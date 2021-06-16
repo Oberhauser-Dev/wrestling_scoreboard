@@ -47,6 +47,7 @@ class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
   @override
   Widget build(BuildContext context) {
     var match = initMatch();
+
     return Navigator(
       pages: [
         MaterialPage(
