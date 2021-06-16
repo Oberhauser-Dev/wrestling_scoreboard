@@ -22,4 +22,8 @@ class Person {
     }
     return null;
   }
+
+  get fullName {
+    return '$prename $surname';
+  }
 }

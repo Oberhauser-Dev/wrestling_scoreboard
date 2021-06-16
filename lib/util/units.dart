@@ -1,0 +1,1 @@
+const weightUnit = 'kg';
