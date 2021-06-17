@@ -27,14 +27,22 @@ class FightState extends State<FightScreen> {
   late Fight fight;
   late StopWatchTimer _stopwatch;
   String _currentTime = '0:00';
+  int _presetSecondsPrev = 0;
 
   FightState(this.match, this.fight) {
     _stopwatch = StopWatchTimer(
         mode: StopWatchMode.countUp,
         onChangeRawSecond: (value) {
-          fight.duration = Duration(seconds: value);
+          int tmpVal;
+          if (!_stopwatch.isRunning) {
+            tmpVal = fight.duration.inSeconds + (value - _presetSecondsPrev);
+            _presetSecondsPrev = value;
+          } else {
+            tmpVal = value;
+          }
+          fight.duration = Duration(seconds: tmpVal);
           setState(() {
-            _currentTime = StopWatchTimer.getDisplayTime(value * 1000,
+            _currentTime = StopWatchTimer.getDisplayTime(tmpVal * 1000,
                     minute: true, second: true, milliSecond: false, hours: false)
                 .replaceFirst(RegExp(r'^0'), '');
           });
@@ -54,11 +62,8 @@ class FightState extends State<FightScreen> {
     double cellHeightClock = width / 6;
     double fontSizeClock = width / 9;
     return FightShortCuts(
-        toggleStopwatch: () {
-          _stopwatch.isRunning
-              ? _stopwatch.onExecute.add(StopWatchExecute.stop)
-              : _stopwatch.onExecute.add(StopWatchExecute.start);
-        },
+        stopwatch: _stopwatch,
+        fight: fight,
         child: Scaffold(
           body: Column(
             children: [
@@ -178,5 +183,11 @@ class FightState extends State<FightScreen> {
             ],
           ),
         ));
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopwatch.dispose();
   }
 }

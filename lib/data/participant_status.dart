@@ -6,7 +6,7 @@ class ParticipantStatus {
   final Participant participant;
   final WeightClass weightClass;
   double? weight;
-  List<Action> actions = [];
+  List<WrestlingAction> actions = [];
   int? classificationPoints;
 
   ParticipantStatus({required this.participant, required this.weightClass, this.weight});

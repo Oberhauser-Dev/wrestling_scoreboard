@@ -5,10 +5,10 @@ enum ActionType {
   dismissal // red card
 }
 
-class Action {
+class WrestlingAction {
   Duration duration;
   ActionType actionType;
   int? pointCount;
 
-  Action(this.actionType, this.duration, {this.pointCount});
+  WrestlingAction({required this.actionType, required this.duration, this.pointCount});
 }
