@@ -21,13 +21,13 @@ class Fight extends ChangeNotifier {
 
   addAction(FightAction action) {
     _actions.add(action);
-    action.actor == FightRole.red ? this.r?.actions.add(action) : this.b?.actions.add(action);
+    action.role == FightRole.red ? this.r?.actions.add(action) : this.b?.actions.add(action);
     notifyListeners();
   }
 
   removeAction(FightAction action) {
     _actions.remove(action);
-    action.actor == FightRole.red ? this.r?.actions.remove(action) : this.b?.actions.remove(action);
+    action.role == FightRole.red ? this.r?.actions.remove(action) : this.b?.actions.remove(action);
     notifyListeners();
   }
 

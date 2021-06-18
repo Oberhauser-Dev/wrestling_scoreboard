@@ -5,36 +5,204 @@ import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 
-class FightShortCuts extends StatelessWidget {
+enum FightScreenActions {
+  StartStop,
+  Reset,
+  AddOneSec,
+  RmOneSec,
+  RedOne,
+  RedTwo,
+  RedThree,
+  RedFour,
+  RedPassivity,
+  RedCaution,
+  RedDismissal,
+  RedUndo,
+  BlueOne,
+  BlueTwo,
+  BlueThree,
+  BlueFour,
+  BluePassivity,
+  BlueCaution,
+  BlueDismissal,
+  BlueUndo,
+}
+
+class FightScreenActionIntent extends Intent {
+  const FightScreenActionIntent({required this.type});
+
+  const FightScreenActionIntent.StartStop() : type = FightScreenActions.StartStop;
+
+  const FightScreenActionIntent.Reset() : type = FightScreenActions.Reset;
+
+  const FightScreenActionIntent.AddOneSec() : type = FightScreenActions.AddOneSec;
+
+  const FightScreenActionIntent.RmOneSec() : type = FightScreenActions.RmOneSec;
+
+  const FightScreenActionIntent.RedOne() : type = FightScreenActions.RedOne;
+
+  const FightScreenActionIntent.RedTwo() : type = FightScreenActions.RedTwo;
+
+  const FightScreenActionIntent.RedThree() : type = FightScreenActions.RedThree;
+
+  const FightScreenActionIntent.RedFour() : type = FightScreenActions.RedFour;
+
+  const FightScreenActionIntent.RedPassivity() : type = FightScreenActions.RedPassivity;
+
+  const FightScreenActionIntent.RedCaution() : type = FightScreenActions.RedCaution;
+
+  const FightScreenActionIntent.RedDismissal() : type = FightScreenActions.RedDismissal;
+
+  const FightScreenActionIntent.RedUndo() : type = FightScreenActions.RedUndo;
+
+  const FightScreenActionIntent.BlueOne() : type = FightScreenActions.BlueOne;
+
+  const FightScreenActionIntent.BlueTwo() : type = FightScreenActions.BlueTwo;
+
+  const FightScreenActionIntent.BlueThree() : type = FightScreenActions.BlueThree;
+
+  const FightScreenActionIntent.BlueFour() : type = FightScreenActions.BlueFour;
+
+  const FightScreenActionIntent.BluePassivity() : type = FightScreenActions.BluePassivity;
+
+  const FightScreenActionIntent.BlueCaution() : type = FightScreenActions.BlueCaution;
+
+  const FightScreenActionIntent.BlueDismissal() : type = FightScreenActions.BlueDismissal;
+
+  const FightScreenActionIntent.BlueUndo() : type = FightScreenActions.BlueUndo;
+  final FightScreenActions type;
+}
+
+class FightActionHandler extends StatelessWidget {
   final Widget child;
   final StopWatchTimer stopwatch;
   final Fight fight;
 
-  FightShortCuts({required this.child, required this.stopwatch, required this.fight});
+  FightActionHandler({required this.child, required this.stopwatch, required this.fight});
+
+  handleIntent(FightScreenActionIntent intent) {
+    handleIntentStatic(intent, this.stopwatch, this.fight);
+  }
+
+  static handleIntentStatic(FightScreenActionIntent intent, StopWatchTimer stopwatch, Fight fight) {
+    switch (intent.type) {
+      case FightScreenActions.StartStop:
+        stopwatch.isRunning
+            ? stopwatch.onExecute.add(StopWatchExecute.stop)
+            : stopwatch.onExecute.add(StopWatchExecute.start);
+        break;
+      case FightScreenActions.AddOneSec:
+        stopwatch.setPresetSecondTime(1);
+        break;
+      case FightScreenActions.RmOneSec:
+        stopwatch.setPresetSecondTime(-1);
+        break;
+      case FightScreenActions.Reset:
+        stopwatch.onExecute.add(StopWatchExecute.reset);
+        break;
+      case FightScreenActions.RedOne:
+        fight.addAction(FightAction(
+            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
+        break;
+      case FightScreenActions.RedTwo:
+        fight.addAction(FightAction(
+            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 2));
+        break;
+      case FightScreenActions.RedThree:
+        fight.addAction(FightAction(
+            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 3));
+        break;
+      case FightScreenActions.RedFour:
+        fight.addAction(FightAction(
+            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 4));
+        break;
+      case FightScreenActions.RedPassivity:
+        fight.addAction(
+            FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity));
+        break;
+      case FightScreenActions.RedCaution:
+        fight
+            .addAction(FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution));
+        break;
+      case FightScreenActions.RedDismissal:
+        fight.addAction(
+            FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal));
+        break;
+      case FightScreenActions.RedUndo:
+        if (fight.r != null && fight.r!.actions.isNotEmpty) fight.removeAction(fight.r!.actions.last);
+        break;
+      case FightScreenActions.BlueOne:
+        fight.addAction(FightAction(
+            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
+        break;
+      case FightScreenActions.BlueTwo:
+        fight.addAction(FightAction(
+            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 2));
+        break;
+      case FightScreenActions.BlueThree:
+        fight.addAction(FightAction(
+            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 3));
+        break;
+      case FightScreenActions.BlueFour:
+        fight.addAction(FightAction(
+            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 4));
+        break;
+      case FightScreenActions.BluePassivity:
+        fight.addAction(
+            FightAction(role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity));
+        break;
+      case FightScreenActions.BlueCaution:
+        fight.addAction(
+            FightAction(role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution));
+        break;
+      case FightScreenActions.BlueDismissal:
+        fight.addAction(
+            FightAction(role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal));
+        break;
+      case FightScreenActions.BlueUndo:
+        if (fight.b != null && fight.b!.actions.isNotEmpty) fight.removeAction(fight.b!.actions.last);
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final redOneIntent = RedOneFightActionIntent(
-        FightAction(actor: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
-    final blueOneIntent = BlueOneFightActionIntent(FightAction(
-        actor: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
+    final redOneIntent = const FightScreenActionIntent.RedOne();
+    final redTwoIntent = const FightScreenActionIntent.RedTwo();
+    final redThreeIntent = const FightScreenActionIntent.RedThree();
+    final redFourIntent = const FightScreenActionIntent.RedFour();
+
+    final blueOneIntent = const FightScreenActionIntent.BlueOne();
+    final blueTwoIntent = const FightScreenActionIntent.BlueTwo();
+    final blueThreeIntent = const FightScreenActionIntent.BlueThree();
+    final blueFourIntent = const FightScreenActionIntent.BlueFour();
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.space): const StopwatchIntent(),
-        LogicalKeySet(LogicalKeyboardKey.arrowUp): const IncrementStopWatchIntent(),
-        LogicalKeySet(LogicalKeyboardKey.arrowDown): const DecrementStopwatchIntent(),
+        LogicalKeySet(LogicalKeyboardKey.space): const FightScreenActionIntent.StartStop(),
+        LogicalKeySet(LogicalKeyboardKey.arrowUp): const FightScreenActionIntent.AddOneSec(),
+        LogicalKeySet(LogicalKeyboardKey.arrowDown): const FightScreenActionIntent.RmOneSec(),
         LogicalKeySet(LogicalKeyboardKey.keyF): redOneIntent,
         LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
+        LogicalKeySet(LogicalKeyboardKey.keyD): redTwoIntent,
+        LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
+        LogicalKeySet(LogicalKeyboardKey.keyS): redThreeIntent,
+        LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
+        LogicalKeySet(LogicalKeyboardKey.keyA): redFourIntent,
+        LogicalKeySet(LogicalKeyboardKey.digit4): redFourIntent,
         LogicalKeySet(LogicalKeyboardKey.keyJ): blueOneIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
+        LogicalKeySet(LogicalKeyboardKey.keyK): blueTwoIntent,
+        LogicalKeySet(LogicalKeyboardKey.numpad2): blueTwoIntent,
+        LogicalKeySet(LogicalKeyboardKey.keyL): blueThreeIntent,
+        LogicalKeySet(LogicalKeyboardKey.numpad3): blueThreeIntent,
+        LogicalKeySet(LogicalKeyboardKey.semicolon): blueFourIntent,
+        LogicalKeySet(LogicalKeyboardKey.numpad4): blueFourIntent,
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
-          StopwatchIntent: ToggleStopwatchAction(stopwatch),
-          IncrementStopWatchIntent: IncrementStopwatchAction(stopwatch),
-          DecrementStopwatchIntent: DecrementStopwatchAction(stopwatch),
-          RedOneFightActionIntent: AddFightActionAction(fight),
-          BlueOneFightActionIntent: AddFightActionAction(fight),
+          FightScreenActionIntent: CallbackAction<FightScreenActionIntent>(
+            onInvoke: handleIntent,
+          )
         },
         child: Focus(
           autofocus: true,
@@ -42,91 +210,5 @@ class FightShortCuts extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// Stopwatch
-
-class StopwatchIntent extends Intent {
-  const StopwatchIntent();
-}
-
-class ToggleStopwatchAction extends Action<StopwatchIntent> {
-  final StopWatchTimer stopwatch;
-
-  ToggleStopwatchAction(this.stopwatch);
-
-  @override
-  void invoke(covariant StopwatchIntent intent) {
-    stopwatch.isRunning
-        ? stopwatch.onExecute.add(StopWatchExecute.stop)
-        : stopwatch.onExecute.add(StopWatchExecute.start);
-  }
-}
-
-class IncrementStopWatchIntent extends Intent {
-  const IncrementStopWatchIntent();
-}
-
-class DecrementStopwatchIntent extends Intent {
-  const DecrementStopwatchIntent();
-}
-
-class IncrementStopwatchAction extends Action<IncrementStopWatchIntent> {
-  IncrementStopwatchAction(this.stopwatch);
-
-  final StopWatchTimer stopwatch;
-
-  @override
-  void invoke(covariant IncrementStopWatchIntent intent) {
-    stopwatch.setPresetSecondTime(1);
-  }
-}
-
-class DecrementStopwatchAction extends Action<DecrementStopwatchIntent> {
-  DecrementStopwatchAction(this.stopwatch);
-
-  final StopWatchTimer stopwatch;
-
-  @override
-  void invoke(covariant DecrementStopwatchIntent intent) {
-    stopwatch.setPresetSecondTime(-1);
-  }
-}
-
-// Points
-abstract class FightActionIntent extends Intent {
-  final FightAction action;
-
-  const FightActionIntent(this.action);
-}
-
-class RedOneFightActionIntent extends FightActionIntent {
-  RedOneFightActionIntent(FightAction action) : super(action);
-}
-
-class BlueOneFightActionIntent extends FightActionIntent {
-  BlueOneFightActionIntent(FightAction action) : super(action);
-}
-
-class AddFightActionAction extends Action<FightActionIntent> {
-  final Fight fight;
-
-  AddFightActionAction(this.fight);
-
-  @override
-  void invoke(covariant FightActionIntent intent) {
-    fight.addAction(intent.action);
-  }
-}
-
-class RemoveFightActionAction extends Action<FightActionIntent> {
-  final Fight fight;
-
-  RemoveFightActionAction(this.fight);
-
-  @override
-  void invoke(covariant FightActionIntent intent) {
-    fight.removeAction(intent.action);
   }
 }

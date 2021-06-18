@@ -107,27 +107,64 @@ class FightState extends State<FightScreen> {
         : Container();
   }
 
-  displayActionControls(MaterialColor color, double padding, double cellHeight, double fontSizeDefault) {
+  displayActionControls(FightRole role, double padding, double cellHeight, double fontSizeDefault) {
+    bool isRed = role == FightRole.red;
+    MaterialColor color = isRed ? Colors.red : Colors.blue;
+    Function(FightScreenActionIntent) callback = (FightScreenActionIntent intent) {
+      FightActionHandler.handleIntentStatic(intent, _stopwatch, fight);
+    };
+    var actions = <Widget>[
+      displayActionControl(
+          '1',
+          () => callback(isRed ? const FightScreenActionIntent.RedOne() : FightScreenActionIntent.BlueOne()),
+          color,
+          padding),
+      displayActionControl(
+          '2',
+          () => callback(isRed ? const FightScreenActionIntent.RedTwo() : FightScreenActionIntent.BlueTwo()),
+          color,
+          padding),
+      displayActionControl(
+          '4',
+          () => callback(isRed ? const FightScreenActionIntent.RedFour() : FightScreenActionIntent.BlueFour()),
+          color,
+          padding),
+      displayActionControl(
+          'S',
+          () =>
+              callback(isRed ? const FightScreenActionIntent.RedDismissal() : FightScreenActionIntent.BlueDismissal()),
+          color,
+          padding), // TODO not correct?
+      displayActionControl(
+          'P',
+          () =>
+              callback(isRed ? const FightScreenActionIntent.RedPassivity() : FightScreenActionIntent.BluePassivity()),
+          color,
+          padding),
+      displayActionControl(
+          'V',
+          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
+          color,
+          padding),
+      displayActionControl(
+          '<',
+          () => callback(isRed ? const FightScreenActionIntent.RedUndo() : FightScreenActionIntent.BlueUndo()),
+          color,
+          padding),
+    ];
     return Expanded(
-        flex: 2,
-        child: Container(
-            height: cellHeight,
-            child: IntrinsicWidth(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                displayActionControl('1', () {}, color, padding),
-                displayActionControl('2', () {}, color, padding),
-                displayActionControl('4', () {}, color, padding),
-                displayActionControl('S', () {}, color, padding),
-                displayActionControl('P', () {}, color, padding),
-                displayActionControl('V', () {}, color, padding),
-                displayActionControl('<', () {}, color, padding),
-              ],
-            ))));
+      flex: 2,
+      child: Container(
+          height: cellHeight,
+          child: IntrinsicWidth(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: actions,
+          ))),
+    );
   }
 
-  displayActionControl(String text, Function callback, MaterialColor color, double padding) {
+  displayActionControl(String text, void Function() callback, MaterialColor color, double padding) {
     return Expanded(
         child: OutlinedButton(
             style: OutlinedButton.styleFrom(
@@ -150,7 +187,7 @@ class FightState extends State<FightScreen> {
     double cellHeightClock = width / 6;
     double fontSizeClock = width / 9;
 
-    return FightShortCuts(
+    return FightActionHandler(
       stopwatch: _stopwatch,
       fight: fight,
       child: Scaffold(
@@ -228,7 +265,7 @@ class FightState extends State<FightScreen> {
               Row(
                 children: [
                   displayTechnicalPoints(fight.r, Colors.red, cellHeightClock, fontSizeClock),
-                  displayActionControls(Colors.red, padding, cellHeightClock, fontSizeDefault),
+                  displayActionControls(FightRole.red, padding, cellHeightClock, fontSizeDefault),
                   Expanded(
                       flex: 60,
                       child: Container(
@@ -238,7 +275,7 @@ class FightState extends State<FightScreen> {
                             _currentTime,
                             style: TextStyle(fontSize: fontSizeClock),
                           )))),
-                  displayActionControls(Colors.blue, padding, cellHeightClock, fontSizeDefault),
+                  displayActionControls(FightRole.blue, padding, cellHeightClock, fontSizeDefault),
                   displayTechnicalPoints(fight.b, Colors.blue, cellHeightClock, fontSizeClock),
                 ],
               ),
@@ -281,14 +318,18 @@ class ActionsWidget extends StatelessWidget {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            ...this.actions.map((e) => Tooltip(
-                message: durationToString(e.duration),
-                child: Container(
-                  height: cellHeight,
-                  padding: EdgeInsets.all(padding),
-                  child: FittedText(e.toString()),
-                  color: e.actor == FightRole.red ? Colors.red : Colors.blue,
-                ))),
+            ...this.actions.map((e) {
+              final color = e.role == FightRole.red ? Colors.red : Colors.blue;
+              return Tooltip(
+                  message: durationToString(e.duration),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 1),
+                    height: cellHeight,
+                    padding: EdgeInsets.all(padding),
+                    child: FittedText(e.toString()),
+                    color: color,
+                  ));
+            }),
           ],
         ),
       ),

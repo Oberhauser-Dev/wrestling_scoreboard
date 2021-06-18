@@ -11,9 +11,9 @@ class FightAction {
   Duration duration;
   FightActionType actionType;
   int? pointCount;
-  FightRole actor;
+  FightRole role;
 
-  FightAction({required this.actionType, required this.duration, required this.actor, this.pointCount});
+  FightAction({required this.actionType, required this.duration, required this.role, this.pointCount});
 
   @override
   String toString() {
