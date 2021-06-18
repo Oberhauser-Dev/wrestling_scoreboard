@@ -16,8 +16,8 @@ import 'common_elements.dart';
 import 'components/FittedText.dart';
 
 class FightScreen extends StatefulWidget {
-  late TeamMatch match;
-  late Fight fight;
+  final TeamMatch match;
+  final Fight fight;
 
   FightScreen(this.match, this.fight);
 
@@ -28,8 +28,8 @@ class FightScreen extends StatefulWidget {
 }
 
 class FightState extends State<FightScreen> {
-  late TeamMatch match;
-  late Fight fight;
+  final TeamMatch match;
+  final Fight fight;
   late StopWatchTimer _stopwatch;
   String _currentTime = '0:00';
   int _presetSecondsPrev = 0;
@@ -111,7 +111,7 @@ class FightState extends State<FightScreen> {
     bool isRed = role == FightRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
     Function(FightScreenActionIntent) callback = (FightScreenActionIntent intent) {
-      FightActionHandler.handleIntentStatic(intent, _stopwatch, fight);
+      FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, context: context);
     };
     var actions = <Widget>[
       displayActionControl(
@@ -189,10 +189,11 @@ class FightState extends State<FightScreen> {
 
     return FightActionHandler(
       stopwatch: _stopwatch,
+      match: match,
       fight: fight,
       child: Scaffold(
-        body: ChangeNotifierProvider(
-          create: (context) => fight,
+        body: ChangeNotifierProvider.value(
+          value: fight,
           child: Column(
             children: [
               IntrinsicHeight(
@@ -224,7 +225,7 @@ class FightState extends State<FightScreen> {
                               padding: EdgeInsets.all(padding),
                               child: Center(
                                   child: Text(
-                                'Kampf ${match.fights.indexOf(this.fight)}',
+                                    'Kampf ${match.fights.indexOf(this.fight) + 1}',
                                 style: fontStyleInfo,
                               ))),
                           Container(
@@ -238,7 +239,7 @@ class FightState extends State<FightScreen> {
                               padding: EdgeInsets.all(padding),
                               child: Center(
                                   child: Text(
-                                '${fight.weightClass.weight} $weightUnit',
+                                fight.weightClass.name ?? 'Unknown',
                                 style: fontStyleInfo,
                               ))),
                         ])),

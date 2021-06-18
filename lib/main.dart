@@ -42,7 +42,6 @@ class WrestlingScoreboardPage extends StatefulWidget {
 }
 
 class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
-  Fight? _selectedFight;
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +51,8 @@ class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
       pages: [
         MaterialPage(
           key: ValueKey('MatchSequence'),
-          child: MatchSequence(match, handleSelectedFight),
+          child: MatchSequence(match, (Fight fight) => handleSelectedFight(fight, match)),
         ),
-        if (_selectedFight != null)
-          MaterialPage(
-            key: ValueKey('FightScreen'),
-            child: FightScreen(match, _selectedFight!),
-          ),
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
@@ -66,19 +60,13 @@ class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
         }
 
         // Update the list of pages by setting _selectedFight to null
-        setState(() {
-          _selectedFight = null;
-        });
-
         return true;
       },
     );
   }
 
-  handleSelectedFight(Fight fight) {
-    setState(() {
-      _selectedFight = fight;
-    });
+  handleSelectedFight(Fight fight, TeamMatch match) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
   }
 
   TeamMatch initMatch() {

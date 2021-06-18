@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
+import 'package:wrestling_scoreboard/data/team_match.dart';
+
+import 'fight_screen.dart';
 
 enum FightScreenActions {
   StartStop,
@@ -11,6 +15,9 @@ enum FightScreenActions {
   AddOneSec,
   RmOneSec,
   Undo,
+  NextFight,
+  PreviousFight,
+  Quit,
   RedOne,
   RedTwo,
   RedThree,
@@ -41,6 +48,12 @@ class FightScreenActionIntent extends Intent {
   const FightScreenActionIntent.RmOneSec() : type = FightScreenActions.RmOneSec;
 
   const FightScreenActionIntent.Undo() : type = FightScreenActions.Undo;
+
+  const FightScreenActionIntent.NextFight() : type = FightScreenActions.NextFight;
+
+  const FightScreenActionIntent.PreviousFight() : type = FightScreenActions.PreviousFight;
+
+  const FightScreenActionIntent.Quit() : type = FightScreenActions.Quit;
 
   const FightScreenActionIntent.RedOne() : type = FightScreenActions.RedOne;
 
@@ -79,15 +92,17 @@ class FightScreenActionIntent extends Intent {
 class FightActionHandler extends StatelessWidget {
   final Widget child;
   final StopWatchTimer stopwatch;
+  final TeamMatch match;
   final Fight fight;
 
-  FightActionHandler({required this.child, required this.stopwatch, required this.fight});
+  FightActionHandler({required this.child, required this.stopwatch, required this.match, required this.fight});
 
-  handleIntent(FightScreenActionIntent intent) {
-    handleIntentStatic(intent, this.stopwatch, this.fight);
+  handleIntent(FightScreenActionIntent intent, {BuildContext? context}) {
+    handleIntentStatic(intent, this.stopwatch, this.match, this.fight, context: context);
   }
 
-  static handleIntentStatic(FightScreenActionIntent intent, StopWatchTimer stopwatch, Fight fight) {
+  static handleIntentStatic(FightScreenActionIntent intent, StopWatchTimer stopwatch, TeamMatch match, Fight fight,
+      {BuildContext? context}) {
     switch (intent.type) {
       case FightScreenActions.StartStop:
         stopwatch.isRunning
@@ -102,6 +117,27 @@ class FightActionHandler extends StatelessWidget {
         break;
       case FightScreenActions.Reset:
         stopwatch.onExecute.add(StopWatchExecute.reset);
+        break;
+      case FightScreenActions.NextFight:
+        if (context != null) {
+          int index = match.fights.indexOf(fight) + 1;
+          if (index < match.fights.length) {
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, match.fights[index])));
+          }
+        }
+        break;
+      case FightScreenActions.PreviousFight:
+        if (context != null) {
+          int index = match.fights.indexOf(fight) - 1;
+          if (index >= 0) {
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, match.fights[index])));
+          }
+        }
+        break;
+      case FightScreenActions.Quit:
+        if (context != null) Navigator.pop(context);
         break;
       case FightScreenActions.RedOne:
         fight.addAction(FightAction(
@@ -188,6 +224,9 @@ class FightActionHandler extends StatelessWidget {
         LogicalKeySet(LogicalKeyboardKey.arrowUp): const FightScreenActionIntent.AddOneSec(),
         LogicalKeySet(LogicalKeyboardKey.arrowDown): const FightScreenActionIntent.RmOneSec(),
         LogicalKeySet(LogicalKeyboardKey.backspace): const FightScreenActionIntent.Undo(),
+        LogicalKeySet(LogicalKeyboardKey.arrowRight): const FightScreenActionIntent.NextFight(),
+        LogicalKeySet(LogicalKeyboardKey.arrowLeft): const FightScreenActionIntent.PreviousFight(),
+        LogicalKeySet(LogicalKeyboardKey.escape): const FightScreenActionIntent.Quit(),
         LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
         LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
@@ -200,7 +239,7 @@ class FightActionHandler extends StatelessWidget {
       child: Actions(
         actions: <Type, Action<Intent>>{
           FightScreenActionIntent: CallbackAction<FightScreenActionIntent>(
-            onInvoke: handleIntent,
+            onInvoke: (FightScreenActionIntent intent) => handleIntent(intent, context: context),
           )
         },
         child: RawKeyboardListener(
