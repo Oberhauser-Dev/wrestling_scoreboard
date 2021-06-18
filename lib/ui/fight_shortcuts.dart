@@ -10,6 +10,7 @@ enum FightScreenActions {
   Reset,
   AddOneSec,
   RmOneSec,
+  Undo,
   RedOne,
   RedTwo,
   RedThree,
@@ -38,6 +39,8 @@ class FightScreenActionIntent extends Intent {
   const FightScreenActionIntent.AddOneSec() : type = FightScreenActions.AddOneSec;
 
   const FightScreenActionIntent.RmOneSec() : type = FightScreenActions.RmOneSec;
+
+  const FightScreenActionIntent.Undo() : type = FightScreenActions.Undo;
 
   const FightScreenActionIntent.RedOne() : type = FightScreenActions.RedOne;
 
@@ -162,6 +165,9 @@ class FightActionHandler extends StatelessWidget {
       case FightScreenActions.BlueUndo:
         if (fight.b != null && fight.b!.actions.isNotEmpty) fight.removeAction(fight.b!.actions.last);
         break;
+      case FightScreenActions.Undo:
+        if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);
+        break;
     }
   }
 
@@ -181,21 +187,14 @@ class FightActionHandler extends StatelessWidget {
         LogicalKeySet(LogicalKeyboardKey.space): const FightScreenActionIntent.StartStop(),
         LogicalKeySet(LogicalKeyboardKey.arrowUp): const FightScreenActionIntent.AddOneSec(),
         LogicalKeySet(LogicalKeyboardKey.arrowDown): const FightScreenActionIntent.RmOneSec(),
-        LogicalKeySet(LogicalKeyboardKey.keyF): redOneIntent,
+        LogicalKeySet(LogicalKeyboardKey.backspace): const FightScreenActionIntent.Undo(),
         LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
-        LogicalKeySet(LogicalKeyboardKey.keyD): redTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
-        LogicalKeySet(LogicalKeyboardKey.keyS): redThreeIntent,
         LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
-        LogicalKeySet(LogicalKeyboardKey.keyA): redFourIntent,
         LogicalKeySet(LogicalKeyboardKey.digit4): redFourIntent,
-        LogicalKeySet(LogicalKeyboardKey.keyJ): blueOneIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
-        LogicalKeySet(LogicalKeyboardKey.keyK): blueTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad2): blueTwoIntent,
-        LogicalKeySet(LogicalKeyboardKey.keyL): blueThreeIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad3): blueThreeIntent,
-        LogicalKeySet(LogicalKeyboardKey.semicolon): blueFourIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad4): blueFourIntent,
       },
       child: Actions(
@@ -204,9 +203,34 @@ class FightActionHandler extends StatelessWidget {
             onInvoke: handleIntent,
           )
         },
-        child: Focus(
-          autofocus: true,
-          child: child,
+        child: RawKeyboardListener(
+          focusNode: FocusNode(),
+          child: Focus(autofocus: true, child: child),
+          onKey: (RawKeyEvent event) {
+            if (event.runtimeType.toString() == 'RawKeyDownEvent') {
+              if (event.physicalKey == PhysicalKeyboardKey.keyF) {
+                handleIntent(redOneIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyD) {
+                handleIntent(redTwoIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyS) {
+                handleIntent(redThreeIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyA) {
+                handleIntent(redFourIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyJ ||
+                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit1)) {
+                handleIntent(blueOneIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyK ||
+                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit2)) {
+                handleIntent(blueTwoIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyL ||
+                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3)) {
+                handleIntent(blueThreeIntent);
+              } else if (event.physicalKey == PhysicalKeyboardKey.semicolon ||
+                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit4)) {
+                handleIntent(blueFourIntent);
+              }
+            }
+          },
         ),
       ),
     );
