@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:wrestling_scoreboard/data/action.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
-import 'package:wrestling_scoreboard/data/participant_status.dart';
+import 'package:wrestling_scoreboard/data/fight_action.dart';
+import 'package:wrestling_scoreboard/data/fight_role.dart';
 
 class FightShortCuts extends StatelessWidget {
   final Widget child;
@@ -14,21 +14,27 @@ class FightShortCuts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final redOneIntent = RedOneFightActionIntent(
+        FightAction(actor: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
+    final blueOneIntent = BlueOneFightActionIntent(FightAction(
+        actor: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
         LogicalKeySet(LogicalKeyboardKey.space): const StopwatchIntent(),
         LogicalKeySet(LogicalKeyboardKey.arrowUp): const IncrementStopWatchIntent(),
         LogicalKeySet(LogicalKeyboardKey.arrowDown): const DecrementStopwatchIntent(),
-        LogicalKeySet(LogicalKeyboardKey.keyF): WrestlingActionIntent(
-            WrestlingAction(duration: fight.duration, actionType: ActionType.points, pointCount: 1)),
-        LogicalKeySet(LogicalKeyboardKey.digit1): WrestlingActionIntent(
-            WrestlingAction(duration: fight.duration, actionType: ActionType.points, pointCount: 1)),
+        LogicalKeySet(LogicalKeyboardKey.keyF): redOneIntent,
+        LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
+        LogicalKeySet(LogicalKeyboardKey.keyJ): blueOneIntent,
+        LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
           StopwatchIntent: ToggleStopwatchAction(stopwatch),
           IncrementStopWatchIntent: IncrementStopwatchAction(stopwatch),
           DecrementStopwatchIntent: DecrementStopwatchAction(stopwatch),
+          RedOneFightActionIntent: AddFightActionAction(fight),
+          BlueOneFightActionIntent: AddFightActionAction(fight),
         },
         child: Focus(
           autofocus: true,
@@ -89,36 +95,38 @@ class DecrementStopwatchAction extends Action<DecrementStopwatchIntent> {
 }
 
 // Points
-class WrestlingActionIntent extends Intent {
-  const WrestlingActionIntent(this.action);
+abstract class FightActionIntent extends Intent {
+  final FightAction action;
 
-  final WrestlingAction action;
+  const FightActionIntent(this.action);
 }
 
-class WrestlingActionAction extends Action<WrestlingActionIntent> {
-  WrestlingActionAction(this.pStatus);
+class RedOneFightActionIntent extends FightActionIntent {
+  RedOneFightActionIntent(FightAction action) : super(action);
+}
 
-  final ParticipantStatus pStatus;
+class BlueOneFightActionIntent extends FightActionIntent {
+  BlueOneFightActionIntent(FightAction action) : super(action);
+}
+
+class AddFightActionAction extends Action<FightActionIntent> {
+  final Fight fight;
+
+  AddFightActionAction(this.fight);
 
   @override
-  void invoke(covariant WrestlingActionIntent intent) {
-    pStatus.actions.add(intent.action);
+  void invoke(covariant FightActionIntent intent) {
+    fight.addAction(intent.action);
   }
 }
 
-class RemoveWrestlingActionIntent extends Intent {
-  const RemoveWrestlingActionIntent(this.action);
+class RemoveFightActionAction extends Action<FightActionIntent> {
+  final Fight fight;
 
-  final WrestlingAction action;
-}
-
-class RemoveWrestlingActionAction extends Action<WrestlingActionIntent> {
-  RemoveWrestlingActionAction(this.pStatus);
-
-  final ParticipantStatus pStatus;
+  RemoveFightActionAction(this.fight);
 
   @override
-  void invoke(covariant WrestlingActionIntent intent) {
-    pStatus.actions.remove(intent.action);
+  void invoke(covariant FightActionIntent intent) {
+    fight.removeAction(intent.action);
   }
 }

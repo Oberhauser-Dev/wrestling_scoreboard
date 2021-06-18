@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
+import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
@@ -30,7 +31,10 @@ class MatchSequence extends StatelessWidget {
           Row(children: [
             Expanded(
               flex: flexWidthWeight + flexWidthStyle,
-              child: Container(),
+              child: Container(
+                child: Text(match.league),
+                padding: EdgeInsets.all(padding),
+              ),
             ),
             ...CommonElements.getTeamHeader(match, context),
           ]),

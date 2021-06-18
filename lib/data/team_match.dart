@@ -12,6 +12,7 @@ class TeamMatch {
   final Person referee;
   int visitorsCount = 0;
   String comment = '';
+  late String league; // Liga
   List<Fight>? _fights;
   List<WeightClass> weightClasses = [
     WeightClass(57, WrestlingStyle.free),
@@ -28,7 +29,10 @@ class TeamMatch {
 
   TeamMatch(this.home, this.guest, this.referee, {this.id}) {
     if (home.team.league == guest.team.league && home.team.league != null) {
-      // TODO load other weight classes
+      this.league = home.team.league!;
+      //  TODO load weight classes of league
+    } else {
+      this.league = 'Freundschaftskampf';
     }
   }
 

@@ -1,23 +1,37 @@
+import 'package:flutter/cupertino.dart';
+
+import 'fight_action.dart';
 import 'fight_result.dart';
+import 'fight_role.dart';
 import 'participant_status.dart';
 import 'weight_class.dart';
 
-enum FightRole {
-  red,
-  blue,
-}
-
-class Fight {
+class Fight extends ChangeNotifier {
   final ParticipantStatus? r; // red
   final ParticipantStatus? b; // blue
   final WeightClass weightClass;
   final int? pool;
+  final List<FightAction> _actions = [];
   FightResult? result;
   FightRole? winner;
 
   Duration duration = Duration();
 
   Fight(this.r, this.b, this.weightClass, {this.pool});
+
+  addAction(FightAction action) {
+    _actions.add(action);
+    action.actor == FightRole.red ? this.r?.actions.add(action) : this.b?.actions.add(action);
+    notifyListeners();
+  }
+
+  removeAction(FightAction action) {
+    _actions.remove(action);
+    action.actor == FightRole.red ? this.r?.actions.remove(action) : this.b?.actions.remove(action);
+    notifyListeners();
+  }
+
+  get actions => this._actions;
 
   updateClassificationPoints({bool isTournament = false}) {
     ParticipantStatus? _winner = this.winner == FightRole.red ? this.r : this.b;
