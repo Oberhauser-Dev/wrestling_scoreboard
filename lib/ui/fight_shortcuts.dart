@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
+import 'package:wrestling_scoreboard/util/date_time.dart';
 
 import 'fight_screen.dart';
 
@@ -25,6 +25,8 @@ enum FightScreenActions {
   RedPassivity,
   RedCaution,
   RedDismissal,
+  RedActivityTime,
+  RedInjuryTime,
   RedUndo,
   BlueOne,
   BlueTwo,
@@ -33,6 +35,8 @@ enum FightScreenActions {
   BluePassivity,
   BlueCaution,
   BlueDismissal,
+  BlueActivityTime,
+  BlueInjuryTime,
   BlueUndo,
 }
 
@@ -69,6 +73,10 @@ class FightScreenActionIntent extends Intent {
 
   const FightScreenActionIntent.RedDismissal() : type = FightScreenActions.RedDismissal;
 
+  const FightScreenActionIntent.RedActivityTime() : type = FightScreenActions.RedActivityTime;
+
+  const FightScreenActionIntent.RedInjuryTime() : type = FightScreenActions.RedInjuryTime;
+
   const FightScreenActionIntent.RedUndo() : type = FightScreenActions.RedUndo;
 
   const FightScreenActionIntent.BlueOne() : type = FightScreenActions.BlueOne;
@@ -85,13 +93,17 @@ class FightScreenActionIntent extends Intent {
 
   const FightScreenActionIntent.BlueDismissal() : type = FightScreenActions.BlueDismissal;
 
+  const FightScreenActionIntent.BlueActivityTime() : type = FightScreenActions.BlueActivityTime;
+
+  const FightScreenActionIntent.BlueInjuryTime() : type = FightScreenActions.BlueInjuryTime;
+
   const FightScreenActionIntent.BlueUndo() : type = FightScreenActions.BlueUndo;
   final FightScreenActions type;
 }
 
 class FightActionHandler extends StatelessWidget {
   final Widget child;
-  final StopWatchTimer stopwatch;
+  final CustomStopWatchTimer stopwatch;
   final TeamMatch match;
   final Fight fight;
 
@@ -101,22 +113,24 @@ class FightActionHandler extends StatelessWidget {
     handleIntentStatic(intent, this.stopwatch, this.match, this.fight, context: context);
   }
 
-  static handleIntentStatic(FightScreenActionIntent intent, StopWatchTimer stopwatch, TeamMatch match, Fight fight,
+  static handleIntentStatic(
+      FightScreenActionIntent intent, CustomStopWatchTimer stopwatch, TeamMatch match, Fight fight,
       {BuildContext? context}) {
     switch (intent.type) {
       case FightScreenActions.StartStop:
-        stopwatch.isRunning
-            ? stopwatch.onExecute.add(StopWatchExecute.stop)
-            : stopwatch.onExecute.add(StopWatchExecute.start);
+        stopwatch.isRunning ? stopwatch.stop() : stopwatch.start();
         break;
       case FightScreenActions.AddOneSec:
-        stopwatch.setPresetSecondTime(1);
+        stopwatch.addTime(sec: 1);
         break;
       case FightScreenActions.RmOneSec:
-        stopwatch.setPresetSecondTime(-1);
+        if (stopwatch.currentMillis > 1000)
+          stopwatch.addTime(sec: -1);
+        else
+          stopwatch.addTime(millis: -stopwatch.currentMillis);
         break;
       case FightScreenActions.Reset:
-        stopwatch.onExecute.add(StopWatchExecute.reset);
+        stopwatch.reset();
         break;
       case FightScreenActions.NextFight:
         if (context != null) {
@@ -167,6 +181,12 @@ class FightActionHandler extends StatelessWidget {
         fight.addAction(
             FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal));
         break;
+      case FightScreenActions.RedActivityTime:
+        // TODO: Handle this case.
+        break;
+      case FightScreenActions.RedInjuryTime:
+        // TODO: Handle this case.
+        break;
       case FightScreenActions.RedUndo:
         if (fight.r != null && fight.r!.actions.isNotEmpty) fight.removeAction(fight.r!.actions.last);
         break;
@@ -200,6 +220,12 @@ class FightActionHandler extends StatelessWidget {
         break;
       case FightScreenActions.BlueUndo:
         if (fight.b != null && fight.b!.actions.isNotEmpty) fight.removeAction(fight.b!.actions.last);
+        break;
+      case FightScreenActions.BlueActivityTime:
+        // TODO: Handle this case.
+        break;
+      case FightScreenActions.BlueInjuryTime:
+        // TODO: Handle this case.
         break;
       case FightScreenActions.Undo:
         if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);

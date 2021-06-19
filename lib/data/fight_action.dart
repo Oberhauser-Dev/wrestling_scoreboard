@@ -3,6 +3,7 @@ import 'package:wrestling_scoreboard/data/fight_role.dart';
 enum FightActionType {
   points,
   passivity, // P
+  verbal, // V admonition
   caution, // yellow card
   dismissal // red card
 }
@@ -22,8 +23,10 @@ class FightAction {
         return pointCount?.toString() ?? '0';
       case FightActionType.passivity:
         return 'P';
-      case FightActionType.caution:
+      case FightActionType.verbal:
         return 'V';
+      case FightActionType.caution:
+        return 'O';
       case FightActionType.dismissal:
         return 'D';
       default:

@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard/data/participant_status.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/fight_shortcuts.dart';
+import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
@@ -30,35 +31,75 @@ class FightScreen extends StatefulWidget {
 class FightState extends State<FightScreen> {
   final TeamMatch match;
   final Fight fight;
-  late StopWatchTimer _stopwatch;
+  late CustomStopWatchTimer _stopwatch;
+  late CustomStopWatchTimer _fightStopwatch;
+  late CustomStopWatchTimer _breakStopwatch;
+  late CustomStopWatchTimer _injuryRedStopwatch;
+  late CustomStopWatchTimer _injuryBlueStopwatch;
+  int passivityRedSeconds = 0;
+  int passivityBlueSeconds = 0;
   String _currentTime = '0:00';
-  int _presetSecondsPrev = 0;
+  int round = 1;
   late Function(FightScreenActionIntent) callback;
 
   FightState(this.match, this.fight) {
-    _stopwatch = StopWatchTimer(
-        mode: StopWatchMode.countUp,
-        onChangeRawSecond: (value) {
-          int tmpVal;
-          if (!_stopwatch.isRunning) {
-            tmpVal = fight.duration.inSeconds + (value - _presetSecondsPrev);
-            _presetSecondsPrev = value;
-          } else {
-            tmpVal = value;
+    _stopwatch = _fightStopwatch = CustomStopWatchTimer(
+      mode: StopWatchMode.countUp,
+      onChangeSecond: (val) {
+        if (_stopwatch == _fightStopwatch) {
+          // Only display if active
+          fight.duration = updateDisplayTime(val * 1000);
+
+          if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
+            _fightStopwatch.stop();
+            if (round < match.maxRounds) {
+              _stopwatch = _breakStopwatch;
+              _breakStopwatch.start();
+              round++;
+            }
+          } else if (fight.duration.inSeconds ~/ match.roundDuration.inSeconds < (round - 1)) {
+            // Fix times below round time: e.g. if subtract time
+            round -= 1;
           }
-          fight.duration = Duration(seconds: tmpVal);
-          setState(() {
-            _currentTime = StopWatchTimer.getDisplayTime(tmpVal * 1000,
-                    minute: true, second: true, milliSecond: false, hours: false)
-                .replaceFirst(RegExp(r'^0'), '');
-          });
-        });
-    _stopwatch.setPresetTime(
-      mSec: fight.duration.inMilliseconds,
+        }
+      },
+      onStartStop: onStartStop,
+    );
+    _stopwatch.addTime(millis: fight.duration.inMilliseconds);
+    _breakStopwatch = CustomStopWatchTimer(
+      mode: StopWatchMode.countUp,
+      onChangeSecond: (val) {
+        if (_stopwatch == _breakStopwatch) {
+          // Only display if active
+          var dur = updateDisplayTime(val * 1000);
+          if (dur.compareTo(match.breakDuration) >= 0) {
+            _breakStopwatch.reset();
+            _stopwatch = _fightStopwatch;
+            updateDisplayTime(_fightStopwatch.currentMillis); // Refresh old display
+          }
+        }
+      },
+      onStartStop: onStartStop,
     );
     callback = (FightScreenActionIntent intent) {
       FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, context: context);
     };
+  }
+
+  onStartStop() {
+    // Update color
+    setState(() {
+      _currentTime = _currentTime;
+    });
+  }
+
+  Duration updateDisplayTime(int millis) {
+    setState(() {
+      _currentTime = StopWatchTimer.getDisplayTime(millis, minute: true, second: true, milliSecond: false, hours: false)
+          .replaceFirst(RegExp(r'^0'), '');
+    });
+
+    return Duration(milliseconds: millis);
   }
 
   displayName(ParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
@@ -132,19 +173,29 @@ class FightState extends State<FightScreen> {
           color,
           padding),
       displayActionControl(
-          'S',
-          () =>
-              callback(isRed ? const FightScreenActionIntent.RedDismissal() : FightScreenActionIntent.BlueDismissal()),
-          color,
-          padding), // TODO not correct?
-      displayActionControl(
           'P',
           () =>
               callback(isRed ? const FightScreenActionIntent.RedPassivity() : FightScreenActionIntent.BluePassivity()),
           color,
           padding),
       displayActionControl(
-          'V',
+          'O',
+          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
+          color,
+          padding),
+      /*displayActionControl(
+          'D',
+              () =>
+              callback(isRed ? const FightScreenActionIntent.RedDismissal() : FightScreenActionIntent.BlueDismissal()),
+          color,
+          padding),*/
+      displayActionControl(
+          'AT', // AZ Activity Time, Aktivitätszeit
+          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
+          color,
+          padding),
+      displayActionControl(
+          'IT', // VZ Injury Time, Verletzungszeit
           () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
           color,
           padding),
@@ -188,6 +239,8 @@ class FightState extends State<FightScreen> {
     double fontSizeDefault = width / 90;
     double cellHeightClock = width / 6;
     double fontSizeClock = width / 9;
+
+    MaterialColor stopwatchColor = _stopwatch == _breakStopwatch ? Colors.orange : white;
 
     return FightActionHandler(
       stopwatch: _stopwatch,
@@ -308,8 +361,10 @@ class FightState extends State<FightScreen> {
                           height: cellHeightClock,
                           child: Center(
                               child: Text(
-                            _currentTime,
-                            style: TextStyle(fontSize: fontSizeClock),
+                                _currentTime,
+                            style: TextStyle(
+                                fontSize: fontSizeClock,
+                                color: _stopwatch.isRunning ? stopwatchColor : stopwatchColor.shade200),
                           )))),
                   displayActionControls(FightRole.blue, padding, cellHeightClock, fontSizeDefault),
                   displayTechnicalPoints(fight.b, Colors.blue, cellHeightClock, fontSizeClock),
