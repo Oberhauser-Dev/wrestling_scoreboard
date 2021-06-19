@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import 'common_elements.dart';
+import 'components/FittedText.dart';
 
 class MatchSequence extends StatelessWidget {
   late TeamMatch match;
@@ -32,7 +33,7 @@ class MatchSequence extends StatelessWidget {
             Expanded(
               flex: flexWidthWeight + flexWidthStyle,
               child: Container(
-                child: Text(match.league),
+                child: FittedText('${match.league}\nNo: ${match.id ?? ''}\nSR: ${match.referee.fullName}'),
                 padding: EdgeInsets.all(padding),
               ),
             ),
