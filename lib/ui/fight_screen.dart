@@ -33,6 +33,7 @@ class FightState extends State<FightScreen> {
   late StopWatchTimer _stopwatch;
   String _currentTime = '0:00';
   int _presetSecondsPrev = 0;
+  late Function(FightScreenActionIntent) callback;
 
   FightState(this.match, this.fight) {
     _stopwatch = StopWatchTimer(
@@ -55,6 +56,9 @@ class FightState extends State<FightScreen> {
     _stopwatch.setPresetTime(
       mSec: fight.duration.inMilliseconds,
     );
+    callback = (FightScreenActionIntent intent) {
+      FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, context: context);
+    };
   }
 
   displayName(ParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
@@ -76,7 +80,8 @@ class FightState extends State<FightScreen> {
                   // (pStatus?.participant.age != null
                   //     ? '${pStatus?.participant.age} years'
                   //     : 'Unknown age'),
-                  style: TextStyle(fontSize: fontSizeDefault)))),
+                  style: TextStyle(
+                      fontSize: fontSizeDefault, color: pStatus?.weight == null ? Colors.white30 : Colors.white)))),
     ]));
   }
 
@@ -110,9 +115,6 @@ class FightState extends State<FightScreen> {
   displayActionControls(FightRole role, double padding, double cellHeight, double fontSizeDefault) {
     bool isRed = role == FightRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
-    Function(FightScreenActionIntent) callback = (FightScreenActionIntent intent) {
-      FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, context: context);
-    };
     var actions = <Widget>[
       displayActionControl(
           '1',
@@ -147,7 +149,7 @@ class FightState extends State<FightScreen> {
           color,
           padding),
       displayActionControl(
-          '<',
+          '⎌',
           () => callback(isRed ? const FightScreenActionIntent.RedUndo() : FightScreenActionIntent.BlueUndo()),
           color,
           padding),
@@ -221,13 +223,46 @@ class FightState extends State<FightScreen> {
                     Expanded(
                         flex: 20,
                         child: Column(children: [
-                          Container(
-                              padding: EdgeInsets.all(padding),
-                              child: Center(
-                                  child: Text(
-                                    'Kampf ${match.fights.indexOf(this.fight) + 1}',
-                                style: fontStyleInfo,
-                              ))),
+                          Row(children: [
+                            match.fights.first == fight
+                                ? IconButton(
+                                    color: Colors.white24,
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      callback(FightScreenActionIntent.Quit());
+                                    },
+                                  )
+                                : IconButton(
+                                    color: Colors.white24,
+                                    icon: Icon(Icons.arrow_back),
+                                    onPressed: () {
+                                      callback(FightScreenActionIntent.PreviousFight());
+                                    },
+                                  ),
+                            Expanded(
+                                child: Container(
+                                    padding: EdgeInsets.all(padding),
+                                    child: Center(
+                                        child: Text(
+                                      'Kampf ${match.fights.indexOf(this.fight) + 1}',
+                                      style: fontStyleInfo,
+                                    )))),
+                            match.fights.last == fight
+                                ? IconButton(
+                                    color: Colors.white24,
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      callback(FightScreenActionIntent.Quit());
+                                    },
+                                  )
+                                : IconButton(
+                                    color: Colors.white24,
+                                    icon: Icon(Icons.arrow_forward),
+                                    onPressed: () {
+                                      callback(FightScreenActionIntent.NextFight());
+                                    },
+                                  ),
+                          ]),
                           Container(
                               padding: EdgeInsets.all(padding),
                               child: Center(
