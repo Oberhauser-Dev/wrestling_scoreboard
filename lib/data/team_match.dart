@@ -10,6 +10,7 @@ class TeamMatch {
   final Lineup home;
   final Lineup guest;
   final Person referee;
+  late final DateTime date;
   int visitorsCount = 0;
   String comment = '';
   late String league; // Liga
@@ -39,6 +40,7 @@ class TeamMatch {
     } else {
       this.league = 'Freundschaftskampf';
     }
+    date = DateTime.now();
   }
 
   List<Fight> get fights {
