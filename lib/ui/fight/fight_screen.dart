@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_action_conrols.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
+import 'package:wrestling_scoreboard/ui/models/participant_status_model.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
@@ -35,15 +36,15 @@ class FightState extends State<FightScreen> {
   late ObservableStopwatch _stopwatch;
   late ObservableStopwatch _fightStopwatch;
   late ObservableStopwatch _breakStopwatch;
-  ObservableStopwatch? _injuryRedStopwatch;
-  ObservableStopwatch? _activityRedStopwatch;
-  ObservableStopwatch? _injuryBlueStopwatch;
-  ObservableStopwatch? _activityBlueStopwatch;
+  late ParticipantStatusModel _r;
+  late ParticipantStatusModel _b;
   String _currentTime = '0:00';
   int round = 1;
   late Function(FightScreenActionIntent) callback;
 
   FightState(this.match, this.fight) {
+    _r = ParticipantStatusModel(fight.r);
+    _b = ParticipantStatusModel(fight.b);
     _stopwatch = _fightStopwatch = ObservableStopwatch(
         limit: match.roundDuration * match.maxRounds,
         onChangeSecond: (val) {
@@ -53,13 +54,13 @@ class FightState extends State<FightScreen> {
 
             if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
               _fightStopwatch.stop();
-              if (_activityRedStopwatch != null) {
-                _activityRedStopwatch!.stop();
-                _activityRedStopwatch = null;
+              if (_r.activityStopwatch != null) {
+                _r.activityStopwatch!.stop();
+                _r.activityStopwatch = null;
               }
-              if (_activityBlueStopwatch != null) {
-                _activityBlueStopwatch!.stop();
-                _activityBlueStopwatch = null;
+              if (_b.activityStopwatch != null) {
+                _b.activityStopwatch!.stop();
+                _b.activityStopwatch = null;
               }
               if (round < match.maxRounds) {
                 _stopwatch = _breakStopwatch;
@@ -74,12 +75,12 @@ class FightState extends State<FightScreen> {
         },
         onStartStop: onStartStop,
         onStart: () {
-          if (_activityRedStopwatch != null) _activityRedStopwatch!.start();
-          if (_activityBlueStopwatch != null) _activityBlueStopwatch!.start();
+          if (_r.activityStopwatch != null) _r.activityStopwatch!.start();
+          if (_b.activityStopwatch != null) _b.activityStopwatch!.start();
         },
         onStop: () {
-          if (_activityRedStopwatch != null) _activityRedStopwatch!.stop();
-          if (_activityBlueStopwatch != null) _activityBlueStopwatch!.stop();
+          if (_r.activityStopwatch != null) _r.activityStopwatch!.stop();
+          if (_b.activityStopwatch != null) _b.activityStopwatch!.stop();
         });
     _stopwatch.addDuration(fight.duration);
     _breakStopwatch = ObservableStopwatch(
@@ -144,8 +145,8 @@ class FightState extends State<FightScreen> {
     ]));
   }
 
-  displayTechnicalPoints(ParticipantStatus? pStatus, FightRole role, double cellHeight) {
-    return Expanded(flex: 30, child: TechnicalPoints(pStatus: pStatus, height: cellHeight, role: role));
+  displayTechnicalPoints(ParticipantStatusModel pStatus, FightRole role, double cellHeight) {
+    return Expanded(flex: 30, child: TechnicalPoints(pStatusModel: pStatus, height: cellHeight, role: role));
   }
 
   displayClassificationPoints(ParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
@@ -164,16 +165,16 @@ class FightState extends State<FightScreen> {
   doAction(FightScreenActions action) {
     switch (action) {
       case FightScreenActions.RedActivityTime:
-        _activityRedStopwatch = _activityRedStopwatch == null ? ObservableStopwatch() : null;
+        _r.activityStopwatch = _r.activityStopwatch == null ? ObservableStopwatch() : null;
         break;
       case FightScreenActions.RedInjuryTime:
-        _injuryRedStopwatch = _injuryRedStopwatch == null ? ObservableStopwatch() : null;
+        _r.injuryStopwatch = _r.injuryStopwatch == null ? ObservableStopwatch() : null;
         break;
       case FightScreenActions.RedActivityTime:
-        _activityBlueStopwatch = _activityBlueStopwatch == null ? ObservableStopwatch() : null;
+        _b.activityStopwatch = _b.activityStopwatch == null ? ObservableStopwatch() : null;
         break;
       case FightScreenActions.RedInjuryTime:
-        _injuryBlueStopwatch = _injuryBlueStopwatch == null ? ObservableStopwatch() : null;
+        _b.injuryStopwatch = _b.injuryStopwatch == null ? ObservableStopwatch() : null;
         break;
       default:
         break;
@@ -304,7 +305,7 @@ class FightState extends State<FightScreen> {
               )),
               Row(
                 children: [
-                  displayTechnicalPoints(fight.r, FightRole.red, cellHeightClock),
+                  displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
                   Expanded(
                       flex: 2,
                       child: Container(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
@@ -322,7 +323,7 @@ class FightState extends State<FightScreen> {
                   Expanded(
                       flex: 2,
                       child: Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
-                  displayTechnicalPoints(fight.b, FightRole.blue, cellHeightClock),
+                  displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                 ],
               ),
               Container(
