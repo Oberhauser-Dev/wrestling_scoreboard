@@ -8,13 +8,13 @@ class MockableDateTime {
 }
 
 class ObservableStopwatch extends Stopwatch {
-  final void Function()? onStart;
-  final void Function()? onStartStop;
-  final void Function()? onStop;
-  final void Function()? onEnd;
-  final void Function(Duration)? onChange;
-  final void Function(Duration)? onChangeSecond;
-  final void Function(Duration)? onChangeMinute;
+  final StreamController onStart = StreamController.broadcast();
+  final StreamController<bool> onStartStop = StreamController.broadcast();
+  final StreamController<Duration> onStop = StreamController.broadcast();
+  final StreamController<Duration> onEnd = StreamController.broadcast();
+  final StreamController<Duration> onChange = StreamController.broadcast();
+  final StreamController<Duration> onChangeSecond = StreamController.broadcast();
+  final StreamController<Duration> onChangeMinute = StreamController.broadcast();
   Timer? _timer;
   Duration presetDuration = Duration();
   Duration _prevDuration = Duration();
@@ -22,14 +22,7 @@ class ObservableStopwatch extends Stopwatch {
   final Duration tick;
 
   ObservableStopwatch({
-    this.onStartStop,
-    this.onStart,
-    this.onStop,
-    this.onChange,
-    this.onChangeSecond,
-    this.onChangeMinute,
     this.limit,
-    this.onEnd,
     this.tick = const Duration(milliseconds: 30),
   });
 
@@ -46,21 +39,21 @@ class ObservableStopwatch extends Stopwatch {
         _handleTick();
       });
       super.start();
-      if (onStart != null) onStart!();
+      onStart.add(null);
       _onStartStop();
     }
   }
 
   _handleTick() {
     var elapsed = this.elapsed;
-    if (onChange != null) onChange!(this.elapsed);
+    onChange.add(this.elapsed);
     if (elapsed.inSeconds != _prevDuration.inSeconds) {
-      if (onChangeSecond != null) onChangeSecond!(this.elapsed);
-      if (onChangeMinute != null && elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute!(this.elapsed);
+      onChangeSecond.add(this.elapsed);
+      if (elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute.add(this.elapsed);
     }
     if (limit != null && elapsed >= limit!) {
       this.stop();
-      if (onEnd != null) onEnd!();
+      onEnd.add(this.elapsed);
     }
     _prevDuration = elapsed;
   }
@@ -69,7 +62,7 @@ class ObservableStopwatch extends Stopwatch {
     if (isRunning) {
       _timer?.cancel();
       super.stop();
-      if (onStop != null) onStop!();
+      onStop.add(this.elapsed);
       _onStartStop();
     }
   }
@@ -79,7 +72,7 @@ class ObservableStopwatch extends Stopwatch {
   }
 
   _onStartStop() {
-    if (onStartStop != null) onStartStop!();
+    onStartStop.add(super.isRunning);
   }
 
   reset() {

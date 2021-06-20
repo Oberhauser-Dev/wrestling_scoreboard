@@ -20,11 +20,13 @@ class TechnicalPoints extends StatelessWidget {
     return Container(
         color: role == FightRole.red ? Colors.red : Colors.blue,
         height: height,
-        child: Center(
-          child: Consumer<Fight>(
-            builder: (context, cart, child) =>
-                Text((pStatusModel.pStatus?.technicalPoints ?? 0).toString(), style: TextStyle(fontSize: fontSize)),
+        child: Column(children: [
+          Center(
+            child: Consumer<Fight>(
+              builder: (context, cart, child) =>
+                  Text((pStatusModel.pStatus?.technicalPoints ?? 0).toString(), style: TextStyle(fontSize: fontSize)),
+            ),
           ),
-        ));
+        ]));
   }
 }

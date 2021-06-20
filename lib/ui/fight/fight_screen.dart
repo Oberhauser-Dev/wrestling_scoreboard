@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_action_conrols.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
+import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_status_model.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
@@ -38,7 +39,6 @@ class FightState extends State<FightScreen> {
   late ObservableStopwatch _breakStopwatch;
   late ParticipantStatusModel _r;
   late ParticipantStatusModel _b;
-  String _currentTime = '0:00';
   int round = 1;
   late Function(FightScreenActionIntent) callback;
 
@@ -46,79 +46,60 @@ class FightState extends State<FightScreen> {
     _r = ParticipantStatusModel(fight.r);
     _b = ParticipantStatusModel(fight.b);
     _stopwatch = _fightStopwatch = ObservableStopwatch(
-        limit: match.roundDuration * match.maxRounds,
-        onChangeSecond: (val) {
-          if (_stopwatch == _fightStopwatch) {
-            // Only display if active
-            fight.duration = updateDisplayTime(val);
+      limit: match.roundDuration * match.maxRounds,
+    );
+    _fightStopwatch.onStart.stream.listen((event) {
+      if (_r.activityStopwatch != null) _r.activityStopwatch!.start();
+      if (_b.activityStopwatch != null) _b.activityStopwatch!.start();
+    });
+    _fightStopwatch.onStop.stream.listen((event) {
+      if (_r.activityStopwatch != null) _r.activityStopwatch!.stop();
+      if (_b.activityStopwatch != null) _b.activityStopwatch!.stop();
+    });
+    _fightStopwatch.onChangeSecond.stream.listen(
+      (event) {
+        if (_stopwatch == _fightStopwatch) {
+          fight.duration = event;
 
-            if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
-              _fightStopwatch.stop();
-              if (_r.activityStopwatch != null) {
-                _r.activityStopwatch!.stop();
-                _r.activityStopwatch = null;
-              }
-              if (_b.activityStopwatch != null) {
-                _b.activityStopwatch!.stop();
-                _b.activityStopwatch = null;
-              }
-              if (round < match.maxRounds) {
-                _stopwatch = _breakStopwatch;
-                _breakStopwatch.start();
-                round++;
-              }
-            } else if (fight.duration.inSeconds ~/ match.roundDuration.inSeconds < (round - 1)) {
-              // Fix times below round time: e.g. if subtract time
-              round -= 1;
+          if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
+            _fightStopwatch.stop();
+            if (_r.activityStopwatch != null) {
+              _r.activityStopwatch!.stop();
+              _r.activityStopwatch = null;
             }
+            if (_b.activityStopwatch != null) {
+              _b.activityStopwatch!.stop();
+              _b.activityStopwatch = null;
+            }
+            if (round < match.maxRounds) {
+              setState(() {
+                _stopwatch = _breakStopwatch;
+              });
+              _breakStopwatch.start();
+              round++;
+            }
+          } else if (fight.duration.inSeconds ~/ match.roundDuration.inSeconds < (round - 1)) {
+            // Fix times below round time: e.g. if subtract time
+            round -= 1;
           }
-        },
-        onStartStop: onStartStop,
-        onStart: () {
-          if (_r.activityStopwatch != null) _r.activityStopwatch!.start();
-          if (_b.activityStopwatch != null) _b.activityStopwatch!.start();
-        },
-        onStop: () {
-          if (_r.activityStopwatch != null) _r.activityStopwatch!.stop();
-          if (_b.activityStopwatch != null) _b.activityStopwatch!.stop();
-        });
+        }
+      },
+    );
     _stopwatch.addDuration(fight.duration);
     _breakStopwatch = ObservableStopwatch(
       limit: match.breakDuration,
-      onEnd: () {
-        if (_stopwatch == _breakStopwatch) {
-          _breakStopwatch.reset();
-          _stopwatch = _fightStopwatch;
-          updateDisplayTime(_fightStopwatch.elapsed); // Refresh old display
-        }
-      },
-      onChangeSecond: (val) {
-        if (_stopwatch == _breakStopwatch) {
-          // Only display if active
-          updateDisplayTime(val);
-        }
-      },
-      onStartStop: onStartStop,
     );
+    _breakStopwatch.onEnd.stream.listen((event) {
+      if (_stopwatch == _breakStopwatch) {
+        _breakStopwatch.reset();
+        setState(() {
+          _stopwatch = _fightStopwatch;
+        });
+      }
+    });
     callback = (FightScreenActionIntent intent) {
       FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, doAction, context: context);
     };
-  }
-
-  onStartStop() {
-    // Update color
-    setState(() {
-      _currentTime = _currentTime;
-    });
-  }
-
-  Duration updateDisplayTime(Duration duration) {
-    setState(() {
-      _currentTime =
-          '${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
-    });
-
-    return duration;
   }
 
   displayName(ParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
@@ -189,7 +170,6 @@ class FightState extends State<FightScreen> {
     double cellHeight = width / 30;
     double fontSizeDefault = width / 90;
     double cellHeightClock = width / 6;
-    double fontSizeClock = width / 9;
 
     MaterialColor stopwatchColor = _stopwatch == _breakStopwatch ? Colors.orange : white;
 
@@ -312,14 +292,9 @@ class FightState extends State<FightScreen> {
                   Expanded(
                       flex: 60,
                       child: Container(
-                          height: cellHeightClock,
-                          child: Center(
-                              child: Text(
-                            _currentTime,
-                            style: TextStyle(
-                                fontSize: fontSizeClock,
-                                color: _stopwatch.isRunning ? stopwatchColor : stopwatchColor.shade200),
-                          )))),
+                        height: cellHeightClock,
+                        child: Center(child: TimeDisplay(_stopwatch, stopwatchColor)),
+                      )),
                   Expanded(
                       flex: 2,
                       child: Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
