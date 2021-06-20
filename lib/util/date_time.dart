@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'dart:async';
 
 class MockableDateTime {
   static bool isMocked = false;
@@ -9,73 +7,62 @@ class MockableDateTime {
   static now() => MockableDateTime.isMocked ? mockedDateTime : DateTime.now();
 }
 
-class CustomStopWatchTimer {
+class ObservableStopwatch extends Stopwatch {
   final void Function()? onStart;
   final void Function()? onStartStop;
   final void Function()? onStop;
-  final void Function(int)? onChangeSecond;
-  late final StopWatchTimer instance;
-  int _savePresetSeconds = 0;
-  int _currentMillis = 0;
+  final void Function(Duration)? onChange;
+  final void Function(Duration)? onChangeSecond;
+  final void Function(Duration)? onChangeMinute;
+  Timer? _timer;
+  Duration presetDuration = Duration();
+  Duration _prevDuration = Duration();
+  final Duration tick;
 
-  CustomStopWatchTimer({
-    bool isLapHours = true,
-    mode = StopWatchMode.countUp,
-    int presetMillisecond = 0,
-    Function(int)? onChange,
-    Function(int)? onChangeRawSecond,
-    Function(int)? onChangeRawMinute,
-    VoidCallback? onEnded,
+  ObservableStopwatch({
     this.onStartStop,
     this.onStart,
     this.onStop,
+    this.onChange,
     this.onChangeSecond,
-  }) {
-    instance = StopWatchTimer(
-        isLapHours: isLapHours,
-        mode: mode,
-        presetMillisecond: presetMillisecond,
-        onChange: onChange,
-        onChangeRawSecond: (int val) {
-          if (onChangeRawSecond != null) onChangeRawSecond(val);
-          if (onChangeSecond != null) {
-            // Fix preset seconds
-            if (!instance.isRunning) {
-              _currentMillis = _currentMillis + (val - _savePresetSeconds) * 1000;
-              _savePresetSeconds = val;
-            } else {
-              _currentMillis = val * 1000;
-            }
-            onChangeSecond!(_currentMillis ~/ 1000);
-          }
-        },
-        onChangeRawMinute: onChangeRawMinute,
-        onEnded: onEnded);
-  }
+    this.onChangeMinute,
+    this.tick = const Duration(milliseconds: 30),
+  });
 
-  get isRunning => instance.isRunning;
+  get elapsed => super.elapsed + presetDuration;
 
-  get currentMillis => _currentMillis;
-
-  addTime({int? millis, int sec = 0}) {
-    instance.setPresetTime(mSec: millis ?? sec * 1000);
+  addDuration(Duration duration) {
+    presetDuration += duration;
+    _handleTick();
   }
 
   start() {
-    if (!instance.isRunning) {
-      instance.onExecute.add(StopWatchExecute.start);
-      this._currentMillis = instance.rawTime.value;
+    if (!isRunning) {
+      _timer = Timer.periodic(tick, (Timer timer) {
+        _handleTick();
+      });
+      super.start();
       if (onStart != null) onStart!();
       _onStartStop();
     }
   }
 
+  _handleTick() {
+    var elapsed = this.elapsed;
+    if (onChange != null) onChange!(this.elapsed);
+    if (elapsed.inSeconds != _prevDuration.inSeconds) {
+      if (onChangeSecond != null) onChangeSecond!(this.elapsed);
+      if (onChangeMinute != null && elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute!(this.elapsed);
+    }
+    _prevDuration = elapsed;
+  }
+
   stop() {
-    if (instance.isRunning) {
+    if (isRunning) {
+      _timer?.cancel();
+      super.stop();
       if (onStop != null) onStop!();
       _onStartStop();
-      this._currentMillis = instance.rawTime.value;
-      instance.onExecute.add(StopWatchExecute.stop);
     }
   }
 
@@ -85,11 +72,9 @@ class CustomStopWatchTimer {
 
   reset() {
     stop();
-    instance.onExecute.add(StopWatchExecute.reset);
-  }
-
-  dispose() {
-    instance.dispose();
+    super.reset();
+    _prevDuration = Duration();
+    presetDuration = Duration();
   }
 }
 

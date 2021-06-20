@@ -103,7 +103,7 @@ class FightScreenActionIntent extends Intent {
 
 class FightActionHandler extends StatelessWidget {
   final Widget child;
-  final CustomStopWatchTimer stopwatch;
+  final ObservableStopwatch stopwatch;
   final TeamMatch match;
   final Fight fight;
 
@@ -113,21 +113,20 @@ class FightActionHandler extends StatelessWidget {
     handleIntentStatic(intent, this.stopwatch, this.match, this.fight, context: context);
   }
 
-  static handleIntentStatic(
-      FightScreenActionIntent intent, CustomStopWatchTimer stopwatch, TeamMatch match, Fight fight,
+  static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, TeamMatch match, Fight fight,
       {BuildContext? context}) {
     switch (intent.type) {
       case FightScreenActions.StartStop:
         stopwatch.isRunning ? stopwatch.stop() : stopwatch.start();
         break;
       case FightScreenActions.AddOneSec:
-        stopwatch.addTime(sec: 1);
+        stopwatch.addDuration(const Duration(seconds: 1));
         break;
       case FightScreenActions.RmOneSec:
-        if (stopwatch.currentMillis > 1000)
-          stopwatch.addTime(sec: -1);
+        if (stopwatch.elapsed > const Duration(seconds: 1))
+          stopwatch.addDuration(-const Duration(seconds: 1));
         else
-          stopwatch.addTime(millis: -stopwatch.currentMillis);
+          stopwatch.addDuration(-stopwatch.elapsed); // Do not reset, as it will may stop the timer
         break;
       case FightScreenActions.Reset:
         stopwatch.reset();

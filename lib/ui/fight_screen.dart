@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
@@ -31,11 +30,11 @@ class FightScreen extends StatefulWidget {
 class FightState extends State<FightScreen> {
   final TeamMatch match;
   final Fight fight;
-  late CustomStopWatchTimer _stopwatch;
-  late CustomStopWatchTimer _fightStopwatch;
-  late CustomStopWatchTimer _breakStopwatch;
-  late CustomStopWatchTimer _injuryRedStopwatch;
-  late CustomStopWatchTimer _injuryBlueStopwatch;
+  late ObservableStopwatch _stopwatch;
+  late ObservableStopwatch _fightStopwatch;
+  late ObservableStopwatch _breakStopwatch;
+  late ObservableStopwatch _injuryRedStopwatch;
+  late ObservableStopwatch _injuryBlueStopwatch;
   int passivityRedSeconds = 0;
   int passivityBlueSeconds = 0;
   String _currentTime = '0:00';
@@ -43,12 +42,11 @@ class FightState extends State<FightScreen> {
   late Function(FightScreenActionIntent) callback;
 
   FightState(this.match, this.fight) {
-    _stopwatch = _fightStopwatch = CustomStopWatchTimer(
-      mode: StopWatchMode.countUp,
+    _stopwatch = _fightStopwatch = ObservableStopwatch(
       onChangeSecond: (val) {
         if (_stopwatch == _fightStopwatch) {
           // Only display if active
-          fight.duration = updateDisplayTime(val * 1000);
+          fight.duration = updateDisplayTime(val);
 
           if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
             _fightStopwatch.stop();
@@ -65,17 +63,16 @@ class FightState extends State<FightScreen> {
       },
       onStartStop: onStartStop,
     );
-    _stopwatch.addTime(millis: fight.duration.inMilliseconds);
-    _breakStopwatch = CustomStopWatchTimer(
-      mode: StopWatchMode.countUp,
+    _stopwatch.addDuration(fight.duration);
+    _breakStopwatch = ObservableStopwatch(
       onChangeSecond: (val) {
         if (_stopwatch == _breakStopwatch) {
           // Only display if active
-          var dur = updateDisplayTime(val * 1000);
+          var dur = updateDisplayTime(val);
           if (dur.compareTo(match.breakDuration) >= 0) {
             _breakStopwatch.reset();
             _stopwatch = _fightStopwatch;
-            updateDisplayTime(_fightStopwatch.currentMillis); // Refresh old display
+            updateDisplayTime(_fightStopwatch.elapsed); // Refresh old display
           }
         }
       },
@@ -93,13 +90,13 @@ class FightState extends State<FightScreen> {
     });
   }
 
-  Duration updateDisplayTime(int millis) {
+  Duration updateDisplayTime(Duration duration) {
     setState(() {
-      _currentTime = StopWatchTimer.getDisplayTime(millis, minute: true, second: true, milliSecond: false, hours: false)
-          .replaceFirst(RegExp(r'^0'), '');
+      _currentTime =
+          '${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
     });
 
-    return Duration(milliseconds: millis);
+    return duration;
   }
 
   displayName(ParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
@@ -381,12 +378,6 @@ class FightState extends State<FightScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await _stopwatch.dispose();
   }
 }
 
