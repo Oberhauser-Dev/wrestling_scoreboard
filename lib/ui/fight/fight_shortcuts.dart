@@ -17,6 +17,7 @@ enum FightScreenActions {
   Undo,
   NextFight,
   PreviousFight,
+  Horn,
   Quit,
   RedOne,
   RedTwo,
@@ -56,6 +57,8 @@ class FightScreenActionIntent extends Intent {
   const FightScreenActionIntent.NextFight() : type = FightScreenActions.NextFight;
 
   const FightScreenActionIntent.PreviousFight() : type = FightScreenActions.PreviousFight;
+
+  const FightScreenActionIntent.Horn() : type = FightScreenActions.Horn;
 
   const FightScreenActionIntent.Quit() : type = FightScreenActions.Quit;
 
@@ -231,6 +234,9 @@ class FightActionHandler extends StatelessWidget {
         break;
       case FightScreenActions.Undo:
         if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);
+        break;
+      case FightScreenActions.Horn:
+        // TODO: Handle this case.
         break;
     }
   }

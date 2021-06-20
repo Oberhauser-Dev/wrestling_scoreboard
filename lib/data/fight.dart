@@ -53,6 +53,9 @@ class Fight extends ChangeNotifier {
             ? getClassificationPointsLooserTournament(this.result!)
             : getClassificationPointsLooserTeamMatch(this.result!);
       }
+    } else {
+      this.r?.classificationPoints = null;
+      this.b?.classificationPoints = null;
     }
   }
 
