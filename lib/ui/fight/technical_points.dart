@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
+import 'package:wrestling_scoreboard/ui/components/FittedText.dart';
+import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_status_model.dart';
+import 'package:wrestling_scoreboard/util/colors.dart';
 
 class TechnicalPoints extends StatelessWidget {
   final double height;
@@ -14,19 +17,30 @@ class TechnicalPoints extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double fontSize = width / 9;
-
     return Container(
         color: role == FightRole.red ? Colors.red : Colors.blue,
         height: height,
         child: Column(children: [
-          Center(
-            child: Consumer<Fight>(
-              builder: (context, cart, child) =>
-                  Text((pStatusModel.pStatus?.technicalPoints ?? 0).toString(), style: TextStyle(fontSize: fontSize)),
+          Expanded(
+            flex: 70,
+            child: Center(
+              child: Consumer<Fight>(
+                  builder: (context, cart, child) =>
+                      FittedText((pStatusModel.pStatus?.technicalPoints ?? 0).toString())),
             ),
           ),
+          if (pStatusModel.activityStopwatch != null)
+            Expanded(
+                flex: 50,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [FittedText('AT'), TimeDisplay(pStatusModel.activityStopwatch!, white)])),
+          if (pStatusModel.isInjury)
+            Expanded(
+                flex: 50,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [FittedText('IT'), TimeDisplay(pStatusModel.injuryStopwatch, white)])),
         ]));
   }
 }

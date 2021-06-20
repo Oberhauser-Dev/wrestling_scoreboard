@@ -13,6 +13,7 @@ class ObservableStopwatch extends Stopwatch {
   final StreamController<Duration> onStop = StreamController.broadcast();
   final StreamController<Duration> onEnd = StreamController.broadcast();
   final StreamController<Duration> onChange = StreamController.broadcast();
+  final StreamController<Duration> onAdd = StreamController.broadcast();
   final StreamController<Duration> onChangeSecond = StreamController.broadcast();
   final StreamController<Duration> onChangeMinute = StreamController.broadcast();
   Timer? _timer;
@@ -30,6 +31,7 @@ class ObservableStopwatch extends Stopwatch {
 
   addDuration(Duration duration) {
     presetDuration += duration;
+    onAdd.add(duration);
     _handleTick();
   }
 
@@ -80,6 +82,18 @@ class ObservableStopwatch extends Stopwatch {
     super.reset();
     _prevDuration = Duration();
     presetDuration = Duration();
+  }
+
+  dispose() {
+    stop();
+    onStart.close();
+    onStartStop.close();
+    onStop.close();
+    onEnd.close();
+    onAdd.close();
+    onChange.close();
+    onChangeSecond.close();
+    onChangeMinute.close();
   }
 }
 

@@ -45,16 +45,33 @@ class FightState extends State<FightScreen> {
   FightState(this.match, this.fight) {
     _r = ParticipantStatusModel(fight.r);
     _b = ParticipantStatusModel(fight.b);
+    _r.injuryStopwatch.limit = match.injuryDuration;
+    _r.injuryStopwatch.onEnd.stream.listen((event) {
+      setState(() {
+        _r.isInjury = false;
+      });
+    });
+    _b.injuryStopwatch.limit = match.injuryDuration;
+    _b.injuryStopwatch.onEnd.stream.listen((event) {
+      setState(() {
+        _b.isInjury = false;
+      });
+    });
+
     _stopwatch = _fightStopwatch = ObservableStopwatch(
       limit: match.roundDuration * match.maxRounds,
     );
     _fightStopwatch.onStart.stream.listen((event) {
-      if (_r.activityStopwatch != null) _r.activityStopwatch!.start();
-      if (_b.activityStopwatch != null) _b.activityStopwatch!.start();
+      _r.activityStopwatch?.start();
+      _b.activityStopwatch?.start();
     });
     _fightStopwatch.onStop.stream.listen((event) {
-      if (_r.activityStopwatch != null) _r.activityStopwatch!.stop();
-      if (_b.activityStopwatch != null) _b.activityStopwatch!.stop();
+      _r.activityStopwatch?.stop();
+      _b.activityStopwatch?.stop();
+    });
+    _fightStopwatch.onAdd.stream.listen((event) {
+      _r.activityStopwatch?.addDuration(event);
+      _b.activityStopwatch?.addDuration(event);
     });
     _fightStopwatch.onChangeSecond.stream.listen(
       (event) {
@@ -64,11 +81,11 @@ class FightState extends State<FightScreen> {
           if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
             _fightStopwatch.stop();
             if (_r.activityStopwatch != null) {
-              _r.activityStopwatch!.stop();
+              _r.activityStopwatch!.dispose();
               _r.activityStopwatch = null;
             }
             if (_b.activityStopwatch != null) {
-              _b.activityStopwatch!.stop();
+              _b.activityStopwatch!.dispose();
               _b.activityStopwatch = null;
             }
             if (round < match.maxRounds) {
@@ -117,10 +134,6 @@ class FightState extends State<FightScreen> {
           height: cellHeight,
           child: Center(
               child: Text((pStatus?.weight != null ? '${pStatus?.weight} $weightUnit' : 'Unknown weight'),
-                  // + ' | ' +
-                  // (pStatus?.participant.age != null
-                  //     ? '${pStatus?.participant.age} years'
-                  //     : 'Unknown age'),
                   style: TextStyle(
                       fontSize: fontSizeDefault, color: pStatus?.weight == null ? Colors.white30 : Colors.white)))),
     ]));
@@ -146,16 +159,56 @@ class FightState extends State<FightScreen> {
   doAction(FightScreenActions action) {
     switch (action) {
       case FightScreenActions.RedActivityTime:
-        _r.activityStopwatch = _r.activityStopwatch == null ? ObservableStopwatch() : null;
+        ParticipantStatusModel psm = _r;
+        psm.activityStopwatch?.dispose();
+        setState(() {
+          psm.activityStopwatch =
+              psm.activityStopwatch == null ? ObservableStopwatch(limit: match.activityDuration) : null;
+        });
+        if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
+        psm.activityStopwatch?.onEnd.stream.listen((event) {
+          psm.activityStopwatch?.dispose();
+          setState(() {
+            psm.activityStopwatch = null;
+          });
+        });
         break;
       case FightScreenActions.RedInjuryTime:
-        _r.injuryStopwatch = _r.injuryStopwatch == null ? ObservableStopwatch() : null;
+        ParticipantStatusModel psm = _r;
+        setState(() {
+          psm.isInjury = !psm.isInjury;
+        });
+        if (psm.isInjury)
+          psm.injuryStopwatch.start();
+        else {
+          psm.injuryStopwatch.stop();
+        }
         break;
-      case FightScreenActions.RedActivityTime:
-        _b.activityStopwatch = _b.activityStopwatch == null ? ObservableStopwatch() : null;
+      case FightScreenActions.BlueActivityTime:
+        ParticipantStatusModel psm = _b;
+        psm.activityStopwatch?.dispose();
+        setState(() {
+          psm.activityStopwatch =
+              psm.activityStopwatch == null ? ObservableStopwatch(limit: match.activityDuration) : null;
+        });
+        if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
+        psm.activityStopwatch?.onEnd.stream.listen((event) {
+          psm.activityStopwatch?.dispose();
+          setState(() {
+            psm.activityStopwatch = null;
+          });
+        });
         break;
-      case FightScreenActions.RedInjuryTime:
-        _b.injuryStopwatch = _b.injuryStopwatch == null ? ObservableStopwatch() : null;
+      case FightScreenActions.BlueInjuryTime:
+        ParticipantStatusModel psm = _b;
+        setState(() {
+          psm.isInjury = !psm.isInjury;
+        });
+        if (psm.isInjury)
+          psm.injuryStopwatch.start();
+        else {
+          psm.injuryStopwatch.stop();
+        }
         break;
       default:
         break;
@@ -312,5 +365,12 @@ class FightState extends State<FightScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _fightStopwatch.dispose();
+    _breakStopwatch.dispose();
   }
 }

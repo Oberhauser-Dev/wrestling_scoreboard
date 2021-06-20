@@ -18,16 +18,20 @@ class TimeDisplayState extends State<TimeDisplay> {
 
   update() {
     // Update color
-    setState(() {
-      _currentTime = _currentTime;
-    });
+    if (mounted) {
+      setState(() {
+        _currentTime = _currentTime;
+      });
+    }
   }
 
   updateDisplayTime(Duration duration) {
-    setState(() {
-      _currentTime =
-          '${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
-    });
+    if (mounted) {
+      setState(() {
+        _currentTime =
+            '${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+      });
+    }
   }
 
   @override
