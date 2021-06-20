@@ -20,9 +20,12 @@ class Fight extends ChangeNotifier {
   Fight(this.r, this.b, this.weightClass, {this.pool});
 
   addAction(FightAction action) {
-    _actions.add(action);
-    action.role == FightRole.red ? this.r?.actions.add(action) : this.b?.actions.add(action);
-    notifyListeners();
+    ParticipantStatus? pStatus = action.role == FightRole.red ? this.r : this.b;
+    if (pStatus != null) {
+      _actions.add(action);
+      pStatus.actions.add(action);
+      notifyListeners();
+    }
   }
 
   removeAction(FightAction action) {
