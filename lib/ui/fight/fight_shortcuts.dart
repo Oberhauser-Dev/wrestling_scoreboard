@@ -106,18 +106,21 @@ class FightActionHandler extends StatelessWidget {
   final ObservableStopwatch stopwatch;
   final TeamMatch match;
   final Fight fight;
+  final Function(FightScreenActions action) doAction;
 
-  FightActionHandler({required this.child, required this.stopwatch, required this.match, required this.fight});
+  FightActionHandler(
+      {required this.child, required this.stopwatch, required this.match, required this.fight, required this.doAction});
 
   handleIntent(FightScreenActionIntent intent, {BuildContext? context}) {
-    handleIntentStatic(intent, this.stopwatch, this.match, this.fight, context: context);
+    handleIntentStatic(intent, this.stopwatch, this.match, this.fight, this.doAction, context: context);
   }
 
   static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, TeamMatch match, Fight fight,
+      Function(FightScreenActions action) doAction,
       {BuildContext? context}) {
     switch (intent.type) {
       case FightScreenActions.StartStop:
-        stopwatch.isRunning ? stopwatch.stop() : stopwatch.start();
+        stopwatch.startStop();
         break;
       case FightScreenActions.AddOneSec:
         stopwatch.addDuration(const Duration(seconds: 1));
@@ -181,10 +184,10 @@ class FightActionHandler extends StatelessWidget {
             FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal));
         break;
       case FightScreenActions.RedActivityTime:
-        // TODO: Handle this case.
+        doAction(FightScreenActions.RedActivityTime);
         break;
       case FightScreenActions.RedInjuryTime:
-        // TODO: Handle this case.
+        doAction(FightScreenActions.RedInjuryTime);
         break;
       case FightScreenActions.RedUndo:
         if (fight.r != null && fight.r!.actions.isNotEmpty) fight.removeAction(fight.r!.actions.last);
@@ -221,10 +224,10 @@ class FightActionHandler extends StatelessWidget {
         if (fight.b != null && fight.b!.actions.isNotEmpty) fight.removeAction(fight.b!.actions.last);
         break;
       case FightScreenActions.BlueActivityTime:
-        // TODO: Handle this case.
+        doAction(FightScreenActions.BlueActivityTime);
         break;
       case FightScreenActions.BlueInjuryTime:
-        // TODO: Handle this case.
+        doAction(FightScreenActions.BlueInjuryTime);
         break;
       case FightScreenActions.Undo:
         if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);

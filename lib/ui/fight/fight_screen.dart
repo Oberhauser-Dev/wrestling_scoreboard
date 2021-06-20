@@ -2,18 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
-import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/participant_status.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
-import 'package:wrestling_scoreboard/ui/fight_shortcuts.dart';
+import 'package:wrestling_scoreboard/ui/fight/fight_action_conrols.dart';
+import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
+import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
-import 'common_elements.dart';
-import 'components/FittedText.dart';
+import '../common_elements.dart';
+import '../components/FittedText.dart';
+import 'fight_actions.dart';
 
 class FightScreen extends StatefulWidget {
   final TeamMatch match;
@@ -33,53 +35,72 @@ class FightState extends State<FightScreen> {
   late ObservableStopwatch _stopwatch;
   late ObservableStopwatch _fightStopwatch;
   late ObservableStopwatch _breakStopwatch;
-  late ObservableStopwatch _injuryRedStopwatch;
-  late ObservableStopwatch _injuryBlueStopwatch;
-  int passivityRedSeconds = 0;
-  int passivityBlueSeconds = 0;
+  ObservableStopwatch? _injuryRedStopwatch;
+  ObservableStopwatch? _activityRedStopwatch;
+  ObservableStopwatch? _injuryBlueStopwatch;
+  ObservableStopwatch? _activityBlueStopwatch;
   String _currentTime = '0:00';
   int round = 1;
   late Function(FightScreenActionIntent) callback;
 
   FightState(this.match, this.fight) {
     _stopwatch = _fightStopwatch = ObservableStopwatch(
-      onChangeSecond: (val) {
-        if (_stopwatch == _fightStopwatch) {
-          // Only display if active
-          fight.duration = updateDisplayTime(val);
+        limit: match.roundDuration * match.maxRounds,
+        onChangeSecond: (val) {
+          if (_stopwatch == _fightStopwatch) {
+            // Only display if active
+            fight.duration = updateDisplayTime(val);
 
-          if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
-            _fightStopwatch.stop();
-            if (round < match.maxRounds) {
-              _stopwatch = _breakStopwatch;
-              _breakStopwatch.start();
-              round++;
+            if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
+              _fightStopwatch.stop();
+              if (_activityRedStopwatch != null) {
+                _activityRedStopwatch!.stop();
+                _activityRedStopwatch = null;
+              }
+              if (_activityBlueStopwatch != null) {
+                _activityBlueStopwatch!.stop();
+                _activityBlueStopwatch = null;
+              }
+              if (round < match.maxRounds) {
+                _stopwatch = _breakStopwatch;
+                _breakStopwatch.start();
+                round++;
+              }
+            } else if (fight.duration.inSeconds ~/ match.roundDuration.inSeconds < (round - 1)) {
+              // Fix times below round time: e.g. if subtract time
+              round -= 1;
             }
-          } else if (fight.duration.inSeconds ~/ match.roundDuration.inSeconds < (round - 1)) {
-            // Fix times below round time: e.g. if subtract time
-            round -= 1;
           }
-        }
-      },
-      onStartStop: onStartStop,
-    );
+        },
+        onStartStop: onStartStop,
+        onStart: () {
+          if (_activityRedStopwatch != null) _activityRedStopwatch!.start();
+          if (_activityBlueStopwatch != null) _activityBlueStopwatch!.start();
+        },
+        onStop: () {
+          if (_activityRedStopwatch != null) _activityRedStopwatch!.stop();
+          if (_activityBlueStopwatch != null) _activityBlueStopwatch!.stop();
+        });
     _stopwatch.addDuration(fight.duration);
     _breakStopwatch = ObservableStopwatch(
+      limit: match.breakDuration,
+      onEnd: () {
+        if (_stopwatch == _breakStopwatch) {
+          _breakStopwatch.reset();
+          _stopwatch = _fightStopwatch;
+          updateDisplayTime(_fightStopwatch.elapsed); // Refresh old display
+        }
+      },
       onChangeSecond: (val) {
         if (_stopwatch == _breakStopwatch) {
           // Only display if active
-          var dur = updateDisplayTime(val);
-          if (dur.compareTo(match.breakDuration) >= 0) {
-            _breakStopwatch.reset();
-            _stopwatch = _fightStopwatch;
-            updateDisplayTime(_fightStopwatch.elapsed); // Refresh old display
-          }
+          updateDisplayTime(val);
         }
       },
       onStartStop: onStartStop,
     );
     callback = (FightScreenActionIntent intent) {
-      FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, context: context);
+      FightActionHandler.handleIntentStatic(intent, _stopwatch, match, fight, doAction, context: context);
     };
   }
 
@@ -123,18 +144,8 @@ class FightState extends State<FightScreen> {
     ]));
   }
 
-  displayTechnicalPoints(ParticipantStatus? pStatus, MaterialColor color, double cellHeight, double fontSize) {
-    return Expanded(
-        flex: 30,
-        child: Container(
-            color: color,
-            height: cellHeight,
-            child: Center(
-              child: Consumer<Fight>(
-                builder: (context, cart, child) =>
-                    Text((pStatus?.technicalPoints ?? 0).toString(), style: TextStyle(fontSize: fontSize)),
-              ),
-            )));
+  displayTechnicalPoints(ParticipantStatus? pStatus, FightRole role, double cellHeight) {
+    return Expanded(flex: 30, child: TechnicalPoints(pStatus: pStatus, height: cellHeight, role: role));
   }
 
   displayClassificationPoints(ParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
@@ -150,81 +161,23 @@ class FightState extends State<FightScreen> {
         : Container();
   }
 
-  displayActionControls(FightRole role, double padding, double cellHeight, double fontSizeDefault) {
-    bool isRed = role == FightRole.red;
-    MaterialColor color = isRed ? Colors.red : Colors.blue;
-    var actions = <Widget>[
-      displayActionControl(
-          '1',
-          () => callback(isRed ? const FightScreenActionIntent.RedOne() : FightScreenActionIntent.BlueOne()),
-          color,
-          padding),
-      displayActionControl(
-          '2',
-          () => callback(isRed ? const FightScreenActionIntent.RedTwo() : FightScreenActionIntent.BlueTwo()),
-          color,
-          padding),
-      displayActionControl(
-          '4',
-          () => callback(isRed ? const FightScreenActionIntent.RedFour() : FightScreenActionIntent.BlueFour()),
-          color,
-          padding),
-      displayActionControl(
-          'P',
-          () =>
-              callback(isRed ? const FightScreenActionIntent.RedPassivity() : FightScreenActionIntent.BluePassivity()),
-          color,
-          padding),
-      displayActionControl(
-          'O',
-          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
-          color,
-          padding),
-      /*displayActionControl(
-          'D',
-              () =>
-              callback(isRed ? const FightScreenActionIntent.RedDismissal() : FightScreenActionIntent.BlueDismissal()),
-          color,
-          padding),*/
-      displayActionControl(
-          'AT', // AZ Activity Time, Aktivitätszeit
-          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
-          color,
-          padding),
-      displayActionControl(
-          'IT', // VZ Injury Time, Verletzungszeit
-          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
-          color,
-          padding),
-      displayActionControl(
-          '⎌',
-          () => callback(isRed ? const FightScreenActionIntent.RedUndo() : FightScreenActionIntent.BlueUndo()),
-          color,
-          padding),
-    ];
-    return Expanded(
-      flex: 2,
-      child: Container(
-          height: cellHeight,
-          child: IntrinsicWidth(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: actions,
-          ))),
-    );
-  }
-
-  displayActionControl(String text, void Function() callback, MaterialColor color, double padding) {
-    return Expanded(
-        child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: color,
-              side: BorderSide(color: color.shade900, width: 1),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-            ),
-            onPressed: () => callback(),
-            child: FittedText(text)));
+  doAction(FightScreenActions action) {
+    switch (action) {
+      case FightScreenActions.RedActivityTime:
+        _activityRedStopwatch = _activityRedStopwatch == null ? ObservableStopwatch() : null;
+        break;
+      case FightScreenActions.RedInjuryTime:
+        _injuryRedStopwatch = _injuryRedStopwatch == null ? ObservableStopwatch() : null;
+        break;
+      case FightScreenActions.RedActivityTime:
+        _activityBlueStopwatch = _activityBlueStopwatch == null ? ObservableStopwatch() : null;
+        break;
+      case FightScreenActions.RedInjuryTime:
+        _injuryBlueStopwatch = _injuryBlueStopwatch == null ? ObservableStopwatch() : null;
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -243,6 +196,7 @@ class FightState extends State<FightScreen> {
       stopwatch: _stopwatch,
       match: match,
       fight: fight,
+      doAction: doAction,
       child: Scaffold(
         body: ChangeNotifierProvider.value(
           value: fight,
@@ -350,21 +304,25 @@ class FightState extends State<FightScreen> {
               )),
               Row(
                 children: [
-                  displayTechnicalPoints(fight.r, Colors.red, cellHeightClock, fontSizeClock),
-                  displayActionControls(FightRole.red, padding, cellHeightClock, fontSizeDefault),
+                  displayTechnicalPoints(fight.r, FightRole.red, cellHeightClock),
+                  Expanded(
+                      flex: 2,
+                      child: Container(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
                   Expanded(
                       flex: 60,
                       child: Container(
                           height: cellHeightClock,
                           child: Center(
                               child: Text(
-                                _currentTime,
+                            _currentTime,
                             style: TextStyle(
                                 fontSize: fontSizeClock,
                                 color: _stopwatch.isRunning ? stopwatchColor : stopwatchColor.shade200),
                           )))),
-                  displayActionControls(FightRole.blue, padding, cellHeightClock, fontSizeDefault),
-                  displayTechnicalPoints(fight.b, Colors.blue, cellHeightClock, fontSizeClock),
+                  Expanded(
+                      flex: 2,
+                      child: Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
+                  displayTechnicalPoints(fight.b, FightRole.blue, cellHeightClock),
                 ],
               ),
               Container(
@@ -375,44 +333,6 @@ class FightState extends State<FightScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ActionsWidget extends StatelessWidget {
-  final List<FightAction> actions;
-
-  ActionsWidget(this.actions) {
-    actions.sort((a, b) => a.duration.compareTo(b.duration));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double padding = width / 100;
-    double cellHeight = width / 18;
-
-    return SingleChildScrollView(
-      reverse: true,
-      scrollDirection: Axis.horizontal,
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            ...this.actions.map((e) {
-              final color = e.role == FightRole.red ? Colors.red : Colors.blue;
-              return Tooltip(
-                  message: durationToString(e.duration),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 1),
-                    height: cellHeight,
-                    padding: EdgeInsets.all(padding),
-                    child: FittedText(e.toString()),
-                    color: color,
-                  ));
-            }),
-          ],
         ),
       ),
     );

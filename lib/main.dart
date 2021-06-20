@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/data/weight_class.dart';
-import 'package:wrestling_scoreboard/ui/fight_screen.dart';
+import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/match_sequence.dart';
 
 import 'data/fight.dart';

@@ -16,6 +16,8 @@ class TeamMatch {
   List<Fight>? _fights;
   final Duration roundDuration = Duration(minutes: 3);
   final Duration breakDuration = Duration(seconds: 30);
+  final Duration activityDuration = Duration(seconds: 30);
+  final Duration injuryDuration = Duration(seconds: 30);
   int maxRounds = 2;
   List<WeightClass> weightClasses = [
     WeightClass(57, WrestlingStyle.free),

@@ -11,12 +11,14 @@ class ObservableStopwatch extends Stopwatch {
   final void Function()? onStart;
   final void Function()? onStartStop;
   final void Function()? onStop;
+  final void Function()? onEnd;
   final void Function(Duration)? onChange;
   final void Function(Duration)? onChangeSecond;
   final void Function(Duration)? onChangeMinute;
   Timer? _timer;
   Duration presetDuration = Duration();
   Duration _prevDuration = Duration();
+  Duration? limit;
   final Duration tick;
 
   ObservableStopwatch({
@@ -26,6 +28,8 @@ class ObservableStopwatch extends Stopwatch {
     this.onChange,
     this.onChangeSecond,
     this.onChangeMinute,
+    this.limit,
+    this.onEnd,
     this.tick = const Duration(milliseconds: 30),
   });
 
@@ -54,6 +58,10 @@ class ObservableStopwatch extends Stopwatch {
       if (onChangeSecond != null) onChangeSecond!(this.elapsed);
       if (onChangeMinute != null && elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute!(this.elapsed);
     }
+    if (limit != null && elapsed >= limit!) {
+      this.stop();
+      if (onEnd != null) onEnd!();
+    }
     _prevDuration = elapsed;
   }
 
@@ -64,6 +72,10 @@ class ObservableStopwatch extends Stopwatch {
       if (onStop != null) onStop!();
       _onStartStop();
     }
+  }
+
+  startStop() {
+    this.isRunning ? this.stop() : this.start();
   }
 
   _onStartStop() {
