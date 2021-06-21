@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
@@ -32,15 +33,17 @@ class TechnicalPoints extends StatelessWidget {
           if (pStatusModel.activityStopwatch != null)
             Expanded(
                 flex: 50,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [FittedText('AT'), TimeDisplay(pStatusModel.activityStopwatch!, white)])),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                  FittedText(AppLocalizations.of(context)!.activityTimeAbbr),
+                  TimeDisplay(pStatusModel.activityStopwatch!, white)
+                ])),
           if (pStatusModel.isInjury)
             Expanded(
                 flex: 50,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [FittedText('IT'), TimeDisplay(pStatusModel.injuryStopwatch, white)])),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                  FittedText(AppLocalizations.of(context)!.injuryTimeShort),
+                  TimeDisplay(pStatusModel.injuryStopwatch, white)
+                ])),
         ]));
   }
 }

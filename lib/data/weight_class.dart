@@ -4,7 +4,7 @@ import 'package:wrestling_scoreboard/util/units.dart';
 import 'wrestling_style.dart';
 
 class WeightClass {
-  late final String? name;
+  late final String name;
   final int weight;
   final WrestlingStyle style;
 

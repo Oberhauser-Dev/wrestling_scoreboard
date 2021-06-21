@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/ui/components/FittedText.dart';
 
@@ -52,13 +53,13 @@ class FightActionControls extends StatelessWidget {
           color,
           padding),*/
       displayActionControl(
-          'AT', // AZ Activity Time, Aktivitätszeit
+          AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           () => callback(
               isRed ? const FightScreenActionIntent.RedActivityTime() : FightScreenActionIntent.BlueActivityTime()),
           color,
           padding),
       displayActionControl(
-          'IT', // VZ Injury Time, Verletzungszeit
+          AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
           () => callback(
               isRed ? const FightScreenActionIntent.RedInjuryTime() : FightScreenActionIntent.BlueInjuryTime()),
           color,

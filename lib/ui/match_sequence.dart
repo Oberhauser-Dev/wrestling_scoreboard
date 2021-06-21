@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_result.dart';
@@ -35,7 +36,8 @@ class MatchSequence extends StatelessWidget {
             Expanded(
               flex: flexWidthWeight + flexWidthStyle,
               child: Container(
-                child: FittedText('${match.league}\nNo: ${match.id ?? ''}\nSR: ${match.referee.fullName}'),
+                child: FittedText(
+                    '${match.league}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee.fullName}'),
                 padding: EdgeInsets.all(padding),
               ),
             ),
@@ -67,12 +69,12 @@ class FightListItem extends StatelessWidget {
 
   FightListItem(this.fight, this.listItemCallback, this.flexWidthWeight, this.flexWidthStyle);
 
-  displayName(ParticipantStatus? pStatus, FightRole role, double fontSize) {
+  displayName(ParticipantStatus? pStatus, FightRole role, double fontSize, BuildContext context) {
     return Container(
       color: getColorFromFightRole(role),
       child: Center(
           child: Text(
-        pStatus == null ? 'Unbesetzt' : pStatus.participant.fullName,
+        pStatus == null ? AppLocalizations.of(context)!.participantVacant : pStatus.participant.fullName,
         style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white, fontSize: fontSize),
       )),
     );
@@ -105,7 +107,8 @@ class FightListItem extends StatelessWidget {
                       flex: flexWidthStyle,
                       child: Container(
                         child: Center(
-                            child: Text('${fight.weightClass.style == WrestlingStyle.free ? 'F' : 'G'}',
+                            child: Text(
+                                '${fight.weightClass.style == WrestlingStyle.free ? AppLocalizations.of(context)!.freeStyleAbbr : AppLocalizations.of(context)!.grecoRomanAbbr}',
                                 style: fontStyleDefault)),
                       )),
                   Expanded(
@@ -116,7 +119,7 @@ class FightListItem extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 50,
-                              child: displayName(fight.r, FightRole.red, fontSizeDefault),
+                              child: displayName(fight.r, FightRole.red, fontSizeDefault, context),
                             ),
                             Consumer<ParticipantStatus?>(
                               builder: (context, data, child) => Expanded(
@@ -163,7 +166,7 @@ class FightListItem extends StatelessWidget {
                                         color:
                                             data.winner != null ? getColorFromFightRole(data.winner!).shade800 : null,
                                         child: Center(
-                                          child: Text(getStringFromFightResult(data.result),
+                                          child: Text(getAbbreviationFromFightResult(data.result, context),
                                               style: TextStyle(fontSize: fontSizeDefault * 0.7)),
                                         ),
                                       )),
@@ -217,7 +220,7 @@ class FightListItem extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 50,
-                          child: displayName(fight.b, FightRole.blue, fontSizeDefault),
+                          child: displayName(fight.b, FightRole.blue, fontSizeDefault, context),
                         )
                       ]),
                     ),

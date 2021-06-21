@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/participant_status.dart';
@@ -92,13 +93,15 @@ class FightMainControlsState extends State<FightMainControls> {
         ? FightResult.values.map((FightResult? value) {
             return DropdownMenuItem<FightResult?>(
               value: value,
-              child: Tooltip(message: value.toString(), child: Text(getStringFromFightResult(value))),
+              child: Tooltip(
+                  message: getDescriptionFromFightResult(value, context),
+                  child: Text(getAbbreviationFromFightResult(value, context))),
             );
           }).toList()
         : [];
     items.add(DropdownMenuItem<FightResult?>(
       value: null,
-      child: Text('Select', style: TextStyle(color: Theme.of(context).disabledColor)),
+      child: Text(AppLocalizations.of(context)!.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
     ));
     return Container(
       color: role == widget.fightState.fight.winner ? getColorFromFightRole(role) : null,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/data/weight_class.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
@@ -18,10 +20,12 @@ void main() {
 }
 
 class WrestlingScoreboardApp extends StatelessWidget {
+  Locale _locale = Locale('en');
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wrestling Scoreboard',
+      title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
       theme: ThemeData(
         brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -31,6 +35,17 @@ class WrestlingScoreboardApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       themeMode: ThemeMode.dark,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('de', ''),
+      ],
+      locale: _locale,
       home: WrestlingScoreboardPage(),
     );
   }
@@ -42,7 +57,6 @@ class WrestlingScoreboardPage extends StatefulWidget {
 }
 
 class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
-
   @override
   Widget build(BuildContext context) {
     var match = initMatch();

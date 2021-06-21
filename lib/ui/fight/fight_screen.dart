@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
@@ -132,13 +133,16 @@ class FightState extends State<FightScreen> {
           height: cellHeight * 2,
           child: Center(
               child: FittedText(
-            pStatus?.participant.fullName ?? 'Unbesetzt',
+                pStatus?.participant.fullName ?? AppLocalizations.of(context)!.participantVacant,
             style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white),
           ))),
       Container(
           height: cellHeight,
           child: Center(
-              child: Text((pStatus?.weight != null ? '${pStatus?.weight} $weightUnit' : 'Unknown weight'),
+              child: Text(
+                  (pStatus?.weight != null
+                      ? '${pStatus?.weight} $weightUnit'
+                      : AppLocalizations.of(context)!.participantUnknownWeight),
                   style: TextStyle(
                       fontSize: fontSizeDefault, color: pStatus?.weight == null ? Colors.white30 : Colors.white)))),
     ]));
@@ -290,7 +294,7 @@ class FightState extends State<FightScreen> {
                                   padding: EdgeInsets.all(padding),
                                   child: Center(
                                       child: Text(
-                                    'Kampf ${match.fights.indexOf(this.fight) + 1}',
+                                        '${AppLocalizations.of(context)!.fight} ${match.fights.indexOf(this.fight) + 1}',
                                     style: fontStyleInfo,
                                   )))),
                         ]),
@@ -298,14 +302,14 @@ class FightState extends State<FightScreen> {
                             padding: EdgeInsets.all(padding),
                             child: Center(
                                 child: Text(
-                              '${styleToString(fight.weightClass.style)}',
+                                  '${styleToString(fight.weightClass.style, context)}',
                               style: fontStyleInfo,
                             ))),
                         Container(
                             padding: EdgeInsets.all(padding),
                             child: Center(
                                 child: Text(
-                              fight.weightClass.name ?? 'Unknown',
+                                  fight.weightClass.name,
                               style: fontStyleInfo,
                             ))),
                       ])),
