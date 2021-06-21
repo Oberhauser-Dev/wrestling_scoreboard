@@ -161,15 +161,17 @@ class FightState extends State<FightScreen> {
 
   displayParticipant(ParticipantStatus? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
     var color = getColorFromFightRole(role);
+    List<Widget> items = [
+      displayName(pStatus, padding, cellHeight, fontSize),
+      displayClassificationPoints(pStatus, color, padding, cellHeight),
+    ];
+    if (role == FightRole.blue) items = List.from(items.reversed);
     return ChangeNotifierProvider.value(
       value: pStatus,
       child: Container(
         color: color,
         child: IntrinsicHeight(
-          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            displayName(pStatus, padding, cellHeight, fontSize),
-            displayClassificationPoints(pStatus, color, padding, cellHeight),
-          ]),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items),
         ),
       ),
     );
