@@ -51,12 +51,14 @@ class FightState extends State<FightScreen> {
       setState(() {
         _r.isInjury = false;
       });
+      callback(FightScreenActionIntent.Horn());
     });
     _b.injuryStopwatch.limit = match.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
       });
+      callback(FightScreenActionIntent.Horn());
     });
 
     stopwatch = _fightStopwatch = ObservableStopwatch(
@@ -89,6 +91,7 @@ class FightState extends State<FightScreen> {
               _b.activityStopwatch!.dispose();
               _b.activityStopwatch = null;
             }
+            callback(FightScreenActionIntent.Horn());
             if (round < match.maxRounds) {
               setState(() {
                 stopwatch = _breakStopwatch;
@@ -113,6 +116,7 @@ class FightState extends State<FightScreen> {
         setState(() {
           stopwatch = _fightStopwatch;
         });
+        callback(FightScreenActionIntent.Horn());
       }
     });
     callback = (FightScreenActionIntent intent) {
@@ -188,10 +192,12 @@ class FightState extends State<FightScreen> {
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
+          callback(FightScreenActionIntent.Horn());
           psm.activityStopwatch?.dispose();
           setState(() {
             psm.activityStopwatch = null;
           });
+          callback(FightScreenActionIntent.Horn());
         });
         break;
       case FightScreenActions.RedInjuryTime:
@@ -218,6 +224,7 @@ class FightState extends State<FightScreen> {
           setState(() {
             psm.activityStopwatch = null;
           });
+          callback(FightScreenActionIntent.Horn());
         });
         break;
       case FightScreenActions.BlueInjuryTime:

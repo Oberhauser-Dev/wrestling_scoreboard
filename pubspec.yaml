@@ -30,6 +30,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   quiver: ^3.0.1
   provider: ^5.0.0
+  audioplayers: 0.19.0
+  # dart_vlc: ^0.0.7
 
 dev_dependencies:
   flutter_test:
@@ -47,9 +49,10 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    #   - images/a_dot_burr.jpeg
+    #   - images/a_dot_ham.jpeg
+    - assets/audio/BoxingBell.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

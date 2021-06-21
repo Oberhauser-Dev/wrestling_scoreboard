@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
+import 'package:wrestling_scoreboard/util/audio/audio.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 
 import 'fight_screen.dart';
@@ -236,7 +237,8 @@ class FightActionHandler extends StatelessWidget {
         if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);
         break;
       case FightScreenActions.Horn:
-        // TODO: Handle this case.
+        var sound = HornSound();
+        sound.play();
         break;
     }
   }
