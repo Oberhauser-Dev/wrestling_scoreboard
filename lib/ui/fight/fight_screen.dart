@@ -141,20 +141,38 @@ class FightState extends State<FightScreen> {
   }
 
   displayClassificationPoints(ParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
-    return pStatus?.classificationPoints != null
-        ? Container(
-            color: color.shade800,
-            height: cellHeight * 3,
-            padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
-            child: FittedText(
-              pStatus!.classificationPoints.toString(),
-            ),
-          )
-        : Container();
+    return Consumer<ParticipantStatus?>(
+      builder: (context, cart, child) => pStatus?.classificationPoints != null
+          ? Container(
+              color: color.shade800,
+              height: cellHeight * 3,
+              padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
+              child: FittedText(
+                pStatus!.classificationPoints.toString(),
+              ),
+            )
+          : Container(),
+    );
   }
 
   displayTechnicalPoints(ParticipantStatusModel pStatus, FightRole role, double cellHeight) {
     return Expanded(flex: 33, child: TechnicalPoints(pStatusModel: pStatus, height: cellHeight, role: role));
+  }
+
+  displayParticipant(ParticipantStatus? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
+    var color = getColorFromFightRole(role);
+    return ChangeNotifierProvider.value(
+      value: pStatus,
+      child: Container(
+        color: color,
+        child: IntrinsicHeight(
+          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            displayName(pStatus, padding, cellHeight, fontSize),
+            displayClassificationPoints(pStatus, color, padding, cellHeight),
+          ]),
+        ),
+      ),
+    );
   }
 
   doAction(FightScreenActions action) {
@@ -222,10 +240,6 @@ class FightState extends State<FightScreen> {
         child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)));
   }
 
-  refresh() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -252,14 +266,9 @@ class FightState extends State<FightScreen> {
                 row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, context)),
                 row(padding: bottomPadding, children: [
                   Expanded(
-                      flex: 50,
-                      child: Container(
-                          color: Colors.red,
-                          child: IntrinsicHeight(
-                              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                            displayName(fight.r, padding, cellHeight, fontSizeDefault),
-                            displayClassificationPoints(fight.r, Colors.red, padding, cellHeight),
-                          ])))),
+                    flex: 50,
+                    child: displayParticipant(fight.r, FightRole.red, padding, cellHeight, fontSizeDefault),
+                  ),
                   Expanded(
                       flex: 20,
                       child: Column(children: [
@@ -289,14 +298,9 @@ class FightState extends State<FightScreen> {
                             ))),
                       ])),
                   Expanded(
-                      flex: 50,
-                      child: Container(
-                          color: Colors.blue,
-                          child: IntrinsicHeight(
-                              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                            displayClassificationPoints(fight.b, Colors.blue, padding, cellHeight),
-                            displayName(fight.b, padding, cellHeight, fontSizeDefault),
-                          ])))),
+                    flex: 50,
+                    child: displayParticipant(fight.b, FightRole.blue, padding, cellHeight, fontSizeDefault),
+                  ),
                 ]),
                 row(
                   padding: bottomPadding,

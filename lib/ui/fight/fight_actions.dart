@@ -25,7 +25,7 @@ class ActionsWidget extends StatelessWidget {
         child: Row(
           children: [
             ...this.actions.map((e) {
-              final color = e.role == FightRole.red ? Colors.red : Colors.blue;
+              final color = getColorFromFightRole(e.role);
               return Tooltip(
                   message: durationToString(e.duration),
                   child: Container(

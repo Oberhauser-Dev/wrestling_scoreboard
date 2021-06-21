@@ -101,7 +101,7 @@ class FightMainControlsState extends State<FightMainControls> {
       child: Text('Select', style: TextStyle(color: Theme.of(context).disabledColor)),
     ));
     return Container(
-      color: role == widget.fightState.fight.winner ? (role == FightRole.red ? Colors.red : Colors.blue) : null,
+      color: role == widget.fightState.fight.winner ? getColorFromFightRole(role) : null,
       child: ButtonTheme(
         alignedDropdown: true,
         child: DropdownButton<FightResult?>(
@@ -114,9 +114,8 @@ class FightMainControlsState extends State<FightMainControls> {
             setState(() {
               widget.fightState.fight.winner = val != null && val != FightResult.DSQ2 ? role : null;
               widget.fightState.fight.result = val;
+              widget.fightState.fight.updateClassificationPoints();
             });
-            widget.fightState.fight.updateClassificationPoints();
-            widget.fightState.refresh(); // Refresh classification points in parent
           },
         ),
       ),

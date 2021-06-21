@@ -18,7 +18,7 @@ class TechnicalPoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: role == FightRole.red ? Colors.red : Colors.blue,
+        color: getColorFromFightRole(role),
         height: height,
         child: Column(children: [
           Expanded(

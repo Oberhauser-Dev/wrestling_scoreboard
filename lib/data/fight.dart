@@ -23,14 +23,14 @@ class Fight extends ChangeNotifier {
     ParticipantStatus? pStatus = action.role == FightRole.red ? this.r : this.b;
     if (pStatus != null) {
       _actions.add(action);
-      pStatus.actions.add(action);
+      pStatus.addAction(action);
       notifyListeners();
     }
   }
 
   removeAction(FightAction action) {
     _actions.remove(action);
-    action.role == FightRole.red ? this.r?.actions.remove(action) : this.b?.actions.remove(action);
+    action.role == FightRole.red ? this.r?.removeAction(action) : this.b?.removeAction(action);
     notifyListeners();
   }
 
