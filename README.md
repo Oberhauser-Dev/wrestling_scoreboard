@@ -13,3 +13,7 @@ flutter build web
 ```
 
 Publish files in `build/web`.
+
+# License
+
+Published under [MIT license](./LICENSE.md).
