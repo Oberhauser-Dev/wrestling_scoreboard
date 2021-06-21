@@ -12,7 +12,12 @@ class TeamMatch extends ChangeNotifier {
   final Lineup home;
   final Lineup guest;
   final Person referee;
-  late final DateTime date;
+  Person? transcriptWriter;
+  Person? timeKeeper;
+  Person? matPresident;
+  List<Person> stewards = [];
+  DateTime? date;
+  String? location;
   int visitorsCount = 0;
   String comment = '';
   late String league; // Liga
@@ -35,14 +40,14 @@ class TeamMatch extends ChangeNotifier {
     WeightClass(75, WrestlingStyle.greco, name: '75 kg B'),
   ];
 
-  TeamMatch(this.home, this.guest, this.referee, {this.id}) {
+  TeamMatch(this.home, this.guest, this.referee, {this.id, this.location, this.date}) {
     if (home.team.league == guest.team.league && home.team.league != null) {
       this.league = home.team.league!;
       //  TODO load weight classes of league
     } else {
       this.league = 'Freundschaftskampf';
     }
-    date = DateTime.now();
+    this.date = date ?? DateTime.now();
   }
 
   List<Fight> get fights {

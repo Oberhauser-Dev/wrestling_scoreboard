@@ -1,7 +1,10 @@
-class Team {
-  String? id; // Vereinsnummer
-  final String name; // without
-  String? league; // Liga
+import 'club.dart';
 
-  Team({required this.name});
+class Team {
+  final String name;
+  final String? description;
+  String? league; // Liga
+  Club club;
+
+  Team({required this.name, required this.club, this.description});
 }

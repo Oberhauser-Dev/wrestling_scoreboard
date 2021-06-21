@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard/data/weight_class.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/match_sequence.dart';
 
+import 'data/club.dart';
 import 'data/fight.dart';
 import 'data/gender.dart';
 import 'data/lineup.dart';
@@ -98,7 +99,8 @@ class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
     ParticipantStatus rS2 = ParticipantStatus(participant: r2, weightClass: wc61);
     ParticipantStatus rS3 = ParticipantStatus(participant: r3, weightClass: wc75);
     ParticipantStatus rS4 = ParticipantStatus(participant: r4, weightClass: wc130);
-    Team homeTeam = Team(name: 'Springfield Wrestlers');
+    Club homeClub = Club(name: 'Springfield Wrestlers');
+    Team homeTeam = Team(name: 'Springfield Wrestlers', club: homeClub, description: '1. Team Men');
     Lineup home = Lineup(team: homeTeam, participantStatusList: [rS1, rS2, rS3, rS4]);
 
     Participant b1 = Participant(prename: 'Meg', surname: 'Griffin', gender: Gender.female);
@@ -109,10 +111,11 @@ class _WrestlingScoreboardPageState extends State<WrestlingScoreboardPage> {
     ParticipantStatus bS2 = ParticipantStatus(participant: b2, weightClass: wc66);
     ParticipantStatus bS3 = ParticipantStatus(participant: b3, weightClass: wc75);
     ParticipantStatus bS4 = ParticipantStatus(participant: b4, weightClass: wc130);
-    Team guestTeam = Team(name: 'Quahog Hunters');
+    Club guestClub = Club(name: 'Quahog Hunters');
+    Team guestTeam = Team(name: 'Quahog Hunters II', club: guestClub, description: '2. Team Men');
     Lineup guest = Lineup(team: guestTeam, participantStatusList: [bS1, bS2, bS3, bS4]);
 
     Person referee = Person(prename: 'Mr', surname: 'Referee', gender: Gender.male);
-    return TeamMatch(home, guest, referee);
+    return TeamMatch(home, guest, referee, location: 'Springfield');
   }
 }
