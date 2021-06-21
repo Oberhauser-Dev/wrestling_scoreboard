@@ -1,16 +1,15 @@
-# wrestling_scoreboard
+# Wrestling Scoreboard
 
 Wrestling software for managing team fights and tournaments.
 
-## Getting Started
+Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, tournament
 
-This project is a starting point for a Flutter application.
+## Deployment
 
-A few resources to get you started if this is your first Flutter project:
+### Web
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+flutter build web
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Publish files in `build/web`.
