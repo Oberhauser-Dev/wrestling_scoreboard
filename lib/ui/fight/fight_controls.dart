@@ -92,7 +92,7 @@ class FightMainControlsState extends State<FightMainControls> {
         ? FightResult.values.map((FightResult? value) {
             return DropdownMenuItem<FightResult?>(
               value: value,
-              child: Tooltip(message: value.toString(), child: Text(value.toString().split('.').last)),
+              child: Tooltip(message: value.toString(), child: Text(getStringFromFightResult(value))),
             );
           }).toList()
         : [];
