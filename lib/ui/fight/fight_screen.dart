@@ -246,84 +246,87 @@ class FightState extends State<FightScreen> {
       child: Scaffold(
         body: ChangeNotifierProvider.value(
           value: fight,
-          child: Column(
-            children: [
-              row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, context)),
-              row(padding: bottomPadding, children: [
-                Expanded(
-                    flex: 50,
-                    child: Container(
-                        color: Colors.red,
-                        child: IntrinsicHeight(
-                            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                          displayName(fight.r, padding, cellHeight, fontSizeDefault),
-                          displayClassificationPoints(fight.r, Colors.red, padding, cellHeight),
-                        ])))),
-                Expanded(
-                    flex: 20,
-                    child: Column(children: [
-                      Row(children: [
-                        Expanded(
-                            child: Container(
-                                padding: EdgeInsets.all(padding),
-                                child: Center(
-                                    child: Text(
-                                  'Kampf ${match.fights.indexOf(this.fight) + 1}',
-                                  style: fontStyleInfo,
-                                )))),
-                      ]),
-                      Container(
-                          padding: EdgeInsets.all(padding),
-                          child: Center(
-                              child: Text(
-                            '${styleToString(fight.weightClass.style)}',
-                            style: fontStyleInfo,
-                          ))),
-                      Container(
-                          padding: EdgeInsets.all(padding),
-                          child: Center(
-                              child: Text(
-                            fight.weightClass.name ?? 'Unknown',
-                            style: fontStyleInfo,
-                          ))),
-                    ])),
-                Expanded(
-                    flex: 50,
-                    child: Container(
-                        color: Colors.blue,
-                        child: IntrinsicHeight(
-                            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                          displayClassificationPoints(fight.b, Colors.blue, padding, cellHeight),
-                          displayName(fight.b, padding, cellHeight, fontSizeDefault),
-                        ])))),
-              ]),
-              row(
-                padding: bottomPadding,
-                children: [
-                  displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
-                  Expanded(
-                      flex: 2,
-                      child: Container(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, context)),
+                row(padding: bottomPadding, children: [
                   Expanded(
                       flex: 50,
                       child: Container(
-                        height: cellHeightClock,
-                        child: Center(child: TimeDisplay(stopwatch, stopwatchColor)),
-                      )),
+                          color: Colors.red,
+                          child: IntrinsicHeight(
+                              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                            displayName(fight.r, padding, cellHeight, fontSizeDefault),
+                            displayClassificationPoints(fight.r, Colors.red, padding, cellHeight),
+                          ])))),
                   Expanded(
-                      flex: 2,
-                      child: Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
-                  displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
-                ],
-              ),
-              Container(
-                padding: bottomPadding,
-                child: Consumer<Fight>(
-                  builder: (context, cart, child) => ActionsWidget(fight.actions),
+                      flex: 20,
+                      child: Column(children: [
+                        Row(children: [
+                          Expanded(
+                              child: Container(
+                                  padding: EdgeInsets.all(padding),
+                                  child: Center(
+                                      child: Text(
+                                    'Kampf ${match.fights.indexOf(this.fight) + 1}',
+                                    style: fontStyleInfo,
+                                  )))),
+                        ]),
+                        Container(
+                            padding: EdgeInsets.all(padding),
+                            child: Center(
+                                child: Text(
+                              '${styleToString(fight.weightClass.style)}',
+                              style: fontStyleInfo,
+                            ))),
+                        Container(
+                            padding: EdgeInsets.all(padding),
+                            child: Center(
+                                child: Text(
+                              fight.weightClass.name ?? 'Unknown',
+                              style: fontStyleInfo,
+                            ))),
+                      ])),
+                  Expanded(
+                      flex: 50,
+                      child: Container(
+                          color: Colors.blue,
+                          child: IntrinsicHeight(
+                              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                            displayClassificationPoints(fight.b, Colors.blue, padding, cellHeight),
+                            displayName(fight.b, padding, cellHeight, fontSizeDefault),
+                          ])))),
+                ]),
+                row(
+                  padding: bottomPadding,
+                  children: [
+                    displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
+                    Expanded(
+                        flex: 2,
+                        child: Container(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
+                    Expanded(
+                        flex: 50,
+                        child: Container(
+                          height: cellHeightClock,
+                          child: Center(child: TimeDisplay(stopwatch, stopwatchColor)),
+                        )),
+                    Expanded(
+                        flex: 2,
+                        child:
+                            Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
+                    displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
+                  ],
                 ),
-              ),
-              Container(padding: bottomPadding, child: FightMainControls(callback, this)),
-            ],
+                Container(
+                  padding: bottomPadding,
+                  child: Consumer<Fight>(
+                    builder: (context, cart, child) => ActionsWidget(fight.actions),
+                  ),
+                ),
+                Container(padding: bottomPadding, child: FightMainControls(callback, this)),
+              ],
+            ),
           ),
         ),
       ),
