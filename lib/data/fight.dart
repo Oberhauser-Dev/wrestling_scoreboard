@@ -15,9 +15,23 @@ class Fight extends ChangeNotifier {
   FightResult? result;
   FightRole? winner;
 
-  Duration duration = Duration();
+  Duration _duration = Duration();
 
-  Fight(this.r, this.b, this.weightClass, {this.pool});
+  Fight(this.r, this.b, this.weightClass, {this.pool}) {
+    this.r?.addListener(() {
+      notifyListeners();
+    });
+    this.b?.addListener(() {
+      notifyListeners();
+    });
+  }
+
+  Duration get duration => _duration;
+
+  set duration(Duration duration) {
+    _duration = duration;
+    notifyListeners();
+  }
 
   addAction(FightAction action) {
     ParticipantStatus? pStatus = action.role == FightRole.red ? this.r : this.b;

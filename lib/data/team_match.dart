@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'fight.dart';
 import 'lineup.dart';
 import 'person.dart';
@@ -5,7 +7,7 @@ import 'weight_class.dart';
 import 'wrestling_style.dart';
 
 /// For team matches only.
-class TeamMatch {
+class TeamMatch extends ChangeNotifier {
   final int? id;
   final Lineup home;
   final Lineup guest;
@@ -52,7 +54,11 @@ class TeamMatch {
         var red = homePartList.isNotEmpty ? homePartList.single : null;
         var blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
-        _fights!.add(Fight(red, blue, weightClass));
+        var fight = Fight(red, blue, weightClass);
+        fight.addListener(() {
+          notifyListeners();
+        });
+        _fights!.add(fight);
       }
     }
     return _fights!;

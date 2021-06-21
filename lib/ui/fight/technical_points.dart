@@ -25,7 +25,7 @@ class TechnicalPoints extends StatelessWidget {
             flex: 70,
             child: Center(
               child: Consumer<Fight>(
-                  builder: (context, cart, child) =>
+                  builder: (context, data, child) =>
                       FittedText((pStatusModel.pStatus?.technicalPoints ?? 0).toString())),
             ),
           ),

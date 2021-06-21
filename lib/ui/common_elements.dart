@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/FittedText.dart';
 
@@ -20,25 +21,27 @@ class CommonElements {
       Expanded(
           flex: 10,
           child: Container(
-            height: cellHeight,
-            color: Colors.red.shade900,
-            padding: EdgeInsets.all(padding),
-            child: Center(
-                child: FittedText(
-              match.homePoints.toString(),
-            )),
-          )),
+              height: cellHeight,
+              color: Colors.red.shade900,
+              padding: EdgeInsets.all(padding),
+              child: Center(
+                child: Consumer<TeamMatch>(
+                    builder: (context, data, child) => FittedText(
+                          data.homePoints.toString(),
+                        )),
+              ))),
       Expanded(
           flex: 10,
           child: Container(
-            height: cellHeight,
-            color: Colors.blue.shade900,
-            padding: EdgeInsets.all(padding),
-            child: Center(
-                child: FittedText(
-              match.guestPoints.toString(),
-            )),
-          )),
+              height: cellHeight,
+              color: Colors.blue.shade900,
+              padding: EdgeInsets.all(padding),
+              child: Center(
+                child: Consumer<TeamMatch>(
+                    builder: (context, data, child) => FittedText(
+                          data.guestPoints.toString(),
+                        )),
+              ))),
       Expanded(
           flex: 50,
           child: Container(

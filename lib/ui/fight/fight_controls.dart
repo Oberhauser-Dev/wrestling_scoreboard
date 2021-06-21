@@ -24,12 +24,12 @@ class FightMainControlsState extends State<FightMainControls> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double cellHeight = width / 72;
     widget.fightState.stopwatch.onStartStop.stream.listen((isRunning) {
-      setState(() {
-        _pausePlayButton = isRunning ? Icons.pause : Icons.play_arrow;
-      });
+      if (mounted) {
+        setState(() {
+          _pausePlayButton = isRunning ? Icons.pause : Icons.play_arrow;
+        });
+      }
     });
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

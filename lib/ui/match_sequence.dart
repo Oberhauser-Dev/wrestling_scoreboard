@@ -27,7 +27,9 @@ class MatchSequence extends StatelessWidget {
     int flexWidthStyle = 5;
     var fights = match.fights;
     return Scaffold(
-      body: Column(children: [
+        body: ChangeNotifierProvider.value(
+      value: match,
+      child: Column(children: [
         Column(children: [
           Row(children: [
             Expanded(
@@ -53,7 +55,7 @@ class MatchSequence extends StatelessWidget {
               }),
         ),
       ]),
-    );
+    ));
   }
 }
 
@@ -84,47 +86,115 @@ class FightListItem extends StatelessWidget {
     double fontSizeDefault = width / 60;
     TextStyle fontStyleDefault = TextStyle(fontSize: fontSizeDefault);
 
-    return Column(children: [
-      InkWell(
-          onTap: () {
-            listItemCallback(fight);
-          },
-          child: IntrinsicHeight(
-            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              Expanded(
-                  flex: flexWidthWeight,
-                  child: Container(
-                    padding: edgeInsets,
-                    child: Center(child: Text('${fight.weightClass.weight} $weightUnit', style: fontStyleDefault)),
-                  )),
-              Expanded(
-                  flex: flexWidthStyle,
-                  child: Container(
-                    child: Center(
-                        child: Text('${fight.weightClass.style == WrestlingStyle.free ? 'F' : 'G'}',
-                            style: fontStyleDefault)),
-                  )),
-              Expanded(
-                  flex: 55,
-                  child: ChangeNotifierProvider.value(
-                    value: fight.r,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 50,
-                          child: displayName(fight.r, FightRole.red, fontSizeDefault),
+    return ChangeNotifierProvider.value(
+        value: fight,
+        child: Column(children: [
+          InkWell(
+              onTap: () {
+                listItemCallback(fight);
+              },
+              child: IntrinsicHeight(
+                child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  Expanded(
+                      flex: flexWidthWeight,
+                      child: Container(
+                        padding: edgeInsets,
+                        child: Center(child: Text('${fight.weightClass.weight} $weightUnit', style: fontStyleDefault)),
+                      )),
+                  Expanded(
+                      flex: flexWidthStyle,
+                      child: Container(
+                        child: Center(
+                            child: Text('${fight.weightClass.style == WrestlingStyle.free ? 'F' : 'G'}',
+                                style: fontStyleDefault)),
+                      )),
+                  Expanded(
+                      flex: 55,
+                      child: ChangeNotifierProvider.value(
+                        value: fight.r,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 50,
+                              child: displayName(fight.r, FightRole.red, fontSizeDefault),
+                            ),
+                            Consumer<ParticipantStatus?>(
+                              builder: (context, data, child) => Expanded(
+                                flex: 5,
+                                child: Column(children: [
+                                  Expanded(
+                                      flex: 70,
+                                      child: Container(
+                                        color: fight.winner == FightRole.red ? Colors.red.shade800 : null,
+                                        child: Center(
+                                          child: Text(data?.classificationPoints?.toString() ?? '-',
+                                              style: fontStyleDefault),
+                                        ),
+                                      )),
+                                  Expanded(
+                                      flex: 50,
+                                      child: Row(children: [
+                                        Expanded(
+                                            flex: 50,
+                                            child: Container(
+                                              color: fight.winner == FightRole.red ? Colors.red.shade800 : null,
+                                              child: Center(
+                                                child: data?.classificationPoints != null
+                                                    ? Text(data!.technicalPoints.toString(),
+                                                        style: TextStyle(fontSize: fontSizeDefault / 2))
+                                                    : null,
+                                              ),
+                                            )),
+                                      ])),
+                                ]),
+                              ),
+                            ),
+                          ],
                         ),
+                      )),
+                  Expanded(
+                      flex: 10,
+                      child: Consumer<Fight>(
+                          builder: (context, data, child) => Column(
+                                children: [
+                                  Expanded(
+                                      flex: 70,
+                                      child: Container(
+                                        color:
+                                            data.winner != null ? getColorFromFightRole(data.winner!).shade800 : null,
+                                        child: Center(
+                                          child: Text(getStringFromFightResult(data.result),
+                                              style: TextStyle(fontSize: fontSizeDefault * 0.7)),
+                                        ),
+                                      )),
+                                  Expanded(
+                                      flex: 50,
+                                      child: Container(
+                                        child: Center(
+                                          child: data.winner != null
+                                              ? Text(durationToString(data.duration),
+                                                  style: TextStyle(fontSize: fontSizeDefault / 2))
+                                              : null,
+                                        ),
+                                      )),
+                                ],
+                              ))),
+                  Expanded(
+                    flex: 55,
+                    child: ChangeNotifierProvider.value(
+                      value: fight.b,
+                      child: Row(children: [
                         Consumer<ParticipantStatus?>(
-                          builder: (context, cart, child) => Expanded(
+                          builder: (context, data, child) => Expanded(
                             flex: 5,
                             child: Column(children: [
                               Expanded(
                                   flex: 70,
                                   child: Container(
-                                    color: fight.winner == FightRole.red ? Colors.red.shade800 : null,
+                                    color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
                                     child: Center(
-                                      child: Text(fight.r?.classificationPoints?.toString() ?? '-',
-                                          style: fontStyleDefault),
+                                      child:
+                                          Text(data?.classificationPoints?.toString() ?? '-', style: fontStyleDefault),
                                     ),
                                   )),
                               Expanded(
@@ -133,10 +203,10 @@ class FightListItem extends StatelessWidget {
                                     Expanded(
                                         flex: 50,
                                         child: Container(
-                                          color: fight.winner == FightRole.red ? Colors.red.shade800 : null,
+                                          color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
                                           child: Center(
-                                            child: fight.r?.classificationPoints != null
-                                                ? Text(fight.r!.technicalPoints.toString(),
+                                            child: data?.classificationPoints != null
+                                                ? Text(data!.technicalPoints.toString(),
                                                     style: TextStyle(fontSize: fontSizeDefault / 2))
                                                 : null,
                                           ),
@@ -145,82 +215,18 @@ class FightListItem extends StatelessWidget {
                             ]),
                           ),
                         ),
-                      ],
-                    ),
-                  )),
-              Expanded(
-                  flex: 10,
-                  child: Column(
-                    children: [
-                      Expanded(
-                          flex: 70,
-                          child: Container(
-                            color: fight.winner != null ? getColorFromFightRole(fight.winner!).shade800 : null,
-                            child: Center(
-                              child: Text(getStringFromFightResult(fight.result),
-                                  style: TextStyle(fontSize: fontSizeDefault * 0.7)),
-                            ),
-                          )),
-                      Expanded(
+                        Expanded(
                           flex: 50,
-                          child: Container(
-                            child: Center(
-                              child: fight.winner != null
-                                  ? Text(durationToString(fight.duration),
-                                      style: TextStyle(fontSize: fontSizeDefault / 2))
-                                  : null,
-                            ),
-                          )),
-                    ],
-                  )),
-              Expanded(
-                flex: 55,
-                child: ChangeNotifierProvider.value(
-                  value: fight.r,
-                  child: Row(children: [
-                    Consumer<ParticipantStatus?>(
-                      builder: (context, cart, child) => Expanded(
-                        flex: 5,
-                        child: Column(children: [
-                          Expanded(
-                              flex: 70,
-                              child: Container(
-                                color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
-                                child: Center(
-                                  child:
-                                      Text(fight.b?.classificationPoints?.toString() ?? '-', style: fontStyleDefault),
-                                ),
-                              )),
-                          Expanded(
-                              flex: 50,
-                              child: Row(children: [
-                                Expanded(
-                                    flex: 50,
-                                    child: Container(
-                                      color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
-                                      child: Center(
-                                        child: fight.b?.classificationPoints != null
-                                            ? Text(fight.b!.technicalPoints.toString(),
-                                                style: TextStyle(fontSize: fontSizeDefault / 2))
-                                            : null,
-                                      ),
-                                    )),
-                              ])),
-                        ]),
-                      ),
+                          child: displayName(fight.b, FightRole.blue, fontSizeDefault),
+                        )
+                      ]),
                     ),
-                    Expanded(
-                      flex: 50,
-                      child: displayName(fight.b, FightRole.blue, fontSizeDefault),
-                    )
-                  ]),
-                ),
-              ),
-            ]),
-          )),
-      Divider(
-        height: 1,
-      ),
-    ]);
+                  ),
+                ]),
+              )),
+          Divider(
+            height: 1,
+          ),
+        ]));
   }
 }

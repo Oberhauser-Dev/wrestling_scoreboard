@@ -142,7 +142,7 @@ class FightState extends State<FightScreen> {
 
   displayClassificationPoints(ParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
     return Consumer<ParticipantStatus?>(
-      builder: (context, cart, child) => pStatus?.classificationPoints != null
+      builder: (context, data, child) => pStatus?.classificationPoints != null
           ? Container(
               color: color.shade800,
               height: cellHeight * 3,
@@ -258,8 +258,11 @@ class FightState extends State<FightScreen> {
       fight: fight,
       doAction: doAction,
       child: Scaffold(
-        body: ChangeNotifierProvider.value(
-          value: fight,
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: match),
+            ChangeNotifierProvider.value(value: fight),
+          ],
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -325,7 +328,7 @@ class FightState extends State<FightScreen> {
                 Container(
                   padding: bottomPadding,
                   child: Consumer<Fight>(
-                    builder: (context, cart, child) => ActionsWidget(fight.actions),
+                    builder: (context, data, child) => ActionsWidget(fight.actions),
                   ),
                 ),
                 Container(padding: bottomPadding, child: FightMainControls(callback, this)),
