@@ -85,6 +85,7 @@ class FightActionControls extends StatelessWidget {
               primary: Colors.white,
               backgroundColor: color,
               side: BorderSide(color: color.shade900, width: 1),
+              padding: EdgeInsets.all(2 + (padding * 0.75)),
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
             ),
             onPressed: () => callback(),
