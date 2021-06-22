@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import 'fight.dart';
+import 'league.dart';
 import 'lineup.dart';
 import 'person.dart';
 import 'weight_class.dart';
@@ -20,7 +21,7 @@ class TeamMatch extends ChangeNotifier {
   String? location;
   int visitorsCount = 0;
   String comment = '';
-  late String league; // Liga
+  late League league; // Liga
   List<Fight>? _fights;
   final Duration roundDuration = Duration(minutes: 3);
   final Duration breakDuration = Duration(seconds: 30);
@@ -45,7 +46,7 @@ class TeamMatch extends ChangeNotifier {
       this.league = home.team.league!;
       //  TODO load weight classes of league
     } else {
-      this.league = 'Freundschaftskampf';
+      this.league = League.outOfCompetition;
     }
     this.date = date ?? DateTime.now();
   }
