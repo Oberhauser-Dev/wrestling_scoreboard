@@ -271,6 +271,16 @@ class FightState extends State<FightScreen> {
       fight: fight,
       doAction: doAction,
       child: Scaffold(
+        bottomNavigationBar: BottomAppBar(
+          child: Row(children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+          ]),
+        ),
         body: MultiProvider(
           providers: [
             ChangeNotifierProvider.value(value: match),
@@ -295,23 +305,23 @@ class FightState extends State<FightScreen> {
                                   child: Center(
                                       child: Text(
                                         '${AppLocalizations.of(context)!.fight} ${match.fights.indexOf(this.fight) + 1}',
-                                    style: fontStyleInfo,
-                                  )))),
+                                        style: fontStyleInfo,
+                                      )))),
                         ]),
                         Container(
                             padding: EdgeInsets.all(padding),
                             child: Center(
                                 child: Text(
                                   '${styleToString(fight.weightClass.style, context)}',
-                              style: fontStyleInfo,
-                            ))),
+                                  style: fontStyleInfo,
+                                ))),
                         Container(
                             padding: EdgeInsets.all(padding),
                             child: Center(
                                 child: Text(
                                   fight.weightClass.name,
-                              style: fontStyleInfo,
-                            ))),
+                                  style: fontStyleInfo,
+                                ))),
                       ])),
                   Expanded(
                     flex: 50,
@@ -334,7 +344,7 @@ class FightState extends State<FightScreen> {
                     Expanded(
                         flex: 2,
                         child:
-                            Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
+                        Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
                     displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                   ],
                 ),

@@ -8,5 +8,5 @@ class Team {
   League? league;
   Club club;
 
-  Team({required this.name, required this.club, this.description});
+  Team({required this.name, required this.club, this.description, this.league});
 }

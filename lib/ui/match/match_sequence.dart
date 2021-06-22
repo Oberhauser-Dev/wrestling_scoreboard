@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/participant_status.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
@@ -16,9 +17,12 @@ import 'common_elements.dart';
 
 class MatchSequence extends StatelessWidget {
   late TeamMatch match;
-  late Function(Fight) listItemCallback;
 
-  MatchSequence(this.match, this.listItemCallback);
+  MatchSequence(this.match);
+
+  handleSelectedFight(Fight fight, BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,36 +32,47 @@ class MatchSequence extends StatelessWidget {
     int flexWidthStyle = 5;
     var fights = match.fights;
     return Scaffold(
-        body: ChangeNotifierProvider.value(
-      value: match,
-      child: Column(children: [
-        Column(children: [
-          Row(children: [
-            Expanded(
-              flex: flexWidthWeight + flexWidthStyle,
-              child: Container(
-                child: FittedText(
-                    '${match.league}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee.fullName}'),
-                padding: EdgeInsets.all(padding),
-              ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
             ),
-            ...CommonElements.getTeamHeader(match, context),
           ]),
-          Divider(
-            height: 1,
-          ),
-        ]),
-        Expanded(
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: fights.length,
-              itemBuilder: (context, index) {
-                var fight = fights[index];
-                return FightListItem(fight, listItemCallback, flexWidthWeight, flexWidthStyle);
-              }),
         ),
-      ]),
-    ));
+        body: ChangeNotifierProvider.value(
+          value: match,
+          child: Column(children: [
+            Column(children: [
+              Row(children: [
+                Expanded(
+                  flex: flexWidthWeight + flexWidthStyle,
+                  child: Container(
+                    child: FittedText(
+                        '${match.league}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee.fullName}'),
+                    padding: EdgeInsets.all(padding),
+                  ),
+                ),
+                ...CommonElements.getTeamHeader(match, context),
+              ]),
+              Divider(
+                height: 1,
+              ),
+            ]),
+            Expanded(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: fights.length,
+                  itemBuilder: (context, index) {
+                    var fight = fights[index];
+                    return FightListItem(
+                        fight, (fight) => handleSelectedFight(fight, context), flexWidthWeight, flexWidthStyle);
+                  }),
+            ),
+          ]),
+        ));
   }
 }
 
