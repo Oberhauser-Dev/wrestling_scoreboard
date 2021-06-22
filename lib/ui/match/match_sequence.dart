@@ -11,8 +11,8 @@ import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
+import '../components/fitted_text.dart';
 import 'common_elements.dart';
-import 'components/fitted_text.dart';
 
 class MatchSequence extends StatelessWidget {
   late TeamMatch match;

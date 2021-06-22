@@ -16,8 +16,8 @@ import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
-import '../common_elements.dart';
 import '../components/fitted_text.dart';
+import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_controls.dart';
 

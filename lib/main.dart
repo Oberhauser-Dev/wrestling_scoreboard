@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/data/weight_class.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard/ui/match_sequence.dart';
+import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
 
 import 'data/club.dart';
 import 'data/fight.dart';
