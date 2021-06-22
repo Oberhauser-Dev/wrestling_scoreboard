@@ -17,7 +17,7 @@ import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../common_elements.dart';
-import '../components/FittedText.dart';
+import '../components/fitted_text.dart';
 import 'fight_actions.dart';
 import 'fight_controls.dart';
 

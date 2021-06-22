@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
-import 'package:wrestling_scoreboard/ui/components/FittedText.dart';
+import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
 
 class CommonElements {
   static List<Widget> getTeamHeader(TeamMatch match, BuildContext context) {

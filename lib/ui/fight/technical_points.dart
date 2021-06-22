@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/ui/components/FittedText.dart';
+import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_status_model.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
