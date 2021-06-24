@@ -5,6 +5,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:server/routes/api_route.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
@@ -17,14 +18,14 @@ Future init() async {
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
-  // First, serve files from the 'public' directory
+      // First, serve files from the 'public' directory
       .add(_staticHandler)
-  // If a corresponding file is not found, send requests to a `Router`
+      // If a corresponding file is not found, send requests to a `Router`
       .add(_router);
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
   final pipeline = Pipeline()
-  // See https://pub.dev/documentation/shelf/latest/shelf/logRequests.html
+      // See https://pub.dev/documentation/shelf/latest/shelf/logRequests.html
       .addMiddleware(logRequests())
       .addHandler(cascade.handler);
 
@@ -39,15 +40,15 @@ Future init() async {
 }
 
 // Serve files from the file system.
-final _staticHandler =
-shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
+final _staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()
+  ..mount('/api/', ApiRoute().router)
   ..get('/helloworld', _helloWorldHandler)
   ..get(
     '/time',
-        (request) => Response.ok(DateTime.now().toUtc().toIso8601String()),
+    (request) => Response.ok(DateTime.now().toUtc().toIso8601String()),
   )
   ..get('/sum/<a|[0-9]+>/<b|[0-9]+>', _sumHandler);
 
@@ -57,8 +58,7 @@ Response _sumHandler(request, String a, String b) {
   final aNum = int.parse(a);
   final bNum = int.parse(b);
   return Response.ok(
-    const JsonEncoder.withIndent(' ')
-        .convert({'a': aNum, 'b': bNum, 'sum': aNum + bNum}),
+    const JsonEncoder.withIndent(' ').convert({'a': aNum, 'b': bNum, 'sum': aNum + bNum}),
     headers: {
       'content-type': 'application/json',
       'Cache-Control': 'public, max-age=604800',
