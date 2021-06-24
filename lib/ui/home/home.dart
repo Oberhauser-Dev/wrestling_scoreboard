@@ -6,29 +6,36 @@ import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/mocks/mocks.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
+import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
 
 class Home extends StatelessWidget {
-  late List<ListItem> items;
-  late List<Club> clubs;
+  late final Future<List<Club>> _clubs;
 
   Home() {
-    clubs = getClubs();
+    _clubs = fetchMany<Club>();
   }
 
   @override
   Widget build(BuildContext context) {
-    items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll(
-        clubs.map((e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
-    items
-      ..add(HeadingItem(AppLocalizations.of(context)!.league))
-      ..addAll(getLeagues()
-          .map((e) => ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))));
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: GroupedList(items),
+      body: FutureBuilder<List<Club>>(
+          future: _clubs, // a previously-obtained Future<String> or null
+          builder: (BuildContext context, AsyncSnapshot<List<Club>> snapshot) {
+            if (snapshot.hasData) {
+              List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll(snapshot.data!.map(
+                  (e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
+              items
+                ..add(HeadingItem(AppLocalizations.of(context)!.league))
+                ..addAll(getLeagues().map((e) =>
+                    ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))));
+              return GroupedList(items);
+            } else {
+              return Text('Cannot access data!');
+            }
+          }),
     );
   }
 
