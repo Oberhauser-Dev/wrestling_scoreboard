@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotenv/dotenv.dart' show load, clean, isEveryDefined, env;
+import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/routes/api_route.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
@@ -48,6 +49,7 @@ final _staticHandler = shelf_static.createStaticHandler('public', defaultDocumen
 // Router instance to handler requests.
 final _router = shelf_router.Router()
   ..mount('/api/', ApiRoute().router)
+  ..mount('/ws/', websocketHandler)
   ..get('/helloworld', _helloWorldHandler)
   ..get(
     '/time',
