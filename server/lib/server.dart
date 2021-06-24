@@ -5,6 +5,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dotenv/dotenv.dart' show load, clean, isEveryDefined, env;
 import 'package:server/routes/api_route.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
@@ -12,9 +13,11 @@ import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
 Future init() async {
+  load(); // Load dotenv variables
+
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
-  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+  final port = int.parse(Platform.environment['PORT'] ?? env['PORT'] ?? '8080');
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
@@ -32,7 +35,7 @@ Future init() async {
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
   final server = await shelf_io.serve(
     pipeline,
-    InternetAddress.anyIPv4, // Allows external connections
+    Platform.environment['HOST'] ?? env['HOST'] ?? InternetAddress.anyIPv4, // Allows external connections
     port,
   );
 
