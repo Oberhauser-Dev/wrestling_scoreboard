@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,7 +26,7 @@ class TechnicalPoints extends StatelessWidget {
           Expanded(
             flex: 70,
             child: Center(
-              child: Consumer<Fight>(
+              child: Consumer<ClientFight>(
                   builder: (context, data, child) =>
                       FittedText((pStatusModel.pStatus?.technicalPoints ?? 0).toString())),
             ),

@@ -1,44 +1,29 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'fight_action.dart';
 import 'participant.dart';
-import 'weight_class.dart';
 
-class ParticipantStatus extends ChangeNotifier {
-  final Participant participant;
-  final WeightClass weightClass;
-  final List<FightAction> _actions = [];
-  double? weight;
-  int? _classificationPoints;
+class ClientParticipantStatus extends ParticipantStatus with ChangeNotifier {
+  ClientParticipantStatus({required ClientParticipant participant, required WeightClass weightClass, double? weight})
+      : super(participant: participant, weightClass: weightClass, weight: weight);
 
-  ParticipantStatus({required this.participant, required this.weightClass, this.weight});
+  ClientParticipantStatus.from(ParticipantStatus obj) : this(participant: ClientParticipant.from(obj.participant), weightClass: obj.weightClass, weight: obj.weight);
 
-  get actions => this._actions;
+  factory ClientParticipantStatus.fromJson(Map<String, dynamic> json) =>
+      ClientParticipantStatus.from(ParticipantStatus.fromJson(json));
 
   addAction(FightAction action) {
-    _actions.add(action);
+    super.addAction(action);
     notifyListeners();
   }
 
   removeAction(FightAction action) {
-    _actions.remove(action);
+    super.removeAction(action);
     notifyListeners();
   }
 
   set classificationPoints(int? points) {
-    _classificationPoints = points;
+    super.classificationPoints = points;
     notifyListeners();
-  }
-
-  int? get classificationPoints => _classificationPoints;
-
-  int get technicalPoints {
-    int res = 0;
-    _actions.forEach((el) {
-      if (el.actionType == FightActionType.points) {
-        res += el.pointCount!;
-      }
-    });
-    return res;
   }
 }

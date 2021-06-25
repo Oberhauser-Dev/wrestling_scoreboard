@@ -13,6 +13,8 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
+import 'middleware/cors.dart';
+
 Future init() async {
   load(); // Load dotenv variables
 
@@ -30,6 +32,7 @@ Future init() async {
   // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
   final pipeline = Pipeline()
       // See https://pub.dev/documentation/shelf/latest/shelf/logRequests.html
+      .addMiddleware(corsConfig)
       .addMiddleware(logRequests())
       .addHandler(cascade.handler);
 

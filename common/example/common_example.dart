@@ -1,6 +1,6 @@
 import 'package:common/common.dart';
 
 void main() {
-  var awesome = Club();
-  print('awesome: ${awesome.isAwesome}');
+  final club = Club(name: 'Quahog Hunters');
+  print('name: ${club.name}');
 }

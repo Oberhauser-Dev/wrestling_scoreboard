@@ -1,88 +1,35 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'fight.dart';
-import 'league.dart';
 import 'lineup.dart';
-import 'person.dart';
-import 'weight_class.dart';
-import 'wrestling_style.dart';
+import 'participant_status.dart';
 
 /// For team matches only.
-class TeamMatch extends ChangeNotifier {
-  final int? id;
-  final Lineup home;
-  final Lineup guest;
-  final Person referee;
-  Person? transcriptWriter;
-  Person? timeKeeper;
-  Person? matPresident;
-  List<Person> stewards = [];
-  DateTime? date;
-  String? location;
-  int visitorsCount = 0;
-  String comment = '';
-  late League league; // Liga
-  List<Fight>? _fights;
-  final Duration roundDuration = Duration(minutes: 3);
-  final Duration breakDuration = Duration(seconds: 30);
-  final Duration activityDuration = Duration(seconds: 30);
-  final Duration injuryDuration = Duration(seconds: 30);
-  int maxRounds = 2;
-  List<WeightClass> weightClasses = [
-    WeightClass(57, WrestlingStyle.free),
-    WeightClass(130, WrestlingStyle.greco),
-    WeightClass(61, WrestlingStyle.greco),
-    WeightClass(98, WrestlingStyle.free),
-    WeightClass(66, WrestlingStyle.free),
-    WeightClass(86, WrestlingStyle.greco),
-    WeightClass(71, WrestlingStyle.greco),
-    WeightClass(80, WrestlingStyle.free),
-    WeightClass(75, WrestlingStyle.free, name: '75 kg A'),
-    WeightClass(75, WrestlingStyle.greco, name: '75 kg B'),
-  ];
+class ClientTeamMatch extends TeamMatch with ChangeNotifier {
+  List<ClientFight>? _fights;
 
-  TeamMatch(this.home, this.guest, this.referee, {this.id, this.location, this.date}) {
-    if (home.team.league == guest.team.league && home.team.league != null) {
-      this.league = home.team.league!;
-      //  TODO load weight classes of league
-    } else {
-      this.league = League.outOfCompetition;
-    }
-    this.date = date ?? DateTime.now();
-  }
+  ClientTeamMatch(ClientLineup home, ClientLineup guest, Person referee, {int? id, String? location, DateTime? date})
+      : super(home, guest, referee, id: id, location: location, date: date);
 
-  List<Fight> get fights {
+  ClientTeamMatch.from(TeamMatch obj)
+      : this(ClientLineup.from(obj.home), ClientLineup.from(obj.guest), obj.referee,
+            id: obj.id, location: obj.location, date: obj.date);
+
+  factory ClientTeamMatch.fromJson(Map<String, dynamic> json) => ClientTeamMatch.from(TeamMatch.fromJson(json));
+
+  List<ClientFight> get fights {
     if (_fights == null) {
       _fights = [];
-      for (final weightClass in weightClasses) {
-        var homePartList = home.participantStatusList.where((el) => el.weightClass == weightClass);
-        var guestPartList = guest.participantStatusList.where((el) => el.weightClass == weightClass);
-        var red = homePartList.isNotEmpty ? homePartList.single : null;
-        var blue = guestPartList.isNotEmpty ? guestPartList.single : null;
-
-        var fight = Fight(red, blue, weightClass);
-        fight.addListener(() {
+      for (final fight in super.fights) {
+        var tmpFight =
+            ClientFight(fight.r as ClientParticipantStatus?, fight.b as ClientParticipantStatus?, fight.weightClass);
+        _fights!.add(tmpFight);
+        tmpFight.addListener(() {
           notifyListeners();
         });
-        _fights!.add(fight);
       }
     }
     return _fights!;
-  }
-
-  int get homePoints {
-    int res = 0;
-    for (final fight in fights) {
-      res += fight.r?.classificationPoints ?? 0;
-    }
-    return res;
-  }
-
-  int get guestPoints {
-    int res = 0;
-    for (final fight in fights) {
-      res += fight.b?.classificationPoints ?? 0;
-    }
-    return res;
   }
 }

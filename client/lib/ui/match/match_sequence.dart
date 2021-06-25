@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,18 +10,18 @@ import 'package:wrestling_scoreboard/data/participant_status.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard/util/date_time.dart';
+import 'package:common/src/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
 import 'common_elements.dart';
 
 class MatchSequence extends StatelessWidget {
-  late TeamMatch match;
+  late ClientTeamMatch match;
 
   MatchSequence(this.match);
 
-  handleSelectedFight(Fight fight, BuildContext context) {
+  handleSelectedFight(ClientFight fight, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
   }
 
@@ -77,14 +78,14 @@ class MatchSequence extends StatelessWidget {
 }
 
 class FightListItem extends StatelessWidget {
-  Fight fight;
-  late Function(Fight) listItemCallback;
+  ClientFight fight;
+  late Function(ClientFight) listItemCallback;
   int flexWidthWeight = 12;
   int flexWidthStyle = 5;
 
   FightListItem(this.fight, this.listItemCallback, this.flexWidthWeight, this.flexWidthStyle);
 
-  displayName(ParticipantStatus? pStatus, FightRole role, double fontSize, BuildContext context) {
+  displayName(ClientParticipantStatus? pStatus, FightRole role, double fontSize, BuildContext context) {
     return Container(
       color: getColorFromFightRole(role),
       child: Center(
@@ -136,7 +137,7 @@ class FightListItem extends StatelessWidget {
                               flex: 50,
                               child: displayName(fight.r, FightRole.red, fontSizeDefault, context),
                             ),
-                            Consumer<ParticipantStatus?>(
+                            Consumer<ClientParticipantStatus?>(
                               builder: (context, data, child) => Expanded(
                                 flex: 5,
                                 child: Column(children: [
@@ -172,7 +173,7 @@ class FightListItem extends StatelessWidget {
                       )),
                   Expanded(
                       flex: 10,
-                      child: Consumer<Fight>(
+                      child: Consumer<ClientFight>(
                           builder: (context, data, child) => Column(
                                 children: [
                                   Expanded(
@@ -202,7 +203,7 @@ class FightListItem extends StatelessWidget {
                     child: ChangeNotifierProvider.value(
                       value: fight.b,
                       child: Row(children: [
-                        Consumer<ParticipantStatus?>(
+                        Consumer<ClientParticipantStatus?>(
                           builder: (context, data, child) => Expanded(
                             flex: 5,
                             child: Column(children: [

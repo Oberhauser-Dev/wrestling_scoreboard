@@ -1,13 +1,24 @@
+import 'package:common/common.dart';
+
 import 'participant_status.dart';
-import 'person.dart';
 import 'team.dart';
 
-class Lineup {
-  final Team team;
-  final Person? leader; // Mannschaftsführer
-  final Person? coach; // Trainer
-  final List<ParticipantStatus> participantStatusList;
-  int tier; // Rangordnung
+class ClientLineup extends Lineup {
+  ClientLineup(
+      {required ClientTeam team,
+      required List<ClientParticipantStatus> participantStatusList,
+      Person? leader,
+      Person? coach,
+      int tier = 1})
+      : super(team: team, participantStatusList: participantStatusList, leader: leader, coach: coach, tier: tier);
 
-  Lineup({required this.team, required this.participantStatusList, this.leader, this.coach, this.tier = 1});
+  ClientLineup.from(Lineup obj)
+      : this(
+            team: ClientTeam.from(obj.team),
+            participantStatusList: obj.participantStatusList.map((e) => ClientParticipantStatus.from(e)).toList(),
+            leader: obj.leader,
+            coach: obj.coach,
+            tier: obj.tier);
+
+  factory ClientLineup.fromJson(Map<String, dynamic> json) => ClientLineup.from(Lineup.fromJson(json));
 }

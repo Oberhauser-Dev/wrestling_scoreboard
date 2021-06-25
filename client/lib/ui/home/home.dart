@@ -9,10 +9,10 @@ import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
 
 class Home extends StatelessWidget {
-  late final Future<List<Club>> _clubs;
+  late final Future<List<ClientClub>> _clubs;
 
   Home() {
-    _clubs = fetchMany<Club>();
+    _clubs = fetchMany<ClientClub>();
   }
 
   @override
@@ -21,9 +21,9 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: FutureBuilder<List<Club>>(
+      body: FutureBuilder<List<ClientClub>>(
           future: _clubs, // a previously-obtained Future<String> or null
-          builder: (BuildContext context, AsyncSnapshot<List<Club>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<ClientClub>> snapshot) {
             if (snapshot.hasData) {
               List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll(snapshot.data!.map(
                   (e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
@@ -39,7 +39,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  handleSelectedClub(Club club, BuildContext context) {
+  handleSelectedClub(ClientClub club, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -49,7 +49,7 @@ class Home extends StatelessWidget {
                 )));
   }
 
-  handleSelectedLeague(League league, BuildContext context) {
+  handleSelectedLeague(ClientLeague league, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(

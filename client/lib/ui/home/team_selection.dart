@@ -9,7 +9,7 @@ import 'match_selection.dart';
 
 class TeamSelection extends StatelessWidget {
   final String title;
-  final List<Team> teams;
+  final List<ClientTeam> teams;
   late List<ListItem> items;
 
   TeamSelection({required this.title, required this.teams});
@@ -27,7 +27,7 @@ class TeamSelection extends StatelessWidget {
     );
   }
 
-  handleSelectedTeam(Team team, BuildContext context) {
+  handleSelectedTeam(ClientTeam team, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(

@@ -1,4 +1,8 @@
-import 'package:wrestling_scoreboard/data/fight_role.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+import 'fight_role.dart';
+
+part 'fight_action.g.dart';
 
 enum FightActionType {
   points,
@@ -8,6 +12,7 @@ enum FightActionType {
   dismissal // red card
 }
 
+@JsonSerializable()
 class FightAction {
   Duration duration;
   FightActionType actionType;
@@ -15,6 +20,10 @@ class FightAction {
   FightRole role;
 
   FightAction({required this.actionType, required this.duration, required this.role, this.pointCount});
+
+  factory FightAction.fromJson(Map<String, dynamic> json) => _$FightActionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FightActionToJson(this);
 
   @override
   String toString() {

@@ -8,6 +8,13 @@ A simple usage example:
 import 'package:common/common.dart';
 
 main() {
-  var club = new Club();
+  var club = Club(name: 'MyClubName');
 }
+```
+
+## Json Serialization
+
+Build Json Serialization models with:
+```
+flutter pub run build_runner build
 ```

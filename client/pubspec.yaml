@@ -37,6 +37,8 @@ dependencies:
   audioplayers: ^0.19.0
   # dart_vlc: ^0.0.7
   flutter_settings_screens: ^0.3.0-null-safety
+  common:
+    path: ../common
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,12 @@
+import 'package:common/common.dart';
+import 'package:common/src/util/date_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
-import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/util/audio/audio.dart';
-import 'package:wrestling_scoreboard/util/date_time.dart';
 
 import 'fight_screen.dart';
 
@@ -108,8 +108,8 @@ class FightScreenActionIntent extends Intent {
 class FightActionHandler extends StatelessWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
-  final TeamMatch match;
-  final Fight fight;
+  final ClientTeamMatch match;
+  final ClientFight fight;
   final Function(FightScreenActions action) doAction;
 
   FightActionHandler(
@@ -119,8 +119,8 @@ class FightActionHandler extends StatelessWidget {
     handleIntentStatic(intent, this.stopwatch, this.match, this.fight, this.doAction, context: context);
   }
 
-  static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, TeamMatch match, Fight fight,
-      Function(FightScreenActions action) doAction,
+  static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, ClientTeamMatch match,
+      ClientFight fight, Function(FightScreenActions action) doAction,
       {BuildContext? context}) {
     switch (intent.type) {
       case FightScreenActions.StartStop:

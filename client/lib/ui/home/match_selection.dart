@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
 
 class MatchSelection extends StatelessWidget {
   final String title;
-  final List<TeamMatch> matches;
+  final List<ClientTeamMatch> matches;
   late List<ListItem> items;
 
   MatchSelection({required this.title, required this.matches});
@@ -27,7 +27,7 @@ class MatchSelection extends StatelessWidget {
     );
   }
 
-  handleSelectedMatch(TeamMatch match, BuildContext context) {
+  handleSelectedMatch(ClientTeamMatch match, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSequence(match)));
   }
 }

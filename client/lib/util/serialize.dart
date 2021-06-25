@@ -11,8 +11,8 @@ import 'package:wrestling_scoreboard/data/club.dart';
 
 T deserialize<T>(Map<String, dynamic> json) {
   switch (T) {
-    case Club:
-      return Club.fromJson(json) as T;
+    case ClientClub:
+      return ClientClub.fromJson(json) as T;
     default:
       throw UnimplementedError('Cannot deserialize ${T.toString()}');
   }

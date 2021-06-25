@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,7 +14,7 @@ import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_status_model.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
-import 'package:wrestling_scoreboard/util/date_time.dart';
+import 'package:common/src/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
@@ -22,8 +23,8 @@ import 'fight_actions.dart';
 import 'fight_controls.dart';
 
 class FightScreen extends StatefulWidget {
-  final TeamMatch match;
-  final Fight fight;
+  final ClientTeamMatch match;
+  final ClientFight fight;
 
   FightScreen(this.match, this.fight);
 
@@ -34,8 +35,8 @@ class FightScreen extends StatefulWidget {
 }
 
 class FightState extends State<FightScreen> {
-  final TeamMatch match;
-  final Fight fight;
+  final ClientTeamMatch match;
+  final ClientFight fight;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _fightStopwatch;
   late ObservableStopwatch _breakStopwatch;
@@ -125,7 +126,7 @@ class FightState extends State<FightScreen> {
     };
   }
 
-  displayName(ParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
+  displayName(ClientParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
     return Expanded(
         child: Column(children: [
       Container(
@@ -148,8 +149,8 @@ class FightState extends State<FightScreen> {
     ]));
   }
 
-  displayClassificationPoints(ParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
-    return Consumer<ParticipantStatus?>(
+  displayClassificationPoints(ClientParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
+    return Consumer<ClientParticipantStatus?>(
       builder: (context, data, child) => pStatus?.classificationPoints != null
           ? Container(
               color: color.shade800,
@@ -167,7 +168,7 @@ class FightState extends State<FightScreen> {
     return Expanded(flex: 33, child: TechnicalPoints(pStatusModel: pStatus, height: cellHeight, role: role));
   }
 
-  displayParticipant(ParticipantStatus? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
+  displayParticipant(ClientParticipantStatus? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
     var color = getColorFromFightRole(role);
     List<Widget> items = [
       displayName(pStatus, padding, cellHeight, fontSize),
@@ -350,7 +351,7 @@ class FightState extends State<FightScreen> {
                 ),
                 Container(
                   padding: bottomPadding,
-                  child: Consumer<Fight>(
+                  child: Consumer<ClientFight>(
                     builder: (context, data, child) => ActionsWidget(fight.actions),
                   ),
                 ),

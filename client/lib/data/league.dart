@@ -1,7 +1,8 @@
-class League {
-  static League outOfCompetition = League(name: 'Out of competition', year: DateTime(DateTime.now().year));
-  DateTime year;
-  String name;
+import 'package:common/common.dart';
 
-  League({required this.name, required this.year});
+class ClientLeague extends League {
+  ClientLeague({required String name, required DateTime year}) : super(name: name, year: year);
+  ClientLeague.from(League obj) : this(name: obj.name, year: obj.year);
+
+  factory ClientLeague.fromJson(Map<String, dynamic> json) => ClientLeague.from(League.fromJson(json));
 }

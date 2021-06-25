@@ -1,9 +1,9 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard/data/fight_action.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
-import 'package:wrestling_scoreboard/util/date_time.dart';
+import 'package:common/src/util/date_time.dart';
 
 class ActionsWidget extends StatelessWidget {
   final List<FightAction> actions;

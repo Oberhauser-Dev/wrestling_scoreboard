@@ -1,13 +1,9 @@
-class Club {
-  String? id; // Vereinsnummer
-  final String name;
+import 'package:common/common.dart';
 
-  Club({required this.name, this.id});
+class ClientClub extends Club {
+  ClientClub({required String name, String? id}) : super(name: name, id: id);
 
-  factory Club.fromJson(Map<String, dynamic> json) {
-    return Club(
-      id: json['id'],
-      name: json['name'],
-    );
-  }
+  ClientClub.from(Club obj) : this(name: obj.name, id: obj.id);
+
+  factory ClientClub.fromJson(Map<String, dynamic> json) => ClientClub.from(Club.fromJson(json));
 }
