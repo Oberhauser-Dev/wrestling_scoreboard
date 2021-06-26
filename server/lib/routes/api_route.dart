@@ -1,5 +1,6 @@
 import 'package:server/controllers/club_controller.dart';
 import 'package:server/controllers/team_controller.dart';
+import 'package:server/middleware/content_type.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
@@ -20,5 +21,10 @@ class ApiRoute {
     router.all('/<ignored|.*>', (Request request) => Response.notFound('null'));
 
     return router;
+  }
+
+  Handler get pipeline {
+    final pipeline = Pipeline().addMiddleware(contentTypeJsonConfig).addHandler(router);
+    return pipeline;
   }
 }

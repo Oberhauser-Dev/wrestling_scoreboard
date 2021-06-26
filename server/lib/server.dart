@@ -50,5 +50,5 @@ final _staticHandler = shelf_static.createStaticHandler('public', defaultDocumen
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()
-  ..mount('/api/', ApiRoute().router)
+  ..mount('/api/', ApiRoute().pipeline)
   ..mount('/ws/', websocketHandler);
