@@ -1,12 +1,12 @@
 import 'package:common/common.dart';
 
-League leagueMenRPW = League(name: 'Real Pro Wrestling', year: DateTime(2021));
-League leagueJnRPW = League(name: 'Real Pro Wrestling Jn', year: DateTime(2021));
-League leagueNational = League(name: 'National League', year: DateTime(2021));
+League leagueMenRPW = League(name: 'Real Pro Wrestling', startDate: DateTime(2021));
+League leagueJnRPW = League(name: 'Real Pro Wrestling Jn', startDate: DateTime(2021));
+League leagueNational = League(name: 'National League', startDate: DateTime(2021));
 List<League> leagues = [leagueMenRPW, leagueJnRPW, leagueNational];
 
-Club homeClub = Club(name: 'Springfield Wrestlers', id: '12345');
-Club guestClub = Club(name: 'Quahog Hunters', id: '05432');
+Club homeClub = Club(name: 'Springfield Wrestlers', no: '12345');
+Club guestClub = Club(name: 'Quahog Hunters', no: '05432');
 List<Club> clubs = [homeClub, guestClub];
 
 Team homeTeam =

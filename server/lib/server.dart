@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:dotenv/dotenv.dart' show load, clean, isEveryDefined, env;
 import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/routes/api_route.dart';
+import 'package:server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
@@ -41,6 +42,8 @@ Future init() async {
     Platform.environment['HOST'] ?? env['HOST'] ?? InternetAddress.anyIPv4, // Allows external connections
     port,
   );
+
+  await PostgresDb().connection.open();
 
   print('Serving at http://${server.address.host}:${server.port}');
 }

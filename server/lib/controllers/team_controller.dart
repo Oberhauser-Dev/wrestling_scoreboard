@@ -1,12 +1,27 @@
-import 'dart:convert';
+import 'package:common/common.dart';
+import 'package:server/controllers/club_controller.dart';
 
-import 'package:server/mocks/mocks.dart';
-import 'package:shelf/shelf.dart';
+import 'entity_controller.dart';
+import 'league_controller.dart';
 
-Future<Response> teamRequest(Request request, String id) async {
-  return Response.ok(jsonEncode(getTeams().singleWhere((element) => element.id == id)));
-}
+class TeamController extends EntityController<Team> {
+  static final TeamController _singleton = TeamController._internal();
 
-Future<Response> teamsRequest(Request request) async {
-  return Response.ok(jsonEncode(getTeams()));
+  factory TeamController() {
+    return _singleton;
+  }
+
+  TeamController._internal() : super(tableName: 'team');
+
+  @override
+  Future<Team> parseToClass(Map<String, dynamic> e) async {
+    final club = await ClubController().getSingle(e['club_id'] as int);
+    final league = await LeagueController().getSingle(e['league_id'] as int);
+    return Team(
+        id: e['id'] as int?,
+        name: e['name'] as String,
+        club: club!,
+        description: e['description'] as String?,
+        league: league);
+  }
 }

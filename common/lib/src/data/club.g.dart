@@ -8,12 +8,14 @@ part of 'club.dart';
 
 Club _$ClubFromJson(Map<String, dynamic> json) {
   return Club(
+    id: json['id'] as int?,
     name: json['name'] as String,
-    id: json['id'] as String?,
+    no: json['no'] as String?,
   );
 }
 
 Map<String, dynamic> _$ClubToJson(Club instance) => <String, dynamic>{
       'id': instance.id,
+      'no': instance.no,
       'name': instance.name,
     };

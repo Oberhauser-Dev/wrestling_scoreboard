@@ -1,12 +1,17 @@
-import 'dart:convert';
+import 'package:common/common.dart';
+import 'package:server/controllers/entity_controller.dart';
 
-import 'package:server/mocks/mocks.dart';
-import 'package:shelf/shelf.dart';
+class ClubController extends EntityController<Club> {
+  static final ClubController _singleton = ClubController._internal();
 
-Future<Response> clubRequest(Request request, String id) async {
-  return Response.ok(jsonEncode(getClubs().singleWhere((element) => element.id == id)));
-}
+  factory ClubController() {
+    return _singleton;
+  }
 
-Future<Response> clubsRequest(Request request) async {
-  return Response.ok(jsonEncode(getClubs()));
+  ClubController._internal() : super(tableName: 'club');
+
+  @override
+  Future<Club> parseToClass(Map<String, dynamic> e) async {
+    return Club(id: e['id'] as int?, no: e['no'] as String?, name: e['name'] as String);
+  }
 }

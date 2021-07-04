@@ -1,4 +1,5 @@
 import 'package:server/controllers/club_controller.dart';
+import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:server/middleware/content_type.dart';
 import 'package:shelf/shelf.dart';
@@ -9,12 +10,19 @@ class ApiRoute {
   Router get router {
     final router = Router();
 
+    final clubController = ClubController();
     // A handler can have more that one route.
-    router.get('/clubs', clubsRequest);
-    router.get('/club/<id|[0-9]{5}>', clubRequest);
+    router.get('/clubs', clubController.requestMultiple);
+    router.get('/club/<id|[0-9]+>', clubController.requestSingle);
+    // router.get('/club/<no|[0-9]{5}>', clubRequest);
 
-    router.get('/teams', teamsRequest);
-    router.get('/team/<id|[a-zA-Z0-9_]+>', teamRequest);
+    final leagueController = LeagueController();
+    router.get('/leagues', leagueController.requestMultiple);
+    router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
+
+    final teamController = TeamController();
+    router.get('/teams', teamController.requestMultiple);
+    router.get('/team/<id|[0-9]+>', teamController.requestSingle);
 
     // This nested catch-all, will only catch /api/.* when mounted above.
     // Notice that ordering if annotated handlers and mounts is significant.
