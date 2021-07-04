@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:wrestling_scoreboard/data/club.dart';
+import 'package:wrestling_scoreboard/data/league.dart';
+import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/util/serialize.dart';
 
 const apiUrl = 'http://localhost:8080/api';
@@ -10,6 +12,10 @@ String _getPathFromClass<T>() {
   switch (T) {
     case ClientClub:
       return '/club';
+    case ClientLeague:
+      return '/league';
+    case ClientTeam:
+      return '/team';
     default:
       throw UnimplementedError('Path for "${T.toString()}" not found');
   }

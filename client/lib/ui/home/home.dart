@@ -10,9 +10,11 @@ import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
 
 class Home extends StatelessWidget {
   late final Future<List<ClientClub>> _clubs;
+  late final Future<List<ClientLeague>> _leagues;
 
   Home() {
     _clubs = fetchMany<ClientClub>();
+    _leagues = fetchMany<ClientLeague>();
   }
 
   @override
@@ -21,15 +23,15 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: FutureBuilder<List<ClientClub>>(
-          future: _clubs, // a previously-obtained Future<String> or null
-          builder: (BuildContext context, AsyncSnapshot<List<ClientClub>> snapshot) {
+      body: FutureBuilder<List<dynamic>>(
+          future: Future.wait([_clubs,_leagues]), // a previously-obtained Future<String> or null
+          builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.hasData) {
-              List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll(snapshot.data!.map(
+              List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll((snapshot.data![0] as List<ClientClub>).map(
                   (e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
               items
                 ..add(HeadingItem(AppLocalizations.of(context)!.league))
-                ..addAll(getLeagues().map((e) =>
+                ..addAll((snapshot.data![1] as List<ClientLeague>).map((e) =>
                     ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))));
               return GroupedList(items);
             } else {

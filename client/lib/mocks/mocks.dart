@@ -7,14 +7,12 @@ import 'package:wrestling_scoreboard/data/participant_status.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 
-ClientLeague leagueMenRPW = ClientLeague(name: 'Real Pro Wrestling', year: DateTime(2021));
-ClientLeague leagueJnRPW = ClientLeague(name: 'Real Pro Wrestling Jn', year: DateTime(2021));
-ClientLeague leagueNational = ClientLeague(name: 'National League', year: DateTime(2021));
-List<ClientLeague> leagues = [leagueMenRPW, leagueJnRPW, leagueNational];
+ClientLeague leagueMenRPW = ClientLeague(name: 'Real Pro Wrestling', startDate: DateTime(2021));
+ClientLeague leagueJnRPW = ClientLeague(name: 'Real Pro Wrestling Jn', startDate: DateTime(2021));
+ClientLeague leagueNational = ClientLeague(name: 'National League', startDate: DateTime(2021));
 
 ClientClub homeClub = ClientClub(name: 'Springfield Wrestlers');
 ClientClub guestClub = ClientClub(name: 'Quahog Hunters');
-List<ClientClub> clubs = [homeClub, guestClub];
 
 ClientTeam homeTeam =
     ClientTeam(name: 'Springfield Wrestlers', club: homeClub, description: '1. Team Men', league: leagueMenRPW);
@@ -67,10 +65,6 @@ ClientTeamMatch initJnRPWMatch() {
   Person referee = Person(prename: 'Mr', surname: 'Referee', gender: Gender.male);
   return ClientTeamMatch(home, guest, referee, location: 'Springfield');
 }
-
-List<ClientClub> getClubs() => clubs;
-
-List<ClientLeague> getLeagues() => leagues;
 
 List<ClientTeam> getTeams() => teams;
 
