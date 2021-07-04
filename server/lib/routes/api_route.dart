@@ -12,16 +12,16 @@ class ApiRoute {
 
     final clubController = ClubController();
     // A handler can have more that one route.
-    router.get('/clubs', clubController.requestMultiple);
+    router.get('/clubs', clubController.requestMany);
     router.get('/club/<id|[0-9]+>', clubController.requestSingle);
     // router.get('/club/<no|[0-9]{5}>', clubRequest);
 
     final leagueController = LeagueController();
-    router.get('/leagues', leagueController.requestMultiple);
+    router.get('/leagues', leagueController.requestMany);
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
 
     final teamController = TeamController();
-    router.get('/teams', teamController.requestMultiple);
+    router.get('/teams', teamController.requestMany);
     router.get('/team/<id|[0-9]+>', teamController.requestSingle);
 
     // This nested catch-all, will only catch /api/.* when mounted above.

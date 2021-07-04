@@ -12,9 +12,9 @@ abstract class EntityController<T> {
     final res = await PostgresDb()
         .connection
         .mappedResultsQuery('SELECT * FROM $tableName WHERE $primaryKeyName = @id', substitutionValues: {'id': id});
-    final multiple = mapToRest(res);
-    if (multiple.isEmpty) return Future.value(null);
-    return multiple.first;
+    final many = mapToRest(res);
+    if (many.isEmpty) return Future.value(null);
+    return many.first;
   }
 
   Future<T?> getSingle(int id) async {
@@ -32,18 +32,18 @@ abstract class EntityController<T> {
     }
   }
 
-  Future<Iterable<Map<String, dynamic>>> getMultipleRest() async {
+  Future<Iterable<Map<String, dynamic>>> getManyRest() async {
     final res = await PostgresDb().connection.mappedResultsQuery('SELECT * FROM $tableName');
     return mapToRest(res);
   }
 
-  Future<List<T>> getMultiple() async {
-    return Future.wait((await getMultipleRest()).map((e) async => await parseToClass(e)).toList());
+  Future<List<T>> getMany() async {
+    return Future.wait((await getManyRest()).map((e) async => await parseToClass(e)).toList());
   }
 
-  Future<Response> requestMultiple(Request request) async {
-    final multiple = await getMultipleRest();
-    return Response.ok(betterJsonEncode(multiple.toList()));
+  Future<Response> requestMany(Request request) async {
+    final many = await getManyRest();
+    return Response.ok(betterJsonEncode(many.toList()));
   }
 
   Future<Iterable<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
