@@ -4,7 +4,7 @@ import 'package:dotenv/dotenv.dart';
 import 'package:shelf/shelf.dart';
 
 final corsHeaders = {
-  'Access-Control-Allow-Origin': Platform.environment['CORS_ALLOW_ORIGIN'] ?? env['CORS_ALLOW_ORIGIN'] ?? '*',
+  'Access-Control-Allow-Origin': env['CORS_ALLOW_ORIGIN'] ?? '*',
   'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS, PUT',
   'Access-Control-Allow-Headers': '*',
 };

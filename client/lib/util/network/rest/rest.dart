@@ -1,12 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/util/serialize.dart';
 
-const apiUrl = 'http://localhost:8080/api';
+final apiUrl = dotenv.env['API_URL'] ?? 'http://localhost:8080/api';
 
 String _getPathFromClass<T>() {
   switch (T) {
@@ -21,8 +22,8 @@ String _getPathFromClass<T>() {
   }
 }
 
-Future<T> fetchSingle<T>(int id) async {
-  final response = await http.get(Uri.parse('$apiUrl${_getPathFromClass<T>()}/$id'));
+Future<T> fetchSingle<T>(int id, {String prepend = ''}) async {
+  final response = await http.get(Uri.parse('$apiUrl$prepend${_getPathFromClass<T>()}/$id'));
 
   if (response.statusCode == 200) {
     Map<String, dynamic> json = jsonDecode(response.body);

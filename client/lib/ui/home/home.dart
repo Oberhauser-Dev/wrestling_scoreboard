@@ -36,7 +36,7 @@ class Home extends StatelessWidget {
                     ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))));
               return GroupedList(items);
             } else {
-              return Text('Cannot access data!');
+              return Center(child: Text('Cannot access data!'));
             }
           }),
     );

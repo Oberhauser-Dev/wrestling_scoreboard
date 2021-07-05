@@ -20,7 +20,7 @@ Future init() async {
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
-  final port = int.parse(Platform.environment['PORT'] ?? env['PORT'] ?? '8080');
+  final port = int.parse(env['PORT'] ?? '8080');
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
@@ -39,7 +39,7 @@ Future init() async {
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
   final server = await shelf_io.serve(
     pipeline,
-    Platform.environment['HOST'] ?? env['HOST'] ?? InternetAddress.anyIPv4, // Allows external connections
+    env['HOST'] ?? InternetAddress.anyIPv4, // Allows external connections
     port,
   );
 
