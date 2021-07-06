@@ -14,11 +14,13 @@ class ApiRoute {
     // A handler can have more that one route.
     router.get('/clubs', clubController.requestMany);
     router.get('/club/<id|[0-9]+>', clubController.requestSingle);
+    router.get('/club/<id|[0-9]+>/teams', clubController.requestTeams);
     // router.get('/club/<no|[0-9]{5}>', clubRequest);
 
     final leagueController = LeagueController();
     router.get('/leagues', leagueController.requestMany);
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
+    router.get('/league/<id|[0-9]+>/teams', leagueController.requestTeams);
 
     final teamController = TeamController();
     router.get('/teams', teamController.requestMany);

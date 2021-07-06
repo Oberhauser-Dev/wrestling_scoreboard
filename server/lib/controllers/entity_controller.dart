@@ -11,7 +11,7 @@ abstract class EntityController<T> {
   Future<Map<String, dynamic>?> getSingleRest(int id) async {
     final res = await PostgresDb()
         .connection
-        .mappedResultsQuery('SELECT * FROM $tableName WHERE $primaryKeyName = @id', substitutionValues: {'id': id});
+        .mappedResultsQuery('SELECT * FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
     final many = mapToRest(res);
     if (many.isEmpty) return Future.value(null);
     return many.first;
@@ -32,8 +32,8 @@ abstract class EntityController<T> {
     }
   }
 
-  Future<Iterable<Map<String, dynamic>>> getManyRest() async {
-    final res = await PostgresDb().connection.mappedResultsQuery('SELECT * FROM $tableName');
+  Future<Iterable<Map<String, dynamic>>> getManyRest({List<String>? conditions}) async {
+    final res = await PostgresDb().connection.mappedResultsQuery('SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' AND ')};');
     return mapToRest(res);
   }
 
