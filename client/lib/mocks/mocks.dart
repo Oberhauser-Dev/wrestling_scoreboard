@@ -20,7 +20,6 @@ ClientTeam homeTeamJuniors =
     ClientTeam(name: 'Springfield Wrestlers Jn', club: homeClub, description: 'Juniors', league: leagueJnRPW);
 ClientTeam guestTeam =
     ClientTeam(name: 'Quahog Hunters II', club: guestClub, description: '2. Team Men', league: leagueMenRPW);
-List<ClientTeam> teams = [homeTeam, homeTeamJuniors, guestTeam];
 
 List<ClientTeamMatch> matches = [initMenRPWMatch(), initJnRPWMatch()];
 
@@ -66,17 +65,7 @@ ClientTeamMatch initJnRPWMatch() {
   return ClientTeamMatch(home, guest, referee, location: 'Springfield');
 }
 
-List<ClientTeam> getTeams() => teams;
-
 List<ClientTeamMatch> getMatches() => matches;
-
-List<ClientTeam> getTeamsOfClub(ClientClub club) {
-  return getTeams().where((element) => element.club == club).toList();
-}
-
-List<ClientTeam> getTeamsOfLeague(ClientLeague league) {
-  return getTeams().where((element) => element.league == league).toList();
-}
 
 List<ClientTeamMatch> getMatchesOfTeam(ClientTeam team) {
   return getMatches().where((element) => element.home.team == team || element.guest.team == team).toList();
