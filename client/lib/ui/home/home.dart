@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
-import 'package:wrestling_scoreboard/mocks/mocks.dart';
+import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
@@ -24,11 +24,12 @@ class Home extends StatelessWidget {
         title: Text('Home'),
       ),
       body: FutureBuilder<List<dynamic>>(
-          future: Future.wait([_clubs,_leagues]), // a previously-obtained Future<String> or null
+          future: Future.wait([_clubs, _leagues]), // a previously-obtained Future<String> or null
           builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.hasData) {
-              List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll((snapshot.data![0] as List<ClientClub>).map(
-                  (e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
+              List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll(
+                  (snapshot.data![0] as List<ClientClub>).map(
+                      (e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
               items
                 ..add(HeadingItem(AppLocalizations.of(context)!.league))
                 ..addAll((snapshot.data![1] as List<ClientLeague>).map((e) =>
@@ -42,22 +43,28 @@ class Home extends StatelessWidget {
   }
 
   handleSelectedClub(ClientClub club, BuildContext context) {
-    Navigator.push(
+    fetchMany<ClientTeam>(prepend: '/club/${club.id}').then(
+      (value) => Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TeamSelection(
                   title: club.name,
-                  teams: getTeamsOfClub(club),
-                )));
+                  teams: value,
+                )),
+      ),
+    );
   }
 
   handleSelectedLeague(ClientLeague league, BuildContext context) {
-    Navigator.push(
+    fetchMany<ClientTeam>(prepend: '/league/${league.id}').then(
+      (value) => Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TeamSelection(
                   title: league.name,
-                  teams: getTeamsOfLeague(league),
-                )));
+                  teams: value,
+                )),
+      ),
+    );
   }
 }

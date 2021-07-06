@@ -21,7 +21,7 @@ String _getPathFromClass<T>() {
   }
 }
 
-Future<T> fetchSingle<T>(String id) async {
+Future<T> fetchSingle<T>(int id) async {
   final response = await http.get(Uri.parse('$apiUrl${_getPathFromClass<T>()}/$id'));
 
   if (response.statusCode == 200) {
@@ -32,9 +32,9 @@ Future<T> fetchSingle<T>(String id) async {
   }
 }
 
-Future<List<T>> fetchMany<T>() async {
+Future<List<T>> fetchMany<T>({String prepend = ''}) async {
   try {
-    final response = await http.get(Uri.parse('$apiUrl${_getPathFromClass<T>()}s'));
+    final response = await http.get(Uri.parse('$apiUrl$prepend${_getPathFromClass<T>()}s'));
 
     if (response.statusCode == 200) {
       List json = jsonDecode(response.body);
