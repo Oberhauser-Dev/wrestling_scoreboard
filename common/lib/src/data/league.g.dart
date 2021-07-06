@@ -8,12 +8,14 @@ part of 'league.dart';
 
 League _$LeagueFromJson(Map<String, dynamic> json) {
   return League(
+    id: json['id'] as int?,
     name: json['name'] as String,
     startDate: DateTime.parse(json['startDate'] as String),
   );
 }
 
 Map<String, dynamic> _$LeagueToJson(League instance) => <String, dynamic>{
+      'id': instance.id,
       'startDate': instance.startDate.toIso8601String(),
       'name': instance.name,
     };
