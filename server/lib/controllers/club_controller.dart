@@ -13,8 +13,8 @@ class ClubController extends EntityController<Club> {
   ClubController._internal() : super(tableName: 'club');
 
   Future<Response> requestTeams(Request request, String id) async {
-    final many = await TeamController().getManyRest(conditions: ['club_id = $id']);
-    return Response.ok(betterJsonEncode(many.toList()));
+    return EntityController.handleRequestManyOfController(TeamController(),
+        isRaw: isRaw(request), conditions: ['club_id = $id']);
   }
 
   @override

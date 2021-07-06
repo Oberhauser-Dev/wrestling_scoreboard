@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:common/common.dart';
 import 'package:server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
@@ -8,42 +10,37 @@ abstract class EntityController<T> {
 
   EntityController({required this.tableName, this.primaryKeyName = 'id'});
 
-  Future<Map<String, dynamic>?> getSingleRest(int id) async {
+  Future<Map<String, dynamic>?> getSingleRaw(int id) async {
     final res = await PostgresDb()
         .connection
         .mappedResultsQuery('SELECT * FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
-    final many = mapToRest(res);
+    final many = mapToTable(res);
     if (many.isEmpty) return Future.value(null);
     return many.first;
   }
 
   Future<T?> getSingle(int id) async {
-    final single = await getSingleRest(id);
+    final single = await getSingleRaw(id);
     if (single == null) return Future.value(null);
     return parseToClass(single);
   }
 
   Future<Response> requestSingle(Request request, String id) async {
-    final obj = await getSingleRest(int.parse(id));
-    if (obj == null) {
-      return Response.notFound('Object with ID $id not found in $tableName');
-    } else {
-      return Response.ok(betterJsonEncode(obj));
-    }
+    return handleRequestSingleOfController(this, int.parse(id), isRaw: isRaw(request));
   }
 
-  Future<Iterable<Map<String, dynamic>>> getManyRest({List<String>? conditions}) async {
-    final res = await PostgresDb().connection.mappedResultsQuery('SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' AND ')};');
-    return mapToRest(res);
+  Future<Iterable<Map<String, dynamic>>> getManyRaw({List<String>? conditions}) async {
+    final res = await PostgresDb().connection.mappedResultsQuery(
+        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' AND ')};');
+    return mapToTable(res);
   }
 
-  Future<List<T>> getMany() async {
-    return Future.wait((await getManyRest()).map((e) async => await parseToClass(e)).toList());
+  Future<List<T>> getMany({List<String>? conditions}) async {
+    return Future.wait((await getManyRaw(conditions: conditions)).map((e) async => await parseToClass(e)).toList());
   }
 
   Future<Response> requestMany(Request request) async {
-    final many = await getManyRest();
-    return Response.ok(betterJsonEncode(many.toList()));
+    return handleRequestManyOfController(this, isRaw: isRaw(request));
   }
 
   Future<Iterable<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
@@ -53,11 +50,47 @@ abstract class EntityController<T> {
     }));
   }
 
-  Iterable<Map<String, dynamic>> mapToRest(List<Map<String, Map<String, dynamic>>> res) {
+  Iterable<Map<String, dynamic>> mapToTable(List<Map<String, Map<String, dynamic>>> res) {
     return res.map((row) => row[tableName]!);
   }
 
-  Future<T> parseToClass(Map<String, dynamic> e) {
+  Future<T> parseToClass(Map<String, dynamic> e);
+
+  /*{
     throw UnimplementedError('Parsing database object $tableName to ${T.toString()} is not supported yet');
+  }*/
+
+  bool isRaw(Request request) {
+    return (request.url.queryParameters['raw'] ?? '').parseBool();
+  }
+
+  static Future<Response> handleRequestSingleOfController(EntityController controller, int id,
+      {bool isRaw = false}) async {
+    if (isRaw) {
+      final single = await controller.getSingleRaw(id);
+      if (single == null) {
+        return Response.notFound('Object with ID $id not found in ${controller.tableName}');
+      } else {
+        return Response.ok(betterJsonEncode(single));
+      }
+    } else {
+      final single = await controller.getSingle(id);
+      if (single == null) {
+        return Response.notFound('Object with ID $id not found in ${controller.tableName}');
+      } else {
+        return Response.ok(jsonEncode(single));
+      }
+    }
+  }
+
+  static Future<Response> handleRequestManyOfController(EntityController controller,
+      {bool isRaw = false, List<String>? conditions}) async {
+    if (isRaw) {
+      final many = await controller.getManyRaw(conditions: conditions);
+      return Response.ok(betterJsonEncode(many.toList()));
+    } else {
+      final many = await controller.getMany(conditions: conditions);
+      return Response.ok(jsonEncode(many.toList()));
+    }
   }
 }

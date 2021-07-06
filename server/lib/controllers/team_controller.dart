@@ -16,7 +16,8 @@ class TeamController extends EntityController<Team> {
   @override
   Future<Team> parseToClass(Map<String, dynamic> e) async {
     final club = await ClubController().getSingle(e['club_id'] as int);
-    final league = await LeagueController().getSingle(e['league_id'] as int);
+    final leagueId = e['league_id'] as int?;
+    final league = leagueId == null ? null : await LeagueController().getSingle(leagueId);
     return Team(
         id: e['id'] as int?,
         name: e['name'] as String,
