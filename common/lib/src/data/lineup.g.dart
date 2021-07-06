@@ -8,6 +8,7 @@ part of 'lineup.dart';
 
 Lineup _$LineupFromJson(Map<String, dynamic> json) {
   return Lineup(
+    id: json['id'] as int?,
     team: Team.fromJson(json['team'] as Map<String, dynamic>),
     participantStatusList: (json['participantStatusList'] as List<dynamic>)
         .map((e) => ParticipantStatus.fromJson(e as Map<String, dynamic>))
@@ -23,6 +24,7 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$LineupToJson(Lineup instance) => <String, dynamic>{
+      'id': instance.id,
       'team': instance.team,
       'leader': instance.leader,
       'coach': instance.coach,

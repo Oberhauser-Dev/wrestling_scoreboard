@@ -8,6 +8,7 @@ part of 'participant_status.dart';
 
 ParticipantStatus _$ParticipantStatusFromJson(Map<String, dynamic> json) {
   return ParticipantStatus(
+    id: json['id'] as int?,
     participant:
         Participant.fromJson(json['participant'] as Map<String, dynamic>),
     weightClass:
@@ -18,6 +19,7 @@ ParticipantStatus _$ParticipantStatusFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ParticipantStatusToJson(ParticipantStatus instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'participant': instance.participant,
       'weightClass': instance.weightClass,
       'weight': instance.weight,

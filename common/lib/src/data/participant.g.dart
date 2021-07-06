@@ -8,7 +8,8 @@ part of 'participant.dart';
 
 Participant _$ParticipantFromJson(Map<String, dynamic> json) {
   return Participant(
-    id: json['id'] as String?,
+    id: json['id'] as int?,
+    no: json['no'] as String?,
     club: json['club'] == null
         ? null
         : Club.fromJson(json['club'] as Map<String, dynamic>),
@@ -23,11 +24,12 @@ Participant _$ParticipantFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ParticipantToJson(Participant instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'prename': instance.prename,
       'surname': instance.surname,
       'gender': _$GenderEnumMap[instance.gender],
       'birthDate': instance.birthDate?.toIso8601String(),
-      'id': instance.id,
+      'no': instance.no,
       'club': instance.club,
     };
 

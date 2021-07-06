@@ -1,3 +1,4 @@
+import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'fight.dart';
@@ -8,10 +9,11 @@ import 'weight_class.dart';
 import 'wrestling_style.dart';
 
 part 'team_match.g.dart';
+
 /// For team matches only.
 @JsonSerializable()
-class TeamMatch {
-  final int? id;
+class TeamMatch extends DataObject {
+  final String? no;
   final Lineup home;
   final Lineup guest;
   final Person referee;
@@ -43,14 +45,14 @@ class TeamMatch {
     WeightClass(75, WrestlingStyle.greco, name: '75 kg B'),
   ];
 
-  TeamMatch(this.home, this.guest, this.referee, {this.id, this.location, this.date}) {
+  TeamMatch(this.home, this.guest, this.referee, {int? id, this.no, this.location, this.date}) : super(id) {
     if (home.team.league == guest.team.league && home.team.league != null) {
-      this.league = home.team.league!;
+      league = home.team.league!;
       //  TODO load weight classes of league
     } else {
-      this.league = League.outOfCompetition;
+      league = League.outOfCompetition;
     }
-    this.date = date ?? DateTime.now();
+    date ??= DateTime.now();
   }
 
   factory TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);

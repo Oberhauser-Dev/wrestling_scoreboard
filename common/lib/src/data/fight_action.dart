@@ -1,3 +1,4 @@
+import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'fight_role.dart';
@@ -13,13 +14,14 @@ enum FightActionType {
 }
 
 @JsonSerializable()
-class FightAction {
+class FightAction extends DataObject {
   Duration duration;
   FightActionType actionType;
   int? pointCount;
   FightRole role;
 
-  FightAction({required this.actionType, required this.duration, required this.role, this.pointCount});
+  FightAction({int? id, required this.actionType, required this.duration, required this.role, this.pointCount})
+      : super(id);
 
   factory FightAction.fromJson(Map<String, dynamic> json) => _$FightActionFromJson(json);
 

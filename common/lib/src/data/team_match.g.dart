@@ -12,6 +12,7 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
     Lineup.fromJson(json['guest'] as Map<String, dynamic>),
     Person.fromJson(json['referee'] as Map<String, dynamic>),
     id: json['id'] as int?,
+    no: json['no'] as String?,
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
   )
@@ -38,6 +39,7 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'id': instance.id,
+      'no': instance.no,
       'home': instance.home,
       'guest': instance.guest,
       'referee': instance.referee,

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'data_object.dart';
 import 'fight_action.dart';
 import 'fight_result.dart';
 import 'fight_role.dart';
@@ -9,7 +10,7 @@ import 'weight_class.dart';
 part 'fight.g.dart';
 
 @JsonSerializable()
-class Fight {
+class Fight extends DataObject {
   final ParticipantStatus? r; // red
   final ParticipantStatus? b; // blue
   final WeightClass weightClass;
@@ -20,7 +21,7 @@ class Fight {
 
   Duration _duration = Duration();
 
-  Fight(this.r, this.b, this.weightClass, {this.pool});
+  Fight(this.r, this.b, this.weightClass, {int? id, this.pool}) : super(id);
 
   factory Fight.fromJson(Map<String, dynamic> json) => _$FightFromJson(json);
 

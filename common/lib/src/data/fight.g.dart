@@ -15,6 +15,7 @@ Fight _$FightFromJson(Map<String, dynamic> json) {
         ? null
         : ParticipantStatus.fromJson(json['b'] as Map<String, dynamic>),
     WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
+    id: json['id'] as int?,
     pool: json['pool'] as int?,
   )
     ..result = _$enumDecodeNullable(_$FightResultEnumMap, json['result'])
@@ -23,6 +24,7 @@ Fight _$FightFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
+      'id': instance.id,
       'r': instance.r,
       'b': instance.b,
       'weightClass': instance.weightClass,

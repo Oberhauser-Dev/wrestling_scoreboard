@@ -10,12 +10,14 @@ WeightClass _$WeightClassFromJson(Map<String, dynamic> json) {
   return WeightClass(
     json['weight'] as int,
     _$enumDecode(_$WrestlingStyleEnumMap, json['style']),
+    id: json['id'] as int?,
     name: json['name'] as String?,
   );
 }
 
 Map<String, dynamic> _$WeightClassToJson(WeightClass instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'weight': instance.weight,
       'style': _$WrestlingStyleEnumMap[instance.style],

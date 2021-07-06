@@ -8,6 +8,7 @@ part of 'fight_action.dart';
 
 FightAction _$FightActionFromJson(Map<String, dynamic> json) {
   return FightAction(
+    id: json['id'] as int?,
     actionType: _$enumDecode(_$FightActionTypeEnumMap, json['actionType']),
     duration: Duration(microseconds: json['duration'] as int),
     role: _$enumDecode(_$FightRoleEnumMap, json['role']),
@@ -17,6 +18,7 @@ FightAction _$FightActionFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$FightActionToJson(FightAction instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'duration': instance.duration.inMicroseconds,
       'actionType': _$FightActionTypeEnumMap[instance.actionType],
       'pointCount': instance.pointCount,

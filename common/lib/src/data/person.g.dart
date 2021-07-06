@@ -8,6 +8,7 @@ part of 'person.dart';
 
 Person _$PersonFromJson(Map<String, dynamic> json) {
   return Person(
+    id: json['id'] as int?,
     prename: json['prename'] as String,
     surname: json['surname'] as String,
     gender: _$enumDecodeNullable(_$GenderEnumMap, json['gender']),
@@ -18,6 +19,7 @@ Person _$PersonFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$PersonToJson(Person instance) => <String, dynamic>{
+      'id': instance.id,
       'prename': instance.prename,
       'surname': instance.surname,
       'gender': _$GenderEnumMap[instance.gender],

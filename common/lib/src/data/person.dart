@@ -1,3 +1,4 @@
+import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../util.dart';
@@ -6,13 +7,13 @@ import 'gender.dart';
 part 'person.g.dart';
 
 @JsonSerializable()
-class Person {
+class Person extends DataObject {
   final String prename;
   final String surname;
   final Gender? gender;
   final DateTime? birthDate;
 
-  Person({required this.prename, required this.surname, this.gender, this.birthDate});
+  Person({int? id, required this.prename, required this.surname, this.gender, this.birthDate}) : super(id);
 
   factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 

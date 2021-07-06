@@ -5,14 +5,21 @@ import 'gender.dart';
 import 'person.dart';
 
 part 'participant.g.dart';
+
 @JsonSerializable()
 class Participant extends Person {
-  String? id; // Vereinsnummer
+  String? no; // Vereinsnummer
   final Club? club;
 
   Participant(
-      {this.id, this.club, required String prename, required String surname, Gender? gender, DateTime? birthDate})
-      : super(prename: prename, surname: surname, birthDate: birthDate, gender: gender);
+      {int? id,
+      this.no,
+      this.club,
+      required String prename,
+      required String surname,
+      Gender? gender,
+      DateTime? birthDate})
+      : super(id: id, prename: prename, surname: surname, birthDate: birthDate, gender: gender);
 
   factory Participant.fromJson(Map<String, dynamic> json) => _$ParticipantFromJson(json);
 
