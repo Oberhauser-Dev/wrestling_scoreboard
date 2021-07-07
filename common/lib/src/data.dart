@@ -6,7 +6,7 @@ export 'data/fight_role.dart';
 export 'data/gender.dart';
 export 'data/league.dart';
 export 'data/lineup.dart';
-export 'data/participant.dart';
+export 'data/membership.dart';
 export 'data/participant_status.dart';
 export 'data/person.dart';
 export 'data/team.dart';
