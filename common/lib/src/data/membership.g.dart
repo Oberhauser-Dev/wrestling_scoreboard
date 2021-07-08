@@ -8,6 +8,7 @@ part of 'membership.dart';
 
 Membership _$MembershipFromJson(Map<String, dynamic> json) {
   return Membership(
+    id: json['id'] as int?,
     no: json['no'] as String?,
     club: Club.fromJson(json['club'] as Map<String, dynamic>),
     person: Person.fromJson(json['person'] as Map<String, dynamic>),
@@ -16,6 +17,7 @@ Membership _$MembershipFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$MembershipToJson(Membership instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'no': instance.no,
       'club': instance.club,
       'person': instance.person,

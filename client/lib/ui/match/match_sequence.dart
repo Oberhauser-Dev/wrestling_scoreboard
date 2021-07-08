@@ -90,7 +90,7 @@ class FightListItem extends StatelessWidget {
       color: getColorFromFightRole(role),
       child: Center(
           child: Text(
-        pStatus == null ? AppLocalizations.of(context)!.participantVacant : pStatus.participant.fullName,
+        pStatus == null ? AppLocalizations.of(context)!.participantVacant : pStatus.membership.person.fullName,
         style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white, fontSize: fontSize),
       )),
     );

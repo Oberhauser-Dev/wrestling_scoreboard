@@ -2,24 +2,21 @@ import 'package:common/common.dart';
 
 import 'club.dart';
 
-class ClientParticipant extends Participant {
-  ClientParticipant({
-    required String prename,
-    required String surname,
-    Gender? gender,
-    DateTime? birthDate,
-    String? id,
-    ClientClub? club,
-  }) : super(prename: prename, surname: surname, birthDate: birthDate, gender: gender, id: id, club: club);
+class ClientMembership extends Membership {
+  ClientMembership({
+    int? id,
+    String? no,
+    required ClientClub club,
+    required Person person,
+  }) : super(id: id, no: no, club: club, person: person);
 
-  ClientParticipant.from(Participant obj)
+  ClientMembership.from(Membership obj)
       : this(
-            prename: obj.prename,
-            surname: obj.surname,
-            birthDate: obj.birthDate,
-            gender: obj.gender,
-            id: obj.id,
-            club: obj.club != null ? ClientClub.from(obj.club!) : null);
+          id: obj.id,
+          no: obj.no,
+          club: ClientClub.from(obj.club),
+          person: obj.person,
+        );
 
-  factory ClientParticipant.fromJson(Map<String, dynamic> json) => ClientParticipant.from(Participant.fromJson(json));
+  factory ClientMembership.fromJson(Map<String, dynamic> json) => ClientMembership.from(Membership.fromJson(json));
 }

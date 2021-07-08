@@ -134,7 +134,7 @@ class FightState extends State<FightScreen> {
           height: cellHeight * 2,
           child: Center(
               child: FittedText(
-                pStatus?.participant.fullName ?? AppLocalizations.of(context)!.participantVacant,
+                pStatus?.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
             style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white),
           ))),
       Container(
