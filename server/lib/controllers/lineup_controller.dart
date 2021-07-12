@@ -15,9 +15,9 @@ class LineupController extends EntityController<Lineup> {
 
   LineupController._internal() : super(tableName: 'lineup');
 
-  Future<Response> requestTeams(Request request, String id) async {
+  Future<Response> requestParticipations(Request request, String id) async {
     return EntityController.handleRequestManyOfController(ParticipationController(),
-        isRaw: isRaw(request), conditions: ['club_id = $id']);
+        isRaw: isRaw(request), conditions: ['lineup_id = $id']);
   }
 
   @override

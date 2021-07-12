@@ -32,6 +32,7 @@ class ApiRoute {
     final lineupController = LineupController();
     router.get('/lineups', lineupController.requestMany);
     router.get('/lineup/<id|[0-9]+>', lineupController.requestSingle);
+    router.get('/lineup/<id|[0-9]+>/participations', lineupController.requestParticipations);
 
     final matchController = TeamMatchController();
     router.get('/team_matchs', matchController.requestMany);

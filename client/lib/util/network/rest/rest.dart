@@ -44,7 +44,7 @@ Future<T> fetchSingle<T>(int id, {String prepend = ''}) async {
     Map<String, dynamic> json = jsonDecode(response.body);
     return deserialize<T>(json);
   } else {
-    throw Exception('Failed to load single ${T.toString()}');
+    throw Exception('Failed to load single ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
   }
 }
 
@@ -56,7 +56,7 @@ Future<List<T>> fetchMany<T>({String prepend = ''}) async {
       List json = jsonDecode(response.body);
       return json.map((e) => deserialize<T>(e)).toList();
     } else {
-      throw Exception('Failed to load many ${T.toString()}');
+      throw Exception('Failed to load many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
     }
   } catch (e) {
     print(e);

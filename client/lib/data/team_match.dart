@@ -1,6 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:wrestling_scoreboard/mocks/mocks.dart';
+import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
 
 import 'fight.dart';
 import 'lineup.dart';
@@ -25,9 +25,8 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
 
   Future<List<Fight>> generateFights() async {
     _fights = [];
-    // TODO fetch
-    Iterable<Participation> homeParticipations = getParticipations().where((el) => el.lineup == home);
-    Iterable<Participation> guestParticipations = getParticipations().where((el) => el.lineup == guest);
+    final homeParticipations = await fetchMany<Participation>(prepend: '/lineup/${home.id}');
+    final guestParticipations = await fetchMany<Participation>(prepend: '/lineup/${guest.id}');
     for (final weightClass in weightClasses) {
       var homePartList = homeParticipations.where((el) => el.weightClass == weightClass);
       var guestPartList = guestParticipations.where((el) => el.weightClass == weightClass);

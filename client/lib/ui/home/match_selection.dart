@@ -27,7 +27,8 @@ class MatchSelection extends StatelessWidget {
     );
   }
 
-  handleSelectedMatch(ClientTeamMatch match, BuildContext context) {
+  handleSelectedMatch(ClientTeamMatch match, BuildContext context) async {
+    await match.generateFights(); // TODO fetch previous data, if available
     Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSequence(match)));
   }
 }
