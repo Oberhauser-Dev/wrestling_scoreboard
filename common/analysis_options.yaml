@@ -7,8 +7,9 @@ include: package:pedantic/analysis_options.yaml
 # For lint rules and documentation, see http://dart-lang.github.io/linter/lints.
 
 # Uncomment to specify additional rules.
-# linter:
-#   rules:
+linter:
+  rules:
+    prefer_relative_imports: true
 #     - camel_case_types
 
 # analyzer:
