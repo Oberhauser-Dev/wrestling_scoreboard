@@ -1,18 +1,12 @@
-import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'fight_role.dart';
+import '../enums/fight_action_type.dart';
+import '../enums/fight_role.dart';
+import 'data_object.dart';
 
 part 'fight_action.g.dart';
 
-enum FightActionType {
-  points,
-  passivity, // P
-  verbal, // V admonition
-  caution, // yellow card
-  dismissal // red card
-}
-
+/// An action and its value that is fulfilled by the participant during a fight, e.g. points or caution
 @JsonSerializable()
 class FightAction extends DataObject {
   Duration duration;

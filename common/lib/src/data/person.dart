@@ -1,11 +1,12 @@
-import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../enums/gender.dart';
 import '../util.dart';
-import 'gender.dart';
+import 'data_object.dart';
 
 part 'person.g.dart';
 
+/// The persons information.
 @JsonSerializable()
 class Person extends DataObject {
   final String prename;

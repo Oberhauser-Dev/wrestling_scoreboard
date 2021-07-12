@@ -1,18 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../enums/fight_result.dart';
+import '../enums/fight_role.dart';
 import 'data_object.dart';
 import 'fight_action.dart';
-import 'fight_result.dart';
-import 'fight_role.dart';
-import 'participant_status.dart';
+import 'participant_state.dart';
 import 'weight_class.dart';
 
 part 'fight.g.dart';
 
+/// The fight between two persons, which are represented by a ParticipantStatus.
 @JsonSerializable()
 class Fight extends DataObject {
-  final ParticipantStatus? r; // red
-  final ParticipantStatus? b; // blue
+  final ParticipantState? r; // red
+  final ParticipantState? b; // blue
   final WeightClass weightClass;
   final int? pool;
   final List<FightAction> _actions = [];
@@ -34,7 +35,7 @@ class Fight extends DataObject {
   }
 
   bool addAction(FightAction action) {
-    ParticipantStatus? pStatus = action.role == FightRole.red ? this.r : this.b;
+    ParticipantState? pStatus = action.role == FightRole.red ? this.r : this.b;
     if (pStatus != null) {
       _actions.add(action);
       pStatus.addAction(action);
@@ -51,8 +52,8 @@ class Fight extends DataObject {
   get actions => this._actions;
 
   updateClassificationPoints({bool isTournament = false}) {
-    ParticipantStatus? _winner = this.winner == FightRole.red ? this.r : this.b;
-    ParticipantStatus? _looser = this.winner == FightRole.red ? this.b : this.r;
+    ParticipantState? _winner = this.winner == FightRole.red ? this.r : this.b;
+    ParticipantState? _looser = this.winner == FightRole.red ? this.b : this.r;
 
     if (this.result != null) {
       if (_winner != null) {

@@ -246,6 +246,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  sasl_scram:
+    dependency: transitive
+    description:
+      path: "."
+      ref: main
+      resolved-ref: a53af33979c9319769431a5b76ee0cc3d8ba0d69
+      url: "https://github.com/Oberhauser-Dev/sasl_scram_dart.git"
+    source: git
+    version: "0.0.1"
   shelf:
     dependency: "direct main"
     description:

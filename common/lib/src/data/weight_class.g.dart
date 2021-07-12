@@ -8,9 +8,9 @@ part of 'weight_class.dart';
 
 WeightClass _$WeightClassFromJson(Map<String, dynamic> json) {
   return WeightClass(
-    json['weight'] as int,
-    _$enumDecode(_$WrestlingStyleEnumMap, json['style']),
     id: json['id'] as int?,
+    weight: json['weight'] as int,
+    style: _$enumDecode(_$WrestlingStyleEnumMap, json['style']),
     name: json['name'] as String?,
   );
 }

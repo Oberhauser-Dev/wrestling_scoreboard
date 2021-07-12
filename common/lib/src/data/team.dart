@@ -6,6 +6,7 @@ import 'league.dart';
 
 part 'team.g.dart';
 
+/// The team of a club.
 @JsonSerializable()
 class Team extends DataObject {
   final String name;

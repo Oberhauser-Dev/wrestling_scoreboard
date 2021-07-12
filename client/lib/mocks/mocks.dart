@@ -2,8 +2,7 @@ import 'package:common/common.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/data/lineup.dart';
-import 'package:wrestling_scoreboard/data/participant.dart';
-import 'package:wrestling_scoreboard/data/participant_status.dart';
+import 'package:wrestling_scoreboard/data/membership.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 
@@ -24,11 +23,11 @@ ClientTeam guestTeam =
 List<ClientTeamMatch> matches = [initMenRPWMatch(), initJnRPWMatch()];
 
 // TEAM 1
-WeightClass wc57 = WeightClass(57, WrestlingStyle.free);
-WeightClass wc130 = WeightClass(130, WrestlingStyle.greco);
-WeightClass wc61 = WeightClass(61, WrestlingStyle.greco);
-WeightClass wc66 = WeightClass(66, WrestlingStyle.free);
-WeightClass wc75 = WeightClass(75, WrestlingStyle.free, name: '75 kg A');
+WeightClass wc57 = WeightClass(weight: 57, style: WrestlingStyle.free);
+WeightClass wc130 = WeightClass(weight: 130, style: WrestlingStyle.greco);
+WeightClass wc61 = WeightClass(weight: 61, style: WrestlingStyle.greco);
+WeightClass wc66 = WeightClass(weight: 66, style: WrestlingStyle.free);
+WeightClass wc75 = WeightClass(weight: 75, style: WrestlingStyle.free, name: '75 kg A');
 
 Person p1 = Person(prename: 'Lisa', surname: 'Simpson', gender: Gender.female);
 Person p2 = Person(prename: 'Bart', surname: 'Simpson', gender: Gender.male);
@@ -38,10 +37,6 @@ ClientMembership r1 = ClientMembership(person: p1, club: homeClub);
 ClientMembership r2 = ClientMembership(person: p2, club: homeClub);
 ClientMembership r3 = ClientMembership(person: p3, club: homeClub);
 ClientMembership r4 = ClientMembership(person: p4, club: homeClub);
-ClientParticipantStatus rS1 = ClientParticipantStatus(memebership: r1, weightClass: wc57);
-ClientParticipantStatus rS2 = ClientParticipantStatus(memebership: r2, weightClass: wc61);
-ClientParticipantStatus rS3 = ClientParticipantStatus(memebership: r3, weightClass: wc75);
-ClientParticipantStatus rS4 = ClientParticipantStatus(memebership: r4, weightClass: wc130);
 
 // TEAM 2
 Person p5 = Person(prename: 'Meg', surname: 'Griffin', gender: Gender.female);
@@ -52,28 +47,39 @@ ClientMembership b1 = ClientMembership(person: p5, club: guestClub);
 ClientMembership b2 = ClientMembership(person: p6, club: guestClub);
 ClientMembership b3 = ClientMembership(person: p7, club: guestClub);
 ClientMembership b4 = ClientMembership(person: p8, club: guestClub);
-ClientParticipantStatus bS1 = ClientParticipantStatus(memebership: b1, weightClass: wc57);
-ClientParticipantStatus bS2 = ClientParticipantStatus(memebership: b2, weightClass: wc66);
-ClientParticipantStatus bS3 = ClientParticipantStatus(memebership: b3, weightClass: wc75);
-ClientParticipantStatus bS4 = ClientParticipantStatus(memebership: b4, weightClass: wc130);
+
+final List<Participation> participations = [];
 
 ClientTeamMatch initMenRPWMatch() {
-  ClientLineup home = ClientLineup(team: homeTeam, participantStatusList: [rS1, rS2, rS3, rS4]);
-  ClientLineup guest = ClientLineup(team: guestTeam, participantStatusList: [bS1, bS2, bS3, bS4]);
+  ClientLineup home = ClientLineup(team: homeTeam);
+  ClientLineup guest = ClientLineup(team: guestTeam);
+
+  participations.add(Participation(membership: r1, lineup: home, weightClass: wc57));
+  participations.add(Participation(membership: r1, lineup: home, weightClass: wc61));
+  participations.add(Participation(membership: r1, lineup: home, weightClass: wc75));
+  participations.add(Participation(membership: r1, lineup: home, weightClass: wc130));
+  participations.add(Participation(membership: r1, lineup: guest, weightClass: wc57));
+  participations.add(Participation(membership: r1, lineup: guest, weightClass: wc66));
+  participations.add(Participation(membership: r1, lineup: guest, weightClass: wc75));
+  participations.add(Participation(membership: r1, lineup: guest, weightClass: wc130));
 
   Person referee = Person(prename: 'Mr', surname: 'Referee', gender: Gender.male);
   return ClientTeamMatch(home, guest, referee, location: 'Springfield');
 }
 
 ClientTeamMatch initJnRPWMatch() {
-  ClientLineup home = ClientLineup(team: homeTeamJuniors, participantStatusList: [rS1, rS2, rS3, rS4]);
-  ClientLineup guest = ClientLineup(team: guestTeam, participantStatusList: [bS1, bS2, bS3, bS4]);
+  ClientLineup home = ClientLineup(team: homeTeamJuniors);
+  ClientLineup guest = ClientLineup(team: guestTeam);
+
+  // Miss participants
 
   Person referee = Person(prename: 'Mr', surname: 'Referee', gender: Gender.male);
   return ClientTeamMatch(home, guest, referee, location: 'Springfield');
 }
 
 List<ClientTeamMatch> getMatches() => matches;
+
+List<Participation> getParticipations() => participations;
 
 List<ClientTeamMatch> getMatchesOfTeam(ClientTeam team) {
   return getMatches().where((element) => element.home.team == team || element.guest.team == team).toList();

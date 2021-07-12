@@ -1,8 +1,8 @@
-import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:quiver/core.dart';
 
-import 'wrestling_style.dart';
+import '../enums/wrestling_style.dart';
+import 'data_object.dart';
 
 part 'weight_class.g.dart';
 
@@ -12,7 +12,8 @@ class WeightClass extends DataObject {
   final int weight;
   final WrestlingStyle style;
 
-  WeightClass(this.weight, this.style, {int? id, String? name, String weightUnit = 'kg'}) : super(id) {
+  WeightClass({int? id, required this.weight, required this.style, String? name, String weightUnit = 'kg'})
+      : super(id) {
     this.name = name ?? this.weight.toString() + ' ' + weightUnit;
   }
 

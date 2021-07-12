@@ -2,4 +2,5 @@
 library common;
 
 export 'src/data.dart';
+export 'src/enums.dart';
 export 'src/util.dart';

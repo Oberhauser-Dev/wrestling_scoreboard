@@ -1,3 +1,4 @@
+/// The result of a single fight.
 enum FightResult {
   VFA, // VICTORY BY FALL,              SCHULTERSIEG (SS)
   VIN, // VICTORY BY INJURY,            AUFGABESIEG WEGEN VERLETZUNG (AS)
@@ -9,4 +10,8 @@ enum FightResult {
   VFO, // VICTORY BY FORFEIT - NO SHOW UP ON THE MAT,                 AUSSCHLUSS VOM WETTKAMPF WG. NICHTANTRITT (DN)
   DSQ, // DISQUALIFICAT. FROM THE WHOLE COMPET. DUE TO INFR. OF THE RULES, AUSSCHLUSS VOM WETTKAMPF WG. UNSPORTLICHK./TÄTLICHKEIT (DQ)
   DSQ2, // IN CASE BOTH WRESTLERS HAVE BEEN DISQ. DUE TO INFR. OF THE RULES, BEIDE RINGER DISQ. (UNSPORTLICHKEIT/ REGELWIDRIGKEIT (DQ2)
+}
+
+FightResult fightResultDecode(String val) {
+  return FightResult.values.singleWhere((element) => element.toString() == 'FightResult.' + val);
 }

@@ -4,6 +4,7 @@ import 'data_object.dart';
 
 part 'club.g.dart';
 
+/// The sports club.
 @JsonSerializable()
 class Club extends DataObject {
   String? no; // Vereinsnummer

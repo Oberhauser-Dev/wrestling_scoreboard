@@ -10,10 +10,10 @@ Fight _$FightFromJson(Map<String, dynamic> json) {
   return Fight(
     json['r'] == null
         ? null
-        : ParticipantStatus.fromJson(json['r'] as Map<String, dynamic>),
+        : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
     json['b'] == null
         ? null
-        : ParticipantStatus.fromJson(json['b'] as Map<String, dynamic>),
+        : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
     WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
     id: json['id'] as int?,
     pool: json['pool'] as int?,

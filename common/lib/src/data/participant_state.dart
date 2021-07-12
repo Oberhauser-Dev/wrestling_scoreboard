@@ -1,24 +1,24 @@
-import 'package:common/src/data/data_object.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../enums/fight_action_type.dart';
+import 'data_object.dart';
 import 'fight_action.dart';
-import 'membership.dart';
-import 'weight_class.dart';
+import 'participation.dart';
 
-part 'participant_status.g.dart';
+part 'participant_state.g.dart';
+
+/// The state of one participant during a fight.
 @JsonSerializable()
-class ParticipantStatus extends DataObject {
-  final Membership membership;
-  final WeightClass weightClass;
+class ParticipantState extends DataObject {
+  final Participation participation;
   final List<FightAction> _actions = [];
-  double? weight;
   int? _classificationPoints;
 
-  ParticipantStatus({int? id, required this.membership, required this.weightClass, this.weight}) : super(id);
+  ParticipantState({int? id, required this.participation}) : super(id);
 
-  factory ParticipantStatus.fromJson(Map<String, dynamic> json) => _$ParticipantStatusFromJson(json);
+  factory ParticipantState.fromJson(Map<String, dynamic> json) => _$ParticipantStateFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ParticipantStatusToJson(this);
+  Map<String, dynamic> toJson() => _$ParticipantStateToJson(this);
 
   get actions => this._actions;
 

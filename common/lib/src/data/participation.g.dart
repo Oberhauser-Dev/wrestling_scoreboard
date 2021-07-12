@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'participant_status.dart';
+part of 'participation.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ParticipantStatus _$ParticipantStatusFromJson(Map<String, dynamic> json) {
-  return ParticipantStatus(
+Participation _$ParticipationFromJson(Map<String, dynamic> json) {
+  return Participation(
     id: json['id'] as int?,
     membership: Membership.fromJson(json['membership'] as Map<String, dynamic>),
+    lineup: Lineup.fromJson(json['lineup'] as Map<String, dynamic>),
     weightClass:
         WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
     weight: (json['weight'] as num?)?.toDouble(),
-  )..classificationPoints = json['classificationPoints'] as int?;
+  );
 }
 
-Map<String, dynamic> _$ParticipantStatusToJson(ParticipantStatus instance) =>
+Map<String, dynamic> _$ParticipationToJson(Participation instance) =>
     <String, dynamic>{
       'id': instance.id,
       'membership': instance.membership,
+      'lineup': instance.lineup,
       'weightClass': instance.weightClass,
       'weight': instance.weight,
-      'classificationPoints': instance.classificationPoints,
     };

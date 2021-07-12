@@ -31,6 +31,9 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
     ..visitorsCount = json['visitorsCount'] as int
     ..comment = json['comment'] as String
     ..league = League.fromJson(json['league'] as Map<String, dynamic>)
+    ..fights = (json['fights'] as List<dynamic>?)
+        ?.map((e) => Fight.fromJson(e as Map<String, dynamic>))
+        .toList()
     ..maxRounds = json['maxRounds'] as int
     ..weightClasses = (json['weightClasses'] as List<dynamic>)
         .map((e) => WeightClass.fromJson(e as Map<String, dynamic>))
@@ -52,6 +55,7 @@ Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
       'league': instance.league,
+      'fights': instance.fights,
       'maxRounds': instance.maxRounds,
       'weightClasses': instance.weightClasses,
     };

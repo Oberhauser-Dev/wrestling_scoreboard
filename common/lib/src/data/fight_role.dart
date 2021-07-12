@@ -1,4 +1,0 @@
-enum FightRole {
-  red,
-  blue,
-}

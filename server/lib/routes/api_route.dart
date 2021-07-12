@@ -1,9 +1,16 @@
-import 'package:server/controllers/club_controller.dart';
-import 'package:server/controllers/league_controller.dart';
-import 'package:server/controllers/team_controller.dart';
-import 'package:server/middleware/content_type.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+
+import '../controllers/club_controller.dart';
+import '../controllers/league_controller.dart';
+import '../controllers/lineup_controller.dart';
+import '../controllers/membership_controller.dart';
+import '../controllers/participation_controller.dart';
+import '../controllers/person_controller.dart';
+import '../controllers/team_controller.dart';
+import '../controllers/team_match_controller.dart';
+import '../controllers/weight_class_controller.dart';
+import '../middleware/content_type.dart';
 
 class ApiRoute {
   // By exposing a [Router] for an object, it can be mounted in other routers.
@@ -22,9 +29,35 @@ class ApiRoute {
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
     router.get('/league/<id|[0-9]+>/teams', leagueController.requestTeams);
 
+    final lineupController = LineupController();
+    router.get('/lineups', lineupController.requestMany);
+    router.get('/lineup/<id|[0-9]+>', lineupController.requestSingle);
+
+    final matchController = TeamMatchController();
+    router.get('/team_matchs', matchController.requestMany);
+    router.get('/team_matches', matchController.requestMany);
+    router.get('/team_match/<id|[0-9]+>', matchController.requestSingle);
+
+    final membershipController = MembershipController();
+    router.get('/memberships', membershipController.requestMany);
+    router.get('/membership/<id|[0-9]+>', membershipController.requestSingle);
+
+    final participationController = ParticipationController();
+    router.get('/participations', participationController.requestMany);
+    router.get('/participation/<id|[0-9]+>', participationController.requestSingle);
+
+    final personController = PersonController();
+    router.get('/persons', personController.requestMany);
+    router.get('/person/<id|[0-9]+>', personController.requestSingle);
+
     final teamController = TeamController();
     router.get('/teams', teamController.requestMany);
     router.get('/team/<id|[0-9]+>', teamController.requestSingle);
+
+    final weightClassController = WeightClassController();
+    router.get('/weight_classs', weightClassController.requestMany);
+    router.get('/weight_classes', weightClassController.requestMany);
+    router.get('/weight_class/<id|[0-9]+>', weightClassController.requestSingle);
 
     // This nested catch-all, will only catch /api/.* when mounted above.
     // Notice that ordering if annotated handlers and mounts is significant.

@@ -5,14 +5,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/data/participant_status.dart';
+import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_action_conrols.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
-import 'package:wrestling_scoreboard/ui/models/participant_status_model.dart';
+import 'package:wrestling_scoreboard/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:common/src/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
@@ -40,14 +40,14 @@ class FightState extends State<FightScreen> {
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _fightStopwatch;
   late ObservableStopwatch _breakStopwatch;
-  late ParticipantStatusModel _r;
-  late ParticipantStatusModel _b;
+  late ParticipantStateModel _r;
+  late ParticipantStateModel _b;
   int round = 1;
   late Function(FightScreenActionIntent) callback;
 
   FightState(this.match, this.fight) {
-    _r = ParticipantStatusModel(fight.r);
-    _b = ParticipantStatusModel(fight.b);
+    _r = ParticipantStateModel(fight.r);
+    _b = ParticipantStateModel(fight.b);
     _r.injuryStopwatch.limit = match.injuryDuration;
     _r.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
@@ -126,7 +126,7 @@ class FightState extends State<FightScreen> {
     };
   }
 
-  displayName(ClientParticipantStatus? pStatus, double padding, double cellHeight, double fontSizeDefault) {
+  displayName(ClientParticipantState? pStatus, double padding, double cellHeight, double fontSizeDefault) {
     return Expanded(
         child: Column(children: [
       Container(
@@ -134,23 +134,23 @@ class FightState extends State<FightScreen> {
           height: cellHeight * 2,
           child: Center(
               child: FittedText(
-                pStatus?.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
+                pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
             style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white),
           ))),
       Container(
           height: cellHeight,
           child: Center(
               child: Text(
-                  (pStatus?.weight != null
-                      ? '${pStatus?.weight} $weightUnit'
+                  (pStatus?.participation.weight != null
+                      ? '${pStatus?.participation.weight} $weightUnit'
                       : AppLocalizations.of(context)!.participantUnknownWeight),
                   style: TextStyle(
-                      fontSize: fontSizeDefault, color: pStatus?.weight == null ? Colors.white30 : Colors.white)))),
+                      fontSize: fontSizeDefault, color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white)))),
     ]));
   }
 
-  displayClassificationPoints(ClientParticipantStatus? pStatus, MaterialColor color, double padding, double cellHeight) {
-    return Consumer<ClientParticipantStatus?>(
+  displayClassificationPoints(ClientParticipantState? pStatus, MaterialColor color, double padding, double cellHeight) {
+    return Consumer<ClientParticipantState?>(
       builder: (context, data, child) => pStatus?.classificationPoints != null
           ? Container(
               color: color.shade800,
@@ -164,11 +164,11 @@ class FightState extends State<FightScreen> {
     );
   }
 
-  displayTechnicalPoints(ParticipantStatusModel pStatus, FightRole role, double cellHeight) {
+  displayTechnicalPoints(ParticipantStateModel pStatus, FightRole role, double cellHeight) {
     return Expanded(flex: 33, child: TechnicalPoints(pStatusModel: pStatus, height: cellHeight, role: role));
   }
 
-  displayParticipant(ClientParticipantStatus? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
+  displayParticipant(ClientParticipantState? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
     var color = getColorFromFightRole(role);
     List<Widget> items = [
       displayName(pStatus, padding, cellHeight, fontSize),
@@ -189,7 +189,7 @@ class FightState extends State<FightScreen> {
   doAction(FightScreenActions action) {
     switch (action) {
       case FightScreenActions.RedActivityTime:
-        ParticipantStatusModel psm = _r;
+        ParticipantStateModel psm = _r;
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
@@ -206,7 +206,7 @@ class FightState extends State<FightScreen> {
         });
         break;
       case FightScreenActions.RedInjuryTime:
-        ParticipantStatusModel psm = _r;
+        ParticipantStateModel psm = _r;
         setState(() {
           psm.isInjury = !psm.isInjury;
         });
@@ -217,7 +217,7 @@ class FightState extends State<FightScreen> {
         }
         break;
       case FightScreenActions.BlueActivityTime:
-        ParticipantStatusModel psm = _b;
+        ParticipantStateModel psm = _b;
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
@@ -233,7 +233,7 @@ class FightState extends State<FightScreen> {
         });
         break;
       case FightScreenActions.BlueInjuryTime:
-        ParticipantStatusModel psm = _b;
+        ParticipantStateModel psm = _b;
         setState(() {
           psm.isInjury = !psm.isInjury;
         });

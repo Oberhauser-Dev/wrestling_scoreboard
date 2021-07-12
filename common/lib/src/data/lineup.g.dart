@@ -10,9 +10,6 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
   return Lineup(
     id: json['id'] as int?,
     team: Team.fromJson(json['team'] as Map<String, dynamic>),
-    participantStatusList: (json['participantStatusList'] as List<dynamic>)
-        .map((e) => ParticipantStatus.fromJson(e as Map<String, dynamic>))
-        .toList(),
     leader: json['leader'] == null
         ? null
         : Person.fromJson(json['leader'] as Map<String, dynamic>),
@@ -28,6 +25,5 @@ Map<String, dynamic> _$LineupToJson(Lineup instance) => <String, dynamic>{
       'team': instance.team,
       'leader': instance.leader,
       'coach': instance.coach,
-      'participantStatusList': instance.participantStatusList,
       'tier': instance.tier,
     };
