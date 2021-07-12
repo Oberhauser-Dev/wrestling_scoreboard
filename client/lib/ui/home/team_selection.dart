@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
-import 'package:wrestling_scoreboard/mocks/mocks.dart';
+import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
+import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
 
 import 'match_selection.dart';
 
@@ -28,12 +29,15 @@ class TeamSelection extends StatelessWidget {
   }
 
   handleSelectedTeam(ClientTeam team, BuildContext context) {
-    Navigator.push(
+    fetchMany<ClientTeamMatch>(prepend: '/team/${team.id}').then(
+      (value) => Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => MatchSelection(
                   title: team.name,
-                  matches: getMatchesOfTeam(team),
-                )));
+                  matches: value,
+                )),
+      ),
+    );
   }
 }

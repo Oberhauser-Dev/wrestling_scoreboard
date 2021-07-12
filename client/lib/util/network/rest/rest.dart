@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:common/common.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:wrestling_scoreboard/data/club.dart';
+import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
+import 'package:wrestling_scoreboard/data/lineup.dart';
+import 'package:wrestling_scoreboard/data/membership.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
+import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/util/serialize.dart';
 
 final apiUrl = dotenv.env['API_URL'] ?? 'http://localhost:8080/api';
@@ -13,10 +18,20 @@ String _getPathFromClass<T>() {
   switch (T) {
     case ClientClub:
       return '/club';
+    case ClientFight:
+      return '/fight';
     case ClientLeague:
       return '/league';
+    case ClientLineup:
+      return '/lineup';
+    case ClientMembership:
+      return '/membership';
+    case Participation:
+      return '/participation';
     case ClientTeam:
       return '/team';
+    case ClientTeamMatch:
+      return '/team_match';
     default:
       throw UnimplementedError('Path for "${T.toString()}" not found');
   }

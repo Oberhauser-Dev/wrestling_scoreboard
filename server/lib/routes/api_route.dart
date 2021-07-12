@@ -53,6 +53,7 @@ class ApiRoute {
     final teamController = TeamController();
     router.get('/teams', teamController.requestMany);
     router.get('/team/<id|[0-9]+>', teamController.requestSingle);
+    router.get('/team/<id|[0-9]+>/team_matchs', teamController.requestTeamMatches);
 
     final weightClassController = WeightClassController();
     router.get('/weight_classs', weightClassController.requestMany);

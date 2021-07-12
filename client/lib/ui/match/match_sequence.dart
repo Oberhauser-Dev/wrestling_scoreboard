@@ -17,7 +17,9 @@ import 'common_elements.dart';
 class MatchSequence extends StatelessWidget {
   late ClientTeamMatch match;
 
-  MatchSequence(this.match);
+  MatchSequence(this.match) {
+    this.match.generateFights();
+  }
 
   handleSelectedFight(ClientFight fight, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
