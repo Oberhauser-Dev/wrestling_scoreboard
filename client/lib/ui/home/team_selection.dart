@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
-import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 import 'match_selection.dart';
 
@@ -29,15 +29,15 @@ class TeamSelection extends StatelessWidget {
   }
 
   handleSelectedTeam(ClientTeam team, BuildContext context) {
-    fetchMany<ClientTeamMatch>(prepend: '/team/${team.id}').then(
-      (value) => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MatchSelection(
-                  title: team.name,
-                  matches: value,
-                )),
-      ),
-    );
+    dataProvider.fetchMany<ClientTeamMatch>(filterObject: team).then(
+          (value) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MatchSelection(
+                      title: team.name,
+                      matches: value,
+                    )),
+          ),
+        );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:wrestling_scoreboard/util/network/rest/rest.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 import 'fight.dart';
 import 'lineup.dart';
@@ -10,12 +10,23 @@ import 'participant_state.dart';
 class ClientTeamMatch extends TeamMatch with ChangeNotifier {
   List<ClientFight>? _fights;
 
-  ClientTeamMatch(ClientLineup home, ClientLineup guest, Person referee, {int? id, String? location, DateTime? date})
-      : super(home, guest, referee, id: id, location: location, date: date);
+  ClientTeamMatch(
+      {int? id,
+      required ClientLineup home,
+      required ClientLineup guest,
+      required Person referee,
+      String? location,
+      DateTime? date})
+      : super(id: id, home: home, guest: guest, referee: referee, location: location, date: date);
 
   ClientTeamMatch.from(TeamMatch obj)
-      : this(ClientLineup.from(obj.home), ClientLineup.from(obj.guest), obj.referee,
-            id: obj.id, location: obj.location, date: obj.date);
+      : this(
+            id: obj.id,
+            home: ClientLineup.from(obj.home),
+            guest: ClientLineup.from(obj.guest),
+            referee: obj.referee,
+            location: obj.location,
+            date: obj.date);
 
   factory ClientTeamMatch.fromJson(Map<String, dynamic> json) => ClientTeamMatch.from(TeamMatch.fromJson(json));
 
@@ -25,13 +36,19 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
 
   Future<List<Fight>> generateFights() async {
     _fights = [];
-    final homeParticipations = await fetchMany<Participation>(prepend: '/lineup/${home.id}');
-    final guestParticipations = await fetchMany<Participation>(prepend: '/lineup/${guest.id}');
+    final homeParticipations = await dataProvider.fetchMany<Participation>(filterObject: home);
+    final guestParticipations = await dataProvider.fetchMany<Participation>(filterObject: guest);
     for (final weightClass in weightClasses) {
-      var homePartList = homeParticipations.where((el) => el.weightClass == weightClass);
-      var guestPartList = guestParticipations.where((el) => el.weightClass == weightClass);
-      var red = homePartList.isNotEmpty ? homePartList.single : null;
-      var blue = guestPartList.isNotEmpty ? guestPartList.single : null;
+      final homePartList = homeParticipations.where((el) => el.weightClass == weightClass);
+      if (homePartList.length > 1)
+        throw Exception(
+            'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}');
+      final guestPartList = guestParticipations.where((el) => (el.weightClass == weightClass));
+      if (guestPartList.length > 1)
+        throw Exception(
+            'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}');
+      final red = homePartList.isNotEmpty ? homePartList.single : null;
+      final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
       var fight = ClientFight(
         red == null ? null : ClientParticipantState(participation: red),

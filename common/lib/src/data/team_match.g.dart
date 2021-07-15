@@ -8,10 +8,10 @@ part of 'team_match.dart';
 
 TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
   return TeamMatch(
-    Lineup.fromJson(json['home'] as Map<String, dynamic>),
-    Lineup.fromJson(json['guest'] as Map<String, dynamic>),
-    Person.fromJson(json['referee'] as Map<String, dynamic>),
     id: json['id'] as int?,
+    home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
+    guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
+    referee: Person.fromJson(json['referee'] as Map<String, dynamic>),
     no: json['no'] as String?,
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),

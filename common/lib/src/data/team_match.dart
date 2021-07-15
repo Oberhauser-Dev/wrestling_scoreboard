@@ -45,7 +45,7 @@ class TeamMatch extends DataObject {
     WeightClass(weight: 75, style: WrestlingStyle.greco, name: '75 kg B'),
   ];
 
-  TeamMatch(this.home, this.guest, this.referee, {int? id, this.no, this.location, this.date}) : super(id) {
+  TeamMatch({int? id, required this.home, required this.guest, required this.referee, this.no, this.location, this.date}) : super(id) {
     if (home.team.league == guest.team.league && home.team.league != null) {
       league = home.team.league!;
       //  TODO load weight classes of league

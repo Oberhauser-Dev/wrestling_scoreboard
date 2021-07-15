@@ -21,7 +21,9 @@ class WeightClass extends DataObject {
 
   Map<String, dynamic> toJson() => _$WeightClassToJson(this);
 
-  bool operator ==(o) => o is WeightClass && name == o.name && weight == o.weight;
+  @override
+  bool operator ==(o) => o is WeightClass && name == o.name && weight == o.weight && style == o.style;
 
-  int get hashCode => hash2(name.hashCode, weight.hashCode);
+  @override
+  int get hashCode => hash3(name.hashCode, weight.hashCode, style.hashCode);
 }

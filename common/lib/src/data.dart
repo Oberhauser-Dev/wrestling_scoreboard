@@ -1,3 +1,4 @@
+export 'data/data_object.dart';
 export 'data/club.dart';
 export 'data/fight.dart';
 export 'data/fight_action.dart';
