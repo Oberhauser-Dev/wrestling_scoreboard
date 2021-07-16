@@ -228,9 +228,11 @@ packages:
   postgres:
     dependency: "direct main"
     description:
-      path: "../../../isoos/postgresql-dart"
-      relative: true
-    source: path
+      path: "."
+      ref: dev-merge
+      resolved-ref: c6c6385b04ca1f45da0220784e18cdf5d1ff1335
+      url: "https://github.com/Gustl22/postgresql-dart.git"
+    source: git
     version: "2.3.2"
   pub_semver:
     dependency: transitive
@@ -251,10 +253,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: a53af33979c9319769431a5b76ee0cc3d8ba0d69
-      url: "https://github.com/Oberhauser-Dev/sasl_scram_dart.git"
+      resolved-ref: "26fb03e67e093e0ca1bbaaea3c268b971eb135a6"
+      url: "https://github.com/mongo-dart/sasl_scram.git"
     source: git
-    version: "0.0.1"
+    version: "0.1.0"
   shelf:
     dependency: "direct main"
     description:
