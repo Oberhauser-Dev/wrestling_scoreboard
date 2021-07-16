@@ -89,7 +89,7 @@ ClientTeamMatch initMenRPWMatch() {
   _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130));
 
   Person referee = Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
-  return ClientTeamMatch(id: 1, home: home, guest: guest, referee: referee, location: 'Springfield');
+  return ClientTeamMatch(id: 1, home: home, guest: guest, referees: [referee], location: 'Springfield');
 }
 
 ClientTeamMatch initJnRPWMatch() {
@@ -101,7 +101,7 @@ ClientTeamMatch initJnRPWMatch() {
   // Miss participants
 
   Person referee = Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
-  return ClientTeamMatch(id: 2, home: home, guest: guest, referee: referee, location: 'Springfield');
+  return ClientTeamMatch(id: 2, home: home, guest: guest, referees: [referee], location: 'Springfield');
 }
 
 List<ClientClub> getClubs() => _clubs;

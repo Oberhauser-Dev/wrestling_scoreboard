@@ -14,17 +14,17 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
       {int? id,
       required ClientLineup home,
       required ClientLineup guest,
-      required Person referee,
+      required List<Person> referees,
       String? location,
       DateTime? date})
-      : super(id: id, home: home, guest: guest, referee: referee, location: location, date: date);
+      : super(id: id, home: home, guest: guest, referees: referees, location: location, date: date);
 
   ClientTeamMatch.from(TeamMatch obj)
       : this(
             id: obj.id,
             home: ClientLineup.from(obj.home),
             guest: ClientLineup.from(obj.guest),
-            referee: obj.referee,
+            referees: obj.referees,
             location: obj.location,
             date: obj.date);
 

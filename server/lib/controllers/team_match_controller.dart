@@ -19,7 +19,14 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final guest = await LineupController().getSingle(e['guest_id'] as int);
     final referee = await PersonController().getSingle(e['referee_id'] as int);
 
-    return TeamMatch(home!, guest!, referee!,
-        id: e['id'] as int?, no: e['no'] as String?, location: e['location'] as String?, date: e['date'] as DateTime?);
+    return TeamMatch(
+      id: e['id'] as int?,
+      no: e['no'] as String?,
+      home: home!,
+      guest: guest!,
+      referees: [referee!],
+      location: e['location'] as String?,
+      date: e['date'] as DateTime?,
+    );
   }
 }

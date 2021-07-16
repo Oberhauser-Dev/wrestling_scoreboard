@@ -9,5 +9,5 @@ export 'data/participant_state.dart';
 export 'data/participation.dart';
 export 'data/person.dart';
 export 'data/team.dart';
-export 'data/team_match.dart';
+export 'data/team_match/team_match.dart';
 export 'data/weight_class.dart';
