@@ -14,7 +14,7 @@ class ClubController extends EntityController<Club> {
 
   Future<Response> requestTeams(Request request, String id) async {
     return EntityController.handleRequestManyOfController(TeamController(),
-        isRaw: isRaw(request), conditions: ['club_id = $id']);
+        isRaw: isRaw(request), conditions: ['club_id = @id'], substitutionValues: {'id': id});
   }
 
   @override

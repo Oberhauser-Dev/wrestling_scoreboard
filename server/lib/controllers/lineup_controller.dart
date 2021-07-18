@@ -17,7 +17,7 @@ class LineupController extends EntityController<Lineup> {
 
   Future<Response> requestParticipations(Request request, String id) async {
     return EntityController.handleRequestManyOfController(ParticipationController(),
-        isRaw: isRaw(request), conditions: ['lineup_id = $id']);
+        isRaw: isRaw(request), conditions: ['lineup_id = @id'], substitutionValues: {'id': id});
   }
 
   @override

@@ -29,28 +29,52 @@ abstract class EntityController<T> {
     return many.first;
   }
 
+  Future<int> createSingle(Map<String, Object> values) async {
+    final res = await PostgresDb().connection.query(
+        'INSERT INTO $tableName (${values.keys.join(',')}) VALUES (${values.values.map((e) => e.toString()).join(',')}) RETURNING $primaryKeyName;');
+    return res.last[0] as int;
+  }
+
+  Future<bool> deleteSingle(int id) async {
+    final res = await PostgresDb()
+        .connection
+        .query('DELETE FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
+    // TODO catch if row cannot be deleted, return false; alternatively select id before in order to check its existence.
+    return true;
+  }
+
   Future<Response> requestMany(Request request) async {
     return handleRequestManyOfController(this, isRaw: isRaw(request));
   }
 
-  Future<List<T>> getMany({List<String>? conditions, Conjunction conjunction = Conjunction.and}) async {
-    return Future.wait((await getManyRaw(conditions: conditions, conjunction: conjunction))
+  Future<List<T>> getMany(
+      {List<String>? conditions,
+      Conjunction conjunction = Conjunction.and,
+      Map<String, dynamic>? substitutionValues}) async {
+    return Future.wait(
+        (await getManyRaw(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues))
+            .map((e) async => await parseToClass(e))
+            .toList());
+  }
+
+  Future<List<T>> getManyFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
+    return Future.wait((await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues))
         .map((e) async => await parseToClass(e))
         .toList());
   }
 
-  Future<List<T>> getManyFromQuery(String sqlQuery) async {
-    return Future.wait((await getManyRawFromQuery(sqlQuery)).map((e) async => await parseToClass(e)).toList());
-  }
-
   Future<Iterable<Map<String, dynamic>>> getManyRaw(
-      {List<String>? conditions, Conjunction conjunction = Conjunction.and}) async {
+      {List<String>? conditions,
+      Conjunction conjunction = Conjunction.and,
+      Map<String, dynamic>? substitutionValues}) async {
     return getManyRawFromQuery(
-        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')};');
+        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')};',
+        substitutionValues: substitutionValues);
   }
 
-  Future<Iterable<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery) async {
-    final res = await PostgresDb().connection.mappedResultsQuery(sqlQuery);
+  Future<Iterable<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
+      {Map<String, dynamic>? substitutionValues}) async {
+    final res = await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues);
     return mapToTable(res);
   }
 
@@ -95,23 +119,28 @@ abstract class EntityController<T> {
   }
 
   static Future<Response> handleRequestManyOfController(EntityController controller,
-      {bool isRaw = false, List<String>? conditions, Conjunction conjunction = Conjunction.and}) async {
+      {bool isRaw = false,
+      List<String>? conditions,
+      Conjunction conjunction = Conjunction.and,
+      Map<String, dynamic>? substitutionValues}) async {
     if (isRaw) {
-      final many = await controller.getManyRaw(conditions: conditions, conjunction: conjunction);
+      final many = await controller.getManyRaw(
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
       return Response.ok(betterJsonEncode(many.toList()));
     } else {
-      final many = await controller.getMany(conditions: conditions, conjunction: conjunction);
+      final many = await controller.getMany(
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
       return Response.ok(jsonEncode(many.toList()));
     }
   }
 
   static Future<Response> handleRequestManyOfControllerFromQuery(EntityController controller,
-      {bool isRaw = false, required String sqlQuery}) async {
+      {bool isRaw = false, required String sqlQuery, Map<String, dynamic>? substitutionValues}) async {
     if (isRaw) {
-      final many = await controller.getManyRawFromQuery(sqlQuery);
+      final many = await controller.getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues);
       return Response.ok(betterJsonEncode(many.toList()));
     } else {
-      final many = await controller.getManyFromQuery(sqlQuery);
+      final many = await controller.getManyFromQuery(sqlQuery, substitutionValues: substitutionValues);
       return Response.ok(jsonEncode(many.toList()));
     }
   }

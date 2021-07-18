@@ -75,4 +75,15 @@ class RestDataProvider extends DataProvider {
       throw e;
     }
   }
+
+  @override
+  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
+    final prepend = '${_getPathFromClass(wrestlingEvent.runtimeType)}/${wrestlingEvent.id}';
+    final response = await http.post(Uri.parse('$_apiUrl$prepend/fights/generate'), body: {'reset': reset.toString()});
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to generate fights ${wrestlingEvent.toString()}: ' +
+          (response.reasonPhrase ?? response.statusCode.toString()));
+    }
+  }
 }

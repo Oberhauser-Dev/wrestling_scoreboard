@@ -33,6 +33,53 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 --
+-- Name: fight_action_type; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.fight_action_type AS ENUM (
+    'points',
+    'passivity',
+    'verbal',
+    'caution',
+    'dismissal'
+);
+
+
+ALTER TYPE public.fight_action_type OWNER TO postgres;
+
+--
+-- Name: fight_result; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.fight_result AS ENUM (
+    'VFA',
+    'VIN',
+    'VCA',
+    'VSU',
+    'VSU1',
+    'VPO',
+    'VPO1',
+    'VFO',
+    'DSQ',
+    'DSQ2'
+);
+
+
+ALTER TYPE public.fight_result OWNER TO postgres;
+
+--
+-- Name: fight_role; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.fight_role AS ENUM (
+    'red',
+    'blue'
+);
+
+
+ALTER TYPE public.fight_role OWNER TO postgres;
+
+--
 -- Name: gender; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -94,6 +141,82 @@ ALTER TABLE public.club_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
+
+
+--
+-- Name: fight; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.fight (
+    id integer NOT NULL,
+    red_id integer,
+    blue_id integer,
+    weight_class_id integer NOT NULL,
+    winner public.fight_role,
+    fight_result public.fight_result
+);
+
+
+ALTER TABLE public.fight OWNER TO postgres;
+
+--
+-- Name: fight_action; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.fight_action (
+    id integer NOT NULL,
+    "durationMillis" integer NOT NULL,
+    "pointCount" smallint,
+    action_type public.fight_action_type NOT NULL,
+    fight_role public.fight_role NOT NULL,
+    fight_id integer NOT NULL
+);
+
+
+ALTER TABLE public.fight_action OWNER TO postgres;
+
+--
+-- Name: fight_action_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.fight_action_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.fight_action_id_seq OWNER TO postgres;
+
+--
+-- Name: fight_action_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.fight_action_id_seq OWNED BY public.fight_action.id;
+
+
+--
+-- Name: fight_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.fight_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.fight_id_seq OWNER TO postgres;
+
+--
+-- Name: fight_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.fight_id_seq OWNED BY public.fight.id;
 
 
 --
@@ -201,6 +324,41 @@ ALTER TABLE public.membership_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.membership_id_seq OWNED BY public.membership.id;
+
+
+--
+-- Name: participant_state; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.participant_state (
+    id integer NOT NULL,
+    participation_id integer NOT NULL,
+    classification_points smallint
+);
+
+
+ALTER TABLE public.participant_state OWNER TO postgres;
+
+--
+-- Name: participant_state_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.participant_state_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.participant_state_id_seq OWNER TO postgres;
+
+--
+-- Name: participant_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.participant_state_id_seq OWNED BY public.participant_state.id;
 
 
 --
@@ -352,6 +510,40 @@ INHERITS (public.wrestling_event);
 ALTER TABLE public.team_match OWNER TO postgres;
 
 --
+-- Name: team_match_fight; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.team_match_fight (
+    id integer NOT NULL,
+    team_match_id integer NOT NULL,
+    fight_id integer NOT NULL
+);
+
+
+ALTER TABLE public.team_match_fight OWNER TO postgres;
+
+--
+-- Name: team_match_fight_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.team_match_fight_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.team_match_fight_id_seq OWNER TO postgres;
+
+--
+-- Name: team_match_fight_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.team_match_fight_id_seq OWNED BY public.team_match_fight.id;
+
+
+--
 -- Name: team_match_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -384,6 +576,62 @@ INHERITS (public.wrestling_event);
 
 
 ALTER TABLE public.tournament OWNER TO postgres;
+
+--
+-- Name: tournament_fight; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tournament_fight (
+    id integer NOT NULL,
+    tournament_id integer NOT NULL,
+    fight_id integer
+);
+
+
+ALTER TABLE public.tournament_fight OWNER TO postgres;
+
+--
+-- Name: tournament_fight_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tournament_fight_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tournament_fight_id_seq OWNER TO postgres;
+
+--
+-- Name: tournament_fight_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tournament_fight_id_seq OWNED BY public.tournament_fight.id;
+
+
+--
+-- Name: tournament_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tournament_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tournament_id_seq OWNER TO postgres;
+
+--
+-- Name: tournament_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tournament_id_seq OWNED BY public.tournament.id;
+
 
 --
 -- Name: weight_class; Type: TABLE; Schema: public; Owner: postgres
@@ -451,6 +699,20 @@ ALTER TABLE ONLY public.club ALTER COLUMN id SET DEFAULT nextval('public.club_id
 
 
 --
+-- Name: fight id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight ALTER COLUMN id SET DEFAULT nextval('public.fight_id_seq'::regclass);
+
+
+--
+-- Name: fight_action id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight_action ALTER COLUMN id SET DEFAULT nextval('public.fight_action_id_seq'::regclass);
+
+
+--
 -- Name: league id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -469,6 +731,13 @@ ALTER TABLE ONLY public.lineup ALTER COLUMN id SET DEFAULT nextval('public.lineu
 --
 
 ALTER TABLE ONLY public.membership ALTER COLUMN id SET DEFAULT nextval('public.membership_id_seq'::regclass);
+
+
+--
+-- Name: participant_state id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_state ALTER COLUMN id SET DEFAULT nextval('public.participant_state_id_seq'::regclass);
 
 
 --
@@ -500,10 +769,24 @@ ALTER TABLE ONLY public.team_match ALTER COLUMN id SET DEFAULT nextval('public.t
 
 
 --
+-- Name: team_match_fight id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_match_fight ALTER COLUMN id SET DEFAULT nextval('public.team_match_fight_id_seq'::regclass);
+
+
+--
 -- Name: tournament id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.tournament ALTER COLUMN id SET DEFAULT nextval('public.wrestling_event_id_seq'::regclass);
+ALTER TABLE ONLY public.tournament ALTER COLUMN id SET DEFAULT nextval('public.tournament_id_seq'::regclass);
+
+
+--
+-- Name: tournament_fight id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournament_fight ALTER COLUMN id SET DEFAULT nextval('public.tournament_fight_id_seq'::regclass);
 
 
 --
@@ -527,6 +810,22 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 COPY public.club (id, no, name) FROM stdin;
 1	05432	Quahog Hunters
 2	12345	Springfield Wrestlers
+\.
+
+
+--
+-- Data for Name: fight; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result) FROM stdin;
+\.
+
+
+--
+-- Data for Name: fight_action; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.fight_action (id, "durationMillis", "pointCount", action_type, fight_role, fight_id) FROM stdin;
 \.
 
 
@@ -566,6 +865,14 @@ COPY public.membership (id, person_id, club_id, no) FROM stdin;
 6	6	1	\N
 7	7	1	\N
 8	8	1	\N
+\.
+
+
+--
+-- Data for Name: participant_state; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.participant_state (id, participation_id, classification_points) FROM stdin;
 \.
 
 
@@ -623,11 +930,27 @@ COPY public.team_match (id, home_id, guest_id, referee_id, transcript_writer_id,
 
 
 --
+-- Data for Name: team_match_fight; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.team_match_fight (id, team_match_id, fight_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.tournament (id, date, location, "visitorsCount", comment, name) FROM stdin;
 1	2021-07-17	Quahog	15	\N	The Griffin-Simpson Tournament
+\.
+
+
+--
+-- Data for Name: tournament_fight; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tournament_fight (id, tournament_id, fight_id) FROM stdin;
 \.
 
 
@@ -665,6 +988,20 @@ SELECT pg_catalog.setval('public.club_id_seq', 2, true);
 
 
 --
+-- Name: fight_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.fight_action_id_seq', 1, false);
+
+
+--
+-- Name: fight_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.fight_id_seq', 20, true);
+
+
+--
 -- Name: league_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -683,6 +1020,13 @@ SELECT pg_catalog.setval('public.lineup_id_seq', 4, true);
 --
 
 SELECT pg_catalog.setval('public.membership_id_seq', 8, true);
+
+
+--
+-- Name: participant_state_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.participant_state_id_seq', 22, true);
 
 
 --
@@ -707,10 +1051,31 @@ SELECT pg_catalog.setval('public.team_id_seq', 3, true);
 
 
 --
+-- Name: team_match_fight_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.team_match_fight_id_seq', 18, true);
+
+
+--
 -- Name: team_match_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.team_match_id_seq', 1, true);
+
+
+--
+-- Name: tournament_fight_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tournament_fight_id_seq', 1, false);
+
+
+--
+-- Name: tournament_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tournament_id_seq', 1, false);
 
 
 --
@@ -733,6 +1098,22 @@ SELECT pg_catalog.setval('public.wrestling_event_id_seq', 1, true);
 
 ALTER TABLE ONLY public.club
     ADD CONSTRAINT club_pk PRIMARY KEY (id);
+
+
+--
+-- Name: fight_action fight_action_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight_action
+    ADD CONSTRAINT fight_action_pk PRIMARY KEY (id);
+
+
+--
+-- Name: fight fight_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight
+    ADD CONSTRAINT fight_pk PRIMARY KEY (id);
 
 
 --
@@ -768,6 +1149,14 @@ ALTER TABLE ONLY public.membership
 
 
 --
+-- Name: participant_state participant_state_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_state
+    ADD CONSTRAINT participant_state_pk PRIMARY KEY (id);
+
+
+--
 -- Name: participation participation_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -784,6 +1173,14 @@ ALTER TABLE ONLY public.person
 
 
 --
+-- Name: team_match_fight team_match_fight_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_match_fight
+    ADD CONSTRAINT team_match_fight_pk PRIMARY KEY (id);
+
+
+--
 -- Name: team_match team_match_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -797,6 +1194,22 @@ ALTER TABLE ONLY public.team_match
 
 ALTER TABLE ONLY public.team
     ADD CONSTRAINT team_pk PRIMARY KEY (id);
+
+
+--
+-- Name: tournament_fight tournament_fight_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournament_fight
+    ADD CONSTRAINT tournament_fight_pk PRIMARY KEY (id);
+
+
+--
+-- Name: tournament tournament_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournament
+    ADD CONSTRAINT tournament_pk PRIMARY KEY (id);
 
 
 --
@@ -820,6 +1233,45 @@ ALTER TABLE ONLY public.wrestling_event
 --
 
 CREATE UNIQUE INDEX club_no_uindex ON public.club USING btree (no);
+
+
+--
+-- Name: team_match_fight_id_uindex; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX team_match_fight_id_uindex ON public.team_match_fight USING btree (id);
+
+
+--
+-- Name: fight_action fight_action_fight_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight_action
+    ADD CONSTRAINT fight_action_fight_id_fk FOREIGN KEY (fight_id) REFERENCES public.fight(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fight fight_participant_state_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight
+    ADD CONSTRAINT fight_participant_state_id_fk FOREIGN KEY (red_id) REFERENCES public.participant_state(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fight fight_participant_state_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight
+    ADD CONSTRAINT fight_participant_state_id_fk_2 FOREIGN KEY (blue_id) REFERENCES public.participant_state(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fight fight_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fight
+    ADD CONSTRAINT fight_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
 
 
 --
@@ -852,6 +1304,14 @@ ALTER TABLE ONLY public.membership
 
 ALTER TABLE ONLY public.membership
     ADD CONSTRAINT membership_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: participant_state participant_state_participation_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_state
+    ADD CONSTRAINT participant_state_participation_id_fk FOREIGN KEY (participation_id) REFERENCES public.participation(id) ON DELETE CASCADE;
 
 
 --
@@ -892,6 +1352,22 @@ ALTER TABLE ONLY public.team
 
 ALTER TABLE ONLY public.team
     ADD CONSTRAINT team_league_id_fk FOREIGN KEY (league_id) REFERENCES public.league(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_match_fight team_match_fight_fight_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_match_fight
+    ADD CONSTRAINT team_match_fight_fight_id_fk FOREIGN KEY (fight_id) REFERENCES public.fight(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_match_fight team_match_fight_team_match_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_match_fight
+    ADD CONSTRAINT team_match_fight_team_match_id_fk FOREIGN KEY (team_match_id) REFERENCES public.team_match(id) ON DELETE CASCADE;
 
 
 --
@@ -948,6 +1424,22 @@ ALTER TABLE ONLY public.team_match
 
 ALTER TABLE ONLY public.team_match
     ADD CONSTRAINT team_match_person_id_fk_4 FOREIGN KEY (mat_president_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: tournament_fight tournament_fight_fight_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournament_fight
+    ADD CONSTRAINT tournament_fight_fight_id_fk FOREIGN KEY (fight_id) REFERENCES public.fight(id) ON DELETE CASCADE;
+
+
+--
+-- Name: tournament_fight tournament_fight_tournament_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournament_fight
+    ADD CONSTRAINT tournament_fight_tournament_id_fk FOREIGN KEY (tournament_id) REFERENCES public.tournament(id) ON DELETE CASCADE;
 
 
 --

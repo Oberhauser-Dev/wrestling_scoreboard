@@ -8,34 +8,46 @@ import 'participant_state.dart';
 
 /// For team matches only.
 class ClientTeamMatch extends TeamMatch with ChangeNotifier {
-  List<ClientFight>? _fights;
-
   ClientTeamMatch(
       {int? id,
       required ClientLineup home,
       required ClientLineup guest,
+      required List<WeightClass> weightClasses,
       required List<Person> referees,
       String? location,
       DateTime? date})
-      : super(id: id, home: home, guest: guest, referees: referees, location: location, date: date);
+      : super(
+            id: id,
+            home: home,
+            guest: guest,
+            weightClasses: weightClasses,
+            referees: referees,
+            location: location,
+            date: date);
 
   ClientTeamMatch.from(TeamMatch obj)
       : this(
             id: obj.id,
             home: ClientLineup.from(obj.home),
             guest: ClientLineup.from(obj.guest),
+            weightClasses: obj.weightClasses,
             referees: obj.referees,
             location: obj.location,
             date: obj.date);
 
   factory ClientTeamMatch.fromJson(Map<String, dynamic> json) => ClientTeamMatch.from(TeamMatch.fromJson(json));
 
-  List<ClientFight> get fights {
-    return _fights!;
+  List<ClientFight> get fights => super.fights.cast<ClientFight>();
+
+  set fights(List<Fight> newFights) {
+    if (newFights is List<ClientFight>)
+      super.fights = newFights;
+    else
+      super.fights = newFights.map((e) => ClientFight.from(e)).toList();
   }
 
-  Future<List<Fight>> generateFights() async {
-    _fights = [];
+  Future<void> generateFights() async {
+    super.fights = [];
     final homeParticipations = await dataProvider.fetchMany<Participation>(filterObject: home);
     final guestParticipations = await dataProvider.fetchMany<Participation>(filterObject: guest);
     for (final weightClass in weightClasses) {
@@ -51,15 +63,14 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
       var fight = ClientFight(
-        red == null ? null : ClientParticipantState(participation: red),
-        blue == null ? null : ClientParticipantState(participation: blue),
-        weightClass,
+        r: red == null ? null : ClientParticipantState(participation: red),
+        b: blue == null ? null : ClientParticipantState(participation: blue),
+        weightClass: weightClass,
       );
       fight.addListener(() {
         notifyListeners();
       });
-      _fights!.add(fight);
+      fights.add(fight);
     }
-    return _fights!;
   }
 }

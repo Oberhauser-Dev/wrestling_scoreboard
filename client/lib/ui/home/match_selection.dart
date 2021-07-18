@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class MatchSelection extends StatelessWidget {
   final String title;
@@ -28,7 +30,12 @@ class MatchSelection extends StatelessWidget {
   }
 
   handleSelectedMatch(ClientTeamMatch match, BuildContext context) async {
-    await match.generateFights(); // TODO fetch previous data, if available
+    var fights = await dataProvider.fetchMany<ClientFight>(filterObject: match);
+    if (fights.isEmpty) {
+      await dataProvider.generateFights(match);
+      fights = await dataProvider.fetchMany<ClientFight>(filterObject: match);
+    }
+    match.fights = fights;
     Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSequence(match)));
   }
 }

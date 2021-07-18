@@ -1,0 +1,22 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'team_match_fight.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TeamMatchFight _$TeamMatchFightFromJson(Map<String, dynamic> json) {
+  return TeamMatchFight(
+    id: json['id'] as int?,
+    teamMatch: TeamMatch.fromJson(json['teamMatch'] as Map<String, dynamic>),
+    fight: Fight.fromJson(json['fight'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$TeamMatchFightToJson(TeamMatchFight instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'teamMatch': instance.teamMatch,
+      'fight': instance.fight,
+    };

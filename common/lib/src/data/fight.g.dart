@@ -8,14 +8,15 @@ part of 'fight.dart';
 
 Fight _$FightFromJson(Map<String, dynamic> json) {
   return Fight(
-    json['r'] == null
+    id: json['id'] as int?,
+    r: json['r'] == null
         ? null
         : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
-    json['b'] == null
+    b: json['b'] == null
         ? null
         : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
-    WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
-    id: json['id'] as int?,
+    weightClass:
+        WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
     pool: json['pool'] as int?,
   )
     ..result = _$enumDecodeNullable(_$FightResultEnumMap, json['result'])

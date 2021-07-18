@@ -36,8 +36,8 @@ Tournament _$TournamentFromJson(Map<String, dynamic> json) {
         .toList()
     ..visitorsCount = json['visitorsCount'] as int
     ..comment = json['comment'] as String
-    ..fights = (json['fights'] as List<dynamic>?)
-        ?.map((e) => Fight.fromJson(e as Map<String, dynamic>))
+    ..fights = (json['fights'] as List<dynamic>)
+        .map((e) => Fight.fromJson(e as Map<String, dynamic>))
         .toList()
     ..roundDuration = Duration(microseconds: json['roundDuration'] as int)
     ..breakDuration = Duration(microseconds: json['breakDuration'] as int)

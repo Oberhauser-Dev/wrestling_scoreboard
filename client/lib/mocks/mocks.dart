@@ -1,5 +1,6 @@
 import 'package:common/common.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
+import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/data/lineup.dart';
 import 'package:wrestling_scoreboard/data/membership.dart';
@@ -43,13 +44,26 @@ List<ClientTeam> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
 
 List<ClientTeamMatch> _matches = [initMenRPWMatch(), initJnRPWMatch()];
 
-// TEAM 1
+List<ClientFight> _fights = [];
+
+List<TeamMatchFight> _teamMatchFights = [];
+
+List<TournamentFight> _tournamentFights = [];
+
 WeightClass wc57 = WeightClass(id: 1, weight: 57, style: WrestlingStyle.free);
 WeightClass wc130 = WeightClass(id: 2, weight: 130, style: WrestlingStyle.greco);
 WeightClass wc61 = WeightClass(id: 3, weight: 61, style: WrestlingStyle.greco);
-WeightClass wc66 = WeightClass(id: 4, weight: 66, style: WrestlingStyle.free);
-WeightClass wc75 = WeightClass(id: 5, weight: 75, style: WrestlingStyle.free, name: '75 kg A');
+WeightClass wc98 = WeightClass(id: 4, weight: 98, style: WrestlingStyle.free);
+WeightClass wc66 = WeightClass(id: 5, weight: 66, style: WrestlingStyle.free);
+WeightClass wc86 = WeightClass(id: 6, weight: 86, style: WrestlingStyle.greco);
+WeightClass wc71 = WeightClass(id: 7, weight: 71, style: WrestlingStyle.greco);
+WeightClass wc80 = WeightClass(id: 8, weight: 80, style: WrestlingStyle.free);
+WeightClass wc75A = WeightClass(id: 9, weight: 75, style: WrestlingStyle.free, name: '75 kg A');
+WeightClass wc75B = WeightClass(id: 10, weight: 75, style: WrestlingStyle.greco, name: '75 kg B');
 
+final List<WeightClass> weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
+
+// TEAM 1
 Person p1 = Person(id: 1, prename: 'Lisa', surname: 'Simpson', gender: Gender.female);
 Person p2 = Person(id: 2, prename: 'Bart', surname: 'Simpson', gender: Gender.male);
 Person p3 = Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female);
@@ -81,15 +95,16 @@ ClientTeamMatch initMenRPWMatch() {
   _lineups.add(guest);
   _participations.add(Participation(id: 1, membership: r1, lineup: home, weightClass: wc57));
   _participations.add(Participation(id: 2, membership: r2, lineup: home, weightClass: wc61));
-  _participations.add(Participation(id: 3, membership: r3, lineup: home, weightClass: wc75));
+  _participations.add(Participation(id: 3, membership: r3, lineup: home, weightClass: wc75A));
   _participations.add(Participation(id: 4, membership: r4, lineup: home, weightClass: wc130));
   _participations.add(Participation(id: 5, membership: b1, lineup: guest, weightClass: wc57));
   _participations.add(Participation(id: 6, membership: b2, lineup: guest, weightClass: wc66));
-  _participations.add(Participation(id: 7, membership: b3, lineup: guest, weightClass: wc75));
+  _participations.add(Participation(id: 7, membership: b3, lineup: guest, weightClass: wc75A));
   _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130));
 
   Person referee = Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
-  return ClientTeamMatch(id: 1, home: home, guest: guest, referees: [referee], location: 'Springfield');
+  return ClientTeamMatch(
+      id: 1, home: home, guest: guest, weightClasses: weightClasses, referees: [referee], location: 'Springfield');
 }
 
 ClientTeamMatch initJnRPWMatch() {
@@ -101,7 +116,8 @@ ClientTeamMatch initJnRPWMatch() {
   // Miss participants
 
   Person referee = Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
-  return ClientTeamMatch(id: 2, home: home, guest: guest, referees: [referee], location: 'Springfield');
+  return ClientTeamMatch(
+      id: 2, home: home, guest: guest, weightClasses: weightClasses, referees: [referee], location: 'Springfield');
 }
 
 List<ClientClub> getClubs() => _clubs;
@@ -118,6 +134,12 @@ List<ClientTeamMatch> getTeamMatches() => _matches;
 
 List<Participation> getParticipations() => _participations;
 
+List<ClientFight> getFights() => _fights;
+
+List<TeamMatchFight> getTeamMatchFights() => _teamMatchFights;
+
+List<TournamentFight> getTournamentFights() => _tournamentFights;
+
 List<Participation> getParticipationsOfLineup(Lineup lineup) {
   return getParticipations().where((element) => element.lineup == lineup).toList();
 }
@@ -132,4 +154,18 @@ List<ClientTeam> getTeamsOfLeague(ClientLeague league) {
 
 List<ClientTeamMatch> getMatchesOfTeam(ClientTeam team) {
   return getTeamMatches().where((element) => element.home.team == team || element.guest.team == team).toList();
+}
+
+List<ClientFight> getFightsOfTournament(Tournament tournament) {
+  return getTournamentFights()
+      .where((element) => element.tournament == tournament)
+      .map((e) => ClientFight.from(e.fight))
+      .toList();
+}
+
+List<ClientFight> getFightsOfTeamMatch(ClientTeamMatch match) {
+  return getTeamMatchFights()
+      .where((element) => element.teamMatch == match)
+      .map((e) => ClientFight.from(e.fight))
+      .toList();
 }

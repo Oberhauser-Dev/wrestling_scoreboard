@@ -11,7 +11,8 @@ ParticipantState _$ParticipantStateFromJson(Map<String, dynamic> json) {
     id: json['id'] as int?,
     participation:
         Participation.fromJson(json['participation'] as Map<String, dynamic>),
-  )..classificationPoints = json['classificationPoints'] as int?;
+    classificationPoints: json['classificationPoints'] as int?,
+  );
 }
 
 Map<String, dynamic> _$ParticipantStateToJson(ParticipantState instance) =>

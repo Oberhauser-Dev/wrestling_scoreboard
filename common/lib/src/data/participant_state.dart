@@ -14,7 +14,9 @@ class ParticipantState extends DataObject {
   final List<FightAction> _actions = [];
   int? _classificationPoints;
 
-  ParticipantState({int? id, required this.participation}) : super(id);
+  ParticipantState({int? id, required this.participation, int? classificationPoints})
+      : _classificationPoints = classificationPoints,
+        super(id);
 
   factory ParticipantState.fromJson(Map<String, dynamic> json) => _$ParticipantStateFromJson(json);
 
@@ -45,4 +47,6 @@ class ParticipantState extends DataObject {
     });
     return res;
   }
+
+  bool equalDuringFight(o) => o is ParticipantState && o.runtimeType == runtimeType && participation == o.participation;
 }

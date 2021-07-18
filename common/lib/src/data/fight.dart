@@ -6,6 +6,7 @@ import 'data_object.dart';
 import 'fight_action.dart';
 import 'participant_state.dart';
 import 'weight_class.dart';
+import 'wrestling_event.dart';
 
 part 'fight.g.dart';
 
@@ -22,7 +23,7 @@ class Fight extends DataObject {
 
   Duration _duration = Duration();
 
-  Fight(this.r, this.b, this.weightClass, {int? id, this.pool}) : super(id);
+  Fight({int? id, this.r, this.b, required this.weightClass, this.pool}) : super(id);
 
   factory Fight.fromJson(Map<String, dynamic> json) => _$FightFromJson(json);
 
@@ -60,7 +61,7 @@ class Fight extends DataObject {
         _winner.classificationPoints = isTournament
             ? getClassificationPointsWinnerTournament(this.result!)
             : getClassificationPointsWinnerTeamMatch(
-                this.result!, _winner.technicalPoints - (_looser?.technicalPoints ?? 0));
+            this.result!, _winner.technicalPoints - (_looser?.technicalPoints ?? 0));
       }
 
       if (_looser != null) {
@@ -73,6 +74,12 @@ class Fight extends DataObject {
       this.b?.classificationPoints = null;
     }
   }
+
+  bool equalDuringFight(o) =>
+      o is Fight && o.runtimeType == runtimeType
+          && (r?.equalDuringFight(o.r) ?? (r == null && o == null))
+          && (b?.equalDuringFight(o.b) ?? (b == null && o == null))
+          && weightClass == o.weightClass;
 
   static int getClassificationPointsWinnerTournament(FightResult result) {
     switch (result) {

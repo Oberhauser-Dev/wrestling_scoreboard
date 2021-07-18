@@ -28,7 +28,11 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
         if (filterObject != null) throw DataUnimplementedError(T, filterObject);
         return getClubs() as List<T>;
       case ClientFight:
-        throw DataUnimplementedError(T, filterObject);
+        if (filterObject.runtimeType == Tournament) return getFightsOfTournament(filterObject as Tournament) as List<T>;
+        if (filterObject.runtimeType == ClientTeamMatch)
+          return getFightsOfTeamMatch(filterObject as ClientTeamMatch) as List<T>;
+        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        return getFights() as List<T>;
       case ClientLeague:
         if (filterObject != null) throw DataUnimplementedError(T, filterObject);
         return getLeagues() as List<T>;
@@ -54,6 +58,52 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
         return getTeamMatches() as List<T>;
       default:
         throw DataUnimplementedError(T, filterObject);
+    }
+  }
+
+  @override
+  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
+    final fightsAll = getFights();
+    if (reset) {
+      if (wrestlingEvent is TeamMatch) {
+        final teamMatchFightsAll = getTeamMatchFights();
+        wrestlingEvent.fights.forEach((element) {
+          teamMatchFightsAll.removeWhere((tmf) => tmf.fight.equalDuringFight(element));
+        });
+      } else if (wrestlingEvent is Tournament) {
+        final tournamentFightsAll = getTournamentFights();
+        wrestlingEvent.fights.forEach((element) {
+          tournamentFightsAll.removeWhere((tof) => tof.fight.equalDuringFight(element));
+        });
+      }
+
+      // Remove if exists
+      wrestlingEvent.fights.forEach((element) {
+        fightsAll.remove(element);
+      });
+    }
+    // Generate new fights
+    await wrestlingEvent.generateFights();
+    // Add if not exists
+    wrestlingEvent.fights.forEach((element) {
+      if (!fightsAll.contains(element)) {
+        fightsAll.add(ClientFight.from(element));
+      }
+    });
+    if (wrestlingEvent is TeamMatch) {
+      final teamMatchFightsAll = getTeamMatchFights();
+      wrestlingEvent.fights.forEach((element) {
+        if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
+          teamMatchFightsAll.add(TeamMatchFight(teamMatch: wrestlingEvent, fight: element));
+        }
+      });
+    } else if (wrestlingEvent is Tournament) {
+      final tournamentFightsAll = getTournamentFights();
+      wrestlingEvent.fights.forEach((element) {
+        if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
+          tournamentFightsAll.add(TournamentFight(tournament: wrestlingEvent, fight: element));
+        }
+      });
     }
   }
 }

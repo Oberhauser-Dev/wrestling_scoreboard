@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../enums/wrestling_style.dart';
 import '../fight.dart';
 import '../league.dart';
 import '../lineup.dart';
@@ -9,19 +8,6 @@ import '../weight_class.dart';
 import '../wrestling_event.dart';
 
 part 'team_match.g.dart';
-
-final List<WeightClass> weightClasses = [
-  WeightClass(weight: 57, style: WrestlingStyle.free),
-  WeightClass(weight: 130, style: WrestlingStyle.greco),
-  WeightClass(weight: 61, style: WrestlingStyle.greco),
-  WeightClass(weight: 98, style: WrestlingStyle.free),
-  WeightClass(weight: 66, style: WrestlingStyle.free),
-  WeightClass(weight: 86, style: WrestlingStyle.greco),
-  WeightClass(weight: 71, style: WrestlingStyle.greco),
-  WeightClass(weight: 80, style: WrestlingStyle.free),
-  WeightClass(weight: 75, style: WrestlingStyle.free, name: '75 kg A'),
-  WeightClass(weight: 75, style: WrestlingStyle.greco, name: '75 kg B'),
-];
 
 /// For team matches only.
 @JsonSerializable()
@@ -48,6 +34,7 @@ class TeamMatch extends WrestlingEvent {
       {int? id,
       required Lineup home,
       required Lineup guest,
+      required List<WeightClass> weightClasses,
       required List<Person> referees,
       this.no,
       String? location,
@@ -62,7 +49,6 @@ class TeamMatch extends WrestlingEvent {
         ) {
     if (home.team.league == guest.team.league && home.team.league != null) {
       league = home.team.league!;
-      //  TODO load weight classes of league
     } else {
       league = League.outOfCompetition;
     }
@@ -78,7 +64,7 @@ class TeamMatch extends WrestlingEvent {
 
   int get homePoints {
     var res = 0;
-    for (final fight in fights!) {
+    for (final fight in fights) {
       res += fight.r?.classificationPoints ?? 0;
     }
     return res;
@@ -86,7 +72,7 @@ class TeamMatch extends WrestlingEvent {
 
   int get guestPoints {
     var res = 0;
-    for (final fight in fights!) {
+    for (final fight in fights) {
       res += fight.b?.classificationPoints ?? 0;
     }
     return res;

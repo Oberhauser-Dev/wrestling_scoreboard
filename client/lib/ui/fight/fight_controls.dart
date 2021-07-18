@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/data/participant_state.dart';
 
 import 'fight_screen.dart';
 import 'fight_shortcuts.dart';
