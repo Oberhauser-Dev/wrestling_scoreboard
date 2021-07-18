@@ -9,6 +9,7 @@ part of 'tournament.dart';
 Tournament _$TournamentFromJson(Map<String, dynamic> json) {
   return Tournament(
     id: json['id'] as int?,
+    name: json['name'] as String,
     lineups: (json['lineups'] as List<dynamic>)
         .map((e) => Lineup.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -60,6 +61,7 @@ Map<String, dynamic> _$TournamentToJson(Tournament instance) =>
       'comment': instance.comment,
       'fights': instance.fights,
       'weightClasses': instance.weightClasses,
+      'name': instance.name,
       'roundDuration': instance.roundDuration.inMicroseconds,
       'breakDuration': instance.breakDuration.inMicroseconds,
       'activityDuration': instance.activityDuration.inMicroseconds,

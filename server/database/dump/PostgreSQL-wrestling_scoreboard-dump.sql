@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.3
--- Dumped by pg_dump version 13.3
+-- Dumped from database version 13.3 (Ubuntu 13.3-0ubuntu0.21.04.1)
+-- Dumped by pg_dump version 13.3 (Ubuntu 13.3-0ubuntu0.21.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -15,6 +15,22 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
 
 --
 -- Name: gender; Type: TYPE; Schema: public; Owner: postgres
@@ -298,11 +314,26 @@ ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
 
 
 --
+-- Name: wrestling_event; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wrestling_event (
+    id integer NOT NULL,
+    date date,
+    location character varying(100),
+    "visitorsCount" integer,
+    comment text
+);
+
+
+ALTER TABLE public.wrestling_event OWNER TO postgres;
+
+--
 -- Name: team_match; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.team_match (
-    id integer NOT NULL,
+    id integer,
     home_id integer,
     guest_id integer,
     referee_id integer,
@@ -314,7 +345,8 @@ CREATE TABLE public.team_match (
     "visitorsCount" integer,
     comment text,
     league_id integer
-);
+)
+INHERITS (public.wrestling_event);
 
 
 ALTER TABLE public.team_match OWNER TO postgres;
@@ -340,6 +372,18 @@ ALTER TABLE public.team_match_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
 
+
+--
+-- Name: tournament; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tournament (
+    name character varying(127)
+)
+INHERITS (public.wrestling_event);
+
+
+ALTER TABLE public.tournament OWNER TO postgres;
 
 --
 -- Name: weight_class; Type: TABLE; Schema: public; Owner: postgres
@@ -375,6 +419,28 @@ ALTER TABLE public.weight_class_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.weight_class_id_seq OWNED BY public.weight_class.id;
+
+
+--
+-- Name: wrestling_event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wrestling_event_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wrestling_event_id_seq OWNER TO postgres;
+
+--
+-- Name: wrestling_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wrestling_event_id_seq OWNED BY public.wrestling_event.id;
 
 
 --
@@ -434,10 +500,24 @@ ALTER TABLE ONLY public.team_match ALTER COLUMN id SET DEFAULT nextval('public.t
 
 
 --
+-- Name: tournament id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournament ALTER COLUMN id SET DEFAULT nextval('public.wrestling_event_id_seq'::regclass);
+
+
+--
 -- Name: weight_class id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.weight_class ALTER COLUMN id SET DEFAULT nextval('public.weight_class_id_seq'::regclass);
+
+
+--
+-- Name: wrestling_event id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('public.wrestling_event_id_seq'::regclass);
 
 
 --
@@ -477,15 +557,15 @@ COPY public.lineup (id, team_id, leader_id, coach_id) FROM stdin;
 -- Data for Name: membership; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.membership (person_id, club_id, id, no) FROM stdin;
-1	2	1	\N
+COPY public.membership (id, person_id, club_id, no) FROM stdin;
+1	1	2	\N
 2	2	2	\N
-3	2	3	\N
-4	2	4	\N
-5	1	5	\N
-6	1	6	\N
-7	1	7	\N
-8	1	8	\N
+3	3	2	\N
+4	4	2	\N
+5	5	1	\N
+6	6	1	\N
+7	7	1	\N
+8	8	1	\N
 \.
 
 
@@ -543,6 +623,15 @@ COPY public.team_match (id, home_id, guest_id, referee_id, transcript_writer_id,
 
 
 --
+-- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tournament (id, date, location, "visitorsCount", comment, name) FROM stdin;
+1	2021-07-17	Quahog	15	\N	The Griffin-Simpson Tournament
+\.
+
+
+--
 -- Data for Name: weight_class; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -557,6 +646,14 @@ COPY public.weight_class (id, name, weight, style) FROM stdin;
 10	\N	130	greco
 5	75 kg A	75	free
 6	75 kg B	75	greco
+\.
+
+
+--
+-- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wrestling_event (id, date, location, "visitorsCount", comment) FROM stdin;
 \.
 
 
@@ -621,6 +718,13 @@ SELECT pg_catalog.setval('public.team_match_id_seq', 1, true);
 --
 
 SELECT pg_catalog.setval('public.weight_class_id_seq', 10, true);
+
+
+--
+-- Name: wrestling_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wrestling_event_id_seq', 1, true);
 
 
 --
@@ -701,6 +805,14 @@ ALTER TABLE ONLY public.team
 
 ALTER TABLE ONLY public.weight_class
     ADD CONSTRAINT weight_class_pk PRIMARY KEY (id);
+
+
+--
+-- Name: wrestling_event wrestling_event_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wrestling_event
+    ADD CONSTRAINT wrestling_event_pk PRIMARY KEY (id);
 
 
 --

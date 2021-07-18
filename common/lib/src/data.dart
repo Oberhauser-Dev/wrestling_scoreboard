@@ -10,4 +10,5 @@ export 'data/participation.dart';
 export 'data/person.dart';
 export 'data/team.dart';
 export 'data/team_match/team_match.dart';
+export 'data/tournament/tournament.dart';
 export 'data/weight_class.dart';

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../fight.dart';
 import '../lineup.dart';
 import '../person.dart';
 import '../weight_class.dart';
@@ -10,6 +11,7 @@ part 'tournament.g.dart';
 /// For team matches only.
 @JsonSerializable()
 class Tournament extends WrestlingEvent {
+  final String name;
 
   @override
   Duration roundDuration = Duration(minutes: 3);
@@ -28,6 +30,7 @@ class Tournament extends WrestlingEvent {
 
   Tournament(
       {int? id,
+      required this.name,
       required List<Lineup> lineups,
       required List<WeightClass> weightClasses,
       required List<Person> referees,

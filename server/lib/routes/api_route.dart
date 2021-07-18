@@ -1,3 +1,4 @@
+import 'package:server/controllers/tournament_controller.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
@@ -38,6 +39,10 @@ class ApiRoute {
     router.get('/team_matchs', matchController.requestMany);
     router.get('/team_matches', matchController.requestMany);
     router.get('/team_match/<id|[0-9]+>', matchController.requestSingle);
+
+    final tournamentController = TournamentController();
+    router.get('/tournaments', tournamentController.requestMany);
+    router.get('/tournament/<id|[0-9]+>', tournamentController.requestSingle);
 
     final membershipController = MembershipController();
     router.get('/memberships', membershipController.requestMany);
