@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
+import 'package:wrestling_scoreboard/ui/lineup/edit_team_match.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
@@ -23,6 +24,11 @@ class MatchSequence extends StatelessWidget {
     Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
   }
 
+  handleEditLineups(TeamMatch match, BuildContext context) {
+    final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.lineup;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EditTeamMatch(title: title, match: match)));
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -32,12 +38,16 @@ class MatchSequence extends StatelessWidget {
     var fights = match.fights;
     return Scaffold(
         bottomNavigationBar: BottomAppBar(
-          child: Row(children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context, false);
               },
+            ),
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => handleEditLineups(match, context),
             ),
           ]),
         ),

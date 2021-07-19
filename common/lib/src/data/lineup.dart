@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'data_object.dart';
-import 'person.dart';
+import 'membership.dart';
 import 'team.dart';
 
 part 'lineup.g.dart';
@@ -10,8 +10,8 @@ part 'lineup.g.dart';
 @JsonSerializable()
 class Lineup extends DataObject {
   final Team team;
-  final Person? leader; // Mannschaftsführer
-  final Person? coach; // Trainer
+  final Membership? leader; // Mannschaftsführer
+  final Membership? coach; // Trainer
   int tier; // Rangordnung
 
   Lineup({int? id, required this.team, this.leader, this.coach, this.tier = 1}) : super(id);

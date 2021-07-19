@@ -20,7 +20,7 @@ class Person extends DataObject {
 
   Map<String, dynamic> toJson() => _$PersonToJson(this);
 
-  get age {
+  int? get age {
     DateTime today = MockableDateTime.now();
 
     if (birthDate != null) {
@@ -33,7 +33,7 @@ class Person extends DataObject {
     return null;
   }
 
-  get fullName {
+  String get fullName {
     return '$prename $surname';
   }
 }

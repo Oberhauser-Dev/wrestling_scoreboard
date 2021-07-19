@@ -142,7 +142,7 @@ class FightState extends State<FightScreen> {
           child: Center(
               child: Text(
                   (pStatus?.participation.weight != null
-                      ? '${pStatus?.participation.weight} $weightUnit'
+                      ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
                       : AppLocalizations.of(context)!.participantUnknownWeight),
                   style: TextStyle(
                       fontSize: fontSizeDefault, color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white)))),

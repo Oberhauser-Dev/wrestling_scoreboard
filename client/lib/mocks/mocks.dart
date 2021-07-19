@@ -93,14 +93,14 @@ ClientTeamMatch initMenRPWMatch() {
   ClientLineup guest = ClientLineup(id: 2, team: _guestTeam);
   _lineups.add(home);
   _lineups.add(guest);
-  _participations.add(Participation(id: 1, membership: r1, lineup: home, weightClass: wc57));
-  _participations.add(Participation(id: 2, membership: r2, lineup: home, weightClass: wc61));
-  _participations.add(Participation(id: 3, membership: r3, lineup: home, weightClass: wc75A));
-  _participations.add(Participation(id: 4, membership: r4, lineup: home, weightClass: wc130));
-  _participations.add(Participation(id: 5, membership: b1, lineup: guest, weightClass: wc57));
+  _participations.add(Participation(id: 1, membership: r1, lineup: home, weightClass: wc57, weight: 55.8));
+  _participations.add(Participation(id: 2, membership: r2, lineup: home, weightClass: wc61, weight: 60.15));
+  _participations.add(Participation(id: 3, membership: r3, lineup: home, weightClass: wc75A, weight: 73.3));
+  _participations.add(Participation(id: 4, membership: r4, lineup: home, weightClass: wc130, weight: 133.5));
+  _participations.add(Participation(id: 5, membership: b1, lineup: guest, weightClass: wc57, weight: 57.0));
   _participations.add(Participation(id: 6, membership: b2, lineup: guest, weightClass: wc66));
-  _participations.add(Participation(id: 7, membership: b3, lineup: guest, weightClass: wc75A));
-  _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130));
+  _participations.add(Participation(id: 7, membership: b3, lineup: guest, weightClass: wc75A, weight: 72.4));
+  _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
 
   Person referee = Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
   return ClientTeamMatch(
@@ -142,6 +142,10 @@ List<TournamentFight> getTournamentFights() => _tournamentFights;
 
 List<Participation> getParticipationsOfLineup(Lineup lineup) {
   return getParticipations().where((element) => element.lineup == lineup).toList();
+}
+
+List<ClientMembership> getMembershipsOfClub(Club club) {
+  return getMemberships().where((element) => element.club == club).toList();
 }
 
 List<ClientTeam> getTeamsOfClub(ClientClub club) {

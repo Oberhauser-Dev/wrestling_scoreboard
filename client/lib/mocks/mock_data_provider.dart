@@ -40,6 +40,7 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
         if (filterObject != null) throw DataUnimplementedError(T, filterObject);
         return getLineups() as List<T>;
       case ClientMembership:
+        if (filterObject.runtimeType == ClientClub) return getMembershipsOfClub(filterObject as ClientClub) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(T, filterObject);
         return getMemberships() as List<T>;
       case Participation:
