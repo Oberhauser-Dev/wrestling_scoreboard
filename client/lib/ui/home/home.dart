@@ -27,13 +27,16 @@ class Home extends StatelessWidget {
           future: Future.wait([_clubs, _leagues]), // a previously-obtained Future<String> or null
           builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.hasData) {
-              List<ListItem> items = [HeadingItem(AppLocalizations.of(context)!.club)]..addAll(
-                  (snapshot.data![0] as List<ClientClub>).map(
-                      (e) => ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context))));
-              items
-                ..add(HeadingItem(AppLocalizations.of(context)!.league))
-                ..addAll((snapshot.data![1] as List<ClientLeague>).map((e) =>
-                    ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))));
+              List<ListGroup> items = [
+                ListGroup(
+                    HeadingItem(AppLocalizations.of(context)!.club),
+                    (snapshot.data![0] as List<ClientClub>).map((e) =>
+                        ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context)))),
+                ListGroup(
+                    HeadingItem(AppLocalizations.of(context)!.league),
+                    (snapshot.data![1] as List<ClientLeague>).map((e) =>
+                        ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))))
+              ];
               return GroupedList(items);
             } else {
               return Center(child: Text('Cannot access data!'));

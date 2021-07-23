@@ -10,16 +10,18 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 class MatchSelection extends StatelessWidget {
   final String title;
   final List<ClientTeamMatch> matches;
-  late List<ListItem> items;
+  late List<ListGroup> items;
 
   MatchSelection({required this.title, required this.matches});
 
   @override
   Widget build(BuildContext context) {
-    items = [HeadingItem(AppLocalizations.of(context)!.match)]..addAll(matches.map((e) => ContentItem(
-        '${e.home.team.name} - ${e.guest.team.name}',
-        icon: Icons.event,
-        onTab: () => handleSelectedMatch(e, context))));
+    items = [
+      ListGroup(
+          HeadingItem(AppLocalizations.of(context)!.match),
+          matches.map((e) => ContentItem('${e.home.team.name} - ${e.guest.team.name}',
+              icon: Icons.event, onTab: () => handleSelectedMatch(e, context))))
+    ];
 
     return Scaffold(
       appBar: AppBar(

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'font.dart';
+
 /// The base class for the different types of items the list can contain.
 abstract class ListItem {
   Widget? buildLeading(BuildContext context);
@@ -24,12 +26,7 @@ class HeadingItem implements ListItem {
 
   @override
   Widget buildTitle(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(bottom: 10, top: 20),
-        child: Text(
-          heading,
-          style: Theme.of(context).textTheme.headline5,
-        ));
+    return HeadingText(heading);
   }
 
   @override
@@ -66,23 +63,51 @@ class ContentItem implements ListItem {
   }
 }
 
+class ListGroup {
+  final HeadingItem headingItem;
+  final Iterable<ContentItem> contentItems;
+
+  ListGroup(this.headingItem, [this.contentItems = const []]);
+}
+
 class GroupedList extends StatelessWidget {
-  final List<ListItem> items;
+  final List<ListGroup> items;
 
   GroupedList(this.items);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        shrinkWrap: true,
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return ListTile(
-            leading: item.buildLeading(context),
-            title: item.buildTitle(context),
-            subtitle: item.buildSubtitle(context),
-            onTap: item.buildOnTab(),
-          );
+          final List<Widget> tiles = [];
+          if (index != 0) {
+            tiles.add(Divider(indent: 16, endIndent: 16));
+          }
+          tiles.add(ListTile(
+            leading: item.headingItem.buildLeading(context),
+            title: item.headingItem.buildTitle(context),
+            subtitle: item.headingItem.buildSubtitle(context),
+            onTap: item.headingItem.buildOnTab(),
+          ));
+          if (item.contentItems.isNotEmpty) {
+            tiles.addAll(item.contentItems.map((e) => ListTile(
+                  leading: e.buildLeading(context),
+                  title: e.buildTitle(context),
+                  subtitle: e.buildSubtitle(context),
+                  onTap: e.buildOnTab(),
+                )));
+          } else {
+            tiles.add(ListTile(
+              title: Center(child: Text(
+                'No items available.',
+                style: Theme.of(context).textTheme.caption,
+              )),
+            ));
+          }
+          return Column(children: [...tiles]);
         });
   }
 }

@@ -25,7 +25,7 @@ class MatchSequence extends StatelessWidget {
   }
 
   handleEditLineups(TeamMatch match, BuildContext context) {
-    final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.lineup;
+    final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.match;
     Navigator.push(context, MaterialPageRoute(builder: (context) => EditTeamMatch(title: title, match: match)));
   }
 

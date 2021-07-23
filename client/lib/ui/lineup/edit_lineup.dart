@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard/ui/components/font.dart';
 
 class EditLineup extends StatelessWidget {
   final String title;
@@ -48,41 +49,43 @@ class EditLineup extends StatelessWidget {
         child: Center(
           child: Container(
             constraints: BoxConstraints(maxWidth: 1140),
-            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-                getPersonDropdown(lineup.leader, AppLocalizations.of(context)!.leader, context),
-                getPersonDropdown(lineup.coach, AppLocalizations.of(context)!.coach, context),
+                ListTile(title: HeadingText(lineup.team.name)),
+                ListTile(title: getPersonDropdown(lineup.leader, AppLocalizations.of(context)!.leader, context)),
+                ListTile(title: getPersonDropdown(lineup.coach, AppLocalizations.of(context)!.coach, context)),
                 ...weightClasses.map<Widget>((e) {
                   final weightParticipations = participations.where((participation) => participation.weightClass == e);
                   final participation = weightParticipations.isEmpty ? null : weightParticipations.single;
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: 80,
-                        child: Container(
-                          padding: EdgeInsets.only(right: 8, top: 8, bottom: 8),
-                          child: getPersonDropdown(participation?.membership,
-                              '${AppLocalizations.of(context)!.weightClass} ${e.name}', context),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 20,
-                        child: Container(
-                          padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
-                          child: TextFormField(
-                            initialValue: participation?.weight?.toString() ?? '',
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(vertical: 20),
-                                labelText: AppLocalizations.of(context)!.weight),
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))
-                            ],
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        Expanded(
+                          flex: 80,
+                          child: Container(
+                            padding: EdgeInsets.only(right: 8, top: 8, bottom: 8),
+                            child: getPersonDropdown(participation?.membership,
+                                '${AppLocalizations.of(context)!.weightClass} ${e.name}', context),
                           ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          flex: 20,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
+                            child: TextFormField(
+                              initialValue: participation?.weight?.toString() ?? '',
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(vertical: 20),
+                                  labelText: AppLocalizations.of(context)!.weight),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }).toList()
               ],

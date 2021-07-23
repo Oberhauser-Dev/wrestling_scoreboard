@@ -11,14 +11,16 @@ import 'match_selection.dart';
 class TeamSelection extends StatelessWidget {
   final String title;
   final List<ClientTeam> teams;
-  late List<ListItem> items;
+  late List<ListGroup> items;
 
   TeamSelection({required this.title, required this.teams});
 
   @override
   Widget build(BuildContext context) {
-    items = [HeadingItem(AppLocalizations.of(context)!.team)]
-      ..addAll(teams.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))));
+    items = [
+      ListGroup(HeadingItem(AppLocalizations.of(context)!.team),
+          teams.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))))
+    ];
 
     return Scaffold(
       appBar: AppBar(
