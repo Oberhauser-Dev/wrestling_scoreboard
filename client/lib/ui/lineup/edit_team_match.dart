@@ -18,20 +18,36 @@ class EditTeamMatch extends StatelessWidget {
   Widget build(BuildContext context) {
     items = [
       ListGroup(
-          HeadingItem(AppLocalizations.of(context)!.lineup),
-          match.lineups
-              .map((e) => ContentItem(e.team.name, icon: Icons.group, onTab: () => handleSelectedLineup(e, context))))
+        HeadingItem(AppLocalizations.of(context)!.match),
+        [
+          ContentItem('Details', icon: Icons.description, onTab: () {}),
+          ContentItem(AppLocalizations.of(context)!.weightClass, icon: Icons.fitness_center, onTab: () {}),
+          ContentItem('Durations', icon: Icons.timer, onTab: () {}),
+        ],
+      ),
+      ListGroup(
+        HeadingItem(AppLocalizations.of(context)!.person),
+        [
+          ContentItem(AppLocalizations.of(context)!.referee, icon: Icons.sports, onTab: () {}),
+          ContentItem('Mat president', icon: Icons.manage_accounts, onTab: () {}),
+          ContentItem('Time Keeper', icon: Icons.pending_actions, onTab: () {}),
+          ContentItem('Transcription Writer', icon: Icons.history_edu, onTab: () {}),
+          ContentItem('Steward', icon: Icons.security, onTab: () {}),
+        ],
+      ),
+      ListGroup(HeadingItem(AppLocalizations.of(context)!.lineup + ' & ' + AppLocalizations.of(context)!.fight), [
+        ...match.lineups
+            .map((e) => ContentItem(e.team.name, icon: Icons.group, onTab: () => handleSelectedLineup(e, context))),
+        ContentItem(AppLocalizations.of(context)!.fight, icon: Icons.sports_kabaddi, onTab: () {})
+      ]),
     ];
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Column(
-          children: [
-            GroupedList(items),
-          ],
-        ));
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: GroupedList(items),
+    );
   }
 
   handleSelectedLineup(Lineup lineup, BuildContext context) async {

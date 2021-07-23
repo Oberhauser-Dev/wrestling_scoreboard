@@ -72,7 +72,6 @@ class MatchSequence extends StatelessWidget {
             ]),
             Expanded(
               child: ListView.builder(
-                  shrinkWrap: true,
                   itemCount: fights.length,
                   itemBuilder: (context, index) {
                     var fight = fights[index];
