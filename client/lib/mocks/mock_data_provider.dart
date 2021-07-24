@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:common/common.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
@@ -25,40 +27,38 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
   List<T> getManyMocksFromClass<T>({DataObject? filterObject}) {
     switch (T) {
       case ClientClub:
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getClubs() as List<T>;
       case ClientFight:
-        if (filterObject.runtimeType == Tournament) return getFightsOfTournament(filterObject as Tournament) as List<T>;
-        if (filterObject.runtimeType == ClientTeamMatch)
-          return getFightsOfTeamMatch(filterObject as ClientTeamMatch) as List<T>;
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject is Tournament) return getFightsOfTournament(filterObject) as List<T>;
+        if (filterObject is ClientTeamMatch) return getFightsOfTeamMatch(filterObject) as List<T>;
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getFights() as List<T>;
       case ClientLeague:
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getLeagues() as List<T>;
       case ClientLineup:
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getLineups() as List<T>;
       case ClientMembership:
-        if (filterObject.runtimeType == ClientClub) return getMembershipsOfClub(filterObject as ClientClub) as List<T>;
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject is ClientClub) return getMembershipsOfClub(filterObject) as List<T>;
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getMemberships() as List<T>;
       case Participation:
-        if (filterObject.runtimeType == ClientLineup)
-          return getParticipationsOfLineup(filterObject as ClientLineup) as List<T>;
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject is ClientLineup) return getParticipationsOfLineup(filterObject) as List<T>;
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getParticipations() as List<T>;
       case ClientTeam:
-        if (filterObject.runtimeType == ClientClub) return getTeamsOfClub(filterObject as ClientClub) as List<T>;
-        if (filterObject.runtimeType == ClientLeague) return getTeamsOfLeague(filterObject as ClientLeague) as List<T>;
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject is ClientClub) return getTeamsOfClub(filterObject) as List<T>;
+        if (filterObject is ClientLeague) return getTeamsOfLeague(filterObject) as List<T>;
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeams() as List<T>;
       case ClientTeamMatch:
-        if (filterObject.runtimeType == ClientTeam) return getMatchesOfTeam(filterObject as ClientTeam) as List<T>;
-        if (filterObject != null) throw DataUnimplementedError(T, filterObject);
+        if (filterObject is ClientTeam) return getMatchesOfTeam(filterObject) as List<T>;
+        if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeamMatches() as List<T>;
       default:
-        throw DataUnimplementedError(T, filterObject);
+        throw DataUnimplementedError(CRUD.read, T, filterObject);
     }
   }
 
@@ -105,6 +105,55 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
           tournamentFightsAll.add(TournamentFight(tournament: wrestlingEvent, fight: element));
         }
       });
+    }
+  }
+
+  @override
+  Future<int> createOrUpdateSingle(DataObject obj) async {
+    if (obj.id == null) {
+      return Future.value(_createMockSingle(obj).id);
+    } else {
+      return Future.value(_updateMockSingle(obj).id);
+    }
+  }
+
+  DataObject _createMockSingle(DataObject obj) {
+    obj.id = Random().nextInt(32000);
+    if (obj is Participation) {
+      getParticipations().add(obj);
+    } else if (obj is Lineup) {
+      getLineups().add(ClientLineup.from(obj));
+    } else {
+      throw DataUnimplementedError(CRUD.create, obj.runtimeType);
+    }
+    return obj;
+  }
+
+  DataObject _updateMockSingle(DataObject obj) {
+    if (obj is Participation) {
+      getParticipations().remove(obj);
+      getParticipations().add(obj);
+    } else if (obj is Lineup) {
+      final clientObj = ClientLineup.from(obj);
+      getLineups().remove(clientObj);
+      getLineups().add(clientObj);
+      getParticipations().where((element) => element.lineup == clientObj).forEach((element) {
+        element.lineup = clientObj;
+      });
+    } else {
+      throw DataUnimplementedError(CRUD.create, obj.runtimeType);
+    }
+    return obj;
+  }
+
+  @override
+  Future<void> deleteSingle(DataObject obj) async {
+    if (obj is Participation) {
+      getParticipations().remove(obj);
+    } else if (obj is Lineup) {
+      getLineups().remove(obj);
+    } else {
+      throw DataUnimplementedError(CRUD.delete, obj.runtimeType);
     }
   }
 }

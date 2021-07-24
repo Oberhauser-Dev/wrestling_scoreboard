@@ -35,7 +35,7 @@ class RestDataProvider extends DataProvider {
       case ClientTeamMatch:
         return '/team_match';
       default:
-        throw UnimplementedError('Path for "${t.toString()}" not found');
+        throw UnimplementedError('Path for "${t.toString()}" not found.');
     }
   }
 
@@ -51,7 +51,7 @@ class RestDataProvider extends DataProvider {
       return deserialize<T>(json);
     } else {
       throw Exception(
-          'Failed to load single ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
+          'Failed to READ single ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
     }
   }
 
@@ -68,7 +68,7 @@ class RestDataProvider extends DataProvider {
         return json.map((e) => deserialize<T>(e)).toList();
       } else {
         throw Exception(
-            'Failed to load many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
+            'Failed to READ many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
       }
     } catch (e) {
       print(e);
@@ -82,8 +82,18 @@ class RestDataProvider extends DataProvider {
     final response = await http.post(Uri.parse('$_apiUrl$prepend/fights/generate'), body: {'reset': reset.toString()});
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to generate fights ${wrestlingEvent.toString()}: ' +
+      throw Exception('Failed to CREATE generated fights ${wrestlingEvent.toString()}: ' +
           (response.reasonPhrase ?? response.statusCode.toString()));
     }
+  }
+
+  @override
+  Future<int> createOrUpdateSingle(DataObject obj) async {
+    throw DataUnimplementedError(CRUD.create, obj.runtimeType);
+  }
+
+  @override
+  Future<void> deleteSingle(DataObject obj) {
+    throw DataUnimplementedError(CRUD.create, obj.runtimeType);
   }
 }
