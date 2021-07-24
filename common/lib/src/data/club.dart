@@ -7,7 +7,7 @@ part 'club.g.dart';
 /// The sports club.
 @JsonSerializable()
 class Club extends DataObject {
-  String? no; // Vereinsnummer
+  final String? no; // Vereinsnummer
   final String name;
 
   Club({int? id, required this.name, this.no}) : super(id);

@@ -11,10 +11,10 @@ part 'participation.g.dart';
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
 @JsonSerializable()
 class Participation extends DataObject {
-  final Membership membership;
-  final Lineup lineup;
+  Membership membership;
+  Lineup lineup;
   final WeightClass weightClass;
-  double? weight;
+  final double? weight;
 
   Participation({
     int? id,

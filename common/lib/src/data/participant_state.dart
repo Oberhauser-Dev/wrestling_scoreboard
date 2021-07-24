@@ -10,7 +10,7 @@ part 'participant_state.g.dart';
 /// The state of one participant during a fight.
 @JsonSerializable()
 class ParticipantState extends DataObject {
-  final Participation participation;
+  Participation participation;
   final List<FightAction> _actions = [];
   int? _classificationPoints;
 

@@ -8,8 +8,8 @@ part 'league.g.dart';
 @JsonSerializable()
 class League extends DataObject {
   static League outOfCompetition = League(name: 'Out of competition', startDate: DateTime(DateTime.now().year));
-  DateTime startDate;
-  String name;
+  final DateTime startDate;
+  final String name;
 
   League({int? id, required this.name, required this.startDate}) : super(id);
 

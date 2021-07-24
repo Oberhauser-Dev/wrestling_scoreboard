@@ -13,8 +13,8 @@ part 'fight.g.dart';
 /// The fight between two persons, which are represented by a ParticipantStatus.
 @JsonSerializable()
 class Fight extends DataObject {
-  final ParticipantState? r; // red
-  final ParticipantState? b; // blue
+  ParticipantState? r; // red
+  ParticipantState? b; // blue
   final WeightClass weightClass;
   final int? pool;
   final List<FightAction> _actions = [];

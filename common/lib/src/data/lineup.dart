@@ -9,10 +9,10 @@ part 'lineup.g.dart';
 /// The lineup for a team match or tournament.
 @JsonSerializable()
 class Lineup extends DataObject {
-  final Team team;
-  final Membership? leader; // Mannschaftsführer
-  final Membership? coach; // Trainer
-  int tier; // Rangordnung
+  Team team;
+  Membership? leader; // Mannschaftsführer
+  Membership? coach; // Trainer
+  final int tier; // Rangordnung
 
   Lineup({int? id, required this.team, this.leader, this.coach, this.tier = 1}) : super(id);
 

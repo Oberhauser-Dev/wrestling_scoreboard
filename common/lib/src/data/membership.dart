@@ -9,9 +9,9 @@ part 'membership.g.dart';
 /// The membership of a person in a club.
 @JsonSerializable()
 class Membership extends DataObject {
-  String? no; // Vereinsnummer
-  final Club club;
-  final Person person;
+  final String? no; // Vereinsnummer
+  Club club;
+  Person person;
 
   Membership({
     int? id,

@@ -8,8 +8,8 @@ part 'team_match_fight.g.dart';
 
 @JsonSerializable()
 class TeamMatchFight extends DataObject {
-  final TeamMatch teamMatch;
-  final Fight fight;
+  TeamMatch teamMatch;
+  Fight fight;
 
   TeamMatchFight({int? id, required this.teamMatch, required this.fight}) : super(id);
 }
