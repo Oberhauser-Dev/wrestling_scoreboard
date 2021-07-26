@@ -31,7 +31,7 @@ class TeamSelection extends StatelessWidget {
   }
 
   handleSelectedTeam(ClientTeam team, BuildContext context) {
-    dataProvider.fetchMany<ClientTeamMatch>(filterObject: team).then(
+    dataProvider.readMany<ClientTeamMatch>(filterObject: team).then(
           (value) => Navigator.push(
             context,
             MaterialPageRoute(

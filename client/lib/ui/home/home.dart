@@ -13,8 +13,8 @@ class Home extends StatelessWidget {
   late final Future<List<ClientLeague>> _leagues;
 
   Home() {
-    _clubs = dataProvider.fetchMany<ClientClub>();
-    _leagues = dataProvider.fetchMany<ClientLeague>();
+    _clubs = dataProvider.readMany<ClientClub>();
+    _leagues = dataProvider.readMany<ClientLeague>();
   }
 
   @override
@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
   }
 
   handleSelectedClub(ClientClub club, BuildContext context) {
-    dataProvider.fetchMany<ClientTeam>(filterObject: club).then(
+    dataProvider.readMany<ClientTeam>(filterObject: club).then(
           (value) => Navigator.push(
             context,
             MaterialPageRoute(
@@ -59,7 +59,7 @@ class Home extends StatelessWidget {
   }
 
   handleSelectedLeague(ClientLeague league, BuildContext context) {
-    dataProvider.fetchMany<ClientTeam>(filterObject: league).then(
+    dataProvider.readMany<ClientTeam>(filterObject: league).then(
           (value) => Navigator.push(
             context,
             MaterialPageRoute(

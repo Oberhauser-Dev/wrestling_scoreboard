@@ -14,13 +14,13 @@ import 'mocks.dart';
 
 class MockDataProvider<T extends DataObject> extends DataProvider {
   @override
-  Future<T> fetchSingle<T extends DataObject>(int id, {DataObject? filterObject}) async {
-    final List<T> many = await fetchMany<T>(filterObject: filterObject);
+  Future<T> readSingle<T extends DataObject>(int id, {DataObject? filterObject}) async {
+    final List<T> many = await readMany<T>(filterObject: filterObject);
     return many.singleWhere((element) => element.id == id);
   }
 
   @override
-  Future<List<T>> fetchMany<T extends DataObject>({DataObject? filterObject}) {
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) {
     return Future.value(getManyMocksFromClass<T>(filterObject: filterObject));
   }
 

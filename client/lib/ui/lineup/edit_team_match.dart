@@ -51,8 +51,8 @@ class EditTeamMatch extends StatelessWidget {
   }
 
   handleSelectedLineup(Lineup lineup, BuildContext context) async {
-    final participations = await dataProvider.fetchMany<Participation>(filterObject: lineup);
-    final memberships = await dataProvider.fetchMany<ClientMembership>(filterObject: lineup.team.club);
+    final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
+    final memberships = await dataProvider.readMany<ClientMembership>(filterObject: lineup.team.club);
     final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.lineup;
     Navigator.push(
         context,

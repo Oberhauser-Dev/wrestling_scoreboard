@@ -48,8 +48,8 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
 
   Future<void> generateFights() async {
     super.fights = [];
-    final homeParticipations = await dataProvider.fetchMany<Participation>(filterObject: home);
-    final guestParticipations = await dataProvider.fetchMany<Participation>(filterObject: guest);
+    final homeParticipations = await dataProvider.readMany<Participation>(filterObject: home);
+    final guestParticipations = await dataProvider.readMany<Participation>(filterObject: guest);
     for (final weightClass in weightClasses) {
       final homePartList = homeParticipations.where((el) => el.weightClass == weightClass);
       if (homePartList.length > 1)

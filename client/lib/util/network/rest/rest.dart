@@ -39,7 +39,7 @@ class RestDataProvider extends DataProvider {
     }
   }
 
-  Future<T> fetchSingle<T extends DataObject>(int id, {DataObject? filterObject}) async {
+  Future<T> readSingle<T extends DataObject>(int id, {DataObject? filterObject}) async {
     var prepend = '';
     if (filterObject != null) {
       prepend = '${_getPathFromClass(filterObject.runtimeType)}/${filterObject.id}';
@@ -55,7 +55,7 @@ class RestDataProvider extends DataProvider {
     }
   }
 
-  Future<List<T>> fetchMany<T extends DataObject>({DataObject? filterObject}) async {
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
     try {
       var prepend = '';
       if (filterObject != null) {

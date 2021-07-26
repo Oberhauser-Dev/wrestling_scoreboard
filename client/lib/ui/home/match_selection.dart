@@ -32,10 +32,10 @@ class MatchSelection extends StatelessWidget {
   }
 
   handleSelectedMatch(ClientTeamMatch match, BuildContext context) async {
-    var fights = await dataProvider.fetchMany<ClientFight>(filterObject: match);
+    var fights = await dataProvider.readMany<ClientFight>(filterObject: match);
     if (fights.isEmpty) {
       await dataProvider.generateFights(match);
-      fights = await dataProvider.fetchMany<ClientFight>(filterObject: match);
+      fights = await dataProvider.readMany<ClientFight>(filterObject: match);
     }
     match.fights = fights;
     Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSequence(match)));

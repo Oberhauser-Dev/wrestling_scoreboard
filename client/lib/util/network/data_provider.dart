@@ -17,10 +17,10 @@ enum CRUD {
 /// Data exchange layer with CRUD operations
 abstract class DataProvider {
   /// READ: get a single object
-  Future<T> fetchSingle<T extends DataObject>(int id, {DataObject? filterObject});
+  Future<T> readSingle<T extends DataObject>(int id, {DataObject? filterObject});
 
   /// READ: get many objects
-  Future<List<T>> fetchMany<T extends DataObject>({DataObject? filterObject});
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
   Future<int> createOrUpdateSingle(DataObject obj);
