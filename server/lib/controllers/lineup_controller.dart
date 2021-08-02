@@ -1,5 +1,5 @@
 import 'package:common/common.dart';
-import 'package:server/controllers/person_controller.dart';
+import 'package:server/controllers/membership_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:shelf/shelf.dart';
 
@@ -25,9 +25,9 @@ class LineupController extends EntityController<Lineup> {
     final id = e['id'] as int?;
     final team = await TeamController().getSingle(e['team_id'] as int);
     final leaderId = e['leader_id'] as int?;
-    final leader = leaderId == null ? null : await PersonController().getSingle(leaderId);
+    final leader = leaderId == null ? null : await MembershipController().getSingle(leaderId);
     final coachId = e['coach_id'] as int?;
-    final coach = coachId == null ? null : await PersonController().getSingle(coachId);
+    final coach = coachId == null ? null : await MembershipController().getSingle(coachId);
     return Lineup(id: id, team: team!, leader: leader, coach: coach, tier: e['tier'] as int? ?? 1);
   }
 }
