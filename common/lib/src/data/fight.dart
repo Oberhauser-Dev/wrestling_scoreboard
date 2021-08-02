@@ -77,8 +77,8 @@ class Fight extends DataObject {
 
   bool equalDuringFight(o) =>
       o is Fight && o.runtimeType == runtimeType
-          && (r?.equalDuringFight(o.r) ?? (r == null && o == null))
-          && (b?.equalDuringFight(o.b) ?? (b == null && o == null))
+          && (r?.equalDuringFight(o.r) ?? (r == null && o.r == null))
+          && (b?.equalDuringFight(o.b) ?? (b == null && o.b == null))
           && weightClass == o.weightClass;
 
   static int getClassificationPointsWinnerTournament(FightResult result) {

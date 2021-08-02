@@ -16,6 +16,11 @@ import 'package:wrestling_scoreboard/util/serialize.dart';
 final _apiUrl = dotenv.env['API_URL'] ?? 'http://localhost:8080/api';
 
 class RestDataProvider extends DataProvider {
+
+  static const rawQueryParameter = {
+    'raw': 'true',
+  };
+
   String _getPathFromClass(Type t) {
     switch (t) {
       case ClientClub:
@@ -39,33 +44,43 @@ class RestDataProvider extends DataProvider {
     }
   }
 
-  Future<T> readSingle<T extends DataObject>(int id, {DataObject? filterObject}) async {
-    var prepend = '';
-    if (filterObject != null) {
-      prepend = '${_getPathFromClass(filterObject.runtimeType)}/${filterObject.id}';
-    }
-    final response = await http.get(Uri.parse('$_apiUrl$prepend${_getPathFromClass(T)}/$id'));
+  Future<T> readSingle<T extends DataObject>(int id) async {
+    final json = await readRawSingle(id, isRaw: false);
+    return deserialize<T>(json);
+  }
+
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
+    final json = await readRawMany(filterObject: filterObject, isRaw: false);
+    return json.map((e) => deserialize<T>(e)).toList();
+  }
+
+  @override
+  Future<Map<String, dynamic>> readRawSingle<T extends DataObject>(int id, {bool isRaw = true}) async {
+    final uri = Uri.parse('$_apiUrl${_getPathFromClass(T)}/$id');
+    if(isRaw) uri.queryParameters.addAll(rawQueryParameter);
+    final response = await http.get(uri);
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      return deserialize<T>(json);
+      return jsonDecode(response.body);
     } else {
       throw Exception(
           'Failed to READ single ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
     }
   }
 
-  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
+  @override
+  Future<Iterable<Map<String, dynamic>>> readRawMany<T extends DataObject>({DataObject? filterObject, bool isRaw = true}) async {
     try {
       var prepend = '';
       if (filterObject != null) {
         prepend = '${_getPathFromClass(filterObject.runtimeType)}/${filterObject.id}';
       }
-      final response = await http.get(Uri.parse('$_apiUrl$prepend${_getPathFromClass(T)}s'));
+      final uri = Uri.parse('$_apiUrl$prepend${_getPathFromClass(T)}s');
+      if(isRaw) uri.queryParameters.addAll(rawQueryParameter);
+      final response = await http.get(uri);
 
       if (response.statusCode == 200) {
-        List json = jsonDecode(response.body);
-        return json.map((e) => deserialize<T>(e)).toList();
+        return jsonDecode(response.body);
       } else {
         throw Exception(
             'Failed to READ many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
@@ -74,6 +89,18 @@ class RestDataProvider extends DataProvider {
       print(e);
       throw e;
     }
+  }
+
+  @override
+  Stream<T> readSingleStream<T extends DataObject>(int id) {
+    // TODO: implement readSingleStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<T>> readManyStream<T extends DataObject>({DataObject? filterObject}) {
+    // TODO: implement readManyStream
+    throw UnimplementedError();
   }
 
   @override

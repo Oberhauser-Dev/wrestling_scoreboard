@@ -3,6 +3,8 @@ abstract class DataObject {
 
   DataObject([this.id]);
 
+  Map<String, dynamic> toJson();
+
   @override
   bool operator ==(o) => o is DataObject && o.runtimeType == runtimeType && id == o.id;
 }

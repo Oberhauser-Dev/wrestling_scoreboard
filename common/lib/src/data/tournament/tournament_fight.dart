@@ -12,4 +12,8 @@ class TournamentFight extends DataObject {
   Fight fight;
 
   TournamentFight({int? id, required this.tournament, required this.fight}) : super(id);
+
+  factory TournamentFight.fromJson(Map<String, dynamic> json) => _$TournamentFightFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TournamentFightToJson(this);
 }

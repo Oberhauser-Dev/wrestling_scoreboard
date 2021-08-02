@@ -37,6 +37,8 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
 
   factory ClientTeamMatch.fromJson(Map<String, dynamic> json) => ClientTeamMatch.from(TeamMatch.fromJson(json));
 
+  List<ClientLineup> get lineups => super.lineups.cast<ClientLineup>();
+
   List<ClientFight> get fights => super.fights.cast<ClientFight>();
 
   set fights(List<Fight> newFights) {

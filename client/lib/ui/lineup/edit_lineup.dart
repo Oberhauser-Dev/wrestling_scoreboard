@@ -4,22 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard/data/lineup.dart';
 import 'package:wrestling_scoreboard/ui/components/font.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class EditLineup extends StatefulWidget {
   final String title;
-  final Lineup lineup;
+  final ClientLineup lineup;
   final List<Participation> participations;
   final List<WeightClass> weightClasses;
   final List<Membership> memberships;
+  final Function()? onSubmit;
 
   EditLineup(
       {required this.title,
       required this.weightClasses,
       required this.lineup,
       required this.participations,
-      required this.memberships});
+      required this.memberships,
+      this.onSubmit});
 
   @override
   State<StatefulWidget> createState() => EditLineupState();
@@ -57,9 +60,10 @@ class EditLineupState extends State<EditLineup> {
 
   void handleSubmit(BuildContext context) async {
     await dataProvider
-        .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
+        .createOrUpdateSingle(ClientLineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
     await Future.forEach(_removeParticipations, (Participation element) => dataProvider.deleteSingle(element));
     await Future.forEach(_addParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
+    if(widget.onSubmit != null) widget.onSubmit!();
     Navigator.of(context).pop();
   }
 

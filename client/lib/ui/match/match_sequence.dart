@@ -10,21 +10,22 @@ import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/lineup/edit_team_match.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
 import 'common_elements.dart';
 
 class MatchSequence extends StatelessWidget {
-  late ClientTeamMatch match;
+  final ClientTeamMatch match;
 
   MatchSequence(this.match);
 
-  handleSelectedFight(ClientFight fight, BuildContext context) {
+  handleSelectedFight(ClientTeamMatch match, ClientFight fight, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
   }
 
-  handleEditLineups(TeamMatch match, BuildContext context) {
+  handleEditLineups(ClientTeamMatch match, BuildContext context) {
     final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.match;
     Navigator.push(context, MaterialPageRoute(builder: (context) => EditTeamMatch(title: title, match: match)));
   }
@@ -35,62 +36,82 @@ class MatchSequence extends StatelessWidget {
     double padding = width / 100;
     int flexWidthWeight = 12;
     int flexWidthStyle = 5;
-    var fights = match.fights;
-    return Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
+    return StreamBuilder(
+      stream: dataProvider.readSingleStream<TeamMatch>(match.id!),
+      initialData: match,
+      builder: (BuildContext context, AsyncSnapshot<TeamMatch> matchSnap) {
+        if (matchSnap.hasError) {
+          throw matchSnap.error!;
+        }
+        final match = matchSnap.data as ClientTeamMatch;
+        return Scaffold(
+            bottomNavigationBar: BottomAppBar(
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => handleEditLineups(match, context),
+                ),
+              ]),
             ),
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () => handleEditLineups(match, context),
-            ),
-          ]),
-        ),
-        body: ChangeNotifierProvider.value(
-          value: match,
-          child: Column(children: [
-            Column(children: [
-              Row(children: [
+            body: ChangeNotifierProvider.value(
+              value: match,
+              child: Column(children: [
+                Column(children: [
+                  Row(children: [
+                    Expanded(
+                      flex: flexWidthWeight + flexWidthStyle,
+                      child: Container(
+                        child: FittedText(
+                            '${match.league}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referees.map((e) => e.fullName).join(', ')}'),
+                        padding: EdgeInsets.all(padding),
+                      ),
+                    ),
+                    ...CommonElements.getTeamHeader(match, context),
+                  ]),
+                  Divider(
+                    height: 1,
+                  ),
+                ]),
                 Expanded(
-                  flex: flexWidthWeight + flexWidthStyle,
-                  child: Container(
-                    child: FittedText(
-                        '${match.league}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referees.map((e) => e.fullName).join(', ')}'),
-                    padding: EdgeInsets.all(padding),
+                  child: StreamBuilder(
+                    stream: dataProvider.readManyStream<Fight>(filterObject: match),
+                    initialData: match.fights,
+                    builder: (BuildContext context, AsyncSnapshot<List<Fight>> fightSnap) {
+                      if (fightSnap.hasError) {
+                        throw fightSnap.error!;
+                      }
+                      final fights = fightSnap.data as List<ClientFight>;
+                      return ListView.builder(
+                        itemCount: fights.length,
+                        itemBuilder: (context, index) {
+                          final fight = fights[index];
+                          return FightListItem(fight, (fight) => handleSelectedFight(match, fight, context),
+                              flexWidthWeight, flexWidthStyle);
+                        },
+                      );
+                    },
                   ),
                 ),
-                ...CommonElements.getTeamHeader(match, context),
               ]),
-              Divider(
-                height: 1,
-              ),
-            ]),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: fights.length,
-                  itemBuilder: (context, index) {
-                    var fight = fights[index];
-                    return FightListItem(
-                        fight, (fight) => handleSelectedFight(fight, context), flexWidthWeight, flexWidthStyle);
-                  }),
-            ),
-          ]),
-        ));
+            ));
+      },
+    );
   }
 }
 
 class FightListItem extends StatelessWidget {
-  ClientFight fight;
-  late Function(ClientFight) listItemCallback;
-  int flexWidthWeight = 12;
-  int flexWidthStyle = 5;
+  final ClientFight fight;
+  final Function(ClientFight) listItemCallback;
+  final int flexWidthWeight;
+  final int flexWidthStyle;
 
-  FightListItem(this.fight, this.listItemCallback, this.flexWidthWeight, this.flexWidthStyle);
+  FightListItem(this.fight, this.listItemCallback, [this.flexWidthWeight = 12, this.flexWidthStyle = 5]);
 
   displayName(ClientParticipantState? pStatus, FightRole role, double fontSize, BuildContext context) {
     return Container(

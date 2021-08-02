@@ -17,10 +17,22 @@ enum CRUD {
 /// Data exchange layer with CRUD operations
 abstract class DataProvider {
   /// READ: get a single object
-  Future<T> readSingle<T extends DataObject>(int id, {DataObject? filterObject});
+  Future<T> readSingle<T extends DataObject>(int id);
 
   /// READ: get many objects
   Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject});
+
+  /// READ: get a single object
+  Stream<T> readSingleStream<T extends DataObject>(int id);
+
+  /// READ: get many objects
+  Stream<List<T>> readManyStream<T extends DataObject>({DataObject? filterObject});
+
+  /// READ: get a single raw object
+  Future<Map<String, dynamic>> readRawSingle<T extends DataObject>(int id);
+
+  /// READ: get many raw objects
+  Future<Iterable<Map<String, dynamic>>> readRawMany<T extends DataObject>({DataObject? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
   Future<int> createOrUpdateSingle(DataObject obj);
@@ -35,5 +47,5 @@ abstract class DataProvider {
 class DataUnimplementedError extends UnimplementedError {
   DataUnimplementedError(CRUD operationType, Type type, [DataObject? filterObject])
       : super(
-            'Data ${operationType.toString().substring(4).toUpperCase()}-request for "${type.toString()}" ${filterObject == null ? '' : 'in "${filterObject.runtimeType.toString()}'}" not found.');
+            'Data ${operationType.toString().substring(5).toUpperCase()}-request for "${type.toString()}" ${filterObject == null ? '' : 'in "${filterObject.runtimeType.toString()}'}" not found.');
 }

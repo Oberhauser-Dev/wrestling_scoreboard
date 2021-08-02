@@ -2,14 +2,16 @@ import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard/data/lineup.dart';
 import 'package:wrestling_scoreboard/data/membership.dart';
+import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/lineup/edit_lineup.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class EditTeamMatch extends StatelessWidget {
   final String title;
-  final TeamMatch match;
+  final ClientTeamMatch match;
   late List<ListGroup> items;
 
   EditTeamMatch({required this.title, required this.match});
@@ -50,7 +52,7 @@ class EditTeamMatch extends StatelessWidget {
     );
   }
 
-  handleSelectedLineup(Lineup lineup, BuildContext context) async {
+  handleSelectedLineup(ClientLineup lineup, BuildContext context) async {
     final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
     final memberships = await dataProvider.readMany<ClientMembership>(filterObject: lineup.team.club);
     final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.lineup;
@@ -63,6 +65,9 @@ class EditTeamMatch extends StatelessWidget {
                   lineup: lineup,
                   participations: participations,
                   memberships: memberships,
+                  onSubmit: () async {
+                    await dataProvider.generateFights(match);
+                  },
                 )));
   }
 }
