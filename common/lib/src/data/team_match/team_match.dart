@@ -35,7 +35,7 @@ class TeamMatch extends WrestlingEvent {
       required Lineup home,
       required Lineup guest,
       required List<WeightClass> weightClasses,
-      required List<Person> referees,
+      required Iterable<Person> referees,
       this.no,
       String? location,
       DateTime? date})

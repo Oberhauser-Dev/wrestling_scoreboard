@@ -13,7 +13,7 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
       required ClientLineup home,
       required ClientLineup guest,
       required List<WeightClass> weightClasses,
-      required List<Person> referees,
+      required Iterable<Person> referees,
       String? location,
       DateTime? date})
       : super(
@@ -41,7 +41,7 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
 
   List<ClientFight> get fights => super.fights.cast<ClientFight>();
 
-  set fights(List<Fight> newFights) {
+  set fights(Iterable<Fight> newFights) {
     if (newFights is List<ClientFight>)
       super.fights = newFights;
     else

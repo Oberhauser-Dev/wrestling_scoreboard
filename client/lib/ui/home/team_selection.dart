@@ -10,7 +10,7 @@ import 'match_selection.dart';
 
 class TeamSelection extends StatelessWidget {
   final String title;
-  final List<ClientTeam> teams;
+  final Iterable<ClientTeam> teams;
   late List<ListGroup> items;
 
   TeamSelection({required this.title, required this.teams});

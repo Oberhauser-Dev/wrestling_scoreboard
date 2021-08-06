@@ -3,3 +3,4 @@ export 'enums/fight_result.dart';
 export 'enums/fight_role.dart';
 export 'enums/gender.dart';
 export 'enums/wrestling_style.dart';
+export 'enums/crud.dart';

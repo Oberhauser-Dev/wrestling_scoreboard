@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class MatchSelection extends StatelessWidget {
   final String title;
-  final List<ClientTeamMatch> matches;
+  final Iterable<ClientTeamMatch> matches;
   late List<ListGroup> items;
 
   MatchSelection({required this.title, required this.matches});

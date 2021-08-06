@@ -41,6 +41,7 @@ dependencies:
   flutter_settings_screens: ^0.3.0-null-safety
   common:
     path: ../common
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_test:

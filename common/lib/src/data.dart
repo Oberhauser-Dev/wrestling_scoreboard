@@ -6,6 +6,7 @@ import 'data/membership.dart';
 import 'data/participation.dart';
 import 'data/team.dart';
 import 'data/team_match/team_match.dart';
+import 'data/tournament/tournament.dart';
 
 export 'data/club.dart';
 export 'data/data_object.dart';
@@ -35,3 +36,57 @@ const List<Type> dataObjectTypes = [
   Team,
   TeamMatch,
 ];
+
+String getTableNameFromType(Type t) {
+  switch (t) {
+    case Club:
+      return 'club';
+    case Fight:
+      return 'fight';
+    case League:
+      return 'league';
+    case Lineup:
+      return 'lineup';
+    case Membership:
+      return 'membership';
+    case Participation:
+      return 'participation';
+    case Team:
+      return 'team';
+    case TeamMatch:
+      return 'team_match';
+    case Tournament:
+      return 'tournament';
+    case Object:
+      return 'object';
+    default:
+      throw UnimplementedError('ClassName for "${t.toString()}" not found.');
+  }
+}
+
+Type getTypeFromTableName(String tableName) {
+  switch (tableName) {
+    case 'club':
+      return Club;
+    case 'fight':
+      return Fight;
+    case 'league':
+      return League;
+    case 'lineup':
+      return Lineup;
+    case 'membership':
+      return Membership;
+    case 'participation':
+      return Participation;
+    case 'team':
+      return Team;
+    case 'team_match':
+      return TeamMatch;
+    case 'tournament':
+      return Tournament;
+    case 'object':
+      return Object;
+    default:
+      throw UnimplementedError('Type for "${tableName.toString()}" not found.');
+  }
+}

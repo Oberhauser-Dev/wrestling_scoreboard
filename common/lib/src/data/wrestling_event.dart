@@ -7,11 +7,11 @@ part 'wrestling_event.g.dart';
 @JsonSerializable()
 class WrestlingEvent extends DataObject {
   final List<Lineup> lineups;
-  final List<Person> referees;
-  List<Person> transcriptWriters = [];
-  List<Person> timeKeepers = [];
-  List<Person> matPresidents = [];
-  List<Person> stewards = [];
+  final Iterable<Person> referees;
+  Iterable<Person> transcriptWriters = [];
+  Iterable<Person> timeKeepers = [];
+  Iterable<Person> matPresidents = [];
+  Iterable<Person> stewards = [];
   DateTime? date;
   String? location;
   int visitorsCount = 0;

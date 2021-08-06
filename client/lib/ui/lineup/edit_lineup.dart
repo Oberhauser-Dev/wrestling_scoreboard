@@ -11,9 +11,9 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 class EditLineup extends StatefulWidget {
   final String title;
   final ClientLineup lineup;
-  final List<Participation> participations;
-  final List<WeightClass> weightClasses;
-  final List<Membership> memberships;
+  final Iterable<Participation> participations;
+  final Iterable<WeightClass> weightClasses;
+  final Iterable<Membership> memberships;
   final Function()? onSubmit;
 
   EditLineup(

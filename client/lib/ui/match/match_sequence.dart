@@ -82,15 +82,15 @@ class MatchSequence extends StatelessWidget {
                   child: StreamBuilder(
                     stream: dataProvider.readManyStream<Fight>(filterObject: match),
                     initialData: match.fights,
-                    builder: (BuildContext context, AsyncSnapshot<List<Fight>> fightSnap) {
+                    builder: (BuildContext context, AsyncSnapshot<Iterable<Fight>> fightSnap) {
                       if (fightSnap.hasError) {
                         throw fightSnap.error!;
                       }
-                      final fights = fightSnap.data as List<ClientFight>;
+                      final fights = fightSnap.data as Iterable<ClientFight>;
                       return ListView.builder(
                         itemCount: fights.length,
                         itemBuilder: (context, index) {
-                          final fight = fights[index];
+                          final fight = fights.elementAt(index);
                           return FightListItem(fight, (fight) => handleSelectedFight(match, fight, context),
                               flexWidthWeight, flexWidthStyle);
                         },

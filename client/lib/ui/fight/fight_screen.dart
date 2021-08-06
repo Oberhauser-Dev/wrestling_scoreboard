@@ -14,7 +14,6 @@ import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
-import 'package:common/src/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';

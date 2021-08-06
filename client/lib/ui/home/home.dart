@@ -9,8 +9,8 @@ import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class Home extends StatelessWidget {
-  late final Future<List<ClientClub>> _clubs;
-  late final Future<List<ClientLeague>> _leagues;
+  late final Future<Iterable<ClientClub>> _clubs;
+  late final Future<Iterable<ClientLeague>> _leagues;
 
   Home() {
     _clubs = dataProvider.readMany<ClientClub>();
