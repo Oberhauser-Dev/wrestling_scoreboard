@@ -21,7 +21,14 @@ abstract class DataProvider {
   Stream<T> readSingleStream<T extends DataObject>(int id);
 
   /// READ: get many objects
-  Stream<Iterable<T>> readManyStream<T extends DataObject>({DataObject? filterObject});
+  Stream<ManyDataObject> readManyStream<T extends DataObject>({DataObject? filterObject}) {
+    final filterType = filterObject == null ? Object : filterObject.getBaseType();
+    var stream = getOrCreateManyStreamController<T>(filterType: filterType).stream;
+    if (filterObject != null) {
+      stream = stream.where((e) => e.filterId == filterObject.id!);
+    }
+    return stream;
+  }
 
   /// READ: get a single raw object
   Future<Map<String, dynamic>> readRawSingle<T extends DataObject>(int id);
@@ -39,8 +46,8 @@ abstract class DataProvider {
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]);
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = Map<Type, StreamController<DataObject>>();
-  final Map<Type, Map<Type, StreamController<Iterable<DataObject>>>> _manyStreamControllers =
-      Map<Type, Map<Type, StreamController<Iterable<DataObject>>>>();
+  final Map<Type, Map<Type, StreamController<ManyDataObject>>> _manyStreamControllers =
+      Map<Type, Map<Type, StreamController<ManyDataObject>>>();
 
   StreamController<T>? getSingleStreamController<T extends DataObject>() {
     return _singleStreamControllers[T] as StreamController<T>?;
@@ -55,20 +62,18 @@ abstract class DataProvider {
     return streamController;
   }
 
-  StreamController<Iterable<T>>? getManyStreamController<T extends DataObject>({Type filterType = Object}) {
-    Map<Type, StreamController<Iterable<T>>>? streamControllersOfType =
-        _manyStreamControllers[T] as Map<Type, StreamController<Iterable<T>>>?;
+  StreamController<ManyDataObject>? getManyStreamController<T extends DataObject>({Type filterType = Object}) {
+    Map<Type, StreamController<ManyDataObject>>? streamControllersOfType = _manyStreamControllers[T];
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
-  StreamController<Iterable<T>> getOrCreateManyStreamController<T extends DataObject>({Type filterType = Object}) {
+  StreamController<ManyDataObject> getOrCreateManyStreamController<T extends DataObject>({Type filterType = Object}) {
     var streamController = getManyStreamController<T>(filterType: filterType);
     if (streamController == null) {
-      streamController = StreamController<Iterable<T>>.broadcast();
-      Map<Type, StreamController<Iterable<T>>>? streamControllersOfType =
-          _manyStreamControllers[T] as Map<Type, StreamController<Iterable<T>>>?;
+      streamController = StreamController<ManyDataObject>.broadcast();
+      Map<Type, StreamController<ManyDataObject>>? streamControllersOfType = _manyStreamControllers[T];
       if (streamControllersOfType == null) {
-        streamControllersOfType = Map<Type, StreamController<Iterable<T>>>();
+        streamControllersOfType = Map<Type, StreamController<ManyDataObject>>();
         _manyStreamControllers[T] = streamControllersOfType;
       }
       streamControllersOfType[filterType] = streamController;

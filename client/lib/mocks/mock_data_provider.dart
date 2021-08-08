@@ -41,31 +41,6 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
     return (getOrCreateSingleStreamController<T>().stream).where((event) => event.id == id);
   }
 
-  @override
-  Stream<Iterable<T>> readManyStream<T extends DataObject>({DataObject? filterObject}) {
-    // TODO avoid dependencies and unify with remote service
-    final filterType = filterObject == null ? Object : filterObject.getBaseType();
-    var stream = getOrCreateManyStreamController<T>(filterType: filterType).stream;
-    if (filterObject != null) {
-      stream = stream.where((e) {
-        if (e is List<Team>) {
-          if (filterObject is Club)
-            return (e as List<Team>).where((element) => element.club == filterObject).isNotEmpty;
-        } else if (e is List<Fight>) {
-          if (filterObject is TeamMatch)
-            return getTeamMatchFights()
-                .where((element) => element.teamMatch == filterObject && (e as List<Fight>).contains(element.fight))
-                .isNotEmpty;
-        } else if (e is List<Participation>) {
-          if (filterObject is Lineup)
-            return (e as List<Participation>).where((element) => element.lineup == filterObject).isNotEmpty;
-        }
-        throw DataUnimplementedError(CRUD.read, T, filterObject);
-      });
-    }
-    return stream;
-  }
-
   List<T> getManyMocksFromClass<T>({DataObject? filterObject}) {
     switch (T) {
       case ClientClub:
@@ -162,7 +137,12 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
     }
     // Currently do not update list of all entities (as is and should not used anywhere)
     if (obj is Participation) {
-      getManyStreamController<Participation>(filterType: Lineup)?.add(getParticipationsOfLineup(obj.lineup));
+      final manyLineupFilter = ManyDataObject(
+        data: getParticipationsOfLineup(obj.lineup),
+        filterType: Lineup,
+        filterId: obj.lineup.id,
+      );
+      getManyStreamController<Participation>(filterType: Lineup)?.add(manyLineupFilter);
     } else if (obj is Lineup) {
       // No filtered list needs to be handled.
     } else {
@@ -171,12 +151,18 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
   }
 
   Future<void> updateMany<T extends DataObject>({DataObject? filterObject}) async {
+    // Currently do not update list of all entities (as is and should not used anywhere)
     switch (T) {
       case Fight:
-        if (filterObject is ClientTeamMatch)
-          return getManyStreamController<Fight>(filterType: TeamMatch)?.add(getFightsOfTeamMatch(filterObject));
-        if (filterObject != null) throw DataUnimplementedError(CRUD.update, T, filterObject);
-        return getManyStreamController<Fight>()?.add(getFights());
+        if (filterObject is ClientTeamMatch) {
+          final manyFilter = ManyDataObject(
+            data: getFightsOfTeamMatch(filterObject),
+            filterType: TeamMatch,
+            filterId: filterObject.id,
+          );
+          return getManyStreamController<Fight>(filterType: TeamMatch)?.add(manyFilter);
+        }
+        throw DataUnimplementedError(CRUD.update, T, filterObject);
       default:
         throw DataUnimplementedError(CRUD.update, filterObject.runtimeType);
     }

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:common/common.dart';
 import 'package:server/controllers/participant_state_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/person_controller.dart';
 import 'package:server/controllers/team_match_fight_controller.dart';
+import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/controllers/weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
 
@@ -59,6 +62,12 @@ class ServerTeamMatch extends TeamMatch {
       );
       fights.add(fight);
     }
+    broadcast(jsonEncode(manyToJson(
+        fights,
+        Fight,
+        CRUD.update,
+        filterType: TeamMatch,
+        filterId: id)));
   }
 }
 
