@@ -107,17 +107,13 @@ class TeamMatchController extends EntityController<TeamMatch> {
         ''');
       if (res.isEmpty) {
         if (e.r != null) {
-          e.r!.id = await ParticipantStateController().createSingle({'participation_id': e.r!.participation.id!});
+          e.r!.id = await ParticipantStateController().createSingle(e.r!);
         }
         if (e.b != null) {
-          e.b!.id = await ParticipantStateController().createSingle({'participation_id': e.b!.participation.id!});
+          e.b!.id = await ParticipantStateController().createSingle(e.b!);
         }
-        final fightId = await FightController().createSingle({
-          if (e.r != null) 'red_id': e.r!.id!,
-          if (e.b != null) 'blue_id': e.b!.id!,
-          'weight_class_id': e.weightClass.id!,
-        });
-        await TeamMatchFightController().createSingle({'team_match_id': teamMatch.id!, 'fight_id': fightId});
+        e.id = await FightController().createSingle(e);
+        await TeamMatchFightController().createSingle(TeamMatchFight(teamMatch: teamMatch, fight: e));
       }
     });
     return Response.ok('{"status": "success"}');
@@ -132,14 +128,27 @@ class TeamMatchController extends EntityController<TeamMatch> {
         await WeightClassController().getMany(); // TODO need extra table for each league with weight classes.
 
     return ServerTeamMatch(
-      id: e['id'] as int?,
+      id: e[primaryKeyName] as int?,
       no: e['no'] as String?,
       home: home!,
       guest: guest!,
       weightClasses: weightClasses,
-      referees: [referee!],
+      referees: [referee!], // TODO need extra table for multiple referees.
       location: e['location'] as String?,
       date: e['date'] as DateTime?,
     );
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(TeamMatch e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'no': e.no,
+      'home_id': e.home.id,
+      'guest_id': e.guest.id,
+      'referee_id': e.referees.first.id,
+      'location': e.location,
+      'date': e.date,
+    };
   }
 }

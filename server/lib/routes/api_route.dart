@@ -28,6 +28,7 @@ class ApiRoute {
     router.get('/clubs', clubController.requestMany);
     router.get('/club/<id|[0-9]+>', clubController.requestSingle);
     router.get('/club/<id|[0-9]+>/teams', clubController.requestTeams);
+    router.get('/club/<id|[0-9]+>/memberships', clubController.requestMemberships);
     // router.get('/club/<no|[0-9]{5}>', clubRequest);
 
     final leagueController = LeagueController();

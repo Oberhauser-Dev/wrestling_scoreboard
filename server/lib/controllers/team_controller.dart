@@ -30,10 +30,21 @@ class TeamController extends EntityController<Team> {
     final leagueId = e['league_id'] as int?;
     final league = leagueId == null ? null : await LeagueController().getSingle(leagueId);
     return Team(
-        id: e['id'] as int?,
+        id: e[primaryKeyName] as int?,
         name: e['name'] as String,
         club: club!,
         description: e['description'] as String?,
         league: league);
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(Team e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'name': e.name,
+      'description': e.description,
+      'club_id': e.club.id,
+      'league_id': e.league?.id,
+    };
   }
 }

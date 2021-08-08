@@ -1,10 +1,19 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
+import 'package:server/controllers/club_controller.dart';
+import 'package:server/controllers/fight_controller.dart';
+import 'package:server/controllers/league_controller.dart';
+import 'package:server/controllers/lineup_controller.dart';
+import 'package:server/controllers/membership_controller.dart';
+import 'package:server/controllers/participation_controller.dart';
+import 'package:server/controllers/team_controller.dart';
+import 'package:server/controllers/team_match_controller.dart';
+import 'package:server/controllers/tournament_controller.dart';
 import 'package:server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 
-abstract class EntityController<T> {
+abstract class EntityController<T extends DataObject> {
   String tableName;
   String primaryKeyName;
 
@@ -29,9 +38,23 @@ abstract class EntityController<T> {
     return many.first;
   }
 
-  Future<int> createSingle(Map<String, Object> values) async {
-    final res = await PostgresDb().connection.query(
-        'INSERT INTO $tableName (${values.keys.join(',')}) VALUES (${values.values.map((e) => e.toString()).join(',')}) RETURNING $primaryKeyName;');
+  Future<int> createSingle(T dataObject) async {
+    final values = parseFromClass(dataObject);
+    final res = await PostgresDb().connection.query('''
+        INSERT INTO $tableName (${values.keys.join(',')}) 
+        VALUES (${values.values.map((e) => e.toString()).join(',')}) RETURNING $primaryKeyName;
+        ''');
+    dataObject.id = res.last[0] as int;
+    return dataObject.id!;
+  }
+
+  Future<int> updateSingle(T dataObject) async {
+    final values = parseFromClass(dataObject);
+    final res = await PostgresDb().connection.query('''
+        UPDATE $tableName 
+        SET ${values.entries.map((e) => '${e.key} = ${e.value}').join(',')} 
+        WHERE $primaryKeyName = ${dataObject.id!} RETURNING $primaryKeyName;
+        ''');
     return res.last[0] as int;
   }
 
@@ -91,9 +114,7 @@ abstract class EntityController<T> {
 
   Future<T> parseToClass(Map<String, dynamic> e);
 
-  /*{
-    throw UnimplementedError('Parsing database object $tableName to ${T.toString()} is not supported yet');
-  }*/
+  Map<String, dynamic> parseFromClass(T e);
 
   bool isRaw(Request request) {
     return (request.url.queryParameters['raw'] ?? '').parseBool();
@@ -142,6 +163,22 @@ abstract class EntityController<T> {
     } else {
       final many = await controller.getManyFromQuery(sqlQuery, substitutionValues: substitutionValues);
       return Response.ok(jsonEncode(many.toList()));
+    }
+  }
+
+  static EntityController getControllerFromDataType(Type t) {
+    switch(t) {
+      case Club: return ClubController();
+      case Fight: return FightController();
+      case League: return LeagueController();
+      case Lineup: return LineupController();
+      case Membership: return MembershipController();
+      case Participation: return ParticipationController();
+      case Team: return TeamController();
+      case TeamMatch: return TeamMatchController();
+      case Tournament: return TournamentController();
+      default:
+        throw UnimplementedError('Controller not available for type: $t');
     }
   }
 }

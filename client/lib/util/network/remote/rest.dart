@@ -43,8 +43,8 @@ class RestDataProvider extends DataProvider {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception(
-          'Failed to READ single ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
+      throw Exception('Failed to READ single ${getBaseType(T).toString()}: ' +
+          (response.reasonPhrase ?? response.statusCode.toString()));
     }
   }
 
@@ -64,8 +64,8 @@ class RestDataProvider extends DataProvider {
         final List json = jsonDecode(response.body);
         return json.map((e) => e as Map<String, dynamic>);
       } else {
-        throw Exception(
-            'Failed to READ many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
+        throw Exception('Failed to READ many ${getBaseType(T).toString()}: ' +
+            (response.reasonPhrase ?? response.statusCode.toString()));
       }
     } catch (e) {
       print(e);
@@ -80,84 +80,74 @@ class RestDataProvider extends DataProvider {
 
   @override
   Stream<Iterable<T>> readManyStream<T extends DataObject>({DataObject? filterObject}) {
-    return getOrCreateManyStreamController<T>(filterType: filterObject?.runtimeType ?? Object).stream;
+    final filterType = filterObject == null ? Object : filterObject.getBaseType();
+    var stream = getOrCreateManyStreamController<T>(filterType: filterType).stream;
+    if (filterObject != null) {
+      stream = stream.where((e) {
+        if (e is List<Team>) {
+          if (filterObject is Club)
+            return (e as List<Team>).where((element) => element.club == filterObject).isNotEmpty;
+        } else if (e is List<Participation>) {
+          if (filterObject is Lineup)
+            return (e as List<Participation>).where((element) => element.lineup == filterObject).isNotEmpty;
+        }
+        throw DataUnimplementedError(CRUD.read, T, filterObject);
+      });
+    }
+    return stream;
   }
 
   _initUpdateStream() {
     final handleSingle = ({required CRUD operation, required DataObject single}) {
-      if (single is Club) return getSingleStreamController<Club>()?.sink.add(single);
-      if (single is Fight) return getSingleStreamController<Fight>()?.sink.add(single);
-      if (single is League) return getSingleStreamController<League>()?.sink.add(single);
-      if (single is Lineup) return getSingleStreamController<Lineup>()?.sink.add(single);
-      if (single is Membership) return getSingleStreamController<Membership>()?.sink.add(single);
-      if (single is Participation) return getSingleStreamController<Participation>()?.sink.add(single);
-      if (single is Team) return getSingleStreamController<Team>()?.sink.add(single);
-      if (single is TeamMatch) return getSingleStreamController<TeamMatch>()?.sink.add(single);
-      if (single is Tournament) return getSingleStreamController<Tournament>()?.sink.add(single);
-      throw DataUnimplementedError(CRUD.read, single.runtimeType);
+      if (operation == CRUD.update) {
+        if (single is Club) return getSingleStreamController<Club>()?.sink.add(single);
+        if (single is Fight) return getSingleStreamController<Fight>()?.sink.add(single);
+        if (single is League) return getSingleStreamController<League>()?.sink.add(single);
+        if (single is Lineup) return getSingleStreamController<Lineup>()?.sink.add(single);
+        if (single is Membership) return getSingleStreamController<Membership>()?.sink.add(single);
+        if (single is Participation) return getSingleStreamController<Participation>()?.sink.add(single);
+        if (single is Team) return getSingleStreamController<Team>()?.sink.add(single);
+        if (single is TeamMatch) return getSingleStreamController<TeamMatch>()?.sink.add(single);
+        if (single is Tournament) return getSingleStreamController<Tournament>()?.sink.add(single);
+        throw DataUnimplementedError(CRUD.read, single.runtimeType);
+      }
     };
 
     final handleMany =
-        ({required CRUD operation, required Iterable<DataObject> many, Type? filterType, int? filterId}) {
-      if (many is Iterable<Club>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Club>()?.sink.add(many);
+        ({required CRUD operation, required Iterable<DataObject> many, Type filterType = Object, int? filterId}) {
+      if (many.isEmpty) return;
+      if (many.first is Club) {
+        return getManyStreamController<Club>(filterType: filterType)?.sink.add(many as Iterable<Club>);
       }
-      if (many is Iterable<Fight>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Fight>()?.sink.add(many);
+      if (many.first is Fight) {
+        return getManyStreamController<Fight>(filterType: filterType)?.sink.add(many as Iterable<Fight>);
       }
-      if (many is Iterable<League>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<League>()?.sink.add(many);
+      if (many.first is League) {
+        return getManyStreamController<League>(filterType: filterType)?.sink.add(many as Iterable<League>);
       }
-      if (many is Iterable<Lineup>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Lineup>()?.sink.add(many);
+      if (many.first is Lineup) {
+        return getManyStreamController<Lineup>(filterType: filterType)?.sink.add(many as Iterable<Lineup>);
       }
-      if (many is Iterable<Membership>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Membership>()?.sink.add(many);
+      if (many.first is Membership) {
+        return getManyStreamController<Membership>(filterType: filterType)?.sink.add(many as Iterable<Membership>);
       }
-      if (many is Iterable<Participation>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Participation>()?.sink.add(many);
+      if (many.first is Participation) {
+        return getManyStreamController<Participation>(filterType: filterType)?.sink.add(many as Iterable<Participation>);
       }
-      if (many is Iterable<Team>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Team>()?.sink.add(many);
+      if (many.first is Team) {
+        return getManyStreamController<Team>(filterType: filterType)?.sink.add(many as Iterable<Team>);
       }
-      if (many is Iterable<TeamMatch>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<TeamMatch>()?.sink.add(many);
+      if (many.first is TeamMatch) {
+        return getManyStreamController<TeamMatch>(filterType: filterType)?.sink.add(many as Iterable<TeamMatch>);
       }
-      if (many is Iterable<Tournament>) {
-        if (filterId != null) {
-          throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
-        }
-        return getManyStreamController<Tournament>()?.sink.add(many);
+      if (many.first is Tournament) {
+        return getManyStreamController<Tournament>()?.sink.add(many as Iterable<Tournament>);
       }
-      throw DataUnimplementedError(CRUD.read, many.first.runtimeType);
+      throw DataUnimplementedError(operation, many.first.runtimeType);
     };
 
-    getSinkStream().listen((event) {
-      final json = jsonDecode(event);
+    getSinkStream().listen((message) {
+      final json = jsonDecode(message);
       handleFromJson(json, handleSingle, handleMany);
     });
   }
@@ -174,17 +164,12 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<int> createOrUpdateSingle(DataObject obj) async {
-    addToSink(jsonEncode(singleToJson(obj, CRUD.create)));
-    if (obj.id != null) {
-      return obj.id!;
-    } else {
-      throw UnimplementedError('Did\'t receive id from server');
-    }
+  Future<void> createOrUpdateSingle(DataObject obj) async {
+    addToSink(jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create)));
   }
 
   @override
-  Future<void> deleteSingle(DataObject obj) {
-    return addToSink(jsonEncode(singleToJson(obj, CRUD.delete)));
+  Future<void> deleteSingle(DataObject obj) async {
+    addToSink(jsonEncode(singleToJson(obj, CRUD.delete)));
   }
 }

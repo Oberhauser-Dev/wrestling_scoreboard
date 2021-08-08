@@ -15,24 +15,19 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
         .map((e) => WeightClass.fromJson(e as Map<String, dynamic>))
         .toList(),
     referees: (json['referees'] as List<dynamic>)
-        .map((e) => Person.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        .map((e) => Person.fromJson(e as Map<String, dynamic>)),
     no: json['no'] as String?,
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
   )
     ..transcriptWriters = (json['transcriptWriters'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-        .toList()
     ..timeKeepers = (json['timeKeepers'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-        .toList()
     ..matPresidents = (json['matPresidents'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-        .toList()
     ..stewards = (json['stewards'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-        .toList()
     ..visitorsCount = json['visitorsCount'] as int
     ..comment = json['comment'] as String
     ..fights = (json['fights'] as List<dynamic>)
@@ -44,11 +39,11 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'id': instance.id,
-      'referees': instance.referees,
-      'transcriptWriters': instance.transcriptWriters,
-      'timeKeepers': instance.timeKeepers,
-      'matPresidents': instance.matPresidents,
-      'stewards': instance.stewards,
+      'referees': instance.referees.toList(),
+      'transcriptWriters': instance.transcriptWriters.toList(),
+      'timeKeepers': instance.timeKeepers.toList(),
+      'matPresidents': instance.matPresidents.toList(),
+      'stewards': instance.stewards.toList(),
       'date': instance.date?.toIso8601String(),
       'location': instance.location,
       'visitorsCount': instance.visitorsCount,

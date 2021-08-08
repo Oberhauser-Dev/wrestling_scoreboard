@@ -13,14 +13,25 @@ class PersonController extends EntityController<Person> {
 
   @override
   Future<Person> parseToClass(Map<String, dynamic> e) async {
-    final gender = genderDecode(e['gender']);
+    final gender = GenderParser.valueOf(e['gender']);
 
     return Person(
-      id: e['id'] as int?,
+      id: e[primaryKeyName] as int?,
       prename: e['prename'] as String,
       surname: e['surname'] as String,
       gender: gender,
       birthDate: e['birthDate'] as DateTime?,
     );
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(Person e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'prename': e.prename,
+      'surname': e.surname,
+      'gender': e.gender?.name,
+      'birthDate': e.birthDate,
+    };
   }
 }

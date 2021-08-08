@@ -16,9 +16,18 @@ class ParticipantStateController extends EntityController<ParticipantState> {
   Future<ParticipantState> parseToClass(Map<String, dynamic> e) async {
     final participation = await ParticipationController().getSingle(e['participation_id'] as int);
     return ParticipantState(
-      id: e['id'] as int?,
+      id: e[primaryKeyName] as int?,
       participation: participation!,
       classificationPoints: e['classification_points'] as int?,
     );
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(ParticipantState e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'participation_id': e.participation.id,
+      'classification_points': e.classificationPoints,
+    };
   }
 }

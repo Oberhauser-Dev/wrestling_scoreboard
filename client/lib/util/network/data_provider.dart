@@ -30,7 +30,7 @@ abstract class DataProvider {
   Future<Iterable<Map<String, dynamic>>> readRawMany<T extends DataObject>({DataObject? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
-  Future<int> createOrUpdateSingle(DataObject obj);
+  Future<void> createOrUpdateSingle(DataObject obj);
 
   /// DELETE: delete a single object
   Future<void> deleteSingle(DataObject obj);
@@ -75,10 +75,4 @@ abstract class DataProvider {
     }
     return streamController;
   }
-}
-
-class DataUnimplementedError extends UnimplementedError {
-  DataUnimplementedError(CRUD operationType, Type type, [DataObject? filterObject])
-      : super(
-            'Data ${operationType.toString().substring(5).toUpperCase()}-request for "${type.toString()}" ${filterObject == null ? '' : 'in "${filterObject.runtimeType.toString()}'}" not found.');
 }

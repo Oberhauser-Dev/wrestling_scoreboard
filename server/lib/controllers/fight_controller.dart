@@ -20,6 +20,16 @@ class FightController extends EntityController<Fight> {
     final r = redId == null ? null : await ParticipantStateController().getSingle(redId);
     final b = blueId == null ? null : await ParticipantStateController().getSingle(blueId);
     final weightClass = await WeightClassController().getSingle(e['weight_class_id'] as int);
-    return Fight(id: e['id'] as int?, r: r, b: b, weightClass: weightClass!);
+    return Fight(id: e[primaryKeyName] as int?, r: r, b: b, weightClass: weightClass!);
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(Fight e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'red_id': e.r?.id,
+      'blue_id': e.b?.id,
+      'weight_class_id': e.weightClass.id,
+    };
   }
 }

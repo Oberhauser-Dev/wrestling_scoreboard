@@ -4,6 +4,8 @@ enum FightRole {
   blue,
 }
 
-FightRole fightRoleDecode(String val) {
-  return FightRole.values.singleWhere((element) => element.toString() == 'FightRole.' + val);
+extension FightRoleParser on FightRole {
+  String get name => toString().split('.').last;
+
+  static FightRole valueOf(String name) => FightRole.values.singleWhere((element) => element.name == name);
 }

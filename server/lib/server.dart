@@ -54,4 +54,17 @@ final _staticHandler = shelf_static.createStaticHandler('public', defaultDocumen
 // Router instance to handler requests.
 final _router = shelf_router.Router()
   ..mount('/api/', ApiRoute().pipeline)
-  ..mount('/ws/', websocketHandler);
+  ..mount('/ws/', (Request request) {
+    try {
+      return websocketHandler(request);
+    } on HijackException catch (error, stackTrace) {
+      // A HijackException should bypass the response-writing logic entirely.
+      print('HijackException thrown on WebsocketHandler.\n$error');
+      // TODO hide stack trace or handle better
+      // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
+      rethrow;
+    } catch (error, stackTrace) {
+      print('Error thrown by handler.\n$error');
+      return Response.internalServerError();
+    }
+  });

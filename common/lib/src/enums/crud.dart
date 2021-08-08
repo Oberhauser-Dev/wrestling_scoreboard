@@ -5,10 +5,8 @@ enum CRUD {
   delete,
 }
 
-CRUD crudDecode(String val) {
-  return CRUD.values.singleWhere((element) => element.toString() == 'CRUD.' + val);
-}
+extension CrudParser on CRUD {
+  String get name => toString().split('.').last;
 
-String crudEncode(CRUD val) {
-  return val.toString().substring(5);
+  static CRUD valueOf(String name) => CRUD.values.singleWhere((element) => element.name == name);
 }

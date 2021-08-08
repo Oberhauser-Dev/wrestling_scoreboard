@@ -3,6 +3,8 @@ enum WrestlingStyle {
   greco, // greco-roman style
 }
 
-WrestlingStyle wrestlingStyleDecode(String val) {
-  return WrestlingStyle.values.singleWhere((element) => element.toString() == 'WrestlingStyle.' + val);
+extension WrestlingStyleParser on WrestlingStyle {
+  String get name => toString().split('.').last;
+
+  static WrestlingStyle valueOf(String name) => WrestlingStyle.values.singleWhere((element) => element.name == name);
 }

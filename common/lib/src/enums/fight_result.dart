@@ -12,6 +12,8 @@ enum FightResult {
   DSQ2, // IN CASE BOTH WRESTLERS HAVE BEEN DISQ. DUE TO INFR. OF THE RULES, BEIDE RINGER DISQ. (UNSPORTLICHKEIT/ REGELWIDRIGKEIT (DQ2)
 }
 
-FightResult fightResultDecode(String val) {
-  return FightResult.values.singleWhere((element) => element.toString() == 'FightResult.' + val);
+extension FightResultParser on FightResult {
+  String get name => toString().split('.').last;
+
+  static FightResult valueOf(String name) => FightResult.values.singleWhere((element) => element.name == name);
 }

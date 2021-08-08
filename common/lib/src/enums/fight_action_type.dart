@@ -6,6 +6,8 @@ enum FightActionType {
   dismissal // red card
 }
 
-FightActionType fightActionTypeDecode(String val) {
-  return FightActionType.values.singleWhere((element) => element.toString() == 'FightActionType.' + val);
+extension FightActionTypeParser on FightActionType {
+  String get name => toString().split('.').last;
+
+  static FightActionType valueOf(String name) => FightActionType.values.singleWhere((element) => element.name == name);
 }

@@ -19,9 +19,18 @@ class TeamMatchFightController extends EntityController<TeamMatchFight> {
     final fight = await FightController().getSingle(e['fight_id'] as int);
 
     return TeamMatchFight(
-      id: e['id'] as int?,
+      id: e[primaryKeyName] as int?,
       teamMatch: teamMatch!,
       fight: fight!,
     );
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(TeamMatchFight e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'team_match_id': e.teamMatch.id,
+      'fight_id': e.fight.id,
+    };
   }
 }

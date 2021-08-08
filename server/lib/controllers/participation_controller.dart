@@ -26,11 +26,22 @@ class ParticipationController extends EntityController<Participation> {
     }
 
     return Participation(
-      id: e['id'] as int?,
+      id: e[primaryKeyName] as int?,
       weightClass: weightClass!,
       lineup: lineup!,
       membership: membership!,
       weight: weight,
     );
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(Participation e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'weight_class_id': e.weightClass.id,
+      'lineup_id': e.lineup.id,
+      'membership_id': e.membership.id,
+      'weight': e.weight.toString(),
+    };
   }
 }

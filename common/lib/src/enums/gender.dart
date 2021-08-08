@@ -5,6 +5,8 @@ enum Gender {
   other,
 }
 
-Gender genderDecode(String val) {
-  return Gender.values.singleWhere((element) => element.toString() == 'Gender.' + val);
+extension GenderParser on Gender {
+  String get name => toString().split('.').last;
+
+  static Gender valueOf(String name) => Gender.values.singleWhere((element) => element.name == name);
 }

@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:common/common.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
-import 'package:wrestling_scoreboard/data/data_object.dart';
 import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/data/lineup.dart';
@@ -44,7 +43,8 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
 
   @override
   Stream<Iterable<T>> readManyStream<T extends DataObject>({DataObject? filterObject}) {
-    final filterType = filterObject == null ? Object : getBaseType(filterObject.runtimeType);
+    // TODO avoid dependencies and unify with remote service
+    final filterType = filterObject == null ? Object : filterObject.getBaseType();
     var stream = getOrCreateManyStreamController<T>(filterType: filterType).stream;
     if (filterObject != null) {
       stream = stream.where((e) {
@@ -56,6 +56,9 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
             return getTeamMatchFights()
                 .where((element) => element.teamMatch == filterObject && (e as List<Fight>).contains(element.fight))
                 .isNotEmpty;
+        } else if (e is List<Participation>) {
+          if (filterObject is Lineup)
+            return (e as List<Participation>).where((element) => element.lineup == filterObject).isNotEmpty;
         }
         throw DataUnimplementedError(CRUD.read, T, filterObject);
       });
@@ -150,21 +153,21 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
   }
 
   @override
-  Future<int> createOrUpdateSingle(DataObject obj) async {
+  Future<void> createOrUpdateSingle(DataObject obj) async {
+    final operation = obj.id == null ? CRUD.create : CRUD.update;
     if (obj.id == null) {
       obj = _createMockSingle(obj);
     } else {
       obj = _updateMockSingle(obj);
     }
+    // Currently do not update list of all entities (as is and should not used anywhere)
     if (obj is Participation) {
-      getManyStreamController<Participation>()?.add(getParticipations());
       getManyStreamController<Participation>(filterType: Lineup)?.add(getParticipationsOfLineup(obj.lineup));
     } else if (obj is Lineup) {
-      getManyStreamController<Lineup>()?.add(getLineups());
+      // No filtered list needs to be handled.
     } else {
-      throw DataUnimplementedError(CRUD.create, obj.runtimeType);
+      throw DataUnimplementedError(operation, obj.runtimeType);
     }
-    return Future.value(obj.id);
   }
 
   Future<void> updateMany<T extends DataObject>({DataObject? filterObject}) async {

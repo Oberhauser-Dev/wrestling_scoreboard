@@ -26,7 +26,7 @@ class TournamentController extends EntityController<Tournament> {
   Future<Tournament> parseToClass(Map<String, dynamic> e) async {
     // TODO fetch lineups, referees, weightClasses, etc.
     return Tournament(
-      id: e['id'] as int?,
+      id: e[primaryKeyName] as int?,
       name: e['name'],
       lineups: [],
       referees: [],
@@ -34,5 +34,15 @@ class TournamentController extends EntityController<Tournament> {
       date: e['date'] as DateTime?,
       weightClasses: [],
     );
+  }
+
+  @override
+  Map<String, dynamic> parseFromClass(Tournament e) {
+    return {
+      if (e.id != null) primaryKeyName: e.id,
+      'name': e.name,
+      'location': e.location,
+      'date': e.date,
+    };
   }
 }

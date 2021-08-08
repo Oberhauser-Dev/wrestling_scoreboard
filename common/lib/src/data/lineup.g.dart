@@ -16,7 +16,6 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
     coach: json['coach'] == null
         ? null
         : Membership.fromJson(json['coach'] as Map<String, dynamic>),
-    tier: json['tier'] as int,
   );
 }
 
@@ -25,5 +24,4 @@ Map<String, dynamic> _$LineupToJson(Lineup instance) => <String, dynamic>{
       'team': instance.team,
       'leader': instance.leader,
       'coach': instance.coach,
-      'tier': instance.tier,
     };

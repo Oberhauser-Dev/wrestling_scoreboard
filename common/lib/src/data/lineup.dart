@@ -12,9 +12,8 @@ class Lineup extends DataObject {
   Team team;
   Membership? leader; // Mannschaftsführer
   Membership? coach; // Trainer
-  final int tier; // Rangordnung
 
-  Lineup({int? id, required this.team, this.leader, this.coach, this.tier = 1}) : super(id);
+  Lineup({int? id, required this.team, this.leader, this.coach}) : super(id);
 
   factory Lineup.fromJson(Map<String, dynamic> json) => _$LineupFromJson(json);
 
