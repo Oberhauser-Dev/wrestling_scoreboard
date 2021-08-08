@@ -14,7 +14,7 @@ class Participation extends DataObject {
   Membership membership;
   Lineup lineup;
   final WeightClass weightClass;
-  final double? weight;
+  double? weight;
 
   Participation({
     int? id,
