@@ -228,12 +228,10 @@ packages:
   postgres:
     dependency: "direct main"
     description:
-      path: "."
-      ref: dev-merge
-      resolved-ref: c6c6385b04ca1f45da0220784e18cdf5d1ff1335
-      url: "https://github.com/Gustl22/postgresql-dart.git"
-    source: git
-    version: "2.3.2"
+      name: postgres
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.0"
   pub_semver:
     dependency: transitive
     description:
@@ -251,12 +249,17 @@ packages:
   sasl_scram:
     dependency: transitive
     description:
-      path: "."
-      ref: main
-      resolved-ref: "26fb03e67e093e0ca1bbaaea3c268b971eb135a6"
-      url: "https://github.com/mongo-dart/sasl_scram.git"
-    source: git
+      name: sasl_scram
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.1.0"
+  saslprep:
+    dependency: transitive
+    description:
+      name: saslprep
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   shelf:
     dependency: "direct main"
     description:
@@ -369,6 +372,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  unorm_dart:
+    dependency: transitive
+    description:
+      name: unorm_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   vm_service:
     dependency: transitive
     description:
