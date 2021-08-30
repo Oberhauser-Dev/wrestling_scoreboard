@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:common/common.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wrestling_scoreboard/mocks/mock_data_provider.dart';
 import 'package:wrestling_scoreboard/util/network/remote/rest.dart';
 
-final _isMock = dotenv.env['APP_ENVIRONMENT'] == 'mock';
+import '../environment.dart';
+
+final _isMock = env(appEnvironment, fallBack: 'development') == 'mock';
 
 final dataProvider = _isMock ? MockDataProvider() : RestDataProvider();
 

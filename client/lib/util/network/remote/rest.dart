@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:wrestling_scoreboard/data/data_object.dart';
+import 'package:wrestling_scoreboard/util/environment.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard/util/network/remote/url.dart';
 
 import 'web_socket.dart';
 
-final _apiUrl = dotenv.env['API_URL'] ?? 'http://localhost:8080/api';
+final _apiUrl = adaptLocalhost(env(apiUrl, fallBack: 'http://localhost:8080/api'));
 
 class RestDataProvider extends DataProvider {
   RestDataProvider() {
