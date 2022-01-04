@@ -14,7 +14,7 @@ packages:
       name: audioplayers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.19.1"
+    version: "0.20.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -77,7 +77,7 @@ packages:
       name: dropdown_search
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.3"
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -122,7 +122,7 @@ packages:
       name: flutter_settings_screens
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.1-null-safety"
+    version: "0.3.2-null-safety"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -175,13 +175,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
-  material_color_utilities:
-    dependency: transitive
-    description:
-      name: material_color_utilities
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   meta:
     dependency: transitive
     description:
@@ -286,7 +279,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.2"
   quiver:
     dependency: "direct main"
     description:
@@ -396,7 +389,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.8"
+    version: "0.4.3"
   typed_data:
     dependency: transitive
     description:
