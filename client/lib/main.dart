@@ -22,7 +22,7 @@ class WrestlingScoreboardApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     return MaterialApp(
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
       theme: ThemeData(

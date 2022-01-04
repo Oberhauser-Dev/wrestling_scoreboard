@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
 import 'package:common/src/util/date_time.dart';
