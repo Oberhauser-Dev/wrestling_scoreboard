@@ -21,6 +21,7 @@ class HeadingItem implements ListItem {
 
   HeadingItem(this.heading);
 
+  @override
   Widget? buildLeading(BuildContext context) => null;
 
   @override
@@ -46,6 +47,7 @@ class ContentItem implements ListItem {
 
   ContentItem(this.title, {this.body, this.icon, this.onTab});
 
+  @override
   Widget? buildLeading(BuildContext context) => icon != null ? Icon(icon) : null;
 
   @override
@@ -53,12 +55,12 @@ class ContentItem implements ListItem {
 
   @override
   Widget? buildSubtitle(BuildContext context) {
-    return (this.body != null) ? Text(this.body!) : null;
+    return (body != null) ? Text(body!) : null;
   }
 
   @override
   Function()? buildOnTab() {
-    return this.onTab;
+    return onTab;
   }
 }
 
@@ -72,7 +74,7 @@ class ListGroup {
 class GroupedList extends StatelessWidget {
   final List<ListGroup> items;
 
-  GroupedList(this.items);
+  const GroupedList(this.items, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +85,7 @@ class GroupedList extends StatelessWidget {
           final item = items[index];
           final List<Widget> tiles = [];
           if (index != 0) {
-            tiles.add(Divider(indent: 16, endIndent: 16));
+            tiles.add(const Divider(indent: 16, endIndent: 16));
           }
           tiles.add(ListTile(
             leading: item.headingItem.buildLeading(context),

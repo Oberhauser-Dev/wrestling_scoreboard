@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class FittedText extends Text {
-  FittedText(
+  const FittedText(
     String data, {
     Key? key,
     TextStyle? style,

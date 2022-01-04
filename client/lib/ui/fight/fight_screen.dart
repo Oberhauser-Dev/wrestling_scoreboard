@@ -24,17 +24,17 @@ class FightScreen extends StatefulWidget {
   final ClientTeamMatch match;
   final ClientFight fight;
 
-  FightScreen(this.match, this.fight);
+  const FightScreen(this.match, this.fight, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return FightState(match, fight);
+    return FightState();
   }
 }
 
 class FightState extends State<FightScreen> {
-  final ClientTeamMatch match;
-  final ClientFight fight;
+  late ClientTeamMatch match;
+  late ClientFight fight;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _fightStopwatch;
   late ObservableStopwatch _breakStopwatch;
@@ -43,7 +43,11 @@ class FightState extends State<FightScreen> {
   int round = 1;
   late Function(FightScreenActionIntent) callback;
 
-  FightState(this.match, this.fight) {
+  @override
+  initState() {
+    super.initState();
+    match = widget.match;
+    fight = widget.fight;
     _r = ParticipantStateModel(fight.r);
     _b = ParticipantStateModel(fight.b);
     _r.injuryStopwatch.limit = match.injuryDuration;
@@ -51,14 +55,14 @@ class FightState extends State<FightScreen> {
       setState(() {
         _r.isInjury = false;
       });
-      callback(FightScreenActionIntent.Horn());
+      callback(const FightScreenActionIntent.Horn());
     });
     _b.injuryStopwatch.limit = match.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
       });
-      callback(FightScreenActionIntent.Horn());
+      callback(const FightScreenActionIntent.Horn());
     });
 
     stopwatch = _fightStopwatch = ObservableStopwatch(
@@ -91,7 +95,7 @@ class FightState extends State<FightScreen> {
               _b.activityStopwatch!.dispose();
               _b.activityStopwatch = null;
             }
-            callback(FightScreenActionIntent.Horn());
+            callback(const FightScreenActionIntent.Horn());
             if (round < match.maxRounds) {
               setState(() {
                 stopwatch = _breakStopwatch;
@@ -116,7 +120,7 @@ class FightState extends State<FightScreen> {
         setState(() {
           stopwatch = _fightStopwatch;
         });
-        callback(FightScreenActionIntent.Horn());
+        callback(const FightScreenActionIntent.Horn());
       }
     });
     callback = (FightScreenActionIntent intent) {
@@ -135,7 +139,7 @@ class FightState extends State<FightScreen> {
                 pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
             style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white),
           ))),
-      Container(
+      SizedBox(
           height: cellHeight,
           child: Center(
               child: Text(
@@ -195,12 +199,12 @@ class FightState extends State<FightScreen> {
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
-          callback(FightScreenActionIntent.Horn());
+          callback(const FightScreenActionIntent.Horn());
           psm.activityStopwatch?.dispose();
           setState(() {
             psm.activityStopwatch = null;
           });
-          callback(FightScreenActionIntent.Horn());
+          callback(const FightScreenActionIntent.Horn());
         });
         break;
       case FightScreenActions.RedInjuryTime:
@@ -208,9 +212,9 @@ class FightState extends State<FightScreen> {
         setState(() {
           psm.isInjury = !psm.isInjury;
         });
-        if (psm.isInjury)
+        if (psm.isInjury) {
           psm.injuryStopwatch.start();
-        else {
+        } else {
           psm.injuryStopwatch.stop();
         }
         break;
@@ -227,7 +231,7 @@ class FightState extends State<FightScreen> {
           setState(() {
             psm.activityStopwatch = null;
           });
-          callback(FightScreenActionIntent.Horn());
+          callback(const FightScreenActionIntent.Horn());
         });
         break;
       case FightScreenActions.BlueInjuryTime:
@@ -235,9 +239,9 @@ class FightState extends State<FightScreen> {
         setState(() {
           psm.isInjury = !psm.isInjury;
         });
-        if (psm.isInjury)
+        if (psm.isInjury) {
           psm.injuryStopwatch.start();
-        else {
+        } else {
           psm.injuryStopwatch.stop();
         }
         break;
@@ -273,7 +277,7 @@ class FightState extends State<FightScreen> {
         bottomNavigationBar: BottomAppBar(
           child: Row(children: [
             IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context, false);
               },
@@ -303,7 +307,7 @@ class FightState extends State<FightScreen> {
                                   padding: EdgeInsets.all(padding),
                                   child: Center(
                                       child: Text(
-                                        '${AppLocalizations.of(context)!.fight} ${match.fights.indexOf(this.fight) + 1}',
+                                        '${AppLocalizations.of(context)!.fight} ${match.fights.indexOf(fight) + 1}',
                                         style: fontStyleInfo,
                                       )))),
                         ]),
@@ -333,17 +337,17 @@ class FightState extends State<FightScreen> {
                     displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
                     Expanded(
                         flex: 2,
-                        child: Container(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
+                        child: SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
                     Expanded(
                         flex: 50,
-                        child: Container(
+                        child: SizedBox(
                           height: cellHeightClock,
                           child: Center(child: TimeDisplay(stopwatch, stopwatchColor)),
                         )),
                     Expanded(
                         flex: 2,
                         child:
-                        Container(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
+                        SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
                     displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                   ],
                 ),

@@ -109,11 +109,17 @@ class FightActionHandler extends StatelessWidget {
   final ClientFight fight;
   final Function(FightScreenActions action) doAction;
 
-  FightActionHandler(
-      {required this.child, required this.stopwatch, required this.match, required this.fight, required this.doAction});
+  const FightActionHandler(
+      {required this.child,
+      required this.stopwatch,
+      required this.match,
+      required this.fight,
+      required this.doAction,
+      Key? key})
+      : super(key: key);
 
   handleIntent(FightScreenActionIntent intent, {BuildContext? context}) {
-    handleIntentStatic(intent, this.stopwatch, this.match, this.fight, this.doAction, context: context);
+    handleIntentStatic(intent, stopwatch, match, fight, doAction, context: context);
   }
 
   static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, ClientTeamMatch match,
@@ -127,10 +133,11 @@ class FightActionHandler extends StatelessWidget {
         stopwatch.addDuration(const Duration(seconds: 1));
         break;
       case FightScreenActions.RmOneSec:
-        if (stopwatch.elapsed > const Duration(seconds: 1))
+        if (stopwatch.elapsed > const Duration(seconds: 1)) {
           stopwatch.addDuration(-const Duration(seconds: 1));
-        else
-          stopwatch.addDuration(-stopwatch.elapsed); // Do not reset, as it will may stop the timer
+        } else {
+          stopwatch.addDuration(-stopwatch.elapsed);
+        } // Do not reset, as it will may stop the timer
         break;
       case FightScreenActions.Reset:
         stopwatch.reset();
@@ -242,15 +249,15 @@ class FightActionHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final redOneIntent = const FightScreenActionIntent.RedOne();
-    final redTwoIntent = const FightScreenActionIntent.RedTwo();
-    final redThreeIntent = const FightScreenActionIntent.RedThree();
-    final redFourIntent = const FightScreenActionIntent.RedFour();
+    const redOneIntent = FightScreenActionIntent.RedOne();
+    const redTwoIntent = FightScreenActionIntent.RedTwo();
+    const redThreeIntent = FightScreenActionIntent.RedThree();
+    const redFourIntent = FightScreenActionIntent.RedFour();
 
-    final blueOneIntent = const FightScreenActionIntent.BlueOne();
-    final blueTwoIntent = const FightScreenActionIntent.BlueTwo();
-    final blueThreeIntent = const FightScreenActionIntent.BlueThree();
-    final blueFourIntent = const FightScreenActionIntent.BlueFour();
+    const blueOneIntent = FightScreenActionIntent.BlueOne();
+    const blueTwoIntent = FightScreenActionIntent.BlueTwo();
+    const blueThreeIntent = FightScreenActionIntent.BlueThree();
+    const blueFourIntent = FightScreenActionIntent.BlueFour();
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
         LogicalKeySet(LogicalKeyboardKey.space): const FightScreenActionIntent.StartStop(),

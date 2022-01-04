@@ -37,30 +37,37 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
 
   factory ClientTeamMatch.fromJson(Map<String, dynamic> json) => ClientTeamMatch.from(TeamMatch.fromJson(json));
 
+  @override
   List<ClientLineup> get lineups => super.lineups.cast<ClientLineup>();
 
+  @override
   List<ClientFight> get fights => super.fights.cast<ClientFight>();
 
+  @override
   set fights(Iterable<Fight> newFights) {
-    if (newFights is List<ClientFight>)
+    if (newFights is List<ClientFight>) {
       super.fights = newFights;
-    else
+    } else {
       super.fights = newFights.map((e) => ClientFight.from(e)).toList();
+    }
   }
 
+  @override
   Future<void> generateFights() async {
     super.fights = [];
     final homeParticipations = await dataProvider.readMany<Participation>(filterObject: home);
     final guestParticipations = await dataProvider.readMany<Participation>(filterObject: guest);
     for (final weightClass in weightClasses) {
       final homePartList = homeParticipations.where((el) => el.weightClass == weightClass);
-      if (homePartList.length > 1)
+      if (homePartList.length > 1) {
         throw Exception(
             'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}');
+      }
       final guestPartList = guestParticipations.where((el) => (el.weightClass == weightClass));
-      if (guestPartList.length > 1)
+      if (guestPartList.length > 1) {
         throw Exception(
             'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}');
+      }
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
@@ -11,13 +10,12 @@ import 'match_selection.dart';
 class TeamSelection extends StatelessWidget {
   final String title;
   final Iterable<ClientTeam> teams;
-  late List<ListGroup> items;
 
-  TeamSelection({required this.title, required this.teams});
+  const TeamSelection({Key? key, required this.title, required this.teams}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    items = [
+    final items = [
       ListGroup(HeadingItem(AppLocalizations.of(context)!.team),
           teams.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))))
     ];

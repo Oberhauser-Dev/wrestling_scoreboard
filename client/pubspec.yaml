@@ -42,6 +42,7 @@ dependencies:
   common:
     path: ../common
   web_socket_channel: ^2.1.0
+  flutter_lints: ^1.0.4
 
 dev_dependencies:
   flutter_test:

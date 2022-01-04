@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class Settings extends StatelessWidget {
-  const Settings();
+  const Settings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class Settings extends StatelessWidget {
             subtitle: 'English',
             // leading: Icon(Icons.language),
             selected: 0,
-            values: <int, String>{
+            values: const <int, String>{
               0: 'English',
               1: 'German',
             },
@@ -26,7 +26,7 @@ class Settings extends StatelessWidget {
           ),
           SwitchSettingsTile(
             title: 'Use fingerprint (Fake setting)',
-            leading: Icon(Icons.fingerprint),
+            leading: const Icon(Icons.fingerprint),
             defaultValue: value,
             onChange: (bool value) {},
             settingKey: 'key-fingerprint',

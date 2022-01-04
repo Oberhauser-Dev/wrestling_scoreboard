@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
   late final Future<Iterable<ClientClub>> _clubs;
   late final Future<Iterable<ClientLeague>> _leagues;
 
-  Home() {
+  Home({Key? key}) : super(key: key) {
     _clubs = dataProvider.readMany<ClientClub>();
     _leagues = dataProvider.readMany<ClientLeague>();
   }
@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
       body: FutureBuilder<List<dynamic>>(
           future: Future.wait([_clubs, _leagues]), // a previously-obtained Future<String> or null
@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
               ];
               return GroupedList(items);
             } else {
-              return Center(child: Text('Cannot access data!'));
+              return const Center(child: Text('Cannot access data!'));
             }
           }),
     );

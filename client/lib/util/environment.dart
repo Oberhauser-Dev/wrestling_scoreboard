@@ -19,9 +19,7 @@ String env(String variable, {String fallBack = ''}) {
   }
   if (fromEnv == null || fromEnv.isEmpty) {
     fromEnv = dotenv.env[variable];
-    if (fromEnv == null) {
-      fromEnv = fallBack;
-    }
+    fromEnv ??= fallBack;
   }
   return fromEnv;
 }

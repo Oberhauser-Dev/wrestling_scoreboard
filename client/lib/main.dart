@@ -12,9 +12,9 @@ void main() async {
 }
 
 class WrestlingScoreboardApp extends StatelessWidget {
-  Locale _locale = Locale('en');
+  final Locale _locale = const Locale('en');
 
-  WrestlingScoreboardApp() {
+  WrestlingScoreboardApp({Key? key}) : super(key: key) {
     (() async {
       await Settings.init(cacheProvider: SharePreferenceCache());
     })();
@@ -34,18 +34,18 @@ class WrestlingScoreboardApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       themeMode: ThemeMode.dark,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en', ''),
-        const Locale('de', ''),
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('de', ''),
       ],
       locale: _locale,
-      home: AppNavigation(),
+      home: const AppNavigation(),
     );
   }
 }

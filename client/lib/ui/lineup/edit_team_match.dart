@@ -11,13 +11,12 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 class EditTeamMatch extends StatelessWidget {
   final String title;
   final ClientTeamMatch match;
-  late List<ListGroup> items;
 
-  EditTeamMatch({required this.title, required this.match});
+  const EditTeamMatch({required this.title, required this.match, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    items = [
+    final items = [
       ListGroup(
         HeadingItem(AppLocalizations.of(context)!.match),
         [

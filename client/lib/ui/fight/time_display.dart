@@ -1,12 +1,12 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
-import 'package:common/src/util/date_time.dart';
 
 class TimeDisplay extends StatefulWidget {
-  MaterialColor color;
-  ObservableStopwatch stopwatch;
+  final MaterialColor color;
+  final ObservableStopwatch stopwatch;
 
-  TimeDisplay(this.stopwatch, this.color);
+  const TimeDisplay(this.stopwatch, this.color, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TimeDisplayState();

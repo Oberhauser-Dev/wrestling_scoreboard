@@ -46,9 +46,9 @@ abstract class DataProvider {
   /// CREATE: generate fights of a wrestling event
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]);
 
-  final Map<Type, StreamController<DataObject>> _singleStreamControllers = Map<Type, StreamController<DataObject>>();
+  final Map<Type, StreamController<DataObject>> _singleStreamControllers = <Type, StreamController<DataObject>>{};
   final Map<Type, Map<Type, StreamController<ManyDataObject>>> _manyStreamControllers =
-      Map<Type, Map<Type, StreamController<ManyDataObject>>>();
+      <Type, Map<Type, StreamController<ManyDataObject>>>{};
 
   StreamController<T>? getSingleStreamController<T extends DataObject>() {
     return _singleStreamControllers[T] as StreamController<T>?;
@@ -74,7 +74,7 @@ abstract class DataProvider {
       streamController = StreamController<ManyDataObject>.broadcast();
       Map<Type, StreamController<ManyDataObject>>? streamControllersOfType = _manyStreamControllers[T];
       if (streamControllersOfType == null) {
-        streamControllersOfType = Map<Type, StreamController<ManyDataObject>>();
+        streamControllersOfType = <Type, StreamController<ManyDataObject>>{};
         _manyStreamControllers[T] = streamControllersOfType;
       }
       streamControllersOfType[filterType] = streamController;

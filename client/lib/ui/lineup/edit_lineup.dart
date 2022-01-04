@@ -17,13 +17,13 @@ class EditLineup extends StatefulWidget {
   final Iterable<Membership> memberships;
   final Function()? onSubmit;
 
-  EditLineup(
-      {required this.title,
+  const EditLineup(
+      {Key? key, required this.title,
       required this.weightClasses,
       required this.lineup,
       required this.participations,
       required this.memberships,
-      this.onSubmit});
+      this.onSubmit}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => EditLineupState();
@@ -35,11 +35,14 @@ class EditLineupState extends State<EditLineup> {
   Membership? _leader;
   Membership? _coach;
   late Map<WeightClass, Participation?> _participations;
-  HashSet<Participation> _deleteParticipations = HashSet();
-  HashSet<Participation> _createOrUpdateParticipations = HashSet();
+  final HashSet<Participation> _deleteParticipations = HashSet();
+  final HashSet<Participation> _createOrUpdateParticipations = HashSet();
 
-  Future<List<Membership>> filterMemberships(String filter) async {
-    return widget.memberships.where((element) => element.person.fullName.contains(filter)).toList();
+  Future<List<Membership>> filterMemberships(String? filter) async {
+    return (filter == null
+            ? widget.memberships
+            : widget.memberships.where((element) => element.person.fullName.contains(filter)))
+        .toList();
   }
 
   Widget getPersonDropdown(
@@ -49,14 +52,13 @@ class EditLineupState extends State<EditLineup> {
       void Function(Membership? value)? onSaved,
       required BuildContext context}) {
     return DropdownSearch<Membership>(
-      dropdownSearchDecoration: InputDecoration(),
-      searchBoxDecoration: InputDecoration(prefixIcon: const Icon(Icons.search)),
+      dropdownSearchDecoration: InputDecoration(labelText: label),
+      searchFieldProps: TextFieldProps(decoration: const InputDecoration(prefixIcon: Icon(Icons.search))),
       mode: Mode.MENU,
       showSearchBox: true,
       showClearButton: true,
-      label: label,
-      onFind: (String filter) => filterMemberships(filter),
-      itemAsString: (Membership u) => u.person.fullName,
+      onFind: (String? filter) => filterMemberships(filter),
+      itemAsString: (Membership? u) => u?.person.fullName ?? '',
       selectedItem: membership,
       onChanged: onChanged,
       onSaved: onSaved,
@@ -95,13 +97,13 @@ class EditLineupState extends State<EditLineup> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(widget.title),
           actions: [
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.save),
                   onPressed: () => handleSubmit(context),
@@ -112,7 +114,7 @@ class EditLineupState extends State<EditLineup> {
         body: SingleChildScrollView(
           child: Center(
             child: Container(
-              constraints: BoxConstraints(maxWidth: 1140),
+              constraints: const BoxConstraints(maxWidth: 1140),
               child: Column(
                 children: [
                   ListTile(title: HeadingText(widget.lineup.team.name)),
@@ -143,7 +145,7 @@ class EditLineupState extends State<EditLineup> {
                           Expanded(
                             flex: 80,
                             child: Container(
-                              padding: EdgeInsets.only(right: 8, top: 8, bottom: 8),
+                              padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
                               child: getPersonDropdown(
                                 membership: participation?.membership,
                                 label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name}',
@@ -173,12 +175,12 @@ class EditLineupState extends State<EditLineup> {
                           Expanded(
                             flex: 20,
                             child: Container(
-                              padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
+                              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
                               child: TextFormField(
                                 initialValue: participation?.weight?.toString() ?? '',
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(vertical: 20),
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
                                     labelText: AppLocalizations.of(context)!.weight),
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))

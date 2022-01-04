@@ -85,45 +85,45 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
     if (reset) {
       if (wrestlingEvent is TeamMatch) {
         final teamMatchFightsAll = getTeamMatchFights();
-        wrestlingEvent.fights.forEach((element) {
+        for (var element in wrestlingEvent.fights) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.equalDuringFight(element));
-        });
+        }
       } else if (wrestlingEvent is Tournament) {
         final tournamentFightsAll = getTournamentFights();
-        wrestlingEvent.fights.forEach((element) {
+        for (var element in wrestlingEvent.fights) {
           tournamentFightsAll.removeWhere((tof) => tof.fight.equalDuringFight(element));
-        });
+        }
       }
 
       // Remove if exists
-      wrestlingEvent.fights.forEach((element) {
+      for (var element in wrestlingEvent.fights) {
         fightsAll.remove(element);
-      });
+      }
     }
     // Generate new fights
     await wrestlingEvent.generateFights();
     // Add if not exists
-    wrestlingEvent.fights.forEach((element) {
+    for (var element in wrestlingEvent.fights) {
       if (!fightsAll.contains(element)) {
         fightsAll.add(ClientFight.from(element));
       }
-    });
+    }
     if (wrestlingEvent is TeamMatch) {
       final teamMatchFightsAll = getTeamMatchFights();
-      wrestlingEvent.fights.forEach((element) {
+      for (var element in wrestlingEvent.fights) {
         if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
           teamMatchFightsAll.add(TeamMatchFight(teamMatch: wrestlingEvent, fight: element));
         }
-      });
+      }
       updateMany<Fight>(filterObject: wrestlingEvent);
     } else if (wrestlingEvent is Tournament) {
       final tournamentFightsAll = getTournamentFights();
-      wrestlingEvent.fights.forEach((element) {
+      for (var element in wrestlingEvent.fights) {
         if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
           tournamentFightsAll.add(TournamentFight(tournament: wrestlingEvent, fight: element));
         }
-      });
+      }
     }
   }
 

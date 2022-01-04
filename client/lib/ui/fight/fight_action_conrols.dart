@@ -9,7 +9,7 @@ class FightActionControls extends StatelessWidget {
   final FightRole role;
   final Function(FightScreenActionIntent) callback;
 
-  FightActionControls(this.role, this.callback);
+  const FightActionControls(this.role, this.callback, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,28 +21,28 @@ class FightActionControls extends StatelessWidget {
     var actions = <Widget>[
       displayActionControl(
           '1',
-          () => callback(isRed ? const FightScreenActionIntent.RedOne() : FightScreenActionIntent.BlueOne()),
+          () => callback(isRed ? const FightScreenActionIntent.RedOne() : const FightScreenActionIntent.BlueOne()),
           color,
           padding),
       displayActionControl(
           '2',
-          () => callback(isRed ? const FightScreenActionIntent.RedTwo() : FightScreenActionIntent.BlueTwo()),
+          () => callback(isRed ? const FightScreenActionIntent.RedTwo() : const FightScreenActionIntent.BlueTwo()),
           color,
           padding),
       displayActionControl(
           '4',
-          () => callback(isRed ? const FightScreenActionIntent.RedFour() : FightScreenActionIntent.BlueFour()),
+          () => callback(isRed ? const FightScreenActionIntent.RedFour() : const FightScreenActionIntent.BlueFour()),
           color,
           padding),
       displayActionControl(
           'P',
           () =>
-              callback(isRed ? const FightScreenActionIntent.RedPassivity() : FightScreenActionIntent.BluePassivity()),
+              callback(isRed ? const FightScreenActionIntent.RedPassivity() : const FightScreenActionIntent.BluePassivity()),
           color,
           padding),
       displayActionControl(
           'O',
-          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : FightScreenActionIntent.BlueCaution()),
+          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : const FightScreenActionIntent.BlueCaution()),
           color,
           padding),
       /*displayActionControl(
@@ -54,18 +54,18 @@ class FightActionControls extends StatelessWidget {
       displayActionControl(
           AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           () => callback(
-              isRed ? const FightScreenActionIntent.RedActivityTime() : FightScreenActionIntent.BlueActivityTime()),
+              isRed ? const FightScreenActionIntent.RedActivityTime() : const FightScreenActionIntent.BlueActivityTime()),
           color,
           padding),
       displayActionControl(
           AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
           () => callback(
-              isRed ? const FightScreenActionIntent.RedInjuryTime() : FightScreenActionIntent.BlueInjuryTime()),
+              isRed ? const FightScreenActionIntent.RedInjuryTime() : const FightScreenActionIntent.BlueInjuryTime()),
           color,
           padding),
       displayActionControl(
           '⎌',
-          () => callback(isRed ? const FightScreenActionIntent.RedUndo() : FightScreenActionIntent.BlueUndo()),
+          () => callback(isRed ? const FightScreenActionIntent.RedUndo() : const FightScreenActionIntent.BlueUndo()),
           color,
           padding),
     ];

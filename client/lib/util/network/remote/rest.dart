@@ -24,11 +24,13 @@ class RestDataProvider extends DataProvider {
     return '/${getTableNameFromType(getBaseType(t))}';
   }
 
+  @override
   Future<T> readSingle<T extends DataObject>(int id) async {
     final json = await readRawSingle<T>(id, isRaw: false);
     return toClientObject(getBaseType(T).fromJson(json)) as T;
   }
 
+  @override
   Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
     final json = await readRawMany<T>(filterObject: filterObject, isRaw: false);
     return json.map((e) => (toClientObject(getBaseType(T).fromJson(e)) as T)).toList();
@@ -69,7 +71,7 @@ class RestDataProvider extends DataProvider {
       }
     } catch (e) {
       print(e);
-      throw e;
+      rethrow;
     }
   }
 
@@ -79,7 +81,7 @@ class RestDataProvider extends DataProvider {
   }
 
   _initUpdateStream() {
-    final handleSingle = ({required CRUD operation, required DataObject single}) {
+    handleSingle({required CRUD operation, required DataObject single}) {
       single = toClientObject(single);
       if (operation == CRUD.update) {
         if (single is Club) return getSingleStreamController<Club>()?.sink.add(single);
@@ -93,9 +95,9 @@ class RestDataProvider extends DataProvider {
         if (single is Tournament) return getSingleStreamController<Tournament>()?.sink.add(single);
         throw DataUnimplementedError(CRUD.read, single.runtimeType);
       }
-    };
+    }
 
-    final handleMany = ({required CRUD operation, required ManyDataObject many}) {
+    handleMany({required CRUD operation, required ManyDataObject many}) {
       final data = many.data = many.data.map((e) => toClientObject(e));
       final filterType = many.filterType;
       if (data.isEmpty) return;
@@ -127,7 +129,7 @@ class RestDataProvider extends DataProvider {
         return getManyStreamController<Tournament>()?.sink.add(many);
       }
       throw DataUnimplementedError(operation, data.first.runtimeType);
-    };
+    }
 
     getSinkStream().listen((message) {
       final json = jsonDecode(message);

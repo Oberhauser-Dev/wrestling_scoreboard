@@ -18,7 +18,7 @@ import 'common_elements.dart';
 class MatchSequence extends StatelessWidget {
   final ClientTeamMatch match;
 
-  MatchSequence(this.match);
+  const MatchSequence(this.match, {Key? key}) : super(key: key);
 
   handleSelectedFight(ClientTeamMatch match, ClientFight fight, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
@@ -47,13 +47,13 @@ class MatchSequence extends StatelessWidget {
             bottomNavigationBar: BottomAppBar(
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: () => handleEditLineups(match, context),
                 ),
               ]),
@@ -73,7 +73,7 @@ class MatchSequence extends StatelessWidget {
                     ),
                     ...CommonElements.getTeamHeader(match, context),
                   ]),
-                  Divider(
+                  const Divider(
                     height: 1,
                   ),
                 ]),
@@ -91,7 +91,7 @@ class MatchSequence extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final ClientFight fight = fights.elementAt(index);
                           return FightListItem(fight, (fight) => handleSelectedFight(match, fight, context),
-                              flexWidthWeight, flexWidthStyle);
+                              flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
                         },
                       );
                     },
@@ -110,7 +110,7 @@ class FightListItem extends StatelessWidget {
   final int flexWidthWeight;
   final int flexWidthStyle;
 
-  FightListItem(this.fight, this.listItemCallback, [this.flexWidthWeight = 12, this.flexWidthStyle = 5]);
+  const FightListItem(this.fight, this.listItemCallback, {this.flexWidthWeight = 12, this.flexWidthStyle = 5, Key? key}) : super(key: key);
 
   displayName(ClientParticipantState? pStatus, FightRole role, double fontSize, BuildContext context) {
     return Container(
@@ -150,12 +150,10 @@ class FightListItem extends StatelessWidget {
                       )),
                   Expanded(
                       flex: flexWidthStyle,
-                      child: Container(
-                        child: Center(
-                            child: Text(
-                                '${fight.weightClass.style == WrestlingStyle.free ? AppLocalizations.of(context)!.freeStyleAbbr : AppLocalizations.of(context)!.grecoRomanAbbr}',
-                                style: fontStyleDefault)),
-                      )),
+                      child: Center(
+                          child: Text(
+                              fight.weightClass.style == WrestlingStyle.free ? AppLocalizations.of(context)!.freeStyleAbbr : AppLocalizations.of(context)!.grecoRomanAbbr,
+                              style: fontStyleDefault))),
                   Expanded(
                       flex: 55,
                       child: ChangeNotifierProvider.value(
@@ -217,13 +215,11 @@ class FightListItem extends StatelessWidget {
                                       )),
                                   Expanded(
                                       flex: 50,
-                                      child: Container(
-                                        child: Center(
-                                          child: data.winner != null
-                                              ? Text(durationToString(data.duration),
-                                                  style: TextStyle(fontSize: fontSizeDefault / 2))
-                                              : null,
-                                        ),
+                                      child: Center(
+                                        child: data.winner != null
+                                            ? Text(durationToString(data.duration),
+                                                style: TextStyle(fontSize: fontSizeDefault / 2))
+                                            : null,
                                       )),
                                 ],
                               ))),
@@ -272,7 +268,7 @@ class FightListItem extends StatelessWidget {
                   ),
                 ]),
               )),
-          Divider(
+          const Divider(
             height: 1,
           ),
         ]));

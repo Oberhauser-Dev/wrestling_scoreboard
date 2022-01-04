@@ -30,14 +30,17 @@ class ClientFight extends Fight with ChangeNotifier {
 
   factory ClientFight.fromJson(Map<String, dynamic> json) => ClientFight.from(Fight.fromJson(json));
 
+  @override
   ClientParticipantState? get r {
     return super.r != null ? super.r as ClientParticipantState : null;
   }
 
+  @override
   ClientParticipantState? get b {
     return super.b != null ? super.b as ClientParticipantState : null;
   }
 
+  @override
   set duration(Duration duration) {
     super.duration = duration;
     notifyListeners();
@@ -52,6 +55,7 @@ class ClientFight extends Fight with ChangeNotifier {
     return false;
   }
 
+  @override
   removeAction(FightAction action) {
     super.removeAction(action);
     notifyListeners();

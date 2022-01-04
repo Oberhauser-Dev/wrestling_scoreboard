@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class HeadingText extends StatelessWidget {
-  String heading;
+  final String heading;
 
-  HeadingText(this.heading);
+  const HeadingText(this.heading, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(bottom: 10, top: 20),
+        padding: const EdgeInsets.only(bottom: 10, top: 20),
         child: Text(
           heading.toUpperCase(),
           style: Theme.of(context).textTheme.caption,
