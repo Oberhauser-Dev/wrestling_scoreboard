@@ -67,7 +67,7 @@ class MatchSequence extends StatelessWidget {
                       flex: flexWidthWeight + flexWidthStyle,
                       child: Container(
                         child: FittedText(
-                            '${match.league}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referees.map((e) => e.fullName).join(', ')}'),
+                            '${match.league.name}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referees.map((e) => e.fullName).join(', ')}'),
                         padding: EdgeInsets.all(padding),
                       ),
                     ),
