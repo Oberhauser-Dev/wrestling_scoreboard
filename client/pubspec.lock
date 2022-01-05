@@ -175,6 +175,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
+  libwinmedia:
+    dependency: "direct main"
+    description:
+      name: libwinmedia
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   lints:
     dependency: transitive
     description:
@@ -211,7 +218,7 @@ packages:
     source: hosted
     version: "1.8.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"

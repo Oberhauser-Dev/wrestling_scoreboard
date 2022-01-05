@@ -241,8 +241,7 @@ class FightActionHandler extends StatelessWidget {
         if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);
         break;
       case FightScreenActions.Horn:
-        var sound = HornSound();
-        sound.play();
+        HornSound().play();
         break;
     }
   }

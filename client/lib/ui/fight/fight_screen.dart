@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_state_model.dart';
+import 'package:wrestling_scoreboard/util/audio/audio.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
@@ -27,9 +28,7 @@ class FightScreen extends StatefulWidget {
   const FightScreen(this.match, this.fight, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return FightState();
-  }
+  State<StatefulWidget> createState() => FightState();
 }
 
 class FightState extends State<FightScreen> {
@@ -46,6 +45,7 @@ class FightState extends State<FightScreen> {
   @override
   initState() {
     super.initState();
+    HornSound();
     match = widget.match;
     fight = widget.fight;
     _r = ParticipantStateModel(fight.r);
@@ -367,8 +367,9 @@ class FightState extends State<FightScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
+    await HornSound().dispose();
     _fightStopwatch.dispose();
     _breakStopwatch.dispose();
   }

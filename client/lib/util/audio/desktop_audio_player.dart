@@ -1,23 +1,44 @@
-// import 'package:dart_vlc/dart_vlc.dart';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
+import 'package:libwinmedia/libwinmedia.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'audio.dart';
 
 class DesktopAudioPlayer implements Playable {
-  // Player player = Player(id: 1337);
+  late Player player;
 
-  DesktopAudioPlayer();
-
-  @override
-  void play() async {
-    // player.play();
-    throw UnimplementedError('Desktop Audio is not supported yet!');
+  DesktopAudioPlayer() {
+    LWM.initialize();
+    player = Player(id: 0);
   }
 
   @override
-  set source(String url) {
-    /*(() async {
-      Media media = await Media.asset(url);
-      player.open(media);
-    })();*/
+  Future<void> play() async {
+    player.jump(0);
+    player.play();
+  }
+
+  @override
+  setSource(String url) async {
+    // Create absolute file path to access it via the player
+    Directory directory = await getTemporaryDirectory();
+    final tmpPath = join(directory.path, url.split("/").last);
+    final tmpFile = File(tmpPath);
+    if (!await tmpFile.exists()) {
+      ByteData data = await rootBundle.load(url);
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await tmpFile.writeAsBytes(bytes);
+    }
+    player.open([
+      Media(uri: 'file://$tmpPath'),
+    ]);
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
   }
 }

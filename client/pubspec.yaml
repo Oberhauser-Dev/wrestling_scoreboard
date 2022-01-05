@@ -37,12 +37,13 @@ dependencies:
   quiver: ^3.0.1
   provider: ^6.0.2
   audioplayers: ^0.20.1
-  # dart_vlc: ^0.0.7
   flutter_settings_screens: ^0.3.0-null-safety
   common:
     path: ../common
   web_socket_channel: ^2.1.0
   flutter_lints: ^1.0.4
+  libwinmedia: ^0.0.7
+  path_provider: ^2.0.8
 
 dev_dependencies:
   flutter_test:

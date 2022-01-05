@@ -9,12 +9,17 @@ class DefaultAudioPlayer implements Playable {
   DefaultAudioPlayer();
 
   @override
-  void play() async {
+  Future<void> play() async {
     player.play(url);
   }
 
   @override
-  set source(String url) {
+  Future<void> setSource(String url) async {
     this.url = url;
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
   }
 }
