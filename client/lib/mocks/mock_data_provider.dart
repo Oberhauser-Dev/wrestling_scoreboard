@@ -103,25 +103,37 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
     // Generate new fights
     await wrestlingEvent.generateFights();
     // Add if not exists
-    for (var element in wrestlingEvent.fights) {
-      if (!fightsAll.contains(element)) {
+    final random = Random();
+    for (final element in wrestlingEvent.fights) {
+      if (fightsAll.where((ClientFight f) => f.equalDuringFight(element)).isEmpty) {
+        do { // Generate new id as long it is not taken yet
+          element.id = random.nextInt(0x7fffffff);
+        } while (fightsAll.where((f) => f.id == element.id).isNotEmpty);
         fightsAll.add(ClientFight.from(element));
       }
     }
     if (wrestlingEvent is TeamMatch) {
       final teamMatchFightsAll = getTeamMatchFights();
-      for (var element in wrestlingEvent.fights) {
+      for (final element in wrestlingEvent.fights) {
         if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
-          teamMatchFightsAll.add(TeamMatchFight(teamMatch: wrestlingEvent, fight: element));
+          int generatedId;
+          do { // Generate new id as long it is not taken yet
+            generatedId = random.nextInt(0x7fffffff);
+          } while (teamMatchFightsAll.where((t) => t.id == element.id).isNotEmpty);
+          teamMatchFightsAll.add(TeamMatchFight(id: generatedId, teamMatch: wrestlingEvent, fight: element));
         }
       }
       updateMany<Fight>(filterObject: wrestlingEvent);
     } else if (wrestlingEvent is Tournament) {
       final tournamentFightsAll = getTournamentFights();
-      for (var element in wrestlingEvent.fights) {
+      for (final element in wrestlingEvent.fights) {
         if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
-          tournamentFightsAll.add(TournamentFight(tournament: wrestlingEvent, fight: element));
+          int generatedId;
+          do { // Generate new id as long it is not taken yet
+            generatedId = random.nextInt(0x7fffffff);
+          } while (tournamentFightsAll.where((t) => t.id == element.id).isNotEmpty);
+          tournamentFightsAll.add(TournamentFight(id: tournamentFightsAll.length, tournament: wrestlingEvent, fight: element));
         }
       }
     }

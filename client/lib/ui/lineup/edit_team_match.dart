@@ -64,7 +64,7 @@ class EditTeamMatch extends StatelessWidget {
                   participations: participations,
                   memberships: memberships,
                   onSubmit: () async {
-                    await dataProvider.generateFights(match);
+                    await dataProvider.generateFights(match, true);
                   },
                 )));
   }
