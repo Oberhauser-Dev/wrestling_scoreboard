@@ -1,24 +1,32 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:http/http.dart' as http;
 import 'package:wrestling_scoreboard/data/data_object.dart';
+import 'package:wrestling_scoreboard/ui/settings/settings.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/network/remote/url.dart';
 
 import 'web_socket.dart';
 
-final _apiUrl = adaptLocalhost(env(apiUrl, fallBack: 'http://localhost:8080/api'));
 
 class RestDataProvider extends DataProvider {
-  RestDataProvider() {
-    _initUpdateStream();
-  }
-
   static const rawQueryParameter = {
     'raw': 'true',
   };
+
+  var _apiUrl = adaptLocalhost(
+      Settings.getValue<String>(CustomSettingsScreen.keyApiUrl, env(apiUrl, fallBack: 'http://localhost:8080/api'))!);
+  late final WebSocketManager _webSocketManager;
+
+  RestDataProvider() {
+    CustomSettingsScreen.onChangeApiUrl.stream.listen((event) {
+      _apiUrl = adaptLocalhost(event);
+    });
+    _initUpdateStream();
+  }
 
   String _getPathFromType(Type t) {
     return '/${getTableNameFromType(getBaseType(t))}';
@@ -131,7 +139,7 @@ class RestDataProvider extends DataProvider {
       throw DataUnimplementedError(operation, data.first.runtimeType);
     }
 
-    getSinkStream().listen((message) {
+    _webSocketManager = WebSocketManager((message) {
       final json = jsonDecode(message);
       handleFromJson(json, handleSingle, handleMany);
     });
@@ -150,11 +158,11 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<void> createOrUpdateSingle(DataObject obj) async {
-    addToSink(jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create)));
+    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create)));
   }
 
   @override
   Future<void> deleteSingle(DataObject obj) async {
-    addToSink(jsonEncode(singleToJson(obj, CRUD.delete)));
+    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, CRUD.delete)));
   }
 }

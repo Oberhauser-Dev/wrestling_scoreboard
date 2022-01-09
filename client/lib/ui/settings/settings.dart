@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:wrestling_scoreboard/util/environment.dart';
 
 class CustomSettingsScreen extends StatefulWidget {
   static const keyLocale = 'locale';
@@ -62,7 +63,7 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
             settingKey: CustomSettingsScreen.keyLocale,
             title: AppLocalizations.of(context)!.language + (isDisplayInternational() ? ' | Language' : ''),
             subtitle: getTranslationOfLocale(_locale),
-            // leading: Icon(Icons.language),
+            leading: const Icon(Icons.translate),
             selected: _locale,
             values: languageSettingValues,
             onChange: (String? val) {
@@ -72,16 +73,30 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
               });
             },
           ),
-          SwitchSettingsTile(
-            title: 'Use fingerprint (Fake setting)',
-            leading: const Icon(Icons.fingerprint),
-            defaultValue: value,
-            onChange: (bool? value) {},
-            settingKey: 'key-fingerprint',
-          ),
+          // SwitchSettingsTile(
+          //   title: 'Use fingerprint (Fake setting)',
+          //   leading: const Icon(Icons.fingerprint),
+          //   defaultValue: value,
+          //   onChange: (bool? value) {},
+          //   settingKey: 'key-fingerprint',
+          // ),
           TextInputSettingsTile(
             title: AppLocalizations.of(context)!.apiUrl,
             settingKey: CustomSettingsScreen.keyApiUrl,
+            // leading: const Icon(Icons.storage),
+            initialValue: env(apiUrl, fallBack: 'http://localhost:8080/api'),
+            onChange: (String? val) {
+              if(val != null) CustomSettingsScreen.onChangeApiUrl.add(val);
+            },
+          ),
+          TextInputSettingsTile(
+            title: AppLocalizations.of(context)!.wsUrl,
+            settingKey: CustomSettingsScreen.keyWsUrl,
+            // leading: const Icon(Icons.storage),
+            initialValue: env(webSocketUrl, fallBack: 'ws://localhost:8080/ws'),
+            onChange: (String? val) {
+              if(val != null) CustomSettingsScreen.onChangeWsUrl.add(val);
+            },
           ),
         ],
       ),
