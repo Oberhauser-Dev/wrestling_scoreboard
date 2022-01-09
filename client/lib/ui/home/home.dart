@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text(AppLocalizations.of(context)!.home),
       ),
       body: FutureBuilder<List<dynamic>>(
           future: Future.wait([_clubs, _leagues]), // a previously-obtained Future<String> or null

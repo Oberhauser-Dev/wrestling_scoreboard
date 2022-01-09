@@ -126,9 +126,11 @@ packages:
   flutter_settings_screens:
     dependency: "direct main"
     description:
-      name: flutter_settings_screens
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: nullable-defaultvalue
+      resolved-ref: "80c1c73a9ab0b3d19315d0cbde611b53704ecbe0"
+      url: "https://github.com/gustl22/flutter_settings_screens.git"
+    source: git
     version: "0.3.2-null-safety"
   flutter_test:
     dependency: "direct dev"
@@ -258,7 +260,7 @@ packages:
       name: path_provider_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   path_provider_windows:
     dependency: transitive
     description:
@@ -286,7 +288,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.2"
   process:
     dependency: transitive
     description:

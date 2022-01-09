@@ -5,19 +5,42 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:wrestling_scoreboard/ui/appNavigation.dart';
+import 'package:wrestling_scoreboard/ui/settings/settings.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
-  runApp(WrestlingScoreboardApp());
+  await Settings.init(cacheProvider: SharePreferenceCache());
+  runApp(const WrestlingScoreboardApp());
 }
 
-class WrestlingScoreboardApp extends StatelessWidget {
-  final Locale _locale = const Locale('en');
+class WrestlingScoreboardApp extends StatefulWidget {
+  const WrestlingScoreboardApp({Key? key}) : super(key: key);
 
-  WrestlingScoreboardApp({Key? key}) : super(key: key) {
-    (() async {
-      await Settings.init(cacheProvider: SharePreferenceCache());
-    })();
+
+  @override
+  State<StatefulWidget> createState() => WrestlingScoreboardAppState();
+}
+
+class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
+  Locale? _locale;
+
+  @override
+  void initState() {
+    super.initState();
+    final localeStr = Settings.getValue<String>(CustomSettingsScreen.keyLocale, null);
+    if (localeStr != null) {
+      final splits = localeStr.split('_');
+      if (splits.length > 1) {
+        _locale = Locale(splits[0], splits[1]);
+      } else {
+        _locale = Locale(splits[0]);
+      }
+    }
+    CustomSettingsScreen.onChangeLocale.stream.listen((event) {
+      setState(() {
+        _locale = event;
+      });
+    });
   }
 
   @override
@@ -40,10 +63,7 @@ class WrestlingScoreboardApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('de', ''),
-      ],
+      supportedLocales: CustomSettingsScreen.supportedLanguages.values,
       locale: _locale,
       home: const AppNavigation(),
     );

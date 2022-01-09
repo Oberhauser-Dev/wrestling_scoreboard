@@ -133,7 +133,7 @@ class MockDataProvider<T extends DataObject> extends DataProvider {
           do { // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
           } while (tournamentFightsAll.where((t) => t.id == element.id).isNotEmpty);
-          tournamentFightsAll.add(TournamentFight(id: tournamentFightsAll.length, tournament: wrestlingEvent, fight: element));
+          tournamentFightsAll.add(TournamentFight(id: generatedId, tournament: wrestlingEvent, fight: element));
         }
       }
     }

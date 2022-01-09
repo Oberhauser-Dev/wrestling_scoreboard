@@ -55,5 +55,13 @@
   "activityTime": "Aktivitätszeit",
   "activityTimeAbbr": "AZ",
   "injuryTime": "Verletzungszeit",
-  "injuryTimeShort": "VZ"
+  "injuryTimeShort": "VZ",
+  "home": "Start",
+  "settings": "Einstellungen",
+  "systemSetting": "Systemeinstellung",
+  "language": "Sprache",
+  "de_DE": "Deutsch",
+  "en_US": "Englisch (US)",
+  "apiUrl": "Api-Url",
+  "wsUrl": "Websocket-Url"
 }

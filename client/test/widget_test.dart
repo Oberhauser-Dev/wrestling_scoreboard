@@ -12,7 +12,7 @@ import 'package:wrestling_scoreboard/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(WrestlingScoreboardApp());
+    await tester.pumpWidget(const WrestlingScoreboardApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

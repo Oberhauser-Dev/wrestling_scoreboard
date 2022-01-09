@@ -60,5 +60,13 @@
   "activityTime": "activity time",
   "activityTimeAbbr": "AT",
   "injuryTime": "injury time",
-  "injuryTimeShort": "IT"
+  "injuryTimeShort": "IT",
+  "home": "Home",
+  "settings": "Settings",
+  "systemSetting": "System setting",
+  "language": "Language",
+  "de_DE": "German",
+  "en_US": "English (US)",
+  "apiUrl": "Api-Url",
+  "wsUrl": "Websocket-Url"
 }

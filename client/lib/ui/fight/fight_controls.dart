@@ -14,9 +14,7 @@ class FightMainControls extends StatefulWidget {
   const FightMainControls(this.callback, this.fightState, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return FightMainControlsState();
-  }
+  State<StatefulWidget> createState() => FightMainControlsState();
 }
 
 class FightMainControlsState extends State<FightMainControls> {
