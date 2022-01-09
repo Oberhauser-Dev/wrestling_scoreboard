@@ -45,7 +45,9 @@ Future init() async {
 
   await PostgresDb().connection.open();
 
-  print('Serving at http://${server.address.host}:${server.port}');
+  final serverUrl = 'http://${server.address.host}:${server.port}';
+  print('Serving API at $serverUrl/api/');
+  print('Serving Websocket at $serverUrl/ws/');
 }
 
 // Serve files from the file system.
@@ -59,7 +61,7 @@ final _router = shelf_router.Router()
       return websocketHandler(request);
     } on HijackException catch (error, _) {
       // A HijackException should bypass the response-writing logic entirely.
-      print('HijackException thrown on WebsocketHandler.\n$error');
+      print('Warning: HijackException thrown on WebsocketHandler.\n$error');
       // TODO hide stack trace or handle better
       // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
       rethrow;
