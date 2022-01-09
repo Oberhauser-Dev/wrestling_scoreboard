@@ -11,11 +11,13 @@ import 'entity_controller.dart';
 final Set<WebSocketChannel> webSocketPool = HashSet();
 
 void broadcast(String data) {
-  webSocketPool.forEach((element) => element.sink.add(data));
+  for (var element in webSocketPool) {
+    element.sink.add(data);
+  }
 }
 
 final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
-  final handleSingle = ({required CRUD operation, required DataObject single}) async {
+  handleSingle({required CRUD operation, required DataObject single}) async {
     print('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
     final controller = EntityController.getControllerFromDataType(single.runtimeType);
     if (operation == CRUD.update) {
@@ -44,11 +46,12 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
         throw DataUnimplementedError(operation, single.runtimeType);
       }
     }
-  };
-  final handleMany = ({required CRUD operation, required ManyDataObject many}) {
+  }
+  
+  handleMany({required CRUD operation, required ManyDataObject many}) {
     print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(many.data.first.runtimeType)}s');
     throw DataUnimplementedError(operation, many.runtimeType);
-  };
+  }
 
   webSocketPool.add(webSocket);
   webSocket.stream.listen((message) {

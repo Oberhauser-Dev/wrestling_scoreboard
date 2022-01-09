@@ -1,8 +1,9 @@
-import 'package:server/server.dart';
 import 'package:test/test.dart';
 
 void main() {
-  // test('calculate', () {
-  //   expect(calculate(), 42);
-  // });
+  myTestMethod() => 42;
+  
+  test('Run some test', () {
+    expect(myTestMethod(), 42);
+  });
 }

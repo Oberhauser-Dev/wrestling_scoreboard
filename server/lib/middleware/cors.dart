@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dotenv/dotenv.dart';
 import 'package:shelf/shelf.dart';
 

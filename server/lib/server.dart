@@ -4,7 +4,7 @@
 
 import 'dart:io';
 
-import 'package:dotenv/dotenv.dart' show load, clean, isEveryDefined, env;
+import 'package:dotenv/dotenv.dart' show load, env;
 import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/routes/api_route.dart';
 import 'package:server/services/postgres_db.dart';
@@ -57,13 +57,13 @@ final _router = shelf_router.Router()
   ..mount('/ws/', (Request request) {
     try {
       return websocketHandler(request);
-    } on HijackException catch (error, stackTrace) {
+    } on HijackException catch (error, _) {
       // A HijackException should bypass the response-writing logic entirely.
       print('HijackException thrown on WebsocketHandler.\n$error');
       // TODO hide stack trace or handle better
       // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
       rethrow;
-    } catch (error, stackTrace) {
+    } catch (error, _) {
       print('Error thrown by handler.\n$error');
       return Response.internalServerError();
     }
