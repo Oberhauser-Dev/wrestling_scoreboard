@@ -16,29 +16,30 @@ class EditTeamMatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final items = [
       ListGroup(
-        HeadingItem(AppLocalizations.of(context)!.match),
+        HeadingItem(localizations.match),
         [
-          ContentItem('Details', icon: Icons.description, onTab: () {}),
-          ContentItem(AppLocalizations.of(context)!.weightClass, icon: Icons.fitness_center, onTab: () {}),
-          ContentItem('Durations', icon: Icons.timer, onTab: () {}),
+          ContentItem(localizations.details, icon: Icons.description, onTab: () {}),
+          ContentItem(localizations.weightClass, icon: Icons.fitness_center, onTab: () {}),
+          ContentItem(localizations.durations, icon: Icons.timer, onTab: () {}),
         ],
       ),
       ListGroup(
-        HeadingItem(AppLocalizations.of(context)!.person),
+        HeadingItem(localizations.person),
         [
-          ContentItem(AppLocalizations.of(context)!.referee, icon: Icons.sports, onTab: () {}),
-          ContentItem('Mat president', icon: Icons.manage_accounts, onTab: () {}),
-          ContentItem('Time Keeper', icon: Icons.pending_actions, onTab: () {}),
-          ContentItem('Transcription Writer', icon: Icons.history_edu, onTab: () {}),
-          ContentItem('Steward', icon: Icons.security, onTab: () {}),
+          ContentItem(localizations.referee, icon: Icons.sports, onTab: () {}),
+          ContentItem(localizations.matPresident, icon: Icons.manage_accounts, onTab: () {}),
+          ContentItem(localizations.timeKeeper, icon: Icons.pending_actions, onTab: () {}),
+          ContentItem(localizations.transcriptionWriter, icon: Icons.history_edu, onTab: () {}),
+          ContentItem(localizations.steward, icon: Icons.security, onTab: () {}),
         ],
       ),
-      ListGroup(HeadingItem(AppLocalizations.of(context)!.lineup + ' & ' + AppLocalizations.of(context)!.fight), [
+      ListGroup(HeadingItem(localizations.lineup + ' & ' + localizations.fight), [
         ...match.lineups
             .map((e) => ContentItem(e.team.name, icon: Icons.group, onTab: () => handleSelectedLineup(e, context))),
-        ContentItem(AppLocalizations.of(context)!.fight, icon: Icons.sports_kabaddi, onTab: () {})
+        ContentItem(localizations.fight, icon: Icons.sports_kabaddi, onTab: () {})
       ]),
     ];
 

@@ -3,11 +3,22 @@
   "@appName": {
     "description": "The internationalized app name"
   },
+  "home": "Home",
+  "settings": "Settings",
+  "systemSetting": "System setting",
+  "language": "Language",
+  "de_DE": "German",
+  "en_US": "English (US)",
+  "apiUrl": "Api-Url",
+  "wsUrl": "Websocket-Url",
+
   "optionSelect": "select",
   "edit": "Edit",
   "save": "Save",
   "add": "Add",
   "remove": "Remove",
+  "noItems": "No items available.",
+  
   "participantVacant": "vacant",
   "weight": "Weight",
   "weightClass": "Weight Class",
@@ -51,8 +62,7 @@
   "fightResultVfoAbbr": "VFO",
   "fightResultDsqAbbr": "DSQ",
   "fightResultDsq2Abbr": "DSQ2",
-  "referee": "Referee",
-  "refereeAbbr": "REF",
+  
   "freeStyle": "Freestyle",
   "freeStyleAbbr": "F",
   "grecoRoman": "Greco-Roman",
@@ -61,12 +71,13 @@
   "activityTimeAbbr": "AT",
   "injuryTime": "injury time",
   "injuryTimeShort": "IT",
-  "home": "Home",
-  "settings": "Settings",
-  "systemSetting": "System setting",
-  "language": "Language",
-  "de_DE": "German",
-  "en_US": "English (US)",
-  "apiUrl": "Api-Url",
-  "wsUrl": "Websocket-Url"
+
+  "referee": "Referee",
+  "refereeAbbr": "REF",
+  "matPresident": "Mat president",
+  "timeKeeper": "Time Keeper",
+  "transcriptionWriter": "Transcription Writer",
+  "steward": "Steward",
+  "details": "Details",
+  "durations": "durations"
 }

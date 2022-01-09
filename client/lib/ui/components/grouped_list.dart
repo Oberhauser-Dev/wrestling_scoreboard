@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'font.dart';
 
@@ -103,7 +104,7 @@ class GroupedList extends StatelessWidget {
           } else {
             tiles.add(ListTile(
               title: Center(child: Text(
-                'No items available.',
+                AppLocalizations.of(context)!.noItems,
                 style: Theme.of(context).textTheme.caption,
               )),
             ));
