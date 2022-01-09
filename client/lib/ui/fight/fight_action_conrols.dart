@@ -14,7 +14,7 @@ class FightActionControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double padding = width / 100;
+    double padding = width / 512;
 
     bool isRed = role == FightRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
