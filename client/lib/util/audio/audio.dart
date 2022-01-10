@@ -1,9 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
-
-import 'default_audio_player.dart';
-import 'desktop_audio_player.dart';
+import 'stub_audio_player.dart'
+if (dart.library.js) 'web_audio_player.dart'
+if (dart.library.io) 'desktop_audio_player.dart';
 
 class HornSound {
   static HornSound? _singleton;
@@ -27,11 +24,7 @@ class HornSound {
   }
 
   HornSound._internal() {
-    if (!kIsWeb && Platform.isLinux || Platform.isWindows) {
-      audioPlayer = DesktopAudioPlayer();
-    } else {
-      audioPlayer = DefaultAudioPlayer();
-    }
+    audioPlayer = getAudioPlayer();
     isSourceSet = audioPlayer.setSource('assets/audio/BoxingBell.mp3');
   }
 }
