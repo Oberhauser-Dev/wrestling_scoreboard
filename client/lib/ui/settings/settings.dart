@@ -3,16 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:wrestling_scoreboard/util/asset.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 
 class CustomSettingsScreen extends StatefulWidget {
   static const keyLocale = 'locale';
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
+  static const keyBellSound = 'bell-sound';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
   static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
   static final StreamController<String> onChangeWsUrl = StreamController.broadcast();
+  static final StreamController<String> onChangeBellSound = StreamController.broadcast();
 
   static final supportedLanguages = {
     'en_US': const Locale('en', 'US'),
@@ -27,6 +30,7 @@ class CustomSettingsScreen extends StatefulWidget {
 
 class CustomSettingsScreenState extends State<CustomSettingsScreen> {
   String? _locale;
+  String? _bellSound;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,6 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
     }
 
     String getTranslationOfLocale([String? locale]) {
-
       switch (locale) {
         case 'de':
         case 'de_DE':
@@ -98,6 +101,27 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
               if(val != null) CustomSettingsScreen.onChangeWsUrl.add(val);
             },
           ),
+          FutureBuilder<List<String>>(
+            future: getAssetList(prefix: '', filetype: '.mp3'),
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                final bellSoundValues = snapshot.data!;
+                return DropDownSettingsTile<String>(
+                  settingKey: CustomSettingsScreen.keyBellSound,
+                  title: AppLocalizations.of(context)!.bellSound,
+                  leading: const Icon(Icons.audiotrack),
+                  selected: _bellSound,
+                  values: bellSoundValues.asMap().map((key, value) => MapEntry(value, value.split('/').last.replaceAll('.mp3', ''))),
+                  onChange: (String? val) {
+                    if (val != null) CustomSettingsScreen.onChangeBellSound.add(val);
+                    setState(() {
+                      _bellSound = val;
+                    });
+                  },
+                );
+              }
+              return const SizedBox();
+          },),
         ],
       ),
     ]);

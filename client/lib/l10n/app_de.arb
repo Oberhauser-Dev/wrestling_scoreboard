@@ -8,6 +8,7 @@
   "en_US": "Englisch (US)",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "bellSound": "Glocken-Sound",
 
   "optionSelect": "Auswählen",
   "edit": "Bearbeite",

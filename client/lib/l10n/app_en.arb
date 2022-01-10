@@ -11,6 +11,7 @@
   "en_US": "English (US)",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "bellSound": "Bell sound",
 
   "optionSelect": "select",
   "edit": "Edit",

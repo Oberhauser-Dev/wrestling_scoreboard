@@ -1,3 +1,6 @@
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:wrestling_scoreboard/ui/settings/settings.dart';
+
 import 'stub_audio_player.dart'
 if (dart.library.js) 'web_audio_player.dart'
 if (dart.library.io) 'desktop_audio_player.dart';
@@ -25,7 +28,11 @@ class HornSound {
 
   HornSound._internal() {
     audioPlayer = getAudioPlayer();
-    isSourceSet = audioPlayer.setSource('assets/audio/BoxingBell.mp3');
+    isSourceSet =
+        audioPlayer.setSource(Settings.getValue(CustomSettingsScreen.keyBellSound, 'assets/audio/BoxingBell.mp3')!);
+    CustomSettingsScreen.onChangeBellSound.stream.listen((event) {
+      isSourceSet = audioPlayer.setSource(event);
+    });
   }
 }
 
