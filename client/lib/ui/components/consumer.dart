@@ -11,7 +11,7 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<T>(
-      stream: dataProvider.readSingleStream<T>(initialData.runtimeType, initialData.id!),
+      stream: dataProvider.streamSingle<T>(initialData.runtimeType, initialData.id!),
       initialData: initialData,
       builder: (BuildContext context, AsyncSnapshot<T> snap) {
         if (snap.hasError) {
@@ -33,7 +33,7 @@ class ManyConsumer<T extends DataObject> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: dataProvider.readManyStream<T>(initialData.runtimeType, filterObject: filterObject),
+      stream: dataProvider.streamMany<T>(initialData.runtimeType, filterObject: filterObject),
       initialData: ManyDataObject<T>(data: initialData),
       builder: (BuildContext context, AsyncSnapshot<ManyDataObject<T>> snap) {
         if (snap.hasError) {

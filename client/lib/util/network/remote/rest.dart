@@ -84,7 +84,7 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Stream<T> readSingleStream<T extends DataObject>(Type t, int id) {
+  Stream<T> streamSingle<T extends DataObject>(Type t, int id) {
     return getOrCreateSingleStreamController<T>(t).stream;
   }
 

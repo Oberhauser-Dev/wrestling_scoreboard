@@ -20,10 +20,10 @@ abstract class DataProvider {
   Future<Iterable<T>> readMany<T extends DataObject>({DataObject? filterObject});
 
   /// READ: get a single object
-  Stream<T> readSingleStream<T extends DataObject>(Type t, int id);
+  Stream<T> streamSingle<T extends DataObject>(Type t, int id);
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> readManyStream<T extends DataObject>(Type t, {DataObject? filterObject}) {
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject>(Type t, {DataObject? filterObject}) {
     final filterType = filterObject == null ? Object : filterObject.getBaseType();
     var stream = getOrCreateManyStreamController<T>(t, filterType: filterType).stream;
     if (filterObject != null) {
