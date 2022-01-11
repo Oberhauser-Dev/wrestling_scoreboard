@@ -7,9 +7,9 @@ import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
+import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/lineup/edit_team_match.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
@@ -35,14 +35,9 @@ class MatchSequence extends StatelessWidget {
     double padding = width / 100;
     int flexWidthWeight = 12;
     int flexWidthStyle = 5;
-    return StreamBuilder(
-      stream: dataProvider.readSingleStream<TeamMatch>(match.id!),
+    return SingleConsumer(
       initialData: match,
-      builder: (BuildContext context, AsyncSnapshot<TeamMatch> matchSnap) {
-        if (matchSnap.hasError) {
-          throw matchSnap.error!;
-        }
-        final match = matchSnap.data as ClientTeamMatch;
+      builder: (BuildContext context, ClientTeamMatch match) {
         return Scaffold(
             bottomNavigationBar: BottomAppBar(
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -78,14 +73,10 @@ class MatchSequence extends StatelessWidget {
                   ),
                 ]),
                 Expanded(
-                  child: StreamBuilder<ManyDataObject>(
-                    stream: dataProvider.readManyStream<Fight>(filterObject: match),
-                    initialData: ManyDataObject(data: match.fights),
-                    builder: (BuildContext context, AsyncSnapshot<ManyDataObject> fightSnap) {
-                      if (fightSnap.hasError) {
-                        throw fightSnap.error!;
-                      }
-                      final fights = fightSnap.data!.data.map((e) => (e as ClientFight));
+                  child: ManyConsumer(
+                    filterObject: match,
+                    initialData: match.fights,
+                    builder: (BuildContext context, Iterable<ClientFight> fights) {
                       return ListView.builder(
                         itemCount: fights.length,
                         itemBuilder: (context, index) {

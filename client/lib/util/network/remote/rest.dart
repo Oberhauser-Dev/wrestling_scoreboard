@@ -84,59 +84,24 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Stream<T> readSingleStream<T extends DataObject>(int id) {
-    return getOrCreateSingleStreamController<T>().stream;
+  Stream<T> readSingleStream<T extends DataObject>(Type t, int id) {
+    return getOrCreateSingleStreamController<T>(t).stream;
   }
 
   _initUpdateStream() {
-    handleSingle({required CRUD operation, required DataObject single}) {
-      single = toClientObject(single);
+    void handleSingle<T extends DataObject>({required CRUD operation, required T single}) {
+      final tmp = toClientObject<T>(single);
       if (operation == CRUD.update) {
-        if (single is Club) return getSingleStreamController<Club>()?.sink.add(single);
-        if (single is Fight) return getSingleStreamController<Fight>()?.sink.add(single);
-        if (single is League) return getSingleStreamController<League>()?.sink.add(single);
-        if (single is Lineup) return getSingleStreamController<Lineup>()?.sink.add(single);
-        if (single is Membership) return getSingleStreamController<Membership>()?.sink.add(single);
-        if (single is Participation) return getSingleStreamController<Participation>()?.sink.add(single);
-        if (single is Team) return getSingleStreamController<Team>()?.sink.add(single);
-        if (single is TeamMatch) return getSingleStreamController<TeamMatch>()?.sink.add(single);
-        if (single is Tournament) return getSingleStreamController<Tournament>()?.sink.add(single);
-        throw DataUnimplementedError(CRUD.read, single.runtimeType);
+        getSingleStreamController<T>(single.runtimeType)?.sink.add(tmp);
       }
     }
 
-    handleMany({required CRUD operation, required ManyDataObject many}) {
-      final data = many.data = many.data.map((e) => toClientObject(e));
+    void handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) {
+      final tmp = ManyDataObject<T>(
+          data: many.data.map((e) => toClientObject<T>(e)), filterId: many.filterId, filterType: many.filterType);
       final filterType = many.filterType;
-      if (data.isEmpty) return;
-      if (data.first is Club) {
-        return getManyStreamController<Club>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is Fight) {
-        return getManyStreamController<Fight>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is League) {
-        return getManyStreamController<League>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is Lineup) {
-        return getManyStreamController<Lineup>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is Membership) {
-        return getManyStreamController<Membership>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is Participation) {
-        return getManyStreamController<Participation>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is Team) {
-        return getManyStreamController<Team>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is TeamMatch) {
-        return getManyStreamController<TeamMatch>(filterType: filterType)?.sink.add(many);
-      }
-      if (data.first is Tournament) {
-        return getManyStreamController<Tournament>()?.sink.add(many);
-      }
-      throw DataUnimplementedError(operation, data.first.runtimeType);
+      if (tmp.data.isEmpty) return;
+      getManyStreamController<T>(many.data.first.runtimeType, filterType: filterType)?.sink.add(tmp);
     }
 
     _webSocketManager = WebSocketManager((message) {

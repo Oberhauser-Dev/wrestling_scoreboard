@@ -20,8 +20,8 @@ Map<String, dynamic> manyToJson(List<DataObject> many, Type type, CRUD operation
 
 void handleFromJson(
     Map<String, dynamic> json,
-    void Function({required CRUD operation, required DataObject single}) handleSingle,
-    void Function({required CRUD operation, required ManyDataObject many}) handleMany) {
+    void Function<U extends DataObject>({required CRUD operation, required U single}) handleSingle,
+    void Function<V extends DataObject>({required CRUD operation, required ManyDataObject<V> many}) handleMany) {
   final isMany = json['isMany'] == 'true';
   final type = getTypeFromTableName(json['tableName']);
   final operation = CrudParser.valueOf(json['operation']);
@@ -40,8 +40,8 @@ void handleFromJson(
   }
 }
 
-class ManyDataObject {
-  Iterable<DataObject> data;
+class ManyDataObject<T extends DataObject> {
+  Iterable<T> data;
   final Type filterType;
   final int? filterId;
 

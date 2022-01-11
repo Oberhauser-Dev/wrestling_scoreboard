@@ -27,6 +27,8 @@ Type getBaseType(Type type) {
       return Membership;
     case ClientParticipantState:
       return ParticipantState;
+    case DataObject:
+      throw 'Base type not found';
     default:
       return type;
   }

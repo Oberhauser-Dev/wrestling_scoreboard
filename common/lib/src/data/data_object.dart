@@ -19,7 +19,7 @@ abstract class DataObject {
     if (this is Lineup) return Lineup;
     if (this is Membership) return Membership;
     if (this is ParticipantState) return ParticipantState;
-    return this.runtimeType;
+    return runtimeType;
   }
 
   @override
