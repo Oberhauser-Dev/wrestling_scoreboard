@@ -6,5 +6,5 @@ in `lib/`, and example unit test in `test/`.
 ## Build package
 
 ```shell
-dart compile exe bin/server.dart
+dart compile exe bin/server.dart -o ./bin/server
 ```
