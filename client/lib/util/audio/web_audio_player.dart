@@ -15,7 +15,7 @@ class WebAudioPlayer implements Playable {
 
   @override
   Future<void> setSource(String url) async {
-    this.url = url;
+    this.url = 'assets/' + url; // Need to prefix assets folder as in web it's nested twice
   }
 
   @override

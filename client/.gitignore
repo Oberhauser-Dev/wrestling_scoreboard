@@ -47,3 +47,5 @@ app.*.map.json
 
 # Dotenv environment variables
 .env
+.env.*
+!.env.example
