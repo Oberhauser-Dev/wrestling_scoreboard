@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:wrestling_scoreboard/util/asset.dart';
+import 'package:wrestling_scoreboard/util/audio/audio.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 
 class CustomSettingsScreen extends StatefulWidget {
@@ -29,12 +30,12 @@ class CustomSettingsScreen extends StatefulWidget {
 }
 
 class CustomSettingsScreenState extends State<CustomSettingsScreen> {
-  String? _locale;
-  String? _bellSound;
+  String? _locale = Settings.getValue<String>(CustomSettingsScreen.keyLocale, null);
+  String? _bellSound = Settings.getValue<String>(CustomSettingsScreen.keyBellSound, 'assets/audio/BoxingBell.mp3');
 
   @override
   Widget build(BuildContext context) {
-    var value = true;
+    // var value = true;
     
     bool isDisplayInternational() {
       if (Localizations.localeOf(context).languageCode == 'en') return false;
@@ -113,10 +114,14 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                   selected: _bellSound,
                   values: bellSoundValues.asMap().map((key, value) => MapEntry(value, value.split('/').last.replaceAll('.mp3', ''))),
                   onChange: (String? val) {
-                    if (val != null) CustomSettingsScreen.onChangeBellSound.add(val);
                     setState(() {
                       _bellSound = val;
                     });
+                    if (val != null) {
+                      CustomSettingsScreen.onChangeBellSound.add(val);
+                      HornSound().play();
+                      HornSound().dispose();
+                    }
                   },
                 );
               }
