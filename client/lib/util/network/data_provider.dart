@@ -23,7 +23,7 @@ abstract class DataProvider {
   Stream<T> streamSingle<T extends DataObject>(Type t, int id, {bool init = false});
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> streamMany<T extends DataObject>(Type t, {DataObject? filterObject, bool init = false}) {
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject>(Type t, {DataObject? filterObject, bool init = true}) {
     final filterType = filterObject == null ? Object : filterObject.getBaseType();
     final controller = getOrCreateManyStreamController<T>(t, filterType: filterType);
     if (init) {
