@@ -16,8 +16,8 @@ class MatchSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       ListGroup(
-          HeadingItem(AppLocalizations.of(context)!.match),
-          matches.map((e) => ContentItem('${e.home.team.name} - ${e.guest.team.name}',
+          header: HeadingItem(AppLocalizations.of(context)!.match),
+          items: matches.map((e) => ContentItem('${e.home.team.name} - ${e.guest.team.name}',
               icon: Icons.event, onTab: () => handleSelectedMatch(e, context))))
     ];
 
@@ -25,7 +25,7 @@ class MatchSelection extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: GroupedList(items),
+      body: GroupedList(items: items),
     );
   }
 

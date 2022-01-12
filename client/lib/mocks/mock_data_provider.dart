@@ -37,8 +37,10 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Stream<T> streamSingle<T extends DataObject>(Type t, int id) {
-    return (getOrCreateSingleStreamController<T>(t).stream).where((event) => event.id == id);
+  Stream<T> streamSingle<T extends DataObject>(Type t, int id, {bool init = false}) {
+    final controller = getOrCreateSingleStreamController<T>(t);
+    if(init) readSingle<T>(id).then((value) => controller.sink.add(value));
+    return controller.stream.where((event) => event.id == id);
   }
 
   List<T> getManyMocksFromClass<T>({DataObject? filterObject}) {

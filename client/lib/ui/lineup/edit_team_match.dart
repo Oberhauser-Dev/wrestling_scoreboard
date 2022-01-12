@@ -24,16 +24,16 @@ class EditTeamMatch extends StatelessWidget {
       builder: (BuildContext context, ClientTeamMatch match) {
         final items = [
           ListGroup(
-            HeadingItem(localizations.match),
-            [
+            header: HeadingItem(localizations.match),
+            items: [
               ContentItem(localizations.details, icon: Icons.description, onTab: () {}),
               ContentItem(localizations.weightClass, icon: Icons.fitness_center, onTab: () {}),
               ContentItem(localizations.durations, icon: Icons.timer, onTab: () {}),
             ],
           ),
           ListGroup(
-            HeadingItem(localizations.person),
-            [
+            header: HeadingItem(localizations.person),
+            items: [
               ContentItem(localizations.referee, icon: Icons.sports, onTab: () {}),
               ContentItem(localizations.matPresident, icon: Icons.manage_accounts, onTab: () {}),
               ContentItem(localizations.timeKeeper, icon: Icons.pending_actions, onTab: () {}),
@@ -42,8 +42,8 @@ class EditTeamMatch extends StatelessWidget {
             ],
           ),
           ListGroup(
-            HeadingItem(localizations.lineup + ' & ' + localizations.fight),
-            [
+            header: HeadingItem(localizations.lineup + ' & ' + localizations.fight),
+            items: [
               ...match.lineups.map(
                   (e) => ContentItem(e.team.name, icon: Icons.group, onTab: () => handleSelectedLineup(e, context))),
               ContentItem(localizations.fight, icon: Icons.sports_kabaddi, onTab: () {})
@@ -55,7 +55,7 @@ class EditTeamMatch extends StatelessWidget {
           appBar: AppBar(
             title: Text(title),
           ),
-          body: GroupedList(items),
+          body: GroupedList(items: items),
         );
       },
     );

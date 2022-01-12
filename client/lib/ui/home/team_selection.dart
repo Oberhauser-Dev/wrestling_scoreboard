@@ -16,15 +16,15 @@ class TeamSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      ListGroup(HeadingItem(AppLocalizations.of(context)!.team),
-          teams.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))))
+      ListGroup(header: HeadingItem(AppLocalizations.of(context)!.team),
+          items: teams.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))))
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
-      body: GroupedList(items),
+      body: GroupedList(items: items),
     );
   }
 

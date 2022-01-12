@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
@@ -8,13 +9,7 @@ import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class Home extends StatelessWidget {
-  late final Future<Iterable<ClientClub>> _clubs;
-  late final Future<Iterable<ClientLeague>> _leagues;
-
-  Home({Key? key}) : super(key: key) {
-    _clubs = dataProvider.readMany<ClientClub>();
-    _leagues = dataProvider.readMany<ClientLeague>();
-  }
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +17,42 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.home),
       ),
-      body: FutureBuilder<List<dynamic>>(
-          future: Future.wait([_clubs, _leagues]), // a previously-obtained Future<String> or null
-          builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-            if (snapshot.hasData) {
-              List<ListGroup> items = [
-                ListGroup(
-                    HeadingItem(AppLocalizations.of(context)!.club),
-                    (snapshot.data![0] as List<ClientClub>).map((e) =>
-                        ContentItem(e.name, icon: Icons.foundation, onTab: () => handleSelectedClub(e, context)))),
-                ListGroup(
-                    HeadingItem(AppLocalizations.of(context)!.league),
-                    (snapshot.data![1] as List<ClientLeague>).map((e) =>
-                        ContentItem(e.name, icon: Icons.emoji_events, onTab: () => handleSelectedLeague(e, context))))
-              ];
-              return GroupedList(items);
-            } else {
-              return const Center(child: Text('Cannot access data!'));
-            }
-          }),
+      body: GroupedList(
+        items: [
+          StreamBuilder(
+            stream: dataProvider.streamMany<ClientClub>(ClientClub),
+            builder: (BuildContext context, AsyncSnapshot<ManyDataObject<ClientClub>> clubsSnap) {
+              return ListGroup(
+                  header: HeadingItem(AppLocalizations.of(context)!.club),
+                  items: clubsSnap.hasData
+                      ? (clubsSnap.data!.data.map(
+                          (e) => ContentItem(
+                            e.name,
+                            icon: Icons.foundation,
+                            onTab: () => handleSelectedClub(e, context),
+                          ),
+                        ))
+                      : []);
+            },
+          ),
+          StreamBuilder(
+            stream: dataProvider.streamMany<ClientLeague>(ClientLeague),
+            builder: (BuildContext context, AsyncSnapshot<ManyDataObject<ClientLeague>> leaguesSnap) {
+              return ListGroup(
+                  header: HeadingItem(AppLocalizations.of(context)!.league),
+                  items: leaguesSnap.hasData
+                      ? (leaguesSnap.data!.data.map(
+                          (e) => ContentItem(
+                            e.name,
+                            icon: Icons.emoji_events,
+                            onTab: () => handleSelectedLeague(e, context),
+                          ),
+                        ))
+                      : []);
+            },
+          ),
+        ],
+      ),
     );
   }
 
