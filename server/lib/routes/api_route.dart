@@ -35,6 +35,7 @@ class ApiRoute {
     router.get('/leagues', leagueController.requestMany);
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
     router.get('/league/<id|[0-9]+>/teams', leagueController.requestTeams);
+    router.get('/league/<id|[0-9]+>/weight_classs', leagueController.requestWeightClasses);
 
     final lineupController = LineupController();
     router.get('/lineups', lineupController.requestMany);

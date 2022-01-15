@@ -21,6 +21,7 @@ export 'data/person.dart';
 export 'data/team.dart';
 export 'data/team_match/team_match.dart';
 export 'data/team_match/team_match_fight.dart';
+export 'data/team_match/league_weight_class.dart';
 export 'data/tournament/tournament.dart';
 export 'data/tournament/tournament_fight.dart';
 export 'data/weight_class.dart';

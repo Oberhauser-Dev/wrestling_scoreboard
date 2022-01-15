@@ -11,12 +11,14 @@ TeamMatchFight _$TeamMatchFightFromJson(Map<String, dynamic> json) {
     id: json['id'] as int?,
     teamMatch: TeamMatch.fromJson(json['teamMatch'] as Map<String, dynamic>),
     fight: Fight.fromJson(json['fight'] as Map<String, dynamic>),
+    pos: json['pos'] as int,
   );
 }
 
 Map<String, dynamic> _$TeamMatchFightToJson(TeamMatchFight instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'pos': instance.pos,
       'teamMatch': instance.teamMatch,
       'fight': instance.fight,
     };

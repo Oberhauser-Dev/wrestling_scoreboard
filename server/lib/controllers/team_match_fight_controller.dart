@@ -22,6 +22,7 @@ class TeamMatchFightController extends EntityController<TeamMatchFight> {
       id: e[primaryKeyName] as int?,
       teamMatch: teamMatch!,
       fight: fight!,
+      pos: e['pos'],
     );
   }
 

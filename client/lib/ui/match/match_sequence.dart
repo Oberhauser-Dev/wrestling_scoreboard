@@ -64,7 +64,6 @@ class MatchSequence extends StatelessWidget {
                     if (fights.isEmpty) {
                       dataProvider.generateFights(match);
                     }
-                    fights.sort((a,b) => a.weightClass.weight - b.weightClass.weight);
                     match.fights = fights;
                     return Column(children: [
                       Column(children: [

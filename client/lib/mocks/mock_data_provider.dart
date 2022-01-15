@@ -122,16 +122,16 @@ class MockDataProvider extends DataProvider {
     }
     if (wrestlingEvent is TeamMatch) {
       final teamMatchFightsAll = getTeamMatchFights();
-      for (final element in newFights) {
+      newFights.asMap().forEach((key, element) {
         if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
           int generatedId;
           do { // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
           } while (teamMatchFightsAll.where((t) => t.id == element.id).isNotEmpty);
-          teamMatchFightsAll.add(TeamMatchFight(id: generatedId, teamMatch: wrestlingEvent, fight: element));
+          teamMatchFightsAll.add(TeamMatchFight(id: generatedId, teamMatch: wrestlingEvent, fight: element, pos: key));
         }
-      }
+      });
     } else if (wrestlingEvent is Tournament) {
       final tournamentFightsAll = getTournamentFights();
       for (final element in newFights) {

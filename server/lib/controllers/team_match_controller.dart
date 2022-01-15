@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
+import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/participant_state_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/person_controller.dart';
@@ -80,28 +81,30 @@ class TeamMatchController extends EntityController<TeamMatch> {
         SELECT f.* 
         FROM fight as f 
         JOIN team_match_fight AS tmf ON tmf.fight_id = f.id
-        WHERE tmf.team_match_id = @id;''';
+        WHERE tmf.team_match_id = @id
+        ORDER BY tmf.pos;''';
 
   Future<Response> requestFights(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(FightController(),
         isRaw: isRaw(request), sqlQuery: _fightsQuery, substitutionValues: {'id': id});
   }
 
-  Future<List<Fight>> _getFights(String id, bool isRaw) {
+  Future<List<Fight>> getFights(String id) {
     return FightController().getManyFromQuery(_fightsQuery, substitutionValues: {'id': id});
   }
 
   Future<Response> generateFights(Request request, String id) async {
     final isReset = (request.url.queryParameters['reset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
-    final oldFights = (await _getFights(id, true)); // TODO Check if works...
+    final oldFights = (await getFights(id)); // TODO Check if works...
     if (isReset) {
       await Future.forEach(oldFights, (Fight e) async {
         if (e.id != null) await deleteSingle(e.id!);
       });
     }
     await teamMatch.generateFights();
-    await Future.forEach(teamMatch.fights, (Fight e) async {
+    await Future.forEach(teamMatch.fights.asMap().entries, (MapEntry<int, Fight> entry) async {
+      final e = entry.value;
       final hasRed = e.r != null;
       final hasBlue = e.b != null;
       // Get fight of teamMatch that has the same participants and the same weightClass
@@ -117,7 +120,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
         AND ${hasBlue ? 'ps_blue.participation_id = ${e.b!.participation.id}' : 'f.blue_id IS NULL'};
         ''');
       if (res.isEmpty) {
-        // TODO why creating participants and fight after generating fights? Shouldn't they already exist?
+        // Create ParticipantState to be stored in the team match fight
         if (e.r != null) {
           e.r!.id = await ParticipantStateController().createSingle(e.r!);
         }
@@ -125,7 +128,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
           e.b!.id = await ParticipantStateController().createSingle(e.b!);
         }
         e.id = await FightController().createSingle(e);
-        await TeamMatchFightController().createSingle(TeamMatchFight(teamMatch: teamMatch, fight: e));
+        await TeamMatchFightController().createSingle(TeamMatchFight(teamMatch: teamMatch, fight: e, pos: entry.key));
       }
     });
     return Response.ok('{"status": "success"}');
@@ -136,8 +139,10 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final home = await LineupController().getSingle(e['home_id'] as int);
     final guest = await LineupController().getSingle(e['guest_id'] as int);
     final referee = await PersonController().getSingle(e['referee_id'] as int);
-    final weightClasses =
-        await WeightClassController().getMany(); // TODO need extra table for each league with weight classes.
+    final weightClasses = home != null && home.team.league != null
+        ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
+        : await WeightClassController().getMany();
+    // TODO may add weightclasses of both teams leagues
 
     return ServerTeamMatch(
       id: e[primaryKeyName] as int?,
