@@ -18,30 +18,62 @@ Map<String, dynamic> manyToJson(List<DataObject> many, Type type, CRUD operation
       'data': many,
     };
 
+typedef HandleSingleCallback = void Function<T extends DataObject>({required CRUD operation, required T single});
+typedef HandleManyCallback = void Function<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many});
+
 void handleFromJson(
     Map<String, dynamic> json,
-    void Function({required CRUD operation, required DataObject single}) handleSingle,
-    void Function({required CRUD operation, required ManyDataObject many}) handleMany) {
+    HandleSingleCallback handleSingle,
+    HandleManyCallback handleMany) {
+  final Type type = getTypeFromTableName(json['tableName']);
+  switch (type) {
+    case Club:
+      return _handleFromJsonGeneric<Club>(json, handleSingle, handleMany);
+    case Fight:
+      return _handleFromJsonGeneric<Fight>(json, handleSingle, handleMany);
+    case League:
+      return _handleFromJsonGeneric<League>(json, handleSingle, handleMany);
+    case Lineup:
+      return _handleFromJsonGeneric<Lineup>(json, handleSingle, handleMany);
+    case Membership:
+      return _handleFromJsonGeneric<Membership>(json, handleSingle, handleMany);
+    case Participation:
+      return _handleFromJsonGeneric<Participation>(json, handleSingle, handleMany);
+    case Team:
+      return _handleFromJsonGeneric<Team>(json, handleSingle, handleMany);
+    case TeamMatch:
+      return _handleFromJsonGeneric<TeamMatch>(json, handleSingle, handleMany);
+    case Tournament:
+      return _handleFromJsonGeneric<Tournament>(json, handleSingle, handleMany);
+    default:
+      throw UnimplementedError('Cannot handle Json for type "${type.toString()}".');
+  }
+}
+
+void _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
+    HandleSingleCallback handleSingle,
+    HandleManyCallback handleMany) {
   final isMany = json['isMany'] == 'true';
-  final type = getTypeFromTableName(json['tableName']);
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {
-    final List data = json['data'];
-    final Type? filterType = json['filterType'] == null ? Object : getTypeFromTableName(json['filterType']);
+    final List<dynamic> data = json['data'];
+    final Type? filterType = json['filterType'] == null
+        ? Object
+        : getTypeFromTableName(json['filterType']);
     final int? filterId = json['filterId'];
-    handleMany(
+    handleMany<T>(
         operation: operation,
-        many: ManyDataObject(
-            data: (data.map((e) => e as Map<String, dynamic>)).map((e) => type.fromJson(e)),
+        many: ManyDataObject<T>(
+            data: data.map((e) => T.fromJson(e as Map<String, dynamic>) as T).toList(),
             filterType: filterType ?? Object,
             filterId: filterId));
   } else {
-    handleSingle(operation: operation, single: type.fromJson(json['data']));
+    handleSingle<T>(operation: operation, single: T.fromJson(json['data']) as T);
   }
 }
 
 class ManyDataObject<T extends DataObject> {
-  Iterable<T> data;
+  List<T> data;
   final Type filterType;
   final int? filterId;
 

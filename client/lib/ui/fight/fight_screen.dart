@@ -23,9 +23,9 @@ import 'fight_controls.dart';
 
 class FightScreen extends StatefulWidget {
   final ClientTeamMatch match;
-  final ClientFight fight;
+  final int fightIndex;
 
-  const FightScreen(this.match, this.fight, {Key? key}) : super(key: key);
+  const FightScreen(this.match, this.fightIndex, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => FightState();
@@ -34,6 +34,7 @@ class FightScreen extends StatefulWidget {
 class FightState extends State<FightScreen> {
   late ClientTeamMatch match;
   late ClientFight fight;
+  late int fightIndex;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _fightStopwatch;
   late ObservableStopwatch _breakStopwatch;
@@ -47,7 +48,8 @@ class FightState extends State<FightScreen> {
     super.initState();
     HornSound();
     match = widget.match;
-    fight = widget.fight;
+    fightIndex = widget.fightIndex;
+    fight = widget.match.fights[fightIndex];
     _r = ParticipantStateModel(fight.r);
     _b = ParticipantStateModel(fight.b);
     _r.injuryStopwatch.limit = match.injuryDuration;
@@ -124,7 +126,7 @@ class FightState extends State<FightScreen> {
       }
     });
     callback = (FightScreenActionIntent intent) {
-      FightActionHandler.handleIntentStatic(intent, stopwatch, match, fight, doAction, context: context);
+      FightActionHandler.handleIntentStatic(intent, stopwatch, match, fightIndex, doAction, context: context);
     };
   }
 
@@ -271,7 +273,7 @@ class FightState extends State<FightScreen> {
     return FightActionHandler(
       stopwatch: stopwatch,
       match: match,
-      fight: fight,
+      fightIndex: fightIndex,
       doAction: doAction,
       child: Scaffold(
         bottomNavigationBar: BottomAppBar(
@@ -307,7 +309,7 @@ class FightState extends State<FightScreen> {
                                   padding: EdgeInsets.all(padding),
                                   child: Center(
                                       child: Text(
-                                        '${AppLocalizations.of(context)!.fight} ${match.fights.indexOf(fight) + 1}',
+                                        '${AppLocalizations.of(context)!.fight} ${fightIndex + 1}',
                                         style: fontStyleInfo,
                                       )))),
                         ]),

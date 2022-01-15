@@ -2,18 +2,18 @@ import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-class SingleConsumer<T extends DataObject> extends StatelessWidget {
-  final T initialData;
-  final Widget Function(BuildContext context, T data) builder;
+class SingleConsumer<T extends DataObject, S extends T> extends StatelessWidget {
+  final S initialData;
+  final Widget Function(BuildContext context, S data) builder;
 
-  const SingleConsumer({required this.initialData, required this.builder, Key? key}) : super(key: key);
+  const SingleConsumer({required this.builder, required this.initialData, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<T>(
-      stream: dataProvider.streamSingle<T>(initialData.runtimeType, initialData.id!, init: false),
+    return StreamBuilder<S>(
+      stream: dataProvider.streamSingle<T, S>(initialData.id!, init: false),
       initialData: initialData,
-      builder: (BuildContext context, AsyncSnapshot<T> snap) {
+      builder: (BuildContext context, AsyncSnapshot<S> snap) {
         if (snap.hasError) {
           throw snap.error!;
         }
@@ -23,19 +23,19 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   }
 }
 
-class ManyConsumer<T extends DataObject> extends StatelessWidget {
-  final Iterable<T> initialData;
+class ManyConsumer<T extends DataObject, S extends T> extends StatelessWidget {
+  final List<S>? initialData;
   final DataObject? filterObject;
-  final Widget Function(BuildContext context, Iterable<T> data) builder;
+  final Widget Function(BuildContext context, List<S> data) builder;
 
-  const ManyConsumer({required this.initialData, required this.builder, this.filterObject, Key? key}) : super(key: key);
+  const ManyConsumer({required this.builder, this.filterObject, this.initialData, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: dataProvider.streamMany<T>(initialData.runtimeType, filterObject: filterObject, init: false),
-      initialData: ManyDataObject<T>(data: initialData),
-      builder: (BuildContext context, AsyncSnapshot<ManyDataObject<T>> snap) {
+      stream: dataProvider.streamMany<T, S>(filterObject: filterObject, init: initialData == null),
+      initialData: ManyDataObject<S>(data: initialData ?? []),
+      builder: (BuildContext context, AsyncSnapshot<ManyDataObject<S>> snap) {
         if (snap.hasError) {
           throw snap.error!;
         }
@@ -44,4 +44,3 @@ class ManyConsumer<T extends DataObject> extends StatelessWidget {
     );
   }
 }
-

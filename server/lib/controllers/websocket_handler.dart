@@ -17,7 +17,7 @@ void broadcast(String data) {
 }
 
 final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
-  handleSingle({required CRUD operation, required DataObject single}) async {
+  void handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
     print('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
     final controller = EntityController.getControllerFromDataType(single.runtimeType);
     if (operation == CRUD.update) {
@@ -48,7 +48,7 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
     }
   }
   
-  handleMany({required CRUD operation, required ManyDataObject many}) {
+  void handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) {
     print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(many.data.first.runtimeType)}s');
     throw DataUnimplementedError(operation, many.runtimeType);
   }

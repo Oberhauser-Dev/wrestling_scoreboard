@@ -106,25 +106,26 @@ class FightActionHandler extends StatelessWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
   final ClientTeamMatch match;
-  final ClientFight fight;
+  final int fightIndex;
   final Function(FightScreenActions action) doAction;
 
   const FightActionHandler(
       {required this.child,
       required this.stopwatch,
       required this.match,
-      required this.fight,
+      required this.fightIndex,
       required this.doAction,
       Key? key})
       : super(key: key);
 
   handleIntent(FightScreenActionIntent intent, {BuildContext? context}) {
-    handleIntentStatic(intent, stopwatch, match, fight, doAction, context: context);
+    handleIntentStatic(intent, stopwatch, match, fightIndex, doAction, context: context);
   }
 
   static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, ClientTeamMatch match,
-      ClientFight fight, Function(FightScreenActions action) doAction,
+      int fightIndex, Function(FightScreenActions action) doAction,
       {BuildContext? context}) {
+    final fight = match.fights[fightIndex];
     switch (intent.type) {
       case FightScreenActions.StartStop:
         stopwatch.startStop();
@@ -144,19 +145,19 @@ class FightActionHandler extends StatelessWidget {
         break;
       case FightScreenActions.NextFight:
         if (context != null) {
-          int index = match.fights.indexOf(fight) + 1;
+          int index = fightIndex + 1;
           if (index < match.fights.length) {
             Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, match.fights[index])));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
           }
         }
         break;
       case FightScreenActions.PreviousFight:
         if (context != null) {
-          int index = match.fights.indexOf(fight) - 1;
+          int index = fightIndex - 1;
           if (index >= 0) {
             Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, match.fights[index])));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
           }
         }
         break;

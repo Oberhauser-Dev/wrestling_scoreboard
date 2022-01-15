@@ -19,7 +19,7 @@ class EditTeamMatch extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return SingleConsumer(
+    return SingleConsumer<TeamMatch, ClientTeamMatch>(
       initialData: match,
       builder: (BuildContext context, ClientTeamMatch match) {
         final items = [
@@ -62,14 +62,14 @@ class EditTeamMatch extends StatelessWidget {
   }
 
   handleSelectedLineup(ClientLineup lineup, BuildContext context) async {
-    final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
-    final memberships = await dataProvider.readMany<ClientMembership>(filterObject: lineup.team.club);
+    final participations = await dataProvider.readMany<Participation, Participation>(filterObject: lineup);
+    final memberships = await dataProvider.readMany<Membership, ClientMembership>(filterObject: lineup.team.club);
     final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.lineup;
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return SingleConsumer(
+          return SingleConsumer<Lineup, ClientLineup>(
             initialData: lineup,
             builder: (BuildContext context, ClientLineup lineup) {
               return EditLineup(

@@ -34,30 +34,30 @@ Type getBaseType(Type type) {
   }
 }
 
-T toClientObject<T extends DataObject>(T dataObject) {
+S toClientObject<T extends DataObject, S extends T>(T dataObject) {
   if (dataObject is Club) {
-    if(dataObject is ClientClub) return dataObject;
-    return ClientClub.from(dataObject) as T;
+    if (dataObject is ClientClub) return dataObject as S;
+    return ClientClub.from(dataObject) as S;
   } else if (dataObject is Fight) {
-    if(dataObject is ClientFight) return dataObject;
-    return ClientFight.from(dataObject) as T;
+    if (dataObject is ClientFight) return dataObject as S;
+    return ClientFight.from(dataObject) as S;
   } else if (dataObject is League) {
-    if(dataObject is ClientLeague) return dataObject;
-    return ClientLeague.from(dataObject) as T;
+    if (dataObject is ClientLeague) return dataObject as S;
+    return ClientLeague.from(dataObject) as S;
   } else if (dataObject is Lineup) {
-    if(dataObject is ClientLineup) return dataObject;
-    return ClientLineup.from(dataObject) as T;
+    if (dataObject is ClientLineup) return dataObject as S;
+    return ClientLineup.from(dataObject) as S;
   } else if (dataObject is Membership) {
-    if(dataObject is ClientMembership) return dataObject;
-    return ClientMembership.from(dataObject) as T;
+    if (dataObject is ClientMembership) return dataObject as S;
+    return ClientMembership.from(dataObject) as S;
   } else if (dataObject is Participation) {
-    return dataObject;
+    return dataObject as S;
   } else if (dataObject is Team) {
-    if(dataObject is ClientTeam) return dataObject;
-    return ClientTeam.from(dataObject) as T;
+    if (dataObject is ClientTeam) return dataObject as S;
+    return ClientTeam.from(dataObject) as S;
   } else if (dataObject is TeamMatch) {
-    if(dataObject is ClientTeamMatch) return dataObject;
-    return ClientTeamMatch.from(dataObject) as T;
+    if (dataObject is ClientTeamMatch) return dataObject as S;
+    return ClientTeamMatch.from(dataObject) as S;
   }
   throw UnimplementedError('Cannot deserialize ${T.toString()}');
 }

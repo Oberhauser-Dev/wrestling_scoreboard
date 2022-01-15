@@ -36,7 +36,7 @@ class ServerTeamMatch extends TeamMatch {
 
   @override
   Future<void> generateFights() async {
-    fights = [];
+    List<Fight> fights = [];
     final homeParticipations =
         await ParticipationController().getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': home.id});
     final guestParticipations =
@@ -62,12 +62,8 @@ class ServerTeamMatch extends TeamMatch {
       );
       fights.add(fight);
     }
-    broadcast(jsonEncode(manyToJson(
-        fights,
-        Fight,
-        CRUD.update,
-        filterType: TeamMatch,
-        filterId: id)));
+    this.fights = fights;
+    broadcast(jsonEncode(manyToJson(fights, Fight, CRUD.update, filterType: TeamMatch, filterId: id)));
   }
 }
 
@@ -80,26 +76,32 @@ class TeamMatchController extends EntityController<TeamMatch> {
 
   TeamMatchController._internal() : super(tableName: 'team_match');
 
-  Future<Response> requestFights(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(FightController(),
-        isRaw: isRaw(request), sqlQuery: '''
+  static const _fightsQuery = '''
         SELECT f.* 
         FROM fight as f 
         JOIN team_match_fight AS tmf ON tmf.fight_id = f.id
-        WHERE tmf.team_match_id = @id;''', substitutionValues: {'id': id});
+        WHERE tmf.team_match_id = @id;''';
+
+  Future<Response> requestFights(Request request, String id) async {
+    return EntityController.handleRequestManyOfControllerFromQuery(FightController(),
+        isRaw: isRaw(request), sqlQuery: _fightsQuery, substitutionValues: {'id': id});
+  }
+
+  Future<List<Fight>> _getFights(String id, bool isRaw) {
+    return FightController().getManyFromQuery(_fightsQuery, substitutionValues: {'id': id});
   }
 
   Future<Response> generateFights(Request request, String id) async {
     final isReset = (request.url.queryParameters['reset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
+    final oldFights = (await _getFights(id, true)); // TODO Check if works...
     if (isReset) {
-      await Future.forEach(teamMatch.fights, (Fight e) async {
+      await Future.forEach(oldFights, (Fight e) async {
         if (e.id != null) await deleteSingle(e.id!);
       });
     }
     await teamMatch.generateFights();
-    final fights = teamMatch.fights;
-    await Future.forEach(fights, (Fight e) async {
+    await Future.forEach(teamMatch.fights, (Fight e) async {
       final hasRed = e.r != null;
       final hasBlue = e.b != null;
       // Get fight of teamMatch that has the same participants and the same weightClass
@@ -115,6 +117,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
         AND ${hasBlue ? 'ps_blue.participation_id = ${e.b!.participation.id}' : 'f.blue_id IS NULL'};
         ''');
       if (res.isEmpty) {
+        // TODO why creating participants and fight after generating fights? Shouldn't they already exist?
         if (e.r != null) {
           e.r!.id = await ParticipantStateController().createSingle(e.r!);
         }

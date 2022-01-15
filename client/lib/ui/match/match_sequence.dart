@@ -10,18 +10,19 @@ import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/lineup/edit_team_match.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
 import 'common_elements.dart';
 
 class MatchSequence extends StatelessWidget {
-  final ClientTeamMatch match;
+  final ClientTeamMatch filterObject;
 
-  const MatchSequence(this.match, {Key? key}) : super(key: key);
+  const MatchSequence(this.filterObject, {Key? key}) : super(key: key);
 
-  handleSelectedFight(ClientTeamMatch match, ClientFight fight, BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fight)));
+  handleSelectedFight(ClientTeamMatch match, int fightIndex, BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fightIndex)));
   }
 
   handleEditLineups(ClientTeamMatch match, BuildContext context) {
@@ -35,8 +36,8 @@ class MatchSequence extends StatelessWidget {
     double padding = width / 100;
     int flexWidthWeight = 12;
     int flexWidthStyle = 5;
-    return SingleConsumer(
-      initialData: match,
+    return SingleConsumer<TeamMatch, ClientTeamMatch>(
+      initialData: filterObject,
       builder: (BuildContext context, ClientTeamMatch match) {
         return Scaffold(
             bottomNavigationBar: BottomAppBar(
@@ -55,40 +56,45 @@ class MatchSequence extends StatelessWidget {
             ),
             body: ChangeNotifierProvider.value(
               value: match,
-              child: Column(children: [
-                Column(children: [
-                  Row(children: [
-                    Expanded(
-                      flex: flexWidthWeight + flexWidthStyle,
-                      child: Container(
-                        child: FittedText(
-                            '${match.league.name}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referees.map((e) => e.fullName).join(', ')}'),
-                        padding: EdgeInsets.all(padding),
+              child: StreamBuilder(
+                  stream: dataProvider.streamMany<Fight, ClientFight>(filterObject: match),
+                  builder: (BuildContext context, AsyncSnapshot<ManyDataObject<ClientFight>> snapshot) {
+                    if(!snapshot.hasData) return const CircularProgressIndicator();
+                    final fights = snapshot.data!.data.toList();
+                    if (fights.isEmpty) {
+                      dataProvider.generateFights(match);
+                    }
+                    fights.sort((a,b) => a.weightClass.weight - b.weightClass.weight);
+                    match.fights = fights;
+                    return Column(children: [
+                      Column(children: [
+                        Row(children: [
+                          Expanded(
+                            flex: flexWidthWeight + flexWidthStyle,
+                            child: Container(
+                              child: FittedText(
+                                  '${match.league.name}\n${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}\n${AppLocalizations.of(context)!.refereeAbbr}: ${match.referees.map((e) => e.fullName).join(', ')}'),
+                              padding: EdgeInsets.all(padding),
+                            ),
+                          ),
+                          ...CommonElements.getTeamHeader(match, context),
+                        ]),
+                        const Divider(
+                          height: 1,
+                        ),
+                      ]),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: fights.length,
+                          itemBuilder: (context, index) {
+                            final ClientFight fight = fights.elementAt(index);
+                            return FightListItem(fight, (fight) => handleSelectedFight(match, index, context),
+                                flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
+                          },
+                        ),
                       ),
-                    ),
-                    ...CommonElements.getTeamHeader(match, context),
-                  ]),
-                  const Divider(
-                    height: 1,
-                  ),
-                ]),
-                Expanded(
-                  child: ManyConsumer(
-                    filterObject: match,
-                    initialData: match.fights,
-                    builder: (BuildContext context, Iterable<ClientFight> fights) {
-                      return ListView.builder(
-                        itemCount: fights.length,
-                        itemBuilder: (context, index) {
-                          final ClientFight fight = fights.elementAt(index);
-                          return FightListItem(fight, (fight) => handleSelectedFight(match, fight, context),
-                              flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ]),
+                    ]);
+                  }),
             ));
       },
     );
@@ -101,7 +107,8 @@ class FightListItem extends StatelessWidget {
   final int flexWidthWeight;
   final int flexWidthStyle;
 
-  const FightListItem(this.fight, this.listItemCallback, {this.flexWidthWeight = 12, this.flexWidthStyle = 5, Key? key}) : super(key: key);
+  const FightListItem(this.fight, this.listItemCallback, {this.flexWidthWeight = 12, this.flexWidthStyle = 5, Key? key})
+      : super(key: key);
 
   displayName(ClientParticipantState? pStatus, FightRole role, double fontSize, BuildContext context) {
     return Container(
@@ -143,7 +150,9 @@ class FightListItem extends StatelessWidget {
                       flex: flexWidthStyle,
                       child: Center(
                           child: Text(
-                              fight.weightClass.style == WrestlingStyle.free ? AppLocalizations.of(context)!.freeStyleAbbr : AppLocalizations.of(context)!.grecoRomanAbbr,
+                              fight.weightClass.style == WrestlingStyle.free
+                                  ? AppLocalizations.of(context)!.freeStyleAbbr
+                                  : AppLocalizations.of(context)!.grecoRomanAbbr,
                               style: fontStyleDefault))),
                   Expanded(
                       flex: 55,

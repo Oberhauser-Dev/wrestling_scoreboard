@@ -167,7 +167,7 @@ List<ClientFight> getFightsOfTournament(Tournament tournament) {
       .toList();
 }
 
-List<ClientFight> getFightsOfTeamMatch(ClientTeamMatch match) {
+List<ClientFight> getFightsOfTeamMatch(TeamMatch match) {
   return getTeamMatchFights()
       .where((element) => element.teamMatch == match)
       .map((e) => ClientFight.from(e.fight))

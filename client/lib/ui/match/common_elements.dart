@@ -18,29 +18,35 @@ class CommonElements {
             child: Center(child: FittedText(match.home.team.name)),
           )),
       Expanded(
-          flex: 10,
-          child: Container(
-              height: cellHeight,
-              color: Colors.red.shade900,
-              padding: EdgeInsets.all(padding),
-              child: Center(
-                child: Consumer<ClientTeamMatch>(
-                    builder: (context, data, child) => FittedText(
-                          data.homePoints.toString(),
-                        )),
-              ))),
+        flex: 10,
+        child: Container(
+          height: cellHeight,
+          color: Colors.red.shade900,
+          padding: EdgeInsets.all(padding),
+          child: Center(
+            child: Consumer<ClientTeamMatch>(
+              builder: (context, data, child) => FittedText(
+                match.homePoints.toString(),
+              ),
+            ),
+          ),
+        ),
+      ),
       Expanded(
-          flex: 10,
-          child: Container(
-              height: cellHeight,
-              color: Colors.blue.shade900,
-              padding: EdgeInsets.all(padding),
-              child: Center(
-                child: Consumer<ClientTeamMatch>(
-                    builder: (context, data, child) => FittedText(
-                          data.guestPoints.toString(),
-                        )),
-              ))),
+        flex: 10,
+        child: Container(
+          height: cellHeight,
+          color: Colors.blue.shade900,
+          padding: EdgeInsets.all(padding),
+          child: Center(
+            child: Consumer<ClientTeamMatch>(
+              builder: (context, data, child) => FittedText(
+                match.guestPoints.toString(),
+              ),
+            ),
+          ),
+        ),
+      ),
       Expanded(
           flex: 50,
           child: Container(

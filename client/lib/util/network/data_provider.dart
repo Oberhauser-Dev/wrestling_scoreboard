@@ -14,25 +14,29 @@ final dataProvider = _isMock ? MockDataProvider() : RestDataProvider();
 /// Data exchange layer with CRUD operations
 abstract class DataProvider {
   /// READ: get a single object
-  Future<T> readSingle<T extends DataObject>(int id);
+  Future<S> readSingle<T extends DataObject, S extends T>(int id);
 
   /// READ: get many objects
-  Future<Iterable<T>> readMany<T extends DataObject>({DataObject? filterObject});
+  Future<List<S>> readMany<T extends DataObject, S extends T>({DataObject? filterObject});
 
   /// READ: get a single object
-  Stream<T> streamSingle<T extends DataObject>(Type t, int id, {bool init = false});
+  Stream<S> streamSingle<T extends DataObject, S extends T>(int id, {bool init = false}) {
+    final controller = getOrCreateSingleStreamController<T, S>();
+    if(init) readSingle<T, S>(id).then((value) => controller.sink.add(value));
+    return controller.stream.where((event) => event.id == id);
+  }
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> streamMany<T extends DataObject>(Type t, {DataObject? filterObject, bool init = true}) {
+  Stream<ManyDataObject<S>> streamMany<T extends DataObject, S extends T>({DataObject? filterObject, bool init = true}) {
     final filterType = filterObject == null ? Object : filterObject.getBaseType();
-    final controller = getOrCreateManyStreamController<T>(t, filterType: filterType);
-    if (init) {
-      readMany<T>(filterObject: filterObject).then((value) =>
-          controller.sink.add(ManyDataObject(data: value, filterType: filterType, filterId: filterObject?.id)));
-    }
+    final controller = getOrCreateManyStreamController<T, S>(filterType: filterType);
     var stream = controller.stream;
     if (filterObject != null) {
       stream = stream.where((e) => e.filterId == filterObject.id!);
+    }
+    if (init) {
+      readMany<T, S>(filterObject: filterObject).then((value) =>
+          controller.sink.add(ManyDataObject(data: value, filterType: filterType, filterId: filterObject?.id)));
     }
     return stream;
   }
@@ -55,32 +59,32 @@ abstract class DataProvider {
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject>>> _manyStreamControllers = {};
 
-  StreamController<T>? getSingleStreamController<T extends DataObject>(Type t) {
-    return _singleStreamControllers[getBaseType(t)] as StreamController<T>?;
+  StreamController<S>? getSingleStreamController<T extends DataObject, S extends T>() {
+    return _singleStreamControllers[T] as StreamController<S>?;
   }
 
-  StreamController<T> getOrCreateSingleStreamController<T extends DataObject>(Type t) {
-    StreamController<T>? streamController = getSingleStreamController<T>(t);
+  StreamController<S> getOrCreateSingleStreamController<T extends DataObject, S extends T>() {
+    StreamController<S>? streamController = getSingleStreamController<T, S>();
     if (streamController == null) {
-      streamController = StreamController<T>.broadcast();
-      _singleStreamControllers[getBaseType(t)] = streamController;
+      streamController = StreamController<S>.broadcast();
+      _singleStreamControllers[T] = streamController;
     }
     return streamController;
   }
 
-  StreamController<ManyDataObject<T>>? getManyStreamController<T extends DataObject>(Type t, {Type filterType = Object}) {
-    Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType = _manyStreamControllers[getBaseType(t)]?.cast<Type, StreamController<ManyDataObject<T>>>();
+  StreamController<ManyDataObject<S>>? getManyStreamController<T extends DataObject, S extends T>({Type filterType = Object}) {
+    Map<Type, StreamController<ManyDataObject<S>>>? streamControllersOfType = _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<S>>>();
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
-  StreamController<ManyDataObject<T>> getOrCreateManyStreamController<T extends DataObject>(Type t, {Type filterType = Object}) {
-    var streamController = getManyStreamController<T>(t, filterType: filterType);
+  StreamController<ManyDataObject<S>> getOrCreateManyStreamController<T extends DataObject, S extends T>({Type filterType = Object}) {
+    var streamController = getManyStreamController<T, S>(filterType: filterType);
     if (streamController == null) {
-      streamController = StreamController<ManyDataObject<T>>.broadcast();
-      Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType = _manyStreamControllers[getBaseType(t)]?.cast<Type, StreamController<ManyDataObject<T>>>();
+      streamController = StreamController<ManyDataObject<S>>.broadcast();
+      Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType = _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<S>>>();
       if (streamControllersOfType == null) {
         streamControllersOfType = <Type, StreamController<ManyDataObject<T>>>{};
-        _manyStreamControllers[getBaseType(t)] = streamControllersOfType;
+        _manyStreamControllers[T] = streamControllersOfType;
       }
       streamControllersOfType[filterType] = streamController;
     }
