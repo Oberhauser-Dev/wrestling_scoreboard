@@ -52,7 +52,8 @@ class ContentItem extends StatelessWidget implements ListItem {
   Widget? buildLeading(BuildContext context) => icon != null ? Icon(icon) : null;
 
   @override
-  Widget buildTitle(BuildContext context) => Text(title);
+  Widget buildTitle(BuildContext context) =>
+      Text(title, style: onTab == null ? TextStyle(color: Theme.of(context).disabledColor) : null);
 
   @override
   Widget? buildSubtitle(BuildContext context) {

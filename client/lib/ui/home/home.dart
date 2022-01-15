@@ -21,7 +21,7 @@ class Home extends StatelessWidget {
           ManyConsumer<Club, ClientClub>(
             builder: (BuildContext context, List<ClientClub> clubs) {
               return ListGroup(
-                header: HeadingItem(AppLocalizations.of(context)!.club),
+                header: HeadingItem(AppLocalizations.of(context)!.clubs),
                 items: clubs.map(
                   (e) => ContentItem(
                     e.name,
@@ -35,7 +35,7 @@ class Home extends StatelessWidget {
           ManyConsumer<League, ClientLeague>(
             builder: (BuildContext context, List<ClientLeague> leagues) {
               return ListGroup(
-                header: HeadingItem(AppLocalizations.of(context)!.league),
+                header: HeadingItem(AppLocalizations.of(context)!.leagues),
                 items: leagues.map(
                   (e) => ContentItem(
                     e.name,

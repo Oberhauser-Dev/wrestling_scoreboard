@@ -15,16 +15,40 @@ class TeamSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final description = filterObject is Club
+        ? ListGroup(
+            header: HeadingItem(AppLocalizations.of(context)!.info),
+            items: [
+              ContentItem(
+                (filterObject as Club).no ?? '-',
+                body: AppLocalizations.of(context)!.clubNumber,
+                icon: Icons.tag,
+              ),
+            ],
+          )
+        : filterObject is League
+            ? ListGroup(
+                header: HeadingItem(AppLocalizations.of(context)!.info),
+                items: [
+                  ContentItem(
+                    (filterObject as League).startDate.toIso8601String(),
+                    body: AppLocalizations.of(context)!.date, // Start date
+                    icon: Icons.emoji_events,
+                  ),
+                ],
+              )
+            : const SizedBox();
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
       body: GroupedList(items: [
+        description,
         ManyConsumer<Team, ClientTeam>(
           filterObject: filterObject,
           builder: (BuildContext context, List<ClientTeam> data) {
             return ListGroup(
-              header: HeadingItem(AppLocalizations.of(context)!.team),
+              header: HeadingItem(AppLocalizations.of(context)!.teams),
               items:
                   data.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))),
             );

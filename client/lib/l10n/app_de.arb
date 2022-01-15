@@ -15,14 +15,17 @@
   "save": "Speichern",
   "add": "Hinzufügen",
   "remove": "Entfernen",
+  "info": "Info",
   "noItems": "Keine Einträge vorhanden.",
-  
+
+  "date": "Datum",
   "participantVacant": "unbesetzt",
   "weightClass": "Gewichtsklasse",
   "weight": "Gewicht",
   "participantUnknownWeight": "Gewicht unbekannt",
   "club": "Verein",
   "clubs": "Vereine",
+  "clubNumber": "Vereinsnummer",
   "person": "Person",
   "persons": "Personen",
   "leader": "Mannschaftsführer",

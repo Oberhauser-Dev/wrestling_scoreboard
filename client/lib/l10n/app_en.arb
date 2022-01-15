@@ -18,14 +18,17 @@
   "save": "Save",
   "add": "Add",
   "remove": "Remove",
+  "info": "Info",
   "noItems": "No items available.",
-  
+
+  "date": "Date",
   "participantVacant": "vacant",
   "weight": "Weight",
   "weightClass": "Weight Class",
   "participantUnknownWeight": "unknown weight",
   "club": "Club",
   "clubs": "Clubs",
+  "clubNumber": "Club number",
   "person": "Person",
   "persons": "Persons",
   "leader": "Team Leader",
