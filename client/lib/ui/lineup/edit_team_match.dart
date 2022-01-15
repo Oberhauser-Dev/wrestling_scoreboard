@@ -34,7 +34,7 @@ class EditTeamMatch extends StatelessWidget {
             ],
           ),
           ListGroup(
-            header: HeadingItem(localizations.person),
+            header: HeadingItem(localizations.persons),
             items: [
               ContentItem(localizations.referee, icon: Icons.sports, onTab: () {}),
               ContentItem(localizations.matPresident, icon: Icons.manage_accounts, onTab: () {}),
@@ -44,7 +44,7 @@ class EditTeamMatch extends StatelessWidget {
             ],
           ),
           ListGroup(
-            header: HeadingItem(localizations.lineup + ' & ' + localizations.fight),
+            header: HeadingItem(localizations.lineups + ' & ' + localizations.fights),
             items: [
               ...lineups.map((lineup) {
                 return SingleConsumer<Lineup, ClientLineup>(
@@ -54,7 +54,7 @@ class EditTeamMatch extends StatelessWidget {
                       icon: Icons.group, onTab: () => handleSelectedLineup(lineup, context)),
                 );
               }),
-              ContentItem(localizations.fight, icon: Icons.sports_kabaddi, onTab: () {})
+              ContentItem(localizations.fights, icon: Icons.sports_kabaddi, onTab: () {})
             ],
           ),
         ];
