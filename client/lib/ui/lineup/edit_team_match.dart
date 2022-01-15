@@ -18,8 +18,10 @@ class EditTeamMatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final lineups = match.lineups;
 
     return SingleConsumer<TeamMatch, ClientTeamMatch>(
+      id: match.id!,
       initialData: match,
       builder: (BuildContext context, ClientTeamMatch match) {
         final items = [
@@ -44,8 +46,14 @@ class EditTeamMatch extends StatelessWidget {
           ListGroup(
             header: HeadingItem(localizations.lineup + ' & ' + localizations.fight),
             items: [
-              ...match.lineups.map(
-                  (e) => ContentItem(e.team.name, icon: Icons.group, onTab: () => handleSelectedLineup(e, context))),
+              ...lineups.map((lineup) {
+                return SingleConsumer<Lineup, ClientLineup>(
+                  id: lineup.id!,
+                  initialData: lineup,
+                  builder: (context, lineup) => ContentItem(lineup.team.name,
+                      icon: Icons.group, onTab: () => handleSelectedLineup(lineup, context)),
+                );
+              }),
               ContentItem(localizations.fight, icon: Icons.sports_kabaddi, onTab: () {})
             ],
           ),
@@ -69,19 +77,14 @@ class EditTeamMatch extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return SingleConsumer<Lineup, ClientLineup>(
-            initialData: lineup,
-            builder: (BuildContext context, ClientLineup lineup) {
-              return EditLineup(
-                title: title,
-                weightClasses: match.weightClasses,
-                lineup: lineup,
-                participations: participations,
-                memberships: memberships,
-                onSubmit: () async {
-                  await dataProvider.generateFights(match, true);
-                },
-              );
+          return EditLineup(
+            title: title,
+            weightClasses: match.weightClasses,
+            lineup: lineup,
+            participations: participations,
+            memberships: memberships,
+            onSubmit: () async {
+              await dataProvider.generateFights(match, true);
             },
           );
         },

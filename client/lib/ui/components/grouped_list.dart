@@ -40,13 +40,13 @@ class HeadingItem implements ListItem {
 }
 
 /// A ListItem that contains data to display a message.
-class ContentItem implements ListItem {
+class ContentItem extends StatelessWidget implements ListItem {
   final IconData? icon;
   final String title;
   final String? body;
   final Function()? onTab;
 
-  ContentItem(this.title, {this.body, this.icon, this.onTab});
+  const ContentItem(this.title, {this.body, this.icon, this.onTab, Key? key}) : super(key: key);
 
   @override
   Widget? buildLeading(BuildContext context) => icon != null ? Icon(icon) : null;
@@ -63,11 +63,21 @@ class ContentItem implements ListItem {
   Function()? buildOnTab() {
     return onTab;
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: buildLeading(context),
+      title: buildTitle(context),
+      subtitle: buildSubtitle(context),
+      onTap: buildOnTab(),
+    );
+  }
 }
 
 class ListGroup extends StatelessWidget {
   final HeadingItem header;
-  final Iterable<ContentItem> items;
+  final Iterable<Widget> items;
 
   const ListGroup({required this.header, this.items = const [], Key? key}) : super(key: key);
 
@@ -81,12 +91,7 @@ class ListGroup extends StatelessWidget {
       onTap: header.buildOnTab(),
     ));
     if (items.isNotEmpty) {
-      tiles.addAll(items.map((e) => ListTile(
-            leading: e.buildLeading(context),
-            title: e.buildTitle(context),
-            subtitle: e.buildSubtitle(context),
-            onTap: e.buildOnTab(),
-          )));
+      tiles.addAll(items);
     } else {
       tiles.add(ListTile(
         title: Center(

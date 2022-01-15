@@ -37,6 +37,7 @@ class MatchSequence extends StatelessWidget {
     int flexWidthWeight = 12;
     int flexWidthStyle = 5;
     return SingleConsumer<TeamMatch, ClientTeamMatch>(
+      id: filterObject.id!,
       initialData: filterObject,
       builder: (BuildContext context, ClientTeamMatch match) {
         return Scaffold(

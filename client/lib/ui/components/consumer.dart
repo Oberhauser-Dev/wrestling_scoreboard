@@ -3,15 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class SingleConsumer<T extends DataObject, S extends T> extends StatelessWidget {
-  final S initialData;
+  final S? initialData;
+  final int id;
   final Widget Function(BuildContext context, S data) builder;
 
-  const SingleConsumer({required this.builder, required this.initialData, Key? key}) : super(key: key);
+  const SingleConsumer({required this.builder, required this.id, this.initialData, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<S>(
-      stream: dataProvider.streamSingle<T, S>(initialData.id!, init: false),
+      stream: dataProvider.streamSingle<T, S>(id, init: initialData == null),
       initialData: initialData,
       builder: (BuildContext context, AsyncSnapshot<S> snap) {
         if (snap.hasError) {
