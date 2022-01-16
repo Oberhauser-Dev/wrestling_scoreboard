@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/lineup.dart';
+import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/ui/components/font.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
@@ -18,12 +19,14 @@ class EditLineup extends StatefulWidget {
   final Function()? onSubmit;
 
   const EditLineup(
-      {Key? key, required this.title,
+      {Key? key,
+      required this.title,
       required this.weightClasses,
       required this.lineup,
       required this.participations,
       required this.memberships,
-      this.onSubmit}) : super(key: key);
+      this.onSubmit})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => EditLineupState();
@@ -93,121 +96,95 @@ class EditLineupState extends State<EditLineup> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: Text(widget.title),
-          actions: [
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.save),
-                  onPressed: () => handleSubmit(context),
-                  label: Text(AppLocalizations.of(context)!.save),
-                ))
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 1140),
-              child: Column(
-                children: [
-                  ListTile(title: HeadingText(widget.lineup.team.name)),
-                  ListTile(
-                      title: getPersonDropdown(
-                    membership: _leader,
-                    label: AppLocalizations.of(context)!.leader,
-                    context: context,
-                    onSaved: (Membership? value) => setState(() {
-                      _leader = value;
-                    }),
-                  )),
-                  ListTile(
-                      title: getPersonDropdown(
-                    membership: _coach,
-                    label: AppLocalizations.of(context)!.coach,
-                    context: context,
-                    onSaved: (Membership? value) => setState(() {
-                      _coach = value;
-                    }),
-                  )),
-                  ..._participations.entries.map((mapEntry) {
-                    final weightClass = mapEntry.key;
-                    final participation = mapEntry.value;
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          Expanded(
-                            flex: 80,
-                            child: Container(
-                              padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-                              child: getPersonDropdown(
-                                membership: participation?.membership,
-                                label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name}',
-                                context: context,
-                                onSaved: (Membership? newMembership) {
-                                  final oldParticipation = _participations[weightClass];
-                                  if (oldParticipation?.membership == newMembership) return;
-                                  if (oldParticipation?.id != null) {
-                                    _deleteParticipations.add(oldParticipation!);
-                                  }
-                                  final addParticipation = newMembership == null
-                                      ? null
-                                      : Participation(
-                                          membership: newMembership,
-                                          lineup: widget.lineup,
-                                          weightClass: weightClass,
-                                        );
-                                  if (addParticipation != null) {
-                                    _createOrUpdateParticipations.add(addParticipation);
-                                    // _removeParticipations.remove(addParticipation); -> Cannot remove new participation, so Participant will be removed and added again
-                                  }
-                                  _participations[weightClass] = addParticipation;
-                                },
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 20,
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
-                              child: TextFormField(
-                                initialValue: participation?.weight?.toString() ?? '',
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                                    labelText: AppLocalizations.of(context)!.weight),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))
-                                ],
-                                onSaved: (String? value) {
-                                  final participation = _participations[weightClass];
-                                  if (participation != null) {
-                                    final newValue = value == null || value.isEmpty ? null : double.parse(value);
-                                    if (participation.weight == newValue) return;
-                                    participation.weight = newValue;
-                                    _createOrUpdateParticipations.add(participation);
-                                    print('save: $value');
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+        key: _formKey,
+        child: EditWidget(
+          title: widget.title,
+          onSubmit: () => handleSubmit(context),
+          items: [
+            ListTile(title: HeadingText(widget.lineup.team.name)),
+            ListTile(
+                title: getPersonDropdown(
+              membership: _leader,
+              label: AppLocalizations.of(context)!.leader,
+              context: context,
+              onSaved: (Membership? value) => setState(() {
+                _leader = value;
+              }),
+            )),
+            ListTile(
+                title: getPersonDropdown(
+              membership: _coach,
+              label: AppLocalizations.of(context)!.coach,
+              context: context,
+              onSaved: (Membership? value) => setState(() {
+                _coach = value;
+              }),
+            )),
+            ..._participations.entries.map((mapEntry) {
+              final weightClass = mapEntry.key;
+              final participation = mapEntry.value;
+              return ListTile(
+                title: Row(
+                  children: [
+                    Expanded(
+                      flex: 80,
+                      child: Container(
+                        padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
+                        child: getPersonDropdown(
+                          membership: participation?.membership,
+                          label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name}',
+                          context: context,
+                          onSaved: (Membership? newMembership) {
+                            final oldParticipation = _participations[weightClass];
+                            if (oldParticipation?.membership == newMembership) return;
+                            if (oldParticipation?.id != null) {
+                              _deleteParticipations.add(oldParticipation!);
+                            }
+                            final addParticipation = newMembership == null
+                                ? null
+                                : Participation(
+                                    membership: newMembership,
+                                    lineup: widget.lineup,
+                                    weightClass: weightClass,
+                                  );
+                            if (addParticipation != null) {
+                              _createOrUpdateParticipations.add(addParticipation);
+                              // _removeParticipations.remove(addParticipation); -> Cannot remove new participation, so Participant will be removed and added again
+                            }
+                            _participations[weightClass] = addParticipation;
+                          },
+                        ),
                       ),
-                    );
-                  }).toList()
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+                    ),
+                    Expanded(
+                      flex: 20,
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
+                        child: TextFormField(
+                          initialValue: participation?.weight?.toString() ?? '',
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                              labelText: AppLocalizations.of(context)!.weight),
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                          onSaved: (String? value) {
+                            final participation = _participations[weightClass];
+                            if (participation != null) {
+                              final newValue = value == null || value.isEmpty ? null : double.parse(value);
+                              if (participation.weight == newValue) return;
+                              participation.weight = newValue;
+                              _createOrUpdateParticipations.add(participation);
+                              print('save: $value');
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList()
+          ],
+        ));
   }
 }

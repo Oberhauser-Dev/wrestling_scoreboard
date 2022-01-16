@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
+import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class EditClub extends StatefulWidget {
@@ -26,59 +27,41 @@ class EditClubState extends State<EditClub> {
     final localizations = AppLocalizations.of(context)!;
 
     final items = [
-      TextFormField(
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: localizations.name,
-          icon: const Icon(Icons.description),
+      ListTile(
+        title: TextFormField(
+          decoration: InputDecoration(
+            border: const UnderlineInputBorder(),
+            labelText: localizations.name,
+            icon: const Icon(Icons.description),
+          ),
+          initialValue: widget.club.name,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return localizations.mandatoryField;
+            }
+          },
+          onSaved: (newValue) => _name = newValue,
         ),
-        initialValue: widget.club.name,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return localizations.mandatoryField;
-          }
-        },
-        onSaved: (newValue) => _name = newValue,
       ),
-      TextFormField(
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: localizations.clubNumber,
-          icon: const Icon(Icons.tag),
+      ListTile(
+        title: TextFormField(
+          decoration: InputDecoration(
+            border: const UnderlineInputBorder(),
+            labelText: localizations.clubNumber,
+            icon: const Icon(Icons.tag),
+          ),
+          initialValue: widget.club.no,
+          onSaved: (newValue) => _no = newValue,
         ),
-        initialValue: widget.club.no,
-        onSaved: (newValue) => _no = newValue,
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.save),
-                onPressed: () => handleSubmit(context),
-                label: Text(AppLocalizations.of(context)!.save),
-              ))
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 1140),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: items,
-                ),
-              ),
-            ),
-          ),
-        ),
+    return Form(
+      key: _formKey,
+      child: EditWidget(
+        title: widget.title,
+        onSubmit: () => handleSubmit(context),
+        items: items,
       ),
     );
   }
