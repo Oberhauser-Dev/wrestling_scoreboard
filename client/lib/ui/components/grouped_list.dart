@@ -17,67 +17,44 @@ abstract class ListItem {
 }
 
 /// A ListItem that contains data to display a heading.
-class HeadingItem implements ListItem {
-  final String heading;
+class HeadingItem extends StatelessWidget {
+  final String title;
+  final Widget? trailing;
 
-  HeadingItem(this.heading);
-
-  @override
-  Widget? buildLeading(BuildContext context) => null;
+  const HeadingItem({required this.title, this.trailing, Key? key}) : super(key: key);
 
   @override
-  Widget buildTitle(BuildContext context) {
-    return HeadingText(heading);
-  }
-
-  @override
-  Widget? buildSubtitle(BuildContext context) => null;
-
-  @override
-  Function()? buildOnTab() {
-    return null;
-  }
+  Widget build(BuildContext context) => ListTile(
+        title: HeadingText(title),
+        trailing: trailing,
+      );
 }
 
 /// A ListItem that contains data to display a message.
-class ContentItem extends StatelessWidget implements ListItem {
+class ContentItem extends StatelessWidget {
   final IconData? icon;
   final String title;
-  final String? body;
-  final Function()? onTab;
+  final String? subtitle;
+  final Widget? trailing;
+  final Function()? onTap;
 
-  const ContentItem(this.title, {this.body, this.icon, this.onTab, Key? key}) : super(key: key);
-
-  @override
-  Widget? buildLeading(BuildContext context) => icon != null ? Icon(icon) : null;
-
-  @override
-  Widget buildTitle(BuildContext context) =>
-      Text(title, style: onTab == null ? TextStyle(color: Theme.of(context).disabledColor) : null);
-
-  @override
-  Widget? buildSubtitle(BuildContext context) {
-    return (body != null) ? Text(body!) : null;
-  }
-
-  @override
-  Function()? buildOnTab() {
-    return onTab;
-  }
+  const ContentItem({required this.title, this.subtitle, this.icon, this.onTap, this.trailing, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: buildLeading(context),
-      title: buildTitle(context),
-      subtitle: buildSubtitle(context),
-      onTap: buildOnTab(),
+      leading: icon != null ? Icon(icon) : null,
+      title: Text(title, style: onTap == null ? TextStyle(color: Theme.of(context).disabledColor) : null),
+      subtitle: (subtitle != null) ? Text(subtitle!) : null,
+      trailing: trailing,
+      onTap: onTap,
     );
   }
 }
 
 class ListGroup extends StatelessWidget {
-  final HeadingItem header;
+  final Widget header;
   final Iterable<Widget> items;
 
   const ListGroup({required this.header, this.items = const [], Key? key}) : super(key: key);
@@ -85,12 +62,7 @@ class ListGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> tiles = [];
-    tiles.add(ListTile(
-      leading: header.buildLeading(context),
-      title: header.buildTitle(context),
-      subtitle: header.buildSubtitle(context),
-      onTap: header.buildOnTab(),
-    ));
+    tiles.add(header);
     if (items.isNotEmpty) {
       tiles.addAll(items);
     } else {

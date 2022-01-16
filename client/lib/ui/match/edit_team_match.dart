@@ -26,35 +26,35 @@ class EditTeamMatch extends StatelessWidget {
       builder: (BuildContext context, ClientTeamMatch match) {
         final items = [
           ListGroup(
-            header: HeadingItem(localizations.match),
+            header: HeadingItem(title: localizations.match),
             items: [
-              ContentItem(localizations.details, icon: Icons.description, onTab: () {}),
-              ContentItem(localizations.weightClass, icon: Icons.fitness_center, onTab: () {}),
-              ContentItem(localizations.durations, icon: Icons.timer, onTab: () {}),
+              ContentItem(title: localizations.details, icon: Icons.description, onTap: () {}),
+              ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: () {}),
+              ContentItem(title: localizations.durations, icon: Icons.timer, onTap: () {}),
             ],
           ),
           ListGroup(
-            header: HeadingItem(localizations.persons),
+            header: HeadingItem(title: localizations.persons),
             items: [
-              ContentItem(localizations.referee, icon: Icons.sports, onTab: () {}),
-              ContentItem(localizations.matPresident, icon: Icons.manage_accounts, onTab: () {}),
-              ContentItem(localizations.timeKeeper, icon: Icons.pending_actions, onTab: () {}),
-              ContentItem(localizations.transcriptionWriter, icon: Icons.history_edu, onTab: () {}),
-              ContentItem(localizations.steward, icon: Icons.security, onTab: () {}),
+              ContentItem(title: localizations.referee, icon: Icons.sports, onTap: () {}),
+              ContentItem(title: localizations.matPresident, icon: Icons.manage_accounts, onTap: () {}),
+              ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: () {}),
+              ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: () {}),
+              ContentItem(title: localizations.steward, icon: Icons.security, onTap: () {}),
             ],
           ),
           ListGroup(
-            header: HeadingItem(localizations.lineups + ' & ' + localizations.fights),
+            header: HeadingItem(title: localizations.lineups + ' & ' + localizations.fights),
             items: [
               ...lineups.map((lineup) {
                 return SingleConsumer<Lineup, ClientLineup>(
                   id: lineup.id!,
                   initialData: lineup,
-                  builder: (context, lineup) => ContentItem(lineup.team.name,
-                      icon: Icons.group, onTab: () => handleSelectedLineup(lineup, context)),
+                  builder: (context, lineup) => ContentItem(
+                      title: lineup.team.name, icon: Icons.group, onTap: () => handleSelectedLineup(lineup, context)),
                 );
               }),
-              ContentItem(localizations.fights, icon: Icons.sports_kabaddi, onTab: () {})
+              ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: () {})
             ],
           ),
         ];
@@ -83,8 +83,8 @@ class EditTeamMatch extends StatelessWidget {
             lineup: lineup,
             participations: participations,
             memberships: memberships,
-            onSubmit: () async {
-              await dataProvider.generateFights(match, true);
+            onSubmit: () {
+              dataProvider.generateFights(match, true);
             },
           );
         },

@@ -15,8 +15,13 @@
   "save": "Speichern",
   "add": "Hinzufügen",
   "remove": "Entfernen",
+  "cancel": "Abbrechen",
+  "ok": "OK",
   "info": "Info",
+  "details": "Details",
+  "name": "Name",
   "noItems": "Keine Einträge vorhanden.",
+  "mandatoryField": "Das ist ein Pflichtfeld.",
 
   "date": "Datum",
   "participantVacant": "unbesetzt",
@@ -79,6 +84,5 @@
   "timeKeeper": "Zeitnehmer",
   "transcriptionWriter": "Protokollführer",
   "steward": "Ordner",
-  "details": "Details",
   "durations": "Zeiten"
 }

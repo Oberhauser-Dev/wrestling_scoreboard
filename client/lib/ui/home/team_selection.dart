@@ -17,22 +17,22 @@ class TeamSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     final description = filterObject is Club
         ? ListGroup(
-            header: HeadingItem(AppLocalizations.of(context)!.info),
+            header: HeadingItem(title: AppLocalizations.of(context)!.info),
             items: [
               ContentItem(
-                (filterObject as Club).no ?? '-',
-                body: AppLocalizations.of(context)!.clubNumber,
+                title: (filterObject as Club).no ?? '-',
+                subtitle: AppLocalizations.of(context)!.clubNumber,
                 icon: Icons.tag,
               ),
             ],
           )
         : filterObject is League
             ? ListGroup(
-                header: HeadingItem(AppLocalizations.of(context)!.info),
+                header: HeadingItem(title: AppLocalizations.of(context)!.info),
                 items: [
                   ContentItem(
-                    (filterObject as League).startDate.toIso8601String(),
-                    body: AppLocalizations.of(context)!.date, // Start date
+                    title: (filterObject as League).startDate.toIso8601String(),
+                    subtitle: AppLocalizations.of(context)!.date, // Start date
                     icon: Icons.emoji_events,
                   ),
                 ],
@@ -48,9 +48,9 @@ class TeamSelection extends StatelessWidget {
           filterObject: filterObject,
           builder: (BuildContext context, List<ClientTeam> data) {
             return ListGroup(
-              header: HeadingItem(AppLocalizations.of(context)!.teams),
-              items:
-                  data.map((e) => ContentItem(e.name, icon: Icons.group, onTab: () => handleSelectedTeam(e, context))),
+              header: HeadingItem(title: AppLocalizations.of(context)!.teams),
+              items: data.map(
+                  (e) => ContentItem(title: e.name, icon: Icons.group, onTap: () => handleSelectedTeam(e, context))),
             );
           },
         ),

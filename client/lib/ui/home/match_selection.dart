@@ -16,21 +16,21 @@ class MatchSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     final description = filterObject is Team
         ? ListGroup(
-            header: HeadingItem(AppLocalizations.of(context)!.info),
+            header: HeadingItem(title: AppLocalizations.of(context)!.info),
             items: [
               ContentItem(
-                (filterObject as Team).league?.name ?? '-',
-                body: AppLocalizations.of(context)!.league,
+                title: (filterObject as Team).league?.name ?? '-',
+                subtitle: AppLocalizations.of(context)!.league,
                 icon: Icons.emoji_events,
               ),
               ContentItem(
-                (filterObject as Team).club.name,
-                body: AppLocalizations.of(context)!.club,
+                title: (filterObject as Team).club.name,
+                subtitle: AppLocalizations.of(context)!.club,
                 icon: Icons.foundation,
               ),
               ContentItem(
-                (filterObject as Team).description ?? '-',
-                body: AppLocalizations.of(context)!.team,
+                title: (filterObject as Team).description ?? '-',
+                subtitle: AppLocalizations.of(context)!.team,
                 icon: Icons.description,
               ),
             ],
@@ -46,12 +46,12 @@ class MatchSelection extends StatelessWidget {
           filterObject: filterObject,
           builder: (BuildContext context, List<ClientTeamMatch> data) {
             return ListGroup(
-              header: HeadingItem(AppLocalizations.of(context)!.matches),
+              header: HeadingItem(title: AppLocalizations.of(context)!.matches),
               items: data.map(
                 (e) => ContentItem(
-                  '${e.home.team.name} - ${e.guest.team.name}',
+                  title: '${e.home.team.name} - ${e.guest.team.name}',
                   icon: Icons.event,
-                  onTab: () => handleSelectedMatch(e, context),
+                  onTap: () => handleSelectedMatch(e, context),
                 ),
               ),
             );

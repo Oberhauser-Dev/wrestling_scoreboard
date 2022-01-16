@@ -17,7 +17,7 @@ class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    Home(),
+    const Home(),
     const CustomSettingsScreen(),
   ];
 
@@ -34,6 +34,7 @@ class _AppNavigationState extends State<AppNavigation> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),

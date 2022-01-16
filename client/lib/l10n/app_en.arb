@@ -18,8 +18,13 @@
   "save": "Save",
   "add": "Add",
   "remove": "Remove",
+  "cancel": "Cancel",
+  "ok": "OK",
   "info": "Info",
+  "details": "Details",
+  "name": "Name",
   "noItems": "No items available.",
+  "mandatoryField": "This is a mandatory field.",
 
   "date": "Date",
   "participantVacant": "vacant",
@@ -82,6 +87,5 @@
   "timeKeeper": "Time Keeper",
   "transcriptionWriter": "Transcription Writer",
   "steward": "Steward",
-  "details": "Details",
   "durations": "durations"
 }

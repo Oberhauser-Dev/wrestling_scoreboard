@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard/ui/lineup/edit_team_match.dart';
+import 'package:wrestling_scoreboard/ui/match/edit_team_match.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
