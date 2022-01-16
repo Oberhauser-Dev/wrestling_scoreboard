@@ -16,7 +16,9 @@ class MatchSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     final description = filterObject is Team
         ? ListGroup(
-            header: HeadingItem(title: AppLocalizations.of(context)!.info),
+            header: HeadingItem(
+              title: AppLocalizations.of(context)!.info,
+            ),
             items: [
               ContentItem(
                 title: (filterObject as Team).league?.name ?? '-',

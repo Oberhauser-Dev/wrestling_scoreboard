@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class SingleConsumer<T extends DataObject, S extends T> extends StatelessWidget {
-  final S? initialData;
   final int id;
+  final S? initialData;
   final Widget Function(BuildContext context, S data) builder;
 
-  const SingleConsumer({required this.builder, required this.id, this.initialData, Key? key}) : super(key: key);
+  const SingleConsumer({required this.id, this.initialData, required this.builder, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ManyConsumer<T extends DataObject, S extends T> extends StatelessWidget {
   final DataObject? filterObject;
   final Widget Function(BuildContext context, List<S> data) builder;
 
-  const ManyConsumer({required this.builder, this.filterObject, this.initialData, Key? key}) : super(key: key);
+  const ManyConsumer({this.initialData, required this.builder, this.filterObject, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
