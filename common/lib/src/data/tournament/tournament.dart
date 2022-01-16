@@ -28,21 +28,25 @@ class Tournament extends WrestlingEvent {
   @override
   int maxRounds = 2;
 
-  Tournament(
-      {int? id,
-      required this.name,
-      required List<Lineup> lineups,
-      required List<WeightClass> weightClasses,
-      required List<Person> referees,
-      String? location,
-      DateTime? date})
-      : super(
+  Tournament({
+    int? id,
+    required this.name,
+    required List<Lineup> lineups,
+    required List<WeightClass> weightClasses,
+    required List<Person> referees,
+    String? location,
+    DateTime? date,
+    int? visitorsCount,
+    String? comment,
+  }) : super(
           id: id,
           lineups: lineups,
           referees: referees,
           location: location,
           date: date,
           weightClasses: weightClasses,
+          comment: comment,
+          visitorsCount: visitorsCount,
         );
 
   factory Tournament.fromJson(Map<String, dynamic> json) => _$TournamentFromJson(json);

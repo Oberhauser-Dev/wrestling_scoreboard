@@ -14,8 +14,8 @@ class WrestlingEvent extends DataObject {
   Iterable<Person> stewards = [];
   DateTime? date;
   String? location;
-  int visitorsCount = 0;
-  String comment = '';
+  int? visitorsCount;
+  String? comment;
   List<Fight> fights = [];
   final Duration roundDuration = Duration(minutes: 3);
   final Duration breakDuration = Duration(seconds: 30);
@@ -25,7 +25,14 @@ class WrestlingEvent extends DataObject {
   List<WeightClass> weightClasses;
 
   WrestlingEvent(
-      {int? id, required this.lineups, required this.referees, this.location, this.date, this.weightClasses = const []})
+      {int? id,
+      required this.lineups,
+      required this.referees,
+      this.location,
+      this.date,
+      this.weightClasses = const [],
+      this.visitorsCount,
+      this.comment})
       : super(id) {
     date ??= DateTime.now();
   }

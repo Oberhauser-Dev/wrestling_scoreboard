@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:common/common.dart';
+import 'package:server/controllers/club_controller.dart';
+import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -29,7 +31,8 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
       await controller.deleteSingle(single.id!);
     }
     // Currently do not update list of all entities (as is and should not used anywhere)
-    if (operation != CRUD.read) {
+    // Update doesn't need to update lists, it should only be also listened to the object itself, which gets an update event
+    if (operation == CRUD.create || operation == CRUD.delete) {
       /*webSocket.sink.add(jsonEncode(
         manyToJson(await EntityController.getControllerFromDataType(single.runtimeType).getMany(), operation)));*/
       if (single is Participation) {
@@ -42,12 +45,18 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
             filterId: single.lineup.id)));
       } else if (single is Lineup) {
         // No filtered list needs to be handled.
+      } else if (single is Club) {
+        // Exception: the full Club list has to be updated, shouldn't occur often
+        broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
+      } else if (single is League) {
+        // Exception: the full League list has to be updated, shouldn't occur often
+        broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update)));
       } else {
         throw DataUnimplementedError(operation, single.runtimeType);
       }
     }
   }
-  
+
   void handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) {
     print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(many.data.first.runtimeType)}s');
     throw DataUnimplementedError(operation, many.runtimeType);

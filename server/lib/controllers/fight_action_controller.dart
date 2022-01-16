@@ -1,4 +1,5 @@
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 
 import 'entity_controller.dart';
 
@@ -16,20 +17,22 @@ class FightActionController extends EntityController<FightAction> {
     return FightAction(
       id: e[primaryKeyName] as int?,
       actionType: FightActionTypeParser.valueOf(e['action_type']),
-      duration: e['duration'],
+      duration: Duration(milliseconds: e['duration_millis']),
       role: FightRoleParser.valueOf(e['role']),
       pointCount: e['point_count'] as int?,
     );
   }
 
   @override
-  Map<String, dynamic> parseFromClass(FightAction e) {
-    return {
+  PostgresMap parseFromClass(FightAction e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'action_type': e.actionType.name,
-      'duration': e.duration,
+      'duration_millis': e.duration.inMilliseconds,
       'role': e.role.name,
       'point_count': e.pointCount,
-    };
+    }, {
+      'point_count': PostgreSQLDataType.smallInteger
+    });
   }
 }

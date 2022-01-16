@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 import 'package:server/controllers/club_controller.dart';
 import 'package:server/controllers/fight_controller.dart';
 import 'package:server/controllers/league_controller.dart';
@@ -12,6 +13,39 @@ import 'package:server/controllers/team_match_controller.dart';
 import 'package:server/controllers/tournament_controller.dart';
 import 'package:server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
+
+Map<Type, PostgreSQLDataType> typeDartToCodeMap = {
+  String: PostgreSQLDataType.varChar,
+  // 'int2': PostgreSQLDataType.smallInteger,
+  int: PostgreSQLDataType.integer,
+  // 'int8': PostgreSQLDataType.bigInteger,
+  // 'float4': PostgreSQLDataType.real,
+  double: PostgreSQLDataType.double,
+  bool: PostgreSQLDataType.boolean,
+  DateTime: PostgreSQLDataType.date,
+  // 'timestamp': PostgreSQLDataType.timestampWithoutTimezone,
+  // 'timestamptz': PostgreSQLDataType.timestampWithTimezone,
+  // 'interval': PostgreSQLDataType.interval,
+  PgPoint: PostgreSQLDataType.point,
+  // 'jsonb': PostgreSQLDataType.jsonb,
+  // 'bytea': PostgreSQLDataType.byteArray,
+  // 'name': PostgreSQLDataType.name,
+  // 'uuid': PostgreSQLDataType.uuid,
+  // 'json': PostgreSQLDataType.json,
+  // 'point': PostgreSQLDataType.point,
+  List<int>: PostgreSQLDataType.integerArray,
+  List<String>: PostgreSQLDataType.textArray,
+  List<double>: PostgreSQLDataType.doubleArray,
+  // 'varchar': PostgreSQLDataType.varChar,
+  // '_jsonb': PostgreSQLDataType.jsonbArray,
+};
+
+class PostgresMap {
+  Map<String, dynamic> map;
+  Map<String, PostgreSQLDataType?> types;
+
+  PostgresMap(this.map, [this.types = const {}]);
+}
 
 abstract class EntityController<T extends DataObject> {
   String tableName;
@@ -39,22 +73,24 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> createSingle(T dataObject) async {
-    final values = parseFromClass(dataObject);
-    final res = await PostgresDb().connection.query('''
-        INSERT INTO $tableName (${values.keys.join(',')}) 
-        VALUES (${values.values.map((e) => e.toString()).join(',')}) RETURNING $primaryKeyName;
-        ''');
+    final postgresData = parseFromClass(dataObject);
+    final sql = '''
+        INSERT INTO $tableName (${postgresData.map.keys.join(',')}) 
+        VALUES (${postgresData.map.entries.map((e) => PostgreSQLFormat.id(e.key, type: postgresData.types[e.key] ?? typeDartToCodeMap[e.value.runtimeType])).join(', ')}) RETURNING $primaryKeyName;
+        ''';
+    final res = await PostgresDb().connection.query(sql, substitutionValues: postgresData.map);
     dataObject.id = res.last[0] as int;
     return dataObject.id!;
   }
 
   Future<int> updateSingle(T dataObject) async {
-    final values = parseFromClass(dataObject);
-    final res = await PostgresDb().connection.query('''
+    final postgresData = parseFromClass(dataObject);
+    final sql = '''
         UPDATE $tableName 
-        SET ${values.entries.map((e) => '${e.key} = ${e.value}').join(',')} 
+        SET ${postgresData.map.entries.map((e) => '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresData.types[e.key] ?? typeDartToCodeMap[e.value.runtimeType])}').join(',')} 
         WHERE $primaryKeyName = ${dataObject.id!} RETURNING $primaryKeyName;
-        ''');
+        ''';
+    final res = await PostgresDb().connection.query(sql, substitutionValues: postgresData.map);
     return res.last[0] as int;
   }
 
@@ -114,7 +150,7 @@ abstract class EntityController<T extends DataObject> {
 
   Future<T> parseToClass(Map<String, dynamic> e);
 
-  Map<String, dynamic> parseFromClass(T e);
+  PostgresMap parseFromClass(T e);
 
   bool isRaw(Request request) {
     return (request.url.queryParameters['raw'] ?? '').parseBool();
@@ -167,16 +203,25 @@ abstract class EntityController<T extends DataObject> {
   }
 
   static EntityController getControllerFromDataType(Type t) {
-    switch(t) {
-      case Club: return ClubController();
-      case Fight: return FightController();
-      case League: return LeagueController();
-      case Lineup: return LineupController();
-      case Membership: return MembershipController();
-      case Participation: return ParticipationController();
-      case Team: return TeamController();
-      case TeamMatch: return TeamMatchController();
-      case Tournament: return TournamentController();
+    switch (t) {
+      case Club:
+        return ClubController();
+      case Fight:
+        return FightController();
+      case League:
+        return LeagueController();
+      case Lineup:
+        return LineupController();
+      case Membership:
+        return MembershipController();
+      case Participation:
+        return ParticipationController();
+      case Team:
+        return TeamController();
+      case TeamMatch:
+        return TeamMatchController();
+      case Tournament:
+        return TournamentController();
       default:
         throw UnimplementedError('Controller not available for type: $t');
     }

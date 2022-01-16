@@ -19,6 +19,8 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
     no: json['no'] as String?,
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
+    visitorsCount: json['visitorsCount'] as int?,
+    comment: json['comment'] as String?,
   )
     ..transcriptWriters = (json['transcriptWriters'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
@@ -28,8 +30,6 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
     ..stewards = (json['stewards'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-    ..visitorsCount = json['visitorsCount'] as int
-    ..comment = json['comment'] as String
     ..fights = (json['fights'] as List<dynamic>)
         .map((e) => Fight.fromJson(e as Map<String, dynamic>))
         .toList()

@@ -24,12 +24,12 @@ class FightController extends EntityController<Fight> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(Fight e) {
-    return {
+  PostgresMap parseFromClass(Fight e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'red_id': e.r?.id,
       'blue_id': e.b?.id,
       'weight_class_id': e.weightClass.id,
-    };
+    });
   }
 }

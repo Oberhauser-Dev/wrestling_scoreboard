@@ -36,15 +36,15 @@ class LeagueController extends EntityController<League> {
 
   @override
   Future<League> parseToClass(Map<String, dynamic> e) async {
-    return League(id: e['id'] as int?, name: e['name'] as String, startDate: e['startDate'] as DateTime);
+    return League(id: e['id'] as int?, name: e['name'] as String, startDate: e['start_date'] as DateTime);
   }
 
   @override
-  Map<String, dynamic> parseFromClass(League e) {
-    return {
+  PostgresMap parseFromClass(League e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'name': e.name,
-      'startDate': e.startDate,
-    };
+      'start_date': e.startDate,
+    });
   }
 }

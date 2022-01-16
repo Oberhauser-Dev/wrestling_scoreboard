@@ -30,23 +30,26 @@ class TeamMatch extends WrestlingEvent {
   @override
   int maxRounds = 2;
 
-  TeamMatch(
-      {int? id,
-      required Lineup home,
-      required Lineup guest,
-      required List<WeightClass> weightClasses,
-      required Iterable<Person> referees,
-      this.no,
-      String? location,
-      DateTime? date})
+  TeamMatch({int? id,
+    required Lineup home,
+    required Lineup guest,
+    required List<WeightClass> weightClasses,
+    required Iterable<Person> referees,
+    this.no,
+    String? location,
+    DateTime? date,
+    int? visitorsCount,
+    String? comment,})
       : super(
-          id: id,
-          lineups: [home, guest],
-          referees: referees,
-          location: location,
-          date: date,
-          weightClasses: weightClasses,
-        ) {
+    id: id,
+    lineups: [home, guest],
+    referees: referees,
+    location: location,
+    date: date,
+    weightClasses: weightClasses,
+    comment: comment,
+    visitorsCount: visitorsCount,
+  ) {
     if (home.team.league == guest.team.league && home.team.league != null) {
       league = home.team.league!;
     } else {

@@ -29,11 +29,11 @@ class ClubController extends EntityController<Club> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(Club e) {
-    return {
+  PostgresMap parseFromClass(Club e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'no': e.no,
       'name': e.name,
-    };
+    });
   }
 }

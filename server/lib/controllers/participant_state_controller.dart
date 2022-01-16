@@ -1,4 +1,5 @@
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 
 import 'entity_controller.dart';
 import 'participation_controller.dart';
@@ -23,11 +24,13 @@ class ParticipantStateController extends EntityController<ParticipantState> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(ParticipantState e) {
-    return {
+  PostgresMap parseFromClass(ParticipantState e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'participation_id': e.participation.id,
       'classification_points': e.classificationPoints,
-    };
+    }, {
+      'classification_points': PostgreSQLDataType.smallInteger
+    });
   }
 }

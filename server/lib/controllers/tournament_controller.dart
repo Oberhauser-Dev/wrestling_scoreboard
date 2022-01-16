@@ -1,4 +1,5 @@
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
@@ -29,20 +30,26 @@ class TournamentController extends EntityController<Tournament> {
       id: e[primaryKeyName] as int?,
       name: e['name'],
       lineups: [],
+      weightClasses: [],
       referees: [],
       location: e['location'] as String?,
       date: e['date'] as DateTime?,
-      weightClasses: [],
+      visitorsCount: e['visitors_count'] as int?,
+      comment: e['comment'] as String?,
     );
   }
 
   @override
-  Map<String, dynamic> parseFromClass(Tournament e) {
-    return {
+  PostgresMap parseFromClass(Tournament e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'name': e.name,
       'location': e.location,
       'date': e.date,
-    };
+      'visitors_count': e.visitorsCount,
+      'comment': e.comment,
+    }, {
+      'comment': PostgreSQLDataType.text
+    });
   }
 }

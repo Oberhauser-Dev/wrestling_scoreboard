@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/participant_state_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
@@ -15,16 +16,18 @@ import 'fight_controller.dart';
 import 'lineup_controller.dart';
 
 class ServerTeamMatch extends TeamMatch {
-  ServerTeamMatch(
-      {int? id,
-      required Lineup home,
-      required Lineup guest,
-      required List<WeightClass> weightClasses,
-      required List<Person> referees,
-      String? no,
-      String? location,
-      DateTime? date})
-      : super(
+  ServerTeamMatch({
+    int? id,
+    required Lineup home,
+    required Lineup guest,
+    required List<WeightClass> weightClasses,
+    required List<Person> referees,
+    String? no,
+    String? location,
+    DateTime? date,
+    int? visitorsCount,
+    String? comment,
+  }) : super(
           id: id,
           home: home,
           guest: guest,
@@ -33,6 +36,8 @@ class ServerTeamMatch extends TeamMatch {
           location: location,
           date: date,
           weightClasses: weightClasses,
+          visitorsCount: visitorsCount,
+          comment: comment,
         );
 
   @override
@@ -150,15 +155,18 @@ class TeamMatchController extends EntityController<TeamMatch> {
       home: home!,
       guest: guest!,
       weightClasses: weightClasses,
-      referees: [referee!], // TODO need extra table for multiple referees.
+      referees: [referee!],
+      // TODO need extra table for multiple referees.
       location: e['location'] as String?,
       date: e['date'] as DateTime?,
+      visitorsCount: e['visitors_count'] as int?,
+      comment: e['comment'] as String?,
     );
   }
 
   @override
-  Map<String, dynamic> parseFromClass(TeamMatch e) {
-    return {
+  PostgresMap parseFromClass(TeamMatch e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'no': e.no,
       'home_id': e.home.id,
@@ -166,6 +174,10 @@ class TeamMatchController extends EntityController<TeamMatch> {
       'referee_id': e.referees.first.id,
       'location': e.location,
       'date': e.date,
-    };
+      'visitors_count': e.visitorsCount,
+      'comment': e.comment,
+    }, {
+      'comment': PostgreSQLDataType.text
+    });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 
 import 'entity_controller.dart';
 
@@ -22,12 +23,14 @@ class WeightClassController extends EntityController<WeightClass> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(WeightClass e) {
-    return {
+  PostgresMap parseFromClass(WeightClass e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'name': e.name,
       'weight': e.weight,
       'style': e.style.name,
-    };
+    }, {
+      'weight': PostgreSQLDataType.smallInteger
+    });
   }
 }

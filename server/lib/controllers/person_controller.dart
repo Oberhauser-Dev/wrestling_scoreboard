@@ -20,18 +20,18 @@ class PersonController extends EntityController<Person> {
       prename: e['prename'] as String,
       surname: e['surname'] as String,
       gender: gender,
-      birthDate: e['birthDate'] as DateTime?,
+      birthDate: e['birth_date'] as DateTime?,
     );
   }
 
   @override
-  Map<String, dynamic> parseFromClass(Person e) {
-    return {
+  PostgresMap parseFromClass(Person e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'prename': e.prename,
       'surname': e.surname,
       'gender': e.gender?.name,
-      'birthDate': e.birthDate,
-    };
+      'birth_date': e.birthDate,
+    });
   }
 }

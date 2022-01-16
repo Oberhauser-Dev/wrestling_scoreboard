@@ -27,11 +27,11 @@ class TeamMatchFightController extends EntityController<TeamMatchFight> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(TeamMatchFight e) {
-    return {
+  PostgresMap parseFromClass(TeamMatchFight e) {
+    return PostgresMap({
       if (e.id != null) primaryKeyName: e.id,
       'team_match_id': e.teamMatch.id,
       'fight_id': e.fight.id,
-    };
+    });
   }
 }

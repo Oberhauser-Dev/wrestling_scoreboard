@@ -165,8 +165,8 @@ ALTER TABLE public.fight OWNER TO wrestling;
 
 CREATE TABLE public.fight_action (
     id integer NOT NULL,
-    "durationMillis" integer NOT NULL,
-    "pointCount" smallint,
+    duration_millis integer NOT NULL,
+    point_count smallint,
     action_type public.fight_action_type NOT NULL,
     fight_role public.fight_role NOT NULL,
     fight_id integer NOT NULL
@@ -226,7 +226,7 @@ ALTER SEQUENCE public.fight_id_seq OWNED BY public.fight.id;
 CREATE TABLE public.league (
     id integer NOT NULL,
     name character varying(127) NOT NULL,
-    "startDate" date NOT NULL
+    start_date date NOT NULL
 );
 
 
@@ -442,7 +442,7 @@ CREATE TABLE public.person (
     id integer NOT NULL,
     prename character varying(100) NOT NULL,
     surname character varying(100) NOT NULL,
-    "birthDate" date,
+    birth_date date,
     gender public.gender
 );
 
@@ -454,6 +454,7 @@ ALTER TABLE public.person OWNER TO wrestling;
 --
 
 CREATE SEQUENCE public.person_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -515,7 +516,7 @@ CREATE TABLE public.wrestling_event (
     id integer NOT NULL,
     date date,
     location character varying(100),
-    "visitorsCount" integer,
+    visitors_count integer,
     comment text
 );
 
@@ -530,7 +531,7 @@ CREATE TABLE public.team_match (
     id integer,
     date date,
     location character varying(100),
-    "visitorsCount" integer,
+    visitors_count integer,
     comment text,
     home_id integer,
     guest_id integer,
@@ -876,7 +877,7 @@ COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result) F
 -- Data for Name: fight_action; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.fight_action (id, "durationMillis", "pointCount", action_type, fight_role, fight_id) FROM stdin;
+COPY public.fight_action (id, duration_millis, point_count, action_type, fight_role, fight_id) FROM stdin;
 \.
 
 
@@ -884,7 +885,7 @@ COPY public.fight_action (id, "durationMillis", "pointCount", action_type, fight
 -- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.league (id, name, "startDate") FROM stdin;
+COPY public.league (id, name, start_date) FROM stdin;
 2	Real Pro Wrestling Jn	2021-10-01
 3	National League	2021-10-01
 1	Real Pro Wrestling	2021-10-01
@@ -970,7 +971,7 @@ COPY public.participation (id, membership_id, lineup_id, weight_class_id, weight
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.person (id, prename, surname, "birthDate", gender) FROM stdin;
+COPY public.person (id, prename, surname, birth_date, gender) FROM stdin;
 1	Lisa	Simpson	2010-07-08	female
 2	Bart	Simpson	2007-07-08	male
 3	March	Simpson	1980-07-08	female
@@ -998,7 +999,7 @@ COPY public.team (id, name, description, club_id, league_id) FROM stdin;
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, "visitorsCount", comment, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id) FROM stdin;
+COPY public.team_match (id, date, location, visitors_count, comment, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id) FROM stdin;
 1	2021-07-10	Springfield	\N	\N	1	2	9	\N	\N	\N	1
 \.
 
@@ -1021,7 +1022,7 @@ COPY public.team_match_fight (id, team_match_id, fight_id, pos) FROM stdin;
 -- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament (id, date, location, "visitorsCount", comment, name) FROM stdin;
+COPY public.tournament (id, date, location, visitors_count, comment, name) FROM stdin;
 1	2021-07-17	Quahog	15	\N	The Griffin-Simpson Tournament
 \.
 
@@ -1056,7 +1057,7 @@ COPY public.weight_class (id, name, weight, style) FROM stdin;
 -- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.wrestling_event (id, date, location, "visitorsCount", comment) FROM stdin;
+COPY public.wrestling_event (id, date, location, visitors_count, comment) FROM stdin;
 \.
 
 
@@ -1558,20 +1559,6 @@ ALTER TABLE ONLY public.tournament_fight
 
 ALTER TABLE ONLY public.tournament_fight
     ADD CONSTRAINT tournament_fight_tournament_id_fk FOREIGN KEY (tournament_id) REFERENCES public.tournament(id) ON DELETE CASCADE;
-
-
---
--- Name: TABLE league_weight_class; Type: ACL; Schema: public; Owner: wrestling
---
-
-GRANT ALL ON TABLE public.league_weight_class TO wrestling;
-
-
---
--- Name: SEQUENCE league_weight_class_id_seq; Type: ACL; Schema: public; Owner: wrestling
---
-
-GRANT SELECT,USAGE ON SEQUENCE public.league_weight_class_id_seq TO wrestling;
 
 
 --
