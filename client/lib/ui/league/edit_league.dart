@@ -5,12 +5,9 @@ import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class EditLeague extends StatefulWidget {
-  final String title;
-  late final ClientLeague league;
+  final ClientLeague? league;
 
-  EditLeague({required this.title, ClientLeague? league, Key? key}) : super(key: key) {
-    this.league = league ?? ClientLeague(name: '', startDate: DateTime.now());
-  }
+  const EditLeague({this.league, Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => EditLeagueState();
@@ -25,7 +22,7 @@ class EditLeagueState extends State<EditLeague> {
   @override
   void initState() {
     super.initState();
-    _startDate = widget.league.startDate;
+    _startDate = widget.league?.startDate ?? DateTime.now();
   }
 
   @override
@@ -40,7 +37,7 @@ class EditLeagueState extends State<EditLeague> {
             labelText: localizations.name,
             icon: const Icon(Icons.description),
           ),
-          initialValue: widget.league.name,
+          initialValue: widget.league?.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
@@ -74,13 +71,17 @@ class EditLeagueState extends State<EditLeague> {
     ];
 
     return Form(
-        key: _formKey, child: EditWidget(title: widget.title, onSubmit: () => handleSubmit(context), items: items));
+        key: _formKey,
+        child: EditWidget(
+            title: '${widget.league == null ? localizations.add : localizations.edit} ${localizations.league}',
+            onSubmit: () => handleSubmit(context),
+            items: items));
   }
 
   void handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(ClientLeague(id: widget.league.id, name: _name!, startDate: _startDate));
+      await dataProvider.createOrUpdateSingle(ClientLeague(id: widget.league?.id, name: _name!, startDate: _startDate));
       Navigator.of(context).pop();
     }
   }

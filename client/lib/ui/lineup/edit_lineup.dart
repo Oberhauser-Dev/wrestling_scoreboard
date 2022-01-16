@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:common/common.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/lineup.dart';
+import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/ui/components/font.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
@@ -48,26 +48,6 @@ class EditLineupState extends State<EditLineup> {
         .toList();
   }
 
-  Widget getPersonDropdown(
-      {required Membership? membership,
-      required String label,
-      void Function(Membership? value)? onChanged,
-      void Function(Membership? value)? onSaved,
-      required BuildContext context}) {
-    return DropdownSearch<Membership>(
-      dropdownSearchDecoration: InputDecoration(labelText: label),
-      searchFieldProps: TextFieldProps(decoration: const InputDecoration(prefixIcon: Icon(Icons.search))),
-      mode: Mode.MENU,
-      showSearchBox: true,
-      showClearButton: true,
-      onFind: (String? filter) => filterMemberships(filter),
-      itemAsString: (Membership? u) => u?.person.fullName ?? '',
-      selectedItem: membership,
-      onChanged: onChanged,
-      onSaved: onSaved,
-    );
-  }
-
   void handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -103,23 +83,29 @@ class EditLineupState extends State<EditLineup> {
           items: [
             ListTile(title: HeadingText(widget.lineup.team.name)),
             ListTile(
-                title: getPersonDropdown(
-              membership: _leader,
-              label: AppLocalizations.of(context)!.leader,
-              context: context,
-              onSaved: (Membership? value) => setState(() {
-                _leader = value;
-              }),
-            )),
+              title: getDropdown<Membership>(
+                selectedItem: _leader,
+                label: AppLocalizations.of(context)!.leader,
+                context: context,
+                onSaved: (Membership? value) => setState(() {
+                  _leader = value;
+                }),
+                itemAsString: (u) => u.person.fullName,
+                onFind: filterMemberships,
+              ),
+            ),
             ListTile(
-                title: getPersonDropdown(
-              membership: _coach,
-              label: AppLocalizations.of(context)!.coach,
-              context: context,
-              onSaved: (Membership? value) => setState(() {
-                _coach = value;
-              }),
-            )),
+              title: getDropdown<Membership>(
+                selectedItem: _coach,
+                label: AppLocalizations.of(context)!.coach,
+                context: context,
+                onSaved: (Membership? value) => setState(() {
+                  _coach = value;
+                }),
+                itemAsString: (u) => u.person.fullName,
+                onFind: filterMemberships,
+              ),
+            ),
             ..._participations.entries.map((mapEntry) {
               final weightClass = mapEntry.key;
               final participation = mapEntry.value;
@@ -130,8 +116,8 @@ class EditLineupState extends State<EditLineup> {
                       flex: 80,
                       child: Container(
                         padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-                        child: getPersonDropdown(
-                          membership: participation?.membership,
+                        child: getDropdown<Membership>(
+                          selectedItem: participation?.membership,
                           label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name}',
                           context: context,
                           onSaved: (Membership? newMembership) {
@@ -153,6 +139,8 @@ class EditLineupState extends State<EditLineup> {
                             }
                             _participations[weightClass] = addParticipation;
                           },
+                          itemAsString: (u) => u.person.fullName,
+                          onFind: filterMemberships,
                         ),
                       ),
                     ),

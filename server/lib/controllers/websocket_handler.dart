@@ -5,6 +5,7 @@ import 'package:common/common.dart';
 import 'package:server/controllers/club_controller.dart';
 import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
+import 'package:server/controllers/team_controller.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -51,6 +52,23 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
       } else if (single is League) {
         // Exception: the full League list has to be updated, shouldn't occur often
         broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update)));
+      } else if (single is Team) {
+        broadcast(jsonEncode(manyToJson(
+            await TeamController()
+                .getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
+            Team,
+            CRUD.update,
+            filterType: Club,
+            filterId: single.club.id)));
+        if (single.league != null) {
+          broadcast(jsonEncode(manyToJson(
+              await TeamController()
+                  .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}),
+              Team,
+              CRUD.update,
+              filterType: League,
+              filterId: single.league!.id)));
+        }
       } else {
         throw DataUnimplementedError(operation, single.runtimeType);
       }

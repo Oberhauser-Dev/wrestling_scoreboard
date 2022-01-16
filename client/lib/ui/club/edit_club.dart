@@ -5,12 +5,9 @@ import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class EditClub extends StatefulWidget {
-  final String title;
-  late final ClientClub club;
+  final ClientClub? club;
 
-  EditClub({required this.title, ClientClub? club, Key? key}) : super(key: key) {
-    this.club = club ?? ClientClub(name: '');
-  }
+  const EditClub({this.club, Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => EditClubState();
@@ -34,7 +31,7 @@ class EditClubState extends State<EditClub> {
             labelText: localizations.name,
             icon: const Icon(Icons.description),
           ),
-          initialValue: widget.club.name,
+          initialValue: widget.club?.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
@@ -50,7 +47,7 @@ class EditClubState extends State<EditClub> {
             labelText: localizations.clubNumber,
             icon: const Icon(Icons.tag),
           ),
-          initialValue: widget.club.no,
+          initialValue: widget.club?.no,
           onSaved: (newValue) => _no = newValue,
         ),
       ),
@@ -59,7 +56,7 @@ class EditClubState extends State<EditClub> {
     return Form(
       key: _formKey,
       child: EditWidget(
-        title: widget.title,
+        title: '${widget.club == null ? localizations.add : localizations.edit} ${localizations.club}',
         onSubmit: () => handleSubmit(context),
         items: items,
       ),
@@ -69,7 +66,7 @@ class EditClubState extends State<EditClub> {
   void handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(ClientClub(id: widget.club.id, name: _name!, no: _no));
+      await dataProvider.createOrUpdateSingle(ClientClub(id: widget.club?.id, name: _name!, no: _no));
       Navigator.of(context).pop();
     }
   }

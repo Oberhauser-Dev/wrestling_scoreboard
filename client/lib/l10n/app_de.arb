@@ -20,6 +20,7 @@
   "info": "Info",
   "details": "Details",
   "name": "Name",
+  "description": "Beschreibung",
   "noItems": "Keine Einträge vorhanden.",
   "mandatoryField": "Das ist ein Pflichtfeld.",
 

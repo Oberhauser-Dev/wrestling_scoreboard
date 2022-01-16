@@ -7,8 +7,9 @@ import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/ui/club/edit_club.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
+import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/league/edit_league.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard/ui/team/edit_team.dart';
 
 import 'match_selection.dart';
 
@@ -16,58 +17,6 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
   final S filterObject;
 
   const TeamSelection({Key? key, required this.filterObject}) : super(key: key);
-
-  Widget buildInfoWidget(
-      {required S obj,
-      required Widget editPage,
-      required Widget body,
-      required String classLocale,
-      required BuildContext context}) {
-    final localizations = AppLocalizations.of(context)!;
-    return ListGroup(
-      header: HeadingItem(
-        title: localizations.info,
-        trailing: Wrap(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => editPage,
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  content: Text('${localizations.remove} $classLocale?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(localizations.cancel),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        dataProvider.deleteSingle(obj);
-                        Navigator.of(context).popUntil((route) => route.isFirst);
-                      },
-                      child: Text(localizations.ok),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      items: [body],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,33 +26,35 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
       initialData: filterObject,
       builder: (context, data) {
         final description = data is ClientClub
-            ? buildInfoWidget(
+            ? InfoWidget(
                 obj: data,
                 editPage: EditClub(
-                  title: localizations.edit + ' ' + localizations.club,
                   club: data as ClientClub,
                 ),
-                body: ContentItem(
-                  title: (data as ClientClub).no ?? '-',
-                  subtitle: localizations.clubNumber,
-                  icon: Icons.tag,
-                ),
+                children: [
+                  ContentItem(
+                    title: (data as ClientClub).no ?? '-',
+                    subtitle: localizations.clubNumber,
+                    icon: Icons.tag,
+                  )
+                ],
                 classLocale: localizations.club,
-                context: context)
+              )
             : data is ClientLeague
-                ? buildInfoWidget(
+                ? InfoWidget(
                     obj: data,
                     editPage: EditLeague(
-                      title: localizations.edit + ' ' + localizations.league,
                       league: data as ClientLeague,
                     ),
-                    body: ContentItem(
-                      title: (data as ClientLeague).startDate.toIso8601String(),
-                      subtitle: localizations.date, // Start date
-                      icon: Icons.emoji_events,
-                    ),
+                    children: [
+                      ContentItem(
+                        title: (data as ClientLeague).startDate.toIso8601String(),
+                        subtitle: localizations.date, // Start date
+                        icon: Icons.emoji_events,
+                      )
+                    ],
                     classLocale: localizations.league,
-                    context: context)
+                  )
                 : const SizedBox();
         return Scaffold(
           appBar: AppBar(
@@ -113,10 +64,22 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
             description,
             ManyConsumer<Team, ClientTeam>(
               filterObject: data,
-              builder: (BuildContext context, List<ClientTeam> data) {
+              builder: (BuildContext context, List<ClientTeam> team) {
                 return ListGroup(
-                  header: HeadingItem(title: localizations.teams),
-                  items: data.map((e) =>
+                  header: HeadingItem(
+                    title: localizations.teams,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditTeam(
+                                    initialClub: data is Club ? data as Club : null,
+                                    initialLeague: data is League ? data as League : null,
+                                  ))),
+                    ),
+                  ),
+                  items: team.map((e) =>
                       ContentItem(title: e.name, icon: Icons.group, onTap: () => handleSelectedTeam(e, context))),
                 );
               },

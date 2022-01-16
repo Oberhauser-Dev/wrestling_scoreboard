@@ -23,6 +23,7 @@
   "info": "Info",
   "details": "Details",
   "name": "Name",
+  "description": "Description",
   "noItems": "No items available.",
   "mandatoryField": "This is a mandatory field.",
 

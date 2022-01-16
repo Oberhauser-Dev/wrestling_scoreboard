@@ -36,7 +36,7 @@ class Home extends StatelessWidget {
                     title: localizations.clubs,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () => handleEditClub(context),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EditClub())),
                     ),
                   ),
                   items: clubs.map(
@@ -60,7 +60,7 @@ class Home extends StatelessWidget {
                     title: localizations.leagues,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () => handleEditLeague(context),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EditLeague())),
                     ),
                   ),
                   items: leagues.map(
@@ -103,15 +103,5 @@ class Home extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  handleEditClub(BuildContext context) {
-    final title = AppLocalizations.of(context)!.add + ' ' + AppLocalizations.of(context)!.club;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EditClub(title: title)));
-  }
-
-  handleEditLeague(BuildContext context) {
-    final title = AppLocalizations.of(context)!.add + ' ' + AppLocalizations.of(context)!.league;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EditLeague(title: title)));
   }
 }
