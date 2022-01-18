@@ -58,21 +58,19 @@ void broadcastSingle(DataObject single) async {
           filterId: single.league!.id)));
     }
   } else if (single is TeamMatch) {
-    sqlQuery(String identifier) => '''
-        SELECT tm.* 
-        FROM team_match as tm
-        JOIN team AS t ON t.id = tm.$identifier
-        WHERE t.id = @id;''';
-    broadcast(jsonEncode(manyToJson(
-        await TeamMatchController()
-            .getManyFromQuery(sqlQuery('home_id'), substitutionValues: {'id': single.home.team.id}),
+    final homeMatches = await TeamMatchController()
+        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
+
+    final guestMatches = await TeamMatchController()
+        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
+
+    broadcast(jsonEncode(manyToJson(homeMatches,
         TeamMatch,
         CRUD.update,
         filterType: Team,
         filterId: single.home.team.id)));
     broadcast(jsonEncode(manyToJson(
-        await TeamMatchController()
-            .getManyFromQuery(sqlQuery('guest_id'), substitutionValues: {'id': single.guest.team.id}),
+        guestMatches,
         TeamMatch,
         CRUD.update,
         filterType: Team,
