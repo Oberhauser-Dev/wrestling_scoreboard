@@ -42,7 +42,7 @@ class ParticipationController extends EntityController<Participation> {
       'weight_class_id': e.weightClass.id,
       'lineup_id': e.lineup.id,
       'membership_id': e.membership.id,
-      'weight': e.weight.toString(),
+      'weight': e.weight?.toString(),
     }, {
       'weight': PostgreSQLDataType.numeric
     });
