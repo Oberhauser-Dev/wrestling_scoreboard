@@ -96,8 +96,7 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MatchSelection(
-          title: team.name,
+        builder: (context) => MatchSelection<Team, ClientTeam>(
           filterObject: team,
         ),
       ),
