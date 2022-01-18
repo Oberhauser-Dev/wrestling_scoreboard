@@ -73,9 +73,27 @@ class MatchSelection extends StatelessWidget {
                 (e) => SingleConsumer<TeamMatch, ClientTeamMatch>(
                   id: e.id!,
                   initialData: e,
-                  builder: (context, data) => ContentItem(
-                    title: '${data.date?.toIso8601String().substring(0,10) ?? 'no date'}, ${data.no}, ${data.home.team.name} - ${data.guest.team.name}',
-                    icon: Icons.event,
+                  builder: (context, data) => ListTile(
+                    title: RichText(
+                        textScaleFactor: 1.5, // MediaQuery.of(context).textScaleFactor
+                        text: TextSpan(
+                          text:
+                              '${data.date?.toIso8601String().substring(0, 10) ?? 'no date'}, ${data.no ?? 'no ID'}, ',
+                          children: [
+                            TextSpan(
+                                text: data.home.team.name,
+                                style: data.home.team == (filterObject as Team)
+                                    ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
+                                    : null),
+                            const TextSpan(text: ' - '),
+                            TextSpan(
+                                text: data.guest.team.name,
+                                style: data.guest.team == (filterObject as Team)
+                                    ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                                    : null),
+                          ],
+                        )),
+                    leading: const Icon(Icons.event),
                     onTap: () => handleSelectedMatch(data, context),
                   ),
                 ),
