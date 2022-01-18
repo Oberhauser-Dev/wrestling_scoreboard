@@ -45,7 +45,7 @@ class MatchSequence extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.edit),
+                  icon: const Icon(Icons.info),
                   onPressed: () =>
                       Navigator.push(context, MaterialPageRoute(builder: (context) => TeamMatchOverview(match: match))),
                 ),

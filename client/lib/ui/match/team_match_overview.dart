@@ -5,7 +5,9 @@ import 'package:wrestling_scoreboard/data/lineup.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
+import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/lineup/lineup_edit.dart';
+import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamMatchOverview extends StatelessWidget {
@@ -19,22 +21,49 @@ class TeamMatchOverview extends StatelessWidget {
     final lineups = match.lineups;
 
     final items = [
-      ListGroup(
-        header: HeadingItem(title: localizations.match),
-        items: [
-          ContentItem(title: localizations.details, icon: Icons.description, onTap: () {}),
-          ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: () {}),
-          ContentItem(title: localizations.durations, icon: Icons.timer, onTap: () {}),
-        ],
-      ),
+      InfoWidget(
+          obj: match,
+          editPage: TeamMatchEdit(
+            teamMatch: match,
+          ),
+          children: [
+            ContentItem(
+              title: match.no ?? '-',
+              subtitle: localizations.matchNumber,
+              icon: Icons.tag,
+            ),
+            ContentItem(
+              title: match.location ?? 'no location',
+              subtitle: localizations.matchNumber,
+              icon: Icons.place,
+            ),
+            ContentItem(
+              title: match.date?.toIso8601String() ?? 'no date',
+              subtitle: localizations.date,
+              icon: Icons.date_range,
+            ),
+            ContentItem(
+              title: match.home.team.name,
+              subtitle: '${localizations.team} ${localizations.red}',
+              icon: Icons.emoji_events,
+            ),
+            ContentItem(
+              title: match.guest.team.name,
+              subtitle: '${localizations.team} ${localizations.blue}',
+              icon: Icons.emoji_events,
+            ),
+            ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
+            ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
+          ],
+          classLocale: localizations.match),
       ListGroup(
         header: HeadingItem(title: localizations.persons),
         items: [
-          ContentItem(title: localizations.referee, icon: Icons.sports, onTap: () {}),
-          ContentItem(title: localizations.matPresident, icon: Icons.manage_accounts, onTap: () {}),
-          ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: () {}),
-          ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: () {}),
-          ContentItem(title: localizations.steward, icon: Icons.security, onTap: () {}),
+          ContentItem(title: localizations.referee, icon: Icons.sports, onTap: null),
+          ContentItem(title: localizations.matPresident, icon: Icons.manage_accounts, onTap: null),
+          ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: null),
+          ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: null),
+          ContentItem(title: localizations.steward, icon: Icons.security, onTap: null),
         ],
       ),
       ListGroup(
@@ -48,14 +77,14 @@ class TeamMatchOverview extends StatelessWidget {
                   title: lineup.team.name, icon: Icons.group, onTap: () => handleSelectedLineup(lineup, context)),
             );
           }),
-          ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: () {})
+          ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
         ],
       ),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${localizations.info} ${localizations.match}'),
+        title: Text('${localizations.match} ${localizations.details}'),
       ),
       body: GroupedList(items: items),
     );
