@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/lineup.dart';
+import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/ui/components/font.dart';
@@ -119,7 +120,7 @@ class LineupEditState extends State<LineupEdit> {
                         padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
                         child: getDropdown<Membership>(
                           selectedItem: participation?.membership,
-                          label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name}',
+                          label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name} ${styleToAbbr(weightClass.style, context)}',
                           context: context,
                           onSaved: (Membership? newMembership) {
                             final oldParticipation = _participations[weightClass];

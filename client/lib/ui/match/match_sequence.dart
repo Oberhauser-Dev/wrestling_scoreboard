@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
+import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/match/team_match_overview.dart';
@@ -146,9 +147,7 @@ class FightListItem extends StatelessWidget {
                       flex: flexWidthStyle,
                       child: Center(
                           child: Text(
-                              fight.weightClass.style == WrestlingStyle.free
-                                  ? AppLocalizations.of(context)!.freeStyleAbbr
-                                  : AppLocalizations.of(context)!.grecoRomanAbbr,
+                              styleToAbbr(fight.weightClass.style, context),
                               style: fontStyleDefault))),
                   Expanded(
                       flex: 55,
