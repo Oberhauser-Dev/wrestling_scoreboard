@@ -149,7 +149,7 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> createOrUpdateSingle(DataObject obj) async {
+  Future<int> createOrUpdateSingle(DataObject obj) async {
     final operation = obj.id == null ? CRUD.create : CRUD.update;
     if (obj.id == null) {
       obj = _createMockSingle(obj);
@@ -169,6 +169,7 @@ class MockDataProvider extends DataProvider {
     } else {
       throw DataUnimplementedError(operation, obj.runtimeType);
     }
+    return obj.id!;
   }
 
   Future<void> updateMany(Type t, {DataObject? filterObject}) async {

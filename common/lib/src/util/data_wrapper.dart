@@ -18,14 +18,14 @@ Map<String, dynamic> manyToJson(List<DataObject> many, Type type, CRUD operation
       'data': many,
     };
 
-typedef HandleSingleCallback = void Function<T extends DataObject>({required CRUD operation, required T single});
-typedef HandleManyCallback = void Function<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many});
+typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({required CRUD operation, required T single});
+typedef HandleManyCallback = Future<void> Function<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many});
 
-void handleFromJson(
+Future<int?> handleFromJson(
     Map<String, dynamic> json,
     HandleSingleCallback handleSingle,
     HandleManyCallback handleMany) {
-  final Type type = getTypeFromTableName(json['tableName']);
+  final type = getTypeFromTableName(json['tableName']);
   switch (type) {
     case Club:
       return _handleFromJsonGeneric<Club>(json, handleSingle, handleMany);
@@ -50,9 +50,9 @@ void handleFromJson(
   }
 }
 
-void _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
     HandleSingleCallback handleSingle,
-    HandleManyCallback handleMany) {
+    HandleManyCallback handleMany) async {
   final isMany = json['isMany'] == 'true';
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {
@@ -61,14 +61,14 @@ void _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
         ? Object
         : getTypeFromTableName(json['filterType']);
     final int? filterId = json['filterId'];
-    handleMany<T>(
+    await handleMany<T>(
         operation: operation,
         many: ManyDataObject<T>(
             data: data.map((e) => T.fromJson(e as Map<String, dynamic>) as T).toList(),
             filterType: filterType ?? Object,
             filterId: filterId));
   } else {
-    handleSingle<T>(operation: operation, single: T.fromJson(json['data']) as T);
+    return await handleSingle<T>(operation: operation, single: T.fromJson(json['data']) as T);
   }
 }
 

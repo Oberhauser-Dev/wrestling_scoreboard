@@ -48,7 +48,8 @@ abstract class DataProvider {
   Future<Iterable<Map<String, dynamic>>> readRawMany<T extends DataObject>({DataObject? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
-  Future<void> createOrUpdateSingle(DataObject obj);
+  /// Returns the id of the object
+  Future<int> createOrUpdateSingle(DataObject obj);
 
   /// DELETE: delete a single object
   Future<void> deleteSingle(DataObject obj);

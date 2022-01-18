@@ -517,7 +517,8 @@ CREATE TABLE public.wrestling_event (
     date date,
     location character varying(100),
     visitors_count integer,
-    comment text
+    comment text,
+    no character varying(16)
 );
 
 
@@ -999,8 +1000,8 @@ COPY public.team (id, name, description, club_id, league_id) FROM stdin;
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id) FROM stdin;
-1	2021-07-10	Springfield	\N	\N	1	2	9	\N	\N	\N	1
+COPY public.team_match (id, date, location, visitors_count, comment, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id, no) FROM stdin;
+1	2021-07-10	Springfield	\N	\N	1	2	9	\N	\N	\N	1	\N
 \.
 
 
@@ -1022,8 +1023,8 @@ COPY public.team_match_fight (id, team_match_id, fight_id, pos) FROM stdin;
 -- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament (id, date, location, visitors_count, comment, name) FROM stdin;
-1	2021-07-17	Quahog	15	\N	The Griffin-Simpson Tournament
+COPY public.tournament (id, date, location, visitors_count, comment, name, no) FROM stdin;
+1	2021-07-17	Quahog	15	\N	The Griffin-Simpson Tournament	\N
 \.
 
 
@@ -1057,7 +1058,7 @@ COPY public.weight_class (id, name, weight, style) FROM stdin;
 -- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.wrestling_event (id, date, location, visitors_count, comment) FROM stdin;
+COPY public.wrestling_event (id, date, location, visitors_count, comment, no) FROM stdin;
 \.
 
 

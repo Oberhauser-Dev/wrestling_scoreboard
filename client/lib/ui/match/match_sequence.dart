@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard/data/participant_state.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard/ui/match/edit_team_match.dart';
+import 'package:wrestling_scoreboard/ui/match/team_match_overview.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
@@ -23,11 +23,6 @@ class MatchSequence extends StatelessWidget {
 
   handleSelectedFight(ClientTeamMatch match, int fightIndex, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fightIndex)));
-  }
-
-  handleEditLineups(ClientTeamMatch match, BuildContext context) {
-    final title = AppLocalizations.of(context)!.edit + ' ' + AppLocalizations.of(context)!.match;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EditTeamMatch(title: title, match: match)));
   }
 
   @override
@@ -51,7 +46,8 @@ class MatchSequence extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () => handleEditLineups(match, context),
+                  onPressed: () =>
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => TeamMatchOverview(match: match))),
                 ),
               ]),
             ),
@@ -60,7 +56,7 @@ class MatchSequence extends StatelessWidget {
               child: StreamBuilder(
                   stream: dataProvider.streamMany<Fight, ClientFight>(filterObject: match),
                   builder: (BuildContext context, AsyncSnapshot<ManyDataObject<ClientFight>> snapshot) {
-                    if(!snapshot.hasData) return const CircularProgressIndicator();
+                    if (!snapshot.hasData) return const CircularProgressIndicator();
                     final fights = snapshot.data!.data.toList();
                     if (fights.isEmpty) {
                       dataProvider.generateFights(match);

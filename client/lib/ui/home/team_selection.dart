@@ -71,12 +71,14 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditTeam(
-                                    initialClub: data is Club ? data as Club : null,
-                                    initialLeague: data is League ? data as League : null,
-                                  ))),
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditTeam(
+                            initialClub: data is Club ? data as Club : null,
+                            initialLeague: data is League ? data as League : null,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   items: team.map((e) =>

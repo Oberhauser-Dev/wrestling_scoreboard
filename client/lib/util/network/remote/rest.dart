@@ -90,7 +90,7 @@ class RestDataProvider extends DataProvider {
   }
 
   _initUpdateStream() {
-    void handleSingle<U extends DataObject>({required CRUD operation, required U single}) {
+    Future<int> handleSingle<U extends DataObject>({required CRUD operation, required U single}) async {
       callback<T extends DataObject, S extends T>(T single) {
         final tmp = toClientObject<T, S>(single);
         if (operation == CRUD.update) {
@@ -115,9 +115,10 @@ class RestDataProvider extends DataProvider {
       } else if (U == TeamMatch) {
         callback<TeamMatch, ClientTeamMatch>(single as TeamMatch);
       }
+      return single.id!;
     }
 
-    void handleMany<U extends DataObject>({required CRUD operation, required ManyDataObject<U> many}) {
+    Future<void> handleMany<U extends DataObject>({required CRUD operation, required ManyDataObject<U> many}) async {
       callback<T extends DataObject, S extends T>(ManyDataObject<T> many) {
         final tmp = ManyDataObject<S>(
             data: many.data.map((e) => toClientObject<T, S>(e)).toList(),
@@ -165,8 +166,18 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> createOrUpdateSingle(DataObject obj) async {
-    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create)));
+  /// As we need the return value immediately, we need to use the rest API.
+  Future<int> createOrUpdateSingle(DataObject obj) async {
+    final body = jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create));
+    final uri = Uri.parse('$_apiUrl/${obj.tableName}');
+    final response = await http.post(uri,body: body);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: ' +
+          (response.reasonPhrase ?? response.statusCode.toString()));
+    }
   }
 
   @override

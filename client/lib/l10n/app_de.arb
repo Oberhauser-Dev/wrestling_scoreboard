@@ -25,6 +25,8 @@
   "mandatoryField": "Das ist ein Pflichtfeld.",
 
   "date": "Datum",
+  "place": "Ort",
+
   "participantVacant": "unbesetzt",
   "weightClass": "Gewichtsklasse",
   "weight": "Gewicht",
@@ -44,6 +46,7 @@
   "leagues": "Ligen",
   "match": "Begegnung",
   "matches": "Begegnungen",
+  "matchNumber": "Begegnungs-ID / Kampf-ID",
   "lineup": "Aufstellung",
   "lineups": "Aufstellungen",
   "fight": "Kampf",
@@ -69,7 +72,9 @@
   "fightResultVfoAbbr": "DN",
   "fightResultDsqAbbr": "DQ",
   "fightResultDsq2Abbr": "DQ2",
-  
+
+  "red": "Red",
+  "blue": "Blue",
   "freeStyle": "Freistil",
   "freeStyleAbbr": "F",
   "grecoRoman": "Gr.-Römisch",

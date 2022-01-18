@@ -28,6 +28,8 @@
   "mandatoryField": "This is a mandatory field.",
 
   "date": "Date",
+  "place": "Place",
+
   "participantVacant": "vacant",
   "weight": "Weight",
   "weightClass": "Weight Class",
@@ -47,6 +49,7 @@
   "leagues": "Leagues",
   "match": "Match",
   "matches": "Matches",
+  "matchNumber": "Match-ID",
   "lineup": "Lineup",
   "lineups": "Lineups",
   "fight": "Fight",
@@ -72,7 +75,9 @@
   "fightResultVfoAbbr": "VFO",
   "fightResultDsqAbbr": "DSQ",
   "fightResultDsq2Abbr": "DSQ2",
-  
+
+  "red": "Red",
+  "blue": "Blue",
   "freeStyle": "Freestyle",
   "freeStyleAbbr": "F",
   "grecoRoman": "Greco-Roman",

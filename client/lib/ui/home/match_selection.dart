@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
 import 'package:wrestling_scoreboard/ui/team/edit_team.dart';
 
 class MatchSelection extends StatelessWidget {
@@ -51,14 +52,32 @@ class MatchSelection extends StatelessWidget {
         description,
         ManyConsumer<TeamMatch, ClientTeamMatch>(
           filterObject: filterObject,
-          builder: (BuildContext context, List<ClientTeamMatch> data) {
+          builder: (BuildContext context, List<ClientTeamMatch> teamMatch) {
             return ListGroup(
-              header: HeadingItem(title: localizations.matches),
-              items: data.map(
-                (e) => ContentItem(
-                  title: '${e.home.team.name} - ${e.guest.team.name}',
-                  icon: Icons.event,
-                  onTap: () => handleSelectedMatch(e, context),
+              header: HeadingItem(
+                title: localizations.matches,
+                trailing: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TeamMatchEdit(
+                        initialHomeTeam: filterObject is Team ? filterObject as Team : null,
+                        initialGuestTeam: filterObject is Team ? filterObject as Team : null,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              items: teamMatch.map(
+                (e) => SingleConsumer<TeamMatch, ClientTeamMatch>(
+                  id: e.id!,
+                  initialData: e,
+                  builder: (context, data) => ContentItem(
+                    title: '${data.date?.toIso8601String().substring(0,10) ?? 'no date'}, ${data.no}, ${data.home.team.name} - ${data.guest.team.name}',
+                    icon: Icons.event,
+                    onTap: () => handleSelectedMatch(data, context),
+                  ),
                 ),
               ),
             );

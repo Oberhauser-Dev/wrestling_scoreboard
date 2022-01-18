@@ -12,12 +12,14 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
       {int? id,
       required ClientLineup home,
       required ClientLineup guest,
-      required List<WeightClass> weightClasses,
-      required Iterable<Person> referees,
+      required List<WeightClass> weightClasses, // TODO make optional
+      required Iterable<Person> referees, // TODO make optional
+      String? no,
       String? location,
       DateTime? date})
       : super(
             id: id,
+            no: no,
             home: home,
             guest: guest,
             weightClasses: weightClasses,
@@ -28,6 +30,7 @@ class ClientTeamMatch extends TeamMatch with ChangeNotifier {
   ClientTeamMatch.from(TeamMatch obj)
       : this(
             id: obj.id,
+            no: obj.no,
             home: ClientLineup.from(obj.home),
             guest: ClientLineup.from(obj.guest),
             weightClasses: obj.weightClasses,

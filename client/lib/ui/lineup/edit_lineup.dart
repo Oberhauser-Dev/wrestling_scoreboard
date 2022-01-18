@@ -11,20 +11,17 @@ import 'package:wrestling_scoreboard/ui/components/font.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class EditLineup extends StatefulWidget {
-  final String title;
   final ClientLineup lineup;
-  final Iterable<Participation> participations;
-  final Iterable<WeightClass> weightClasses;
-  final Iterable<Membership> memberships;
+  final List<WeightClass> weightClasses;
+  final List<Participation> participations;
+
   final Function()? onSubmit;
 
   const EditLineup(
       {Key? key,
-      required this.title,
-      required this.weightClasses,
       required this.lineup,
+      required this.weightClasses,
       required this.participations,
-      required this.memberships,
       this.onSubmit})
       : super(key: key);
 
@@ -35,6 +32,8 @@ class EditLineup extends StatefulWidget {
 class EditLineupState extends State<EditLineup> {
   final _formKey = GlobalKey<FormState>();
 
+  Iterable<Membership>? memberships;
+
   Membership? _leader;
   Membership? _coach;
   late Map<WeightClass, Participation?> _participations;
@@ -42,9 +41,10 @@ class EditLineupState extends State<EditLineup> {
   final HashSet<Participation> _createOrUpdateParticipations = HashSet();
 
   Future<List<Membership>> filterMemberships(String? filter) async {
+    memberships ??= await dataProvider.readMany<Membership, Membership>(filterObject: widget.lineup.team.club);
     return (filter == null
-            ? widget.memberships
-            : widget.memberships.where((element) => element.person.fullName.contains(filter)))
+            ? memberships!
+            : memberships!.where((element) => element.person.fullName.contains(filter)))
         .toList();
   }
 
@@ -75,10 +75,11 @@ class EditLineupState extends State<EditLineup> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Form(
         key: _formKey,
         child: EditWidget(
-          title: widget.title,
+          title: '${widget.lineup == null ? localizations.add : localizations.edit} ${AppLocalizations.of(context)!.lineup}',
           onSubmit: () => handleSubmit(context),
           items: [
             ListTile(title: HeadingText(widget.lineup.team.name)),

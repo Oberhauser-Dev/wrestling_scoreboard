@@ -12,7 +12,11 @@ part 'team_match.g.dart';
 /// For team matches only.
 @JsonSerializable()
 class TeamMatch extends WrestlingEvent {
+
+  /// competitionId (CID), eventId, matchId or Kampf-Id
+  // TODO move to wrestling event
   final String? no;
+
   late League league; // Liga
 
   @override

@@ -143,7 +143,8 @@ class TeamMatchController extends EntityController<TeamMatch> {
   Future<TeamMatch> parseToClass(Map<String, dynamic> e) async {
     final home = await LineupController().getSingle(e['home_id'] as int);
     final guest = await LineupController().getSingle(e['guest_id'] as int);
-    final referee = await PersonController().getSingle(e['referee_id'] as int);
+    final int? refereeId = e['referee_id'];
+    final List<Person> referees = refereeId != null ? [(await PersonController().getSingle(refereeId))!] : [];
     final weightClasses = home != null && home.team.league != null
         ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
         : await WeightClassController().getMany();
@@ -155,7 +156,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
       home: home!,
       guest: guest!,
       weightClasses: weightClasses,
-      referees: [referee!],
+      referees: referees,
       // TODO need extra table for multiple referees.
       location: e['location'] as String?,
       date: e['date'] as DateTime?,
@@ -171,7 +172,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
       'no': e.no,
       'home_id': e.home.id,
       'guest_id': e.guest.id,
-      'referee_id': e.referees.first.id,
+      'referee_id': e.referees.isNotEmpty ? e.referees.first.id : null,
       'location': e.location,
       'date': e.date,
       'visitors_count': e.visitorsCount,

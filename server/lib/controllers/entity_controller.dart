@@ -11,6 +11,7 @@ import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:server/controllers/team_match_controller.dart';
 import 'package:server/controllers/tournament_controller.dart';
+import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 
@@ -52,6 +53,10 @@ abstract class EntityController<T extends DataObject> {
   String primaryKeyName;
 
   EntityController({required this.tableName, this.primaryKeyName = 'id'});
+
+  Future<Response> postSingle(Request request) async {
+    return handlePostSingleOfController(this, await request.readAsString().then((message) => jsonDecode(message)));
+  }
 
   Future<Response> requestSingle(Request request, String id) async {
     return handleRequestSingleOfController(this, int.parse(id), isRaw: isRaw(request));
@@ -154,6 +159,11 @@ abstract class EntityController<T extends DataObject> {
 
   bool isRaw(Request request) {
     return (request.url.queryParameters['raw'] ?? '').parseBool();
+  }
+
+  static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, dynamic> json) async {
+    final id = await handleFromJson(json, handleSingle, handleMany);
+    return Response.ok(jsonEncode(id));
   }
 
   static Future<Response> handleRequestSingleOfController(EntityController controller, int id,
