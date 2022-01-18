@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
 import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
-import 'package:wrestling_scoreboard/ui/team/edit_team.dart';
+import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
 
 class MatchSelection extends StatelessWidget {
   final String title;
@@ -22,7 +22,7 @@ class MatchSelection extends StatelessWidget {
     final description = filterObject is ClientTeam
         ? InfoWidget(
             obj: filterObject,
-            editPage: EditTeam(
+            editPage: TeamEdit(
               team: filterObject as ClientTeam,
             ),
             children: [

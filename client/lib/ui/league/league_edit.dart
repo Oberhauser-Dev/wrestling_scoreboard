@@ -4,16 +4,16 @@ import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-class EditLeague extends StatefulWidget {
+class LeagueEdit extends StatefulWidget {
   final ClientLeague? league;
 
-  const EditLeague({this.league, Key? key}) : super(key: key);
+  const LeagueEdit({this.league, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => EditLeagueState();
+  State<StatefulWidget> createState() => LeagueEditState();
 }
 
-class EditLeagueState extends State<EditLeague> {
+class LeagueEditState extends State<LeagueEdit> {
   final _formKey = GlobalKey<FormState>();
 
   String? _name;

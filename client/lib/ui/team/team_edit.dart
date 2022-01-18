@@ -8,18 +8,18 @@ import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-class EditTeam extends StatefulWidget {
+class TeamEdit extends StatefulWidget {
   final ClientTeam? team;
   final Club? initialClub;
   final League? initialLeague;
 
-  const EditTeam({this.team, this.initialClub, this.initialLeague, Key? key}) : super(key: key);
+  const TeamEdit({this.team, this.initialClub, this.initialLeague, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => EditTeamState();
+  State<StatefulWidget> createState() => TeamEditState();
 }
 
-class EditTeamState extends State<EditTeam> {
+class TeamEditState extends State<TeamEdit> {
   final _formKey = GlobalKey<FormState>();
 
   List<Club>? clubs;

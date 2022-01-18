@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
-import 'package:wrestling_scoreboard/ui/club/edit_club.dart';
+import 'package:wrestling_scoreboard/ui/club/club_edit.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
-import 'package:wrestling_scoreboard/ui/league/edit_league.dart';
+import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class Home extends StatelessWidget {
                     title: localizations.clubs,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EditClub())),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ClubEdit())),
                     ),
                   ),
                   items: clubs.map(
@@ -60,7 +60,7 @@ class Home extends StatelessWidget {
                     title: localizations.leagues,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EditLeague())),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueEdit())),
                     ),
                   ),
                   items: leagues.map(

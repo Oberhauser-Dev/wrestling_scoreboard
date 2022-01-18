@@ -4,12 +4,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/data/team.dart';
-import 'package:wrestling_scoreboard/ui/club/edit_club.dart';
+import 'package:wrestling_scoreboard/ui/club/club_edit.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
-import 'package:wrestling_scoreboard/ui/league/edit_league.dart';
-import 'package:wrestling_scoreboard/ui/team/edit_team.dart';
+import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
+import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
 
 import 'match_selection.dart';
 
@@ -28,7 +28,7 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
         final description = data is ClientClub
             ? InfoWidget(
                 obj: data,
-                editPage: EditClub(
+                editPage: ClubEdit(
                   club: data as ClientClub,
                 ),
                 children: [
@@ -43,7 +43,7 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
             : data is ClientLeague
                 ? InfoWidget(
                     obj: data,
-                    editPage: EditLeague(
+                    editPage: LeagueEdit(
                       league: data as ClientLeague,
                     ),
                     children: [
@@ -73,7 +73,7 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditTeam(
+                          builder: (context) => TeamEdit(
                             initialClub: data is Club ? data as Club : null,
                             initialLeague: data is League ? data as League : null,
                           ),

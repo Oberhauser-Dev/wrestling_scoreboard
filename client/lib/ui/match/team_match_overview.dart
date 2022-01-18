@@ -5,7 +5,7 @@ import 'package:wrestling_scoreboard/data/lineup.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
-import 'package:wrestling_scoreboard/ui/lineup/edit_lineup.dart';
+import 'package:wrestling_scoreboard/ui/lineup/lineup_edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamMatchOverview extends StatelessWidget {
@@ -67,7 +67,7 @@ class TeamMatchOverview extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return EditLineup(
+          return LineupEdit(
             weightClasses: match.weightClasses,
             participations: participations,
             lineup: lineup,

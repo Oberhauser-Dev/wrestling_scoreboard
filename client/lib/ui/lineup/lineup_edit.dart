@@ -10,14 +10,14 @@ import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/ui/components/font.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-class EditLineup extends StatefulWidget {
+class LineupEdit extends StatefulWidget {
   final ClientLineup lineup;
   final List<WeightClass> weightClasses;
   final List<Participation> participations;
 
   final Function()? onSubmit;
 
-  const EditLineup(
+  const LineupEdit(
       {Key? key,
       required this.lineup,
       required this.weightClasses,
@@ -26,10 +26,10 @@ class EditLineup extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => EditLineupState();
+  State<StatefulWidget> createState() => LineupEditState();
 }
 
-class EditLineupState extends State<EditLineup> {
+class LineupEditState extends State<LineupEdit> {
   final _formKey = GlobalKey<FormState>();
 
   Iterable<Membership>? memberships;
