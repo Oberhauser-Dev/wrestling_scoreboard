@@ -26,6 +26,8 @@
   "description": "Description",
   "noItems": "No items available.",
   "mandatoryField": "This is a mandatory field.",
+  "noWebSocketConnection": "The connection to the server could not be established or was interrupted.",
+  "retry": "Retry",
 
   "date": "Date",
   "place": "Place",

@@ -8,9 +8,47 @@ import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
+import 'package:wrestling_scoreboard/ui/settings/settings.dart';
+import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => HomeState();
+}
+
+class HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    WebSocketManager.onWebSocketConnected.stream.distinct().listen((isConnected) {
+      if (!isConnected) {
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          final localizations = AppLocalizations.of(context)!;
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              content: Text(localizations.noWebSocketConnection),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(localizations.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    CustomSettingsScreen.onConnectWebSocket.sink.add(null);
+                  },
+                  child: Text(localizations.retry),
+                ),
+              ],
+            ),
+          );
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +74,12 @@ class Home extends StatelessWidget {
                     title: localizations.clubs,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ClubEdit())),
+                      onPressed: () =>
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const ClubEdit())),
                     ),
                   ),
                   items: clubs.map(
-                    (e) => SingleConsumer<Club, ClientClub>(
+                        (e) => SingleConsumer<Club, ClientClub>(
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
@@ -60,11 +99,12 @@ class Home extends StatelessWidget {
                     title: localizations.leagues,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueEdit())),
+                      onPressed: () =>
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueEdit())),
                     ),
                   ),
                   items: leagues.map(
-                    (e) => SingleConsumer<League, ClientLeague>(
+                        (e) => SingleConsumer<League, ClientLeague>(
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(

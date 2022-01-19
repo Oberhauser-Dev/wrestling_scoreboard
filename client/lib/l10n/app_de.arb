@@ -23,6 +23,8 @@
   "description": "Beschreibung",
   "noItems": "Keine Einträge vorhanden.",
   "mandatoryField": "Das ist ein Pflichtfeld.",
+  "noWebSocketConnection": "Die Verbindung zum Server konnte nicht aufgebaut werden oder wurde unterbrochen.",
+  "retry": "Erneut versuchen",
 
   "date": "Datum",
   "place": "Ort",

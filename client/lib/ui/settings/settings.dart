@@ -15,7 +15,7 @@ class CustomSettingsScreen extends StatefulWidget {
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
   static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
-  static final StreamController<String> onChangeWsUrl = StreamController.broadcast();
+  static final StreamController<String?> onConnectWebSocket = StreamController.broadcast();
   static final StreamController<String> onChangeBellSound = StreamController.broadcast();
 
   static final supportedLanguages = {
@@ -99,7 +99,7 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
             // leading: const Icon(Icons.storage),
             initialValue: env(webSocketUrl, fallBack: 'ws://localhost:8080/ws'),
             onChange: (String? val) {
-              if(val != null) CustomSettingsScreen.onChangeWsUrl.add(val);
+              if(val != null) CustomSettingsScreen.onConnectWebSocket.add(val);
             },
           ),
           FutureBuilder<List<String>>(

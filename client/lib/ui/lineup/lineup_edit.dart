@@ -164,7 +164,6 @@ class LineupEditState extends State<LineupEdit> {
                               if (participation.weight == newValue) return;
                               participation.weight = newValue;
                               _createOrUpdateParticipations.add(participation);
-                              print('save: $value');
                             }
                           },
                         ),

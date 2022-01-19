@@ -67,25 +67,20 @@ class RestDataProvider extends DataProvider {
   @override
   Future<List<Map<String, dynamic>>> readRawMany<T extends DataObject>(
       {DataObject? filterObject, bool isRaw = true}) async {
-    try {
-      var prepend = '';
-      if (filterObject != null) {
-        prepend = '${_getPathFromType(filterObject.runtimeType)}/${filterObject.id}';
-      }
-      final uri = Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s');
-      if (isRaw) uri.queryParameters.addAll(rawQueryParameter);
-      final response = await http.get(uri);
+    var prepend = '';
+    if (filterObject != null) {
+      prepend = '${_getPathFromType(filterObject.runtimeType)}/${filterObject.id}';
+    }
+    final uri = Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s');
+    if (isRaw) uri.queryParameters.addAll(rawQueryParameter);
+    final response = await http.get(uri);
 
-      if (response.statusCode == 200) {
-        final List<dynamic> json = jsonDecode(response.body);
-        return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
-      } else {
-        throw Exception(
-            'Failed to READ many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
-      }
-    } catch (e) {
-      print(e);
-      rethrow;
+    if (response.statusCode == 200) {
+      final List<dynamic> json = jsonDecode(response.body);
+      return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
+    } else {
+      throw Exception(
+          'Failed to READ many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
     }
   }
 
@@ -170,7 +165,7 @@ class RestDataProvider extends DataProvider {
   Future<int> createOrUpdateSingle(DataObject obj) async {
     final body = jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
-    final response = await http.post(uri,body: body);
+    final response = await http.post(uri, body: body);
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
