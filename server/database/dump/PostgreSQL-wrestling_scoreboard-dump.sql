@@ -865,12 +865,12 @@ COPY public.club (id, no, name) FROM stdin;
 --
 
 COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result) FROM stdin;
-21	23	24	1	\N	\N
 22	\N	\N	2	\N	\N
 23	25	\N	3	\N	\N
 24	\N	26	4	\N	\N
 25	27	28	7	\N	\N
 26	29	30	10	\N	\N
+21	23	24	1	red	VFA
 \.
 
 
@@ -879,6 +879,10 @@ COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result) F
 --
 
 COPY public.fight_action (id, duration_millis, point_count, action_type, fight_role, fight_id) FROM stdin;
+1	20000	2	points	red	21
+2	25000	1	points	red	21
+3	30000	1	points	blue	21
+4	36000	\N	passivity	blue	21
 \.
 
 
@@ -941,14 +945,14 @@ COPY public.membership (id, person_id, club_id, no) FROM stdin;
 --
 
 COPY public.participant_state (id, participation_id, classification_points) FROM stdin;
-23	1	\N
-24	5	\N
 25	2	\N
 26	6	\N
 27	3	\N
 28	7	\N
 29	4	\N
 30	8	\N
+24	5	1
+23	1	4
 \.
 
 
@@ -1000,8 +1004,8 @@ COPY public.team (id, name, description, club_id, league_id) FROM stdin;
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id, no) FROM stdin;
-1	2021-07-10	Springfield	\N	\N	1	2	9	\N	\N	\N	1	\N
+COPY public.team_match (id, date, location, visitors_count, comment, no, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id) FROM stdin;
+1	2021-07-10	Springfield	\N	\N	\N	1	2	9	\N	\N	\N	1
 \.
 
 
@@ -1023,8 +1027,8 @@ COPY public.team_match_fight (id, team_match_id, fight_id, pos) FROM stdin;
 -- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament (id, date, location, visitors_count, comment, name, no) FROM stdin;
-1	2021-07-17	Quahog	15	\N	The Griffin-Simpson Tournament	\N
+COPY public.tournament (id, date, location, visitors_count, comment, no, name) FROM stdin;
+1	2021-07-17	Quahog	15	\N	\N	The Griffin-Simpson Tournament
 \.
 
 
@@ -1073,7 +1077,7 @@ SELECT pg_catalog.setval('public.club_id_seq', 2, true);
 -- Name: fight_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.fight_action_id_seq', 1, false);
+SELECT pg_catalog.setval('public.fight_action_id_seq', 4, true);
 
 
 --
