@@ -40,18 +40,18 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<S> readSingle<T extends DataObject, S extends T>(int id) async {
-    final json = await readRawSingle<T>(id, isRaw: false);
+    final json = await readSingleJson<T>(id, isRaw: false);
     return toClientObject<T, S>(T.fromJson(json) as T);
   }
 
   @override
   Future<List<S>> readMany<T extends DataObject, S extends T>({DataObject? filterObject}) async {
-    final json = await readRawMany<T>(filterObject: filterObject, isRaw: false);
+    final json = await readManyJson<T>(filterObject: filterObject, isRaw: false);
     return json.map((e) => (toClientObject(T.fromJson(e)) as S)).toList();
   }
 
   @override
-  Future<Map<String, dynamic>> readRawSingle<T extends DataObject>(int id, {bool isRaw = true}) async {
+  Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id, {bool isRaw = true}) async {
     final uri = Uri.parse('$_apiUrl${_getPathFromType(T)}/$id');
     if (isRaw) uri.queryParameters.addAll(rawQueryParameter);
     final response = await http.get(uri);
@@ -65,7 +65,7 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> readRawMany<T extends DataObject>(
+  Future<List<Map<String, dynamic>>> readManyJson<T extends DataObject>(
       {DataObject? filterObject, bool isRaw = true}) async {
     var prepend = '';
     if (filterObject != null) {

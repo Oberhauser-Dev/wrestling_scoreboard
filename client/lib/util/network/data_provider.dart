@@ -59,11 +59,11 @@ abstract class DataProvider {
     return stream;
   }
 
-  /// READ: get a single raw object
-  Future<Map<String, dynamic>> readRawSingle<T extends DataObject>(int id);
+  /// READ: get a single json object
+  Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id);
 
-  /// READ: get many raw objects
-  Future<Iterable<Map<String, dynamic>>> readRawMany<T extends DataObject>({DataObject? filterObject});
+  /// READ: get many json objects
+  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject>({DataObject? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
   /// Returns the id of the object
