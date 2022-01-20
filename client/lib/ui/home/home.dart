@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
-import 'package:wrestling_scoreboard/ui/settings/settings.dart';
 import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
 
 class Home extends StatefulWidget {
@@ -22,7 +21,7 @@ class HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    WebSocketManager.onWebSocketConnected.stream.distinct().listen((isConnected) {
+    WebSocketManager.onWebSocketConnecting.stream.distinct().listen((isConnected) {
       if (!isConnected) {
         WidgetsBinding.instance?.addPostFrameCallback((_) {
           final localizations = AppLocalizations.of(context)!;
@@ -38,7 +37,7 @@ class HomeState extends State<Home> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    CustomSettingsScreen.onConnectWebSocket.sink.add(null);
+                    WebSocketManager.onWebSocketConnecting.sink.add(true);
                   },
                   child: Text(localizations.retry),
                 ),
