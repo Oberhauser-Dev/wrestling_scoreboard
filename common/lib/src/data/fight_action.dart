@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import '../enums/fight_action_type.dart';
 import '../enums/fight_role.dart';
 import 'data_object.dart';
+import 'fight.dart';
 
 part 'fight_action.g.dart';
 
@@ -13,8 +14,9 @@ class FightAction extends DataObject {
   FightActionType actionType;
   int? pointCount;
   FightRole role;
+  Fight fight;
 
-  FightAction({int? id, required this.actionType, required this.duration, required this.role, this.pointCount})
+  FightAction({int? id, required this.actionType, required this.fight, required this.duration, required this.role, this.pointCount})
       : super(id);
 
   factory FightAction.fromJson(Map<String, dynamic> json) => _$FightActionFromJson(json);

@@ -21,7 +21,9 @@ Fight _$FightFromJson(Map<String, dynamic> json) {
     winner: _$enumDecodeNullable(_$FightRoleEnumMap, json['winner']),
     result: _$enumDecodeNullable(_$FightResultEnumMap, json['result']),
     duration: Duration(microseconds: json['duration'] as int),
-  );
+  )..actions = (json['actions'] as List<dynamic>)
+      .map((e) => FightAction.fromJson(e as Map<String, dynamic>))
+      .toList();
 }
 
 Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
@@ -30,6 +32,7 @@ Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
       'b': instance.b,
       'weightClass': instance.weightClass,
       'pool': instance.pool,
+      'actions': instance.actions,
       'result': _$FightResultEnumMap[instance.result],
       'winner': _$FightRoleEnumMap[instance.winner],
       'duration': instance.duration.inMicroseconds,

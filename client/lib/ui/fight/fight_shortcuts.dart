@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/util/audio/audio.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 import 'fight_screen.dart';
 
@@ -164,32 +165,62 @@ class FightActionHandler extends StatelessWidget {
         if (context != null) Navigator.pop(context);
         break;
       case FightScreenActions.RedOne:
-        fight.addAction(FightAction(
-            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.red,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 1);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedTwo:
-        fight.addAction(FightAction(
-            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 2));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.red,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 2);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedThree:
-        fight.addAction(FightAction(
-            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 3));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.red,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 3);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedFour:
-        fight.addAction(FightAction(
-            role: FightRole.red, duration: fight.duration, actionType: FightActionType.points, pointCount: 4));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.red,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 4);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedPassivity:
-        fight.addAction(
-            FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity));
+        final action = FightAction(
+            fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedCaution:
-        fight
-            .addAction(FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution));
+        final action = FightAction(
+            fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedDismissal:
-        fight.addAction(
-            FightAction(role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal));
+        final action = FightAction(
+            fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedActivityTime:
         doAction(FightScreenActions.RedActivityTime);
@@ -198,38 +229,76 @@ class FightActionHandler extends StatelessWidget {
         doAction(FightScreenActions.RedInjuryTime);
         break;
       case FightScreenActions.RedUndo:
-        if (fight.r != null && fight.r!.actions.isNotEmpty) fight.removeAction(fight.r!.actions.last);
+        if (fight.r != null && fight.r!.actions.isNotEmpty) {
+          final action = fight.r!.actions.last;
+          fight.removeAction(action);
+          dataProvider.deleteSingle(action);
+        }
         break;
       case FightScreenActions.BlueOne:
-        fight.addAction(FightAction(
-            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 1));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.blue,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 1);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueTwo:
-        fight.addAction(FightAction(
-            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 2));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.blue,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 2);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueThree:
-        fight.addAction(FightAction(
-            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 3));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.blue,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 3);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueFour:
-        fight.addAction(FightAction(
-            role: FightRole.blue, duration: fight.duration, actionType: FightActionType.points, pointCount: 4));
+        final action = FightAction(
+            fight: fight,
+            role: FightRole.blue,
+            duration: fight.duration,
+            actionType: FightActionType.points,
+            pointCount: 4);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BluePassivity:
-        fight.addAction(
-            FightAction(role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity));
+        final action = FightAction(
+            fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueCaution:
-        fight.addAction(
-            FightAction(role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution));
+        final action = FightAction(
+            fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueDismissal:
-        fight.addAction(
-            FightAction(role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal));
+        final action = FightAction(
+            fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal);
+        fight.addAction(action);
+        dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueUndo:
-        if (fight.b != null && fight.b!.actions.isNotEmpty) fight.removeAction(fight.b!.actions.last);
+        if (fight.b != null && fight.b!.actions.isNotEmpty) {
+          final action = fight.b!.actions.last;
+          fight.removeAction(action);
+          dataProvider.deleteSingle(action);
+        }
         break;
       case FightScreenActions.BlueActivityTime:
         doAction(FightScreenActions.BlueActivityTime);
@@ -238,7 +307,11 @@ class FightActionHandler extends StatelessWidget {
         doAction(FightScreenActions.BlueInjuryTime);
         break;
       case FightScreenActions.Undo:
-        if (fight.actions.isNotEmpty) fight.removeAction(fight.actions.last);
+        if (fight.actions.isNotEmpty) {
+          final action = fight.actions.last;
+          fight.removeAction(action);
+          dataProvider.deleteSingle(action);
+        }
         break;
       case FightScreenActions.Horn:
         HornSound().play();

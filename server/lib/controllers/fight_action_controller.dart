@@ -2,6 +2,7 @@ import 'package:common/common.dart';
 import 'package:postgres/postgres.dart';
 
 import 'entity_controller.dart';
+import 'fight_controller.dart';
 
 class FightActionController extends EntityController<FightAction> {
   static final FightActionController _singleton = FightActionController._internal();
@@ -20,6 +21,7 @@ class FightActionController extends EntityController<FightAction> {
       duration: Duration(milliseconds: e['duration_millis']),
       role: FightRoleParser.valueOf(e['fight_role']),
       pointCount: e['point_count'] as int?,
+      fight: (await FightController().getSingle(e['fight_id'] as int))!,
     );
   }
 
@@ -31,6 +33,7 @@ class FightActionController extends EntityController<FightAction> {
       'duration_millis': e.duration.inMilliseconds,
       'fight_role': e.role.name,
       'point_count': e.pointCount,
+      'fight_id': e.fight.id,
     }, {
       'point_count': PostgreSQLDataType.smallInteger
     });
