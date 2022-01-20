@@ -22,10 +22,6 @@ class MatchSequence extends StatelessWidget {
 
   const MatchSequence(this.filterObject, {Key? key}) : super(key: key);
 
-  handleSelectedFight(ClientTeamMatch match, int fightIndex, BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fightIndex)));
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -85,7 +81,7 @@ class MatchSequence extends StatelessWidget {
                           itemCount: fights.length,
                           itemBuilder: (context, index) {
                             final ClientFight fight = fights.elementAt(index);
-                            return FightListItem(fight, (fight) => handleSelectedFight(match, index, context),
+                            return FightListItem(fight, (fight) => navigateToFightScreen(context, match, index),
                                 flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
                           },
                         ),
@@ -145,10 +141,8 @@ class FightListItem extends StatelessWidget {
                       )),
                   Expanded(
                       flex: flexWidthStyle,
-                      child: Center(
-                          child: Text(
-                              styleToAbbr(fight.weightClass.style, context),
-                              style: fontStyleDefault))),
+                      child:
+                          Center(child: Text(styleToAbbr(fight.weightClass.style, context), style: fontStyleDefault))),
                   Expanded(
                       flex: 55,
                       child: ChangeNotifierProvider.value(

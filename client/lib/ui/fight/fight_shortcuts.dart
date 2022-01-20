@@ -1,7 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/util/audio/audio.dart';
 
@@ -148,7 +147,7 @@ class FightActionHandler extends StatelessWidget {
           int index = fightIndex + 1;
           if (index < match.fights.length) {
             Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
+            navigateToFightScreen(context, match, index);
           }
         }
         break;
@@ -157,7 +156,7 @@ class FightActionHandler extends StatelessWidget {
           int index = fightIndex - 1;
           if (index >= 0) {
             Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
+            navigateToFightScreen(context, match, index);
           }
         }
         break;

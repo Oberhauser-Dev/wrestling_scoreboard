@@ -90,6 +90,7 @@ class ApiRoute {
     router.post('/fights', fightController.postSingle);
     router.get('/fights', fightController.requestMany);
     router.get('/fight/<id|[0-9]+>', fightController.requestSingle);
+    router.get('/fight/<id|[0-9]+>/fight_actions', fightController.requestFightActions);
 
     // TeamMatchFightController currently not used!
     final teamMatchFightController = TeamMatchFightController();

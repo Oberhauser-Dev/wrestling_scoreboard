@@ -1,5 +1,6 @@
 import 'data/club.dart';
 import 'data/fight.dart';
+import 'data/fight_action.dart';
 import 'data/league.dart';
 import 'data/lineup.dart';
 import 'data/membership.dart';
@@ -30,6 +31,7 @@ export 'data/wrestling_event.dart';
 const List<Type> dataObjectTypes = [
   Club,
   Fight,
+  FightAction,
   League,
   Lineup,
   Membership,
@@ -44,6 +46,8 @@ String getTableNameFromType(Type t) {
       return 'club';
     case Fight:
       return 'fight';
+    case FightAction:
+      return 'fight_action';
     case League:
       return 'league';
     case Lineup:
@@ -71,6 +75,8 @@ Type getTypeFromTableName(String tableName) {
       return Club;
     case 'fight':
       return Fight;
+    case 'fight_action':
+      return FightAction;
     case 'league':
       return League;
     case 'lineup':

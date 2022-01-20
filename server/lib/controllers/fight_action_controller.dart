@@ -18,7 +18,7 @@ class FightActionController extends EntityController<FightAction> {
       id: e[primaryKeyName] as int?,
       actionType: FightActionTypeParser.valueOf(e['action_type']),
       duration: Duration(milliseconds: e['duration_millis']),
-      role: FightRoleParser.valueOf(e['role']),
+      role: FightRoleParser.valueOf(e['fight_role']),
       pointCount: e['point_count'] as int?,
     );
   }
@@ -29,7 +29,7 @@ class FightActionController extends EntityController<FightAction> {
       if (e.id != null) primaryKeyName: e.id,
       'action_type': e.actionType.name,
       'duration_millis': e.duration.inMilliseconds,
-      'role': e.role.name,
+      'fight_role': e.role.name,
       'point_count': e.pointCount,
     }, {
       'point_count': PostgreSQLDataType.smallInteger

@@ -1,6 +1,8 @@
 import 'package:common/common.dart';
+import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
+import 'fight_action_controller.dart';
 import 'participant_state_controller.dart';
 import 'weight_class_controller.dart';
 
@@ -12,6 +14,11 @@ class FightController extends EntityController<Fight> {
   }
 
   FightController._internal() : super(tableName: 'fight');
+
+  Future<Response> requestFightActions(Request request, String id) async {
+    return EntityController.handleRequestManyOfController(FightActionController(),
+        isRaw: isRaw(request), conditions: ['fight_id = @id'], substitutionValues: {'id': id});
+  }
 
   @override
   Future<Fight> parseToClass(Map<String, dynamic> e) async {

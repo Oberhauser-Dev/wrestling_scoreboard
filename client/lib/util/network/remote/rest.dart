@@ -97,6 +97,8 @@ class RestDataProvider extends DataProvider {
         callback<Club, ClientClub>(single as Club);
       } else if (U == Fight) {
         callback<Fight, ClientFight>(single as Fight);
+      } else if (U == FightAction) {
+        callback<FightAction, FightAction>(single as FightAction);
       } else if (U == League) {
         callback<League, ClientLeague>(single as League);
       } else if (U == Lineup) {
@@ -128,6 +130,8 @@ class RestDataProvider extends DataProvider {
         callback<Club, ClientClub>(many as ManyDataObject<Club>);
       } else if (U == Fight) {
         callback<Fight, ClientFight>(many as ManyDataObject<Fight>);
+      } else if (U == FightAction) {
+        callback<FightAction, FightAction>(many as ManyDataObject<FightAction>);
       } else if (U == League) {
         callback<League, ClientLeague>(many as ManyDataObject<League>);
       } else if (U == Lineup) {

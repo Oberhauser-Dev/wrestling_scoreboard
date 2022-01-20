@@ -12,6 +12,7 @@ abstract class DataObject {
 
   Type getBaseType() {
     if (this is Fight) return Fight;
+    if (this is FightAction) return FightAction;
     if (this is TeamMatch) return TeamMatch;
     if (this is Team) return Team;
     if (this is Club) return Club;
@@ -33,6 +34,8 @@ extension FromJson on Type {
         return Club.fromJson(json);
       case Fight:
         return Fight.fromJson(json);
+      case FightAction:
+        return FightAction.fromJson(json);
       case League:
         return League.fromJson(json);
       case Lineup:

@@ -14,12 +14,19 @@ import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard/util/audio/audio.dart';
 import 'package:wrestling_scoreboard/util/colors.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
 import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_controls.dart';
+
+void navigateToFightScreen(BuildContext context, ClientTeamMatch match, int index) async {
+  final fight = match.fights[index];
+  fight.actions = await dataProvider.readMany<FightAction, FightAction>(filterObject: fight);
+  Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
+}
 
 class FightScreen extends StatefulWidget {
   final ClientTeamMatch match;

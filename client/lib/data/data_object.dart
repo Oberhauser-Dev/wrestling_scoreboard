@@ -41,6 +41,8 @@ S toClientObject<T extends DataObject, S extends T>(T dataObject) {
   } else if (dataObject is Fight) {
     if (dataObject is ClientFight) return dataObject as S;
     return ClientFight.from(dataObject) as S;
+  } else if (dataObject is FightAction) {
+    return dataObject as S;
   } else if (dataObject is League) {
     if (dataObject is ClientLeague) return dataObject as S;
     return ClientLeague.from(dataObject) as S;
