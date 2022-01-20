@@ -4,13 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'participant_state.dart';
 
 class ClientFight extends Fight with ChangeNotifier {
-  ClientFight(
-      {int? id,
-      ClientParticipantState? r,
-      ClientParticipantState? b,
-      required WeightClass weightClass,
-      int? pool})
-      : super(id: id, r: r, b: b, weightClass: weightClass, pool: pool) {
+  ClientFight({
+    int? id,
+    ClientParticipantState? r,
+    ClientParticipantState? b,
+    required WeightClass weightClass,
+    int? pool,
+    FightResult? result,
+    FightRole? winner,
+    Duration duration = const Duration(),
+  }) : super(id: id, r: r, b: b, weightClass: weightClass, pool: pool, result: result, winner: winner, duration: duration) {
     r?.addListener(() {
       notifyListeners();
     });
@@ -26,6 +29,9 @@ class ClientFight extends Fight with ChangeNotifier {
           b: obj.b == null ? null : ClientParticipantState.from(obj.b!),
           weightClass: obj.weightClass,
           pool: obj.pool,
+          result: obj.result,
+          winner: obj.winner,
+          duration: obj.duration,
         );
 
   factory ClientFight.fromJson(Map<String, dynamic> json) => ClientFight.from(Fight.fromJson(json));

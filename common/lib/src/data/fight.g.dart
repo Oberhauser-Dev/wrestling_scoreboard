@@ -18,10 +18,10 @@ Fight _$FightFromJson(Map<String, dynamic> json) {
     weightClass:
         WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
     pool: json['pool'] as int?,
-  )
-    ..result = _$enumDecodeNullable(_$FightResultEnumMap, json['result'])
-    ..winner = _$enumDecodeNullable(_$FightRoleEnumMap, json['winner'])
-    ..duration = Duration(microseconds: json['duration'] as int);
+    winner: _$enumDecodeNullable(_$FightRoleEnumMap, json['winner']),
+    result: _$enumDecodeNullable(_$FightResultEnumMap, json['result']),
+    duration: Duration(microseconds: json['duration'] as int),
+  );
 }
 
 Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
@@ -72,6 +72,11 @@ K? _$enumDecodeNullable<K, V>(
   return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
 }
 
+const _$FightRoleEnumMap = {
+  FightRole.red: 'red',
+  FightRole.blue: 'blue',
+};
+
 const _$FightResultEnumMap = {
   FightResult.VFA: 'VFA',
   FightResult.VIN: 'VIN',
@@ -83,9 +88,4 @@ const _$FightResultEnumMap = {
   FightResult.VFO: 'VFO',
   FightResult.DSQ: 'DSQ',
   FightResult.DSQ2: 'DSQ2',
-};
-
-const _$FightRoleEnumMap = {
-  FightRole.red: 'red',
-  FightRole.blue: 'blue',
 };

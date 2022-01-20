@@ -6,7 +6,6 @@ import 'data_object.dart';
 import 'fight_action.dart';
 import 'participant_state.dart';
 import 'weight_class.dart';
-import 'wrestling_event.dart';
 
 part 'fight.g.dart';
 
@@ -20,20 +19,13 @@ class Fight extends DataObject {
   final List<FightAction> _actions = [];
   FightResult? result;
   FightRole? winner;
+  Duration duration;
 
-  Duration _duration = Duration();
-
-  Fight({int? id, this.r, this.b, required this.weightClass, this.pool}) : super(id);
+  Fight({int? id, this.r, this.b, required this.weightClass, this.pool, this.winner, this.result, this.duration = const Duration()}) : super(id);
 
   factory Fight.fromJson(Map<String, dynamic> json) => _$FightFromJson(json);
 
   Map<String, dynamic> toJson() => _$FightToJson(this);
-
-  Duration get duration => _duration;
-
-  set duration(Duration duration) {
-    _duration = duration;
-  }
 
   bool addAction(FightAction action) {
     ParticipantState? pStatus = action.role == FightRole.red ? this.r : this.b;

@@ -153,7 +153,8 @@ CREATE TABLE public.fight (
     blue_id integer,
     weight_class_id integer NOT NULL,
     winner public.fight_role,
-    fight_result public.fight_result
+    fight_result public.fight_result,
+    duration_millis integer
 );
 
 
@@ -864,13 +865,13 @@ COPY public.club (id, no, name) FROM stdin;
 -- Data for Name: fight; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result) FROM stdin;
-22	\N	\N	2	\N	\N
-23	25	\N	3	\N	\N
-24	\N	26	4	\N	\N
-25	27	28	7	\N	\N
-26	29	30	10	\N	\N
-21	23	24	1	red	VFA
+COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result, duration_millis) FROM stdin;
+22	\N	\N	2	\N	\N	\N
+23	25	\N	3	\N	\N	\N
+24	\N	26	4	\N	\N	\N
+25	27	28	7	\N	\N	\N
+26	29	30	10	\N	\N	\N
+21	23	24	1	red	VFA	45000
 \.
 
 

@@ -5,9 +5,11 @@ class ClientParticipantState extends ParticipantState with ChangeNotifier {
   ClientParticipantState({
     int? id,
     required Participation participation,
-  }) : super(id: id, participation: participation);
+    int? classificationPoints,
+  }) : super(id: id, participation: participation, classificationPoints: classificationPoints);
 
-  ClientParticipantState.from(ParticipantState obj) : this(id: obj.id, participation: obj.participation);
+  ClientParticipantState.from(ParticipantState obj)
+      : this(id: obj.id, participation: obj.participation, classificationPoints: obj.classificationPoints);
 
   factory ClientParticipantState.fromJson(Map<String, dynamic> json) =>
       ClientParticipantState.from(ParticipantState.fromJson(json));

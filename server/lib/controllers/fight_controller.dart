@@ -17,10 +17,19 @@ class FightController extends EntityController<Fight> {
   Future<Fight> parseToClass(Map<String, dynamic> e) async {
     final redId = e['red_id'] as int?;
     final blueId = e['blue_id'] as int?;
-    final r = redId == null ? null : await ParticipantStateController().getSingle(redId);
-    final b = blueId == null ? null : await ParticipantStateController().getSingle(blueId);
+    final winner = e['winner'] as String?;
+    final fightResult = e['fight_result'] as String?;
     final weightClass = await WeightClassController().getSingle(e['weight_class_id'] as int);
-    return Fight(id: e[primaryKeyName] as int?, r: r, b: b, weightClass: weightClass!);
+    final durationMillis = e['duration_millis'] as int?;
+    return Fight(
+      id: e[primaryKeyName] as int?,
+      r: redId == null ? null : await ParticipantStateController().getSingle(redId),
+      b: blueId == null ? null : await ParticipantStateController().getSingle(blueId),
+      weightClass: weightClass!,
+      winner: winner == null ? null : FightRoleParser.valueOf(winner),
+      result: fightResult == null ? null : FightResultParser.valueOf(fightResult),
+      duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
+    );
   }
 
   @override
@@ -30,6 +39,9 @@ class FightController extends EntityController<Fight> {
       'red_id': e.r?.id,
       'blue_id': e.b?.id,
       'weight_class_id': e.weightClass.id,
+      'winner': e.winner?.name,
+      'fight_result': e.result?.name,
+      'duration_millis': e.duration.inMilliseconds,
     });
   }
 }
