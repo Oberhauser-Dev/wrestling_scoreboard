@@ -9,7 +9,8 @@ Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) => <
       'data': single,
     };
 
-Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation, {Type filterType = Object, int? filterId}) =>
+Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation,
+        {Type filterType = Object, int? filterId}) =>
     <String, dynamic>{
       'operation': operation.name,
       'isMany': 'true',
@@ -21,12 +22,11 @@ Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation, {T
     };
 
 typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({required CRUD operation, required T single});
-typedef HandleManyCallback = Future<void> Function<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many});
+typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
+    {required CRUD operation, required ManyDataObject<T> many});
 
 Future<int?> handleFromJson(
-    Map<String, dynamic> json,
-    HandleSingleCallback handleSingle,
-    HandleManyCallback handleMany) {
+    Map<String, dynamic> json, HandleSingleCallback handleSingle, HandleManyCallback handleMany) {
   final type = getTypeFromTableName(json['tableName']);
   switch (type) {
     case Club:
@@ -52,25 +52,22 @@ Future<int?> handleFromJson(
   }
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
-    HandleSingleCallback handleSingle,
-    HandleManyCallback handleMany) async {
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(
+    Map<String, dynamic> json, HandleSingleCallback handleSingle, HandleManyCallback handleMany) async {
   final isMany = json['isMany'] == 'true';
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {
     final List<dynamic> data = json['data'];
-    final Type? filterType = json['filterType'] == null
-        ? Object
-        : getTypeFromTableName(json['filterType']);
+    final Type? filterType = json['filterType'] == null ? Object : getTypeFromTableName(json['filterType']);
     final int? filterId = json['filterId'];
     await handleMany<T>(
         operation: operation,
         many: ManyDataObject<T>(
-            data: data.map((e) => T.fromJson(e as Map<String, dynamic>) as T).toList(),
+            data: data.map((e) => DataObject.fromJson<T>(e as Map<String, dynamic>)).toList(),
             filterType: filterType ?? Object,
             filterId: filterId));
   } else {
-    return await handleSingle<T>(operation: operation, single: T.fromJson(json['data']) as T);
+    return await handleSingle<T>(operation: operation, single: DataObject.fromJson<T>(json['data']));
   }
 }
 

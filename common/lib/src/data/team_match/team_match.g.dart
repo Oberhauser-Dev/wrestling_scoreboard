@@ -15,7 +15,8 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
         .map((e) => WeightClass.fromJson(e as Map<String, dynamic>))
         .toList(),
     referees: (json['referees'] as List<dynamic>)
-        .map((e) => Person.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Person.fromJson(e as Map<String, dynamic>))
+        .toList(),
     no: json['no'] as String?,
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),

@@ -20,6 +20,16 @@ class Lineup extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$LineupToJson(this);
 
+  static Future<Lineup> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final id = e['id'] as int?;
+    final team = await getSingle<Team>(e['team_id'] as int);
+    final leaderId = e['leader_id'] as int?;
+    final leader = leaderId == null ? null : await getSingle<Membership>(leaderId);
+    final coachId = e['coach_id'] as int?;
+    final coach = coachId == null ? null : await getSingle<Membership>(coachId);
+    return Lineup(id: id, team: team!, leader: leader, coach: coach);
+  }
+
   @override
   Map<String, dynamic> toRaw() {
     return {

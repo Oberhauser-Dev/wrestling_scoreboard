@@ -47,6 +47,17 @@ class WrestlingEvent extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$WrestlingEventToJson(this);
 
+  static Future<WrestlingEvent> fromRaw(Map<String, dynamic> e) async => WrestlingEvent(
+        id: e['id'] as int?,
+        lineups: [],
+        weightClasses: [],
+        referees: [],
+        location: e['location'] as String?,
+        date: e['date'] as DateTime?,
+        visitorsCount: e['visitors_count'] as int?,
+        comment: e['comment'] as String?,
+      );
+
   @override
   Map<String, dynamic> toRaw() {
     return {

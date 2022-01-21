@@ -24,6 +24,15 @@ class FightAction extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$FightActionToJson(this);
 
+  static Future<FightAction> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => FightAction(
+    id: e['id'] as int?,
+    actionType: FightActionTypeParser.valueOf(e['action_type']),
+    duration: Duration(milliseconds: e['duration_millis']),
+    role: FightRoleParser.valueOf(e['fight_role']),
+    pointCount: e['point_count'] as int?,
+    fight: (await getSingle<Fight>(e['fight_id'] as int))!,
+  );
+  
   @override
   Map<String, dynamic> toRaw() {
     return {

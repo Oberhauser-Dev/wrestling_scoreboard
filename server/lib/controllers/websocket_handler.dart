@@ -65,17 +65,10 @@ void broadcastSingle(DataObject single) async {
     final guestMatches = await TeamMatchController()
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
 
-    broadcast(jsonEncode(manyToJson(homeMatches,
-        TeamMatch,
-        CRUD.update,
-        filterType: Team,
-        filterId: single.home.team.id)));
-    broadcast(jsonEncode(manyToJson(
-        guestMatches,
-        TeamMatch,
-        CRUD.update,
-        filterType: Team,
-        filterId: single.guest.team.id)));
+    broadcast(
+        jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.home.team.id)));
+    broadcast(
+        jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.guest.team.id)));
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }
@@ -83,7 +76,7 @@ void broadcastSingle(DataObject single) async {
 
 Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
-  final controller = EntityController.getControllerFromDataType(single.runtimeType);
+  final controller = EntityController.getControllerFromDataType<T>();
   if (operation == CRUD.update) {
     await controller.updateSingle(single);
     broadcast(jsonEncode(singleToJson(single, single.getBaseType(), operation)));

@@ -18,6 +18,12 @@ class League extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$LeagueToJson(this);
 
+  static Future<League> fromRaw(Map<String, dynamic> e) async => League(
+        id: e['id'] as int?,
+        name: e['name'] as String,
+        startDate: e['start_date'] as DateTime,
+      );
+
   @override
   Map<String, dynamic> toRaw() {
     return {

@@ -22,6 +22,13 @@ class WeightClass extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$WeightClassToJson(this);
 
+  static Future<WeightClass> fromRaw(Map<String, dynamic> e) async => WeightClass(
+        id: e['id'] as int?,
+        name: e['name'] as String?,
+        weight: e['weight'] as int,
+        style: WrestlingStyleParser.valueOf(e['style']),
+      );
+
   @override
   Map<String, dynamic> toRaw() {
     return {
@@ -31,7 +38,7 @@ class WeightClass extends DataObject {
       'style': style.name,
     };
   }
-  
+
   @override
   bool operator ==(o) => o is WeightClass && name == o.name && weight == o.weight && style == o.style;
 

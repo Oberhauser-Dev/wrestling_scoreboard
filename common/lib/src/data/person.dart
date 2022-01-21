@@ -21,6 +21,14 @@ class Person extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$PersonToJson(this);
 
+  static Future<Person> fromRaw(Map<String, dynamic> e) async => Person(
+        id: e['id'] as int?,
+        prename: e['prename'] as String,
+        surname: e['surname'] as String,
+        gender: GenderParser.valueOf(e['gender']),
+        birthDate: e['birth_date'] as DateTime?,
+      );
+
   @override
   Map<String, dynamic> toRaw() {
     return {
@@ -31,7 +39,7 @@ class Person extends DataObject {
       'birth_date': birthDate,
     };
   }
-  
+
   int? get age {
     DateTime today = MockableDateTime.now();
 

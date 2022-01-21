@@ -25,4 +25,10 @@ class Club extends DataObject {
       'name': name,
     };
   }
+
+  static Future<Club> fromRaw(Map<String, dynamic> e) async => Club(
+    id: e['id'] as int?,
+    no: e['no'] as String?,
+    name: e['name'] as String,
+  );
 }

@@ -54,6 +54,21 @@ class Tournament extends WrestlingEvent {
   @override
   Map<String, dynamic> toJson() => _$TournamentToJson(this);
 
+  static Future<Tournament> fromRaw(Map<String, dynamic> e) async {
+    // TODO fetch lineups, referees, weightClasses, etc.
+    return Tournament(
+      id: e['id'] as int?,
+      name: e['name'],
+      lineups: [],
+      weightClasses: [],
+      referees: [],
+      location: e['location'] as String?,
+      date: e['date'] as DateTime?,
+      visitorsCount: e['visitors_count'] as int?,
+      comment: e['comment'] as String?,
+    );
+  }
+  
   @override
   Map<String, dynamic> toRaw() {
     return super.toRaw()..addAll({

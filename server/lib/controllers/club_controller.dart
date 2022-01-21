@@ -22,9 +22,4 @@ class ClubController extends EntityController<Club> {
     return EntityController.handleRequestManyOfController(MembershipController(),
         isRaw: isRaw(request), conditions: ['club_id = @id'], substitutionValues: {'id': id});
   }
-
-  @override
-  Future<Club> parseFromRaw(Map<String, dynamic> e) async {
-    return Club(id: e[primaryKeyName] as int?, no: e['no'] as String?, name: e['name'] as String);
-  }
 }

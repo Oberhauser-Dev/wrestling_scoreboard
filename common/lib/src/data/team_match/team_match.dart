@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../data_object.dart';
 import '../fight.dart';
 import '../league.dart';
 import '../lineup.dart';
@@ -38,7 +39,7 @@ class TeamMatch extends WrestlingEvent {
     required Lineup home,
     required Lineup guest,
     required List<WeightClass> weightClasses,
-    required Iterable<Person> referees,
+    required List<Person> referees,
     this.no,
     String? location,
     DateTime? date,
@@ -70,7 +71,31 @@ class TeamMatch extends WrestlingEvent {
   @override
   Map<String, dynamic> toJson() => _$TeamMatchToJson(this);
 
-  factory TeamMatch.fromRaw(Map<String, dynamic> json) => throw UnimplementedError();
+  static Future<TeamMatch> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final home = await getSingle<Lineup>(e['home_id'] as int);
+    final guest = await getSingle<Lineup>(e['guest_id'] as int);
+    final int? refereeId = e['referee_id'];
+    // TODO need extra table for multiple referees.
+    final List<Person> referees = refereeId != null ? [(await getSingle<Person>(refereeId))!] : [];
+    // TODO ditch weightclasses, always handle at client
+    // final weightClasses = home != null && home.team.league != null
+    // ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
+    //     : await WeightClassController().getMany();
+    // TODO may add weightclasses of both teams leagues
+
+    return TeamMatch(
+    id: e['id'] as int?,
+    no: e['no'] as String?,
+    home: home!,
+    guest: guest!,
+    weightClasses: [], // weightClasses
+    referees: referees,
+    location: e['location'] as String?,
+    date: e['date'] as DateTime?,
+    visitorsCount: e['visitors_count'] as int?,
+    comment: e['comment'] as String?,
+    );
+  }
 
   @override
   Map<String, dynamic> toRaw() {

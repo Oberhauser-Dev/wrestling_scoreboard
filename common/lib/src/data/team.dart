@@ -21,6 +21,18 @@ class Team extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$TeamToJson(this);
 
+  static Future<Team> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final club = await getSingle<Club>(e['club_id'] as int);
+    final leagueId = e['league_id'] as int?;
+    final league = leagueId == null ? null : await getSingle<League>(leagueId);
+    return Team(
+        id: e['id'] as int?,
+        name: e['name'] as String,
+        club: club!,
+        description: e['description'] as String?,
+        league: league);
+  }
+
   @override
   Map<String, dynamic> toRaw() {
     return {

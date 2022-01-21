@@ -29,6 +29,25 @@ class Participation extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$ParticipationToJson(this);
 
+  static Future<Participation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final weightClass = await getSingle<WeightClass>(e['weight_class_id'] as int);
+    final lineup = await getSingle<Lineup>(e['lineup_id'] as int);
+    final membership = await getSingle<Membership>(e['membership_id'] as int);
+    final weightEncoded = e['weight'];
+    double? weight;
+    if (weightEncoded != null) {
+      weight = double.parse(weightEncoded);
+    }
+
+    return Participation(
+      id: e['id'] as int?,
+      weightClass: weightClass!,
+      lineup: lineup!,
+      membership: membership!,
+      weight: weight,
+    );
+  }
+
   @override
   Map<String, dynamic> toRaw() {
     return {

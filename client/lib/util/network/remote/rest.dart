@@ -41,13 +41,13 @@ class RestDataProvider extends DataProvider {
   @override
   Future<S> readSingle<T extends DataObject, S extends T>(int id) async {
     final json = await readSingleJson<T>(id, isRaw: false);
-    return toClientObject<T, S>(T.fromJson(json) as T);
+    return toClientObject<T, S>(DataObject.fromJson<T>(json));
   }
 
   @override
   Future<List<S>> readMany<T extends DataObject, S extends T>({DataObject? filterObject}) async {
     final json = await readManyJson<T>(filterObject: filterObject, isRaw: false);
-    return json.map((e) => (toClientObject(T.fromJson(e)) as S)).toList();
+    return json.map((e) => (toClientObject(DataObject.fromJson<T>(e)) as S)).toList();
   }
 
   @override
@@ -167,7 +167,7 @@ class RestDataProvider extends DataProvider {
   @override
   /// As we need the return value immediately, we need to use the rest API.
   Future<int> createOrUpdateSingle(DataObject obj) async {
-    final body = jsonEncode(singleToJson(obj, obj.id != null ? CRUD.update : CRUD.create));
+    final body = jsonEncode(singleToJson(obj, obj.getBaseType(), obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
     final response = await http.post(uri, body: body);
 
@@ -181,6 +181,6 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<void> deleteSingle(DataObject obj) async {
-    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, CRUD.delete)));
+    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.getBaseType(), CRUD.delete)));
   }
 }

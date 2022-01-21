@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:common/common.dart';
 import 'package:postgres/postgres.dart';
 import 'package:server/controllers/club_controller.dart';
+import 'package:server/controllers/fight_action_controller.dart';
 import 'package:server/controllers/fight_controller.dart';
 import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/lineup_controller.dart';
@@ -65,7 +66,7 @@ abstract class EntityController<T extends DataObject> {
   Future<T?> getSingle(int id) async {
     final single = await getSingleRaw(id);
     if (single == null) return Future.value(null);
-    return parseFromRaw(single);
+    return DataObject.fromRaw<T>(single, getSingleFromDataType);
   }
 
   Future<Map<String, dynamic>?> getSingleRaw(int id) async {
@@ -81,7 +82,7 @@ abstract class EntityController<T extends DataObject> {
     dataObject.id = await createSingleRaw(dataObject.toRaw());
     return dataObject.id!;
   }
-  
+
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
     final postgresTypes = getPostgresDataTypes();
     final sql = '''
@@ -95,7 +96,7 @@ abstract class EntityController<T extends DataObject> {
   Future<int> updateSingle(T dataObject) async {
     return updateSingleRaw(dataObject.toRaw());
   }
-  
+
   Future<int> updateSingleRaw(Map<String, dynamic> data) async {
     final postgresTypes = getPostgresDataTypes();
     final sql = '''
@@ -125,13 +126,13 @@ abstract class EntityController<T extends DataObject> {
       Map<String, dynamic>? substitutionValues}) async {
     return Future.wait(
         (await getManyRaw(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues))
-            .map((e) async => await parseFromRaw(e))
+            .map((e) async => await DataObject.fromRaw<T>(e, getSingleFromDataType))
             .toList());
   }
 
   Future<List<T>> getManyFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
     return Future.wait((await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues))
-        .map((e) async => await parseFromRaw(e))
+        .map((e) async => await DataObject.fromRaw<T>(e, getSingleFromDataType))
         .toList());
   }
 
@@ -153,15 +154,13 @@ abstract class EntityController<T extends DataObject> {
   Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
     return Future.wait(res.map((row) async {
       final e = row[tableName]!;
-      return await parseFromRaw(e);
+      return await DataObject.fromRaw<T>(e, getSingleFromDataType);
     }));
   }
 
   List<Map<String, dynamic>> mapToTable(List<Map<String, Map<String, dynamic>>> res) {
     return res.map((row) => row[tableName]!).toList();
   }
-
-  Future<T> parseFromRaw(Map<String, dynamic> e);
 
   Map<String, PostgreSQLDataType> getPostgresDataTypes() => {};
 
@@ -220,28 +219,34 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
-  static EntityController getControllerFromDataType(Type t) {
-    switch (t) {
+  static Future<T?> getSingleFromDataType<T extends DataObject>(int id) {
+    return getControllerFromDataType<T>().getSingle(id);
+  }
+
+  static EntityController<T> getControllerFromDataType<T extends DataObject>() {
+    switch (T) {
       case Club:
-        return ClubController();
+        return ClubController() as EntityController<T>;
       case Fight:
-        return FightController();
+        return FightController() as EntityController<T>;
+      case FightAction:
+        return FightActionController as EntityController<T>;
       case League:
-        return LeagueController();
+        return LeagueController() as EntityController<T>;
       case Lineup:
-        return LineupController();
+        return LineupController() as EntityController<T>;
       case Membership:
-        return MembershipController();
+        return MembershipController() as EntityController<T>;
       case Participation:
-        return ParticipationController();
+        return ParticipationController() as EntityController<T>;
       case Team:
-        return TeamController();
+        return TeamController() as EntityController<T>;
       case TeamMatch:
-        return TeamMatchController();
+        return TeamMatchController() as EntityController<T>;
       case Tournament:
-        return TournamentController();
+        return TournamentController() as EntityController<T>;
       default:
-        throw UnimplementedError('Controller not available for type: $t');
+        throw UnimplementedError('Controller not available for type: $T');
     }
   }
 }

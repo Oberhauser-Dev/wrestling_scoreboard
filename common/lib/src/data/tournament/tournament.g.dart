@@ -32,6 +32,7 @@ Tournament _$TournamentFromJson(Map<String, dynamic> json) {
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
     ..stewards = (json['stewards'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
+    ..no = json['no'] as String?
     ..fights = (json['fights'] as List<dynamic>)
         .map((e) => Fight.fromJson(e as Map<String, dynamic>))
         .toList()
@@ -52,6 +53,7 @@ Map<String, dynamic> _$TournamentToJson(Tournament instance) =>
       'matPresidents': instance.matPresidents.toList(),
       'stewards': instance.stewards.toList(),
       'date': instance.date?.toIso8601String(),
+      'no': instance.no,
       'location': instance.location,
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,

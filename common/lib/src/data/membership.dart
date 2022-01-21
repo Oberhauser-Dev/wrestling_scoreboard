@@ -25,6 +25,17 @@ class Membership extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$MembershipToJson(this);
 
+  static Future<Membership> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final person = await getSingle<Person>(e['person_id'] as int);
+    final club = await getSingle<Club>(e['club_id'] as int);
+    return Membership(
+      id: e['id'] as int?,
+      no: e['no'] as String?,
+      person: person!,
+      club: club!,
+    );
+  }
+
   @override
   Map<String, dynamic> toRaw() {
     return {

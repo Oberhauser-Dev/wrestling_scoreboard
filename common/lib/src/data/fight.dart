@@ -21,7 +21,16 @@ class Fight extends DataObject {
   FightRole? winner;
   Duration duration;
 
-  Fight({int? id, this.r, this.b, required this.weightClass, this.pool, this.winner, this.result, this.duration = const Duration()}) : super(id);
+  Fight(
+      {int? id,
+      this.r,
+      this.b,
+      required this.weightClass,
+      this.pool,
+      this.winner,
+      this.result,
+      this.duration = const Duration()})
+      : super(id);
 
   factory Fight.fromJson(Map<String, dynamic> json) => _$FightFromJson(json);
 
@@ -40,7 +49,26 @@ class Fight extends DataObject {
       'duration_millis': duration.inMilliseconds,
     };
   }
-  
+
+  static Future<Fight> fromRaw(
+      Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final redId = e['red_id'] as int?;
+    final blueId = e['blue_id'] as int?;
+    final winner = e['winner'] as String?;
+    final fightResult = e['fight_result'] as String?;
+    final weightClass = await getSingle<WeightClass>(e['weight_class_id'] as int);
+    final durationMillis = e['duration_millis'] as int?;
+    return Fight(
+      id: e['id'] as int?,
+      r: redId == null ? null : await getSingle<ParticipantState>(redId),
+      b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
+      weightClass: weightClass!,
+      winner: winner == null ? null : FightRoleParser.valueOf(winner),
+      result: fightResult == null ? null : FightResultParser.valueOf(fightResult),
+      duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
+    );
+  }
+
   bool addAction(FightAction action) {
     ParticipantState? pStatus = action.role == FightRole.red ? this.r : this.b;
     if (pStatus != null) {
@@ -65,7 +93,7 @@ class Fight extends DataObject {
         _winner.classificationPoints = isTournament
             ? getClassificationPointsWinnerTournament(this.result!)
             : getClassificationPointsWinnerTeamMatch(
-            this.result!, _winner.technicalPoints - (_looser?.technicalPoints ?? 0));
+                this.result!, _winner.technicalPoints - (_looser?.technicalPoints ?? 0));
       }
 
       if (_looser != null) {
@@ -80,10 +108,11 @@ class Fight extends DataObject {
   }
 
   bool equalDuringFight(o) =>
-      o is Fight && o.runtimeType == runtimeType
-          && (r?.equalDuringFight(o.r) ?? (r == null && o.r == null))
-          && (b?.equalDuringFight(o.b) ?? (b == null && o.b == null))
-          && weightClass == o.weightClass;
+      o is Fight &&
+      o.runtimeType == runtimeType &&
+      (r?.equalDuringFight(o.r) ?? (r == null && o.r == null)) &&
+      (b?.equalDuringFight(o.b) ?? (b == null && o.b == null)) &&
+      weightClass == o.weightClass;
 
   static int getClassificationPointsWinnerTournament(FightResult result) {
     switch (result) {

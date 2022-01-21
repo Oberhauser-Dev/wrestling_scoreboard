@@ -23,6 +23,15 @@ class ParticipantState extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$ParticipantStateToJson(this);
 
+  static Future<ParticipantState> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final participation = await getSingle<Participation>(e['participation_id'] as int);
+    return ParticipantState(
+      id: e['id'] as int?,
+      participation: participation!,
+      classificationPoints: e['classification_points'] as int?,
+    );
+  }
+  
   @override
   Map<String, dynamic> toRaw() {
     return {

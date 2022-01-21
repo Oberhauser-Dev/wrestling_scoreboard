@@ -2,18 +2,14 @@ import 'dart:convert';
 
 import 'package:common/common.dart';
 import 'package:postgres/postgres.dart';
-import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/participant_state_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
-import 'package:server/controllers/person_controller.dart';
 import 'package:server/controllers/team_match_fight_controller.dart';
 import 'package:server/controllers/websocket_handler.dart';
-import 'package:server/controllers/weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
 import 'fight_controller.dart';
-import 'lineup_controller.dart';
 
 class ServerTeamMatch extends TeamMatch {
   ServerTeamMatch({
@@ -140,35 +136,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
   }
 
   @override
-  Future<TeamMatch> parseFromRaw(Map<String, dynamic> e) async {
-    final home = await LineupController().getSingle(e['home_id'] as int);
-    final guest = await LineupController().getSingle(e['guest_id'] as int);
-    final int? refereeId = e['referee_id'];
-    final List<Person> referees = refereeId != null ? [(await PersonController().getSingle(refereeId))!] : [];
-    final weightClasses = home != null && home.team.league != null
-        ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
-        : await WeightClassController().getMany();
-    // TODO may add weightclasses of both teams leagues
-
-    return ServerTeamMatch(
-      id: e[primaryKeyName] as int?,
-      no: e['no'] as String?,
-      home: home!,
-      guest: guest!,
-      weightClasses: weightClasses,
-      referees: referees,
-      // TODO need extra table for multiple referees.
-      location: e['location'] as String?,
-      date: e['date'] as DateTime?,
-      visitorsCount: e['visitors_count'] as int?,
-      comment: e['comment'] as String?,
-    );
-  }
-  
-  @override
   Map<String, PostgreSQLDataType> getPostgresDataTypes() {
-    return {
-      'comment': PostgreSQLDataType.text
-    };
+    return {'comment': PostgreSQLDataType.text};
   }
 }

@@ -24,22 +24,6 @@ class TournamentController extends EntityController<Tournament> {
   }
 
   @override
-  Future<Tournament> parseFromRaw(Map<String, dynamic> e) async {
-    // TODO fetch lineups, referees, weightClasses, etc.
-    return Tournament(
-      id: e[primaryKeyName] as int?,
-      name: e['name'],
-      lineups: [],
-      weightClasses: [],
-      referees: [],
-      location: e['location'] as String?,
-      date: e['date'] as DateTime?,
-      visitorsCount: e['visitors_count'] as int?,
-      comment: e['comment'] as String?,
-    );
-  }
-
-  @override
   Map<String, PostgreSQLDataType> getPostgresDataTypes() {
     return {'comment': PostgreSQLDataType.text};
   }

@@ -13,19 +13,7 @@ class WeightClassController extends EntityController<WeightClass> {
   WeightClassController._internal() : super(tableName: 'weight_class');
 
   @override
-  Future<WeightClass> parseFromRaw(Map<String, dynamic> e) async {
-    return WeightClass(
-      id: e[primaryKeyName] as int?,
-      name: e['name'] as String?,
-      weight: e['weight'] as int,
-      style: WrestlingStyleParser.valueOf(e['style']),
-    );
-  }
-
-  @override
   Map<String, PostgreSQLDataType> getPostgresDataTypes() {
-    return {
-      'weight': PostgreSQLDataType.smallInteger
-    };
+    return {'weight': PostgreSQLDataType.smallInteger};
   }
 }

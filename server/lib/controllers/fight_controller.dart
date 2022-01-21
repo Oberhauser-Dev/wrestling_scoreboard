@@ -3,8 +3,6 @@ import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
 import 'fight_action_controller.dart';
-import 'participant_state_controller.dart';
-import 'weight_class_controller.dart';
 
 class FightController extends EntityController<Fight> {
   static final FightController _singleton = FightController._internal();
@@ -18,24 +16,5 @@ class FightController extends EntityController<Fight> {
   Future<Response> requestFightActions(Request request, String id) async {
     return EntityController.handleRequestManyOfController(FightActionController(),
         isRaw: isRaw(request), conditions: ['fight_id = @id'], substitutionValues: {'id': id});
-  }
-
-  @override
-  Future<Fight> parseFromRaw(Map<String, dynamic> e) async {
-    final redId = e['red_id'] as int?;
-    final blueId = e['blue_id'] as int?;
-    final winner = e['winner'] as String?;
-    final fightResult = e['fight_result'] as String?;
-    final weightClass = await WeightClassController().getSingle(e['weight_class_id'] as int);
-    final durationMillis = e['duration_millis'] as int?;
-    return Fight(
-      id: e[primaryKeyName] as int?,
-      r: redId == null ? null : await ParticipantStateController().getSingle(redId),
-      b: blueId == null ? null : await ParticipantStateController().getSingle(blueId),
-      weightClass: weightClass!,
-      winner: winner == null ? null : FightRoleParser.valueOf(winner),
-      result: fightResult == null ? null : FightResultParser.valueOf(fightResult),
-      duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
-    );
   }
 }

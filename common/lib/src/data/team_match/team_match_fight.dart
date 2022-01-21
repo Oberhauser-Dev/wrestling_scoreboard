@@ -19,6 +19,18 @@ class TeamMatchFight extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$TeamMatchFightToJson(this);
 
+  static Future<TeamMatchFight> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final teamMatch = await getSingle<TeamMatch>(e['team_match_id'] as int);
+    final fight = await getSingle<Fight>(e['fight_id'] as int);
+
+    return TeamMatchFight(
+      id: e['id'] as int?,
+      teamMatch: teamMatch!,
+      fight: fight!,
+      pos: e['pos'],
+    );
+  }
+  
   @override
   Map<String, dynamic> toRaw() {
     return {

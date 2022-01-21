@@ -33,9 +33,4 @@ class LeagueController extends EntityController<League> {
   Future<List<WeightClass>> getWeightClasses(String id) {
     return WeightClassController().getManyFromQuery(_weightClassesQuery, substitutionValues: {'id': id});
   }
-
-  @override
-  Future<League> parseFromRaw(Map<String, dynamic> e) async {
-    return League(id: e['id'] as int?, name: e['name'] as String, startDate: e['start_date'] as DateTime);
-  }
 }
