@@ -14,5 +14,15 @@ class Club extends DataObject {
 
   factory Club.fromJson(Map<String, dynamic> json) => _$ClubFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$ClubToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'no': no,
+      'name': name,
+    };
+  }
 }

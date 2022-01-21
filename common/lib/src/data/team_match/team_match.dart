@@ -12,7 +12,6 @@ part 'team_match.g.dart';
 /// For team matches only.
 @JsonSerializable()
 class TeamMatch extends WrestlingEvent {
-
   /// competitionId (CID), eventId, matchId or Kampf-Id
   // TODO move to wrestling event
   final String? no;
@@ -34,7 +33,8 @@ class TeamMatch extends WrestlingEvent {
   @override
   int maxRounds = 2;
 
-  TeamMatch({int? id,
+  TeamMatch({
+    int? id,
     required Lineup home,
     required Lineup guest,
     required List<WeightClass> weightClasses,
@@ -43,17 +43,17 @@ class TeamMatch extends WrestlingEvent {
     String? location,
     DateTime? date,
     int? visitorsCount,
-    String? comment,})
-      : super(
-    id: id,
-    lineups: [home, guest],
-    referees: referees,
-    location: location,
-    date: date,
-    weightClasses: weightClasses,
-    comment: comment,
-    visitorsCount: visitorsCount,
-  ) {
+    String? comment,
+  }) : super(
+          id: id,
+          lineups: [home, guest],
+          referees: referees,
+          location: location,
+          date: date,
+          weightClasses: weightClasses,
+          comment: comment,
+          visitorsCount: visitorsCount,
+        ) {
     if (home.team.league == guest.team.league && home.team.league != null) {
       league = home.team.league!;
     } else {
@@ -67,7 +67,20 @@ class TeamMatch extends WrestlingEvent {
 
   factory TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$TeamMatchToJson(this);
+
+  factory TeamMatch.fromRaw(Map<String, dynamic> json) => throw UnimplementedError();
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return super.toRaw()
+      ..addAll({
+        'home_id': home.id,
+        'guest_id': guest.id,
+        'referee_id': referees.isNotEmpty ? referees.first.id : null,
+      });
+  }
 
   int get homePoints {
     var res = 0;

@@ -25,8 +25,22 @@ class Fight extends DataObject {
 
   factory Fight.fromJson(Map<String, dynamic> json) => _$FightFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$FightToJson(this);
 
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'red_id': r?.id,
+      'blue_id': b?.id,
+      'weight_class_id': weightClass.id,
+      'winner': winner?.name,
+      'fight_result': result?.name,
+      'duration_millis': duration.inMilliseconds,
+    };
+  }
+  
   bool addAction(FightAction action) {
     ParticipantState? pStatus = action.role == FightRole.red ? this.r : this.b;
     if (pStatus != null) {

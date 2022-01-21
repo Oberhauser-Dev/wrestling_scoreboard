@@ -40,18 +40,6 @@ class TournamentController extends EntityController<Tournament> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(Tournament e) {
-    return {
-      if (e.id != null) primaryKeyName: e.id,
-      'name': e.name,
-      'location': e.location,
-      'date': e.date,
-      'visitors_count': e.visitorsCount,
-      'comment': e.comment,
-    };
-  }
-
-  @override
   Map<String, PostgreSQLDataType> getPostgresDataTypes() {
     return {'comment': PostgreSQLDataType.text};
   }

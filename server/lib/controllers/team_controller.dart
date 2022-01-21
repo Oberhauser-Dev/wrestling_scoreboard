@@ -38,15 +38,4 @@ class TeamController extends EntityController<Team> {
         description: e['description'] as String?,
         league: league);
   }
-
-  @override
-  Map<String, dynamic> parseFromClass(Team e) {
-    return {
-      if (e.id != null) primaryKeyName: e.id,
-      'name': e.name,
-      'description': e.description,
-      'club_id': e.club.id,
-      'league_id': e.league?.id,
-    };
-  }
 }

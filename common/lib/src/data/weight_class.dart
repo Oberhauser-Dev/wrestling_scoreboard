@@ -19,8 +19,19 @@ class WeightClass extends DataObject {
 
   factory WeightClass.fromJson(Map<String, dynamic> json) => _$WeightClassFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$WeightClassToJson(this);
 
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'weight': weight,
+      'style': style.name,
+    };
+  }
+  
   @override
   bool operator ==(o) => o is WeightClass && name == o.name && weight == o.weight && style == o.style;
 

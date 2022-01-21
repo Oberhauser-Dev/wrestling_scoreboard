@@ -78,7 +78,7 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> createSingle(T dataObject) async {
-    dataObject.id = await createSingleRaw(parseFromClass(dataObject));
+    dataObject.id = await createSingleRaw(dataObject.toRaw());
     return dataObject.id!;
   }
   
@@ -93,7 +93,7 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> updateSingle(T dataObject) async {
-    return updateSingleRaw(parseFromClass(dataObject));
+    return updateSingleRaw(dataObject.toRaw());
   }
   
   Future<int> updateSingleRaw(Map<String, dynamic> data) async {
@@ -162,8 +162,6 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<T> parseToClass(Map<String, dynamic> e);
-
-  Map<String, dynamic> parseFromClass(T e);
 
   Map<String, PostgreSQLDataType> getPostgresDataTypes() => {};
 

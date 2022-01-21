@@ -16,4 +16,12 @@ class LeagueWeightClass extends DataObject {
   factory LeagueWeightClass.fromJson(Map<String, dynamic> json) => _$LeagueWeightClassFromJson(json);
 
   Map<String, dynamic> toJson() => _$LeagueWeightClassToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    // TODO: implement toRaw
+    throw UnimplementedError();
+  }
+
+  factory LeagueWeightClass.fromRaw(Map<String, dynamic> json) => throw UnimplementedError();
 }

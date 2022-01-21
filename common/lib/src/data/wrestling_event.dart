@@ -13,6 +13,7 @@ class WrestlingEvent extends DataObject {
   Iterable<Person> matPresidents = [];
   Iterable<Person> stewards = [];
   DateTime? date;
+  String? no;
   String? location;
   int? visitorsCount;
   String? comment;
@@ -43,5 +44,18 @@ class WrestlingEvent extends DataObject {
 
   factory WrestlingEvent.fromJson(Map<String, dynamic> json) => _$WrestlingEventFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$WrestlingEventToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'no': no,
+      'location': location,
+      'date': date,
+      'visitors_count': visitorsCount,
+      'comment': comment,
+    };
+  }
 }

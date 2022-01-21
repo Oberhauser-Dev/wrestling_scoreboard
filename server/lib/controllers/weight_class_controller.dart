@@ -23,16 +23,6 @@ class WeightClassController extends EntityController<WeightClass> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(WeightClass e) {
-    return {
-      if (e.id != null) primaryKeyName: e.id,
-      'name': e.name,
-      'weight': e.weight,
-      'style': e.style.name,
-    };
-  }
-
-  @override
   Map<String, PostgreSQLDataType> getPostgresDataTypes() {
     return {
       'weight': PostgreSQLDataType.smallInteger

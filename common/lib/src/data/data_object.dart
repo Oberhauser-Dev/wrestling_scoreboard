@@ -7,6 +7,8 @@ abstract class DataObject {
   DataObject([this.id]);
 
   Map<String, dynamic> toJson();
+  
+  Map<String, dynamic> toRaw();
 
   String get tableName => getTableNameFromType(getBaseType());
 

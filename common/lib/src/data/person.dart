@@ -18,8 +18,20 @@ class Person extends DataObject {
 
   factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$PersonToJson(this);
 
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'prename': prename,
+      'surname': surname,
+      'gender': gender?.name,
+      'birth_date': birthDate,
+    };
+  }
+  
   int? get age {
     DateTime today = MockableDateTime.now();
 

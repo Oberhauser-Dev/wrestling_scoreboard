@@ -15,5 +15,15 @@ class TournamentFight extends DataObject {
 
   factory TournamentFight.fromJson(Map<String, dynamic> json) => _$TournamentFightFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$TournamentFightToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'tournament_id': tournament.id,
+      'fight_id': fight.id,
+    };
+  }
 }

@@ -24,13 +24,4 @@ class TournamentFightController extends EntityController<TournamentFight> {
       fight: fight!,
     );
   }
-
-  @override
-  Map<String, dynamic> parseFromClass(TournamentFight e) {
-    return {
-      if (e.id != null) primaryKeyName: e.id,
-      'tournament_id': e.tournament.id,
-      'fight_id': e.fight.id,
-    };
-  }
 }

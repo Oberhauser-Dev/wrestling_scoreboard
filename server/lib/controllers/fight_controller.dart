@@ -38,17 +38,4 @@ class FightController extends EntityController<Fight> {
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
     );
   }
-
-  @override
-  Map<String, dynamic> parseFromClass(Fight e) {
-    return {
-      if (e.id != null) primaryKeyName: e.id,
-      'red_id': e.r?.id,
-      'blue_id': e.b?.id,
-      'weight_class_id': e.weightClass.id,
-      'winner': e.winner?.name,
-      'fight_result': e.result?.name,
-      'duration_millis': e.duration.inMilliseconds,
-    };
-  }
 }

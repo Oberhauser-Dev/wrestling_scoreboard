@@ -22,5 +22,16 @@ class Membership extends DataObject {
 
   factory Membership.fromJson(Map<String, dynamic> json) => _$MembershipFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MembershipToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'person_id': person.id,
+      'club_id': club.id,
+      'no': no,
+    };
+  }
 }

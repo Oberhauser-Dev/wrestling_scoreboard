@@ -51,5 +51,14 @@ class Tournament extends WrestlingEvent {
 
   factory Tournament.fromJson(Map<String, dynamic> json) => _$TournamentFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$TournamentToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return super.toRaw()..addAll({
+      if (id != null) 'id': id,
+      'name': name,
+    });
+  }
 }

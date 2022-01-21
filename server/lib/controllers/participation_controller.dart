@@ -36,17 +36,6 @@ class ParticipationController extends EntityController<Participation> {
   }
 
   @override
-  Map<String, dynamic> parseFromClass(Participation e) {
-    return {
-      if (e.id != null) primaryKeyName: e.id,
-      'weight_class_id': e.weightClass.id,
-      'lineup_id': e.lineup.id,
-      'membership_id': e.membership.id,
-      'weight': e.weight?.toString(),
-    };
-  }
-
-  @override
   Map<String, PostgreSQLDataType> getPostgresDataTypes() {
     return {'weight': PostgreSQLDataType.numeric};
   }

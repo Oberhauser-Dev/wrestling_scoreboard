@@ -20,8 +20,18 @@ class ParticipantState extends DataObject {
 
   factory ParticipantState.fromJson(Map<String, dynamic> json) => _$ParticipantStateFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$ParticipantStateToJson(this);
 
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'participation_id': participation.id,
+      'classification_points': classificationPoints,
+    };
+  }
+  
   get actions => this._actions;
 
   addAction(FightAction action) {

@@ -21,8 +21,21 @@ class FightAction extends DataObject {
 
   factory FightAction.fromJson(Map<String, dynamic> json) => _$FightActionFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$FightActionToJson(this);
 
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'action_type': actionType.name,
+      'duration_millis': duration.inMilliseconds,
+      'fight_role': role.name,
+      'point_count': pointCount,
+      'fight_id': fight.id,
+    };
+  }
+  
   @override
   String toString() {
     switch (actionType) {

@@ -18,5 +18,17 @@ class Team extends DataObject {
 
   factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$TeamToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'description': description,
+      'club_id': club.id,
+      'league_id': league?.id,
+    };
+  }
 }

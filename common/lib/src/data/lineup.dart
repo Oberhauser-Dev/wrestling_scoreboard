@@ -17,5 +17,16 @@ class Lineup extends DataObject {
 
   factory Lineup.fromJson(Map<String, dynamic> json) => _$LineupFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$LineupToJson(this);
+
+  @override
+  Map<String, dynamic> toRaw() {
+    return {
+      if (id != null) 'id': id,
+      'team_id': team.id,
+      'leader_id': leader?.id,
+      'coach_id': coach?.id,
+    };
+  }
 }
