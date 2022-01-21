@@ -69,10 +69,16 @@ abstract class DataObject {
         return (await Membership.fromRaw(raw, getSingle)) as T;
       case Participation:
         return (await Participation.fromRaw(raw, getSingle)) as T;
+      case ParticipantState:
+        return (await ParticipantState.fromRaw(raw, getSingle)) as T;
+      case Person:
+        return (await Person.fromRaw(raw)) as T;
       case Team:
         return (await Team.fromRaw(raw, getSingle)) as T;
       case TeamMatch:
         return (await TeamMatch.fromRaw(raw, getSingle)) as T;
+      case WeightClass:
+        return (await WeightClass.fromRaw(raw)) as T;
       default:
         throw UnimplementedError('Raw conversation for "$T" not found.');
     }

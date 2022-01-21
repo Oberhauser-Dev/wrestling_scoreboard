@@ -8,11 +8,14 @@ import 'package:server/controllers/fight_controller.dart';
 import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/lineup_controller.dart';
 import 'package:server/controllers/membership_controller.dart';
+import 'package:server/controllers/participant_state_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
+import 'package:server/controllers/person_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:server/controllers/team_match_controller.dart';
 import 'package:server/controllers/tournament_controller.dart';
 import 'package:server/controllers/websocket_handler.dart';
+import 'package:server/controllers/weight_class_controller.dart';
 import 'package:server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 
@@ -239,12 +242,18 @@ abstract class EntityController<T extends DataObject> {
         return MembershipController() as EntityController<T>;
       case Participation:
         return ParticipationController() as EntityController<T>;
+      case ParticipantState:
+        return ParticipantStateController() as EntityController<T>;
+      case Person:
+        return PersonController() as EntityController<T>;
       case Team:
         return TeamController() as EntityController<T>;
       case TeamMatch:
         return TeamMatchController() as EntityController<T>;
       case Tournament:
         return TournamentController() as EntityController<T>;
+      case WeightClass:
+        return WeightClassController() as EntityController<T>;
       default:
         throw UnimplementedError('Controller not available for type: $T');
     }
