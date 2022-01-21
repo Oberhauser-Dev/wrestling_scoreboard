@@ -24,7 +24,7 @@ class ClubController extends EntityController<Club> {
   }
 
   @override
-  Future<Club> parseToClass(Map<String, dynamic> e) async {
+  Future<Club> parseFromRaw(Map<String, dynamic> e) async {
     return Club(id: e[primaryKeyName] as int?, no: e['no'] as String?, name: e['name'] as String);
   }
 }

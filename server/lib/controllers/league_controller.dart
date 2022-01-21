@@ -35,7 +35,7 @@ class LeagueController extends EntityController<League> {
   }
 
   @override
-  Future<League> parseToClass(Map<String, dynamic> e) async {
+  Future<League> parseFromRaw(Map<String, dynamic> e) async {
     return League(id: e['id'] as int?, name: e['name'] as String, startDate: e['start_date'] as DateTime);
   }
 }

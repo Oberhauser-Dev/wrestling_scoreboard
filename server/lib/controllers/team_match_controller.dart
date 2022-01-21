@@ -140,7 +140,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
   }
 
   @override
-  Future<TeamMatch> parseToClass(Map<String, dynamic> e) async {
+  Future<TeamMatch> parseFromRaw(Map<String, dynamic> e) async {
     final home = await LineupController().getSingle(e['home_id'] as int);
     final guest = await LineupController().getSingle(e['guest_id'] as int);
     final int? refereeId = e['referee_id'];

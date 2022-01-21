@@ -13,7 +13,7 @@ class WeightClassController extends EntityController<WeightClass> {
   WeightClassController._internal() : super(tableName: 'weight_class');
 
   @override
-  Future<WeightClass> parseToClass(Map<String, dynamic> e) async {
+  Future<WeightClass> parseFromRaw(Map<String, dynamic> e) async {
     return WeightClass(
       id: e[primaryKeyName] as int?,
       name: e['name'] as String?,

@@ -21,7 +21,7 @@ class LineupController extends EntityController<Lineup> {
   }
 
   @override
-  Future<Lineup> parseToClass(Map<String, dynamic> e) async {
+  Future<Lineup> parseFromRaw(Map<String, dynamic> e) async {
     final id = e[primaryKeyName] as int?;
     final team = await TeamController().getSingle(e['team_id'] as int);
     final leaderId = e['leader_id'] as int?;

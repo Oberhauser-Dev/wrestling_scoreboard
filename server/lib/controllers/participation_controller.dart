@@ -16,7 +16,7 @@ class ParticipationController extends EntityController<Participation> {
   ParticipationController._internal() : super(tableName: 'participation');
 
   @override
-  Future<Participation> parseToClass(Map<String, dynamic> e) async {
+  Future<Participation> parseFromRaw(Map<String, dynamic> e) async {
     final weightClass = await WeightClassController().getSingle(e['weight_class_id'] as int);
     final lineup = await LineupController().getSingle(e['lineup_id'] as int);
     final membership = await MembershipController().getSingle(e['membership_id'] as int);

@@ -14,7 +14,7 @@ class FightActionController extends EntityController<FightAction> {
   FightActionController._internal() : super(tableName: 'fight_action');
 
   @override
-  Future<FightAction> parseToClass(Map<String, dynamic> e) async {
+  Future<FightAction> parseFromRaw(Map<String, dynamic> e) async {
     return FightAction(
       id: e[primaryKeyName] as int?,
       actionType: FightActionTypeParser.valueOf(e['action_type']),

@@ -65,7 +65,7 @@ abstract class EntityController<T extends DataObject> {
   Future<T?> getSingle(int id) async {
     final single = await getSingleRaw(id);
     if (single == null) return Future.value(null);
-    return parseToClass(single);
+    return parseFromRaw(single);
   }
 
   Future<Map<String, dynamic>?> getSingleRaw(int id) async {
@@ -125,13 +125,13 @@ abstract class EntityController<T extends DataObject> {
       Map<String, dynamic>? substitutionValues}) async {
     return Future.wait(
         (await getManyRaw(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues))
-            .map((e) async => await parseToClass(e))
+            .map((e) async => await parseFromRaw(e))
             .toList());
   }
 
   Future<List<T>> getManyFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
     return Future.wait((await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues))
-        .map((e) async => await parseToClass(e))
+        .map((e) async => await parseFromRaw(e))
         .toList());
   }
 
@@ -153,7 +153,7 @@ abstract class EntityController<T extends DataObject> {
   Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
     return Future.wait(res.map((row) async {
       final e = row[tableName]!;
-      return await parseToClass(e);
+      return await parseFromRaw(e);
     }));
   }
 
@@ -161,7 +161,7 @@ abstract class EntityController<T extends DataObject> {
     return res.map((row) => row[tableName]!).toList();
   }
 
-  Future<T> parseToClass(Map<String, dynamic> e);
+  Future<T> parseFromRaw(Map<String, dynamic> e);
 
   Map<String, PostgreSQLDataType> getPostgresDataTypes() => {};
 

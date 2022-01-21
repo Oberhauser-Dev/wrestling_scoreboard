@@ -21,7 +21,7 @@ class FightController extends EntityController<Fight> {
   }
 
   @override
-  Future<Fight> parseToClass(Map<String, dynamic> e) async {
+  Future<Fight> parseFromRaw(Map<String, dynamic> e) async {
     final redId = e['red_id'] as int?;
     final blueId = e['blue_id'] as int?;
     final winner = e['winner'] as String?;

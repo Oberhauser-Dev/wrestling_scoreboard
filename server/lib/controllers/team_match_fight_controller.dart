@@ -14,7 +14,7 @@ class TeamMatchFightController extends EntityController<TeamMatchFight> {
   TeamMatchFightController._internal() : super(tableName: 'team_match_fight');
 
   @override
-  Future<TeamMatchFight> parseToClass(Map<String, dynamic> e) async {
+  Future<TeamMatchFight> parseFromRaw(Map<String, dynamic> e) async {
     final teamMatch = await TeamMatchController().getSingle(e['team_match_id'] as int);
     final fight = await FightController().getSingle(e['fight_id'] as int);
 

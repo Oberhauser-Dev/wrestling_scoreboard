@@ -24,7 +24,7 @@ class TournamentController extends EntityController<Tournament> {
   }
 
   @override
-  Future<Tournament> parseToClass(Map<String, dynamic> e) async {
+  Future<Tournament> parseFromRaw(Map<String, dynamic> e) async {
     // TODO fetch lineups, referees, weightClasses, etc.
     return Tournament(
       id: e[primaryKeyName] as int?,
