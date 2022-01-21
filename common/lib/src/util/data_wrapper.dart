@@ -1,17 +1,19 @@
 import '../data.dart';
 import '../enums/crud.dart';
 
-Map<String, dynamic> singleToJson(DataObject single, CRUD operation) => <String, dynamic>{
+Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) => <String, dynamic>{
       'operation': operation.name,
       'isMany': 'false',
-      'tableName': single.tableName,
+      'isRaw': single is DataObject ? 'false' : 'true',
+      'tableName': getTableNameFromType(type),
       'data': single,
     };
 
-Map<String, dynamic> manyToJson(List<DataObject> many, Type type, CRUD operation, {Type filterType = Object, int? filterId}) =>
+Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation, {Type filterType = Object, int? filterId}) =>
     <String, dynamic>{
       'operation': operation.name,
       'isMany': 'true',
+      'isRaw': many.isNotEmpty ? (many.first is DataObject ? 'false' : 'true') : 'true',
       'filterType': getTableNameFromType(filterType),
       if (filterId != null) 'filterId': filterId,
       'tableName': getTableNameFromType(type),

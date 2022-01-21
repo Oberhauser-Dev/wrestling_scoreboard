@@ -25,13 +25,13 @@ class PersonController extends EntityController<Person> {
   }
 
   @override
-  PostgresMap parseFromClass(Person e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(Person e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'prename': e.prename,
       'surname': e.surname,
       'gender': e.gender?.name,
       'birth_date': e.birthDate,
-    });
+    };
   }
 }

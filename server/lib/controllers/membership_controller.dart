@@ -26,12 +26,12 @@ class MembershipController extends EntityController<Membership> {
   }
 
   @override
-  PostgresMap parseFromClass(Membership e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(Membership e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'person_id': e.person.id,
       'club_id': e.club.id,
       'no': e.no,
-    });
+    };
   }
 }

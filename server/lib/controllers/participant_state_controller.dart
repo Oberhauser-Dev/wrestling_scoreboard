@@ -24,13 +24,16 @@ class ParticipantStateController extends EntityController<ParticipantState> {
   }
 
   @override
-  PostgresMap parseFromClass(ParticipantState e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(ParticipantState e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'participation_id': e.participation.id,
       'classification_points': e.classificationPoints,
-    }, {
-      'classification_points': PostgreSQLDataType.smallInteger
-    });
+    };
+  }
+
+  @override
+  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
+    return {'classification_points': PostgreSQLDataType.smallInteger};
   }
 }

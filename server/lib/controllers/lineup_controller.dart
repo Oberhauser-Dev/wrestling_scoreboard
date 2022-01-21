@@ -32,12 +32,12 @@ class LineupController extends EntityController<Lineup> {
   }
 
   @override
-  PostgresMap parseFromClass(Lineup e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(Lineup e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'team_id': e.team.id,
       'leader_id': e.leader?.id,
       'coach_id': e.coach?.id,
-    });
+    };
   }
 }

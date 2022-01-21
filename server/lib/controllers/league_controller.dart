@@ -40,11 +40,11 @@ class LeagueController extends EntityController<League> {
   }
 
   @override
-  PostgresMap parseFromClass(League e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(League e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'name': e.name,
       'start_date': e.startDate,
-    });
+    };
   }
 }

@@ -40,13 +40,13 @@ class TeamController extends EntityController<Team> {
   }
 
   @override
-  PostgresMap parseFromClass(Team e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(Team e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'name': e.name,
       'description': e.description,
       'club_id': e.club.id,
       'league_id': e.league?.id,
-    });
+    };
   }
 }

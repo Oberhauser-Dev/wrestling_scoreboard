@@ -22,13 +22,14 @@ void broadcast(String data) {
 
 // Currently do not update list of all entities (as is and should not used anywhere)
 // Update doesn't need to update lists, it should only be also listened to the object itself, which gets an update event
+// TODO let client decide if want raw type or dataObject type
 void broadcastSingle(DataObject single) async {
   /*webSocket.sink.add(jsonEncode(
-        manyToJson(await EntityController.getControllerFromDataType(single.runtimeType).getMany(), operation)));*/
+        manyToJson(await EntityController.getControllerFromDataType(single.runtimeType).getManyRaw(), operation)));*/
   if (single is Participation) {
     broadcast(jsonEncode(manyToJson(
         await ParticipationController()
-            .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}),
+            .getManyRaw(conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}),
         Participation,
         CRUD.update,
         filterType: Lineup,
@@ -37,13 +38,13 @@ void broadcastSingle(DataObject single) async {
     // No filtered list needs to be handled.
   } else if (single is Club) {
     // Exception: the full Club list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update)));
   } else if (single is League) {
     // Exception: the full League list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update)));
   } else if (single is Team) {
     broadcast(jsonEncode(manyToJson(
-        await TeamController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
+        await TeamController().getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
         Team,
         CRUD.update,
         filterType: Club,
@@ -51,7 +52,7 @@ void broadcastSingle(DataObject single) async {
     if (single.league != null) {
       broadcast(jsonEncode(manyToJson(
           await TeamController()
-              .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}),
+              .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}),
           Team,
           CRUD.update,
           filterType: League,
@@ -59,10 +60,10 @@ void broadcastSingle(DataObject single) async {
     }
   } else if (single is TeamMatch) {
     final homeMatches = await TeamMatchController()
-        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
+        .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
 
     final guestMatches = await TeamMatchController()
-        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
+        .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
 
     broadcast(jsonEncode(manyToJson(homeMatches,
         TeamMatch,
@@ -85,7 +86,7 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
   final controller = EntityController.getControllerFromDataType(single.runtimeType);
   if (operation == CRUD.update) {
     await controller.updateSingle(single);
-    broadcast(jsonEncode(singleToJson(single, operation)));
+    broadcast(jsonEncode(singleToJson(single, single.getBaseType(), operation)));
   } else if (operation == CRUD.create) {
     single.id = await controller.createSingle(single);
   } else if (operation == CRUD.delete) {

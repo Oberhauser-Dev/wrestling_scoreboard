@@ -78,24 +78,32 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> createSingle(T dataObject) async {
-    final postgresData = parseFromClass(dataObject);
-    final sql = '''
-        INSERT INTO $tableName (${postgresData.map.keys.join(',')}) 
-        VALUES (${postgresData.map.entries.map((e) => PostgreSQLFormat.id(e.key, type: postgresData.types[e.key] ?? typeDartToCodeMap[e.value.runtimeType])).join(', ')}) RETURNING $primaryKeyName;
-        ''';
-    final res = await PostgresDb().connection.query(sql, substitutionValues: postgresData.map);
-    dataObject.id = res.last[0] as int;
+    dataObject.id = await createSingleRaw(parseFromClass(dataObject));
     return dataObject.id!;
+  }
+  
+  Future<int> createSingleRaw(Map<String, dynamic> data) async {
+    final postgresTypes = getPostgresDataTypes();
+    final sql = '''
+        INSERT INTO $tableName (${data.keys.join(',')}) 
+        VALUES (${data.entries.map((e) => PostgreSQLFormat.id(e.key, type: postgresTypes[e.key] ?? typeDartToCodeMap[e.value.runtimeType])).join(', ')}) RETURNING $primaryKeyName;
+        ''';
+    final res = await PostgresDb().connection.query(sql, substitutionValues: data);
+    return res.last[0] as int;
   }
 
   Future<int> updateSingle(T dataObject) async {
-    final postgresData = parseFromClass(dataObject);
+    return updateSingleRaw(parseFromClass(dataObject));
+  }
+  
+  Future<int> updateSingleRaw(Map<String, dynamic> data) async {
+    final postgresTypes = getPostgresDataTypes();
     final sql = '''
         UPDATE $tableName 
-        SET ${postgresData.map.entries.map((e) => '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresData.types[e.key] ?? typeDartToCodeMap[e.value.runtimeType])}').join(',')} 
-        WHERE $primaryKeyName = ${dataObject.id!} RETURNING $primaryKeyName;
+        SET ${data.entries.map((e) => '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresTypes[e.key] ?? typeDartToCodeMap[e.value.runtimeType])}').join(',')} 
+        WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
-    final res = await PostgresDb().connection.query(sql, substitutionValues: postgresData.map);
+    final res = await PostgresDb().connection.query(sql, substitutionValues: data);
     return res.last[0] as int;
   }
 
@@ -127,7 +135,7 @@ abstract class EntityController<T extends DataObject> {
         .toList());
   }
 
-  Future<Iterable<Map<String, dynamic>>> getManyRaw(
+  Future<List<Map<String, dynamic>>> getManyRaw(
       {List<String>? conditions,
       Conjunction conjunction = Conjunction.and,
       Map<String, dynamic>? substitutionValues}) async {
@@ -136,26 +144,28 @@ abstract class EntityController<T extends DataObject> {
         substitutionValues: substitutionValues);
   }
 
-  Future<Iterable<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
+  Future<List<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
       {Map<String, dynamic>? substitutionValues}) async {
     final res = await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues);
     return mapToTable(res);
   }
 
-  Future<Iterable<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
+  Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
     return Future.wait(res.map((row) async {
       final e = row[tableName]!;
       return await parseToClass(e);
     }));
   }
 
-  Iterable<Map<String, dynamic>> mapToTable(List<Map<String, Map<String, dynamic>>> res) {
-    return res.map((row) => row[tableName]!);
+  List<Map<String, dynamic>> mapToTable(List<Map<String, Map<String, dynamic>>> res) {
+    return res.map((row) => row[tableName]!).toList();
   }
 
   Future<T> parseToClass(Map<String, dynamic> e);
 
-  PostgresMap parseFromClass(T e);
+  Map<String, dynamic> parseFromClass(T e);
+
+  Map<String, PostgreSQLDataType> getPostgresDataTypes() => {};
 
   bool isRaw(Request request) {
     return (request.url.queryParameters['raw'] ?? '').parseBool();

@@ -166,8 +166,8 @@ class TeamMatchController extends EntityController<TeamMatch> {
   }
 
   @override
-  PostgresMap parseFromClass(TeamMatch e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(TeamMatch e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'no': e.no,
       'home_id': e.home.id,
@@ -177,8 +177,13 @@ class TeamMatchController extends EntityController<TeamMatch> {
       'date': e.date,
       'visitors_count': e.visitorsCount,
       'comment': e.comment,
-    }, {
+    };
+  }
+
+  @override
+  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
+    return {
       'comment': PostgreSQLDataType.text
-    });
+    };
   }
 }

@@ -26,16 +26,21 @@ class FightActionController extends EntityController<FightAction> {
   }
 
   @override
-  PostgresMap parseFromClass(FightAction e) {
-    return PostgresMap({
+  Map<String, dynamic> parseFromClass(FightAction e) {
+    return {
       if (e.id != null) primaryKeyName: e.id,
       'action_type': e.actionType.name,
       'duration_millis': e.duration.inMilliseconds,
       'fight_role': e.role.name,
       'point_count': e.pointCount,
       'fight_id': e.fight.id,
-    }, {
+    };
+  }
+
+  @override
+  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
+    return {
       'point_count': PostgreSQLDataType.smallInteger
-    });
+    };
   }
 }
