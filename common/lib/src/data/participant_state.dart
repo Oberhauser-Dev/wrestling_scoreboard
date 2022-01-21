@@ -12,11 +12,9 @@ part 'participant_state.g.dart';
 class ParticipantState extends DataObject {
   Participation participation;
   final List<FightAction> _actions = [];
-  int? _classificationPoints;
+  int? classificationPoints;
 
-  ParticipantState({int? id, required this.participation, int? classificationPoints})
-      : _classificationPoints = classificationPoints,
-        super(id);
+  ParticipantState({int? id, required this.participation, this.classificationPoints}) : super(id);
 
   factory ParticipantState.fromJson(Map<String, dynamic> json) => _$ParticipantStateFromJson(json);
 
@@ -31,7 +29,7 @@ class ParticipantState extends DataObject {
       classificationPoints: e['classification_points'] as int?,
     );
   }
-  
+
   @override
   Map<String, dynamic> toRaw() {
     return {
@@ -40,25 +38,19 @@ class ParticipantState extends DataObject {
       'classification_points': classificationPoints,
     };
   }
-  
-  get actions => this._actions;
 
-  addAction(FightAction action) {
+  List<FightAction> get ex_actions => _actions;
+
+  void addAction(FightAction action) {
     _actions.add(action);
   }
 
-  removeAction(FightAction action) {
+  void removeAction(FightAction action) {
     _actions.remove(action);
   }
 
-  set classificationPoints(int? points) {
-    _classificationPoints = points;
-  }
-
-  int? get classificationPoints => _classificationPoints;
-
   int get technicalPoints {
-    int res = 0;
+    var res = 0;
     _actions.forEach((el) {
       if (el.actionType == FightActionType.points) {
         res += el.pointCount!;

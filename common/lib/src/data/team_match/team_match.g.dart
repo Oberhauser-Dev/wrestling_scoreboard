@@ -11,10 +11,10 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
     id: json['id'] as int?,
     home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
     guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
-    weightClasses: (json['weightClasses'] as List<dynamic>)
+    ex_weightClasses: (json['ex_weightClasses'] as List<dynamic>)
         .map((e) => WeightClass.fromJson(e as Map<String, dynamic>))
         .toList(),
-    referees: (json['referees'] as List<dynamic>)
+    ex_referees: (json['ex_referees'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
         .toList(),
     no: json['no'] as String?,
@@ -23,15 +23,15 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
     visitorsCount: json['visitorsCount'] as int?,
     comment: json['comment'] as String?,
   )
-    ..transcriptWriters = (json['transcriptWriters'] as List<dynamic>)
+    ..ex_tanscriptWriters = (json['ex_tanscriptWriters'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-    ..timeKeepers = (json['timeKeepers'] as List<dynamic>)
+    ..ex_timeKeepers = (json['ex_timeKeepers'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-    ..matPresidents = (json['matPresidents'] as List<dynamic>)
+    ..ex_matPresidents = (json['ex_matPresidents'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-    ..stewards = (json['stewards'] as List<dynamic>)
+    ..ex_stewards = (json['ex_stewards'] as List<dynamic>)
         .map((e) => Person.fromJson(e as Map<String, dynamic>))
-    ..fights = (json['fights'] as List<dynamic>)
+    ..ex_fights = (json['ex_fights'] as List<dynamic>)
         .map((e) => Fight.fromJson(e as Map<String, dynamic>))
         .toList()
     ..league = League.fromJson(json['league'] as Map<String, dynamic>)
@@ -40,18 +40,18 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'id': instance.id,
-      'referees': instance.referees.toList(),
-      'transcriptWriters': instance.transcriptWriters.toList(),
-      'timeKeepers': instance.timeKeepers.toList(),
-      'matPresidents': instance.matPresidents.toList(),
-      'stewards': instance.stewards.toList(),
+      'ex_referees': instance.ex_referees,
+      'ex_tanscriptWriters': instance.ex_tanscriptWriters.toList(),
+      'ex_timeKeepers': instance.ex_timeKeepers.toList(),
+      'ex_matPresidents': instance.ex_matPresidents.toList(),
+      'ex_stewards': instance.ex_stewards.toList(),
       'date': instance.date?.toIso8601String(),
+      'no': instance.no,
       'location': instance.location,
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
-      'fights': instance.fights,
-      'weightClasses': instance.weightClasses,
-      'no': instance.no,
+      'ex_fights': instance.ex_fights,
+      'ex_weightClasses': instance.ex_weightClasses,
       'league': instance.league,
       'maxRounds': instance.maxRounds,
       'home': instance.home,

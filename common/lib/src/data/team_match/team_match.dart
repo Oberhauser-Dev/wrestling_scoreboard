@@ -13,10 +13,6 @@ part 'team_match.g.dart';
 /// For team matches only.
 @JsonSerializable()
 class TeamMatch extends WrestlingEvent {
-  /// competitionId (CID), eventId, matchId or Kampf-Id
-  // TODO move to wrestling event
-  final String? no;
-
   late League league; // Liga
 
   @override
@@ -38,20 +34,21 @@ class TeamMatch extends WrestlingEvent {
     int? id,
     required Lineup home,
     required Lineup guest,
-    required List<WeightClass> weightClasses,
-    required List<Person> referees,
-    this.no,
+    required List<WeightClass> ex_weightClasses,
+    required List<Person> ex_referees,
+    String? no,
     String? location,
     DateTime? date,
     int? visitorsCount,
     String? comment,
   }) : super(
           id: id,
-          lineups: [home, guest],
-          referees: referees,
+          no: no,
+          ex_lineups: [home, guest],
+          ex_referees: ex_referees,
           location: location,
           date: date,
-          weightClasses: weightClasses,
+          ex_weightClasses: ex_weightClasses,
           comment: comment,
           visitorsCount: visitorsCount,
         ) {
@@ -62,9 +59,9 @@ class TeamMatch extends WrestlingEvent {
     }
   }
 
-  Lineup get home => lineups[0];
+  Lineup get home => ex_lineups[0];
 
-  Lineup get guest => lineups[1];
+  Lineup get guest => ex_lineups[1];
 
   factory TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
 
@@ -88,8 +85,8 @@ class TeamMatch extends WrestlingEvent {
     no: e['no'] as String?,
     home: home!,
     guest: guest!,
-    weightClasses: [], // weightClasses
-    referees: referees,
+    ex_weightClasses: [], // weightClasses
+    ex_referees: referees,
     location: e['location'] as String?,
     date: e['date'] as DateTime?,
     visitorsCount: e['visitors_count'] as int?,
@@ -103,13 +100,13 @@ class TeamMatch extends WrestlingEvent {
       ..addAll({
         'home_id': home.id,
         'guest_id': guest.id,
-        'referee_id': referees.isNotEmpty ? referees.first.id : null,
+        'referee_id': ex_referees.isNotEmpty ? ex_referees.first.id : null,
       });
   }
 
   int get homePoints {
     var res = 0;
-    for (final fight in fights) {
+    for (final fight in ex_fights) {
       res += fight.r?.classificationPoints ?? 0;
     }
     return res;
@@ -117,7 +114,7 @@ class TeamMatch extends WrestlingEvent {
 
   int get guestPoints {
     var res = 0;
-    for (final fight in fights) {
+    for (final fight in ex_fights) {
       res += fight.b?.classificationPoints ?? 0;
     }
     return res;

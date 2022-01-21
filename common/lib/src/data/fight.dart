@@ -16,7 +16,7 @@ class Fight extends DataObject {
   ParticipantState? b; // blue
   final WeightClass weightClass;
   final int? pool;
-  List<FightAction> actions = [];
+  List<FightAction> ex_actions = [];
   FightResult? result;
   FightRole? winner;
   Duration duration;
@@ -72,7 +72,7 @@ class Fight extends DataObject {
   bool addAction(FightAction action) {
     ParticipantState? pStatus = action.role == FightRole.red ? this.r : this.b;
     if (pStatus != null) {
-      actions.add(action);
+      ex_actions.add(action);
       pStatus.addAction(action);
       return true;
     }
@@ -80,7 +80,7 @@ class Fight extends DataObject {
   }
 
   removeAction(FightAction action) {
-    actions.remove(action);
+    ex_actions.remove(action);
     action.role == FightRole.red ? this.r?.removeAction(action) : this.b?.removeAction(action);
   }
 

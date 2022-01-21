@@ -6,32 +6,36 @@ part 'wrestling_event.g.dart';
 
 @JsonSerializable()
 class WrestlingEvent extends DataObject {
-  final List<Lineup> lineups;
-  final Iterable<Person> referees;
-  Iterable<Person> transcriptWriters = [];
-  Iterable<Person> timeKeepers = [];
-  Iterable<Person> matPresidents = [];
-  Iterable<Person> stewards = [];
+  final List<Lineup> ex_lineups;
+  final List<Person> ex_referees;
+  Iterable<Person> ex_tanscriptWriters = [];
+  Iterable<Person> ex_timeKeepers = [];
+  Iterable<Person> ex_matPresidents = [];
+  Iterable<Person> ex_stewards = [];
   DateTime? date;
+
+  /// competitionId (CID), eventId, matchId or Kampf-Id
   String? no;
+
   String? location;
   int? visitorsCount;
   String? comment;
-  List<Fight> fights = [];
+  List<Fight> ex_fights = [];
   final Duration roundDuration = Duration(minutes: 3);
   final Duration breakDuration = Duration(seconds: 30);
   final Duration activityDuration = Duration(seconds: 30);
   final Duration injuryDuration = Duration(seconds: 30);
   int maxRounds = 2;
-  List<WeightClass> weightClasses;
+  List<WeightClass> ex_weightClasses;
 
   WrestlingEvent(
       {int? id,
-      required this.lineups,
-      required this.referees,
+      this.no,
+      required this.ex_lineups,
+      required this.ex_referees,
       this.location,
       this.date,
-      this.weightClasses = const [],
+      this.ex_weightClasses = const [],
       this.visitorsCount,
       this.comment})
       : super(id) {
@@ -49,9 +53,9 @@ class WrestlingEvent extends DataObject {
 
   static Future<WrestlingEvent> fromRaw(Map<String, dynamic> e) async => WrestlingEvent(
         id: e['id'] as int?,
-        lineups: [],
-        weightClasses: [],
-        referees: [],
+        ex_lineups: [],
+        ex_weightClasses: [],
+        ex_referees: [],
         location: e['location'] as String?,
         date: e['date'] as DateTime?,
         visitorsCount: e['visitors_count'] as int?,

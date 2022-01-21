@@ -7,7 +7,9 @@ part 'club.g.dart';
 /// The sports club.
 @JsonSerializable()
 class Club extends DataObject {
-  final String? no; // Vereinsnummer
+  /// Club-ID
+  final String? no;
+
   final String name;
 
   Club({int? id, required this.name, this.no}) : super(id);
@@ -27,8 +29,8 @@ class Club extends DataObject {
   }
 
   static Future<Club> fromRaw(Map<String, dynamic> e) async => Club(
-    id: e['id'] as int?,
-    no: e['no'] as String?,
-    name: e['name'] as String,
-  );
+        id: e['id'] as int?,
+        no: e['no'] as String?,
+        name: e['name'] as String,
+      );
 }
