@@ -12,10 +12,12 @@ sudo apt install postgresql-client-common
 sudo apt-get install postgresql-client
 ```
 
-You have to login as postgres user before any operations: `sudo -u postgres -i`, and then: `psql -U postgres`
+You have to login as postgres user before any operations: `sudo -u postgres -i`.
+
+#### Setup Postgres: 
+Open psql command line: `psql -U postgres`
 List all users: `\du`
 
-#### Postgres Password: 
 ```sql
 CREATE USER wrestling WITH PASSWORD 'my_password';
 DROP DATABASE IF EXISTS wrestling_scoreboard;
