@@ -2,9 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../data.dart';
 
-part 'wrestling_event.g.dart';
-
-@JsonSerializable()
 abstract class WrestlingEvent extends DataObject {
   final List<Lineup> ex_lineups;
   final List<Person> ex_referees;
@@ -43,11 +40,6 @@ abstract class WrestlingEvent extends DataObject {
   }
 
   Future<void> generateFights(List<List<Participation>> teamParticipations);
-
-  factory WrestlingEvent.fromJson(Map<String, dynamic> json) => _$WrestlingEventFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$WrestlingEventToJson(this);
 
   // static Future<WrestlingEvent> fromRaw(Map<String, dynamic> e) async => WrestlingEvent(
   //       id: e['id'] as int?,
