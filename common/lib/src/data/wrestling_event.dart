@@ -5,7 +5,7 @@ import '../data.dart';
 part 'wrestling_event.g.dart';
 
 @JsonSerializable()
-class WrestlingEvent extends DataObject {
+abstract class WrestlingEvent extends DataObject {
   final List<Lineup> ex_lineups;
   final List<Person> ex_referees;
   Iterable<Person> ex_tanscriptWriters = [];
@@ -42,25 +42,23 @@ class WrestlingEvent extends DataObject {
     date ??= DateTime.now();
   }
 
-  Future<void> generateFights() {
-    throw UnimplementedError('Base class does not support generating fights. Use TeamMatch or Tournament instead.');
-  }
+  Future<void> generateFights(List<List<Participation>> teamParticipations);
 
   factory WrestlingEvent.fromJson(Map<String, dynamic> json) => _$WrestlingEventFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$WrestlingEventToJson(this);
 
-  static Future<WrestlingEvent> fromRaw(Map<String, dynamic> e) async => WrestlingEvent(
-        id: e['id'] as int?,
-        ex_lineups: [],
-        ex_weightClasses: [],
-        ex_referees: [],
-        location: e['location'] as String?,
-        date: e['date'] as DateTime?,
-        visitorsCount: e['visitors_count'] as int?,
-        comment: e['comment'] as String?,
-      );
+  // static Future<WrestlingEvent> fromRaw(Map<String, dynamic> e) async => WrestlingEvent(
+  //       id: e['id'] as int?,
+  //       ex_lineups: [],
+  //       ex_weightClasses: [],
+  //       ex_referees: [],
+  //       location: e['location'] as String?,
+  //       date: e['date'] as DateTime?,
+  //       visitorsCount: e['visitors_count'] as int?,
+  //       comment: e['comment'] as String?,
+  //     );
 
   @override
   Map<String, dynamic> toRaw() {

@@ -226,6 +226,12 @@ abstract class EntityController<T extends DataObject> {
     return getControllerFromDataType<T>().getSingle(id);
   }
 
+  static Future<List<T>> getManyFromDataType<T extends DataObject>(
+      {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
+    return getControllerFromDataType<T>()
+        .getMany(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
+  }
+
   static EntityController<T> getControllerFromDataType<T extends DataObject>() {
     switch (T) {
       case Club:

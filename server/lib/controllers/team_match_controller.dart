@@ -11,64 +11,6 @@ import 'package:shelf/shelf.dart';
 import 'entity_controller.dart';
 import 'fight_controller.dart';
 
-class ServerTeamMatch extends TeamMatch {
-  ServerTeamMatch({
-    int? id,
-    required Lineup home,
-    required Lineup guest,
-    required List<WeightClass> weightClasses,
-    required List<Person> referees,
-    String? no,
-    String? location,
-    DateTime? date,
-    int? visitorsCount,
-    String? comment,
-  }) : super(
-          id: id,
-          home: home,
-          guest: guest,
-          referees: referees,
-          no: no,
-          location: location,
-          date: date,
-          weightClasses: weightClasses,
-          visitorsCount: visitorsCount,
-          comment: comment,
-        );
-
-  @override
-  Future<void> generateFights() async {
-    List<Fight> fights = [];
-    final homeParticipations =
-        await ParticipationController().getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': home.id});
-    final guestParticipations =
-        await ParticipationController().getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': guest.id});
-    for (final weightClass in weightClasses) {
-      final homePartList = homeParticipations.where((el) => el.weightClass == weightClass);
-      if (homePartList.length > 1) {
-        throw Exception(
-            'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}');
-      }
-      final guestPartList = guestParticipations.where((el) => (el.weightClass == weightClass));
-      if (guestPartList.length > 1) {
-        throw Exception(
-            'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}');
-      }
-      final red = homePartList.isNotEmpty ? homePartList.single : null;
-      final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
-
-      var fight = Fight(
-        r: red == null ? null : ParticipantState(participation: red),
-        b: blue == null ? null : ParticipantState(participation: blue),
-        weightClass: weightClass,
-      );
-      fights.add(fight);
-    }
-    this.fights = fights;
-    broadcast(jsonEncode(manyToJson(fights, Fight, CRUD.update, filterType: TeamMatch, filterId: id)));
-  }
-}
-
 class TeamMatchController extends EntityController<TeamMatch> {
   static final TeamMatchController _singleton = TeamMatchController._internal();
 
@@ -103,8 +45,16 @@ class TeamMatchController extends EntityController<TeamMatch> {
         if (e.id != null) await deleteSingle(e.id!);
       });
     }
-    await teamMatch.generateFights();
-    await Future.forEach(teamMatch.fights.asMap().entries, (MapEntry<int, Fight> entry) async {
+    final homeParticipations = await ParticipationController()
+        .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id});
+    final guestParticipations = await ParticipationController()
+        .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.guest.id});
+    
+    await teamMatch.generateFights([homeParticipations, guestParticipations]);
+    
+    broadcast(
+        jsonEncode(manyToJson(teamMatch.ex_fights, Fight, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
+    await Future.forEach(teamMatch.ex_fights.asMap().entries, (MapEntry<int, Fight> entry) async {
       final e = entry.value;
       final hasRed = e.r != null;
       final hasBlue = e.b != null;

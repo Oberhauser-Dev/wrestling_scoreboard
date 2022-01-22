@@ -4,6 +4,8 @@ import '../data_object.dart';
 import '../fight.dart';
 import '../league.dart';
 import '../lineup.dart';
+import '../participant_state.dart';
+import '../participation.dart';
 import '../person.dart';
 import '../weight_class.dart';
 import '../wrestling_event.dart';
@@ -118,5 +120,35 @@ class TeamMatch extends WrestlingEvent {
       res += fight.b?.classificationPoints ?? 0;
     }
     return res;
+  }
+
+  @override
+  Future<void> generateFights(List<List<Participation>> teamParticipations) async {
+    final fights = <Fight>[];
+    if(teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
+    for (final weightClass in ex_weightClasses) {
+      final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
+      if (homePartList.length > 1) {
+        throw Exception(
+            'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((
+                e) => e.membership.person.fullName).join(', ')}');
+      }
+      final guestPartList = teamParticipations[1].where((el) => (el.weightClass == weightClass));
+      if (guestPartList.length > 1) {
+        throw Exception(
+            'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((
+                e) => e.membership.person.fullName).join(', ')}');
+      }
+      final red = homePartList.isNotEmpty ? homePartList.single : null;
+      final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
+
+      var fight = Fight(
+        r: red == null ? null : ParticipantState(participation: red),
+        b: blue == null ? null : ParticipantState(participation: blue),
+        weightClass: weightClass,
+      );
+      fights.add(fight);
+    }
+    ex_fights = fights;
   }
 }

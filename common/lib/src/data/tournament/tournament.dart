@@ -1,3 +1,4 @@
+import 'package:common/src/data/participation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../fight.dart';
@@ -75,5 +76,11 @@ class Tournament extends WrestlingEvent {
       if (id != null) 'id': id,
       'name': name,
     });
+  }
+
+  @override
+  Future<void> generateFights(List<List<Participation>> teamParticipations) {
+    // TODO: implement generateFights
+    throw UnimplementedError();
   }
 }
