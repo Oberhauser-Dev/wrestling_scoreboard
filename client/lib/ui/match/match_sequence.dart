@@ -1,7 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
@@ -28,7 +27,7 @@ class MatchSequence extends StatelessWidget {
     return SingleConsumer<TeamMatch>(
       id: filterObject.id!,
       initialData: filterObject,
-      builder: (BuildContext context, TeamMatch match) {
+      builder: (context, match) {
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -41,20 +40,21 @@ class MatchSequence extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.info),
                 onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TeamMatchOverview(match: match))),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => TeamMatchOverview(match: match!))),
               ),
             ]),
           ),
           body: StreamBuilder(
-              stream: dataProvider.streamMany<Fight>(filterObject: match),
-              builder: (BuildContext context, AsyncSnapshot<ManyDataObject<Fight>> snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
-                final fights = snapshot.data!.data.toList();
-                if (fights.isEmpty) {
-                  dataProvider.generateFights(match);
-                }
-                match.ex_fights = fights;
-                return Column(children: [
+            stream: dataProvider.streamMany<Fight>(filterObject: match),
+            builder: (BuildContext context, AsyncSnapshot<ManyDataObject<Fight>> snapshot) {
+              if (!snapshot.hasData) return const CircularProgressIndicator();
+              final fights = snapshot.data!.data.toList();
+              if (fights.isEmpty) {
+                dataProvider.generateFights(match!);
+              }
+              match!.ex_fights = fights;
+              return Column(
+                children: [
                   Column(children: [
                     Row(children: [
                       Expanded(
@@ -81,8 +81,10 @@ class MatchSequence extends StatelessWidget {
                       },
                     ),
                   ),
-                ]);
-              }),
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -122,11 +124,7 @@ class FightListItem extends StatelessWidget {
     TextStyle fontStyleDefault = TextStyle(fontSize: fontSizeDefault);
 
     final fight = match.ex_fights[index];
-    return
-        // ChangeNotifierProvider.value(
-        //   value: fight,
-        //   child:
-        Column(
+    return Column(
       children: [
         InkWell(
           onTap: () {
@@ -147,18 +145,16 @@ class FightListItem extends StatelessWidget {
                     child: Center(child: Text(styleToAbbr(fight.weightClass.style, context), style: fontStyleDefault))),
                 Expanded(
                   flex: 55,
-                  child:
-                      // ChangeNotifierProvider.value(
-                      //   value: fight.r,
-                      //   child:
-                      Row(
+                  child: Row(
                     children: [
                       Expanded(
                         flex: 50,
                         child: displayName(fight.r, FightRole.red, fontSizeDefault, context),
                       ),
-                      Consumer<ParticipantState?>(
-                        builder: (context, data, child) => Expanded(
+                      SingleConsumer<ParticipantState>(
+                        id: fight.r?.id,
+                        initialData: fight.r,
+                        builder: (context, data) => Expanded(
                           flex: 5,
                           child: Column(
                             children: [
@@ -196,42 +192,43 @@ class FightListItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // ),
                 ),
                 Expanded(
-                    flex: 10,
-                    child: Consumer<Fight>(
-                        builder: (context, data, child) => Column(
-                              children: [
-                                Expanded(
-                                    flex: 70,
-                                    child: Container(
-                                      color: data.winner != null ? getColorFromFightRole(data.winner!).shade800 : null,
-                                      child: Center(
-                                        child: Text(getAbbreviationFromFightResult(data.result, context),
-                                            style: TextStyle(fontSize: fontSizeDefault * 0.7)),
-                                      ),
-                                    )),
-                                Expanded(
-                                    flex: 50,
-                                    child: Center(
-                                      child: data.winner != null
-                                          ? Text(durationToString(data.duration),
-                                              style: TextStyle(fontSize: fontSizeDefault / 2))
-                                          : null,
-                                    )),
-                              ],
-                            ))),
+                  flex: 10,
+                  child: SingleConsumer<Fight>(
+                    id: fight.id,
+                    initialData: fight,
+                    builder: (context, data) => Column(
+                      children: [
+                        Expanded(
+                            flex: 70,
+                            child: Container(
+                              color: data?.winner != null ? getColorFromFightRole(data!.winner!).shade800 : null,
+                              child: Center(
+                                child: Text(getAbbreviationFromFightResult(data?.result, context),
+                                    style: TextStyle(fontSize: fontSizeDefault * 0.7)),
+                              ),
+                            )),
+                        Expanded(
+                            flex: 50,
+                            child: Center(
+                              child: data?.winner != null
+                                  ? Text(durationToString(data!.duration),
+                                      style: TextStyle(fontSize: fontSizeDefault / 2))
+                                  : null,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
                 Expanded(
                   flex: 55,
-                  child:
-                      // ChangeNotifierProvider.value(
-                      //   value: fight.b,
-                      //   child:
-                      Row(
+                  child: Row(
                     children: [
-                      Consumer<ParticipantState?>(
-                        builder: (context, data, child) => Expanded(
+                      SingleConsumer<ParticipantState>(
+                        id: fight.b?.id,
+                        initialData: fight.b,
+                        builder: (context, pState) => Expanded(
                           flex: 5,
                           child: Column(
                             children: [
@@ -240,8 +237,8 @@ class FightListItem extends StatelessWidget {
                                   child: Container(
                                     color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
                                     child: Center(
-                                      child:
-                                          Text(data?.classificationPoints?.toString() ?? '-', style: fontStyleDefault),
+                                      child: Text(pState?.classificationPoints?.toString() ?? '-',
+                                          style: fontStyleDefault),
                                     ),
                                   )),
                               Expanded(
@@ -253,8 +250,8 @@ class FightListItem extends StatelessWidget {
                                       child: Container(
                                         color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
                                         child: Center(
-                                          child: data?.classificationPoints != null
-                                              ? Text(data!.technicalPoints.toString(),
+                                          child: pState?.classificationPoints != null
+                                              ? Text(pState!.technicalPoints.toString(),
                                                   style: TextStyle(fontSize: fontSizeDefault / 2))
                                               : null,
                                         ),
@@ -272,7 +269,6 @@ class FightListItem extends StatelessWidget {
                         child: displayName(fight.b, FightRole.blue, fontSizeDefault, context),
                       )
                     ],
-                    // ),
                   ),
                 ),
               ],
@@ -283,7 +279,6 @@ class FightListItem extends StatelessWidget {
           height: 1,
         ),
       ],
-      // )
     );
   }
 }

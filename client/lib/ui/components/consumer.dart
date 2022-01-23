@@ -5,9 +5,9 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
 
 class SingleConsumer<T extends DataObject> extends StatelessWidget {
-  final int id;
+  final int? id;
   final T? initialData;
-  final Widget Function(BuildContext context, T data) builder;
+  final Widget Function(BuildContext context, T? data) builder;
 
   const SingleConsumer({required this.id, this.initialData, required this.builder, Key? key}) : super(key: key);
 
@@ -15,8 +15,8 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: WebSocketManager.onWebSocketConnecting.stream.distinct(),
-      builder: (_, __) => StreamBuilder<T>(
-        stream: dataProvider.streamSingle<T>(id, init: initialData == null),
+      builder: (_, __) => id == null ? builder(context, null) :  StreamBuilder<T>(
+        stream: dataProvider.streamSingle<T>(id!, init: initialData == null),
         initialData: initialData,
         builder: (BuildContext context, AsyncSnapshot<T> snap) {
           if (snap.hasError) {

@@ -80,7 +80,7 @@ class HomeState extends State<Home> {
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
-                        title: data.name,
+                        title: data!.name,
                         icon: Icons.foundation,
                         onTap: () => handleSelectedClub(data, context),
                       ),
@@ -105,7 +105,7 @@ class HomeState extends State<Home> {
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
-                        title: data.name,
+                        title: data!.name,
                         icon: Icons.emoji_events,
                         onTap: () => handleSelectedLeague(data, context),
                       ),

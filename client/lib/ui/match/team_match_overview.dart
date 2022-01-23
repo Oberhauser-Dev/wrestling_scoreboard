@@ -20,7 +20,7 @@ class TeamMatchOverview extends StatelessWidget {
         id: match.id!,
         initialData: match,
         builder: (context, match) {
-          final lineups = match.ex_lineups;
+          final lineups = match!.ex_lineups;
           final items = [
             InfoWidget(
                 obj: match,
@@ -75,7 +75,7 @@ class TeamMatchOverview extends StatelessWidget {
                     id: lineup.id!,
                     initialData: lineup,
                     builder: (context, lineup) => ContentItem(
-                        title: lineup.team.name, icon: Icons.group, onTap: () => handleSelectedLineup(lineup, context)),
+                        title: lineup!.team.name, icon: Icons.group, onTap: () => handleSelectedLineup(lineup, context)),
                   );
                 }),
                 ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)

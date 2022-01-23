@@ -180,25 +180,22 @@ class FightState extends State<FightScreen> {
 
   displayParticipant(ParticipantState? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
     var color = getColorFromFightRole(role);
-    buildParticipantStateInfo(context, pStatus) {
-      List<Widget> items = [
-        displayName(pStatus, padding, cellHeight, fontSize),
-        displayClassificationPoints(pStatus, color, padding, cellHeight),
-      ];
-      if (role == FightRole.blue) items = List.from(items.reversed);
-      return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
-    }
 
     return Container(
       color: color,
       child: IntrinsicHeight(
-        child: pStatus == null
-            ? buildParticipantStateInfo(context, pStatus)
-            : SingleConsumer<ParticipantState>(
-                id: pStatus.id!,
-                initialData: pStatus,
-                builder: buildParticipantStateInfo,
-              ),
+        child: SingleConsumer<ParticipantState>(
+          id: pStatus?.id,
+          initialData: pStatus,
+          builder: (context, pStatus) {
+            List<Widget> items = [
+              displayName(pStatus, padding, cellHeight, fontSize),
+              displayClassificationPoints(pStatus, color, padding, cellHeight),
+            ];
+            if (role == FightRole.blue) items = List.from(items.reversed);
+            return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
+          },
+        ),
       ),
     );
   }
@@ -299,20 +296,17 @@ class FightState extends State<FightScreen> {
             ),
           ]),
         ),
-        body: 
-        // MultiProvider(
-        //   providers: [
-        //     ChangeNotifierProvider.value(value: fight),
-        //   ],
-        //   child: 
-          SingleChildScrollView(
+        body: StreamProvider<Fight>(
+          create: (context) => dataProvider.streamSingle<Fight>(fight.id!, init: false),
+          initialData: fight,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SingleConsumer<TeamMatch>(
                   id: match.id!,
                   initialData: match,
                   builder: (context, match) {
-                    return row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, context));
+                    return row(padding: bottomPadding, children: CommonElements.getTeamHeader(match!, context));
                   },
                 ),
                 row(padding: bottomPadding, children: [
@@ -383,7 +377,7 @@ class FightState extends State<FightScreen> {
             ),
           ),
         ),
-      // ),
+      ),
     );
   }
 

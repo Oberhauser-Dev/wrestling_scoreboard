@@ -79,7 +79,7 @@ class MatchSelection<T extends DataObject> extends StatelessWidget {
                               textScaleFactor: 1.5, // MediaQuery.of(context).textScaleFactor
                               text: TextSpan(
                                 text:
-                                    '${match.date?.toIso8601String().substring(0, 10) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
+                                    '${match!.date?.toIso8601String().substring(0, 10) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
                                 children: [
                                   TextSpan(
                                       text: match.home.team.name,

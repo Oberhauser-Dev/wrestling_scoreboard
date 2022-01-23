@@ -20,9 +20,10 @@ class TechnicalPoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: getColorFromFightRole(role),
-        height: height,
-        child: Column(children: [
+      color: getColorFromFightRole(role),
+      height: height,
+      child: Column(
+        children: [
           Expanded(
             flex: 70,
             child: Center(
@@ -40,11 +41,17 @@ class TechnicalPoints extends StatelessWidget {
                 ])),
           if (pStatusModel.isInjury)
             Expanded(
-                flex: 50,
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              flex: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                   FittedText(AppLocalizations.of(context)!.injuryTimeShort),
                   TimeDisplay(pStatusModel.injuryStopwatch, white)
-                ])),
-        ]));
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

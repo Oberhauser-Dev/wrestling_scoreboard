@@ -1,6 +1,5 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
 
 class CommonElements {
@@ -24,10 +23,8 @@ class CommonElements {
           color: Colors.red.shade900,
           padding: EdgeInsets.all(padding),
           child: Center(
-            child: Consumer<TeamMatch>(
-              builder: (context, data, child) => FittedText(
-                match.homePoints.toString(),
-              ),
+            child: FittedText(
+              match.homePoints.toString(),
             ),
           ),
         ),
@@ -39,10 +36,8 @@ class CommonElements {
           color: Colors.blue.shade900,
           padding: EdgeInsets.all(padding),
           child: Center(
-            child: Consumer<TeamMatch>(
-              builder: (context, data, child) => FittedText(
-                match.guestPoints.toString(),
-              ),
+            child: FittedText(
+              match.guestPoints.toString(),
             ),
           ),
         ),
