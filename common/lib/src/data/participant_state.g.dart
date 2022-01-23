@@ -18,6 +18,6 @@ ParticipantState _$ParticipantStateFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ParticipantStateToJson(ParticipantState instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'participation': instance.participation,
+      'participation': instance.participation.toJson(),
       'classificationPoints': instance.classificationPoints,
     };

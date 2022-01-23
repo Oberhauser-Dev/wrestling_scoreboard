@@ -19,6 +19,6 @@ Map<String, dynamic> _$TeamMatchFightToJson(TeamMatchFight instance) =>
     <String, dynamic>{
       'id': instance.id,
       'pos': instance.pos,
-      'teamMatch': instance.teamMatch,
-      'fight': instance.fight,
+      'teamMatch': instance.teamMatch.toJson(),
+      'fight': instance.fight.toJson(),
     };

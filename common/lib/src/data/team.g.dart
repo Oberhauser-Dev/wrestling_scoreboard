@@ -22,6 +22,6 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
-      'league': instance.league,
-      'club': instance.club,
+      'league': instance.league?.toJson(),
+      'club': instance.club.toJson(),
     };

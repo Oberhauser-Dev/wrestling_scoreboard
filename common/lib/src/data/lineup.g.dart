@@ -21,7 +21,7 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$LineupToJson(Lineup instance) => <String, dynamic>{
       'id': instance.id,
-      'team': instance.team,
-      'leader': instance.leader,
-      'coach': instance.coach,
+      'team': instance.team.toJson(),
+      'leader': instance.leader?.toJson(),
+      'coach': instance.coach?.toJson(),
     };

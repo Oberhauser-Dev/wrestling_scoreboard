@@ -19,6 +19,6 @@ Map<String, dynamic> _$MembershipToJson(Membership instance) =>
     <String, dynamic>{
       'id': instance.id,
       'no': instance.no,
-      'club': instance.club,
-      'person': instance.person,
+      'club': instance.club.toJson(),
+      'person': instance.person.toJson(),
     };

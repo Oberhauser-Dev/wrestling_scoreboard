@@ -38,7 +38,7 @@ void broadcastSingle(DataObject single) async {
     // No filtered list needs to be handled.
   } else if (single is Club) {
     // Exception: the full Club list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
   } else if (single is League) {
     // Exception: the full League list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update)));

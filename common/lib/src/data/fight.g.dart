@@ -28,11 +28,11 @@ Fight _$FightFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
       'id': instance.id,
-      'r': instance.r,
-      'b': instance.b,
-      'weightClass': instance.weightClass,
+      'r': instance.r?.toJson(),
+      'b': instance.b?.toJson(),
+      'weightClass': instance.weightClass.toJson(),
       'pool': instance.pool,
-      'ex_actions': instance.ex_actions,
+      'ex_actions': instance.ex_actions.map((e) => e.toJson()).toList(),
       'result': _$FightResultEnumMap[instance.result],
       'winner': _$FightRoleEnumMap[instance.winner],
       'duration': instance.duration.inMicroseconds,

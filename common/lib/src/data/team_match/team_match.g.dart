@@ -40,20 +40,23 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'id': instance.id,
-      'ex_referees': instance.ex_referees,
-      'ex_tanscriptWriters': instance.ex_tanscriptWriters.toList(),
-      'ex_timeKeepers': instance.ex_timeKeepers.toList(),
-      'ex_matPresidents': instance.ex_matPresidents.toList(),
-      'ex_stewards': instance.ex_stewards.toList(),
+      'ex_referees': instance.ex_referees.map((e) => e.toJson()).toList(),
+      'ex_tanscriptWriters':
+          instance.ex_tanscriptWriters.map((e) => e.toJson()).toList(),
+      'ex_timeKeepers': instance.ex_timeKeepers.map((e) => e.toJson()).toList(),
+      'ex_matPresidents':
+          instance.ex_matPresidents.map((e) => e.toJson()).toList(),
+      'ex_stewards': instance.ex_stewards.map((e) => e.toJson()).toList(),
       'date': instance.date?.toIso8601String(),
       'no': instance.no,
       'location': instance.location,
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
-      'ex_fights': instance.ex_fights,
-      'ex_weightClasses': instance.ex_weightClasses,
-      'league': instance.league,
+      'ex_fights': instance.ex_fights.map((e) => e.toJson()).toList(),
+      'ex_weightClasses':
+          instance.ex_weightClasses.map((e) => e.toJson()).toList(),
+      'league': instance.league.toJson(),
       'maxRounds': instance.maxRounds,
-      'home': instance.home,
-      'guest': instance.guest,
+      'home': instance.home.toJson(),
+      'guest': instance.guest.toJson(),
     };

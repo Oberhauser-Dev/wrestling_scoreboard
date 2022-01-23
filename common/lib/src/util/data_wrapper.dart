@@ -1,32 +1,33 @@
 import '../data.dart';
 import '../enums/crud.dart';
 
-Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) => <String, dynamic>{
+Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) =>
+    <String, dynamic>{
       'operation': operation.name,
-      'isMany': 'false',
-      'isRaw': single is DataObject ? 'false' : 'true',
+      'isMany': false,
+      'isRaw': single is! DataObject,
       'tableName': getTableNameFromType(type),
-      'data': single,
+      'data': single is DataObject ? single.toJson() : single,
     };
 
 Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation,
-        {Type filterType = Object, int? filterId}) =>
+    {Type filterType = Object, int? filterId}) =>
     <String, dynamic>{
       'operation': operation.name,
-      'isMany': 'true',
-      'isRaw': many.isNotEmpty ? (many.first is DataObject ? 'false' : 'true') : 'true',
+      'isMany': true,
+      'isRaw': many.isNotEmpty ? (many.first is DataObject ? false : true) : true,
       'filterType': getTableNameFromType(filterType),
       if (filterId != null) 'filterId': filterId,
       'tableName': getTableNameFromType(type),
-      'data': many,
+      'data': many.map((e) => e is DataObject ? e.toJson() : e),
     };
 
 typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({required CRUD operation, required T single});
 typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<T> many});
 
-Future<int?> handleFromJson(
-    Map<String, dynamic> json, HandleSingleCallback handleSingle, HandleManyCallback handleMany) {
+Future<int?> handleFromJson(Map<String, dynamic> json, HandleSingleCallback handleSingle,
+    HandleManyCallback handleMany) {
   final type = getTypeFromTableName(json['tableName']);
   switch (type) {
     case Club:
@@ -52,8 +53,8 @@ Future<int?> handleFromJson(
   }
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(
-    Map<String, dynamic> json, HandleSingleCallback handleSingle, HandleManyCallback handleMany) async {
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json, HandleSingleCallback handleSingle,
+    HandleManyCallback handleMany) async {
   final isMany = json['isMany'] == 'true';
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {

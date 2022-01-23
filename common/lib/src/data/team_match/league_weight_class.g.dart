@@ -20,6 +20,6 @@ Map<String, dynamic> _$LeagueWeightClassToJson(LeagueWeightClass instance) =>
     <String, dynamic>{
       'id': instance.id,
       'pos': instance.pos,
-      'league': instance.league,
-      'weightClass': instance.weightClass,
+      'league': instance.league.toJson(),
+      'weightClass': instance.weightClass.toJson(),
     };

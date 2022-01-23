@@ -24,7 +24,7 @@ Map<String, dynamic> _$FightActionToJson(FightAction instance) =>
       'actionType': _$FightActionTypeEnumMap[instance.actionType],
       'pointCount': instance.pointCount,
       'role': _$FightRoleEnumMap[instance.role],
-      'fight': instance.fight,
+      'fight': instance.fight.toJson(),
     };
 
 K _$enumDecode<K, V>(

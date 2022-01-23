@@ -183,7 +183,7 @@ abstract class EntityController<T extends DataObject> {
       if (single == null) {
         return Response.notFound('Object with ID $id not found in ${controller.tableName}');
       } else {
-        return Response.ok(betterJsonEncode(single));
+        return Response.ok(rawJsonEncode(single));
       }
     } else {
       final single = await controller.getSingle(id);
@@ -203,7 +203,7 @@ abstract class EntityController<T extends DataObject> {
     if (isRaw) {
       final many = await controller.getManyRaw(
           conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
-      return Response.ok(betterJsonEncode(many.toList()));
+      return Response.ok(rawJsonEncode(many.toList()));
     } else {
       final many = await controller.getMany(
           conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
@@ -215,7 +215,7 @@ abstract class EntityController<T extends DataObject> {
       {bool isRaw = false, required String sqlQuery, Map<String, dynamic>? substitutionValues}) async {
     if (isRaw) {
       final many = await controller.getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues);
-      return Response.ok(betterJsonEncode(many.toList()));
+      return Response.ok(rawJsonEncode(many.toList()));
     } else {
       final many = await controller.getManyFromQuery(sqlQuery, substitutionValues: substitutionValues);
       return Response.ok(jsonEncode(many.toList()));

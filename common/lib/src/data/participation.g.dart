@@ -20,8 +20,8 @@ Participation _$ParticipationFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ParticipationToJson(Participation instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'membership': instance.membership,
-      'lineup': instance.lineup,
-      'weightClass': instance.weightClass,
+      'membership': instance.membership.toJson(),
+      'lineup': instance.lineup.toJson(),
+      'weightClass': instance.weightClass.toJson(),
       'weight': instance.weight,
     };
