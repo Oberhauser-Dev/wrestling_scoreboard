@@ -158,7 +158,7 @@ class RestDataProvider extends DataProvider {
   @override
   /// As we need the return value immediately, we need to use the rest API.
   Future<int> createOrUpdateSingle(DataObject obj) async {
-    final body = jsonEncode(singleToJson(obj, obj.getBaseType(), obj.id != null ? CRUD.update : CRUD.create));
+    final body = jsonEncode(singleToJson(obj, obj.runtimeType, obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
     final response = await http.post(uri, body: body);
 
@@ -172,6 +172,6 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<void> deleteSingle(DataObject obj) async {
-    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.getBaseType(), CRUD.delete)));
+    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.runtimeType, CRUD.delete)));
   }
 }

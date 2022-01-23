@@ -12,20 +12,7 @@ abstract class DataObject {
 
   Map<String, dynamic> toRaw();
 
-  String get tableName => getTableNameFromType(getBaseType());
-
-  Type getBaseType() {
-    if (this is Fight) return Fight;
-    if (this is FightAction) return FightAction;
-    if (this is TeamMatch) return TeamMatch;
-    if (this is Team) return Team;
-    if (this is Club) return Club;
-    if (this is League) return League;
-    if (this is Lineup) return Lineup;
-    if (this is Membership) return Membership;
-    if (this is ParticipantState) return ParticipantState;
-    return runtimeType;
-  }
+  String get tableName => getTableNameFromType(runtimeType);
 
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
     switch (T) {

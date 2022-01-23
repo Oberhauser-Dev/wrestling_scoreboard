@@ -38,7 +38,7 @@ abstract class DataProvider {
   /// READ: get many objects
   Stream<ManyDataObject<T>> streamMany<T extends DataObject>(
       {DataObject? filterObject, bool init = true}) {
-    final filterType = filterObject == null ? Object : filterObject.getBaseType();
+    final filterType = filterObject == null ? Object : filterObject.runtimeType;
     final controller = getOrCreateManyStreamController<T>(filterType: filterType);
     var stream = controller.stream;
 

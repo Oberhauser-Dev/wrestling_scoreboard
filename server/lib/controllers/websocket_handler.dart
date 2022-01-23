@@ -79,7 +79,7 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
   final controller = EntityController.getControllerFromDataType<T>();
   if (operation == CRUD.update) {
     await controller.updateSingle(single);
-    broadcast(jsonEncode(singleToJson(single, single.getBaseType(), operation)));
+    broadcast(jsonEncode(singleToJson(single, single.runtimeType, operation)));
   } else if (operation == CRUD.create) {
     single.id = await controller.createSingle(single);
   } else if (operation == CRUD.delete) {
