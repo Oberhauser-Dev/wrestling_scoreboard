@@ -1,9 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/club.dart';
-import 'package:wrestling_scoreboard/data/league.dart';
-import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/ui/club/club_edit.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
@@ -13,42 +10,42 @@ import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
 
 import 'match_selection.dart';
 
-class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
-  final S filterObject;
+class TeamSelection<T extends DataObject> extends StatelessWidget {
+  final T filterObject;
 
   const TeamSelection({Key? key, required this.filterObject}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return SingleConsumer<T, S>(
+    return SingleConsumer<T>(
       id: filterObject.id!,
       initialData: filterObject,
       builder: (context, data) {
-        final description = data is ClientClub
+        final description = data is Club
             ? InfoWidget(
                 obj: data,
                 editPage: ClubEdit(
-                  club: data as ClientClub,
+                  club: data as Club,
                 ),
                 children: [
                   ContentItem(
-                    title: (data as ClientClub).no ?? '-',
+                    title: (data as Club).no ?? '-',
                     subtitle: localizations.clubNumber,
                     icon: Icons.tag,
                   )
                 ],
                 classLocale: localizations.club,
               )
-            : data is ClientLeague
+            : data is League
                 ? InfoWidget(
                     obj: data,
                     editPage: LeagueEdit(
-                      league: data as ClientLeague,
+                      league: data as League,
                     ),
                     children: [
                       ContentItem(
-                        title: (data as ClientLeague).startDate.toIso8601String(),
+                        title: (data as League).startDate.toIso8601String(),
                         subtitle: localizations.date, // Start date
                         icon: Icons.emoji_events,
                       )
@@ -58,13 +55,13 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
                 : const SizedBox();
         return Scaffold(
           appBar: AppBar(
-            title: Text(data is League ? (data as ClientLeague).name : (data as ClientClub).name),
+            title: Text(data is League ? (data as League).name : (data as Club).name),
           ),
           body: GroupedList(items: [
             description,
-            ManyConsumer<Team, ClientTeam>(
+            ManyConsumer<Team>(
               filterObject: data,
-              builder: (BuildContext context, List<ClientTeam> team) {
+              builder: (BuildContext context, List<Team> team) {
                 return ListGroup(
                   header: HeadingItem(
                     title: localizations.teams,
@@ -92,11 +89,11 @@ class TeamSelection<T extends DataObject, S extends T> extends StatelessWidget {
     );
   }
 
-  handleSelectedTeam(ClientTeam team, BuildContext context) {
+  handleSelectedTeam(Team team, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MatchSelection<Team, ClientTeam>(
+        builder: (context) => MatchSelection<Team>(
           filterObject: team,
         ),
       ),

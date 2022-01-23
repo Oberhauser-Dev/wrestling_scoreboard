@@ -1,15 +1,12 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/club.dart';
-import 'package:wrestling_scoreboard/data/league.dart';
-import 'package:wrestling_scoreboard/data/team.dart';
 import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamEdit extends StatefulWidget {
-  final ClientTeam? team;
+  final Team? team;
   final Club? initialClub;
   final League? initialLeague;
 
@@ -79,7 +76,7 @@ class TeamEditState extends State<TeamEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            clubs ??= await dataProvider.readMany<Club, ClientClub>();
+            clubs ??= await dataProvider.readMany<Club>();
             return (filter == null ? clubs! : clubs!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -95,7 +92,7 @@ class TeamEditState extends State<TeamEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            leagues ??= await dataProvider.readMany<League, ClientLeague>();
+            leagues ??= await dataProvider.readMany<League>();
             return (filter == null ? leagues! : leagues!.where((element) => element.name.contains(filter))).toList();
           },
         ),

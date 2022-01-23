@@ -2,13 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:common/common.dart';
-import 'package:wrestling_scoreboard/data/club.dart';
-import 'package:wrestling_scoreboard/data/fight.dart';
-import 'package:wrestling_scoreboard/data/league.dart';
-import 'package:wrestling_scoreboard/data/lineup.dart';
-import 'package:wrestling_scoreboard/data/membership.dart';
-import 'package:wrestling_scoreboard/data/team.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 import 'mocks.dart';
@@ -18,15 +11,15 @@ class MockDataProvider extends DataProvider {
   final latency = const Duration(milliseconds: 100);
 
   @override
-  Future<S> readSingle<T extends DataObject, S extends T>(int id) async {
-    final Iterable<S> many = await readMany<T, S>();
+  Future<T> readSingle<T extends DataObject>(int id) async {
+    final Iterable<T> many = await readMany<T>();
     return many.singleWhere((element) => element.id == id);
   }
 
   @override
-  Future<List<S>> readMany<T extends DataObject, S extends T>({DataObject? filterObject}) async {
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
     await Future.delayed(latency);
-    return Future.value(getManyMocksFromClass<S>(filterObject: filterObject));
+    return Future.value(getManyMocksFromClass<T>(filterObject: filterObject));
   }
 
   @override
@@ -44,35 +37,35 @@ class MockDataProvider extends DataProvider {
 
   List<T> getManyMocksFromClass<T extends DataObject>({DataObject? filterObject}) {
     switch (T) {
-      case ClientClub:
+      case Club:
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getClubs() as List<T>;
-      case ClientFight:
+      case Fight:
         if (filterObject is Tournament) return getFightsOfTournament(filterObject) as List<T>;
-        if (filterObject is ClientTeamMatch) return getFightsOfTeamMatch(filterObject) as List<T>;
+        if (filterObject is TeamMatch) return getFightsOfTeamMatch(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getFights() as List<T>;
-      case ClientLeague:
+      case League:
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getLeagues() as List<T>;
-      case ClientLineup:
+      case Lineup:
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getLineups() as List<T>;
-      case ClientMembership:
-        if (filterObject is ClientClub) return getMembershipsOfClub(filterObject) as List<T>;
+      case Membership:
+        if (filterObject is Club) return getMembershipsOfClub(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getMemberships() as List<T>;
       case Participation:
-        if (filterObject is ClientLineup) return getParticipationsOfLineup(filterObject) as List<T>;
+        if (filterObject is Lineup) return getParticipationsOfLineup(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getParticipations() as List<T>;
-      case ClientTeam:
-        if (filterObject is ClientClub) return getTeamsOfClub(filterObject) as List<T>;
-        if (filterObject is ClientLeague) return getTeamsOfLeague(filterObject) as List<T>;
+      case Team:
+        if (filterObject is Club) return getTeamsOfClub(filterObject) as List<T>;
+        if (filterObject is League) return getTeamsOfLeague(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeams() as List<T>;
-      case ClientTeamMatch:
-        if (filterObject is ClientTeam) return getMatchesOfTeam(filterObject) as List<T>;
+      case TeamMatch:
+        if (filterObject is Team) return getMatchesOfTeam(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeamMatches() as List<T>;
       default:
@@ -83,10 +76,10 @@ class MockDataProvider extends DataProvider {
   @override
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
     List<Fight> oldFights; // TODO really needs old fights or just use the exising ones from teammatch
-    if(wrestlingEvent is TeamMatch) {
-      oldFights =  getFightsOfTeamMatch(wrestlingEvent);
+    if (wrestlingEvent is TeamMatch) {
+      oldFights = getFightsOfTeamMatch(wrestlingEvent);
     } else {
-      oldFights =  getFightsOfTournament(wrestlingEvent as Tournament);
+      oldFights = getFightsOfTournament(wrestlingEvent as Tournament);
     }
     final fightsAll = getFights();
     if (reset) {
@@ -107,44 +100,75 @@ class MockDataProvider extends DataProvider {
         fightsAll.remove(element);
       }
     }
+
+    List<List<Participation>> teamParticipations;
+    if (wrestlingEvent is TeamMatch) {
+      final homeParticipations = await dataProvider.readMany<Participation>(
+          filterObject: wrestlingEvent.home);
+      final guestParticipations = await dataProvider.readMany<Participation>(
+          filterObject: wrestlingEvent.guest);
+      teamParticipations = [homeParticipations, guestParticipations];
+    } else if (wrestlingEvent is Tournament) {
+      // TODO get all participations
+      teamParticipations = [];
+      // throw UnimplementedError('generate fights for tournaments not yet implemented');
+    } else {
+      teamParticipations = [];
+      throw UnimplementedError('generate fights for tournaments not yet implemented');
+    }
+
     // Generate new fights
-    await wrestlingEvent.generateFights();
-    final newFights = wrestlingEvent.fights;
+    await wrestlingEvent.generateFights(teamParticipations);
+    // TODO add notifier to all fights
+
+    final newFights = wrestlingEvent.ex_fights;
     // Add if not exists
     final random = Random();
     for (final element in newFights) {
-      if (fightsAll.where((ClientFight f) => f.equalDuringFight(element)).isEmpty) {
+      if (fightsAll
+          .where((Fight f) => f.equalDuringFight(element))
+          .isEmpty) {
         do { // Generate new id as long it is not taken yet
           element.id = random.nextInt(0x7fffffff);
-        } while (fightsAll.where((f) => f.id == element.id).isNotEmpty);
-        fightsAll.add(ClientFight.from(element));
+        } while (fightsAll
+            .where((f) => f.id == element.id)
+            .isNotEmpty);
+        fightsAll.add(element);
       }
     }
     if (wrestlingEvent is TeamMatch) {
       final teamMatchFightsAll = getTeamMatchFights();
       newFights.asMap().forEach((key, element) {
-        if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
+        if (teamMatchFightsAll
+            .where((tmf) => tmf.fight.equalDuringFight(element))
+            .isEmpty) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
           int generatedId;
           do { // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (teamMatchFightsAll.where((t) => t.id == element.id).isNotEmpty);
+          } while (teamMatchFightsAll
+              .where((t) => t.id == element.id)
+              .isNotEmpty);
           teamMatchFightsAll.add(TeamMatchFight(id: generatedId, teamMatch: wrestlingEvent, fight: element, pos: key));
         }
       });
     } else if (wrestlingEvent is Tournament) {
       final tournamentFightsAll = getTournamentFights();
       for (final element in newFights) {
-        if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
+        if (tournamentFightsAll
+            .where((tof) => tof.fight.equalDuringFight(element))
+            .isEmpty) {
           int generatedId;
           do { // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (tournamentFightsAll.where((t) => t.id == element.id).isNotEmpty);
+          } while (tournamentFightsAll
+              .where((t) => t.id == element.id)
+              .isNotEmpty);
           tournamentFightsAll.add(TournamentFight(id: generatedId, tournament: wrestlingEvent, fight: element));
         }
       }
     }
-    wrestlingEvent.fights = newFights;
+    wrestlingEvent.ex_fights = newFights;
     updateMany(Fight, filterObject: wrestlingEvent);
   }
 
@@ -163,7 +187,7 @@ class MockDataProvider extends DataProvider {
         filterType: Lineup,
         filterId: obj.lineup.id,
       );
-      getManyStreamController<Participation, Participation>(filterType: Lineup)?.add(manyLineupFilter);
+      getManyStreamController<Participation>(filterType: Lineup)?.add(manyLineupFilter);
     } else if (obj is Lineup) {
       // No filtered list needs to be handled.
     } else {
@@ -176,13 +200,13 @@ class MockDataProvider extends DataProvider {
     // Currently do not update list of all entities (as is and should not used anywhere)
     switch (t) {
       case Fight:
-        if (filterObject is ClientTeamMatch) {
+        if (filterObject is TeamMatch) {
           final manyFilter = ManyDataObject(
             data: getFightsOfTeamMatch(filterObject),
             filterType: TeamMatch,
             filterId: filterObject.id,
           );
-          return getManyStreamController<Fight, ClientFight>(filterType: TeamMatch)?.add(manyFilter);
+          return getManyStreamController<Fight>(filterType: TeamMatch)?.add(manyFilter);
         }
         throw DataUnimplementedError(CRUD.update, t, filterObject);
       default:
@@ -194,7 +218,7 @@ class MockDataProvider extends DataProvider {
     obj.id = Random().nextInt(32000);
     if (obj is Participation) {
       getParticipations().add(obj);
-    } else if (obj is ClientLineup) {
+    } else if (obj is Lineup) {
       getLineups().add(obj);
     } else {
       throw DataUnimplementedError(CRUD.create, obj.runtimeType);
@@ -206,14 +230,14 @@ class MockDataProvider extends DataProvider {
     if (obj is Participation) {
       getParticipations().remove(obj);
       getParticipations().add(obj);
-      getSingleStreamController<Participation, Participation>()?.add(obj);
-    } else if (obj is ClientLineup) {
+      getSingleStreamController<Participation>()?.add(obj);
+    } else if (obj is Lineup) {
       getLineups().remove(obj);
       getLineups().add(obj);
       getParticipations().where((element) => element.lineup == obj).forEach((element) {
         element.lineup = obj;
       });
-      getSingleStreamController<Lineup, ClientLineup>()?.add(obj);
+      getSingleStreamController<Lineup>()?.add(obj);
     } else {
       throw DataUnimplementedError(CRUD.update, obj.runtimeType);
     }

@@ -1,8 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/club.dart';
-import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/ui/club/club_edit.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
@@ -66,8 +64,8 @@ class HomeState extends State<Home> {
         ),
         body: TabBarView(
           children: [
-            ManyConsumer<Club, ClientClub>(
-              builder: (BuildContext context, List<ClientClub> clubs) {
+            ManyConsumer<Club>(
+              builder: (BuildContext context, List<Club> clubs) {
                 return ListGroup(
                   header: HeadingItem(
                     title: localizations.clubs,
@@ -78,7 +76,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   items: clubs.map(
-                        (e) => SingleConsumer<Club, ClientClub>(
+                        (e) => SingleConsumer<Club>(
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
@@ -91,8 +89,8 @@ class HomeState extends State<Home> {
                 );
               },
             ),
-            ManyConsumer<League, ClientLeague>(
-              builder: (BuildContext context, List<ClientLeague> leagues) {
+            ManyConsumer<League>(
+              builder: (BuildContext context, List<League> leagues) {
                 return ListGroup(
                   header: HeadingItem(
                     title: localizations.leagues,
@@ -103,7 +101,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   items: leagues.map(
-                        (e) => SingleConsumer<League, ClientLeague>(
+                        (e) => SingleConsumer<League>(
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
@@ -122,22 +120,22 @@ class HomeState extends State<Home> {
     );
   }
 
-  handleSelectedClub(ClientClub club, BuildContext context) {
+  handleSelectedClub(Club club, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TeamSelection<Club, ClientClub>(
+        builder: (context) => TeamSelection<Club>(
           filterObject: club,
         ),
       ),
     );
   }
 
-  handleSelectedLeague(ClientLeague league, BuildContext context) {
+  handleSelectedLeague(League league, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TeamSelection<League, ClientLeague>(
+        builder: (context) => TeamSelection<League>(
           filterObject: league,
         ),
       ),

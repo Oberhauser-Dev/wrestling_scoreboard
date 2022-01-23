@@ -1,14 +1,12 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/team.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamMatchEdit extends StatefulWidget {
-  final ClientTeamMatch? teamMatch;
+  final TeamMatch? teamMatch;
   final Team? initialHomeTeam;
   final Team? initialGuestTeam;
 
@@ -20,7 +18,7 @@ class TeamMatchEdit extends StatefulWidget {
 
 class TeamMatchEditState extends State<TeamMatchEdit> {
   final _formKey = GlobalKey<FormState>();
-  
+
   List<Team>? teams;
 
   String? _location;
@@ -102,7 +100,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider.readMany<Team, ClientTeam>(); // TODO filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider.readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -118,7 +116,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider.readMany<Team, ClientTeam>(); // TODO filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider.readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -140,8 +138,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
       _formKey.currentState!.save();
 
       var home = widget.teamMatch?.home;
-      if(home == null) {
-        final homeId =  await dataProvider.createOrUpdateSingle(Lineup(team: _homeTeam!));
+      if (home == null) {
+        final homeId = await dataProvider.createOrUpdateSingle(Lineup(team: _homeTeam!));
         home = Lineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
@@ -149,8 +147,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
       }
 
       var guest = widget.teamMatch?.guest;
-      if(guest == null) {
-        final guestId =  await dataProvider.createOrUpdateSingle(Lineup(team: _guestTeam!));
+      if (guest == null) {
+        final guestId = await dataProvider.createOrUpdateSingle(Lineup(team: _guestTeam!));
         guest = Lineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
@@ -164,8 +162,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           home: home,
           guest: guest,
           date: _date,
-          referees: [],
-          weightClasses: []));
+          ex_referees: [],
+          ex_weightClasses: []));
       Navigator.of(context).pop();
     }
   }

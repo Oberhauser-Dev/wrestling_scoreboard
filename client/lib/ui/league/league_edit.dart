@@ -1,11 +1,11 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/league.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class LeagueEdit extends StatefulWidget {
-  final ClientLeague? league;
+  final League? league;
 
   const LeagueEdit({this.league, Key? key}) : super(key: key);
 
@@ -81,7 +81,7 @@ class LeagueEditState extends State<LeagueEdit> {
   void handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(ClientLeague(id: widget.league?.id, name: _name!, startDate: _startDate));
+      await dataProvider.createOrUpdateSingle(League(id: widget.league?.id, name: _name!, startDate: _startDate));
       Navigator.of(context).pop();
     }
   }

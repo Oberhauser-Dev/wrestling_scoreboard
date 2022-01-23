@@ -1,11 +1,11 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/club.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class ClubEdit extends StatefulWidget {
-  final ClientClub? club;
+  final Club? club;
 
   const ClubEdit({this.club, Key? key}) : super(key: key);
 
@@ -66,7 +66,7 @@ class ClubEditState extends State<ClubEdit> {
   void handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(ClientClub(id: widget.club?.id, name: _name!, no: _no));
+      await dataProvider.createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
       Navigator.of(context).pop();
     }
   }

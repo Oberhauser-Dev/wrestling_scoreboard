@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
@@ -27,7 +26,7 @@ class TechnicalPoints extends StatelessWidget {
           Expanded(
             flex: 70,
             child: Center(
-              child: Consumer<ClientFight>(
+              child: Consumer<Fight>(
                   builder: (context, data, child) =>
                       FittedText((pStatusModel.pStatus?.technicalPoints ?? 0).toString())),
             ),

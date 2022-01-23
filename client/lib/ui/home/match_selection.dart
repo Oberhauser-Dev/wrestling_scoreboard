@@ -1,8 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/team.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
@@ -10,52 +8,52 @@ import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
 import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
 import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
 
-class MatchSelection<T extends DataObject, S extends T> extends StatelessWidget {
-  final S filterObject;
+class MatchSelection<T extends DataObject> extends StatelessWidget {
+  final T filterObject;
 
   const MatchSelection({Key? key, required this.filterObject}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return SingleConsumer<T, S>(
+    return SingleConsumer<T>(
         id: filterObject.id!,
         initialData: filterObject,
         builder: (context, data) {
-          final description = data is ClientTeam
+          final description = data is Team
               ? InfoWidget(
-              obj: data,
-              editPage: TeamEdit(
-                team: data as ClientTeam,
-              ),
-              children: [
-                ContentItem(
-                  title: (data as Team).description ?? '-',
-                  subtitle: localizations.description,
-                  icon: Icons.subject,
-                ),
-                ContentItem(
-                  title: (data as Team).league?.name ?? '-',
-                  subtitle: localizations.league,
-                  icon: Icons.emoji_events,
-                ),
-                ContentItem(
-                  title: (data as Team).club.name,
-                  subtitle: localizations.club,
-                  icon: Icons.foundation,
-                ),
-              ],
-              classLocale: localizations.team)
+                  obj: data,
+                  editPage: TeamEdit(
+                    team: data,
+                  ),
+                  children: [
+                    ContentItem(
+                      title: data.description ?? '-',
+                      subtitle: localizations.description,
+                      icon: Icons.subject,
+                    ),
+                    ContentItem(
+                      title: data.league?.name ?? '-',
+                      subtitle: localizations.league,
+                      icon: Icons.emoji_events,
+                    ),
+                    ContentItem(
+                      title: data.club.name,
+                      subtitle: localizations.club,
+                      icon: Icons.foundation,
+                    ),
+                  ],
+                  classLocale: localizations.team)
               : const SizedBox();
           return Scaffold(
             appBar: AppBar(
-              title: Text(data is Team ? (data as Team).name : 'no title'),
+              title: Text(data is Team ? data.name : 'no title'),
             ),
             body: GroupedList(items: [
               description,
-              ManyConsumer<TeamMatch, ClientTeamMatch>(
+              ManyConsumer<TeamMatch>(
                 filterObject: data,
-                builder: (BuildContext context, List<ClientTeamMatch> matches) {
+                builder: (BuildContext context, List<TeamMatch> matches) {
                   return ListGroup(
                     header: HeadingItem(
                       title: localizations.matches,
@@ -73,7 +71,7 @@ class MatchSelection<T extends DataObject, S extends T> extends StatelessWidget 
                       ),
                     ),
                     items: matches.map(
-                          (e) => SingleConsumer<TeamMatch, ClientTeamMatch>(
+                      (e) => SingleConsumer<TeamMatch>(
                         id: e.id!,
                         initialData: e,
                         builder: (context, match) => ListTile(
@@ -81,7 +79,7 @@ class MatchSelection<T extends DataObject, S extends T> extends StatelessWidget 
                               textScaleFactor: 1.5, // MediaQuery.of(context).textScaleFactor
                               text: TextSpan(
                                 text:
-                                '${match.date?.toIso8601String().substring(0, 10) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
+                                    '${match.date?.toIso8601String().substring(0, 10) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
                                 children: [
                                   TextSpan(
                                       text: match.home.team.name,
@@ -91,7 +89,7 @@ class MatchSelection<T extends DataObject, S extends T> extends StatelessWidget 
                                   const TextSpan(text: ' - '),
                                   TextSpan(
                                       text: match.guest.team.name,
-                                      style: match.guest.team == (data as Team)
+                                      style: match.guest.team == data
                                           ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                                           : null),
                                 ],
@@ -106,11 +104,10 @@ class MatchSelection<T extends DataObject, S extends T> extends StatelessWidget 
               ),
             ]),
           );
-        }
-    );
+        });
   }
 
-  handleSelectedMatch(ClientTeamMatch match, BuildContext context) async {
+  handleSelectedMatch(TeamMatch match, BuildContext context) async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSequence(match)));
   }
 }

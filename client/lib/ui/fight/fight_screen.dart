@@ -2,11 +2,9 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:wrestling_scoreboard/data/fight.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/data/participant_state.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_action_conrols.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
@@ -22,14 +20,14 @@ import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_controls.dart';
 
-void navigateToFightScreen(BuildContext context, ClientTeamMatch match, int index) async {
-  final fight = match.fights[index];
-  fight.actions = await dataProvider.readMany<FightAction, FightAction>(filterObject: fight);
+void navigateToFightScreen(BuildContext context, TeamMatch match, int index) async {
+  final fight = match.ex_fights[index];
+  fight.ex_actions = await dataProvider.readMany<FightAction>(filterObject: fight);
   Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
 }
 
 class FightScreen extends StatefulWidget {
-  final ClientTeamMatch match;
+  final TeamMatch match;
   final int fightIndex;
 
   const FightScreen(this.match, this.fightIndex, {Key? key}) : super(key: key);
@@ -39,8 +37,8 @@ class FightScreen extends StatefulWidget {
 }
 
 class FightState extends State<FightScreen> {
-  late ClientTeamMatch match;
-  late ClientFight fight;
+  late TeamMatch match;
+  late Fight fight;
   late int fightIndex;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _fightStopwatch;
@@ -56,7 +54,7 @@ class FightState extends State<FightScreen> {
     HornSound();
     match = widget.match;
     fightIndex = widget.fightIndex;
-    fight = widget.match.fights[fightIndex];
+    fight = widget.match.ex_fights[fightIndex];
     _r = ParticipantStateModel(fight.r);
     _b = ParticipantStateModel(fight.b);
     _r.injuryStopwatch.limit = match.injuryDuration;
@@ -137,7 +135,7 @@ class FightState extends State<FightScreen> {
     };
   }
 
-  displayName(ClientParticipantState? pStatus, double padding, double cellHeight, double fontSizeDefault) {
+  displayName(ParticipantState? pStatus, double padding, double cellHeight, double fontSizeDefault) {
     return Expanded(
         child: Column(children: [
       Container(
@@ -145,7 +143,7 @@ class FightState extends State<FightScreen> {
           height: cellHeight * 2,
           child: Center(
               child: FittedText(
-                pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
+            pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
             style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white),
           ))),
       SizedBox(
@@ -156,12 +154,13 @@ class FightState extends State<FightScreen> {
                       ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
                       : AppLocalizations.of(context)!.participantUnknownWeight),
                   style: TextStyle(
-                      fontSize: fontSizeDefault, color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white)))),
+                      fontSize: fontSizeDefault,
+                      color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white)))),
     ]));
   }
 
-  displayClassificationPoints(ClientParticipantState? pStatus, MaterialColor color, double padding, double cellHeight) {
-    return Consumer<ClientParticipantState?>(
+  displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding, double cellHeight) {
+    return Consumer<ParticipantState?>(
       builder: (context, data, child) => pStatus?.classificationPoints != null
           ? Container(
               color: color.shade800,
@@ -179,20 +178,27 @@ class FightState extends State<FightScreen> {
     return Expanded(flex: 33, child: TechnicalPoints(pStatusModel: pStatus, height: cellHeight, role: role));
   }
 
-  displayParticipant(ClientParticipantState? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
+  displayParticipant(ParticipantState? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
     var color = getColorFromFightRole(role);
-    List<Widget> items = [
-      displayName(pStatus, padding, cellHeight, fontSize),
-      displayClassificationPoints(pStatus, color, padding, cellHeight),
-    ];
-    if (role == FightRole.blue) items = List.from(items.reversed);
-    return ChangeNotifierProvider.value(
-      value: pStatus,
-      child: Container(
-        color: color,
-        child: IntrinsicHeight(
-          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items),
-        ),
+    buildParticipantStateInfo(context, pStatus) {
+      List<Widget> items = [
+        displayName(pStatus, padding, cellHeight, fontSize),
+        displayClassificationPoints(pStatus, color, padding, cellHeight),
+      ];
+      if (role == FightRole.blue) items = List.from(items.reversed);
+      return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
+    }
+
+    return Container(
+      color: color,
+      child: IntrinsicHeight(
+        child: pStatus == null
+            ? buildParticipantStateInfo(context, pStatus)
+            : SingleConsumer<ParticipantState>(
+                id: pStatus.id!,
+                initialData: pStatus,
+                builder: buildParticipantStateInfo,
+              ),
       ),
     );
   }
@@ -293,15 +299,22 @@ class FightState extends State<FightScreen> {
             ),
           ]),
         ),
-        body: MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(value: match),
-            ChangeNotifierProvider.value(value: fight),
-          ],
-          child: SingleChildScrollView(
+        body: 
+        // MultiProvider(
+        //   providers: [
+        //     ChangeNotifierProvider.value(value: fight),
+        //   ],
+        //   child: 
+          SingleChildScrollView(
             child: Column(
               children: [
-                row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, context)),
+                SingleConsumer<TeamMatch>(
+                  id: match.id!,
+                  initialData: match,
+                  builder: (context, match) {
+                    return row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, context));
+                  },
+                ),
                 row(padding: bottomPadding, children: [
                   Expanded(
                     flex: 50,
@@ -316,24 +329,24 @@ class FightState extends State<FightScreen> {
                                   padding: EdgeInsets.all(padding),
                                   child: Center(
                                       child: Text(
-                                        '${AppLocalizations.of(context)!.fight} ${fightIndex + 1}',
-                                        style: fontStyleInfo,
-                                      )))),
+                                    '${AppLocalizations.of(context)!.fight} ${fightIndex + 1}',
+                                    style: fontStyleInfo,
+                                  )))),
                         ]),
                         Container(
                             padding: EdgeInsets.all(padding),
                             child: Center(
                                 child: Text(
-                                  '${styleToString(fight.weightClass.style, context)}',
-                                  style: fontStyleInfo,
-                                ))),
+                              '${styleToString(fight.weightClass.style, context)}',
+                              style: fontStyleInfo,
+                            ))),
                         Container(
                             padding: EdgeInsets.all(padding),
                             child: Center(
                                 child: Text(
-                                  fight.weightClass.name,
-                                  style: fontStyleInfo,
-                                ))),
+                              fight.weightClass.name,
+                              style: fontStyleInfo,
+                            ))),
                       ])),
                   Expanded(
                     flex: 50,
@@ -355,15 +368,14 @@ class FightState extends State<FightScreen> {
                         )),
                     Expanded(
                         flex: 2,
-                        child:
-                        SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
+                        child: SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
                     displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                   ],
                 ),
                 Container(
                   padding: bottomPadding,
-                  child: Consumer<ClientFight>(
-                    builder: (context, data, child) => ActionsWidget(fight.actions),
+                  child: Consumer<Fight>(
+                    builder: (context, data, child) => ActionsWidget(fight.ex_actions),
                   ),
                 ),
                 Container(padding: bottomPadding, child: FightMainControls(callback, this)),
@@ -371,7 +383,7 @@ class FightState extends State<FightScreen> {
             ),
           ),
         ),
-      ),
+      // ),
     );
   }
 

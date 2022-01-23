@@ -4,7 +4,6 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/lineup.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
@@ -12,7 +11,7 @@ import 'package:wrestling_scoreboard/ui/components/font.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class LineupEdit extends StatefulWidget {
-  final ClientLineup lineup;
+  final Lineup lineup;
   final List<WeightClass> weightClasses;
   final List<Participation> participations;
 
@@ -42,7 +41,7 @@ class LineupEditState extends State<LineupEdit> {
   final HashSet<Participation> _createOrUpdateParticipations = HashSet();
 
   Future<List<Membership>> filterMemberships(String? filter) async {
-    memberships ??= await dataProvider.readMany<Membership, Membership>(filterObject: widget.lineup.team.club);
+    memberships ??= await dataProvider.readMany<Membership>(filterObject: widget.lineup.team.club);
     return (filter == null
             ? memberships!
             : memberships!.where((element) => element.person.fullName.contains(filter)))
@@ -53,7 +52,7 @@ class LineupEditState extends State<LineupEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await dataProvider.createOrUpdateSingle(
-          ClientLineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
+          Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
       await Future.forEach(_deleteParticipations, (Participation element) => dataProvider.deleteSingle(element));
       await Future.forEach(
           _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));

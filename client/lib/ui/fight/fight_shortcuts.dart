@@ -1,7 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/util/audio/audio.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
@@ -105,7 +104,7 @@ class FightScreenActionIntent extends Intent {
 class FightActionHandler extends StatelessWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
-  final ClientTeamMatch match;
+  final TeamMatch match;
   final int fightIndex;
   final Function(FightScreenActions action) doAction;
 
@@ -122,10 +121,10 @@ class FightActionHandler extends StatelessWidget {
     handleIntentStatic(intent, stopwatch, match, fightIndex, doAction, context: context);
   }
 
-  static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, ClientTeamMatch match,
+  static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, TeamMatch match,
       int fightIndex, Function(FightScreenActions action) doAction,
       {BuildContext? context}) {
-    final fight = match.fights[fightIndex];
+    final fight = match.ex_fights[fightIndex];
     switch (intent.type) {
       case FightScreenActions.StartStop:
         stopwatch.startStop();
@@ -146,7 +145,7 @@ class FightActionHandler extends StatelessWidget {
       case FightScreenActions.NextFight:
         if (context != null) {
           int index = fightIndex + 1;
-          if (index < match.fights.length) {
+          if (index < match.ex_fights.length) {
             Navigator.pop(context);
             navigateToFightScreen(context, match, index);
           }
@@ -229,8 +228,8 @@ class FightActionHandler extends StatelessWidget {
         doAction(FightScreenActions.RedInjuryTime);
         break;
       case FightScreenActions.RedUndo:
-        if (fight.r != null && fight.r!.actions.isNotEmpty) {
-          final action = fight.r!.actions.last;
+        if (fight.r != null && fight.r!.ex_actions.isNotEmpty) {
+          final action = fight.r!.ex_actions.last;
           fight.removeAction(action);
           dataProvider.deleteSingle(action);
         }
@@ -294,8 +293,8 @@ class FightActionHandler extends StatelessWidget {
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueUndo:
-        if (fight.b != null && fight.b!.actions.isNotEmpty) {
-          final action = fight.b!.actions.last;
+        if (fight.b != null && fight.b!.ex_actions.isNotEmpty) {
+          final action = fight.b!.ex_actions.last;
           fight.removeAction(action);
           dataProvider.deleteSingle(action);
         }
@@ -307,8 +306,8 @@ class FightActionHandler extends StatelessWidget {
         doAction(FightScreenActions.BlueInjuryTime);
         break;
       case FightScreenActions.Undo:
-        if (fight.actions.isNotEmpty) {
-          final action = fight.actions.last;
+        if (fight.ex_actions.isNotEmpty) {
+          final action = fight.ex_actions.last;
           fight.removeAction(action);
           dataProvider.deleteSingle(action);
         }

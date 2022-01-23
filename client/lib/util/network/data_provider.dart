@@ -13,19 +13,19 @@ final dataProvider = _isMock ? MockDataProvider() : RestDataProvider();
 /// Data exchange layer with CRUD operations
 abstract class DataProvider {
   /// READ: get a single object
-  Future<S> readSingle<T extends DataObject, S extends T>(int id);
+  Future<T> readSingle<T extends DataObject>(int id);
 
   /// READ: get many objects
-  Future<List<S>> readMany<T extends DataObject, S extends T>({DataObject? filterObject});
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject});
 
   /// READ: get a single object
-  Stream<S> streamSingle<T extends DataObject, S extends T>(int id, {bool init = false}) {
-    final controller = getOrCreateSingleStreamController<T, S>();
+  Stream<T> streamSingle<T extends DataObject>(int id, {bool init = false}) {
+    final controller = getOrCreateSingleStreamController<T>();
     if (init) {
       // Use try / catch instead of Future.catchError, because Dart Debugger can't recognize this as uncaught.
       (() async {
         try {
-          final single = await readSingle<T, S>(id);
+          final single = await readSingle<T>(id);
           controller.sink.add(single);
         } catch (e) {
           controller.sink.addError(e);
@@ -36,10 +36,10 @@ abstract class DataProvider {
   }
 
   /// READ: get many objects
-  Stream<ManyDataObject<S>> streamMany<T extends DataObject, S extends T>(
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject>(
       {DataObject? filterObject, bool init = true}) {
     final filterType = filterObject == null ? Object : filterObject.getBaseType();
-    final controller = getOrCreateManyStreamController<T, S>(filterType: filterType);
+    final controller = getOrCreateManyStreamController<T>(filterType: filterType);
     var stream = controller.stream;
 
     if (filterObject != null) {
@@ -49,7 +49,7 @@ abstract class DataProvider {
       // Use try / catch instead of Future.catchError, because Dart Debugger can't recognize this as uncaught.
       (() async {
         try {
-          final many = await readMany<T, S>(filterObject: filterObject);
+          final many = await readMany<T>(filterObject: filterObject);
           controller.sink.add(ManyDataObject(data: many, filterType: filterType, filterId: filterObject?.id));
         } catch (e) {
           controller.sink.addError(e);
@@ -78,33 +78,33 @@ abstract class DataProvider {
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject>>> _manyStreamControllers = {};
 
-  StreamController<S>? getSingleStreamController<T extends DataObject, S extends T>() {
-    return _singleStreamControllers[T] as StreamController<S>?;
+  StreamController<T>? getSingleStreamController<T extends DataObject>() {
+    return _singleStreamControllers[T] as StreamController<T>?;
   }
 
-  StreamController<S> getOrCreateSingleStreamController<T extends DataObject, S extends T>() {
-    StreamController<S>? streamController = getSingleStreamController<T, S>();
+  StreamController<T> getOrCreateSingleStreamController<T extends DataObject>() {
+    StreamController<T>? streamController = getSingleStreamController<T>();
     if (streamController == null) {
-      streamController = StreamController<S>.broadcast();
+      streamController = StreamController<T>.broadcast();
       _singleStreamControllers[T] = streamController;
     }
     return streamController;
   }
 
-  StreamController<ManyDataObject<S>>? getManyStreamController<T extends DataObject, S extends T>(
+  StreamController<ManyDataObject<T>>? getManyStreamController<T extends DataObject>(
       {Type filterType = Object}) {
-    Map<Type, StreamController<ManyDataObject<S>>>? streamControllersOfType =
-        _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<S>>>();
+    Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType =
+        _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<T>>>();
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
-  StreamController<ManyDataObject<S>> getOrCreateManyStreamController<T extends DataObject, S extends T>(
+  StreamController<ManyDataObject<T>> getOrCreateManyStreamController<T extends DataObject>(
       {Type filterType = Object}) {
-    var streamController = getManyStreamController<T, S>(filterType: filterType);
+    var streamController = getManyStreamController<T>(filterType: filterType);
     if (streamController == null) {
-      streamController = StreamController<ManyDataObject<S>>.broadcast();
+      streamController = StreamController<ManyDataObject<T>>.broadcast();
       Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType =
-          _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<S>>>();
+          _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<T>>>();
       if (streamControllersOfType == null) {
         streamControllersOfType = <Type, StreamController<ManyDataObject<T>>>{};
         _manyStreamControllers[T] = streamControllersOfType;

@@ -1,10 +1,10 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
 
 class CommonElements {
-  static List<Widget> getTeamHeader(ClientTeamMatch match, BuildContext context) {
+  static List<Widget> getTeamHeader(TeamMatch match, BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double padding = width / 75;
     double cellHeight = width / 15;
@@ -24,7 +24,7 @@ class CommonElements {
           color: Colors.red.shade900,
           padding: EdgeInsets.all(padding),
           child: Center(
-            child: Consumer<ClientTeamMatch>(
+            child: Consumer<TeamMatch>(
               builder: (context, data, child) => FittedText(
                 match.homePoints.toString(),
               ),
@@ -39,7 +39,7 @@ class CommonElements {
           color: Colors.blue.shade900,
           padding: EdgeInsets.all(padding),
           child: Center(
-            child: Consumer<ClientTeamMatch>(
+            child: Consumer<TeamMatch>(
               builder: (context, data, child) => FittedText(
                 match.guestPoints.toString(),
               ),

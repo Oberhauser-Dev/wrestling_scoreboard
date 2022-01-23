@@ -1,8 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/lineup.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
@@ -11,18 +9,18 @@ import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamMatchOverview extends StatelessWidget {
-  final ClientTeamMatch match;
+  final TeamMatch match;
 
   const TeamMatchOverview({required this.match, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return SingleConsumer<TeamMatch, ClientTeamMatch>(
+    return SingleConsumer<TeamMatch>(
         id: match.id!,
         initialData: match,
         builder: (context, match) {
-          final lineups = match.lineups;
+          final lineups = match.ex_lineups;
           final items = [
             InfoWidget(
                 obj: match,
@@ -73,7 +71,7 @@ class TeamMatchOverview extends StatelessWidget {
               header: HeadingItem(title: localizations.lineups + ' & ' + localizations.fights),
               items: [
                 ...lineups.map((lineup) {
-                  return SingleConsumer<Lineup, ClientLineup>(
+                  return SingleConsumer<Lineup>(
                     id: lineup.id!,
                     initialData: lineup,
                     builder: (context, lineup) => ContentItem(
@@ -94,14 +92,14 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  handleSelectedLineup(ClientLineup lineup, BuildContext context) async {
-    final participations = await dataProvider.readMany<Participation, Participation>(filterObject: lineup);
+  handleSelectedLineup(Lineup lineup, BuildContext context) async {
+    final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
           return LineupEdit(
-            weightClasses: match.weightClasses,
+            weightClasses: match.ex_weightClasses,
             participations: participations,
             lineup: lineup,
             onSubmit: () {

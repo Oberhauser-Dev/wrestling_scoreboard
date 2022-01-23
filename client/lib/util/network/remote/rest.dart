@@ -3,14 +3,6 @@ import 'dart:convert';
 import 'package:common/common.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:http/http.dart' as http;
-import 'package:wrestling_scoreboard/data/club.dart';
-import 'package:wrestling_scoreboard/data/data_object.dart';
-import 'package:wrestling_scoreboard/data/fight.dart';
-import 'package:wrestling_scoreboard/data/league.dart';
-import 'package:wrestling_scoreboard/data/lineup.dart';
-import 'package:wrestling_scoreboard/data/membership.dart';
-import 'package:wrestling_scoreboard/data/team.dart';
-import 'package:wrestling_scoreboard/data/team_match.dart';
 import 'package:wrestling_scoreboard/ui/settings/settings.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
@@ -35,19 +27,19 @@ class RestDataProvider extends DataProvider {
   }
 
   String _getPathFromType(Type t) {
-    return '/${getTableNameFromType(getBaseType(t))}';
+    return '/${getTableNameFromType(t)}';
   }
 
   @override
-  Future<S> readSingle<T extends DataObject, S extends T>(int id) async {
+  Future<T> readSingle<T extends DataObject>(int id) async {
     final json = await readSingleJson<T>(id, isRaw: false);
-    return toClientObject<T, S>(DataObject.fromJson<T>(json));
+    return DataObject.fromJson<T>(json);
   }
 
   @override
-  Future<List<S>> readMany<T extends DataObject, S extends T>({DataObject? filterObject}) async {
+  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
     final json = await readManyJson<T>(filterObject: filterObject, isRaw: false);
-    return json.map((e) => (toClientObject(DataObject.fromJson<T>(e)) as S)).toList();
+    return json.map((e) => DataObject.fromJson<T>(e)).toList();
   }
 
   @override
@@ -86,64 +78,63 @@ class RestDataProvider extends DataProvider {
 
   _initUpdateStream() {
     Future<int> handleSingle<U extends DataObject>({required CRUD operation, required U single}) async {
-      callback<T extends DataObject, S extends T>(T single) {
-        final tmp = toClientObject<T, S>(single);
+      callback<T extends DataObject>(T single) {
         if (operation == CRUD.update) {
-          getSingleStreamController<T, S>()?.sink.add(tmp);
+          getSingleStreamController<T>()?.sink.add(single);
         }
       }
 
       if (U == Club) {
-        callback<Club, ClientClub>(single as Club);
+        callback<Club>(single as Club);
       } else if (U == Fight) {
-        callback<Fight, ClientFight>(single as Fight);
+        callback<Fight>(single as Fight);
       } else if (U == FightAction) {
-        callback<FightAction, FightAction>(single as FightAction);
+        callback<FightAction>(single as FightAction);
       } else if (U == League) {
-        callback<League, ClientLeague>(single as League);
+        callback<League>(single as League);
       } else if (U == Lineup) {
-        callback<Lineup, ClientLineup>(single as Lineup);
+        callback<Lineup>(single as Lineup);
       } else if (U == Membership) {
-        callback<Membership, ClientMembership>(single as Membership);
+        callback<Membership>(single as Membership);
       } else if (U == Participation) {
-        callback<Participation, Participation>(single as Participation);
+        callback<Participation>(single as Participation);
       } else if (U == Team) {
-        callback<Team, ClientTeam>(single as Team);
+        callback<Team>(single as Team);
       } else if (U == TeamMatch) {
-        callback<TeamMatch, ClientTeamMatch>(single as TeamMatch);
+        callback<TeamMatch>(single as TeamMatch);
       }
       return single.id!;
     }
 
     Future<void> handleMany<U extends DataObject>({required CRUD operation, required ManyDataObject<U> many}) async {
-      callback<T extends DataObject, S extends T>(ManyDataObject<T> many) {
-        final tmp = ManyDataObject<S>(
-            data: many.data.map((e) => toClientObject<T, S>(e)).toList(),
+      callback<T extends DataObject>(ManyDataObject<T> many) {
+        final tmp = ManyDataObject<T>(
+            data: many.data,
             filterId: many.filterId,
             filterType: many.filterType);
         final filterType = many.filterType;
         if (tmp.data.isEmpty) return;
-        getManyStreamController<T, S>(filterType: filterType)?.sink.add(tmp);
+        getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
       }
 
       if (U == Club) {
-        callback<Club, ClientClub>(many as ManyDataObject<Club>);
+        callback<Club>(many as ManyDataObject<Club>);
       } else if (U == Fight) {
-        callback<Fight, ClientFight>(many as ManyDataObject<Fight>);
+        callback<Fight>(many as ManyDataObject<Fight>);
       } else if (U == FightAction) {
-        callback<FightAction, FightAction>(many as ManyDataObject<FightAction>);
+        callback<FightAction>(many as ManyDataObject<FightAction>);
       } else if (U == League) {
-        callback<League, ClientLeague>(many as ManyDataObject<League>);
+        callback<League>(many as ManyDataObject<League>);
       } else if (U == Lineup) {
-        callback<Lineup, ClientLineup>(many as ManyDataObject<Lineup>);
+        callback<Lineup>(many as ManyDataObject<Lineup>);
       } else if (U == Membership) {
-        callback<Membership, ClientMembership>(many as ManyDataObject<Membership>);
+        callback<Membership>(many as ManyDataObject<Membership>);
       } else if (U == Participation) {
-        callback<Participation, Participation>(many as ManyDataObject<Participation>);
+        callback<Participation>(many as ManyDataObject<Participation>);
       } else if (U == Team) {
-        callback<Team, ClientTeam>(many as ManyDataObject<Team>);
+        callback<Team>(many as ManyDataObject<Team>);
       } else if (U == TeamMatch) {
-        callback<TeamMatch, ClientTeamMatch>(many as ManyDataObject<TeamMatch>);
+        callback<TeamMatch>(many as ManyDataObject<TeamMatch>);
       }
     }
 

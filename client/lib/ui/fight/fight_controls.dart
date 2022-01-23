@@ -38,7 +38,7 @@ class FightMainControlsState extends State<FightMainControls> {
             child: Row(
               children: [
                 Expanded(
-                    child: widget.fightState.match.fights.first == widget.fightState.fight
+                    child: widget.fightState.match.ex_fights.first == widget.fightState.fight
                         ? IconButton(
                             color: Colors.white24,
                             icon: const Icon(Icons.close),
@@ -61,7 +61,7 @@ class FightMainControlsState extends State<FightMainControls> {
                     child: IconButton(
                         onPressed: () => widget.callback(const FightScreenActionIntent.Horn()), icon: const Icon(Icons.campaign))),
                 Expanded(
-                    child: widget.fightState.match.fights.last == widget.fightState.fight
+                    child: widget.fightState.match.ex_fights.last == widget.fightState.fight
                         ? IconButton(
                             color: Colors.white24,
                             icon: const Icon(Icons.close),
