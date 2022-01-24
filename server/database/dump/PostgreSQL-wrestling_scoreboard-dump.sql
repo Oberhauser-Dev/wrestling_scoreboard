@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.5 (Ubuntu 13.5-0ubuntu0.21.10.1)
--- Dumped by pg_dump version 13.5 (Ubuntu 13.5-0ubuntu0.21.10.1)
+-- Dumped from database version 13.3
+-- Dumped by pg_dump version 13.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -93,6 +93,21 @@ CREATE TYPE public.gender AS ENUM (
 ALTER TYPE public.gender OWNER TO wrestling;
 
 --
+-- Name: person_role; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.person_role AS ENUM (
+    'referee',
+    'transcriptWriter',
+    'timeKeeper',
+    'matPresident',
+    'steward'
+);
+
+
+ALTER TYPE public.person_role OWNER TO wrestling;
+
+--
 -- Name: wrestling_style; Type: TYPE; Schema: public; Owner: wrestling
 --
 
@@ -141,6 +156,42 @@ ALTER TABLE public.club_id_seq OWNER TO wrestling;
 --
 
 ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
+
+
+--
+-- Name: event_person; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.event_person (
+    id integer NOT NULL,
+    event_id integer NOT NULL,
+    person_id integer NOT NULL,
+    person_role public.person_role
+);
+
+
+ALTER TABLE public.event_person OWNER TO wrestling;
+
+--
+-- Name: event_person_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.event_person_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.event_person_id_seq OWNER TO wrestling;
+
+--
+-- Name: event_person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.event_person_id_seq OWNED BY public.event_person.id;
 
 
 --
@@ -740,6 +791,13 @@ ALTER TABLE ONLY public.club ALTER COLUMN id SET DEFAULT nextval('public.club_id
 
 
 --
+-- Name: event_person id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.event_person ALTER COLUMN id SET DEFAULT nextval('public.event_person_id_seq'::regclass);
+
+
+--
 -- Name: fight id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -858,6 +916,14 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 COPY public.club (id, no, name) FROM stdin;
 1	05432	Quahog Hunters
 2	12345	Springfield Wrestlers
+\.
+
+
+--
+-- Data for Name: event_person; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.event_person (id, event_id, person_id, person_role) FROM stdin;
 \.
 
 
@@ -1075,6 +1141,13 @@ SELECT pg_catalog.setval('public.club_id_seq', 2, true);
 
 
 --
+-- Name: event_person_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.event_person_id_seq', 1, false);
+
+
+--
 -- Name: fight_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -1192,6 +1265,14 @@ SELECT pg_catalog.setval('public.wrestling_event_id_seq', 1, true);
 
 ALTER TABLE ONLY public.club
     ADD CONSTRAINT club_pk PRIMARY KEY (id);
+
+
+--
+-- Name: event_person event_person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.event_person
+    ADD CONSTRAINT event_person_pk PRIMARY KEY (id);
 
 
 --
@@ -1338,6 +1419,13 @@ CREATE UNIQUE INDEX club_no_uindex ON public.club USING btree (no);
 
 
 --
+-- Name: event_person_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
+--
+
+CREATE UNIQUE INDEX event_person_id_uindex ON public.event_person USING btree (id);
+
+
+--
 -- Name: league_weight_class_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
 --
 
@@ -1349,6 +1437,22 @@ CREATE UNIQUE INDEX league_weight_class_id_uindex ON public.league_weight_class 
 --
 
 CREATE UNIQUE INDEX team_match_fight_id_uindex ON public.team_match_fight USING btree (id);
+
+
+--
+-- Name: event_person event_person_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.event_person
+    ADD CONSTRAINT event_person_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: event_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.event_person
+    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (event_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
 
 
 --
