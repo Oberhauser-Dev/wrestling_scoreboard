@@ -16,6 +16,13 @@ part 'team_match.g.dart';
 @JsonSerializable()
 class TeamMatch extends WrestlingEvent {
   late League league; // Liga
+  Person? referee;
+  Person? judge;
+  Person? matChairman;
+  Person? timeKeeper;
+  Person? transcriptWriter;
+
+  // TODO add missing stewards to extra table
 
   @override
   final Duration roundDuration = Duration(minutes: 3);
@@ -32,12 +39,19 @@ class TeamMatch extends WrestlingEvent {
   @override
   int maxRounds = 2;
 
+  Lineup home;
+
+  Lineup guest;
+
   TeamMatch({
     int? id,
-    required Lineup home,
-    required Lineup guest,
-    required List<WeightClass> ex_weightClasses,
-    required List<Person> ex_referees,
+    required this.home,
+    required this.guest,
+    this.matChairman,
+    this.referee,
+    this.judge,
+    this.timeKeeper,
+    this.transcriptWriter,
     String? no,
     String? location,
     DateTime? date,
@@ -46,11 +60,8 @@ class TeamMatch extends WrestlingEvent {
   }) : super(
           id: id,
           no: no,
-          ex_lineups: [home, guest],
-          ex_referees: ex_referees,
           location: location,
           date: date,
-          ex_weightClasses: ex_weightClasses,
           comment: comment,
           visitorsCount: visitorsCount,
         ) {
@@ -61,10 +72,6 @@ class TeamMatch extends WrestlingEvent {
     }
   }
 
-  Lineup get home => ex_lineups[0];
-
-  Lineup get guest => ex_lineups[1];
-
   factory TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
 
   @override
@@ -74,8 +81,10 @@ class TeamMatch extends WrestlingEvent {
     final home = await getSingle<Lineup>(e['home_id'] as int);
     final guest = await getSingle<Lineup>(e['guest_id'] as int);
     final int? refereeId = e['referee_id'];
-    // TODO need extra table for multiple referees.
-    final List<Person> referees = refereeId != null ? [(await getSingle<Person>(refereeId))!] : [];
+    final int? matChairmanId = e['mat_chairman_id'];
+    final int? judgeId = e['judge_id'];
+    final int? timeKeeperId = e['time_keeper_id'];
+    final int? transcriptWriterId = e['time_keeper_id'];
     // TODO ditch weightclasses, always handle at client
     // final weightClasses = home != null && home.team.league != null
     // ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
@@ -83,16 +92,19 @@ class TeamMatch extends WrestlingEvent {
     // TODO may add weightclasses of both teams leagues
 
     return TeamMatch(
-    id: e['id'] as int?,
-    no: e['no'] as String?,
-    home: home!,
-    guest: guest!,
-    ex_weightClasses: [], // weightClasses
-    ex_referees: referees,
-    location: e['location'] as String?,
-    date: e['date'] as DateTime?,
-    visitorsCount: e['visitors_count'] as int?,
-    comment: e['comment'] as String?,
+      id: e['id'] as int?,
+      no: e['no'] as String?,
+      location: e['location'] as String?,
+      date: e['date'] as DateTime?,
+      visitorsCount: e['visitors_count'] as int?,
+      comment: e['comment'] as String?,
+      home: home!,
+      guest: guest!,
+      referee: refereeId == null ? null : await getSingle<Person>(refereeId),
+      matChairman: matChairmanId == null ? null : await getSingle<Person>(matChairmanId),
+      judge: judgeId == null ? null : await getSingle<Person>(judgeId),
+      transcriptWriter: transcriptWriterId == null ? null : await getSingle<Person>(transcriptWriterId),
+      timeKeeper: timeKeeperId == null ? null : await getSingle<Person>(timeKeeperId),
     );
   }
 
@@ -102,42 +114,44 @@ class TeamMatch extends WrestlingEvent {
       ..addAll({
         'home_id': home.id,
         'guest_id': guest.id,
-        'referee_id': ex_referees.isNotEmpty ? ex_referees.first.id : null,
+        'referee_id': referee?.id,
+        'judge_id': judge?.id,
+        'mat_chairman': matChairman?.id,
+        'transcript_writer': transcriptWriter?.id,
+        'time_keeper': timeKeeper?.id,
       });
   }
 
-  int get homePoints {
+  static int getHomePoints(List<Fight> fights) {
     var res = 0;
-    for (final fight in ex_fights) {
+    for (final fight in fights) {
       res += fight.r?.classificationPoints ?? 0;
     }
     return res;
   }
 
-  int get guestPoints {
+  static int getGuestPoints(List<Fight> fights) {
     var res = 0;
-    for (final fight in ex_fights) {
+    for (final fight in fights) {
       res += fight.b?.classificationPoints ?? 0;
     }
     return res;
   }
 
   @override
-  Future<void> generateFights(List<List<Participation>> teamParticipations) async {
+  Future<List<Fight>> generateFights(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) async {
     final fights = <Fight>[];
-    if(teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
-    for (final weightClass in ex_weightClasses) {
+    if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
+    for (final weightClass in weightClasses) {
       final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
       if (homePartList.length > 1) {
         throw Exception(
-            'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((
-                e) => e.membership.person.fullName).join(', ')}');
+            'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}');
       }
       final guestPartList = teamParticipations[1].where((el) => (el.weightClass == weightClass));
       if (guestPartList.length > 1) {
         throw Exception(
-            'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((
-                e) => e.membership.person.fullName).join(', ')}');
+            'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}');
       }
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
@@ -149,6 +163,6 @@ class TeamMatch extends WrestlingEvent {
       );
       fights.add(fight);
     }
-    ex_fights = fights;
+    return fights;
   }
 }

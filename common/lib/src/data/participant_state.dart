@@ -11,7 +11,6 @@ part 'participant_state.g.dart';
 @JsonSerializable()
 class ParticipantState extends DataObject {
   Participation participation;
-  final List<FightAction> _actions = [];
   int? classificationPoints;
 
   ParticipantState({int? id, required this.participation, this.classificationPoints}) : super(id);
@@ -39,19 +38,9 @@ class ParticipantState extends DataObject {
     };
   }
 
-  List<FightAction> get ex_actions => _actions;
-
-  void addAction(FightAction action) {
-    _actions.add(action);
-  }
-
-  void removeAction(FightAction action) {
-    _actions.remove(action);
-  }
-
-  int get technicalPoints {
+  static int getTechnicalPoints(Iterable<FightAction> actions) {
     var res = 0;
-    _actions.forEach((el) {
+    actions.forEach((el) {
       if (el.actionType == FightActionType.points) {
         res += el.pointCount!;
       }

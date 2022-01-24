@@ -1,9 +1,7 @@
-import 'package:common/src/data/participation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../fight.dart';
-import '../lineup.dart';
-import '../person.dart';
+import '../participation.dart';
 import '../weight_class.dart';
 import '../wrestling_event.dart';
 
@@ -32,20 +30,14 @@ class Tournament extends WrestlingEvent {
   Tournament({
     int? id,
     required this.name,
-    required List<Lineup> ex_lineups,
-    required List<WeightClass> ex_weightClasses,
-    required List<Person> ex_referees,
     String? location,
     DateTime? date,
     int? visitorsCount,
     String? comment,
   }) : super(
           id: id,
-          ex_lineups: ex_lineups,
-          ex_referees: ex_referees,
           location: location,
           date: date,
-          ex_weightClasses: ex_weightClasses,
           comment: comment,
           visitorsCount: visitorsCount,
         );
@@ -60,26 +52,24 @@ class Tournament extends WrestlingEvent {
     return Tournament(
       id: e['id'] as int?,
       name: e['name'],
-      ex_lineups: [],
-      ex_weightClasses: [],
-      ex_referees: [],
       location: e['location'] as String?,
       date: e['date'] as DateTime?,
       visitorsCount: e['visitors_count'] as int?,
       comment: e['comment'] as String?,
     );
   }
-  
+
   @override
   Map<String, dynamic> toRaw() {
-    return super.toRaw()..addAll({
-      if (id != null) 'id': id,
-      'name': name,
-    });
+    return super.toRaw()
+      ..addAll({
+        if (id != null) 'id': id,
+        'name': name,
+      });
   }
 
   @override
-  Future<void> generateFights(List<List<Participation>> teamParticipations) {
+  Future<List<Fight>> generateFights(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) {
     // TODO: implement generateFights
     throw UnimplementedError();
   }

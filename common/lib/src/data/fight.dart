@@ -16,7 +16,6 @@ class Fight extends DataObject {
   ParticipantState? b; // blue
   final WeightClass weightClass;
   final int? pool;
-  List<FightAction> ex_actions = [];
   FightResult? result;
   FightRole? winner;
   Duration duration;
@@ -50,8 +49,7 @@ class Fight extends DataObject {
     };
   }
 
-  static Future<Fight> fromRaw(
-      Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+  static Future<Fight> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final redId = e['red_id'] as int?;
     final blueId = e['blue_id'] as int?;
     final winner = e['winner'] as String?;
@@ -69,37 +67,24 @@ class Fight extends DataObject {
     );
   }
 
-  bool addAction(FightAction action) {
-    ParticipantState? pStatus = action.role == FightRole.red ? this.r : this.b;
-    if (pStatus != null) {
-      ex_actions.add(action);
-      pStatus.addAction(action);
-      return true;
-    }
-    return false;
-  }
-
-  removeAction(FightAction action) {
-    ex_actions.remove(action);
-    action.role == FightRole.red ? this.r?.removeAction(action) : this.b?.removeAction(action);
-  }
-
-  updateClassificationPoints({bool isTournament = false}) {
+  updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
     ParticipantState? _winner = this.winner == FightRole.red ? this.r : this.b;
     ParticipantState? _looser = this.winner == FightRole.red ? this.b : this.r;
 
-    if (this.result != null) {
+    if (result != null) {
       if (_winner != null) {
         _winner.classificationPoints = isTournament
-            ? getClassificationPointsWinnerTournament(this.result!)
+            ? getClassificationPointsWinnerTournament(result!)
             : getClassificationPointsWinnerTeamMatch(
-                this.result!, _winner.technicalPoints - (_looser?.technicalPoints ?? 0));
+                result!,
+                ParticipantState.getTechnicalPoints(actions.where((element) => element.role == winner)) -
+                    ParticipantState.getTechnicalPoints(actions.where((element) => element.role != winner)));
       }
 
       if (_looser != null) {
         _looser.classificationPoints = isTournament
-            ? getClassificationPointsLooserTournament(this.result!)
-            : getClassificationPointsLooserTeamMatch(this.result!);
+            ? getClassificationPointsLooserTournament(result!)
+            : getClassificationPointsLooserTeamMatch(result!);
       }
     } else {
       this.r?.classificationPoints = null;
