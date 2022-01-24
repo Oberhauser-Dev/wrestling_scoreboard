@@ -17,16 +17,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: wrestling
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
 CREATE SCHEMA public;
 
 
-ALTER SCHEMA public OWNER TO wrestling;
+ALTER SCHEMA public OWNER TO postgres;
 
 --
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: wrestling
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
 --
 
 COMMENT ON SCHEMA public IS 'standard public schema';
@@ -159,18 +159,18 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 
 
 --
--- Name: event_person; Type: TABLE; Schema: public; Owner: wrestling
+-- Name: tournament_person; Type: TABLE; Schema: public; Owner: wrestling
 --
 
-CREATE TABLE public.event_person (
+CREATE TABLE public.tournament_person (
     id integer NOT NULL,
-    event_id integer NOT NULL,
+    tournament_id integer NOT NULL,
     person_id integer NOT NULL,
     person_role public.person_role
 );
 
 
-ALTER TABLE public.event_person OWNER TO wrestling;
+ALTER TABLE public.tournament_person OWNER TO wrestling;
 
 --
 -- Name: event_person_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
@@ -191,7 +191,7 @@ ALTER TABLE public.event_person_id_seq OWNER TO wrestling;
 -- Name: event_person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.event_person_id_seq OWNED BY public.event_person.id;
+ALTER SEQUENCE public.event_person_id_seq OWNED BY public.tournament_person.id;
 
 
 --
@@ -591,8 +591,9 @@ CREATE TABLE public.team_match (
     referee_id integer,
     transcript_writer_id integer,
     time_keeper_id integer,
-    mat_president_id integer,
-    league_id integer
+    mat_chairman_id integer,
+    league_id integer,
+    judge_id integer
 )
 INHERITS (public.wrestling_event);
 
@@ -791,13 +792,6 @@ ALTER TABLE ONLY public.club ALTER COLUMN id SET DEFAULT nextval('public.club_id
 
 
 --
--- Name: event_person id; Type: DEFAULT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.event_person ALTER COLUMN id SET DEFAULT nextval('public.event_person_id_seq'::regclass);
-
-
---
 -- Name: fight id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -896,6 +890,13 @@ ALTER TABLE ONLY public.tournament_fight ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: tournament_person id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.tournament_person ALTER COLUMN id SET DEFAULT nextval('public.event_person_id_seq'::regclass);
+
+
+--
 -- Name: weight_class id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -916,14 +917,6 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 COPY public.club (id, no, name) FROM stdin;
 1	05432	Quahog Hunters
 2	12345	Springfield Wrestlers
-\.
-
-
---
--- Data for Name: event_person; Type: TABLE DATA; Schema: public; Owner: wrestling
---
-
-COPY public.event_person (id, event_id, person_id, person_role) FROM stdin;
 \.
 
 
@@ -1071,8 +1064,8 @@ COPY public.team (id, name, description, club_id, league_id) FROM stdin;
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_president_id, league_id) FROM stdin;
-1	2021-07-10	Springfield	\N	\N	\N	1	2	9	\N	\N	\N	1
+COPY public.team_match (id, date, location, visitors_count, comment, no, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id) FROM stdin;
+1	2021-07-10	Springfield	\N	\N	\N	1	2	9	\N	\N	\N	1	\N
 \.
 
 
@@ -1104,6 +1097,14 @@ COPY public.tournament (id, date, location, visitors_count, comment, no, name) F
 --
 
 COPY public.tournament_fight (id, tournament_id, fight_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tournament_person; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.tournament_person (id, tournament_id, person_id, person_role) FROM stdin;
 \.
 
 
@@ -1268,10 +1269,10 @@ ALTER TABLE ONLY public.club
 
 
 --
--- Name: event_person event_person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: tournament_person event_person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.event_person
+ALTER TABLE ONLY public.tournament_person
     ADD CONSTRAINT event_person_pk PRIMARY KEY (id);
 
 
@@ -1422,7 +1423,7 @@ CREATE UNIQUE INDEX club_no_uindex ON public.club USING btree (no);
 -- Name: event_person_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
 --
 
-CREATE UNIQUE INDEX event_person_id_uindex ON public.event_person USING btree (id);
+CREATE UNIQUE INDEX event_person_id_uindex ON public.tournament_person USING btree (id);
 
 
 --
@@ -1440,19 +1441,19 @@ CREATE UNIQUE INDEX team_match_fight_id_uindex ON public.team_match_fight USING 
 
 
 --
--- Name: event_person event_person_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: tournament_person event_person_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.event_person
+ALTER TABLE ONLY public.tournament_person
     ADD CONSTRAINT event_person_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
 
 
 --
--- Name: event_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: tournament_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.event_person
-    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (event_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.tournament_person
+    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (tournament_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
 
 
 --
@@ -1652,7 +1653,15 @@ ALTER TABLE ONLY public.team_match
 --
 
 ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_person_id_fk_4 FOREIGN KEY (mat_president_id) REFERENCES public.person(id) ON DELETE CASCADE;
+    ADD CONSTRAINT team_match_person_id_fk_4 FOREIGN KEY (mat_chairman_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_match team_match_person_id_fk_5; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match
+    ADD CONSTRAINT team_match_person_id_fk_5 FOREIGN KEY (judge_id) REFERENCES public.person(id) ON DELETE CASCADE;
 
 
 --
