@@ -7,7 +7,6 @@ import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard/ui/match/team_match_overview.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';
@@ -44,14 +43,9 @@ class MatchSequence extends StatelessWidget {
               ),
             ]),
           ),
-          body: StreamBuilder(
-            stream: dataProvider.streamMany<Fight>(filterObject: match),
-            builder: (BuildContext context, AsyncSnapshot<ManyDataObject<Fight>> snapshot) {
-              if (!snapshot.hasData) return const CircularProgressIndicator();
-              final fights = snapshot.data!.data.toList();
-              if (fights.isEmpty) {
-                dataProvider.generateFights(match!);
-              }
+          body: ManyConsumer<Fight>(
+            filterObject: match,
+            builder: (context, fights) {
               final matchInfos = [
                 match!.league.name,
                 '${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}',
@@ -82,7 +76,7 @@ class MatchSequence extends StatelessWidget {
                       itemCount: fights.length,
                       itemBuilder: (context, index) {
                         return FightListItem(match, fights, index,
-                            (match, index) => navigateToFightScreen(context, match, fights, index),
+                            (match, fights, index) => navigateToFightScreen(context, match, fights, index),
                             flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
                       },
                     ),
@@ -101,7 +95,7 @@ class FightListItem extends StatelessWidget {
   final TeamMatch match;
   final List<Fight> fights;
   final int index;
-  final Function(TeamMatch match, int index) listItemCallback;
+  final Function(TeamMatch match, List<Fight> fights, int index) listItemCallback;
   final int flexWidthWeight;
   final int flexWidthStyle;
 
@@ -135,7 +129,7 @@ class FightListItem extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            listItemCallback(match, index);
+            listItemCallback(match, fights, index);
           },
           child: IntrinsicHeight(
             child: ManyConsumer<FightAction>(
