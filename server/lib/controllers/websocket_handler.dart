@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:common/common.dart';
 import 'package:server/controllers/club_controller.dart';
+import 'package:server/controllers/fight_action_controller.dart';
 import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/lineup_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
@@ -34,14 +35,20 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterId: single.lineup.id)));
   } else if (single is Lineup) {
     // No filtered list needs to be handled.
-  } else if (single is FightAction) {
-    // No filtered list needs to be handled.
   } else if (single is Club) {
     // Exception: the full Club list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
   } else if (single is League) {
     // Exception: the full League list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update)));
+  } else if (single is FightAction) {
+    broadcast(jsonEncode(manyToJson(
+        await FightActionController()
+            .getMany(conditions: ['fight_id = @id'], substitutionValues: {'id': single.fight.id}),
+        FightAction,
+        CRUD.update,
+        filterType: Fight,
+        filterId: single.fight.id)));
   } else if (single is Team) {
     broadcast(jsonEncode(manyToJson(
         await TeamController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
@@ -91,6 +98,14 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == League) {
     // Exception: the full League list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update)));
+  } else if (T == FightAction) {
+    broadcast(jsonEncode(manyToJson(
+        await FightActionController()
+            .getManyRaw(conditions: ['fight_id = @id'], substitutionValues: {'id': single['fight_id']}),
+        FightAction,
+        CRUD.update,
+        filterType: Fight,
+        filterId: single['fight_id'])));
   } else if (T == Team) {
     broadcast(jsonEncode(manyToJson(
         await TeamController().getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
