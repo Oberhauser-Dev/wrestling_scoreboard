@@ -84,7 +84,7 @@ class TeamMatch extends WrestlingEvent {
     final int? matChairmanId = e['mat_chairman_id'];
     final int? judgeId = e['judge_id'];
     final int? timeKeeperId = e['time_keeper_id'];
-    final int? transcriptWriterId = e['time_keeper_id'];
+    final int? transcriptWriterId = e['transcript_writer_id'];
     // TODO ditch weightclasses, always handle at client
     // final weightClasses = home != null && home.team.league != null
     // ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
@@ -116,9 +116,9 @@ class TeamMatch extends WrestlingEvent {
         'guest_id': guest.id,
         'referee_id': referee?.id,
         'judge_id': judge?.id,
-        'mat_chairman': matChairman?.id,
-        'transcript_writer': transcriptWriter?.id,
-        'time_keeper': timeKeeper?.id,
+        'mat_chairman_id': matChairman?.id,
+        'transcript_writer_id': transcriptWriter?.id,
+        'time_keeper_id': timeKeeper?.id,
       });
   }
 
