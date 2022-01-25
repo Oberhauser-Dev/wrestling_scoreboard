@@ -1,25 +1,29 @@
 import '../data.dart';
 import '../enums/crud.dart';
 
-Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) => <String, dynamic>{
+Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
+  return
+    <String, dynamic>{
       'operation': operation.name,
       'isMany': false,
       'isRaw': single is! DataObject,
       'tableName': getTableNameFromType(type),
       'data': single is DataObject ? single.toJson() : single,
     };
+}
 
 Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation,
-        {Type filterType = Object, int? filterId}) =>
-    <String, dynamic>{
-      'operation': operation.name,
-      'isMany': true,
-      'isRaw': many.isNotEmpty ? (many.first is DataObject ? false : true) : true,
-      'filterType': getTableNameFromType(filterType),
-      if (filterId != null) 'filterId': filterId,
-      'tableName': getTableNameFromType(type),
-      'data': many.map((e) => e is DataObject ? e.toJson() : e),
-    };
+    {Type filterType = Object, int? filterId}) {
+  return <String, dynamic>{
+    'operation': operation.name,
+    'isMany': true,
+    'isRaw': many.isEmpty || (many.first is! DataObject),
+    'filterType': getTableNameFromType(filterType),
+    if (filterId != null) 'filterId': filterId,
+    'tableName': getTableNameFromType(type),
+    'data': many.map((e) => e is DataObject ? e.toJson() : e).toList(),
+  };
+}
 
 typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({required CRUD operation, required T single});
 typedef HandleSingleRawCallback = Future<int> Function<T extends DataObject>(
@@ -31,9 +35,9 @@ typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
 
 Future<int?> handleFromJson(Map<String, dynamic> json,
     {required HandleSingleCallback handleSingle,
-    required HandleManyCallback handleMany,
-    required HandleSingleRawCallback handleSingleRaw,
-    required HandleManyRawCallback handleManyRaw}) {
+      required HandleManyCallback handleMany,
+      required HandleSingleRawCallback handleSingleRaw,
+      required HandleManyRawCallback handleManyRaw}) {
   final type = getTypeFromTableName(json['tableName']);
   switch (type) {
     case Club:
@@ -109,11 +113,11 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
 
 Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
     {required HandleSingleCallback handleSingle,
-    required HandleManyCallback handleMany,
-    required HandleSingleRawCallback handleSingleRaw,
-    required HandleManyRawCallback handleManyRaw}) async {
-  final isMany = json['isMany'] == 'true';
-  final isRaw = json['isRaw'] == 'true';
+      required HandleManyCallback handleMany,
+      required HandleSingleRawCallback handleSingleRaw,
+      required HandleManyRawCallback handleManyRaw}) async {
+  final isMany = json['isMany'] as bool;
+  final isRaw = json['isRaw'] as bool;
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {
     final List<dynamic> data = json['data'];
