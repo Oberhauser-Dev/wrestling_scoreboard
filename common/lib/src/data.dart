@@ -9,6 +9,7 @@ import 'data/participation.dart';
 import 'data/team.dart';
 import 'data/team_match/team_match.dart';
 import 'data/tournament/tournament.dart';
+import 'data/weight_class.dart';
 
 export 'data/club.dart';
 export 'data/data_object.dart';
@@ -21,9 +22,9 @@ export 'data/participant_state.dart';
 export 'data/participation.dart';
 export 'data/person.dart';
 export 'data/team.dart';
+export 'data/team_match/league_weight_class.dart';
 export 'data/team_match/team_match.dart';
 export 'data/team_match/team_match_fight.dart';
-export 'data/team_match/league_weight_class.dart';
 export 'data/tournament/tournament.dart';
 export 'data/tournament/tournament_fight.dart';
 export 'data/weight_class.dart';
@@ -40,6 +41,7 @@ const List<Type> dataObjectTypes = [
   ParticipantState,
   Team,
   TeamMatch,
+  WeightClass,
 ];
 
 String getTableNameFromType(Type t) {
@@ -66,6 +68,8 @@ String getTableNameFromType(Type t) {
       return 'team_match';
     case Tournament:
       return 'tournament';
+    case WeightClass:
+      return 'weight_class';
     case Object:
       return 'object';
     default:
@@ -97,6 +101,8 @@ Type getTypeFromTableName(String tableName) {
       return TeamMatch;
     case 'tournament':
       return Tournament;
+    case 'weight_class':
+      return WeightClass;
     case 'object':
       return Object;
     default:

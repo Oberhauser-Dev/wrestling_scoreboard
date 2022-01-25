@@ -30,10 +30,14 @@ abstract class DataObject {
         return Membership.fromJson(json) as T;
       case Participation:
         return Participation.fromJson(json) as T;
+      case ParticipantState:
+        return ParticipantState.fromJson(json) as T;
       case Team:
         return Team.fromJson(json) as T;
       case TeamMatch:
         return TeamMatch.fromJson(json) as T;
+      case WeightClass:
+        return WeightClass.fromJson(json) as T;
       default:
         throw UnimplementedError('Json conversation for "$T" not found.');
     }
