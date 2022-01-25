@@ -13,7 +13,11 @@ class FightActionController extends EntityController<FightAction> {
   FightActionController._internal() : super(tableName: 'fight_action');
 
   @override
-  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
-    return {'point_count': PostgreSQLDataType.smallInteger};
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+    return {
+      'point_count': PostgreSQLDataType.smallInteger,
+      'fight_role': null,
+      'action_type': null,
+    };
   }
 }

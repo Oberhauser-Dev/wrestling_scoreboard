@@ -90,7 +90,7 @@ abstract class EntityController<T extends DataObject> {
     final postgresTypes = getPostgresDataTypes();
     final sql = '''
         INSERT INTO $tableName (${data.keys.join(',')}) 
-        VALUES (${data.entries.map((e) => PostgreSQLFormat.id(e.key, type: postgresTypes[e.key] ?? typeDartToCodeMap[e.value.runtimeType])).join(', ')}) RETURNING $primaryKeyName;
+        VALUES (${data.entries.map((e) => PostgreSQLFormat.id(e.key, type: postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType])).join(', ')}) RETURNING $primaryKeyName;
         ''';
     final res = await PostgresDb().connection.query(sql, substitutionValues: data);
     return res.last[0] as int;
@@ -104,7 +104,7 @@ abstract class EntityController<T extends DataObject> {
     final postgresTypes = getPostgresDataTypes();
     final sql = '''
         UPDATE $tableName 
-        SET ${data.entries.map((e) => '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresTypes[e.key] ?? typeDartToCodeMap[e.value.runtimeType])}').join(',')} 
+        SET ${data.entries.map((e) => '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType])}').join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
     final res = await PostgresDb().connection.query(sql, substitutionValues: data);
@@ -165,7 +165,7 @@ abstract class EntityController<T extends DataObject> {
     return res.map((row) => row[tableName]!).toList();
   }
 
-  Map<String, PostgreSQLDataType> getPostgresDataTypes() => {};
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() => {};
 
   bool isRaw(Request request) {
     return (request.url.queryParameters['isRaw'] ?? '').parseBool();
@@ -247,7 +247,7 @@ abstract class EntityController<T extends DataObject> {
       case Fight:
         return FightController() as EntityController<T>;
       case FightAction:
-        return FightActionController as EntityController<T>;
+        return FightActionController() as EntityController<T>;
       case League:
         return LeagueController() as EntityController<T>;
       case Lineup:
