@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:common/common.dart';
 import 'package:postgres/postgres.dart';
+import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/participant_state_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/team_match_fight_controller.dart';
@@ -40,6 +41,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final isReset = (request.url.queryParameters['reset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
     final oldFights = (await getFights(id)); // TODO Check if works...
+    final weightClasses = (await LeagueController().getWeightClasses(teamMatch.league.id.toString())); // TODO Check if works...
     if (isReset) {
       await Future.forEach(oldFights, (Fight e) async {
         if (e.id != null) await deleteSingle(e.id!);
@@ -50,11 +52,11 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final guestParticipations = await ParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.guest.id});
     
-    await teamMatch.generateFights([homeParticipations, guestParticipations]);
+    final fights = await teamMatch.generateFights([homeParticipations, guestParticipations], weightClasses);
     
     broadcast(
-        jsonEncode(manyToJson(teamMatch.ex_fights, Fight, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
-    await Future.forEach(teamMatch.ex_fights.asMap().entries, (MapEntry<int, Fight> entry) async {
+        jsonEncode(manyToJson(fights, Fight, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
+    await Future.forEach(fights.asMap().entries, (MapEntry<int, Fight> entry) async {
       final e = entry.value;
       final hasRed = e.r != null;
       final hasBlue = e.b != null;

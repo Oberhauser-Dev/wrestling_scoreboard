@@ -4,6 +4,7 @@ import 'data/fight_action.dart';
 import 'data/league.dart';
 import 'data/lineup.dart';
 import 'data/membership.dart';
+import 'data/participant_state.dart';
 import 'data/participation.dart';
 import 'data/team.dart';
 import 'data/team_match/team_match.dart';
@@ -36,6 +37,7 @@ const List<Type> dataObjectTypes = [
   Lineup,
   Membership,
   Participation,
+  ParticipantState,
   Team,
   TeamMatch,
 ];
@@ -56,6 +58,8 @@ String getTableNameFromType(Type t) {
       return 'membership';
     case Participation:
       return 'participation';
+    case ParticipantState:
+      return 'participant_state';
     case Team:
       return 'team';
     case TeamMatch:
@@ -85,6 +89,8 @@ Type getTypeFromTableName(String tableName) {
       return Membership;
     case 'participation':
       return Participation;
+    case 'participant_state':
+      return ParticipantState;
     case 'team':
       return Team;
     case 'team_match':

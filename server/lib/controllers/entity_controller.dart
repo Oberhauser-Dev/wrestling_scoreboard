@@ -168,11 +168,19 @@ abstract class EntityController<T extends DataObject> {
   Map<String, PostgreSQLDataType> getPostgresDataTypes() => {};
 
   bool isRaw(Request request) {
-    return (request.url.queryParameters['raw'] ?? '').parseBool();
+    return (request.url.queryParameters['isRaw'] ?? '').parseBool();
+  }
+
+  static Future<Map<String, dynamic>> query(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
+    return (await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues)).single;
   }
 
   static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, dynamic> json) async {
-    final id = await handleFromJson(json, handleSingle, handleMany);
+    final id = await handleFromJson(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw);
     return Response.ok(jsonEncode(id));
   }
 
