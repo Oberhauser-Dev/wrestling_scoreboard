@@ -125,13 +125,21 @@ class FightActionHandler extends StatelessWidget {
       Key? key})
       : super(key: key);
 
-  handleIntent(FightScreenActionIntent intent, {BuildContext? context}) {
-    handleIntentStatic(intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction, context: context);
+  Future<void> handleIntent(FightScreenActionIntent intent, {BuildContext? context}) async {
+    await handleIntentStatic(intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,
+        context: context);
   }
 
-  static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, TeamMatch match,
-      List<Fight> fights, List<FightAction> Function() getActions, void Function(List<FightAction> actions) setActions, int fightIndex, Function(FightScreenActions action) doAction,
-      {BuildContext? context}) {
+  static Future<void> handleIntentStatic(
+      FightScreenActionIntent intent,
+      ObservableStopwatch stopwatch,
+      TeamMatch match,
+      List<Fight> fights,
+      List<FightAction> Function() getActions,
+      void Function(List<FightAction> actions) setActions,
+      int fightIndex,
+      Function(FightScreenActions action) doAction,
+      {BuildContext? context}) async {
     final fight = fights[fightIndex];
     switch (intent.type) {
       case FightScreenActions.StartStop:
@@ -179,7 +187,7 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 1);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedTwo:
         final action = FightAction(
@@ -189,7 +197,7 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 2);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedThree:
         final action = FightAction(
@@ -199,7 +207,7 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 3);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedFour:
         final action = FightAction(
@@ -209,25 +217,25 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 4);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedPassivity:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedCaution:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedDismissal:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedActivityTime:
         doAction(FightScreenActions.RedActivityTime);
@@ -254,7 +262,7 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 1);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueTwo:
         final action = FightAction(
@@ -264,7 +272,7 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 2);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueThree:
         final action = FightAction(
@@ -274,7 +282,7 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 3);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueFour:
         final action = FightAction(
@@ -284,25 +292,25 @@ class FightActionHandler extends StatelessWidget {
             actionType: FightActionType.points,
             pointCount: 4);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BluePassivity:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueCaution:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueDismissal:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal);
         setActions(getActions()..add(action));
-        dataProvider.createOrUpdateSingle(action);
+        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueUndo:
         if (fight.b != null) {
