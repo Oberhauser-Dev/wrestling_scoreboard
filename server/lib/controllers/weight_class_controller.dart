@@ -13,7 +13,10 @@ class WeightClassController extends EntityController<WeightClass> {
   WeightClassController._internal() : super(tableName: 'weight_class');
 
   @override
-  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
-    return {'weight': PostgreSQLDataType.smallInteger};
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+    return {
+      'weight': PostgreSQLDataType.smallInteger,
+      'style': null,
+    };
   }
 }

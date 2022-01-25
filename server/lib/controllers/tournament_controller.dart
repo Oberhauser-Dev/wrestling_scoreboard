@@ -24,7 +24,7 @@ class TournamentController extends EntityController<Tournament> {
   }
 
   @override
-  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
     return {'comment': PostgreSQLDataType.text};
   }
 }

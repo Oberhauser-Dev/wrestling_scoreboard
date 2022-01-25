@@ -13,7 +13,7 @@ class ParticipantStateController extends EntityController<ParticipantState> {
   ParticipantStateController._internal() : super(tableName: 'participant_state');
 
   @override
-  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
     return {'classification_points': PostgreSQLDataType.smallInteger};
   }
 }

@@ -1,4 +1,5 @@
 import 'package:common/common.dart';
+import 'package:postgres/postgres.dart';
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
@@ -16,5 +17,13 @@ class FightController extends EntityController<Fight> {
   Future<Response> requestFightActions(Request request, String id) async {
     return EntityController.handleRequestManyOfController(FightActionController(),
         isRaw: isRaw(request), conditions: ['fight_id = @id'], substitutionValues: {'id': id});
+  }
+
+  @override
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+    return {
+      'winner': null,
+      'fight_result': null,
+    };
   }
 }

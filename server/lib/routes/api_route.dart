@@ -87,7 +87,7 @@ class ApiRoute {
     router.get('/weight_class/<id|[0-9]+>', weightClassController.requestSingle);
 
     final fightController = FightController();
-    router.post('/fights', fightController.postSingle);
+    router.post('/fight', fightController.postSingle);
     router.get('/fights', fightController.requestMany);
     router.get('/fight/<id|[0-9]+>', fightController.requestSingle);
     router.get('/fight/<id|[0-9]+>/fight_actions', fightController.requestFightActions);

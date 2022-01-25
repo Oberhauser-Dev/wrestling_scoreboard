@@ -88,7 +88,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
   }
 
   @override
-  Map<String, PostgreSQLDataType> getPostgresDataTypes() {
+  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
     return {'comment': PostgreSQLDataType.text};
   }
 }
