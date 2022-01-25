@@ -77,8 +77,9 @@ class Fight extends DataObject {
             ? getClassificationPointsWinnerTournament(result!)
             : getClassificationPointsWinnerTeamMatch(
                 result!,
-                ParticipantState.getTechnicalPoints(actions.where((element) => element.role == winner)) -
-                    ParticipantState.getTechnicalPoints(actions.where((element) => element.role != winner)));
+                ParticipantState.getTechnicalPoints(actions, winner!) -
+                    ParticipantState.getTechnicalPoints(
+                        actions, winner == FightRole.red ? FightRole.blue : FightRole.red));
       }
 
       if (_looser != null) {

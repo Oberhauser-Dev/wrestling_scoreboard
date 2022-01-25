@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../enums/fight_action_type.dart';
+import '../enums/fight_role.dart';
 import 'data_object.dart';
 import 'fight_action.dart';
 import 'participation.dart';
@@ -38,10 +39,10 @@ class ParticipantState extends DataObject {
     };
   }
 
-  static int getTechnicalPoints(Iterable<FightAction> actions) {
+  static int getTechnicalPoints(Iterable<FightAction> actions, FightRole role) {
     var res = 0;
     actions.forEach((el) {
-      if (el.actionType == FightActionType.points) {
+      if (el.actionType == FightActionType.points && el.role == role) {
         res += el.pointCount!;
       }
     });
