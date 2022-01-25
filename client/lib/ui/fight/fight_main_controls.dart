@@ -120,6 +120,8 @@ class FightMainControlsState extends State<FightMainControls> {
                   widget.fightState.fight.result = val;
                   widget.fightState.fight.updateClassificationPoints(actions);
                   dataProvider.createOrUpdateSingle(widget.fightState.fight);
+                  if(widget.fightState.fight.r != null) dataProvider.createOrUpdateSingle(widget.fightState.fight.r!);
+                  if(widget.fightState.fight.b != null) dataProvider.createOrUpdateSingle(widget.fightState.fight.b!);
                 });
               },
             ),

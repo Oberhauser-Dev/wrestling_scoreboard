@@ -25,7 +25,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
     webSocketConnectingStream = WebSocketManager.onWebSocketConnecting.stream.distinct();
     singleStream = widget.id == null
         ? null
-        : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null).distinct();
+        : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null);
   }
 
   @override
@@ -71,7 +71,7 @@ class ManyConsumerState<T extends DataObject> extends State<ManyConsumer<T>> {
     super.initState();
     webSocketConnectingStream = WebSocketManager.onWebSocketConnecting.stream.distinct();
     manyStream =
-        dataProvider.streamMany<T>(filterObject: widget.filterObject, init: widget.initialData == null).distinct();
+        dataProvider.streamMany<T>(filterObject: widget.filterObject, init: widget.initialData == null);
   }
 
   @override

@@ -98,6 +98,9 @@ class FightState extends State<FightScreen> {
     _fightStopwatch.onStop.stream.listen((event) {
       _r.activityStopwatch?.stop();
       _b.activityStopwatch?.stop();
+      
+      // Save time to database on each stop
+      dataProvider.createOrUpdateSingle(fight);
     });
     _fightStopwatch.onAdd.stream.listen((event) {
       _r.activityStopwatch?.addDuration(event);
