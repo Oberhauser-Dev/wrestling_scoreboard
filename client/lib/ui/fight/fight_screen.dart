@@ -20,7 +20,7 @@ import 'package:wrestling_scoreboard/util/units.dart';
 import '../components/fitted_text.dart';
 import '../match/common_elements.dart';
 import 'fight_actions.dart';
-import 'fight_controls.dart';
+import 'fight_main_controls.dart';
 
 void navigateToFightScreen(BuildContext context, TeamMatch match, List<Fight> fights, int index) async {
   final actions = await dataProvider.readMany<FightAction>(filterObject: fights[index]);
@@ -380,7 +380,7 @@ class FightState extends State<FightScreen> {
                     Expanded(
                         flex: 2,
                         child:
-                            SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.red, handleAction))),
+                            SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.red, fight.r == null ? null : handleAction))),
                     Expanded(
                         flex: 50,
                         child: SizedBox(
@@ -390,7 +390,7 @@ class FightState extends State<FightScreen> {
                     Expanded(
                         flex: 2,
                         child: SizedBox(
-                            height: cellHeightClock, child: FightActionControls(FightRole.blue, handleAction))),
+                            height: cellHeightClock, child: FightActionControls(FightRole.blue, fight.b == null ? null : handleAction))),
                     displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                   ],
                 ),

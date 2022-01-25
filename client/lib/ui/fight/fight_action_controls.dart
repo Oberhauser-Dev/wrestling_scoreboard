@@ -7,7 +7,7 @@ import 'fight_shortcuts.dart';
 
 class FightActionControls extends StatelessWidget {
   final FightRole role;
-  final Function(FightScreenActionIntent) callback;
+  final Function(FightScreenActionIntent)? callback;
 
   const FightActionControls(this.role, this.callback, {Key? key}) : super(key: key);
 
@@ -18,54 +18,56 @@ class FightActionControls extends StatelessWidget {
 
     bool isRed = role == FightRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
+    void Function()? prepareCallback(FightScreenActionIntent intentRed, FightScreenActionIntent intentBlue) {
+      return callback == null ? null : () => callback!(isRed ? intentRed : intentBlue);
+    }
+
     var actions = <Widget>[
       displayActionControl(
           '1',
-          () => callback(isRed ? const FightScreenActionIntent.RedOne() : const FightScreenActionIntent.BlueOne()),
+          prepareCallback(const FightScreenActionIntent.RedOne(), const FightScreenActionIntent.BlueOne()),
           color,
           padding),
       displayActionControl(
           '2',
-          () => callback(isRed ? const FightScreenActionIntent.RedTwo() : const FightScreenActionIntent.BlueTwo()),
+          prepareCallback(const FightScreenActionIntent.RedTwo(), const FightScreenActionIntent.BlueTwo()),
           color,
           padding),
       displayActionControl(
           '4',
-          () => callback(isRed ? const FightScreenActionIntent.RedFour() : const FightScreenActionIntent.BlueFour()),
+          prepareCallback(const FightScreenActionIntent.RedFour(), const FightScreenActionIntent.BlueFour()),
           color,
           padding),
       displayActionControl(
           'P',
-          () =>
-              callback(isRed ? const FightScreenActionIntent.RedPassivity() : const FightScreenActionIntent.BluePassivity()),
+          prepareCallback(const FightScreenActionIntent.RedPassivity(), const FightScreenActionIntent.BluePassivity()),
           color,
           padding),
       displayActionControl(
           'O',
-          () => callback(isRed ? const FightScreenActionIntent.RedCaution() : const FightScreenActionIntent.BlueCaution()),
+          prepareCallback(const FightScreenActionIntent.RedCaution(), const FightScreenActionIntent.BlueCaution()),
           color,
           padding),
       /*displayActionControl(
           'D',
-              () =>
-              callback(isRed ? const FightScreenActionIntent.RedDismissal() : FightScreenActionIntent.BlueDismissal()),
+          prepareCallback(const FightScreenActionIntent.RedDismissal(), FightScreenActionIntent.BlueDismissal()),
           color,
           padding),*/
       displayActionControl(
           AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
-          () => callback(
-              isRed ? const FightScreenActionIntent.RedActivityTime() : const FightScreenActionIntent.BlueActivityTime()),
+          prepareCallback(
+              const FightScreenActionIntent.RedActivityTime(), const FightScreenActionIntent.BlueActivityTime()),
           color,
           padding),
       displayActionControl(
           AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
-          () => callback(
-              isRed ? const FightScreenActionIntent.RedInjuryTime() : const FightScreenActionIntent.BlueInjuryTime()),
+          prepareCallback(
+              const FightScreenActionIntent.RedInjuryTime(), const FightScreenActionIntent.BlueInjuryTime()),
           color,
           padding),
       displayActionControl(
           '⎌',
-          () => callback(isRed ? const FightScreenActionIntent.RedUndo() : const FightScreenActionIntent.BlueUndo()),
+          prepareCallback(const FightScreenActionIntent.RedUndo(), const FightScreenActionIntent.BlueUndo()),
           color,
           padding),
     ];
@@ -77,7 +79,7 @@ class FightActionControls extends StatelessWidget {
     );
   }
 
-  displayActionControl(String text, void Function() callback, MaterialColor color, double padding) {
+  displayActionControl(String text, void Function()? callback, MaterialColor color, double padding) {
     return Expanded(
         child: OutlinedButton(
             style: OutlinedButton.styleFrom(
@@ -87,7 +89,7 @@ class FightActionControls extends StatelessWidget {
               padding: EdgeInsets.all(2 + (padding * 0.75)),
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
             ),
-            onPressed: () => callback(),
+            onPressed: callback,
             child: FittedText(text)));
   }
 }

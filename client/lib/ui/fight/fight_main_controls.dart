@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 import 'fight_screen.dart';
 import 'fight_shortcuts.dart';
@@ -118,6 +119,7 @@ class FightMainControlsState extends State<FightMainControls> {
                   widget.fightState.fight.winner = val != null && val != FightResult.DSQ2 ? role : null;
                   widget.fightState.fight.result = val;
                   widget.fightState.fight.updateClassificationPoints(actions);
+                  dataProvider.createOrUpdateSingle(widget.fightState.fight);
                 });
               },
             ),
