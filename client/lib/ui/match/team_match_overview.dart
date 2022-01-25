@@ -20,7 +20,7 @@ class TeamMatchOverview extends StatelessWidget {
         id: match.id!,
         initialData: match,
         builder: (context, match) {
-          final lineups = match!.ex_lineups;
+          final lineups = [match!.home, match.guest];
           final items = [
             InfoWidget(
                 obj: match,
@@ -61,7 +61,7 @@ class TeamMatchOverview extends StatelessWidget {
               header: HeadingItem(title: localizations.persons),
               items: [
                 ContentItem(title: localizations.referee, icon: Icons.sports, onTap: null),
-                ContentItem(title: localizations.matPresident, icon: Icons.manage_accounts, onTap: null),
+                ContentItem(title: localizations.matChairman, icon: Icons.manage_accounts, onTap: null),
                 ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: null),
                 ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: null),
                 ContentItem(title: localizations.steward, icon: Icons.security, onTap: null),
@@ -94,12 +94,13 @@ class TeamMatchOverview extends StatelessWidget {
 
   handleSelectedLineup(Lineup lineup, BuildContext context) async {
     final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
+    final weightClasses = await dataProvider.readMany<WeightClass>(filterObject: lineup.team.league);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
           return LineupEdit(
-            weightClasses: match.ex_weightClasses,
+            weightClasses: weightClasses,
             participations: participations,
             lineup: lineup,
             onSubmit: () {

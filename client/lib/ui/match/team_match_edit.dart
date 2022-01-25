@@ -100,7 +100,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider.readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider
+                .readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -116,7 +117,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider.readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider
+                .readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -155,15 +157,16 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
         await dataProvider.createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
       }
 
-      await dataProvider.createOrUpdateSingle(TeamMatch(
+      await dataProvider.createOrUpdateSingle(
+        TeamMatch(
           id: widget.teamMatch?.id,
           location: _location!,
           no: _no,
           home: home,
           guest: guest,
           date: _date,
-          ex_referees: [],
-          ex_weightClasses: []));
+        ),
+      );
       Navigator.of(context).pop();
     }
   }

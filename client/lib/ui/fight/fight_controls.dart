@@ -1,6 +1,7 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight_result.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 
@@ -38,7 +39,7 @@ class FightMainControlsState extends State<FightMainControls> {
             child: Row(
               children: [
                 Expanded(
-                    child: widget.fightState.match.ex_fights.first == widget.fightState.fight
+                    child: widget.fightState.fights.first == widget.fightState.fight
                         ? IconButton(
                             color: Colors.white24,
                             icon: const Icon(Icons.close),
@@ -59,9 +60,10 @@ class FightMainControlsState extends State<FightMainControls> {
                         icon: Icon(_pausePlayButton))),
                 Expanded(
                     child: IconButton(
-                        onPressed: () => widget.callback(const FightScreenActionIntent.Horn()), icon: const Icon(Icons.campaign))),
+                        onPressed: () => widget.callback(const FightScreenActionIntent.Horn()),
+                        icon: const Icon(Icons.campaign))),
                 Expanded(
-                    child: widget.fightState.match.ex_fights.last == widget.fightState.fight
+                    child: widget.fightState.fights.last == widget.fightState.fight
                         ? IconButton(
                             color: Colors.white24,
                             icon: const Icon(Icons.close),
@@ -103,22 +105,23 @@ class FightMainControlsState extends State<FightMainControls> {
     return Container(
       color: role == widget.fightState.fight.winner ? getColorFromFightRole(role) : null,
       child: ButtonTheme(
-        alignedDropdown: true,
-        child: DropdownButton<FightResult?>(
-          isExpanded: true,
-          value: role == widget.fightState.fight.winner || widget.fightState.fight.result == FightResult.DSQ2
-              ? widget.fightState.fight.result
-              : null,
-          items: items,
-          onChanged: (val) {
-            setState(() {
-              widget.fightState.fight.winner = val != null && val != FightResult.DSQ2 ? role : null;
-              widget.fightState.fight.result = val;
-              widget.fightState.fight.updateClassificationPoints();
-            });
-          },
-        ),
-      ),
+          alignedDropdown: true,
+          child: Consumer<List<FightAction>>(
+            builder: (context, actions, child) => DropdownButton<FightResult?>(
+              isExpanded: true,
+              value: role == widget.fightState.fight.winner || widget.fightState.fight.result == FightResult.DSQ2
+                  ? widget.fightState.fight.result
+                  : null,
+              items: items,
+              onChanged: (val) {
+                setState(() {
+                  widget.fightState.fight.winner = val != null && val != FightResult.DSQ2 ? role : null;
+                  widget.fightState.fight.result = val;
+                  widget.fightState.fight.updateClassificationPoints(actions);
+                });
+              },
+            ),
+          )),
     );
   }
 }

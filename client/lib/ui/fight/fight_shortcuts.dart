@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -105,6 +107,9 @@ class FightActionHandler extends StatelessWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
   final TeamMatch match;
+  final List<Fight> fights;
+  final List<FightAction> Function() getActions;
+  final void Function(List<FightAction> actions) setActions;
   final int fightIndex;
   final Function(FightScreenActions action) doAction;
 
@@ -112,19 +117,22 @@ class FightActionHandler extends StatelessWidget {
       {required this.child,
       required this.stopwatch,
       required this.match,
+      required this.fights,
+      required this.getActions,
       required this.fightIndex,
       required this.doAction,
+      required this.setActions,
       Key? key})
       : super(key: key);
 
   handleIntent(FightScreenActionIntent intent, {BuildContext? context}) {
-    handleIntentStatic(intent, stopwatch, match, fightIndex, doAction, context: context);
+    handleIntentStatic(intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction, context: context);
   }
 
   static handleIntentStatic(FightScreenActionIntent intent, ObservableStopwatch stopwatch, TeamMatch match,
-      int fightIndex, Function(FightScreenActions action) doAction,
+      List<Fight> fights, List<FightAction> Function() getActions, void Function(List<FightAction> actions) setActions, int fightIndex, Function(FightScreenActions action) doAction,
       {BuildContext? context}) {
-    final fight = match.ex_fights[fightIndex];
+    final fight = fights[fightIndex];
     switch (intent.type) {
       case FightScreenActions.StartStop:
         stopwatch.startStop();
@@ -145,9 +153,9 @@ class FightActionHandler extends StatelessWidget {
       case FightScreenActions.NextFight:
         if (context != null) {
           int index = fightIndex + 1;
-          if (index < match.ex_fights.length) {
+          if (index < fights.length) {
             Navigator.pop(context);
-            navigateToFightScreen(context, match, index);
+            navigateToFightScreen(context, match, fights, index);
           }
         }
         break;
@@ -156,7 +164,7 @@ class FightActionHandler extends StatelessWidget {
           int index = fightIndex - 1;
           if (index >= 0) {
             Navigator.pop(context);
-            navigateToFightScreen(context, match, index);
+            navigateToFightScreen(context, match, fights, index);
           }
         }
         break;
@@ -170,7 +178,7 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 1);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedTwo:
@@ -180,7 +188,7 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 2);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedThree:
@@ -190,7 +198,7 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 3);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedFour:
@@ -200,25 +208,25 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 4);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedPassivity:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedCaution:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedDismissal:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.RedActivityTime:
@@ -228,10 +236,14 @@ class FightActionHandler extends StatelessWidget {
         doAction(FightScreenActions.RedInjuryTime);
         break;
       case FightScreenActions.RedUndo:
-        if (fight.r != null && fight.r!.ex_actions.isNotEmpty) {
-          final action = fight.r!.ex_actions.last;
-          fight.removeAction(action);
-          dataProvider.deleteSingle(action);
+        if (fight.r != null) {
+          final actions = getActions();
+          final rActions = actions.where((el) => el.role == FightRole.red);
+          if (rActions.isNotEmpty) {
+            final action = rActions.last;
+            setActions(actions..remove(action));
+            dataProvider.deleteSingle(action);
+          }
         }
         break;
       case FightScreenActions.BlueOne:
@@ -241,7 +253,7 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 1);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueTwo:
@@ -251,7 +263,7 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 2);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueThree:
@@ -261,7 +273,7 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 3);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueFour:
@@ -271,32 +283,36 @@ class FightActionHandler extends StatelessWidget {
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 4);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BluePassivity:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueCaution:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueDismissal:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal);
-        fight.addAction(action);
+        setActions(getActions()..add(action));
         dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.BlueUndo:
-        if (fight.b != null && fight.b!.ex_actions.isNotEmpty) {
-          final action = fight.b!.ex_actions.last;
-          fight.removeAction(action);
-          dataProvider.deleteSingle(action);
+        if (fight.b != null) {
+          final actions = getActions();
+          final bActions = actions.where((el) => el.role == FightRole.blue);
+          if (bActions.isNotEmpty) {
+            final action = bActions.last;
+            setActions(actions..remove(action));
+            dataProvider.deleteSingle(action);
+          }
         }
         break;
       case FightScreenActions.BlueActivityTime:
@@ -306,9 +322,10 @@ class FightActionHandler extends StatelessWidget {
         doAction(FightScreenActions.BlueInjuryTime);
         break;
       case FightScreenActions.Undo:
-        if (fight.ex_actions.isNotEmpty) {
-          final action = fight.ex_actions.last;
-          fight.removeAction(action);
+        final actions = getActions();
+        if (actions.isNotEmpty) {
+          final action = actions.last;
+          setActions(actions..remove(action));
           dataProvider.deleteSingle(action);
         }
         break;

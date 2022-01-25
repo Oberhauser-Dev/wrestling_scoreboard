@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -5,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard/ui/fight/fight_action_conrols.dart';
+import 'package:wrestling_scoreboard/ui/fight/fight_action_controls.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
@@ -20,25 +22,31 @@ import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_controls.dart';
 
-void navigateToFightScreen(BuildContext context, TeamMatch match, int index) async {
-  final fight = match.ex_fights[index];
-  fight.ex_actions = await dataProvider.readMany<FightAction>(filterObject: fight);
-  Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, index)));
+void navigateToFightScreen(BuildContext context, TeamMatch match, List<Fight> fights, int index) async {
+  final actions = await dataProvider.readMany<FightAction>(filterObject: fights[index]);
+  Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fights, actions, index)));
 }
 
+/// Initialize with default values, but do not synchronize with live data, as during a fight the connection could be interrupted. So the client always sends data, but never should receive any.
+/// If closing and reopening screen, data should be updated though.
 class FightScreen extends StatefulWidget {
   final TeamMatch match;
+  final List<Fight> fights;
+  final List<FightAction> actions;
   final int fightIndex;
 
-  const FightScreen(this.match, this.fightIndex, {Key? key}) : super(key: key);
+  const FightScreen(this.match, this.fights, this.actions, this.fightIndex, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => FightState();
 }
 
 class FightState extends State<FightScreen> {
+  final StreamController<List<FightAction>> _onChangeActions = StreamController.broadcast();
   late TeamMatch match;
   late Fight fight;
+  late List<Fight> fights;
+  late List<FightAction> actions;
   late int fightIndex;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _fightStopwatch;
@@ -46,15 +54,23 @@ class FightState extends State<FightScreen> {
   late ParticipantStateModel _r;
   late ParticipantStateModel _b;
   int round = 1;
-  late Function(FightScreenActionIntent) callback;
+  late Function(FightScreenActionIntent) handleAction;
+
+  List<FightAction> getActions() => actions;
+
+  setActions(List<FightAction> actions) {
+    _onChangeActions.add(List.of(actions));
+  }
 
   @override
   initState() {
     super.initState();
     HornSound();
     match = widget.match;
+    fights = widget.fights;
+    actions = widget.actions;
     fightIndex = widget.fightIndex;
-    fight = widget.match.ex_fights[fightIndex];
+    fight = widget.fights[fightIndex];
     _r = ParticipantStateModel(fight.r);
     _b = ParticipantStateModel(fight.b);
     _r.injuryStopwatch.limit = match.injuryDuration;
@@ -62,14 +78,14 @@ class FightState extends State<FightScreen> {
       setState(() {
         _r.isInjury = false;
       });
-      callback(const FightScreenActionIntent.Horn());
+      handleAction(const FightScreenActionIntent.Horn());
     });
     _b.injuryStopwatch.limit = match.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
       });
-      callback(const FightScreenActionIntent.Horn());
+      handleAction(const FightScreenActionIntent.Horn());
     });
 
     stopwatch = _fightStopwatch = ObservableStopwatch(
@@ -102,7 +118,7 @@ class FightState extends State<FightScreen> {
               _b.activityStopwatch!.dispose();
               _b.activityStopwatch = null;
             }
-            callback(const FightScreenActionIntent.Horn());
+            handleAction(const FightScreenActionIntent.Horn());
             if (round < match.maxRounds) {
               setState(() {
                 stopwatch = _breakStopwatch;
@@ -127,11 +143,17 @@ class FightState extends State<FightScreen> {
         setState(() {
           stopwatch = _fightStopwatch;
         });
-        callback(const FightScreenActionIntent.Horn());
+        handleAction(const FightScreenActionIntent.Horn());
       }
     });
-    callback = (FightScreenActionIntent intent) {
-      FightActionHandler.handleIntentStatic(intent, stopwatch, match, fightIndex, doAction, context: context);
+    _onChangeActions.stream.listen((actions) {
+      this.actions = actions;
+    });
+    setActions(actions);
+    handleAction = (FightScreenActionIntent intent) {
+      FightActionHandler.handleIntentStatic(
+          intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,
+          context: context);
     };
   }
 
@@ -175,7 +197,14 @@ class FightState extends State<FightScreen> {
   }
 
   displayTechnicalPoints(ParticipantStateModel pStatus, FightRole role, double cellHeight) {
-    return Expanded(flex: 33, child: TechnicalPoints(pStatusModel: pStatus, height: cellHeight, role: role));
+    return Expanded(
+      flex: 33,
+      child: TechnicalPoints(
+        pStatusModel: pStatus,
+        height: cellHeight,
+        role: role,
+      ),
+    );
   }
 
   displayParticipant(ParticipantState? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
@@ -211,12 +240,12 @@ class FightState extends State<FightScreen> {
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
-          callback(const FightScreenActionIntent.Horn());
+          handleAction(const FightScreenActionIntent.Horn());
           psm.activityStopwatch?.dispose();
           setState(() {
             psm.activityStopwatch = null;
           });
-          callback(const FightScreenActionIntent.Horn());
+          handleAction(const FightScreenActionIntent.Horn());
         });
         break;
       case FightScreenActions.RedInjuryTime:
@@ -243,7 +272,7 @@ class FightState extends State<FightScreen> {
           setState(() {
             psm.activityStopwatch = null;
           });
-          callback(const FightScreenActionIntent.Horn());
+          handleAction(const FightScreenActionIntent.Horn());
         });
         break;
       case FightScreenActions.BlueInjuryTime:
@@ -283,6 +312,9 @@ class FightState extends State<FightScreen> {
     return FightActionHandler(
       stopwatch: stopwatch,
       match: match,
+      getActions: getActions,
+      setActions: setActions,
+      fights: fights,
       fightIndex: fightIndex,
       doAction: doAction,
       child: Scaffold(
@@ -296,19 +328,13 @@ class FightState extends State<FightScreen> {
             ),
           ]),
         ),
-        body: StreamProvider<Fight>(
-          create: (context) => dataProvider.streamSingle<Fight>(fight.id!, init: false),
-          initialData: fight,
+        body: StreamProvider<List<FightAction>>(
+          initialData: actions,
+          create: (context) => _onChangeActions.stream,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SingleConsumer<TeamMatch>(
-                  id: match.id!,
-                  initialData: match,
-                  builder: (context, match) {
-                    return row(padding: bottomPadding, children: CommonElements.getTeamHeader(match!, context));
-                  },
-                ),
+                row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, fights, context)),
                 row(padding: bottomPadding, children: [
                   Expanded(
                     flex: 50,
@@ -353,7 +379,8 @@ class FightState extends State<FightScreen> {
                     displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
                     Expanded(
                         flex: 2,
-                        child: SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.red, callback))),
+                        child:
+                            SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.red, handleAction))),
                     Expanded(
                         flex: 50,
                         child: SizedBox(
@@ -362,17 +389,18 @@ class FightState extends State<FightScreen> {
                         )),
                     Expanded(
                         flex: 2,
-                        child: SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.blue, callback))),
+                        child: SizedBox(
+                            height: cellHeightClock, child: FightActionControls(FightRole.blue, handleAction))),
                     displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                   ],
                 ),
                 Container(
                   padding: bottomPadding,
-                  child: Consumer<Fight>(
-                    builder: (context, data, child) => ActionsWidget(fight.ex_actions),
+                  child: Consumer<List<FightAction>>(
+                    builder: (context, actions, child) => ActionsWidget(actions),
                   ),
                 ),
-                Container(padding: bottomPadding, child: FightMainControls(callback, this)),
+                Container(padding: bottomPadding, child: FightMainControls(handleAction, this)),
               ],
             ),
           ),

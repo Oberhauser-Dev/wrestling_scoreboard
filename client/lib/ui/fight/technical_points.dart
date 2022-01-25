@@ -27,9 +27,9 @@ class TechnicalPoints extends StatelessWidget {
           Expanded(
             flex: 70,
             child: Center(
-              child: Consumer<Fight>(
+              child: Consumer<List<FightAction>>(
                   builder: (context, data, child) =>
-                      FittedText((pStatusModel.pStatus?.technicalPoints ?? 0).toString())),
+                      FittedText((ParticipantState.getTechnicalPoints(data, role)).toString())),
             ),
           ),
           if (pStatusModel.activityStopwatch != null)

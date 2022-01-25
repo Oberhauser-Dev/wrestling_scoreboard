@@ -7,7 +7,6 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'mocks.dart';
 
 class MockDataProvider extends DataProvider {
-
   final latency = const Duration(milliseconds: 100);
 
   @override
@@ -102,73 +101,65 @@ class MockDataProvider extends DataProvider {
     }
 
     List<List<Participation>> teamParticipations;
+    List<WeightClass> weightClasses;
     if (wrestlingEvent is TeamMatch) {
-      final homeParticipations = await dataProvider.readMany<Participation>(
-          filterObject: wrestlingEvent.home);
-      final guestParticipations = await dataProvider.readMany<Participation>(
-          filterObject: wrestlingEvent.guest);
+      final homeParticipations = await dataProvider.readMany<Participation>(filterObject: wrestlingEvent.home);
+      final guestParticipations = await dataProvider.readMany<Participation>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
+      weightClasses = await dataProvider.readMany<WeightClass>(filterObject: wrestlingEvent.home.team.league);
     } else if (wrestlingEvent is Tournament) {
       // TODO get all participations
       teamParticipations = [];
+      weightClasses = [];
       // throw UnimplementedError('generate fights for tournaments not yet implemented');
     } else {
       teamParticipations = [];
+      weightClasses = [];
       throw UnimplementedError('generate fights for tournaments not yet implemented');
     }
 
     // Generate new fights
-    await wrestlingEvent.generateFights(teamParticipations);
+    final newFights = await wrestlingEvent.generateFights(teamParticipations, weightClasses);
     // TODO add notifier to all fights
 
-    final newFights = wrestlingEvent.ex_fights;
     // Add if not exists
     final random = Random();
     for (final element in newFights) {
-      if (fightsAll
-          .where((Fight f) => f.equalDuringFight(element))
-          .isEmpty) {
-        do { // Generate new id as long it is not taken yet
+      if (fightsAll.where((Fight f) => f.equalDuringFight(element)).isEmpty) {
+        do {
+          // Generate new id as long it is not taken yet
           element.id = random.nextInt(0x7fffffff);
-        } while (fightsAll
-            .where((f) => f.id == element.id)
-            .isNotEmpty);
+        } while (fightsAll.where((f) => f.id == element.id).isNotEmpty);
         fightsAll.add(element);
       }
     }
     if (wrestlingEvent is TeamMatch) {
       final teamMatchFightsAll = getTeamMatchFights();
       newFights.asMap().forEach((key, element) {
-        if (teamMatchFightsAll
-            .where((tmf) => tmf.fight.equalDuringFight(element))
-            .isEmpty) {
+        if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
           int generatedId;
-          do { // Generate new id as long it is not taken yet
+          do {
+            // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (teamMatchFightsAll
-              .where((t) => t.id == element.id)
-              .isNotEmpty);
+          } while (teamMatchFightsAll.where((t) => t.id == element.id).isNotEmpty);
           teamMatchFightsAll.add(TeamMatchFight(id: generatedId, teamMatch: wrestlingEvent, fight: element, pos: key));
         }
       });
     } else if (wrestlingEvent is Tournament) {
       final tournamentFightsAll = getTournamentFights();
       for (final element in newFights) {
-        if (tournamentFightsAll
-            .where((tof) => tof.fight.equalDuringFight(element))
-            .isEmpty) {
+        if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
           int generatedId;
-          do { // Generate new id as long it is not taken yet
+          do {
+            // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (tournamentFightsAll
-              .where((t) => t.id == element.id)
-              .isNotEmpty);
+          } while (tournamentFightsAll.where((t) => t.id == element.id).isNotEmpty);
           tournamentFightsAll.add(TournamentFight(id: generatedId, tournament: wrestlingEvent, fight: element));
         }
       }
     }
-    wrestlingEvent.ex_fights = newFights;
+    getFights().addAll(newFights);
     updateMany(Fight, filterObject: wrestlingEvent);
   }
 

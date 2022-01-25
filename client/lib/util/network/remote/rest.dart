@@ -12,7 +12,7 @@ import 'web_socket.dart';
 
 class RestDataProvider extends DataProvider {
   static const rawQueryParameter = {
-    'raw': 'true',
+    'isRaw': 'true',
   };
 
   var _apiUrl = adaptLocalhost(
@@ -77,70 +77,41 @@ class RestDataProvider extends DataProvider {
   }
 
   _initUpdateStream() {
-    Future<int> handleSingle<U extends DataObject>({required CRUD operation, required U single}) async {
-      callback<T extends DataObject>(T single) {
-        if (operation == CRUD.update) {
-          getSingleStreamController<T>()?.sink.add(single);
-        }
-      }
-
-      if (U == Club) {
-        callback<Club>(single as Club);
-      } else if (U == Fight) {
-        callback<Fight>(single as Fight);
-      } else if (U == FightAction) {
-        callback<FightAction>(single as FightAction);
-      } else if (U == League) {
-        callback<League>(single as League);
-      } else if (U == Lineup) {
-        callback<Lineup>(single as Lineup);
-      } else if (U == Membership) {
-        callback<Membership>(single as Membership);
-      } else if (U == Participation) {
-        callback<Participation>(single as Participation);
-      } else if (U == Team) {
-        callback<Team>(single as Team);
-      } else if (U == TeamMatch) {
-        callback<TeamMatch>(single as TeamMatch);
+    Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
+      if (operation == CRUD.update) {
+        getSingleStreamController<T>()?.sink.add(single);
       }
       return single.id!;
     }
 
-    Future<void> handleMany<U extends DataObject>({required CRUD operation, required ManyDataObject<U> many}) async {
-      callback<T extends DataObject>(ManyDataObject<T> many) {
-        final tmp = ManyDataObject<T>(
-            data: many.data,
-            filterId: many.filterId,
-            filterType: many.filterType);
-        final filterType = many.filterType;
-        if (tmp.data.isEmpty) return;
-        getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
+    Future<int> handleSingleRaw<T extends DataObject>({required CRUD operation, required Map<String, dynamic> single}) async {
+      if (operation == CRUD.update) {
+        getSingleRawStreamController<T>()?.sink.add(single);
       }
+      return single['id'];
+    }
 
-      if (U == Club) {
-        callback<Club>(many as ManyDataObject<Club>);
-      } else if (U == Fight) {
-        callback<Fight>(many as ManyDataObject<Fight>);
-      } else if (U == FightAction) {
-        callback<FightAction>(many as ManyDataObject<FightAction>);
-      } else if (U == League) {
-        callback<League>(many as ManyDataObject<League>);
-      } else if (U == Lineup) {
-        callback<Lineup>(many as ManyDataObject<Lineup>);
-      } else if (U == Membership) {
-        callback<Membership>(many as ManyDataObject<Membership>);
-      } else if (U == Participation) {
-        callback<Participation>(many as ManyDataObject<Participation>);
-      } else if (U == Team) {
-        callback<Team>(many as ManyDataObject<Team>);
-      } else if (U == TeamMatch) {
-        callback<TeamMatch>(many as ManyDataObject<TeamMatch>);
-      }
+    Future<void> handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async {
+      final tmp = ManyDataObject<T>(data: many.data, filterId: many.filterId, filterType: many.filterType);
+      final filterType = many.filterType;
+      if (tmp.data.isEmpty) return;
+      getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
+    }
+
+    Future<void> handleManyRaw<T extends DataObject>({required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
+      final tmp = ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
+      final filterType = many.filterType;
+      if (tmp.data.isEmpty) return;
+      getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 
     _webSocketManager = WebSocketManager((message) {
       final json = jsonDecode(message);
-      handleFromJson(json, handleSingle, handleMany);
+      handleFromJson(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     });
   }
 

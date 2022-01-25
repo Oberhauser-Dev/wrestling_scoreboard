@@ -96,12 +96,23 @@ TeamMatch initMenRPWMatch() {
   _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
 
   Person referee = Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
+  Person judge = Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
+  Person matChairman = Person(id: 11, prename: 'Mr', surname: 'Chairman', gender: Gender.male);
+  Person timeKeeper = Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
+  Person transcriptWriter = Person(id: 12, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
   return TeamMatch(
       id: 1,
+      no: '123456',
       home: home,
       guest: guest,
-      ex_weightClasses: weightClasses,
-      ex_referees: [referee],
+      referee: referee,
+      judge: judge,
+      matChairman: matChairman,
+      timeKeeper: timeKeeper,
+      transcriptWriter: transcriptWriter,
+      date: DateTime.now(),
+      comment: 'Some commment',
+      visitorsCount: 123,
       location: 'Springfield');
 }
 
@@ -118,8 +129,7 @@ TeamMatch initJnRPWMatch() {
       id: 2,
       home: home,
       guest: guest,
-      ex_weightClasses: weightClasses,
-      ex_referees: [referee],
+      referee: referee,
       location: 'Springfield');
 }
 
