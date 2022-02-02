@@ -155,7 +155,7 @@ class LineupEditState extends State<LineupEdit> {
                           decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(vertical: 20),
                               labelText: AppLocalizations.of(context)!.weight),
-                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))],
                           onSaved: (String? value) {
                             final participation = _participations[weightClass];
                             if (participation != null) {
