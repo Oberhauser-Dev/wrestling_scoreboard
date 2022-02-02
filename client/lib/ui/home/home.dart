@@ -2,10 +2,11 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/ui/club/club_edit.dart';
+import 'package:wrestling_scoreboard/ui/club/club_overview.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
-import 'package:wrestling_scoreboard/ui/home/team_selection.dart';
 import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
+import 'package:wrestling_scoreboard/ui/league/league_overview.dart';
 import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
 
 class Home extends StatefulWidget {
@@ -124,7 +125,7 @@ class HomeState extends State<Home> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TeamSelection<Club>(
+        builder: (context) => ClubOverview(
           filterObject: club,
         ),
       ),
@@ -135,7 +136,7 @@ class HomeState extends State<Home> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TeamSelection<League>(
+        builder: (context) => LeagueOverview(
           filterObject: league,
         ),
       ),
