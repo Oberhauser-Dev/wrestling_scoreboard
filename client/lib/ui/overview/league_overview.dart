@@ -60,8 +60,15 @@ class LeagueOverview extends StatelessWidget {
                       ),
                     ),
                   ),
-                  items: team.map((e) =>
-                      ContentItem(title: e.name, icon: Icons.group, onTap: () => handleSelectedTeam(e, context))),
+                  items: team.map(
+                    (e) => SingleConsumer<Team>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                              title: data!.name, icon: Icons.group, onTap: () => handleSelectedTeam(data, context));
+                        }),
+                  ),
                 );
               },
             ),
@@ -81,10 +88,16 @@ class LeagueOverview extends StatelessWidget {
                       ),
                     ),
                   ),
-                  items: leagueWeightClasses.map((e) => ContentItem(
-                      title: e.weightClass.name,
-                      icon: Icons.group,
-                      onTap: () => handleSelectedWeightClass(e, context))),
+                  items: leagueWeightClasses.map((e) {
+                    return SingleConsumer<LeagueWeightClass>(
+                      id: e.id,
+                      initialData: e,
+                      builder: (context, data) => ContentItem(
+                          title: data!.weightClass.name,
+                          icon: Icons.group,
+                          onTap: () => handleSelectedWeightClass(data, context)),
+                    );
+                  }),
                 );
               },
             ),
