@@ -13,12 +13,12 @@ Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
 }
 
 Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation,
-    {Type filterType = Object, int? filterId}) {
+    {Type? filterType, int? filterId}) {
   return <String, dynamic>{
     'operation': operation.name,
     'isMany': true,
     'isRaw': many.isEmpty || (many.first is! DataObject),
-    'filterType': getTableNameFromType(filterType),
+    'filterType': filterType == null ? null : getTableNameFromType(filterType),
     if (filterId != null) 'filterId': filterId,
     'tableName': getTableNameFromType(type),
     'data': many.map((e) => e is DataObject ? e.toJson() : e).toList(),
@@ -140,14 +140,14 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> j
           operation: operation,
           many: ManyDataObject<Map<String, dynamic>>(
               data: data.map((e) => e as Map<String, dynamic>).toList(),
-              filterType: filterType ?? Object,
+              filterType: filterType,
               filterId: filterId));
     } else {
       await handleMany<T>(
           operation: operation,
           many: ManyDataObject<T>(
               data: data.map((e) => DataObject.fromJson<T>(e as Map<String, dynamic>)).toList(),
-              filterType: filterType ?? Object,
+              filterType: filterType,
               filterId: filterId));
     }
   } else {
@@ -161,8 +161,8 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> j
 
 class ManyDataObject<T> {
   List<T> data;
-  final Type filterType;
+  final Type? filterType;
   final int? filterId;
 
-  ManyDataObject({required this.data, this.filterType = Object, this.filterId});
+  ManyDataObject({required this.data, this.filterType, this.filterId});
 }

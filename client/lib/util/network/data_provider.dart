@@ -36,10 +36,8 @@ abstract class DataProvider {
   }
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> streamMany<T extends DataObject>(
-      {DataObject? filterObject, bool init = true}) {
-    final filterType = filterObject == null ? Object : filterObject.runtimeType;
-    final controller = getOrCreateManyStreamController<T>(filterType: filterType);
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject>({DataObject? filterObject, bool init = true}) {
+    final controller = getOrCreateManyStreamController<T>(filterType: filterObject.runtimeType);
     var stream = controller.stream;
 
     if (filterObject != null) {
@@ -50,7 +48,8 @@ abstract class DataProvider {
       (() async {
         try {
           final many = await readMany<T>(filterObject: filterObject);
-          controller.sink.add(ManyDataObject(data: many, filterType: filterType, filterId: filterObject?.id));
+          controller.sink
+              .add(ManyDataObject(data: many, filterType: filterObject.runtimeType, filterId: filterObject?.id));
         } catch (e) {
           controller.sink.addError(e);
         }
@@ -76,10 +75,10 @@ abstract class DataProvider {
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]);
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
-  final Map<Type, Map<Type, StreamController<ManyDataObject>>> _manyStreamControllers = {};
+  final Map<Type, Map<Type, StreamController<ManyDataObject<dynamic>>>> _manyStreamControllers = {};
   final Map<Type, StreamController<Map<String, dynamic>>> _singleRawStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>> _manyRawStreamControllers = {};
-  
+
   StreamController<T>? getSingleStreamController<T extends DataObject>() {
     return _singleStreamControllers[T] as StreamController<T>?;
   }
@@ -106,22 +105,24 @@ abstract class DataProvider {
     return streamController;
   }
 
-  StreamController<ManyDataObject<T>>? getManyStreamController<T extends DataObject>(
-      {Type filterType = Object}) {
+  StreamController<ManyDataObject<T>>? getManyStreamController<T extends DataObject>({Type? filterType = Null}) {
+    filterType ??= Null;
     Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType =
         _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<T>>>();
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
   StreamController<ManyDataObject<Map<String, dynamic>>>? getManyRawStreamController<T extends DataObject>(
-      {Type filterType = Object}) {
+      {Type? filterType = Null}) {
+    filterType ??= Null;
     Map<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>? streamControllersOfType =
-    _manyRawStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>();
+        _manyRawStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>();
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
   StreamController<ManyDataObject<T>> getOrCreateManyStreamController<T extends DataObject>(
-      {Type filterType = Object}) {
+      {Type? filterType = Null}) {
+    filterType ??= Null;
     var streamController = getManyStreamController<T>(filterType: filterType);
     if (streamController == null) {
       streamController = StreamController<ManyDataObject<T>>.broadcast();
@@ -137,12 +138,13 @@ abstract class DataProvider {
   }
 
   StreamController<ManyDataObject<Map<String, dynamic>>> getOrCreateManyRawStreamController<T extends DataObject>(
-      {Type filterType = Object}) {
+      {Type? filterType = Null}) {
+    filterType ??= Null;
     var streamController = getManyRawStreamController<T>(filterType: filterType);
     if (streamController == null) {
       streamController = StreamController<ManyDataObject<Map<String, dynamic>>>.broadcast();
       Map<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>? streamControllersOfType =
-      _manyRawStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>();
+          _manyRawStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>();
       if (streamControllersOfType == null) {
         streamControllersOfType = <Type, StreamController<ManyDataObject<Map<String, dynamic>>>>{};
         _manyRawStreamControllers[T] = streamControllersOfType;
