@@ -50,8 +50,10 @@ class InfoWidget extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
+                        // TODO Also delete subsequent object (e.g. WeightClass of LeagueWeightClass)
                         dataProvider.deleteSingle(obj);
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
                       child: Text(localizations.ok),
                     ),

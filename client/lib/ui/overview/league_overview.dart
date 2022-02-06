@@ -5,9 +5,10 @@ import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/edit/league_edit.dart';
-import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
-import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
 import 'package:wrestling_scoreboard/ui/edit/league_weight_class_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard/ui/overview/league_weight_class_overview.dart';
+import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
 
 class LeagueOverview extends StatelessWidget {
   final League filterObject;
@@ -66,10 +67,10 @@ class LeagueOverview extends StatelessWidget {
             ),
             ManyConsumer<LeagueWeightClass>(
               filterObject: data,
-              builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClass) {
+              builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClasses) {
                 return ListGroup(
                   header: HeadingItem(
-                    title: localizations.weightClass,
+                    title: localizations.weightClasses,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -80,8 +81,10 @@ class LeagueOverview extends StatelessWidget {
                       ),
                     ),
                   ),
-                  items: leagueWeightClass.map((e) =>
-                      ContentItem(title: e.weightClass.name, icon: Icons.group, onTap: () => handleSelectedWeightClass(e, context))),
+                  items: leagueWeightClasses.map((e) => ContentItem(
+                      title: e.weightClass.name,
+                      icon: Icons.group,
+                      onTap: () => handleSelectedWeightClass(e, context))),
                 );
               },
             ),
@@ -106,9 +109,8 @@ class LeagueOverview extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        // TODO may add its own overview
-        builder: (context) => LeagueWeightClassEdit(
-          leagueWeightClass: leagueWeightClass, league: leagueWeightClass.league,
+        builder: (context) => LeagueWeightClassOverview(
+          filterObject: leagueWeightClass,
         ),
       ),
     );

@@ -36,6 +36,7 @@
   "participantVacant": "vacant",
   "weight": "Weight",
   "weightClass": "Weight Class",
+  "weightClasses": "Weight Classes",
   "weightUnit": "Weight Unit",
   "suffix": "Suffix",
   "participantUnknownWeight": "unknown weight",
@@ -83,6 +84,7 @@
 
   "red": "Red",
   "blue": "Blue",
+  "wrestlingStyle": "Style",
   "freeStyle": "Freestyle",
   "freeStyleAbbr": "F",
   "grecoRoman": "Greco-Roman",

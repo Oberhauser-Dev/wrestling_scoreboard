@@ -33,11 +33,25 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
 
     final items = [
       ListTile(
+        title: TextFormField(
+          initialValue: widget.weightClass?.weight.toString() ?? '',
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+              icon: const Icon(Icons.fitness_center),
+              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+              labelText: localizations.weight),
+          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
+          onSaved: (String? value) {
+            _weight = value != null ? int.parse(value) : 0;
+          },
+        ),
+      ),
+      ListTile(
         leading: const Icon(Icons.style),
         title: ButtonTheme(
           alignedDropdown: true,
           child: DropdownButton<WrestlingStyle>(
-            hint: Text(localizations.weight),
+            hint: Text(localizations.wrestlingStyle),
             isExpanded: true,
             items: WrestlingStyle.values.map((WrestlingStyle value) {
               return DropdownMenuItem<WrestlingStyle>(
@@ -50,20 +64,6 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
               _wrestlingStyle = newValue!;
             }),
           ),
-        ),
-      ),
-      ListTile(
-        title: TextFormField(
-          initialValue: widget.weightClass?.weight.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-              icon: const Icon(Icons.fitness_center),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.weight),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
-          onSaved: (String? value) {
-            _weight = value != null ? int.parse(value) : 0;
-          },
         ),
       ),
       ListTile(

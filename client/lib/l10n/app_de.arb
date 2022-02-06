@@ -33,6 +33,7 @@
   "participantVacant": "unbesetzt",
   "weight": "Gewicht",
   "weightClass": "Gewichtsklasse",
+  "weightClasses": "Gewichtsklassen",
   "weightUnit": "Gewichtseinheit",
   "suffix": "Suffix",
   "participantUnknownWeight": "Gewicht unbekannt",
@@ -80,6 +81,7 @@
 
   "red": "Red",
   "blue": "Blue",
+  "wrestlingStyle": "Stilart",
   "freeStyle": "Freistil",
   "freeStyleAbbr": "F",
   "grecoRoman": "Gr.-Römisch",
