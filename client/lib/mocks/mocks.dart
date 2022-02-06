@@ -51,8 +51,8 @@ WeightClass wc66 = WeightClass(id: 5, weight: 66, style: WrestlingStyle.free);
 WeightClass wc86 = WeightClass(id: 6, weight: 86, style: WrestlingStyle.greco);
 WeightClass wc71 = WeightClass(id: 7, weight: 71, style: WrestlingStyle.greco);
 WeightClass wc80 = WeightClass(id: 8, weight: 80, style: WrestlingStyle.free);
-WeightClass wc75A = WeightClass(id: 9, weight: 75, style: WrestlingStyle.free, name: '75 kg A');
-WeightClass wc75B = WeightClass(id: 10, weight: 75, style: WrestlingStyle.greco, name: '75 kg B');
+WeightClass wc75A = WeightClass(id: 9, weight: 75, style: WrestlingStyle.free, suffix: 'A');
+WeightClass wc75B = WeightClass(id: 10, weight: 75, style: WrestlingStyle.greco, suffix: 'B');
 
 final List<WeightClass> weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 

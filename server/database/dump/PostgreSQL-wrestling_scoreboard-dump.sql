@@ -108,6 +108,18 @@ CREATE TYPE public.person_role AS ENUM (
 ALTER TYPE public.person_role OWNER TO wrestling;
 
 --
+-- Name: weight_unit; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.weight_unit AS ENUM (
+    'pound',
+    'kilogram'
+);
+
+
+ALTER TYPE public.weight_unit OWNER TO wrestling;
+
+--
 -- Name: wrestling_style; Type: TYPE; Schema: public; Owner: wrestling
 --
 
@@ -732,9 +744,10 @@ ALTER SEQUENCE public.tournament_id_seq OWNED BY public.tournament.id;
 
 CREATE TABLE public.weight_class (
     id integer NOT NULL,
-    name character varying(255),
+    suffix character varying(255),
     weight smallint NOT NULL,
-    style public.wrestling_style DEFAULT 'free'::public.wrestling_style NOT NULL
+    style public.wrestling_style DEFAULT 'free'::public.wrestling_style NOT NULL,
+    unit public.weight_unit
 );
 
 
@@ -1112,17 +1125,17 @@ COPY public.tournament_person (id, tournament_id, person_id, person_role) FROM s
 -- Data for Name: weight_class; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.weight_class (id, name, weight, style) FROM stdin;
-1	\N	57	free
-2	\N	61	greco
-3	\N	66	free
-4	\N	71	greco
-7	\N	80	free
-8	\N	86	greco
-9	\N	98	free
-10	\N	130	greco
-5	75 kg A	75	free
-6	75 kg B	75	greco
+COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
+6	B	75	greco	kilogram
+1	\N	57	free	kilogram
+7	\N	80	free	kilogram
+2	\N	61	greco	kilogram
+3	\N	66	free	kilogram
+8	\N	86	greco	kilogram
+9	\N	98	free	kilogram
+4	\N	71	greco	kilogram
+5	A	75	free	kilogram
+10	\N	130	greco	kilogram
 \.
 
 

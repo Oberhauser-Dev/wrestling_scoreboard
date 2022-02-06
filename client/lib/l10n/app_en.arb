@@ -34,6 +34,7 @@
 
   "participantVacant": "vacant",
   "weight": "Weight",
+  "suffix": "Suffix",
   "weightClass": "Weight Class",
   "participantUnknownWeight": "unknown weight",
   "club": "Club",

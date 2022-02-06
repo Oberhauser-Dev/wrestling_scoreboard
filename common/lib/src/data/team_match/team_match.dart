@@ -146,12 +146,12 @@ class TeamMatch extends WrestlingEvent {
       final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
       if (homePartList.length > 1) {
         throw Exception(
-            'Home team has two or more participants in the same weight class ${weightClass.name}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}');
+            'Home team has two or more participants in the same weight class ${weightClass.suffix}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}');
       }
       final guestPartList = teamParticipations[1].where((el) => (el.weightClass == weightClass));
       if (guestPartList.length > 1) {
         throw Exception(
-            'Guest team has two or more participants in the same weight class ${weightClass.name}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}');
+            'Guest team has two or more participants in the same weight class ${weightClass.suffix}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}');
       }
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;

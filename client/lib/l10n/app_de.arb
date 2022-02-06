@@ -32,6 +32,7 @@
   "participantVacant": "unbesetzt",
   "weightClass": "Gewichtsklasse",
   "weight": "Gewicht",
+  "suffix": "Suffix",
   "participantUnknownWeight": "Gewicht unbekannt",
   "club": "Verein",
   "clubs": "Vereine",

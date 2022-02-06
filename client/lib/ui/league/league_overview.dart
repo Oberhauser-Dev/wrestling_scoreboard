@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
 import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
+import 'package:wrestling_scoreboard/ui/weight_class/weight_class_edit.dart';
 
 import '../home/match_selection.dart';
 
@@ -64,6 +65,27 @@ class LeagueOverview extends StatelessWidget {
                 );
               },
             ),
+            ManyConsumer<WeightClass>(
+              filterObject: data,
+              builder: (BuildContext context, List<WeightClass> weightClass) {
+                return ListGroup(
+                  header: HeadingItem(
+                    title: localizations.weightClass,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WeightClassEdit(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: weightClass.map((e) =>
+                      ContentItem(title: e.name, icon: Icons.group, onTap: () => handleSelectedWeightClass(e, context))),
+                );
+              },
+            ),
           ]),
         );
       },
@@ -76,6 +98,18 @@ class LeagueOverview extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => MatchSelection<Team>(
           filterObject: team,
+        ),
+      ),
+    );
+  }
+
+  handleSelectedWeightClass(WeightClass weightClass, BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        // TODO may add its own overview
+        builder: (context) => WeightClassEdit(
+          weightClass: weightClass,
         ),
       ),
     );

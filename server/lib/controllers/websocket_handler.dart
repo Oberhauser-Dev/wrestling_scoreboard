@@ -76,6 +76,14 @@ void broadcastSingle<T extends DataObject>(T single) async {
         jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.home.team.id)));
     broadcast(
         jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.guest.team.id)));
+  } else if (single is WeightClass) {
+    // TODO Broadcast to every league, which uses the same weightClasses
+    // broadcast(jsonEncode(manyToJson(
+    //     await LeagueController().getWeightClasses(single.id}),
+    //     WeightClass,
+    //     CRUD.update,
+    //     filterType: League,
+    //     filterId: single.league.id)));
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }
@@ -135,6 +143,8 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
 
     broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: homeTeamId)));
     broadcast(jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: guestTeamId)));
+  } else if (T == WeightClass) {
+    // TODO get from broadcastSingle
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }

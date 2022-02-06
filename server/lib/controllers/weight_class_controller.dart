@@ -17,6 +17,7 @@ class WeightClassController extends EntityController<WeightClass> {
     return {
       'weight': PostgreSQLDataType.smallInteger,
       'style': null,
+      'unit': null,
     };
   }
 }

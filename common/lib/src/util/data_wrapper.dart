@@ -106,6 +106,12 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
+    case WeightClass:
+      return _handleFromJsonGeneric<WeightClass>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     default:
       throw UnimplementedError('Cannot handle Json for type "${type.toString()}".');
   }

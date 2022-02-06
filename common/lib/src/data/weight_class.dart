@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:quiver/core.dart';
 
+import '../enums/weight_unit.dart';
 import '../enums/wrestling_style.dart';
 import 'data_object.dart';
 
@@ -8,24 +9,27 @@ part 'weight_class.g.dart';
 
 @JsonSerializable()
 class WeightClass extends DataObject {
-  late final String name;
+  final String? suffix;
   final int weight;
   final WrestlingStyle style;
+  final WeightUnit unit;
 
-  WeightClass({int? id, required this.weight, required this.style, String? name, String weightUnit = 'kg'})
-      : super(id) {
-    this.name = name ?? this.weight.toString() + ' ' + weightUnit;
-  }
+  WeightClass({int? id, required this.weight, required this.style, this.suffix, this.unit = WeightUnit.kilogram})
+      : super(id);
+
+  String get name => [weight.toString(), unit.toAbbr(), if (suffix != null && suffix!.isNotEmpty) suffix].join(' ');
 
   factory WeightClass.fromJson(Map<String, dynamic> json) => _$WeightClassFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$WeightClassToJson(this);
 
-  static Future<WeightClass> fromRaw(Map<String, dynamic> e) async => WeightClass(
+  static Future<WeightClass> fromRaw(Map<String, dynamic> e) async =>
+      WeightClass(
         id: e['id'] as int?,
-        name: e['name'] as String?,
+        suffix: e['suffix'] as String?,
         weight: e['weight'] as int,
+        unit: WeightUnitParser.valueOf(e['unit']),
         style: WrestlingStyleParser.valueOf(e['style']),
       );
 
@@ -33,15 +37,17 @@ class WeightClass extends DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'name': name,
+      'suffix': suffix,
       'weight': weight,
+      'unit': unit.name,
       'style': style.name,
     };
   }
 
   @override
-  bool operator ==(o) => o is WeightClass && name == o.name && weight == o.weight && style == o.style;
+  bool operator ==(o) =>
+      o is WeightClass && suffix == o.suffix && weight == o.weight && style == o.style && unit == o.unit;
 
   @override
-  int get hashCode => hash3(name.hashCode, weight.hashCode, style.hashCode);
+  int get hashCode => hash4(suffix.hashCode, weight.hashCode, style.hashCode, unit.hashCode);
 }
