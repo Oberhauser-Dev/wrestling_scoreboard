@@ -20,74 +20,82 @@ class TeamMatchOverview extends StatelessWidget {
         id: match.id!,
         initialData: match,
         builder: (context, match) {
-          final lineups = [match!.home, match.guest];
-          final items = [
-            InfoWidget(
-                obj: match,
-                editPage: TeamMatchEdit(
-                  teamMatch: match,
-                ),
-                children: [
-                  ContentItem(
-                    title: match.no ?? '-',
-                    subtitle: localizations.matchNumber,
-                    icon: Icons.tag,
-                  ),
-                  ContentItem(
-                    title: match.location ?? 'no location',
-                    subtitle: localizations.place,
-                    icon: Icons.place,
-                  ),
-                  ContentItem(
-                    title: match.date?.toIso8601String() ?? 'no date',
-                    subtitle: localizations.date,
-                    icon: Icons.date_range,
-                  ),
-                  ContentItem(
-                    title: match.home.team.name,
-                    subtitle: '${localizations.team} ${localizations.red}',
-                    icon: Icons.emoji_events,
-                  ),
-                  ContentItem(
-                    title: match.guest.team.name,
-                    subtitle: '${localizations.team} ${localizations.blue}',
-                    icon: Icons.emoji_events,
-                  ),
-                  ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
-                  ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
-                ],
-                classLocale: localizations.match),
-            ListGroup(
-              header: HeadingItem(title: localizations.persons),
-              items: [
-                ContentItem(title: localizations.referee, icon: Icons.sports, onTap: null),
-                ContentItem(title: localizations.matChairman, icon: Icons.manage_accounts, onTap: null),
-                ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: null),
-                ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: null),
-                ContentItem(title: localizations.steward, icon: Icons.security, onTap: null),
-              ],
-            ),
-            ListGroup(
-              header: HeadingItem(title: localizations.lineups + ' & ' + localizations.fights),
-              items: [
-                ...lineups.map((lineup) {
-                  return SingleConsumer<Lineup>(
-                    id: lineup.id!,
-                    initialData: lineup,
-                    builder: (context, lineup) => ContentItem(
-                        title: lineup!.team.name, icon: Icons.group, onTap: () => handleSelectedLineup(lineup, context)),
-                  );
-                }),
-                ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
-              ],
-            ),
-          ];
-
           return Scaffold(
             appBar: AppBar(
               title: Text('${localizations.match} ${localizations.details}'),
             ),
-            body: GroupedList(items: items),
+            body: SingleConsumer<Lineup>(
+              id: match!.home.id!,
+              initialData: match.home,
+              builder: (context, homeLineup) => SingleConsumer<Lineup>(
+                id: match.guest.id!,
+                initialData: match.guest,
+                builder: (context, guestLineup) {
+                  final items = [
+                    InfoWidget(
+                        obj: match,
+                        editPage: TeamMatchEdit(
+                          teamMatch: match,
+                        ),
+                        children: [
+                          ContentItem(
+                            title: match.no ?? '-',
+                            subtitle: localizations.matchNumber,
+                            icon: Icons.tag,
+                          ),
+                          ContentItem(
+                            title: match.location ?? 'no location',
+                            subtitle: localizations.place,
+                            icon: Icons.place,
+                          ),
+                          ContentItem(
+                            title: match.date?.toIso8601String() ?? 'no date',
+                            subtitle: localizations.date,
+                            icon: Icons.date_range,
+                          ),
+                          ContentItem(
+                            title: homeLineup!.team.name,
+                            subtitle: '${localizations.team} ${localizations.red}',
+                            icon: Icons.emoji_events,
+                          ),
+                          ContentItem(
+                            title: guestLineup!.team.name,
+                            subtitle: '${localizations.team} ${localizations.blue}',
+                            icon: Icons.emoji_events,
+                          ),
+                          ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
+                          ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
+                        ],
+                        classLocale: localizations.match),
+                    ListGroup(
+                      header: HeadingItem(title: localizations.persons),
+                      items: [
+                        ContentItem(title: localizations.referee, icon: Icons.sports, onTap: null),
+                        ContentItem(title: localizations.matChairman, icon: Icons.manage_accounts, onTap: null),
+                        ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: null),
+                        ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: null),
+                        ContentItem(title: localizations.steward, icon: Icons.security, onTap: null),
+                      ],
+                    ),
+                    ListGroup(
+                      header: HeadingItem(title: localizations.lineups + ' & ' + localizations.fights),
+                      items: [
+                        ContentItem(
+                            title: homeLineup.team.name,
+                            icon: Icons.group,
+                            onTap: () => handleSelectedLineup(homeLineup, context)),
+                        ContentItem(
+                            title: guestLineup.team.name,
+                            icon: Icons.group,
+                            onTap: () => handleSelectedLineup(guestLineup, context)),
+                        ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
+                      ],
+                    ),
+                  ];
+                  return GroupedList(items: items);
+                },
+              ),
+            ),
           );
         });
   }
