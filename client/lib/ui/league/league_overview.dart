@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
 import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
-import 'package:wrestling_scoreboard/ui/weight_class/weight_class_edit.dart';
+import 'package:wrestling_scoreboard/ui/weight_class/league_weight_class_edit.dart';
 
 import '../home/match_selection.dart';
 
@@ -65,9 +65,9 @@ class LeagueOverview extends StatelessWidget {
                 );
               },
             ),
-            ManyConsumer<WeightClass>(
+            ManyConsumer<LeagueWeightClass>(
               filterObject: data,
-              builder: (BuildContext context, List<WeightClass> weightClass) {
+              builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClass) {
                 return ListGroup(
                   header: HeadingItem(
                     title: localizations.weightClass,
@@ -76,13 +76,13 @@ class LeagueOverview extends StatelessWidget {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const WeightClassEdit(),
+                          builder: (context) => LeagueWeightClassEdit(league: data),
                         ),
                       ),
                     ),
                   ),
-                  items: weightClass.map((e) =>
-                      ContentItem(title: e.name, icon: Icons.group, onTap: () => handleSelectedWeightClass(e, context))),
+                  items: leagueWeightClass.map((e) =>
+                      ContentItem(title: e.weightClass.name, icon: Icons.group, onTap: () => handleSelectedWeightClass(e, context))),
                 );
               },
             ),
@@ -103,13 +103,13 @@ class LeagueOverview extends StatelessWidget {
     );
   }
 
-  handleSelectedWeightClass(WeightClass weightClass, BuildContext context) {
+  handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
         // TODO may add its own overview
-        builder: (context) => WeightClassEdit(
-          weightClass: weightClass,
+        builder: (context) => LeagueWeightClassEdit(
+          leagueWeightClass: leagueWeightClass, league: leagueWeightClass.league,
         ),
       ),
     );

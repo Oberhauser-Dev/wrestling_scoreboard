@@ -6,16 +6,13 @@ import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-class WeightClassEdit extends StatefulWidget {
+abstract class WeightClassEdit extends StatefulWidget {
   final WeightClass? weightClass;
 
   const WeightClassEdit({this.weightClass, Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => WeightClassEditState();
 }
 
-class WeightClassEditState extends State<WeightClassEdit> {
+abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> {
   final _formKey = GlobalKey<FormState>();
 
   String? _suffix;
@@ -62,7 +59,7 @@ class WeightClassEditState extends State<WeightClassEdit> {
           decoration: InputDecoration(
               icon: const Icon(Icons.fitness_center),
               contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: AppLocalizations.of(context)!.weight),
+              labelText: localizations.weight),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
           onSaved: (String? value) {
             _weight = value != null ? int.parse(value) : 0;
@@ -75,7 +72,7 @@ class WeightClassEditState extends State<WeightClassEdit> {
         ButtonTheme(
           alignedDropdown: true,
           child: DropdownButton<WeightUnit>(
-            hint: Text(localizations.weight),
+            hint: Text(localizations.weightUnit),
             isExpanded: true,
             items: WeightUnit.values.map((WeightUnit value) {
               return DropdownMenuItem<WeightUnit>(
@@ -101,13 +98,14 @@ class WeightClassEditState extends State<WeightClassEdit> {
           onSaved: (newValue) => _suffix = newValue,
         ),
       ),
+      ...buildFields(context),
     ];
 
     return Form(
         key: _formKey,
         child: EditWidget(
-            title:
-                '${widget.weightClass == null ? localizations.add : localizations.edit} ${localizations.weightClass}',
+            typeLocalization: localizations.weightClass,
+            id: widget.weightClass?.id,
             onSubmit: () => handleSubmit(context),
             items: items));
   }
@@ -115,9 +113,14 @@ class WeightClassEditState extends State<WeightClassEdit> {
   void handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final weightClassId = await dataProvider.createOrUpdateSingle(WeightClass(
-          id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit));
+      final weightClass = WeightClass(
+          id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
+      weightClass.id = await dataProvider.createOrUpdateSingle(weightClass);
+      await handleSubmitWeightClass(weightClass);
       Navigator.of(context).pop();
     }
   }
+  
+  List<Widget> buildFields(BuildContext context);
+  Future<void> handleSubmitWeightClass(WeightClass weightClass);
 }

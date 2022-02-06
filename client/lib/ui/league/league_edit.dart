@@ -73,7 +73,8 @@ class LeagueEditState extends State<LeagueEdit> {
     return Form(
         key: _formKey,
         child: EditWidget(
-            title: '${widget.league == null ? localizations.add : localizations.edit} ${localizations.league}',
+            typeLocalization: localizations.league,
+            id: widget.league?.id,
             onSubmit: () => handleSubmit(context),
             items: items));
   }

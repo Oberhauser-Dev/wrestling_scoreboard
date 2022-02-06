@@ -1,5 +1,6 @@
 import 'package:common/common.dart';
 import 'package:server/controllers/entity_controller.dart';
+import 'package:server/controllers/league_weight_class_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:server/controllers/weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
@@ -32,5 +33,10 @@ class LeagueController extends EntityController<League> {
 
   Future<List<WeightClass>> getWeightClasses(String id) {
     return WeightClassController().getManyFromQuery(_weightClassesQuery, substitutionValues: {'id': id});
+  }
+
+  Future<Response> requestLeagueWeightClasses(Request request, String id) async {
+    return EntityController.handleRequestManyOfController(LeagueWeightClassController(),
+        isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id});
   }
 }

@@ -21,6 +21,7 @@
   "details": "Details",
   "name": "Name",
   "description": "Beschreibung",
+  "position": "Position",
   "noItems": "Keine Einträge vorhanden.",
   "mandatoryField": "Das ist ein Pflichtfeld.",
   "noWebSocketConnection": "Die Verbindung zum Server konnte nicht aufgebaut werden oder wurde unterbrochen.",
@@ -30,8 +31,9 @@
   "place": "Ort",
 
   "participantVacant": "unbesetzt",
-  "weightClass": "Gewichtsklasse",
   "weight": "Gewicht",
+  "weightClass": "Gewichtsklasse",
+  "weightUnit": "Gewichtseinheit",
   "suffix": "Suffix",
   "participantUnknownWeight": "Gewicht unbekannt",
   "club": "Verein",

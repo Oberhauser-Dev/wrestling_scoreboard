@@ -24,6 +24,7 @@
   "details": "Details",
   "name": "Name",
   "description": "Description",
+  "position": "Position",
   "noItems": "No items available.",
   "mandatoryField": "This is a mandatory field.",
   "noWebSocketConnection": "The connection to the server could not be established or was interrupted.",
@@ -34,8 +35,9 @@
 
   "participantVacant": "vacant",
   "weight": "Weight",
-  "suffix": "Suffix",
   "weightClass": "Weight Class",
+  "weightUnit": "Weight Unit",
+  "suffix": "Suffix",
   "participantUnknownWeight": "unknown weight",
   "club": "Club",
   "clubs": "Clubs",

@@ -102,7 +102,8 @@ class TeamEditState extends State<TeamEdit> {
     return Form(
       key: _formKey,
       child: EditWidget(
-        title: '${widget.team == null ? localizations.add : localizations.edit} ${localizations.team}',
+        typeLocalization: localizations.team,
+        id: widget.team?.id,
         onSubmit: () => handleSubmit(context),
         items: items,
       ),

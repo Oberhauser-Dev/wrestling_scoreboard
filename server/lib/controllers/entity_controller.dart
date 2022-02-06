@@ -6,6 +6,7 @@ import 'package:server/controllers/club_controller.dart';
 import 'package:server/controllers/fight_action_controller.dart';
 import 'package:server/controllers/fight_controller.dart';
 import 'package:server/controllers/league_controller.dart';
+import 'package:server/controllers/league_weight_class_controller.dart';
 import 'package:server/controllers/lineup_controller.dart';
 import 'package:server/controllers/membership_controller.dart';
 import 'package:server/controllers/participant_state_controller.dart';
@@ -13,6 +14,7 @@ import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/person_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:server/controllers/team_match_controller.dart';
+import 'package:server/controllers/team_match_fight_controller.dart';
 import 'package:server/controllers/tournament_controller.dart';
 import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/controllers/weight_class_controller.dart';
@@ -91,13 +93,14 @@ abstract class EntityController<T extends DataObject> {
     final sql = '''
         INSERT INTO $tableName (${data.keys.join(',')}) 
         VALUES (${Map.of(data).entries.map((e) {
-          final postgresType = postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
-          // Trim all strings before inserting into db
-          if(postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
-            data[e.key] = (e.value as String).trim();
-          }
-          return PostgreSQLFormat.id(e.key, type: postgresType);
-        }).join(', ')}) RETURNING $primaryKeyName;
+      final postgresType =
+          postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
+      // Trim all strings before inserting into db
+      if (postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
+        data[e.key] = (e.value as String).trim();
+      }
+      return PostgreSQLFormat.id(e.key, type: postgresType);
+    }).join(', ')}) RETURNING $primaryKeyName;
         ''';
     final res = await PostgresDb().connection.query(sql, substitutionValues: data);
     return res.last[0] as int;
@@ -112,16 +115,20 @@ abstract class EntityController<T extends DataObject> {
     final sql = '''
         UPDATE $tableName 
         SET ${Map.of(data).entries.map((e) {
-          final postgresType = postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
-          // Trim all strings before inserting into db
-          if(postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
-            data[e.key] = (e.value as String).trim();
-          }
-          return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
-        }).join(',')} 
+      final postgresType =
+          postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
+      // Trim all strings before inserting into db
+      if (postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
+        data[e.key] = (e.value as String).trim();
+      }
+      return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
+    }).join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
     final res = await PostgresDb().connection.query(sql, substitutionValues: data);
+    if (res.isEmpty || res.last.isEmpty) {
+      throw InvalidParameterException('The data object of table $tableName could not be updated. Check the parameters: $data');
+    }
     return res.last[0] as int;
   }
 
@@ -190,12 +197,16 @@ abstract class EntityController<T extends DataObject> {
   }
 
   static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, dynamic> json) async {
-    final id = await handleFromJson(json,
-        handleSingle: handleSingle,
-        handleMany: handleMany,
-        handleSingleRaw: handleSingleRaw,
-        handleManyRaw: handleManyRaw);
-    return Response.ok(jsonEncode(id));
+    try {
+      final id = await handleFromJson(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
+      return Response.ok(jsonEncode(id));
+    } on InvalidParameterException catch(e) {
+      return Response.notFound(e.message);
+    }
   }
 
   static Future<Response> handleRequestSingleOfController(EntityController controller, int id,
@@ -264,6 +275,8 @@ abstract class EntityController<T extends DataObject> {
         return FightActionController() as EntityController<T>;
       case League:
         return LeagueController() as EntityController<T>;
+      case LeagueWeightClass:
+        return LeagueWeightClassController() as EntityController<T>;
       case Lineup:
         return LineupController() as EntityController<T>;
       case Membership:
@@ -278,6 +291,8 @@ abstract class EntityController<T extends DataObject> {
         return TeamController() as EntityController<T>;
       case TeamMatch:
         return TeamMatchController() as EntityController<T>;
+      case TeamMatchFight:
+        return TeamMatchFightController() as EntityController<T>;
       case Tournament:
         return TournamentController() as EntityController<T>;
       case WeightClass:
@@ -291,4 +306,10 @@ abstract class EntityController<T extends DataObject> {
 enum Conjunction {
   and,
   or,
+}
+
+class InvalidParameterException implements Exception {
+  String message;
+
+  InvalidParameterException(this.message);
 }

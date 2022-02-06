@@ -24,6 +24,8 @@ abstract class DataObject {
         return FightAction.fromJson(json) as T;
       case League:
         return League.fromJson(json) as T;
+      case LeagueWeightClass:
+        return LeagueWeightClass.fromJson(json) as T;
       case Lineup:
         return Lineup.fromJson(json) as T;
       case Membership:
@@ -36,6 +38,8 @@ abstract class DataObject {
         return Team.fromJson(json) as T;
       case TeamMatch:
         return TeamMatch.fromJson(json) as T;
+      case TeamMatchFight:
+        return TeamMatchFight.fromJson(json) as T;
       case WeightClass:
         return WeightClass.fromJson(json) as T;
       default:
@@ -54,6 +58,8 @@ abstract class DataObject {
         return (await FightAction.fromRaw(raw, getSingle)) as T;
       case League:
         return (await League.fromRaw(raw)) as T;
+      case LeagueWeightClass:
+        return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
       case Lineup:
         return (await Lineup.fromRaw(raw, getSingle)) as T;
       case Membership:
@@ -68,6 +74,8 @@ abstract class DataObject {
         return (await Team.fromRaw(raw, getSingle)) as T;
       case TeamMatch:
         return (await TeamMatch.fromRaw(raw, getSingle)) as T;
+      case TeamMatchFight:
+        return (await TeamMatchFight.fromRaw(raw, getSingle)) as T;
       case WeightClass:
         return (await WeightClass.fromRaw(raw)) as T;
       default:

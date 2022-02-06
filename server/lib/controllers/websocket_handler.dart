@@ -5,6 +5,7 @@ import 'package:common/common.dart';
 import 'package:server/controllers/club_controller.dart';
 import 'package:server/controllers/fight_action_controller.dart';
 import 'package:server/controllers/league_controller.dart';
+import 'package:server/controllers/league_weight_class_controller.dart';
 import 'package:server/controllers/lineup_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/team_controller.dart';
@@ -76,14 +77,14 @@ void broadcastSingle<T extends DataObject>(T single) async {
         jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.home.team.id)));
     broadcast(
         jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.guest.team.id)));
-  } else if (single is WeightClass) {
-    // TODO Broadcast to every league, which uses the same weightClasses
-    // broadcast(jsonEncode(manyToJson(
-    //     await LeagueController().getWeightClasses(single.id}),
-    //     WeightClass,
-    //     CRUD.update,
-    //     filterType: League,
-    //     filterId: single.league.id)));
+  } else if (single is LeagueWeightClass) {
+    broadcast(jsonEncode(manyToJson(
+        await LeagueWeightClassController()
+            .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}),
+        LeagueWeightClass,
+        CRUD.update,
+        filterType: League,
+        filterId: single.league.id)));
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }
@@ -143,8 +144,14 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
 
     broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: homeTeamId)));
     broadcast(jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: guestTeamId)));
-  } else if (T == WeightClass) {
-    // TODO get from broadcastSingle
+  } else if (T == LeagueWeightClass) {
+    broadcast(jsonEncode(manyToJson(
+        await LeagueWeightClassController()
+            .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
+        LeagueWeightClass,
+        CRUD.update,
+        filterType: League,
+        filterId: single['league_id'])));
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }

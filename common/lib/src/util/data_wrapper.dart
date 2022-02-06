@@ -64,6 +64,12 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
+    case LeagueWeightClass:
+      return _handleFromJsonGeneric<LeagueWeightClass>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     case Lineup:
       return _handleFromJsonGeneric<Lineup>(json,
           handleSingle: handleSingle,

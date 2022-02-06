@@ -120,9 +120,10 @@ class RestDataProvider extends DataProvider {
     final prepend = '${_getPathFromType(wrestlingEvent.runtimeType)}/${wrestlingEvent.id}';
     final response = await http.post(Uri.parse('$_apiUrl$prepend/fights/generate'), body: {'reset': reset.toString()});
 
-    if (response.statusCode != 200) {
-      throw Exception('Failed to CREATE generated fights ${wrestlingEvent.toString()}: ' +
-          (response.reasonPhrase ?? response.statusCode.toString()));
+    if (response.statusCode >= 400) {
+      throw Exception('Failed to CREATE generated fights ${wrestlingEvent.toString()}: \n' +
+          (response.reasonPhrase ?? response.statusCode.toString()) +
+          '\nBody: ${response.body}');
     }
   }
 
@@ -133,11 +134,12 @@ class RestDataProvider extends DataProvider {
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
     final response = await http.post(uri, body: body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode < 400) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: ' +
-          (response.reasonPhrase ?? response.statusCode.toString()));
+      throw Exception('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: \n' +
+          (response.reasonPhrase ?? response.statusCode.toString()) +
+          '\nBody: ${response.body}');
     }
   }
 

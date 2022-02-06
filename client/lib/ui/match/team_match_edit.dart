@@ -128,7 +128,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
     return Form(
       key: _formKey,
       child: EditWidget(
-        title: '${widget.teamMatch == null ? localizations.add : localizations.edit} ${localizations.match}',
+        typeLocalization: localizations.match,
+        id: widget.teamMatch?.id,
         onSubmit: () => handleSubmit(context),
         items: items,
       ),

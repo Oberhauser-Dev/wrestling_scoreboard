@@ -56,7 +56,8 @@ class ClubEditState extends State<ClubEdit> {
     return Form(
       key: _formKey,
       child: EditWidget(
-        title: '${widget.club == null ? localizations.add : localizations.edit} ${localizations.club}',
+        typeLocalization: localizations.club,
+        id: widget.club?.id,
         onSubmit: () => handleSubmit(context),
         items: items,
       ),

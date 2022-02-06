@@ -67,6 +67,9 @@ class MockDataProvider extends DataProvider {
         if (filterObject is Team) return getMatchesOfTeam(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeamMatches() as List<T>;
+      case LeagueWeightClass:
+      case TeamMatchFight:
+        // TODO
       default:
         throw DataUnimplementedError(CRUD.read, T, filterObject);
     }

@@ -79,14 +79,15 @@ class LineupEditState extends State<LineupEdit> {
     return Form(
         key: _formKey,
         child: EditWidget(
-          title: '${widget.lineup == null ? localizations.add : localizations.edit} ${AppLocalizations.of(context)!.lineup}',
+          typeLocalization: localizations.lineup,
+          id: widget.lineup.id,
           onSubmit: () => handleSubmit(context),
           items: [
             ListTile(title: HeadingText(widget.lineup.team.name)),
             ListTile(
               title: getDropdown<Membership>(
                 selectedItem: _leader,
-                label: AppLocalizations.of(context)!.leader,
+                label: localizations.leader,
                 context: context,
                 onSaved: (Membership? value) => setState(() {
                   _leader = value;
@@ -98,7 +99,7 @@ class LineupEditState extends State<LineupEdit> {
             ListTile(
               title: getDropdown<Membership>(
                 selectedItem: _coach,
-                label: AppLocalizations.of(context)!.coach,
+                label: localizations.coach,
                 context: context,
                 onSaved: (Membership? value) => setState(() {
                   _coach = value;
@@ -119,7 +120,7 @@ class LineupEditState extends State<LineupEdit> {
                         padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
                         child: getDropdown<Membership>(
                           selectedItem: participation?.membership,
-                          label: '${AppLocalizations.of(context)!.weightClass} ${weightClass.name} ${styleToAbbr(weightClass.style, context)}',
+                          label: '${localizations.weightClass} ${weightClass.name} ${styleToAbbr(weightClass.style, context)}',
                           context: context,
                           onSaved: (Membership? newMembership) {
                             final oldParticipation = _participations[weightClass];
@@ -154,7 +155,7 @@ class LineupEditState extends State<LineupEdit> {
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                              labelText: AppLocalizations.of(context)!.weight),
+                              labelText: localizations.weight),
                           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))],
                           onSaved: (String? value) {
                             final participation = _participations[weightClass];
