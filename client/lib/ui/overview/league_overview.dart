@@ -1,6 +1,7 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
@@ -93,7 +94,7 @@ class LeagueOverview extends StatelessWidget {
                       id: e.id,
                       initialData: e,
                       builder: (context, data) => ContentItem(
-                          title: data!.weightClass.name,
+                          title: '${data!.weightClass.name} ${styleToString(data.weightClass.style, context)}',
                           icon: Icons.group,
                           onTap: () => handleSelectedWeightClass(data, context)),
                     );
