@@ -144,14 +144,16 @@ abstract class EntityController<T extends DataObject> {
     return handleRequestManyOfController(this, isRaw: isRaw(request));
   }
 
-  Future<List<T>> getMany(
-      {List<String>? conditions,
-      Conjunction conjunction = Conjunction.and,
-      Map<String, dynamic>? substitutionValues}) async {
-    return Future.wait(
-        (await getManyRaw(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues))
-            .map((e) async => await DataObject.fromRaw<T>(e, getSingleFromDataType))
-            .toList());
+  Future<List<T>> getMany({
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+    String? orderBy,
+  }) async {
+    return Future.wait((await getManyRaw(
+            conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy))
+        .map((e) async => await DataObject.fromRaw<T>(e, getSingleFromDataType))
+        .toList());
   }
 
   Future<List<T>> getManyFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
@@ -163,9 +165,9 @@ abstract class EntityController<T extends DataObject> {
   Future<List<Map<String, dynamic>>> getManyRaw(
       {List<String>? conditions,
       Conjunction conjunction = Conjunction.and,
-      Map<String, dynamic>? substitutionValues}) async {
+      Map<String, dynamic>? substitutionValues, String? orderBy}) async {
     return getManyRawFromQuery(
-        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')};',
+        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')} ${orderBy == null ? '' : 'ORDER BY $orderBy'};',
         substitutionValues: substitutionValues);
   }
 
@@ -228,18 +230,20 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
-  static Future<Response> handleRequestManyOfController(EntityController controller,
-      {bool isRaw = false,
-      List<String>? conditions,
-      Conjunction conjunction = Conjunction.and,
-      Map<String, dynamic>? substitutionValues}) async {
+  static Future<Response> handleRequestManyOfController(EntityController controller, {
+    bool isRaw = false,
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+    String? orderBy,
+  }) async {
     if (isRaw) {
       final many = await controller.getManyRaw(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
       return Response.ok(rawJsonEncode(many.toList()));
     } else {
       final many = await controller.getMany(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
       return Response.ok(jsonEncode(many.toList()));
     }
   }
