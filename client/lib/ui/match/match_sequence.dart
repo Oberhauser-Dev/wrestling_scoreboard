@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard/data/fight_role.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard/ui/match/team_match_overview.dart';
+import 'package:wrestling_scoreboard/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard/util/units.dart';
 
 import '../components/fitted_text.dart';

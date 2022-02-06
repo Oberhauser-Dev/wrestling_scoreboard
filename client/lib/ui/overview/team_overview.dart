@@ -4,50 +4,48 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
+import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/team_match_edit.dart';
 import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
-import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
-import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
 
-class MatchSelection<T extends DataObject> extends StatelessWidget {
-  final T filterObject;
+class TeamOverview<T extends DataObject> extends StatelessWidget {
+  final Team filterObject;
 
-  const MatchSelection({Key? key, required this.filterObject}) : super(key: key);
+  const TeamOverview({Key? key, required this.filterObject}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return SingleConsumer<T>(
+    return SingleConsumer<Team>(
         id: filterObject.id!,
         initialData: filterObject,
         builder: (context, data) {
-          final description = data is Team
-              ? InfoWidget(
-                  obj: data,
-                  editPage: TeamEdit(
-                    team: data,
-                  ),
-                  children: [
-                    ContentItem(
-                      title: data.description ?? '-',
-                      subtitle: localizations.description,
-                      icon: Icons.subject,
-                    ),
-                    ContentItem(
-                      title: data.league?.name ?? '-',
-                      subtitle: localizations.league,
-                      icon: Icons.emoji_events,
-                    ),
-                    ContentItem(
-                      title: data.club.name,
-                      subtitle: localizations.club,
-                      icon: Icons.foundation,
-                    ),
-                  ],
-                  classLocale: localizations.team)
-              : const SizedBox();
+          final description = InfoWidget(
+              obj: data!,
+              editPage: TeamEdit(
+                team: data,
+              ),
+              children: [
+                ContentItem(
+                  title: data.description ?? '-',
+                  subtitle: localizations.description,
+                  icon: Icons.subject,
+                ),
+                ContentItem(
+                  title: data.league?.name ?? '-',
+                  subtitle: localizations.league,
+                  icon: Icons.emoji_events,
+                ),
+                ContentItem(
+                  title: data.club.name,
+                  subtitle: localizations.club,
+                  icon: Icons.foundation,
+                ),
+              ],
+              classLocale: localizations.team);
           return Scaffold(
             appBar: AppBar(
-              title: Text(data is Team ? data.name : 'no title'),
+              title: Text(data.name),
             ),
             body: GroupedList(items: [
               description,
@@ -63,8 +61,8 @@ class MatchSelection<T extends DataObject> extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => TeamMatchEdit(
-                              initialHomeTeam: data is Team ? data as Team : null,
-                              initialGuestTeam: data is Team ? data as Team : null,
+                              initialHomeTeam: data,
+                              initialGuestTeam: data,
                             ),
                           ),
                         ),
@@ -83,7 +81,7 @@ class MatchSelection<T extends DataObject> extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                       text: match.home.team.name,
-                                      style: match.home.team == (data as Team)
+                                      style: match.home.team == data
                                           ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
                                           : null),
                                   const TextSpan(text: ' - '),

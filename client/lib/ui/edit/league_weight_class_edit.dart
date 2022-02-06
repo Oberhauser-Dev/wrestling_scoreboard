@@ -2,7 +2,7 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/ui/weight_class/weight_class_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/weight_class_edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class LeagueWeightClassEdit extends WeightClassEdit {

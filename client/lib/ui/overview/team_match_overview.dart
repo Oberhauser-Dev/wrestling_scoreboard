@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
-import 'package:wrestling_scoreboard/ui/lineup/lineup_edit.dart';
-import 'package:wrestling_scoreboard/ui/match/team_match_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/lineup_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/team_match_edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamMatchOverview extends StatelessWidget {
@@ -35,7 +35,7 @@ class TeamMatchOverview extends StatelessWidget {
                   ),
                   ContentItem(
                     title: match.location ?? 'no location',
-                    subtitle: localizations.matchNumber,
+                    subtitle: localizations.place,
                     icon: Icons.place,
                   ),
                   ContentItem(

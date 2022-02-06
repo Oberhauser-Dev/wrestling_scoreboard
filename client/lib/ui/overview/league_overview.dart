@@ -4,11 +4,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
-import 'package:wrestling_scoreboard/ui/league/league_edit.dart';
-import 'package:wrestling_scoreboard/ui/team/team_edit.dart';
-import 'package:wrestling_scoreboard/ui/weight_class/league_weight_class_edit.dart';
-
-import '../home/match_selection.dart';
+import 'package:wrestling_scoreboard/ui/edit/league_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
+import 'package:wrestling_scoreboard/ui/edit/league_weight_class_edit.dart';
 
 class LeagueOverview extends StatelessWidget {
   final League filterObject;
@@ -96,7 +95,7 @@ class LeagueOverview extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MatchSelection<Team>(
+        builder: (context) => TeamOverview(
           filterObject: team,
         ),
       ),
