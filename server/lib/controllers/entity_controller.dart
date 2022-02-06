@@ -97,7 +97,7 @@ abstract class EntityController<T extends DataObject> {
           postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
       // Trim all strings before inserting into db
       if (postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
-        data[e.key] = (e.value as String).trim();
+        data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
       }
       return PostgreSQLFormat.id(e.key, type: postgresType);
     }).join(', ')}) RETURNING $primaryKeyName;
@@ -119,7 +119,7 @@ abstract class EntityController<T extends DataObject> {
           postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
       // Trim all strings before inserting into db
       if (postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
-        data[e.key] = (e.value as String).trim();
+        data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
       }
       return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
     }).join(',')} 
