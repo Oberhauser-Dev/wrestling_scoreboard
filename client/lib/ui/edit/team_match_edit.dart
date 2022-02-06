@@ -136,7 +136,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
     );
   }
 
-  void handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 

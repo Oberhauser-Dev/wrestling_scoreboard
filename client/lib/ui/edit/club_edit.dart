@@ -64,7 +64,7 @@ class ClubEditState extends State<ClubEdit> {
     );
   }
 
-  void handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await dataProvider.createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));

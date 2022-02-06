@@ -84,7 +84,8 @@ class RestDataProvider extends DataProvider {
       return single.id!;
     }
 
-    Future<int> handleSingleRaw<T extends DataObject>({required CRUD operation, required Map<String, dynamic> single}) async {
+    Future<int> handleSingleRaw<T extends DataObject>(
+        {required CRUD operation, required Map<String, dynamic> single}) async {
       if (operation == CRUD.update) {
         getSingleRawStreamController<T>()?.sink.add(single);
       }
@@ -98,8 +99,10 @@ class RestDataProvider extends DataProvider {
       getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 
-    Future<void> handleManyRaw<T extends DataObject>({required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
-      final tmp = ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
+    Future<void> handleManyRaw<T extends DataObject>(
+        {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
+      final tmp =
+          ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
       final filterType = many.filterType;
       if (tmp.data.isEmpty) return;
       getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
@@ -137,7 +140,7 @@ class RestDataProvider extends DataProvider {
     if (response.statusCode < 400) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: \n' +
+      throw RestException('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: \n' +
           (response.reasonPhrase ?? response.statusCode.toString()) +
           '\nBody: ${response.body}');
     }
@@ -147,4 +150,10 @@ class RestDataProvider extends DataProvider {
   Future<void> deleteSingle(DataObject obj) async {
     _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.runtimeType, CRUD.delete)));
   }
+}
+
+class RestException implements Exception {
+  String message;
+
+  RestException(this.message);
 }

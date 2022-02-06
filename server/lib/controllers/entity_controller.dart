@@ -102,8 +102,14 @@ abstract class EntityController<T extends DataObject> {
       return PostgreSQLFormat.id(e.key, type: postgresType);
     }).join(', ')}) RETURNING $primaryKeyName;
         ''';
-    final res = await PostgresDb().connection.query(sql, substitutionValues: data);
-    return res.last[0] as int;
+    try {
+      final res = await PostgresDb().connection.query(sql, substitutionValues: data);
+      return res.last[0] as int;
+    } on PostgreSQLException catch (e) {
+      throw InvalidParameterException(
+          'The data object of table $tableName could not be created. Check the attributes: $data'
+          '\nPostgreSQLException: {"code": ${e.code}');
+    }
   }
 
   Future<int> updateSingle(T dataObject) async {
@@ -125,11 +131,18 @@ abstract class EntityController<T extends DataObject> {
     }).join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
-    final res = await PostgresDb().connection.query(sql, substitutionValues: data);
-    if (res.isEmpty || res.last.isEmpty) {
-      throw InvalidParameterException('The data object of table $tableName could not be updated. Check the parameters: $data');
+    try {
+      final res = await PostgresDb().connection.query(sql, substitutionValues: data);
+      if (res.isEmpty || res.last.isEmpty) {
+        throw InvalidParameterException(
+            'The data object of table $tableName could not be updated. Check the attributes: $data');
+      }
+      return res.last[0] as int;
+    } on PostgreSQLException catch (e) {
+      throw InvalidParameterException(
+          'The data object of table $tableName could not be updated. Check the attributes: $data'
+              '\nPostgreSQLException: {"code": ${e.code}');
     }
-    return res.last[0] as int;
   }
 
   Future<bool> deleteSingle(int id) async {
@@ -165,7 +178,8 @@ abstract class EntityController<T extends DataObject> {
   Future<List<Map<String, dynamic>>> getManyRaw(
       {List<String>? conditions,
       Conjunction conjunction = Conjunction.and,
-      Map<String, dynamic>? substitutionValues, String? orderBy}) async {
+      Map<String, dynamic>? substitutionValues,
+      String? orderBy}) async {
     return getManyRawFromQuery(
         'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')} ${orderBy == null ? '' : 'ORDER BY $orderBy'};',
         substitutionValues: substitutionValues);
@@ -206,7 +220,7 @@ abstract class EntityController<T extends DataObject> {
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
       return Response.ok(jsonEncode(id));
-    } on InvalidParameterException catch(e) {
+    } on InvalidParameterException catch (e) {
       return Response.notFound(e.message);
     }
   }
@@ -230,7 +244,8 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
-  static Future<Response> handleRequestManyOfController(EntityController controller, {
+  static Future<Response> handleRequestManyOfController(
+    EntityController controller, {
     bool isRaw = false,
     List<String>? conditions,
     Conjunction conjunction = Conjunction.and,

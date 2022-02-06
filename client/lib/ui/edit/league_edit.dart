@@ -79,7 +79,7 @@ class LeagueEditState extends State<LeagueEdit> {
             items: items));
   }
 
-  void handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await dataProvider.createOrUpdateSingle(League(id: widget.league?.id, name: _name!, startDate: _startDate));

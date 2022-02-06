@@ -110,7 +110,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
             items: items));
   }
 
-  void handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final weightClass = WeightClass(

@@ -28,6 +28,7 @@
   "noItems": "No items available.",
   "mandatoryField": "This is a mandatory field.",
   "noWebSocketConnection": "The connection to the server could not be established or was interrupted.",
+  "invalidParameterException": "The change was not successful, please check your input parameters.",
   "retry": "Retry",
 
   "date": "Date",
