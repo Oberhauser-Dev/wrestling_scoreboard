@@ -90,7 +90,14 @@ abstract class EntityController<T extends DataObject> {
     final postgresTypes = getPostgresDataTypes();
     final sql = '''
         INSERT INTO $tableName (${data.keys.join(',')}) 
-        VALUES (${data.entries.map((e) => PostgreSQLFormat.id(e.key, type: postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType])).join(', ')}) RETURNING $primaryKeyName;
+        VALUES (${Map.of(data).entries.map((e) {
+          final postgresType = postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
+          // Trim all strings before inserting into db
+          if(postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
+            data[e.key] = (e.value as String).trim();
+          }
+          return PostgreSQLFormat.id(e.key, type: postgresType);
+        }).join(', ')}) RETURNING $primaryKeyName;
         ''';
     final res = await PostgresDb().connection.query(sql, substitutionValues: data);
     return res.last[0] as int;
@@ -104,7 +111,14 @@ abstract class EntityController<T extends DataObject> {
     final postgresTypes = getPostgresDataTypes();
     final sql = '''
         UPDATE $tableName 
-        SET ${data.entries.map((e) => '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType])}').join(',')} 
+        SET ${Map.of(data).entries.map((e) {
+          final postgresType = postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
+          // Trim all strings before inserting into db
+          if(postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
+            data[e.key] = (e.value as String).trim();
+          }
+          return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
+        }).join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
     final res = await PostgresDb().connection.query(sql, substitutionValues: data);
