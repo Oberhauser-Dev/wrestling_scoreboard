@@ -146,11 +146,36 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<bool> deleteSingle(int id) async {
-    final res = await PostgresDb()
-        .connection
-        .query('DELETE FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
-    // TODO catch if row cannot be deleted, return false; alternatively select id before in order to check its existence.
+    try {
+      await PostgresDb()
+          .connection
+          .query('DELETE FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
+    } on PostgreSQLException catch (_) {
+      return false;
+    }
     return true;
+  }
+
+  Future<void> deleteMany({
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+  }) async {
+    await deleteManyRaw(
+        conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
+  }
+
+  Future<void> deleteManyRaw(
+      {List<String>? conditions,
+        Conjunction conjunction = Conjunction.and,
+        Map<String, dynamic>? substitutionValues}) async {
+    return setManyRawFromQuery(
+        'DELETE FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')};',
+        substitutionValues: substitutionValues);
+  }
+
+  Future<void> setManyRawFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
+    await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues);
   }
 
   Future<Response> requestMany(Request request) async {

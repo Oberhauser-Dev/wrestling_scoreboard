@@ -41,15 +41,10 @@ class TeamMatchController extends EntityController<TeamMatch> {
   Future<Response> generateFights(Request request, String id) async {
     final isReset = (request.url.queryParameters['reset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
-    final oldFights = (await getFights(id)); // TODO Check if works...
+    final oldFights = (await getFights(id));
     final weightClasses = teamMatch.league.id == null
         ? <WeightClass>[]
         : (await LeagueController().getWeightClasses(teamMatch.league.id.toString()));
-    if (isReset) {
-      await Future.forEach(oldFights, (Fight e) async {
-        if (e.id != null) await deleteSingle(e.id!);
-      });
-    }
     final homeParticipations = await ParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id});
     final guestParticipations = await ParticipationController()
@@ -93,6 +88,23 @@ class TeamMatchController extends EntityController<TeamMatch> {
             .query('UPDATE team_match_fight SET pos = ${entry.key} WHERE fight_id = ${fight.id};');
       }
     });
+    if (isReset) {
+      await Future.forEach(oldFights, (Fight fight) async {
+        if (fight.id != null) {
+          await TeamMatchFightController().deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
+          await FightController().deleteSingle(fight.id!);
+        }
+      });
+    } else {
+      // Get old fights, which aren't reused anymore and delete them.
+      final unusedFights = oldFights.where((oldFight) => fights.every((newFight) => newFight.id != oldFight.id));
+      await Future.forEach(unusedFights, (Fight fight) async {
+        if (fight.id != null) {
+          await TeamMatchFightController().deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
+          await FightController().deleteSingle(fight.id!);
+        }
+      });
+    }
     broadcast(jsonEncode(manyToJson(fights, Fight, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
 
     return Response.ok('{"status": "success"}');
