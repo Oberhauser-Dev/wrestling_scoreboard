@@ -166,3 +166,94 @@ class ManyDataObject<T> {
 
   ManyDataObject({required this.data, this.filterType, this.filterId});
 }
+
+const List<Type> dataObjectTypes = [
+  Club,
+  Fight,
+  FightAction,
+  League,
+  LeagueWeightClass,
+  Lineup,
+  Membership,
+  Participation,
+  ParticipantState,
+  Person,
+  Team,
+  TeamMatch,
+  TeamMatchFight,
+  WeightClass,
+];
+
+String getTableNameFromType(Type t) {
+  switch (t) {
+    case Club:
+      return 'club';
+    case Fight:
+      return 'fight';
+    case FightAction:
+      return 'fight_action';
+    case League:
+      return 'league';
+    case LeagueWeightClass:
+      return 'league_weight_class';
+    case Lineup:
+      return 'lineup';
+    case Membership:
+      return 'membership';
+    case Participation:
+      return 'participation';
+    case ParticipantState:
+      return 'participant_state';
+    case Person:
+      return 'person';
+    case Team:
+      return 'team';
+    case TeamMatch:
+      return 'team_match';
+    case TeamMatchFight:
+      return 'team_match_fight';
+    case Tournament:
+      return 'tournament';
+    case WeightClass:
+      return 'weight_class';
+    default:
+      throw UnimplementedError('ClassName for "${t.toString()}" not found.');
+  }
+}
+
+Type getTypeFromTableName(String tableName) {
+  switch (tableName) {
+    case 'club':
+      return Club;
+    case 'fight':
+      return Fight;
+    case 'fight_action':
+      return FightAction;
+    case 'league':
+      return League;
+    case 'league_weight_class':
+      return LeagueWeightClass;
+    case 'lineup':
+      return Lineup;
+    case 'membership':
+      return Membership;
+    case 'participation':
+      return Participation;
+    case 'participant_state':
+      return ParticipantState;
+    case 'person':
+      return Person;
+    case 'team':
+      return Team;
+    case 'team_match':
+      return TeamMatch;
+    case 'team_match_fight':
+      return TeamMatchFight;
+    case 'tournament':
+      return Tournament;
+    case 'weight_class':
+      return WeightClass;
+    default:
+      throw UnimplementedError('Type for "${tableName.toString()}" not found.');
+  }
+}

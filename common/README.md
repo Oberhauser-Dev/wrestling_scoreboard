@@ -24,8 +24,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 Update following files accordingly:
 - `package:common/lib/src/data/data_wrapper.dart@handleFromJson`
-- `package:common/lib/src/data/dataO_oject.dart`
-- `package:common/lib/src/data.dart`
+- `package:common/lib/src/data/data_oject.dart`
 - `package:server/lib/controllers/websocket_handler.dart`
 - `package:server/lib/controllers/entity_controller.dart@getControllerFromDataType`
 - `package:server/lib/routes/api_routes`
