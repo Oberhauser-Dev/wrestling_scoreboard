@@ -43,6 +43,9 @@
   "clubNumber": "Vereinsnummer",
   "person": "Person",
   "persons": "Personen",
+  "membership": "Mitgliedschaft",
+  "memberships": "Mitgliedschaften",
+  "membershipNumber": "Mitgliedsnummer",
   "leader": "Mannschaftsführer",
   "leaders": "Mannschaftsführer",
   "coach": "Trainer",
@@ -91,6 +94,7 @@
   "activityTimeAbbr": "AZ",
   "injuryTime": "Verletzungszeit",
   "injuryTimeShort": "VZ",
+  "durations": "Zeiten",
 
   "referee": "Schiedsrichter",
   "refereeAbbr": "SR",
@@ -98,5 +102,13 @@
   "timeKeeper": "Zeitnehmer",
   "transcriptionWriter": "Protokollführer",
   "steward": "Ordner",
-  "durations": "Zeiten"
+  
+  "prename": "Vorname",
+  "surname": "Nachname",
+  "age": "Age",
+  "dateOfBirth": "Date of Birth",
+  "gender": "Gender",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "genderTransgender": "Diverse"
 }

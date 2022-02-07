@@ -7,9 +7,9 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class LeagueWeightClassEdit extends WeightClassEdit {
   final LeagueWeightClass? leagueWeightClass;
-  final League league;
+  final League initialLeague;
 
-  LeagueWeightClassEdit({this.leagueWeightClass, required this.league, Key? key})
+  LeagueWeightClassEdit({this.leagueWeightClass, required this.initialLeague, Key? key})
       : super(weightClass: leagueWeightClass?.weightClass, key: key);
 
   @override
@@ -41,9 +41,9 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
   }
 
   @override
-  Future<void> handleSubmitWeightClass(WeightClass weightClass) async {
+  Future<void> handleNested(weightClass) async {
     final leagueWeightClass =
-        LeagueWeightClass(id: widget.leagueWeightClass?.id, league: widget.league, pos: _pos, weightClass: weightClass);
+        LeagueWeightClass(id: widget.leagueWeightClass?.id, league: widget.initialLeague, pos: _pos, weightClass: weightClass);
     leagueWeightClass.id = await dataProvider.createOrUpdateSingle(leagueWeightClass);
   }
 }

@@ -1,5 +1,6 @@
 import '../data.dart';
 import '../enums/crud.dart';
+import '../util.dart';
 
 typedef GetSingleOfTypeCallback = Future<T?> Function<T extends DataObject>(int id);
 
@@ -34,6 +35,8 @@ abstract class DataObject {
         return Participation.fromJson(json) as T;
       case ParticipantState:
         return ParticipantState.fromJson(json) as T;
+      case Person:
+        return Person.fromJson(json) as T;
       case Team:
         return Team.fromJson(json) as T;
       case TeamMatch:

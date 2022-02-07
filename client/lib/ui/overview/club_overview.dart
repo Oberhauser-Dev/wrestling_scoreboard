@@ -1,11 +1,13 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/ui/edit/club_edit.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
+import 'package:wrestling_scoreboard/ui/edit/club_edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard/ui/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
 
 class ClubOverview extends StatelessWidget {
@@ -42,7 +44,7 @@ class ClubOverview extends StatelessWidget {
             description,
             ManyConsumer<Team>(
               filterObject: data,
-              builder: (BuildContext context, List<Team> team) {
+              builder: (BuildContext context, List<Team> teams) {
                 return ListGroup(
                   header: HeadingItem(
                     title: localizations.teams,
@@ -58,8 +60,39 @@ class ClubOverview extends StatelessWidget {
                       ),
                     ),
                   ),
-                  items: team.map((e) =>
-                      ContentItem(title: e.name, icon: Icons.group, onTap: () => handleSelectedTeam(e, context))),
+                  items: teams.map((team) => SingleConsumer<Team>(
+                      id: team.id,
+                      initialData: team,
+                      builder: (context, team) => ContentItem(
+                          title: team!.name, icon: Icons.group, onTap: () => handleSelectedTeam(team, context)))),
+                );
+              },
+            ),
+            ManyConsumer<Membership>(
+              filterObject: data,
+              builder: (BuildContext context, List<Membership> memberships) {
+                return ListGroup(
+                  header: HeadingItem(
+                    title: localizations.memberships,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MembershipEdit(
+                            initialClub: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: memberships.map((membership) => SingleConsumer<Membership>(
+                      id: membership.id,
+                      initialData: membership,
+                      builder: (context, team) => ContentItem(
+                          title: membership.person.fullName,
+                          icon: Icons.person,
+                          onTap: () => handleSelectedMembership(membership, context)))),
                 );
               },
             ),
@@ -75,6 +108,17 @@ class ClubOverview extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => TeamOverview(
           filterObject: team,
+        ),
+      ),
+    );
+  }
+
+  handleSelectedMembership(Membership membership, BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MembershipOverview(
+          filterObject: membership,
         ),
       ),
     );

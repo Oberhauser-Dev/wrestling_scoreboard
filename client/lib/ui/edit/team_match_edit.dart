@@ -69,6 +69,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
       ),
       ListTile(
         title: TextFormField(
+          key: ValueKey(_date),
           readOnly: true,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),

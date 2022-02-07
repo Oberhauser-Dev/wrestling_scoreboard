@@ -84,7 +84,7 @@ class LeagueOverview extends StatelessWidget {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LeagueWeightClassEdit(league: data),
+                          builder: (context) => LeagueWeightClassEdit(initialLeague: data),
                         ),
                       ),
                     ),

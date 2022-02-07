@@ -48,6 +48,7 @@ class LeagueEditState extends State<LeagueEdit> {
       ),
       ListTile(
         title: TextFormField(
+          key: ValueKey(_startDate),
           readOnly: true,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),

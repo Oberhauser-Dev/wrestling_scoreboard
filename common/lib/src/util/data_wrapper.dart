@@ -94,6 +94,12 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
+    case Person:
+      return _handleFromJsonGeneric<Person>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     case Team:
       return _handleFromJsonGeneric<Team>(json,
           handleSingle: handleSingle,

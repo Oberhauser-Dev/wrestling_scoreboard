@@ -23,7 +23,7 @@ class LeagueWeightClassOverview extends StatelessWidget {
           obj: data!,
           editPage: LeagueWeightClassEdit(
             leagueWeightClass: data,
-            league: data.league,
+            initialLeague: data.league,
           ),
           children: [
             ContentItem(

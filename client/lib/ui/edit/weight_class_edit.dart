@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/common.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 abstract class WeightClassEdit extends StatefulWidget {
@@ -12,7 +13,7 @@ abstract class WeightClassEdit extends StatefulWidget {
   const WeightClassEdit({this.weightClass, Key? key}) : super(key: key);
 }
 
-abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> {
+abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> implements AbstractEditState<WeightClass> {
   final _formKey = GlobalKey<FormState>();
 
   String? _suffix;
@@ -32,6 +33,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
     final localizations = AppLocalizations.of(context)!;
 
     final items = [
+      ...buildFields(context),
       ListTile(
         title: TextFormField(
           initialValue: widget.weightClass?.weight.toString() ?? '',
@@ -98,7 +100,6 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
           onSaved: (newValue) => _suffix = newValue,
         ),
       ),
-      ...buildFields(context),
     ];
 
     return Form(
@@ -116,11 +117,8 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
       final weightClass = WeightClass(
           id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
       weightClass.id = await dataProvider.createOrUpdateSingle(weightClass);
-      await handleSubmitWeightClass(weightClass);
+      await handleNested(weightClass);
       Navigator.of(context).pop();
     }
   }
-  
-  List<Widget> buildFields(BuildContext context);
-  Future<void> handleSubmitWeightClass(WeightClass weightClass);
 }

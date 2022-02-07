@@ -7,6 +7,7 @@ import 'package:server/controllers/fight_action_controller.dart';
 import 'package:server/controllers/league_controller.dart';
 import 'package:server/controllers/league_weight_class_controller.dart';
 import 'package:server/controllers/lineup_controller.dart';
+import 'package:server/controllers/membership_controller.dart';
 import 'package:server/controllers/participation_controller.dart';
 import 'package:server/controllers/team_controller.dart';
 import 'package:server/controllers/team_match_controller.dart';
@@ -35,6 +36,8 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterType: Lineup,
         filterId: single.lineup.id)));
   } else if (single is Lineup) {
+    // No filtered list needs to be handled.
+  } else if (single is Person) {
     // No filtered list needs to be handled.
   } else if (single is Club) {
     // Exception: the full Club list has to be updated, shouldn't occur often
@@ -85,6 +88,13 @@ void broadcastSingle<T extends DataObject>(T single) async {
         CRUD.update,
         filterType: League,
         filterId: single.league.id)));
+  } else if (single is Membership) {
+    broadcast(jsonEncode(manyToJson(
+        await MembershipController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
+        Membership,
+        CRUD.update,
+        filterType: Club,
+        filterId: single.club.id)));
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }
@@ -100,6 +110,8 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterType: Lineup,
         filterId: single['lineup_id'])));
   } else if (T == Lineup) {
+    // No filtered list needs to be handled.
+  } else if (T == Person) {
     // No filtered list needs to be handled.
   } else if (T == Club) {
     // Exception: the full Club list has to be updated, shouldn't occur often
@@ -152,6 +164,14 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         CRUD.update,
         filterType: League,
         filterId: single['league_id'])));
+  } else if (T == Membership) {
+    broadcast(jsonEncode(manyToJson(
+        await MembershipController()
+            .getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
+        Membership,
+        CRUD.update,
+        filterType: Club,
+        filterId: single['club_id'])));
   } else {
     throw DataUnimplementedError(CRUD.update, single.runtimeType);
   }
