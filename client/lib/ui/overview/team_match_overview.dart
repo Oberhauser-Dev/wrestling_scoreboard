@@ -37,6 +37,7 @@ class TeamMatchOverview extends StatelessWidget {
                         editPage: TeamMatchEdit(
                           teamMatch: match,
                         ),
+                        onDelete: () => dataProvider.deleteSingle(match),
                         children: [
                           ContentItem(
                             title: match.no ?? '-',

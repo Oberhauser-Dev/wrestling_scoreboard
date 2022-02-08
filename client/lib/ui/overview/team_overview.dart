@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_match_edit.dart';
 import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamOverview<T extends DataObject> extends StatelessWidget {
   final Team filterObject;
@@ -25,6 +26,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
               editPage: TeamEdit(
                 team: data,
               ),
+              onDelete: () => dataProvider.deleteSingle(data),
               children: [
                 ContentItem(
                   title: data.description ?? '-',

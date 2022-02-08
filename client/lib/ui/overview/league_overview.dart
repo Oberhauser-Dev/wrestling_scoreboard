@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard/ui/edit/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
 import 'package:wrestling_scoreboard/ui/overview/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class LeagueOverview extends StatelessWidget {
   final League filterObject;
@@ -28,6 +29,7 @@ class LeagueOverview extends StatelessWidget {
           editPage: LeagueEdit(
             league: data,
           ),
+          onDelete: () => dataProvider.deleteSingle(data),
           children: [
             ContentItem(
               title: data.startDate.toIso8601String(),

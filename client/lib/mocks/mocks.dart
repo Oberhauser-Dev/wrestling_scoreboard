@@ -137,9 +137,16 @@ List<Fight> getFightsOfTeamMatch(TeamMatch match) {
 
 List<FightAction> getFightActions() => _fightActions;
 
+List<FightAction> getFightActionsOfFight(Fight fight) =>
+    getFightActions().where((element) => element.fight == fight).toList();
+
 List<League> getLeagues() => _leagues;
 
 List<LeagueWeightClass> getLeagueWeightClasses() => _leagueWeightClasses;
+
+List<LeagueWeightClass> getLeagueWeightClassesOfLeague(League league) {
+  return getLeagueWeightClasses().where((element) => element.league == league).toList();
+}
 
 List<Lineup> getLineups() => _lineups;
 
@@ -177,6 +184,16 @@ List<TeamMatch> getTeamMatchesOfTeam(Team team) {
 
 List<TeamMatchFight> getTeamMatchFights() => _teamMatchFights;
 
+List<TeamMatchFight> getTeamMatchFightsOfTeamMatch(TeamMatch match) {
+  return getTeamMatchFights().where((element) => element.teamMatch == match).toList();
+}
+
 List<TournamentFight> getTournamentFights() => _tournamentFights;
 
 List<WeightClass> getWeightClasses() => _weightClasses;
+
+List<WeightClass> getWeightClassesOfLeague(League league) {
+  return (getLeagueWeightClasses().where((element) => element.league == league).toList()..sort((a, b) => a.pos - b.pos))
+      .map((e) => e.weightClass)
+      .toList();
+}

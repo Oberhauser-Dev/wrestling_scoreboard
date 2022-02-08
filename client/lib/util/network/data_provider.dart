@@ -49,7 +49,7 @@ abstract class DataProvider {
         try {
           final many = await readMany<T>(filterObject: filterObject);
           controller.sink
-              .add(ManyDataObject(data: many, filterType: filterObject.runtimeType, filterId: filterObject?.id));
+              .add(ManyDataObject<T>(data: many, filterType: filterObject.runtimeType, filterId: filterObject?.id));
         } catch (e) {
           controller.sink.addError(e);
         }
@@ -66,10 +66,10 @@ abstract class DataProvider {
 
   /// CREATE | UPDATE: create or update a single object
   /// Returns the id of the object
-  Future<int> createOrUpdateSingle(DataObject obj);
+  Future<int> createOrUpdateSingle(DataObject single);
 
   /// DELETE: delete a single object
-  Future<void> deleteSingle(DataObject obj);
+  Future<void> deleteSingle(DataObject single);
 
   /// CREATE: generate fights of a wrestling event
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]);

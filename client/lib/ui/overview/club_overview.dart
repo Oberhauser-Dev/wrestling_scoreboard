@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard/ui/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
 import 'package:wrestling_scoreboard/ui/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
+import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class ClubOverview extends StatelessWidget {
   final Club filterObject;
@@ -27,6 +28,7 @@ class ClubOverview extends StatelessWidget {
           editPage: ClubEdit(
             club: data,
           ),
+          onDelete: () => dataProvider.deleteSingle(data),
           children: [
             ContentItem(
               title: data.no ?? '-',

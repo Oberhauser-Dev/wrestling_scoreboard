@@ -2,19 +2,20 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class InfoWidget extends StatelessWidget {
   final DataObject obj;
   final Widget editPage;
   final List<Widget> children;
   final String classLocale;
+  final VoidCallback onDelete;
 
   const InfoWidget({
     required this.obj,
     required this.editPage,
     required this.children,
     required this.classLocale,
+    required this.onDelete,
     Key? key,
   }) : super(key: key);
 
@@ -50,8 +51,7 @@ class InfoWidget extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        // TODO Also delete subsequent object (e.g. WeightClass of LeagueWeightClass)
-                        dataProvider.deleteSingle(obj);
+                        onDelete();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },

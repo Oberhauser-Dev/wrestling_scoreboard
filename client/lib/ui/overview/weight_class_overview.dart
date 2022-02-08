@@ -1,60 +1,58 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/gender.dart';
+import 'package:wrestling_scoreboard/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/overview/common.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-abstract class PersonOverview extends StatelessWidget implements AbstractOverview {
-  final Person _filterObject;
+abstract class WeightClassOverview extends StatelessWidget implements AbstractOverview {
+  final WeightClass _filterObject;
 
-  const PersonOverview({Key? key, required Person filterObject})
+  const WeightClassOverview({Key? key, required WeightClass filterObject})
       : _filterObject = filterObject,
         super(key: key);
 
   @override
-  Widget buildOverview(
-    BuildContext context, {
-    required String classLocale,
-    required Widget editPage,
-    required VoidCallback onDelete,
-    required List<Widget> tiles,
-  }) {
+  Widget buildOverview(BuildContext context,
+      {required String classLocale,
+      required Widget editPage,
+      required VoidCallback onDelete,
+      required List<Widget> tiles}) {
     final localizations = AppLocalizations.of(context)!;
-    return SingleConsumer<Person>(
+    return SingleConsumer<WeightClass>(
       id: _filterObject.id!,
       initialData: _filterObject,
-      builder: (context, person) {
+      builder: (context, data) {
         final description = InfoWidget(
-          obj: person!,
+          obj: data!,
           editPage: editPage,
           onDelete: () {
             onDelete();
-            dataProvider.deleteSingle(person);
+            dataProvider.deleteSingle(data);
           },
           children: [
             ...tiles,
             ContentItem(
-              title: person.fullName,
-              subtitle: localizations.name,
-              icon: Icons.person,
+              title: _filterObject.weight.toString(),
+              subtitle: localizations.weight,
+              icon: Icons.fitness_center,
             ),
             ContentItem(
-              title: person.age?.toString() ?? '-',
-              subtitle: localizations.age,
-              icon: Icons.event,
+              title: styleToString(_filterObject.style, context),
+              subtitle: localizations.wrestlingStyle,
+              icon: Icons.style,
             ),
             ContentItem(
-              title: person.birthDate?.toIso8601String() ?? '-',
-              subtitle: localizations.dateOfBirth,
-              icon: Icons.cake,
+              title: _filterObject.unit.toAbbr(),
+              subtitle: localizations.weightUnit,
+              icon: Icons.straighten,
             ),
             ContentItem(
-              title: genderToString(person.gender, context),
-              subtitle: localizations.gender,
+              title: _filterObject.suffix ?? '-',
+              subtitle: localizations.suffix,
               icon: Icons.description,
             ),
           ],
@@ -62,7 +60,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
         );
         return Scaffold(
           appBar: AppBar(
-            title: Text(person.fullName),
+            title: Text(_filterObject.name),
           ),
           body: GroupedList(items: [
             description,
