@@ -64,7 +64,7 @@ class MockDataProvider extends DataProvider {
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeams() as List<T>;
       case TeamMatch:
-        if (filterObject is Team) return getMatchesOfTeam(filterObject) as List<T>;
+        if (filterObject is Team) return getTeamMatchesOfTeam(filterObject) as List<T>;
         if (filterObject != null) throw DataUnimplementedError(CRUD.read, T, filterObject);
         return getTeamMatches() as List<T>;
       case LeagueWeightClass:
@@ -169,7 +169,6 @@ class MockDataProvider extends DataProvider {
 
   @override
   Future<int> createOrUpdateSingle(DataObject obj) async {
-    final operation = obj.id == null ? CRUD.create : CRUD.update;
     if (obj.id == null) {
       obj = _createMockSingle(obj);
     } else {
@@ -186,6 +185,7 @@ class MockDataProvider extends DataProvider {
     } else if (obj is Lineup) {
       // No filtered list needs to be handled.
     } else {
+      final operation = obj.id == null ? CRUD.create : CRUD.update;
       throw DataUnimplementedError(operation, obj.runtimeType);
     }
     return obj.id!;
@@ -211,42 +211,61 @@ class MockDataProvider extends DataProvider {
 
   DataObject _createMockSingle(DataObject obj) {
     obj.id = Random().nextInt(32000);
-    if (obj is Participation) {
-      getParticipations().add(obj);
-    } else if (obj is Lineup) {
-      getLineups().add(obj);
-    } else {
-      throw DataUnimplementedError(CRUD.create, obj.runtimeType);
-    }
+    getListOfType(obj, CRUD.create).add(obj);
     return obj;
   }
 
   DataObject _updateMockSingle(DataObject obj) {
+    final objList = getListOfType(obj, CRUD.update);
+    objList.remove(obj);
+    objList.add(obj);
     if (obj is Participation) {
-      getParticipations().remove(obj);
-      getParticipations().add(obj);
       getSingleStreamController<Participation>()?.add(obj);
     } else if (obj is Lineup) {
-      getLineups().remove(obj);
-      getLineups().add(obj);
       getParticipations().where((element) => element.lineup == obj).forEach((element) {
         element.lineup = obj;
       });
       getSingleStreamController<Lineup>()?.add(obj);
-    } else {
-      throw DataUnimplementedError(CRUD.update, obj.runtimeType);
     }
     return obj;
   }
 
   @override
   Future<void> deleteSingle(DataObject obj) async {
-    if (obj is Participation) {
-      getParticipations().remove(obj);
+    getListOfType(obj, CRUD.delete).remove(obj);
+  }
+  
+  List<T> getListOfType<T extends DataObject>(T obj, CRUD crud) {
+    if (obj is Club) {
+      return getClubs().cast<T>();
+    } else if (obj is Fight) {
+      return getFights().cast<T>();
+    } else if (obj is FightAction) {
+      return getFightActions().cast<T>();
+    } else if (obj is League) {
+      return getLeagues().cast<T>();
+    } else if (obj is LeagueWeightClass) {
+      return getLeagueWeightClasses().cast<T>();
     } else if (obj is Lineup) {
-      getLineups().remove(obj);
+      return getLineups().cast<T>();
+    } else if (obj is Membership) {
+      return getMemberships().cast<T>();
+    } else if (obj is Participation) {
+      return getParticipations().cast<T>();
+    } else if (obj is ParticipantState) {
+      return getParticipantStates().cast<T>();
+    } else if (obj is Person) {
+      return getPersons().cast<T>();
+    } else if (obj is Team) {
+      return getTeams().cast<T>();
+    } else if (obj is TeamMatch) {
+      return getTeamMatches().cast<T>();
+    } else if (obj is TeamMatchFight) {
+      return getTeamMatchFights().cast<T>();
+    } else if (obj is WeightClass) {
+      return getWeightClasses().cast<T>();
     } else {
-      throw DataUnimplementedError(CRUD.delete, obj.runtimeType);
+      throw DataUnimplementedError(crud, obj.runtimeType);
     }
   }
 }
