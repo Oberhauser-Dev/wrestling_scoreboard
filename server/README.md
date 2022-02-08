@@ -6,6 +6,7 @@ in `lib/`, and example unit test in `test/`.
 ## Build package
 
 ```shell
+dart pub get
 dart compile exe bin/server.dart -o ./bin/server
 ```
 
@@ -19,11 +20,11 @@ sudo nano /etc/systemd/system/wrestling-scoreboard-server.service
 Description=Wrestling-scoreboard-server
 
 [Service]
-ExecStart=/var/www/wrestling-scoreboard/server/bin/server
+ExecStart=/var/www/wrestling_scoreboard/server/bin/server
 Restart=on-failure
 User=www
 Group=www
-WorkingDirectory=/var/www/wrestling-scoreboard/server
+WorkingDirectory=/var/www/wrestling_scoreboard/server
 
 [Install]
 WantedBy=multi-user.target
