@@ -50,9 +50,10 @@ class MatchSequence extends StatelessWidget {
                 match!.league.name,
                 '${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}',
                 if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
-                if (match.matChairman != null)
-                  '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
-                if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
+                // Not enough space to display all three referees
+                // if (match.matChairman != null)
+                //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
+                // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
               ];
               return Column(
                 children: [
