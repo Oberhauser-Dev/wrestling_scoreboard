@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:wrestling_scoreboard/ui/settings/settings.dart';
+import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 import 'package:wrestling_scoreboard/util/network/remote/url.dart';
 
@@ -20,7 +19,7 @@ class WebSocketManager {
 
   WebSocketManager(this.messageHandler) {
     // TODO try removing backslash if https://github.com/google/dart-neats/pull/146 is merged.
-    CustomSettingsScreen.onChangeWsUrlWebSocket.stream.listen((url) {
+    Preferences.onChangeWsUrlWebSocket.stream.listen((url) {
       wsUrl = adaptLocalhost(url.endsWith('/') ? url : (url + '/'));
       onWebSocketConnecting.sink.add(true);
     });
@@ -40,8 +39,8 @@ class WebSocketManager {
         _channel?.sink.close();
       }
     });
-    CustomSettingsScreen.onChangeWsUrlWebSocket.sink
-        .add(Settings.getValue<String>(CustomSettingsScreen.keyWsUrl, env(webSocketUrl))!);
+    Preferences.getString(Preferences.keyWsUrl)
+        .then((value) => Preferences.onChangeWsUrlWebSocket.sink.add(value ?? env(webSocketUrl)));
   }
 
   dynamic addToSink(String val) {

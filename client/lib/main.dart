@@ -3,13 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:wrestling_scoreboard/ui/appNavigation.dart';
-import 'package:wrestling_scoreboard/ui/settings/settings.dart';
+import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
-  await Settings.init(cacheProvider: SharePreferenceCache());
   runApp(const WrestlingScoreboardApp());
 }
 
@@ -27,16 +25,20 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   @override
   void initState() {
     super.initState();
-    final localeStr = Settings.getValue<String>(CustomSettingsScreen.keyLocale, null);
-    if (localeStr != null) {
-      final splits = localeStr.split('_');
-      if (splits.length > 1) {
-        _locale = Locale(splits[0], splits[1]);
-      } else {
-        _locale = Locale(splits[0]);
+    Preferences.getString(Preferences.keyLocale).then((localeStr) {
+      if (localeStr != null) {
+        final splits = localeStr.split('_');
+        setState(() {
+          if (splits.length > 1) {
+            _locale = Locale(splits[0], splits[1]);
+          } else {
+            _locale = Locale(splits[0]);
+          }
+        });
       }
-    }
-    CustomSettingsScreen.onChangeLocale.stream.listen((event) {
+    });
+    
+    Preferences.onChangeLocale.stream.distinct().listen((event) {
       setState(() {
         _locale = event;
       });
@@ -63,7 +65,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: CustomSettingsScreen.supportedLanguages.values,
+      supportedLocales: Preferences.supportedLanguages.values,
       locale: _locale,
       home: const AppNavigation(),
     );

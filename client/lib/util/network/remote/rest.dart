@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:common/common.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:http/http.dart' as http;
-import 'package:wrestling_scoreboard/ui/settings/settings.dart';
+import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard/util/network/remote/url.dart';
@@ -15,15 +14,17 @@ class RestDataProvider extends DataProvider {
     'isRaw': 'true',
   };
 
-  var _apiUrl = adaptLocalhost(
-      Settings.getValue<String>(CustomSettingsScreen.keyApiUrl, env(apiUrl))!);
+  String _apiUrl = env(apiUrl);
   late final WebSocketManager _webSocketManager;
 
   RestDataProvider() {
-    CustomSettingsScreen.onChangeApiUrl.stream.listen((event) {
+    Preferences.getString(Preferences.keyApiUrl).then((value) {
+      _apiUrl = adaptLocalhost((value ?? env(apiUrl)));
+      _initUpdateStream();
+    });
+    Preferences.onChangeApiUrl.stream.listen((event) {
       _apiUrl = adaptLocalhost(event);
     });
-    _initUpdateStream();
   }
 
   String _getPathFromType(Type t) {

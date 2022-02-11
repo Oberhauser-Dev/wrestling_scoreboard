@@ -1,9 +1,9 @@
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:wrestling_scoreboard/ui/settings/settings.dart';
+import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard/util/environment.dart';
 
 import 'stub_audio_player.dart'
-if (dart.library.js) 'web_audio_player.dart'
-if (dart.library.io) 'desktop_audio_player.dart';
+    if (dart.library.js) 'web_audio_player.dart'
+    if (dart.library.io) 'desktop_audio_player.dart';
 
 class HornSound {
   static HornSound? _singleton;
@@ -11,13 +11,18 @@ class HornSound {
   late Future<void> isSourceSet;
 
   factory HornSound() {
-    _singleton ??= HornSound._internal();
+    _singleton ??= HornSound._fromPreference();
+    return _singleton!;
+  }
+  
+  factory HornSound.source(String source) {
+    _singleton ??= HornSound._fromSource(source);
     return _singleton!;
   }
 
   Future<void> play() async {
     await isSourceSet;
-    audioPlayer.play();
+    await audioPlayer.play();
   }
 
   Future<void> dispose() async {
@@ -26,11 +31,16 @@ class HornSound {
     _singleton = null;
   }
 
-  HornSound._internal() {
+  HornSound._fromSource(String source) {
     audioPlayer = getAudioPlayer();
-    isSourceSet =
-        audioPlayer.setSource(Settings.getValue(CustomSettingsScreen.keyBellSound, 'assets/audio/BoxingBell.mp3')!);
-    CustomSettingsScreen.onChangeBellSound.stream.listen((event) {
+    isSourceSet = audioPlayer.setSource(source);
+  }
+  
+  HornSound._fromPreference() {
+    audioPlayer = getAudioPlayer();
+    isSourceSet = Preferences.getString(Preferences.keyBellSound)
+        .then((value) => audioPlayer.setSource(value ?? env(bellSoundPath)));
+    Preferences.onChangeBellSound.stream.listen((event) {
       isSourceSet = audioPlayer.setSource(event);
     });
   }

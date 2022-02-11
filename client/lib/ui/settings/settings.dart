@@ -1,28 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:settings_ui/settings_ui.dart';
+import 'package:wrestling_scoreboard/ui/components/ok_dialog.dart';
+import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard/util/asset.dart';
 import 'package:wrestling_scoreboard/util/audio/audio.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
 
 class CustomSettingsScreen extends StatefulWidget {
-  static const keyLocale = 'locale';
-  static const keyApiUrl = 'api-url';
-  static const keyWsUrl = 'ws-url';
-  static const keyBellSound = 'bell-sound';
-
-  static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
-  static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
-  static final StreamController<String> onChangeWsUrlWebSocket = StreamController.broadcast();
-  static final StreamController<String> onChangeBellSound = StreamController.broadcast();
-
-  static final supportedLanguages = {
-    'en_US': const Locale('en', 'US'),
-    'de_DE': const Locale('de', 'DE'),
-  };
-
   const CustomSettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -30,13 +15,49 @@ class CustomSettingsScreen extends StatefulWidget {
 }
 
 class CustomSettingsScreenState extends State<CustomSettingsScreen> {
-  String? _locale = Settings.getValue<String>(CustomSettingsScreen.keyLocale, null);
-  String _bellSoundPath = Settings.getValue<String>(CustomSettingsScreen.keyBellSound, env(bellSoundPath))!;
+  String? _locale;
+  String _wsUrl = env(webSocketUrl);
+  String _apiUrl = env(apiUrl);
+  String _bellSoundPath = env(bellSoundPath);
+
+  @override
+  void initState() {
+    Preferences.getString(Preferences.keyBellSound).then((value) {
+      if (value != null) {
+        setState(() {
+          _bellSoundPath = value;
+        });
+      }
+    });
+    Preferences.getString(Preferences.keyLocale).then((value) {
+      if (value != null) {
+        setState(() {
+          _locale = value;
+        });
+      }
+    });
+    Preferences.getString(Preferences.keyApiUrl).then((value) {
+      if (value != null) {
+        setState(() {
+          _apiUrl = value;
+        });
+      }
+    });
+    Preferences.getString(Preferences.keyWsUrl).then((value) {
+      if (value != null) {
+        setState(() {
+          _wsUrl = value;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  String getBellNameOfPath(String value) => value.split('/').last.replaceAll('.mp3', '');
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    // var value = true;
 
     bool isDisplayInternational() {
       if (Localizations.localeOf(context).languageCode == 'en') return false;
@@ -56,104 +77,209 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
       }
     }
 
-    final Map<String?, String> languageSettingValues =
-        CustomSettingsScreen.supportedLanguages.map((key, value) => MapEntry(key, getTranslationOfLocale(key)));
-    languageSettingValues.addEntries([MapEntry(null, getTranslationOfLocale())]);
-
-    return SettingsScreen(title: localizations.settings, children: [
-      SettingsGroup(
-        title: 'General',
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localizations.settings),
+      ),
+      body: Column(
         children: [
-          DropDownSettingsTile<String>(
-            settingKey: CustomSettingsScreen.keyLocale,
-            title: localizations.language + (isDisplayInternational() ? ' | Language' : ''),
-            subtitle: getTranslationOfLocale(_locale),
-            leading: const Icon(Icons.translate),
-            selected: _locale,
-            values: languageSettingValues,
-            onChange: (String? val) {
-              CustomSettingsScreen.onChangeLocale.add(CustomSettingsScreen.supportedLanguages[val]);
-              setState(() {
-                _locale = val;
-              });
-            },
-          ),
-          // SwitchSettingsTile(
-          //   title: 'Use fingerprint (Fake setting)',
-          //   leading: const Icon(Icons.fingerprint),
-          //   defaultValue: value,
-          //   onChange: (bool? value) {},
-          //   settingKey: 'key-fingerprint',
-          // ),
-          TextInputSettingsTile(
-            title: localizations.apiUrl,
-            settingKey: CustomSettingsScreen.keyApiUrl,
-            // leading: const Icon(Icons.storage),
-            initialValue: env(apiUrl),
-            onChange: (String? val) {
-              if (val != null) CustomSettingsScreen.onChangeApiUrl.add(val);
-            },
-          ),
-          TextInputSettingsTile(
-            title: localizations.wsUrl,
-            settingKey: CustomSettingsScreen.keyWsUrl,
-            // leading: const Icon(Icons.storage),
-            initialValue: env(webSocketUrl),
-            onChange: (String? val) {
-              if (val != null) CustomSettingsScreen.onChangeWsUrlWebSocket.add(val);
-            },
-          ),
-          FutureBuilder<List<String>>(
-            future: getAssetList(prefix: '', filetype: '.mp3'),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                final bellSoundValues = snapshot.data!;
-                return DropDownSettingsTile<String>(
-                  settingKey: CustomSettingsScreen.keyBellSound,
-                  title: localizations.bellSound,
-                  leading: const Icon(Icons.audiotrack),
-                  selected: _bellSoundPath,
-                  values: bellSoundValues
-                      .asMap()
-                      .map((key, value) => MapEntry(value, value.split('/').last.replaceAll('.mp3', ''))),
-                  onChange: (String? val) {
+          SettingsList(shrinkWrap: true, sections: [
+            SettingsSection(
+              title: Text('General'),
+              tiles: [
+                SettingsTile.navigation(
+                  title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
+                  leading: const Icon(Icons.translate),
+                  value: Text(getTranslationOfLocale(_locale)),
+                  onPressed: (context) async {
+                    final val = await showDialog<String?>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        final List<MapEntry<String?, String>> languageSettingValues = Preferences.supportedLanguages
+                            .map((key, value) => MapEntry<String?, String>(key, getTranslationOfLocale(key)))
+                            .entries
+                            .toList();
+                        languageSettingValues.add(MapEntry(null, getTranslationOfLocale()));
+                        return RadioDialog(values: languageSettingValues, initialValue: _locale);
+                      },
+                    );
+                    Preferences.onChangeLocale.add(Preferences.supportedLanguages[val]);
+                    await Preferences.setString(Preferences.keyLocale, val);
+                    setState(() {
+                      _locale = val;
+                    });
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text(localizations.apiUrl),
+                  leading: const Icon(Icons.storage),
+                  value: Text(_apiUrl),
+                  onPressed: (context) async {
+                    final val = await showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return TextInputDialog(initialValue: _apiUrl);
+                      },
+                    );
                     if (val != null) {
+                      Preferences.onChangeApiUrl.add(val);
+                      await Preferences.setString(Preferences.keyApiUrl, val);
+                      setState(() {
+                        _apiUrl = val;
+                      });
+                    }
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text(localizations.wsUrl),
+                  leading: const Icon(Icons.storage),
+                  value: Text(_wsUrl),
+                  onPressed: (context) async {
+                    final val = await showDialog<String?>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return TextInputDialog(initialValue: _wsUrl);
+                      },
+                    );
+                    if (val != null) {
+                      Preferences.onChangeWsUrlWebSocket.add(val);
+                      await Preferences.setString(Preferences.keyWsUrl, val);
+                      setState(() {
+                        _wsUrl = val;
+                      });
+                    }
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text(localizations.bellSound),
+                  leading: const Icon(Icons.audiotrack),
+                  value: Text(getBellNameOfPath(_bellSoundPath)),
+                  onPressed: (context) async {
+                    final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
+                    // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
+                    final List<MapEntry<String, String>> bellSoundValues = bellSoundPaths
+                        .asMap()
+                        .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
+                        .entries
+                        .toList();
+                    final val = await showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return RadioDialog(
+                          values: bellSoundValues,
+                          initialValue: _bellSoundPath,
+                          onChanged: (value) {
+                            if(value != null) {
+                              HornSound.source(value).play();
+                              HornSound().dispose();
+                            }
+                          },
+                        );
+                      },
+                    );
+                    if (val != null) {
+                      Preferences.onChangeBellSound.add(val);
+                      await Preferences.setString(Preferences.keyBellSound, val);
                       setState(() {
                         _bellSoundPath = val;
                       });
-                      CustomSettingsScreen.onChangeBellSound.add(val);
-                      HornSound().play();
-                      HornSound().dispose();
                     }
                   },
-                );
-              }
-              return const SizedBox();
-            },
-          ),
+                ),
+              ],
+            ),
+          ]),
           TextButton(
               onPressed: () {
                 setState(() {
                   _locale = null;
-                  Settings.setValue<String>(CustomSettingsScreen.keyLocale, _locale);
-                  CustomSettingsScreen.onChangeLocale.add(null);
+                  Preferences.setString(Preferences.keyLocale, _locale);
+                  Preferences.onChangeLocale.add(null);
 
                   final defaultApiUrl = env(apiUrl);
-                  Settings.setValue<String>(CustomSettingsScreen.keyApiUrl, defaultApiUrl);
-                  CustomSettingsScreen.onChangeApiUrl.add(defaultApiUrl);
+                  Preferences.setString(Preferences.keyApiUrl, defaultApiUrl);
+                  Preferences.onChangeApiUrl.add(defaultApiUrl);
 
                   final defaultWsUrl = env(webSocketUrl);
-                  Settings.setValue<String>(CustomSettingsScreen.keyWsUrl, defaultWsUrl);
-                  CustomSettingsScreen.onChangeWsUrlWebSocket.add(defaultWsUrl);
+                  Preferences.setString(Preferences.keyWsUrl, defaultWsUrl);
+                  Preferences.onChangeWsUrlWebSocket.add(defaultWsUrl);
 
                   _bellSoundPath = env(bellSoundPath);
-                  Settings.setValue<String>(CustomSettingsScreen.keyBellSound, _bellSoundPath);
-                  CustomSettingsScreen.onChangeBellSound.add(_bellSoundPath);
+                  Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
+                  Preferences.onChangeBellSound.add(_bellSoundPath);
                 });
               },
-              child: Text(localizations.reset)),
+              child: Text(localizations.reset))
         ],
       ),
-    ]);
+    );
+  }
+}
+
+class TextInputDialog extends StatelessWidget {
+  final String? initialValue;
+
+  const TextInputDialog({required this.initialValue, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String? result;
+    return OkDialog(
+        child: TextFormField(
+          initialValue: initialValue,
+          onChanged: (value) => result = value,
+        ),
+        getResult: () => result);
+  }
+}
+
+class RadioDialog extends StatefulWidget {
+  final List<MapEntry<String?, String>> values;
+  final String? initialValue;
+  final void Function(String? value)? onChanged;
+
+  const RadioDialog({
+    Key? key,
+    required this.values,
+    required this.initialValue,
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  State<RadioDialog> createState() => _RadioDialogState();
+}
+
+class _RadioDialogState extends State<RadioDialog> {
+  String? result;
+
+  @override
+  void initState() {
+    result = widget.initialValue;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return OkDialog<String?>(
+        child: ListView.builder(
+          key: Key(result.toString()),
+          shrinkWrap: true,
+          itemCount: widget.values.length,
+          itemBuilder: (context, index) {
+            final entry = widget.values[index];
+            return RadioListTile<String?>(
+              value: entry.key,
+              groupValue: result,
+              onChanged: (v) {
+                if (widget.onChanged != null) widget.onChanged!(v);
+                setState(() {
+                  result = v;
+                });
+              },
+              title: Text(entry.value),
+            );
+          },
+        ),
+        getResult: () => result);
   }
 }
