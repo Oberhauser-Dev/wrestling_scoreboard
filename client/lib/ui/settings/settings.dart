@@ -31,12 +31,13 @@ class CustomSettingsScreen extends StatefulWidget {
 
 class CustomSettingsScreenState extends State<CustomSettingsScreen> {
   String? _locale = Settings.getValue<String>(CustomSettingsScreen.keyLocale, null);
-  String? _bellSound = Settings.getValue<String>(CustomSettingsScreen.keyBellSound, 'assets/audio/BoxingBell.mp3');
+  String _bellSoundPath = Settings.getValue<String>(CustomSettingsScreen.keyBellSound, env(bellSoundPath))!;
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     // var value = true;
-    
+
     bool isDisplayInternational() {
       if (Localizations.localeOf(context).languageCode == 'en') return false;
       return true;
@@ -46,12 +47,12 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
       switch (locale) {
         case 'de':
         case 'de_DE':
-          return AppLocalizations.of(context)!.de_DE + (isDisplayInternational() ? ' | German' : '');
+          return localizations.de_DE + (isDisplayInternational() ? ' | German' : '');
         case 'en':
         case 'en_US':
-          return AppLocalizations.of(context)!.en_US + (isDisplayInternational() ? ' | English (US)' : '');
+          return localizations.en_US + (isDisplayInternational() ? ' | English (US)' : '');
         default:
-          return AppLocalizations.of(context)!.systemSetting + (isDisplayInternational() ? ' | System setting' : '');
+          return localizations.systemSetting + (isDisplayInternational() ? ' | System setting' : '');
       }
     }
 
@@ -59,13 +60,13 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
         CustomSettingsScreen.supportedLanguages.map((key, value) => MapEntry(key, getTranslationOfLocale(key)));
     languageSettingValues.addEntries([MapEntry(null, getTranslationOfLocale())]);
 
-    return SettingsScreen(title: AppLocalizations.of(context)!.settings, children: [
+    return SettingsScreen(title: localizations.settings, children: [
       SettingsGroup(
         title: 'General',
         children: [
           DropDownSettingsTile<String>(
             settingKey: CustomSettingsScreen.keyLocale,
-            title: AppLocalizations.of(context)!.language + (isDisplayInternational() ? ' | Language' : ''),
+            title: localizations.language + (isDisplayInternational() ? ' | Language' : ''),
             subtitle: getTranslationOfLocale(_locale),
             leading: const Icon(Icons.translate),
             selected: _locale,
@@ -85,21 +86,21 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
           //   settingKey: 'key-fingerprint',
           // ),
           TextInputSettingsTile(
-            title: AppLocalizations.of(context)!.apiUrl,
+            title: localizations.apiUrl,
             settingKey: CustomSettingsScreen.keyApiUrl,
             // leading: const Icon(Icons.storage),
-            initialValue: env(apiUrl, fallBack: 'http://localhost:8080/api'),
+            initialValue: env(apiUrl),
             onChange: (String? val) {
-              if(val != null) CustomSettingsScreen.onChangeApiUrl.add(val);
+              if (val != null) CustomSettingsScreen.onChangeApiUrl.add(val);
             },
           ),
           TextInputSettingsTile(
-            title: AppLocalizations.of(context)!.wsUrl,
+            title: localizations.wsUrl,
             settingKey: CustomSettingsScreen.keyWsUrl,
             // leading: const Icon(Icons.storage),
-            initialValue: env(webSocketUrl, fallBack: 'ws://localhost:8080/ws'),
+            initialValue: env(webSocketUrl),
             onChange: (String? val) {
-              if(val != null) CustomSettingsScreen.onChangeWsUrlWebSocket.add(val);
+              if (val != null) CustomSettingsScreen.onChangeWsUrlWebSocket.add(val);
             },
           ),
           FutureBuilder<List<String>>(
@@ -109,15 +110,17 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                 final bellSoundValues = snapshot.data!;
                 return DropDownSettingsTile<String>(
                   settingKey: CustomSettingsScreen.keyBellSound,
-                  title: AppLocalizations.of(context)!.bellSound,
+                  title: localizations.bellSound,
                   leading: const Icon(Icons.audiotrack),
-                  selected: _bellSound,
-                  values: bellSoundValues.asMap().map((key, value) => MapEntry(value, value.split('/').last.replaceAll('.mp3', ''))),
+                  selected: _bellSoundPath,
+                  values: bellSoundValues
+                      .asMap()
+                      .map((key, value) => MapEntry(value, value.split('/').last.replaceAll('.mp3', ''))),
                   onChange: (String? val) {
-                    setState(() {
-                      _bellSound = val;
-                    });
                     if (val != null) {
+                      setState(() {
+                        _bellSoundPath = val;
+                      });
                       CustomSettingsScreen.onChangeBellSound.add(val);
                       HornSound().play();
                       HornSound().dispose();
@@ -126,7 +129,29 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                 );
               }
               return const SizedBox();
-          },),
+            },
+          ),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  _locale = null;
+                  Settings.setValue<String>(CustomSettingsScreen.keyLocale, _locale);
+                  CustomSettingsScreen.onChangeLocale.add(null);
+
+                  final defaultApiUrl = env(apiUrl);
+                  Settings.setValue<String>(CustomSettingsScreen.keyApiUrl, defaultApiUrl);
+                  CustomSettingsScreen.onChangeApiUrl.add(defaultApiUrl);
+
+                  final defaultWsUrl = env(webSocketUrl);
+                  Settings.setValue<String>(CustomSettingsScreen.keyWsUrl, defaultWsUrl);
+                  CustomSettingsScreen.onChangeWsUrlWebSocket.add(defaultWsUrl);
+
+                  _bellSoundPath = env(bellSoundPath);
+                  Settings.setValue<String>(CustomSettingsScreen.keyBellSound, _bellSoundPath);
+                  CustomSettingsScreen.onChangeBellSound.add(_bellSoundPath);
+                });
+              },
+              child: Text(localizations.reset)),
         ],
       ),
     ]);

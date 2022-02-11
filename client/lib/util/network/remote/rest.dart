@@ -16,7 +16,7 @@ class RestDataProvider extends DataProvider {
   };
 
   var _apiUrl = adaptLocalhost(
-      Settings.getValue<String>(CustomSettingsScreen.keyApiUrl, env(apiUrl, fallBack: 'http://localhost:8080/api'))!);
+      Settings.getValue<String>(CustomSettingsScreen.keyApiUrl, env(apiUrl))!);
   late final WebSocketManager _webSocketManager;
 
   RestDataProvider() {

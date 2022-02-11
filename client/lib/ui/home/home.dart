@@ -1,11 +1,11 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/ui/edit/club_edit.dart';
-import 'package:wrestling_scoreboard/ui/overview/club_overview.dart';
 import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
+import 'package:wrestling_scoreboard/ui/edit/club_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/league_edit.dart';
+import 'package:wrestling_scoreboard/ui/overview/club_overview.dart';
 import 'package:wrestling_scoreboard/ui/overview/league_overview.dart';
 import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
 
@@ -21,7 +21,7 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     WebSocketManager.onWebSocketConnecting.stream.distinct().listen((isConnected) {
-      if (!isConnected) {
+      if (mounted && !isConnected) {
         WidgetsBinding.instance?.addPostFrameCallback((_) {
           final localizations = AppLocalizations.of(context)!;
           showDialog<String>(
@@ -56,10 +56,28 @@ class HomeState extends State<Home> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(localizations.home),
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.foundation)),
-              Tab(icon: Icon(Icons.emoji_events)),
+              Tab(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.foundation),
+                    const SizedBox(width: 8),
+                    Text(localizations.clubs),
+                  ],
+                ),
+              ),
+              Tab(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.emoji_events),
+                    const SizedBox(width: 8),
+                    Text(localizations.leagues),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -77,7 +95,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   items: clubs.map(
-                        (e) => SingleConsumer<Club>(
+                    (e) => SingleConsumer<Club>(
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
@@ -102,7 +120,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   items: leagues.map(
-                        (e) => SingleConsumer<League>(
+                    (e) => SingleConsumer<League>(
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(

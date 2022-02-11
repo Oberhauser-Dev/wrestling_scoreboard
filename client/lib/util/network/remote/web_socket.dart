@@ -40,8 +40,8 @@ class WebSocketManager {
         _channel?.sink.close();
       }
     });
-    CustomSettingsScreen.onChangeWsUrlWebSocket.sink.add(Settings.getValue<String>(
-        CustomSettingsScreen.keyWsUrl, env(webSocketUrl, fallBack: 'ws://localhost:8080/ws'))!);
+    CustomSettingsScreen.onChangeWsUrlWebSocket.sink
+        .add(Settings.getValue<String>(CustomSettingsScreen.keyWsUrl, env(webSocketUrl))!);
   }
 
   dynamic addToSink(String val) {

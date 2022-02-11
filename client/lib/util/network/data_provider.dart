@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard/util/network/remote/rest.dart';
 
 import '../environment.dart';
 
-final _isMock = env(appEnvironment, fallBack: 'development') == 'mock';
+final _isMock = env(appEnvironment) == 'mock';
 
 final dataProvider = _isMock ? MockDataProvider() : RestDataProvider();
 
