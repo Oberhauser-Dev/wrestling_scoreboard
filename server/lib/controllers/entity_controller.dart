@@ -61,7 +61,14 @@ abstract class EntityController<T extends DataObject> {
   EntityController({required this.tableName, this.primaryKeyName = 'id'});
 
   Future<Response> postSingle(Request request) async {
-    return handlePostSingleOfController(this, await request.readAsString().then((message) => jsonDecode(message)));
+    try {
+      return handlePostSingleOfController(this, await request.readAsString().then((message) => jsonDecode(message)));
+    } on FormatException catch (e) {
+      final message =
+          'The data object of table $tableName could not be created. Check the format: ${await request.readAsString()}'
+          '\nFormatException: ${e.message}';
+      return Response.notFound(message);
+    }
   }
 
   Future<Response> requestSingle(Request request, String id) async {
@@ -141,7 +148,7 @@ abstract class EntityController<T extends DataObject> {
     } on PostgreSQLException catch (e) {
       throw InvalidParameterException(
           'The data object of table $tableName could not be updated. Check the attributes: $data'
-              '\nPostgreSQLException: {"code": ${e.code}');
+          '\nPostgreSQLException: {"code": ${e.code}');
     }
   }
 
@@ -161,14 +168,13 @@ abstract class EntityController<T extends DataObject> {
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
   }) async {
-    await deleteManyRaw(
-        conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
+    await deleteManyRaw(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
   }
 
   Future<void> deleteManyRaw(
       {List<String>? conditions,
-        Conjunction conjunction = Conjunction.and,
-        Map<String, dynamic>? substitutionValues}) async {
+      Conjunction conjunction = Conjunction.and,
+      Map<String, dynamic>? substitutionValues}) async {
     return setManyRawFromQuery(
         'DELETE FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')};',
         substitutionValues: substitutionValues);
