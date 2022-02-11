@@ -61,13 +61,14 @@ abstract class EntityController<T extends DataObject> {
   EntityController({required this.tableName, this.primaryKeyName = 'id'});
 
   Future<Response> postSingle(Request request) async {
+    final message = await request.readAsString();
     try {
-      return handlePostSingleOfController(this, await request.readAsString().then((message) => jsonDecode(message)));
+      return handlePostSingleOfController(this, jsonDecode(message));
     } on FormatException catch (e) {
-      final message =
-          'The data object of table $tableName could not be created. Check the format: ${await request.readAsString()}'
+      final errMessage =
+          'The data object of table $tableName could not be created. Check the format: $message'
           '\nFormatException: ${e.message}';
-      return Response.notFound(message);
+      return Response.notFound(errMessage);
     }
   }
 
