@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Sample see: https://github.com/dart-lang/samples/tree/master/server/simple -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" sizes="64x64" href="64.png">
-    <title>pkg:shelf example</title>
+    <title>Wrestling Scoreboard Server</title>
 </head>
 
 <style>
@@ -35,24 +36,39 @@
 </style>
 
 <body>
-<h1>pkg:shelf example</h1>
-<img src="/dashland.jpeg" alt="Dashland">
-<p>This file is being served by <a
-        href="https://pub.dev/packages/shelf_static">package:shelf_static</a> from the
-    <code>/public</code> directory.</p>
+<h1>Wrestling Scoreboard Server</h1>
+<img src="/dashland.svg" alt="Dashland">
 <!-- TODO: Link to new pkg:shelf docs once https://github.com/dart-lang/site-www/issues/3058 is fixed -->
 <p>This app uses <a
         href="https://pub.dev/packages/shelf_router">package:shelf_router</a> to define several code-based handlers:</p>
 <ul>
-    <li><a href="/helloworld">/helloworld</a></li>
-    <li><a href="/time">/time</a>
-    <li><code>/sum/&lt;a|[0-9]+&gt;/&lt;b|[0-9]+&gt;</code></li>
+    <li><a href="/api">API Endpoint</a></li>
+    <ul>
+        <li><a href="/api/clubs">Clubs</a></li>
+        <li><a href="/api/fights">Fights</a></li>
+        <li><a href="/api/fight_actions">FightActions</a></li>
+        <li><a href="/api/leagues">Leagues</a></li>
+        <li><a href="/api/league_weight_classs">LeagueWeightClasses</a></li>
+        <li><a href="/api/lineups">Lineups</a></li>
+        <li><a href="/api/memberships">Memberships</a></li>
+        <li><a href="/api/participant_states">ParticipantStates</a></li>
+        <li><a href="/api/participations">Participations</a></li>
+        <li><a href="/api/persons">Persons</a></li>
+        <li><a href="/api/teams">Teams</a></li>
+        <li><a href="/api/team_matchs">TeamMatchs</a></li>
+        <li><a href="/api/team_match_fights">TeamMatchFights</a></li>
+        <li><a href="/api/tournaments">Tournaments</a></li>
+        <li><a href="/api/tournament_fights">TournamentFights</a></li>
+        <li><a href="/api/weight_classs">WeightClasses</a></li>
+    </ul>
+    <li><a href="/ws">Websocket Endpoint</a>
+        <!-- <li><code>/sum/&lt;a|[0-9]+&gt;/&lt;b|[0-9]+&gt;</code></li>-->
 </ul>
 
-<p>
-    The last handler is defined with regular expressions to handle requests to <a href="/sum/1/2">/sum/1/2</a> and <a href="/sum/35/7">/sum/35/7</a>,
-    but not <a href="/sum/bob/john">/sum/bob/john</a> or <a href="/sum/1/2/3">/sum/1/2/3</a>.
-<p>
+<!--<p>-->
+<!--    The last handler is defined with regular expressions to handle requests to <a href="/sum/1/2">/sum/1/2</a> and <a href="/sum/35/7">/sum/35/7</a>,-->
+<!--    but not <a href="/sum/bob/john">/sum/bob/john</a> or <a href="/sum/1/2/3">/sum/1/2/3</a>.-->
+<!--<p>-->
 </body>
 
 </html>
