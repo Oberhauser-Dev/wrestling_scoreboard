@@ -108,7 +108,7 @@ abstract class EntityController<T extends DataObject> {
     } on PostgreSQLException catch (e) {
       throw InvalidParameterException(
           'The data object of table $tableName could not be created. Check the attributes: $data'
-          '\nPostgreSQLException: {"code": ${e.code}');
+          '\nPostgreSQLException: {"code": ${e.code}}');
     }
   }
 
