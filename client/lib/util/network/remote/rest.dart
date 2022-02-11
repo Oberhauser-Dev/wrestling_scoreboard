@@ -121,7 +121,9 @@ class RestDataProvider extends DataProvider {
   @override
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
     final prepend = '${_getPathFromType(wrestlingEvent.runtimeType)}/${wrestlingEvent.id}';
-    final response = await http.post(Uri.parse('$_apiUrl$prepend/fights/generate'), body: {'reset': reset.toString()});
+    const headers = {"Content-Type": "application/json"};
+    final response = await http
+        .post(Uri.parse('$_apiUrl$prepend/fights/generate'), headers: headers, body: {'reset': reset.toString()});
 
     if (response.statusCode >= 400) {
       throw Exception('Failed to CREATE generated fights ${wrestlingEvent.toString()}: \n' +
@@ -135,7 +137,8 @@ class RestDataProvider extends DataProvider {
   Future<int> createOrUpdateSingle(DataObject obj) async {
     final body = jsonEncode(singleToJson(obj, obj.runtimeType, obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
-    final response = await http.post(uri, body: body);
+    const headers = {"Content-Type": "application/json"};
+    final response = await http.post(uri, headers: headers, body: body);
 
     if (response.statusCode < 400) {
       return jsonDecode(response.body);
