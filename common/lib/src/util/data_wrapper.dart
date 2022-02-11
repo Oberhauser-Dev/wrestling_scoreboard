@@ -139,7 +139,7 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> j
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {
     final List<dynamic> data = json['data'];
-    final Type? filterType = json['filterType'] == null ? Object : getTypeFromTableName(json['filterType']);
+    final Type? filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
     final int? filterId = json['filterId'];
     if (isRaw) {
       await handleManyRaw<T>(
