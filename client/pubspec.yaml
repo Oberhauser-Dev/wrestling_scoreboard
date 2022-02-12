@@ -36,12 +36,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   quiver: ^3.0.1
   provider: ^6.0.2
-  audioplayers: ^0.20.1
+  audioplayers:
+    git:
+      url: https://github.com/azchohfi/audioplayers.git
+      ref: windowsSupport
+      path: packages/audioplayers
   common:
     path: ../common
   web_socket_channel: ^2.1.0
   flutter_lints: ^1.0.4
-  libwinmedia: ^0.0.7
+  libwinmedia: ^0.0.7 # TODO remove, once Linux is supported
   path_provider: ^2.0.8
   settings_ui: ^2.0.2
   shared_preferences: ^2.0.13

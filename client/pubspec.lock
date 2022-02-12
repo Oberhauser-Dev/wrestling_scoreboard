@@ -25,10 +25,12 @@ packages:
   audioplayers:
     dependency: "direct main"
     description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.20.1"
+      path: "packages/audioplayers"
+      ref: windowsSupport
+      resolved-ref: "27de6d5e52a3b9169b68571d83821568df48ec15"
+      url: "https://github.com/azchohfi/audioplayers.git"
+    source: git
+    version: "0.21.0"
   boolean_selector:
     dependency: transitive
     description:

@@ -48,7 +48,7 @@ class DesktopAudioPlayer implements Playable {
 Playable getAudioPlayer() {
   // Load desktop audio player accordingly, but it cannot be excluded during compile time via conditional imports
   // Therefore DesktopAudioPlayer source code is compiled also for iOS, macOs and Android although it's never used.
-  if (!kIsWeb && Platform.isLinux || Platform.isWindows) {
+  if (!kIsWeb && Platform.isLinux) {
     return DesktopAudioPlayer();
   } else {
     return MobileAudioPlayer();
