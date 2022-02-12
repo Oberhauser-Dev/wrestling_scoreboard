@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
@@ -21,12 +20,9 @@ enum WebSocketConnectionState {
 class WebSocketManager {
   late Function(dynamic message) messageHandler;
   WebSocketChannel? _channel;
-  WebSocket? _ws;
   String? wsUrl;
 
   /// Manages connection state of WebSocket
-  /// true: try to connect, but not guaranteed
-  /// false: close connection (usually no need to use, as Widgets throw an error and display connection state accordingly)
   static final StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
 
   WebSocketManager(this.messageHandler) {
@@ -38,10 +34,9 @@ class WebSocketManager {
     onWebSocketConnection.stream.listen((connectionState) async {
       if (connectionState == WebSocketConnectionState.connecting && wsUrl != null) {
         await _channel?.sink.close(4210);
-        await _ws?.close(4210);
         try {
-          _ws = await WebSocket.connect(wsUrl!);
-          _channel = IOWebSocketChannel(_ws!);
+          // TODO await for Future when https://github.com/dart-lang/web_socket_channel/pull/85 is merged
+          _channel = WebSocketChannel.connect(Uri.parse(wsUrl!));
           _channel?.stream.listen(messageHandler, onError: (e) {
             if (e is WebSocketChannelException) {
               log('Websocket connection refused by server');
@@ -59,18 +54,17 @@ class WebSocketManager {
               onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
             }
             _channel = null;
-            _ws = null;
           });
           log('Websocket connection established: $wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
         } on SocketException catch (e) {
+          // Is probably only thrown, when connecting via `await WebSocket.connect(wsUrl!)`, see await for ready state above
           log('Websocket connection refused by server');
           onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
         }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {
         await _channel?.sink.close(1001);
         _channel = null;
-        _ws = null;
       }
     });
     Preferences.getString(Preferences.keyWsUrl)
