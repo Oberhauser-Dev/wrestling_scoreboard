@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard/util/environment.dart';
@@ -13,9 +15,13 @@ enum WebSocketConnectionState {
   disconnected,
 }
 
+/// Close event codes: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
+/// Custom:
+/// - 4210: Client attempts to reconnect
 class WebSocketManager {
   late Function(dynamic message) messageHandler;
   WebSocketChannel? _channel;
+  WebSocket? _ws;
   String? wsUrl;
 
   /// Manages connection state of WebSocket
@@ -31,30 +37,40 @@ class WebSocketManager {
     });
     onWebSocketConnection.stream.listen((connectionState) async {
       if (connectionState == WebSocketConnectionState.connecting && wsUrl != null) {
-        await _channel?.sink.close();
-        _channel = WebSocketChannel.connect(Uri.parse(wsUrl!));
-        _channel?.stream.listen(messageHandler,
-            onError: (e) {
-          if (e is WebSocketChannelException) {
-            log('Websocket connection refused by server');
-            onWebSocketConnection.sink.add(WebSocketConnectionState.disconnecting);
-          }
-        }, onDone: () {
-          if (_channel?.closeCode != null) {
-            // closeCode == 1005
-            log('Websocket connection closed by server');
-            onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
-          } else {
-            log('Websocket connection closed by client');
-            onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
-          }
-          _channel = null;
-        });
-        log('Websocket connection established: $wsUrl');
-        onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
+        await _channel?.sink.close(4210);
+        await _ws?.close(4210);
+        try {
+          _ws = await WebSocket.connect(wsUrl!);
+          _channel = IOWebSocketChannel(_ws!);
+          _channel?.stream.listen(messageHandler, onError: (e) {
+            if (e is WebSocketChannelException) {
+              log('Websocket connection refused by server');
+              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnecting);
+            }
+          }, onDone: () {
+            if (_channel?.closeCode == 4210) {
+              log('Websocket connection reconnecting');
+              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+            } else if (_channel?.closeCode == 1001) {
+              log('Websocket connection closed by client');
+              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+            } else {
+              log('Websocket connection closed by server');
+              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+            }
+            _channel = null;
+            _ws = null;
+          });
+          log('Websocket connection established: $wsUrl');
+          onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
+        } on SocketException catch (e) {
+          log('Websocket connection refused by server');
+          onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+        }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {
-        await _channel?.sink.close();
+        await _channel?.sink.close(1001);
         _channel = null;
+        _ws = null;
       }
     });
     Preferences.getString(Preferences.keyWsUrl)
