@@ -38,8 +38,9 @@ class TeamMatchController extends EntityController<TeamMatch> {
     return FightController().getManyFromQuery(_fightsQuery, substitutionValues: {'id': id});
   }
 
+  /// isReset: delete all previous Fights and TeamMatchFights, else reuse the states
   Future<Response> generateFights(Request request, String id) async {
-    final isReset = (request.url.queryParameters['reset'] ?? '').parseBool();
+    final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
     final oldFights = (await getFights(id));
     final weightClasses = teamMatch.league.id == null
@@ -91,6 +92,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
     if (isReset) {
       await Future.forEach(oldFights, (Fight fight) async {
         if (fight.id != null) {
+          // TODO may also delete fightActions, participantState etc.
           await TeamMatchFightController().deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
           await FightController().deleteSingle(fight.id!);
         }
@@ -100,6 +102,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
       final unusedFights = oldFights.where((oldFight) => fights.every((newFight) => newFight.id != oldFight.id));
       await Future.forEach(unusedFights, (Fight fight) async {
         if (fight.id != null) {
+          // TODO may also delete fightActions, participantState etc.
           await TeamMatchFightController().deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
           await FightController().deleteSingle(fight.id!);
         }

@@ -113,7 +113,7 @@ class TeamMatchOverview extends StatelessWidget {
             participations: participations,
             lineup: lineup,
             onSubmit: () {
-              dataProvider.generateFights(match, true);
+              dataProvider.generateFights(match, false);
             },
           );
         },

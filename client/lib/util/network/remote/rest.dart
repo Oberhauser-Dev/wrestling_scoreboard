@@ -13,6 +13,7 @@ class RestDataProvider extends DataProvider {
   static const rawQueryParameter = {
     'isRaw': 'true',
   };
+  static const headers = {"Content-Type": "application/json"};
 
   String _apiUrl = env(apiUrl);
   late final WebSocketManager _webSocketManager;
@@ -45,8 +46,7 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id, {bool isRaw = true}) async {
-    final uri = Uri.parse('$_apiUrl${_getPathFromType(T)}/$id');
-    if (isRaw) uri.queryParameters.addAll(rawQueryParameter);
+    final uri = Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -64,8 +64,7 @@ class RestDataProvider extends DataProvider {
     if (filterObject != null) {
       prepend = '${_getPathFromType(filterObject.runtimeType)}/${filterObject.id}';
     }
-    final uri = Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s');
-    if (isRaw) uri.queryParameters.addAll(rawQueryParameter);
+    final uri = Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter :null);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -122,9 +121,8 @@ class RestDataProvider extends DataProvider {
   @override
   Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
     final prepend = '${_getPathFromType(wrestlingEvent.runtimeType)}/${wrestlingEvent.id}';
-    const headers = {"Content-Type": "application/json"};
-    final response = await http
-        .post(Uri.parse('$_apiUrl$prepend/fights/generate'), headers: headers, body: {'reset': reset.toString()});
+    final uri = Uri.parse('$_apiUrl$prepend/fights/generate').replace(queryParameters: reset ? const {'isReset': 'true'} : null);
+    final response = await http.post(uri, headers: headers);
 
     if (response.statusCode >= 400) {
       throw Exception('Failed to CREATE generated fights ${wrestlingEvent.toString()}: \n' +
@@ -138,7 +136,6 @@ class RestDataProvider extends DataProvider {
   Future<int> createOrUpdateSingle(DataObject obj) async {
     final body = jsonEncode(singleToJson(obj, obj.runtimeType, obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
-    const headers = {"Content-Type": "application/json"};
     final response = await http.post(uri, headers: headers, body: body);
 
     if (response.statusCode < 400) {
