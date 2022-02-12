@@ -20,8 +20,8 @@ class HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    WebSocketManager.onWebSocketConnecting.stream.distinct().listen((isConnected) {
-      if (mounted && !isConnected) {
+    WebSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
+      if (mounted && connectionState == WebSocketConnectionState.disconnected) {
         WidgetsBinding.instance?.addPostFrameCallback((_) {
           final localizations = AppLocalizations.of(context)!;
           showDialog<String>(
@@ -36,7 +36,7 @@ class HomeState extends State<Home> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    WebSocketManager.onWebSocketConnecting.sink.add(true);
+                    WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
                   },
                   child: Text(localizations.retry),
                 ),

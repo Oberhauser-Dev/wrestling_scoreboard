@@ -151,8 +151,8 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> deleteSingle(DataObject obj) async {
-    _webSocketManager.addToSink(jsonEncode(singleToJson(obj, obj.runtimeType, CRUD.delete)));
+  Future<void> deleteSingle(DataObject single) async {
+    _webSocketManager.addToSink(jsonEncode(singleToJson(single, single.runtimeType, CRUD.delete)));
   }
 }
 

@@ -16,13 +16,14 @@ class SingleConsumer<T extends DataObject> extends StatefulWidget {
 }
 
 class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>> {
-  late Stream<bool> webSocketConnectingStream;
+  late Stream<WebSocketConnectionState> webSocketConnectionStream;
   late Stream<T>? singleStream;
 
   @override
   void initState() {
     super.initState();
-    webSocketConnectingStream = WebSocketManager.onWebSocketConnecting.stream.distinct();
+    webSocketConnectionStream = WebSocketManager.onWebSocketConnection.stream.distinct().where(
+        (event) => event == WebSocketConnectionState.disconnected || event == WebSocketConnectionState.connected);
     singleStream = widget.id == null
         ? null
         : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null);
@@ -31,8 +32,8 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: webSocketConnectingStream,
-      builder: (_, __) => widget.id == null
+      stream: webSocketConnectionStream,
+      builder: (context, snapshot) => widget.id == null
           ? widget.builder(context, null)
           : StreamBuilder<T>(
               stream: singleStream,
@@ -40,7 +41,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
               builder: (BuildContext context, AsyncSnapshot<T> snap) {
                 if (snap.hasError) {
                   return ExceptionWidget(snap.error!, () {
-                    WebSocketManager.onWebSocketConnecting.sink.add(true);
+                    WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
                   });
                 }
                 return widget.builder(context, snap.data!);
@@ -63,13 +64,14 @@ class ManyConsumer<T extends DataObject> extends StatefulWidget {
 
 // TODO add const CircularProgressIndicator() on load
 class ManyConsumerState<T extends DataObject> extends State<ManyConsumer<T>> {
-  late Stream<bool> webSocketConnectingStream;
+  late Stream<WebSocketConnectionState> webSocketConnectionStream;
   late Stream<ManyDataObject<T>> manyStream;
 
   @override
   void initState() {
     super.initState();
-    webSocketConnectingStream = WebSocketManager.onWebSocketConnecting.stream.distinct();
+    webSocketConnectionStream = WebSocketManager.onWebSocketConnection.stream.distinct().where(
+            (event) => event == WebSocketConnectionState.disconnected || event == WebSocketConnectionState.connected);
     manyStream =
         dataProvider.streamMany<T>(filterObject: widget.filterObject, init: widget.initialData == null);
   }
@@ -77,14 +79,14 @@ class ManyConsumerState<T extends DataObject> extends State<ManyConsumer<T>> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: webSocketConnectingStream,
-      builder: (_, __) => StreamBuilder(
+      stream: webSocketConnectionStream,
+      builder: (context, snapshot) => StreamBuilder(
         stream: manyStream,
         initialData: ManyDataObject<T>(data: widget.initialData ?? []),
         builder: (BuildContext context, AsyncSnapshot<ManyDataObject<T>> snap) {
           if (snap.hasError) {
             return ExceptionWidget(snap.error!, () {
-              WebSocketManager.onWebSocketConnecting.sink.add(true);
+              WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
             });
           }
           return widget.builder(context, snap.data!.data);
