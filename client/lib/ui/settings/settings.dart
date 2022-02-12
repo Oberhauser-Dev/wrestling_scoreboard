@@ -196,13 +196,13 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                   Preferences.setString(Preferences.keyLocale, _locale);
                   Preferences.onChangeLocale.add(null);
 
-                  final defaultApiUrl = env(apiUrl);
-                  Preferences.setString(Preferences.keyApiUrl, defaultApiUrl);
-                  Preferences.onChangeApiUrl.add(defaultApiUrl);
+                  _apiUrl = env(apiUrl);
+                  Preferences.setString(Preferences.keyApiUrl, _apiUrl);
+                  Preferences.onChangeApiUrl.add(_apiUrl);
 
-                  final defaultWsUrl = env(webSocketUrl);
-                  Preferences.setString(Preferences.keyWsUrl, defaultWsUrl);
-                  Preferences.onChangeWsUrlWebSocket.add(defaultWsUrl);
+                  _wsUrl = env(webSocketUrl);
+                  Preferences.setString(Preferences.keyWsUrl, _wsUrl);
+                  Preferences.onChangeWsUrlWebSocket.add(_wsUrl);
 
                   _bellSoundPath = env(bellSoundPath);
                   Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
