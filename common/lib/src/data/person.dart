@@ -41,12 +41,12 @@ class Person extends DataObject {
   }
 
   int? get age {
-    DateTime today = MockableDateTime.now();
+    final today = MockableDateTime.now();
 
     if (birthDate != null) {
-      int yearDiff = today.year - birthDate!.year;
-      int monthDiff = today.month - birthDate!.month;
-      int dayDiff = today.day - birthDate!.day;
+      final yearDiff = today.year - birthDate!.year;
+      final monthDiff = today.month - birthDate!.month;
+      final dayDiff = today.day - birthDate!.day;
 
       return monthDiff >= 0 && dayDiff >= 0 ? yearDiff : yearDiff - 1;
     }

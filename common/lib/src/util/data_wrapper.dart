@@ -40,6 +40,12 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
       required HandleManyRawCallback handleManyRaw}) {
   final type = getTypeFromTableName(json['tableName']);
   switch (type) {
+    case BoutConfig:
+      return _handleFromJsonGeneric<Club>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     case Club:
       return _handleFromJsonGeneric<Club>(json,
           handleSingle: handleSingle,
@@ -139,7 +145,7 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> j
   final operation = CrudParser.valueOf(json['operation']);
   if (isMany) {
     final List<dynamic> data = json['data'];
-    final Type? filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
+    final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
     final int? filterId = json['filterId'];
     if (isRaw) {
       await handleManyRaw<T>(
@@ -163,6 +169,7 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> j
       return await handleSingle<T>(operation: operation, single: DataObject.fromJson<T>(json['data']));
     }
   }
+  return null;
 }
 
 class ManyDataObject<T> {
@@ -174,6 +181,7 @@ class ManyDataObject<T> {
 }
 
 const List<Type> dataObjectTypes = [
+  BoutConfig,
   Club,
   Fight,
   FightAction,
@@ -192,6 +200,8 @@ const List<Type> dataObjectTypes = [
 
 String getTableNameFromType(Type t) {
   switch (t) {
+    case BoutConfig:
+      return 'bout_config';
     case Club:
       return 'club';
     case Fight:
@@ -229,6 +239,8 @@ String getTableNameFromType(Type t) {
 
 Type getTypeFromTableName(String tableName) {
   switch (tableName) {
+    case 'bout_config':
+      return BoutConfig;
     case 'club':
       return Club;
     case 'fight':

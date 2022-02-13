@@ -1,3 +1,4 @@
+export 'data/bout_config.dart';
 export 'data/club.dart';
 export 'data/data_object.dart';
 export 'data/fight.dart';

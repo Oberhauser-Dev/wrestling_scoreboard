@@ -67,9 +67,9 @@ class Fight extends DataObject {
     );
   }
 
-  updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
-    ParticipantState? _winner = this.winner == FightRole.red ? this.r : this.b;
-    ParticipantState? _looser = this.winner == FightRole.red ? this.b : this.r;
+  void updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
+    var _winner = winner == FightRole.red ? r : b;
+    var _looser = winner == FightRole.red ? b : r;
 
     if (result != null) {
       if (_winner != null) {
@@ -88,8 +88,8 @@ class Fight extends DataObject {
             : getClassificationPointsLooserTeamMatch(result!);
       }
     } else {
-      this.r?.classificationPoints = null;
-      this.b?.classificationPoints = null;
+      r?.classificationPoints = null;
+      b?.classificationPoints = null;
     }
   }
 

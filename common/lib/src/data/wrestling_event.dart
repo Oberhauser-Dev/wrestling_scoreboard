@@ -9,11 +9,6 @@ abstract class WrestlingEvent extends DataObject {
   String? location;
   int? visitorsCount;
   String? comment;
-  final Duration roundDuration = Duration(minutes: 3);
-  final Duration breakDuration = Duration(seconds: 30);
-  final Duration activityDuration = Duration(seconds: 30);
-  final Duration injuryDuration = Duration(seconds: 30);
-  int maxRounds = 2;
 
   WrestlingEvent({int? id, this.no, this.location, this.date, this.visitorsCount, this.comment}) : super(id) {
     date ??= DateTime.now();

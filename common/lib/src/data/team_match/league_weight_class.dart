@@ -1,7 +1,8 @@
-import 'package:common/common.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../data_object.dart';
+import '../league.dart';
+import '../weight_class.dart';
 
 part 'league_weight_class.g.dart';
 

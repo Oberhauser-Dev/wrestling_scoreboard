@@ -17,6 +17,8 @@ abstract class DataObject {
 
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
     switch (T) {
+      case BoutConfig:
+        return BoutConfig.fromJson(json) as T;
       case Club:
         return Club.fromJson(json) as T;
       case Fight:
@@ -53,6 +55,8 @@ abstract class DataObject {
   static Future<T> fromRaw<T extends DataObject>(
       Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
     switch (T) {
+      case BoutConfig:
+        return (await BoutConfig.fromRaw(raw)) as T;
       case Club:
         return (await Club.fromRaw(raw)) as T;
       case Fight:
@@ -60,7 +64,7 @@ abstract class DataObject {
       case FightAction:
         return (await FightAction.fromRaw(raw, getSingle)) as T;
       case League:
-        return (await League.fromRaw(raw)) as T;
+        return (await League.fromRaw(raw, getSingle)) as T;
       case LeagueWeightClass:
         return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
       case Lineup:

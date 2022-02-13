@@ -4,7 +4,7 @@ class MockableDateTime {
   static bool isMocked = false;
   static DateTime mockedDateTime = DateTime(2021, 6, 15);
 
-  static now() => MockableDateTime.isMocked ? mockedDateTime : DateTime.now();
+  static DateTime now() => MockableDateTime.isMocked ? mockedDateTime : DateTime.now();
 }
 
 class ObservableStopwatch extends Stopwatch {
@@ -27,15 +27,17 @@ class ObservableStopwatch extends Stopwatch {
     this.tick = const Duration(milliseconds: 30),
   });
 
-  get elapsed => super.elapsed + presetDuration;
+  @override
+  Duration get elapsed => super.elapsed + presetDuration;
 
-  addDuration(Duration duration) {
+  void addDuration(Duration duration) {
     presetDuration += duration;
     onAdd.add(duration);
     _handleTick();
   }
 
-  start() {
+  @override
+  void start() {
     if (!isRunning) {
       _timer = Timer.periodic(tick, (Timer timer) {
         _handleTick();
@@ -46,45 +48,47 @@ class ObservableStopwatch extends Stopwatch {
     }
   }
 
-  _handleTick() {
-    var elapsed = this.elapsed;
+  void _handleTick() {
+    final elapsed = this.elapsed;
     onChange.add(this.elapsed);
     if (elapsed.inSeconds != _prevDuration.inSeconds) {
       onChangeSecond.add(this.elapsed);
       if (elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute.add(this.elapsed);
     }
     if (limit != null && elapsed >= limit!) {
-      this.stop();
+      stop();
       onEnd.add(this.elapsed);
     }
     _prevDuration = elapsed;
   }
 
-  stop() {
+  @override
+  void stop() {
     if (isRunning) {
       _timer?.cancel();
       super.stop();
-      onStop.add(this.elapsed);
+      onStop.add(elapsed);
       _onStartStop();
     }
   }
 
-  startStop() {
-    this.isRunning ? this.stop() : this.start();
+  void startStop() {
+    isRunning ? stop() : start();
   }
 
-  _onStartStop() {
+  void _onStartStop() {
     onStartStop.add(super.isRunning);
   }
 
-  reset() {
+  @override
+  void reset() {
     stop();
     super.reset();
     _prevDuration = Duration();
     presetDuration = Duration();
   }
 
-  dispose() {
+  void dispose() {
     stop();
     onStart.close();
     onStartStop.close();
@@ -97,6 +101,6 @@ class ObservableStopwatch extends Stopwatch {
   }
 }
 
-durationToString(Duration duration) {
+String durationToString(Duration duration) {
   return '${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
 }

@@ -24,21 +24,6 @@ class TeamMatch extends WrestlingEvent {
 
   // TODO add missing stewards to extra table
 
-  @override
-  final Duration roundDuration = Duration(minutes: 3);
-
-  @override
-  final Duration breakDuration = Duration(seconds: 30);
-
-  @override
-  final Duration activityDuration = Duration(seconds: 30);
-
-  @override
-  final Duration injuryDuration = Duration(seconds: 30);
-
-  @override
-  int maxRounds = 2;
-
   Lineup home;
 
   Lineup guest;

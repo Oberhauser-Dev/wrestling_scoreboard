@@ -10,17 +10,12 @@ Tournament _$TournamentFromJson(Map<String, dynamic> json) {
   return Tournament(
     id: json['id'] as int?,
     name: json['name'] as String,
+    boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
     visitorsCount: json['visitorsCount'] as int?,
     comment: json['comment'] as String?,
-  )
-    ..no = json['no'] as String?
-    ..roundDuration = Duration(microseconds: json['roundDuration'] as int)
-    ..breakDuration = Duration(microseconds: json['breakDuration'] as int)
-    ..activityDuration = Duration(microseconds: json['activityDuration'] as int)
-    ..injuryDuration = Duration(microseconds: json['injuryDuration'] as int)
-    ..maxRounds = json['maxRounds'] as int;
+  )..no = json['no'] as String?;
 }
 
 Map<String, dynamic> _$TournamentToJson(Tournament instance) =>
@@ -32,9 +27,5 @@ Map<String, dynamic> _$TournamentToJson(Tournament instance) =>
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
       'name': instance.name,
-      'roundDuration': instance.roundDuration.inMicroseconds,
-      'breakDuration': instance.breakDuration.inMicroseconds,
-      'activityDuration': instance.activityDuration.inMicroseconds,
-      'injuryDuration': instance.injuryDuration.inMicroseconds,
-      'maxRounds': instance.maxRounds,
+      'boutConfig': instance.boutConfig.toJson(),
     };
