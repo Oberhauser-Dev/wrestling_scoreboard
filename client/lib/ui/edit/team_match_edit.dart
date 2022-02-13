@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard/util/date_time.dart';
 
 class TeamMatchEdit extends StatefulWidget {
   final TeamMatch? teamMatch;
@@ -87,7 +88,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
               setState(() => _date = value);
             }
           }),
-          initialValue: _date.toIso8601String(),
+          initialValue: _date.toDateTimeString(context),
         ),
       ),
       ListTile(

@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_match_edit.dart';
+import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamMatchOverview extends StatelessWidget {
@@ -50,7 +51,7 @@ class TeamMatchOverview extends StatelessWidget {
                             icon: Icons.place,
                           ),
                           ContentItem(
-                            title: match.date?.toIso8601String() ?? 'no date',
+                            title: match.date?.toDateTimeString(context) ?? 'no date',
                             subtitle: localizations.date,
                             icon: Icons.date_range,
                           ),

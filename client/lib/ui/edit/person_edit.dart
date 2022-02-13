@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard/data/gender.dart';
 import 'package:wrestling_scoreboard/ui/components/edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/common.dart';
+import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 abstract class PersonEdit extends StatefulWidget {
@@ -85,7 +86,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
               setState(() => _dateOfBirth = value);
             }
           }),
-          initialValue: _dateOfBirth?.toIso8601String() ?? '-',
+          initialValue: _dateOfBirth?.toDateString(context),
         ),
       ),
       ListTile(

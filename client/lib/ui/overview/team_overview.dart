@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
 import 'package:wrestling_scoreboard/ui/edit/team_match_edit.dart';
 import 'package:wrestling_scoreboard/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 class TeamOverview<T extends DataObject> extends StatelessWidget {
@@ -79,7 +80,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
                               textScaleFactor: 1.5, // MediaQuery.of(context).textScaleFactor
                               text: TextSpan(
                                 text:
-                                    '${match!.date?.toIso8601String().substring(0, 10) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
+                                    '${match!.date?.toDateString(context) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
                                 children: [
                                   TextSpan(
                                       text: match.home.team.name,

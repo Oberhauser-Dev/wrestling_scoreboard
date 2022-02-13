@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard/ui/components/info.dart';
 import 'package:wrestling_scoreboard/ui/overview/common.dart';
+import 'package:wrestling_scoreboard/util/date_time.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
 abstract class PersonOverview extends StatelessWidget implements AbstractOverview {
@@ -48,7 +49,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
               icon: Icons.event,
             ),
             ContentItem(
-              title: person.birthDate?.toIso8601String() ?? '-',
+              title: person.birthDate?.toDateString(context) ?? '-',
               subtitle: localizations.dateOfBirth,
               icon: Icons.cake,
             ),
