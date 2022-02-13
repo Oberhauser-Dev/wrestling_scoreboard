@@ -136,6 +136,44 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: bout_config; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.bout_config (
+    id integer NOT NULL,
+    period_duration_secs integer,
+    break_duration_secs integer,
+    activity_duration_secs integer,
+    injury_duration_secs integer,
+    period_count smallint
+);
+
+
+ALTER TABLE public.bout_config OWNER TO wrestling;
+
+--
+-- Name: bout_config_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.bout_config_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.bout_config_id_seq OWNER TO wrestling;
+
+--
+-- Name: bout_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.bout_config_id_seq OWNED BY public.bout_config.id;
+
+
+--
 -- Name: club; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -290,7 +328,8 @@ ALTER SEQUENCE public.fight_id_seq OWNED BY public.fight.id;
 CREATE TABLE public.league (
     id integer NOT NULL,
     name character varying(127) NOT NULL,
-    start_date date NOT NULL
+    start_date date NOT NULL,
+    bout_config_id integer NOT NULL
 );
 
 
@@ -675,7 +714,8 @@ ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
 --
 
 CREATE TABLE public.tournament (
-    name character varying(127)
+    name character varying(127),
+    bout_config_id integer NOT NULL
 )
 INHERITS (public.wrestling_event);
 
@@ -722,6 +762,7 @@ ALTER SEQUENCE public.tournament_fight_id_seq OWNED BY public.tournament_fight.i
 --
 
 CREATE SEQUENCE public.tournament_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -795,6 +836,13 @@ ALTER TABLE public.wrestling_event_id_seq OWNER TO wrestling;
 --
 
 ALTER SEQUENCE public.wrestling_event_id_seq OWNED BY public.wrestling_event.id;
+
+
+--
+-- Name: bout_config id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout_config ALTER COLUMN id SET DEFAULT nextval('public.bout_config_id_seq'::regclass);
 
 
 --
@@ -924,6 +972,15 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Data for Name: bout_config; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity_duration_secs, injury_duration_secs, period_count) FROM stdin;
+1	180	30	30	30	2
+\.
+
+
+--
 -- Data for Name: club; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -963,10 +1020,10 @@ COPY public.fight_action (id, duration_millis, point_count, action_type, fight_r
 -- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.league (id, name, start_date) FROM stdin;
-2	Real Pro Wrestling Jn	2021-10-01
-3	National League	2021-10-01
-1	Real Pro Wrestling	2021-10-01
+COPY public.league (id, name, start_date, bout_config_id) FROM stdin;
+2	Real Pro Wrestling Jn	2021-10-01	1
+3	National League	2021-10-01	1
+1	Real Pro Wrestling	2021-10-01	1
 \.
 
 
@@ -1100,8 +1157,8 @@ COPY public.team_match_fight (id, team_match_id, fight_id, pos) FROM stdin;
 -- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament (id, date, location, visitors_count, comment, no, name) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	The Griffin-Simpson Tournament
+COPY public.tournament (id, date, location, visitors_count, comment, no, name, bout_config_id) FROM stdin;
+1	2021-07-17	Quahog	15	\N	\N	The Griffin-Simpson Tournament	1
 \.
 
 
@@ -1145,6 +1202,13 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 
 COPY public.wrestling_event (id, date, location, visitors_count, comment, no) FROM stdin;
 \.
+
+
+--
+-- Name: bout_config_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.bout_config_id_seq', 1, true);
 
 
 --
@@ -1271,6 +1335,14 @@ SELECT pg_catalog.setval('public.weight_class_id_seq', 10, true);
 --
 
 SELECT pg_catalog.setval('public.wrestling_event_id_seq', 1, true);
+
+
+--
+-- Name: bout_config bout_config_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout_config
+    ADD CONSTRAINT bout_config_pk PRIMARY KEY (id);
 
 
 --
@@ -1426,6 +1498,13 @@ ALTER TABLE ONLY public.wrestling_event
 
 
 --
+-- Name: bout_config_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
+--
+
+CREATE UNIQUE INDEX bout_config_id_uindex ON public.bout_config USING btree (id);
+
+
+--
 -- Name: club_no_uindex; Type: INDEX; Schema: public; Owner: wrestling
 --
 
@@ -1502,6 +1581,14 @@ ALTER TABLE ONLY public.fight
 
 
 --
+-- Name: league league_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league
+    ADD CONSTRAINT league_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id) ON DELETE CASCADE;
+
+
+--
 -- Name: league_weight_class league_weight_class_league_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -1530,7 +1617,7 @@ ALTER TABLE ONLY public.lineup
 --
 
 ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_person_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.person(id);
+    ADD CONSTRAINT lineup_person_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.person(id) ON DELETE CASCADE;
 
 
 --
@@ -1675,6 +1762,14 @@ ALTER TABLE ONLY public.team_match
 
 ALTER TABLE ONLY public.team_match
     ADD CONSTRAINT team_match_person_id_fk_5 FOREIGN KEY (judge_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: tournament tournament_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.tournament
+    ADD CONSTRAINT tournament_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id) ON DELETE CASCADE;
 
 
 --

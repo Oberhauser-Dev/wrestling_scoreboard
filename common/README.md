@@ -26,8 +26,10 @@ Update following files accordingly:
 - `package:common/lib/src/util/data_wrapper.dart`
 - `package:common/lib/src/data/data_oject.dart`
 - `package:common/lib/src/data.dart`
+- `package:server/lib/routes/api_route.dart`
 - `package:server/lib/controllers/websocket_handler.dart`
 - `package:server/lib/controllers/entity_controller.dart@getControllerFromDataType`
-- `package:server/lib/routes/api_routes`
+- `package:server/public/index.html`
+- Adapt and export database
 - `package:client/lib/mocks/mock_data_provider.dart`
 - `package:client/lib/mocks/mocks.dart`

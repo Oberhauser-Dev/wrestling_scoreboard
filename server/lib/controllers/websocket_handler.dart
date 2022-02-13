@@ -29,6 +29,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
   if (single is Club) {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
+  } else if (single is BoutConfig) {
   } else if (single is Fight) {
   } else if (single is FightAction) {
     broadcast(jsonEncode(manyToJson(
@@ -107,6 +108,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   if (T == Club) {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update)));
+  } else if (T == BoutConfig) {
   } else if (T == Fight) {
   } else if (T == FightAction) {
     broadcast(jsonEncode(manyToJson(

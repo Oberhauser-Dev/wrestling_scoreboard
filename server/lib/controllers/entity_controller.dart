@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:common/common.dart';
 import 'package:postgres/postgres.dart';
+import 'package:server/controllers/bout_config_controller.dart';
 import 'package:server/controllers/club_controller.dart';
 import 'package:server/controllers/fight_action_controller.dart';
 import 'package:server/controllers/fight_controller.dart';
@@ -318,6 +319,8 @@ abstract class EntityController<T extends DataObject> {
 
   static EntityController<T> getControllerFromDataType<T extends DataObject>() {
     switch (T) {
+      case BoutConfig:
+        return BoutConfigController() as EntityController<T>;
       case Club:
         return ClubController() as EntityController<T>;
       case Fight:

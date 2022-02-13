@@ -2,6 +2,7 @@ import 'package:server/controllers/league_weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../controllers/bout_config_controller.dart';
 import '../controllers/club_controller.dart';
 import '../controllers/fight_action_controller.dart';
 import '../controllers/fight_controller.dart';
@@ -23,6 +24,11 @@ class ApiRoute {
   // By exposing a [Router] for an object, it can be mounted in other routers.
   Router get router {
     final router = Router();
+
+    final boutConfigController = BoutConfigController();
+    router.post('/bout_config', boutConfigController.postSingle);
+    router.get('/bout_configs', boutConfigController.requestMany);
+    router.get('/bout_config/<id|[0-9]+>', boutConfigController.requestSingle);
 
     final clubController = ClubController();
     // A handler can have more that one route.
