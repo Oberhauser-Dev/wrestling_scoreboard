@@ -81,11 +81,37 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
       appBar: AppBar(
         title: Text(localizations.settings),
       ),
-      body: Column(
-        children: [
-          SettingsList(shrinkWrap: true, sections: [
+      body: SettingsList(
+          platform: Theme.of(context).platform == TargetPlatform.windows ? DevicePlatform.web : null, // Use web theme for windows
+          sections: [
             SettingsSection(
-              title: Text('General'),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(localizations.general),
+                  TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _locale = null;
+                          Preferences.setString(Preferences.keyLocale, _locale);
+                          Preferences.onChangeLocale.add(null);
+
+                          _apiUrl = env(apiUrl);
+                          Preferences.setString(Preferences.keyApiUrl, _apiUrl);
+                          Preferences.onChangeApiUrl.add(_apiUrl);
+
+                          _wsUrl = env(webSocketUrl);
+                          Preferences.setString(Preferences.keyWsUrl, _wsUrl);
+                          Preferences.onChangeWsUrlWebSocket.add(_wsUrl);
+
+                          _bellSoundPath = env(bellSoundPath);
+                          Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
+                          Preferences.onChangeBellSound.add(_bellSoundPath);
+                        });
+                      },
+                      child: Text(localizations.reset))
+                ],
+              ),
               tiles: [
                 SettingsTile.navigation(
                   title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
@@ -169,7 +195,7 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                           values: bellSoundValues,
                           initialValue: _bellSoundPath,
                           onChanged: (value) {
-                            if(value != null) {
+                            if (value != null) {
                               HornSound.source(value).play();
                               HornSound().dispose();
                             }
@@ -189,29 +215,6 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
               ],
             ),
           ]),
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  _locale = null;
-                  Preferences.setString(Preferences.keyLocale, _locale);
-                  Preferences.onChangeLocale.add(null);
-
-                  _apiUrl = env(apiUrl);
-                  Preferences.setString(Preferences.keyApiUrl, _apiUrl);
-                  Preferences.onChangeApiUrl.add(_apiUrl);
-
-                  _wsUrl = env(webSocketUrl);
-                  Preferences.setString(Preferences.keyWsUrl, _wsUrl);
-                  Preferences.onChangeWsUrlWebSocket.add(_wsUrl);
-
-                  _bellSoundPath = env(bellSoundPath);
-                  Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
-                  Preferences.onChangeBellSound.add(_bellSoundPath);
-                });
-              },
-              child: Text(localizations.reset))
-        ],
-      ),
     );
   }
 }

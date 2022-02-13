@@ -2,6 +2,7 @@
   "appName": "Ringerkampf-Anzeige",  
   "home": "Start",
   "settings": "Einstellungen",
+  "general": "Allgemein",
   "systemSetting": "Systemeinstellung",
   "language": "Sprache",
   "de_DE": "Deutsch",
