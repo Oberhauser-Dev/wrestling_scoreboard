@@ -53,7 +53,8 @@ class FightState extends State<FightScreen> {
   late ObservableStopwatch _breakStopwatch;
   late ParticipantStateModel _r;
   late ParticipantStateModel _b;
-  int round = 1;
+  late BoutConfig _boutConfig;
+  int period = 1;
   late Function(FightScreenActionIntent) handleAction;
 
   List<FightAction> getActions() => actions;
@@ -68,19 +69,21 @@ class FightState extends State<FightScreen> {
     HornSound();
     match = widget.match;
     fights = widget.fights;
+    // TODO may overwrite in settings to be more flexible
+    _boutConfig = match.home.team.league?.boutConfig ?? BoutConfig();
     actions = widget.actions;
     fightIndex = widget.fightIndex;
     fight = widget.fights[fightIndex];
     _r = ParticipantStateModel(fight.r);
     _b = ParticipantStateModel(fight.b);
-    _r.injuryStopwatch.limit = match.injuryDuration;
+    _r.injuryStopwatch.limit = _boutConfig.injuryDuration;
     _r.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _r.isInjury = false;
       });
       handleAction(const FightScreenActionIntent.Horn());
     });
-    _b.injuryStopwatch.limit = match.injuryDuration;
+    _b.injuryStopwatch.limit = _boutConfig.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
@@ -89,7 +92,7 @@ class FightState extends State<FightScreen> {
     });
 
     stopwatch = _fightStopwatch = ObservableStopwatch(
-      limit: match.roundDuration * match.maxRounds,
+      limit: _boutConfig.periodDuration * _boutConfig.periodCount,
     );
     _fightStopwatch.onStart.stream.listen((event) {
       _r.activityStopwatch?.start();
@@ -111,7 +114,7 @@ class FightState extends State<FightScreen> {
         if (stopwatch == _fightStopwatch) {
           fight.duration = event;
 
-          if (fight.duration.compareTo(match.roundDuration * round) >= 0) {
+          if (fight.duration.compareTo(_boutConfig.periodDuration * period) >= 0) {
             _fightStopwatch.stop();
             if (_r.activityStopwatch != null) {
               _r.activityStopwatch!.dispose();
@@ -122,23 +125,23 @@ class FightState extends State<FightScreen> {
               _b.activityStopwatch = null;
             }
             handleAction(const FightScreenActionIntent.Horn());
-            if (round < match.maxRounds) {
+            if (period < _boutConfig.periodCount) {
               setState(() {
                 stopwatch = _breakStopwatch;
               });
               _breakStopwatch.start();
-              round++;
+              period++;
             }
-          } else if (fight.duration.inSeconds ~/ match.roundDuration.inSeconds < (round - 1)) {
+          } else if (fight.duration.inSeconds ~/ _boutConfig.periodDuration.inSeconds < (period - 1)) {
             // Fix times below round time: e.g. if subtract time
-            round -= 1;
+            period -= 1;
           }
         }
       },
     );
     stopwatch.addDuration(fight.duration);
     _breakStopwatch = ObservableStopwatch(
-      limit: match.breakDuration,
+      limit: _boutConfig.breakDuration,
     );
     _breakStopwatch.onEnd.stream.listen((event) {
       if (stopwatch == _breakStopwatch) {
@@ -239,7 +242,7 @@ class FightState extends State<FightScreen> {
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
-              psm.activityStopwatch == null ? ObservableStopwatch(limit: match.activityDuration) : null;
+              psm.activityStopwatch == null ? ObservableStopwatch(limit: _boutConfig.activityDuration) : null;
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
@@ -267,7 +270,7 @@ class FightState extends State<FightScreen> {
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
-              psm.activityStopwatch == null ? ObservableStopwatch(limit: match.activityDuration) : null;
+              psm.activityStopwatch == null ? ObservableStopwatch(limit: _boutConfig.activityDuration) : null;
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {

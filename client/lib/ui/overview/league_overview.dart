@@ -35,6 +35,15 @@ class LeagueOverview extends StatelessWidget {
               title: data.startDate.toIso8601String(),
               subtitle: localizations.date, // Start date
               icon: Icons.emoji_events,
+            ),
+            ContentItem(
+              title:
+                  '${data.boutConfig.periodDuration.inSeconds} ✕ ${data.boutConfig.periodCount}',
+              // '${localizations.breakDurationInSecs}: ${data.boutConfig.breakDuration.inSeconds}, '
+              // '${localizations.activityDurationInSecs}: ${data.boutConfig.activityDuration.inSeconds}, '
+              // '${localizations.injuryDurationInSecs}: ${data.boutConfig.injuryDuration.inSeconds}',
+              subtitle: localizations.periodDurationInSecs, // Start date
+              icon: Icons.timer,
             )
           ],
           classLocale: localizations.league,

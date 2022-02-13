@@ -65,7 +65,6 @@ class TeamMatchOverview extends StatelessWidget {
                             icon: Icons.emoji_events,
                           ),
                           ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
-                          ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
                         ],
                         classLocale: localizations.match),
                     ListGroup(

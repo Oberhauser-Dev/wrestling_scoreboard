@@ -29,11 +29,11 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
     final localizations = AppLocalizations.of(context)!;
 
     final items = [
-      ...buildFields(context),
+      ...fields,
       ListTile(
         title: TextFormField(
           initialValue: widget.weightClass?.weight.toString() ?? '',
@@ -105,7 +105,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
     return Form(
         key: _formKey,
         child: EditWidget(
-            typeLocalization: localizations.weightClass,
+            typeLocalization: classLocale ?? localizations.weightClass,
             id: widget.weightClass?.id,
             onSubmit: () => handleSubmit(context),
             items: items));

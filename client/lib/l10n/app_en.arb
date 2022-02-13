@@ -99,7 +99,12 @@
   "activityTimeAbbr": "AT",
   "injuryTime": "injury time",
   "injuryTimeShort": "IT",
-  "durations": "durations",
+  "durations": "Durations",
+  "periodDurationInSecs": "Period duration (in seconds)",
+  "breakDurationInSecs": "Break duration (in seconds)",
+  "activityDurationInSecs": "Activity duration (in seconds)",
+  "injuryDurationInSecs": "Injury duration (in seconds)",
+  "periodCount": "Number of periods",
 
   "referee": "Referee",
   "refereeAbbr": "REF",

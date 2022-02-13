@@ -18,9 +18,9 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
   String? _no;
 
   @override
-  List<Widget> buildFields(BuildContext context) {
+  Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return [
+    return buildEdit(context, classLocale: localizations.membership, fields: [
       ListTile(
         title: TextFormField(
           decoration: InputDecoration(
@@ -32,7 +32,7 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
           onSaved: (newValue) => _no = newValue,
         ),
       ),
-    ];
+    ]);
   }
 
   @override

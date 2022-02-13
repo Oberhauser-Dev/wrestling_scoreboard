@@ -41,7 +41,7 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
   final type = getTypeFromTableName(json['tableName']);
   switch (type) {
     case BoutConfig:
-      return _handleFromJsonGeneric<Club>(json,
+      return _handleFromJsonGeneric<BoutConfig>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,

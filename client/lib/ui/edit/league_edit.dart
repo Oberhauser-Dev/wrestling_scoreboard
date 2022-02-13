@@ -1,10 +1,10 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/ui/components/edit.dart';
+import 'package:wrestling_scoreboard/ui/edit/bout_config_edit.dart';
 import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 
-class LeagueEdit extends StatefulWidget {
+class LeagueEdit extends BoutConfigEdit {
   final League? league;
 
   const LeagueEdit({this.league, Key? key}) : super(key: key);
@@ -13,23 +13,21 @@ class LeagueEdit extends StatefulWidget {
   State<StatefulWidget> createState() => LeagueEditState();
 }
 
-class LeagueEditState extends State<LeagueEdit> {
-  final _formKey = GlobalKey<FormState>();
-
+class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
   String? _name;
   late DateTime _startDate;
 
   @override
   void initState() {
-    super.initState();
     _startDate = widget.league?.startDate ?? DateTime.now();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    final items = [
+    return buildEdit(context, classLocale: localizations.league, fields: [
       ListTile(
         title: TextFormField(
           decoration: InputDecoration(
@@ -69,22 +67,12 @@ class LeagueEditState extends State<LeagueEdit> {
           initialValue: _startDate.toIso8601String(),
         ),
       ),
-    ];
-
-    return Form(
-        key: _formKey,
-        child: EditWidget(
-            typeLocalization: localizations.league,
-            id: widget.league?.id,
-            onSubmit: () => handleSubmit(context),
-            items: items));
+    ]);
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(League(id: widget.league?.id, name: _name!, startDate: _startDate));
-      Navigator.of(context).pop();
-    }
+  @override
+  Future<void> handleNested(BoutConfig dataObject) async {
+    await dataProvider.createOrUpdateSingle(
+        League(id: widget.league?.id, name: _name!, startDate: _startDate, boutConfig: dataObject));
   }
 }

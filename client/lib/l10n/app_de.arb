@@ -97,6 +97,11 @@
   "injuryTime": "Verletzungszeit",
   "injuryTimeShort": "VZ",
   "durations": "Zeiten",
+  "periodDurationInSecs": "Dauer der Runde (in Sekunden)",
+  "breakDurationInSecs": "Dauer der Pause (in Sekunden)",
+  "activityDurationInSecs": "Dauer der Aktivitätszeit (in Sekunden)",
+  "injuryDurationInSecs": "Dauer der Verletzungszeit (in Sekunden)",
+  "periodCount": "Number of periods",
 
   "referee": "Schiedsrichter",
   "refereeAbbr": "SR",

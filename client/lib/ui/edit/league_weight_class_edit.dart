@@ -20,9 +20,9 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
   int _pos = 0;
 
   @override
-  List<Widget> buildFields(BuildContext context) {
+  Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return [
+    return buildEdit(context, classLocale: localizations.weightClass, fields: [
       ListTile(
         title: TextFormField(
           initialValue: widget.leagueWeightClass?.pos.toString() ?? '',
@@ -37,13 +37,13 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
           },
         ),
       ),
-    ];
+    ]);
   }
 
   @override
   Future<void> handleNested(weightClass) async {
-    final leagueWeightClass =
-        LeagueWeightClass(id: widget.leagueWeightClass?.id, league: widget.initialLeague, pos: _pos, weightClass: weightClass);
+    final leagueWeightClass = LeagueWeightClass(
+        id: widget.leagueWeightClass?.id, league: widget.initialLeague, pos: _pos, weightClass: weightClass);
     leagueWeightClass.id = await dataProvider.createOrUpdateSingle(leagueWeightClass);
   }
 }

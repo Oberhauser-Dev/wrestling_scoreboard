@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class AbstractEditState<T> {
-  List<Widget> buildFields(BuildContext context);
+  Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields});
 
   Future<void> handleNested(T dataObject);
 }

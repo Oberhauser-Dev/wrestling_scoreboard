@@ -1,8 +1,23 @@
 import 'package:common/common.dart';
 
-League _leagueMenRPW = League(id: 1, name: 'Real Pro Wrestling', startDate: DateTime(2021));
-League _leagueJnRPW = League(id: 2, name: 'Real Pro Wrestling Jn', startDate: DateTime(2021));
-League _leagueNational = League(id: 3, name: 'National League', startDate: DateTime(2021));
+League _leagueMenRPW = League(
+  id: 1,
+  name: 'Real Pro Wrestling',
+  startDate: DateTime(2021),
+  boutConfig: BoutConfig(id: 1),
+);
+League _leagueJnRPW = League(
+  id: 2,
+  name: 'Real Pro Wrestling Jn',
+  startDate: DateTime(2021),
+  boutConfig: BoutConfig(id: 2),
+);
+League _leagueNational = League(
+  id: 3,
+  name: 'National League',
+  startDate: DateTime(2021),
+  boutConfig: BoutConfig(id: 3),
+);
 
 Club _homeClub = Club(id: 1, name: 'Springfield Wrestlers');
 Club _guestClub = Club(id: 2, name: 'Quahog Hunters');

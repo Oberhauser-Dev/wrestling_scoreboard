@@ -28,11 +28,11 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
     final localizations = AppLocalizations.of(context)!;
 
     final items = [
-      ...buildFields(context),
+      ...fields,
       ListTile(
         title: TextFormField(
           decoration: InputDecoration(
@@ -113,7 +113,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
     return Form(
       key: _formKey,
       child: EditWidget(
-        typeLocalization: localizations.person,
+        typeLocalization: classLocale ?? localizations.person,
         id: widget.person?.id,
         onSubmit: () => handleSubmit(context),
         items: items,

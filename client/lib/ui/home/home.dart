@@ -22,7 +22,7 @@ class HomeState extends State<Home> {
     super.initState();
     WebSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
       if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
           final localizations = AppLocalizations.of(context)!;
           showDialog<String>(
             context: context,

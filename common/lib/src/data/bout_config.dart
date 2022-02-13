@@ -10,7 +10,7 @@ class BoutConfig extends DataObject {
   static const defaultPeriodDuration = Duration(minutes: 3);
   static const defaultBreakDuration = Duration(seconds: 30);
   static const defaultActivityDuration = Duration(seconds: 30);
-  static const defaultInjuryDuration = Duration(seconds: 30);
+  static const defaultInjuryDuration = Duration(minutes: 2);
   static const defaultPeriodCount = 2;
 
   final Duration periodDuration;

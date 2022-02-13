@@ -212,6 +212,8 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                     }
                   },
                 ),
+                // TODO option to overwrite boutConfigs
+                // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
               ],
             ),
           ]),
