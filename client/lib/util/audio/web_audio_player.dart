@@ -14,13 +14,18 @@ class WebAudioPlayer implements Playable {
   }
 
   @override
+  Future<void> stop() async {
+    await player.stop();
+  }
+
+  @override
   Future<void> setSource(String url) async {
     this.url = 'assets/' + url; // Need to prefix assets folder as in web it's nested twice
   }
 
   @override
-  void dispose() {
-    player.dispose();
+  Future<void> dispose() async {
+    await player.dispose();
   }
 }
 

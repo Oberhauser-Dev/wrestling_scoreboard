@@ -418,7 +418,6 @@ class FightState extends State<FightScreen> {
   @override
   void dispose() async {
     super.dispose();
-    await HornSound().dispose();
     _fightStopwatch.dispose();
     _breakStopwatch.dispose();
   }

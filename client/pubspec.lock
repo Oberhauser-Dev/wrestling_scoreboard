@@ -7,7 +7,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.11"
+    version: "3.2.0"
   args:
     dependency: transitive
     description:
@@ -27,7 +27,7 @@ packages:
     description:
       path: "packages/audioplayers"
       ref: windowsSupport
-      resolved-ref: "27de6d5e52a3b9169b68571d83821568df48ec15"
+      resolved-ref: "91edb64876b7720142aff121db3ed403dd8f213f"
       url: "https://github.com/azchohfi/audioplayers.git"
     source: git
     version: "0.21.0"
@@ -253,7 +253,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.0.9"
   path_provider_android:
     dependency: transitive
     description:
@@ -482,14 +482,14 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.10"
+    version: "2.4.0"
   xdg_directories:
     dependency: transitive
     description:
       name: xdg_directories
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.0+1"
   xml:
     dependency: transitive
     description:

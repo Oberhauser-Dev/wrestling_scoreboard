@@ -3,21 +3,18 @@ import 'package:wrestling_scoreboard/util/environment.dart';
 
 import 'stub_audio_player.dart'
     if (dart.library.js) 'web_audio_player.dart'
-    if (dart.library.io) 'desktop_audio_player.dart';
+    if (dart.library.io) 'default_audio_player.dart';
 
 class HornSound {
-  static HornSound? _singleton;
   late Playable audioPlayer;
   late Future<void> isSourceSet;
 
   factory HornSound() {
-    _singleton ??= HornSound._fromPreference();
-    return _singleton!;
+    return HornSound._fromPreference();
   }
   
   factory HornSound.source(String source) {
-    _singleton ??= HornSound._fromSource(source);
-    return _singleton!;
+    return HornSound._fromSource(source);
   }
 
   Future<void> play() async {
@@ -25,10 +22,14 @@ class HornSound {
     await audioPlayer.play();
   }
 
+  Future<void> stop() async {
+    await isSourceSet;
+    await audioPlayer.stop();
+  }
+
   Future<void> dispose() async {
     await isSourceSet;
-    audioPlayer.dispose();
-    _singleton = null;
+    await audioPlayer.dispose();
   }
 
   HornSound._fromSource(String source) {
@@ -48,8 +49,10 @@ class HornSound {
 
 abstract class Playable {
   Future<void> play();
+  
+  Future<void> stop();
 
   Future<void> setSource(String url);
 
-  void dispose();
+  Future<void> dispose();
 }
