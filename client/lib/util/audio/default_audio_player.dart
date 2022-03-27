@@ -7,37 +7,29 @@ import 'audio.dart';
 import 'linux_audio_player.dart';
 
 class DefaultAudioPlayer implements Playable {
-  static AudioCache audioCache = AudioCache(prefix: '');
-  AudioPlayer? player;
-  String url = '';
+  AudioPlayer player = AudioPlayer();
+  Source? source;
 
   DefaultAudioPlayer();
 
   @override
   Future<void> play() async {
-    player = await audioCache.play(url);
-    player?.onPlayerCompletion.listen((event) { 
-      player?.dispose();
-      player = null;
-    });
+    if (source != null) player.play(source!);
   }
 
   @override
   Future<void> stop() async {
-    await player?.stop();
+    await player.stop();
   }
 
   @override
   Future<void> setSource(String url) async {
-    this.url = url;
-    audioCache.load(url);
+    source = UrlSource(url);
   }
 
   @override
   Future<void> dispose() async {
-    player?.dispose();
-    player = null;
-    await audioCache.clearAll();
+    await player.dispose();
   }
 }
 
