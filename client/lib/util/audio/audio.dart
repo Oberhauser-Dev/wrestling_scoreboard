@@ -31,12 +31,12 @@ class HornSound {
   }
 
   HornSound._fromSource(String source) {
-    audioPlayer = getAudioPlayer();
+    audioPlayer = DefaultAudioPlayer();
     isSourceSet = audioPlayer.setSource(source);
   }
   
   HornSound._fromPreference() {
-    audioPlayer = getAudioPlayer();
+    audioPlayer = DefaultAudioPlayer();
     isSourceSet = Preferences.getString(Preferences.keyBellSound)
         .then((value) => audioPlayer.setSource(value ?? env(bellSoundPath)));
     Preferences.onChangeBellSound.stream.listen((event) {

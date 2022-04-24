@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
-  libwinmedia
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

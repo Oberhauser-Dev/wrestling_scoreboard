@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  libwinmedia
+  audioplayers_linux
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

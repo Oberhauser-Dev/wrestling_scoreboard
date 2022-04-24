@@ -26,46 +26,55 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/audioplayers"
-      ref: main
-      resolved-ref: "2b66fff610a6ee0a70557cad036ab931f17fc51c"
-      url: "https://github.com/bluefireteam/audioplayers.git"
+      ref: "798-linux-support"
+      resolved-ref: cc8b717d0c4008957a43a2613d4a8e66b9838041
+      url: "https://github.com/Gustl22/audioplayers.git"
     source: git
-    version: "0.20.1"
+    version: "1.0.0-rc.1"
   audioplayers_android:
     dependency: transitive
     description:
-      path: "C:\\/src/flutter/.pub-cache/git/audioplayers-2b66fff610a6ee0a70557cad036ab931f17fc51c/packages/audioplayers_android"
-      relative: true
-    source: path
-    version: "0.20.1"
+      name: audioplayers_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.1"
   audioplayers_darwin:
     dependency: transitive
     description:
-      path: "C:\\/src/flutter/.pub-cache/git/audioplayers-2b66fff610a6ee0a70557cad036ab931f17fc51c/packages/audioplayers_darwin"
-      relative: true
-    source: path
-    version: "0.20.1"
+      name: audioplayers_darwin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.1"
+  audioplayers_linux:
+    dependency: transitive
+    description:
+      path: "packages/audioplayers_linux"
+      ref: "798-linux-support"
+      resolved-ref: cc8b717d0c4008957a43a2613d4a8e66b9838041
+      url: "https://github.com/Gustl22/audioplayers.git"
+    source: git
+    version: "1.0.0-rc.1"
   audioplayers_platform_interface:
     dependency: transitive
     description:
-      path: "C:\\/src/flutter/.pub-cache/git/audioplayers-2b66fff610a6ee0a70557cad036ab931f17fc51c/packages/audioplayers_platform_interface"
-      relative: true
-    source: path
-    version: "0.20.1"
+      name: audioplayers_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.1"
   audioplayers_web:
     dependency: transitive
     description:
-      path: "C:\\/src/flutter/.pub-cache/git/audioplayers-2b66fff610a6ee0a70557cad036ab931f17fc51c/packages/audioplayers_web"
-      relative: true
-    source: path
-    version: "0.20.1"
+      name: audioplayers_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.1"
   audioplayers_windows:
     dependency: transitive
     description:
-      path: "C:\\/src/flutter/.pub-cache/git/audioplayers-2b66fff610a6ee0a70557cad036ab931f17fc51c/packages/audioplayers_windows"
-      relative: true
-    source: path
-    version: "0.20.1"
+      name: audioplayers_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -233,13 +242,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
-  libwinmedia:
-    dependency: "direct main"
-    description:
-      name: libwinmedia
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.7"
   lints:
     dependency: transitive
     description:

@@ -7,10 +7,10 @@ Future<List<String>> getAssetList({String prefix = '', String filetype = ''}) as
 
   final Map<String, dynamic> manifestMap = json.decode(manifestContent);
 
-  final imagePaths = manifestMap.keys
+  final assetPaths = manifestMap.keys
       .where((String key) => key.startsWith(prefix))
       .where((String key) => key.endsWith(filetype))
       .toList();
 
-  return imagePaths;
+  return assetPaths;
 }
