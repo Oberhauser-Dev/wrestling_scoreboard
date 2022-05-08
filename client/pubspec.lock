@@ -25,56 +25,52 @@ packages:
   audioplayers:
     dependency: "direct main"
     description:
-      path: "packages/audioplayers"
-      ref: "798-linux-support"
-      resolved-ref: cc8b717d0c4008957a43a2613d4a8e66b9838041
-      url: "https://github.com/Gustl22/audioplayers.git"
-    source: git
-    version: "1.0.0-rc.1"
+      name: audioplayers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.4"
   audioplayers_android:
     dependency: transitive
     description:
       name: audioplayers_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-rc.1"
+    version: "1.0.0-rc.2"
   audioplayers_darwin:
     dependency: transitive
     description:
       name: audioplayers_darwin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-rc.1"
+    version: "1.0.0-rc.4"
   audioplayers_linux:
     dependency: transitive
     description:
-      path: "packages/audioplayers_linux"
-      ref: "798-linux-support"
-      resolved-ref: cc8b717d0c4008957a43a2613d4a8e66b9838041
-      url: "https://github.com/Gustl22/audioplayers.git"
-    source: git
-    version: "1.0.0-rc.1"
+      name: audioplayers_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.3"
   audioplayers_platform_interface:
     dependency: transitive
     description:
       name: audioplayers_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-rc.1"
+    version: "1.0.0-rc.2"
   audioplayers_web:
     dependency: transitive
     description:
       name: audioplayers_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-rc.1"
+    version: "1.0.0-rc.3"
   audioplayers_windows:
     dependency: transitive
     description:
       name: audioplayers_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-rc.1"
+    version: "1.0.0-rc.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -123,7 +119,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -241,7 +237,7 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "4.5.0"
   lints:
     dependency: transitive
     description:
@@ -297,7 +293,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.12"
+    version: "2.0.13"
   path_provider_ios:
     dependency: transitive
     description:
@@ -374,7 +370,7 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1+1"
+    version: "3.1.0"
   settings_ui:
     dependency: "direct main"
     description:
@@ -512,14 +508,14 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   win32:
     dependency: transitive
     description:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.4"
+    version: "2.5.2"
   xdg_directories:
     dependency: transitive
     description:
@@ -543,4 +539,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.15.0 <3.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=2.8.1"

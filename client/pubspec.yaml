@@ -36,13 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   quiver: ^3.0.1
   provider: ^6.0.2
-  # TODO use, once Linux port is released:
-  #audioplayers: ^1.0.0-rc.1
-  audioplayers:
-    git:
-      url: https://github.com/Gustl22/audioplayers.git
-      ref: 798-linux-support
-      path: packages/audioplayers
+  audioplayers: ^1.0.0-rc.4
   common:
     path: ../common
   web_socket_channel: ^2.1.0
