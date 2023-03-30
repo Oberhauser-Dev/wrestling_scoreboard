@@ -45,23 +45,23 @@ class FightMainControlsState extends State<FightMainControls> {
                             color: Colors.white24,
                             icon: const Icon(Icons.close),
                             onPressed: () {
-                              widget.callback(const FightScreenActionIntent.Quit());
+                              widget.callback(const FightScreenActionIntent.quit());
                             },
                           )
                         : IconButton(
                             color: Colors.white24,
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
-                              widget.callback(const FightScreenActionIntent.PreviousFight());
+                              widget.callback(const FightScreenActionIntent.previousFight());
                             },
                           )),
                 Expanded(
                     child: IconButton(
-                        onPressed: () => widget.callback(const FightScreenActionIntent.StartStop()),
+                        onPressed: () => widget.callback(const FightScreenActionIntent.startStop()),
                         icon: Icon(_pausePlayButton))),
                 Expanded(
                     child: IconButton(
-                        onPressed: () => widget.callback(const FightScreenActionIntent.Horn()),
+                        onPressed: () => widget.callback(const FightScreenActionIntent.horn()),
                         icon: const Icon(Icons.campaign))),
                 Expanded(
                     child: widget.fightState.fights.last == widget.fightState.fight
@@ -69,14 +69,14 @@ class FightMainControlsState extends State<FightMainControls> {
                             color: Colors.white24,
                             icon: const Icon(Icons.close),
                             onPressed: () {
-                              widget.callback(const FightScreenActionIntent.Quit());
+                              widget.callback(const FightScreenActionIntent.quit());
                             },
                           )
                         : IconButton(
                             color: Colors.white24,
                             icon: const Icon(Icons.arrow_forward),
                             onPressed: () {
-                              widget.callback(const FightScreenActionIntent.NextFight());
+                              widget.callback(const FightScreenActionIntent.nextFight());
                             },
                           )),
               ],

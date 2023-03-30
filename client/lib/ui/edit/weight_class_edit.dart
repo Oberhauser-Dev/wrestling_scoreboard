@@ -31,6 +31,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
   @override
   Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
     final items = [
       ...fields,
@@ -107,18 +108,18 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
         child: EditWidget(
             typeLocalization: classLocale ?? localizations.weightClass,
             id: widget.weightClass?.id,
-            onSubmit: () => handleSubmit(context),
+            onSubmit: () => handleSubmit(navigator),
             items: items));
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final weightClass = WeightClass(
           id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
       weightClass.id = await dataProvider.createOrUpdateSingle(weightClass);
       await handleNested(weightClass);
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 }

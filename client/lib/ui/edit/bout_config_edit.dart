@@ -24,6 +24,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
   @override
   Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
     final items = [
       ...fields,
@@ -72,8 +73,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
       ),
       ListTile(
         title: TextFormField(
-          initialValue:
-              (widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration).inSeconds.toString(),
+          initialValue: (widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration).inSeconds.toString(),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
               icon: const Icon(Icons.timer),
@@ -106,13 +106,13 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
       child: EditWidget(
         typeLocalization: classLocale ?? 'Bout config',
         id: widget.boutConfig?.id,
-        onSubmit: () => handleSubmit(context),
+        onSubmit: () => handleSubmit(navigator),
         items: items,
       ),
     );
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final boutConfig = BoutConfig(
@@ -125,7 +125,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
       );
       boutConfig.id = await dataProvider.createOrUpdateSingle(boutConfig);
       await handleNested(boutConfig);
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 }

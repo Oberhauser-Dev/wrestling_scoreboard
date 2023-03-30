@@ -28,6 +28,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
                 team: data,
               ),
               onDelete: () => dataProvider.deleteSingle(data),
+              classLocale: localizations.team,
               children: [
                 ContentItem(
                   title: data.description ?? '-',
@@ -44,8 +45,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
                   subtitle: localizations.club,
                   icon: Icons.foundation,
                 ),
-              ],
-              classLocale: localizations.team);
+              ]);
           return Scaffold(
             appBar: AppBar(
               title: Text(data.name),

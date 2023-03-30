@@ -30,8 +30,8 @@ class ActionsWidget extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 1),
                     height: cellHeight,
                     padding: EdgeInsets.all(padding),
-                    child: FittedText(e.toString()),
                     color: color,
+                    child: FittedText(e.toString()),
                   ));
             }),
           ],

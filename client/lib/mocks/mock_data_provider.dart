@@ -72,7 +72,7 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
+  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
     List<Fight> oldFights; // TODO really needs old fights or just use the exising ones from teammatch
     if (wrestlingEvent is TeamMatch) {
       oldFights = getFightsOfTeamMatch(wrestlingEvent);
@@ -80,7 +80,7 @@ class MockDataProvider extends DataProvider {
       oldFights = getFightsOfTournament(wrestlingEvent as Tournament);
     }
     final fightsAll = getFights();
-    if (reset) {
+    if (isReset) {
       if (wrestlingEvent is TeamMatch) {
         final teamMatchFightsAll = getTeamMatchFights();
         for (var element in oldFights) {

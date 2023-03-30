@@ -19,6 +19,8 @@ class MatchSequence extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigator = Navigator.of(context);
+    
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
     int flexWidthWeight = 12;
@@ -62,8 +64,8 @@ class MatchSequence extends StatelessWidget {
                       Expanded(
                         flex: flexWidthWeight + flexWidthStyle,
                         child: Container(
-                          child: FittedText(matchInfos.join('\n')),
                           padding: EdgeInsets.all(padding),
+                          child: FittedText(matchInfos.join('\n')),
                         ),
                       ),
                       ...CommonElements.getTeamHeader(match, fights, context),
@@ -77,7 +79,7 @@ class MatchSequence extends StatelessWidget {
                       itemCount: fights.length,
                       itemBuilder: (context, index) {
                         return FightListItem(match, fights, index,
-                            (match, fights, index) => navigateToFightScreen(context, match, fights, index),
+                            (match, fights, index) => navigateToFightScreen(navigator, match, fights, index),
                             flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
                       },
                     ),

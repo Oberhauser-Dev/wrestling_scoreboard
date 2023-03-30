@@ -28,7 +28,7 @@ class WebSocketManager {
   WebSocketManager(this.messageHandler) {
     // TODO try removing backslash if https://github.com/google/dart-neats/pull/146 is merged.
     Preferences.onChangeWsUrlWebSocket.stream.listen((url) {
-      wsUrl = adaptLocalhost(url.endsWith('/') ? url : (url + '/'));
+      wsUrl = adaptLocalhost(url.endsWith('/') ? url : ('$url/'));
       onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
     });
     onWebSocketConnection.stream.listen((connectionState) async {
@@ -59,7 +59,7 @@ class WebSocketManager {
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
         } on SocketException catch (e) {
           // Is probably only thrown, when connecting via `await WebSocket.connect(wsUrl!)`, see await for ready state above
-          log('Websocket connection refused by server');
+          log('Websocket connection refused by server: $e');
           onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
         }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {

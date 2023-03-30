@@ -11,7 +11,7 @@ class HeadingText extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10, top: 20),
         child: Text(
           heading.toUpperCase(),
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         ));
   }
 }

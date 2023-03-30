@@ -9,97 +9,97 @@ import 'package:wrestling_scoreboard/util/network/data_provider.dart';
 import 'fight_screen.dart';
 
 enum FightScreenActions {
-  StartStop,
-  Reset,
-  AddOneSec,
-  RmOneSec,
-  Undo,
-  NextFight,
-  PreviousFight,
-  Horn,
-  Quit,
-  RedOne,
-  RedTwo,
-  RedThree,
-  RedFour,
-  RedPassivity,
-  RedCaution,
-  RedDismissal,
-  RedActivityTime,
-  RedInjuryTime,
-  RedUndo,
-  BlueOne,
-  BlueTwo,
-  BlueThree,
-  BlueFour,
-  BluePassivity,
-  BlueCaution,
-  BlueDismissal,
-  BlueActivityTime,
-  BlueInjuryTime,
-  BlueUndo,
+  startStop,
+  reset,
+  addOneSec,
+  rmOneSec,
+  undo,
+  nextFight,
+  previousFight,
+  horn,
+  quit,
+  redOne,
+  redTwo,
+  redThree,
+  redFour,
+  redPassivity,
+  redCaution,
+  redDismissal,
+  redActivityTime,
+  redInjuryTime,
+  redUndo,
+  blueOne,
+  blueTwo,
+  blueThree,
+  blueFour,
+  bluePassivity,
+  blueCaution,
+  blueDismissal,
+  blueActivityTime,
+  blueInjuryTime,
+  blueUndo,
 }
 
 class FightScreenActionIntent extends Intent {
   const FightScreenActionIntent({required this.type});
 
-  const FightScreenActionIntent.StartStop() : type = FightScreenActions.StartStop;
+  const FightScreenActionIntent.startStop() : type = FightScreenActions.startStop;
 
-  const FightScreenActionIntent.Reset() : type = FightScreenActions.Reset;
+  const FightScreenActionIntent.reset() : type = FightScreenActions.reset;
 
-  const FightScreenActionIntent.AddOneSec() : type = FightScreenActions.AddOneSec;
+  const FightScreenActionIntent.addOneSec() : type = FightScreenActions.addOneSec;
 
-  const FightScreenActionIntent.RmOneSec() : type = FightScreenActions.RmOneSec;
+  const FightScreenActionIntent.rmOneSec() : type = FightScreenActions.rmOneSec;
 
-  const FightScreenActionIntent.Undo() : type = FightScreenActions.Undo;
+  const FightScreenActionIntent.undo() : type = FightScreenActions.undo;
 
-  const FightScreenActionIntent.NextFight() : type = FightScreenActions.NextFight;
+  const FightScreenActionIntent.nextFight() : type = FightScreenActions.nextFight;
 
-  const FightScreenActionIntent.PreviousFight() : type = FightScreenActions.PreviousFight;
+  const FightScreenActionIntent.previousFight() : type = FightScreenActions.previousFight;
 
-  const FightScreenActionIntent.Horn() : type = FightScreenActions.Horn;
+  const FightScreenActionIntent.horn() : type = FightScreenActions.horn;
 
-  const FightScreenActionIntent.Quit() : type = FightScreenActions.Quit;
+  const FightScreenActionIntent.quit() : type = FightScreenActions.quit;
 
-  const FightScreenActionIntent.RedOne() : type = FightScreenActions.RedOne;
+  const FightScreenActionIntent.redOne() : type = FightScreenActions.redOne;
 
-  const FightScreenActionIntent.RedTwo() : type = FightScreenActions.RedTwo;
+  const FightScreenActionIntent.redTwo() : type = FightScreenActions.redTwo;
 
-  const FightScreenActionIntent.RedThree() : type = FightScreenActions.RedThree;
+  const FightScreenActionIntent.redThree() : type = FightScreenActions.redThree;
 
-  const FightScreenActionIntent.RedFour() : type = FightScreenActions.RedFour;
+  const FightScreenActionIntent.redFour() : type = FightScreenActions.redFour;
 
-  const FightScreenActionIntent.RedPassivity() : type = FightScreenActions.RedPassivity;
+  const FightScreenActionIntent.redPassivity() : type = FightScreenActions.redPassivity;
 
-  const FightScreenActionIntent.RedCaution() : type = FightScreenActions.RedCaution;
+  const FightScreenActionIntent.redCaution() : type = FightScreenActions.redCaution;
 
-  const FightScreenActionIntent.RedDismissal() : type = FightScreenActions.RedDismissal;
+  const FightScreenActionIntent.redDismissal() : type = FightScreenActions.redDismissal;
 
-  const FightScreenActionIntent.RedActivityTime() : type = FightScreenActions.RedActivityTime;
+  const FightScreenActionIntent.redActivityTime() : type = FightScreenActions.redActivityTime;
 
-  const FightScreenActionIntent.RedInjuryTime() : type = FightScreenActions.RedInjuryTime;
+  const FightScreenActionIntent.redInjuryTime() : type = FightScreenActions.redInjuryTime;
 
-  const FightScreenActionIntent.RedUndo() : type = FightScreenActions.RedUndo;
+  const FightScreenActionIntent.redUndo() : type = FightScreenActions.redUndo;
 
-  const FightScreenActionIntent.BlueOne() : type = FightScreenActions.BlueOne;
+  const FightScreenActionIntent.blueOne() : type = FightScreenActions.blueOne;
 
-  const FightScreenActionIntent.BlueTwo() : type = FightScreenActions.BlueTwo;
+  const FightScreenActionIntent.blueTwo() : type = FightScreenActions.blueTwo;
 
-  const FightScreenActionIntent.BlueThree() : type = FightScreenActions.BlueThree;
+  const FightScreenActionIntent.blueThree() : type = FightScreenActions.blueThree;
 
-  const FightScreenActionIntent.BlueFour() : type = FightScreenActions.BlueFour;
+  const FightScreenActionIntent.blueFour() : type = FightScreenActions.blueFour;
 
-  const FightScreenActionIntent.BluePassivity() : type = FightScreenActions.BluePassivity;
+  const FightScreenActionIntent.bluePassivity() : type = FightScreenActions.bluePassivity;
 
-  const FightScreenActionIntent.BlueCaution() : type = FightScreenActions.BlueCaution;
+  const FightScreenActionIntent.blueCaution() : type = FightScreenActions.blueCaution;
 
-  const FightScreenActionIntent.BlueDismissal() : type = FightScreenActions.BlueDismissal;
+  const FightScreenActionIntent.blueDismissal() : type = FightScreenActions.blueDismissal;
 
-  const FightScreenActionIntent.BlueActivityTime() : type = FightScreenActions.BlueActivityTime;
+  const FightScreenActionIntent.blueActivityTime() : type = FightScreenActions.blueActivityTime;
 
-  const FightScreenActionIntent.BlueInjuryTime() : type = FightScreenActions.BlueInjuryTime;
+  const FightScreenActionIntent.blueInjuryTime() : type = FightScreenActions.blueInjuryTime;
 
-  const FightScreenActionIntent.BlueUndo() : type = FightScreenActions.BlueUndo;
+  const FightScreenActionIntent.blueUndo() : type = FightScreenActions.blueUndo;
   final FightScreenActions type;
 }
 
@@ -125,9 +125,9 @@ class FightActionHandler extends StatelessWidget {
       Key? key})
       : super(key: key);
 
-  Future<void> handleIntent(FightScreenActionIntent intent, {BuildContext? context}) async {
+  Future<void> handleIntent(FightScreenActionIntent intent, {NavigatorState? navigator}) async {
     await handleIntentStatic(intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,
-        context: context);
+        navigator: navigator);
   }
 
   static Future<void> handleIntentStatic(
@@ -139,47 +139,47 @@ class FightActionHandler extends StatelessWidget {
       void Function(List<FightAction> actions) setActions,
       int fightIndex,
       Function(FightScreenActions action) doAction,
-      {BuildContext? context}) async {
+      {NavigatorState? navigator}) async {
     final fight = fights[fightIndex];
     switch (intent.type) {
-      case FightScreenActions.StartStop:
+      case FightScreenActions.startStop:
         stopwatch.startStop();
         break;
-      case FightScreenActions.AddOneSec:
+      case FightScreenActions.addOneSec:
         stopwatch.addDuration(const Duration(seconds: 1));
         break;
-      case FightScreenActions.RmOneSec:
+      case FightScreenActions.rmOneSec:
         if (stopwatch.elapsed > const Duration(seconds: 1)) {
           stopwatch.addDuration(-const Duration(seconds: 1));
         } else {
           stopwatch.addDuration(-stopwatch.elapsed);
         } // Do not reset, as it will may stop the timer
         break;
-      case FightScreenActions.Reset:
+      case FightScreenActions.reset:
         stopwatch.reset();
         break;
-      case FightScreenActions.NextFight:
-        if (context != null) {
+      case FightScreenActions.nextFight:
+        if (navigator != null) {
           int index = fightIndex + 1;
           if (index < fights.length) {
-            Navigator.pop(context);
-            navigateToFightScreen(context, match, fights, index);
+            navigator.pop();
+            navigateToFightScreen(navigator, match, fights, index);
           }
         }
         break;
-      case FightScreenActions.PreviousFight:
-        if (context != null) {
+      case FightScreenActions.previousFight:
+        if (navigator != null) {
           int index = fightIndex - 1;
           if (index >= 0) {
-            Navigator.pop(context);
-            navigateToFightScreen(context, match, fights, index);
+            navigator.pop();
+            navigateToFightScreen(navigator, match, fights, index);
           }
         }
         break;
-      case FightScreenActions.Quit:
-        if (context != null) Navigator.pop(context);
+      case FightScreenActions.quit:
+        if (navigator != null) navigator.pop();
         break;
-      case FightScreenActions.RedOne:
+      case FightScreenActions.redOne:
         final action = FightAction(
             fight: fight,
             role: FightRole.red,
@@ -189,7 +189,7 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedTwo:
+      case FightScreenActions.redTwo:
         final action = FightAction(
             fight: fight,
             role: FightRole.red,
@@ -199,7 +199,7 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedThree:
+      case FightScreenActions.redThree:
         final action = FightAction(
             fight: fight,
             role: FightRole.red,
@@ -209,7 +209,7 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedFour:
+      case FightScreenActions.redFour:
         final action = FightAction(
             fight: fight,
             role: FightRole.red,
@@ -219,31 +219,31 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedPassivity:
+      case FightScreenActions.redPassivity:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity);
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedCaution:
+      case FightScreenActions.redCaution:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution);
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedDismissal:
+      case FightScreenActions.redDismissal:
         final action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal);
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.RedActivityTime:
-        doAction(FightScreenActions.RedActivityTime);
+      case FightScreenActions.redActivityTime:
+        doAction(FightScreenActions.redActivityTime);
         break;
-      case FightScreenActions.RedInjuryTime:
-        doAction(FightScreenActions.RedInjuryTime);
+      case FightScreenActions.redInjuryTime:
+        doAction(FightScreenActions.redInjuryTime);
         break;
-      case FightScreenActions.RedUndo:
+      case FightScreenActions.redUndo:
         if (fight.r != null) {
           final actions = getActions();
           final rActions = actions.where((el) => el.role == FightRole.red);
@@ -254,7 +254,7 @@ class FightActionHandler extends StatelessWidget {
           }
         }
         break;
-      case FightScreenActions.BlueOne:
+      case FightScreenActions.blueOne:
         final action = FightAction(
             fight: fight,
             role: FightRole.blue,
@@ -264,7 +264,7 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BlueTwo:
+      case FightScreenActions.blueTwo:
         final action = FightAction(
             fight: fight,
             role: FightRole.blue,
@@ -274,7 +274,7 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BlueThree:
+      case FightScreenActions.blueThree:
         final action = FightAction(
             fight: fight,
             role: FightRole.blue,
@@ -284,7 +284,7 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BlueFour:
+      case FightScreenActions.blueFour:
         final action = FightAction(
             fight: fight,
             role: FightRole.blue,
@@ -294,25 +294,25 @@ class FightActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BluePassivity:
+      case FightScreenActions.bluePassivity:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity);
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BlueCaution:
+      case FightScreenActions.blueCaution:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution);
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BlueDismissal:
+      case FightScreenActions.blueDismissal:
         final action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal);
         setActions(getActions()..add(action));
         action.id = await dataProvider.createOrUpdateSingle(action);
         break;
-      case FightScreenActions.BlueUndo:
+      case FightScreenActions.blueUndo:
         if (fight.b != null) {
           final actions = getActions();
           final bActions = actions.where((el) => el.role == FightRole.blue);
@@ -323,13 +323,13 @@ class FightActionHandler extends StatelessWidget {
           }
         }
         break;
-      case FightScreenActions.BlueActivityTime:
-        doAction(FightScreenActions.BlueActivityTime);
+      case FightScreenActions.blueActivityTime:
+        doAction(FightScreenActions.blueActivityTime);
         break;
-      case FightScreenActions.BlueInjuryTime:
-        doAction(FightScreenActions.BlueInjuryTime);
+      case FightScreenActions.blueInjuryTime:
+        doAction(FightScreenActions.blueInjuryTime);
         break;
-      case FightScreenActions.Undo:
+      case FightScreenActions.undo:
         final actions = getActions();
         if (actions.isNotEmpty) {
           final action = actions.last;
@@ -337,7 +337,7 @@ class FightActionHandler extends StatelessWidget {
           dataProvider.deleteSingle(action);
         }
         break;
-      case FightScreenActions.Horn:
+      case FightScreenActions.horn:
         HornSound().play();
         break;
     }
@@ -345,24 +345,25 @@ class FightActionHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const redOneIntent = FightScreenActionIntent.RedOne();
-    const redTwoIntent = FightScreenActionIntent.RedTwo();
-    const redThreeIntent = FightScreenActionIntent.RedThree();
-    const redFourIntent = FightScreenActionIntent.RedFour();
+    final navigator = Navigator.of(context);
+    const redOneIntent = FightScreenActionIntent.redOne();
+    const redTwoIntent = FightScreenActionIntent.redTwo();
+    const redThreeIntent = FightScreenActionIntent.redThree();
+    const redFourIntent = FightScreenActionIntent.redFour();
 
-    const blueOneIntent = FightScreenActionIntent.BlueOne();
-    const blueTwoIntent = FightScreenActionIntent.BlueTwo();
-    const blueThreeIntent = FightScreenActionIntent.BlueThree();
-    const blueFourIntent = FightScreenActionIntent.BlueFour();
+    const blueOneIntent = FightScreenActionIntent.blueOne();
+    const blueTwoIntent = FightScreenActionIntent.blueTwo();
+    const blueThreeIntent = FightScreenActionIntent.blueThree();
+    const blueFourIntent = FightScreenActionIntent.blueFour();
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.space): const FightScreenActionIntent.StartStop(),
-        LogicalKeySet(LogicalKeyboardKey.arrowUp): const FightScreenActionIntent.AddOneSec(),
-        LogicalKeySet(LogicalKeyboardKey.arrowDown): const FightScreenActionIntent.RmOneSec(),
-        LogicalKeySet(LogicalKeyboardKey.backspace): const FightScreenActionIntent.Undo(),
-        LogicalKeySet(LogicalKeyboardKey.arrowRight): const FightScreenActionIntent.NextFight(),
-        LogicalKeySet(LogicalKeyboardKey.arrowLeft): const FightScreenActionIntent.PreviousFight(),
-        LogicalKeySet(LogicalKeyboardKey.escape): const FightScreenActionIntent.Quit(),
+        LogicalKeySet(LogicalKeyboardKey.space): const FightScreenActionIntent.startStop(),
+        LogicalKeySet(LogicalKeyboardKey.arrowUp): const FightScreenActionIntent.addOneSec(),
+        LogicalKeySet(LogicalKeyboardKey.arrowDown): const FightScreenActionIntent.rmOneSec(),
+        LogicalKeySet(LogicalKeyboardKey.backspace): const FightScreenActionIntent.undo(),
+        LogicalKeySet(LogicalKeyboardKey.arrowRight): const FightScreenActionIntent.nextFight(),
+        LogicalKeySet(LogicalKeyboardKey.arrowLeft): const FightScreenActionIntent.previousFight(),
+        LogicalKeySet(LogicalKeyboardKey.escape): const FightScreenActionIntent.quit(),
         LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
         LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
@@ -375,7 +376,7 @@ class FightActionHandler extends StatelessWidget {
       child: Actions(
         actions: <Type, Action<Intent>>{
           FightScreenActionIntent: CallbackAction<FightScreenActionIntent>(
-            onInvoke: (FightScreenActionIntent intent) => handleIntent(intent, context: context),
+            onInvoke: (FightScreenActionIntent intent) => handleIntent(intent, navigator: navigator),
           )
         },
         child: RawKeyboardListener(

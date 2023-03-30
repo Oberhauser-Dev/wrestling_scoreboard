@@ -31,6 +31,7 @@ class LeagueOverview extends StatelessWidget {
             league: data,
           ),
           onDelete: () => dataProvider.deleteSingle(data),
+          classLocale: localizations.league,
           children: [
             ContentItem(
               title: data.startDate.toDateString(context),
@@ -47,7 +48,6 @@ class LeagueOverview extends StatelessWidget {
               icon: Icons.timer,
             )
           ],
-          classLocale: localizations.league,
         );
         return Scaffold(
           appBar: AppBar(

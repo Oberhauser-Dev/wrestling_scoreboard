@@ -22,9 +22,9 @@ import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_main_controls.dart';
 
-void navigateToFightScreen(BuildContext context, TeamMatch match, List<Fight> fights, int index) async {
+void navigateToFightScreen(NavigatorState navigator, TeamMatch match, List<Fight> fights, int index) async {
   final actions = await dataProvider.readMany<FightAction>(filterObject: fights[index]);
-  Navigator.push(context, MaterialPageRoute(builder: (context) => FightScreen(match, fights, actions, index)));
+  navigator.push(MaterialPageRoute(builder: (context) => FightScreen(match, fights, actions, index)));
 }
 
 /// Initialize with default values, but do not synchronize with live data, as during a fight the connection could be interrupted. So the client always sends data, but never should receive any.
@@ -81,14 +81,14 @@ class FightState extends State<FightScreen> {
       setState(() {
         _r.isInjury = false;
       });
-      handleAction(const FightScreenActionIntent.Horn());
+      handleAction(const FightScreenActionIntent.horn());
     });
     _b.injuryStopwatch.limit = _boutConfig.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
       });
-      handleAction(const FightScreenActionIntent.Horn());
+      handleAction(const FightScreenActionIntent.horn());
     });
 
     stopwatch = _fightStopwatch = ObservableStopwatch(
@@ -101,7 +101,7 @@ class FightState extends State<FightScreen> {
     _fightStopwatch.onStop.stream.listen((event) {
       _r.activityStopwatch?.stop();
       _b.activityStopwatch?.stop();
-      
+
       // Save time to database on each stop
       dataProvider.createOrUpdateSingle(fight);
     });
@@ -124,7 +124,7 @@ class FightState extends State<FightScreen> {
               _b.activityStopwatch!.dispose();
               _b.activityStopwatch = null;
             }
-            handleAction(const FightScreenActionIntent.Horn());
+            handleAction(const FightScreenActionIntent.horn());
             if (period < _boutConfig.periodCount) {
               setState(() {
                 stopwatch = _breakStopwatch;
@@ -149,7 +149,7 @@ class FightState extends State<FightScreen> {
         setState(() {
           stopwatch = _fightStopwatch;
         });
-        handleAction(const FightScreenActionIntent.Horn());
+        handleAction(const FightScreenActionIntent.horn());
       }
     });
     _onChangeActions.stream.listen((actions) {
@@ -159,7 +159,7 @@ class FightState extends State<FightScreen> {
     handleAction = (FightScreenActionIntent intent) {
       FightActionHandler.handleIntentStatic(
           intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,
-          context: context);
+          navigator: Navigator.of(context));
     };
   }
 
@@ -237,7 +237,7 @@ class FightState extends State<FightScreen> {
 
   doAction(FightScreenActions action) {
     switch (action) {
-      case FightScreenActions.RedActivityTime:
+      case FightScreenActions.redActivityTime:
         ParticipantStateModel psm = _r;
         psm.activityStopwatch?.dispose();
         setState(() {
@@ -246,15 +246,15 @@ class FightState extends State<FightScreen> {
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
-          handleAction(const FightScreenActionIntent.Horn());
+          handleAction(const FightScreenActionIntent.horn());
           psm.activityStopwatch?.dispose();
           setState(() {
             psm.activityStopwatch = null;
           });
-          handleAction(const FightScreenActionIntent.Horn());
+          handleAction(const FightScreenActionIntent.horn());
         });
         break;
-      case FightScreenActions.RedInjuryTime:
+      case FightScreenActions.redInjuryTime:
         ParticipantStateModel psm = _r;
         setState(() {
           psm.isInjury = !psm.isInjury;
@@ -265,7 +265,7 @@ class FightState extends State<FightScreen> {
           psm.injuryStopwatch.stop();
         }
         break;
-      case FightScreenActions.BlueActivityTime:
+      case FightScreenActions.blueActivityTime:
         ParticipantStateModel psm = _b;
         psm.activityStopwatch?.dispose();
         setState(() {
@@ -278,10 +278,10 @@ class FightState extends State<FightScreen> {
           setState(() {
             psm.activityStopwatch = null;
           });
-          handleAction(const FightScreenActionIntent.Horn());
+          handleAction(const FightScreenActionIntent.horn());
         });
         break;
-      case FightScreenActions.BlueInjuryTime:
+      case FightScreenActions.blueInjuryTime:
         ParticipantStateModel psm = _b;
         setState(() {
           psm.isInjury = !psm.isInjury;
@@ -385,8 +385,9 @@ class FightState extends State<FightScreen> {
                     displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
                     Expanded(
                         flex: 2,
-                        child:
-                            SizedBox(height: cellHeightClock, child: FightActionControls(FightRole.red, fight.r == null ? null : handleAction))),
+                        child: SizedBox(
+                            height: cellHeightClock,
+                            child: FightActionControls(FightRole.red, fight.r == null ? null : handleAction))),
                     Expanded(
                         flex: 50,
                         child: SizedBox(
@@ -396,7 +397,8 @@ class FightState extends State<FightScreen> {
                     Expanded(
                         flex: 2,
                         child: SizedBox(
-                            height: cellHeightClock, child: FightActionControls(FightRole.blue, fight.b == null ? null : handleAction))),
+                            height: cellHeightClock,
+                            child: FightActionControls(FightRole.blue, fight.b == null ? null : handleAction))),
                     displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
                   ],
                 ),

@@ -33,6 +33,7 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
             onDelete();
             dataProvider.deleteSingle(data);
           },
+          classLocale: classLocale,
           children: [
             ...tiles,
             ContentItem(
@@ -56,7 +57,6 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
               icon: Icons.description,
             ),
           ],
-          classLocale: classLocale,
         );
         return Scaffold(
           appBar: AppBar(

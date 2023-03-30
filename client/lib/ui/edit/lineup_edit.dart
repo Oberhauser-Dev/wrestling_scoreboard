@@ -48,7 +48,7 @@ class LineupEditState extends State<LineupEdit> {
         .toList();
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await dataProvider.createOrUpdateSingle(
@@ -57,7 +57,7 @@ class LineupEditState extends State<LineupEdit> {
       await Future.forEach(
           _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
       if (widget.onSubmit != null) widget.onSubmit!();
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 
@@ -76,12 +76,14 @@ class LineupEditState extends State<LineupEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
+    
     return Form(
         key: _formKey,
         child: EditWidget(
           typeLocalization: localizations.lineup,
           id: widget.lineup.id,
-          onSubmit: () => handleSubmit(context),
+          onSubmit: () => handleSubmit(navigator),
           items: [
             ListTile(title: HeadingText(widget.lineup.team.name)),
             ListTile(

@@ -36,6 +36,7 @@ class TeamEditState extends State<TeamEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
     final items = [
       ListTile(
@@ -50,6 +51,7 @@ class TeamEditState extends State<TeamEdit> {
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
             }
+            return null;
           },
           onSaved: (newValue) => _name = newValue,
         ),
@@ -104,13 +106,13 @@ class TeamEditState extends State<TeamEdit> {
       child: EditWidget(
         typeLocalization: localizations.team,
         id: widget.team?.id,
-        onSubmit: () => handleSubmit(context),
+        onSubmit: () => handleSubmit(navigator),
         items: items,
       ),
     );
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await dataProvider.createOrUpdateSingle(Team(
@@ -120,7 +122,7 @@ class TeamEditState extends State<TeamEdit> {
         club: _club!,
         league: _league,
       ));
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 }

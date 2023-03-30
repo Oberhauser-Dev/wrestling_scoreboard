@@ -22,6 +22,7 @@ class ClubEditState extends State<ClubEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
     final items = [
       ListTile(
@@ -36,6 +37,7 @@ class ClubEditState extends State<ClubEdit> {
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
             }
+            return null;
           },
           onSaved: (newValue) => _name = newValue,
         ),
@@ -58,17 +60,17 @@ class ClubEditState extends State<ClubEdit> {
       child: EditWidget(
         typeLocalization: localizations.club,
         id: widget.club?.id,
-        onSubmit: () => handleSubmit(context),
+        onSubmit: () => handleSubmit(navigator),
         items: items,
       ),
     );
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await dataProvider.createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 }

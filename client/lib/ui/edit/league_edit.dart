@@ -41,6 +41,7 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
             }
+            return null;
           },
           onSaved: (newValue) => _name = newValue,
         ),

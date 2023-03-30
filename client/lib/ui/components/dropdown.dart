@@ -12,12 +12,15 @@ Widget getDropdown<T>({
   Widget? icon,
 }) {
   return DropdownSearch<T>(
-    dropdownSearchDecoration: InputDecoration(labelText: label, icon: icon),
-    searchFieldProps: TextFieldProps(decoration: const InputDecoration(prefixIcon: Icon(Icons.search))),
-    mode: Mode.MENU,
-    showSearchBox: true,
-    showClearButton: true,
-    onFind: (String? filter) => onFind(filter),
+    dropdownDecoratorProps: DropDownDecoratorProps(
+      dropdownSearchDecoration: InputDecoration(labelText: label, icon: icon),
+    ),
+    popupProps: const PopupProps.menu(
+      searchFieldProps: TextFieldProps(decoration: InputDecoration(prefixIcon: Icon(Icons.search))),
+      showSearchBox: true,
+    ),
+    clearButtonProps: const ClearButtonProps(isVisible: true),
+    asyncItems: (String? filter) => onFind(filter),
     itemAsString: (T? u) => u != null ? itemAsString(u) : 'empty value',
     selectedItem: selectedItem,
     onChanged: onChanged,

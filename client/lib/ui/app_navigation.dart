@@ -15,7 +15,6 @@ class AppNavigation extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     const Home(),
     const CustomSettingsScreen(),

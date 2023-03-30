@@ -36,6 +36,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
             onDelete();
             dataProvider.deleteSingle(person);
           },
+          classLocale: classLocale,
           children: [
             ...tiles,
             ContentItem(
@@ -59,7 +60,6 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
               icon: Icons.description,
             ),
           ],
-          classLocale: classLocale,
         );
         return Scaffold(
           appBar: AppBar(

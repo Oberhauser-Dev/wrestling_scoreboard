@@ -41,7 +41,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
                     WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
                   });
                 }
-                return widget.builder(context, snap.data!);
+                return widget.builder(context, snap.data);
               },
             ),
     );

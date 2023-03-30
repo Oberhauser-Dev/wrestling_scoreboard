@@ -46,14 +46,15 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id, {bool isRaw = true}) async {
-    final uri = Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
+    final uri =
+        Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
       throw Exception(
-          'Failed to READ single ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
+          'Failed to READ single ${T.toString()}: ${response.reasonPhrase ?? response.statusCode.toString()}');
     }
   }
 
@@ -64,7 +65,8 @@ class RestDataProvider extends DataProvider {
     if (filterObject != null) {
       prepend = '${_getPathFromType(filterObject.runtimeType)}/${filterObject.id}';
     }
-    final uri = Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter :null);
+    final uri =
+        Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -72,7 +74,7 @@ class RestDataProvider extends DataProvider {
       return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
     } else {
       throw Exception(
-          'Failed to READ many ${T.toString()}: ' + (response.reasonPhrase ?? response.statusCode.toString()));
+          'Failed to READ many ${T.toString()}: ${response.reasonPhrase ?? response.statusCode.toString()}');
     }
   }
 
@@ -119,19 +121,20 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool reset = false]) async {
+  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
     final prepend = '${_getPathFromType(wrestlingEvent.runtimeType)}/${wrestlingEvent.id}';
-    final uri = Uri.parse('$_apiUrl$prepend/fights/generate').replace(queryParameters: reset ? const {'isReset': 'true'} : null);
+    final uri = Uri.parse('$_apiUrl$prepend/fights/generate')
+        .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: headers);
 
     if (response.statusCode >= 400) {
-      throw Exception('Failed to CREATE generated fights ${wrestlingEvent.toString()}: \n' +
-          (response.reasonPhrase ?? response.statusCode.toString()) +
-          '\nBody: ${response.body}');
+      throw Exception(
+          'Failed to CREATE generated fights ${wrestlingEvent.toString()}: \n${response.reasonPhrase ?? response.statusCode.toString()}\nBody: ${response.body}');
     }
   }
 
   @override
+
   /// As we need the return value immediately, we need to use the rest API.
   Future<int> createOrUpdateSingle(DataObject obj) async {
     final body = jsonEncode(singleToJson(obj, obj.runtimeType, obj.id != null ? CRUD.update : CRUD.create));
@@ -141,9 +144,8 @@ class RestDataProvider extends DataProvider {
     if (response.statusCode < 400) {
       return jsonDecode(response.body);
     } else {
-      throw RestException('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: \n' +
-          (response.reasonPhrase ?? response.statusCode.toString()) +
-          '\nBody: ${response.body}');
+      throw RestException(
+          'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: \n${response.reasonPhrase ?? response.statusCode.toString()}\nBody: ${response.body}');
     }
   }
 

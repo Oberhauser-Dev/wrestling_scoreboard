@@ -70,7 +70,7 @@ class ListGroup extends StatelessWidget {
         title: Center(
             child: Text(
           AppLocalizations.of(context)!.noItems,
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         )),
       ));
     }

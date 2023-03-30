@@ -15,7 +15,7 @@ class ExceptionWidget extends StatelessWidget {
         ? SelectableText(
             AppLocalizations.of(context)!.noWebSocketConnection,
           )
-        : SelectableText(exception.toString(), style: TextStyle(color: Theme.of(context).errorColor));
+        : SelectableText(exception.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error));
     return Center(
       child: Card(
         child: Container(

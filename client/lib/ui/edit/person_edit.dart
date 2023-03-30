@@ -31,6 +31,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
   @override
   Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
     final items = [
       ...fields,
@@ -46,6 +47,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
             }
+            return null;
           },
           onSaved: (newValue) => _prename = newValue,
         ),
@@ -62,6 +64,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
             }
+            return null;
           },
           onSaved: (newValue) => _surname = newValue,
         ),
@@ -116,13 +119,13 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
       child: EditWidget(
         typeLocalization: classLocale ?? localizations.person,
         id: widget.person?.id,
-        onSubmit: () => handleSubmit(context),
+        onSubmit: () => handleSubmit(navigator),
         items: items,
       ),
     );
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final person = Person(
@@ -134,7 +137,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
       );
       person.id = await dataProvider.createOrUpdateSingle(person);
       await handleNested(person);
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 }

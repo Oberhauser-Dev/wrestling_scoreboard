@@ -17,6 +17,8 @@ class TeamMatchOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
+    
     return SingleConsumer<TeamMatch>(
         id: match.id!,
         initialData: match,
@@ -39,6 +41,7 @@ class TeamMatchOverview extends StatelessWidget {
                           teamMatch: match,
                         ),
                         onDelete: () => dataProvider.deleteSingle(match),
+                        classLocale: localizations.match,
                         children: [
                           ContentItem(
                             title: match.no ?? '-',
@@ -66,8 +69,7 @@ class TeamMatchOverview extends StatelessWidget {
                             icon: Icons.emoji_events,
                           ),
                           ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
-                        ],
-                        classLocale: localizations.match),
+                        ]),
                     ListGroup(
                       header: HeadingItem(title: localizations.persons),
                       items: [
@@ -79,16 +81,16 @@ class TeamMatchOverview extends StatelessWidget {
                       ],
                     ),
                     ListGroup(
-                      header: HeadingItem(title: localizations.lineups + ' & ' + localizations.fights),
+                      header: HeadingItem(title: '${localizations.lineups} & ${localizations.fights}'),
                       items: [
                         ContentItem(
                             title: homeLineup.team.name,
                             icon: Icons.group,
-                            onTap: () => handleSelectedLineup(homeLineup, context)),
+                            onTap: () => handleSelectedLineup(homeLineup, navigator)),
                         ContentItem(
                             title: guestLineup.team.name,
                             icon: Icons.group,
-                            onTap: () => handleSelectedLineup(guestLineup, context)),
+                            onTap: () => handleSelectedLineup(guestLineup, navigator)),
                         ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
                       ],
                     ),
@@ -101,11 +103,10 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  handleSelectedLineup(Lineup lineup, BuildContext context) async {
+  handleSelectedLineup(Lineup lineup, NavigatorState navigator) async {
     final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
     final weightClasses = await dataProvider.readMany<WeightClass>(filterObject: lineup.team.league);
-    Navigator.push(
-      context,
+    navigator.push(
       MaterialPageRoute(
         builder: (context) {
           return LineupEdit(

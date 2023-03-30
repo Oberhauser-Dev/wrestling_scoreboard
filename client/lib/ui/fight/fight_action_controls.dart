@@ -25,27 +25,27 @@ class FightActionControls extends StatelessWidget {
     var actions = <Widget>[
       displayActionControl(
           '1',
-          prepareCallback(const FightScreenActionIntent.RedOne(), const FightScreenActionIntent.BlueOne()),
+          prepareCallback(const FightScreenActionIntent.redOne(), const FightScreenActionIntent.blueOne()),
           color,
           padding),
       displayActionControl(
           '2',
-          prepareCallback(const FightScreenActionIntent.RedTwo(), const FightScreenActionIntent.BlueTwo()),
+          prepareCallback(const FightScreenActionIntent.redTwo(), const FightScreenActionIntent.blueTwo()),
           color,
           padding),
       displayActionControl(
           '4',
-          prepareCallback(const FightScreenActionIntent.RedFour(), const FightScreenActionIntent.BlueFour()),
+          prepareCallback(const FightScreenActionIntent.redFour(), const FightScreenActionIntent.blueFour()),
           color,
           padding),
       displayActionControl(
           'P',
-          prepareCallback(const FightScreenActionIntent.RedPassivity(), const FightScreenActionIntent.BluePassivity()),
+          prepareCallback(const FightScreenActionIntent.redPassivity(), const FightScreenActionIntent.bluePassivity()),
           color,
           padding),
       displayActionControl(
           'O',
-          prepareCallback(const FightScreenActionIntent.RedCaution(), const FightScreenActionIntent.BlueCaution()),
+          prepareCallback(const FightScreenActionIntent.redCaution(), const FightScreenActionIntent.blueCaution()),
           color,
           padding),
       /*displayActionControl(
@@ -56,18 +56,18 @@ class FightActionControls extends StatelessWidget {
       displayActionControl(
           AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           prepareCallback(
-              const FightScreenActionIntent.RedActivityTime(), const FightScreenActionIntent.BlueActivityTime()),
+              const FightScreenActionIntent.redActivityTime(), const FightScreenActionIntent.blueActivityTime()),
           color,
           padding),
       displayActionControl(
           AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
           prepareCallback(
-              const FightScreenActionIntent.RedInjuryTime(), const FightScreenActionIntent.BlueInjuryTime()),
+              const FightScreenActionIntent.redInjuryTime(), const FightScreenActionIntent.blueInjuryTime()),
           color,
           padding),
       displayActionControl(
           '⎌',
-          prepareCallback(const FightScreenActionIntent.RedUndo(), const FightScreenActionIntent.BlueUndo()),
+          prepareCallback(const FightScreenActionIntent.redUndo(), const FightScreenActionIntent.blueUndo()),
           color,
           padding),
     ];
@@ -83,8 +83,7 @@ class FightActionControls extends StatelessWidget {
     return Expanded(
         child: OutlinedButton(
             style: OutlinedButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: color,
+              foregroundColor: Colors.white, backgroundColor: color,
               side: BorderSide(color: color.shade900, width: 1),
               padding: EdgeInsets.all(2 + (padding * 0.75)),
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),

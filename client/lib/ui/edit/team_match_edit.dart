@@ -39,6 +39,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
     final items = [
       ListTile(
@@ -64,6 +65,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
             if (value == null || value.isEmpty) {
               return localizations.mandatoryField;
             }
+            return null;
           },
           onSaved: (newValue) => _location = newValue,
         ),
@@ -132,13 +134,13 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
       child: EditWidget(
         typeLocalization: localizations.match,
         id: widget.teamMatch?.id,
-        onSubmit: () => handleSubmit(context),
+        onSubmit: () => handleSubmit(navigator),
         items: items,
       ),
     );
   }
 
-  Future<void> handleSubmit(BuildContext context) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -170,7 +172,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           date: _date,
         ),
       );
-      Navigator.of(context).pop();
+      navigator.pop();
     }
   }
 }

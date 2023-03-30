@@ -29,6 +29,7 @@ class ClubOverview extends StatelessWidget {
             club: data,
           ),
           onDelete: () => dataProvider.deleteSingle(data),
+          classLocale: localizations.club,
           children: [
             ContentItem(
               title: data.no ?? '-',
@@ -36,7 +37,6 @@ class ClubOverview extends StatelessWidget {
               icon: Icons.tag,
             )
           ],
-          classLocale: localizations.club,
         );
         return Scaffold(
           appBar: AppBar(
