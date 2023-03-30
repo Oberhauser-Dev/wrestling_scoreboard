@@ -15,8 +15,7 @@ Membership _$MembershipFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MembershipToJson(Membership instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MembershipToJson(Membership instance) => <String, dynamic>{
       'id': instance.id,
       'no': instance.no,
       'club': instance.club.toJson(),

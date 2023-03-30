@@ -9,14 +9,9 @@ part of 'fight.dart';
 Fight _$FightFromJson(Map<String, dynamic> json) {
   return Fight(
     id: json['id'] as int?,
-    r: json['r'] == null
-        ? null
-        : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
-    b: json['b'] == null
-        ? null
-        : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
-    weightClass:
-        WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
+    r: json['r'] == null ? null : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
+    b: json['b'] == null ? null : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
+    weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
     pool: json['pool'] as int?,
     winner: _$enumDecodeNullable(_$FightRoleEnumMap, json['winner']),
     result: _$enumDecodeNullable(_$FightResultEnumMap, json['result']),

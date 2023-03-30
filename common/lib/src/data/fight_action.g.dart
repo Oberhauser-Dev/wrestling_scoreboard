@@ -17,8 +17,7 @@ FightAction _$FightActionFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$FightActionToJson(FightAction instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$FightActionToJson(FightAction instance) => <String, dynamic>{
       'id': instance.id,
       'duration': instance.duration.inMicroseconds,
       'actionType': _$FightActionTypeEnumMap[instance.actionType],

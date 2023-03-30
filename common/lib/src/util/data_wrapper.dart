@@ -2,18 +2,16 @@ import '../data.dart';
 import '../enums/crud.dart';
 
 Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
-  return
-    <String, dynamic>{
-      'operation': operation.name,
-      'isMany': false,
-      'isRaw': single is! DataObject,
-      'tableName': getTableNameFromType(type),
-      'data': single is DataObject ? single.toJson() : single,
-    };
+  return <String, dynamic>{
+    'operation': operation.name,
+    'isMany': false,
+    'isRaw': single is! DataObject,
+    'tableName': getTableNameFromType(type),
+    'data': single is DataObject ? single.toJson() : single,
+  };
 }
 
-Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation,
-    {Type? filterType, int? filterId}) {
+Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation, {Type? filterType, int? filterId}) {
   return <String, dynamic>{
     'operation': operation.name,
     'isMany': true,
@@ -35,9 +33,9 @@ typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
 
 Future<int?> handleFromJson(Map<String, dynamic> json,
     {required HandleSingleCallback handleSingle,
-      required HandleManyCallback handleMany,
-      required HandleSingleRawCallback handleSingleRaw,
-      required HandleManyRawCallback handleManyRaw}) {
+    required HandleManyCallback handleMany,
+    required HandleSingleRawCallback handleSingleRaw,
+    required HandleManyRawCallback handleManyRaw}) {
   final type = getTypeFromTableName(json['tableName']);
   switch (type) {
     case BoutConfig:
@@ -137,9 +135,9 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
 
 Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
     {required HandleSingleCallback handleSingle,
-      required HandleManyCallback handleMany,
-      required HandleSingleRawCallback handleSingleRaw,
-      required HandleManyRawCallback handleManyRaw}) async {
+    required HandleManyCallback handleMany,
+    required HandleSingleRawCallback handleSingleRaw,
+    required HandleManyRawCallback handleManyRaw}) async {
   final isMany = json['isMany'] as bool;
   final isRaw = json['isRaw'] as bool;
   final operation = CrudParser.valueOf(json['operation']);
@@ -151,9 +149,7 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> j
       await handleManyRaw<T>(
           operation: operation,
           many: ManyDataObject<Map<String, dynamic>>(
-              data: data.map((e) => e as Map<String, dynamic>).toList(),
-              filterType: filterType,
-              filterId: filterId));
+              data: data.map((e) => e as Map<String, dynamic>).toList(), filterType: filterType, filterId: filterId));
     } else {
       await handleMany<T>(
           operation: operation,

@@ -18,8 +18,7 @@ Tournament _$TournamentFromJson(Map<String, dynamic> json) {
   )..no = json['no'] as String?;
 }
 
-Map<String, dynamic> _$TournamentToJson(Tournament instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TournamentToJson(Tournament instance) => <String, dynamic>{
       'id': instance.id,
       'date': instance.date?.toIso8601String(),
       'no': instance.no,

@@ -30,7 +30,7 @@ class TeamMatchFight extends DataObject {
       pos: e['pos'],
     );
   }
-  
+
   @override
   Map<String, dynamic> toRaw() {
     return {

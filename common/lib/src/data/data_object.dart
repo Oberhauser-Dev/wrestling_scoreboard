@@ -52,8 +52,7 @@ abstract class DataObject {
     }
   }
 
-  static Future<T> fromRaw<T extends DataObject>(
-      Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
+  static Future<T> fromRaw<T extends DataObject>(Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
     switch (T) {
       case BoutConfig:
         return (await BoutConfig.fromRaw(raw)) as T;
@@ -91,7 +90,10 @@ abstract class DataObject {
   }
 
   @override
-  bool operator ==(o) => o is DataObject && o.runtimeType == runtimeType && id == o.id;
+  bool operator ==(other) => other is DataObject && other.runtimeType == runtimeType && id == other.id;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id);
 }
 
 class DataUnimplementedError extends UnimplementedError {

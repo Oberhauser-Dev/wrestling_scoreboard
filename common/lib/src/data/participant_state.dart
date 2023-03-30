@@ -41,11 +41,11 @@ class ParticipantState extends DataObject {
 
   static int getTechnicalPoints(Iterable<FightAction> actions, FightRole role) {
     var res = 0;
-    actions.forEach((el) {
+    for (var el in actions) {
       if (el.actionType == FightActionType.points && el.role == role) {
         res += el.pointCount!;
       }
-    });
+    }
     return res;
   }
 

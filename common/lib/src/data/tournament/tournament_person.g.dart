@@ -15,8 +15,7 @@ TournamentPerson _$TournamentPersonFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$TournamentPersonToJson(TournamentPerson instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TournamentPersonToJson(TournamentPerson instance) => <String, dynamic>{
       'id': instance.id,
       'role': _$PersonRoleEnumMap[instance.role],
       'tournament': instance.tournament.toJson(),

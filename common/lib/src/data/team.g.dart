@@ -12,9 +12,7 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     club: Club.fromJson(json['club'] as Map<String, dynamic>),
     description: json['description'] as String?,
-    league: json['league'] == null
-        ? null
-        : League.fromJson(json['league'] as Map<String, dynamic>),
+    league: json['league'] == null ? null : League.fromJson(json['league'] as Map<String, dynamic>),
   );
 }
 

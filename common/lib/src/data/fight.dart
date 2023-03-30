@@ -68,22 +68,22 @@ class Fight extends DataObject {
   }
 
   void updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
-    var _winner = winner == FightRole.red ? r : b;
-    var _looser = winner == FightRole.red ? b : r;
+    var winner = this.winner == FightRole.red ? r : b;
+    var looser = this.winner == FightRole.red ? b : r;
 
     if (result != null) {
-      if (_winner != null) {
-        _winner.classificationPoints = isTournament
+      if (winner != null) {
+        winner.classificationPoints = isTournament
             ? getClassificationPointsWinnerTournament(result!)
             : getClassificationPointsWinnerTeamMatch(
                 result!,
-                ParticipantState.getTechnicalPoints(actions, winner!) -
+                ParticipantState.getTechnicalPoints(actions, this.winner!) -
                     ParticipantState.getTechnicalPoints(
-                        actions, winner == FightRole.red ? FightRole.blue : FightRole.red));
+                        actions, this.winner == FightRole.red ? FightRole.blue : FightRole.red));
       }
 
-      if (_looser != null) {
-        _looser.classificationPoints = isTournament
+      if (looser != null) {
+        looser.classificationPoints = isTournament
             ? getClassificationPointsLooserTournament(result!)
             : getClassificationPointsLooserTeamMatch(result!);
       }

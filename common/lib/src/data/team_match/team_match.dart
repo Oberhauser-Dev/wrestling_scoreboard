@@ -124,7 +124,8 @@ class TeamMatch extends WrestlingEvent {
   }
 
   @override
-  Future<List<Fight>> generateFights(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) async {
+  Future<List<Fight>> generateFights(
+      List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) async {
     final fights = <Fight>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {

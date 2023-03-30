@@ -15,8 +15,7 @@ TeamMatchFight _$TeamMatchFightFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$TeamMatchFightToJson(TeamMatchFight instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TeamMatchFightToJson(TeamMatchFight instance) => <String, dynamic>{
       'id': instance.id,
       'pos': instance.pos,
       'teamMatch': instance.teamMatch.toJson(),

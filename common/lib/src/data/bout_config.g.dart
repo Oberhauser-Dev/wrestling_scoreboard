@@ -17,8 +17,7 @@ BoutConfig _$BoutConfigFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$BoutConfigToJson(BoutConfig instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$BoutConfigToJson(BoutConfig instance) => <String, dynamic>{
       'id': instance.id,
       'periodDuration': instance.periodDuration.inMicroseconds,
       'breakDuration': instance.breakDuration.inMicroseconds,

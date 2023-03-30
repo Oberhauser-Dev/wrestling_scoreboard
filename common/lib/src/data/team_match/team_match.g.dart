@@ -11,21 +11,12 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
     id: json['id'] as int?,
     home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
     guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
-    matChairman: json['matChairman'] == null
-        ? null
-        : Person.fromJson(json['matChairman'] as Map<String, dynamic>),
-    referee: json['referee'] == null
-        ? null
-        : Person.fromJson(json['referee'] as Map<String, dynamic>),
-    judge: json['judge'] == null
-        ? null
-        : Person.fromJson(json['judge'] as Map<String, dynamic>),
-    timeKeeper: json['timeKeeper'] == null
-        ? null
-        : Person.fromJson(json['timeKeeper'] as Map<String, dynamic>),
-    transcriptWriter: json['transcriptWriter'] == null
-        ? null
-        : Person.fromJson(json['transcriptWriter'] as Map<String, dynamic>),
+    matChairman: json['matChairman'] == null ? null : Person.fromJson(json['matChairman'] as Map<String, dynamic>),
+    referee: json['referee'] == null ? null : Person.fromJson(json['referee'] as Map<String, dynamic>),
+    judge: json['judge'] == null ? null : Person.fromJson(json['judge'] as Map<String, dynamic>),
+    timeKeeper: json['timeKeeper'] == null ? null : Person.fromJson(json['timeKeeper'] as Map<String, dynamic>),
+    transcriptWriter:
+        json['transcriptWriter'] == null ? null : Person.fromJson(json['transcriptWriter'] as Map<String, dynamic>),
     no: json['no'] as String?,
     location: json['location'] as String?,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),

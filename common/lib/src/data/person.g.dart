@@ -12,9 +12,7 @@ Person _$PersonFromJson(Map<String, dynamic> json) {
     prename: json['prename'] as String,
     surname: json['surname'] as String,
     gender: _$enumDecodeNullable(_$GenderEnumMap, json['gender']),
-    birthDate: json['birthDate'] == null
-        ? null
-        : DateTime.parse(json['birthDate'] as String),
+    birthDate: json['birthDate'] == null ? null : DateTime.parse(json['birthDate'] as String),
   );
 }
 

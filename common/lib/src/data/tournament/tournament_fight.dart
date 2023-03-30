@@ -28,7 +28,7 @@ class TournamentFight extends DataObject {
       fight: fight!,
     );
   }
-  
+
   @override
   Map<String, dynamic> toRaw() {
     return {

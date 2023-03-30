@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:quiver/core.dart';
 
 import '../enums/weight_unit.dart';
 import '../enums/wrestling_style.dart';
@@ -24,8 +23,7 @@ class WeightClass extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$WeightClassToJson(this);
 
-  static Future<WeightClass> fromRaw(Map<String, dynamic> e) async =>
-      WeightClass(
+  static Future<WeightClass> fromRaw(Map<String, dynamic> e) async => WeightClass(
         id: e['id'] as int?,
         suffix: e['suffix'] as String?,
         weight: e['weight'] as int,
@@ -45,9 +43,13 @@ class WeightClass extends DataObject {
   }
 
   @override
-  bool operator ==(o) =>
-      o is WeightClass && suffix == o.suffix && weight == o.weight && style == o.style && unit == o.unit;
+  bool operator ==(other) =>
+      other is WeightClass &&
+      suffix == other.suffix &&
+      weight == other.weight &&
+      style == other.style &&
+      unit == other.unit;
 
   @override
-  int get hashCode => hash4(suffix.hashCode, weight.hashCode, style.hashCode, unit.hashCode);
+  int get hashCode => Object.hash(suffix, weight, style, unit);
 }
