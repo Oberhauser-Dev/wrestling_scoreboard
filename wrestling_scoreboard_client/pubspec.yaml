@@ -20,13 +20,13 @@ dependencies:
 
   provider: ^6.0.2
   audioplayers: ^3.0.1
-  common:
-    path: ../wrestling_scoreboard_common
   web_socket_channel: ^2.1.0
   flutter_lints: ^2.0.1
   path_provider: ^2.0.8
   settings_ui: ^2.0.2
   shared_preferences: ^2.0.13
+  wrestling_scoreboard_common:
+    path: ../wrestling_scoreboard_common
 
 dev_dependencies:
   flutter_test:

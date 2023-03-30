@@ -1,6 +1,6 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart';
-import 'package:server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 
 class BoutConfigController extends EntityController<BoutConfig> {
   static final BoutConfigController _singleton = BoutConfigController._internal();

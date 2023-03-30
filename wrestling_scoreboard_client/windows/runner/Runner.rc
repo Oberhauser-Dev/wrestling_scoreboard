@@ -90,7 +90,7 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "dev.oberhauser" "\0"
-            VALUE "FileDescription", "A new Flutter project." "\0"
+            VALUE "FileDescription", "Wrestling software for managing team fights and tournaments." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "client" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 dev.oberhauser. All rights reserved." "\0"

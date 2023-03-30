@@ -5,7 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -12,7 +12,7 @@ dependencies:
   shelf: ^1.0.0
   shelf_router: ^1.0.0
   shelf_static: ^1.0.0
-  common:
+  wrestling_scoreboard_common:
     path: ../wrestling_scoreboard_common
   postgres: ^2.4.0
   web_socket_channel: ^2.1.0

@@ -1,7 +1,7 @@
-import 'package:common/common.dart';
-import 'package:server/controllers/entity_controller.dart';
-import 'package:server/controllers/membership_controller.dart';
-import 'package:server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:shelf/shelf.dart';
 
 class ClubController extends EntityController<Club> {

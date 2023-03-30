@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:http/http.dart' as http;
-import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
-import 'package:wrestling_scoreboard/util/environment.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
-import 'package:wrestling_scoreboard/util/network/remote/url.dart';
+import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/util/environment.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
 
 import 'web_socket.dart';
 

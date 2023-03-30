@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/data/wrestling_style.dart';
-import 'package:wrestling_scoreboard/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard/ui/fight/fight_action_controls.dart';
-import 'package:wrestling_scoreboard/ui/fight/fight_shortcuts.dart';
-import 'package:wrestling_scoreboard/ui/fight/technical_points.dart';
-import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
-import 'package:wrestling_scoreboard/ui/models/participant_state_model.dart';
-import 'package:wrestling_scoreboard/util/audio/audio.dart';
-import 'package:wrestling_scoreboard/util/colors.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
-import 'package:wrestling_scoreboard/util/units.dart';
+import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_action_controls.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/technical_points.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/time_display.dart';
+import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
+import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
+import 'package:wrestling_scoreboard_client/util/colors.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/units.dart';
 
 import '../components/fitted_text.dart';
 import '../match/common_elements.dart';

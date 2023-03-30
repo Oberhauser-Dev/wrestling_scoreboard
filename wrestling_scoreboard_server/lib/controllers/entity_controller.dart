@@ -1,25 +1,25 @@
 import 'dart:convert';
 
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart';
-import 'package:server/controllers/bout_config_controller.dart';
-import 'package:server/controllers/club_controller.dart';
-import 'package:server/controllers/fight_action_controller.dart';
-import 'package:server/controllers/fight_controller.dart';
-import 'package:server/controllers/league_controller.dart';
-import 'package:server/controllers/league_weight_class_controller.dart';
-import 'package:server/controllers/lineup_controller.dart';
-import 'package:server/controllers/membership_controller.dart';
-import 'package:server/controllers/participant_state_controller.dart';
-import 'package:server/controllers/participation_controller.dart';
-import 'package:server/controllers/person_controller.dart';
-import 'package:server/controllers/team_controller.dart';
-import 'package:server/controllers/team_match_controller.dart';
-import 'package:server/controllers/team_match_fight_controller.dart';
-import 'package:server/controllers/tournament_controller.dart';
-import 'package:server/controllers/websocket_handler.dart';
-import 'package:server/controllers/weight_class_controller.dart';
-import 'package:server/services/postgres_db.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/fight_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_fight_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/tournament_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 
 Map<Type, PostgreSQLDataType> typeDartToCodeMap = {

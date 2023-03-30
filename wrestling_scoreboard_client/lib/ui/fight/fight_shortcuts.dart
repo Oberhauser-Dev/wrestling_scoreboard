@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard/util/audio/audio.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 
 import 'fight_screen.dart';
 

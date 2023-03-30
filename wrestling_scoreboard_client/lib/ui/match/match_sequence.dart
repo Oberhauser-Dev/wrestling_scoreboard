@@ -1,13 +1,13 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/fight_result.dart';
-import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/data/wrestling_style.dart';
-import 'package:wrestling_scoreboard/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard/ui/overview/team_match_overview.dart';
-import 'package:wrestling_scoreboard/util/units.dart';
+import 'package:wrestling_scoreboard_client/data/fight_result.dart';
+import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_screen.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
+import 'package:wrestling_scoreboard_client/util/units.dart';
 
 import '../components/fitted_text.dart';
 import 'common_elements.dart';

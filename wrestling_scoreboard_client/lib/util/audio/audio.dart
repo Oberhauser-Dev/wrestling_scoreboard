@@ -1,5 +1,5 @@
-import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
-import 'package:wrestling_scoreboard/util/environment.dart';
+import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/util/environment.dart';
 
 import 'default_audio_player.dart';
 

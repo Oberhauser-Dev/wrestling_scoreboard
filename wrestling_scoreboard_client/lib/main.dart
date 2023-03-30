@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:wrestling_scoreboard/ui/app_navigation.dart';
-import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/ui/app_navigation.dart';
+import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');

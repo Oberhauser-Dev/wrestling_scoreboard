@@ -1,13 +1,13 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
-import 'package:wrestling_scoreboard/ui/fight/time_display.dart';
-import 'package:wrestling_scoreboard/ui/models/participant_state_model.dart';
-import 'package:wrestling_scoreboard/util/colors.dart';
+import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/ui/components/fitted_text.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/time_display.dart';
+import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
+import 'package:wrestling_scoreboard_client/util/colors.dart';
 
 class TechnicalPoints extends StatelessWidget {
   final double height;

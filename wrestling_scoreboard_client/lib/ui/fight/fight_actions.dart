@@ -1,7 +1,7 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard/data/fight_role.dart';
-import 'package:wrestling_scoreboard/ui/components/fitted_text.dart';
+import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/ui/components/fitted_text.dart';
 
 class ActionsWidget extends StatelessWidget {
   final List<FightAction> actions;

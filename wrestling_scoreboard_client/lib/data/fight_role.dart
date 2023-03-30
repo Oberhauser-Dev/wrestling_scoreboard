@@ -1,4 +1,4 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 
 MaterialColor getColorFromFightRole(FightRole role) {

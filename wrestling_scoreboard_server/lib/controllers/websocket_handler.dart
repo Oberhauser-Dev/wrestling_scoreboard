@@ -1,16 +1,16 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:common/common.dart';
-import 'package:server/controllers/club_controller.dart';
-import 'package:server/controllers/fight_action_controller.dart';
-import 'package:server/controllers/league_controller.dart';
-import 'package:server/controllers/league_weight_class_controller.dart';
-import 'package:server/controllers/lineup_controller.dart';
-import 'package:server/controllers/membership_controller.dart';
-import 'package:server/controllers/participation_controller.dart';
-import 'package:server/controllers/team_controller.dart';
-import 'package:server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

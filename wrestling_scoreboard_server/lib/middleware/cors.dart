@@ -1,4 +1,4 @@
-import 'package:server/server.dart';
+import 'package:wrestling_scoreboard_server/server.dart';
 import 'package:shelf/shelf.dart';
 
 final corsHeaders = {

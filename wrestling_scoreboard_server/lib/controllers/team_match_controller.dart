@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart';
-import 'package:server/controllers/league_controller.dart';
-import 'package:server/controllers/participant_state_controller.dart';
-import 'package:server/controllers/participation_controller.dart';
-import 'package:server/controllers/team_match_fight_controller.dart';
-import 'package:server/controllers/websocket_handler.dart';
-import 'package:server/services/postgres_db.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_fight_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';

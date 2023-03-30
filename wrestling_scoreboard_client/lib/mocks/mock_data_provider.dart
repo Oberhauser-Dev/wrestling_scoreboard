@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:common/common.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 
 import 'mocks.dart';
 

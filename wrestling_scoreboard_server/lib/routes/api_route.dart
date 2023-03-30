@@ -1,4 +1,4 @@
-import 'package:server/controllers/league_weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 

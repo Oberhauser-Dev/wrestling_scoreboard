@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wrestling_scoreboard/ui/components/ok_dialog.dart';
-import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
-import 'package:wrestling_scoreboard/util/asset.dart';
-import 'package:wrestling_scoreboard/util/audio/audio.dart';
-import 'package:wrestling_scoreboard/util/environment.dart';
+import 'package:wrestling_scoreboard_client/ui/components/ok_dialog.dart';
+import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/util/asset.dart';
+import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
+import 'package:wrestling_scoreboard_client/util/environment.dart';
 
 class CustomSettingsScreen extends StatefulWidget {
   const CustomSettingsScreen({Key? key}) : super(key: key);

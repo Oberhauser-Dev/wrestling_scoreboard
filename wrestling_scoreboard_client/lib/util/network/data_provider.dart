@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:common/common.dart';
-import 'package:wrestling_scoreboard/mocks/mock_data_provider.dart';
-import 'package:wrestling_scoreboard/util/network/remote/rest.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_client/mocks/mock_data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/rest.dart';
 
 import '../environment.dart';
 

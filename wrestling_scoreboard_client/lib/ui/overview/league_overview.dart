@@ -1,17 +1,17 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/data/wrestling_style.dart';
-import 'package:wrestling_scoreboard/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
-import 'package:wrestling_scoreboard/ui/components/info.dart';
-import 'package:wrestling_scoreboard/ui/edit/league_edit.dart';
-import 'package:wrestling_scoreboard/ui/edit/league_weight_class_edit.dart';
-import 'package:wrestling_scoreboard/ui/edit/team_edit.dart';
-import 'package:wrestling_scoreboard/ui/overview/league_weight_class_overview.dart';
-import 'package:wrestling_scoreboard/ui/overview/team_overview.dart';
-import 'package:wrestling_scoreboard/util/date_time.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/ui/components/info.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/league_weight_class_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
+import 'package:wrestling_scoreboard_client/util/date_time.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 
 class LeagueOverview extends StatelessWidget {
   final League filterObject;

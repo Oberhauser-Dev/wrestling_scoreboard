@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:wrestling_scoreboard/ui/settings/preferences.dart';
-import 'package:wrestling_scoreboard/util/environment.dart';
-import 'package:wrestling_scoreboard/util/network/remote/url.dart';
+import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/util/environment.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
 
 enum WebSocketConnectionState {
   connecting,

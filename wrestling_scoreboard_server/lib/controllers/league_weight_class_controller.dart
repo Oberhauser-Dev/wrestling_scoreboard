@@ -1,4 +1,4 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
 

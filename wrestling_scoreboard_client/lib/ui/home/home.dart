@@ -1,13 +1,13 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard/ui/components/grouped_list.dart';
-import 'package:wrestling_scoreboard/ui/edit/club_edit.dart';
-import 'package:wrestling_scoreboard/ui/edit/league_edit.dart';
-import 'package:wrestling_scoreboard/ui/overview/club_overview.dart';
-import 'package:wrestling_scoreboard/ui/overview/league_overview.dart';
-import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/club_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/club_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/league_overview.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

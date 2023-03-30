@@ -1,8 +1,8 @@
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard/ui/components/exception.dart';
-import 'package:wrestling_scoreboard/util/network/data_provider.dart';
-import 'package:wrestling_scoreboard/util/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 
 class SingleConsumer<T extends DataObject> extends StatefulWidget {
   final int? id;
