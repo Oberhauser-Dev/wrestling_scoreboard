@@ -1,4 +1,4 @@
-import 'package:dotenv/dotenv.dart';
+import 'package:server/server.dart';
 import 'package:shelf/shelf.dart';
 
 final corsHeaders = {

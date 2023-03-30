@@ -1,14 +1,14 @@
 name: server
-description: A sample command-line application.
+description: Server for a wrestling scoreboard.
 version: 1.0.0
-# homepage: https://www.example.com
+homepage: https://server.wrestling-scoreboard.oberhauser.dev
+publish_to: 'none'
 
 environment:
   sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
-#   path: ^1.8.
-  dotenv: ^3.0.0
+  dotenv: ^4.1.0
   shelf: ^1.0.0
   shelf_router: ^1.0.0
   shelf_static: ^1.0.0
@@ -16,7 +16,8 @@ dependencies:
     path: ../common
   postgres: ^2.4.0
   web_socket_channel: ^2.1.0
+  shelf_web_socket: ^1.0.3
 
 dev_dependencies:
-  lints: ^1.0.1
+  lints: ^2.0.1
   test: ^1.16.0

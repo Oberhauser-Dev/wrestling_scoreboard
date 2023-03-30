@@ -178,7 +178,7 @@ abstract class EntityController<T extends DataObject> {
       Conjunction conjunction = Conjunction.and,
       Map<String, dynamic>? substitutionValues}) async {
     return setManyRawFromQuery(
-        'DELETE FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')};',
+        'DELETE FROM $tableName ${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'};',
         substitutionValues: substitutionValues);
   }
 
@@ -214,7 +214,7 @@ abstract class EntityController<T extends DataObject> {
       Map<String, dynamic>? substitutionValues,
       String? orderBy}) async {
     return getManyRawFromQuery(
-        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ' + conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')} ${orderBy == null ? '' : 'ORDER BY $orderBy'};',
+        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} ${orderBy == null ? '' : 'ORDER BY $orderBy'};',
         substitutionValues: substitutionValues);
   }
 

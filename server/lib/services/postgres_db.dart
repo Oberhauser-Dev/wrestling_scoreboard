@@ -1,5 +1,5 @@
-import 'package:dotenv/dotenv.dart';
 import 'package:postgres/postgres.dart';
+import 'package:server/server.dart';
 
 class PostgresDb {
   final String postgresHost = env['DATABASE_HOST'] ?? 'localhost';

@@ -4,7 +4,7 @@
 
 import 'dart:io';
 
-import 'package:dotenv/dotenv.dart' show load, env;
+import 'package:dotenv/dotenv.dart' show DotEnv;
 import 'package:server/controllers/websocket_handler.dart';
 import 'package:server/routes/api_route.dart';
 import 'package:server/services/postgres_db.dart';
@@ -15,8 +15,10 @@ import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
 import 'middleware/cors.dart';
 
+final env = DotEnv();
+
 Future init() async {
-  load(); // Load dotenv variables
+  env.load(); // Load dotenv variables
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
