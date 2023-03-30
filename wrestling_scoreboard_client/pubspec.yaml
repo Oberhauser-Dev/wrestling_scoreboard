@@ -1,4 +1,4 @@
-name: wrestling_scoreboard
+name: wrestling_scoreboard_client
 description: Wrestling software for managing team fights and tournaments.
 
 publish_to: 'none'
@@ -21,7 +21,7 @@ dependencies:
   provider: ^6.0.2
   audioplayers: ^3.0.1
   common:
-    path: ../common
+    path: ../wrestling_scoreboard_common
   web_socket_channel: ^2.1.0
   flutter_lints: ^2.0.1
   path_provider: ^2.0.8

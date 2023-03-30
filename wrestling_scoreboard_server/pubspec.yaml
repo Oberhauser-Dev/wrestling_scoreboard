@@ -1,4 +1,4 @@
-name: server
+name: wrestling_scoreboard_server
 description: Server for a wrestling scoreboard.
 version: 1.0.0
 homepage: https://server.wrestling-scoreboard.oberhauser.dev
@@ -13,7 +13,7 @@ dependencies:
   shelf_router: ^1.0.0
   shelf_static: ^1.0.0
   common:
-    path: ../common
+    path: ../wrestling_scoreboard_common
   postgres: ^2.4.0
   web_socket_channel: ^2.1.0
   shelf_web_socket: ^1.0.3
