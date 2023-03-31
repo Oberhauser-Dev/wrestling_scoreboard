@@ -3,7 +3,11 @@ import 'package:intl/intl.dart';
 
 extension DateTimeFormatter on DateTime {
   String toDateString(BuildContext context) {
-    return DateFormat.yMMMd(Localizations.localeOf(context).toLanguageTag()).format(this);
+    return toDateStringFromLocaleName(Localizations.localeOf(context).toLanguageTag());
+  }
+
+  String toDateStringFromLocaleName(String localeName) {
+    return DateFormat.yMMMd(localeName).format(this);
   }
 
   String toTimeString(BuildContext context) {

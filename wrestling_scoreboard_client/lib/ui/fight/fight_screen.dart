@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
@@ -15,7 +15,9 @@ import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.da
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/colors.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import '../components/fitted_text.dart';
 import '../match/common_elements.dart';
@@ -53,7 +55,7 @@ class FightState extends State<FightScreen> {
   late ObservableStopwatch _breakStopwatch;
   late ParticipantStateModel _r;
   late ParticipantStateModel _b;
-  late BoutConfig _boutConfig;
+  late BoutConfig boutConfig;
   int period = 1;
   late Function(FightScreenActionIntent) handleAction;
 
@@ -69,21 +71,21 @@ class FightState extends State<FightScreen> {
     HornSound();
     match = widget.match;
     fights = widget.fights;
-    // TODO may overwrite in settings to be more flexible
-    _boutConfig = match.home.team.league?.boutConfig ?? BoutConfig();
+    // TODO: may overwrite in settings to be more flexible
+    boutConfig = match.home.team.league?.boutConfig ?? BoutConfig();
     actions = widget.actions;
     fightIndex = widget.fightIndex;
     fight = widget.fights[fightIndex];
     _r = ParticipantStateModel(fight.r);
     _b = ParticipantStateModel(fight.b);
-    _r.injuryStopwatch.limit = _boutConfig.injuryDuration;
+    _r.injuryStopwatch.limit = boutConfig.injuryDuration;
     _r.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _r.isInjury = false;
       });
       handleAction(const FightScreenActionIntent.horn());
     });
-    _b.injuryStopwatch.limit = _boutConfig.injuryDuration;
+    _b.injuryStopwatch.limit = boutConfig.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
@@ -92,7 +94,7 @@ class FightState extends State<FightScreen> {
     });
 
     stopwatch = _fightStopwatch = ObservableStopwatch(
-      limit: _boutConfig.periodDuration * _boutConfig.periodCount,
+      limit: boutConfig.periodDuration * boutConfig.periodCount,
     );
     _fightStopwatch.onStart.stream.listen((event) {
       _r.activityStopwatch?.start();
@@ -114,7 +116,7 @@ class FightState extends State<FightScreen> {
         if (stopwatch == _fightStopwatch) {
           fight.duration = event;
 
-          if (fight.duration.compareTo(_boutConfig.periodDuration * period) >= 0) {
+          if (fight.duration.compareTo(boutConfig.periodDuration * period) >= 0) {
             _fightStopwatch.stop();
             if (_r.activityStopwatch != null) {
               _r.activityStopwatch!.dispose();
@@ -125,14 +127,14 @@ class FightState extends State<FightScreen> {
               _b.activityStopwatch = null;
             }
             handleAction(const FightScreenActionIntent.horn());
-            if (period < _boutConfig.periodCount) {
+            if (period < boutConfig.periodCount) {
               setState(() {
                 stopwatch = _breakStopwatch;
               });
               _breakStopwatch.start();
               period++;
             }
-          } else if (fight.duration.inSeconds ~/ _boutConfig.periodDuration.inSeconds < (period - 1)) {
+          } else if (fight.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds < (period - 1)) {
             // Fix times below round time: e.g. if subtract time
             period -= 1;
           }
@@ -141,7 +143,7 @@ class FightState extends State<FightScreen> {
     );
     stopwatch.addDuration(fight.duration);
     _breakStopwatch = ObservableStopwatch(
-      limit: _boutConfig.breakDuration,
+      limit: boutConfig.breakDuration,
     );
     _breakStopwatch.onEnd.stream.listen((event) {
       if (stopwatch == _breakStopwatch) {
@@ -242,7 +244,7 @@ class FightState extends State<FightScreen> {
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
-              psm.activityStopwatch == null ? ObservableStopwatch(limit: _boutConfig.activityDuration) : null;
+              psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
@@ -270,7 +272,7 @@ class FightState extends State<FightScreen> {
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
-              psm.activityStopwatch == null ? ObservableStopwatch(limit: _boutConfig.activityDuration) : null;
+              psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
         });
         if (psm.activityStopwatch != null && _fightStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
@@ -305,6 +307,7 @@ class FightState extends State<FightScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
     TextStyle fontStyleInfo = TextStyle(fontSize: width / 60);
@@ -325,11 +328,18 @@ class FightState extends State<FightScreen> {
       doAction: doAction,
       child: Scaffold(
         bottomNavigationBar: BottomAppBar(
-          child: Row(children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context, false);
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () async {
+                final bytes = await generateScoreSheet(this, localizations: localizations);
+                Printing.sharePdf(bytes: bytes);
               },
             ),
           ]),
