@@ -22,7 +22,7 @@ class FightController extends EntityController<Fight> {
   @override
   Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
     return {
-      'winner': null,
+      'winner_role': null,
       'fight_result': null,
     };
   }

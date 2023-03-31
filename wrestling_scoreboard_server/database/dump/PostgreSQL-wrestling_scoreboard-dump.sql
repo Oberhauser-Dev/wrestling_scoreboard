@@ -52,16 +52,16 @@ ALTER TYPE public.fight_action_type OWNER TO wrestling;
 --
 
 CREATE TYPE public.fight_result AS ENUM (
-    'VFA',
-    'VIN',
-    'VCA',
-    'VSU',
-    'VSU1',
-    'VPO',
-    'VPO1',
-    'VFO',
-    'DSQ',
-    'DSQ2'
+    'vfa',
+    'vin',
+    'vca',
+    'vsu',
+    'vsu1',
+    'vpo',
+    'vpo1',
+    'vfo',
+    'dsq',
+    'dsq2'
 );
 
 
@@ -253,7 +253,7 @@ CREATE TABLE public.fight (
     red_id integer,
     blue_id integer,
     weight_class_id integer NOT NULL,
-    winner public.fight_role,
+    winner_role public.fight_role,
     fight_result public.fight_result,
     duration_millis integer
 );
@@ -994,13 +994,13 @@ COPY public.club (id, no, name) FROM stdin;
 -- Data for Name: fight; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.fight (id, red_id, blue_id, weight_class_id, winner, fight_result, duration_millis) FROM stdin;
+COPY public.fight (id, red_id, blue_id, weight_class_id, winner_role, fight_result, duration_millis) FROM stdin;
 22	\N	\N	2	\N	\N	\N
 23	25	\N	3	\N	\N	\N
 24	\N	26	4	\N	\N	\N
 25	27	28	7	\N	\N	\N
 26	29	30	10	\N	\N	\N
-21	23	24	1	red	VFA	45000
+21	23	24	1	red	vfa	45000
 \.
 
 
