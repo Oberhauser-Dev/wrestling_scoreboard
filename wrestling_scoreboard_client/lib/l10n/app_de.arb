@@ -33,6 +33,7 @@
   "date": "Datum",
   "place": "Ort",
 
+  "wrestlingRulesPdf": "https://www.ringen.de/wp-content/uploads/2019/01/Internationales-Regelwerk_Januar-2019_.pdf",
   "participantVacant": "unbesetzt",
   "weight": "Gewicht",
   "weightClass": "Gewichtsklasse",
@@ -97,11 +98,11 @@
   "injuryTime": "Verletzungszeit",
   "injuryTimeShort": "VZ",
   "durations": "Zeiten",
-  "periodDurationInSecs": "Dauer der Runde (in Sekunden)",
+  "periodDurationInSecs": "Dauer des Kampfabschnittes (in Sekunden)",
   "breakDurationInSecs": "Dauer der Pause (in Sekunden)",
   "activityDurationInSecs": "Dauer der Aktivitätszeit (in Sekunden)",
   "injuryDurationInSecs": "Dauer der Verletzungszeit (in Sekunden)",
-  "periodCount": "Number of periods",
+  "periodCount": "Anzahl der Kampfabschnitte",
 
   "referee": "Schiedsrichter",
   "refereeAbbr": "SR",
@@ -112,10 +113,10 @@
   
   "prename": "Vorname",
   "surname": "Nachname",
-  "age": "Age",
-  "dateOfBirth": "Date of Birth",
-  "gender": "Gender",
-  "genderMale": "Male",
-  "genderFemale": "Female",
-  "genderTransgender": "Diverse"
+  "age": "Alter",
+  "dateOfBirth": "Geburtsdatum",
+  "gender": "Geschlecht",
+  "genderMale": "Männlich",
+  "genderFemale": "Weiblich",
+  "genderTransgender": "Divers"
 }

@@ -36,6 +36,7 @@
   "date": "Date",
   "place": "Place",
 
+  "wrestlingRulesPdf": "https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf",
   "participantVacant": "vacant",
   "weight": "Weight",
   "weightClass": "Weight Class",
@@ -115,10 +116,10 @@
 
   "prename": "Prename",
   "surname": "Surname",
-  "age": "Alter",
-  "dateOfBirth": "Geburtsdatum",
-  "gender": "Geschlecht",
-  "genderMale": "Männlich",
-  "genderFemale": "Weiblich",
-  "genderTransgender": "Divers"
+  "age": "Age",
+  "dateOfBirth": "Date of Birth",
+  "gender": "Gender",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "genderTransgender": "Diverse"
 }
