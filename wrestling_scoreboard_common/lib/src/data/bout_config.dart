@@ -19,14 +19,14 @@ class BoutConfig extends DataObject {
   final Duration injuryDuration;
   final int periodCount;
 
-  BoutConfig(
-      {int? id,
-      this.periodDuration = defaultPeriodDuration,
-      this.breakDuration = defaultBreakDuration,
-      this.activityDuration = defaultActivityDuration,
-      this.injuryDuration = defaultInjuryDuration,
-      this.periodCount = defaultPeriodCount})
-      : super(id);
+  BoutConfig({
+    int? id,
+    this.periodDuration = BoutConfig.defaultPeriodDuration,
+    this.breakDuration = BoutConfig.defaultBreakDuration,
+    this.activityDuration = BoutConfig.defaultActivityDuration,
+    this.injuryDuration = BoutConfig.defaultInjuryDuration,
+    this.periodCount = BoutConfig.defaultPeriodCount,
+  }) : super(id);
 
   factory BoutConfig.fromJson(Map<String, dynamic> json) => _$BoutConfigFromJson(json);
 

@@ -9,18 +9,18 @@ part of 'bout_config.dart';
 BoutConfig _$BoutConfigFromJson(Map<String, dynamic> json) => BoutConfig(
       id: json['id'] as int?,
       periodDuration: json['periodDuration'] == null
-          ? defaultPeriodDuration
+          ? BoutConfig.defaultPeriodDuration
           : Duration(microseconds: json['periodDuration'] as int),
       breakDuration: json['breakDuration'] == null
-          ? defaultBreakDuration
+          ? BoutConfig.defaultBreakDuration
           : Duration(microseconds: json['breakDuration'] as int),
       activityDuration: json['activityDuration'] == null
-          ? defaultActivityDuration
+          ? BoutConfig.defaultActivityDuration
           : Duration(microseconds: json['activityDuration'] as int),
       injuryDuration: json['injuryDuration'] == null
-          ? defaultInjuryDuration
+          ? BoutConfig.defaultInjuryDuration
           : Duration(microseconds: json['injuryDuration'] as int),
-      periodCount: json['periodCount'] as int? ?? defaultPeriodCount,
+      periodCount: json['periodCount'] as int? ?? BoutConfig.defaultPeriodCount,
     );
 
 Map<String, dynamic> _$BoutConfigToJson(BoutConfig instance) =>
