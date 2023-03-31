@@ -9,25 +9,25 @@ String getFullNameFromFightResult(FightResult? result, BuildContext context) {
 String getDescriptionFromFightResult(FightResult? result, BuildContext context) {
   AppLocalizations loc = AppLocalizations.of(context)!;
   switch (result) {
-    case FightResult.VFA:
+    case FightResult.vfa:
       return loc.fightResultVfa;
-    case FightResult.VIN:
+    case FightResult.vin:
       return loc.fightResultVin;
-    case FightResult.VCA:
+    case FightResult.vca:
       return loc.fightResultVca;
-    case FightResult.VSU:
+    case FightResult.vsu:
       return loc.fightResultVsu;
-    case FightResult.VSU1:
+    case FightResult.vsu1:
       return loc.fightResultVsu1;
-    case FightResult.VPO:
+    case FightResult.vpo:
       return loc.fightResultVpo;
-    case FightResult.VPO1:
+    case FightResult.vpo1:
       return loc.fightResultVpo1;
-    case FightResult.VFO:
+    case FightResult.vfo:
       return loc.fightResultVfo;
-    case FightResult.DSQ:
+    case FightResult.dsq:
       return loc.fightResultDsq;
-    case FightResult.DSQ2:
+    case FightResult.dsq2:
       return loc.fightResultDsq2;
     default:
       return '';
@@ -37,25 +37,25 @@ String getDescriptionFromFightResult(FightResult? result, BuildContext context) 
 String getAbbreviationFromFightResult(FightResult? result, BuildContext context) {
   AppLocalizations loc = AppLocalizations.of(context)!;
   switch (result) {
-    case FightResult.VFA:
+    case FightResult.vfa:
       return loc.fightResultVfaAbbr;
-    case FightResult.VIN:
+    case FightResult.vin:
       return loc.fightResultVinAbbr;
-    case FightResult.VCA:
+    case FightResult.vca:
       return loc.fightResultVcaAbbr;
-    case FightResult.VSU:
+    case FightResult.vsu:
       return loc.fightResultVsuAbbr;
-    case FightResult.VSU1:
+    case FightResult.vsu1:
       return loc.fightResultVsu1Abbr;
-    case FightResult.VPO:
+    case FightResult.vpo:
       return loc.fightResultVpoAbbr;
-    case FightResult.VPO1:
+    case FightResult.vpo1:
       return loc.fightResultVpo1Abbr;
-    case FightResult.VFO:
+    case FightResult.vfo:
       return loc.fightResultVfoAbbr;
-    case FightResult.DSQ:
+    case FightResult.dsq:
       return loc.fightResultDsqAbbr;
-    case FightResult.DSQ2:
+    case FightResult.dsq2:
       return loc.fightResultDsq2Abbr;
     default:
       return '';

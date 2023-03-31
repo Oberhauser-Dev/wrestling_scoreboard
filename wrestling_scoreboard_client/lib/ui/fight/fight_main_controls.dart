@@ -104,19 +104,19 @@ class FightMainControlsState extends State<FightMainControls> {
       child: Text(AppLocalizations.of(context)!.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
     ));
     return Container(
-      color: role == widget.fightState.fight.winner ? getColorFromFightRole(role) : null,
+      color: role == widget.fightState.fight.winnerRole ? getColorFromFightRole(role) : null,
       child: ButtonTheme(
           alignedDropdown: true,
           child: Consumer<List<FightAction>>(
             builder: (context, actions, child) => DropdownButton<FightResult?>(
               isExpanded: true,
-              value: role == widget.fightState.fight.winner || widget.fightState.fight.result == FightResult.DSQ2
+              value: role == widget.fightState.fight.winnerRole || widget.fightState.fight.result == FightResult.dsq2
                   ? widget.fightState.fight.result
                   : null,
               items: items,
               onChanged: (val) {
                 setState(() {
-                  widget.fightState.fight.winner = val != null && val != FightResult.DSQ2 ? role : null;
+                  widget.fightState.fight.winnerRole = val != null && val != FightResult.dsq2 ? role : null;
                   widget.fightState.fight.result = val;
                   widget.fightState.fight.updateClassificationPoints(actions);
                   dataProvider.createOrUpdateSingle(widget.fightState.fight);

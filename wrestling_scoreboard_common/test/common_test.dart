@@ -1,5 +1,5 @@
-import 'package:common/common.dart';
 import 'package:test/test.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 void main() {
   group('A group of tests', () {

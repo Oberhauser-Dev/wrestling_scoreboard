@@ -168,7 +168,7 @@ class FightListItem extends StatelessWidget {
                                 Expanded(
                                     flex: 70,
                                     child: Container(
-                                      color: fight.winner == FightRole.red ? Colors.red.shade800 : null,
+                                      color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
                                       child: Center(
                                         child: Text(pState?.classificationPoints?.toString() ?? '-',
                                             style: fontStyleDefault),
@@ -181,7 +181,7 @@ class FightListItem extends StatelessWidget {
                                       Expanded(
                                         flex: 50,
                                         child: Container(
-                                          color: fight.winner == FightRole.red ? Colors.red.shade800 : null,
+                                          color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
                                           child: Center(
                                             child: pState?.classificationPoints != null
                                                 ? Text(
@@ -212,7 +212,7 @@ class FightListItem extends StatelessWidget {
                           Expanded(
                               flex: 70,
                               child: Container(
-                                color: data?.winner != null ? getColorFromFightRole(data!.winner!).shade800 : null,
+                                color: data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
                                 child: Center(
                                   child: Text(getAbbreviationFromFightResult(data?.result, context),
                                       style: TextStyle(fontSize: fontSizeDefault * 0.7)),
@@ -221,7 +221,7 @@ class FightListItem extends StatelessWidget {
                           Expanded(
                               flex: 50,
                               child: Center(
-                                child: data?.winner != null
+                                child: data?.winnerRole != null
                                     ? Text(durationToString(data!.duration),
                                         style: TextStyle(fontSize: fontSizeDefault / 2))
                                     : null,
@@ -244,7 +244,7 @@ class FightListItem extends StatelessWidget {
                                 Expanded(
                                     flex: 70,
                                     child: Container(
-                                      color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
+                                      color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
                                       child: Center(
                                         child: Text(pState?.classificationPoints?.toString() ?? '-',
                                             style: fontStyleDefault),
@@ -257,7 +257,7 @@ class FightListItem extends StatelessWidget {
                                       Expanded(
                                         flex: 50,
                                         child: Container(
-                                          color: fight.winner == FightRole.blue ? Colors.blue.shade800 : null,
+                                          color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
                                           child: Center(
                                             child: pState?.classificationPoints != null
                                                 ? Text(

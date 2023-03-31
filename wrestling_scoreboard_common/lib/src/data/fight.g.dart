@@ -6,18 +6,23 @@ part of 'fight.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Fight _$FightFromJson(Map<String, dynamic> json) {
-  return Fight(
-    id: json['id'] as int?,
-    r: json['r'] == null ? null : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
-    b: json['b'] == null ? null : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
-    weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
-    pool: json['pool'] as int?,
-    winner: _$enumDecodeNullable(_$FightRoleEnumMap, json['winner']),
-    result: _$enumDecodeNullable(_$FightResultEnumMap, json['result']),
-    duration: Duration(microseconds: json['duration'] as int),
-  );
-}
+Fight _$FightFromJson(Map<String, dynamic> json) => Fight(
+      id: json['id'] as int?,
+      r: json['r'] == null
+          ? null
+          : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
+      b: json['b'] == null
+          ? null
+          : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
+      weightClass:
+          WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
+      pool: json['pool'] as int?,
+      winnerRole: $enumDecodeNullable(_$FightRoleEnumMap, json['winnerRole']),
+      result: $enumDecodeNullable(_$FightResultEnumMap, json['result']),
+      duration: json['duration'] == null
+          ? const Duration()
+          : Duration(microseconds: json['duration'] as int),
+    );
 
 Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
       'id': instance.id,
@@ -26,46 +31,9 @@ Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
       'weightClass': instance.weightClass.toJson(),
       'pool': instance.pool,
       'result': _$FightResultEnumMap[instance.result],
-      'winner': _$FightRoleEnumMap[instance.winner],
+      'winnerRole': _$FightRoleEnumMap[instance.winnerRole],
       'duration': instance.duration.inMicroseconds,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
-K? _$enumDecodeNullable<K, V>(
-  Map<K, V> enumValues,
-  dynamic source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
-}
 
 const _$FightRoleEnumMap = {
   FightRole.red: 'red',
@@ -73,14 +41,14 @@ const _$FightRoleEnumMap = {
 };
 
 const _$FightResultEnumMap = {
-  FightResult.VFA: 'VFA',
-  FightResult.VIN: 'VIN',
-  FightResult.VCA: 'VCA',
-  FightResult.VSU: 'VSU',
-  FightResult.VSU1: 'VSU1',
-  FightResult.VPO: 'VPO',
-  FightResult.VPO1: 'VPO1',
-  FightResult.VFO: 'VFO',
-  FightResult.DSQ: 'DSQ',
-  FightResult.DSQ2: 'DSQ2',
+  FightResult.vfa: 'vfa',
+  FightResult.vin: 'vin',
+  FightResult.vca: 'vca',
+  FightResult.vsu: 'vsu',
+  FightResult.vsu1: 'vsu1',
+  FightResult.vpo: 'vpo',
+  FightResult.vpo1: 'vpo1',
+  FightResult.vfo: 'vfo',
+  FightResult.dsq: 'dsq',
+  FightResult.dsq2: 'dsq2',
 };

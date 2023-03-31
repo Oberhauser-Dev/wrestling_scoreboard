@@ -17,7 +17,7 @@ class Fight extends DataObject {
   final WeightClass weightClass;
   final int? pool;
   FightResult? result;
-  FightRole? winner;
+  FightRole? winnerRole;
   Duration duration;
 
   Fight(
@@ -26,7 +26,7 @@ class Fight extends DataObject {
       this.b,
       required this.weightClass,
       this.pool,
-      this.winner,
+      this.winnerRole,
       this.result,
       this.duration = const Duration()})
       : super(id);
@@ -43,7 +43,7 @@ class Fight extends DataObject {
       'red_id': r?.id,
       'blue_id': b?.id,
       'weight_class_id': weightClass.id,
-      'winner': winner?.name,
+      'winner_role': winnerRole?.name,
       'fight_result': result?.name,
       'duration_millis': duration.inMilliseconds,
     };
@@ -52,7 +52,7 @@ class Fight extends DataObject {
   static Future<Fight> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final redId = e['red_id'] as int?;
     final blueId = e['blue_id'] as int?;
-    final winner = e['winner'] as String?;
+    final winner = e['winner_role'] as String?;
     final fightResult = e['fight_result'] as String?;
     final weightClass = await getSingle<WeightClass>(e['weight_class_id'] as int);
     final durationMillis = e['duration_millis'] as int?;
@@ -61,25 +61,25 @@ class Fight extends DataObject {
       r: redId == null ? null : await getSingle<ParticipantState>(redId),
       b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
       weightClass: weightClass!,
-      winner: winner == null ? null : FightRoleParser.valueOf(winner),
+      winnerRole: winner == null ? null : FightRoleParser.valueOf(winner),
       result: fightResult == null ? null : FightResultParser.valueOf(fightResult),
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
     );
   }
 
   void updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
-    var winner = this.winner == FightRole.red ? r : b;
-    var looser = this.winner == FightRole.red ? b : r;
-
-    if (result != null) {
+    if (result != null && winnerRole != null) {
+      var winner = winnerRole == FightRole.red ? r : b;
+      var looser = winnerRole == FightRole.red ? b : r;
+      
       if (winner != null) {
         winner.classificationPoints = isTournament
             ? getClassificationPointsWinnerTournament(result!)
             : getClassificationPointsWinnerTeamMatch(
                 result!,
-                ParticipantState.getTechnicalPoints(actions, this.winner!) -
+                ParticipantState.getTechnicalPoints(actions, winnerRole!) -
                     ParticipantState.getTechnicalPoints(
-                        actions, this.winner == FightRole.red ? FightRole.blue : FightRole.red));
+                        actions, winnerRole == FightRole.red ? FightRole.blue : FightRole.red));
       }
 
       if (looser != null) {
@@ -102,19 +102,19 @@ class Fight extends DataObject {
 
   static int getClassificationPointsWinnerTournament(FightResult result) {
     switch (result) {
-      case FightResult.VFA:
-      case FightResult.VIN:
-      case FightResult.VCA:
-      case FightResult.VFO:
-      case FightResult.DSQ:
+      case FightResult.vfa:
+      case FightResult.vin:
+      case FightResult.vca:
+      case FightResult.vfo:
+      case FightResult.dsq:
         return 5;
-      case FightResult.VSU:
-      case FightResult.VSU1:
+      case FightResult.vsu:
+      case FightResult.vsu1:
         return 4;
-      case FightResult.VPO:
-      case FightResult.VPO1:
+      case FightResult.vpo:
+      case FightResult.vpo1:
         return 3;
-      case FightResult.DSQ2:
+      case FightResult.dsq2:
       default:
         return 0;
     }
@@ -122,17 +122,17 @@ class Fight extends DataObject {
 
   static int getClassificationPointsLooserTournament(FightResult result) {
     switch (result) {
-      case FightResult.VSU1:
-      case FightResult.VPO1:
+      case FightResult.vsu1:
+      case FightResult.vpo1:
         return 1;
-      case FightResult.VFA:
-      case FightResult.VIN:
-      case FightResult.VCA:
-      case FightResult.VFO:
-      case FightResult.VSU:
-      case FightResult.VPO:
-      case FightResult.DSQ:
-      case FightResult.DSQ2:
+      case FightResult.vfa:
+      case FightResult.vin:
+      case FightResult.vca:
+      case FightResult.vfo:
+      case FightResult.vsu:
+      case FightResult.vpo:
+      case FightResult.dsq:
+      case FightResult.dsq2:
       default:
         return 0;
     }
@@ -140,18 +140,18 @@ class Fight extends DataObject {
 
   static int getClassificationPointsWinnerTeamMatch(FightResult result, int diff) {
     switch (result) {
-      case FightResult.VFA:
-      case FightResult.VIN:
-      case FightResult.VCA:
-      case FightResult.VFO:
-      case FightResult.DSQ:
-      case FightResult.VSU:
-      case FightResult.VSU1:
+      case FightResult.vfa:
+      case FightResult.vin:
+      case FightResult.vca:
+      case FightResult.vfo:
+      case FightResult.dsq:
+      case FightResult.vsu:
+      case FightResult.vsu1:
         return 4;
-      case FightResult.VPO:
-      case FightResult.VPO1:
+      case FightResult.vpo:
+      case FightResult.vpo1:
         return diff >= 8 ? 3 : (diff >= 3 ? 2 : 1);
-      case FightResult.DSQ2:
+      case FightResult.dsq2:
       default:
         return 0;
     }
@@ -159,16 +159,16 @@ class Fight extends DataObject {
 
   static int getClassificationPointsLooserTeamMatch(FightResult result) {
     switch (result) {
-      case FightResult.VFA:
-      case FightResult.VIN:
-      case FightResult.VCA:
-      case FightResult.VFO:
-      case FightResult.DSQ:
-      case FightResult.VSU:
-      case FightResult.VSU1:
-      case FightResult.VPO:
-      case FightResult.VPO1:
-      case FightResult.DSQ2:
+      case FightResult.vfa:
+      case FightResult.vin:
+      case FightResult.vca:
+      case FightResult.vfo:
+      case FightResult.dsq:
+      case FightResult.vsu:
+      case FightResult.vsu1:
+      case FightResult.vpo:
+      case FightResult.vpo1:
+      case FightResult.dsq2:
       default:
         return 0;
     }
