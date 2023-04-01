@@ -20,9 +20,9 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, tournament
 ## Setup & Installation
 
 Please read the documentation for setting up the according components:
-- [Server](server/README.md)
-- [Database](server/database/README.md)
-- [Client](client/README.md)
+- [Server](wrestling_scoreboard_server/README.md)
+- [Database](wrestling_scoreboard_server/database/README.md)
+- [Client](wrestling_scoreboard_client/README.md)
 
 If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can take advantage of [these config](docs/nginx) files.
 

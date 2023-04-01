@@ -12,12 +12,12 @@ dart compile exe bin/server.dart -o ./bin/wrestling-scoreboard-server
 
 ## Environment variables:
 
-Create file `.env` in `server` directory. 
+Create file `.env` in `wrestling-scoreboard-server` directory. 
 A pre-configuration can be found in `.env.example` file. Change the values to your needs.
 
 ## Run server
 
-Execute the `./bin/server` executable from within the `server` directory, to handle resource paths correctly.
+Execute the `./bin/wrestling-scoreboard-server` executable from within the `wrestling-scoreboard-server` directory, to handle resource paths correctly.
 
 ### Linux Systemd service
 
@@ -30,11 +30,11 @@ sudo nano /etc/systemd/system/wrestling-scoreboard-server.service
 Description=Wrestling-scoreboard-server
 
 [Service]
-ExecStart=/var/www/wrestling_scoreboard/server/bin/server
+ExecStart=/opt/wrestling_scoreboard_server/bin/wrestling-scoreboard-server
 Restart=on-failure
 User=www
 Group=www
-WorkingDirectory=/var/www/wrestling_scoreboard/server
+WorkingDirectory=/opt/wrestling_scoreboard_server
 
 [Install]
 WantedBy=multi-user.target
