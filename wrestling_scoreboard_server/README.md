@@ -7,7 +7,7 @@ in `lib/`, and example unit test in `test/`.
 
 ```shell
 dart pub get
-dart compile exe bin/server.dart -o ./bin/server
+dart compile exe bin/server.dart -o ./bin/wrestling-scoreboard-server
 ```
 
 ## Environment variables:
