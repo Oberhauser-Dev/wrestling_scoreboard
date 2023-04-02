@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:shelf_web_socket/shelf_web_socket.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
@@ -11,8 +13,7 @@ import 'package:wrestling_scoreboard_server/controllers/membership_controller.da
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
-import 'package:shelf_web_socket/shelf_web_socket.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:wrestling_scoreboard_server/server.dart';
 
 import 'entity_controller.dart';
 
@@ -233,16 +234,19 @@ Future<void> handleManyRaw<T extends DataObject>(
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 
-final websocketHandler = webSocketHandler((WebSocketChannel webSocket) {
-  webSocketPool.add(webSocket);
-  webSocket.stream.listen((message) {
-    final json = jsonDecode(message);
-    handleFromJson(json,
-        handleSingle: handleSingle,
-        handleMany: handleMany,
-        handleSingleRaw: handleSingleRaw,
-        handleManyRaw: handleManyRaw);
-  }, onDone: () {
-    webSocketPool.remove(webSocket);
-  });
-});
+final websocketHandler = webSocketHandler(
+  (WebSocketChannel webSocket) {
+    webSocketPool.add(webSocket);
+    webSocket.stream.listen((message) {
+      final json = jsonDecode(message);
+      handleFromJson(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
+    }, onDone: () {
+      webSocketPool.remove(webSocket);
+    });
+  },
+  pingInterval: Duration(seconds: int.parse(env['WEB_SOCKET_PING_INTERVAL_SECS'] ?? '30')),
+);
