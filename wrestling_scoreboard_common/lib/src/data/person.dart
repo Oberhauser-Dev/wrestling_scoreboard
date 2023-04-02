@@ -21,13 +21,16 @@ class Person extends DataObject {
   @override
   Map<String, dynamic> toJson() => _$PersonToJson(this);
 
-  static Future<Person> fromRaw(Map<String, dynamic> e) async => Person(
+  static Future<Person> fromRaw(Map<String, dynamic> e) async {
+    final gender = e['gender'] as String?;
+    return Person(
         id: e['id'] as int?,
         prename: e['prename'] as String,
         surname: e['surname'] as String,
-        gender: GenderParser.valueOf(e['gender']),
+        gender: gender == null ? null : GenderParser.valueOf(gender),
         birthDate: e['birth_date'] as DateTime?,
       );
+  }
 
   @override
   Map<String, dynamic> toRaw() {
