@@ -9,7 +9,6 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter_dotenv: ^5.0.0
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -40,7 +39,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
     - assets/audio/
     - assets/images/icons/
 
