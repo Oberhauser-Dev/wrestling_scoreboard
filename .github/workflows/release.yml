@@ -7,29 +7,55 @@ on:
 
 jobs:
   release:
-    name: Release for ${{ matrix.os }}
+    name: Release for ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
     
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
-            platform: android
-            build_cmd: apk
-            artifact_path: android/app.apk
-            asset_name: wrestling-scoreboard-client.apk
-            
+            platform: Android
+            build_cmd: ./scripts/build-apk.sh
+            artifact_path: app/outputs/flutter-apk/app-release.apk
+            asset_file_extension: apk
+          - os: windows-latest
+            platform: Windows
+            build_cmd: .\scripts\build-windows.bat
+            artifact_path: windows/wrestling-scoreboard-client-windows.zip
+            asset_file_extension: zip
+          - os: ubuntu-latest
+            platform: Linux
+            # Use env PATH, so commands are available in sudo mode
+            build_cmd: sudo -E env "PATH=$PATH" ./scripts/build-linux.sh
+            artifact_path: linux/x64/release/debian/wrestling-scoreboard-client_0.0.1_amd64.deb
+            asset_file_extension: deb
+          - os: ubuntu-latest
+            platform: Web
+            build_cmd: ./scripts/build-web.sh
+            artifact_path: wrestling-scoreboard-client-web.tar.gz
+            asset_file_extension: tar.gz
+#          - os: macos-latest
+#            platform: macOS
+#            build_cmd: ./scripts/build-macos.sh
+#            artifact_path: macos/app-release.app
+#            asset_file_extension: app
+#          - os: macos-latest
+#            platform: iOS
+#            build_cmd: ./scripts/build-ipa.sh
+#            artifact_path: ios/ipa/app-release.ipa
+#            asset_file_extension: ipa
+
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
       - name: Build
         working-directory: wrestling_scoreboard_client
-        run: flutter build ${{ matrix.build_cmd }}
-
+        run: ${{ matrix.build_cmd }}
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/${{ matrix.artifact_path }}
-          asset_name: ${{ matrix.asset_name }}-${{github.ref_name}}
+          file: wrestling_scoreboard_client/build/${{ matrix.artifact_path }}
+          asset_name: wrestling_scoreboard_client-${{ matrix.platform }}-${{github.ref_name}}.${{ matrix.asset_file_extension }}
           tag: ${{ github.ref }}
