@@ -27,7 +27,7 @@ sudo nano /etc/systemd/system/wrestling-scoreboard-server.service
 
 ```
 [Unit]
-Description=Wrestling-scoreboard-server
+Description=Wrestling-Scoreboard-Server
 
 [Service]
 ExecStart=/opt/wrestling_scoreboard_server/bin/wrestling-scoreboard-server
