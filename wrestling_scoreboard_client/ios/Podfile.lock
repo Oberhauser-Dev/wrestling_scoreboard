@@ -1,0 +1,42 @@
+PODS:
+  - audioplayers_darwin (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - printing (1.0.0):
+    - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
+  - Flutter (from `Flutter`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - printing (from `.symlinks/plugins/printing/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+
+EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
+  Flutter:
+    :path: Flutter
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/ios"
+  printing:
+    :path: ".symlinks/plugins/printing/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+
+SPEC CHECKSUMS:
+  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
+  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+
+COCOAPODS: 1.11.3
