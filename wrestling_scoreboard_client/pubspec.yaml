@@ -3,6 +3,8 @@ description: Wrestling software for managing team fights and tournaments.
 
 publish_to: 'none'
 
+homepage: 'https://wrestling-scoreboard.oberhauser.dev'
+repository: 'https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/master/wrestling_scoreboard_client'
 version: 1.0.0+1
 
 environment:
