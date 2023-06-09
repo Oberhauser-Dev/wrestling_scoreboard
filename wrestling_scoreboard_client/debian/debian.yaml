@@ -1,7 +1,7 @@
 flutter_app:
   command: wrestling_scoreboard_client
   arch: x64
-  parent: /usr/local/lib
+  parent: /opt
 
 control:
   Package: wrestling-scoreboard-client
