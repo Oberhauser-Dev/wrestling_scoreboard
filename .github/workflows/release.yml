@@ -43,9 +43,9 @@ jobs:
           channel: 'stable'
       - name: Install Linux Dependencies
         run: |
-          apt-get update
-          apt-get install -y libunwind-dev
-          apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+          sudo apt-get update
+          sudo apt-get install -y libunwind-dev
+          sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
         if: ${{ matrix.platform == 'Linux' }}
       - name: Build
         uses: oberhauser-dev/flutter-release-action@v0
