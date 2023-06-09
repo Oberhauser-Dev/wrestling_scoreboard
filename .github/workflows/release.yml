@@ -9,6 +9,9 @@ jobs:
   release:
     name: Release for ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: wrestling_scoreboard_client
     
     strategy:
       fail-fast: false
@@ -16,49 +19,43 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: Android
-            build_cmd: ./scripts/build-apk.sh
-            artifact_path: app/outputs/flutter-apk/app-release.apk
-            asset_file_extension: apk
+            release-type: apk
           - os: windows-latest
             platform: Windows
-            build_cmd: .\scripts\build-windows.bat
-            artifact_path: windows/wrestling-scoreboard-client-windows.zip
-            asset_file_extension: zip
+            release-type: windows
           - os: ubuntu-latest
             platform: Linux
-            # Use env PATH, so commands are available in sudo mode
-            build_cmd: sudo -E env "PATH=$PATH" ./scripts/build-linux.sh
-            artifact_path: linux/x64/release/debian/wrestling-scoreboard-client_0.0.1_amd64.deb
-            asset_file_extension: deb
+            release-type: debian
           - os: ubuntu-latest
             platform: Web
-            build_cmd: ./scripts/build-web.sh
-            artifact_path: wrestling-scoreboard-client-web.tar.gz
-            asset_file_extension: tar.gz
+            release-type: web
           - os: macos-latest
             platform: macOS
-            build_cmd: ./scripts/build-macos.sh
-            artifact_path: macos/Build/Products/Release/wrestling_scoreboard_client.app
-            asset_file_extension: app
+            release-type: macos
 #          - os: macos-latest
 #            platform: iOS
-#            build_cmd: ./scripts/build-ipa.sh
-#            artifact_path: ios/ipa/app-release.ipa
-#            asset_file_extension: ipa
-
+#            release-type: ipa
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.7.12'
           channel: 'stable'
+      - name: Install Linux Dependencies
+        run: |
+          apt-get update
+          apt-get install -y libunwind-dev
+          apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+        if: ${{ matrix.platform == 'Linux' }}
       - name: Build
-        working-directory: wrestling_scoreboard_client
-        run: ${{ matrix.build_cmd }}
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+        uses: oberhauser-dev/flutter-release-action@v0
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: wrestling_scoreboard_client/build/${{ matrix.artifact_path }}
-          asset_name: wrestling_scoreboard_client-${{ matrix.platform }}-${{github.ref_name}}.${{ matrix.asset_file_extension }}
+          app-name: 'wrestling_scoreboard_client'
+          app-version: ${{ github.ref }}
           tag: ${{ github.ref }}
+          release-type: ${{ matrix.release-type }}
+          build-args: |-
+            --dart-define=APP_ENVIRONMENT=development
+            --dart-define=API_URL="https://server.wrestling-scoreboard.oberhauser.dev/api"
+            --dart-define=WEB_SOCKET_URL="wss://server.wrestling-scoreboard.oberhauser.dev/ws"
+
