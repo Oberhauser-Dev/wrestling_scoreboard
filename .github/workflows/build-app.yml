@@ -96,7 +96,7 @@ jobs:
 
       - name: Build Web app
         working-directory: ./wrestling_scoreboard_client
-        run: flutter build web
+        run: flutter build web --base-href ${{ inputs.upload_pages_artifact && '"/wrestling_scoreboard/"' || '"/"' }} 
       - name: Upload pages artifact
         if: inputs.upload_pages_artifact
         uses: actions/upload-pages-artifact@v2
