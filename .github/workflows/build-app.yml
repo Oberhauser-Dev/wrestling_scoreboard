@@ -96,7 +96,11 @@ jobs:
 
       - name: Build Web app
         working-directory: ./wrestling_scoreboard_client
-        run: flutter build web --base-href ${{ inputs.upload_pages_artifact && '"/wrestling_scoreboard/"' || '"/"' }} 
+        run: |
+          flutter build web \
+            --base-href ${{ inputs.upload_pages_artifact && '"/wrestling_scoreboard/"' || '"/"' }} \
+            --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \
+            --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
       - name: Upload pages artifact
         if: inputs.upload_pages_artifact
         uses: actions/upload-pages-artifact@v2
