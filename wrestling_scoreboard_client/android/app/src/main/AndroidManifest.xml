@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.oberhauser.wrestling_scoreboard">
+    package="dev.oberhauser.wrestling_scoreboard_client">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="wrestling_scoreboard"
+        android:label="wrestling_scoreboard_client"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

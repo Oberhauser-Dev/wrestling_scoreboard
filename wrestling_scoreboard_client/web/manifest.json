@@ -1,6 +1,6 @@
 {
-    "name": "wrestling_scoreboard",
-    "short_name": "wrestling_scoreboard",
+    "name": "wrestling_scoreboard_client",
+    "short_name": "wrestling_scoreboard_client",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
