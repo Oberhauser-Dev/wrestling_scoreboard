@@ -74,6 +74,12 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
+    case LeagueTeamParticipation:
+      return _handleFromJsonGeneric<LeagueTeamParticipation>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     case Lineup:
       return _handleFromJsonGeneric<Lineup>(json,
           handleSingle: handleSingle,
@@ -118,6 +124,12 @@ Future<int?> handleFromJson(Map<String, dynamic> json,
           handleManyRaw: handleManyRaw);
     case Tournament:
       return _handleFromJsonGeneric<Tournament>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
+    case TournamentTeamParticipation:
+      return _handleFromJsonGeneric<TournamentTeamParticipation>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
@@ -175,24 +187,6 @@ class ManyDataObject<T> {
 
   ManyDataObject({required this.data, this.filterType, this.filterId});
 }
-
-const List<Type> dataObjectTypes = [
-  BoutConfig,
-  Club,
-  Fight,
-  FightAction,
-  League,
-  LeagueWeightClass,
-  Lineup,
-  Membership,
-  Participation,
-  ParticipantState,
-  Person,
-  Team,
-  TeamMatch,
-  TeamMatchFight,
-  WeightClass,
-];
 
 String getTableNameFromType(Type t) {
   switch (t) {
