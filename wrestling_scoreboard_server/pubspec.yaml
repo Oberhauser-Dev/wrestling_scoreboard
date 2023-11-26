@@ -1,6 +1,6 @@
 name: wrestling_scoreboard_server
 description: Server for a wrestling scoreboard.
-version: 1.0.0
+version: 0.0.1
 homepage: https://server.wrestling-scoreboard.oberhauser.dev
 publish_to: 'none'
 
