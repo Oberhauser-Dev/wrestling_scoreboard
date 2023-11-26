@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'bout_config.dart';
-import 'data_object.dart';
+import '../bout_config.dart';
+import '../data_object.dart';
 
 part 'league.g.dart';
 

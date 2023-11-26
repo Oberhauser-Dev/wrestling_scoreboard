@@ -3,7 +3,7 @@ export 'data/club.dart';
 export 'data/data_object.dart';
 export 'data/fight.dart';
 export 'data/fight_action.dart';
-export 'data/league.dart';
+export 'data/team_match/league.dart';
 export 'data/lineup.dart';
 export 'data/membership.dart';
 export 'data/participant_state.dart';

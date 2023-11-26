@@ -2,20 +2,20 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../data_object.dart';
 import '../fight.dart';
-import '../league.dart';
 import '../lineup.dart';
 import '../participant_state.dart';
 import '../participation.dart';
 import '../person.dart';
 import '../weight_class.dart';
 import '../wrestling_event.dart';
+import 'league.dart';
 
 part 'team_match.g.dart';
 
 /// For team matches only.
 @JsonSerializable()
 class TeamMatch extends WrestlingEvent {
-  late League league; // Liga
+  League? league;
   Person? referee;
   Person? judge;
   Person? matChairman;
@@ -32,6 +32,7 @@ class TeamMatch extends WrestlingEvent {
     int? id,
     required this.home,
     required this.guest,
+    this.league,
     this.matChairman,
     this.referee,
     this.judge,
@@ -49,13 +50,7 @@ class TeamMatch extends WrestlingEvent {
           date: date,
           comment: comment,
           visitorsCount: visitorsCount,
-        ) {
-    if (home.team.league == guest.team.league && home.team.league != null) {
-      league = home.team.league!;
-    } else {
-      league = League.outOfCompetition;
-    }
-  }
+        );
 
   factory TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
 
@@ -70,6 +65,7 @@ class TeamMatch extends WrestlingEvent {
     final int? judgeId = e['judge_id'];
     final int? timeKeeperId = e['time_keeper_id'];
     final int? transcriptWriterId = e['transcript_writer_id'];
+    final int? leagueId = e['league_id'];
     // TODO ditch weightclasses, always handle at client
     // final weightClasses = home != null && home.team.league != null
     // ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
@@ -90,6 +86,7 @@ class TeamMatch extends WrestlingEvent {
       judge: judgeId == null ? null : await getSingle<Person>(judgeId),
       transcriptWriter: transcriptWriterId == null ? null : await getSingle<Person>(transcriptWriterId),
       timeKeeper: timeKeeperId == null ? null : await getSingle<Person>(timeKeeperId),
+      league: leagueId == null ? null : await getSingle<League>(leagueId),
     );
   }
 

@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'club.dart';
 import 'data_object.dart';
-import 'league.dart';
 
 part 'team.g.dart';
 
@@ -11,10 +10,9 @@ part 'team.g.dart';
 class Team extends DataObject {
   final String name;
   final String? description;
-  League? league;
   Club club;
 
-  Team({int? id, required this.name, required this.club, this.description, this.league}) : super(id);
+  Team({int? id, required this.name, required this.club, this.description}) : super(id);
 
   factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
@@ -23,14 +21,12 @@ class Team extends DataObject {
 
   static Future<Team> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final club = await getSingle<Club>(e['club_id'] as int);
-    final leagueId = e['league_id'] as int?;
-    final league = leagueId == null ? null : await getSingle<League>(leagueId);
     return Team(
-        id: e['id'] as int?,
-        name: e['name'] as String,
-        club: club!,
-        description: e['description'] as String?,
-        league: league);
+      id: e['id'] as int?,
+      name: e['name'] as String,
+      club: club!,
+      description: e['description'] as String?,
+    );
   }
 
   @override
@@ -40,7 +36,6 @@ class Team extends DataObject {
       'name': name,
       'description': description,
       'club_id': club.id,
-      'league_id': league?.id,
     };
   }
 }

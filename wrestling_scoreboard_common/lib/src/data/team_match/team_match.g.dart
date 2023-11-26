@@ -10,6 +10,9 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => TeamMatch(
       id: json['id'] as int?,
       home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
       guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
+      league: json['league'] == null
+          ? null
+          : League.fromJson(json['league'] as Map<String, dynamic>),
       matChairman: json['matChairman'] == null
           ? null
           : Person.fromJson(json['matChairman'] as Map<String, dynamic>),
@@ -31,7 +34,7 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => TeamMatch(
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       visitorsCount: json['visitorsCount'] as int?,
       comment: json['comment'] as String?,
-    )..league = League.fromJson(json['league'] as Map<String, dynamic>);
+    );
 
 Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'id': instance.id,
@@ -40,7 +43,7 @@ Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
       'location': instance.location,
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
-      'league': instance.league.toJson(),
+      'league': instance.league?.toJson(),
       'referee': instance.referee?.toJson(),
       'judge': instance.judge?.toJson(),
       'matChairman': instance.matChairman?.toJson(),
