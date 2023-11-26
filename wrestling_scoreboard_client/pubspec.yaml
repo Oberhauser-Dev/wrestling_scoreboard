@@ -8,7 +8,7 @@ repository: 'https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/master/
 version: 0.0.1+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
