@@ -115,7 +115,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final boutConfig = BoutConfig(
+      var boutConfig = BoutConfig(
         id: widget.boutConfig?.id,
         periodDuration: Duration(seconds: _periodDurationInSecs!),
         breakDuration: Duration(seconds: _breakDurationInSecs!),
@@ -123,7 +123,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
         injuryDuration: Duration(seconds: _injuryDurationInSecs!),
         periodCount: _periodCount!,
       );
-      boutConfig.id = await dataProvider.createOrUpdateSingle(boutConfig);
+      boutConfig = boutConfig.copyWithId(await dataProvider.createOrUpdateSingle(boutConfig));
       await handleNested(boutConfig);
       navigator.pop();
     }

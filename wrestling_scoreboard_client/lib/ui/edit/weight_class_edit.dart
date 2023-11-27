@@ -115,9 +115,9 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final weightClass = WeightClass(
+      var weightClass = WeightClass(
           id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
-      weightClass.id = await dataProvider.createOrUpdateSingle(weightClass);
+      weightClass = weightClass.copyWithId(await dataProvider.createOrUpdateSingle(weightClass));
       await handleNested(weightClass);
       navigator.pop();
     }

@@ -72,7 +72,7 @@ class FightState extends State<FightScreen> {
     match = widget.match;
     fights = widget.fights;
     // TODO: may overwrite in settings to be more flexible
-    boutConfig = match.home.team.league?.boutConfig ?? BoutConfig();
+    boutConfig = match.league?.boutConfig ?? const BoutConfig();
     actions = widget.actions;
     fightIndex = widget.fightIndex;
     fight = widget.fights[fightIndex];
@@ -114,7 +114,7 @@ class FightState extends State<FightScreen> {
     _fightStopwatch.onChangeSecond.stream.listen(
       (event) {
         if (stopwatch == _fightStopwatch) {
-          fight.duration = event;
+          fight = fight.copyWith(duration: event);
 
           if (fight.duration.compareTo(boutConfig.periodDuration * period) >= 0) {
             _fightStopwatch.stop();

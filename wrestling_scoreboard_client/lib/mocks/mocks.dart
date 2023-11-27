@@ -27,22 +27,26 @@ Team _homeTeam = Team(
   name: 'Springfield Wrestlers',
   club: _homeClub,
   description: '1. Team Men',
-  league: _leagueMenRPW,
 );
 Team _homeTeamJuniors = Team(
   id: 2,
   name: 'Springfield Wrestlers Jn',
   club: _homeClub,
   description: 'Juniors',
-  league: _leagueJnRPW,
 );
 Team _guestTeam = Team(
   id: 3,
   name: 'Quahog Hunters II',
   club: _guestClub,
   description: '2. Team Men',
-  league: _leagueMenRPW,
 );
+
+// Teams per League
+LeagueTeamParticipation _htMenRPW = LeagueTeamParticipation(id: 1, league: _leagueMenRPW, team: _homeTeam);
+LeagueTeamParticipation _htjJnRPW = LeagueTeamParticipation(id: 2, league: _leagueJnRPW, team: _homeTeamJuniors);
+LeagueTeamParticipation _gtMenRPW = LeagueTeamParticipation(id: 3, league: _leagueMenRPW, team: _guestTeam);
+LeagueTeamParticipation _htNat = LeagueTeamParticipation(id: 4, league: _leagueNational, team: _homeTeam);
+LeagueTeamParticipation _gtNat = LeagueTeamParticipation(id: 5, league: _leagueNational, team: _guestTeam);
 
 WeightClass wc57 = WeightClass(id: 1, weight: 57, style: WrestlingStyle.free);
 WeightClass wc130 = WeightClass(id: 2, weight: 130, style: WrestlingStyle.greco);
@@ -80,6 +84,7 @@ final List<Fight> _fights = [];
 final List<FightAction> _fightActions = []; // TODO fill
 final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
 final List<LeagueWeightClass> _leagueWeightClasses = []; // TODO fill
+final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
 final List<Lineup> _lineups = [];
 final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
 final List<Participation> _participations = [];
@@ -135,7 +140,7 @@ TeamMatch initJnRPWMatch() {
   // Miss participants
 
   Person referee = Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
-  return TeamMatch(id: 2, home: home, guest: guest, referee: referee, location: 'Springfield');
+  return TeamMatch(id: 2, home: home, guest: guest, referee: referee, location: 'Springfield', date: DateTime.now());
 }
 
 List<Club> getClubs() => _clubs;
@@ -163,6 +168,16 @@ List<LeagueWeightClass> getLeagueWeightClassesOfLeague(League league) {
   return getLeagueWeightClasses().where((element) => element.league == league).toList();
 }
 
+List<LeagueTeamParticipation> getLeagueTeamParticipations() => _leagueTeamParticipations;
+
+List<LeagueTeamParticipation> getLeagueTeamParticipationsOfLeague(League league) {
+  return getLeagueTeamParticipations().where((element) => element.league == league).toList();
+}
+
+List<LeagueTeamParticipation> getLeagueTeamParticipationsOfTeam(Team team) {
+  return getLeagueTeamParticipations().where((element) => element.team == team).toList();
+}
+
 List<Lineup> getLineups() => _lineups;
 
 List<Membership> getMemberships() => _memberships;
@@ -188,7 +203,7 @@ List<Team> getTeamsOfClub(Club club) {
 }
 
 List<Team> getTeamsOfLeague(League league) {
-  return getTeams().where((element) => element.league == league).toList();
+  return getLeagueTeamParticipationsOfLeague(league).map((e) => e.team).toList();
 }
 
 List<TeamMatch> getTeamMatches() => _teamMatches;
@@ -208,7 +223,7 @@ List<TournamentFight> getTournamentFights() => _tournamentFights;
 List<WeightClass> getWeightClasses() => _weightClasses;
 
 List<WeightClass> getWeightClassesOfLeague(League league) {
-  return (getLeagueWeightClasses().where((element) => element.league == league).toList()..sort((a, b) => a.pos - b.pos))
+  return (getLeagueWeightClassesOfLeague(league).toList()..sort((a, b) => a.pos - b.pos))
       .map((e) => e.weightClass)
       .toList();
 }

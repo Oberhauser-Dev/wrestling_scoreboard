@@ -42,8 +42,8 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
 
   @override
   Future<void> handleNested(weightClass) async {
-    final leagueWeightClass = LeagueWeightClass(
+    var leagueWeightClass = LeagueWeightClass(
         id: widget.leagueWeightClass?.id, league: widget.initialLeague, pos: _pos, weightClass: weightClass);
-    leagueWeightClass.id = await dataProvider.createOrUpdateSingle(leagueWeightClass);
+    leagueWeightClass = leagueWeightClass.copyWithId(await dataProvider.createOrUpdateSingle(leagueWeightClass));
   }
 }

@@ -116,12 +116,15 @@ class FightMainControlsState extends State<FightMainControls> {
               items: items,
               onChanged: (val) {
                 setState(() {
-                  widget.fightState.fight.winnerRole = val != null && val != FightResult.dsq2 ? role : null;
-                  widget.fightState.fight.result = val;
-                  widget.fightState.fight.updateClassificationPoints(actions);
-                  dataProvider.createOrUpdateSingle(widget.fightState.fight);
-                  if(widget.fightState.fight.r != null) dataProvider.createOrUpdateSingle(widget.fightState.fight.r!);
-                  if(widget.fightState.fight.b != null) dataProvider.createOrUpdateSingle(widget.fightState.fight.b!);
+                  var fight = widget.fightState.fight.copyWith(
+                    winnerRole: val != null && val != FightResult.dsq2 ? role : null,
+                    result: val,
+                  );
+                  fight = fight.updateClassificationPoints(actions);
+                  dataProvider.createOrUpdateSingle(fight);
+                  if(fight.r != null) dataProvider.createOrUpdateSingle(fight.r!);
+                  if(fight.b != null) dataProvider.createOrUpdateSingle(fight.b!);
+                  widget.fightState.fight = fight;
                 });
               },
             ),

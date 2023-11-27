@@ -49,7 +49,7 @@ class MatchSequence extends StatelessWidget {
             filterObject: match,
             builder: (context, fights) {
               final matchInfos = [
-                match!.league.name,
+                match!.league?.name,
                 '${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}',
                 if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
                 // Not enough space to display all three referees

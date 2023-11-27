@@ -160,11 +160,11 @@ class LineupEditState extends State<LineupEdit> {
                               labelText: localizations.weight),
                           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))],
                           onSaved: (String? value) {
-                            final participation = _participations[weightClass];
+                            var participation = _participations[weightClass];
                             if (participation != null) {
                               final newValue = value == null || value.isEmpty ? null : double.parse(value);
                               if (participation.weight == newValue) return;
-                              participation.weight = newValue;
+                              participation = participation.copyWith(weight: newValue);
                               _createOrUpdateParticipations.add(participation);
                             }
                           },

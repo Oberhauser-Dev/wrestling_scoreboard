@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'fight_screen.dart';
 
@@ -180,62 +180,63 @@ class FightActionHandler extends StatelessWidget {
         if (navigator != null) navigator.pop();
         break;
       case FightScreenActions.redOne:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.red,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 1);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redTwo:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.red,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 2);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redThree:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.red,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 3);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redFour:
-        final action = FightAction(
-            fight: fight,
-            role: FightRole.red,
-            duration: fight.duration,
-            actionType: FightActionType.points,
-            pointCount: 4);
+        var action = FightAction(
+          fight: fight,
+          role: FightRole.red,
+          duration: fight.duration,
+          actionType: FightActionType.points,
+          pointCount: 4,
+        );
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redPassivity:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.passivity);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redCaution:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.caution);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redDismissal:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight, role: FightRole.red, duration: fight.duration, actionType: FightActionType.dismissal);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.redActivityTime:
         doAction(FightScreenActions.redActivityTime);
@@ -255,62 +256,62 @@ class FightActionHandler extends StatelessWidget {
         }
         break;
       case FightScreenActions.blueOne:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.blue,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 1);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.blueTwo:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.blue,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 2);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.blueThree:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.blue,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 3);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.blueFour:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight,
             role: FightRole.blue,
             duration: fight.duration,
             actionType: FightActionType.points,
             pointCount: 4);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.bluePassivity:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.passivity);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.blueCaution:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.caution);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.blueDismissal:
-        final action = FightAction(
+        var action = FightAction(
             fight: fight, role: FightRole.blue, duration: fight.duration, actionType: FightActionType.dismissal);
+        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
-        action.id = await dataProvider.createOrUpdateSingle(action);
         break;
       case FightScreenActions.blueUndo:
         if (fight.b != null) {

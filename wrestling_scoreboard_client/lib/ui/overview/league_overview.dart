@@ -67,7 +67,7 @@ class LeagueOverview extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => TeamEdit(
-                            initialLeague: data,
+                            //initialLeague: data,
                           ),
                         ),
                       ),

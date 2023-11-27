@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'mocks.dart';
 
@@ -61,6 +61,10 @@ class MockDataProvider extends DataProvider {
         case LeagueWeightClass:
           if (filterObject is League) return getLeagueWeightClassesOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case LeagueTeamParticipation:
+          if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
+          if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case TeamMatchFight:
           if (filterObject is TeamMatch) return getTeamMatchFightsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
@@ -105,7 +109,7 @@ class MockDataProvider extends DataProvider {
       final homeParticipations = await dataProvider.readMany<Participation>(filterObject: wrestlingEvent.home);
       final guestParticipations = await dataProvider.readMany<Participation>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
-      weightClasses = await dataProvider.readMany<WeightClass>(filterObject: wrestlingEvent.home.team.league);
+      weightClasses = await dataProvider.readMany<WeightClass>(filterObject: wrestlingEvent.league);
     } else if (wrestlingEvent is Tournament) {
       // TODO get all participations
       teamParticipations = [];
@@ -119,21 +123,23 @@ class MockDataProvider extends DataProvider {
 
     // Generate new fights
     final newFights = await wrestlingEvent.generateFights(teamParticipations, weightClasses);
+    final newFightsWithId = <Fight>[];
 
     // Add if not exists
     final random = Random();
-    for (final element in newFights) {
+    for (var element in newFights) {
       if (fightsAll.where((Fight f) => f.equalDuringFight(element)).isEmpty) {
         do {
           // Generate new id as long it is not taken yet
-          element.id = random.nextInt(0x7fffffff);
+          element = element.copyWithId(random.nextInt(0x7fffffff));
         } while (fightsAll.where((f) => f.id == element.id).isNotEmpty);
         fightsAll.add(element);
       }
+      newFightsWithId.add(element);
     }
     if (wrestlingEvent is TeamMatch) {
       final teamMatchFightsAll = getTeamMatchFights();
-      newFights.asMap().forEach((key, element) {
+      newFightsWithId.asMap().forEach((key, element) {
         if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
           teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
           int generatedId;
@@ -146,7 +152,7 @@ class MockDataProvider extends DataProvider {
       });
     } else if (wrestlingEvent is Tournament) {
       final tournamentFightsAll = getTournamentFights();
-      for (final element in newFights) {
+      for (final element in newFightsWithId) {
         if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
           int generatedId;
           do {
@@ -157,7 +163,7 @@ class MockDataProvider extends DataProvider {
         }
       }
     }
-    getFights().addAll(newFights);
+    getFights().addAll(newFightsWithId);
     _updateMany(Fight, filterObject: wrestlingEvent);
   }
 
@@ -187,7 +193,7 @@ class MockDataProvider extends DataProvider {
   }
 
   DataObject _createMockSingle(DataObject single) {
-    single.id = Random().nextInt(32000);
+    single = single.copyWithId(Random().nextInt(32000));
     _getListOfObject(single, CRUD.create).add(single);
     return single;
   }
@@ -197,9 +203,14 @@ class MockDataProvider extends DataProvider {
     objList.remove(single);
     objList.add(single);
     if (single is Lineup) {
-      getParticipations().where((element) => element.lineup == single).forEach((element) {
-        element.lineup = single;
-      });
+      final participations = getParticipations();
+      final participationsWithLineup = participations.where((element) => element.lineup.id == single.id);
+      for (final participationWithLineup in participationsWithLineup) {
+        participations.remove(participationWithLineup);
+        participations.add(participationWithLineup.copyWith(
+          lineup: single,
+        ));
+      }
     }
     _getSingleStreamControllerOfObject(single, CRUD.update).add(single);
     return single;
@@ -254,13 +265,13 @@ class MockDataProvider extends DataProvider {
         filterType: Club,
         filterId: single.club.id,
       ));
-      if (single.league != null) {
-        getManyStreamController<Team>(filterType: League)?.add(ManyDataObject(
-          data: getTeamsOfLeague(single.league!),
-          filterType: League,
-          filterId: single.league!.id,
-        ));
-      }
+      // if (single.league != null) {
+      //   getManyStreamController<Team>(filterType: League)?.add(ManyDataObject(
+      //     data: getTeamsOfLeague(single.league!),
+      //     filterType: League,
+      //     filterId: single.league!.id,
+      //   ));
+      // }
     } else if (single is TeamMatch) {
       getManyStreamController<TeamMatch>(filterType: Team)?.add(ManyDataObject(
         data: getTeamMatchesOfTeam(single.home.team),

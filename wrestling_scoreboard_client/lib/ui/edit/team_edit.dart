@@ -8,9 +8,8 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 class TeamEdit extends StatefulWidget {
   final Team? team;
   final Club? initialClub;
-  final League? initialLeague;
 
-  const TeamEdit({this.team, this.initialClub, this.initialLeague, Key? key}) : super(key: key);
+  const TeamEdit({this.team, this.initialClub, Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TeamEditState();
@@ -19,18 +18,16 @@ class TeamEdit extends StatefulWidget {
 class TeamEditState extends State<TeamEdit> {
   final _formKey = GlobalKey<FormState>();
 
-  List<Club>? clubs;
-  List<League>? leagues;
+  List<Club>? availableClubs;
+  List<League>? _availableLeagues;
   String? _name;
   String? _description;
   Club? _club;
-  League? _league;
 
   @override
   void initState() {
     super.initState();
     _club = widget.team?.club ?? widget.initialClub;
-    _league = widget.team?.league ?? widget.initialLeague;
   }
 
   @override
@@ -78,27 +75,27 @@ class TeamEditState extends State<TeamEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            clubs ??= await dataProvider.readMany<Club>();
-            return (filter == null ? clubs! : clubs!.where((element) => element.name.contains(filter))).toList();
+            availableClubs ??= await dataProvider.readMany<Club>();
+            return (filter == null ? availableClubs! : availableClubs!.where((element) => element.name.contains(filter))).toList();
           },
         ),
       ),
-      ListTile(
-        title: getDropdown<League>(
-          icon: const Icon(Icons.emoji_events),
-          selectedItem: _league,
-          label: AppLocalizations.of(context)!.league,
-          context: context,
-          onSaved: (League? value) => setState(() {
-            _league = value;
-          }),
-          itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
-            leagues ??= await dataProvider.readMany<League>();
-            return (filter == null ? leagues! : leagues!.where((element) => element.name.contains(filter))).toList();
-          },
-        ),
-      ),
+      // ListTile(
+      //   title: getDropdown<League>(
+      //     icon: const Icon(Icons.emoji_events),
+      //     selectedItem: _league,
+      //     label: AppLocalizations.of(context)!.league,
+      //     context: context,
+      //     onSaved: (League? value) => setState(() {
+      //       _league = value;
+      //     }),
+      //     itemAsString: (u) => u.name,
+      //     onFind: (String? filter) async {
+      //       _availableLeagues ??= await dataProvider.readMany<League>();
+      //       return (filter == null ? _availableLeagues! : _availableLeagues!.where((element) => element.name.contains(filter))).toList();
+      //     },
+      //   ),
+      // ),
     ];
 
     return Form(
@@ -120,7 +117,6 @@ class TeamEditState extends State<TeamEdit> {
         name: _name!,
         description: _description,
         club: _club!,
-        league: _league,
       ));
       navigator.pop();
     }

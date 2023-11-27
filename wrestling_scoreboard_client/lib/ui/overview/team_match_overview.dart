@@ -1,4 +1,3 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
@@ -8,6 +7,7 @@ import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchOverview extends StatelessWidget {
   final TeamMatch match;
@@ -18,7 +18,7 @@ class TeamMatchOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context);
-    
+
     return SingleConsumer<TeamMatch>(
         id: match.id!,
         initialData: match,
@@ -86,11 +86,13 @@ class TeamMatchOverview extends StatelessWidget {
                         ContentItem(
                             title: homeLineup.team.name,
                             icon: Icons.group,
-                            onTap: () => handleSelectedLineup(homeLineup, navigator)),
+                            onTap: () =>
+                                handleSelectedLineup(homeLineup, match.league ?? League.outOfCompetition, navigator)),
                         ContentItem(
                             title: guestLineup.team.name,
                             icon: Icons.group,
-                            onTap: () => handleSelectedLineup(guestLineup, navigator)),
+                            onTap: () =>
+                                handleSelectedLineup(guestLineup, match.league ?? League.outOfCompetition, navigator)),
                         ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
                       ],
                     ),
@@ -103,9 +105,9 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  handleSelectedLineup(Lineup lineup, NavigatorState navigator) async {
+  handleSelectedLineup(Lineup lineup, League league, NavigatorState navigator) async {
     final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
-    final weightClasses = await dataProvider.readMany<WeightClass>(filterObject: lineup.team.league);
+    final weightClasses = await dataProvider.readMany<WeightClass>(filterObject: league);
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
