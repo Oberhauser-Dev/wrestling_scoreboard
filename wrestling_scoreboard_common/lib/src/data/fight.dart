@@ -59,13 +59,15 @@ class Fight with _$Fight implements DataObject {
     );
   }
 
-  void updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
+  Fight updateClassificationPoints(List<FightAction> actions, {bool isTournament = false}) {
     if (result != null && winnerRole != null) {
       var winner = winnerRole == FightRole.red ? r : b;
       var looser = winnerRole == FightRole.red ? b : r;
 
+      int? winnerClassificationPoints;
+      int? looserClassificationPoints;
       if (winner != null) {
-        winner.classificationPoints = isTournament
+        winnerClassificationPoints = isTournament
             ? getClassificationPointsWinnerTournament(result!)
             : getClassificationPointsWinnerTeamMatch(
                 result!,
@@ -75,13 +77,23 @@ class Fight with _$Fight implements DataObject {
       }
 
       if (looser != null) {
-        looser.classificationPoints = isTournament
+        looserClassificationPoints = isTournament
             ? getClassificationPointsLooserTournament(result!)
             : getClassificationPointsLooserTeamMatch(result!);
       }
+      return copyWith(
+        r: r?.copyWith(
+          classificationPoints: winnerRole == FightRole.red ? winnerClassificationPoints : looserClassificationPoints,
+        ),
+        b: b?.copyWith(
+          classificationPoints: winnerRole == FightRole.blue ? winnerClassificationPoints : looserClassificationPoints,
+        ),
+      );
     } else {
-      r?.classificationPoints = null;
-      b?.classificationPoints = null;
+      return copyWith(
+        r: r?.copyWith(classificationPoints: null),
+        b: b?.copyWith(classificationPoints: null),
+      );
     }
   }
 
