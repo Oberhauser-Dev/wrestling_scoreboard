@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 class LeagueEdit extends BoutConfigEdit {
   final League? league;
 
-  const LeagueEdit({this.league, Key? key}) : super(key: key);
+  LeagueEdit({this.league, Key? key}) : super(boutConfig: league?.boutConfig, key: key);
 
   @override
   State<StatefulWidget> createState() => LeagueEditState();
@@ -28,7 +28,7 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return buildEdit(context, classLocale: localizations.league, fields: [
+    return buildEdit(context, id: widget.league?.id, classLocale: localizations.league, fields: [
       ListTile(
         title: TextFormField(
           decoration: InputDecoration(

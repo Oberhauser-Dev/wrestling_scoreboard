@@ -1,4 +1,3 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,6 +5,7 @@ import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/common.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassEdit extends StatefulWidget {
   final WeightClass? weightClass;
@@ -13,7 +13,8 @@ abstract class WeightClassEdit extends StatefulWidget {
   const WeightClassEdit({this.weightClass, Key? key}) : super(key: key);
 }
 
-abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> implements AbstractEditState<WeightClass> {
+abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>
+    implements AbstractEditState<WeightClass> {
   final _formKey = GlobalKey<FormState>();
 
   String? _suffix;
@@ -29,7 +30,12 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
   }
 
   @override
-  Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
+  Widget buildEdit(
+    BuildContext context, {
+    required String classLocale,
+    required int? id,
+    required List<Widget> fields,
+  }) {
     final localizations = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context);
 
@@ -71,8 +77,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
       ),
       ListTile(
         leading: const Icon(Icons.straighten),
-        title:
-        ButtonTheme(
+        title: ButtonTheme(
           alignedDropdown: true,
           child: DropdownButton<WeightUnit>(
             hint: Text(localizations.weightUnit),
@@ -106,7 +111,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T> 
     return Form(
         key: _formKey,
         child: EditWidget(
-            typeLocalization: classLocale ?? localizations.weightClass,
+            typeLocalization: classLocale,
             id: widget.weightClass?.id,
             onSubmit: () => handleSubmit(navigator),
             items: items));

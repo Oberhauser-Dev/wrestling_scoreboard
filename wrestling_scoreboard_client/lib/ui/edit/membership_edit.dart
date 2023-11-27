@@ -20,7 +20,7 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return buildEdit(context, classLocale: localizations.membership, fields: [
+    return buildEdit(context, id: widget.membership?.id, classLocale: localizations.membership, fields: [
       ListTile(
         title: TextFormField(
           decoration: InputDecoration(

@@ -116,7 +116,7 @@ class HomeState extends State<Home> {
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () =>
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueEdit())),
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LeagueEdit())),
                     ),
                   ),
                   items: leagues.map(

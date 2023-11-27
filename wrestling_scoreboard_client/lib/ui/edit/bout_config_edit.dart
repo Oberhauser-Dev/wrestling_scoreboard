@@ -1,10 +1,10 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/common.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutConfigEdit extends StatefulWidget {
   final BoutConfig? boutConfig;
@@ -22,7 +22,12 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
   int? _periodCount;
 
   @override
-  Widget buildEdit(BuildContext context, {required String? classLocale, required List<Widget> fields}) {
+  Widget buildEdit(
+    BuildContext context, {
+    required String classLocale,
+    required int? id,
+    required List<Widget> fields,
+  }) {
     final localizations = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context);
 
@@ -104,8 +109,8 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
     return Form(
       key: _formKey,
       child: EditWidget(
-        typeLocalization: classLocale ?? 'Bout config',
-        id: widget.boutConfig?.id,
+        typeLocalization: classLocale,
+        id: id,
         onSubmit: () => handleSubmit(navigator),
         items: items,
       ),
