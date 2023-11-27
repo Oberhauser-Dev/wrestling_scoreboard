@@ -109,7 +109,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
   } else if (single is TeamMatchFight) {
   } else if (single is WeightClass) {
   } else {
-    throw DataUnimplementedError(CRUD.update, single.runtimeType);
+    throw DataUnimplementedError(CRUD.update, T);
   }
 }
 
@@ -207,7 +207,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == TeamMatchFight) {
   } else if (T == WeightClass) {
   } else {
-    throw DataUnimplementedError(CRUD.update, single.runtimeType);
+    throw DataUnimplementedError(CRUD.update, T);
   }
 }
 
@@ -216,7 +216,7 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
   final controller = EntityController.getControllerFromDataType<T>();
   if (operation == CRUD.update) {
     await controller.updateSingle(single);
-    broadcast(jsonEncode(singleToJson(single, single.runtimeType, operation)));
+    broadcast(jsonEncode(singleToJson(single, T, operation)));
   } else if (operation == CRUD.create) {
     single = single.copyWithId(await controller.createSingle(single)) as T;
   } else if (operation == CRUD.delete) {
@@ -235,7 +235,7 @@ Future<int> handleSingleRaw<T extends DataObject>(
   final controller = EntityController.getControllerFromDataType<T>();
   if (operation == CRUD.update) {
     await controller.updateSingleRaw(single);
-    broadcast(jsonEncode(singleToJson(single, single.runtimeType, operation)));
+    broadcast(jsonEncode(singleToJson(single, T, operation)));
   } else if (operation == CRUD.create) {
     single['id'] = await controller.createSingleRaw(single);
   } else if (operation == CRUD.delete) {

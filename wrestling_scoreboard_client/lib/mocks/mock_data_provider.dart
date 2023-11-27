@@ -286,7 +286,7 @@ class MockDataProvider extends DataProvider {
         filterId: single.guest.id,
       ));
     } else {
-      throw DataUnimplementedError(CRUD.update, single.runtimeType);
+      throw DataUnimplementedError(CRUD.update, T);
     }
   }
 
