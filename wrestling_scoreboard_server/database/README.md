@@ -21,6 +21,7 @@ On Linux you may want to login as postgres user: `sudo -u postgres -i`
 
 - Open psql command line: `psql -U postgres`
 - List all users: `\du`
+- Start the serveR: `postgres -D /.../PostgreSQL/16/data`
 
 ### Setup User: 
 
@@ -33,9 +34,12 @@ psql -U postgres -c "CREATE USER wrestling WITH PASSWORD 'my_password';"
 
 Reset current database:
 ```shell
-psql -U postgres -c "DROP DATABASE IF EXISTS wrestling_scoreboard;"
-psql -U postgres -c "CREATE DATABASE wrestling_scoreboard;"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE wrestling_scoreboard to wrestling;"
+psql -U postgres
+postgres=#
+```
+```postgresql
+DROP DATABASE IF EXISTS wrestling_scoreboard;
+CREATE DATABASE wrestling_scoreboard WITH OWNER = wrestling;
 ```
 
 Restore prepopulated database, execute in directory `server`:
