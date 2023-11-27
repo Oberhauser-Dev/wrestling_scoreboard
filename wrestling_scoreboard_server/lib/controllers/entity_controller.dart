@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart';
+import 'package:shelf/shelf.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
@@ -20,7 +21,6 @@ import 'package:wrestling_scoreboard_server/controllers/tournament_controller.da
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
-import 'package:shelf/shelf.dart';
 
 Map<Type, PostgreSQLDataType> typeDartToCodeMap = {
   String: PostgreSQLDataType.varChar,
@@ -66,8 +66,7 @@ abstract class EntityController<T extends DataObject> {
     try {
       return handlePostSingleOfController(this, jsonDecode(message));
     } on FormatException catch (e) {
-      final errMessage =
-          'The data object of table $tableName could not be created. Check the format: $message'
+      final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
           '\nFormatException: ${e.message}';
       return Response.notFound(errMessage);
     }
@@ -93,8 +92,7 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> createSingle(T dataObject) async {
-    dataObject.id = await createSingleRaw(dataObject.toRaw());
-    return dataObject.id!;
+    return await createSingleRaw(dataObject.toRaw());
   }
 
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
@@ -245,13 +243,15 @@ abstract class EntityController<T extends DataObject> {
     return (await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues)).single;
   }
 
-  static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, dynamic> json) async {
+  static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, Object?> json) async {
     try {
-      final id = await handleFromJson(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
+      final id = await handleFromJson(
+        json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw,
+      );
       return Response.ok(jsonEncode(id));
     } on InvalidParameterException catch (e) {
       return Response.notFound(e.message);

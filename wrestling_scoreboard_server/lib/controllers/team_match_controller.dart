@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart';
+import 'package:shelf/shelf.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_fight_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
-import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
 import 'fight_controller.dart';
@@ -43,9 +43,9 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
     final oldFights = (await getFights(id));
-    final weightClasses = teamMatch.league.id == null
+    final weightClasses = teamMatch.league?.id == null
         ? <WeightClass>[]
-        : (await LeagueController().getWeightClasses(teamMatch.league.id.toString()));
+        : (await LeagueController().getWeightClasses(teamMatch.league!.id.toString()));
     final homeParticipations = await ParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id});
     final guestParticipations = await ParticipationController()
@@ -54,7 +54,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final newFights = await teamMatch.generateFights([homeParticipations, guestParticipations], weightClasses);
     final fights = List.of(newFights);
     await Future.forEach(newFights.asMap().entries, (MapEntry<int, Fight> entry) async {
-      final fight = entry.value;
+      var fight = entry.value;
       final hasRed = fight.r != null;
       final hasBlue = fight.b != null;
       // Get fight of teamMatch that has the same participants and the same weightClass
@@ -72,17 +72,17 @@ class TeamMatchController extends EntityController<TeamMatch> {
       if (res.isEmpty) {
         // Create ParticipantState to be stored in the team match fight
         if (fight.r != null) {
-          fight.r!.id = await ParticipantStateController().createSingle(fight.r!);
+          fight = fight.copyWith(r: fight.r!.copyWithId(await ParticipantStateController().createSingle(fight.r!)));
         }
         if (fight.b != null) {
-          fight.b!.id = await ParticipantStateController().createSingle(fight.b!);
+          fight = fight.copyWith(b: fight.b!.copyWithId(await ParticipantStateController().createSingle(fight.b!)));
         }
-        fight.id = await FightController().createSingle(fight);
+        fight = fight.copyWithId(await FightController().createSingle(fight));
         await TeamMatchFightController()
             .createSingle(TeamMatchFight(teamMatch: teamMatch, fight: fight, pos: entry.key));
         fights[entry.key] = fight;
       } else {
-        fight.id = res.first['id'];
+        fight = fight.copyWithId(res.first['id']);
         fights[entry.key] = await Fight.fromRaw(res.first, EntityController.getSingleFromDataType);
         await PostgresDb()
             .connection
@@ -93,7 +93,8 @@ class TeamMatchController extends EntityController<TeamMatch> {
       await Future.forEach(oldFights, (Fight fight) async {
         if (fight.id != null) {
           // TODO may also delete fightActions, participantState etc.
-          await TeamMatchFightController().deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
+          await TeamMatchFightController()
+              .deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
           await FightController().deleteSingle(fight.id!);
         }
       });
@@ -103,7 +104,8 @@ class TeamMatchController extends EntityController<TeamMatch> {
       await Future.forEach(unusedFights, (Fight fight) async {
         if (fight.id != null) {
           // TODO may also delete fightActions, participantState etc.
-          await TeamMatchFightController().deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
+          await TeamMatchFightController()
+              .deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
           await FightController().deleteSingle(fight.id!);
         }
       });

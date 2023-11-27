@@ -78,15 +78,16 @@ void broadcastSingle<T extends DataObject>(T single) async {
         CRUD.update,
         filterType: Club,
         filterId: single.club.id)));
-    if (single.league != null) {
-      broadcast(jsonEncode(manyToJson(
-          await TeamController()
-              .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}),
-          Team,
-          CRUD.update,
-          filterType: League,
-          filterId: single.league!.id)));
-    }
+    // TODO: check if league still needs to be updated
+    // if (single.league != null) {
+    //   broadcast(jsonEncode(manyToJson(
+    //       await TeamController()
+    //           .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}),
+    //       Team,
+    //       CRUD.update,
+    //       filterType: League,
+    //       filterId: single.league!.id)));
+    // }
   } else if (single is TeamMatch) {
     final homeMatches = await TeamMatchController()
         .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
@@ -194,7 +195,7 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
     await controller.updateSingle(single);
     broadcast(jsonEncode(singleToJson(single, single.runtimeType, operation)));
   } else if (operation == CRUD.create) {
-    single.id = await controller.createSingle(single);
+    single = single.copyWithId(await controller.createSingle(single)) as T;
   } else if (operation == CRUD.delete) {
     await controller.deleteSingle(single.id!);
   }
