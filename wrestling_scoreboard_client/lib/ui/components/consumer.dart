@@ -1,8 +1,8 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class SingleConsumer<T extends DataObject> extends StatefulWidget {
   final int? id;
@@ -48,19 +48,19 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
   }
 }
 
-class ManyConsumer<T extends DataObject> extends StatefulWidget {
+class ManyConsumer<T extends DataObject, S extends DataObject> extends StatefulWidget {
   final List<T>? initialData;
-  final DataObject? filterObject;
+  final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
 
   const ManyConsumer({this.initialData, required this.builder, this.filterObject, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ManyConsumerState<T>();
+  State<StatefulWidget> createState() => ManyConsumerState<T, S>();
 }
 
 // TODO add const CircularProgressIndicator() on load
-class ManyConsumerState<T extends DataObject> extends State<ManyConsumer<T>> {
+class ManyConsumerState<T extends DataObject, S extends DataObject> extends State<ManyConsumer<T, S>> {
   late Stream<WebSocketConnectionState> webSocketConnectionStream;
 
   @override
@@ -75,7 +75,7 @@ class ManyConsumerState<T extends DataObject> extends State<ManyConsumer<T>> {
     return StreamBuilder(
       stream: webSocketConnectionStream,
       builder: (context, snapshot) => StreamBuilder(
-        stream: dataProvider.streamMany<T>(filterObject: widget.filterObject, init: widget.initialData == null),
+        stream: dataProvider.streamMany<T, S>(filterObject: widget.filterObject, init: widget.initialData == null),
         initialData: ManyDataObject<T>(data: widget.initialData ?? []),
         builder: (BuildContext context, AsyncSnapshot<ManyDataObject<T>> snap) {
           if (snap.hasError) {

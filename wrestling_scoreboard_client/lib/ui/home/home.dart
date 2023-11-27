@@ -1,4 +1,3 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
@@ -8,6 +7,7 @@ import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_overview.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -83,7 +83,7 @@ class HomeState extends State<Home> {
         ),
         body: TabBarView(
           children: [
-            ManyConsumer<Club>(
+            ManyConsumer<Club, DataObject>(
               builder: (BuildContext context, List<Club> clubs) {
                 return ListGroup(
                   header: HeadingItem(
@@ -108,7 +108,7 @@ class HomeState extends State<Home> {
                 );
               },
             ),
-            ManyConsumer<League>(
+            ManyConsumer<League, DataObject>(
               builder: (BuildContext context, List<League> leagues) {
                 return ListGroup(
                   header: HeadingItem(

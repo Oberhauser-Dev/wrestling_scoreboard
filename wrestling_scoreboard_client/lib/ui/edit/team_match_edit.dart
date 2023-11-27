@@ -1,10 +1,10 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
+import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchEdit extends StatefulWidget {
   final TeamMatch? teamMatch;
@@ -104,8 +104,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider
-                .readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider.readMany<Team,
+                DataObject>(); // TODO: filter by teams of same league, but may add an option to search all teams
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -121,8 +121,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider
-                .readMany<Team>(); // TODO filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider.readMany<Team,
+                DataObject>(); // TODO: filter by teams of same league, but may add an option to search all teams
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),

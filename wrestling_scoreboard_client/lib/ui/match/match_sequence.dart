@@ -45,7 +45,7 @@ class MatchSequence extends StatelessWidget {
               ),
             ]),
           ),
-          body: ManyConsumer<Fight>(
+          body: ManyConsumer<Fight, TeamMatch>(
             filterObject: match,
             builder: (context, fights) {
               final matchInfos = [
@@ -135,7 +135,7 @@ class FightListItem extends StatelessWidget {
             listItemCallback(match, fights, index);
           },
           child: IntrinsicHeight(
-            child: ManyConsumer<FightAction>(
+            child: ManyConsumer<FightAction, Fight>(
               filterObject: fight,
               builder: (context, actions) => Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

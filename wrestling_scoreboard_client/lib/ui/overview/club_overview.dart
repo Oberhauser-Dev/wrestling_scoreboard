@@ -44,7 +44,7 @@ class ClubOverview extends StatelessWidget {
           ),
           body: GroupedList(items: [
             description,
-            ManyConsumer<Team>(
+            ManyConsumer<Team, Club>(
               filterObject: data,
               builder: (BuildContext context, List<Team> teams) {
                 return ListGroup(
@@ -70,7 +70,7 @@ class ClubOverview extends StatelessWidget {
                 );
               },
             ),
-            ManyConsumer<Membership>(
+            ManyConsumer<Membership, Club>(
               filterObject: data,
               builder: (BuildContext context, List<Membership> memberships) {
                 return ListGroup(

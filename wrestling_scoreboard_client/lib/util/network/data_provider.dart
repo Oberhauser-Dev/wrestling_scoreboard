@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_client/mocks/mock_data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/rest.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import '../environment.dart';
 
@@ -16,7 +16,7 @@ abstract class DataProvider {
   Future<T> readSingle<T extends DataObject>(int id);
 
   /// READ: get many objects
-  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject});
+  Future<List<T>> readMany<T extends DataObject, S extends DataObject>({S? filterObject});
 
   /// READ: get a single object
   Stream<T> streamSingle<T extends DataObject>(int id, {bool init = false}) {
@@ -36,7 +36,8 @@ abstract class DataProvider {
   }
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> streamMany<T extends DataObject>({DataObject? filterObject, bool init = true}) {
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject, S extends DataObject>(
+      {S? filterObject, bool init = true}) {
     final controller = getOrCreateManyStreamController<T>(filterType: filterObject.runtimeType);
     var stream = controller.stream;
 
@@ -47,7 +48,7 @@ abstract class DataProvider {
       // Use try / catch instead of Future.catchError, because Dart Debugger can't recognize this as uncaught.
       (() async {
         try {
-          final many = await readMany<T>(filterObject: filterObject);
+          final many = await readMany<T, S>(filterObject: filterObject);
           controller.sink
               .add(ManyDataObject<T>(data: many, filterType: filterObject.runtimeType, filterId: filterObject?.id));
         } catch (e) {
@@ -62,7 +63,7 @@ abstract class DataProvider {
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id);
 
   /// READ: get many json objects
-  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject>({DataObject? filterObject});
+  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject>({S? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
   /// Returns the id of the object
@@ -73,7 +74,7 @@ abstract class DataProvider {
 
   /// CREATE: generate fights of a wrestling event
   /// If [isReset] is true, then delete all previous Fights and TeamMatchFights, else reuse the states.
-  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool isReset = false]);
+  Future<void> generateFights<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject<dynamic>>>> _manyStreamControllers = {};
@@ -121,8 +122,7 @@ abstract class DataProvider {
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
-  StreamController<ManyDataObject<T>> getOrCreateManyStreamController<T extends DataObject>(
-      {Type? filterType = Null}) {
+  StreamController<ManyDataObject<T>> getOrCreateManyStreamController<T extends DataObject>({Type? filterType = Null}) {
     filterType ??= Null;
     var streamController = getManyStreamController<T>(filterType: filterType);
     if (streamController == null) {

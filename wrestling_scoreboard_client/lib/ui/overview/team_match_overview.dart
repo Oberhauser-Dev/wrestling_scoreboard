@@ -106,8 +106,8 @@ class TeamMatchOverview extends StatelessWidget {
   }
 
   handleSelectedLineup(Lineup lineup, League league, NavigatorState navigator) async {
-    final participations = await dataProvider.readMany<Participation>(filterObject: lineup);
-    final weightClasses = await dataProvider.readMany<WeightClass>(filterObject: league);
+    final participations = await dataProvider.readMany<Participation, Lineup>(filterObject: lineup);
+    final weightClasses = await dataProvider.readMany<WeightClass, League>(filterObject: league);
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
@@ -116,7 +116,7 @@ class TeamMatchOverview extends StatelessWidget {
             participations: participations,
             lineup: lineup,
             onSubmit: () {
-              dataProvider.generateFights(match, false);
+              dataProvider.generateFights<TeamMatch>(match, false);
             },
           );
         },

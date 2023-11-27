@@ -25,7 +25,7 @@ import 'fight_actions.dart';
 import 'fight_main_controls.dart';
 
 void navigateToFightScreen(NavigatorState navigator, TeamMatch match, List<Fight> fights, int index) async {
-  final actions = await dataProvider.readMany<FightAction>(filterObject: fights[index]);
+  final actions = await dataProvider.readMany<FightAction, Fight>(filterObject: fights[index]);
   navigator.push(MaterialPageRoute(builder: (context) => FightScreen(match, fights, actions, index)));
 }
 

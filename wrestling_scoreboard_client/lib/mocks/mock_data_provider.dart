@@ -11,12 +11,12 @@ class MockDataProvider extends DataProvider {
 
   @override
   Future<T> readSingle<T extends DataObject>(int id) async {
-    final Iterable<T> many = await readMany<T>();
+    final Iterable<T> many = await readMany<T, DataObject>();
     return many.singleWhere((element) => element.id == id);
   }
 
   @override
-  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
+  Future<List<T>> readMany<T extends DataObject, S extends DataObject>({S? filterObject}) async {
     await Future.delayed(latency);
     return Future.value(getManyMocksFromClass<T>(filterObject: filterObject));
   }
@@ -29,7 +29,8 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject>({DataObject? filterObject}) async {
+  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject>(
+      {S? filterObject}) async {
     throw UnimplementedError('Raw types are not supported in Mock mode');
     // return Future.value(getManyMocksFromClass<T>(filterObject: filterObject).map((e) => e.toJson()));
   }
@@ -76,7 +77,7 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
+  Future<void> generateFights<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
     List<Fight> oldFights; // TODO really needs old fights or just use the exising ones from teammatch
     if (wrestlingEvent is TeamMatch) {
       oldFights = getFightsOfTeamMatch(wrestlingEvent);
@@ -106,10 +107,11 @@ class MockDataProvider extends DataProvider {
     List<List<Participation>> teamParticipations;
     List<WeightClass> weightClasses;
     if (wrestlingEvent is TeamMatch) {
-      final homeParticipations = await dataProvider.readMany<Participation>(filterObject: wrestlingEvent.home);
-      final guestParticipations = await dataProvider.readMany<Participation>(filterObject: wrestlingEvent.guest);
+      final homeParticipations = await dataProvider.readMany<Participation, Lineup>(filterObject: wrestlingEvent.home);
+      final guestParticipations =
+          await dataProvider.readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
-      weightClasses = await dataProvider.readMany<WeightClass>(filterObject: wrestlingEvent.league);
+      weightClasses = await dataProvider.readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
     } else if (wrestlingEvent is Tournament) {
       // TODO get all participations
       teamParticipations = [];

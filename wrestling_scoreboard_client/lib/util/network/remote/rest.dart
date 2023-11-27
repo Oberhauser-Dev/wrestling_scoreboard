@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:http/http.dart' as http;
 import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'web_socket.dart';
 
@@ -39,8 +39,8 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<List<T>> readMany<T extends DataObject>({DataObject? filterObject}) async {
-    final json = await readManyJson<T>(filterObject: filterObject, isRaw: false);
+  Future<List<T>> readMany<T extends DataObject, S extends DataObject>({S? filterObject}) async {
+    final json = await readManyJson<T, S>(filterObject: filterObject, isRaw: false);
     return json.map((e) => DataObject.fromJson<T>(e)).toList();
   }
 
@@ -59,11 +59,13 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> readManyJson<T extends DataObject>(
-      {DataObject? filterObject, bool isRaw = true}) async {
+  Future<List<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject>({
+    S? filterObject,
+    bool isRaw = true,
+  }) async {
     var prepend = '';
     if (filterObject != null) {
-      prepend = '${_getPathFromType(filterObject.runtimeType)}/${filterObject.id}';
+      prepend = '${_getPathFromType(S)}/${filterObject.id}';
     }
     final uri =
         Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter : null);
@@ -121,8 +123,8 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> generateFights(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
-    final prepend = '${_getPathFromType(wrestlingEvent.runtimeType)}/${wrestlingEvent.id}';
+  Future<void> generateFights<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
+    final prepend = '${_getPathFromType(T)}/${wrestlingEvent.id}';
     final uri = Uri.parse('$_apiUrl$prepend/fights/generate')
         .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: headers);

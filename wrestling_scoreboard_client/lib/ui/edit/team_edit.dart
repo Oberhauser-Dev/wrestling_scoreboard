@@ -75,7 +75,7 @@ class TeamEditState extends State<TeamEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableClubs ??= await dataProvider.readMany<Club>();
+            availableClubs ??= await dataProvider.readMany<Club, DataObject>();
             return (filter == null ? availableClubs! : availableClubs!.where((element) => element.name.contains(filter))).toList();
           },
         ),

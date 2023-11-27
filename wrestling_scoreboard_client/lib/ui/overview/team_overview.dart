@@ -52,7 +52,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
             ),
             body: GroupedList(items: [
               description,
-              ManyConsumer<TeamMatch>(
+              ManyConsumer<TeamMatch, Team>(
                 filterObject: data,
                 builder: (BuildContext context, List<TeamMatch> matches) {
                   return ListGroup(

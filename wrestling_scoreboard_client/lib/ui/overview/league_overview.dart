@@ -55,7 +55,7 @@ class LeagueOverview extends StatelessWidget {
           ),
           body: GroupedList(items: [
             description,
-            ManyConsumer<Team>(
+            ManyConsumer<Team, League>(
               filterObject: data,
               builder: (BuildContext context, List<Team> team) {
                 return ListGroup(
@@ -85,7 +85,7 @@ class LeagueOverview extends StatelessWidget {
                 );
               },
             ),
-            ManyConsumer<LeagueWeightClass>(
+            ManyConsumer<LeagueWeightClass, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClasses) {
                 return ListGroup(

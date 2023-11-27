@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,6 +8,7 @@ import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/components/font.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class LineupEdit extends StatefulWidget {
   final Lineup lineup;
@@ -17,13 +17,13 @@ class LineupEdit extends StatefulWidget {
 
   final Function()? onSubmit;
 
-  const LineupEdit(
-      {Key? key,
-      required this.lineup,
-      required this.weightClasses,
-      required this.participations,
-      this.onSubmit})
-      : super(key: key);
+  const LineupEdit({
+    Key? key,
+    required this.lineup,
+    required this.weightClasses,
+    required this.participations,
+    this.onSubmit,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => LineupEditState();
@@ -41,18 +41,16 @@ class LineupEditState extends State<LineupEdit> {
   final HashSet<Participation> _createOrUpdateParticipations = HashSet();
 
   Future<List<Membership>> filterMemberships(String? filter) async {
-    memberships ??= await dataProvider.readMany<Membership>(filterObject: widget.lineup.team.club);
-    return (filter == null
-            ? memberships!
-            : memberships!.where((element) => element.person.fullName.contains(filter)))
+    memberships ??= await dataProvider.readMany<Membership, Club>(filterObject: widget.lineup.team.club);
+    return (filter == null ? memberships! : memberships!.where((element) => element.person.fullName.contains(filter)))
         .toList();
   }
 
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(
-          Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
+      await dataProvider
+          .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
       await Future.forEach(_deleteParticipations, (Participation element) => dataProvider.deleteSingle(element));
       await Future.forEach(
           _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
@@ -77,7 +75,7 @@ class LineupEditState extends State<LineupEdit> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context);
-    
+
     return Form(
         key: _formKey,
         child: EditWidget(
@@ -122,7 +120,8 @@ class LineupEditState extends State<LineupEdit> {
                         padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
                         child: getDropdown<Membership>(
                           selectedItem: participation?.membership,
-                          label: '${localizations.weightClass} ${weightClass.name} ${styleToAbbr(weightClass.style, context)}',
+                          label:
+                              '${localizations.weightClass} ${weightClass.name} ${styleToAbbr(weightClass.style, context)}',
                           context: context,
                           onSaved: (Membership? newMembership) {
                             final oldParticipation = _participations[weightClass];
@@ -158,7 +157,9 @@ class LineupEditState extends State<LineupEdit> {
                           decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(vertical: 20),
                               labelText: localizations.weight),
-                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))],
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))
+                          ],
                           onSaved: (String? value) {
                             var participation = _participations[weightClass];
                             if (participation != null) {
