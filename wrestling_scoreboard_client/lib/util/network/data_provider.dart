@@ -16,7 +16,7 @@ abstract class DataProvider {
   Future<T> readSingle<T extends DataObject>(int id);
 
   /// READ: get many objects
-  Future<List<T>> readMany<T extends DataObject, S extends DataObject>({S? filterObject});
+  Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject});
 
   /// READ: get a single object
   Stream<T> streamSingle<T extends DataObject>(int id, {bool init = false}) {
@@ -36,7 +36,7 @@ abstract class DataProvider {
   }
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> streamMany<T extends DataObject, S extends DataObject>(
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject, S extends DataObject?>(
       {S? filterObject, bool init = true}) {
     final controller = getOrCreateManyStreamController<T>(filterType: S);
     var stream = controller.stream;
@@ -63,7 +63,7 @@ abstract class DataProvider {
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id);
 
   /// READ: get many json objects
-  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject>({S? filterObject});
+  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject?>({S? filterObject});
 
   /// CREATE | UPDATE: create or update a single object
   /// Returns the id of the object

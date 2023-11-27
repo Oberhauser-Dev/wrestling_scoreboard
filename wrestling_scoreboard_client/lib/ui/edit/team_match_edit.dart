@@ -104,8 +104,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider.readMany<Team,
-                DataObject>(); // TODO: filter by teams of same league, but may add an option to search all teams
+            // TODO: filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider.readMany<Team, Null>();
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),
@@ -121,8 +121,8 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            teams ??= await dataProvider.readMany<Team,
-                DataObject>(); // TODO: filter by teams of same league, but may add an option to search all teams
+            // TODO: filter by teams of same league, but may add an option to search all teams
+            teams ??= await dataProvider.readMany<Team, Null>();
             return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
           },
         ),

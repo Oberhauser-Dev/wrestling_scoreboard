@@ -11,12 +11,12 @@ class MockDataProvider extends DataProvider {
 
   @override
   Future<T> readSingle<T extends DataObject>(int id) async {
-    final Iterable<T> many = await readMany<T, DataObject>();
+    final Iterable<T> many = await readMany<T, Null>();
     return many.singleWhere((element) => element.id == id);
   }
 
   @override
-  Future<List<T>> readMany<T extends DataObject, S extends DataObject>({S? filterObject}) async {
+  Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject}) async {
     await Future.delayed(latency);
     return Future.value(getManyMocksFromClass<T>(filterObject: filterObject));
   }
@@ -29,7 +29,7 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject>(
+  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject?>(
       {S? filterObject}) async {
     throw UnimplementedError('Raw types are not supported in Mock mode');
     // return Future.value(getManyMocksFromClass<T>(filterObject: filterObject).map((e) => e.toJson()));

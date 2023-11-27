@@ -83,7 +83,7 @@ class HomeState extends State<Home> {
         ),
         body: TabBarView(
           children: [
-            ManyConsumer<Club, DataObject>(
+            ManyConsumer<Club, Null>(
               builder: (BuildContext context, List<Club> clubs) {
                 return ListGroup(
                   header: HeadingItem(
@@ -108,7 +108,7 @@ class HomeState extends State<Home> {
                 );
               },
             ),
-            ManyConsumer<League, DataObject>(
+            ManyConsumer<League, Null>(
               builder: (BuildContext context, List<League> leagues) {
                 return ListGroup(
                   header: HeadingItem(

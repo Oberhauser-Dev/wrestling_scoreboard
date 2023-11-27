@@ -53,7 +53,7 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableTeams ??= await dataProvider.readMany<Team, DataObject>();
+            availableTeams ??= await dataProvider.readMany<Team, Null>();
             return (filter == null
                     ? availableTeams!
                     : availableTeams!.where((element) => element.name.contains(filter)))
@@ -72,7 +72,7 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            _availableLeagues ??= await dataProvider.readMany<League, DataObject>();
+            _availableLeagues ??= await dataProvider.readMany<League, Null>();
             return (filter == null
                     ? _availableLeagues!
                     : _availableLeagues!.where((element) => element.name.contains(filter)))

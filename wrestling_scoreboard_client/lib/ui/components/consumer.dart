@@ -48,7 +48,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
   }
 }
 
-class ManyConsumer<T extends DataObject, S extends DataObject> extends StatefulWidget {
+class ManyConsumer<T extends DataObject, S extends DataObject?> extends StatefulWidget {
   final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
@@ -60,7 +60,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject> extends StatefulW
 }
 
 // TODO add const CircularProgressIndicator() on load
-class ManyConsumerState<T extends DataObject, S extends DataObject> extends State<ManyConsumer<T, S>> {
+class ManyConsumerState<T extends DataObject, S extends DataObject?> extends State<ManyConsumer<T, S>> {
   late Stream<WebSocketConnectionState> webSocketConnectionStream;
 
   @override

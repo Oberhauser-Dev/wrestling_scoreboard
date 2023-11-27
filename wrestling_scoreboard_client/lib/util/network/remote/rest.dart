@@ -39,7 +39,7 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<List<T>> readMany<T extends DataObject, S extends DataObject>({S? filterObject}) async {
+  Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject}) async {
     final json = await readManyJson<T, S>(filterObject: filterObject, isRaw: false);
     return json.map((e) => DataObject.fromJson<T>(e)).toList();
   }
@@ -59,7 +59,7 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject>({
+  Future<List<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject?>({
     S? filterObject,
     bool isRaw = true,
   }) async {
