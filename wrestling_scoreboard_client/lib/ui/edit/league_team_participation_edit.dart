@@ -44,9 +44,9 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
     final items = [
       ListTile(
         title: getDropdown<Team>(
-          icon: const Icon(Icons.foundation),
+          icon: const Icon(Icons.group),
           selectedItem: _team,
-          label: AppLocalizations.of(context)!.club,
+          label: localizations.team,
           context: context,
           onSaved: (Team? value) => setState(() {
             _team = value;
@@ -65,7 +65,7 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
         title: getDropdown<League>(
           icon: const Icon(Icons.emoji_events),
           selectedItem: _league,
-          label: AppLocalizations.of(context)!.league,
+          label: localizations.league,
           context: context,
           onSaved: (League? value) => setState(() {
             _league = value;
@@ -85,7 +85,7 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
     return Form(
       key: _formKey,
       child: EditWidget(
-        typeLocalization: localizations.team,
+        typeLocalization: localizations.participatingTeam,
         id: widget.participation?.id,
         onSubmit: () => handleSubmit(navigator),
         items: items,

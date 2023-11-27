@@ -35,11 +35,6 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
                   subtitle: localizations.description,
                   icon: Icons.subject,
                 ),
-                // ContentItem(
-                //   title: data.league?.name ?? '-',
-                //   subtitle: localizations.league,
-                //   icon: Icons.emoji_events,
-                // ),
                 ContentItem(
                   title: data.club.name,
                   subtitle: localizations.club,

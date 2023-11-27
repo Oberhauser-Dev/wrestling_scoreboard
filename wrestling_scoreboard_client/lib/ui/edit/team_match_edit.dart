@@ -95,7 +95,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
       ),
       ListTile(
         title: getDropdown<Team>(
-          icon: const Icon(Icons.emoji_events),
+          icon: const Icon(Icons.group),
           selectedItem: _homeTeam,
           label: '${localizations.team} ${localizations.red}',
           context: context,
@@ -112,7 +112,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
       ),
       ListTile(
         title: getDropdown<Team>(
-          icon: const Icon(Icons.emoji_events),
+          icon: const Icon(Icons.group),
           selectedItem: _guestTeam,
           label: '${localizations.team} ${localizations.blue}',
           context: context,

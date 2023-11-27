@@ -109,7 +109,7 @@ class LeagueOverview extends StatelessWidget {
                       initialData: e,
                       builder: (context, data) => ContentItem(
                           title: '${data!.weightClass.name} ${styleToString(data.weightClass.style, context)}',
-                          icon: Icons.group,
+                          icon: Icons.fitness_center,
                           onTap: () => handleSelectedWeightClass(data, context)),
                     );
                   }),

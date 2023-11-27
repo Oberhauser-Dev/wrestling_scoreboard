@@ -38,7 +38,7 @@ abstract class DataProvider {
   /// READ: get many objects
   Stream<ManyDataObject<T>> streamMany<T extends DataObject, S extends DataObject>(
       {S? filterObject, bool init = true}) {
-    final controller = getOrCreateManyStreamController<T>(filterType: filterObject.runtimeType);
+    final controller = getOrCreateManyStreamController<T>(filterType: S);
     var stream = controller.stream;
 
     if (filterObject != null) {
@@ -50,7 +50,7 @@ abstract class DataProvider {
         try {
           final many = await readMany<T, S>(filterObject: filterObject);
           controller.sink
-              .add(ManyDataObject<T>(data: many, filterType: filterObject.runtimeType, filterId: filterObject?.id));
+              .add(ManyDataObject<T>(data: many, filterType: S, filterId: filterObject?.id));
         } catch (e) {
           controller.sink.addError(e);
         }
@@ -67,10 +67,10 @@ abstract class DataProvider {
 
   /// CREATE | UPDATE: create or update a single object
   /// Returns the id of the object
-  Future<int> createOrUpdateSingle(DataObject single);
+  Future<int> createOrUpdateSingle<T extends DataObject>(T single);
 
   /// DELETE: delete a single object
-  Future<void> deleteSingle(DataObject single);
+  Future<void> deleteSingle<T extends DataObject>(T single);
 
   /// CREATE: generate fights of a wrestling event
   /// If [isReset] is true, then delete all previous Fights and TeamMatchFights, else reuse the states.

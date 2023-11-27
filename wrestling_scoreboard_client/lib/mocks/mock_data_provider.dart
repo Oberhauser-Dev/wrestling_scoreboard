@@ -170,9 +170,9 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<int> createOrUpdateSingle(DataObject single) async {
+  Future<int> createOrUpdateSingle<T extends DataObject>(T single) async {
     final operation = single.id == null ? CRUD.create : CRUD.update;
-    single = operation == CRUD.create ? _createMockSingle(single) : _updateMockSingle(single);
+    single = operation == CRUD.create ? _createMockSingle<T>(single) : _updateMockSingle<T>(single);
     _broadcastSingle(single);
     return single.id!;
   }
@@ -194,13 +194,13 @@ class MockDataProvider extends DataProvider {
     }
   }
 
-  DataObject _createMockSingle(DataObject single) {
-    single = single.copyWithId(Random().nextInt(32000));
+  T _createMockSingle<T extends DataObject>(T single) {
+    single = single.copyWithId(Random().nextInt(32000)) as T;
     _getListOfObject(single, CRUD.create).add(single);
     return single;
   }
 
-  DataObject _updateMockSingle(DataObject single) {
+  T _updateMockSingle<T extends DataObject>(T single) {
     final objList = _getListOfObject(single, CRUD.update);
     objList.remove(single);
     objList.add(single);
@@ -219,7 +219,7 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> deleteSingle(DataObject single) async {
+  Future<void> deleteSingle<T extends DataObject>(T single) async {
     _getListOfObject(single, CRUD.delete).remove(single);
     _broadcastSingle(single);
   }

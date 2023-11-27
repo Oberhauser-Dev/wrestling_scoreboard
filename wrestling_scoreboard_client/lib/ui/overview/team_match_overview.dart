@@ -61,12 +61,12 @@ class TeamMatchOverview extends StatelessWidget {
                           ContentItem(
                             title: homeLineup!.team.name,
                             subtitle: '${localizations.team} ${localizations.red}',
-                            icon: Icons.emoji_events,
+                            icon: Icons.group,
                           ),
                           ContentItem(
                             title: guestLineup!.team.name,
                             subtitle: '${localizations.team} ${localizations.blue}',
-                            icon: Icons.emoji_events,
+                            icon: Icons.group,
                           ),
                           ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
                         ]),
@@ -85,12 +85,12 @@ class TeamMatchOverview extends StatelessWidget {
                       items: [
                         ContentItem(
                             title: homeLineup.team.name,
-                            icon: Icons.group,
+                            icon: Icons.view_list,
                             onTap: () =>
                                 handleSelectedLineup(homeLineup, match.league ?? League.outOfCompetition, navigator)),
                         ContentItem(
                             title: guestLineup.team.name,
-                            icon: Icons.group,
+                            icon: Icons.view_list,
                             onTap: () =>
                                 handleSelectedLineup(guestLineup, match.league ?? League.outOfCompetition, navigator)),
                         ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
