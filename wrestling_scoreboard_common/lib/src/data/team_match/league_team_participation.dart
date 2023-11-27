@@ -38,4 +38,9 @@ class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObje
 
   @override
   String get tableName => 'league_team_participation';
+
+  @override
+  LeagueTeamParticipation copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

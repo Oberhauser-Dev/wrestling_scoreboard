@@ -39,4 +39,9 @@ class TournamentTeamParticipation with _$TournamentTeamParticipation implements 
 
   @override
   String get tableName => 'tournament_team_participation';
+
+  @override
+  TournamentTeamParticipation copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

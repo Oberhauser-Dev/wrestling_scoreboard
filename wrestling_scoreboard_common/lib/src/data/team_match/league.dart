@@ -45,4 +45,9 @@ class League with _$League implements DataObject {
 
   @override
   String get tableName => 'league';
+
+  @override
+  League copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

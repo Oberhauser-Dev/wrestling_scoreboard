@@ -43,4 +43,9 @@ class TeamMatchFight with _$TeamMatchFight implements DataObject {
 
   @override
   String get tableName => 'team_match_fight';
+
+  @override
+  TeamMatchFight copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

@@ -42,4 +42,9 @@ class Team with _$Team implements DataObject {
 
   @override
   String get tableName => 'team';
+
+  @override
+  Team copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

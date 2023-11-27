@@ -57,4 +57,9 @@ class BoutConfig with _$BoutConfig implements DataObject {
 
   @override
   String get tableName => 'bout_config';
+
+  @override
+  BoutConfig copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

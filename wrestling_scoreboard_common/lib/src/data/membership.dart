@@ -44,4 +44,9 @@ class Membership with _$Membership implements DataObject {
 
   @override
   String get tableName => 'membership';
+
+  @override
+  Membership copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

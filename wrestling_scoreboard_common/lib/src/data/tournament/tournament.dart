@@ -60,4 +60,9 @@ class Tournament extends WrestlingEvent with _$Tournament {
 
   @override
   String get tableName => 'tournament';
+
+  @override
+  Tournament copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

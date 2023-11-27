@@ -40,4 +40,9 @@ class LeagueWeightClass with _$LeagueWeightClass implements DataObject {
 
   @override
   String get tableName => 'league_weight_class';
+
+  @override
+  LeagueWeightClass copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

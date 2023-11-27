@@ -65,4 +65,9 @@ class FightAction with _$FightAction implements DataObject {
 
   @override
   String get tableName => 'fight_action';
+
+  @override
+  FightAction copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

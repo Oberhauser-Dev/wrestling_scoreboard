@@ -180,4 +180,9 @@ class Fight with _$Fight implements DataObject {
         return 0;
     }
   }
+
+  @override
+  Fight copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

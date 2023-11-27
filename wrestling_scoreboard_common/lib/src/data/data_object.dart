@@ -10,6 +10,8 @@ abstract class DataObject {
 
   Map<String, dynamic> toRaw();
 
+  DataObject copyWithId(int? id);
+
   String get tableName;
 
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {

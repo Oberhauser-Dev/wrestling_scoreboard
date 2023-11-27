@@ -42,4 +42,9 @@ class TournamentPerson with _$TournamentPerson implements DataObject {
 
   @override
   String get tableName => 'tournament_person';
+
+  @override
+  TournamentPerson copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

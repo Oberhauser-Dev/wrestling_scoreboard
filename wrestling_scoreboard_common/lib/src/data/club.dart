@@ -35,4 +35,9 @@ class Club with _$Club implements DataObject {
 
   @override
   String get tableName => 'club';
+
+  @override
+  Club copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

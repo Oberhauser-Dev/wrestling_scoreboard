@@ -63,4 +63,9 @@ class Person with _$Person implements DataObject {
 
   @override
   String get tableName => 'person';
+
+  @override
+  Person copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

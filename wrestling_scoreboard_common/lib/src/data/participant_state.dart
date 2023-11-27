@@ -54,4 +54,9 @@ class ParticipantState with _$ParticipantState implements DataObject {
   }
 
   bool equalDuringFight(o) => o is ParticipantState && o.runtimeType == runtimeType && participation == o.participation;
+
+  @override
+  ParticipantState copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

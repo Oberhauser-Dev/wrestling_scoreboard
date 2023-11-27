@@ -56,4 +56,9 @@ class Participation with _$Participation implements DataObject {
 
   @override
   String get tableName => 'participation';
+
+  @override
+  Participation copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }

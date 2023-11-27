@@ -31,11 +31,12 @@ typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
 typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
 
-Future<int?> handlefromJson(Map<String, Object?> json,
-    {required HandleSingleCallback handleSingle,
-    required HandleManyCallback handleMany,
-    required HandleSingleRawCallback handleSingleRaw,
-    required HandleManyRawCallback handleManyRaw}) {
+Future<int?> handleFromJson(Map<String, Object?> json, {
+  required HandleSingleCallback handleSingle,
+  required HandleManyCallback handleMany,
+  required HandleSingleRawCallback handleSingleRaw,
+  required HandleManyRawCallback handleManyRaw,
+}) {
   final type = getTypeFromTableName(json['tableName'] as String);
   switch (type) {
     case BoutConfig:
@@ -145,11 +146,12 @@ Future<int?> handlefromJson(Map<String, Object?> json,
   }
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json,
-    {required HandleSingleCallback handleSingle,
-    required HandleManyCallback handleMany,
-    required HandleSingleRawCallback handleSingleRaw,
-    required HandleManyRawCallback handleManyRaw}) async {
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json, {
+  required HandleSingleCallback handleSingle,
+  required HandleManyCallback handleMany,
+  required HandleSingleRawCallback handleSingleRaw,
+  required HandleManyRawCallback handleManyRaw,
+}) async {
   final isMany = json['isMany'] as bool;
   final isRaw = json['isRaw'] as bool;
   final operation = CrudParser.valueOf(json['operation']);
@@ -191,37 +193,37 @@ class ManyDataObject<T> {
 // TODO: deprecate in favor of Type.tableName
 String getTableNameFromType(Type t) {
   switch (t) {
-    case BoutConfig:
+    case const (BoutConfig):
       return 'bout_config';
-    case Club:
+    case const (Club):
       return 'club';
-    case Fight:
+    case const (Fight):
       return 'fight';
-    case FightAction:
+    case const (FightAction):
       return 'fight_action';
-    case League:
+    case const (League):
       return 'league';
-    case LeagueWeightClass:
+    case const (LeagueWeightClass):
       return 'league_weight_class';
-    case Lineup:
+    case const (Lineup):
       return 'lineup';
-    case Membership:
+    case const (Membership):
       return 'membership';
-    case Participation:
+    case const (Participation):
       return 'participation';
-    case ParticipantState:
+    case const (ParticipantState):
       return 'participant_state';
-    case Person:
+    case const (Person):
       return 'person';
-    case Team:
+    case const (Team):
       return 'team';
-    case TeamMatch:
+    case const (TeamMatch):
       return 'team_match';
-    case TeamMatchFight:
+    case const (TeamMatchFight):
       return 'team_match_fight';
-    case Tournament:
+    case const (Tournament):
       return 'tournament';
-    case WeightClass:
+    case const (WeightClass):
       return 'weight_class';
     default:
       throw UnimplementedError('ClassName for "${t.toString()}" not found.');

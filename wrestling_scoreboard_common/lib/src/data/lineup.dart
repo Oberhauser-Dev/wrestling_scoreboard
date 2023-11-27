@@ -43,4 +43,9 @@ class Lineup with _$Lineup implements DataObject {
 
   @override
   String get tableName => 'lineup';
+
+  @override
+  Lineup copyWithId(int? id) {
+    return copyWith(id: id);
+  }
 }
