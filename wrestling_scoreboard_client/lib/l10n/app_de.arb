@@ -55,6 +55,8 @@
   "coaches": "Trainer",
   "team": "Mannschaft",
   "teams": "Mannschaften",
+  "participatingTeam": "Teilnehmende Mannschaft",
+  "participatingTeams": "Teilnehmende Mannschaften",
   "league": "Liga",
   "leagues": "Ligen",
   "match": "Begegnung",

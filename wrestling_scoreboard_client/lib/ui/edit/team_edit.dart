@@ -1,9 +1,9 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamEdit extends StatefulWidget {
   final Team? team;
@@ -19,7 +19,6 @@ class TeamEditState extends State<TeamEdit> {
   final _formKey = GlobalKey<FormState>();
 
   List<Club>? availableClubs;
-  List<League>? _availableLeagues;
   String? _name;
   String? _description;
   Club? _club;
@@ -76,26 +75,13 @@ class TeamEditState extends State<TeamEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             availableClubs ??= await dataProvider.readMany<Club, DataObject>();
-            return (filter == null ? availableClubs! : availableClubs!.where((element) => element.name.contains(filter))).toList();
+            return (filter == null
+                    ? availableClubs!
+                    : availableClubs!.where((element) => element.name.contains(filter)))
+                .toList();
           },
         ),
       ),
-      // ListTile(
-      //   title: getDropdown<League>(
-      //     icon: const Icon(Icons.emoji_events),
-      //     selectedItem: _league,
-      //     label: AppLocalizations.of(context)!.league,
-      //     context: context,
-      //     onSaved: (League? value) => setState(() {
-      //       _league = value;
-      //     }),
-      //     itemAsString: (u) => u.name,
-      //     onFind: (String? filter) async {
-      //       _availableLeagues ??= await dataProvider.readMany<League>();
-      //       return (filter == null ? _availableLeagues! : _availableLeagues!.where((element) => element.name.contains(filter))).toList();
-      //     },
-      //   ),
-      // ),
     ];
 
     return Form(

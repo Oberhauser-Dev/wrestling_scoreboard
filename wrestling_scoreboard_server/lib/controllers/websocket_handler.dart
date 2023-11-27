@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_match_controller.da
 import 'package:wrestling_scoreboard_server/server.dart';
 
 import 'entity_controller.dart';
+import 'league_team_participation_controller.dart';
 
 final Set<WebSocketChannel> webSocketPool = HashSet();
 
@@ -51,6 +52,22 @@ void broadcastSingle<T extends DataObject>(T single) async {
         CRUD.update,
         filterType: League,
         filterId: single.league.id)));
+  } else if (single is LeagueTeamParticipation) {
+    final leagueTeamParticipationController = LeagueTeamParticipationController();
+    broadcast(jsonEncode(manyToJson(
+        await leagueTeamParticipationController
+            .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}),
+        LeagueTeamParticipation,
+        CRUD.update,
+        filterType: League,
+        filterId: single.league.id)));
+    broadcast(jsonEncode(manyToJson(
+        await leagueTeamParticipationController
+            .getMany(conditions: ['team_id = @id'], substitutionValues: {'id': single.team.id}),
+        LeagueTeamParticipation,
+        CRUD.update,
+        filterType: Team,
+        filterId: single.team.id)));
   } else if (single is Lineup) {
     // No filtered list needs to be handled.
   } else if (single is Membership) {
@@ -78,16 +95,6 @@ void broadcastSingle<T extends DataObject>(T single) async {
         CRUD.update,
         filterType: Club,
         filterId: single.club.id)));
-    // TODO: check if league still needs to be updated
-    // if (single.league != null) {
-    //   broadcast(jsonEncode(manyToJson(
-    //       await TeamController()
-    //           .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}),
-    //       Team,
-    //       CRUD.update,
-    //       filterType: League,
-    //       filterId: single.league!.id)));
-    // }
   } else if (single is TeamMatch) {
     final homeMatches = await TeamMatchController()
         .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
@@ -131,6 +138,22 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         CRUD.update,
         filterType: League,
         filterId: single['league_id'])));
+  } else if (T == LeagueTeamParticipation) {
+    final leagueTeamParticipationController = LeagueTeamParticipationController();
+    broadcast(jsonEncode(manyToJson(
+        await leagueTeamParticipationController
+            .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
+        LeagueTeamParticipation,
+        CRUD.update,
+        filterType: League,
+        filterId: single['league_id'])));
+    broadcast(jsonEncode(manyToJson(
+        await leagueTeamParticipationController
+            .getMany(conditions: ['team_id = @id'], substitutionValues: {'id': single['team_id']}),
+        LeagueTeamParticipation,
+        CRUD.update,
+        filterType: Team,
+        filterId: single['team_id'])));
   } else if (T == Lineup) {
     // No filtered list needs to be handled.
   } else if (T == Membership) {

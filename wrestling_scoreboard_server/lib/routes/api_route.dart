@@ -1,3 +1,4 @@
+import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -57,12 +58,18 @@ class ApiRoute {
     router.get('/league/<id|[0-9]+>/teams', leagueController.requestTeams);
     router.get('/league/<id|[0-9]+>/weight_classs', leagueController.requestWeightClasses);
     router.get('/league/<id|[0-9]+>/league_weight_classs', leagueController.requestLeagueWeightClasses);
+    router.get('/league/<id|[0-9]+>/league_team_participations', leagueController.requestLeagueTeamParticipations);
 
     final leagueWeightClassController = LeagueWeightClassController();
     router.post('/league_weight_class', leagueWeightClassController.postSingle);
     router.get('/league_weight_classs', leagueWeightClassController.requestMany);
     router.get('/league_weight_class/<id|[0-9]+>', leagueWeightClassController.requestSingle);
-    
+
+    final leagueTeamParticipationController = LeagueTeamParticipationController();
+    router.post('/league_team_participation', leagueTeamParticipationController.postSingle);
+    router.get('/league_team_participations', leagueTeamParticipationController.requestMany);
+    router.get('/league_team_participation/<id|[0-9]+>', leagueTeamParticipationController.requestSingle);
+
     final lineupController = LineupController();
     router.post('/lineup', lineupController.postSingle);
     router.get('/lineups', lineupController.requestMany);

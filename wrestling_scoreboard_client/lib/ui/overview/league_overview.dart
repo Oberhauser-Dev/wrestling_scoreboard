@@ -1,4 +1,3 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
@@ -6,12 +5,13 @@ import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueOverview extends StatelessWidget {
   final League filterObject;
@@ -39,8 +39,7 @@ class LeagueOverview extends StatelessWidget {
               icon: Icons.emoji_events,
             ),
             ContentItem(
-              title:
-                  '${data.boutConfig.periodDuration.inSeconds} ✕ ${data.boutConfig.periodCount}',
+              title: '${data.boutConfig.periodDuration.inSeconds} ✕ ${data.boutConfig.periodCount}',
               // '${localizations.breakDurationInSecs}: ${data.boutConfig.breakDuration.inSeconds}, '
               // '${localizations.activityDurationInSecs}: ${data.boutConfig.activityDuration.inSeconds}, '
               // '${localizations.injuryDurationInSecs}: ${data.boutConfig.injuryDuration.inSeconds}',
@@ -55,31 +54,34 @@ class LeagueOverview extends StatelessWidget {
           ),
           body: GroupedList(items: [
             description,
-            ManyConsumer<Team, League>(
+            ManyConsumer<LeagueTeamParticipation, League>(
               filterObject: data,
-              builder: (BuildContext context, List<Team> team) {
+              builder: (BuildContext context, List<LeagueTeamParticipation> team) {
                 return ListGroup(
                   header: HeadingItem(
-                    title: localizations.teams,
+                    title: localizations.participatingTeams,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TeamEdit(
-                            //initialLeague: data,
+                          builder: (context) => LeagueTeamParticipationEdit(
+                            initialLeague: data,
                           ),
                         ),
                       ),
                     ),
                   ),
                   items: team.map(
-                    (e) => SingleConsumer<Team>(
+                    (e) => SingleConsumer<LeagueTeamParticipation>(
                         id: e.id,
                         initialData: e,
                         builder: (context, data) {
                           return ContentItem(
-                              title: data!.name, icon: Icons.group, onTap: () => handleSelectedTeam(data, context));
+                            title: data!.team.name,
+                            icon: Icons.group,
+                            onTap: () => handleSelectedTeam(data, context),
+                          );
                         }),
                   ),
                 );
@@ -120,12 +122,12 @@ class LeagueOverview extends StatelessWidget {
     );
   }
 
-  handleSelectedTeam(Team team, BuildContext context) {
+  handleSelectedTeam(LeagueTeamParticipation team, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TeamOverview(
-          filterObject: team,
+          filterObject: team.team, // TODO: may use team participation overview (?)
         ),
       ),
     );

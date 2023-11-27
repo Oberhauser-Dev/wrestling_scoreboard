@@ -16,45 +16,45 @@ abstract class DataObject {
 
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
     switch (T) {
-      case BoutConfig:
+      case const (BoutConfig):
         return BoutConfig.fromJson(json) as T;
-      case Club:
+      case const (Club):
         return Club.fromJson(json) as T;
-      case Fight:
+      case const (Fight):
         return Fight.fromJson(json) as T;
-      case FightAction:
+      case const (FightAction):
         return FightAction.fromJson(json) as T;
-      case League:
+      case const (League):
         return League.fromJson(json) as T;
-      case LeagueTeamParticipation:
-        return LeagueTeamParticipation.fromJson(json) as T;
-      case LeagueWeightClass:
+      case const (LeagueWeightClass):
         return LeagueWeightClass.fromJson(json) as T;
-      case Lineup:
+      case const (LeagueTeamParticipation):
+        return LeagueTeamParticipation.fromJson(json) as T;
+      case const (Lineup):
         return Lineup.fromJson(json) as T;
-      case Membership:
+      case const (Membership):
         return Membership.fromJson(json) as T;
-      case Participation:
+      case const (Participation):
         return Participation.fromJson(json) as T;
-      case ParticipantState:
+      case const (ParticipantState):
         return ParticipantState.fromJson(json) as T;
-      case Person:
+      case const (Person):
         return Person.fromJson(json) as T;
-      case Team:
+      case const (Team):
         return Team.fromJson(json) as T;
-      case TeamMatch:
+      case const (TeamMatch):
         return TeamMatch.fromJson(json) as T;
-      case TeamMatchFight:
+      case const (TeamMatchFight):
         return TeamMatchFight.fromJson(json) as T;
-      case Tournament:
+      case const (Tournament):
         return Tournament.fromJson(json) as T;
-      case TournamentFight:
+      case const (TournamentFight):
         return TournamentFight.fromJson(json) as T;
-      case TournamentPerson:
+      case const (TournamentPerson):
         return TournamentPerson.fromJson(json) as T;
-      case TournamentTeamParticipation:
+      case const (TournamentTeamParticipation):
         return TournamentTeamParticipation.fromJson(json) as T;
-      case WeightClass:
+      case const (WeightClass):
         return WeightClass.fromJson(json) as T;
       default:
         throw UnimplementedError('Json conversation for "$T" not found.');
@@ -63,43 +63,43 @@ abstract class DataObject {
 
   static Future<T> fromRaw<T extends DataObject>(Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
     switch (T) {
-      case BoutConfig:
+      case const (BoutConfig):
         return (await BoutConfig.fromRaw(raw)) as T;
-      case Club:
+      case const (Club):
         return (await Club.fromRaw(raw)) as T;
-      case Fight:
+      case const (Fight):
         return (await Fight.fromRaw(raw, getSingle)) as T;
-      case FightAction:
+      case const (FightAction):
         return (await FightAction.fromRaw(raw, getSingle)) as T;
-      case League:
+      case const (League):
         return (await League.fromRaw(raw, getSingle)) as T;
-      case LeagueTeamParticipation:
+      case const (LeagueWeightClass):
         return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
-      case LeagueWeightClass:
-        return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
-      case Lineup:
+      case const (LeagueTeamParticipation):
+        return (await LeagueTeamParticipation.fromRaw(raw, getSingle)) as T;
+      case const (Lineup):
         return (await Lineup.fromRaw(raw, getSingle)) as T;
-      case Membership:
+      case const (Membership):
         return (await Membership.fromRaw(raw, getSingle)) as T;
-      case Participation:
+      case const (Participation):
         return (await Participation.fromRaw(raw, getSingle)) as T;
-      case ParticipantState:
+      case const (ParticipantState):
         return (await ParticipantState.fromRaw(raw, getSingle)) as T;
-      case Person:
+      case const (Person):
         return (await Person.fromRaw(raw)) as T;
-      case Team:
+      case const (Team):
         return (await Team.fromRaw(raw, getSingle)) as T;
-      case TeamMatch:
+      case const (TeamMatch):
         return (await TeamMatch.fromRaw(raw, getSingle)) as T;
-      case TeamMatchFight:
+      case const (TeamMatchFight):
         return (await TeamMatchFight.fromRaw(raw, getSingle)) as T;
-      case Tournament:
+      case const (Tournament):
         return (await Tournament.fromRaw(raw, getSingle)) as T;
-      case TournamentPerson:
+      case const (TournamentPerson):
         return (await TournamentPerson.fromRaw(raw, getSingle)) as T;
-      case TournamentTeamParticipation:
+      case const (TournamentTeamParticipation):
         return (await TournamentTeamParticipation.fromRaw(raw, getSingle)) as T;
-      case WeightClass:
+      case const (WeightClass):
         return (await WeightClass.fromRaw(raw)) as T;
       default:
         throw UnimplementedError('Raw conversation for "$T" not found.');

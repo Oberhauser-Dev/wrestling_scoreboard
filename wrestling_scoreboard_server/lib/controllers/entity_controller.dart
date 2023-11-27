@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/fight_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
@@ -331,6 +332,8 @@ abstract class EntityController<T extends DataObject> {
         return LeagueController() as EntityController<T>;
       case LeagueWeightClass:
         return LeagueWeightClassController() as EntityController<T>;
+      case LeagueTeamParticipation:
+        return LeagueTeamParticipationController() as EntityController<T>;
       case Lineup:
         return LineupController() as EntityController<T>;
       case Membership:

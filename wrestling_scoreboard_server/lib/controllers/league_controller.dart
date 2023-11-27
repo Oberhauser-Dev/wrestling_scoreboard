@@ -1,5 +1,6 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
@@ -38,5 +39,10 @@ class LeagueController extends EntityController<League> {
   Future<Response> requestLeagueWeightClasses(Request request, String id) async {
     return EntityController.handleRequestManyOfController(LeagueWeightClassController(),
         isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id}, orderBy: 'pos');
+  }
+
+  Future<Response> requestLeagueTeamParticipations(Request request, String id) async {
+    return EntityController.handleRequestManyOfController(LeagueTeamParticipationController(),
+        isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id});
   }
 }
