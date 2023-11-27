@@ -1,23 +1,24 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../data_object.dart';
 import '../weight_class.dart';
 import 'league.dart';
 
+part 'league_weight_class.freezed.dart';
 part 'league_weight_class.g.dart';
 
-@JsonSerializable()
-class LeagueWeightClass extends DataObject {
-  int pos;
-  League league;
-  WeightClass weightClass;
+@freezed
+class LeagueWeightClass with _$LeagueWeightClass implements DataObject {
+  const LeagueWeightClass._();
 
-  LeagueWeightClass({int? id, required this.league, required this.weightClass, required this.pos}) : super(id);
+  const factory LeagueWeightClass({
+    int? id,
+    required int pos,
+    required League league,
+    required WeightClass weightClass,
+  }) = _LeagueWeightClass;
 
-  factory LeagueWeightClass.fromJson(Map<String, dynamic> json) => _$LeagueWeightClassFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$LeagueWeightClassToJson(this);
+  factory LeagueWeightClass.fromJson(Map<String, Object?> json) => _$LeagueWeightClassFromJson(json);
 
   @override
   Map<String, dynamic> toRaw() {
@@ -36,4 +37,7 @@ class LeagueWeightClass extends DataObject {
         weightClass: (await getSingle<WeightClass>(e['weight_class_id'] as int))!,
         pos: e['pos'],
       );
+
+  @override
+  String get tableName => 'league_weight_class';
 }

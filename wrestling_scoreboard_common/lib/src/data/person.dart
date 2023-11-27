@@ -1,35 +1,36 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/gender.dart';
 import '../util.dart';
 import 'data_object.dart';
 
+part 'person.freezed.dart';
 part 'person.g.dart';
 
 /// The persons information.
-@JsonSerializable()
-class Person extends DataObject {
-  final String prename;
-  final String surname;
-  final Gender? gender;
-  final DateTime? birthDate;
+@freezed
+class Person with _$Person implements DataObject {
+  const Person._();
 
-  Person({int? id, required this.prename, required this.surname, this.gender, this.birthDate}) : super(id);
+  const factory Person({
+    int? id,
+    required String prename,
+    required String surname,
+    Gender? gender,
+    DateTime? birthDate,
+  }) = _Person;
 
-  factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$PersonToJson(this);
+  factory Person.fromJson(Map<String, Object?> json) => _$PersonFromJson(json);
 
   static Future<Person> fromRaw(Map<String, dynamic> e) async {
     final gender = e['gender'] as String?;
     return Person(
-        id: e['id'] as int?,
-        prename: e['prename'] as String,
-        surname: e['surname'] as String,
-        gender: gender == null ? null : GenderParser.valueOf(gender),
-        birthDate: e['birth_date'] as DateTime?,
-      );
+      id: e['id'] as int?,
+      prename: e['prename'] as String,
+      surname: e['surname'] as String,
+      gender: gender == null ? null : GenderParser.valueOf(gender),
+      birthDate: e['birth_date'] as DateTime?,
+    );
   }
 
   @override
@@ -59,4 +60,7 @@ class Person extends DataObject {
   String get fullName {
     return '$prename $surname';
   }
+
+  @override
+  String get tableName => 'person';
 }

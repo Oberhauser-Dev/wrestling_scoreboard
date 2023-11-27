@@ -1,34 +1,28 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/fight_action_type.dart';
 import '../enums/fight_role.dart';
 import 'data_object.dart';
 import 'fight.dart';
 
+part 'fight_action.freezed.dart';
 part 'fight_action.g.dart';
 
 /// An action and its value that is fulfilled by the participant during a fight, e.g. points or caution
-@JsonSerializable()
-class FightAction extends DataObject {
-  Duration duration;
-  FightActionType actionType;
-  int? pointCount;
-  FightRole role;
-  Fight fight;
+@freezed
+class FightAction with _$FightAction implements DataObject {
+  const FightAction._();
 
-  FightAction(
-      {int? id,
-      required this.actionType,
-      required this.fight,
-      required this.duration,
-      required this.role,
-      this.pointCount})
-      : super(id);
+  const factory FightAction({
+    int? id,
+    required FightActionType actionType,
+    required Fight fight,
+    required Duration duration,
+    required FightRole role,
+    int? pointCount,
+  }) = _FightAction;
 
-  factory FightAction.fromJson(Map<String, dynamic> json) => _$FightActionFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$FightActionToJson(this);
+  factory FightAction.fromJson(Map<String, Object?> json) => _$FightActionFromJson(json);
 
   static Future<FightAction> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => FightAction(
         id: e['id'] as int?,
@@ -68,4 +62,7 @@ class FightAction extends DataObject {
         return '';
     }
   }
+
+  @override
+  String get tableName => 'fight_action';
 }

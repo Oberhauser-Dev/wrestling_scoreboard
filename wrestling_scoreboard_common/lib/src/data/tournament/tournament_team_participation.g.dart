@@ -6,19 +6,19 @@ part of 'tournament_team_participation.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TournamentTeamParticipation _$TournamentTeamParticipationFromJson(
+_$TournamentTeamParticipationImpl _$$TournamentTeamParticipationImplFromJson(
         Map<String, dynamic> json) =>
-    TournamentTeamParticipation(
+    _$TournamentTeamParticipationImpl(
       id: json['id'] as int?,
       tournament:
           Tournament.fromJson(json['tournament'] as Map<String, dynamic>),
       team: Team.fromJson(json['team'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$TournamentTeamParticipationToJson(
-        TournamentTeamParticipation instance) =>
+Map<String, dynamic> _$$TournamentTeamParticipationImplToJson(
+        _$TournamentTeamParticipationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'team': instance.team.toJson(),
       'tournament': instance.tournament.toJson(),
+      'team': instance.team.toJson(),
     };

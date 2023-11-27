@@ -1,30 +1,27 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../bout_config.dart';
 import '../data_object.dart';
 
+part 'league.freezed.dart';
 part 'league.g.dart';
 
 /// The league in which the team is fighting.
-@JsonSerializable()
-class League extends DataObject {
+@freezed
+class League with _$League implements DataObject {
   static League outOfCompetition =
       League(name: 'Out of competition', startDate: DateTime(DateTime.now().year), boutConfig: BoutConfig());
-  final DateTime startDate;
-  final String name;
-  final BoutConfig boutConfig;
 
-  League({
+  const League._();
+
+  const factory League({
     int? id,
-    required this.name,
-    required this.startDate,
-    required this.boutConfig,
-  }) : super(id);
+    required String name,
+    required DateTime startDate,
+    required BoutConfig boutConfig,
+  }) = _League;
 
-  factory League.fromJson(Map<String, dynamic> json) => _$LeagueFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$LeagueToJson(this);
+  factory League.fromJson(Map<String, Object?> json) => _$LeagueFromJson(json);
 
   static Future<League> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final boutConfig = await getSingle<BoutConfig>(e['bout_config_id'] as int);
@@ -45,4 +42,7 @@ class League extends DataObject {
       'bout_config_id': boutConfig.id,
     };
   }
+
+  @override
+  String get tableName => 'league';
 }

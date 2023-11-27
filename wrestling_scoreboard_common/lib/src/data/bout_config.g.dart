@@ -6,7 +6,8 @@ part of 'bout_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BoutConfig _$BoutConfigFromJson(Map<String, dynamic> json) => BoutConfig(
+_$BoutConfigImpl _$$BoutConfigImplFromJson(Map<String, dynamic> json) =>
+    _$BoutConfigImpl(
       id: json['id'] as int?,
       periodDuration: json['periodDuration'] == null
           ? BoutConfig.defaultPeriodDuration
@@ -23,7 +24,7 @@ BoutConfig _$BoutConfigFromJson(Map<String, dynamic> json) => BoutConfig(
       periodCount: json['periodCount'] as int? ?? BoutConfig.defaultPeriodCount,
     );
 
-Map<String, dynamic> _$BoutConfigToJson(BoutConfig instance) =>
+Map<String, dynamic> _$$BoutConfigImplToJson(_$BoutConfigImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'periodDuration': instance.periodDuration.inMicroseconds,

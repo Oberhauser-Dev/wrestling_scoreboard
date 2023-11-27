@@ -6,7 +6,8 @@ part of 'team_match.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => TeamMatch(
+_$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) =>
+    _$TeamMatchImpl(
       id: json['id'] as int?,
       home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
       guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
@@ -30,25 +31,25 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => TeamMatch(
           : Person.fromJson(json['transcriptWriter'] as Map<String, dynamic>),
       no: json['no'] as String?,
       location: json['location'] as String?,
-      date:
-          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      date: DateTime.parse(json['date'] as String),
       visitorsCount: json['visitorsCount'] as int?,
       comment: json['comment'] as String?,
     );
 
-Map<String, dynamic> _$TeamMatchToJson(TeamMatch instance) => <String, dynamic>{
+Map<String, dynamic> _$$TeamMatchImplToJson(_$TeamMatchImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
-      'date': instance.date?.toIso8601String(),
-      'no': instance.no,
-      'location': instance.location,
-      'visitorsCount': instance.visitorsCount,
-      'comment': instance.comment,
-      'league': instance.league?.toJson(),
-      'referee': instance.referee?.toJson(),
-      'judge': instance.judge?.toJson(),
-      'matChairman': instance.matChairman?.toJson(),
-      'timeKeeper': instance.timeKeeper?.toJson(),
-      'transcriptWriter': instance.transcriptWriter?.toJson(),
       'home': instance.home.toJson(),
       'guest': instance.guest.toJson(),
+      'league': instance.league?.toJson(),
+      'matChairman': instance.matChairman?.toJson(),
+      'referee': instance.referee?.toJson(),
+      'judge': instance.judge?.toJson(),
+      'timeKeeper': instance.timeKeeper?.toJson(),
+      'transcriptWriter': instance.transcriptWriter?.toJson(),
+      'no': instance.no,
+      'location': instance.location,
+      'date': instance.date.toIso8601String(),
+      'visitorsCount': instance.visitorsCount,
+      'comment': instance.comment,
     };

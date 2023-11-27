@@ -6,8 +6,8 @@ part of 'participation.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Participation _$ParticipationFromJson(Map<String, dynamic> json) =>
-    Participation(
+_$ParticipationImpl _$$ParticipationImplFromJson(Map<String, dynamic> json) =>
+    _$ParticipationImpl(
       id: json['id'] as int?,
       membership:
           Membership.fromJson(json['membership'] as Map<String, dynamic>),
@@ -17,7 +17,7 @@ Participation _$ParticipationFromJson(Map<String, dynamic> json) =>
       weight: (json['weight'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$ParticipationToJson(Participation instance) =>
+Map<String, dynamic> _$$ParticipationImplToJson(_$ParticipationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'membership': instance.membership.toJson(),

@@ -1,29 +1,25 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'club.dart';
 import 'data_object.dart';
 import 'person.dart';
 
+part 'membership.freezed.dart';
 part 'membership.g.dart';
 
 /// The membership of a person in a club.
-@JsonSerializable()
-class Membership extends DataObject {
-  final String? no; // Vereinsnummer
-  Club club;
-  Person person;
+@freezed
+class Membership with _$Membership implements DataObject {
+  const Membership._();
 
-  Membership({
+  const factory Membership({
     int? id,
-    this.no,
-    required this.club,
-    required this.person,
-  }) : super(id);
+    String? no, // Vereinsnummer
+    required Club club,
+    required Person person,
+  }) = _Membership;
 
-  factory Membership.fromJson(Map<String, dynamic> json) => _$MembershipFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$MembershipToJson(this);
+  factory Membership.fromJson(Map<String, Object?> json) => _$MembershipFromJson(json);
 
   static Future<Membership> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final person = await getSingle<Person>(e['person_id'] as int);
@@ -45,4 +41,7 @@ class Membership extends DataObject {
       'no': no,
     };
   }
+
+  @override
+  String get tableName => 'membership';
 }

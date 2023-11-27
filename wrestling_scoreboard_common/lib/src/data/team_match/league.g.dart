@@ -6,7 +6,7 @@ part of 'league.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-League _$LeagueFromJson(Map<String, dynamic> json) => League(
+_$LeagueImpl _$$LeagueImplFromJson(Map<String, dynamic> json) => _$LeagueImpl(
       id: json['id'] as int?,
       name: json['name'] as String,
       startDate: DateTime.parse(json['startDate'] as String),
@@ -14,9 +14,10 @@ League _$LeagueFromJson(Map<String, dynamic> json) => League(
           BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$LeagueToJson(League instance) => <String, dynamic>{
+Map<String, dynamic> _$$LeagueImplToJson(_$LeagueImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
-      'startDate': instance.startDate.toIso8601String(),
       'name': instance.name,
+      'startDate': instance.startDate.toIso8601String(),
       'boutConfig': instance.boutConfig.toJson(),
     };

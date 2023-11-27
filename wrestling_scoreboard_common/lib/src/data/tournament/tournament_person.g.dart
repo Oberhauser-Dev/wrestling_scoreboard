@@ -6,8 +6,9 @@ part of 'tournament_person.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TournamentPerson _$TournamentPersonFromJson(Map<String, dynamic> json) =>
-    TournamentPerson(
+_$TournamentPersonImpl _$$TournamentPersonImplFromJson(
+        Map<String, dynamic> json) =>
+    _$TournamentPersonImpl(
       id: json['id'] as int?,
       tournament:
           Tournament.fromJson(json['tournament'] as Map<String, dynamic>),
@@ -15,12 +16,13 @@ TournamentPerson _$TournamentPersonFromJson(Map<String, dynamic> json) =>
       role: $enumDecode(_$PersonRoleEnumMap, json['role']),
     );
 
-Map<String, dynamic> _$TournamentPersonToJson(TournamentPerson instance) =>
+Map<String, dynamic> _$$TournamentPersonImplToJson(
+        _$TournamentPersonImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'role': _$PersonRoleEnumMap[instance.role]!,
       'tournament': instance.tournament.toJson(),
       'person': instance.person.toJson(),
+      'role': _$PersonRoleEnumMap[instance.role]!,
     };
 
 const _$PersonRoleEnumMap = {

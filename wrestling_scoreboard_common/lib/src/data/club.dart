@@ -1,23 +1,22 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'data_object.dart';
 
+part 'club.freezed.dart';
 part 'club.g.dart';
 
 /// The sports club.
-@JsonSerializable()
-class Club extends DataObject {
-  /// Club-ID
-  final String? no;
+@freezed
+class Club with _$Club implements DataObject {
+  const Club._();
 
-  final String name;
+  const factory Club({
+    int? id,
+    required String name,
+    String? no, // Club-ID
+  }) = _Club;
 
-  Club({int? id, required this.name, this.no}) : super(id);
-
-  factory Club.fromJson(Map<String, dynamic> json) => _$ClubFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ClubToJson(this);
+  factory Club.fromJson(Map<String, Object?> json) => _$ClubFromJson(json);
 
   @override
   Map<String, dynamic> toRaw() {
@@ -33,4 +32,7 @@ class Club extends DataObject {
         no: e['no'] as String?,
         name: e['name'] as String,
       );
+
+  @override
+  String get tableName => 'club';
 }

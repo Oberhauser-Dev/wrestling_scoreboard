@@ -6,7 +6,7 @@ part of 'fight.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Fight _$FightFromJson(Map<String, dynamic> json) => Fight(
+_$FightImpl _$$FightImplFromJson(Map<String, dynamic> json) => _$FightImpl(
       id: json['id'] as int?,
       r: json['r'] == null
           ? null
@@ -20,18 +20,19 @@ Fight _$FightFromJson(Map<String, dynamic> json) => Fight(
       winnerRole: $enumDecodeNullable(_$FightRoleEnumMap, json['winnerRole']),
       result: $enumDecodeNullable(_$FightResultEnumMap, json['result']),
       duration: json['duration'] == null
-          ? const Duration()
+          ? Duration.zero
           : Duration(microseconds: json['duration'] as int),
     );
 
-Map<String, dynamic> _$FightToJson(Fight instance) => <String, dynamic>{
+Map<String, dynamic> _$$FightImplToJson(_$FightImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'r': instance.r?.toJson(),
       'b': instance.b?.toJson(),
       'weightClass': instance.weightClass.toJson(),
       'pool': instance.pool,
-      'result': _$FightResultEnumMap[instance.result],
       'winnerRole': _$FightRoleEnumMap[instance.winnerRole],
+      'result': _$FightResultEnumMap[instance.result],
       'duration': instance.duration.inMicroseconds,
     };
 

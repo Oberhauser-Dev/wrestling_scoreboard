@@ -1,23 +1,24 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'club.dart';
 import 'data_object.dart';
 
+part 'team.freezed.dart';
 part 'team.g.dart';
 
 /// The team of a club.
-@JsonSerializable()
-class Team extends DataObject {
-  final String name;
-  final String? description;
-  Club club;
+@freezed
+class Team with _$Team implements DataObject {
+  const Team._();
 
-  Team({int? id, required this.name, required this.club, this.description}) : super(id);
+  const factory Team({
+    int? id,
+    required String name,
+    required Club club,
+    String? description,
+  }) = _Team;
 
-  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$TeamToJson(this);
+  factory Team.fromJson(Map<String, Object?> json) => _$TeamFromJson(json);
 
   static Future<Team> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final club = await getSingle<Club>(e['club_id'] as int);
@@ -38,4 +39,7 @@ class Team extends DataObject {
       'club_id': club.id,
     };
   }
+
+  @override
+  String get tableName => 'team';
 }

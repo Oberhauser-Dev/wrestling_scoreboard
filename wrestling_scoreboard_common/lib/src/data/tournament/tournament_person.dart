@@ -1,25 +1,26 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../enums/person_role.dart';
 import '../data_object.dart';
 import '../person.dart';
 import 'tournament.dart';
 
+part 'tournament_person.freezed.dart';
 part 'tournament_person.g.dart';
 
 /// An action and its value that is fulfilled by the participant during a fight, e.g. points or caution
-@JsonSerializable()
-class TournamentPerson extends DataObject {
-  PersonRole role;
-  Tournament tournament;
-  Person person;
+@freezed
+class TournamentPerson with _$TournamentPerson implements DataObject {
+  const TournamentPerson._();
 
-  TournamentPerson({int? id, required this.tournament, required this.person, required this.role}) : super(id);
+  const factory TournamentPerson({
+    int? id,
+    required Tournament tournament,
+    required Person person,
+    required PersonRole role,
+  }) = _TournamentPerson;
 
-  factory TournamentPerson.fromJson(Map<String, dynamic> json) => _$TournamentPersonFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$TournamentPersonToJson(this);
+  factory TournamentPerson.fromJson(Map<String, Object?> json) => _$TournamentPersonFromJson(json);
 
   static Future<TournamentPerson> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
       TournamentPerson(
@@ -38,4 +39,7 @@ class TournamentPerson extends DataObject {
       'person_role': role.name,
     };
   }
+
+  @override
+  String get tableName => 'tournament_person';
 }

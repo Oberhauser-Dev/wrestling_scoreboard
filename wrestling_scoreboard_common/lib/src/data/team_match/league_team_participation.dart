@@ -1,23 +1,24 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../data_object.dart';
 import '../team.dart';
 import 'league.dart';
 
+part 'league_team_participation.freezed.dart';
 part 'league_team_participation.g.dart';
 
 /// Team participates in a league.
-@JsonSerializable()
-class LeagueTeamParticipation extends DataObject {
-  Team team;
-  League league;
+@freezed
+class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObject {
+  const LeagueTeamParticipation._();
 
-  LeagueTeamParticipation({int? id, required this.league, required this.team}) : super(id);
+  const factory LeagueTeamParticipation({
+    int? id,
+    required League league,
+    required Team team,
+  }) = _LeagueTeamParticipation;
 
-  factory LeagueTeamParticipation.fromJson(Map<String, dynamic> json) => _$LeagueTeamParticipationFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$LeagueTeamParticipationToJson(this);
+  factory LeagueTeamParticipation.fromJson(Map<String, Object?> json) => _$LeagueTeamParticipationFromJson(json);
 
   @override
   Map<String, dynamic> toRaw() {
@@ -34,4 +35,7 @@ class LeagueTeamParticipation extends DataObject {
         league: (await getSingle<League>(e['league_id'] as int))!,
         team: (await getSingle<Team>(e['team_id'] as int))!,
       );
+
+  @override
+  String get tableName => 'league_team_participation';
 }

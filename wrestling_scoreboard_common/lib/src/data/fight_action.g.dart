@@ -6,7 +6,8 @@ part of 'fight_action.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FightAction _$FightActionFromJson(Map<String, dynamic> json) => FightAction(
+_$FightActionImpl _$$FightActionImplFromJson(Map<String, dynamic> json) =>
+    _$FightActionImpl(
       id: json['id'] as int?,
       actionType: $enumDecode(_$FightActionTypeEnumMap, json['actionType']),
       fight: Fight.fromJson(json['fight'] as Map<String, dynamic>),
@@ -15,14 +16,14 @@ FightAction _$FightActionFromJson(Map<String, dynamic> json) => FightAction(
       pointCount: json['pointCount'] as int?,
     );
 
-Map<String, dynamic> _$FightActionToJson(FightAction instance) =>
+Map<String, dynamic> _$$FightActionImplToJson(_$FightActionImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'duration': instance.duration.inMicroseconds,
       'actionType': _$FightActionTypeEnumMap[instance.actionType]!,
-      'pointCount': instance.pointCount,
-      'role': _$FightRoleEnumMap[instance.role]!,
       'fight': instance.fight.toJson(),
+      'duration': instance.duration.inMicroseconds,
+      'role': _$FightRoleEnumMap[instance.role]!,
+      'pointCount': instance.pointCount,
     };
 
 const _$FightActionTypeEnumMap = {

@@ -1,14 +1,13 @@
-
 include: package:lints/recommended.yaml
 
 # For lint rules and documentation, see http://dart-lang.github.io/linter/lints.
 
-# Uncomment to specify additional rules.
 linter:
   rules:
     prefer_relative_imports: true
-#     - camel_case_types
 
-# analyzer:
-#   exclude:
-#     - path/to/excluded/files/**
+
+# Needed for freezed package:
+analyzer:
+  errors:
+    invalid_annotation_target: ignore

@@ -1,19 +1,16 @@
 import '../data.dart';
 import '../enums/crud.dart';
-import '../util.dart';
 
 typedef GetSingleOfTypeCallback = Future<T?> Function<T extends DataObject>(int id);
 
 abstract class DataObject {
-  int? id;
+  int? get id;
 
-  DataObject([this.id]);
-
-  Map<String, dynamic> toJson();
+  Map<String, Object?> toJson();
 
   Map<String, dynamic> toRaw();
 
-  String get tableName => getTableNameFromType(runtimeType);
+  String get tableName;
 
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
     switch (T) {
@@ -106,12 +103,6 @@ abstract class DataObject {
         throw UnimplementedError('Raw conversation for "$T" not found.');
     }
   }
-
-  @override
-  bool operator ==(other) => other is DataObject && other.runtimeType == runtimeType && id == other.id;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, id);
 }
 
 class DataUnimplementedError extends UnimplementedError {

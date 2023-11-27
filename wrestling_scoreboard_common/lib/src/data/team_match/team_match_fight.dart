@@ -1,23 +1,24 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../data_object.dart';
 import '../fight.dart';
 import 'team_match.dart';
 
+part 'team_match_fight.freezed.dart';
 part 'team_match_fight.g.dart';
 
-@JsonSerializable()
-class TeamMatchFight extends DataObject {
-  int pos;
-  TeamMatch teamMatch;
-  Fight fight;
+@freezed
+class TeamMatchFight with _$TeamMatchFight implements DataObject {
+  const TeamMatchFight._();
 
-  TeamMatchFight({int? id, required this.teamMatch, required this.fight, required this.pos}) : super(id);
+  const factory TeamMatchFight({
+    int? id,
+    required TeamMatch teamMatch,
+    required Fight fight,
+    required int pos,
+  }) = _TeamMatchFight;
 
-  factory TeamMatchFight.fromJson(Map<String, dynamic> json) => _$TeamMatchFightFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$TeamMatchFightToJson(this);
+  factory TeamMatchFight.fromJson(Map<String, Object?> json) => _$TeamMatchFightFromJson(json);
 
   static Future<TeamMatchFight> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final teamMatch = await getSingle<TeamMatch>(e['team_match_id'] as int);
@@ -39,4 +40,7 @@ class TeamMatchFight extends DataObject {
       'fight_id': fight.id,
     };
   }
+
+  @override
+  String get tableName => 'team_match_fight';
 }

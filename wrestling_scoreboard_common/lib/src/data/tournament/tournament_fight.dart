@@ -1,22 +1,23 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../data_object.dart';
 import '../fight.dart';
 import 'tournament.dart';
 
+part 'tournament_fight.freezed.dart';
 part 'tournament_fight.g.dart';
 
-@JsonSerializable()
-class TournamentFight extends DataObject {
-  Tournament tournament;
-  Fight fight;
+@freezed
+class TournamentFight with _$TournamentFight implements DataObject {
+  const TournamentFight._();
 
-  TournamentFight({int? id, required this.tournament, required this.fight}) : super(id);
+  const factory TournamentFight({
+    int? id,
+    required Tournament tournament,
+    required Fight fight,
+  }) = _TournamentFight;
 
-  factory TournamentFight.fromJson(Map<String, dynamic> json) => _$TournamentFightFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$TournamentFightToJson(this);
+  factory TournamentFight.fromJson(Map<String, Object?> json) => _$TournamentFightFromJson(json);
 
   static Future<TournamentFight> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final tournament = await getSingle<Tournament>(e['tournament_id'] as int);
@@ -37,4 +38,7 @@ class TournamentFight extends DataObject {
       'fight_id': fight.id,
     };
   }
+
+  @override
+  String get tableName => 'tournament_fight';
 }

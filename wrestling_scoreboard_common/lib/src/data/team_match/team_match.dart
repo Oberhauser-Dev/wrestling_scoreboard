@@ -1,4 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../data_object.dart';
 import '../fight.dart';
@@ -10,52 +10,33 @@ import '../weight_class.dart';
 import '../wrestling_event.dart';
 import 'league.dart';
 
+part 'team_match.freezed.dart';
 part 'team_match.g.dart';
 
 /// For team matches only.
-@JsonSerializable()
-class TeamMatch extends WrestlingEvent {
-  League? league;
-  Person? referee;
-  Person? judge;
-  Person? matChairman;
-  Person? timeKeeper;
-  Person? transcriptWriter;
-
+@freezed
+class TeamMatch extends WrestlingEvent with _$TeamMatch {
   // TODO add missing stewards to extra table
+  const TeamMatch._();
 
-  Lineup home;
-
-  Lineup guest;
-
-  TeamMatch({
+  const factory TeamMatch({
     int? id,
-    required this.home,
-    required this.guest,
-    this.league,
-    this.matChairman,
-    this.referee,
-    this.judge,
-    this.timeKeeper,
-    this.transcriptWriter,
+    required Lineup home,
+    required Lineup guest,
+    League? league,
+    Person? matChairman,
+    Person? referee,
+    Person? judge,
+    Person? timeKeeper,
+    Person? transcriptWriter,
     String? no,
     String? location,
-    DateTime? date,
+    required DateTime date,
     int? visitorsCount,
     String? comment,
-  }) : super(
-          id: id,
-          no: no,
-          location: location,
-          date: date,
-          comment: comment,
-          visitorsCount: visitorsCount,
-        );
+  }) = _TeamMatch;
 
-  factory TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$TeamMatchToJson(this);
+  factory TeamMatch.fromJson(Map<String, Object?> json) => _$TeamMatchFromJson(json);
 
   static Future<TeamMatch> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final home = await getSingle<Lineup>(e['home_id'] as int);
@@ -76,7 +57,7 @@ class TeamMatch extends WrestlingEvent {
       id: e['id'] as int?,
       no: e['no'] as String?,
       location: e['location'] as String?,
-      date: e['date'] as DateTime?,
+      date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
       comment: e['comment'] as String?,
       home: home!,
@@ -148,4 +129,7 @@ class TeamMatch extends WrestlingEvent {
     }
     return fights;
   }
+
+  @override
+  String get tableName => 'team_match';
 }

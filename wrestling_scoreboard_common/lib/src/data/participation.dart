@@ -1,33 +1,28 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'data_object.dart';
 import 'lineup.dart';
 import 'membership.dart';
 import 'weight_class.dart';
 
+part 'participation.freezed.dart';
 part 'participation.g.dart';
 
 /// The participation of a person (member) on a team match or tournament through the teams lineup.
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
-@JsonSerializable()
-class Participation extends DataObject {
-  Membership membership;
-  Lineup lineup;
-  final WeightClass weightClass;
-  double? weight;
+@freezed
+class Participation with _$Participation implements DataObject {
+  const Participation._();
 
-  Participation({
+  const factory Participation({
     int? id,
-    required this.membership,
-    required this.lineup,
-    required this.weightClass,
-    this.weight,
-  }) : super(id);
+    required Membership membership,
+    required Lineup lineup,
+    required WeightClass weightClass,
+    double? weight,
+  }) = _Participation;
 
-  factory Participation.fromJson(Map<String, dynamic> json) => _$ParticipationFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ParticipationToJson(this);
+  factory Participation.fromJson(Map<String, Object?> json) => _$ParticipationFromJson(json);
 
   static Future<Participation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final weightClass = await getSingle<WeightClass>(e['weight_class_id'] as int);
@@ -58,4 +53,7 @@ class Participation extends DataObject {
       'weight': weight?.toString(),
     };
   }
+
+  @override
+  String get tableName => 'participation';
 }

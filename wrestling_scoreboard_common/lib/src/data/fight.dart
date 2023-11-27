@@ -1,4 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/fight_result.dart';
 import '../enums/fight_role.dart';
@@ -7,34 +7,26 @@ import 'fight_action.dart';
 import 'participant_state.dart';
 import 'weight_class.dart';
 
+part 'fight.freezed.dart';
 part 'fight.g.dart';
 
 /// The fight between two persons, which are represented by a ParticipantStatus.
-@JsonSerializable()
-class Fight extends DataObject {
-  ParticipantState? r; // red
-  ParticipantState? b; // blue
-  final WeightClass weightClass;
-  final int? pool;
-  FightResult? result;
-  FightRole? winnerRole;
-  Duration duration;
+@freezed
+class Fight with _$Fight implements DataObject {
+  const Fight._();
 
-  Fight(
-      {int? id,
-      this.r,
-      this.b,
-      required this.weightClass,
-      this.pool,
-      this.winnerRole,
-      this.result,
-      this.duration = const Duration()})
-      : super(id);
+  const factory Fight({
+    int? id,
+    ParticipantState? r, // red
+    ParticipantState? b, // blue
+    required WeightClass weightClass,
+    int? pool,
+    FightRole? winnerRole,
+    FightResult? result,
+    @Default(Duration.zero) Duration duration,
+  }) = _Fight;
 
-  factory Fight.fromJson(Map<String, dynamic> json) => _$FightFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$FightToJson(this);
+  factory Fight.fromJson(Map<String, Object?> json) => _$FightFromJson(json);
 
   @override
   Map<String, dynamic> toRaw() {
@@ -71,7 +63,7 @@ class Fight extends DataObject {
     if (result != null && winnerRole != null) {
       var winner = winnerRole == FightRole.red ? r : b;
       var looser = winnerRole == FightRole.red ? b : r;
-      
+
       if (winner != null) {
         winner.classificationPoints = isTournament
             ? getClassificationPointsWinnerTournament(result!)
@@ -99,6 +91,9 @@ class Fight extends DataObject {
       (r?.equalDuringFight(o.r) ?? (r == null && o.r == null)) &&
       (b?.equalDuringFight(o.b) ?? (b == null && o.b == null)) &&
       weightClass == o.weightClass;
+
+  @override
+  String get tableName => 'fight';
 
   static int getClassificationPointsWinnerTournament(FightResult result) {
     switch (result) {

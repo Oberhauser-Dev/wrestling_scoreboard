@@ -6,7 +6,7 @@ part of 'person.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Person _$PersonFromJson(Map<String, dynamic> json) => Person(
+_$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
       id: json['id'] as int?,
       prename: json['prename'] as String,
       surname: json['surname'] as String,
@@ -16,7 +16,8 @@ Person _$PersonFromJson(Map<String, dynamic> json) => Person(
           : DateTime.parse(json['birthDate'] as String),
     );
 
-Map<String, dynamic> _$PersonToJson(Person instance) => <String, dynamic>{
+Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'prename': instance.prename,
       'surname': instance.surname,

@@ -1,4 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../bout_config.dart';
 import '../data_object.dart';
@@ -7,34 +7,26 @@ import '../participation.dart';
 import '../weight_class.dart';
 import '../wrestling_event.dart';
 
+part 'tournament.freezed.dart';
 part 'tournament.g.dart';
 
 /// For team matches only.
-@JsonSerializable()
-class Tournament extends WrestlingEvent {
-  final String name;
-  final BoutConfig boutConfig;
+@freezed
+class Tournament extends WrestlingEvent with _$Tournament {
+  const Tournament._();
 
-  Tournament({
+  const factory Tournament({
     int? id,
-    required this.name,
-    required this.boutConfig,
+    required String name,
+    required BoutConfig boutConfig,
     String? location,
-    DateTime? date,
+    required DateTime date,
+    String? no,
     int? visitorsCount,
     String? comment,
-  }) : super(
-          id: id,
-          location: location,
-          date: date,
-          comment: comment,
-          visitorsCount: visitorsCount,
-        );
+  }) = _Tournament;
 
-  factory Tournament.fromJson(Map<String, dynamic> json) => _$TournamentFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$TournamentToJson(this);
+  factory Tournament.fromJson(Map<String, Object?> json) => _$TournamentFromJson(json);
 
   static Future<Tournament> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final boutConfig = await getSingle<BoutConfig>(e['bout_config_id'] as int);
@@ -43,7 +35,7 @@ class Tournament extends WrestlingEvent {
       id: e['id'] as int?,
       name: e['name'],
       location: e['location'] as String?,
-      date: e['date'] as DateTime?,
+      date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
       comment: e['comment'] as String?,
       boutConfig: boutConfig!,
@@ -65,4 +57,7 @@ class Tournament extends WrestlingEvent {
     // TODO: implement generateFights
     throw UnimplementedError();
   }
+
+  @override
+  String get tableName => 'tournament';
 }

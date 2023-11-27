@@ -31,12 +31,12 @@ typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
 typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
 
-Future<int?> handleFromJson(Map<String, dynamic> json,
+Future<int?> handlefromJson(Map<String, Object?> json,
     {required HandleSingleCallback handleSingle,
     required HandleManyCallback handleMany,
     required HandleSingleRawCallback handleSingleRaw,
     required HandleManyRawCallback handleManyRaw}) {
-  final type = getTypeFromTableName(json['tableName']);
+  final type = getTypeFromTableName(json['tableName'] as String);
   switch (type) {
     case BoutConfig:
       return _handleFromJsonGeneric<BoutConfig>(json,
@@ -188,6 +188,7 @@ class ManyDataObject<T> {
   ManyDataObject({required this.data, this.filterType, this.filterId});
 }
 
+// TODO: deprecate in favor of Type.tableName
 String getTableNameFromType(Type t) {
   switch (t) {
     case BoutConfig:

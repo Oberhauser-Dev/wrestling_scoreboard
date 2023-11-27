@@ -1,18 +1,18 @@
 import '../data.dart';
 
-abstract class WrestlingEvent extends DataObject {
-  DateTime? date;
+abstract class WrestlingEvent implements DataObject {
+  const WrestlingEvent();
+
+  DateTime get date;
 
   /// competitionId (CID), eventId, matchId or Kampf-Id
-  String? no;
+  String? get no;
 
-  String? location;
-  int? visitorsCount;
-  String? comment;
+  String? get location;
 
-  WrestlingEvent({int? id, this.no, this.location, this.date, this.visitorsCount, this.comment}) : super(id) {
-    date ??= DateTime.now();
-  }
+  int? get visitorsCount;
+
+  String? get comment;
 
   Future<List<Fight>> generateFights(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses);
 

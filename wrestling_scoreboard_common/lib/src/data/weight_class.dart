@@ -1,27 +1,27 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/weight_unit.dart';
 import '../enums/wrestling_style.dart';
 import 'data_object.dart';
 
+part 'weight_class.freezed.dart';
 part 'weight_class.g.dart';
 
-@JsonSerializable()
-class WeightClass extends DataObject {
-  final String? suffix;
-  final int weight;
-  final WrestlingStyle style;
-  final WeightUnit unit;
+@freezed
+class WeightClass with _$WeightClass implements DataObject {
+  const WeightClass._();
 
-  WeightClass({int? id, required this.weight, required this.style, this.suffix, this.unit = WeightUnit.kilogram})
-      : super(id);
+  const factory WeightClass({
+    int? id,
+    required int weight,
+    required WrestlingStyle style,
+    String? suffix,
+    @Default(WeightUnit.kilogram) WeightUnit unit,
+  }) = _WeightClass;
+
+  factory WeightClass.fromJson(Map<String, Object?> json) => _$WeightClassFromJson(json);
 
   String get name => [weight.toString(), unit.toAbbr(), if (suffix != null && suffix!.isNotEmpty) suffix].join(' ');
-
-  factory WeightClass.fromJson(Map<String, dynamic> json) => _$WeightClassFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$WeightClassToJson(this);
 
   static Future<WeightClass> fromRaw(Map<String, dynamic> e) async => WeightClass(
         id: e['id'] as int?,
@@ -42,6 +42,10 @@ class WeightClass extends DataObject {
     };
   }
 
+  @override
+  String get tableName => 'weight_class';
+
+  // TODO: check if needed, with freezed serialization
   @override
   bool operator ==(other) =>
       other is WeightClass &&
