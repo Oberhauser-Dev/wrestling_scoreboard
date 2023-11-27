@@ -21,7 +21,7 @@ On Linux you may want to login as postgres user: `sudo -u postgres -i`
 
 - Open psql command line: `psql -U postgres`
 - List all users: `\du`
-- Start the serveR: `postgres -D /.../PostgreSQL/16/data`
+- Start the server: `postgres -D /.../PostgreSQL/16/data`
 
 ### Setup User: 
 
