@@ -72,24 +72,23 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
                         initialData: e,
                         builder: (context, match) => ListTile(
                           title: RichText(
-                              textScaleFactor: 1.5, // MediaQuery.of(context).textScaleFactor
-                              text: TextSpan(
-                                text:
-                                    '${match!.date?.toDateString(context) ?? 'no date'}, ${match.no ?? 'no ID'}, ',
-                                children: [
-                                  TextSpan(
-                                      text: match.home.team.name,
-                                      style: match.home.team == data
-                                          ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
-                                          : null),
-                                  const TextSpan(text: ' - '),
-                                  TextSpan(
-                                      text: match.guest.team.name,
-                                      style: match.guest.team == data
-                                          ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
-                                          : null),
-                                ],
-                              )),
+                            text: TextSpan(
+                              text: '${match!.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
+                              children: [
+                                TextSpan(
+                                    text: match.home.team.name,
+                                    style: match.home.team == data
+                                        ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
+                                        : null),
+                                const TextSpan(text: ' - '),
+                                TextSpan(
+                                    text: match.guest.team.name,
+                                    style: match.guest.team == data
+                                        ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                                        : null),
+                              ],
+                            ),
+                          ),
                           leading: const Icon(Icons.event),
                           onTap: () => handleSelectedMatch(match, context),
                         ),
