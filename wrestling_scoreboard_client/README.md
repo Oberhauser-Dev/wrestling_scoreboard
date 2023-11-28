@@ -8,8 +8,17 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, tournament
 
 ### Environment variables:
 
-Create file `.env` in `client` directory.
-A pre-configuration can be found in `.env.example` file. Change the values to your needs.
+```shell
+flutter run \
+--dart-define=APP_ENVIRONMENT=development \
+--dart-define=API_URL='http://localhost:8080/api' \
+--dart-define=WEB_SOCKET_URL='ws://localhost:8080/ws'
+```
+
+Values for `APP_ENVIRONMENT`:
+- `mock`: debug and mock data
+- `production`: connect to API
+- `development`: debug and connect to API
 
 ### Web
 
