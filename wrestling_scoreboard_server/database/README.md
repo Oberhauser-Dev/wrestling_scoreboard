@@ -34,6 +34,7 @@ psql -U postgres -c "CREATE USER wrestling WITH PASSWORD 'my_password';"
 
 Reset current database:
 ```shell
+# sudo -u postgres psql # Use this on peer authentication
 psql -U postgres
 postgres=#
 ```
