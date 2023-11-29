@@ -10,8 +10,15 @@ class TeamMatchEdit extends StatefulWidget {
   final TeamMatch? teamMatch;
   final Team? initialHomeTeam;
   final Team? initialGuestTeam;
+  final League? initialLeague;
 
-  const TeamMatchEdit({this.teamMatch, this.initialHomeTeam, this.initialGuestTeam, Key? key}) : super(key: key);
+  const TeamMatchEdit({
+    this.teamMatch,
+    this.initialHomeTeam,
+    this.initialGuestTeam,
+    this.initialLeague,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TeamMatchEditState();
@@ -20,12 +27,14 @@ class TeamMatchEdit extends StatefulWidget {
 class TeamMatchEditState extends State<TeamMatchEdit> {
   final _formKey = GlobalKey<FormState>();
 
-  List<Team>? teams;
+  List<League>? _availableLeagues;
+  List<Team>? _availableTeams;
 
   String? _location;
   String? _no;
   Team? _homeTeam;
   Team? _guestTeam;
+  League? _league;
   late DateTime _date;
 
   @override
@@ -34,6 +43,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
     _homeTeam = widget.teamMatch?.home.team ?? widget.initialHomeTeam;
     _guestTeam = widget.teamMatch?.guest.team ?? widget.initialGuestTeam;
     _date = widget.teamMatch?.date ?? DateTime.now();
+    _league = widget.teamMatch?.league ?? widget.initialLeague;
   }
 
   @override
@@ -105,8 +115,11 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
-            teams ??= await dataProvider.readMany<Team, Null>();
-            return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
+            _availableTeams ??= await dataProvider.readMany<Team, Null>();
+            return (filter == null
+                    ? _availableTeams!
+                    : _availableTeams!.where((element) => element.name.contains(filter)))
+                .toList();
           },
         ),
       ),
@@ -122,8 +135,30 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
-            teams ??= await dataProvider.readMany<Team, Null>();
-            return (filter == null ? teams! : teams!.where((element) => element.name.contains(filter))).toList();
+            _availableTeams ??= await dataProvider.readMany<Team, Null>();
+            return (filter == null
+                    ? _availableTeams!
+                    : _availableTeams!.where((element) => element.name.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
+      ListTile(
+        title: getDropdown<League>(
+          icon: const Icon(Icons.emoji_events),
+          selectedItem: _league,
+          label: localizations.league,
+          context: context,
+          onSaved: (League? value) => setState(() {
+            _league = value;
+          }),
+          itemAsString: (u) => u.name,
+          onFind: (String? filter) async {
+            _availableLeagues ??= await dataProvider.readMany<League, Null>();
+            return (filter == null
+                    ? _availableLeagues!
+                    : _availableLeagues!.where((element) => element.name.contains(filter)))
+                .toList();
           },
         ),
       ),
@@ -170,6 +205,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           home: home,
           guest: guest,
           date: _date,
+          league: _league,
         ),
       );
       navigator.pop();

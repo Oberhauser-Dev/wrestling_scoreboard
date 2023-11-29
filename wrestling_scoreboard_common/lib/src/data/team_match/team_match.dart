@@ -77,6 +77,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
       ..addAll({
         'home_id': home.id,
         'guest_id': guest.id,
+        'league_id': league?.id,
         'referee_id': referee?.id,
         'judge_id': judge?.id,
         'mat_chairman_id': matChairman?.id,

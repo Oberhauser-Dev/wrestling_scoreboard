@@ -96,16 +96,29 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterType: Club,
         filterId: single.club.id)));
   } else if (single is TeamMatch) {
-    final homeMatches = await TeamMatchController()
+    final teamMatchController = TeamMatchController();
+
+    final homeMatches = await teamMatchController
         .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
-
-    final guestMatches = await TeamMatchController()
-        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
-
     broadcast(
         jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.home.team.id)));
+
+    final guestMatches = await teamMatchController
+        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
     broadcast(
         jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.guest.team.id)));
+
+    if (single.league?.id != null) {
+      final leagueMatches = await teamMatchController
+          .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id});
+      broadcast(jsonEncode(manyToJson(
+        leagueMatches,
+        TeamMatch,
+        CRUD.update,
+        filterType: League,
+        filterId: single.league!.id,
+      )));
+    }
   } else if (single is TeamMatchFight) {
   } else if (single is WeightClass) {
   } else {
@@ -142,14 +155,14 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
     final leagueTeamParticipationController = LeagueTeamParticipationController();
     broadcast(jsonEncode(manyToJson(
         await leagueTeamParticipationController
-            .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
+            .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
         LeagueTeamParticipation,
         CRUD.update,
         filterType: League,
         filterId: single['league_id'])));
     broadcast(jsonEncode(manyToJson(
         await leagueTeamParticipationController
-            .getMany(conditions: ['team_id = @id'], substitutionValues: {'id': single['team_id']}),
+            .getManyRaw(conditions: ['team_id = @id'], substitutionValues: {'id': single['team_id']}),
         LeagueTeamParticipation,
         CRUD.update,
         filterType: Team,
@@ -159,7 +172,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == Membership) {
     broadcast(jsonEncode(manyToJson(
         await MembershipController()
-            .getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
+            .getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
         Membership,
         CRUD.update,
         filterType: Club,
@@ -182,28 +195,32 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         CRUD.update,
         filterType: Club,
         filterId: single['club_id'])));
-    if (single['league_id'] != null) {
-      broadcast(jsonEncode(manyToJson(
-          await TeamController()
-              .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
-          Team,
-          CRUD.update,
-          filterType: League,
-          filterId: single['league_id'])));
-    }
   } else if (T == TeamMatch) {
+    final teamMatchController = TeamMatchController();
+
     final homeTeamId = (await EntityController.query(LineupController.teamIdQuery,
         substitutionValues: {'id': single['home_id']}))['team_id'];
+    final homeMatches = await teamMatchController
+        .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': homeTeamId});
+    broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: homeTeamId)));
+
     final guestTeamId = (await EntityController.query(LineupController.teamIdQuery,
         substitutionValues: {'id': single['guest_id']}))['team_id'];
-    final homeMatches = await TeamMatchController()
-        .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': homeTeamId});
-
-    final guestMatches = await TeamMatchController()
+    final guestMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': guestTeamId});
-
-    broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: homeTeamId)));
     broadcast(jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: guestTeamId)));
+
+    if (single['league_id'] != null) {
+      final leagueMatches = await teamMatchController
+          .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']});
+      broadcast(jsonEncode(manyToJson(
+        leagueMatches,
+        TeamMatch,
+        CRUD.update,
+        filterType: League,
+        filterId: single['league_id'],
+      )));
+    }
   } else if (T == TeamMatchFight) {
   } else if (T == WeightClass) {
   } else {

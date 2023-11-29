@@ -31,6 +31,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
                           TeamMatchEdit(
                             initialHomeTeam: filterObject is Team ? filterObject as Team : null,
                             initialGuestTeam: filterObject is Team ? filterObject as Team : null,
+                            initialLeague: filterObject is League ? filterObject as League : null,
                           ),
                     ),
                   ),
