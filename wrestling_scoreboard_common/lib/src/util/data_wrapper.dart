@@ -7,7 +7,7 @@ Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
     'isMany': false,
     'isRaw': single is! DataObject,
     'tableName': getTableNameFromType(type),
-    'data': single is DataObject ? single.toJson() : single,
+    'data': single, // Is converted automatically with jsonEncode
   };
 }
 
@@ -19,7 +19,7 @@ Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation, {T
     'filterType': filterType == null ? null : getTableNameFromType(filterType),
     if (filterId != null) 'filterId': filterId,
     'tableName': getTableNameFromType(type),
-    'data': many.map((e) => e is DataObject ? e.toJson() : e).toList(),
+    'data': many, // Is converted automatically with jsonEncode
   };
 }
 
