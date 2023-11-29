@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_weight_class_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -87,6 +88,7 @@ class LeagueOverview extends StatelessWidget {
                 );
               },
             ),
+            MatchesWidget<League>(filterObject: data),
             ManyConsumer<LeagueWeightClass, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClasses) {

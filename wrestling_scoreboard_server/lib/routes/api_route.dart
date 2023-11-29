@@ -1,7 +1,7 @@
-import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 
 import '../controllers/bout_config_controller.dart';
 import '../controllers/club_controller.dart';
@@ -45,12 +45,12 @@ class ApiRoute {
     router.get('/fights', fightController.requestMany);
     router.get('/fight/<id|[0-9]+>', fightController.requestSingle);
     router.get('/fight/<id|[0-9]+>/fight_actions', fightController.requestFightActions);
-    
+
     final fightActionController = FightActionController();
     router.post('/fight_action', fightActionController.postSingle);
     router.get('/fight_actions', fightActionController.requestMany);
     router.get('/fight_action/<id|[0-9]+>', fightActionController.requestSingle);
-    
+
     final leagueController = LeagueController();
     router.post('/league', leagueController.postSingle);
     router.get('/leagues', leagueController.requestMany);
@@ -59,6 +59,7 @@ class ApiRoute {
     router.get('/league/<id|[0-9]+>/weight_classs', leagueController.requestWeightClasses);
     router.get('/league/<id|[0-9]+>/league_weight_classs', leagueController.requestLeagueWeightClasses);
     router.get('/league/<id|[0-9]+>/league_team_participations', leagueController.requestLeagueTeamParticipations);
+    router.get('/league/<id|[0-9]+>/team_matchs', leagueController.requestTeamMatchs);
 
     final leagueWeightClassController = LeagueWeightClassController();
     router.post('/league_weight_class', leagueWeightClassController.postSingle);
@@ -80,7 +81,7 @@ class ApiRoute {
     router.post('/membership', membershipController.postSingle);
     router.get('/memberships', membershipController.requestMany);
     router.get('/membership/<id|[0-9]+>', membershipController.requestSingle);
-    
+
     final participantStateController = ParticipantStateController();
     router.post('/participant_state', participantStateController.postSingle);
     router.get('/participant_states', participantStateController.requestMany);
@@ -101,7 +102,7 @@ class ApiRoute {
     router.get('/teams', teamController.requestMany);
     router.get('/team/<id|[0-9]+>', teamController.requestSingle);
     router.get('/team/<id|[0-9]+>/team_matchs', teamController.requestTeamMatches);
-    
+
     final matchController = TeamMatchController();
     router.post('/team_match', matchController.postSingle);
     router.get('/team_matchs', matchController.requestMany);
@@ -109,7 +110,7 @@ class ApiRoute {
     router.get('/team_match/<id|[0-9]+>', matchController.requestSingle);
     router.post('/team_match/<id|[0-9]+>/fights/generate', matchController.generateFights);
     router.get('/team_match/<id|[0-9]+>/fights', matchController.requestFights);
-    
+
     final teamMatchFightController = TeamMatchFightController();
     router.post('/team_match_fight', teamMatchFightController.postSingle);
     router.get('/team_match_fights', teamMatchFightController.requestMany);
