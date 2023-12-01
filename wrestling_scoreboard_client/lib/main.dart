@@ -48,14 +48,8 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     return MaterialApp(
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       localizationsDelegates: const [
         AppLocalizations.delegate,

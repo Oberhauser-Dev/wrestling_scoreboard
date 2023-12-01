@@ -44,8 +44,8 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
                   initialData: e,
                   builder: (context, match) =>
                       ListTile(
-                        title: RichText(
-                          text: TextSpan(
+                        title: Text.rich(
+                          TextSpan(
                             text: '${match!.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
                             children: [
                               TextSpan(
