@@ -43,9 +43,9 @@ class TeamMatchOverview extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                     child: ElevatedButton.icon(
-                      icon: const Icon(Icons.info),
-                      onPressed: () => handleSequence(match, context),
-                      label: Text(localizations.details),
+                      icon: const Icon(Icons.crop_free),
+                      onPressed: () => handleSelectedMatchSequence(match, context),
+                      label: Text(localizations.display),
                     ))
               ],
             ),
@@ -135,7 +135,7 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  handleSequence(TeamMatch match, BuildContext context) {
+  handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.go('/${TeamMatchOverview.route}/${match.id}/${MatchSequence.route}');
   }
 
