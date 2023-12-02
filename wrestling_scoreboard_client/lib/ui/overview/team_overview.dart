@@ -9,19 +9,22 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamOverview<T extends DataObject> extends StatelessWidget {
-  final Team filterObject;
+  static const route = 'team';
 
-  const TeamOverview({Key? key, required this.filterObject}) : super(key: key);
+  final int id;
+  final Team? team;
+
+  const TeamOverview({Key? key, required this.id, this.team}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Team>(
-        id: filterObject.id!,
-        initialData: filterObject,
+        id: id,
+        initialData: team,
         builder: (context, data) {
           final description = InfoWidget(
-              obj: data!,
+              obj: data,
               editPage: TeamEdit(
                 team: data,
               ),

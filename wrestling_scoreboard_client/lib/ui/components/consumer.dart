@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class SingleConsumer<T extends DataObject> extends StatefulWidget {
   final int? id;
   final T? initialData;
-  final Widget Function(BuildContext context, T? data) builder;
+  final Widget Function(BuildContext context, T data) builder;
 
   const SingleConsumer({required this.id, this.initialData, required this.builder, Key? key}) : super(key: key);
 
@@ -30,18 +30,21 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
     return StreamBuilder(
       stream: webSocketConnectionStream,
       builder: (context, snapshot) => widget.id == null
-          ? widget.builder(context, null)
+          ? const ExceptionWidget('Element not found!')
           : StreamBuilder<T>(
               stream:
                   widget.id == null ? null : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null),
               initialData: widget.initialData,
               builder: (BuildContext context, AsyncSnapshot<T> snap) {
                 if (snap.hasError) {
-                  return ExceptionWidget(snap.error!, () {
+                  return ExceptionWidget(snap.error!, onRetry: () {
                     WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
                   });
                 }
-                return widget.builder(context, snap.data);
+                if (snap.data == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return widget.builder(context, snap.data!);
               },
             ),
     );
@@ -59,7 +62,6 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Stateful
   State<StatefulWidget> createState() => ManyConsumerState<T, S>();
 }
 
-// TODO add const CircularProgressIndicator() on load
 class ManyConsumerState<T extends DataObject, S extends DataObject?> extends State<ManyConsumer<T, S>> {
   late Stream<WebSocketConnectionState> webSocketConnectionStream;
 
@@ -79,9 +81,12 @@ class ManyConsumerState<T extends DataObject, S extends DataObject?> extends Sta
         initialData: ManyDataObject<T>(data: widget.initialData ?? []),
         builder: (BuildContext context, AsyncSnapshot<ManyDataObject<T>> snap) {
           if (snap.hasError) {
-            return ExceptionWidget(snap.error!, () {
+            return ExceptionWidget(snap.error!, onRetry: () {
               WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
             });
+          }
+          if (snap.data == null) {
+            return const Center(child: CircularProgressIndicator());
           }
           return widget.builder(context, snap.data!.data);
         },

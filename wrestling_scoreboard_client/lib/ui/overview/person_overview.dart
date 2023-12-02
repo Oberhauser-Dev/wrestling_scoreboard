@@ -9,12 +9,10 @@ import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class PersonOverview extends StatelessWidget implements AbstractOverview {
-  final Person _filterObject;
+abstract class PersonOverview extends StatelessWidget implements AbstractOverview<Person> {
+  static const route = 'person';
 
-  const PersonOverview({Key? key, required Person filterObject})
-      : _filterObject = filterObject,
-        super(key: key);
+  const PersonOverview({Key? key}) : super(key: key);
 
   @override
   Widget buildOverview(
@@ -23,14 +21,16 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
+    required int dataId,
+    Person? initialData,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Person>(
-      id: _filterObject.id!,
-      initialData: _filterObject,
+      id: dataId,
+      initialData: initialData,
       builder: (context, person) {
         final description = InfoWidget(
-          obj: person!,
+          obj: person,
           editPage: editPage,
           onDelete: () {
             onDelete();

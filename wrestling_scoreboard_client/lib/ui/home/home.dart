@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/club_edit.dart';
@@ -99,7 +100,7 @@ class HomeState extends State<Home> {
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
-                        title: data!.name,
+                        title: data.name,
                         icon: Icons.foundation,
                         onTap: () => handleSelectedClub(data, context),
                       ),
@@ -123,7 +124,7 @@ class HomeState extends State<Home> {
                       id: e.id!,
                       initialData: e,
                       builder: (context, data) => ContentItem(
-                        title: data!.name,
+                        title: data.name,
                         icon: Icons.emoji_events,
                         onTap: () => handleSelectedLeague(data, context),
                       ),
@@ -139,24 +140,10 @@ class HomeState extends State<Home> {
   }
 
   handleSelectedClub(Club club, BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ClubOverview(
-          filterObject: club,
-        ),
-      ),
-    );
+    context.go('/${ClubOverview.route}/${club.id}');
   }
 
   handleSelectedLeague(League league, BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LeagueOverview(
-          filterObject: league,
-        ),
-      ),
-    );
+    context.go('/${LeagueOverview.route}/${league.id}');
   }
 }

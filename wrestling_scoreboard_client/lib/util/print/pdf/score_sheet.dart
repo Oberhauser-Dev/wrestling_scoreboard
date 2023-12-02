@@ -171,7 +171,7 @@ class ScoreSheet {
           children: [
             buildFormCell(
                 title: localizations.date,
-                content: event.date == null ? '' : event.date!.toDateStringFromLocaleName(localizations.localeName),
+                content: event.date.toDateStringFromLocaleName(localizations.localeName),
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(

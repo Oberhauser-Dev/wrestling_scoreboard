@@ -8,26 +8,26 @@ import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class WeightClassOverview extends StatelessWidget implements AbstractOverview {
-  final WeightClass _filterObject;
-
-  const WeightClassOverview({Key? key, required WeightClass filterObject})
-      : _filterObject = filterObject,
-        super(key: key);
+abstract class WeightClassOverview extends StatelessWidget implements AbstractOverview<WeightClass> {
+  const WeightClassOverview({Key? key}) : super(key: key);
 
   @override
-  Widget buildOverview(BuildContext context,
-      {required String classLocale,
-      required Widget editPage,
-      required VoidCallback onDelete,
-      required List<Widget> tiles}) {
+  Widget buildOverview(
+    BuildContext context, {
+    required String classLocale,
+    required Widget editPage,
+    required VoidCallback onDelete,
+    required List<Widget> tiles,
+    required int dataId,
+    WeightClass? initialData,
+  }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<WeightClass>(
-      id: _filterObject.id!,
-      initialData: _filterObject,
+      id: dataId,
+      initialData: initialData,
       builder: (context, data) {
         final description = InfoWidget(
-          obj: data!,
+          obj: data,
           editPage: editPage,
           onDelete: () {
             onDelete();
@@ -37,22 +37,22 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
           children: [
             ...tiles,
             ContentItem(
-              title: _filterObject.weight.toString(),
+              title: data.weight.toString(),
               subtitle: localizations.weight,
               icon: Icons.fitness_center,
             ),
             ContentItem(
-              title: styleToString(_filterObject.style, context),
+              title: styleToString(data.style, context),
               subtitle: localizations.wrestlingStyle,
               icon: Icons.style,
             ),
             ContentItem(
-              title: _filterObject.unit.toAbbr(),
+              title: data.unit.toAbbr(),
               subtitle: localizations.weightUnit,
               icon: Icons.straighten,
             ),
             ContentItem(
-              title: _filterObject.suffix ?? '-',
+              title: data.suffix ?? '-',
               subtitle: localizations.suffix,
               icon: Icons.description,
             ),
@@ -60,7 +60,7 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
         );
         return Scaffold(
           appBar: AppBar(
-            title: Text(_filterObject.name),
+            title: Text(data.name),
           ),
           body: GroupedList(items: [
             description,

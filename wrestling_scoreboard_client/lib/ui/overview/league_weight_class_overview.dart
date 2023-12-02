@@ -7,26 +7,30 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueWeightClassOverview extends WeightClassOverview {
-  final LeagueWeightClass filterObject;
+  static const route = 'league_weight_class';
 
-  LeagueWeightClassOverview({Key? key, required this.filterObject})
-      : super(filterObject: filterObject.weightClass, key: key);
+  final int id;
+  final LeagueWeightClass? leagueWeightClass;
+
+  const LeagueWeightClassOverview({Key? key, required this.id, this.leagueWeightClass}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<LeagueWeightClass>(
-      id: filterObject.id!,
-      initialData: filterObject,
+      id: id,
+      initialData: leagueWeightClass,
       builder: (context, data) {
         return buildOverview(context,
             classLocale: localizations.weightClass,
             editPage: LeagueWeightClassEdit(
               leagueWeightClass: data,
-              initialLeague: data!.league,
+              initialLeague: data.league,
             ),
             onDelete: () => dataProvider.deleteSingle(data),
-            tiles: []);
+            tiles: [],
+            dataId: data.weightClass.id!,
+            initialData: data.weightClass);
       },
     );
   }

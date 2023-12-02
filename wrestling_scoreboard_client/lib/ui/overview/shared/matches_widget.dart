@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -42,7 +43,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
               builder: (context, match) => ListTile(
                 title: Text.rich(
                   TextSpan(
-                    text: '${match!.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
+                    text: '${match.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
                     children: [
                       TextSpan(
                           text: match.home.team.name,
@@ -69,6 +70,6 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
   }
 
   handleSelectedMatch(TeamMatch match, BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSequence(match)));
+    context.go('/${TeamMatchOverview.route}/${match.id}');
   }
 }

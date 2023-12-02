@@ -5,9 +5,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExceptionWidget extends StatelessWidget {
   final Object exception;
-  final Function() onRetry;
+  final Function()? onRetry;
 
-  const ExceptionWidget(this.exception, this.onRetry, {Key? key}) : super(key: key);
+  const ExceptionWidget(this.exception, {this.onRetry, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,9 @@ class ExceptionWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 errorText,
-                const SizedBox(height: 16),
-                OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
+                if (onRetry != null) const SizedBox(height: 16),
+                if (onRetry != null)
+                  OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
               ],
             ),
           ]),

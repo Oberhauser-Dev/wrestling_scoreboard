@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/data/fight_result.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
@@ -13,9 +14,12 @@ import '../components/fitted_text.dart';
 import 'common_elements.dart';
 
 class MatchSequence extends StatelessWidget {
-  final TeamMatch filterObject;
+  static const route = 'match_sequence';
 
-  const MatchSequence(this.filterObject, {Key? key}) : super(key: key);
+  final int id;
+  final TeamMatch? teamMatch;
+
+  const MatchSequence({required this.id, this.teamMatch, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,8 @@ class MatchSequence extends StatelessWidget {
     int flexWidthWeight = 12;
     int flexWidthStyle = 5;
     return SingleConsumer<TeamMatch>(
-      id: filterObject.id!,
-      initialData: filterObject,
+      id: id,
+      initialData: teamMatch,
       builder: (context, match) {
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
@@ -40,8 +44,7 @@ class MatchSequence extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.info),
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TeamMatchOverview(match: match!))),
+                onPressed: () => handleSelectedTeamMatch(match, context),
               ),
             ]),
           ),
@@ -49,7 +52,7 @@ class MatchSequence extends StatelessWidget {
             filterObject: match,
             builder: (context, fights) {
               final matchInfos = [
-                match!.league?.name,
+                match.league?.name,
                 '${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}',
                 if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
                 // Not enough space to display all three referees
@@ -91,6 +94,10 @@ class MatchSequence extends StatelessWidget {
         );
       },
     );
+  }
+
+  handleSelectedTeamMatch(TeamMatch match, BuildContext context) {
+    context.go('/${TeamMatchOverview.route}/${match.id}');
   }
 }
 
@@ -170,7 +177,7 @@ class FightListItem extends StatelessWidget {
                                     child: Container(
                                       color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
                                       child: Center(
-                                        child: Text(pState?.classificationPoints?.toString() ?? '-',
+                                        child: Text(pState.classificationPoints?.toString() ?? '-',
                                             style: fontStyleDefault),
                                       ),
                                     )),
@@ -183,7 +190,7 @@ class FightListItem extends StatelessWidget {
                                         child: Container(
                                           color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
                                           child: Center(
-                                            child: pState?.classificationPoints != null
+                                            child: pState.classificationPoints != null
                                                 ? Text(
                                                     ParticipantState.getTechnicalPoints(actions, FightRole.red)
                                                         .toString(),
@@ -213,17 +220,17 @@ class FightListItem extends StatelessWidget {
                               flex: 70,
                               child: Container(
                                 color:
-                                    data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
+                                    data.winnerRole != null ? getColorFromFightRole(data.winnerRole!).shade800 : null,
                                 child: Center(
-                                  child: Text(getAbbreviationFromFightResult(data?.result, context),
+                                  child: Text(getAbbreviationFromFightResult(data.result, context),
                                       style: TextStyle(fontSize: fontSizeDefault * 0.7)),
                                 ),
                               )),
                           Expanded(
                               flex: 50,
                               child: Center(
-                                child: data?.winnerRole != null
-                                    ? Text(durationToString(data!.duration),
+                                child: data.winnerRole != null
+                                    ? Text(durationToString(data.duration),
                                         style: TextStyle(fontSize: fontSizeDefault / 2))
                                     : null,
                               )),
@@ -247,7 +254,7 @@ class FightListItem extends StatelessWidget {
                                     child: Container(
                                       color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
                                       child: Center(
-                                        child: Text(pState?.classificationPoints?.toString() ?? '-',
+                                        child: Text(pState.classificationPoints?.toString() ?? '-',
                                             style: fontStyleDefault),
                                       ),
                                     )),
@@ -260,7 +267,7 @@ class FightListItem extends StatelessWidget {
                                         child: Container(
                                           color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
                                           child: Center(
-                                            child: pState?.classificationPoints != null
+                                            child: pState.classificationPoints != null
                                                 ? Text(
                                                     ParticipantState.getTechnicalPoints(actions, FightRole.blue)
                                                         .toString(),

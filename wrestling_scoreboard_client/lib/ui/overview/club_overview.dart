@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
@@ -12,19 +13,22 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubOverview extends StatelessWidget {
-  final Club filterObject;
+  static const route = 'club';
 
-  const ClubOverview({Key? key, required this.filterObject}) : super(key: key);
+  final int id;
+  final Club? club;
+
+  const ClubOverview({Key? key, required this.id, this.club}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Club>(
-      id: filterObject.id!,
-      initialData: filterObject,
+      id: id,
+      initialData: club,
       builder: (context, data) {
         final description = InfoWidget(
-          obj: data!,
+          obj: data,
           editPage: ClubEdit(
             club: data,
           ),
@@ -66,7 +70,7 @@ class ClubOverview extends StatelessWidget {
                       id: team.id,
                       initialData: team,
                       builder: (context, team) => ContentItem(
-                          title: team!.name, icon: Icons.group, onTap: () => handleSelectedTeam(team, context)))),
+                          title: team.name, icon: Icons.group, onTap: () => handleSelectedTeam(team, context)))),
                 );
               },
             ),
@@ -105,24 +109,10 @@ class ClubOverview extends StatelessWidget {
   }
 
   handleSelectedTeam(Team team, BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TeamOverview(
-          filterObject: team,
-        ),
-      ),
-    );
+    context.go('/${TeamOverview.route}/${team.id}');
   }
 
   handleSelectedMembership(Membership membership, BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MembershipOverview(
-          filterObject: membership,
-        ),
-      ),
-    );
+    context.go('/${MembershipOverview.route}/${membership.id}');
   }
 }

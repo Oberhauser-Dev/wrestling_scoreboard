@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:wrestling_scoreboard_client/ui/app_navigation.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:wrestling_scoreboard_client/ui/router.dart';
 import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
 
 void main() async {
+  usePathUrlStrategy();
   runApp(const WrestlingScoreboardApp());
 }
 
@@ -45,7 +47,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    return MaterialApp(
+    return MaterialApp.router(
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
@@ -58,7 +60,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
       ],
       supportedLocales: Preferences.supportedLanguages.values,
       locale: _locale,
-      home: const AppNavigation(),
+      routerConfig: router,
     );
   }
 }
