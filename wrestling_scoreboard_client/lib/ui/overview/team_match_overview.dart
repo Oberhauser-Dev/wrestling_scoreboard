@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard_client/ui/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -134,7 +134,7 @@ class TeamMatchOverview extends StatelessWidget {
   }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
-    context.go('/${TeamMatchOverview.route}/${match.id}/${MatchSequence.route}');
+    context.go('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 
   handleSelectedLineup(Lineup lineup, League league, TeamMatch match, NavigatorState navigator) async {

@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/app_navigation.dart';
-import 'package:wrestling_scoreboard_client/ui/fight/fight_screen.dart';
-import 'package:wrestling_scoreboard_client/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
+import 'package:wrestling_scoreboard_client/ui/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/membership_overview.dart';
@@ -28,8 +28,8 @@ final router = GoRouter(
         builder: (context, state) => TeamMatchOverview(id: int.parse(state.pathParameters['match_id']!)),
         routes: [
           GoRoute(
-            path: MatchSequence.route,
-            builder: (context, state) => MatchSequence(id: int.parse(state.pathParameters['match_id']!)),
+            path: MatchDisplay.route,
+            builder: (context, state) => MatchDisplay(id: int.parse(state.pathParameters['match_id']!)),
           ),
           GoRoute(
             path: '${FightDisplay.route}/:fight_id',

@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
-import 'package:wrestling_scoreboard_client/ui/fight/fight_screen.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -14,13 +14,13 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import '../components/fitted_text.dart';
 import 'common_elements.dart';
 
-class MatchSequence extends StatelessWidget {
-  static const route = 'match_sequence';
+class MatchDisplay extends StatelessWidget {
+  static const route = 'match_display';
 
   final int id;
   final TeamMatch? teamMatch;
 
-  const MatchSequence({required this.id, this.teamMatch, Key? key}) : super(key: key);
+  const MatchDisplay({required this.id, this.teamMatch, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

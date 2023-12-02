@@ -3,11 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/fight_result.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
+import 'package:wrestling_scoreboard_client/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'fight_screen.dart';
-import 'fight_shortcuts.dart';
 
 class FightMainControls extends StatefulWidget {
   final Function(FightScreenActionIntent) callback;
