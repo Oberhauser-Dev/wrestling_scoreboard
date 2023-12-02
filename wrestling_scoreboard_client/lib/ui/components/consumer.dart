@@ -7,9 +7,14 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class SingleConsumer<T extends DataObject> extends StatefulWidget {
   final int? id;
   final T? initialData;
-  final Widget Function(BuildContext context, T data) builder;
+  final Widget Function(BuildContext context, T? data) builder;
 
-  const SingleConsumer({required this.id, this.initialData, required this.builder, Key? key}) : super(key: key);
+  const SingleConsumer({
+    required this.id,
+    this.initialData,
+    required this.builder,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SingleConsumerState<T>();
@@ -30,7 +35,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
     return StreamBuilder(
       stream: webSocketConnectionStream,
       builder: (context, snapshot) => widget.id == null
-          ? const ExceptionWidget('Element not found!')
+          ? widget.builder(context, null)
           : StreamBuilder<T>(
               stream:
                   widget.id == null ? null : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null),

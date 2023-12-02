@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -21,6 +22,7 @@ class LeagueWeightClassOverview extends WeightClassOverview {
       id: id,
       initialData: leagueWeightClass,
       builder: (context, data) {
+        if (data == null) return ExceptionWidget(localizations.notFoundException);
         return buildOverview(context,
             classLocale: localizations.weightClass,
             editPage: LeagueWeightClassEdit(

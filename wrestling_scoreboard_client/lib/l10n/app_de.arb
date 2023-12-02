@@ -28,6 +28,7 @@
   "noItems": "Keine Einträge vorhanden.",
   "mandatoryField": "Das ist ein Pflichtfeld.",
   "noWebSocketConnection": "Die Verbindung zum Server konnte nicht aufgebaut werden oder wurde unterbrochen.",
+  "notFoundException": "Element wurde nicht gefunden :/",
   "invalidParameterException": "Die Änderung war nicht erfolgreich, bitte überprüfe deine Eingabeparameter.",
   "retry": "Erneut versuchen",
 

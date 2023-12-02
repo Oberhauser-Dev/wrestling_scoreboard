@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
@@ -29,6 +30,7 @@ class TeamMatchOverview extends StatelessWidget {
         id: id,
         initialData: match,
         builder: (context, match) {
+          if (match == null) return ExceptionWidget(localizations.notFoundException);
           return Scaffold(
             appBar: AppBar(
               title: AppBarTitle(
@@ -77,12 +79,12 @@ class TeamMatchOverview extends StatelessWidget {
                             icon: Icons.date_range,
                           ),
                           ContentItem(
-                            title: homeLineup.team.name,
+                            title: homeLineup!.team.name,
                             subtitle: '${localizations.team} ${localizations.red}',
                             icon: Icons.group,
                           ),
                           ContentItem(
-                            title: guestLineup.team.name,
+                            title: guestLineup!.team.name,
                             subtitle: '${localizations.team} ${localizations.blue}',
                             icon: Icons.group,
                           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
@@ -99,11 +100,14 @@ class HomeState extends State<Home> {
                     (e) => SingleConsumer<Club>(
                       id: e.id!,
                       initialData: e,
-                      builder: (context, data) => ContentItem(
-                        title: data.name,
-                        icon: Icons.foundation,
-                        onTap: () => handleSelectedClub(data, context),
-                      ),
+                      builder: (context, data) {
+                        if (data == null) return ExceptionWidget(localizations.notFoundException);
+                        return ContentItem(
+                          title: data.name,
+                          icon: Icons.foundation,
+                          onTap: () => handleSelectedClub(data, context),
+                        );
+                      },
                     ),
                   ),
                 );
@@ -123,11 +127,14 @@ class HomeState extends State<Home> {
                     (e) => SingleConsumer<League>(
                       id: e.id!,
                       initialData: e,
-                      builder: (context, data) => ContentItem(
-                        title: data.name,
-                        icon: Icons.emoji_events,
-                        onTap: () => handleSelectedLeague(data, context),
-                      ),
+                      builder: (context, data) {
+                        if (data == null) return ExceptionWidget(localizations.notFoundException);
+                        return ContentItem(
+                          title: data.name,
+                          icon: Icons.emoji_events,
+                          onTap: () => handleSelectedLeague(data, context),
+                        );
+                      },
                     ),
                   ),
                 );

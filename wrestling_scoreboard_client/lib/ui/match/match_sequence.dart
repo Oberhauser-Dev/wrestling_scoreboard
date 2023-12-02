@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard_client/data/fight_result.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
@@ -23,6 +24,7 @@ class MatchSequence extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context);
 
     double width = MediaQuery.of(context).size.width;
@@ -33,6 +35,7 @@ class MatchSequence extends StatelessWidget {
       id: id,
       initialData: teamMatch,
       builder: (context, match) {
+        if (match == null) return ExceptionWidget(localizations.notFoundException);
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -177,7 +180,7 @@ class FightListItem extends StatelessWidget {
                                     child: Container(
                                       color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
                                       child: Center(
-                                        child: Text(pState.classificationPoints?.toString() ?? '-',
+                                        child: Text(pState?.classificationPoints?.toString() ?? '-',
                                             style: fontStyleDefault),
                                       ),
                                     )),
@@ -190,7 +193,7 @@ class FightListItem extends StatelessWidget {
                                         child: Container(
                                           color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
                                           child: Center(
-                                            child: pState.classificationPoints != null
+                                            child: pState?.classificationPoints != null
                                                 ? Text(
                                                     ParticipantState.getTechnicalPoints(actions, FightRole.red)
                                                         .toString(),
@@ -220,17 +223,17 @@ class FightListItem extends StatelessWidget {
                               flex: 70,
                               child: Container(
                                 color:
-                                    data.winnerRole != null ? getColorFromFightRole(data.winnerRole!).shade800 : null,
+                                    data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
                                 child: Center(
-                                  child: Text(getAbbreviationFromFightResult(data.result, context),
+                                  child: Text(getAbbreviationFromFightResult(data?.result, context),
                                       style: TextStyle(fontSize: fontSizeDefault * 0.7)),
                                 ),
                               )),
                           Expanded(
                               flex: 50,
                               child: Center(
-                                child: data.winnerRole != null
-                                    ? Text(durationToString(data.duration),
+                                child: data?.winnerRole != null
+                                    ? Text(durationToString(data!.duration),
                                         style: TextStyle(fontSize: fontSizeDefault / 2))
                                     : null,
                               )),
@@ -254,7 +257,7 @@ class FightListItem extends StatelessWidget {
                                     child: Container(
                                       color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
                                       child: Center(
-                                        child: Text(pState.classificationPoints?.toString() ?? '-',
+                                        child: Text(pState?.classificationPoints?.toString() ?? '-',
                                             style: fontStyleDefault),
                                       ),
                                     )),
@@ -267,7 +270,7 @@ class FightListItem extends StatelessWidget {
                                         child: Container(
                                           color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
                                           child: Center(
-                                            child: pState.classificationPoints != null
+                                            child: pState?.classificationPoints != null
                                                 ? Text(
                                                     ParticipantState.getTechnicalPoints(actions, FightRole.blue)
                                                         .toString(),

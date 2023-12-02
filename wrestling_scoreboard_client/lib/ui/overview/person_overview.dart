@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/data/gender.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
@@ -29,6 +30,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
       id: dataId,
       initialData: initialData,
       builder: (context, person) {
+        if (person == null) return ExceptionWidget(localizations.notFoundException);
         final description = InfoWidget(
           obj: person,
           editPage: editPage,
