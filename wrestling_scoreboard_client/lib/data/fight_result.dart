@@ -1,6 +1,6 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 String getFullNameFromFightResult(FightResult? result, BuildContext context) {
   return '${getAbbreviationFromFightResult(result, context)} | ${getDescriptionFromFightResult(result, context)}';

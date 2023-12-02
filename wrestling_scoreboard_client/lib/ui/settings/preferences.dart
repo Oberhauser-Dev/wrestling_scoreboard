@@ -21,12 +21,12 @@ class Preferences {
 
   static Future<void> setString(String key, String? value) async {
     final prefs = await SharedPreferences.getInstance();
-    if(value != null) {
+    if (value != null) {
       await prefs.setString(key, value);
     } else {
       await prefs.remove(key);
     }
   }
-  
+
   static Future<String?> getString(String key) => SharedPreferences.getInstance().then((value) => value.getString(key));
 }

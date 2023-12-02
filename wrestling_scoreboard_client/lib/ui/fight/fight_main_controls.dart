@@ -1,10 +1,10 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/fight_result.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'fight_screen.dart';
 import 'fight_shortcuts.dart';
@@ -122,8 +122,8 @@ class FightMainControlsState extends State<FightMainControls> {
                   );
                   fight = fight.updateClassificationPoints(actions);
                   dataProvider.createOrUpdateSingle(fight);
-                  if(fight.r != null) dataProvider.createOrUpdateSingle(fight.r!);
-                  if(fight.b != null) dataProvider.createOrUpdateSingle(fight.b!);
+                  if (fight.r != null) dataProvider.createOrUpdateSingle(fight.r!);
+                  if (fight.b != null) dataProvider.createOrUpdateSingle(fight.b!);
                   widget.fightState.fight = fight;
                 });
               },

@@ -10,7 +10,7 @@ class LineupController extends EntityController<Lineup> {
   factory LineupController() {
     return _singleton;
   }
-  
+
   static final teamIdQuery = 'SELECT team_id FROM lineup WHERE id = @id';
 
   LineupController._internal() : super(tableName: 'lineup');

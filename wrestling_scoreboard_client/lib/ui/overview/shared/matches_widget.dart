@@ -23,49 +23,45 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
             title: localizations.matches,
             trailing: IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () =>
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          TeamMatchEdit(
-                            initialHomeTeam: filterObject is Team ? filterObject as Team : null,
-                            initialGuestTeam: filterObject is Team ? filterObject as Team : null,
-                            initialLeague: filterObject is League ? filterObject as League : null,
-                          ),
-                    ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TeamMatchEdit(
+                    initialHomeTeam: filterObject is Team ? filterObject as Team : null,
+                    initialGuestTeam: filterObject is Team ? filterObject as Team : null,
+                    initialLeague: filterObject is League ? filterObject as League : null,
                   ),
+                ),
+              ),
             ),
           ),
           items: matches.map(
-                (e) =>
-                SingleConsumer<TeamMatch>(
-                  id: e.id!,
-                  initialData: e,
-                  builder: (context, match) =>
-                      ListTile(
-                        title: Text.rich(
-                          TextSpan(
-                            text: '${match!.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
-                            children: [
-                              TextSpan(
-                                  text: match.home.team.name,
-                                  style: match.home.team == filterObject
-                                      ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
-                                      : null),
-                              const TextSpan(text: ' - '),
-                              TextSpan(
-                                  text: match.guest.team.name,
-                                  style: match.guest.team == filterObject
-                                      ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
-                                      : null),
-                            ],
-                          ),
-                        ),
-                        leading: const Icon(Icons.event),
-                        onTap: () => handleSelectedMatch(match, context),
-                      ),
+            (e) => SingleConsumer<TeamMatch>(
+              id: e.id!,
+              initialData: e,
+              builder: (context, match) => ListTile(
+                title: Text.rich(
+                  TextSpan(
+                    text: '${match!.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
+                    children: [
+                      TextSpan(
+                          text: match.home.team.name,
+                          style: match.home.team == filterObject
+                              ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
+                              : null),
+                      const TextSpan(text: ' - '),
+                      TextSpan(
+                          text: match.guest.team.name,
+                          style: match.guest.team == filterObject
+                              ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                              : null),
+                    ],
+                  ),
                 ),
+                leading: const Icon(Icons.event),
+                onTap: () => handleSelectedMatch(match, context),
+              ),
+            ),
           ),
         );
       },

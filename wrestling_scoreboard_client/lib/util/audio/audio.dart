@@ -10,7 +10,7 @@ class HornSound {
   factory HornSound() {
     return HornSound._fromPreference();
   }
-  
+
   factory HornSound.source(String source) {
     return HornSound._fromSource(source);
   }
@@ -34,7 +34,7 @@ class HornSound {
     audioPlayer = DefaultAudioPlayer();
     isSourceSet = audioPlayer.setSource(source);
   }
-  
+
   HornSound._fromPreference() {
     audioPlayer = DefaultAudioPlayer();
     isSourceSet = Preferences.getString(Preferences.keyBellSound)
@@ -47,7 +47,7 @@ class HornSound {
 
 abstract class Playable {
   Future<void> play();
-  
+
   Future<void> stop();
 
   Future<void> setSource(String url);

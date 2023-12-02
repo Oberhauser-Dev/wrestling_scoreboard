@@ -49,8 +49,7 @@ abstract class DataProvider {
       (() async {
         try {
           final many = await readMany<T, S>(filterObject: filterObject);
-          controller.sink
-              .add(ManyDataObject<T>(data: many, filterType: S, filterId: filterObject?.id));
+          controller.sink.add(ManyDataObject<T>(data: many, filterType: S, filterId: filterObject?.id));
         } catch (e) {
           controller.sink.addError(e);
         }

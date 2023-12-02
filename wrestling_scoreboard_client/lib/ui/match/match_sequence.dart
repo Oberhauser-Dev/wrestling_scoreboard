@@ -1,4 +1,3 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/data/fight_result.dart';
@@ -8,6 +7,7 @@ import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_screen.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import '../components/fitted_text.dart';
 import 'common_elements.dart';
@@ -20,7 +20,7 @@ class MatchSequence extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
-    
+
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
     int flexWidthWeight = 12;
@@ -212,7 +212,8 @@ class FightListItem extends StatelessWidget {
                           Expanded(
                               flex: 70,
                               child: Container(
-                                color: data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
+                                color:
+                                    data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
                                 child: Center(
                                   child: Text(getAbbreviationFromFightResult(data?.result, context),
                                       style: TextStyle(fontSize: fontSizeDefault * 0.7)),

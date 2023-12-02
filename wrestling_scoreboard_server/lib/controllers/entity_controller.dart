@@ -115,8 +115,8 @@ abstract class EntityController<T extends DataObject> {
       return res.last[0] as int;
     } on PostgreSQLException catch (e) {
       throw InvalidParameterException(
-          'The data object of table $tableName could not be created. Check the attributes: $data'
-          '\nPostgreSQLException: {"code": ${e.code}}');
+          'The data object of table $tableName could not be created. Check the attributes: $data\n'
+          'PostgreSQLException: {"code": ${e.code}}');
     }
   }
 

@@ -31,7 +31,8 @@ typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
 typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
 
-Future<int?> handleFromJson(Map<String, Object?> json, {
+Future<int?> handleFromJson(
+  Map<String, Object?> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,
@@ -39,103 +40,103 @@ Future<int?> handleFromJson(Map<String, Object?> json, {
 }) {
   final type = getTypeFromTableName(json['tableName'] as String);
   switch (type) {
-    case const(BoutConfig):
+    case const (BoutConfig):
       return _handleFromJsonGeneric<BoutConfig>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Club):
+    case const (Club):
       return _handleFromJsonGeneric<Club>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Fight):
+    case const (Fight):
       return _handleFromJsonGeneric<Fight>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(FightAction):
+    case const (FightAction):
       return _handleFromJsonGeneric<FightAction>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(League):
+    case const (League):
       return _handleFromJsonGeneric<League>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(LeagueWeightClass):
+    case const (LeagueWeightClass):
       return _handleFromJsonGeneric<LeagueWeightClass>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(LeagueTeamParticipation):
+    case const (LeagueTeamParticipation):
       return _handleFromJsonGeneric<LeagueTeamParticipation>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Lineup):
+    case const (Lineup):
       return _handleFromJsonGeneric<Lineup>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Membership):
+    case const (Membership):
       return _handleFromJsonGeneric<Membership>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Participation):
+    case const (Participation):
       return _handleFromJsonGeneric<Participation>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(ParticipantState):
+    case const (ParticipantState):
       return _handleFromJsonGeneric<ParticipantState>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Person):
+    case const (Person):
       return _handleFromJsonGeneric<Person>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Team):
+    case const (Team):
       return _handleFromJsonGeneric<Team>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(TeamMatch):
+    case const (TeamMatch):
       return _handleFromJsonGeneric<TeamMatch>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(Tournament):
+    case const (Tournament):
       return _handleFromJsonGeneric<Tournament>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(TournamentTeamParticipation):
+    case const (TournamentTeamParticipation):
       return _handleFromJsonGeneric<TournamentTeamParticipation>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const(WeightClass):
+    case const (WeightClass):
       return _handleFromJsonGeneric<WeightClass>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
@@ -146,7 +147,8 @@ Future<int?> handleFromJson(Map<String, Object?> json, {
   }
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json, {
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(
+  Map<String, dynamic> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,

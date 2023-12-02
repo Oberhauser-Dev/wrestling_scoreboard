@@ -115,8 +115,7 @@ class HomeState extends State<Home> {
                     title: localizations.leagues,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () =>
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LeagueEdit())),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LeagueEdit())),
                     ),
                   ),
                   items: leagues.map(

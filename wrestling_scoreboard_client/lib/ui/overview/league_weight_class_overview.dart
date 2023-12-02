@@ -1,10 +1,10 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueWeightClassOverview extends WeightClassOverview {
   final LeagueWeightClass filterObject;

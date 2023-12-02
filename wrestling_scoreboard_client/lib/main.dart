@@ -12,7 +12,6 @@ void main() async {
 class WrestlingScoreboardApp extends StatefulWidget {
   const WrestlingScoreboardApp({Key? key}) : super(key: key);
 
-
   @override
   State<StatefulWidget> createState() => WrestlingScoreboardAppState();
 }
@@ -35,7 +34,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
         });
       }
     });
-    
+
     Preferences.onChangeLocale.stream.distinct().listen((event) {
       setState(() {
         _locale = event;

@@ -1,7 +1,7 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/fitted_text.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'fight_shortcuts.dart';
 
@@ -83,7 +83,8 @@ class FightActionControls extends StatelessWidget {
     return Expanded(
         child: OutlinedButton(
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: color,
+              foregroundColor: Colors.white,
+              backgroundColor: color,
               side: BorderSide(color: color.shade900, width: 1),
               padding: EdgeInsets.all(2 + (padding * 0.75)),
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),

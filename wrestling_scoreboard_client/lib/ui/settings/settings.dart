@@ -82,7 +82,9 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
         title: Text(localizations.settings),
       ),
       body: SettingsList(
-          platform: Theme.of(context).platform == TargetPlatform.windows ? DevicePlatform.web : null, // Use web theme for windows
+          platform: Theme.of(context).platform == TargetPlatform.windows
+              ? DevicePlatform.web
+              : null, // Use web theme for windows
           sections: [
             SettingsSection(
               title: Row(
