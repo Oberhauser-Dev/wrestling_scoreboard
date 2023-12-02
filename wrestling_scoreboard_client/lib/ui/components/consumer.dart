@@ -83,7 +83,7 @@ class ManyConsumerState<T extends DataObject, S extends DataObject?> extends Sta
       stream: webSocketConnectionStream,
       builder: (context, snapshot) => StreamBuilder(
         stream: dataProvider.streamMany<T, S>(filterObject: widget.filterObject, init: widget.initialData == null),
-        initialData: ManyDataObject<T>(data: widget.initialData ?? []),
+        initialData: widget.initialData == null ? null : ManyDataObject<T>(data: widget.initialData!),
         builder: (BuildContext context, AsyncSnapshot<ManyDataObject<T>> snap) {
           if (snap.hasError) {
             return ExceptionWidget(snap.error!, onRetry: () {
