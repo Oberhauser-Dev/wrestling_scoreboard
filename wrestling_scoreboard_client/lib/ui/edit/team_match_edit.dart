@@ -53,22 +53,22 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
 
     final items = [
       ListTile(
+        leading: const Icon(Icons.tag),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.matchNumber,
-            icon: const Icon(Icons.tag),
           ),
           initialValue: widget.teamMatch?.no,
           onSaved: (newValue) => _no = newValue,
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.place),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.place,
-            icon: const Icon(Icons.place),
           ),
           initialValue: widget.teamMatch?.location,
           validator: (value) {
@@ -81,13 +81,13 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.date_range),
         title: TextFormField(
           key: ValueKey(_date),
           readOnly: true,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.date,
-            icon: const Icon(Icons.date_range),
           ),
           onTap: () => showDatePicker(
             initialDatePickerMode: DatePickerMode.day,

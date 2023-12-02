@@ -22,11 +22,11 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
     final localizations = AppLocalizations.of(context)!;
     return buildEdit(context, id: widget.membership?.id, classLocale: localizations.membership, fields: [
       ListTile(
+        leading: const Icon(Icons.tag),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.membershipNumber,
-            icon: const Icon(Icons.tag),
           ),
           initialValue: widget.membership?.no,
           onSaved: (newValue) => _no = newValue,

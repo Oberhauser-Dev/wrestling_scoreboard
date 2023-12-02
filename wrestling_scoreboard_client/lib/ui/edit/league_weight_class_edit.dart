@@ -24,13 +24,14 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
     final localizations = AppLocalizations.of(context)!;
     return buildEdit(context, id: widget.leagueWeightClass?.id, classLocale: localizations.weightClass, fields: [
       ListTile(
+        leading: const Icon(Icons.format_list_numbered),
         title: TextFormField(
           initialValue: widget.leagueWeightClass?.pos.toString() ?? '',
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.format_list_numbered),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.position),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.position,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
           onSaved: (String? value) {
             _pos = value != null ? int.parse(value) : 0;

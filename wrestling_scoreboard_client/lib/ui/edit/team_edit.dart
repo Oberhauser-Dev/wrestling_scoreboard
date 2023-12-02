@@ -36,11 +36,11 @@ class TeamEditState extends State<TeamEdit> {
 
     final items = [
       ListTile(
+        leading: const Icon(Icons.short_text),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.name,
-            icon: const Icon(Icons.short_text),
           ),
           initialValue: widget.team?.name,
           validator: (value) {
@@ -53,11 +53,11 @@ class TeamEditState extends State<TeamEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.subject),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.description,
-            icon: const Icon(Icons.subject),
           ),
           initialValue: widget.team?.description,
           onSaved: (newValue) => _description = newValue,

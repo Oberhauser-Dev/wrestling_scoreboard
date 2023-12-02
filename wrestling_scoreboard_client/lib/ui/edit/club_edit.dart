@@ -26,11 +26,11 @@ class ClubEditState extends State<ClubEdit> {
 
     final items = [
       ListTile(
+        leading: const Icon(Icons.description),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.name,
-            icon: const Icon(Icons.description),
           ),
           initialValue: widget.club?.name,
           validator: (value) {
@@ -43,11 +43,11 @@ class ClubEditState extends State<ClubEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.tag),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.clubNumber,
-            icon: const Icon(Icons.tag),
           ),
           initialValue: widget.club?.no,
           onSaved: (newValue) => _no = newValue,

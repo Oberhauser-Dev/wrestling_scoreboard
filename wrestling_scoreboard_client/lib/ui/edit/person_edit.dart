@@ -41,11 +41,11 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
     final items = [
       ...fields,
       ListTile(
+        leading: const Icon(Icons.person),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.prename,
-            icon: const Icon(Icons.person),
           ),
           initialValue: widget.person?.prename,
           validator: (value) {
@@ -58,11 +58,11 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
         ),
       ),
       ListTile(
+        leading: const SizedBox(),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.surname,
-            icon: const SizedBox(),
           ),
           initialValue: widget.person?.surname,
           validator: (value) {
@@ -75,13 +75,13 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.date_range),
         title: TextFormField(
           key: ValueKey(_dateOfBirth),
           readOnly: true,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.date,
-            icon: const Icon(Icons.date_range),
           ),
           onTap: () => showDatePicker(
             initialDatePickerMode: DatePickerMode.year,

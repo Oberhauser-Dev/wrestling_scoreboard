@@ -34,13 +34,14 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
     final items = [
       ...fields,
       ListTile(
+        leading: const Icon(Icons.timer),
         title: TextFormField(
           initialValue: (widget.boutConfig?.periodDuration ?? BoutConfig.defaultPeriodDuration).inSeconds.toString(),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.timer),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.periodDurationInSecs),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.periodDurationInSecs,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
             _periodDurationInSecs = value != null ? int.parse(value) : 0;
@@ -48,13 +49,14 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.timer),
         title: TextFormField(
           initialValue: (widget.boutConfig?.breakDuration ?? BoutConfig.defaultBreakDuration).inSeconds.toString(),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.timer),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.breakDurationInSecs),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.breakDurationInSecs,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
             _breakDurationInSecs = value != null ? int.parse(value) : 0;
@@ -62,14 +64,15 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.timer),
         title: TextFormField(
           initialValue:
               (widget.boutConfig?.activityDuration ?? BoutConfig.defaultActivityDuration).inSeconds.toString(),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.timer),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.activityDurationInSecs),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.activityDurationInSecs,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
             _activityDurationInSecs = value != null ? int.parse(value) : 0;
@@ -77,13 +80,14 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.timer),
         title: TextFormField(
           initialValue: (widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration).inSeconds.toString(),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.timer),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.injuryDurationInSecs),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.injuryDurationInSecs,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
             _injuryDurationInSecs = value != null ? int.parse(value) : 0;
@@ -91,13 +95,14 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.repeat),
         title: TextFormField(
           initialValue: (widget.boutConfig?.periodCount ?? BoutConfig.defaultPeriodCount).toString(),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.repeat),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.periodCount),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.periodCount,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,2}'))],
           onSaved: (String? value) {
             _periodCount = value != null ? int.parse(value) : 0;

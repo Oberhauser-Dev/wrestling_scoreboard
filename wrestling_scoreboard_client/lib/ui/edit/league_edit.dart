@@ -30,11 +30,11 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
 
     return buildEdit(context, id: widget.league?.id, classLocale: localizations.league, fields: [
       ListTile(
+        leading: const Icon(Icons.description),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.name,
-            icon: const Icon(Icons.description),
           ),
           initialValue: widget.league?.name,
           validator: (value) {
@@ -47,13 +47,13 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.date_range),
         title: TextFormField(
           key: ValueKey(_startDate),
           readOnly: true,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.date,
-            icon: const Icon(Icons.date_range),
           ),
           onTap: () => showDatePicker(
             initialDatePickerMode: DatePickerMode.year,

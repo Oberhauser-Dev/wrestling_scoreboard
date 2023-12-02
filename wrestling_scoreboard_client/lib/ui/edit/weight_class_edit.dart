@@ -42,13 +42,14 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>
     final items = [
       ...fields,
       ListTile(
+        leading: const Icon(Icons.fitness_center),
         title: TextFormField(
           initialValue: widget.weightClass?.weight.toString() ?? '',
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              icon: const Icon(Icons.fitness_center),
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.weight),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.weight,
+          ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
           onSaved: (String? value) {
             _weight = value != null ? int.parse(value) : 0;
@@ -96,11 +97,11 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.description),
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.suffix,
-            icon: const Icon(Icons.description),
           ),
           initialValue: widget.weightClass?.suffix ?? '',
           onSaved: (newValue) => _suffix = newValue,
