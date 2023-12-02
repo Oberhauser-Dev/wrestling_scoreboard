@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -44,7 +45,7 @@ class ClubOverview extends StatelessWidget {
         );
         return Scaffold(
           appBar: AppBar(
-            title: Text(data.name),
+            title: AppBarTitle(label: localizations.club, details: data.name),
           ),
           body: GroupedList(items: [
             description,

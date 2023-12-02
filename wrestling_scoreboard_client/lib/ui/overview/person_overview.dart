@@ -63,7 +63,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
         );
         return Scaffold(
           appBar: AppBar(
-            title: Text(person.fullName),
+            title: AppBarTitle(label: classLocale, details: person.fullName),
           ),
           body: GroupedList(items: [
             description,

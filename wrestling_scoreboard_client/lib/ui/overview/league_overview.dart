@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
@@ -55,7 +56,7 @@ class LeagueOverview extends StatelessWidget {
         );
         return Scaffold(
           appBar: AppBar(
-            title: Text(data.name),
+            title: AppBarTitle(label: localizations.league, details: data.name),
           ),
           body: GroupedList(items: [
             description,

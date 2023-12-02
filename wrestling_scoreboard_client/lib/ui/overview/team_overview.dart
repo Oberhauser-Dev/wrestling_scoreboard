@@ -4,6 +4,7 @@ import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -44,7 +45,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
               ]);
           return Scaffold(
             appBar: AppBar(
-              title: Text(data.name),
+              title: AppBarTitle(label: localizations.team, details: data.name),
             ),
             body: GroupedList(items: [
               description,

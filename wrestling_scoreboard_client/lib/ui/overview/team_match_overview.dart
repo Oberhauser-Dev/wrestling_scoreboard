@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/match/match_sequence.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -30,14 +31,9 @@ class TeamMatchOverview extends StatelessWidget {
         builder: (context, match) {
           return Scaffold(
             appBar: AppBar(
-              title: Row(
-                children: [
-                  Text(localizations.match),
-                  Text(
-                    ' ${match.home.team.name} - ${match.guest.team.name}',
-                    style: TextStyle(color: Theme.of(context).disabledColor),
-                  ),
-                ],
+              title: AppBarTitle(
+                label: localizations.match,
+                details: '${match.home.team.name} - ${match.guest.team.name}',
               ),
               actions: [
                 Padding(

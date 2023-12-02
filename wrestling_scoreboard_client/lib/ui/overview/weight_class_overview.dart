@@ -60,7 +60,7 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
         );
         return Scaffold(
           appBar: AppBar(
-            title: Text(data.name),
+            title: AppBarTitle(label: classLocale, details: data.name),
           ),
           body: GroupedList(items: [
             description,

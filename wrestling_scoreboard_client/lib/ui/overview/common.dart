@@ -12,3 +12,23 @@ abstract class AbstractOverview<T extends DataObject> {
     T? initialData,
   });
 }
+
+class AppBarTitle extends StatelessWidget {
+  final String label;
+  final String details;
+
+  const AppBarTitle({super.key, required this.label, required this.details});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(label),
+        Text(
+          '  $details',
+          style: TextStyle(color: Theme.of(context).disabledColor),
+        ),
+      ],
+    );
+  }
+}
