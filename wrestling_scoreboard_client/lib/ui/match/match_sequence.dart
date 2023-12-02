@@ -25,7 +25,6 @@ class MatchSequence extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final navigator = Navigator.of(context);
 
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
@@ -84,8 +83,8 @@ class MatchSequence extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: fights.length,
                       itemBuilder: (context, index) {
-                        return FightListItem(match, fights, index,
-                            (match, fights, index) => navigateToFightScreen(navigator, match, fights, index),
+                        return FightListItem(
+                            match, fights[index], (match, fight) => navigateToFightScreen(context, match, fight),
                             flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
                       },
                     ),
@@ -106,13 +105,12 @@ class MatchSequence extends StatelessWidget {
 
 class FightListItem extends StatelessWidget {
   final TeamMatch match;
-  final List<Fight> fights;
-  final int index;
-  final Function(TeamMatch match, List<Fight> fights, int index) listItemCallback;
+  final Fight fight;
+  final Function(TeamMatch match, Fight fight) listItemCallback;
   final int flexWidthWeight;
   final int flexWidthStyle;
 
-  const FightListItem(this.match, this.fights, this.index, this.listItemCallback,
+  const FightListItem(this.match, this.fight, this.listItemCallback,
       {this.flexWidthWeight = 12, this.flexWidthStyle = 5, Key? key})
       : super(key: key);
 
@@ -137,12 +135,11 @@ class FightListItem extends StatelessWidget {
     double fontSizeDefault = width / 60;
     TextStyle fontStyleDefault = TextStyle(fontSize: fontSizeDefault);
 
-    final fight = fights[index];
     return Column(
       children: [
         InkWell(
           onTap: () {
-            listItemCallback(match, fights, index);
+            listItemCallback(match, fight);
           },
           child: IntrinsicHeight(
             child: ManyConsumer<FightAction, Fight>(

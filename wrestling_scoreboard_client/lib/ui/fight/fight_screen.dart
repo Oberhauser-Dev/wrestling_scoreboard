@@ -2,16 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_action_controls.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/colors.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -24,9 +27,55 @@ import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_main_controls.dart';
 
-void navigateToFightScreen(NavigatorState navigator, TeamMatch match, List<Fight> fights, int index) async {
-  final actions = await dataProvider.readMany<FightAction, Fight>(filterObject: fights[index]);
-  navigator.push(MaterialPageRoute(builder: (context) => FightScreen(match, fights, actions, index)));
+void navigateToFightScreen(BuildContext context, TeamMatch match, Fight fight) async {
+  context.go('/${TeamMatchOverview.route}/${match.id}/${FightDisplay.route}/${fight.id}');
+}
+
+/// Class to load a single fight, while also consider the previous and the next fight.
+/// So must load the whole list of fights to keep track of what comes next.
+/// TODO: This may can be done server side with its own request in the future.
+class FightDisplay extends StatelessWidget {
+  static const route = 'fight';
+  final int matchId;
+  final int fightId;
+  final TeamMatch? initialMatch;
+
+  const FightDisplay({
+    required this.matchId,
+    required this.fightId,
+    this.initialMatch,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return SingleConsumer<TeamMatch>(
+        id: matchId,
+        initialData: initialMatch,
+        builder: (context, match) {
+          if (match == null) return ExceptionWidget(localizations.notFoundException);
+          return ManyConsumer<Fight, TeamMatch>(
+              filterObject: match,
+              builder: (context, fights) {
+                if (fights.isEmpty) {
+                  return Center(
+                    child: Text(
+                      localizations.noItems,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  );
+                }
+                final currentFight = fights.singleWhere((element) => element.id == fightId);
+                final currentFightIndex = fights.indexOf(currentFight);
+                return ManyConsumer<FightAction, Fight>(
+                    filterObject: currentFight,
+                    builder: (context, actions) {
+                      return FightScreen(match, fights, actions, currentFightIndex);
+                    });
+              });
+        });
+  }
 }
 
 /// Initialize with default values, but do not synchronize with live data, as during a fight the connection could be interrupted. So the client always sends data, but never should receive any.
@@ -161,7 +210,7 @@ class FightState extends State<FightScreen> {
     handleAction = (FightScreenActionIntent intent) {
       FightActionHandler.handleIntentStatic(
           intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,
-          navigator: Navigator.of(context));
+          context: context);
     };
   }
 

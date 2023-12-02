@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -125,9 +126,9 @@ class FightActionHandler extends StatelessWidget {
       Key? key})
       : super(key: key);
 
-  Future<void> handleIntent(FightScreenActionIntent intent, {NavigatorState? navigator}) async {
+  Future<void> handleIntent(FightScreenActionIntent intent, {BuildContext? context}) async {
     await handleIntentStatic(intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,
-        navigator: navigator);
+        context: context);
   }
 
   static Future<void> handleIntentStatic(
@@ -139,7 +140,7 @@ class FightActionHandler extends StatelessWidget {
       void Function(List<FightAction> actions) setActions,
       int fightIndex,
       Function(FightScreenActions action) doAction,
-      {NavigatorState? navigator}) async {
+      {BuildContext? context}) async {
     final fight = fights[fightIndex];
     switch (intent.type) {
       case FightScreenActions.startStop:
@@ -159,25 +160,25 @@ class FightActionHandler extends StatelessWidget {
         stopwatch.reset();
         break;
       case FightScreenActions.nextFight:
-        if (navigator != null) {
+        if (context != null) {
           int index = fightIndex + 1;
           if (index < fights.length) {
-            navigator.pop();
-            navigateToFightScreen(navigator, match, fights, index);
+            context.pop();
+            navigateToFightScreen(context, match, fights[index]);
           }
         }
         break;
       case FightScreenActions.previousFight:
-        if (navigator != null) {
+        if (context != null) {
           int index = fightIndex - 1;
           if (index >= 0) {
-            navigator.pop();
-            navigateToFightScreen(navigator, match, fights, index);
+            context.pop();
+            navigateToFightScreen(context, match, fights[index]);
           }
         }
         break;
       case FightScreenActions.quit:
-        if (navigator != null) navigator.pop();
+        if (context != null) context.pop();
         break;
       case FightScreenActions.redOne:
         var action = FightAction(
@@ -346,7 +347,6 @@ class FightActionHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigator = Navigator.of(context);
     const redOneIntent = FightScreenActionIntent.redOne();
     const redTwoIntent = FightScreenActionIntent.redTwo();
     const redThreeIntent = FightScreenActionIntent.redThree();
@@ -377,7 +377,7 @@ class FightActionHandler extends StatelessWidget {
       child: Actions(
         actions: <Type, Action<Intent>>{
           FightScreenActionIntent: CallbackAction<FightScreenActionIntent>(
-            onInvoke: (FightScreenActionIntent intent) => handleIntent(intent, navigator: navigator),
+            onInvoke: (FightScreenActionIntent intent) => handleIntent(intent, context: context),
           )
         },
         child: RawKeyboardListener(
