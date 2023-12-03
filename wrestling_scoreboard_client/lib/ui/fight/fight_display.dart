@@ -9,10 +9,12 @@ import 'package:wrestling_scoreboard_client/data/fight_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
+import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_action_controls.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/technical_points.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/time_display.dart';
+import 'package:wrestling_scoreboard_client/ui/match/common_elements.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
@@ -22,8 +24,6 @@ import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-import '../components/fitted_text.dart';
-import '../match/common_elements.dart';
 import 'fight_actions.dart';
 import 'fight_main_controls.dart';
 
@@ -93,6 +93,8 @@ class FightScreen extends StatefulWidget {
 }
 
 class FightState extends State<FightScreen> {
+  static const flexWidths = [50, 30, 50];
+
   final StreamController<List<FightAction>> _onChangeActions = StreamController.broadcast();
   late TeamMatch match;
   late Fight fight;
@@ -214,57 +216,62 @@ class FightState extends State<FightScreen> {
     };
   }
 
-  displayName(ParticipantState? pStatus, double padding, double cellHeight, double fontSizeDefault) {
+  displayName(ParticipantState? pStatus, double padding) {
     return Expanded(
-        child: Column(children: [
-      Container(
-          padding: EdgeInsets.all(padding),
-          height: cellHeight * 2,
-          child: Center(
-              child: FittedText(
-            pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
-            style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white),
-          ))),
-      SizedBox(
-          height: cellHeight,
-          child: Center(
-              child: Text(
-                  (pStatus?.participation.weight != null
-                      ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
-                      : AppLocalizations.of(context)!.participantUnknownWeight),
-                  style: TextStyle(
-                      fontSize: fontSizeDefault,
-                      color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white)))),
-    ]));
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+              padding: EdgeInsets.all(padding),
+              child: Center(
+                child: ScaledText(
+                  pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
+                  color: pStatus == null ? Colors.white30 : Colors.white,
+                  fontSize: 28,
+                  minFontSize: 20,
+                ),
+              )),
+          SizedBox(
+              child: Center(
+                  child: ScaledText(
+                      (pStatus?.participation.weight != null
+                          ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
+                          : AppLocalizations.of(context)!.participantUnknownWeight),
+                      color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white))),
+        ],
+      ),
+    );
   }
 
-  displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding, double cellHeight) {
+  displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding) {
     return Consumer<ParticipantState?>(
       builder: (context, data, child) => pStatus?.classificationPoints != null
           ? Container(
               color: color.shade800,
-              height: cellHeight * 3,
               padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
-              child: FittedText(
-                pStatus!.classificationPoints.toString(),
+              child: Center(
+                child: ScaledText(
+                  pStatus!.classificationPoints.toString(),
+                  fontSize: 46,
+                  minFontSize: 30,
+                ),
               ),
             )
           : Container(),
     );
   }
 
-  displayTechnicalPoints(ParticipantStateModel pStatus, FightRole role, double cellHeight) {
+  displayTechnicalPoints(ParticipantStateModel pStatus, FightRole role) {
     return Expanded(
       flex: 33,
       child: TechnicalPoints(
         pStatusModel: pStatus,
-        height: cellHeight,
         role: role,
       ),
     );
   }
 
-  displayParticipant(ParticipantState? pStatus, FightRole role, double padding, double cellHeight, double fontSize) {
+  displayParticipant(ParticipantState? pStatus, FightRole role, double padding) {
     var color = getColorFromFightRole(role);
 
     return Container(
@@ -275,8 +282,8 @@ class FightState extends State<FightScreen> {
           initialData: pStatus,
           builder: (context, pStatus) {
             List<Widget> items = [
-              displayName(pStatus, padding, cellHeight, fontSize),
-              displayClassificationPoints(pStatus, color, padding, cellHeight),
+              displayName(pStatus, padding),
+              displayClassificationPoints(pStatus, color, padding),
             ];
             if (role == FightRole.blue) items = List.from(items.reversed);
             return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
@@ -359,10 +366,6 @@ class FightState extends State<FightScreen> {
     final localizations = AppLocalizations.of(context)!;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
-    TextStyle fontStyleInfo = TextStyle(fontSize: width / 60);
-    double cellHeight = width / 30;
-    double fontSizeDefault = width / 90;
-    double cellHeightClock = width / 6;
     final bottomPadding = EdgeInsets.only(bottom: padding);
 
     MaterialColor stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : white;
@@ -399,66 +402,54 @@ class FightState extends State<FightScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                row(padding: bottomPadding, children: CommonElements.getTeamHeader(match, fights, context)),
+                row(
+                    padding: bottomPadding,
+                    children: CommonElements.getTeamHeader(match, fights, context)
+                        .asMap()
+                        .entries
+                        .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                        .toList()),
                 row(padding: bottomPadding, children: [
                   Expanded(
                     flex: 50,
-                    child: displayParticipant(fight.r, FightRole.red, padding, cellHeight, fontSizeDefault),
+                    child: displayParticipant(fight.r, FightRole.red, padding),
                   ),
                   Expanded(
                       flex: 20,
-                      child: Column(children: [
+                      child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                         Row(children: [
                           Expanded(
-                              child: Container(
-                                  padding: EdgeInsets.all(padding),
-                                  child: Center(
-                                      child: Text(
-                                    '${AppLocalizations.of(context)!.fight} ${fightIndex + 1}',
-                                    style: fontStyleInfo,
-                                  )))),
+                              child: Center(
+                                  child: ScaledText(
+                            '${AppLocalizations.of(context)!.fight} ${fightIndex + 1}',
+                                    minFontSize: 10,
+                          ))),
                         ]),
-                        Container(
-                            padding: EdgeInsets.all(padding),
-                            child: Center(
-                                child: Text(
-                              '${styleToString(fight.weightClass.style, context)}',
-                              style: fontStyleInfo,
-                            ))),
-                        Container(
-                            padding: EdgeInsets.all(padding),
-                            child: Center(
-                                child: Text(
-                              fight.weightClass.name,
-                              style: fontStyleInfo,
-                            ))),
+                        Center(
+                            child: ScaledText(
+                          '${styleToString(fight.weightClass.style, context)}',
+                              minFontSize: 10,
+                        )),
+                        Center(
+                            child: ScaledText(
+                          fight.weightClass.name,
+                              minFontSize: 10,
+                        )),
                       ])),
                   Expanded(
                     flex: 50,
-                    child: displayParticipant(fight.b, FightRole.blue, padding, cellHeight, fontSizeDefault),
+                    child: displayParticipant(fight.b, FightRole.blue, padding),
                   ),
                 ]),
                 row(
                   padding: bottomPadding,
                   children: [
-                    displayTechnicalPoints(_r, FightRole.red, cellHeightClock),
+                    displayTechnicalPoints(_r, FightRole.red),
+                    Expanded(flex: 2, child: FightActionControls(FightRole.red, fight.r == null ? null : handleAction)),
+                    Expanded(flex: 50, child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100))),
                     Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                            height: cellHeightClock,
-                            child: FightActionControls(FightRole.red, fight.r == null ? null : handleAction))),
-                    Expanded(
-                        flex: 50,
-                        child: SizedBox(
-                          height: cellHeightClock,
-                          child: Center(child: TimeDisplay(stopwatch, stopwatchColor)),
-                        )),
-                    Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                            height: cellHeightClock,
-                            child: FightActionControls(FightRole.blue, fight.b == null ? null : handleAction))),
-                    displayTechnicalPoints(_b, FightRole.blue, cellHeightClock),
+                        flex: 2, child: FightActionControls(FightRole.blue, fight.b == null ? null : handleAction)),
+                    displayTechnicalPoints(_b, FightRole.blue),
                   ],
                 ),
                 Container(

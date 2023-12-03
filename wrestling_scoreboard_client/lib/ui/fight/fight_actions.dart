@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/data/fight_role.dart';
-import 'package:wrestling_scoreboard_client/ui/components/fitted_text.dart';
+import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ActionsWidget extends StatelessWidget {
@@ -14,7 +14,6 @@ class ActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
-    double cellHeight = width / 18;
 
     return SingleChildScrollView(
       reverse: true,
@@ -28,10 +27,13 @@ class ActionsWidget extends StatelessWidget {
                   message: durationToString(e.duration),
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 1),
-                    height: cellHeight,
                     padding: EdgeInsets.all(padding),
                     color: color,
-                    child: FittedText(e.toString()),
+                    child: ScaledText(
+                      e.toString(),
+                      fontSize: 22,
+                      softWrap: false,
+                    ),
                   ));
             }),
           ],

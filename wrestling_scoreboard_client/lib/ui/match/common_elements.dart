@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/ui/components/fitted_text.dart';
+import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CommonElements {
