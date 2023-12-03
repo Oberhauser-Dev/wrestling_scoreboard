@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HeadingText extends StatelessWidget {
@@ -13,5 +14,20 @@ class HeadingText extends StatelessWidget {
           heading.toUpperCase(),
           style: Theme.of(context).textTheme.bodySmall,
         ));
+  }
+}
+
+class AutoTextScaler extends TextScaler {
+  @override
+  final double textScaleFactor;
+  final double minFontSize;
+  final double maxFontSize;
+
+  const AutoTextScaler({this.textScaleFactor = 1, this.minFontSize = 0, this.maxFontSize = double.infinity});
+
+  @override
+  double scale(double fontSize) {
+    fontSize = fontSize * textScaleFactor;
+    return clampDouble(fontSize, minFontSize, maxFontSize);
   }
 }

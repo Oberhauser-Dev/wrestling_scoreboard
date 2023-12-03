@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,7 @@ class MatchDisplay extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
 
     double width = MediaQuery.of(context).size.width;
-    double padding = width / 100;
+    double padding = width / 140;
     int flexWidthWeight = 12;
     int flexWidthStyle = 5;
     return SingleConsumer<TeamMatch>(
@@ -35,21 +36,27 @@ class MatchDisplay extends StatelessWidget {
       initialData: teamMatch,
       builder: (context, match) {
         if (match == null) return ExceptionWidget(localizations.notFoundException);
+        final isMobile =
+            !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
+        final infoAction = IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () => handleSelectedTeamMatch(match, context),
+        );
         return Scaffold(
-          bottomNavigationBar: BottomAppBar(
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.info),
-                onPressed: () => handleSelectedTeamMatch(match, context),
-              ),
-            ]),
-          ),
+          appBar: isMobile ? AppBar(actions: [infoAction]) : null,
+          bottomNavigationBar: isMobile
+              ? null
+              : BottomAppBar(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
+                    ),
+                    infoAction,
+                  ]),
+                ),
           body: ManyConsumer<Fight, TeamMatch>(
             filterObject: match,
             builder: (context, fights) {
@@ -62,35 +69,62 @@ class MatchDisplay extends StatelessWidget {
                 //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
                 // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
               ];
-              return Column(
+
+              final flexWidths = [17, 50, 30, 50];
+              final headerItems = <Widget>[
+                Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: Center(
+                        child: ScaledText(
+                      matchInfos.join('\n'),
+                      softWrap: false,
+                      fontSize: 12,
+                      minFontSize: 10,
+                    ))),
+                ...CommonElements.getTeamHeader(match, fights, context),
+              ];
+              final column = Column(
                 children: [
-                  Column(children: [
-                    Row(children: [
-                      Expanded(
-                        flex: flexWidthWeight + flexWidthStyle,
-                        child: Container(
-                          padding: EdgeInsets.all(padding),
-                          child: FittedText(matchInfos.join('\n')),
-                        ),
-                      ),
-                      ...CommonElements.getTeamHeader(match, fights, context),
-                    ]),
-                    const Divider(
-                      height: 1,
-                    ),
-                  ]),
+                  IntrinsicHeight(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: headerItems
+                            .asMap()
+                            .entries
+                            .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                            .toList()),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: fights.length,
                       itemBuilder: (context, index) {
-                        return FightListItem(
-                            match, fights[index], (match, fight) => navigateToFightScreen(context, match, fight),
-                            flexWidthWeight: flexWidthWeight, flexWidthStyle: flexWidthStyle);
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () => navigateToFightScreen(context, match, fights[index]),
+                              child: IntrinsicHeight(
+                                child: ManyConsumer<FightAction, Fight>(
+                                  filterObject: fights[index],
+                                  builder: (context, actions) => Row(
+                                    children: FightListItemTwo(match: match, fight: fights[index], actions: actions)
+                                        .build(context)
+                                        .asMap()
+                                        .entries
+                                        .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Divider(height: 1),
+                          ],
+                        );
                       },
                     ),
                   ),
                 ],
               );
+              return column;
             },
           ),
         );
@@ -103,202 +137,132 @@ class MatchDisplay extends StatelessWidget {
   }
 }
 
-class FightListItem extends StatelessWidget {
+class FightListItemTwo {
   final TeamMatch match;
   final Fight fight;
-  final Function(TeamMatch match, Fight fight) listItemCallback;
-  final int flexWidthWeight;
-  final int flexWidthStyle;
+  final List<FightAction> actions;
 
-  const FightListItem(this.match, this.fight, this.listItemCallback,
-      {this.flexWidthWeight = 12, this.flexWidthStyle = 5, Key? key})
-      : super(key: key);
+  const FightListItemTwo({required this.match, required this.fight, required this.actions});
 
-  displayName(ParticipantState? pStatus, FightRole role, double fontSize, BuildContext context) {
+  displayName({ParticipantState? pStatus, required FightRole role, double? fontSize, required BuildContext context}) {
     return Container(
       color: getColorFromFightRole(role),
       child: Center(
-          child: Text(
-        pStatus == null
-            ? AppLocalizations.of(context)!.participantVacant
-            : pStatus.participation.membership.person.fullName,
-        style: TextStyle(color: pStatus == null ? Colors.white30 : Colors.white, fontSize: fontSize),
-      )),
+        child: ScaledText(
+          pStatus == null
+              ? AppLocalizations.of(context)!.participantVacant
+              : pStatus.participation.membership.person.fullName,
+          color: pStatus == null ? Colors.white30 : Colors.white,
+          fontSize: 17,
+          minFontSize: 14,
+        ),
+      ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double padding = width / 100;
-    EdgeInsets edgeInsets = EdgeInsets.all(padding);
-    double fontSizeDefault = width / 60;
-    TextStyle fontStyleDefault = TextStyle(fontSize: fontSizeDefault);
+  Widget displayParticipantState({ParticipantState? pState, required FightRole role}) {
+    final color = (role == fight.winnerRole) ? getColorFromFightRole(role).shade800 : null;
+    return SingleConsumer<ParticipantState>(
+      id: pState?.id,
+      initialData: pState,
+      builder: (context, pState) => Column(
+        children: [
+          Expanded(
+              flex: 70,
+              child: Container(
+                color: color,
+                child: Center(
+                  child: ScaledText(
+                    pState?.classificationPoints?.toString() ?? '-',
+                    fontSize: 15,
+                  ),
+                ),
+              )),
+          Expanded(
+            flex: 50,
+            child: Container(
+              color: color,
+              child: Center(
+                child: pState?.classificationPoints != null
+                    ? ScaledText(
+                        ParticipantState.getTechnicalPoints(actions, role).toString(),
+                        fontSize: 8,
+                      )
+                    : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            listItemCallback(match, fight);
-          },
-          child: IntrinsicHeight(
-            child: ManyConsumer<FightAction, Fight>(
-              filterObject: fight,
-              builder: (context, actions) => Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+  List<Widget> build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final padding = width / 100;
+    final edgeInsets = EdgeInsets.all(padding);
+    return [
+      Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Container(
+              padding: edgeInsets,
+              child: Center(
+                  child: ScaledText(
+                '${fight.weightClass.weight} $weightUnit',
+                softWrap: false,
+                minFontSize: 10,
+              )),
+            ),
+          ),
+          Expanded(
+              child: Center(
+                  child: ScaledText(
+            styleToAbbr(fight.weightClass.style, context),
+            minFontSize: 12,
+          ))),
+        ],
+      ),
+      displayName(pStatus: fight.r, role: FightRole.red, context: context),
+      Row(
+        children: [
+          Expanded(
+            flex: 50,
+            child: displayParticipantState(pState: fight.r, role: FightRole.red),
+          ),
+          Expanded(
+            flex: 100,
+            child: SingleConsumer<Fight>(
+              id: fight.id,
+              initialData: fight,
+              builder: (context, data) => Column(
                 children: [
                   Expanded(
-                      flex: flexWidthWeight,
+                      flex: 70,
                       child: Container(
-                        padding: edgeInsets,
-                        child: Center(child: Text('${fight.weightClass.weight} $weightUnit', style: fontStyleDefault)),
+                        color: data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
+                        child: Center(
+                          child: ScaledText(getAbbreviationFromFightResult(data?.result, context), fontSize: 12),
+                        ),
                       )),
                   Expanded(
-                      flex: flexWidthStyle,
-                      child:
-                          Center(child: Text(styleToAbbr(fight.weightClass.style, context), style: fontStyleDefault))),
-                  Expanded(
-                    flex: 55,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 50,
-                          child: displayName(fight.r, FightRole.red, fontSizeDefault, context),
-                        ),
-                        SingleConsumer<ParticipantState>(
-                          id: fight.r?.id,
-                          initialData: fight.r,
-                          builder: (context, pState) => Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                    flex: 70,
-                                    child: Container(
-                                      color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
-                                      child: Center(
-                                        child: Text(pState?.classificationPoints?.toString() ?? '-',
-                                            style: fontStyleDefault),
-                                      ),
-                                    )),
-                                Expanded(
-                                  flex: 50,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 50,
-                                        child: Container(
-                                          color: fight.winnerRole == FightRole.red ? Colors.red.shade800 : null,
-                                          child: Center(
-                                            child: pState?.classificationPoints != null
-                                                ? Text(
-                                                    ParticipantState.getTechnicalPoints(actions, FightRole.red)
-                                                        .toString(),
-                                                    style: TextStyle(fontSize: fontSizeDefault / 2))
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 10,
-                    child: SingleConsumer<Fight>(
-                      id: fight.id,
-                      initialData: fight,
-                      builder: (context, data) => Column(
-                        children: [
-                          Expanded(
-                              flex: 70,
-                              child: Container(
-                                color:
-                                    data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
-                                child: Center(
-                                  child: Text(getAbbreviationFromFightResult(data?.result, context),
-                                      style: TextStyle(fontSize: fontSizeDefault * 0.7)),
-                                ),
-                              )),
-                          Expanded(
-                              flex: 50,
-                              child: Center(
-                                child: data?.winnerRole != null
-                                    ? Text(durationToString(data!.duration),
-                                        style: TextStyle(fontSize: fontSizeDefault / 2))
-                                    : null,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 55,
-                    child: Row(
-                      children: [
-                        SingleConsumer<ParticipantState>(
-                          id: fight.b?.id,
-                          initialData: fight.b,
-                          builder: (context, pState) => Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                    flex: 70,
-                                    child: Container(
-                                      color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
-                                      child: Center(
-                                        child: Text(pState?.classificationPoints?.toString() ?? '-',
-                                            style: fontStyleDefault),
-                                      ),
-                                    )),
-                                Expanded(
-                                  flex: 50,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 50,
-                                        child: Container(
-                                          color: fight.winnerRole == FightRole.blue ? Colors.blue.shade800 : null,
-                                          child: Center(
-                                            child: pState?.classificationPoints != null
-                                                ? Text(
-                                                    ParticipantState.getTechnicalPoints(actions, FightRole.blue)
-                                                        .toString(),
-                                                    style: TextStyle(fontSize: fontSizeDefault / 2))
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 50,
-                          child: displayName(fight.b, FightRole.blue, fontSizeDefault, context),
-                        )
-                      ],
-                    ),
-                  ),
+                      flex: 50,
+                      child: Center(
+                        child:
+                            data?.winnerRole != null ? ScaledText(durationToString(data!.duration), fontSize: 8) : null,
+                      )),
                 ],
               ),
             ),
           ),
-        ),
-        const Divider(
-          height: 1,
-        ),
-      ],
-    );
+          Expanded(
+            flex: 50,
+            child: displayParticipantState(pState: fight.b, role: FightRole.blue),
+          ),
+        ],
+      ),
+      displayName(pStatus: fight.b, role: FightRole.blue, context: context),
+    ];
   }
 }

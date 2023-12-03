@@ -4,52 +4,61 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class CommonElements {
   static List<Widget> getTeamHeader(TeamMatch match, List<Fight> fights, BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double padding = width / 75;
-    double cellHeight = width / 15;
+    final width = MediaQuery.of(context).size.width;
+    final padding = width / 100;
+    final edgeInsets = EdgeInsets.all(padding);
     return [
-      Expanded(
-          flex: 50,
-          child: Container(
-            height: cellHeight,
-            padding: EdgeInsets.all(padding),
-            color: Colors.red.shade800,
-            child: Center(child: FittedText(match.home.team.name)),
+      Container(
+          color: Colors.red.shade800,
+          padding: edgeInsets,
+          child: Center(
+            child: ScaledText(
+              match.home.team.name,
+              fontSize: 28,
+              minFontSize: 16,
+            ),
           )),
-      Expanded(
-        flex: 10,
-        child: Container(
-          height: cellHeight,
-          color: Colors.red.shade900,
-          padding: EdgeInsets.all(padding),
-          child: Center(
-            child: FittedText(
-              TeamMatch.getHomePoints(fights).toString(),
+      Row(
+        children: [
+          Expanded(
+            child: Container(
+              color: Colors.red.shade900,
+              child: Center(
+                child: ScaledText(
+                  TeamMatch.getHomePoints(fights).toString(),
+                  fontSize: 28,
+                  minFontSize: 16,
+                  softWrap: false,
+                ),
+              ),
             ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.blue.shade900,
+              child: Center(
+                child: ScaledText(
+                  TeamMatch.getGuestPoints(fights).toString(),
+                  fontSize: 28,
+                  minFontSize: 16,
+                  softWrap: false,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      Container(
+        color: Colors.blue.shade800,
+        padding: edgeInsets,
+        child: Center(
+          child: ScaledText(
+            match.guest.team.name,
+            fontSize: 28,
+            minFontSize: 16,
           ),
         ),
       ),
-      Expanded(
-        flex: 10,
-        child: Container(
-          height: cellHeight,
-          color: Colors.blue.shade900,
-          padding: EdgeInsets.all(padding),
-          child: Center(
-            child: FittedText(
-              TeamMatch.getGuestPoints(fights).toString(),
-            ),
-          ),
-        ),
-      ),
-      Expanded(
-          flex: 50,
-          child: Container(
-            height: cellHeight,
-            padding: EdgeInsets.all(padding),
-            color: Colors.blue.shade800,
-            child: Center(child: FittedText(match.guest.team.name)),
-          ))
     ];
   }
 }
