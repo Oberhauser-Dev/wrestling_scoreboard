@@ -136,10 +136,10 @@ class LeagueOverview extends StatelessWidget {
   }
 
   handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
-    context.go('/${TeamOverview.route}/${teamParticipation.team.id}');
+    context.push('/${TeamOverview.route}/${teamParticipation.team.id}');
   }
 
   handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
-    context.go('/${LeagueWeightClassOverview.route}/${leagueWeightClass.id}');
+    context.push('/${LeagueWeightClassOverview.route}/${leagueWeightClass.id}');
   }
 }

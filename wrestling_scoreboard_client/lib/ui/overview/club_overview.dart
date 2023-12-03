@@ -115,10 +115,10 @@ class ClubOverview extends StatelessWidget {
   }
 
   handleSelectedTeam(Team team, BuildContext context) {
-    context.go('/${TeamOverview.route}/${team.id}');
+    context.push('/${TeamOverview.route}/${team.id}');
   }
 
   handleSelectedMembership(Membership membership, BuildContext context) {
-    context.go('/${MembershipOverview.route}/${membership.id}');
+    context.push('/${MembershipOverview.route}/${membership.id}');
   }
 }

@@ -99,7 +99,7 @@ class MatchDisplay extends StatelessWidget {
   }
 
   handleSelectedTeamMatch(TeamMatch match, BuildContext context) {
-    context.go('/${TeamMatchOverview.route}/${match.id}');
+    context.push('/${TeamMatchOverview.route}/${match.id}');
   }
 }
 

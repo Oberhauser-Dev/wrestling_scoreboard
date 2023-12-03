@@ -3,11 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/router.dart';
 import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
 
 void main() async {
   usePathUrlStrategy();
+  // Add this option to provide a way to stack pages indefinitely with `context.push`.
+  // The back button on the browser then behaves the same as the back button in the app.
+  // This comes with the price that URLs may not reflect the current stack on deep links (pasted links).
+  // The correct way would be to add all possible sub-routes of a base route.
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(const WrestlingScoreboardApp());
 }
 

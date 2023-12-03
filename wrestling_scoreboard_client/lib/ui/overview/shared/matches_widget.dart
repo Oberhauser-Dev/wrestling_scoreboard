@@ -79,10 +79,10 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
   }
 
   handleSelectedMatch(TeamMatch match, BuildContext context) async {
-    context.go('/${TeamMatchOverview.route}/${match.id}');
+    context.push('/${TeamMatchOverview.route}/${match.id}');
   }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
-    context.go('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
+    context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 }

@@ -134,7 +134,7 @@ class TeamMatchOverview extends StatelessWidget {
   }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
-    context.go('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
+    context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 
   handleSelectedLineup(Lineup lineup, League league, TeamMatch match, NavigatorState navigator) async {

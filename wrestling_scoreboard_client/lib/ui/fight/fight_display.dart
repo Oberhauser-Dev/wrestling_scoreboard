@@ -28,7 +28,7 @@ import 'fight_actions.dart';
 import 'fight_main_controls.dart';
 
 void navigateToFightScreen(BuildContext context, TeamMatch match, Fight fight) async {
-  context.go('/${TeamMatchOverview.route}/${match.id}/${FightDisplay.route}/${fight.id}');
+  context.push('/${TeamMatchOverview.route}/${match.id}/${FightDisplay.route}/${fight.id}');
 }
 
 /// Class to load a single fight, while also consider the previous and the next fight.

@@ -147,10 +147,10 @@ class HomeState extends State<Home> {
   }
 
   handleSelectedClub(Club club, BuildContext context) {
-    context.go('/${ClubOverview.route}/${club.id}');
+    context.push('/${ClubOverview.route}/${club.id}');
   }
 
   handleSelectedLeague(League league, BuildContext context) {
-    context.go('/${LeagueOverview.route}/${league.id}');
+    context.push('/${LeagueOverview.route}/${league.id}');
   }
 }
