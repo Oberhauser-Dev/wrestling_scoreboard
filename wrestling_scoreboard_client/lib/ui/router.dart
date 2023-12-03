@@ -12,16 +12,16 @@ final router = GoRouter(
   routes: [
     GoRoute(path: '/', builder: (context, state) => const AppNavigation(), routes: [
       GoRoute(
-        path: '${TeamOverview.route}/:id',
-        builder: (context, state) => TeamOverview(id: int.parse(state.pathParameters['id']!)),
+        path: '${TeamOverview.route}/:team_id',
+        builder: (context, state) => TeamOverview(id: int.parse(state.pathParameters['team_id']!)),
       ),
       GoRoute(
-        path: '${ClubOverview.route}/:id',
-        builder: (context, state) => ClubOverview(id: int.parse(state.pathParameters['id']!)),
+        path: '${ClubOverview.route}/:club_id',
+        builder: (context, state) => ClubOverview(id: int.parse(state.pathParameters['club_id']!)),
       ),
       GoRoute(
-        path: '${LeagueOverview.route}/:id',
-        builder: (context, state) => LeagueOverview(id: int.parse(state.pathParameters['id']!)),
+        path: '${LeagueOverview.route}/:league_id',
+        builder: (context, state) => LeagueOverview(id: int.parse(state.pathParameters['league_id']!)),
       ),
       GoRoute(
         path: '${TeamMatchOverview.route}/:match_id',
@@ -42,8 +42,8 @@ final router = GoRouter(
         ],
       ),
       GoRoute(
-        path: '${MembershipOverview.route}/:id',
-        builder: (context, state) => MembershipOverview(id: int.parse(state.pathParameters['id']!)),
+        path: '${MembershipOverview.route}/:membership_id',
+        builder: (context, state) => MembershipOverview(id: int.parse(state.pathParameters['membership_id']!)),
       ),
     ]),
   ],
