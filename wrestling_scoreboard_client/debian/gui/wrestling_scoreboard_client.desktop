@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=0.0.1
-Name=Wrestling Scoreboard Client
-GenericName=Wrestling Scoreboard Client
+Name=Wrestling Scoreboard
+GenericName=Sports event administration
 Comment=Wrestling software for managing team fights and tournaments.
 Terminal=false
 Type=Application

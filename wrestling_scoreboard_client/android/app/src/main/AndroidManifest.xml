@@ -2,7 +2,7 @@
     package="dev.oberhauser.wrestling_scoreboard_client">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="wrestling_scoreboard_client"
+        android:label="Wrestling Scoreboard"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
