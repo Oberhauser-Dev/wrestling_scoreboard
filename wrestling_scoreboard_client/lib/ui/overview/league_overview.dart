@@ -10,9 +10,9 @@ import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/shared/matches_widget.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -136,7 +136,7 @@ class LeagueOverview extends StatelessWidget {
   }
 
   handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
-    context.push('/${TeamOverview.route}/${teamParticipation.team.id}');
+    context.push('/${LeagueTeamParticipationOverview.route}/${teamParticipation.id}');
   }
 
   handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
