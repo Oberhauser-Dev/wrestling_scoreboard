@@ -57,7 +57,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
