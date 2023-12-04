@@ -5,6 +5,7 @@ import '../fight.dart';
 import 'team_match.dart';
 
 part 'team_match_fight.freezed.dart';
+
 part 'team_match_fight.g.dart';
 
 @freezed
@@ -13,9 +14,9 @@ class TeamMatchFight with _$TeamMatchFight implements DataObject {
 
   const factory TeamMatchFight({
     int? id,
+    required int pos,
     required TeamMatch teamMatch,
     required Fight fight,
-    required int pos,
   }) = _TeamMatchFight;
 
   factory TeamMatchFight.fromJson(Map<String, Object?> json) => _$TeamMatchFightFromJson(json);
@@ -36,6 +37,7 @@ class TeamMatchFight with _$TeamMatchFight implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
+      'pos': pos,
       'team_match_id': teamMatch.id,
       'fight_id': fight.id,
     };
