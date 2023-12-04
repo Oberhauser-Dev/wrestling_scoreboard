@@ -1,19 +1,51 @@
 /// The result of a single fight.
 enum FightResult {
-  vfa, // VICTORY BY FALL,              SCHULTERSIEG (SS)
-  vin, // VICTORY BY INJURY,            AUFGABESIEG WEGEN VERLETZUNG (AS)
-  vca, // 3 CAUTIONS "O" DUE TO ERROR AGAINST THE RULES,              SIEGER DURCH 3 VERWARNUNGEN / REGELWIDRIGKEIT (DV)
-  vsu, // TECHNICAL SUPERIORITY - LOSER WITHOUT TECHNICAL POINTS,     TECHNISCHE ÜBERLEGENHEIT - VERLIERER OHNE TECHNISCHE PUNKTE (TÜ)
-  vsu1, // TECHNICAL SUPERIORITY - LOSER WITH TECHNICAL POINTS,       TECHNISCHE ÜBERLEGENHEIT - VERLIERER HAT TECHNISCHE PUNKTE (TÜ1)
-  vpo, // VICTORY BY POINTS - THE LOSER WITHOUT ANY TECHNICAL POINTS, PUNKTSIEG - VERLIERER OHNE TECHNISCHE PUNKTE (PS)
-  vpo1, // VICTORY BY POINTS - THE LOSER WITH TECHNICAL POINTS,       PUNKTSIEG - VERLIERER HAT TECHNISCHE PUNKTE (PS1)
-  vfo, // VICTORY BY FORFEIT - NO SHOW UP ON THE MAT,                 AUSSCHLUSS VOM WETTKAMPF WG. NICHTANTRITT (DN)
-  dsq, // DISQUALIFICAT. FROM THE WHOLE COMPET. DUE TO INFR. OF THE RULES, AUSSCHLUSS VOM WETTKAMPF WG. UNSPORTLICHK./TÄTLICHKEIT (DQ)
-  dsq2, // IN CASE BOTH WRESTLERS HAVE BEEN DISQ. DUE TO INFR. OF THE RULES, BEIDE RINGER DISQ. (UNSPORTLICHKEIT/ REGELWIDRIGKEIT (DQ2)
+  /// Victory by fall
+  /// Schultersieg (SS)
+  vfa,
+
+  /// Victory by injury
+  /// Aufgabesieg wegen Verletzung (AS)
+  vin,
+
+  /// Victory by cautions - the opponent received 3 cautions "O" due to error against the rules
+  /// Sieger durch 3 Verwarnungen / Regelwidrigkeit des Gegners (DV)
+  vca,
+
+  /// Technical superiority - loser without technical points
+  /// Technische Überlegenheit - Verlierer ohne Technische Punkte (TÜ)
+  vsu,
+
+  /// Technical superiority - loser with technical points
+  /// Technische Überlegenheit - Verlierer hat Technische Punkte (TÜ1)
+  vsu1,
+
+  /// Victory by points - the loser without any technical points
+  /// Punktsieg - Verlierer ohne Technische Punkte (PS)
+  vpo,
+
+  /// Victory by points - the loser with technical points
+  /// Punktsieg - Verlierer hat Technische Punkte (PS1)
+  vpo1,
+
+  /// Victory by forfeit - no show up on the mat
+  /// Sieger durch Ausschluss des Gegners vom Wettkampf wegen Nichtantritt (DN)
+  vfo,
+
+  /// Victory by disqualification of the opponent from the whole competition due to infringement of the rules
+  /// Sieger durch Ausschluss des Gegners vom Wettkampf wegen Unsportlichkeit / Tätlichkeit (DQ)
+  dsq,
+
+  /// In case both wrestlers have been disqualified due to infringement of the rules
+  /// Beide Ringer disqualifiziert wegen Unsportlichkeit / Regelwidrigkeit (DQ2)
+  dsq2,
 }
 
 extension FightResultParser on FightResult {
-  String get name => toString().split('.').last;
+  String get name =>
+      toString()
+          .split('.')
+          .last;
 
   static FightResult valueOf(String name) => FightResult.values.singleWhere((element) => element.name == name);
 }
