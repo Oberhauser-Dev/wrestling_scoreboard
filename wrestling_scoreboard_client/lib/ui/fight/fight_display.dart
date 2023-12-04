@@ -450,10 +450,9 @@ class FightState extends State<FightScreen> {
                   padding: bottomPadding,
                   children: [
                     displayTechnicalPoints(_r, FightRole.red),
-                    Expanded(flex: 2, child: FightActionControls(FightRole.red, fight.r == null ? null : handleAction)),
+                    FightActionControls(FightRole.red, fight.r == null ? null : handleAction),
                     Expanded(flex: 50, child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100))),
-                    Expanded(
-                        flex: 2, child: FightActionControls(FightRole.blue, fight.b == null ? null : handleAction)),
+                    FightActionControls(FightRole.blue, fight.b == null ? null : handleAction),
                     displayTechnicalPoints(_b, FightRole.blue),
                   ],
                 ),
