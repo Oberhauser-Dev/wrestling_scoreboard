@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
@@ -130,7 +131,7 @@ class TeamMatchOverview extends StatelessWidget {
                       ],
                     ),
                     ListGroup(
-                      header: HeadingItem(title: '${localizations.lineups} & ${localizations.fights}'),
+                      header: HeadingItem(title: localizations.lineups),
                       items: [
                         ContentItem(
                             title: homeLineup.team.name,
@@ -150,8 +151,39 @@ class TeamMatchOverview extends StatelessWidget {
                                   match,
                                   navigator,
                                 )),
-                        ContentItem(title: localizations.fights, icon: Icons.sports_kabaddi, onTap: null)
                       ],
+                    ),
+                    ManyConsumer<Fight, TeamMatch>(
+                      filterObject: match,
+                      builder: (BuildContext context, List<Fight> fights) {
+                        return ListGroup(
+                          header: HeadingItem(
+                            title: localizations.fights,
+                            /*trailing: IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FightEdit(
+                                    initialMatch: match,
+                                  ),
+                                ),
+                              ),
+                            ),*/
+                          ),
+                          items: fights.map((fight) => SingleConsumer<Fight>(
+                              id: fight.id,
+                              initialData: fight,
+                              builder: (context, team) => ContentItem(
+                                    title:
+                                        '${fight.weightClass.name}, ${styleToAbbr(fight.weightClass.style, context)} | '
+                                        '${fight.r?.participation.membership.person.fullName ?? localizations.participantVacant} vs. '
+                                        '${fight.b?.participation.membership.person.fullName ?? localizations.participantVacant}',
+                                    icon: Icons.sports_kabaddi,
+                                    /*onTap: () => handleSelectedFight(fight, context),*/
+                                  ))),
+                        );
+                      },
                     ),
                   ];
                   return GroupedList(items: items);
@@ -161,6 +193,10 @@ class TeamMatchOverview extends StatelessWidget {
           );
         });
   }
+
+  /*handleSelectedFight(Fight fight, BuildContext context) {
+    context.push('/${FightOverview.route}/${fight.id}');
+  }*/
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
