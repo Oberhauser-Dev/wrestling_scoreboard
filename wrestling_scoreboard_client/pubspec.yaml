@@ -30,13 +30,7 @@ dependencies:
   wrestling_scoreboard_common:
     path: ../wrestling_scoreboard_common
   pdf: ^3.10.1
-  printing: #^5.11.1
-    git:
-      url: https://github.com/Gustl22/dart_pdf.git
-      path: printing
-      ref: patch-1
-    
-    
+  printing: ^5.11.1  
 
 dev_dependencies:
   flutter_test:
