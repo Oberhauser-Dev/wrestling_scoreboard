@@ -88,16 +88,45 @@ class TeamMatchOverview extends StatelessWidget {
                             subtitle: '${localizations.team} ${localizations.blue}',
                             icon: Icons.group,
                           ),
-                          ContentItem(title: localizations.weightClass, icon: Icons.fitness_center, onTap: null),
+                          ContentItem(
+                            title: match.league?.name ?? '-',
+                            subtitle: localizations.league,
+                            icon: Icons.emoji_events,
+                          ),
                         ]),
                     ListGroup(
                       header: HeadingItem(title: localizations.persons),
                       items: [
-                        ContentItem(title: localizations.referee, icon: Icons.sports, onTap: null),
-                        ContentItem(title: localizations.matChairman, icon: Icons.manage_accounts, onTap: null),
-                        ContentItem(title: localizations.timeKeeper, icon: Icons.pending_actions, onTap: null),
-                        ContentItem(title: localizations.transcriptionWriter, icon: Icons.history_edu, onTap: null),
-                        ContentItem(title: localizations.steward, icon: Icons.security, onTap: null),
+                        ContentItem(
+                          title: match.referee?.fullName ?? '-',
+                          subtitle: localizations.referee,
+                          icon: Icons.sports,
+                        ),
+                        ContentItem(
+                          title: match.matChairman?.fullName ?? '-',
+                          subtitle: localizations.matChairman,
+                          icon: Icons.manage_accounts,
+                        ),
+                        ContentItem(
+                          title: match.judge?.fullName ?? '-',
+                          subtitle: localizations.judge,
+                          icon: Icons.manage_accounts,
+                        ),
+                        ContentItem(
+                          title: match.timeKeeper?.fullName ?? '-',
+                          subtitle: localizations.timeKeeper,
+                          icon: Icons.pending_actions,
+                        ),
+                        ContentItem(
+                          title: match.transcriptWriter?.fullName ?? '-',
+                          subtitle: localizations.transcriptionWriter,
+                          icon: Icons.history_edu,
+                        ),
+                        ContentItem(
+                          title: '-', // Multiple stewards
+                          subtitle: localizations.steward,
+                          icon: Icons.security,
+                        ),
                       ],
                     ),
                     ListGroup(

@@ -108,8 +108,9 @@
   "injuryDurationInSecs": "Dauer der Verletzungszeit (in Sekunden)",
   "periodCount": "Anzahl der Kampfabschnitte",
 
-  "referee": "Schiedsrichter",
+  "referee": "Kampfrichter",
   "refereeAbbr": "SR",
+  "judge": "Punktrichter",
   "matChairman": "Mattenpräsident",
   "timeKeeper": "Zeitnehmer",
   "transcriptionWriter": "Protokollführer",

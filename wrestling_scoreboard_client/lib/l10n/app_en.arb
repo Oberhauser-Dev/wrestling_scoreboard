@@ -113,6 +113,7 @@
 
   "referee": "Referee",
   "refereeAbbr": "REF",
+  "judge": "Judge",
   "matChairman": "Mat president",
   "timeKeeper": "Time Keeper",
   "transcriptionWriter": "Transcription Writer",
