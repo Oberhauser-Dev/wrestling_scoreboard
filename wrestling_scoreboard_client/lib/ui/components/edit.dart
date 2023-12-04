@@ -45,7 +45,15 @@ class EditWidget extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        content: Text(localizations.invalidParameterException),
+                        content: Column(
+                          children: [
+                            Text(localizations.invalidParameterException),
+                            Text(
+                              e.message,
+                              style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
+                            ),
+                          ],
+                        ),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
