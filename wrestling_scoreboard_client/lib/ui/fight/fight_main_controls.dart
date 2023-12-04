@@ -87,17 +87,24 @@ class FightMainControlsState extends State<FightMainControls> {
 
   displayDropDown(FightRole role) {
     ParticipantState? pStatus = role == FightRole.red ? widget.fightState.fight.r : widget.fightState.fight.b;
+    ParticipantState? pStatusOpponent = role == FightRole.blue ? widget.fightState.fight.r : widget.fightState.fight.b;
     // Empty List, if pStatus is empty
-    List<DropdownMenuItem<FightResult?>> items = pStatus != null
-        ? FightResult.values.map((FightResult? value) {
-            return DropdownMenuItem<FightResult?>(
-              value: value,
-              child: Tooltip(
-                  message: getDescriptionFromFightResult(value, context),
-                  child: Text(getAbbreviationFromFightResult(value, context))),
-            );
-          }).toList()
-        : [];
+    List<DropdownMenuItem<FightResult?>> items = [];
+    if (pStatus != null) {
+      final fightResultValues = FightResult.values.toList();
+      if (pStatusOpponent == null) {
+        // Cannot select this option, as there is no opponent
+        fightResultValues.remove(FightResult.dsq2);
+      }
+      items.addAll(fightResultValues.map((FightResult? value) {
+        return DropdownMenuItem<FightResult?>(
+          value: value,
+          child: Tooltip(
+              message: getDescriptionFromFightResult(value, context),
+              child: Text(getAbbreviationFromFightResult(value, context))),
+        );
+      }).toList());
+    }
     items.add(DropdownMenuItem<FightResult?>(
       value: null,
       child: Text(AppLocalizations.of(context)!.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
