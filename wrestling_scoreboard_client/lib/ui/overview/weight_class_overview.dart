@@ -33,7 +33,7 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
           editPage: editPage,
           onDelete: () {
             onDelete();
-            dataProvider.deleteSingle(data);
+            dataProvider.deleteSingle<WeightClass>(data);
           },
           classLocale: classLocale,
           children: [

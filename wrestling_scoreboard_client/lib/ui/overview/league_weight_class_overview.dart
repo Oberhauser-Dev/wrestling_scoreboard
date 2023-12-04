@@ -29,7 +29,7 @@ class LeagueWeightClassOverview extends WeightClassOverview {
               leagueWeightClass: data,
               initialLeague: data.league,
             ),
-            onDelete: () => dataProvider.deleteSingle(data),
+            onDelete: () => dataProvider.deleteSingle<LeagueWeightClass>(data),
             tiles: [],
             dataId: data.weightClass.id!,
             initialData: data.weightClass);

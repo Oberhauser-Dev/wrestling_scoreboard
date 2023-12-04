@@ -35,7 +35,7 @@ class ClubOverview extends StatelessWidget {
           editPage: ClubEdit(
             club: data,
           ),
-          onDelete: () => dataProvider.deleteSingle(data),
+          onDelete: () => dataProvider.deleteSingle<Club>(data),
           classLocale: localizations.club,
           children: [
             ContentItem(

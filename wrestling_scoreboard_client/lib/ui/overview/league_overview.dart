@@ -38,7 +38,7 @@ class LeagueOverview extends StatelessWidget {
           editPage: LeagueEdit(
             league: data,
           ),
-          onDelete: () => dataProvider.deleteSingle(data),
+          onDelete: () => dataProvider.deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
             ContentItem(

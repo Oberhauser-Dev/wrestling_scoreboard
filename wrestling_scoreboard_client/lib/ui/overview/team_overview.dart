@@ -31,7 +31,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
               editPage: TeamEdit(
                 team: data,
               ),
-              onDelete: () => dataProvider.deleteSingle(data),
+              onDelete: () => dataProvider.deleteSingle<Team>(data),
               classLocale: localizations.team,
               children: [
                 ContentItem(

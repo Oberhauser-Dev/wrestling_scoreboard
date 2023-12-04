@@ -36,7 +36,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
           editPage: editPage,
           onDelete: () {
             onDelete();
-            dataProvider.deleteSingle(person);
+            dataProvider.deleteSingle<Person>(person);
           },
           classLocale: classLocale,
           children: [

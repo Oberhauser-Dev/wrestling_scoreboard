@@ -60,7 +60,7 @@ class TeamMatchOverview extends StatelessWidget {
                         editPage: TeamMatchEdit(
                           teamMatch: match,
                         ),
-                        onDelete: () => dataProvider.deleteSingle(match),
+                        onDelete: () => dataProvider.deleteSingle<TeamMatch>(match),
                         classLocale: localizations.match,
                         children: [
                           ContentItem(

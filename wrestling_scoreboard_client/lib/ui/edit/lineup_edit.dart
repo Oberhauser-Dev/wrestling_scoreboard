@@ -51,7 +51,8 @@ class LineupEditState extends State<LineupEdit> {
       _formKey.currentState!.save();
       await dataProvider
           .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
-      await Future.forEach(_deleteParticipations, (Participation element) => dataProvider.deleteSingle(element));
+      await Future.forEach(
+          _deleteParticipations, (Participation element) => dataProvider.deleteSingle<Participation>(element));
       await Future.forEach(
           _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
       if (widget.onSubmit != null) widget.onSubmit!();

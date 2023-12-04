@@ -251,7 +251,7 @@ class FightActionHandler extends StatelessWidget {
           if (rActions.isNotEmpty) {
             final action = rActions.last;
             setActions(actions..remove(action));
-            dataProvider.deleteSingle(action);
+            dataProvider.deleteSingle<FightAction>(action);
           }
         }
         break;
@@ -320,7 +320,7 @@ class FightActionHandler extends StatelessWidget {
           if (bActions.isNotEmpty) {
             final action = bActions.last;
             setActions(actions..remove(action));
-            dataProvider.deleteSingle(action);
+            dataProvider.deleteSingle<FightAction>(action);
           }
         }
         break;
@@ -335,7 +335,7 @@ class FightActionHandler extends StatelessWidget {
         if (actions.isNotEmpty) {
           final action = actions.last;
           setActions(actions..remove(action));
-          dataProvider.deleteSingle(action);
+          dataProvider.deleteSingle<FightAction>(action);
         }
         break;
       case FightScreenActions.horn:
