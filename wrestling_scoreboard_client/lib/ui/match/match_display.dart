@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -30,15 +31,11 @@ class MatchDisplay extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     double padding = width / 140;
-    int flexWidthWeight = 12;
-    int flexWidthStyle = 5;
     return SingleConsumer<TeamMatch>(
       id: id,
       initialData: teamMatch,
       builder: (context, match) {
         if (match == null) return ExceptionWidget(localizations.notFoundException);
-        final isMobile =
-            !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
         final infoAction = IconButton(
           icon: const Icon(Icons.info),
           onPressed: () => handleSelectedTeamMatch(match, context),

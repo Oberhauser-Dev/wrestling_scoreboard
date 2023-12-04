@@ -17,6 +17,7 @@ import 'package:wrestling_scoreboard_client/ui/fight/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/match/common_elements.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/colors.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -370,6 +371,13 @@ class FightState extends State<FightScreen> {
 
     MaterialColor stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : white;
 
+    final shareAction = IconButton(
+      icon: const Icon(Icons.share),
+      onPressed: () async {
+        final bytes = await generateScoreSheet(this, localizations: localizations);
+        Printing.sharePdf(bytes: bytes);
+      },
+    );
     return FightActionHandler(
       stopwatch: stopwatch,
       match: match,
@@ -379,23 +387,20 @@ class FightState extends State<FightScreen> {
       fightIndex: fightIndex,
       doAction: doAction,
       child: Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: () async {
-                final bytes = await generateScoreSheet(this, localizations: localizations);
-                Printing.sharePdf(bytes: bytes);
-              },
-            ),
-          ]),
-        ),
+        appBar: isMobile ? AppBar(actions: [shareAction]) : null,
+        bottomNavigationBar: isMobile
+            ? null
+            : BottomAppBar(
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                  ),
+                  shareAction,
+                ]),
+              ),
         body: StreamProvider<List<FightAction>>(
           initialData: actions,
           create: (context) => _onChangeActions.stream,
@@ -422,18 +427,18 @@ class FightState extends State<FightScreen> {
                               child: Center(
                                   child: ScaledText(
                             '${AppLocalizations.of(context)!.fight} ${fightIndex + 1}',
-                                    minFontSize: 10,
+                            minFontSize: 10,
                           ))),
                         ]),
                         Center(
                             child: ScaledText(
                           '${styleToString(fight.weightClass.style, context)}',
-                              minFontSize: 10,
+                          minFontSize: 10,
                         )),
                         Center(
                             child: ScaledText(
                           fight.weightClass.name,
-                              minFontSize: 10,
+                          minFontSize: 10,
                         )),
                       ])),
                   Expanded(
