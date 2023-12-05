@@ -1,15 +1,17 @@
 import 'dart:async';
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
   static const keyLocale = 'locale';
+  static const keyThemeMode = 'theme-mode';
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
   static const keyBellSound = 'bell-sound';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
+  static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();
   static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
   static final StreamController<String> onChangeWsUrlWebSocket = StreamController.broadcast();
   static final StreamController<String> onChangeBellSound = StreamController.broadcast();

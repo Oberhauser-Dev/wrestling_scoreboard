@@ -16,23 +16,31 @@ class CustomSettingsScreen extends StatefulWidget {
 
 class CustomSettingsScreenState extends State<CustomSettingsScreen> {
   String? _locale;
+  ThemeMode _themeMode = ThemeMode.system;
   String _wsUrl = Env.webSocketUrl.fromString();
   String _apiUrl = Env.apiUrl.fromString();
   String _bellSoundPath = Env.bellSoundPath.fromString();
 
   @override
   void initState() {
-    Preferences.getString(Preferences.keyBellSound).then((value) {
-      if (value != null) {
-        setState(() {
-          _bellSoundPath = value;
-        });
-      }
-    });
     Preferences.getString(Preferences.keyLocale).then((value) {
       if (value != null) {
         setState(() {
           _locale = value;
+        });
+      }
+    });
+    Preferences.getString(Preferences.keyThemeMode).then((value) {
+      if (value != null) {
+        setState(() {
+          _themeMode = ThemeMode.values.byName(value);
+        });
+      }
+    });
+    Preferences.getString(Preferences.keyBellSound).then((value) {
+      if (value != null) {
+        setState(() {
+          _bellSoundPath = value;
         });
       }
     });
@@ -77,6 +85,17 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
       }
     }
 
+    String getTranslationOfThemeMode(ThemeMode themeMode) {
+      switch (themeMode) {
+        case ThemeMode.light:
+          return localizations.themeModeLight;
+        case ThemeMode.dark:
+          return localizations.themeModeDark;
+        case ThemeMode.system:
+          return localizations.systemSetting;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.settings),
@@ -97,6 +116,10 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                           _locale = null;
                           Preferences.setString(Preferences.keyLocale, _locale);
                           Preferences.onChangeLocale.add(null);
+
+                          _themeMode = ThemeMode.system;
+                          Preferences.setString(Preferences.keyThemeMode, _themeMode.name);
+                          Preferences.onChangeThemeMode.add(_themeMode);
 
                           _apiUrl = Env.apiUrl.fromString();
                           Preferences.setString(Preferences.keyApiUrl, _apiUrl);
@@ -128,7 +151,7 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                             .entries
                             .toList();
                         languageSettingValues.add(MapEntry(null, getTranslationOfLocale()));
-                        return RadioDialog(values: languageSettingValues, initialValue: _locale);
+                        return RadioDialog<String>(values: languageSettingValues, initialValue: _locale);
                       },
                     );
                     Preferences.onChangeLocale.add(Preferences.supportedLanguages[val]);
@@ -136,6 +159,29 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                     setState(() {
                       _locale = val;
                     });
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text(localizations.themeMode),
+                  leading: const Icon(Icons.brush),
+                  value: Text(getTranslationOfThemeMode(_themeMode)),
+                  onPressed: (context) async {
+                    final val = await showDialog<ThemeMode>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        final List<MapEntry<ThemeMode, String>> themeModeValues = ThemeMode.values
+                            .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
+                            .toList();
+                        return RadioDialog<ThemeMode>(values: themeModeValues, initialValue: _themeMode);
+                      },
+                    );
+                    if (val != null) {
+                      Preferences.onChangeThemeMode.add(val);
+                      await Preferences.setString(Preferences.keyThemeMode, val.name);
+                      setState(() {
+                        _themeMode = val;
+                      });
+                    }
                   },
                 ),
                 SettingsTile.navigation(
@@ -239,10 +285,10 @@ class TextInputDialog extends StatelessWidget {
   }
 }
 
-class RadioDialog extends StatefulWidget {
-  final List<MapEntry<String?, String>> values;
-  final String? initialValue;
-  final void Function(String? value)? onChanged;
+class RadioDialog<T> extends StatefulWidget {
+  final List<MapEntry<T?, String>> values;
+  final T? initialValue;
+  final void Function(T? value)? onChanged;
 
   const RadioDialog({
     Key? key,
@@ -252,11 +298,11 @@ class RadioDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<RadioDialog> createState() => _RadioDialogState();
+  State<RadioDialog<T>> createState() => _RadioDialogState<T>();
 }
 
-class _RadioDialogState extends State<RadioDialog> {
-  String? result;
+class _RadioDialogState<T> extends State<RadioDialog<T>> {
+  T? result;
 
   @override
   void initState() {
@@ -266,14 +312,14 @@ class _RadioDialogState extends State<RadioDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return OkDialog<String?>(
+    return OkDialog<T?>(
         child: ListView.builder(
           key: Key(result.toString()),
           shrinkWrap: true,
           itemCount: widget.values.length,
           itemBuilder: (context, index) {
             final entry = widget.values[index];
-            return RadioListTile<String?>(
+            return RadioListTile<T?>(
               value: entry.key,
               groupValue: result,
               onChanged: (v) {

@@ -31,6 +31,7 @@ class WrestlingScoreboardApp extends StatefulWidget {
 
 class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   Locale? _locale;
+  ThemeMode _themeMode = ThemeMode.system;
 
   @override
   void initState() {
@@ -53,6 +54,12 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
         _locale = event;
       });
     });
+
+    Preferences.onChangeThemeMode.stream.distinct().listen((event) {
+      setState(() {
+        _themeMode = event;
+      });
+    });
   }
 
   @override
@@ -62,7 +69,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: _themeMode,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
