@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Production Remote" type="FlutterRunConfigurationType" factoryName="Flutter">
-    <option name="additionalArgs" value="--release --dart-define=APP_ENVIRONMENT=production --dart-define=API_URL=&quot;https://server.wrestling-scoreboard.oberhauser.dev/api&quot; --dart-define=WEB_SOCKET_URL=&quot;wss://server.wrestling-scoreboard.oberhauser.dev/ws&quot;" />
+    <option name="additionalArgs" value="--release --dart-define=APP_ENVIRONMENT=production --dart-define=API_URL=&quot;https://server.wrestling-scoreboard.oberhauser.dev/api&quot; --dart-define=WEB_SOCKET_URL=&quot;wss://server.wrestling-scoreboard.oberhauser.dev/ws&quot; --dart-define=USE_PATH_URL_STRATEGY=true" />
     <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
     <method v="2" />
   </configuration>
