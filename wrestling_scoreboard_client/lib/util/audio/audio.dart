@@ -38,7 +38,7 @@ class HornSound {
   HornSound._fromPreference() {
     audioPlayer = DefaultAudioPlayer();
     isSourceSet = Preferences.getString(Preferences.keyBellSound)
-        .then((value) => audioPlayer.setSource(value ?? env(bellSoundPath)));
+        .then((value) => audioPlayer.setSource(value ?? Env.bellSoundPath.fromString()));
     Preferences.onChangeBellSound.stream.listen((event) {
       isSourceSet = audioPlayer.setSource(event);
     });

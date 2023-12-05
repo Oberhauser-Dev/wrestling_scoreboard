@@ -68,7 +68,7 @@ class WebSocketManager {
       }
     });
     Preferences.getString(Preferences.keyWsUrl)
-        .then((value) => Preferences.onChangeWsUrlWebSocket.sink.add(value ?? env(webSocketUrl)));
+        .then((value) => Preferences.onChangeWsUrlWebSocket.sink.add(value ?? Env.webSocketUrl.fromString()));
   }
 
   dynamic addToSink(String val) {

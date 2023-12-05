@@ -15,12 +15,12 @@ class RestDataProvider extends DataProvider {
   };
   static const headers = {"Content-Type": "application/json"};
 
-  String _apiUrl = env(apiUrl);
+  String _apiUrl = Env.apiUrl.fromString();
   late final WebSocketManager _webSocketManager;
 
   RestDataProvider() {
     Preferences.getString(Preferences.keyApiUrl).then((value) {
-      _apiUrl = adaptLocalhost((value ?? env(apiUrl)));
+      _apiUrl = adaptLocalhost((value ?? Env.apiUrl.fromString()));
       _initUpdateStream();
     });
     Preferences.onChangeApiUrl.stream.listen((event) {

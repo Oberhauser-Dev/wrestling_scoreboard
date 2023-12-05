@@ -16,9 +16,9 @@ class CustomSettingsScreen extends StatefulWidget {
 
 class CustomSettingsScreenState extends State<CustomSettingsScreen> {
   String? _locale;
-  String _wsUrl = env(webSocketUrl);
-  String _apiUrl = env(apiUrl);
-  String _bellSoundPath = env(bellSoundPath);
+  String _wsUrl = Env.webSocketUrl.fromString();
+  String _apiUrl = Env.apiUrl.fromString();
+  String _bellSoundPath = Env.bellSoundPath.fromString();
 
   @override
   void initState() {
@@ -98,15 +98,15 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                           Preferences.setString(Preferences.keyLocale, _locale);
                           Preferences.onChangeLocale.add(null);
 
-                          _apiUrl = env(apiUrl);
+                          _apiUrl = Env.apiUrl.fromString();
                           Preferences.setString(Preferences.keyApiUrl, _apiUrl);
                           Preferences.onChangeApiUrl.add(_apiUrl);
 
-                          _wsUrl = env(webSocketUrl);
+                          _wsUrl = Env.webSocketUrl.fromString();
                           Preferences.setString(Preferences.keyWsUrl, _wsUrl);
                           Preferences.onChangeWsUrlWebSocket.add(_wsUrl);
 
-                          _bellSoundPath = env(bellSoundPath);
+                          _bellSoundPath = Env.bellSoundPath.fromString();
                           Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
                           Preferences.onChangeBellSound.add(_bellSoundPath);
                         });

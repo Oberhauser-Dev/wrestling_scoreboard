@@ -12,7 +12,8 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, tournament
 flutter run \
 --dart-define=APP_ENVIRONMENT=development \
 --dart-define=API_URL='http://localhost:8080/api' \
---dart-define=WEB_SOCKET_URL='ws://localhost:8080/ws'
+--dart-define=WEB_SOCKET_URL='ws://localhost:8080/ws' \
+--dart-define=USE_PATH_URL_STRATEGY=false
 ```
 
 Values for `APP_ENVIRONMENT`:

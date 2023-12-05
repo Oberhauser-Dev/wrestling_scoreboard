@@ -1,44 +1,45 @@
-const apiUrl = 'API_URL';
-const webSocketUrl = 'WEB_SOCKET_URL';
-const appEnvironment = 'APP_ENVIRONMENT';
-const bellSoundPath = 'BELL_SOUND_PATH';
+enum Env {
+  apiUrl,
+  webSocketUrl,
+  
+  /// 'mock' -> debug and mock data
+  /// 'development' -> debug and connect to API
+  /// 'production' -> connect to API
+  appEnvironment,
+  bellSoundPath,
+  
+  /// Use [PathUrlStrategy] instead of the [HashUrlStrategy]. This must be supported by your server, see
+  /// https://docs.flutter.dev/ui/navigation/url-strategies#configuring-your-web-server
+  usePathUrlStrategy;
 
-/// Priority:
-/// - environment variable
-/// - custom fallBack
-/// - default value
-String env(String variable, {String? fallBack}) {
-  String? fromEnv = _env(variable);
-  if (fromEnv?.isEmpty ?? true) fromEnv = fallBack;
-  if (fromEnv?.isEmpty ?? true) fromEnv = _defaultValue(variable);
-  return fromEnv!;
-}
-
-String? _env(String variable) {
-  switch (variable) {
-    case apiUrl:
-      return const String.fromEnvironment(apiUrl);
-    case webSocketUrl:
-      return const String.fromEnvironment(webSocketUrl);
-    case appEnvironment:
-      return const String.fromEnvironment(appEnvironment);
+  String fromString() {
+    switch (this) {
+      case Env.apiUrl:
+        return const String.fromEnvironment('API_URL', defaultValue: 'http://localhost:8080/api');
+      case Env.webSocketUrl:
+        return const String.fromEnvironment('WEB_SOCKET_URL', defaultValue: 'ws://localhost:8080/ws');
+      case Env.appEnvironment:
+        return const String.fromEnvironment('APP_ENVIRONMENT', defaultValue: 'development');
+      case Env.bellSoundPath:
+        return const String.fromEnvironment('BELL_SOUND_PATH', defaultValue: 'assets/audio/BoxingBell.mp3');
+      default:
+        throw '$this is not of type `String`';
+    }
   }
-  return null;
-}
 
-String _defaultValue(String variable) {
-  switch (variable) {
-    case apiUrl:
-      return 'http://localhost:8080/api';
-    case webSocketUrl:
-      return 'ws://localhost:8080/ws';
-    case appEnvironment:
-      // 'mock' -> debug and mock data
-      // 'development' -> debug and connect to API
-      // 'production' -> connect to API
-      return 'development';
-    case bellSoundPath:
-      return 'assets/audio/BoxingBell.mp3';
+  bool fromBool() {
+    switch (this) {
+      case Env.usePathUrlStrategy:
+        return const bool.fromEnvironment('USE_PATH_URL_STRATEGY', defaultValue: false);
+      default:
+        throw '$this is not of type `bool`';
+    }
   }
-  throw 'Unknown variable';
+
+  int fromInt() {
+    switch (this) {
+      default:
+        throw '$this is not of type `int`';
+    }
+  }
 }

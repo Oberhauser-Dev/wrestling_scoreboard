@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 import '../environment.dart';
 
-final _isMock = env(appEnvironment) == 'mock';
+final _isMock = Env.appEnvironment.fromString() == 'mock';
 
 final dataProvider = _isMock ? MockDataProvider() : RestDataProvider();
 
