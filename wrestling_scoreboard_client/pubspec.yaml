@@ -46,8 +46,15 @@ flutter:
     - assets/audio/
     - assets/images/icons/
 
-flutter_icons:
+flutter_launcher_icons:
   android: "ic_launcher"
   ios: true
   remove_alpha_ios: true
   image_path: "assets/images/icons/launcher.png"
+  web:
+    generate: true
+  windows:
+    generate: true
+    icon_size: 256
+  macos:
+    generate: true

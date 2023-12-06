@@ -28,3 +28,11 @@ flutter build web
 ```
 
 Publish files in `build/web`.
+
+
+### Icons & AppName
+
+Generate launcher icons with: `flutter pub run flutter_launcher_icons`
+
+Change App name with: `flutter pub global activate rename` & `rename setAppName --targets ios,android,macos,windows,linux --value "YourAppName"`
+You can also set the name for linux, but this isn't the launcher name. Update debians `.desktop` file manually.
