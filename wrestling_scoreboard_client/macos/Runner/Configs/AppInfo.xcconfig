@@ -11,4 +11,4 @@ PRODUCT_NAME = Wrestling Scoreboard
 PRODUCT_BUNDLE_IDENTIFIER = dev.oberhauser.wrestlingScoreboardClient
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 dev.oberhauser. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 August Oberhauser. All rights reserved.
