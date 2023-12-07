@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
-import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
-import 'package:wrestling_scoreboard_client/ui/bout/bout_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 

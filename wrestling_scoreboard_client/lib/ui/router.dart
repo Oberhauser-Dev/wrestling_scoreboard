@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/app_navigation.dart';
-import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
-import 'package:wrestling_scoreboard_client/ui/match/match_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_team_participation_overview.dart';

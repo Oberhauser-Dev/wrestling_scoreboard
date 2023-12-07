@@ -5,7 +5,7 @@ import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/match/match_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';

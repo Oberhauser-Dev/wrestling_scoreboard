@@ -7,13 +7,12 @@ import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/common.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'common_elements.dart';
 
 class MatchDisplay extends StatelessWidget {
   static const route = 'match_display';

@@ -6,12 +6,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'components.dart';
 
+// TODO: Replace boutState with individual dataTypes or introduce model.
 Future<Uint8List> generateScoreSheet(BoutState boutState,
     {PdfPageFormat? pageFormat, required, required AppLocalizations localizations}) async {
   final scoreSheet = ScoreSheet(
