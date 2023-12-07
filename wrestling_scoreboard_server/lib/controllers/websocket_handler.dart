@@ -5,7 +5,7 @@ import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
@@ -32,15 +32,15 @@ void broadcastSingle<T extends DataObject>(T single) async {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
   } else if (single is BoutConfig) {
-  } else if (single is Fight) {
-  } else if (single is FightAction) {
+  } else if (single is Bout) {
+  } else if (single is BoutAction) {
     broadcast(jsonEncode(manyToJson(
-        await FightActionController()
-            .getMany(conditions: ['fight_id = @id'], substitutionValues: {'id': single.fight.id}),
-        FightAction,
+        await BoutActionController()
+            .getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': single.bout.id}),
+        BoutAction,
         CRUD.update,
-        filterType: Fight,
-        filterId: single.fight.id)));
+        filterType: Bout,
+        filterId: single.bout.id)));
   } else if (single is League) {
     // SpecialCase: the full League list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update)));
@@ -119,7 +119,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterId: single.league!.id,
       )));
     }
-  } else if (single is TeamMatchFight) {
+  } else if (single is TeamMatchBout) {
   } else if (single is WeightClass) {
   } else {
     throw DataUnimplementedError(CRUD.update, T);
@@ -131,15 +131,15 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update)));
   } else if (T == BoutConfig) {
-  } else if (T == Fight) {
-  } else if (T == FightAction) {
+  } else if (T == Bout) {
+  } else if (T == BoutAction) {
     broadcast(jsonEncode(manyToJson(
-        await FightActionController()
-            .getManyRaw(conditions: ['fight_id = @id'], substitutionValues: {'id': single['fight_id']}),
-        FightAction,
+        await BoutActionController()
+            .getManyRaw(conditions: ['bout_id = @id'], substitutionValues: {'id': single['bout_id']}),
+        BoutAction,
         CRUD.update,
-        filterType: Fight,
-        filterId: single['fight_id'])));
+        filterType: Bout,
+        filterId: single['bout_id'])));
   } else if (T == League) {
     // SpecialCase: the full League list has to be updated, shouldn't occur often
     broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update)));
@@ -221,7 +221,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterId: single['league_id'],
       )));
     }
-  } else if (T == TeamMatchFight) {
+  } else if (T == TeamMatchBout) {
   } else if (T == WeightClass) {
   } else {
     throw DataUnimplementedError(CRUD.update, T);

@@ -80,8 +80,8 @@ Membership b3 = Membership(id: 7, person: p7, club: _guestClub);
 Membership b4 = Membership(id: 8, person: p8, club: _guestClub);
 
 final List<Club> _clubs = [_homeClub, _guestClub];
-final List<Fight> _fights = [];
-final List<FightAction> _fightActions = []; // TODO fill
+final List<Bout> _bouts = [];
+final List<BoutAction> _boutActions = []; // TODO fill
 final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
 final List<LeagueWeightClass> _leagueWeightClasses = []; // TODO fill
 final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
@@ -92,8 +92,8 @@ final List<ParticipantState> _participantStates = []; // TODO fill
 final List<Person> _persons = []; // TODO fill
 final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
 final List<TeamMatch> _teamMatches = [initMenRPWMatch(), initJnRPWMatch()];
-final List<TeamMatchFight> _teamMatchFights = [];
-final List<TournamentFight> _tournamentFights = [];
+final List<TeamMatchBout> _teamMatchBouts = [];
+final List<TournamentBout> _tournamentBouts = [];
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 
 TeamMatch initMenRPWMatch() {
@@ -145,20 +145,20 @@ TeamMatch initJnRPWMatch() {
 
 List<Club> getClubs() => _clubs;
 
-List<Fight> getFights() => _fights;
+List<Bout> getBouts() => _bouts;
 
-List<Fight> getFightsOfTournament(Tournament tournament) {
-  return getTournamentFights().where((element) => element.tournament == tournament).map((e) => e.fight).toList();
+List<Bout> getBoutsOfTournament(Tournament tournament) {
+  return getTournamentBouts().where((element) => element.tournament == tournament).map((e) => e.bout).toList();
 }
 
-List<Fight> getFightsOfTeamMatch(TeamMatch match) {
-  return getTeamMatchFights().where((element) => element.teamMatch == match).map((e) => e.fight).toList();
+List<Bout> getBoutsOfTeamMatch(TeamMatch match) {
+  return getTeamMatchBouts().where((element) => element.teamMatch == match).map((e) => e.bout).toList();
 }
 
-List<FightAction> getFightActions() => _fightActions;
+List<BoutAction> getBoutActions() => _boutActions;
 
-List<FightAction> getFightActionsOfFight(Fight fight) =>
-    getFightActions().where((element) => element.fight == fight).toList();
+List<BoutAction> getBoutActionsOfBout(Bout bout) =>
+    getBoutActions().where((element) => element.bout == bout).toList();
 
 List<League> getLeagues() => _leagues;
 
@@ -212,13 +212,13 @@ List<TeamMatch> getTeamMatchesOfTeam(Team team) {
   return getTeamMatches().where((element) => element.home.team == team || element.guest.team == team).toList();
 }
 
-List<TeamMatchFight> getTeamMatchFights() => _teamMatchFights;
+List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
 
-List<TeamMatchFight> getTeamMatchFightsOfTeamMatch(TeamMatch match) {
-  return getTeamMatchFights().where((element) => element.teamMatch == match).toList();
+List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
+  return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
 }
 
-List<TournamentFight> getTournamentFights() => _tournamentFights;
+List<TournamentBout> getTournamentBouts() => _tournamentBouts;
 
 List<WeightClass> getWeightClasses() => _weightClasses;
 

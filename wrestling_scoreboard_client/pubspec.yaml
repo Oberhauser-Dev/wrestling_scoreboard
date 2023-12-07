@@ -1,5 +1,5 @@
 name: wrestling_scoreboard_client
-description: Wrestling software for managing team fights and tournaments.
+description: Wrestling software for managing team bouts and tournaments.
 
 publish_to: 'none'
 

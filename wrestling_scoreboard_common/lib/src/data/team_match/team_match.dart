@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../data_object.dart';
-import '../fight.dart';
+import '../bout.dart';
 import '../lineup.dart';
 import '../participant_state.dart';
 import '../participation.dart';
@@ -86,26 +86,26 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
       });
   }
 
-  static int getHomePoints(List<Fight> fights) {
+  static int getHomePoints(List<Bout> bouts) {
     var res = 0;
-    for (final fight in fights) {
-      res += fight.r?.classificationPoints ?? 0;
+    for (final bout in bouts) {
+      res += bout.r?.classificationPoints ?? 0;
     }
     return res;
   }
 
-  static int getGuestPoints(List<Fight> fights) {
+  static int getGuestPoints(List<Bout> bouts) {
     var res = 0;
-    for (final fight in fights) {
-      res += fight.b?.classificationPoints ?? 0;
+    for (final bout in bouts) {
+      res += bout.b?.classificationPoints ?? 0;
     }
     return res;
   }
 
   @override
-  Future<List<Fight>> generateFights(
+  Future<List<Bout>> generateBouts(
       List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) async {
-    final fights = <Fight>[];
+    final bouts = <Bout>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {
       final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
@@ -121,14 +121,14 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
-      var fight = Fight(
+      var bout = Bout(
         r: red == null ? null : ParticipantState(participation: red),
         b: blue == null ? null : ParticipantState(participation: blue),
         weightClass: weightClass,
       );
-      fights.add(fight);
+      bouts.add(bout);
     }
-    return fights;
+    return bouts;
   }
 
   @override

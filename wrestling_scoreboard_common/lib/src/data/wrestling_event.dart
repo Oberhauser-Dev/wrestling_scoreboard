@@ -14,7 +14,7 @@ abstract class WrestlingEvent implements DataObject {
 
   String? get comment;
 
-  Future<List<Fight>> generateFights(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses);
+  Future<List<Bout>> generateBouts(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses);
 
   // static Future<WrestlingEvent> fromRaw(Map<String, dynamic> e) async => WrestlingEvent(
   //       id: e['id'] as int?,

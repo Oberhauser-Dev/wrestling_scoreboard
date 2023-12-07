@@ -3,7 +3,7 @@ import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CommonElements {
-  static List<Widget> getTeamHeader(TeamMatch match, List<Fight> fights, BuildContext context) {
+  static List<Widget> getTeamHeader(TeamMatch match, List<Bout> bouts, BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final padding = width / 100;
     final edgeInsets = EdgeInsets.all(padding);
@@ -25,7 +25,7 @@ class CommonElements {
               color: Colors.red.shade900,
               child: Center(
                 child: ScaledText(
-                  TeamMatch.getHomePoints(fights).toString(),
+                  TeamMatch.getHomePoints(bouts).toString(),
                   fontSize: 28,
                   minFontSize: 16,
                   softWrap: false,
@@ -38,7 +38,7 @@ class CommonElements {
               color: Colors.blue.shade900,
               child: Center(
                 child: ScaledText(
-                  TeamMatch.getGuestPoints(fights).toString(),
+                  TeamMatch.getGuestPoints(bouts).toString(),
                   fontSize: 28,
                   minFontSize: 16,
                   softWrap: false,

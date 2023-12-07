@@ -8,7 +8,7 @@ import 'tournament.dart';
 part 'tournament_person.freezed.dart';
 part 'tournament_person.g.dart';
 
-/// An action and its value that is fulfilled by the participant during a fight, e.g. points or caution
+/// An action and its value that is fulfilled by the participant during a bout, e.g. points or caution
 @freezed
 class TournamentPerson with _$TournamentPerson implements DataObject {
   const TournamentPerson._();

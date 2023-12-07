@@ -3,20 +3,20 @@ import 'package:postgres/postgres.dart';
 
 import 'entity_controller.dart';
 
-class FightActionController extends EntityController<FightAction> {
-  static final FightActionController _singleton = FightActionController._internal();
+class BoutActionController extends EntityController<BoutAction> {
+  static final BoutActionController _singleton = BoutActionController._internal();
 
-  factory FightActionController() {
+  factory BoutActionController() {
     return _singleton;
   }
 
-  FightActionController._internal() : super(tableName: 'fight_action');
+  BoutActionController._internal() : super(tableName: 'bout_action');
 
   @override
   Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
     return {
       'point_count': PostgreSQLDataType.smallInteger,
-      'fight_role': null,
+      'bout_role': null,
       'action_type': null,
     };
   }

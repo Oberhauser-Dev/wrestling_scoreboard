@@ -20,10 +20,10 @@ abstract class DataObject {
         return BoutConfig.fromJson(json) as T;
       case const (Club):
         return Club.fromJson(json) as T;
-      case const (Fight):
-        return Fight.fromJson(json) as T;
-      case const (FightAction):
-        return FightAction.fromJson(json) as T;
+      case const (Bout):
+        return Bout.fromJson(json) as T;
+      case const (BoutAction):
+        return BoutAction.fromJson(json) as T;
       case const (League):
         return League.fromJson(json) as T;
       case const (LeagueWeightClass):
@@ -44,12 +44,12 @@ abstract class DataObject {
         return Team.fromJson(json) as T;
       case const (TeamMatch):
         return TeamMatch.fromJson(json) as T;
-      case const (TeamMatchFight):
-        return TeamMatchFight.fromJson(json) as T;
+      case const (TeamMatchBout):
+        return TeamMatchBout.fromJson(json) as T;
       case const (Tournament):
         return Tournament.fromJson(json) as T;
-      case const (TournamentFight):
-        return TournamentFight.fromJson(json) as T;
+      case const (TournamentBout):
+        return TournamentBout.fromJson(json) as T;
       case const (TournamentPerson):
         return TournamentPerson.fromJson(json) as T;
       case const (TournamentTeamParticipation):
@@ -67,10 +67,10 @@ abstract class DataObject {
         return (await BoutConfig.fromRaw(raw)) as T;
       case const (Club):
         return (await Club.fromRaw(raw)) as T;
-      case const (Fight):
-        return (await Fight.fromRaw(raw, getSingle)) as T;
-      case const (FightAction):
-        return (await FightAction.fromRaw(raw, getSingle)) as T;
+      case const (Bout):
+        return (await Bout.fromRaw(raw, getSingle)) as T;
+      case const (BoutAction):
+        return (await BoutAction.fromRaw(raw, getSingle)) as T;
       case const (League):
         return (await League.fromRaw(raw, getSingle)) as T;
       case const (LeagueWeightClass):
@@ -91,8 +91,8 @@ abstract class DataObject {
         return (await Team.fromRaw(raw, getSingle)) as T;
       case const (TeamMatch):
         return (await TeamMatch.fromRaw(raw, getSingle)) as T;
-      case const (TeamMatchFight):
-        return (await TeamMatchFight.fromRaw(raw, getSingle)) as T;
+      case const (TeamMatchBout):
+        return (await TeamMatchBout.fromRaw(raw, getSingle)) as T;
       case const (Tournament):
         return (await Tournament.fromRaw(raw, getSingle)) as T;
       case const (TournamentPerson):

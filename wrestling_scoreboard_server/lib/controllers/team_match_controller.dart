@@ -6,12 +6,12 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_match_fight_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'entity_controller.dart';
-import 'fight_controller.dart';
+import 'bout_controller.dart';
 
 class TeamMatchController extends EntityController<TeamMatch> {
   static final TeamMatchController _singleton = TeamMatchController._internal();
@@ -22,27 +22,27 @@ class TeamMatchController extends EntityController<TeamMatch> {
 
   TeamMatchController._internal() : super(tableName: 'team_match');
 
-  static const _fightsQuery = '''
+  static const _boutsQuery = '''
         SELECT f.* 
-        FROM fight as f 
-        JOIN team_match_fight AS tmf ON tmf.fight_id = f.id
+        FROM bout as f 
+        JOIN team_match_bout AS tmf ON tmf.bout_id = f.id
         WHERE tmf.team_match_id = @id
         ORDER BY tmf.pos;''';
 
-  Future<Response> requestFights(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(FightController(),
-        isRaw: isRaw(request), sqlQuery: _fightsQuery, substitutionValues: {'id': id});
+  Future<Response> requestBouts(Request request, String id) async {
+    return EntityController.handleRequestManyOfControllerFromQuery(BoutController(),
+        isRaw: isRaw(request), sqlQuery: _boutsQuery, substitutionValues: {'id': id});
   }
 
-  Future<List<Fight>> getFights(String id) {
-    return FightController().getManyFromQuery(_fightsQuery, substitutionValues: {'id': id});
+  Future<List<Bout>> getBouts(String id) {
+    return BoutController().getManyFromQuery(_boutsQuery, substitutionValues: {'id': id});
   }
 
-  /// isReset: delete all previous Fights and TeamMatchFights, else reuse the states
-  Future<Response> generateFights(Request request, String id) async {
+  /// isReset: delete all previous Bouts and TeamMatchBouts, else reuse the states
+  Future<Response> generateBouts(Request request, String id) async {
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)))!;
-    final oldFights = (await getFights(id));
+    final oldBouts = (await getBouts(id));
     final weightClasses = teamMatch.league?.id == null
         ? <WeightClass>[]
         : (await LeagueController().getWeightClasses(teamMatch.league!.id.toString()));
@@ -51,66 +51,66 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final guestParticipations = await ParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.guest.id});
 
-    final newFights = await teamMatch.generateFights([homeParticipations, guestParticipations], weightClasses);
-    final fights = List.of(newFights);
-    await Future.forEach(newFights.asMap().entries, (MapEntry<int, Fight> entry) async {
-      var fight = entry.value;
-      final hasRed = fight.r != null;
-      final hasBlue = fight.b != null;
-      // Get fight of teamMatch that has the same participants and the same weightClass
-      final res = await FightController().getManyRawFromQuery('''
+    final newBouts = await teamMatch.generateBouts([homeParticipations, guestParticipations], weightClasses);
+    final bouts = List.of(newBouts);
+    await Future.forEach(newBouts.asMap().entries, (MapEntry<int, Bout> entry) async {
+      var bout = entry.value;
+      final hasRed = bout.r != null;
+      final hasBlue = bout.b != null;
+      // Get bout of teamMatch that has the same participants and the same weightClass
+      final res = await BoutController().getManyRawFromQuery('''
         SELECT f.*
-        FROM fight AS f
-        JOIN team_match_fight AS tmf ON f.id = tmf.fight_id
+        FROM bout AS f
+        JOIN team_match_bout AS tmf ON f.id = tmf.bout_id
         ${hasRed ? 'JOIN participant_state AS ps_red ON ps_red.id = f.red_id' : ''}
         ${hasBlue ? 'JOIN participant_state AS ps_blue ON ps_blue.id = f.blue_id' : ''}
-        WHERE f.weight_class_id = ${fight.weightClass.id}
+        WHERE f.weight_class_id = ${bout.weightClass.id}
         AND tmf.team_match_id = ${teamMatch.id}
-        AND ${hasRed ? 'ps_red.participation_id = ${fight.r!.participation.id}' : 'f.red_id IS NULL'}
-        AND ${hasBlue ? 'ps_blue.participation_id = ${fight.b!.participation.id}' : 'f.blue_id IS NULL'};
+        AND ${hasRed ? 'ps_red.participation_id = ${bout.r!.participation.id}' : 'f.red_id IS NULL'}
+        AND ${hasBlue ? 'ps_blue.participation_id = ${bout.b!.participation.id}' : 'f.blue_id IS NULL'};
         ''');
       if (res.isEmpty) {
-        // Create ParticipantState to be stored in the team match fight
-        if (fight.r != null) {
-          fight = fight.copyWith(r: fight.r!.copyWithId(await ParticipantStateController().createSingle(fight.r!)));
+        // Create ParticipantState to be stored in the team match bout
+        if (bout.r != null) {
+          bout = bout.copyWith(r: bout.r!.copyWithId(await ParticipantStateController().createSingle(bout.r!)));
         }
-        if (fight.b != null) {
-          fight = fight.copyWith(b: fight.b!.copyWithId(await ParticipantStateController().createSingle(fight.b!)));
+        if (bout.b != null) {
+          bout = bout.copyWith(b: bout.b!.copyWithId(await ParticipantStateController().createSingle(bout.b!)));
         }
-        fight = fight.copyWithId(await FightController().createSingle(fight));
-        await TeamMatchFightController()
-            .createSingle(TeamMatchFight(teamMatch: teamMatch, fight: fight, pos: entry.key));
-        fights[entry.key] = fight;
+        bout = bout.copyWithId(await BoutController().createSingle(bout));
+        await TeamMatchBoutController()
+            .createSingle(TeamMatchBout(teamMatch: teamMatch, bout: bout, pos: entry.key));
+        bouts[entry.key] = bout;
       } else {
-        fight = fight.copyWithId(res.first['id']);
-        fights[entry.key] = await Fight.fromRaw(res.first, EntityController.getSingleFromDataType);
+        bout = bout.copyWithId(res.first['id']);
+        bouts[entry.key] = await Bout.fromRaw(res.first, EntityController.getSingleFromDataType);
         await PostgresDb()
             .connection
-            .query('UPDATE team_match_fight SET pos = ${entry.key} WHERE fight_id = ${fight.id};');
+            .query('UPDATE team_match_bout SET pos = ${entry.key} WHERE bout_id = ${bout.id};');
       }
     });
     if (isReset) {
-      await Future.forEach(oldFights, (Fight fight) async {
-        if (fight.id != null) {
-          // TODO may also delete fightActions, participantState etc.
-          await TeamMatchFightController()
-              .deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
-          await FightController().deleteSingle(fight.id!);
+      await Future.forEach(oldBouts, (Bout bout) async {
+        if (bout.id != null) {
+          // TODO may also delete boutActions, participantState etc.
+          await TeamMatchBoutController()
+              .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
+          await BoutController().deleteSingle(bout.id!);
         }
       });
     } else {
-      // Get old fights, which aren't reused anymore and delete them.
-      final unusedFights = oldFights.where((oldFight) => fights.every((newFight) => newFight.id != oldFight.id));
-      await Future.forEach(unusedFights, (Fight fight) async {
-        if (fight.id != null) {
-          // TODO may also delete fightActions, participantState etc.
-          await TeamMatchFightController()
-              .deleteMany(conditions: ['fight_id=@id'], substitutionValues: {'id': fight.id});
-          await FightController().deleteSingle(fight.id!);
+      // Get old bouts, which aren't reused anymore and delete them.
+      final unusedBouts = oldBouts.where((oldBout) => bouts.every((newBout) => newBout.id != oldBout.id));
+      await Future.forEach(unusedBouts, (Bout bout) async {
+        if (bout.id != null) {
+          // TODO may also delete boutActions, participantState etc.
+          await TeamMatchBoutController()
+              .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
+          await BoutController().deleteSingle(bout.id!);
         }
       });
     }
-    broadcast(jsonEncode(manyToJson(fights, Fight, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
+    broadcast(jsonEncode(manyToJson(bouts, Bout, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
 
     return Response.ok('{"status": "success"}');
   }

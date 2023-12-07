@@ -6,16 +6,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
+import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'components.dart';
 
-Future<Uint8List> generateScoreSheet(FightState fightState,
+Future<Uint8List> generateScoreSheet(BoutState boutState,
     {PdfPageFormat? pageFormat, required, required AppLocalizations localizations}) async {
   final scoreSheet = ScoreSheet(
-    fightState: fightState,
+    boutState: boutState,
     localizations: localizations,
     baseColor: PdfColors.blueGrey500,
     accentColor: PdfColors.blueGrey900,
@@ -26,7 +26,7 @@ Future<Uint8List> generateScoreSheet(FightState fightState,
 
 class ScoreSheet {
   ScoreSheet({
-    required this.fightState,
+    required this.boutState,
     required this.baseColor,
     required this.accentColor,
     required this.localizations,
@@ -38,12 +38,12 @@ class ScoreSheet {
   static const horizontalGap = 8.0;
   static const verticalGap = 8.0;
 
-  final FightState fightState;
+  final BoutState boutState;
   final AppLocalizations localizations;
 
-  Fight get fight => fightState.fight;
+  Bout get bout => boutState.bout;
 
-  TeamMatch get event => fightState.match;
+  TeamMatch get event => boutState.match;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -135,7 +135,7 @@ class ScoreSheet {
       ]);
     }
 
-    final isFreeStyle = fight.weightClass.style == WrestlingStyle.free;
+    final isFreeStyle = bout.weightClass.style == WrestlingStyle.free;
 
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,18 +175,18 @@ class ScoreSheet {
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(
-                title: '${localizations.weightClass} (${fight.weightClass.unit.toAbbr()})',
-                content: fight.weightClass.weight.toString(),
+                title: '${localizations.weightClass} (${bout.weightClass.unit.toAbbr()})',
+                content: bout.weightClass.weight.toString(),
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(
-                title: localizations.fightNo, // TODO: change to boutNo
-                content: fight.id?.toString() ?? '',
+                title: localizations.boutNo, // TODO: change to boutNo
+                content: bout.id?.toString() ?? '',
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(
                 title: 'POOL' /*localizations.pool*/,
-                content: fight.pool?.toString() ?? '',
+                content: bout.pool?.toString() ?? '',
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(title: 'RUNDE', content: '', color: PdfColors.grey300, pencilColor: _pencilColor),
@@ -255,9 +255,9 @@ class ScoreSheet {
     }
 
     return Row(children: [
-      buildParticipantColumn(isLeft: true, membership: fight.r?.participation.membership, borderColor: _homeColor),
+      buildParticipantColumn(isLeft: true, membership: bout.r?.participation.membership, borderColor: _homeColor),
       Container(width: horizontalGap),
-      buildParticipantColumn(isLeft: false, membership: fight.b?.participation.membership, borderColor: _guestColor),
+      buildParticipantColumn(isLeft: false, membership: bout.b?.participation.membership, borderColor: _guestColor),
     ]);
   }
 
@@ -266,7 +266,7 @@ class ScoreSheet {
     const roundCellHeight = 35.0;
     const breakCellHeight = 15.0;
 
-    final rounds = fightState.boutConfig.periodCount;
+    final rounds = boutState.boutConfig.periodCount;
 
     Widget buildColorCell({required String colorStr, required PdfColor borderColor}) => Transform.rotateBox(
         angle: pi * 0.5,
@@ -285,16 +285,16 @@ class ScoreSheet {
     Widget buildTechnicalPointsHeaderCell(PdfColor borderColor) => buildTextCell('TECHNISCHE PUNKTE',
         height: headerCellHeight, borderColor: borderColor, alignment: Alignment.center);
     TableRow buildRound({required int round}) {
-      final periodDurMin = fightState.boutConfig.periodDuration * round;
-      final periodDurMax = periodDurMin + fightState.boutConfig.periodDuration;
-      final periodActions = fightState.actions.where(
+      final periodDurMin = boutState.boutConfig.periodDuration * round;
+      final periodDurMax = periodDurMin + boutState.boutConfig.periodDuration;
+      final periodActions = boutState.actions.where(
           (element) => element.duration.compareTo(periodDurMax) <= 0 && element.duration.compareTo(periodDurMin) > 0);
-      final periodActionsRed = periodActions.where((element) => element.role == FightRole.red);
-      final periodActionsBlue = periodActions.where((element) => element.role == FightRole.blue);
+      final periodActionsRed = periodActions.where((element) => element.role == BoutRole.red);
+      final periodActionsBlue = periodActions.where((element) => element.role == BoutRole.blue);
       return TableRow(children: [
         buildFormCell(
             content: periodActionsRed
-                .where((element) => element.actionType == FightActionType.points)
+                .where((element) => element.actionType == BoutActionType.points)
                 .map((e) => e.pointCount ?? 0)
                 .fold<int>(0, (cur, next) => (cur + next))
                 .toString(),
@@ -315,7 +315,7 @@ class ScoreSheet {
             height: roundCellHeight),
         buildFormCell(
             content: periodActionsBlue
-                .where((element) => element.actionType == FightActionType.points)
+                .where((element) => element.actionType == BoutActionType.points)
                 .map((e) => e.pointCount ?? 0)
                 .fold<int>(0, (cur, next) => (cur + next))
                 .toString(),
@@ -330,7 +330,7 @@ class ScoreSheet {
         roundRows.add(buildRound(round: round));
         if (round < (rounds - 1)) {
           final breakDurationStr =
-              '${localizations.breakDurationInSecs}: ${fightState.boutConfig.breakDuration.inSeconds}';
+              '${localizations.breakDurationInSecs}: ${boutState.boutConfig.breakDuration.inSeconds}';
           roundRows.add(TableRow(children: [
             Container(color: _homeColor, height: breakCellHeight),
             buildTextCell(

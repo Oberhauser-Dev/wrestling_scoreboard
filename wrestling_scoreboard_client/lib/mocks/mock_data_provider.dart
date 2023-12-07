@@ -38,9 +38,9 @@ class MockDataProvider extends DataProvider {
   List<T> getManyMocksFromClass<T extends DataObject>({DataObject? filterObject}) {
     if (filterObject != null) {
       switch (T) {
-        case const (Fight):
-          if (filterObject is Tournament) return getFightsOfTournament(filterObject).cast<T>();
-          if (filterObject is TeamMatch) return getFightsOfTeamMatch(filterObject).cast<T>();
+        case const (Bout):
+          if (filterObject is Tournament) return getBoutsOfTournament(filterObject).cast<T>();
+          if (filterObject is TeamMatch) return getBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Membership):
           if (filterObject is Club) return getMembershipsOfClub(filterObject).cast<T>();
@@ -66,8 +66,8 @@ class MockDataProvider extends DataProvider {
           if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
           if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (TeamMatchFight):
-          if (filterObject is TeamMatch) return getTeamMatchFightsOfTeamMatch(filterObject).cast<T>();
+        case const (TeamMatchBout):
+          if (filterObject is TeamMatch) return getTeamMatchBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         default:
           throw DataUnimplementedError(CRUD.read, T, filterObject);
@@ -77,30 +77,30 @@ class MockDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> generateFights<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
-    List<Fight> oldFights; // TODO really needs old fights or just use the exising ones from teammatch
+  Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
+    List<Bout> oldBouts; // TODO really needs old bouts or just use the exising ones from teammatch
     if (wrestlingEvent is TeamMatch) {
-      oldFights = getFightsOfTeamMatch(wrestlingEvent);
+      oldBouts = getBoutsOfTeamMatch(wrestlingEvent);
     } else {
-      oldFights = getFightsOfTournament(wrestlingEvent as Tournament);
+      oldBouts = getBoutsOfTournament(wrestlingEvent as Tournament);
     }
-    final fightsAll = getFights();
+    final boutsAll = getBouts();
     if (isReset) {
       if (wrestlingEvent is TeamMatch) {
-        final teamMatchFightsAll = getTeamMatchFights();
-        for (var element in oldFights) {
-          teamMatchFightsAll.removeWhere((tmf) => tmf.fight.equalDuringFight(element));
+        final teamMatchBoutsAll = getTeamMatchBouts();
+        for (var element in oldBouts) {
+          teamMatchBoutsAll.removeWhere((tmf) => tmf.bout.equalDuringBout(element));
         }
       } else if (wrestlingEvent is Tournament) {
-        final tournamentFightsAll = getTournamentFights();
-        for (var element in oldFights) {
-          tournamentFightsAll.removeWhere((tof) => tof.fight.equalDuringFight(element));
+        final tournamentBoutsAll = getTournamentBouts();
+        for (var element in oldBouts) {
+          tournamentBoutsAll.removeWhere((tof) => tof.bout.equalDuringBout(element));
         }
       }
 
       // Remove if exists
-      for (var element in oldFights) {
-        fightsAll.remove(element);
+      for (var element in oldBouts) {
+        boutsAll.remove(element);
       }
     }
 
@@ -116,57 +116,57 @@ class MockDataProvider extends DataProvider {
       // TODO get all participations
       teamParticipations = [];
       weightClasses = [];
-      // throw UnimplementedError('generate fights for tournaments not yet implemented');
+      // throw UnimplementedError('generate bouts for tournaments not yet implemented');
     } else {
       teamParticipations = [];
       weightClasses = [];
-      throw UnimplementedError('generate fights for tournaments not yet implemented');
+      throw UnimplementedError('generate bouts for tournaments not yet implemented');
     }
 
-    // Generate new fights
-    final newFights = await wrestlingEvent.generateFights(teamParticipations, weightClasses);
-    final newFightsWithId = <Fight>[];
+    // Generate new bouts
+    final newBouts = await wrestlingEvent.generateBouts(teamParticipations, weightClasses);
+    final newBoutsWithId = <Bout>[];
 
     // Add if not exists
     final random = Random();
-    for (var element in newFights) {
-      if (fightsAll.where((Fight f) => f.equalDuringFight(element)).isEmpty) {
+    for (var element in newBouts) {
+      if (boutsAll.where((Bout f) => f.equalDuringBout(element)).isEmpty) {
         do {
           // Generate new id as long it is not taken yet
           element = element.copyWithId(random.nextInt(0x7fffffff));
-        } while (fightsAll.where((f) => f.id == element.id).isNotEmpty);
-        fightsAll.add(element);
+        } while (boutsAll.where((f) => f.id == element.id).isNotEmpty);
+        boutsAll.add(element);
       }
-      newFightsWithId.add(element);
+      newBoutsWithId.add(element);
     }
     if (wrestlingEvent is TeamMatch) {
-      final teamMatchFightsAll = getTeamMatchFights();
-      newFightsWithId.asMap().forEach((key, element) {
-        if (teamMatchFightsAll.where((tmf) => tmf.fight.equalDuringFight(element)).isEmpty) {
-          teamMatchFightsAll.removeWhere((tmf) => tmf.fight.weightClass == element.weightClass);
+      final teamMatchBoutsAll = getTeamMatchBouts();
+      newBoutsWithId.asMap().forEach((key, element) {
+        if (teamMatchBoutsAll.where((tmf) => tmf.bout.equalDuringBout(element)).isEmpty) {
+          teamMatchBoutsAll.removeWhere((tmf) => tmf.bout.weightClass == element.weightClass);
           int generatedId;
           do {
             // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (teamMatchFightsAll.where((t) => t.id == element.id).isNotEmpty);
-          teamMatchFightsAll.add(TeamMatchFight(id: generatedId, teamMatch: wrestlingEvent, fight: element, pos: key));
+          } while (teamMatchBoutsAll.where((t) => t.id == element.id).isNotEmpty);
+          teamMatchBoutsAll.add(TeamMatchBout(id: generatedId, teamMatch: wrestlingEvent, bout: element, pos: key));
         }
       });
     } else if (wrestlingEvent is Tournament) {
-      final tournamentFightsAll = getTournamentFights();
-      for (final element in newFightsWithId) {
-        if (tournamentFightsAll.where((tof) => tof.fight.equalDuringFight(element)).isEmpty) {
+      final tournamentBoutsAll = getTournamentBouts();
+      for (final element in newBoutsWithId) {
+        if (tournamentBoutsAll.where((tof) => tof.bout.equalDuringBout(element)).isEmpty) {
           int generatedId;
           do {
             // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (tournamentFightsAll.where((t) => t.id == element.id).isNotEmpty);
-          tournamentFightsAll.add(TournamentFight(id: generatedId, tournament: wrestlingEvent, fight: element));
+          } while (tournamentBoutsAll.where((t) => t.id == element.id).isNotEmpty);
+          tournamentBoutsAll.add(TournamentBout(id: generatedId, tournament: wrestlingEvent, bout: element));
         }
       }
     }
-    getFights().addAll(newFightsWithId);
-    _updateMany(Fight, filterObject: wrestlingEvent);
+    getBouts().addAll(newBoutsWithId);
+    _updateMany(Bout, filterObject: wrestlingEvent);
   }
 
   @override
@@ -179,14 +179,14 @@ class MockDataProvider extends DataProvider {
 
   Future<void> _updateMany(Type t, {DataObject? filterObject}) async {
     switch (t) {
-      case const (Fight):
+      case const (Bout):
         if (filterObject is TeamMatch) {
           final manyFilter = ManyDataObject(
-            data: getFightsOfTeamMatch(filterObject),
+            data: getBoutsOfTeamMatch(filterObject),
             filterType: TeamMatch,
             filterId: filterObject.id,
           );
-          return getManyStreamController<Fight>(filterType: TeamMatch)?.add(manyFilter);
+          return getManyStreamController<Bout>(filterType: TeamMatch)?.add(manyFilter);
         }
         throw DataUnimplementedError(CRUD.update, t, filterObject);
       default:
@@ -230,12 +230,12 @@ class MockDataProvider extends DataProvider {
     if (single is Club) {
       // SpecialCase: the full Club list has to be updated, shouldn't occur often
       getManyStreamController<Club>()?.add(ManyDataObject(data: getClubs()));
-    } else if (single is Fight) {
-    } else if (single is FightAction) {
-      getManyStreamController<FightAction>(filterType: Fight)?.add(ManyDataObject(
-        data: getFightActionsOfFight(single.fight),
-        filterType: Fight,
-        filterId: single.fight.id,
+    } else if (single is Bout) {
+    } else if (single is BoutAction) {
+      getManyStreamController<BoutAction>(filterType: Bout)?.add(ManyDataObject(
+        data: getBoutActionsOfBout(single.bout),
+        filterType: Bout,
+        filterId: single.bout.id,
       ));
     } else if (single is League) {
       getManyStreamController<League>()?.add(ManyDataObject(data: getLeagues()));
@@ -293,10 +293,10 @@ class MockDataProvider extends DataProvider {
   List<T> _getListOfObject<T extends DataObject>(T obj, CRUD crud) {
     if (obj is Club) {
       return getClubs().cast<T>();
-    } else if (obj is Fight) {
-      return getFights().cast<T>();
-    } else if (obj is FightAction) {
-      return getFightActions().cast<T>();
+    } else if (obj is Bout) {
+      return getBouts().cast<T>();
+    } else if (obj is BoutAction) {
+      return getBoutActions().cast<T>();
     } else if (obj is League) {
       return getLeagues().cast<T>();
     } else if (obj is LeagueWeightClass) {
@@ -315,8 +315,8 @@ class MockDataProvider extends DataProvider {
       return getTeams().cast<T>();
     } else if (obj is TeamMatch) {
       return getTeamMatches().cast<T>();
-    } else if (obj is TeamMatchFight) {
-      return getTeamMatchFights().cast<T>();
+    } else if (obj is TeamMatchBout) {
+      return getTeamMatchBouts().cast<T>();
     } else if (obj is WeightClass) {
       return getWeightClasses().cast<T>();
     } else {
@@ -328,10 +328,10 @@ class MockDataProvider extends DataProvider {
     switch (T) {
       case const (Club):
         return getClubs().cast<T>();
-      case const (Fight):
-        return getFights().cast<T>();
-      case const (FightAction):
-        return getFightActions().cast<T>();
+      case const (Bout):
+        return getBouts().cast<T>();
+      case const (BoutAction):
+        return getBoutActions().cast<T>();
       case const (League):
         return getLeagues().cast<T>();
       case const (LeagueWeightClass):
@@ -350,8 +350,8 @@ class MockDataProvider extends DataProvider {
         return getTeams().cast<T>();
       case const (TeamMatch):
         return getTeamMatches().cast<T>();
-      case const (TeamMatchFight):
-        return getTeamMatchFights().cast<T>();
+      case const (TeamMatchBout):
+        return getTeamMatchBouts().cast<T>();
       case const (WeightClass):
         return getWeightClasses().cast<T>();
       default:
@@ -362,10 +362,10 @@ class MockDataProvider extends DataProvider {
   StreamController<T> _getSingleStreamControllerOfObject<T extends DataObject>(T obj, CRUD crud) {
     if (obj is Club) {
       return getSingleStreamController<Club>() as StreamController<T>;
-    } else if (obj is Fight) {
-      return getSingleStreamController<Fight>() as StreamController<T>;
-    } else if (obj is FightAction) {
-      return getSingleStreamController<FightAction>() as StreamController<T>;
+    } else if (obj is Bout) {
+      return getSingleStreamController<Bout>() as StreamController<T>;
+    } else if (obj is BoutAction) {
+      return getSingleStreamController<BoutAction>() as StreamController<T>;
     } else if (obj is League) {
       return getSingleStreamController<League>() as StreamController<T>;
     } else if (obj is LeagueWeightClass) {
@@ -384,8 +384,8 @@ class MockDataProvider extends DataProvider {
       return getSingleStreamController<Team>() as StreamController<T>;
     } else if (obj is TeamMatch) {
       return getSingleStreamController<TeamMatch>() as StreamController<T>;
-    } else if (obj is TeamMatchFight) {
-      return getSingleStreamController<TeamMatchFight>() as StreamController<T>;
+    } else if (obj is TeamMatchBout) {
+      return getSingleStreamController<TeamMatchBout>() as StreamController<T>;
     } else if (obj is WeightClass) {
       return getSingleStreamController<WeightClass>() as StreamController<T>;
     } else {

@@ -153,34 +153,34 @@ class TeamMatchOverview extends StatelessWidget {
                                 )),
                       ],
                     ),
-                    ManyConsumer<Fight, TeamMatch>(
+                    ManyConsumer<Bout, TeamMatch>(
                       filterObject: match,
-                      builder: (BuildContext context, List<Fight> fights) {
+                      builder: (BuildContext context, List<Bout> bouts) {
                         return ListGroup(
                           header: HeadingItem(
-                            title: localizations.fights,
+                            title: localizations.bouts,
                             /*trailing: IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => FightEdit(
+                                  builder: (context) => BoutEdit(
                                     initialMatch: match,
                                   ),
                                 ),
                               ),
                             ),*/
                           ),
-                          items: fights.map((fight) => SingleConsumer<Fight>(
-                              id: fight.id,
-                              initialData: fight,
+                          items: bouts.map((bout) => SingleConsumer<Bout>(
+                              id: bout.id,
+                              initialData: bout,
                               builder: (context, team) => ContentItem(
                                     title:
-                                        '${fight.weightClass.name}, ${styleToAbbr(fight.weightClass.style, context)} | '
-                                        '${fight.r?.participation.membership.person.fullName ?? localizations.participantVacant} vs. '
-                                        '${fight.b?.participation.membership.person.fullName ?? localizations.participantVacant}',
+                                        '${bout.weightClass.name}, ${styleToAbbr(bout.weightClass.style, context)} | '
+                                        '${bout.r?.participation.membership.person.fullName ?? localizations.participantVacant} vs. '
+                                        '${bout.b?.participation.membership.person.fullName ?? localizations.participantVacant}',
                                     icon: Icons.sports_kabaddi,
-                                    /*onTap: () => handleSelectedFight(fight, context),*/
+                                    /*onTap: () => handleSelectedBout(bout, context),*/
                                   ))),
                         );
                       },
@@ -194,8 +194,8 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  /*handleSelectedFight(Fight fight, BuildContext context) {
-    context.push('/${FightOverview.route}/${fight.id}');
+  /*handleSelectedBout(Bout bout, BuildContext context) {
+    context.push('/${BoutOverview.route}/${bout.id}');
   }*/
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
@@ -213,7 +213,7 @@ class TeamMatchOverview extends StatelessWidget {
             participations: participations,
             lineup: lineup,
             onSubmit: () {
-              dataProvider.generateFights<TeamMatch>(match, false);
+              dataProvider.generateBouts<TeamMatch>(match, false);
             },
           );
         },

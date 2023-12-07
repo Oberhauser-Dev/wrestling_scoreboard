@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/app_navigation.dart';
-import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
+import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/league_overview.dart';
@@ -34,11 +34,11 @@ final router = GoRouter(
             builder: (context, state) => MatchDisplay(id: int.parse(state.pathParameters['match_id']!)),
           ),
           GoRoute(
-            path: '${FightDisplay.route}/:fight_id',
+            path: '${BoutDisplay.route}/:bout_id',
             builder: (context, state) {
               final matchId = int.parse(state.pathParameters['match_id']!);
-              final fightId = int.parse(state.pathParameters['fight_id']!);
-              return FightDisplay(matchId: matchId, fightId: fightId);
+              final boutId = int.parse(state.pathParameters['bout_id']!);
+              return BoutDisplay(matchId: matchId, boutId: boutId);
             },
           ),
         ],

@@ -1,5 +1,5 @@
-/// The result of a single fight.
-enum FightResult {
+/// The result of a single bout.
+enum BoutResult {
   /// Victory by fall
   /// Schultersieg (SS)
   vfa,
@@ -41,11 +41,11 @@ enum FightResult {
   dsq2,
 }
 
-extension FightResultParser on FightResult {
+extension BoutResultParser on BoutResult {
   String get name =>
       toString()
           .split('.')
           .last;
 
-  static FightResult valueOf(String name) => FightResult.values.singleWhere((element) => element.name == name);
+  static BoutResult valueOf(String name) => BoutResult.values.singleWhere((element) => element.name == name);
 }

@@ -71,9 +71,9 @@ abstract class DataProvider {
   /// DELETE: delete a single object
   Future<void> deleteSingle<T extends DataObject>(T single);
 
-  /// CREATE: generate fights of a wrestling event
-  /// If [isReset] is true, then delete all previous Fights and TeamMatchFights, else reuse the states.
-  Future<void> generateFights<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);
+  /// CREATE: generate bouts of a wrestling event
+  /// If [isReset] is true, then delete all previous Bouts and TeamMatchBouts, else reuse the states.
+  Future<void> generateBouts<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject<dynamic>>>> _manyStreamControllers = {};

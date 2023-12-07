@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'fight.dart';
+part of 'bout.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,30 +14,30 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Fight _$FightFromJson(Map<String, dynamic> json) {
-  return _Fight.fromJson(json);
+Bout _$BoutFromJson(Map<String, dynamic> json) {
+  return _Bout.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Fight {
+mixin _$Bout {
   int? get id => throw _privateConstructorUsedError;
   ParticipantState? get r => throw _privateConstructorUsedError; // red
   ParticipantState? get b => throw _privateConstructorUsedError; // blue
   WeightClass get weightClass => throw _privateConstructorUsedError;
   int? get pool => throw _privateConstructorUsedError;
-  FightRole? get winnerRole => throw _privateConstructorUsedError;
-  FightResult? get result => throw _privateConstructorUsedError;
+  BoutRole? get winnerRole => throw _privateConstructorUsedError;
+  BoutResult? get result => throw _privateConstructorUsedError;
   Duration get duration => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $FightCopyWith<Fight> get copyWith => throw _privateConstructorUsedError;
+  $BoutCopyWith<Bout> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $FightCopyWith<$Res> {
-  factory $FightCopyWith(Fight value, $Res Function(Fight) then) =
-      _$FightCopyWithImpl<$Res, Fight>;
+abstract class $BoutCopyWith<$Res> {
+  factory $BoutCopyWith(Bout value, $Res Function(Bout) then) =
+      _$BoutCopyWithImpl<$Res, Bout>;
   @useResult
   $Res call(
       {int? id,
@@ -45,8 +45,8 @@ abstract class $FightCopyWith<$Res> {
       ParticipantState? b,
       WeightClass weightClass,
       int? pool,
-      FightRole? winnerRole,
-      FightResult? result,
+      BoutRole? winnerRole,
+      BoutResult? result,
       Duration duration});
 
   $ParticipantStateCopyWith<$Res>? get r;
@@ -55,9 +55,9 @@ abstract class $FightCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$FightCopyWithImpl<$Res, $Val extends Fight>
-    implements $FightCopyWith<$Res> {
-  _$FightCopyWithImpl(this._value, this._then);
+class _$BoutCopyWithImpl<$Res, $Val extends Bout>
+    implements $BoutCopyWith<$Res> {
+  _$BoutCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -100,11 +100,11 @@ class _$FightCopyWithImpl<$Res, $Val extends Fight>
       winnerRole: freezed == winnerRole
           ? _value.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable
-              as FightRole?,
+              as BoutRole?,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
-              as FightResult?,
+              as BoutResult?,
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -146,10 +146,10 @@ class _$FightCopyWithImpl<$Res, $Val extends Fight>
 }
 
 /// @nodoc
-abstract class _$$FightImplCopyWith<$Res> implements $FightCopyWith<$Res> {
-  factory _$$FightImplCopyWith(
-          _$FightImpl value, $Res Function(_$FightImpl) then) =
-      __$$FightImplCopyWithImpl<$Res>;
+abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
+  factory _$$BoutImplCopyWith(
+          _$BoutImpl value, $Res Function(_$BoutImpl) then) =
+      __$$BoutImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -158,8 +158,8 @@ abstract class _$$FightImplCopyWith<$Res> implements $FightCopyWith<$Res> {
       ParticipantState? b,
       WeightClass weightClass,
       int? pool,
-      FightRole? winnerRole,
-      FightResult? result,
+      BoutRole? winnerRole,
+      BoutResult? result,
       Duration duration});
 
   @override
@@ -171,11 +171,11 @@ abstract class _$$FightImplCopyWith<$Res> implements $FightCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$FightImplCopyWithImpl<$Res>
-    extends _$FightCopyWithImpl<$Res, _$FightImpl>
-    implements _$$FightImplCopyWith<$Res> {
-  __$$FightImplCopyWithImpl(
-      _$FightImpl _value, $Res Function(_$FightImpl) _then)
+class __$$BoutImplCopyWithImpl<$Res>
+    extends _$BoutCopyWithImpl<$Res, _$BoutImpl>
+    implements _$$BoutImplCopyWith<$Res> {
+  __$$BoutImplCopyWithImpl(
+      _$BoutImpl _value, $Res Function(_$BoutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -190,7 +190,7 @@ class __$$FightImplCopyWithImpl<$Res>
     Object? result = freezed,
     Object? duration = null,
   }) {
-    return _then(_$FightImpl(
+    return _then(_$BoutImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -214,11 +214,11 @@ class __$$FightImplCopyWithImpl<$Res>
       winnerRole: freezed == winnerRole
           ? _value.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable
-              as FightRole?,
+              as BoutRole?,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
-              as FightResult?,
+              as BoutResult?,
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -229,8 +229,8 @@ class __$$FightImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$FightImpl extends _Fight {
-  const _$FightImpl(
+class _$BoutImpl extends _Bout {
+  const _$BoutImpl(
       {this.id,
       this.r,
       this.b,
@@ -241,8 +241,8 @@ class _$FightImpl extends _Fight {
       this.duration = Duration.zero})
       : super._();
 
-  factory _$FightImpl.fromJson(Map<String, dynamic> json) =>
-      _$$FightImplFromJson(json);
+  factory _$BoutImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BoutImplFromJson(json);
 
   @override
   final int? id;
@@ -257,23 +257,23 @@ class _$FightImpl extends _Fight {
   @override
   final int? pool;
   @override
-  final FightRole? winnerRole;
+  final BoutRole? winnerRole;
   @override
-  final FightResult? result;
+  final BoutResult? result;
   @override
   @JsonKey()
   final Duration duration;
 
   @override
   String toString() {
-    return 'Fight(id: $id, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$FightImpl &&
+            other is _$BoutImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
@@ -295,30 +295,30 @@ class _$FightImpl extends _Fight {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FightImplCopyWith<_$FightImpl> get copyWith =>
-      __$$FightImplCopyWithImpl<_$FightImpl>(this, _$identity);
+  _$$BoutImplCopyWith<_$BoutImpl> get copyWith =>
+      __$$BoutImplCopyWithImpl<_$BoutImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FightImplToJson(
+    return _$$BoutImplToJson(
       this,
     );
   }
 }
 
-abstract class _Fight extends Fight {
-  const factory _Fight(
+abstract class _Bout extends Bout {
+  const factory _Bout(
       {final int? id,
       final ParticipantState? r,
       final ParticipantState? b,
       required final WeightClass weightClass,
       final int? pool,
-      final FightRole? winnerRole,
-      final FightResult? result,
-      final Duration duration}) = _$FightImpl;
-  const _Fight._() : super._();
+      final BoutRole? winnerRole,
+      final BoutResult? result,
+      final Duration duration}) = _$BoutImpl;
+  const _Bout._() : super._();
 
-  factory _Fight.fromJson(Map<String, dynamic> json) = _$FightImpl.fromJson;
+  factory _Bout.fromJson(Map<String, dynamic> json) = _$BoutImpl.fromJson;
 
   @override
   int? get id;
@@ -331,13 +331,13 @@ abstract class _Fight extends Fight {
   @override
   int? get pool;
   @override
-  FightRole? get winnerRole;
+  BoutRole? get winnerRole;
   @override
-  FightResult? get result;
+  BoutResult? get result;
   @override
   Duration get duration;
   @override
   @JsonKey(ignore: true)
-  _$$FightImplCopyWith<_$FightImpl> get copyWith =>
+  _$$BoutImplCopyWith<_$BoutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

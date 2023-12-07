@@ -1,15 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/fight_action_type.dart';
-import '../enums/fight_role.dart';
+import '../enums/bout_action_type.dart';
+import '../enums/bout_role.dart';
 import 'data_object.dart';
-import 'fight_action.dart';
+import 'bout_action.dart';
 import 'participation.dart';
 
 part 'participant_state.freezed.dart';
 part 'participant_state.g.dart';
 
-/// The state of one participant during a fight.
+/// The state of one participant during a bout.
 @freezed
 class ParticipantState with _$ParticipantState implements DataObject {
   const ParticipantState._();
@@ -43,17 +43,17 @@ class ParticipantState with _$ParticipantState implements DataObject {
   @override
   String get tableName => 'participant_state';
 
-  static int getTechnicalPoints(Iterable<FightAction> actions, FightRole role) {
+  static int getTechnicalPoints(Iterable<BoutAction> actions, BoutRole role) {
     var res = 0;
     for (var el in actions) {
-      if (el.actionType == FightActionType.points && el.role == role) {
+      if (el.actionType == BoutActionType.points && el.role == role) {
         res += el.pointCount!;
       }
     }
     return res;
   }
 
-  bool equalDuringFight(o) => o is ParticipantState && o.runtimeType == runtimeType && participation == o.participation;
+  bool equalDuringBout(o) => o is ParticipantState && o.runtimeType == runtimeType && participation == o.participation;
 
   @override
   ParticipantState copyWithId(int? id) {

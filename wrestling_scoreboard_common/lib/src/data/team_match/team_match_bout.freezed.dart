@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'team_match_fight.dart';
+part of 'team_match_bout.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,39 +14,39 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-TeamMatchFight _$TeamMatchFightFromJson(Map<String, dynamic> json) {
-  return _TeamMatchFight.fromJson(json);
+TeamMatchBout _$TeamMatchBoutFromJson(Map<String, dynamic> json) {
+  return _TeamMatchBout.fromJson(json);
 }
 
 /// @nodoc
-mixin _$TeamMatchFight {
+mixin _$TeamMatchBout {
   int? get id => throw _privateConstructorUsedError;
   TeamMatch get teamMatch => throw _privateConstructorUsedError;
-  Fight get fight => throw _privateConstructorUsedError;
+  Bout get bout => throw _privateConstructorUsedError;
   int get pos => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TeamMatchFightCopyWith<TeamMatchFight> get copyWith =>
+  $TeamMatchBoutCopyWith<TeamMatchBout> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TeamMatchFightCopyWith<$Res> {
-  factory $TeamMatchFightCopyWith(
-          TeamMatchFight value, $Res Function(TeamMatchFight) then) =
-      _$TeamMatchFightCopyWithImpl<$Res, TeamMatchFight>;
+abstract class $TeamMatchBoutCopyWith<$Res> {
+  factory $TeamMatchBoutCopyWith(
+          TeamMatchBout value, $Res Function(TeamMatchBout) then) =
+      _$TeamMatchBoutCopyWithImpl<$Res, TeamMatchBout>;
   @useResult
-  $Res call({int? id, TeamMatch teamMatch, Fight fight, int pos});
+  $Res call({int? id, TeamMatch teamMatch, Bout bout, int pos});
 
   $TeamMatchCopyWith<$Res> get teamMatch;
-  $FightCopyWith<$Res> get fight;
+  $BoutCopyWith<$Res> get bout;
 }
 
 /// @nodoc
-class _$TeamMatchFightCopyWithImpl<$Res, $Val extends TeamMatchFight>
-    implements $TeamMatchFightCopyWith<$Res> {
-  _$TeamMatchFightCopyWithImpl(this._value, this._then);
+class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout>
+    implements $TeamMatchBoutCopyWith<$Res> {
+  _$TeamMatchBoutCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -58,7 +58,7 @@ class _$TeamMatchFightCopyWithImpl<$Res, $Val extends TeamMatchFight>
   $Res call({
     Object? id = freezed,
     Object? teamMatch = null,
-    Object? fight = null,
+    Object? bout = null,
     Object? pos = null,
   }) {
     return _then(_value.copyWith(
@@ -70,10 +70,10 @@ class _$TeamMatchFightCopyWithImpl<$Res, $Val extends TeamMatchFight>
           ? _value.teamMatch
           : teamMatch // ignore: cast_nullable_to_non_nullable
               as TeamMatch,
-      fight: null == fight
-          ? _value.fight
-          : fight // ignore: cast_nullable_to_non_nullable
-              as Fight,
+      bout: null == bout
+          ? _value.bout
+          : bout // ignore: cast_nullable_to_non_nullable
+              as Bout,
       pos: null == pos
           ? _value.pos
           : pos // ignore: cast_nullable_to_non_nullable
@@ -91,35 +91,35 @@ class _$TeamMatchFightCopyWithImpl<$Res, $Val extends TeamMatchFight>
 
   @override
   @pragma('vm:prefer-inline')
-  $FightCopyWith<$Res> get fight {
-    return $FightCopyWith<$Res>(_value.fight, (value) {
-      return _then(_value.copyWith(fight: value) as $Val);
+  $BoutCopyWith<$Res> get bout {
+    return $BoutCopyWith<$Res>(_value.bout, (value) {
+      return _then(_value.copyWith(bout: value) as $Val);
     });
   }
 }
 
 /// @nodoc
-abstract class _$$TeamMatchFightImplCopyWith<$Res>
-    implements $TeamMatchFightCopyWith<$Res> {
-  factory _$$TeamMatchFightImplCopyWith(_$TeamMatchFightImpl value,
-          $Res Function(_$TeamMatchFightImpl) then) =
-      __$$TeamMatchFightImplCopyWithImpl<$Res>;
+abstract class _$$TeamMatchBoutImplCopyWith<$Res>
+    implements $TeamMatchBoutCopyWith<$Res> {
+  factory _$$TeamMatchBoutImplCopyWith(_$TeamMatchBoutImpl value,
+          $Res Function(_$TeamMatchBoutImpl) then) =
+      __$$TeamMatchBoutImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, TeamMatch teamMatch, Fight fight, int pos});
+  $Res call({int? id, TeamMatch teamMatch, Bout bout, int pos});
 
   @override
   $TeamMatchCopyWith<$Res> get teamMatch;
   @override
-  $FightCopyWith<$Res> get fight;
+  $BoutCopyWith<$Res> get bout;
 }
 
 /// @nodoc
-class __$$TeamMatchFightImplCopyWithImpl<$Res>
-    extends _$TeamMatchFightCopyWithImpl<$Res, _$TeamMatchFightImpl>
-    implements _$$TeamMatchFightImplCopyWith<$Res> {
-  __$$TeamMatchFightImplCopyWithImpl(
-      _$TeamMatchFightImpl _value, $Res Function(_$TeamMatchFightImpl) _then)
+class __$$TeamMatchBoutImplCopyWithImpl<$Res>
+    extends _$TeamMatchBoutCopyWithImpl<$Res, _$TeamMatchBoutImpl>
+    implements _$$TeamMatchBoutImplCopyWith<$Res> {
+  __$$TeamMatchBoutImplCopyWithImpl(
+      _$TeamMatchBoutImpl _value, $Res Function(_$TeamMatchBoutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,10 +127,10 @@ class __$$TeamMatchFightImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? teamMatch = null,
-    Object? fight = null,
+    Object? bout = null,
     Object? pos = null,
   }) {
-    return _then(_$TeamMatchFightImpl(
+    return _then(_$TeamMatchBoutImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -139,10 +139,10 @@ class __$$TeamMatchFightImplCopyWithImpl<$Res>
           ? _value.teamMatch
           : teamMatch // ignore: cast_nullable_to_non_nullable
               as TeamMatch,
-      fight: null == fight
-          ? _value.fight
-          : fight // ignore: cast_nullable_to_non_nullable
-              as Fight,
+      bout: null == bout
+          ? _value.bout
+          : bout // ignore: cast_nullable_to_non_nullable
+              as Bout,
       pos: null == pos
           ? _value.pos
           : pos // ignore: cast_nullable_to_non_nullable
@@ -153,83 +153,83 @@ class __$$TeamMatchFightImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TeamMatchFightImpl extends _TeamMatchFight {
-  const _$TeamMatchFightImpl(
+class _$TeamMatchBoutImpl extends _TeamMatchBout {
+  const _$TeamMatchBoutImpl(
       {this.id,
       required this.teamMatch,
-      required this.fight,
+      required this.bout,
       required this.pos})
       : super._();
 
-  factory _$TeamMatchFightImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TeamMatchFightImplFromJson(json);
+  factory _$TeamMatchBoutImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TeamMatchBoutImplFromJson(json);
 
   @override
   final int? id;
   @override
   final TeamMatch teamMatch;
   @override
-  final Fight fight;
+  final Bout bout;
   @override
   final int pos;
 
   @override
   String toString() {
-    return 'TeamMatchFight(id: $id, teamMatch: $teamMatch, fight: $fight, pos: $pos)';
+    return 'TeamMatchBout(id: $id, teamMatch: $teamMatch, bout: $bout, pos: $pos)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TeamMatchFightImpl &&
+            other is _$TeamMatchBoutImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.teamMatch, teamMatch) ||
                 other.teamMatch == teamMatch) &&
-            (identical(other.fight, fight) || other.fight == fight) &&
+            (identical(other.bout, bout) || other.bout == bout) &&
             (identical(other.pos, pos) || other.pos == pos));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, teamMatch, fight, pos);
+  int get hashCode => Object.hash(runtimeType, id, teamMatch, bout, pos);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TeamMatchFightImplCopyWith<_$TeamMatchFightImpl> get copyWith =>
-      __$$TeamMatchFightImplCopyWithImpl<_$TeamMatchFightImpl>(
+  _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith =>
+      __$$TeamMatchBoutImplCopyWithImpl<_$TeamMatchBoutImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TeamMatchFightImplToJson(
+    return _$$TeamMatchBoutImplToJson(
       this,
     );
   }
 }
 
-abstract class _TeamMatchFight extends TeamMatchFight {
-  const factory _TeamMatchFight(
+abstract class _TeamMatchBout extends TeamMatchBout {
+  const factory _TeamMatchBout(
       {final int? id,
       required final TeamMatch teamMatch,
-      required final Fight fight,
-      required final int pos}) = _$TeamMatchFightImpl;
-  const _TeamMatchFight._() : super._();
+      required final Bout bout,
+      required final int pos}) = _$TeamMatchBoutImpl;
+  const _TeamMatchBout._() : super._();
 
-  factory _TeamMatchFight.fromJson(Map<String, dynamic> json) =
-      _$TeamMatchFightImpl.fromJson;
+  factory _TeamMatchBout.fromJson(Map<String, dynamic> json) =
+      _$TeamMatchBoutImpl.fromJson;
 
   @override
   int? get id;
   @override
   TeamMatch get teamMatch;
   @override
-  Fight get fight;
+  Bout get bout;
   @override
   int get pos;
   @override
   @JsonKey(ignore: true)
-  _$$TeamMatchFightImplCopyWith<_$TeamMatchFightImpl> get copyWith =>
+  _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

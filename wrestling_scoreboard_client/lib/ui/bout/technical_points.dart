@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/ui/fight/time_display.dart';
+import 'package:wrestling_scoreboard_client/ui/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/util/colors.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TechnicalPoints extends StatelessWidget {
-  final FightRole role;
+  final BoutRole role;
   final ParticipantStateModel pStatusModel;
 
   const TechnicalPoints({required this.role, required this.pStatusModel, super.key});
@@ -20,14 +20,14 @@ class TechnicalPoints extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final cellHeight = width / 6;
     return Container(
-      color: getColorFromFightRole(role),
+      color: getColorFromBoutRole(role),
       height: cellHeight,
       child: Column(
         children: [
           Expanded(
             flex: 70,
             child: Center(
-              child: Consumer<List<FightAction>>(
+              child: Consumer<List<BoutAction>>(
                   builder: (context, data, child) => FittedText(
                         (ParticipantState.getTechnicalPoints(data, role)).toString(),
                         softWrap: false,

@@ -52,14 +52,14 @@ Future<int?> handleFromJson(
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const (Fight):
-      return _handleFromJsonGeneric<Fight>(json,
+    case const (Bout):
+      return _handleFromJsonGeneric<Bout>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const (FightAction):
-      return _handleFromJsonGeneric<FightAction>(json,
+    case const (BoutAction):
+      return _handleFromJsonGeneric<BoutAction>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
@@ -199,10 +199,10 @@ String getTableNameFromType(Type t) {
       return 'bout_config';
     case const (Club):
       return 'club';
-    case const (Fight):
-      return 'fight';
-    case const (FightAction):
-      return 'fight_action';
+    case const (Bout):
+      return 'bout';
+    case const (BoutAction):
+      return 'bout_action';
     case const (League):
       return 'league';
     case const (LeagueWeightClass):
@@ -223,8 +223,8 @@ String getTableNameFromType(Type t) {
       return 'team';
     case const (TeamMatch):
       return 'team_match';
-    case const (TeamMatchFight):
-      return 'team_match_fight';
+    case const (TeamMatchBout):
+      return 'team_match_bout';
     case const (Tournament):
       return 'tournament';
     case const (WeightClass):
@@ -240,10 +240,10 @@ Type getTypeFromTableName(String tableName) {
       return BoutConfig;
     case 'club':
       return Club;
-    case 'fight':
-      return Fight;
-    case 'fight_action':
-      return FightAction;
+    case 'bout':
+      return Bout;
+    case 'bout_action':
+      return BoutAction;
     case 'league':
       return League;
     case 'league_weight_class':
@@ -264,8 +264,8 @@ Type getTypeFromTableName(String tableName) {
       return Team;
     case 'team_match':
       return TeamMatch;
-    case 'team_match_fight':
-      return TeamMatchFight;
+    case 'team_match_bout':
+      return TeamMatchBout;
     case 'tournament':
       return Tournament;
     case 'weight_class':

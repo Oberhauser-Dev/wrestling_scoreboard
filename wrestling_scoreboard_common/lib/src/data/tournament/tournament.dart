@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../bout_config.dart';
 import '../data_object.dart';
-import '../fight.dart';
+import '../bout.dart';
 import '../participation.dart';
 import '../weight_class.dart';
 import '../wrestling_event.dart';
@@ -53,8 +53,8 @@ class Tournament extends WrestlingEvent with _$Tournament {
   }
 
   @override
-  Future<List<Fight>> generateFights(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) {
-    // TODO: implement generateFights
+  Future<List<Bout>> generateBouts(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) {
+    // TODO: implement generateBouts
     throw UnimplementedError();
   }
 

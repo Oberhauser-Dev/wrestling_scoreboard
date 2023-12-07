@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ActionsWidget extends StatelessWidget {
-  final List<FightAction> actions;
+  final List<BoutAction> actions;
 
   ActionsWidget(this.actions, {super.key}) {
     actions.sort((a, b) => a.duration.compareTo(b.duration));
@@ -22,7 +22,7 @@ class ActionsWidget extends StatelessWidget {
         child: Row(
           children: [
             ...actions.map((e) {
-              final color = getColorFromFightRole(e.role);
+              final color = getColorFromBoutRole(e.role);
               return Tooltip(
                   message: durationToString(e.duration),
                   child: Container(

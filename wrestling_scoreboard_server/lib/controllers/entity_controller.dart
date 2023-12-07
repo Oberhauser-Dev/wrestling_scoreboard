@@ -5,8 +5,8 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/fight_action_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/fight_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
@@ -17,7 +17,7 @@ import 'package:wrestling_scoreboard_server/controllers/participation_controller
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_match_fight_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/tournament_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
@@ -324,10 +324,10 @@ abstract class EntityController<T extends DataObject> {
         return BoutConfigController() as EntityController<T>;
       case Club:
         return ClubController() as EntityController<T>;
-      case Fight:
-        return FightController() as EntityController<T>;
-      case FightAction:
-        return FightActionController() as EntityController<T>;
+      case Bout:
+        return BoutController() as EntityController<T>;
+      case BoutAction:
+        return BoutActionController() as EntityController<T>;
       case League:
         return LeagueController() as EntityController<T>;
       case LeagueWeightClass:
@@ -348,8 +348,8 @@ abstract class EntityController<T extends DataObject> {
         return TeamController() as EntityController<T>;
       case TeamMatch:
         return TeamMatchController() as EntityController<T>;
-      case TeamMatchFight:
-        return TeamMatchFightController() as EntityController<T>;
+      case TeamMatchBout:
+        return TeamMatchBoutController() as EntityController<T>;
       case Tournament:
         return TournamentController() as EntityController<T>;
       case WeightClass:

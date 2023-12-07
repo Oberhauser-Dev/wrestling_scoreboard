@@ -5,8 +5,8 @@ import 'package:wrestling_scoreboard_server/controllers/league_weight_class_cont
 
 import '../controllers/bout_config_controller.dart';
 import '../controllers/club_controller.dart';
-import '../controllers/fight_action_controller.dart';
-import '../controllers/fight_controller.dart';
+import '../controllers/bout_action_controller.dart';
+import '../controllers/bout_controller.dart';
 import '../controllers/league_controller.dart';
 import '../controllers/lineup_controller.dart';
 import '../controllers/membership_controller.dart';
@@ -15,9 +15,9 @@ import '../controllers/participation_controller.dart';
 import '../controllers/person_controller.dart';
 import '../controllers/team_controller.dart';
 import '../controllers/team_match_controller.dart';
-import '../controllers/team_match_fight_controller.dart';
+import '../controllers/team_match_bout_controller.dart';
 import '../controllers/tournament_controller.dart';
-import '../controllers/tournament_fight_controller.dart';
+import '../controllers/tournament_bout_controller.dart';
 import '../controllers/weight_class_controller.dart';
 import '../middleware/content_type.dart';
 
@@ -40,16 +40,16 @@ class ApiRoute {
     router.get('/club/<id|[0-9]+>/memberships', clubController.requestMemberships);
     // router.get('/club/<no|[0-9]{5}>', clubRequest);
 
-    final fightController = FightController();
-    router.post('/fight', fightController.postSingle);
-    router.get('/fights', fightController.requestMany);
-    router.get('/fight/<id|[0-9]+>', fightController.requestSingle);
-    router.get('/fight/<id|[0-9]+>/fight_actions', fightController.requestFightActions);
+    final boutController = BoutController();
+    router.post('/bout', boutController.postSingle);
+    router.get('/bouts', boutController.requestMany);
+    router.get('/bout/<id|[0-9]+>', boutController.requestSingle);
+    router.get('/bout/<id|[0-9]+>/bout_actions', boutController.requestBoutActions);
 
-    final fightActionController = FightActionController();
-    router.post('/fight_action', fightActionController.postSingle);
-    router.get('/fight_actions', fightActionController.requestMany);
-    router.get('/fight_action/<id|[0-9]+>', fightActionController.requestSingle);
+    final boutActionController = BoutActionController();
+    router.post('/bout_action', boutActionController.postSingle);
+    router.get('/bout_actions', boutActionController.requestMany);
+    router.get('/bout_action/<id|[0-9]+>', boutActionController.requestSingle);
 
     final leagueController = LeagueController();
     router.post('/league', leagueController.postSingle);
@@ -108,24 +108,24 @@ class ApiRoute {
     router.get('/team_matchs', matchController.requestMany);
     router.get('/team_matches', matchController.requestMany);
     router.get('/team_match/<id|[0-9]+>', matchController.requestSingle);
-    router.post('/team_match/<id|[0-9]+>/fights/generate', matchController.generateFights);
-    router.get('/team_match/<id|[0-9]+>/fights', matchController.requestFights);
+    router.post('/team_match/<id|[0-9]+>/bouts/generate', matchController.generateBouts);
+    router.get('/team_match/<id|[0-9]+>/bouts', matchController.requestBouts);
 
-    final teamMatchFightController = TeamMatchFightController();
-    router.post('/team_match_fight', teamMatchFightController.postSingle);
-    router.get('/team_match_fights', teamMatchFightController.requestMany);
-    router.get('/team_match_fight/<id|[0-9]+>', teamMatchFightController.requestSingle);
+    final teamMatchBoutController = TeamMatchBoutController();
+    router.post('/team_match_bout', teamMatchBoutController.postSingle);
+    router.get('/team_match_bouts', teamMatchBoutController.requestMany);
+    router.get('/team_match_bout/<id|[0-9]+>', teamMatchBoutController.requestSingle);
 
     final tournamentController = TournamentController();
     router.post('/tournament', tournamentController.postSingle);
     router.get('/tournaments', tournamentController.requestMany);
     router.get('/tournament/<id|[0-9]+>', tournamentController.requestSingle);
-    router.get('/tournament/<id|[0-9]+>/fights', tournamentController.requestFights);
+    router.get('/tournament/<id|[0-9]+>/bouts', tournamentController.requestBouts);
 
-    final tournamentFightController = TournamentFightController();
-    router.post('/tournament_fight', tournamentFightController.postSingle);
-    router.get('/tournament_fights', tournamentFightController.requestMany);
-    router.get('/tournament_fight/<id|[0-9]+>', tournamentFightController.requestSingle);
+    final tournamentBoutController = TournamentBoutController();
+    router.post('/tournament_bout', tournamentBoutController.postSingle);
+    router.get('/tournament_bouts', tournamentBoutController.requestMany);
+    router.get('/tournament_bout/<id|[0-9]+>', tournamentBoutController.requestSingle);
 
     final weightClassController = WeightClassController();
     router.post('/weight_class', weightClassController.postSingle);

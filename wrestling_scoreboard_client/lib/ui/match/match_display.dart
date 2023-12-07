@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/data/fight_result.dart';
-import 'package:wrestling_scoreboard_client/data/fight_role.dart';
+import 'package:wrestling_scoreboard_client/data/bout_result.dart';
+import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/ui/fight/fight_display.dart';
+import 'package:wrestling_scoreboard_client/ui/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
@@ -54,12 +54,12 @@ class MatchDisplay extends StatelessWidget {
                     infoAction,
                   ]),
                 ),
-          body: ManyConsumer<Fight, TeamMatch>(
+          body: ManyConsumer<Bout, TeamMatch>(
             filterObject: match,
-            builder: (context, fights) {
+            builder: (context, bouts) {
               final matchInfos = [
                 match.league?.name,
-                '${AppLocalizations.of(context)!.fightNo}: ${match.id ?? ''}',
+                '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
                 if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
                 // Not enough space to display all three referees
                 // if (match.matChairman != null)
@@ -77,7 +77,7 @@ class MatchDisplay extends StatelessWidget {
                       fontSize: 12,
                       minFontSize: 10,
                     ))),
-                ...CommonElements.getTeamHeader(match, fights, context),
+                ...CommonElements.getTeamHeader(match, bouts, context),
               ];
               final column = Column(
                 children: [
@@ -92,17 +92,17 @@ class MatchDisplay extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: fights.length,
+                      itemCount: bouts.length,
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
                             InkWell(
-                              onTap: () => navigateToFightScreen(context, match, fights[index]),
+                              onTap: () => navigateToBoutScreen(context, match, bouts[index]),
                               child: IntrinsicHeight(
-                                child: ManyConsumer<FightAction, Fight>(
-                                  filterObject: fights[index],
+                                child: ManyConsumer<BoutAction, Bout>(
+                                  filterObject: bouts[index],
                                   builder: (context, actions) => Row(
-                                    children: FightListItemTwo(match: match, fight: fights[index], actions: actions)
+                                    children: BoutListItemTwo(match: match, bout: bouts[index], actions: actions)
                                         .build(context)
                                         .asMap()
                                         .entries
@@ -133,16 +133,16 @@ class MatchDisplay extends StatelessWidget {
   }
 }
 
-class FightListItemTwo {
+class BoutListItemTwo {
   final TeamMatch match;
-  final Fight fight;
-  final List<FightAction> actions;
+  final Bout bout;
+  final List<BoutAction> actions;
 
-  const FightListItemTwo({required this.match, required this.fight, required this.actions});
+  const BoutListItemTwo({required this.match, required this.bout, required this.actions});
 
-  displayName({ParticipantState? pStatus, required FightRole role, double? fontSize, required BuildContext context}) {
+  displayName({ParticipantState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
     return Container(
-      color: getColorFromFightRole(role),
+      color: getColorFromBoutRole(role),
       child: Center(
         child: ScaledText(
           pStatus == null
@@ -156,8 +156,8 @@ class FightListItemTwo {
     );
   }
 
-  Widget displayParticipantState({ParticipantState? pState, required FightRole role}) {
-    final color = (role == fight.winnerRole) ? getColorFromFightRole(role).shade800 : null;
+  Widget displayParticipantState({ParticipantState? pState, required BoutRole role}) {
+    final color = (role == bout.winnerRole) ? getColorFromBoutRole(role).shade800 : null;
     return SingleConsumer<ParticipantState>(
       id: pState?.id,
       initialData: pState,
@@ -206,7 +206,7 @@ class FightListItemTwo {
               padding: edgeInsets,
               child: Center(
                   child: ScaledText(
-                '${fight.weightClass.weight} $weightUnit',
+                '${bout.weightClass.weight} $weightUnit',
                 softWrap: false,
                 minFontSize: 10,
               )),
@@ -215,31 +215,31 @@ class FightListItemTwo {
           Expanded(
               child: Center(
                   child: ScaledText(
-            styleToAbbr(fight.weightClass.style, context),
+            styleToAbbr(bout.weightClass.style, context),
             minFontSize: 12,
           ))),
         ],
       ),
-      displayName(pStatus: fight.r, role: FightRole.red, context: context),
+      displayName(pStatus: bout.r, role: BoutRole.red, context: context),
       Row(
         children: [
           Expanded(
             flex: 50,
-            child: displayParticipantState(pState: fight.r, role: FightRole.red),
+            child: displayParticipantState(pState: bout.r, role: BoutRole.red),
           ),
           Expanded(
             flex: 100,
-            child: SingleConsumer<Fight>(
-              id: fight.id,
-              initialData: fight,
+            child: SingleConsumer<Bout>(
+              id: bout.id,
+              initialData: bout,
               builder: (context, data) => Column(
                 children: [
                   Expanded(
                       flex: 70,
                       child: Container(
-                        color: data?.winnerRole != null ? getColorFromFightRole(data!.winnerRole!).shade800 : null,
+                        color: data?.winnerRole != null ? getColorFromBoutRole(data!.winnerRole!).shade800 : null,
                         child: Center(
-                          child: ScaledText(getAbbreviationFromFightResult(data?.result, context), fontSize: 12),
+                          child: ScaledText(getAbbreviationFromBoutResult(data?.result, context), fontSize: 12),
                         ),
                       )),
                   Expanded(
@@ -254,11 +254,11 @@ class FightListItemTwo {
           ),
           Expanded(
             flex: 50,
-            child: displayParticipantState(pState: fight.b, role: FightRole.blue),
+            child: displayParticipantState(pState: bout.b, role: BoutRole.blue),
           ),
         ],
       ),
-      displayName(pStatus: fight.b, role: FightRole.blue, context: context),
+      displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
     ];
   }
 }

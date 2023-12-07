@@ -1,8 +1,8 @@
 # Wrestling Scoreboard Client
 
-Wrestling software for managing team fights and tournaments.
+Wrestling software for managing team bouts and tournaments.
 
-Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, tournament
+Tags: scoreboard, wrestling, scoring, bracket, mat, team bout, tournament
 
 ## Deployment
 

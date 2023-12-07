@@ -6,7 +6,7 @@ import '../data_object.dart';
 part 'league.freezed.dart';
 part 'league.g.dart';
 
-/// The league in which the team is fighting.
+/// The league in which the team is bouting.
 @freezed
 class League with _$League implements DataObject {
   static League outOfCompetition =

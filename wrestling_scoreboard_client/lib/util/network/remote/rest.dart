@@ -123,15 +123,15 @@ class RestDataProvider extends DataProvider {
   }
 
   @override
-  Future<void> generateFights<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
+  Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
     final prepend = '${_getPathFromType(T)}/${wrestlingEvent.id}';
-    final uri = Uri.parse('$_apiUrl$prepend/fights/generate')
+    final uri = Uri.parse('$_apiUrl$prepend/bouts/generate')
         .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: headers);
 
     if (response.statusCode >= 400) {
       throw Exception(
-          'Failed to CREATE generated fights ${wrestlingEvent.toString()}: \n${response.reasonPhrase ?? response.statusCode.toString()}\nBody: ${response.body}');
+          'Failed to CREATE generated bouts ${wrestlingEvent.toString()}: \n${response.reasonPhrase ?? response.statusCode.toString()}\nBody: ${response.body}');
     }
   }
 

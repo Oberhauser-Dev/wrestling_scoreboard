@@ -3,67 +3,67 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-import 'fight_shortcuts.dart';
+import 'bout_shortcuts.dart';
 
-class FightActionControls extends StatelessWidget {
-  final FightRole role;
-  final Function(FightScreenActionIntent)? callback;
+class BoutActionControls extends StatelessWidget {
+  final BoutRole role;
+  final Function(BoutScreenActionIntent)? callback;
 
-  const FightActionControls(this.role, this.callback, {super.key});
+  const BoutActionControls(this.role, this.callback, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool isRed = role == FightRole.red;
+    bool isRed = role == BoutRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
-    void Function()? prepareCallback(FightScreenActionIntent intentRed, FightScreenActionIntent intentBlue) {
+    void Function()? prepareCallback(BoutScreenActionIntent intentRed, BoutScreenActionIntent intentBlue) {
       return callback == null ? null : () => callback!(isRed ? intentRed : intentBlue);
     }
 
     var actions = <Widget>[
       displayActionControl(
         '1',
-        prepareCallback(const FightScreenActionIntent.redOne(), const FightScreenActionIntent.blueOne()),
+        prepareCallback(const BoutScreenActionIntent.redOne(), const BoutScreenActionIntent.blueOne()),
         color,
       ),
       displayActionControl(
         '2',
-        prepareCallback(const FightScreenActionIntent.redTwo(), const FightScreenActionIntent.blueTwo()),
+        prepareCallback(const BoutScreenActionIntent.redTwo(), const BoutScreenActionIntent.blueTwo()),
         color,
       ),
       displayActionControl(
         '4',
-        prepareCallback(const FightScreenActionIntent.redFour(), const FightScreenActionIntent.blueFour()),
+        prepareCallback(const BoutScreenActionIntent.redFour(), const BoutScreenActionIntent.blueFour()),
         color,
       ),
       displayActionControl(
         'P',
-        prepareCallback(const FightScreenActionIntent.redPassivity(), const FightScreenActionIntent.bluePassivity()),
+        prepareCallback(const BoutScreenActionIntent.redPassivity(), const BoutScreenActionIntent.bluePassivity()),
         color,
       ),
       displayActionControl(
         'O',
-        prepareCallback(const FightScreenActionIntent.redCaution(), const FightScreenActionIntent.blueCaution()),
+        prepareCallback(const BoutScreenActionIntent.redCaution(), const BoutScreenActionIntent.blueCaution()),
         color,
       ),
       /*displayActionControl(
           'D',
-          prepareCallback(const FightScreenActionIntent.RedDismissal(), FightScreenActionIntent.BlueDismissal()),
+          prepareCallback(const BoutScreenActionIntent.RedDismissal(), BoutScreenActionIntent.BlueDismissal()),
           color,
           padding),*/
       displayActionControl(
         AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
         prepareCallback(
-            const FightScreenActionIntent.redActivityTime(), const FightScreenActionIntent.blueActivityTime()),
+            const BoutScreenActionIntent.redActivityTime(), const BoutScreenActionIntent.blueActivityTime()),
         color,
       ),
       displayActionControl(
         AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
-        prepareCallback(const FightScreenActionIntent.redInjuryTime(), const FightScreenActionIntent.blueInjuryTime()),
+        prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
         color,
       ),
       displayActionControl(
         '⎌',
-        prepareCallback(const FightScreenActionIntent.redUndo(), const FightScreenActionIntent.blueUndo()),
+        prepareCallback(const BoutScreenActionIntent.redUndo(), const BoutScreenActionIntent.blueUndo()),
         color,
       ),
     ];

@@ -3,7 +3,7 @@ import 'package:postgres/postgres.dart';
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
-import 'fight_controller.dart';
+import 'bout_controller.dart';
 
 class TournamentController extends EntityController<Tournament> {
   static final TournamentController _singleton = TournamentController._internal();
@@ -14,12 +14,12 @@ class TournamentController extends EntityController<Tournament> {
 
   TournamentController._internal() : super(tableName: 'tournament');
 
-  Future<Response> requestFights(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(FightController(),
+  Future<Response> requestBouts(Request request, String id) async {
+    return EntityController.handleRequestManyOfControllerFromQuery(BoutController(),
         isRaw: isRaw(request), sqlQuery: '''
         SELECT f.* 
-        FROM fight as f 
-        JOIN tournament_fight AS tof ON tof.fight_id = f.id
+        FROM bout as f 
+        JOIN tournament_bout AS tof ON tof.bout_id = f.id
         WHERE tof.tournament_id = $id;''');
   }
 
