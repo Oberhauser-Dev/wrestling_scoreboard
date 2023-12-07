@@ -7,7 +7,7 @@ import 'team.dart';
 part 'lineup.freezed.dart';
 part 'lineup.g.dart';
 
-/// The lineup for a team match or tournament.
+/// The lineup for a team match or competition.
 @freezed
 class Lineup with _$Lineup implements DataObject {
   const Lineup._();

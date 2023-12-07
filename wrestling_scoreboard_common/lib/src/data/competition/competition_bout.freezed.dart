@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'tournament_bout.dart';
+part of 'competition_bout.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,38 +14,38 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-TournamentBout _$TournamentBoutFromJson(Map<String, dynamic> json) {
-  return _TournamentBout.fromJson(json);
+CompetitionBout _$CompetitionBoutFromJson(Map<String, dynamic> json) {
+  return _CompetitionBout.fromJson(json);
 }
 
 /// @nodoc
-mixin _$TournamentBout {
+mixin _$CompetitionBout {
   int? get id => throw _privateConstructorUsedError;
-  Tournament get tournament => throw _privateConstructorUsedError;
+  Competition get competition => throw _privateConstructorUsedError;
   Bout get bout => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TournamentBoutCopyWith<TournamentBout> get copyWith =>
+  $CompetitionBoutCopyWith<CompetitionBout> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TournamentBoutCopyWith<$Res> {
-  factory $TournamentBoutCopyWith(
-          TournamentBout value, $Res Function(TournamentBout) then) =
-      _$TournamentBoutCopyWithImpl<$Res, TournamentBout>;
+abstract class $CompetitionBoutCopyWith<$Res> {
+  factory $CompetitionBoutCopyWith(
+          CompetitionBout value, $Res Function(CompetitionBout) then) =
+      _$CompetitionBoutCopyWithImpl<$Res, CompetitionBout>;
   @useResult
-  $Res call({int? id, Tournament tournament, Bout bout});
+  $Res call({int? id, Competition competition, Bout bout});
 
-  $TournamentCopyWith<$Res> get tournament;
+  $CompetitionCopyWith<$Res> get competition;
   $BoutCopyWith<$Res> get bout;
 }
 
 /// @nodoc
-class _$TournamentBoutCopyWithImpl<$Res, $Val extends TournamentBout>
-    implements $TournamentBoutCopyWith<$Res> {
-  _$TournamentBoutCopyWithImpl(this._value, this._then);
+class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout>
+    implements $CompetitionBoutCopyWith<$Res> {
+  _$CompetitionBoutCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -56,7 +56,7 @@ class _$TournamentBoutCopyWithImpl<$Res, $Val extends TournamentBout>
   @override
   $Res call({
     Object? id = freezed,
-    Object? tournament = null,
+    Object? competition = null,
     Object? bout = null,
   }) {
     return _then(_value.copyWith(
@@ -64,10 +64,10 @@ class _$TournamentBoutCopyWithImpl<$Res, $Val extends TournamentBout>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      tournament: null == tournament
-          ? _value.tournament
-          : tournament // ignore: cast_nullable_to_non_nullable
-              as Tournament,
+      competition: null == competition
+          ? _value.competition
+          : competition // ignore: cast_nullable_to_non_nullable
+              as Competition,
       bout: null == bout
           ? _value.bout
           : bout // ignore: cast_nullable_to_non_nullable
@@ -77,9 +77,9 @@ class _$TournamentBoutCopyWithImpl<$Res, $Val extends TournamentBout>
 
   @override
   @pragma('vm:prefer-inline')
-  $TournamentCopyWith<$Res> get tournament {
-    return $TournamentCopyWith<$Res>(_value.tournament, (value) {
-      return _then(_value.copyWith(tournament: value) as $Val);
+  $CompetitionCopyWith<$Res> get competition {
+    return $CompetitionCopyWith<$Res>(_value.competition, (value) {
+      return _then(_value.copyWith(competition: value) as $Val);
     });
   }
 
@@ -93,45 +93,45 @@ class _$TournamentBoutCopyWithImpl<$Res, $Val extends TournamentBout>
 }
 
 /// @nodoc
-abstract class _$$TournamentBoutImplCopyWith<$Res>
-    implements $TournamentBoutCopyWith<$Res> {
-  factory _$$TournamentBoutImplCopyWith(_$TournamentBoutImpl value,
-          $Res Function(_$TournamentBoutImpl) then) =
-      __$$TournamentBoutImplCopyWithImpl<$Res>;
+abstract class _$$CompetitionBoutImplCopyWith<$Res>
+    implements $CompetitionBoutCopyWith<$Res> {
+  factory _$$CompetitionBoutImplCopyWith(_$CompetitionBoutImpl value,
+          $Res Function(_$CompetitionBoutImpl) then) =
+      __$$CompetitionBoutImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, Tournament tournament, Bout bout});
+  $Res call({int? id, Competition competition, Bout bout});
 
   @override
-  $TournamentCopyWith<$Res> get tournament;
+  $CompetitionCopyWith<$Res> get competition;
   @override
   $BoutCopyWith<$Res> get bout;
 }
 
 /// @nodoc
-class __$$TournamentBoutImplCopyWithImpl<$Res>
-    extends _$TournamentBoutCopyWithImpl<$Res, _$TournamentBoutImpl>
-    implements _$$TournamentBoutImplCopyWith<$Res> {
-  __$$TournamentBoutImplCopyWithImpl(
-      _$TournamentBoutImpl _value, $Res Function(_$TournamentBoutImpl) _then)
+class __$$CompetitionBoutImplCopyWithImpl<$Res>
+    extends _$CompetitionBoutCopyWithImpl<$Res, _$CompetitionBoutImpl>
+    implements _$$CompetitionBoutImplCopyWith<$Res> {
+  __$$CompetitionBoutImplCopyWithImpl(
+      _$CompetitionBoutImpl _value, $Res Function(_$CompetitionBoutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? tournament = null,
+    Object? competition = null,
     Object? bout = null,
   }) {
-    return _then(_$TournamentBoutImpl(
+    return _then(_$CompetitionBoutImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      tournament: null == tournament
-          ? _value.tournament
-          : tournament // ignore: cast_nullable_to_non_nullable
-              as Tournament,
+      competition: null == competition
+          ? _value.competition
+          : competition // ignore: cast_nullable_to_non_nullable
+              as Competition,
       bout: null == bout
           ? _value.bout
           : bout // ignore: cast_nullable_to_non_nullable
@@ -142,74 +142,74 @@ class __$$TournamentBoutImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TournamentBoutImpl extends _TournamentBout {
-  const _$TournamentBoutImpl(
-      {this.id, required this.tournament, required this.bout})
+class _$CompetitionBoutImpl extends _CompetitionBout {
+  const _$CompetitionBoutImpl(
+      {this.id, required this.competition, required this.bout})
       : super._();
 
-  factory _$TournamentBoutImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TournamentBoutImplFromJson(json);
+  factory _$CompetitionBoutImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CompetitionBoutImplFromJson(json);
 
   @override
   final int? id;
   @override
-  final Tournament tournament;
+  final Competition competition;
   @override
   final Bout bout;
 
   @override
   String toString() {
-    return 'TournamentBout(id: $id, tournament: $tournament, bout: $bout)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TournamentBoutImpl &&
+            other is _$CompetitionBoutImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.tournament, tournament) ||
-                other.tournament == tournament) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, tournament, bout);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TournamentBoutImplCopyWith<_$TournamentBoutImpl> get copyWith =>
-      __$$TournamentBoutImplCopyWithImpl<_$TournamentBoutImpl>(
+  _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith =>
+      __$$CompetitionBoutImplCopyWithImpl<_$CompetitionBoutImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TournamentBoutImplToJson(
+    return _$$CompetitionBoutImplToJson(
       this,
     );
   }
 }
 
-abstract class _TournamentBout extends TournamentBout {
-  const factory _TournamentBout(
+abstract class _CompetitionBout extends CompetitionBout {
+  const factory _CompetitionBout(
       {final int? id,
-      required final Tournament tournament,
-      required final Bout bout}) = _$TournamentBoutImpl;
-  const _TournamentBout._() : super._();
+      required final Competition competition,
+      required final Bout bout}) = _$CompetitionBoutImpl;
+  const _CompetitionBout._() : super._();
 
-  factory _TournamentBout.fromJson(Map<String, dynamic> json) =
-      _$TournamentBoutImpl.fromJson;
+  factory _CompetitionBout.fromJson(Map<String, dynamic> json) =
+      _$CompetitionBoutImpl.fromJson;
 
   @override
   int? get id;
   @override
-  Tournament get tournament;
+  Competition get competition;
   @override
   Bout get bout;
   @override
   @JsonKey(ignore: true)
-  _$$TournamentBoutImplCopyWith<_$TournamentBoutImpl> get copyWith =>
+  _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

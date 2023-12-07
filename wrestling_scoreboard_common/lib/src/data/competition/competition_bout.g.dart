@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tournament_bout.dart';
+part of 'competition_bout.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TournamentBoutImpl _$$TournamentBoutImplFromJson(
+_$CompetitionBoutImpl _$$CompetitionBoutImplFromJson(
         Map<String, dynamic> json) =>
-    _$TournamentBoutImpl(
+    _$CompetitionBoutImpl(
       id: json['id'] as int?,
-      tournament:
-          Tournament.fromJson(json['tournament'] as Map<String, dynamic>),
+      competition:
+          Competition.fromJson(json['competition'] as Map<String, dynamic>),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$TournamentBoutImplToJson(
-        _$TournamentBoutImpl instance) =>
+Map<String, dynamic> _$$CompetitionBoutImplToJson(
+        _$CompetitionBoutImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'tournament': instance.tournament.toJson(),
+      'competition': instance.competition.toJson(),
       'bout': instance.bout.toJson(),
     };

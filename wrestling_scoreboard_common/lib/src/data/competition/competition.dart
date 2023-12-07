@@ -7,15 +7,15 @@ import '../participation.dart';
 import '../weight_class.dart';
 import '../wrestling_event.dart';
 
-part 'tournament.freezed.dart';
-part 'tournament.g.dart';
+part 'competition.freezed.dart';
+part 'competition.g.dart';
 
 /// For team matches only.
 @freezed
-class Tournament extends WrestlingEvent with _$Tournament {
-  const Tournament._();
+class Competition extends WrestlingEvent with _$Competition {
+  const Competition._();
 
-  const factory Tournament({
+  const factory Competition({
     int? id,
     required String name,
     required BoutConfig boutConfig,
@@ -24,14 +24,14 @@ class Tournament extends WrestlingEvent with _$Tournament {
     String? no,
     int? visitorsCount,
     String? comment,
-  }) = _Tournament;
+  }) = _Competition;
 
-  factory Tournament.fromJson(Map<String, Object?> json) => _$TournamentFromJson(json);
+  factory Competition.fromJson(Map<String, Object?> json) => _$CompetitionFromJson(json);
 
-  static Future<Tournament> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+  static Future<Competition> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final boutConfig = await getSingle<BoutConfig>(e['bout_config_id'] as int);
     // TODO fetch lineups, referees, weightClasses, etc.
-    return Tournament(
+    return Competition(
       id: e['id'] as int?,
       name: e['name'],
       location: e['location'] as String?,
@@ -59,10 +59,10 @@ class Tournament extends WrestlingEvent with _$Tournament {
   }
 
   @override
-  String get tableName => 'tournament';
+  String get tableName => 'competition';
 
   @override
-  Tournament copyWithId(int? id) {
+  Competition copyWithId(int? id) {
     return copyWith(id: id);
   }
 }

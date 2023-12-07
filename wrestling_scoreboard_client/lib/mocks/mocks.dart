@@ -93,7 +93,7 @@ final List<Person> _persons = []; // TODO fill
 final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
 final List<TeamMatch> _teamMatches = [initMenRPWMatch(), initJnRPWMatch()];
 final List<TeamMatchBout> _teamMatchBouts = [];
-final List<TournamentBout> _tournamentBouts = [];
+final List<CompetitionBout> _competitionBouts = [];
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 
 TeamMatch initMenRPWMatch() {
@@ -147,8 +147,8 @@ List<Club> getClubs() => _clubs;
 
 List<Bout> getBouts() => _bouts;
 
-List<Bout> getBoutsOfTournament(Tournament tournament) {
-  return getTournamentBouts().where((element) => element.tournament == tournament).map((e) => e.bout).toList();
+List<Bout> getBoutsOfCompetition(Competition competition) {
+  return getCompetitionBouts().where((element) => element.competition == competition).map((e) => e.bout).toList();
 }
 
 List<Bout> getBoutsOfTeamMatch(TeamMatch match) {
@@ -218,7 +218,7 @@ List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
   return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
 }
 
-List<TournamentBout> getTournamentBouts() => _tournamentBouts;
+List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
 
 List<WeightClass> getWeightClasses() => _weightClasses;
 

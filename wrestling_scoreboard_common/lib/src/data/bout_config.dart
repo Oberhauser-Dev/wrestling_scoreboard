@@ -5,7 +5,7 @@ import 'data_object.dart';
 part 'bout_config.freezed.dart';
 part 'bout_config.g.dart';
 
-/// The general configuration for a bout, e.g. in a team competition or tournament.
+/// The general configuration for a bout, e.g. in a team match or competition.
 @freezed
 class BoutConfig with _$BoutConfig implements DataObject {
   static const defaultPeriodDuration = Duration(minutes: 3);

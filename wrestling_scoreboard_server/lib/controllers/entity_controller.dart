@@ -18,7 +18,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/tournament_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
@@ -350,8 +350,8 @@ abstract class EntityController<T extends DataObject> {
         return TeamMatchController() as EntityController<T>;
       case TeamMatchBout:
         return TeamMatchBoutController() as EntityController<T>;
-      case Tournament:
-        return TournamentController() as EntityController<T>;
+      case Competition:
+        return CompetitionController() as EntityController<T>;
       case WeightClass:
         return WeightClassController() as EntityController<T>;
       default:

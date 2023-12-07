@@ -59,7 +59,7 @@ class Bout with _$Bout implements DataObject {
     );
   }
 
-  Bout updateClassificationPoints(List<BoutAction> actions, {bool isTournament = false}) {
+  Bout updateClassificationPoints(List<BoutAction> actions, {bool isCompetition = false}) {
     if (result != null && winnerRole != null) {
       var winner = winnerRole == BoutRole.red ? r : b;
       var looser = winnerRole == BoutRole.red ? b : r;
@@ -67,8 +67,8 @@ class Bout with _$Bout implements DataObject {
       int? winnerClassificationPoints;
       int? looserClassificationPoints;
       if (winner != null) {
-        winnerClassificationPoints = isTournament
-            ? getClassificationPointsWinnerTournament(result!)
+        winnerClassificationPoints = isCompetition
+            ? getClassificationPointsWinnerCompetition(result!)
             : getClassificationPointsWinnerTeamMatch(
                 result!,
                 ParticipantState.getTechnicalPoints(actions, winnerRole!) -
@@ -77,8 +77,8 @@ class Bout with _$Bout implements DataObject {
       }
 
       if (looser != null) {
-        looserClassificationPoints = isTournament
-            ? getClassificationPointsLooserTournament(result!)
+        looserClassificationPoints = isCompetition
+            ? getClassificationPointsLooserCompetition(result!)
             : getClassificationPointsLooserTeamMatch(result!);
       }
       return copyWith(
@@ -107,7 +107,7 @@ class Bout with _$Bout implements DataObject {
   @override
   String get tableName => 'bout';
 
-  static int getClassificationPointsWinnerTournament(BoutResult result) {
+  static int getClassificationPointsWinnerCompetition(BoutResult result) {
     switch (result) {
       case BoutResult.vfa:
       case BoutResult.vin:
@@ -127,7 +127,7 @@ class Bout with _$Bout implements DataObject {
     }
   }
 
-  static int getClassificationPointsLooserTournament(BoutResult result) {
+  static int getClassificationPointsLooserCompetition(BoutResult result) {
     switch (result) {
       case BoutResult.vsu1:
       case BoutResult.vpo1:

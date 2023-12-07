@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tournament_team_participation.dart';
+part of 'competition_team_participation.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TournamentTeamParticipationImpl _$$TournamentTeamParticipationImplFromJson(
+_$CompetitionTeamParticipationImpl _$$CompetitionTeamParticipationImplFromJson(
         Map<String, dynamic> json) =>
-    _$TournamentTeamParticipationImpl(
+    _$CompetitionTeamParticipationImpl(
       id: json['id'] as int?,
-      tournament:
-          Tournament.fromJson(json['tournament'] as Map<String, dynamic>),
+      competition:
+          Competition.fromJson(json['competition'] as Map<String, dynamic>),
       team: Team.fromJson(json['team'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$TournamentTeamParticipationImplToJson(
-        _$TournamentTeamParticipationImpl instance) =>
+Map<String, dynamic> _$$CompetitionTeamParticipationImplToJson(
+        _$CompetitionTeamParticipationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'tournament': instance.tournament.toJson(),
+      'competition': instance.competition.toJson(),
       'team': instance.team.toJson(),
     };

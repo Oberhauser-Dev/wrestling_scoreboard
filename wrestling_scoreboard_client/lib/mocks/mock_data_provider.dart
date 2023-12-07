@@ -39,7 +39,7 @@ class MockDataProvider extends DataProvider {
     if (filterObject != null) {
       switch (T) {
         case const (Bout):
-          if (filterObject is Tournament) return getBoutsOfTournament(filterObject).cast<T>();
+          if (filterObject is Competition) return getBoutsOfCompetition(filterObject).cast<T>();
           if (filterObject is TeamMatch) return getBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Membership):
@@ -82,7 +82,7 @@ class MockDataProvider extends DataProvider {
     if (wrestlingEvent is TeamMatch) {
       oldBouts = getBoutsOfTeamMatch(wrestlingEvent);
     } else {
-      oldBouts = getBoutsOfTournament(wrestlingEvent as Tournament);
+      oldBouts = getBoutsOfCompetition(wrestlingEvent as Competition);
     }
     final boutsAll = getBouts();
     if (isReset) {
@@ -91,10 +91,10 @@ class MockDataProvider extends DataProvider {
         for (var element in oldBouts) {
           teamMatchBoutsAll.removeWhere((tmf) => tmf.bout.equalDuringBout(element));
         }
-      } else if (wrestlingEvent is Tournament) {
-        final tournamentBoutsAll = getTournamentBouts();
+      } else if (wrestlingEvent is Competition) {
+        final competitionBoutsAll = getCompetitionBouts();
         for (var element in oldBouts) {
-          tournamentBoutsAll.removeWhere((tof) => tof.bout.equalDuringBout(element));
+          competitionBoutsAll.removeWhere((tof) => tof.bout.equalDuringBout(element));
         }
       }
 
@@ -112,15 +112,15 @@ class MockDataProvider extends DataProvider {
           await dataProvider.readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
       weightClasses = await dataProvider.readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
-    } else if (wrestlingEvent is Tournament) {
+    } else if (wrestlingEvent is Competition) {
       // TODO get all participations
       teamParticipations = [];
       weightClasses = [];
-      // throw UnimplementedError('generate bouts for tournaments not yet implemented');
+      // throw UnimplementedError('generate bouts for competitions not yet implemented');
     } else {
       teamParticipations = [];
       weightClasses = [];
-      throw UnimplementedError('generate bouts for tournaments not yet implemented');
+      throw UnimplementedError('generate bouts for competitions not yet implemented');
     }
 
     // Generate new bouts
@@ -152,16 +152,16 @@ class MockDataProvider extends DataProvider {
           teamMatchBoutsAll.add(TeamMatchBout(id: generatedId, teamMatch: wrestlingEvent, bout: element, pos: key));
         }
       });
-    } else if (wrestlingEvent is Tournament) {
-      final tournamentBoutsAll = getTournamentBouts();
+    } else if (wrestlingEvent is Competition) {
+      final competitionBoutsAll = getCompetitionBouts();
       for (final element in newBoutsWithId) {
-        if (tournamentBoutsAll.where((tof) => tof.bout.equalDuringBout(element)).isEmpty) {
+        if (competitionBoutsAll.where((tof) => tof.bout.equalDuringBout(element)).isEmpty) {
           int generatedId;
           do {
             // Generate new id as long it is not taken yet
             generatedId = random.nextInt(0x7fffffff);
-          } while (tournamentBoutsAll.where((t) => t.id == element.id).isNotEmpty);
-          tournamentBoutsAll.add(TournamentBout(id: generatedId, tournament: wrestlingEvent, bout: element));
+          } while (competitionBoutsAll.where((t) => t.id == element.id).isNotEmpty);
+          competitionBoutsAll.add(CompetitionBout(id: generatedId, competition: wrestlingEvent, bout: element));
         }
       }
     }

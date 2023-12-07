@@ -16,8 +16,8 @@ import '../controllers/person_controller.dart';
 import '../controllers/team_controller.dart';
 import '../controllers/team_match_controller.dart';
 import '../controllers/team_match_bout_controller.dart';
-import '../controllers/tournament_controller.dart';
-import '../controllers/tournament_bout_controller.dart';
+import '../controllers/competition_controller.dart';
+import '../controllers/competition_bout_controller.dart';
 import '../controllers/weight_class_controller.dart';
 import '../middleware/content_type.dart';
 
@@ -116,16 +116,16 @@ class ApiRoute {
     router.get('/team_match_bouts', teamMatchBoutController.requestMany);
     router.get('/team_match_bout/<id|[0-9]+>', teamMatchBoutController.requestSingle);
 
-    final tournamentController = TournamentController();
-    router.post('/tournament', tournamentController.postSingle);
-    router.get('/tournaments', tournamentController.requestMany);
-    router.get('/tournament/<id|[0-9]+>', tournamentController.requestSingle);
-    router.get('/tournament/<id|[0-9]+>/bouts', tournamentController.requestBouts);
+    final competitionController = CompetitionController();
+    router.post('/competition', competitionController.postSingle);
+    router.get('/competitions', competitionController.requestMany);
+    router.get('/competition/<id|[0-9]+>', competitionController.requestSingle);
+    router.get('/competition/<id|[0-9]+>/bouts', competitionController.requestBouts);
 
-    final tournamentBoutController = TournamentBoutController();
-    router.post('/tournament_bout', tournamentBoutController.postSingle);
-    router.get('/tournament_bouts', tournamentBoutController.requestMany);
-    router.get('/tournament_bout/<id|[0-9]+>', tournamentBoutController.requestSingle);
+    final competitionBoutController = CompetitionBoutController();
+    router.post('/competition_bout', competitionBoutController.postSingle);
+    router.get('/competition_bouts', competitionBoutController.requestMany);
+    router.get('/competition_bout/<id|[0-9]+>', competitionBoutController.requestSingle);
 
     final weightClassController = WeightClassController();
     router.post('/weight_class', weightClassController.postSingle);

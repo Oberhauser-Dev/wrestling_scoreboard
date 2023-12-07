@@ -2,7 +2,7 @@
 
 Repository for managing Wrestling software client, server and shared libraries.
 
-Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, tournament
+Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, competition, tournament
 
 ## Screenshots
 

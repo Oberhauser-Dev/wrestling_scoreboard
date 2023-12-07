@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tournament_person.dart';
+part of 'competition_person.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TournamentPersonImpl _$$TournamentPersonImplFromJson(
+_$CompetitionPersonImpl _$$CompetitionPersonImplFromJson(
         Map<String, dynamic> json) =>
-    _$TournamentPersonImpl(
+    _$CompetitionPersonImpl(
       id: json['id'] as int?,
-      tournament:
-          Tournament.fromJson(json['tournament'] as Map<String, dynamic>),
+      competition:
+          Competition.fromJson(json['competition'] as Map<String, dynamic>),
       person: Person.fromJson(json['person'] as Map<String, dynamic>),
       role: $enumDecode(_$PersonRoleEnumMap, json['role']),
     );
 
-Map<String, dynamic> _$$TournamentPersonImplToJson(
-        _$TournamentPersonImpl instance) =>
+Map<String, dynamic> _$$CompetitionPersonImplToJson(
+        _$CompetitionPersonImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'tournament': instance.tournament.toJson(),
+      'competition': instance.competition.toJson(),
       'person': instance.person.toJson(),
       'role': _$PersonRoleEnumMap[instance.role]!,
     };

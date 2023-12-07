@@ -46,14 +46,14 @@ abstract class DataObject {
         return TeamMatch.fromJson(json) as T;
       case const (TeamMatchBout):
         return TeamMatchBout.fromJson(json) as T;
-      case const (Tournament):
-        return Tournament.fromJson(json) as T;
-      case const (TournamentBout):
-        return TournamentBout.fromJson(json) as T;
-      case const (TournamentPerson):
-        return TournamentPerson.fromJson(json) as T;
-      case const (TournamentTeamParticipation):
-        return TournamentTeamParticipation.fromJson(json) as T;
+      case const (Competition):
+        return Competition.fromJson(json) as T;
+      case const (CompetitionBout):
+        return CompetitionBout.fromJson(json) as T;
+      case const (CompetitionPerson):
+        return CompetitionPerson.fromJson(json) as T;
+      case const (CompetitionTeamParticipation):
+        return CompetitionTeamParticipation.fromJson(json) as T;
       case const (WeightClass):
         return WeightClass.fromJson(json) as T;
       default:
@@ -93,12 +93,12 @@ abstract class DataObject {
         return (await TeamMatch.fromRaw(raw, getSingle)) as T;
       case const (TeamMatchBout):
         return (await TeamMatchBout.fromRaw(raw, getSingle)) as T;
-      case const (Tournament):
-        return (await Tournament.fromRaw(raw, getSingle)) as T;
-      case const (TournamentPerson):
-        return (await TournamentPerson.fromRaw(raw, getSingle)) as T;
-      case const (TournamentTeamParticipation):
-        return (await TournamentTeamParticipation.fromRaw(raw, getSingle)) as T;
+      case const (Competition):
+        return (await Competition.fromRaw(raw, getSingle)) as T;
+      case const (CompetitionPerson):
+        return (await CompetitionPerson.fromRaw(raw, getSingle)) as T;
+      case const (CompetitionTeamParticipation):
+        return (await CompetitionTeamParticipation.fromRaw(raw, getSingle)) as T;
       case const (WeightClass):
         return (await WeightClass.fromRaw(raw)) as T;
       default:

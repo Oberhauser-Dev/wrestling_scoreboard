@@ -2,9 +2,9 @@
 Version=0.0.1
 Name=Wrestling Scoreboard
 GenericName=Sports event administration
-Comment=Wrestling software for managing team bouts and tournaments.
+Comment=Wrestling software for managing team matches and competitions.
 Terminal=false
 Type=Application
 Categories=Utility
-Keywords=Wrestling;Scoreboard;Tournament;Scoring;Bracket;Mat;Ringen;Lutte;
+Keywords=Wrestling;Scoreboard;Competition;Tournament;Scoring;Bracket;Mat;Ringen;Lutte;
 Icon=wrestling_scoreboard_client

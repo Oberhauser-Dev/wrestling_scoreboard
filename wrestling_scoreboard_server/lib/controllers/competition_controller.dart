@@ -5,22 +5,22 @@ import 'package:shelf/shelf.dart';
 import 'entity_controller.dart';
 import 'bout_controller.dart';
 
-class TournamentController extends EntityController<Tournament> {
-  static final TournamentController _singleton = TournamentController._internal();
+class CompetitionController extends EntityController<Competition> {
+  static final CompetitionController _singleton = CompetitionController._internal();
 
-  factory TournamentController() {
+  factory CompetitionController() {
     return _singleton;
   }
 
-  TournamentController._internal() : super(tableName: 'tournament');
+  CompetitionController._internal() : super(tableName: 'competition');
 
   Future<Response> requestBouts(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(BoutController(),
         isRaw: isRaw(request), sqlQuery: '''
         SELECT f.* 
         FROM bout as f 
-        JOIN tournament_bout AS tof ON tof.bout_id = f.id
-        WHERE tof.tournament_id = $id;''');
+        JOIN competition_bout AS tof ON tof.bout_id = f.id
+        WHERE tof.competition_id = $id;''');
   }
 
   @override

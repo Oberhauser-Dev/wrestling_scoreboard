@@ -10,7 +10,7 @@ control:
   Priority: optional
   Depends: libgcrypt20, libgstreamer-plugins-base1.0-0, libgstreamer1.0-dev, libgtk-3-0, libjpeg-turbo8, liblz4-1, libstdc++6, libzstd1
   Maintainer: August Oberhauser
-  Description: Wrestling software for managing team bouts and tournaments.
+  Description: Wrestling software for managing team matches and competitions.
 
 options:
   exec_out_dir: build/linux/x64/release/debian/

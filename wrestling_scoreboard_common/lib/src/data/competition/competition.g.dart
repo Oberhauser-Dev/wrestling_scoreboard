@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tournament.dart';
+part of 'competition.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TournamentImpl _$$TournamentImplFromJson(Map<String, dynamic> json) =>
-    _$TournamentImpl(
+_$CompetitionImpl _$$CompetitionImplFromJson(Map<String, dynamic> json) =>
+    _$CompetitionImpl(
       id: json['id'] as int?,
       name: json['name'] as String,
       boutConfig:
@@ -19,7 +19,7 @@ _$TournamentImpl _$$TournamentImplFromJson(Map<String, dynamic> json) =>
       comment: json['comment'] as String?,
     );
 
-Map<String, dynamic> _$$TournamentImplToJson(_$TournamentImpl instance) =>
+Map<String, dynamic> _$$CompetitionImplToJson(_$CompetitionImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

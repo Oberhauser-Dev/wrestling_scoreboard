@@ -209,18 +209,18 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 
 
 --
--- Name: tournament_person; Type: TABLE; Schema: public; Owner: wrestling
+-- Name: competition_person; Type: TABLE; Schema: public; Owner: wrestling
 --
 
-CREATE TABLE public.tournament_person (
+CREATE TABLE public.competition_person (
     id integer NOT NULL,
-    tournament_id integer NOT NULL,
+    competition_id integer NOT NULL,
     person_id integer NOT NULL,
     person_role public.person_role
 );
 
 
-ALTER TABLE public.tournament_person OWNER TO wrestling;
+ALTER TABLE public.competition_person OWNER TO wrestling;
 
 --
 -- Name: event_person_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
@@ -241,7 +241,7 @@ ALTER SEQUENCE public.event_person_id_seq OWNER TO wrestling;
 -- Name: event_person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.event_person_id_seq OWNED BY public.tournament_person.id;
+ALTER SEQUENCE public.event_person_id_seq OWNED BY public.competition_person.id;
 
 
 --
@@ -744,36 +744,36 @@ ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
 
 
 --
--- Name: tournament; Type: TABLE; Schema: public; Owner: wrestling
+-- Name: competition; Type: TABLE; Schema: public; Owner: wrestling
 --
 
-CREATE TABLE public.tournament (
+CREATE TABLE public.competition (
     name character varying(127),
     bout_config_id integer NOT NULL
 )
 INHERITS (public.wrestling_event);
 
 
-ALTER TABLE public.tournament OWNER TO wrestling;
+ALTER TABLE public.competition OWNER TO wrestling;
 
 --
--- Name: tournament_bout; Type: TABLE; Schema: public; Owner: wrestling
+-- Name: competition_bout; Type: TABLE; Schema: public; Owner: wrestling
 --
 
-CREATE TABLE public.tournament_bout (
+CREATE TABLE public.competition_bout (
     id integer NOT NULL,
-    tournament_id integer NOT NULL,
+    competition_id integer NOT NULL,
     bout_id integer
 );
 
 
-ALTER TABLE public.tournament_bout OWNER TO wrestling;
+ALTER TABLE public.competition_bout OWNER TO wrestling;
 
 --
--- Name: tournament_bout_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+-- Name: competition_bout_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
 --
 
-CREATE SEQUENCE public.tournament_bout_id_seq
+CREATE SEQUENCE public.competition_bout_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -782,20 +782,20 @@ CREATE SEQUENCE public.tournament_bout_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.tournament_bout_id_seq OWNER TO wrestling;
+ALTER SEQUENCE public.competition_bout_id_seq OWNER TO wrestling;
 
 --
--- Name: tournament_bout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+-- Name: competition_bout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.tournament_bout_id_seq OWNED BY public.tournament_bout.id;
+ALTER SEQUENCE public.competition_bout_id_seq OWNED BY public.competition_bout.id;
 
 
 --
--- Name: tournament_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+-- Name: competition_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
 --
 
-CREATE SEQUENCE public.tournament_id_seq
+CREATE SEQUENCE public.competition_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -804,13 +804,13 @@ CREATE SEQUENCE public.tournament_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.tournament_id_seq OWNER TO wrestling;
+ALTER SEQUENCE public.competition_id_seq OWNER TO wrestling;
 
 --
--- Name: tournament_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+-- Name: competition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.tournament_id_seq OWNED BY public.tournament.id;
+ALTER SEQUENCE public.competition_id_seq OWNED BY public.competition.id;
 
 
 --
@@ -978,24 +978,24 @@ ALTER TABLE ONLY public.team_match_bout ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- Name: tournament id; Type: DEFAULT; Schema: public; Owner: wrestling
+-- Name: competition id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament ALTER COLUMN id SET DEFAULT nextval('public.tournament_id_seq'::regclass);
-
-
---
--- Name: tournament_bout id; Type: DEFAULT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.tournament_bout ALTER COLUMN id SET DEFAULT nextval('public.tournament_bout_id_seq'::regclass);
+ALTER TABLE ONLY public.competition ALTER COLUMN id SET DEFAULT nextval('public.competition_id_seq'::regclass);
 
 
 --
--- Name: tournament_person id; Type: DEFAULT; Schema: public; Owner: wrestling
+-- Name: competition_bout id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament_person ALTER COLUMN id SET DEFAULT nextval('public.event_person_id_seq'::regclass);
+ALTER TABLE ONLY public.competition_bout ALTER COLUMN id SET DEFAULT nextval('public.competition_bout_id_seq'::regclass);
+
+
+--
+-- Name: competition_person id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_person ALTER COLUMN id SET DEFAULT nextval('public.event_person_id_seq'::regclass);
 
 
 --
@@ -1208,27 +1208,27 @@ COPY public.team_match_bout (id, team_match_id, bout_id, pos) FROM stdin;
 
 
 --
--- Data for Name: tournament; Type: TABLE DATA; Schema: public; Owner: wrestling
+-- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament (id, date, location, visitors_count, comment, no, name, bout_config_id) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	The Griffin-Simpson Tournament	1
+COPY public.competition (id, date, location, visitors_count, comment, no, name, bout_config_id) FROM stdin;
+1	2021-07-17	Quahog	15	\N	\N	The Griffin-Simpson Competition	1
 \.
 
 
 --
--- Data for Name: tournament_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
+-- Data for Name: competition_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament_bout (id, tournament_id, bout_id) FROM stdin;
+COPY public.competition_bout (id, competition_id, bout_id) FROM stdin;
 \.
 
 
 --
--- Data for Name: tournament_person; Type: TABLE DATA; Schema: public; Owner: wrestling
+-- Data for Name: competition_person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.tournament_person (id, tournament_id, person_id, person_role) FROM stdin;
+COPY public.competition_person (id, competition_id, person_id, person_role) FROM stdin;
 \.
 
 
@@ -1371,17 +1371,17 @@ SELECT pg_catalog.setval('public.team_match_id_seq', 1, true);
 
 
 --
--- Name: tournament_bout_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+-- Name: competition_bout_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.tournament_bout_id_seq', 1, false);
+SELECT pg_catalog.setval('public.competition_bout_id_seq', 1, false);
 
 
 --
--- Name: tournament_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+-- Name: competition_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.tournament_id_seq', 1, false);
+SELECT pg_catalog.setval('public.competition_id_seq', 1, false);
 
 
 --
@@ -1415,10 +1415,10 @@ ALTER TABLE ONLY public.club
 
 
 --
--- Name: tournament_person event_person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition_person event_person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament_person
+ALTER TABLE ONLY public.competition_person
     ADD CONSTRAINT event_person_pk PRIMARY KEY (id);
 
 
@@ -1535,19 +1535,19 @@ ALTER TABLE ONLY public.team
 
 
 --
--- Name: tournament_bout tournament_bout_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition_bout competition_bout_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament_bout
-    ADD CONSTRAINT tournament_bout_pk PRIMARY KEY (id);
+ALTER TABLE ONLY public.competition_bout
+    ADD CONSTRAINT competition_bout_pk PRIMARY KEY (id);
 
 
 --
--- Name: tournament tournament_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition competition_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament
-    ADD CONSTRAINT tournament_pk PRIMARY KEY (id);
+ALTER TABLE ONLY public.competition
+    ADD CONSTRAINT competition_pk PRIMARY KEY (id);
 
 
 --
@@ -1584,7 +1584,7 @@ CREATE UNIQUE INDEX club_no_uindex ON public.club USING btree (no);
 -- Name: event_person_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
 --
 
-CREATE UNIQUE INDEX event_person_id_uindex ON public.tournament_person USING btree (id);
+CREATE UNIQUE INDEX event_person_id_uindex ON public.competition_person USING btree (id);
 
 
 --
@@ -1609,19 +1609,19 @@ CREATE UNIQUE INDEX team_match_bout_id_uindex ON public.team_match_bout USING bt
 
 
 --
--- Name: tournament_person event_person_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition_person event_person_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament_person
+ALTER TABLE ONLY public.competition_person
     ADD CONSTRAINT event_person_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
 
 
 --
--- Name: tournament_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament_person
-    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (tournament_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.competition_person
+    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (competition_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
 
 
 --
@@ -1849,27 +1849,27 @@ ALTER TABLE ONLY public.team_match
 
 
 --
--- Name: tournament tournament_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition competition_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament
-    ADD CONSTRAINT tournament_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id) ON DELETE CASCADE;
-
-
---
--- Name: tournament_bout tournament_bout_bout_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.tournament_bout
-    ADD CONSTRAINT tournament_bout_bout_id_fk FOREIGN KEY (bout_id) REFERENCES public.bout(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.competition
+    ADD CONSTRAINT competition_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id) ON DELETE CASCADE;
 
 
 --
--- Name: tournament_bout tournament_bout_tournament_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: competition_bout competition_bout_bout_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.tournament_bout
-    ADD CONSTRAINT tournament_bout_tournament_id_fk FOREIGN KEY (tournament_id) REFERENCES public.tournament(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.competition_bout
+    ADD CONSTRAINT competition_bout_bout_id_fk FOREIGN KEY (bout_id) REFERENCES public.bout(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_bout competition_bout_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_bout
+    ADD CONSTRAINT competition_bout_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
 
 
 --

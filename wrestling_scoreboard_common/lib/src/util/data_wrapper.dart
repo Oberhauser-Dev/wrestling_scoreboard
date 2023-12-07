@@ -124,14 +124,14 @@ Future<int?> handleFromJson(
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const (Tournament):
-      return _handleFromJsonGeneric<Tournament>(json,
+    case const (Competition):
+      return _handleFromJsonGeneric<Competition>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const (TournamentTeamParticipation):
-      return _handleFromJsonGeneric<TournamentTeamParticipation>(json,
+    case const (CompetitionTeamParticipation):
+      return _handleFromJsonGeneric<CompetitionTeamParticipation>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
@@ -225,8 +225,8 @@ String getTableNameFromType(Type t) {
       return 'team_match';
     case const (TeamMatchBout):
       return 'team_match_bout';
-    case const (Tournament):
-      return 'tournament';
+    case const (Competition):
+      return 'competition';
     case const (WeightClass):
       return 'weight_class';
     default:
@@ -266,8 +266,8 @@ Type getTypeFromTableName(String tableName) {
       return TeamMatch;
     case 'team_match_bout':
       return TeamMatchBout;
-    case 'tournament':
-      return Tournament;
+    case 'competition':
+      return Competition;
     case 'weight_class':
       return WeightClass;
     default:
