@@ -5,9 +5,8 @@ import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'web_socket.dart';
 
 class RestDataProvider extends DataProvider {
   static const rawQueryParameter = {

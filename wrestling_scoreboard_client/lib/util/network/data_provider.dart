@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:wrestling_scoreboard_client/mocks/mock_data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/environment.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import '../environment.dart';
 
 final _isMock = Env.appEnvironment.fromString() == 'mock';
 

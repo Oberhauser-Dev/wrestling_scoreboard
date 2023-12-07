@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'home/home.dart';
-import 'settings/settings.dart';
+import 'package:wrestling_scoreboard_client/ui/home/home.dart';
+import 'package:wrestling_scoreboard_client/ui/settings/settings.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class AppNavigation extends StatefulWidget {

@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
-
-import 'audio.dart';
+import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 
 class DefaultAudioPlayer implements Playable {
   AudioPlayer player = AudioPlayer();

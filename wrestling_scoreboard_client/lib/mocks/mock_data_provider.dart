@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:wrestling_scoreboard_client/mocks/mocks.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'mocks.dart';
 
 class MockDataProvider extends DataProvider {
   final latency = const Duration(milliseconds: 100);

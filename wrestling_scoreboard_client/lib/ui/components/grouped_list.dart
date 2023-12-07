@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'font.dart';
+import 'package:wrestling_scoreboard_client/ui/components/font.dart';
 
 /// The base class for the different types of items the list can contain.
 abstract class ListItem {

@@ -1,7 +1,6 @@
 import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/util/audio/default_audio_player.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
-
-import 'default_audio_player.dart';
 
 class HornSound {
   late Playable audioPlayer;

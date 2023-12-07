@@ -8,9 +8,8 @@ import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
+import 'package:wrestling_scoreboard_client/util/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'components.dart';
 
 // TODO: Replace boutState with individual dataTypes or introduce model.
 Future<Uint8List> generateScoreSheet(BoutState boutState,

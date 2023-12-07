@@ -11,6 +11,8 @@ import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_action_controls.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_actions.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_main_controls.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/technical_points.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/time_display.dart';
@@ -24,9 +26,6 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'bout_actions.dart';
-import 'bout_main_controls.dart';
 
 void navigateToBoutScreen(BuildContext context, TeamMatch match, Bout bout) async {
   context.push('/${TeamMatchOverview.route}/${match.id}/${BoutDisplay.route}/${bout.id}');
@@ -211,8 +210,7 @@ class BoutState extends State<BoutScreen> {
     });
     setActions(actions);
     handleAction = (BoutScreenActionIntent intent) {
-      BoutActionHandler.handleIntentStatic(
-          intent, stopwatch, match, bouts, getActions, setActions, boutIndex, doAction,
+      BoutActionHandler.handleIntentStatic(intent, stopwatch, match, bouts, getActions, setActions, boutIndex, doAction,
           context: context);
     };
   }

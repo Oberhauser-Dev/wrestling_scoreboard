@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'bout_shortcuts.dart';
 
 class BoutActionControls extends StatelessWidget {
   final BoutRole role;
