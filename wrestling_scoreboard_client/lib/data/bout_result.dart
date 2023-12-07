@@ -29,7 +29,7 @@ String getDescriptionFromBoutResult(BoutResult? result, BuildContext context) {
       return loc.boutResultDsq;
     case BoutResult.dsq2:
       return loc.boutResultDsq2;
-    default:
+    case null:
       return '';
   }
 }
@@ -57,7 +57,7 @@ String getAbbreviationFromBoutResult(BoutResult? result, BuildContext context) {
       return loc.boutResultDsqAbbr;
     case BoutResult.dsq2:
       return loc.boutResultDsq2Abbr;
-    default:
+    case null:
       return '';
   }
 }
