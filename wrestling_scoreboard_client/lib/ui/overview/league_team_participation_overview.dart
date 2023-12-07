@@ -15,7 +15,7 @@ class LeagueTeamParticipationOverview extends StatelessWidget {
   final int id;
   final LeagueTeamParticipation? leagueTeamParticipation;
 
-  const LeagueTeamParticipationOverview({Key? key, required this.id, this.leagueTeamParticipation}) : super(key: key);
+  const LeagueTeamParticipationOverview({super.key, required this.id, this.leagueTeamParticipation});
 
   @override
   Widget build(BuildContext context) {

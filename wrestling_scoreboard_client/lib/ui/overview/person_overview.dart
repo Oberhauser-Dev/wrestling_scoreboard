@@ -13,7 +13,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class PersonOverview extends StatelessWidget implements AbstractOverview<Person> {
   static const route = 'person';
 
-  const PersonOverview({Key? key}) : super(key: key);
+  const PersonOverview({super.key});
 
   @override
   Widget buildOverview(

@@ -38,35 +38,35 @@ class MockDataProvider extends DataProvider {
   List<T> getManyMocksFromClass<T extends DataObject>({DataObject? filterObject}) {
     if (filterObject != null) {
       switch (T) {
-        case Fight:
+        case const (Fight):
           if (filterObject is Tournament) return getFightsOfTournament(filterObject).cast<T>();
           if (filterObject is TeamMatch) return getFightsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case Membership:
+        case const (Membership):
           if (filterObject is Club) return getMembershipsOfClub(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case Participation:
+        case const (Participation):
           if (filterObject is Lineup) return getParticipationsOfLineup(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case Team:
+        case const (Team):
           if (filterObject is Club) return getTeamsOfClub(filterObject).cast<T>();
           if (filterObject is League) return getTeamsOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case TeamMatch:
+        case const (TeamMatch):
           if (filterObject is Team) return getTeamMatchesOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case WeightClass:
+        case const (WeightClass):
           // TODO may remove in favor of getLeagueWeightClassesOfLeague
           if (filterObject is League) return getWeightClassesOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case LeagueWeightClass:
+        case const (LeagueWeightClass):
           if (filterObject is League) return getLeagueWeightClassesOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case LeagueTeamParticipation:
+        case const (LeagueTeamParticipation):
           if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
           if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case TeamMatchFight:
+        case const (TeamMatchFight):
           if (filterObject is TeamMatch) return getTeamMatchFightsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         default:
@@ -179,7 +179,7 @@ class MockDataProvider extends DataProvider {
 
   Future<void> _updateMany(Type t, {DataObject? filterObject}) async {
     switch (t) {
-      case Fight:
+      case const (Fight):
         if (filterObject is TeamMatch) {
           final manyFilter = ManyDataObject(
             data: getFightsOfTeamMatch(filterObject),
@@ -326,33 +326,33 @@ class MockDataProvider extends DataProvider {
 
   List<T> _getListOfType<T extends DataObject>(CRUD crud) {
     switch (T) {
-      case Club:
+      case const (Club):
         return getClubs().cast<T>();
-      case Fight:
+      case const (Fight):
         return getFights().cast<T>();
-      case FightAction:
+      case const (FightAction):
         return getFightActions().cast<T>();
-      case League:
+      case const (League):
         return getLeagues().cast<T>();
-      case LeagueWeightClass:
+      case const (LeagueWeightClass):
         return getLeagueWeightClasses().cast<T>();
-      case Lineup:
+      case const (Lineup):
         return getLineups().cast<T>();
-      case Membership:
+      case const (Membership):
         return getMemberships().cast<T>();
-      case Participation:
+      case const (Participation):
         return getParticipations().cast<T>();
-      case ParticipantState:
+      case const (ParticipantState):
         return getParticipantStates().cast<T>();
-      case Person:
+      case const (Person):
         return getPersons().cast<T>();
-      case Team:
+      case const (Team):
         return getTeams().cast<T>();
-      case TeamMatch:
+      case const (TeamMatch):
         return getTeamMatches().cast<T>();
-      case TeamMatchFight:
+      case const (TeamMatchFight):
         return getTeamMatchFights().cast<T>();
-      case WeightClass:
+      case const (WeightClass):
         return getWeightClasses().cast<T>();
       default:
         throw DataUnimplementedError(crud, T);

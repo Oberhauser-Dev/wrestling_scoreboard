@@ -10,7 +10,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class WeightClassEdit extends StatefulWidget {
   final WeightClass? weightClass;
 
-  const WeightClassEdit({this.weightClass, Key? key}) : super(key: key);
+  const WeightClassEdit({this.weightClass, super.key});
 }
 
 abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>

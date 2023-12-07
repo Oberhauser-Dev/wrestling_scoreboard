@@ -23,7 +23,7 @@ class LeagueOverview extends StatelessWidget {
   final int id;
   final League? league;
 
-  const LeagueOverview({Key? key, required this.id, this.league}) : super(key: key);
+  const LeagueOverview({super.key, required this.id, this.league});
 
   @override
   Widget build(BuildContext context) {

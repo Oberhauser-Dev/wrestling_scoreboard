@@ -7,7 +7,7 @@ class TimeDisplay extends StatefulWidget {
   final ObservableStopwatch stopwatch;
   final double? fontSize;
 
-  const TimeDisplay(this.stopwatch, this.color, {this.fontSize, Key? key}) : super(key: key);
+  const TimeDisplay(this.stopwatch, this.color, {this.fontSize, super.key});
 
   @override
   State<StatefulWidget> createState() => TimeDisplayState();

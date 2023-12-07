@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 
 class CustomSettingsScreen extends StatefulWidget {
-  const CustomSettingsScreen({Key? key}) : super(key: key);
+  const CustomSettingsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => CustomSettingsScreenState();
@@ -236,26 +236,28 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
                         .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
                         .entries
                         .toList();
-                    final val = await showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RadioDialog(
-                          values: bellSoundValues,
-                          initialValue: _bellSoundPath,
-                          onChanged: (value) async {
-                            if (value != null) {
-                              await HornSound.source(value).play();
-                            }
-                          },
-                        );
-                      },
-                    );
-                    if (val != null) {
-                      Preferences.onChangeBellSound.add(val);
-                      await Preferences.setString(Preferences.keyBellSound, val);
-                      setState(() {
-                        _bellSoundPath = val;
-                      });
+                    if (context.mounted) {
+                      final val = await showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return RadioDialog(
+                            values: bellSoundValues,
+                            initialValue: _bellSoundPath,
+                            onChanged: (value) async {
+                              if (value != null) {
+                                await HornSound.source(value).play();
+                              }
+                            },
+                          );
+                        },
+                      );
+                      if (val != null) {
+                        Preferences.onChangeBellSound.add(val);
+                        await Preferences.setString(Preferences.keyBellSound, val);
+                        setState(() {
+                          _bellSoundPath = val;
+                        });
+                      }
                     }
                   },
                 ),
@@ -271,7 +273,7 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
 class TextInputDialog extends StatelessWidget {
   final String? initialValue;
 
-  const TextInputDialog({required this.initialValue, Key? key}) : super(key: key);
+  const TextInputDialog({required this.initialValue, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -291,11 +293,11 @@ class RadioDialog<T> extends StatefulWidget {
   final void Function(T? value)? onChanged;
 
   const RadioDialog({
-    Key? key,
+    super.key,
     required this.values,
     required this.initialValue,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<RadioDialog<T>> createState() => _RadioDialogState<T>();

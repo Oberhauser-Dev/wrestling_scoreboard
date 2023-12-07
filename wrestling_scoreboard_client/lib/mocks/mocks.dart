@@ -4,23 +4,23 @@ League _leagueMenRPW = League(
   id: 1,
   name: 'Real Pro Wrestling',
   startDate: DateTime(2021),
-  boutConfig: BoutConfig(id: 1),
+  boutConfig: const BoutConfig(id: 1),
 );
 League _leagueJnRPW = League(
   id: 2,
   name: 'Real Pro Wrestling Jn',
   startDate: DateTime(2021),
-  boutConfig: BoutConfig(id: 2),
+  boutConfig: const BoutConfig(id: 2),
 );
 League _leagueNational = League(
   id: 3,
   name: 'National League',
   startDate: DateTime(2021),
-  boutConfig: BoutConfig(id: 3),
+  boutConfig: const BoutConfig(id: 3),
 );
 
-Club _homeClub = Club(id: 1, name: 'Springfield Wrestlers');
-Club _guestClub = Club(id: 2, name: 'Quahog Hunters');
+Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers');
+Club _guestClub = const Club(id: 2, name: 'Quahog Hunters');
 
 Team _homeTeam = Team(
   id: 1,
@@ -48,32 +48,32 @@ LeagueTeamParticipation _gtMenRPW = LeagueTeamParticipation(id: 3, league: _leag
 LeagueTeamParticipation _htNat = LeagueTeamParticipation(id: 4, league: _leagueNational, team: _homeTeam);
 LeagueTeamParticipation _gtNat = LeagueTeamParticipation(id: 5, league: _leagueNational, team: _guestTeam);
 
-WeightClass wc57 = WeightClass(id: 1, weight: 57, style: WrestlingStyle.free);
-WeightClass wc130 = WeightClass(id: 2, weight: 130, style: WrestlingStyle.greco);
-WeightClass wc61 = WeightClass(id: 3, weight: 61, style: WrestlingStyle.greco);
-WeightClass wc98 = WeightClass(id: 4, weight: 98, style: WrestlingStyle.free);
-WeightClass wc66 = WeightClass(id: 5, weight: 66, style: WrestlingStyle.free);
-WeightClass wc86 = WeightClass(id: 6, weight: 86, style: WrestlingStyle.greco);
-WeightClass wc71 = WeightClass(id: 7, weight: 71, style: WrestlingStyle.greco);
-WeightClass wc80 = WeightClass(id: 8, weight: 80, style: WrestlingStyle.free);
-WeightClass wc75A = WeightClass(id: 9, weight: 75, style: WrestlingStyle.free, suffix: 'A');
-WeightClass wc75B = WeightClass(id: 10, weight: 75, style: WrestlingStyle.greco, suffix: 'B');
+WeightClass wc57 = const WeightClass(id: 1, weight: 57, style: WrestlingStyle.free);
+WeightClass wc130 = const WeightClass(id: 2, weight: 130, style: WrestlingStyle.greco);
+WeightClass wc61 = const WeightClass(id: 3, weight: 61, style: WrestlingStyle.greco);
+WeightClass wc98 = const WeightClass(id: 4, weight: 98, style: WrestlingStyle.free);
+WeightClass wc66 = const WeightClass(id: 5, weight: 66, style: WrestlingStyle.free);
+WeightClass wc86 = const WeightClass(id: 6, weight: 86, style: WrestlingStyle.greco);
+WeightClass wc71 = const WeightClass(id: 7, weight: 71, style: WrestlingStyle.greco);
+WeightClass wc80 = const WeightClass(id: 8, weight: 80, style: WrestlingStyle.free);
+WeightClass wc75A = const WeightClass(id: 9, weight: 75, style: WrestlingStyle.free, suffix: 'A');
+WeightClass wc75B = const WeightClass(id: 10, weight: 75, style: WrestlingStyle.greco, suffix: 'B');
 
 // TEAM 1
-Person p1 = Person(id: 1, prename: 'Lisa', surname: 'Simpson', gender: Gender.female);
-Person p2 = Person(id: 2, prename: 'Bart', surname: 'Simpson', gender: Gender.male);
-Person p3 = Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female);
-Person p4 = Person(id: 4, prename: 'Homer', surname: 'Simpson', gender: Gender.male);
+Person p1 = const Person(id: 1, prename: 'Lisa', surname: 'Simpson', gender: Gender.female);
+Person p2 = const Person(id: 2, prename: 'Bart', surname: 'Simpson', gender: Gender.male);
+Person p3 = const Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female);
+Person p4 = const Person(id: 4, prename: 'Homer', surname: 'Simpson', gender: Gender.male);
 Membership r1 = Membership(id: 1, person: p1, club: _homeClub);
 Membership r2 = Membership(id: 2, person: p2, club: _homeClub);
 Membership r3 = Membership(id: 3, person: p3, club: _homeClub);
 Membership r4 = Membership(id: 4, person: p4, club: _homeClub);
 
 // TEAM 2
-Person p5 = Person(id: 5, prename: 'Meg', surname: 'Griffin', gender: Gender.female);
-Person p6 = Person(id: 6, prename: 'Chris', surname: 'Griffin', gender: Gender.male);
-Person p7 = Person(id: 7, prename: 'Lois', surname: 'Griffin', gender: Gender.female);
-Person p8 = Person(id: 8, prename: 'Peter', surname: 'Griffin', gender: Gender.male);
+Person p5 = const Person(id: 5, prename: 'Meg', surname: 'Griffin', gender: Gender.female);
+Person p6 = const Person(id: 6, prename: 'Chris', surname: 'Griffin', gender: Gender.male);
+Person p7 = const Person(id: 7, prename: 'Lois', surname: 'Griffin', gender: Gender.female);
+Person p8 = const Person(id: 8, prename: 'Peter', surname: 'Griffin', gender: Gender.male);
 Membership b1 = Membership(id: 5, person: p5, club: _guestClub);
 Membership b2 = Membership(id: 6, person: p6, club: _guestClub);
 Membership b3 = Membership(id: 7, person: p7, club: _guestClub);
@@ -110,11 +110,11 @@ TeamMatch initMenRPWMatch() {
   _participations.add(Participation(id: 7, membership: b3, lineup: guest, weightClass: wc75A, weight: 72.4));
   _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
 
-  Person referee = Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
-  Person judge = Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
-  Person matChairman = Person(id: 11, prename: 'Mr', surname: 'Chairman', gender: Gender.male);
-  Person timeKeeper = Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
-  Person transcriptWriter = Person(id: 12, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
+  Person referee = const Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
+  Person judge = const Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
+  Person matChairman = const Person(id: 11, prename: 'Mr', surname: 'Chairman', gender: Gender.male);
+  Person timeKeeper = const Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
+  Person transcriptWriter = const Person(id: 12, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
   return TeamMatch(
       id: 1,
       no: '123456',
@@ -139,7 +139,7 @@ TeamMatch initJnRPWMatch() {
 
   // Miss participants
 
-  Person referee = Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
+  Person referee = const Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
   return TeamMatch(id: 2, home: home, guest: guest, referee: referee, location: 'Springfield', date: DateTime.now());
 }
 

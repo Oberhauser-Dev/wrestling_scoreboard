@@ -12,7 +12,7 @@ import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart'
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<StatefulWidget> createState() => HomeState();

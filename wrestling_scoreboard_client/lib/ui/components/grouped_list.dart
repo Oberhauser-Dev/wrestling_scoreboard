@@ -21,7 +21,7 @@ class HeadingItem extends StatelessWidget {
   final String title;
   final Widget? trailing;
 
-  const HeadingItem({required this.title, this.trailing, Key? key}) : super(key: key);
+  const HeadingItem({required this.title, this.trailing, super.key});
 
   @override
   Widget build(BuildContext context) => ListTile(
@@ -38,8 +38,7 @@ class ContentItem extends StatelessWidget {
   final Widget? trailing;
   final Function()? onTap;
 
-  const ContentItem({required this.title, this.subtitle, this.icon, this.onTap, this.trailing, Key? key})
-      : super(key: key);
+  const ContentItem({required this.title, this.subtitle, this.icon, this.onTap, this.trailing, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class ListGroup extends StatelessWidget {
   final Widget header;
   final Iterable<Widget> items;
 
-  const ListGroup({required this.header, this.items = const [], Key? key}) : super(key: key);
+  const ListGroup({required this.header, this.items = const [], super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +80,7 @@ class ListGroup extends StatelessWidget {
 class GroupedList extends StatelessWidget {
   final List<Widget> items;
 
-  const GroupedList({required this.items, Key? key}) : super(key: key);
+  const GroupedList({required this.items, super.key});
 
   @override
   Widget build(BuildContext context) {

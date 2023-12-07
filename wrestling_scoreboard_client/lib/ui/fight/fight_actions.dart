@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class ActionsWidget extends StatelessWidget {
   final List<FightAction> actions;
 
-  ActionsWidget(this.actions, {Key? key}) : super(key: key) {
+  ActionsWidget(this.actions, {super.key}) {
     actions.sort((a, b) => a.duration.compareTo(b.duration));
   }
 

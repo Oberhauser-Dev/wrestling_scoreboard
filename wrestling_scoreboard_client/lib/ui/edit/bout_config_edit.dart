@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class BoutConfigEdit extends StatefulWidget {
   final BoutConfig? boutConfig;
 
-  const BoutConfigEdit({this.boutConfig, Key? key}) : super(key: key);
+  const BoutConfigEdit({this.boutConfig, super.key});
 }
 
 abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> implements AbstractEditState<BoutConfig> {

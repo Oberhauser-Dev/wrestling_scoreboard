@@ -10,8 +10,7 @@ class EditWidget extends StatelessWidget {
   final Future<void> Function() onSubmit;
   final List<Widget> items;
 
-  const EditWidget({Key? key, required this.typeLocalization, required this.onSubmit, required this.items, this.id})
-      : super(key: key);
+  const EditWidget({super.key, required this.typeLocalization, required this.onSubmit, required this.items, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -42,28 +41,30 @@ class EditWidget extends StatelessWidget {
                     await onSubmit();
                   } on RestException catch (e) {
                     developer.log(e.message);
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: Column(
-                          children: [
-                            Text(localizations.invalidParameterException),
-                            Text(
-                              e.message,
-                              style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
+                    if (context.mounted) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Column(
+                            children: [
+                              Text(localizations.invalidParameterException),
+                              Text(
+                                e.message,
+                                style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(localizations.ok),
                             ),
                           ],
                         ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(localizations.ok),
-                          ),
-                        ],
-                      ),
-                    );
+                      );
+                    }
                   }
                 },
                 label: Text(localizations.save),

@@ -20,7 +20,7 @@ class ClubOverview extends StatelessWidget {
   final int id;
   final Club? club;
 
-  const ClubOverview({Key? key, required this.id, this.club}) : super(key: key);
+  const ClubOverview({super.key, required this.id, this.club});
 
   @override
   Widget build(BuildContext context) {

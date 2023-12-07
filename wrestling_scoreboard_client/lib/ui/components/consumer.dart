@@ -13,8 +13,8 @@ class SingleConsumer<T extends DataObject> extends StatefulWidget {
     required this.id,
     this.initialData,
     required this.builder,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => SingleConsumerState<T>();
@@ -49,7 +49,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
                 if (snap.data == null) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return widget.builder(context, snap.data!);
+                return widget.builder(context, snap.data);
               },
             ),
     );
@@ -61,7 +61,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Stateful
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
 
-  const ManyConsumer({this.initialData, required this.builder, this.filterObject, Key? key}) : super(key: key);
+  const ManyConsumer({this.initialData, required this.builder, this.filterObject, super.key});
 
   @override
   State<StatefulWidget> createState() => ManyConsumerState<T, S>();

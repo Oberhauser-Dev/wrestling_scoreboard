@@ -14,7 +14,7 @@ class MembershipOverview extends PersonOverview {
   final int id;
   final Membership? membership;
 
-  const MembershipOverview({Key? key, required this.id, this.membership}) : super(key: key);
+  const MembershipOverview({super.key, required this.id, this.membership});
 
   @override
   Widget build(BuildContext context) {

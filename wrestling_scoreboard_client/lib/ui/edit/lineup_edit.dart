@@ -18,12 +18,12 @@ class LineupEdit extends StatefulWidget {
   final Function()? onSubmit;
 
   const LineupEdit({
-    Key? key,
+    super.key,
     required this.lineup,
     required this.weightClasses,
     required this.participations,
     this.onSubmit,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => LineupEditState();
@@ -177,7 +177,7 @@ class LineupEditState extends State<LineupEdit> {
                   ],
                 ),
               );
-            }).toList()
+            }),
           ],
         ));
   }

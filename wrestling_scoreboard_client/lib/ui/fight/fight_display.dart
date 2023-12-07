@@ -87,7 +87,7 @@ class FightScreen extends StatefulWidget {
   final List<FightAction> actions;
   final int fightIndex;
 
-  const FightScreen(this.match, this.fights, this.actions, this.fightIndex, {Key? key}) : super(key: key);
+  const FightScreen(this.match, this.fights, this.actions, this.fightIndex, {super.key});
 
   @override
   State<StatefulWidget> createState() => FightState();

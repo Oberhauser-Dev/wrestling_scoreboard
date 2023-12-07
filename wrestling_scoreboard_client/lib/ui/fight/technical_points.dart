@@ -13,7 +13,7 @@ class TechnicalPoints extends StatelessWidget {
   final FightRole role;
   final ParticipantStateModel pStatusModel;
 
-  const TechnicalPoints({required this.role, required this.pStatusModel, Key? key}) : super(key: key);
+  const TechnicalPoints({required this.role, required this.pStatusModel, super.key});
 
   @override
   Widget build(BuildContext context) {

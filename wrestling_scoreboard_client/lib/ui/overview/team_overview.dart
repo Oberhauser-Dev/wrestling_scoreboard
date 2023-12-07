@@ -16,7 +16,7 @@ class TeamOverview<T extends DataObject> extends StatelessWidget {
   final int id;
   final Team? team;
 
-  const TeamOverview({Key? key, required this.id, this.team}) : super(key: key);
+  const TeamOverview({super.key, required this.id, this.team});
 
   @override
   Widget build(BuildContext context) {

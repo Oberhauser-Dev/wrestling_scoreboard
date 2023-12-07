@@ -122,8 +122,7 @@ class FightActionHandler extends StatelessWidget {
       required this.fightIndex,
       required this.doAction,
       required this.setActions,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   Future<void> handleIntent(FightScreenActionIntent intent, {BuildContext? context}) async {
     await handleIntentStatic(intent, stopwatch, match, fights, getActions, setActions, fightIndex, doAction,

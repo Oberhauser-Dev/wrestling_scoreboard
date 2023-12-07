@@ -5,7 +5,7 @@ class OkDialog<T extends Object?> extends StatelessWidget {
   final Widget child;
   final T Function() getResult;
 
-  const OkDialog({required this.child, required this.getResult, Key? key}) : super(key: key);
+  const OkDialog({required this.child, required this.getResult, super.key});
 
   @override
   Widget build(BuildContext context) {

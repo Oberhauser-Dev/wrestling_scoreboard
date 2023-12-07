@@ -9,7 +9,7 @@ class FightActionControls extends StatelessWidget {
   final FightRole role;
   final Function(FightScreenActionIntent)? callback;
 
-  const FightActionControls(this.role, this.callback, {Key? key}) : super(key: key);
+  const FightActionControls(this.role, this.callback, {super.key});
 
   @override
   Widget build(BuildContext context) {

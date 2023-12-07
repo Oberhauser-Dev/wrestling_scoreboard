@@ -16,8 +16,8 @@ class ScaledText extends StatelessWidget {
     this.color,
     this.scale,
     this.softWrap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,34 +33,21 @@ class ScaledText extends StatelessWidget {
 
 class FittedText extends Text {
   const FittedText(
-    String data, {
-    Key? key,
-    TextStyle? style,
-    StrutStyle? strutStyle,
-    TextAlign? textAlign,
-    TextDirection? textDirection,
-    Locale? locale,
-    bool? softWrap,
-    TextOverflow? overflow,
-    TextScaler textScaler = const TextScaler.linear(100),
-    int? maxLines,
-    String? semanticsLabel,
-    TextWidthBasis? textWidthBasis,
-    TextHeightBehavior? textHeightBehavior,
-  }) : super(data,
-            key: key,
-            style: style,
-            strutStyle: strutStyle,
-            textAlign: textAlign,
-            textDirection: textDirection,
-            locale: locale,
-            softWrap: softWrap,
-            overflow: overflow,
-            textScaler: textScaler,
-            maxLines: maxLines,
-            semanticsLabel: semanticsLabel,
-            textWidthBasis: textWidthBasis,
-            textHeightBehavior: textHeightBehavior);
+    super.data, {
+    super.key,
+    super.style,
+    super.strutStyle,
+    super.textAlign,
+    super.textDirection,
+    super.locale,
+    super.softWrap,
+    super.overflow,
+    TextScaler super.textScaler = const TextScaler.linear(100),
+    super.maxLines,
+    super.semanticsLabel,
+    super.textWidthBasis,
+    super.textHeightBehavior,
+  });
 
   @override
   Widget build(BuildContext context) {

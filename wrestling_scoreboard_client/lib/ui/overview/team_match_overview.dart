@@ -20,7 +20,7 @@ class TeamMatchOverview extends StatelessWidget {
   final int id;
   final TeamMatch? match;
 
-  const TeamMatchOverview({required this.id, this.match, Key? key}) : super(key: key);
+  const TeamMatchOverview({required this.id, this.match, super.key});
 
   @override
   Widget build(BuildContext context) {

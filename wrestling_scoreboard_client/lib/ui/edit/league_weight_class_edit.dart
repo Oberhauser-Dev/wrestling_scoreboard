@@ -9,8 +9,8 @@ class LeagueWeightClassEdit extends WeightClassEdit {
   final LeagueWeightClass? leagueWeightClass;
   final League initialLeague;
 
-  LeagueWeightClassEdit({this.leagueWeightClass, required this.initialLeague, Key? key})
-      : super(weightClass: leagueWeightClass?.weightClass, key: key);
+  LeagueWeightClassEdit({this.leagueWeightClass, required this.initialLeague, super.key})
+      : super(weightClass: leagueWeightClass?.weightClass);
 
   @override
   State<StatefulWidget> createState() => LeagueWeightClassEditState();

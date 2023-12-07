@@ -6,7 +6,7 @@ import 'settings/settings.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class AppNavigation extends StatefulWidget {
-  const AppNavigation({Key? key}) : super(key: key);
+  const AppNavigation({super.key});
 
   @override
   State<AppNavigation> createState() => _AppNavigationState();

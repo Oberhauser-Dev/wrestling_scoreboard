@@ -9,7 +9,7 @@ class TeamEdit extends StatefulWidget {
   final Team? team;
   final Club? initialClub;
 
-  const TeamEdit({this.team, this.initialClub, Key? key}) : super(key: key);
+  const TeamEdit({this.team, this.initialClub, super.key});
 
   @override
   State<StatefulWidget> createState() => TeamEditState();

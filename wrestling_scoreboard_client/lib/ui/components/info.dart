@@ -16,8 +16,8 @@ class InfoWidget extends StatelessWidget {
     required this.children,
     required this.classLocale,
     required this.onDelete,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

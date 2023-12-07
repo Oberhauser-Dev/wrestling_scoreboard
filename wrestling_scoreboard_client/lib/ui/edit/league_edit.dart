@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class LeagueEdit extends BoutConfigEdit {
   final League? league;
 
-  LeagueEdit({this.league, Key? key}) : super(boutConfig: league?.boutConfig, key: key);
+  LeagueEdit({this.league, super.key}) : super(boutConfig: league?.boutConfig);
 
   @override
   State<StatefulWidget> createState() => LeagueEditState();

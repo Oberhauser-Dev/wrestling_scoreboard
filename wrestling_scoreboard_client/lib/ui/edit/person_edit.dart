@@ -10,7 +10,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class PersonEdit extends StatefulWidget {
   final Person? person;
 
-  const PersonEdit({this.person, Key? key}) : super(key: key);
+  const PersonEdit({this.person, super.key});
 }
 
 abstract class PersonEditState<T extends PersonEdit> extends State<T> implements AbstractEditState<Person> {

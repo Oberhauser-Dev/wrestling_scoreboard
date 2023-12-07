@@ -12,7 +12,7 @@ class FightMainControls extends StatefulWidget {
   final Function(FightScreenActionIntent) callback;
   final FightState fightState;
 
-  const FightMainControls(this.callback, this.fightState, {Key? key}) : super(key: key);
+  const FightMainControls(this.callback, this.fightState, {super.key});
 
   @override
   State<StatefulWidget> createState() => FightMainControlsState();

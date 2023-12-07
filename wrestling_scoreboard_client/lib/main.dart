@@ -23,7 +23,7 @@ void main() async {
 }
 
 class WrestlingScoreboardApp extends StatefulWidget {
-  const WrestlingScoreboardApp({Key? key}) : super(key: key);
+  const WrestlingScoreboardApp({super.key});
 
   @override
   State<StatefulWidget> createState() => WrestlingScoreboardAppState();

@@ -13,7 +13,7 @@ class LeagueWeightClassOverview extends WeightClassOverview {
   final int id;
   final LeagueWeightClass? leagueWeightClass;
 
-  const LeagueWeightClassOverview({Key? key, required this.id, this.leagueWeightClass}) : super(key: key);
+  const LeagueWeightClassOverview({super.key, required this.id, this.leagueWeightClass});
 
   @override
   Widget build(BuildContext context) {

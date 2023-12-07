@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class ClubEdit extends StatefulWidget {
   final Club? club;
 
-  const ClubEdit({this.club, Key? key}) : super(key: key);
+  const ClubEdit({this.club, super.key});
 
   @override
   State<StatefulWidget> createState() => ClubEditState();

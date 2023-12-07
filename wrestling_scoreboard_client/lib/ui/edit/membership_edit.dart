@@ -8,7 +8,7 @@ class MembershipEdit extends PersonEdit {
   final Membership? membership;
   final Club initialClub;
 
-  MembershipEdit({this.membership, required this.initialClub, Key? key}) : super(person: membership?.person, key: key);
+  MembershipEdit({this.membership, required this.initialClub, super.key}) : super(person: membership?.person);
 
   @override
   State<StatefulWidget> createState() => MembershipEditState();

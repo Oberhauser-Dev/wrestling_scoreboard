@@ -7,7 +7,7 @@ class ExceptionWidget extends StatelessWidget {
   final Object exception;
   final Function()? onRetry;
 
-  const ExceptionWidget(this.exception, {this.onRetry, Key? key}) : super(key: key);
+  const ExceptionWidget(this.exception, {this.onRetry, super.key});
 
   @override
   Widget build(BuildContext context) {

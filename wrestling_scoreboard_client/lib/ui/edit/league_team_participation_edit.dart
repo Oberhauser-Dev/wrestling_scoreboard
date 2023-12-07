@@ -14,8 +14,8 @@ class LeagueTeamParticipationEdit extends StatefulWidget {
     this.participation,
     this.initialTeam,
     this.initialLeague,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => TeamEditState();

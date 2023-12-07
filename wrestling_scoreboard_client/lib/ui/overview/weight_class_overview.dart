@@ -10,7 +10,7 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassOverview extends StatelessWidget implements AbstractOverview<WeightClass> {
-  const WeightClassOverview({Key? key}) : super(key: key);
+  const WeightClassOverview({super.key});
 
   @override
   Widget buildOverview(

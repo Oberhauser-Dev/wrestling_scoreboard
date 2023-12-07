@@ -17,8 +17,8 @@ class TeamMatchEdit extends StatefulWidget {
     this.initialHomeTeam,
     this.initialGuestTeam,
     this.initialLeague,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => TeamMatchEditState();
