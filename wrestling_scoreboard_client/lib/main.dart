@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/router.dart';
 import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 
 void main() async {
@@ -19,6 +21,7 @@ void main() async {
   // This comes with the price that URLs may not reflect the current stack on deep links (pasted links).
   // The correct way would be to add all possible sub-routes of a base route.
   GoRouter.optionURLReflectsImperativeAPIs = true;
+
   runApp(const WrestlingScoreboardApp());
 }
 
@@ -36,6 +39,11 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   @override
   void initState() {
     super.initState();
+
+    // Need to init to listen to changes of settings.
+    AudioCache.instance = AudioCache(prefix: '');
+    HornSound.init();
+
     Preferences.getString(Preferences.keyLocale).then((localeStr) {
       if (localeStr != null) {
         final splits = localeStr.split('_');

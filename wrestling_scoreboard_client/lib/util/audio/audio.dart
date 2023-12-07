@@ -1,55 +1,27 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
-import 'package:wrestling_scoreboard_client/util/audio/default_audio_player.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 
 class HornSound {
-  late Playable audioPlayer;
-  late Future<void> isSourceSet;
+  static AudioPlayer audioPlayer = AudioPlayer();
 
-  factory HornSound() {
-    return HornSound._fromPreference();
+  static Future<void> init() async {
+    final bellSound = await Preferences.getString(Preferences.keyBellSound);
+    await audioPlayer.setSource(AssetSource(bellSound ?? Env.bellSoundPath.fromString()));
+    Preferences.onChangeBellSound.stream.listen((path) async {
+      await audioPlayer.setSource(AssetSource(path));
+    });
   }
 
-  factory HornSound.source(String source) {
-    return HornSound._fromSource(source);
+  static Future<void> play() async {
+    await audioPlayer.resume();
   }
 
-  Future<void> play() async {
-    await isSourceSet;
-    await audioPlayer.play();
-  }
-
-  Future<void> stop() async {
-    await isSourceSet;
+  static Future<void> stop() async {
     await audioPlayer.stop();
   }
 
-  Future<void> dispose() async {
-    await isSourceSet;
+  static Future<void> dispose() async {
     await audioPlayer.dispose();
   }
-
-  HornSound._fromSource(String source) {
-    audioPlayer = DefaultAudioPlayer();
-    isSourceSet = audioPlayer.setSource(source);
-  }
-
-  HornSound._fromPreference() {
-    audioPlayer = DefaultAudioPlayer();
-    isSourceSet = Preferences.getString(Preferences.keyBellSound)
-        .then((value) => audioPlayer.setSource(value ?? Env.bellSoundPath.fromString()));
-    Preferences.onChangeBellSound.stream.listen((event) {
-      isSourceSet = audioPlayer.setSource(event);
-    });
-  }
-}
-
-abstract class Playable {
-  Future<void> play();
-
-  Future<void> stop();
-
-  Future<void> setSource(String url);
-
-  Future<void> dispose();
 }

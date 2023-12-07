@@ -338,7 +338,7 @@ class BoutActionHandler extends StatelessWidget {
         }
         break;
       case BoutScreenActions.horn:
-        HornSound().play();
+        HornSound.play();
         break;
     }
   }
