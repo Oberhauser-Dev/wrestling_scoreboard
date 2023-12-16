@@ -4,7 +4,7 @@ description: Wrestling software for managing team matches and competitions.
 publish_to: 'none'
 
 homepage: 'https://wrestling-scoreboard.oberhauser.dev'
-repository: 'https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/master/wrestling_scoreboard_client'
+repository: 'https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/main/wrestling_scoreboard_client'
 version: 0.0.1+1
 
 environment:
