@@ -1,6 +1,7 @@
 {
   "appName": "Ringerkampf-Anzeige",
   "home": "Start",
+  "more": "Mehr",
   "settings": "Einstellungen",
   "general": "Allgemein",
   "systemSetting": "Systemeinstellung",
@@ -13,6 +14,17 @@
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
   "bellSound": "Glocken-Sound",
+
+  "imprint": "Impressum",
+  "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",
+  "about": "Über",
+  "about_Changelog": "Änderungsprotokoll",
+  "about_Licenses": "Lizenzen",
+  "about_Application": "App",
+  "about_Contact": "Kontakt",
+  "about_contact_phrase": "August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)",
+  "about_Development": "Entwicklung",
+  "about_development_phrase": "Oberhauser Dev\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)",
 
   "optionSelect": "Auswählen",
   "edit": "Bearbeite",

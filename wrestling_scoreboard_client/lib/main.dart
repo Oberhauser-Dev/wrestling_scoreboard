@@ -5,10 +5,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/ui/router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/ui/router.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
+
+late PackageInfo packageInfo;
 
 void main() async {
   // Use [HashUrlStrategy] by default to support Single Page Application without configuring the server.
@@ -21,6 +24,9 @@ void main() async {
   // This comes with the price that URLs may not reflect the current stack on deep links (pasted links).
   // The correct way would be to add all possible sub-routes of a base route.
   GoRouter.optionURLReflectsImperativeAPIs = true;
+
+  WidgetsFlutterBinding.ensureInitialized();
+  packageInfo = await PackageInfo.fromPlatform();
 
   runApp(const WrestlingScoreboardApp());
 }

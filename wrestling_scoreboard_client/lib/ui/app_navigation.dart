@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/home/home.dart';
-import 'package:wrestling_scoreboard_client/ui/more/settings/settings.dart';
+import 'package:wrestling_scoreboard_client/ui/more/more.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class AppNavigation extends StatefulWidget {
@@ -16,7 +16,7 @@ class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     const Home(),
-    const CustomSettingsScreen(),
+    const MoreScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -39,8 +39,8 @@ class _AppNavigationState extends State<AppNavigation> {
             label: AppLocalizations.of(context)!.home,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: AppLocalizations.of(context)!.settings,
+            icon: const Icon(Icons.more_horiz),
+            label: AppLocalizations.of(context)!.more,
           ),
         ],
         currentIndex: _selectedIndex,
