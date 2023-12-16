@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 
 class HornSound {

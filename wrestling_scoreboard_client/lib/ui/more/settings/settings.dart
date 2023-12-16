@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wrestling_scoreboard_client/ui/components/ok_dialog.dart';
-import 'package:wrestling_scoreboard_client/ui/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/util/asset.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 
