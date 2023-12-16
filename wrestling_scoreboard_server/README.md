@@ -8,6 +8,7 @@ in `lib/`, and example unit test in `test/`.
 ```shell
 dart pub get
 dart compile exe bin/server.dart -o ./bin/wrestling-scoreboard-server
+chmod +x ./bin/wrestling-scoreboard-server
 ```
 
 ## Environment variables:
