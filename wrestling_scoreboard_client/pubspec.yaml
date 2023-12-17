@@ -48,6 +48,7 @@ flutter:
   assets:
     - assets/audio/
     - assets/images/icons/
+    - CHANGELOG.md
 
 flutter_launcher_icons:
   android: "ic_launcher"
