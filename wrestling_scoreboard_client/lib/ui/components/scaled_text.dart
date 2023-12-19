@@ -42,7 +42,7 @@ class FittedText extends Text {
     super.locale,
     super.softWrap,
     super.overflow,
-    TextScaler super.textScaler = const TextScaler.linear(100),
+    super.textScaler,
     super.maxLines,
     super.semanticsLabel,
     super.textWidthBasis,

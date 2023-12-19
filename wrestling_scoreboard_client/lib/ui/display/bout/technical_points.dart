@@ -26,12 +26,11 @@ class TechnicalPoints extends StatelessWidget {
         children: [
           Expanded(
             flex: 70,
-            child: Center(
-              child: Consumer<List<BoutAction>>(
-                  builder: (context, data, child) => FittedText(
-                        (ParticipantState.getTechnicalPoints(data, role)).toString(),
-                        softWrap: false,
-                      )),
+            child: Consumer<List<BoutAction>>(
+              builder: (context, data, child) => FittedText(
+                (ParticipantState.getTechnicalPoints(data, role)).toString(),
+                softWrap: false,
+              ),
             ),
           ),
           if (pStatusModel.activityStopwatch != null)
