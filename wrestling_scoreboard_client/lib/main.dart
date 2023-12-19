@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/ui/router.dart';
@@ -76,13 +77,20 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
     });
   }
 
+  ThemeData _buildTheme(brightness) {
+    var baseTheme = ThemeData(brightness: brightness);
+    return baseTheme.copyWith(
+      textTheme: GoogleFonts.robotoTextTheme(baseTheme.textTheme),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     return MaterialApp.router(
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: _buildTheme(Brightness.light),
+      darkTheme: _buildTheme(Brightness.dark),
       themeMode: _themeMode,
       localizationsDelegates: const [
         AppLocalizations.delegate,
