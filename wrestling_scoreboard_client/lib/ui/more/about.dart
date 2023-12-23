@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/main.dart';
 import 'package:wrestling_scoreboard_client/ui/components/card.dart';
+import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/components/responsive_container.dart';
 
 const loadCompleteChangelog = false;
@@ -66,20 +67,18 @@ class AboutScreen extends StatelessWidget {
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ],
-                      content: FutureBuilder(
+                      content: LoadingBuilder(
                         future: _loadChangelog(),
-                        builder: (context, snapshot) {
-                          return snapshot.hasData
-                              ? SingleChildScrollView(
-                                  child: MarkdownBody(
-                                    listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
-                                    shrinkWrap: true,
-                                    selectable: true,
-                                    data: snapshot.data!,
-                                    onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
-                                  ),
-                                )
-                              : const Center(child: CircularProgressIndicator());
+                        builder: (context, data) {
+                          return SingleChildScrollView(
+                            child: MarkdownBody(
+                              listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
+                              shrinkWrap: true,
+                              selectable: true,
+                              data: data,
+                              onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
+                            ),
+                          );
                         },
                       ),
                     ),

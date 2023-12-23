@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
+import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
@@ -35,82 +38,94 @@ class MatchDisplay extends StatelessWidget {
       initialData: teamMatch,
       builder: (context, match) {
         if (match == null) return ExceptionWidget(localizations.notFoundException);
-        final infoAction = IconButton(
-          icon: const Icon(Icons.info),
-          onPressed: () => handleSelectedTeamMatch(match, context),
-        );
-        return Scaffold(
-          appBar: AppBar(actions: [infoAction, CommonElements.getFullScreenAction(context)]),
-          body: ManyConsumer<Bout, TeamMatch>(
-            filterObject: match,
-            builder: (context, bouts) {
-              final matchInfos = [
-                match.league?.name,
-                '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
-                if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
-                // Not enough space to display all three referees
-                // if (match.matChairman != null)
-                //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
-                // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
-              ];
+        return Consumer(builder: (context, ref, child) {
+          return LoadingBuilder<WindowState>(
+              future: ref.watch(windowStateNotifierProvider),
+              builder: (BuildContext context, WindowState data) {
+                final isFullScreen = data == WindowState.fullscreen;
+                final infoAction = IconButton(
+                  icon: const Icon(Icons.info),
+                  onPressed: () => handleSelectedTeamMatch(match, context),
+                );
+                return Scaffold(
+                  appBar: isFullScreen
+                      ? null
+                      : AppBar(actions: [infoAction, CommonElements.getFullScreenAction(context, ref)]),
+                  body: ManyConsumer<Bout, TeamMatch>(
+                    filterObject: match,
+                    builder: (context, bouts) {
+                      final matchInfos = [
+                        match.league?.name,
+                        '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
+                        if (match.referee != null)
+                          '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
+                        // Not enough space to display all three referees
+                        // if (match.matChairman != null)
+                        //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
+                        // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
+                      ];
 
-              final headerItems = <Widget>[
-                Padding(
-                    padding: EdgeInsets.all(padding),
-                    child: Center(
-                        child: ScaledText(
-                      matchInfos.join('\n'),
-                      softWrap: false,
-                      fontSize: 12,
-                      minFontSize: 10,
-                    ))),
-                ...CommonElements.getTeamHeader(match, bouts, context),
-              ];
-              final column = Column(
-                children: [
-                  IntrinsicHeight(
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: headerItems
-                            .asMap()
-                            .entries
-                            .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                            .toList()),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: bouts.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () => navigateToBoutScreen(context, match, bouts[index]),
-                              child: IntrinsicHeight(
-                                child: ManyConsumer<BoutAction, Bout>(
-                                  filterObject: bouts[index],
-                                  builder: (context, actions) => Row(
-                                    children: BoutListItemTwo(match: match, bout: bouts[index], actions: actions)
-                                        .build(context)
-                                        .asMap()
-                                        .entries
-                                        .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                                        .toList(),
-                                  ),
-                                ),
-                              ),
+                      final headerItems = <Widget>[
+                        Padding(
+                            padding: EdgeInsets.all(padding),
+                            child: Center(
+                                child: ScaledText(
+                              matchInfos.join('\n'),
+                              softWrap: false,
+                              fontSize: 12,
+                              minFontSize: 10,
+                            ))),
+                        ...CommonElements.getTeamHeader(match, bouts, context),
+                      ];
+                      final column = Column(
+                        children: [
+                          IntrinsicHeight(
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: headerItems
+                                    .asMap()
+                                    .entries
+                                    .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                                    .toList()),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: bouts.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () => navigateToBoutScreen(context, match, bouts[index]),
+                                      child: IntrinsicHeight(
+                                        child: ManyConsumer<BoutAction, Bout>(
+                                          filterObject: bouts[index],
+                                          builder: (context, actions) => Row(
+                                            children:
+                                                BoutListItemTwo(match: match, bout: bouts[index], actions: actions)
+                                                    .build(context)
+                                                    .asMap()
+                                                    .entries
+                                                    .map((entry) =>
+                                                        Expanded(flex: flexWidths[entry.key], child: entry.value))
+                                                    .toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Divider(height: 1),
+                                  ],
+                                );
+                              },
                             ),
-                            const Divider(height: 1),
-                          ],
-                        );
-                      },
-                    ),
+                          ),
+                        ],
+                      );
+                      return column;
+                    },
                   ),
-                ],
-              );
-              return column;
-            },
-          ),
-        );
+                );
+              });
+        });
       },
     );
   }

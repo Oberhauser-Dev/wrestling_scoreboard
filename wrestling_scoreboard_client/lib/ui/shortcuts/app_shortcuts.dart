@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:window_manager/window_manager.dart';
-import 'package:wrestling_scoreboard_client/ui/utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 
 enum AppAction {
   toggleFullScreen,
@@ -19,25 +19,13 @@ class AppActionIntent extends Intent {
 
   final AppAction type;
 
-  Future<void> handle({BuildContext? context}) async {
+  Future<void> handle(BuildContext? context, WidgetRef ref) async {
     switch (type) {
       case AppAction.closeFullScreen:
-        if (isDesktop) {
-          await windowManager.setFullScreen(false);
-        } else {
-          await SystemChrome.setEnabledSystemUIMode(
-            SystemUiMode.manual,
-            overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
-          );
-        }
+        await ref.read(windowStateNotifierProvider.notifier).requestState(WindowState.windowed);
         break;
       case AppAction.toggleFullScreen:
-        if (isDesktop) {
-          await windowManager.setFullScreen(!(await windowManager.isFullScreen()));
-        } else {
-          // TODO: add state and listen to [setSystemUIChangeCallback] to maintain toggle mode
-          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-        }
+        await ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen();
         break;
     }
   }

@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
+import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_action_controls.dart';
@@ -241,7 +244,7 @@ class BoutState extends State<BoutScreen> {
   }
 
   displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding) {
-    return Consumer<ParticipantState?>(
+    return provider.Consumer<ParticipantState?>(
       builder: (context, data, child) => pStatus?.classificationPoints != null
           ? ThemedContainer(
               color: color.shade800,
@@ -382,75 +385,85 @@ class BoutState extends State<BoutScreen> {
       bouts: bouts,
       boutIndex: boutIndex,
       doAction: doAction,
-      child: Scaffold(
-        appBar: AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context)]),
-        body: StreamProvider<List<BoutAction>>(
-          initialData: actions,
-          create: (context) => _onChangeActions.stream,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                row(
-                    padding: bottomPadding,
-                    children: CommonElements.getTeamHeader(match, bouts, context)
-                        .asMap()
-                        .entries
-                        .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                        .toList()),
-                row(padding: bottomPadding, children: [
-                  Expanded(
-                    flex: 50,
-                    child: displayParticipant(bout.r, BoutRole.red, padding),
-                  ),
-                  Expanded(
-                      flex: 20,
-                      child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                        Row(children: [
-                          Expanded(
-                              child: Center(
+      child: Consumer(builder: (context, ref, child) {
+        return LoadingBuilder<WindowState>(
+          future: ref.watch(windowStateNotifierProvider), 
+          builder: (BuildContext context, WindowState data) {
+            final isFullScreen = data == WindowState.fullscreen;
+            return Scaffold(
+              appBar:
+              isFullScreen ? null : AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context, ref)]),
+              // TODO: evaluate, if can convert to riverpod provider
+              body: provider.StreamProvider<List<BoutAction>>(
+                initialData: actions,
+                create: (context) => _onChangeActions.stream,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      row(
+                          padding: bottomPadding,
+                          children: CommonElements.getTeamHeader(match, bouts, context)
+                              .asMap()
+                              .entries
+                              .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                              .toList()),
+                      row(padding: bottomPadding, children: [
+                        Expanded(
+                          flex: 50,
+                          child: displayParticipant(bout.r, BoutRole.red, padding),
+                        ),
+                        Expanded(
+                            flex: 20,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                              Row(children: [
+                                Expanded(
+                                    child: Center(
+                                        child: ScaledText(
+                                          '${AppLocalizations.of(context)!.bout} ${boutIndex + 1}',
+                                          minFontSize: 10,
+                                        ))),
+                              ]),
+                              Center(
                                   child: ScaledText(
-                            '${AppLocalizations.of(context)!.bout} ${boutIndex + 1}',
-                            minFontSize: 10,
-                          ))),
-                        ]),
-                        Center(
-                            child: ScaledText(
-                          '${styleToString(bout.weightClass.style, context)}',
-                          minFontSize: 10,
-                        )),
-                        Center(
-                            child: ScaledText(
-                          bout.weightClass.name,
-                          minFontSize: 10,
-                        )),
-                      ])),
-                  Expanded(
-                    flex: 50,
-                    child: displayParticipant(bout.b, BoutRole.blue, padding),
-                  ),
-                ]),
-                row(
-                  padding: bottomPadding,
-                  children: [
-                    displayTechnicalPoints(_r, BoutRole.red),
-                    BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
-                    Expanded(flex: 50, child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100))),
-                    BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
-                    displayTechnicalPoints(_b, BoutRole.blue),
-                  ],
-                ),
-                Container(
-                  padding: bottomPadding,
-                  child: Consumer<List<BoutAction>>(
-                    builder: (context, actions, child) => ActionsWidget(actions),
+                                    '${styleToString(bout.weightClass.style, context)}',
+                                    minFontSize: 10,
+                                  )),
+                              Center(
+                                  child: ScaledText(
+                                    bout.weightClass.name,
+                                    minFontSize: 10,
+                                  )),
+                            ])),
+                        Expanded(
+                          flex: 50,
+                          child: displayParticipant(bout.b, BoutRole.blue, padding),
+                        ),
+                      ]),
+                      row(
+                        padding: bottomPadding,
+                        children: [
+                          displayTechnicalPoints(_r, BoutRole.red),
+                          BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+                          Expanded(flex: 50, child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100))),
+                          BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
+                          displayTechnicalPoints(_b, BoutRole.blue),
+                        ],
+                      ),
+                      Container(
+                        padding: bottomPadding,
+                        child: provider.Consumer<List<BoutAction>>(
+                          builder: (context, actions, child) => ActionsWidget(actions),
+                        ),
+                      ),
+                      Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
+                    ],
                   ),
                 ),
-                Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
-              ],
-            ),
-          ),
-        ),
-      ),
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 

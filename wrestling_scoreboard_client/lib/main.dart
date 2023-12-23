@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,7 +38,7 @@ void main() async {
     await windowManager.ensureInitialized();
   }
 
-  runApp(const WrestlingScoreboardApp());
+  runApp(const ProviderScope(child: WrestlingScoreboardApp()));
 }
 
 class WrestlingScoreboardApp extends StatefulWidget {
@@ -122,11 +123,13 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
     );
     return Shortcuts(
       shortcuts: appShortcuts,
-      child: Actions(actions: <Type, Action<Intent>>{
-        AppActionIntent: CallbackAction<AppActionIntent>(
-          onInvoke: (AppActionIntent intent) => intent.handle(context: context),
-        )
-      }, child: materialApp),
+      child: Consumer(builder: (context, ref, child) {
+        return Actions(actions: <Type, Action<Intent>>{
+          AppActionIntent: CallbackAction<AppActionIntent>(
+            onInvoke: (AppActionIntent intent) => intent.handle(context, ref),
+          )
+        }, child: materialApp);
+      }),
     );
   }
 }
