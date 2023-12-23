@@ -46,6 +46,8 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   @override
   void initState() {
     super.initState();
+    
+    // TODO: replace with provider state and unify with settings, e.g. by using riverpod.
 
     // Need to init to listen to changes of settings.
     AudioCache.instance = AudioCache(prefix: '');
@@ -60,6 +62,14 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
           } else {
             _locale = Locale(splits[0]);
           }
+        });
+      }
+    });
+
+    Preferences.getString(Preferences.keyThemeMode).then((value) {
+      if (value != null) {
+        setState(() {
+          _themeMode = ThemeMode.values.byName(value);
         });
       }
     });
