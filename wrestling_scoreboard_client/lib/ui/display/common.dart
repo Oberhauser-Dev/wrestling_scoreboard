@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CommonElements {
@@ -8,7 +9,7 @@ class CommonElements {
     final padding = width / 100;
     final edgeInsets = EdgeInsets.all(padding);
     return [
-      Container(
+      ThemedContainer(
           color: Colors.red.shade800,
           padding: edgeInsets,
           child: Center(
@@ -21,7 +22,7 @@ class CommonElements {
       Row(
         children: [
           Expanded(
-            child: Container(
+            child: ThemedContainer(
               color: Colors.red.shade900,
               child: Center(
                 child: ScaledText(
@@ -34,7 +35,7 @@ class CommonElements {
             ),
           ),
           Expanded(
-            child: Container(
+            child: ThemedContainer(
               color: Colors.blue.shade900,
               child: Center(
                 child: ScaledText(
@@ -48,7 +49,7 @@ class CommonElements {
           ),
         ],
       ),
-      Container(
+      ThemedContainer(
         color: Colors.blue.shade800,
         padding: edgeInsets,
         child: Center(

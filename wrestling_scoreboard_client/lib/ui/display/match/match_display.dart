@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/common.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
@@ -140,14 +141,14 @@ class BoutListItemTwo {
   const BoutListItemTwo({required this.match, required this.bout, required this.actions});
 
   displayName({ParticipantState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
-    return Container(
+    return ThemedContainer(
       color: getColorFromBoutRole(role),
       child: Center(
         child: ScaledText(
           pStatus == null
               ? AppLocalizations.of(context)!.participantVacant
               : pStatus.participation.membership.person.fullName,
-          color: pStatus == null ? Colors.white30 : Colors.white,
+          color: pStatus == null ? Colors.white.disabled() : Colors.white,
           fontSize: 17,
           minFontSize: 14,
         ),
@@ -164,7 +165,7 @@ class BoutListItemTwo {
         children: [
           Expanded(
               flex: 70,
-              child: Container(
+              child: ThemedContainer(
                 color: color,
                 child: Center(
                   child: ScaledText(
@@ -175,7 +176,7 @@ class BoutListItemTwo {
               )),
           Expanded(
             flex: 50,
-            child: Container(
+            child: ThemedContainer(
               color: color,
               child: Center(
                 child: pState?.classificationPoints != null
@@ -235,7 +236,7 @@ class BoutListItemTwo {
                 children: [
                   Expanded(
                       flex: 70,
-                      child: Container(
+                      child: ThemedContainer(
                         color: data?.winnerRole != null ? getColorFromBoutRole(data!.winnerRole!).shade800 : null,
                         child: Center(
                           child: ScaledText(getAbbreviationFromBoutResult(data?.result, context), fontSize: 12),

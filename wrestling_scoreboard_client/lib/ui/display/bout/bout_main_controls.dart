@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
+import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -41,14 +42,14 @@ class BoutMainControlsState extends State<BoutMainControls> {
                 Expanded(
                     child: widget.boutState.bouts.first == widget.boutState.bout
                         ? IconButton(
-                            color: Colors.white24,
+                            color: Theme.of(context).disabledColor,
                             icon: const Icon(Icons.close),
                             onPressed: () {
                               widget.callback(const BoutScreenActionIntent.quit());
                             },
                           )
                         : IconButton(
-                            color: Colors.white24,
+                            color: Theme.of(context).disabledColor,
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
                               widget.callback(const BoutScreenActionIntent.previousBout());
@@ -65,14 +66,14 @@ class BoutMainControlsState extends State<BoutMainControls> {
                 Expanded(
                     child: widget.boutState.bouts.last == widget.boutState.bout
                         ? IconButton(
-                            color: Colors.white24,
+                            color: Theme.of(context).disabledColor,
                             icon: const Icon(Icons.close),
                             onPressed: () {
                               widget.callback(const BoutScreenActionIntent.quit());
                             },
                           )
                         : IconButton(
-                            color: Colors.white24,
+                            color: Theme.of(context).disabledColor,
                             icon: const Icon(Icons.arrow_forward),
                             onPressed: () {
                               widget.callback(const BoutScreenActionIntent.nextBout());
@@ -109,7 +110,7 @@ class BoutMainControlsState extends State<BoutMainControls> {
       value: null,
       child: Text(AppLocalizations.of(context)!.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
     ));
-    return Container(
+    return ThemedContainer(
       color: role == widget.boutState.bout.winnerRole ? getColorFromBoutRole(role) : null,
       child: ButtonTheme(
           alignedDropdown: true,

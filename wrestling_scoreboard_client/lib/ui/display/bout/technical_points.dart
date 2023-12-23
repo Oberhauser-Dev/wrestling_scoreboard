@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/util/colors.dart';
@@ -19,7 +20,7 @@ class TechnicalPoints extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final cellHeight = width / 6;
-    return Container(
+    return ThemedContainer(
       color: getColorFromBoutRole(role),
       height: cellHeight,
       child: Column(

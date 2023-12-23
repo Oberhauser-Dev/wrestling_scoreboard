@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_action_controls.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_actions.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_main_controls.dart';
@@ -21,7 +22,6 @@ import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.da
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
-import 'package:wrestling_scoreboard_client/util/colors.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
@@ -245,7 +245,7 @@ class BoutState extends State<BoutScreen> {
   displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding) {
     return Consumer<ParticipantState?>(
       builder: (context, data, child) => pStatus?.classificationPoints != null
-          ? Container(
+          ? ThemedContainer(
               color: color.shade800,
               padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
               child: Center(
@@ -273,7 +273,7 @@ class BoutState extends State<BoutScreen> {
   displayParticipant(ParticipantState? pStatus, BoutRole role, double padding) {
     var color = getColorFromBoutRole(role);
 
-    return Container(
+    return ThemedContainer(
       color: color,
       child: IntrinsicHeight(
         child: SingleConsumer<ParticipantState>(
@@ -367,7 +367,7 @@ class BoutState extends State<BoutScreen> {
     double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);
 
-    MaterialColor stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : white;
+    Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onBackground;
 
     final shareAction = IconButton(
       icon: const Icon(Icons.share),
