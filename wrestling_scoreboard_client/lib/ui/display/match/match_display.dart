@@ -40,20 +40,7 @@ class MatchDisplay extends StatelessWidget {
           onPressed: () => handleSelectedTeamMatch(match, context),
         );
         return Scaffold(
-          appBar: isMobile ? AppBar(actions: [infoAction]) : null,
-          bottomNavigationBar: isMobile
-              ? null
-              : BottomAppBar(
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                    ),
-                    infoAction,
-                  ]),
-                ),
+          appBar: AppBar(actions: [infoAction, CommonElements.getFullScreenAction(context)]),
           body: ManyConsumer<Bout, TeamMatch>(
             filterObject: match,
             builder: (context, bouts) {

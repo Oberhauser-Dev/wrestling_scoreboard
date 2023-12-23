@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 final isMobile =
     !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
+final isDesktop = !kIsWeb && !isMobile;
 
 extension ColorExtension on Color {
   /// Get disabled state of a color.

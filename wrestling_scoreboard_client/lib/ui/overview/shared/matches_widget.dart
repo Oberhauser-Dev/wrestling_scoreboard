@@ -66,7 +66,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
                   leading: const Icon(Icons.event),
                   onTap: () => handleSelectedMatch(match, context),
                   trailing: IconButton(
-                    icon: const Icon(Icons.crop_free),
+                    icon: const Icon(Icons.tv),
                     onPressed: () => handleSelectedMatchSequence(match, context),
                   ),
                 );

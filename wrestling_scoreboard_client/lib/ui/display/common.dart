@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
+import 'package:wrestling_scoreboard_client/ui/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CommonElements {
@@ -61,5 +62,12 @@ class CommonElements {
         ),
       ),
     ];
+  }
+
+  static Widget getFullScreenAction(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.fullscreen),
+      onPressed: () => const AppActionIntent(type: AppAction.toggleFullScreen).handle(context: context),
+    );
   }
 }

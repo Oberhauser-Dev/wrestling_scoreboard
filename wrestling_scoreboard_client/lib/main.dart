@@ -7,8 +7,11 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/ui/router.dart';
+import 'package:wrestling_scoreboard_client/ui/shortcuts/app_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
 
@@ -29,6 +32,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   packageInfo = await PackageInfo.fromPlatform();
 
+  if (isDesktop) {
+    // Support fullscreen on Desktop
+    await windowManager.ensureInitialized();
+  }
+
   runApp(const WrestlingScoreboardApp());
 }
 
@@ -46,7 +54,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   @override
   void initState() {
     super.initState();
-    
+
     // TODO: replace with provider state and unify with settings, e.g. by using riverpod.
 
     // Need to init to listen to changes of settings.
@@ -97,7 +105,7 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    return MaterialApp.router(
+    final materialApp = MaterialApp.router(
       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
@@ -111,6 +119,14 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
       supportedLocales: Preferences.supportedLanguages.values,
       locale: _locale,
       routerConfig: router,
+    );
+    return Shortcuts(
+      shortcuts: appShortcuts,
+      child: Actions(actions: <Type, Action<Intent>>{
+        AppActionIntent: CallbackAction<AppActionIntent>(
+          onInvoke: (AppActionIntent intent) => intent.handle(context: context),
+        )
+      }, child: materialApp),
     );
   }
 }

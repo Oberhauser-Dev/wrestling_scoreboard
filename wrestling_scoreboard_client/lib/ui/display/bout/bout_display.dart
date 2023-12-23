@@ -20,7 +20,6 @@ import 'package:wrestling_scoreboard_client/ui/display/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/common.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
-import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
@@ -210,8 +209,7 @@ class BoutState extends State<BoutScreen> {
     });
     setActions(actions);
     handleAction = (BoutScreenActionIntent intent) {
-      BoutActionHandler.handleIntentStatic(intent, stopwatch, match, bouts, getActions, setActions, boutIndex, doAction,
-          context: context);
+      intent.handle(stopwatch, match, bouts, getActions, setActions, boutIndex, doAction, context: context);
     };
   }
 
@@ -385,20 +383,7 @@ class BoutState extends State<BoutScreen> {
       boutIndex: boutIndex,
       doAction: doAction,
       child: Scaffold(
-        appBar: isMobile ? AppBar(actions: [shareAction]) : null,
-        bottomNavigationBar: isMobile
-            ? null
-            : BottomAppBar(
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    },
-                  ),
-                  shareAction,
-                ]),
-              ),
+        appBar: AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context)]),
         body: StreamProvider<List<BoutAction>>(
           initialData: actions,
           create: (context) => _onChangeActions.stream,

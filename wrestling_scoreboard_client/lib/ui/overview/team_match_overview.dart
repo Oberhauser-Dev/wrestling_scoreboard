@@ -6,9 +6,9 @@ import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
+import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -40,12 +40,13 @@ class TeamMatchOverview extends StatelessWidget {
               ),
               actions: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.crop_free),
-                      onPressed: () => handleSelectedMatchSequence(match, context),
-                      label: Text(localizations.display),
-                    ))
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.tv),
+                    onPressed: () => handleSelectedMatchSequence(match, context),
+                    label: Text(localizations.display),
+                  ),
+                )
               ],
             ),
             body: SingleConsumer<Lineup>(

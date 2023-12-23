@@ -101,36 +101,8 @@ class BoutScreenActionIntent extends Intent {
 
   const BoutScreenActionIntent.blueUndo() : type = BoutScreenActions.blueUndo;
   final BoutScreenActions type;
-}
 
-class BoutActionHandler extends StatelessWidget {
-  final Widget child;
-  final ObservableStopwatch stopwatch;
-  final TeamMatch match;
-  final List<Bout> bouts;
-  final List<BoutAction> Function() getActions;
-  final void Function(List<BoutAction> actions) setActions;
-  final int boutIndex;
-  final Function(BoutScreenActions action) doAction;
-
-  const BoutActionHandler(
-      {required this.child,
-      required this.stopwatch,
-      required this.match,
-      required this.bouts,
-      required this.getActions,
-      required this.boutIndex,
-      required this.doAction,
-      required this.setActions,
-      super.key});
-
-  Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
-    await handleIntentStatic(intent, stopwatch, match, bouts, getActions, setActions, boutIndex, doAction,
-        context: context);
-  }
-
-  static Future<void> handleIntentStatic(
-      BoutScreenActionIntent intent,
+  Future<void> handle(
       ObservableStopwatch stopwatch,
       TeamMatch match,
       List<Bout> bouts,
@@ -140,7 +112,7 @@ class BoutActionHandler extends StatelessWidget {
       Function(BoutScreenActions action) doAction,
       {BuildContext? context}) async {
     final bout = bouts[boutIndex];
-    switch (intent.type) {
+    switch (type) {
       case BoutScreenActions.startStop:
         stopwatch.startStop();
         break;
@@ -180,31 +152,19 @@ class BoutActionHandler extends StatelessWidget {
         break;
       case BoutScreenActions.redOne:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.red,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 1);
+            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.redTwo:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.red,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 2);
+            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.redThree:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.red,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 3);
+            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
@@ -220,20 +180,20 @@ class BoutActionHandler extends StatelessWidget {
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.redPassivity:
-        var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.passivity);
+        var action =
+            BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.passivity);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.redCaution:
-        var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.caution);
+        var action =
+            BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.caution);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.redDismissal:
-        var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.dismissal);
+        var action =
+            BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.dismissal);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
@@ -256,59 +216,43 @@ class BoutActionHandler extends StatelessWidget {
         break;
       case BoutScreenActions.blueOne:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 1);
+            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.blueTwo:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 2);
+            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.blueThree:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 3);
+            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.blueFour:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: bout.duration,
-            actionType: BoutActionType.points,
-            pointCount: 4);
+            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 4);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.bluePassivity:
-        var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.passivity);
+        var action =
+            BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.passivity);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.blueCaution:
-        var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.caution);
+        var action =
+            BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.caution);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
       case BoutScreenActions.blueDismissal:
-        var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.dismissal);
+        var action =
+            BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.dismissal);
         action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
         setActions(getActions()..add(action));
         break;
@@ -342,6 +286,32 @@ class BoutActionHandler extends StatelessWidget {
         break;
     }
   }
+}
+
+class BoutActionHandler extends StatelessWidget {
+  final Widget child;
+  final ObservableStopwatch stopwatch;
+  final TeamMatch match;
+  final List<Bout> bouts;
+  final List<BoutAction> Function() getActions;
+  final void Function(List<BoutAction> actions) setActions;
+  final int boutIndex;
+  final Function(BoutScreenActions action) doAction;
+
+  const BoutActionHandler(
+      {required this.child,
+      required this.stopwatch,
+      required this.match,
+      required this.bouts,
+      required this.getActions,
+      required this.boutIndex,
+      required this.doAction,
+      required this.setActions,
+      super.key});
+
+  Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
+    await intent.handle(stopwatch, match, bouts, getActions, setActions, boutIndex, doAction, context: context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -362,7 +332,7 @@ class BoutActionHandler extends StatelessWidget {
         LogicalKeySet(LogicalKeyboardKey.backspace): const BoutScreenActionIntent.undo(),
         LogicalKeySet(LogicalKeyboardKey.arrowRight): const BoutScreenActionIntent.nextBout(),
         LogicalKeySet(LogicalKeyboardKey.arrowLeft): const BoutScreenActionIntent.previousBout(),
-        LogicalKeySet(LogicalKeyboardKey.escape): const BoutScreenActionIntent.quit(),
+        LogicalKeySet(LogicalKeyboardKey.keyQ, LogicalKeyboardKey.control): const BoutScreenActionIntent.quit(),
         LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
         LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
