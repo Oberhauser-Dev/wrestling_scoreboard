@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/ui/components/card.dart';
 
 class ExceptionWidget extends StatelessWidget {
   final Object exception;
@@ -17,22 +18,18 @@ class ExceptionWidget extends StatelessWidget {
           )
         : SelectableText(exception.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error));
     return Center(
-      child: Card(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Wrap(children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                errorText,
-                if (onRetry != null) const SizedBox(height: 16),
-                if (onRetry != null)
-                  OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
-              ],
-            ),
-          ]),
-        ),
+      child: PaddedCard(
+        child: Wrap(children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              errorText,
+              if (onRetry != null) const SizedBox(height: 16),
+              if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
+            ],
+          ),
+        ]),
       ),
     );
   }

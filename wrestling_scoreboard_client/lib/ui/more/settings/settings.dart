@@ -1,8 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'package:wrestling_scoreboard_client/ui/components/ok_dialog.dart';
+import 'package:wrestling_scoreboard_client/ui/components/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
 import 'package:wrestling_scoreboard_client/util/asset.dart';
 import 'package:wrestling_scoreboard_client/util/environment.dart';
@@ -100,174 +100,216 @@ class CustomSettingsScreenState extends State<CustomSettingsScreen> {
       appBar: AppBar(
         title: Text(localizations.settings),
       ),
-      body: SettingsList(
-          platform: Theme.of(context).platform == TargetPlatform.windows
-              ? DevicePlatform.web
-              : null, // Use web theme for windows
-          sections: [
-            SettingsSection(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localizations.general),
-                  TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _locale = null;
-                          Preferences.setString(Preferences.keyLocale, _locale);
-                          Preferences.onChangeLocale.add(null);
+      body: ResponsiveColumn(
+        children: [
+          SettingsSection(
+            title: localizations.general,
+            action: TextButton(
+              onPressed: () {
+                setState(() {
+                  _locale = null;
+                  Preferences.setString(Preferences.keyLocale, _locale);
+                  Preferences.onChangeLocale.add(null);
 
-                          _themeMode = ThemeMode.system;
-                          Preferences.setString(Preferences.keyThemeMode, _themeMode.name);
-                          Preferences.onChangeThemeMode.add(_themeMode);
-
-                          _apiUrl = Env.apiUrl.fromString();
-                          Preferences.setString(Preferences.keyApiUrl, _apiUrl);
-                          Preferences.onChangeApiUrl.add(_apiUrl);
-
-                          _wsUrl = Env.webSocketUrl.fromString();
-                          Preferences.setString(Preferences.keyWsUrl, _wsUrl);
-                          Preferences.onChangeWsUrlWebSocket.add(_wsUrl);
-
-                          _bellSoundPath = Env.bellSoundPath.fromString();
-                          Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
-                          Preferences.onChangeBellSound.add(_bellSoundPath);
-                        });
-                      },
-                      child: Text(localizations.reset))
-                ],
+                  _themeMode = ThemeMode.system;
+                  Preferences.setString(Preferences.keyThemeMode, _themeMode.name);
+                  Preferences.onChangeThemeMode.add(_themeMode);
+                });
+              },
+              child: Text(localizations.reset),
+            ),
+            children: [
+              ListTile(
+                leading: const Icon(Icons.translate),
+                title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
+                subtitle: Text(getTranslationOfLocale(_locale)),
+                onTap: () async {
+                  final val = await showDialog<String?>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      final List<MapEntry<String?, String>> languageSettingValues = Preferences.supportedLanguages
+                          .map((key, value) => MapEntry<String?, String>(key, getTranslationOfLocale(key)))
+                          .entries
+                          .toList();
+                      languageSettingValues.add(MapEntry(null, getTranslationOfLocale()));
+                      return RadioDialog<String>(values: languageSettingValues, initialValue: _locale);
+                    },
+                  );
+                  Preferences.onChangeLocale.add(Preferences.supportedLanguages[val]);
+                  await Preferences.setString(Preferences.keyLocale, val);
+                  setState(() {
+                    _locale = val;
+                  });
+                },
               ),
-              tiles: [
-                SettingsTile.navigation(
-                  title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
-                  leading: const Icon(Icons.translate),
-                  value: Text(getTranslationOfLocale(_locale)),
-                  onPressed: (context) async {
-                    final val = await showDialog<String?>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        final List<MapEntry<String?, String>> languageSettingValues = Preferences.supportedLanguages
-                            .map((key, value) => MapEntry<String?, String>(key, getTranslationOfLocale(key)))
-                            .entries
-                            .toList();
-                        languageSettingValues.add(MapEntry(null, getTranslationOfLocale()));
-                        return RadioDialog<String>(values: languageSettingValues, initialValue: _locale);
-                      },
-                    );
-                    Preferences.onChangeLocale.add(Preferences.supportedLanguages[val]);
-                    await Preferences.setString(Preferences.keyLocale, val);
+              ListTile(
+                leading: const Icon(Icons.brush),
+                title: Text(localizations.themeMode),
+                subtitle: Text(getTranslationOfThemeMode(_themeMode)),
+                onTap: () async {
+                  final val = await showDialog<ThemeMode>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      final List<MapEntry<ThemeMode, String>> themeModeValues = ThemeMode.values
+                          .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
+                          .toList();
+                      return RadioDialog<ThemeMode>(values: themeModeValues, initialValue: _themeMode);
+                    },
+                  );
+                  if (val != null) {
+                    Preferences.onChangeThemeMode.add(val);
+                    await Preferences.setString(Preferences.keyThemeMode, val.name);
                     setState(() {
-                      _locale = val;
+                      _themeMode = val;
                     });
-                  },
-                ),
-                SettingsTile.navigation(
-                  title: Text(localizations.themeMode),
-                  leading: const Icon(Icons.brush),
-                  value: Text(getTranslationOfThemeMode(_themeMode)),
-                  onPressed: (context) async {
-                    final val = await showDialog<ThemeMode>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        final List<MapEntry<ThemeMode, String>> themeModeValues = ThemeMode.values
-                            .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
-                            .toList();
-                        return RadioDialog<ThemeMode>(values: themeModeValues, initialValue: _themeMode);
-                      },
-                    );
-                    if (val != null) {
-                      Preferences.onChangeThemeMode.add(val);
-                      await Preferences.setString(Preferences.keyThemeMode, val.name);
-                      setState(() {
-                        _themeMode = val;
-                      });
-                    }
-                  },
-                ),
-                SettingsTile.navigation(
-                  title: Text(localizations.apiUrl),
-                  leading: const Icon(Icons.storage),
-                  value: Text(_apiUrl),
-                  onPressed: (context) async {
+                  }
+                },
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: localizations.network,
+            action: TextButton(
+              onPressed: () {
+                setState(() {
+                  _apiUrl = Env.apiUrl.fromString();
+                  Preferences.setString(Preferences.keyApiUrl, _apiUrl);
+                  Preferences.onChangeApiUrl.add(_apiUrl);
+
+                  _wsUrl = Env.webSocketUrl.fromString();
+                  Preferences.setString(Preferences.keyWsUrl, _wsUrl);
+                  Preferences.onChangeWsUrlWebSocket.add(_wsUrl);
+                });
+              },
+              child: Text(localizations.reset),
+            ),
+            children: [
+              ListTile(
+                subtitle: Text(_apiUrl),
+                title: Text(localizations.apiUrl),
+                leading: const Icon(Icons.storage),
+                onTap: () async {
+                  final val = await showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return TextInputDialog(initialValue: _apiUrl);
+                    },
+                  );
+                  if (val != null) {
+                    Preferences.onChangeApiUrl.add(val);
+                    await Preferences.setString(Preferences.keyApiUrl, val);
+                    setState(() {
+                      _apiUrl = val;
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.storage),
+                title: Text(localizations.wsUrl),
+                subtitle: Text(_wsUrl),
+                onTap: () async {
+                  final val = await showDialog<String?>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return TextInputDialog(initialValue: _wsUrl);
+                    },
+                  );
+                  if (val != null) {
+                    Preferences.onChangeWsUrlWebSocket.add(val);
+                    await Preferences.setString(Preferences.keyWsUrl, val);
+                    setState(() {
+                      _wsUrl = val;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: localizations.scoreboard,
+            action: TextButton(
+              onPressed: () {
+                setState(() {
+                  _bellSoundPath = Env.bellSoundPath.fromString();
+                  Preferences.setString(Preferences.keyBellSound, _bellSoundPath);
+                  Preferences.onChangeBellSound.add(_bellSoundPath);
+                });
+              },
+              child: Text(localizations.reset),
+            ),
+            children: [
+              ListTile(
+                leading: const Icon(Icons.audiotrack),
+                title: Text(localizations.bellSound),
+                subtitle: Text(getBellNameOfPath(_bellSoundPath)),
+                onTap: () async {
+                  final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
+                  // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
+                  final List<MapEntry<String, String>> bellSoundValues = bellSoundPaths
+                      .asMap()
+                      .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
+                      .entries
+                      .toList();
+                  if (context.mounted) {
                     final val = await showDialog<String>(
                       context: context,
                       builder: (BuildContext context) {
-                        return TextInputDialog(initialValue: _apiUrl);
+                        return RadioDialog(
+                          values: bellSoundValues,
+                          initialValue: _bellSoundPath,
+                          onChanged: (value) async {
+                            if (value != null) {
+                              final ap = AudioPlayer();
+                              await ap.play(AssetSource(value));
+                            }
+                          },
+                        );
                       },
                     );
                     if (val != null) {
-                      Preferences.onChangeApiUrl.add(val);
-                      await Preferences.setString(Preferences.keyApiUrl, val);
+                      Preferences.onChangeBellSound.add(val);
+                      await Preferences.setString(Preferences.keyBellSound, val);
                       setState(() {
-                        _apiUrl = val;
+                        _bellSoundPath = val;
                       });
                     }
-                  },
-                ),
-                SettingsTile.navigation(
-                  title: Text(localizations.wsUrl),
-                  leading: const Icon(Icons.storage),
-                  value: Text(_wsUrl),
-                  onPressed: (context) async {
-                    final val = await showDialog<String?>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return TextInputDialog(initialValue: _wsUrl);
-                      },
-                    );
-                    if (val != null) {
-                      Preferences.onChangeWsUrlWebSocket.add(val);
-                      await Preferences.setString(Preferences.keyWsUrl, val);
-                      setState(() {
-                        _wsUrl = val;
-                      });
-                    }
-                  },
-                ),
-                SettingsTile.navigation(
-                  title: Text(localizations.bellSound),
-                  leading: const Icon(Icons.audiotrack),
-                  value: Text(getBellNameOfPath(_bellSoundPath)),
-                  onPressed: (context) async {
-                    final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
-                    // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
-                    final List<MapEntry<String, String>> bellSoundValues = bellSoundPaths
-                        .asMap()
-                        .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
-                        .entries
-                        .toList();
-                    if (context.mounted) {
-                      final val = await showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return RadioDialog(
-                            values: bellSoundValues,
-                            initialValue: _bellSoundPath,
-                            onChanged: (value) async {
-                              if (value != null) {
-                                final ap = AudioPlayer();
-                                await ap.play(AssetSource(value));
-                              }
-                            },
-                          );
-                        },
-                      );
-                      if (val != null) {
-                        Preferences.onChangeBellSound.add(val);
-                        await Preferences.setString(Preferences.keyBellSound, val);
-                        setState(() {
-                          _bellSoundPath = val;
-                        });
-                      }
-                    }
-                  },
-                ),
-                // TODO option to overwrite boutConfigs
-                // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
-              ],
-            ),
-          ]),
+                  }
+                },
+              ),
+              // TODO option to overwrite boutConfigs
+              // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
+            ],
+          )
+        ],
+      ),
     );
+  }
+}
+
+class SettingsSection extends StatelessWidget {
+  final String title;
+  final Widget? action;
+  final List<Widget> children;
+
+  const SettingsSection({required this.title, this.action, required this.children, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      ListTile(
+        title: Text(title),
+        trailing: action,
+      ),
+      Card(
+        child: Column(
+          children: ListTile.divideTiles(
+            context: context,
+            tiles: children,
+          ).toList(),
+        ),
+      ),
+    ]);
   }
 }
 

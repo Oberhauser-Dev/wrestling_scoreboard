@@ -20,28 +20,34 @@ class MoreScreen extends StatelessWidget {
       );
     }
 
-    return ResponsiveScrollView(
-      child: Card(
-        child: Column(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: Text(localizations.settings),
-              onTap: () => navigateTo(const CustomSettingsScreen()),
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.info),
-              title: Text(localizations.imprint),
-              onTap: () => navigateTo(const ImprintScreen()),
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.info),
-              title: Text(localizations.about),
-              onTap: () => navigateTo(const AboutScreen()),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(title: Text(localizations.more)),
+      body: ResponsiveScrollView(
+        child: Card(
+          child: Column(
+            children: ListTile.divideTiles(
+              context: context,
+              tiles: [
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: Text(localizations.settings),
+                  onTap: () => navigateTo(const CustomSettingsScreen()),
+                ),
+                const Divider(height: 0),
+                ListTile(
+                  leading: const Icon(Icons.info),
+                  title: Text(localizations.imprint),
+                  onTap: () => navigateTo(const ImprintScreen()),
+                ),
+                const Divider(height: 0),
+                ListTile(
+                  leading: const Icon(Icons.info),
+                  title: Text(localizations.about),
+                  onTap: () => navigateTo(const AboutScreen()),
+                ),
+              ],
+            ).toList(),
+          ),
         ),
       ),
     );
