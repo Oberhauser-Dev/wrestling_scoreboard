@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/ui/components/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/rest.dart';
 
 class EditWidget extends StatelessWidget {
@@ -71,15 +72,8 @@ class EditWidget extends StatelessWidget {
               ))
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 1140),
-            child: Column(
-              children: items,
-            ),
-          ),
-        ),
+      body: ResponsiveColumn(
+        children: items,
       ),
     );
   }

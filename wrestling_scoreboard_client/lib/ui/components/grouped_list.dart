@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/font.dart';
+import 'package:wrestling_scoreboard_client/ui/components/responsive_container.dart';
 
 /// The base class for the different types of items the list can contain.
 abstract class ListItem {
@@ -83,18 +84,20 @@ class GroupedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return Column(
-          children: [
-            if (index != 0) const Divider(indent: 16, endIndent: 16),
-            item,
-          ],
-        );
-      },
+    return ResponsiveContainer(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return Column(
+            children: [
+              if (index != 0) const Divider(indent: 16, endIndent: 16),
+              item,
+            ],
+          );
+        },
+      ),
     );
   }
 }

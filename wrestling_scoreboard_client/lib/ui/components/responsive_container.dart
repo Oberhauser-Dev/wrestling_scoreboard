@@ -17,8 +17,8 @@ class ResponsiveContainer extends StatelessWidget {
     );
   }
 
-  _calculateContainerSize(Size screenSize) {
-    return screenSize.width < 768 ? screenSize.width : 768.0;
+  double _calculateContainerSize(Size screenSize) {
+    return screenSize.width < 768 ? screenSize.width : 768;
   }
 }
 
