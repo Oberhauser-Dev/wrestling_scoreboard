@@ -1,3 +1,5 @@
+import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html'; // 
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,17 +8,24 @@ import 'package:wrestling_scoreboard_client/ui/utils.dart';
 
 part 'app_state_provider.g.dart';
 
-// TODO: check for web
 @Riverpod(keepAlive: true)
 class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
   @override
   Raw<Future<WindowState>> build() async {
-    if (isMobile) {
-      await SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
-        await _setNewState(systemOverlaysAreVisible ? WindowState.windowed : WindowState.fullscreen);
+    if (kIsWeb) {
+      document.addEventListener('fullscreenchange', (event) {
+        if (document.fullscreenElement != null) {
+          _setNewState(WindowState.fullscreen);
+        } else {
+          _setNewState(WindowState.windowed);
+        }
       });
     } else if (isDesktop) {
       windowManager.addListener(this);
+    } else {
+      await SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
+        await _setNewState(systemOverlaysAreVisible ? WindowState.windowed : WindowState.fullscreen);
+      });
     }
 
     if (isDesktop && await windowManager.isFullScreen()) {
@@ -54,7 +63,9 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
   Future<void> requestState(WindowState windowState) async {
     switch (windowState) {
       case WindowState.windowed:
-        if (isDesktop) {
+        if (kIsWeb) {
+          document.exitFullscreen();
+        } else if (isDesktop) {
           await windowManager.setFullScreen(false);
         } else {
           await SystemChrome.setEnabledSystemUIMode(
@@ -64,17 +75,14 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
         }
         break;
       case WindowState.fullscreen:
-        if (isDesktop) {
+        if (kIsWeb) {
+          document.documentElement?.requestFullscreen();
+        } else if (isDesktop) {
           await windowManager.setFullScreen(true);
         } else {
           await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
         }
         break;
-    }
-
-    if (kIsWeb) {
-      // Only need to set on web (not evaluated if it's working there), as we have listeners for the other platforms.
-      await _setNewState(windowState);
     }
   }
 
