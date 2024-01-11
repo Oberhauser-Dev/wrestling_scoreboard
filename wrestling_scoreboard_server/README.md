@@ -33,6 +33,7 @@ Description=Wrestling-Scoreboard-Server
 [Service]
 ExecStart=/opt/wrestling_scoreboard_server/bin/wrestling-scoreboard-server
 Restart=on-failure
+RestartSec=15
 User=www
 Group=www
 WorkingDirectory=/opt/wrestling_scoreboard_server
