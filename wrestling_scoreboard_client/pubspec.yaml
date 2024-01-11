@@ -46,7 +46,8 @@ dev_dependencies:
   riverpod_generator: ^2.3.9
   build_runner: ^2.4.7
 
-dependency_overrides: 
+dependency_overrides:
+  # TODO(gustl22): Remove if solved https://github.com/leanflutter/window_manager/pull/409
   window_manager:
     git:
       url: https://github.com/damywise/window_manager.git
