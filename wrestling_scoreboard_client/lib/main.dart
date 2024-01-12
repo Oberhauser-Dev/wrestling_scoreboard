@@ -9,7 +9,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:wrestling_scoreboard_client/ui/more/settings/preferences.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
+import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/router.dart';
 import 'package:wrestling_scoreboard_client/ui/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/ui/utils.dart';
@@ -41,59 +43,21 @@ void main() async {
   runApp(const ProviderScope(child: WrestlingScoreboardApp()));
 }
 
-class WrestlingScoreboardApp extends StatefulWidget {
+class WrestlingScoreboardApp extends ConsumerStatefulWidget {
   const WrestlingScoreboardApp({super.key});
 
   @override
-  State<StatefulWidget> createState() => WrestlingScoreboardAppState();
+  ConsumerState<ConsumerStatefulWidget> createState() => WrestlingScoreboardAppState();
 }
 
-class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
-  Locale? _locale;
-  ThemeMode _themeMode = ThemeMode.system;
-
+class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> {
   @override
   void initState() {
     super.initState();
 
-    // TODO: replace with provider state and unify with settings, e.g. by using riverpod.
-
     // Need to init to listen to changes of settings.
     AudioCache.instance = AudioCache(prefix: '');
     HornSound.init();
-
-    Preferences.getString(Preferences.keyLocale).then((localeStr) {
-      if (localeStr != null) {
-        final splits = localeStr.split('_');
-        setState(() {
-          if (splits.length > 1) {
-            _locale = Locale(splits[0], splits[1]);
-          } else {
-            _locale = Locale(splits[0]);
-          }
-        });
-      }
-    });
-
-    Preferences.getString(Preferences.keyThemeMode).then((value) {
-      if (value != null) {
-        setState(() {
-          _themeMode = ThemeMode.values.byName(value);
-        });
-      }
-    });
-
-    Preferences.onChangeLocale.stream.distinct().listen((event) {
-      setState(() {
-        _locale = event;
-      });
-    });
-
-    Preferences.onChangeThemeMode.stream.distinct().listen((event) {
-      setState(() {
-        _themeMode = event;
-      });
-    });
   }
 
   ThemeData _buildTheme(brightness) {
@@ -105,31 +69,43 @@ class WrestlingScoreboardAppState extends State<WrestlingScoreboardApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    final materialApp = MaterialApp.router(
-      title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-      theme: _buildTheme(Brightness.light),
-      darkTheme: _buildTheme(Brightness.dark),
-      themeMode: _themeMode,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: Preferences.supportedLanguages.values,
-      locale: _locale,
-      routerConfig: router,
-    );
-    return Shortcuts(
-      shortcuts: appShortcuts,
-      child: Consumer(builder: (context, ref, child) {
-        return Actions(actions: <Type, Action<Intent>>{
-          AppActionIntent: CallbackAction<AppActionIntent>(
-            onInvoke: (AppActionIntent intent) => intent.handle(context, ref),
-          )
-        }, child: materialApp);
-      }),
+    return FutureBuilder<Locale?>(
+      future: ref.watch(localeNotifierProvider),
+      builder: (context, localeSnapshot) {
+        return LoadingBuilder<ThemeMode>(
+          future: ref.watch(themeModeNotifierProvider),
+          builder: (context, themeMode) {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+            final materialApp = MaterialApp.router(
+              title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
+              theme: _buildTheme(Brightness.light),
+              darkTheme: _buildTheme(Brightness.dark),
+              themeMode: themeMode,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: Preferences.supportedLanguages.values,
+              locale: localeSnapshot.data,
+              routerConfig: router,
+            );
+            return Shortcuts(
+              shortcuts: appShortcuts,
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return Actions(actions: <Type, Action<Intent>>{
+                    AppActionIntent: CallbackAction<AppActionIntent>(
+                      onInvoke: (AppActionIntent intent) => intent.handle(context, ref),
+                    )
+                  }, child: materialApp);
+                },
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
