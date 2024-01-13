@@ -48,8 +48,8 @@ Future init() async {
   await PostgresDb().connection.open();
 
   final serverUrl = 'http://${server.address.host}:${server.port}';
-  print('Serving API at $serverUrl/api/');
-  print('Serving Websocket at $serverUrl/ws/');
+  print('Serving API at $serverUrl/api');
+  print('Serving Websocket at $serverUrl/ws');
 }
 
 // Serve files from the file system.
@@ -57,8 +57,8 @@ final _staticHandler = shelf_static.createStaticHandler('public', defaultDocumen
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()
-  ..mount('/api/', ApiRoute().pipeline)
-  ..mount('/ws/', (Request request) {
+  ..mount('/api', ApiRoute().pipeline)
+  ..mount('/ws', (Request request) {
     try {
       return websocketHandler(request);
     } on HijackException catch (error, _) {

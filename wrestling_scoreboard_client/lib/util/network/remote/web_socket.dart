@@ -26,16 +26,14 @@ class WebSocketManager {
   static final StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
 
   WebSocketManager(this.messageHandler) {
-    // TODO try removing backslash if https://github.com/google/dart-neats/pull/146 is merged.
     Preferences.onChangeWsUrlWebSocket.stream.listen((url) {
-      wsUrl = adaptLocalhost(url.endsWith('/') ? url : ('$url/'));
+      wsUrl = adaptLocalhost(url);
       onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
     });
     onWebSocketConnection.stream.listen((connectionState) async {
       if (connectionState == WebSocketConnectionState.connecting && wsUrl != null) {
         await _channel?.sink.close(4210);
         try {
-          // TODO await for Future when https://github.com/dart-lang/web_socket_channel/pull/85 is merged
           _channel = WebSocketChannel.connect(Uri.parse(wsUrl!));
           _channel?.stream.listen(messageHandler, onError: (e) {
             if (e is WebSocketChannelException) {
@@ -55,10 +53,11 @@ class WebSocketManager {
             }
             _channel = null;
           });
+          await _channel?.ready.timeout(const Duration(seconds: 5));
           log('Websocket connection established: $wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
         } on SocketException catch (e) {
-          // Is probably only thrown, when connecting via `await WebSocket.connect(wsUrl!)`, see await for ready state above
+          // Thrown, when connection failed, waiting for `ready` state.
           log('Websocket connection refused by server: $e');
           onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
         }
