@@ -114,7 +114,7 @@ class BoutMainControlsState extends State<BoutMainControls> {
       color: role == widget.boutState.bout.winnerRole ? getColorFromBoutRole(role) : null,
       child: ButtonTheme(
           alignedDropdown: true,
-          child: ManyStreamConsumer<BoutAction, Bout>(
+          child: ManyConsumer<BoutAction, Bout>(
             filterObject: widget.boutState.bout,
             builder: (context, actions) {
               return DropdownButton<BoutResult?>(

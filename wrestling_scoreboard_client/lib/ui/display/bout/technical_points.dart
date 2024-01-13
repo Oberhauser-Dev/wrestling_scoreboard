@@ -28,7 +28,7 @@ class TechnicalPoints extends StatelessWidget {
         children: [
           Expanded(
             flex: 70,
-            child: ManyStreamConsumer<BoutAction, Bout>(
+            child: ManyConsumer<BoutAction, Bout>(
               filterObject: bout,
               builder: (context, actions) {
                 return FittedText(

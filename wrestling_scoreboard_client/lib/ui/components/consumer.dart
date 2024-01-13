@@ -59,7 +59,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
   }
 }
 
-class ManyConsumer<T extends DataObject, S extends DataObject?> extends StatefulWidget {
+/*class ManyConsumer<T extends DataObject, S extends DataObject?> extends StatefulWidget {
   final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
@@ -97,14 +97,14 @@ class ManyConsumerState<T extends DataObject, S extends DataObject?> extends Sta
       },
     );
   }
-}
+}*/
 
-class ManyStreamConsumer<T extends DataObject, S extends DataObject?> extends ConsumerWidget {
+class ManyConsumer<T extends DataObject, S extends DataObject?> extends ConsumerWidget {
   final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
 
-  const ManyStreamConsumer({required this.builder, this.initialData, this.filterObject, super.key});
+  const ManyConsumer({required this.builder, this.initialData, this.filterObject, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

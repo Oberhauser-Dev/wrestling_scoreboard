@@ -364,7 +364,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         Printing.sharePdf(bytes: bytes);
       },
     );
-    return ManyStreamConsumer<BoutAction, Bout>(
+    return ManyConsumer<BoutAction, Bout>(
     filterObject: widget.bout,
     builder: (context, actions) {
         return BoutActionHandler(
