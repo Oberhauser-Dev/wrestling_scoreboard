@@ -6,7 +6,7 @@ part of 'data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$manyDataStreamHash() => r'b657a72c8a9393c9fc6f91d9c8ab995dae4f9ad7';
+String _$manyDataStreamHash() => r'49089cdc4cfef3e619053020a56ac9835bcc4bc4';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const manyDataStreamProvider = ManyDataStreamFamily();
 
 /// See also [manyDataStream].
-class ManyDataStreamFamily<T extends DataObject, S extends DataObject?> extends Family<Raw<Stream<List<T>>>> {
+class ManyDataStreamFamily<T extends DataObject, S extends DataObject?> extends Family<AsyncValue<List<T>>> {
   /// See also [manyDataStream].
   const ManyDataStreamFamily();
 
@@ -75,7 +75,7 @@ class ManyDataStreamFamily<T extends DataObject, S extends DataObject?> extends 
 }
 
 /// See also [manyDataStream].
-class ManyDataStreamProvider<T extends DataObject, S extends DataObject?> extends AutoDisposeProvider<Raw<Stream<List<T>>>> {
+class ManyDataStreamProvider<T extends DataObject, S extends DataObject?> extends AutoDisposeStreamProvider<List<T>> {
   /// See also [manyDataStream].
   ManyDataStreamProvider({
     S? filterObject,
@@ -133,7 +133,7 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?> extend
   }
 
   @override
-  AutoDisposeProviderElement<Raw<Stream<List<T>>>> createElement() {
+  AutoDisposeStreamProviderElement<List<T>> createElement() {
     return _ManyDataStreamProviderElement(this);
   }
 
@@ -154,7 +154,7 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?> extend
   }
 }
 
-mixin ManyDataStreamRef<T extends DataObject, S extends DataObject?> on AutoDisposeProviderRef<Raw<Stream<List<T>>>> {
+mixin ManyDataStreamRef<T extends DataObject, S extends DataObject?> on AutoDisposeStreamProviderRef<List<T>> {
   /// The parameter `filterObject` of this provider.
   S? get filterObject;
 
@@ -163,8 +163,7 @@ mixin ManyDataStreamRef<T extends DataObject, S extends DataObject?> on AutoDisp
 }
 
 class _ManyDataStreamProviderElement<T extends DataObject, S extends DataObject?>
-    extends AutoDisposeProviderElement<Raw<Stream<List<T>>>>
-    with ManyDataStreamRef {
+    extends AutoDisposeStreamProviderElement<List<T>> with ManyDataStreamRef {
   _ManyDataStreamProviderElement(super.provider);
 
   @override

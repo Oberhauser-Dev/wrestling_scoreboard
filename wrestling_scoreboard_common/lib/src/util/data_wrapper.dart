@@ -11,11 +11,18 @@ Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
   };
 }
 
-Map<String, dynamic> manyToJson(List<Object> many, Type type, CRUD operation, {Type? filterType, int? filterId}) {
+Map<String, dynamic> manyToJson(
+  List<Object> many,
+  Type type,
+  CRUD operation, {
+  required bool isRaw,
+  Type? filterType,
+  int? filterId,
+}) {
   return <String, dynamic>{
     'operation': operation.name,
     'isMany': true,
-    'isRaw': many.isEmpty || (many.first is! DataObject),
+    'isRaw': isRaw,
     'filterType': filterType == null ? null : getTableNameFromType(filterType),
     if (filterId != null) 'filterId': filterId,
     'tableName': getTableNameFromType(type),

@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 part 'data_provider.g.dart';
 
 @riverpod
-Raw<Stream<List<T>>> manyDataStream<T extends DataObject, S extends DataObject?>(
+Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   ManyDataStreamRef ref, {
   S? filterObject,
   List<T>? initialData,
@@ -19,7 +19,7 @@ Raw<Stream<List<T>>> manyDataStream<T extends DataObject, S extends DataObject?>
   ref.watch(webSocketStateStreamProvider);
 
   // ref.onDispose(webSocketConnectionStream.close);
-
+  // TODO: e.g. bout action event triggered twice
   return dataProvider
       .streamMany<T, S>(filterObject: filterObject, init: initialData == null)
       .map((event) => event.data);

@@ -108,10 +108,10 @@ class ManyStreamConsumer<T extends DataObject, S extends DataObject?> extends Co
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stream = ref.watch(manyDataStreamProvider<T, S>(initialData: initialData, filterObject: filterObject));
-    return LoadingStreamBuilder<List<T>>(
+    final stream = ref.watch(manyDataStreamProvider<T, S>(initialData: initialData, filterObject: filterObject).future);
+    return LoadingBuilder<List<T>>(
       builder: builder,
-      stream: stream,
+      future: stream,
       initialData: initialData,
       onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
     );

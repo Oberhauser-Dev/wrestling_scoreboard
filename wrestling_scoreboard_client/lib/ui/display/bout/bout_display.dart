@@ -102,7 +102,6 @@ class BoutState extends ConsumerState<BoutScreen> {
   late ParticipantStateModel _b;
   late BoutConfig boutConfig;
   int period = 1;
-  late Function(BoutScreenActionIntent) handleAction;
 
   @override
   initState() {
@@ -192,12 +191,13 @@ class BoutState extends ConsumerState<BoutScreen> {
         handleAction(const BoutScreenActionIntent.horn());
       }
     });
-    handleAction = (BoutScreenActionIntent intent) {
-      intent.handle(stopwatch, match, bouts, getActions, boutIndex, doAction, context: context);
-    };
   }
 
-  Future<List<BoutAction>> getActions() => ref.read(manyDataStreamProvider<BoutAction, Bout>(filterObject: bout)).last;
+  void handleAction(BoutScreenActionIntent intent) {
+    intent.handle(stopwatch, match, bouts, getActions, boutIndex, doAction, context: context);
+  }
+
+  Future<List<BoutAction>> getActions() => ref.read(manyDataStreamProvider<BoutAction, Bout>(filterObject: bout).future);
 
   displayName(ParticipantState? pStatus, double padding) {
     return Expanded(

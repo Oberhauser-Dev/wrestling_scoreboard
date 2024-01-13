@@ -110,7 +110,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
         }
       });
     }
-    broadcast(jsonEncode(manyToJson(bouts, Bout, CRUD.update, filterType: TeamMatch, filterId: teamMatch.id)));
+    broadcast(jsonEncode(manyToJson(bouts, Bout, CRUD.update, isRaw: false, filterType: TeamMatch, filterId: teamMatch.id)));
 
     return Response.ok('{"status": "success"}');
   }

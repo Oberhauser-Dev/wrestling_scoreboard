@@ -98,7 +98,6 @@ class RestDataProvider extends DataProvider {
     Future<void> handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async {
       final tmp = ManyDataObject<T>(data: many.data, filterId: many.filterId, filterType: many.filterType);
       final filterType = many.filterType;
-      if (tmp.data.isEmpty) return;
       getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 
@@ -107,7 +106,6 @@ class RestDataProvider extends DataProvider {
       final tmp =
           ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
       final filterType = many.filterType;
-      if (tmp.data.isEmpty) return;
       getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 

@@ -3,12 +3,16 @@ import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 
 class LoadingBuilder<T> extends StatelessWidget {
   final Future<T> future;
+  final T? initialData;
+  final void Function()? onRetry;
   final Widget Function(BuildContext context, T data) builder;
 
   const LoadingBuilder({
     super.key,
     required this.future,
     required this.builder,
+    this.initialData,
+    this.onRetry,
   });
 
   @override
@@ -17,10 +21,13 @@ class LoadingBuilder<T> extends StatelessWidget {
       future: future,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
-          return ErrorWidget(snapshot.error!);
+          return ExceptionWidget(snapshot.error!, onRetry: onRetry);
         }
         if (snapshot.hasData) {
           return builder(context, snapshot.data as T);
+        }
+        if(initialData != null) {
+          return builder(context, initialData as T);
         }
         return const Center(child: CircularProgressIndicator());
       },

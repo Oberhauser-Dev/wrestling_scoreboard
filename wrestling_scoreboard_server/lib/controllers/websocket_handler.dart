@@ -30,7 +30,7 @@ void broadcast(String data) {
 void broadcastSingle<T extends DataObject>(T single) async {
   if (single is Club) {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update, isRaw: false)));
   } else if (single is BoutConfig) {
   } else if (single is Bout) {
   } else if (single is BoutAction) {
@@ -39,17 +39,19 @@ void broadcastSingle<T extends DataObject>(T single) async {
             .getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': single.bout.id}),
         BoutAction,
         CRUD.update,
+        isRaw: false,
         filterType: Bout,
         filterId: single.bout.id)));
   } else if (single is League) {
     // SpecialCase: the full League list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update, isRaw: false)));
   } else if (single is LeagueWeightClass) {
     broadcast(jsonEncode(manyToJson(
         await LeagueWeightClassController()
             .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}),
         LeagueWeightClass,
-        CRUD.update,
+        CRUD.update, 
+        isRaw: false,
         filterType: League,
         filterId: single.league.id)));
   } else if (single is LeagueTeamParticipation) {
@@ -58,14 +60,14 @@ void broadcastSingle<T extends DataObject>(T single) async {
         await leagueTeamParticipationController
             .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}),
         LeagueTeamParticipation,
-        CRUD.update,
+        CRUD.update, isRaw: false,
         filterType: League,
         filterId: single.league.id)));
     broadcast(jsonEncode(manyToJson(
         await leagueTeamParticipationController
             .getMany(conditions: ['team_id = @id'], substitutionValues: {'id': single.team.id}),
         LeagueTeamParticipation,
-        CRUD.update,
+        CRUD.update, isRaw: false,
         filterType: Team,
         filterId: single.team.id)));
   } else if (single is Lineup) {
@@ -74,7 +76,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
     broadcast(jsonEncode(manyToJson(
         await MembershipController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
         Membership,
-        CRUD.update,
+        CRUD.update, isRaw: false,
         filterType: Club,
         filterId: single.club.id)));
   } else if (single is Participation) {
@@ -82,7 +84,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
         await ParticipationController()
             .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}),
         Participation,
-        CRUD.update,
+        CRUD.update, isRaw: false,
         filterType: Lineup,
         filterId: single.lineup.id)));
   } else if (single is ParticipantState) {
@@ -92,7 +94,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
     broadcast(jsonEncode(manyToJson(
         await TeamController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
         Team,
-        CRUD.update,
+        CRUD.update, isRaw: false,
         filterType: Club,
         filterId: single.club.id)));
   } else if (single is TeamMatch) {
@@ -101,12 +103,12 @@ void broadcastSingle<T extends DataObject>(T single) async {
     final homeMatches = await teamMatchController
         .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
     broadcast(
-        jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.home.team.id)));
+        jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, isRaw: false, filterType: Team, filterId: single.home.team.id)));
 
     final guestMatches = await teamMatchController
         .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
     broadcast(
-        jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: single.guest.team.id)));
+        jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, isRaw: false, filterType: Team, filterId: single.guest.team.id)));
 
     if (single.league?.id != null) {
       final leagueMatches = await teamMatchController
@@ -115,6 +117,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
         leagueMatches,
         TeamMatch,
         CRUD.update,
+        isRaw: false,
         filterType: League,
         filterId: single.league!.id,
       )));
@@ -129,7 +132,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
 void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
   if (T == Club) {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update, isRaw: true)));
   } else if (T == BoutConfig) {
   } else if (T == Bout) {
   } else if (T == BoutAction) {
@@ -138,17 +141,19 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
             .getManyRaw(conditions: ['bout_id = @id'], substitutionValues: {'id': single['bout_id']}),
         BoutAction,
         CRUD.update,
+        isRaw: true,
         filterType: Bout,
         filterId: single['bout_id'])));
   } else if (T == League) {
     // SpecialCase: the full League list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update)));
+    broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update, isRaw: true)));
   } else if (T == LeagueWeightClass) {
     broadcast(jsonEncode(manyToJson(
         await LeagueWeightClassController()
             .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
         LeagueWeightClass,
         CRUD.update,
+        isRaw: true,
         filterType: League,
         filterId: single['league_id'])));
   } else if (T == LeagueTeamParticipation) {
@@ -158,6 +163,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
             .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
         LeagueTeamParticipation,
         CRUD.update,
+        isRaw: true,
         filterType: League,
         filterId: single['league_id'])));
     broadcast(jsonEncode(manyToJson(
@@ -165,6 +171,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
             .getManyRaw(conditions: ['team_id = @id'], substitutionValues: {'id': single['team_id']}),
         LeagueTeamParticipation,
         CRUD.update,
+        isRaw: true,
         filterType: Team,
         filterId: single['team_id'])));
   } else if (T == Lineup) {
@@ -175,6 +182,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
             .getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
         Membership,
         CRUD.update,
+        isRaw: true,
         filterType: Club,
         filterId: single['club_id'])));
   } else if (T == Participation) {
@@ -183,6 +191,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
             .getManyRaw(conditions: ['lineup_id = @id'], substitutionValues: {'id': single['lineup_id']}),
         Participation,
         CRUD.update,
+        isRaw: true,
         filterType: Lineup,
         filterId: single['lineup_id'])));
   } else if (T == ParticipantState) {
@@ -193,6 +202,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         await TeamController().getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
         Team,
         CRUD.update,
+        isRaw: true,
         filterType: Club,
         filterId: single['club_id'])));
   } else if (T == TeamMatch) {
@@ -202,13 +212,13 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         substitutionValues: {'id': single['home_id']}))['team_id'];
     final homeMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': homeTeamId});
-    broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, filterType: Team, filterId: homeTeamId)));
+    broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: homeTeamId)));
 
     final guestTeamId = (await EntityController.query(LineupController.teamIdQuery,
         substitutionValues: {'id': single['guest_id']}))['team_id'];
     final guestMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': guestTeamId});
-    broadcast(jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, filterType: Team, filterId: guestTeamId)));
+    broadcast(jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: guestTeamId)));
 
     if (single['league_id'] != null) {
       final leagueMatches = await teamMatchController
@@ -217,6 +227,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         leagueMatches,
         TeamMatch,
         CRUD.update,
+        isRaw: true,
         filterType: League,
         filterId: single['league_id'],
       )));
