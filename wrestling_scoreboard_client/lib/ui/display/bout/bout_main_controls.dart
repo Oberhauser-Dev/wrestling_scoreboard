@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
+import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
@@ -114,27 +114,30 @@ class BoutMainControlsState extends State<BoutMainControls> {
       color: role == widget.boutState.bout.winnerRole ? getColorFromBoutRole(role) : null,
       child: ButtonTheme(
           alignedDropdown: true,
-          child: Consumer<List<BoutAction>>(
-            builder: (context, actions, child) => DropdownButton<BoutResult?>(
-              isExpanded: true,
-              value: role == widget.boutState.bout.winnerRole || widget.boutState.bout.result == BoutResult.dsq2
-                  ? widget.boutState.bout.result
-                  : null,
-              items: items,
-              onChanged: (val) {
-                setState(() {
-                  var bout = widget.boutState.bout.copyWith(
-                    winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
-                    result: val,
-                  );
-                  bout = bout.updateClassificationPoints(actions);
-                  dataProvider.createOrUpdateSingle(bout);
-                  if (bout.r != null) dataProvider.createOrUpdateSingle(bout.r!);
-                  if (bout.b != null) dataProvider.createOrUpdateSingle(bout.b!);
-                  widget.boutState.bout = bout;
-                });
-              },
-            ),
+          child: ManyStreamConsumer<BoutAction, Bout>(
+            filterObject: widget.boutState.bout,
+            builder: (context, actions) {
+              return DropdownButton<BoutResult?>(
+                isExpanded: true,
+                value: role == widget.boutState.bout.winnerRole || widget.boutState.bout.result == BoutResult.dsq2
+                    ? widget.boutState.bout.result
+                    : null,
+                items: items,
+                onChanged: (val) {
+                  setState(() {
+                    var bout = widget.boutState.bout.copyWith(
+                      winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
+                      result: val,
+                    );
+                    bout = bout.updateClassificationPoints(actions);
+                    dataProvider.createOrUpdateSingle(bout);
+                    if (bout.r != null) dataProvider.createOrUpdateSingle(bout.r!);
+                    if (bout.b != null) dataProvider.createOrUpdateSingle(bout.b!);
+                    widget.boutState.bout = bout;
+                  });
+                },
+              );
+            },
           )),
     );
   }

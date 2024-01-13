@@ -22,6 +22,7 @@ class WebSocketManager {
   WebSocketChannel? _channel;
   String? wsUrl;
 
+  // TODO: convert to provider
   /// Manages connection state of WebSocket
   static final StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
 

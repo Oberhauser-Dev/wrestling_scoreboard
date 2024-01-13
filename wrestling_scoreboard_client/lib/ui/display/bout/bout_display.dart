@@ -1,14 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
-import 'package:provider/provider.dart' as provider;
 import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
@@ -70,11 +68,7 @@ class BoutDisplay extends StatelessWidget {
                 }
                 final currentBout = bouts.singleWhere((element) => element.id == boutId);
                 final currentBoutIndex = bouts.indexOf(currentBout);
-                return ManyConsumer<BoutAction, Bout>(
-                    filterObject: currentBout,
-                    builder: (context, actions) {
-                      return BoutScreen(match, bouts, actions, currentBoutIndex);
-                    });
+                return BoutScreen(match, bouts, currentBout, currentBoutIndex);
               });
         });
   }
@@ -82,26 +76,24 @@ class BoutDisplay extends StatelessWidget {
 
 /// Initialize with default values, but do not synchronize with live data, as during a bout the connection could be interrupted. So the client always sends data, but never should receive any.
 /// If closing and reopening screen, data should be updated though.
-class BoutScreen extends StatefulWidget {
+class BoutScreen extends ConsumerStatefulWidget {
   final TeamMatch match;
   final List<Bout> bouts;
-  final List<BoutAction> actions;
+  final Bout bout;
   final int boutIndex;
 
-  const BoutScreen(this.match, this.bouts, this.actions, this.boutIndex, {super.key});
+  const BoutScreen(this.match, this.bouts, this.bout, this.boutIndex, {super.key});
 
   @override
-  State<StatefulWidget> createState() => BoutState();
+  ConsumerState<ConsumerStatefulWidget> createState() => BoutState();
 }
 
-class BoutState extends State<BoutScreen> {
+class BoutState extends ConsumerState<BoutScreen> {
   static const flexWidths = [50, 30, 50];
 
-  final StreamController<List<BoutAction>> _onChangeActions = StreamController.broadcast();
   late TeamMatch match;
   late Bout bout;
   late List<Bout> bouts;
-  late List<BoutAction> actions;
   late int boutIndex;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _boutStopwatch;
@@ -112,12 +104,6 @@ class BoutState extends State<BoutScreen> {
   int period = 1;
   late Function(BoutScreenActionIntent) handleAction;
 
-  List<BoutAction> getActions() => actions;
-
-  setActions(List<BoutAction> actions) {
-    _onChangeActions.add(List.of(actions));
-  }
-
   @override
   initState() {
     super.initState();
@@ -126,7 +112,6 @@ class BoutState extends State<BoutScreen> {
     bouts = widget.bouts;
     // TODO: may overwrite in settings to be more flexible
     boutConfig = match.league?.boutConfig ?? const BoutConfig();
-    actions = widget.actions;
     boutIndex = widget.boutIndex;
     bout = widget.bouts[boutIndex];
     _r = ParticipantStateModel(bout.r);
@@ -207,14 +192,12 @@ class BoutState extends State<BoutScreen> {
         handleAction(const BoutScreenActionIntent.horn());
       }
     });
-    _onChangeActions.stream.listen((actions) {
-      this.actions = actions;
-    });
-    setActions(actions);
     handleAction = (BoutScreenActionIntent intent) {
-      intent.handle(stopwatch, match, bouts, getActions, setActions, boutIndex, doAction, context: context);
+      intent.handle(stopwatch, match, bouts, getActions, boutIndex, doAction, context: context);
     };
   }
+
+  Future<List<BoutAction>> getActions() => ref.read(manyDataStreamProvider<BoutAction, Bout>(filterObject: bout)).last;
 
   displayName(ParticipantState? pStatus, double padding) {
     return Expanded(
@@ -244,20 +227,23 @@ class BoutState extends State<BoutScreen> {
   }
 
   displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding) {
-    return provider.Consumer<ParticipantState?>(
-      builder: (context, data, child) => pStatus?.classificationPoints != null
-          ? ThemedContainer(
-              color: color.shade800,
-              padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
-              child: Center(
-                child: ScaledText(
-                  pStatus!.classificationPoints.toString(),
-                  fontSize: 46,
-                  minFontSize: 30,
+    return Consumer(
+      builder: (context, ref, child) {
+        ref.watch(manyDataStreamProvider<BoutAction, Bout>(filterObject: widget.bout)); // TODO: replace by participantNotifierProvider
+        return pStatus?.classificationPoints != null
+            ? ThemedContainer(
+                color: color.shade800,
+                padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
+                child: Center(
+                  child: ScaledText(
+                    pStatus!.classificationPoints.toString(),
+                    fontSize: 46,
+                    minFontSize: 30,
+                  ),
                 ),
-              ),
-            )
-          : Container(),
+              )
+            : Container();
+      },
     );
   }
 
@@ -266,7 +252,8 @@ class BoutState extends State<BoutScreen> {
       flex: 33,
       child: TechnicalPoints(
         pStatusModel: pStatus,
-        role: role,
+        role: role, 
+        bout: widget.bout,
       ),
     );
   }
@@ -377,93 +364,99 @@ class BoutState extends State<BoutScreen> {
         Printing.sharePdf(bytes: bytes);
       },
     );
-    return BoutActionHandler(
-      stopwatch: stopwatch,
-      match: match,
-      getActions: getActions,
-      setActions: setActions,
-      bouts: bouts,
-      boutIndex: boutIndex,
-      doAction: doAction,
-      child: Consumer(builder: (context, ref, child) {
-        return LoadingBuilder<WindowState>(
-          future: ref.watch(windowStateNotifierProvider), 
-          builder: (BuildContext context, WindowState data) {
-            final isFullScreen = data == WindowState.fullscreen;
-            return Scaffold(
-              appBar:
-              isFullScreen ? null : AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context, ref)]),
-              // TODO: evaluate, if can convert to riverpod provider
-              body: provider.StreamProvider<List<BoutAction>>(
-                initialData: actions,
-                create: (context) => _onChangeActions.stream,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      row(
+    return ManyStreamConsumer<BoutAction, Bout>(
+    filterObject: widget.bout,
+    builder: (context, actions) {
+        return BoutActionHandler(
+          stopwatch: stopwatch,
+          match: match,
+          getActions: () async => actions,
+          bouts: bouts,
+          boutIndex: boutIndex,
+          doAction: doAction,
+          child: Consumer(builder: (context, ref, child) {
+            return LoadingBuilder<WindowState>(
+              future: ref.watch(windowStateNotifierProvider),
+              builder: (BuildContext context, WindowState data) {
+                final isFullScreen = data == WindowState.fullscreen;
+                return Scaffold(
+                  appBar: isFullScreen
+                      ? null
+                      : AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context, ref)]),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        row(
+                            padding: bottomPadding,
+                            children: CommonElements.getTeamHeader(match, bouts, context)
+                                .asMap()
+                                .entries
+                                .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                                .toList()),
+                        row(padding: bottomPadding, children: [
+                          Expanded(
+                            flex: 50,
+                            child: displayParticipant(bout.r, BoutRole.red, padding),
+                          ),
+                          Expanded(
+                              flex: 20,
+                              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                Row(children: [
+                                  Expanded(
+                                      child: Center(
+                                          child: ScaledText(
+                                    '${AppLocalizations.of(context)!.bout} ${boutIndex + 1}',
+                                    minFontSize: 10,
+                                  ))),
+                                ]),
+                                Center(
+                                    child: ScaledText(
+                                  '${styleToString(bout.weightClass.style, context)}',
+                                  minFontSize: 10,
+                                )),
+                                Center(
+                                    child: ScaledText(
+                                  bout.weightClass.name,
+                                  minFontSize: 10,
+                                )),
+                              ])),
+                          Expanded(
+                            flex: 50,
+                            child: displayParticipant(bout.b, BoutRole.blue, padding),
+                          ),
+                        ]),
+                        row(
                           padding: bottomPadding,
-                          children: CommonElements.getTeamHeader(match, bouts, context)
-                              .asMap()
-                              .entries
-                              .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                              .toList()),
-                      row(padding: bottomPadding, children: [
-                        Expanded(
-                          flex: 50,
-                          child: displayParticipant(bout.r, BoutRole.red, padding),
+                          children: [
+                            displayTechnicalPoints(_r, BoutRole.red),
+                            BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+                            Expanded(
+                              flex: 50,
+                              child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100)),
+                            ),
+                            BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
+                            displayTechnicalPoints(_b, BoutRole.blue),
+                          ],
                         ),
-                        Expanded(
-                            flex: 20,
-                            child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                              Row(children: [
-                                Expanded(
-                                    child: Center(
-                                        child: ScaledText(
-                                          '${AppLocalizations.of(context)!.bout} ${boutIndex + 1}',
-                                          minFontSize: 10,
-                                        ))),
-                              ]),
-                              Center(
-                                  child: ScaledText(
-                                    '${styleToString(bout.weightClass.style, context)}',
-                                    minFontSize: 10,
-                                  )),
-                              Center(
-                                  child: ScaledText(
-                                    bout.weightClass.name,
-                                    minFontSize: 10,
-                                  )),
-                            ])),
-                        Expanded(
-                          flex: 50,
-                          child: displayParticipant(bout.b, BoutRole.blue, padding),
+                        Container(
+                          padding: bottomPadding,
+                          child: ActionsWidget(actions),
                         ),
-                      ]),
-                      row(
-                        padding: bottomPadding,
-                        children: [
-                          displayTechnicalPoints(_r, BoutRole.red),
-                          BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
-                          Expanded(flex: 50, child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100))),
-                          BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
-                          displayTechnicalPoints(_b, BoutRole.blue),
-                        ],
-                      ),
-                      Container(
-                        padding: bottomPadding,
-                        child: provider.Consumer<List<BoutAction>>(
-                          builder: (context, actions, child) => ActionsWidget(actions),
-                        ),
-                      ),
-                      Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
-                    ],
+                        Container(
+                            padding: bottomPadding,
+                            child: BoutMainControls(
+                              handleAction,
+                              this
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
-          },
+          }),
         );
-      }),
+      }
     );
   }
 

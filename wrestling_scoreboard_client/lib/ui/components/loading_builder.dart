@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 
 class LoadingBuilder<T> extends StatelessWidget {
   final Future<T> future;
@@ -22,6 +23,38 @@ class LoadingBuilder<T> extends StatelessWidget {
           return builder(context, snapshot.data as T);
         }
         return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+}
+
+class LoadingStreamBuilder<T> extends StatelessWidget {
+  final T? initialData;
+  final Stream<T> stream;
+  final Widget Function(BuildContext context, T data) builder;
+  final void Function() onRetry;
+
+  const LoadingStreamBuilder({
+    super.key,
+    this.initialData,
+    required this.builder,
+    required this.stream,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<T>(
+      stream: stream,
+      initialData: initialData,
+      builder: (BuildContext context, AsyncSnapshot<T> snap) {
+        if (snap.hasError) {
+          return ExceptionWidget(snap.error!, onRetry: onRetry);
+        }
+        if (snap.data == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return builder(context, snap.data as T);
       },
     );
   }

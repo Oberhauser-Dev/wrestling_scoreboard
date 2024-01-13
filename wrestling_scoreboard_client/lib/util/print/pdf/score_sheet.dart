@@ -57,8 +57,9 @@ class ScoreSheet {
     final doc = Document();
 
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
+    final actions = await boutState.getActions();
 
-// Add page to the PDF
+    // Add page to the PDF
     doc.addPage(
       MultiPage(
         pageTheme: _buildTheme(
@@ -76,7 +77,7 @@ class ScoreSheet {
           Container(height: verticalGap),
           _buildParticipantsHeader(context),
           Container(height: verticalGap),
-          _buildPointsBody(context),
+          _buildPointsBody(context, actions),
         ],
       ),
     );
@@ -261,7 +262,7 @@ class ScoreSheet {
     ]);
   }
 
-  Widget _buildPointsBody(Context context) {
+  Widget _buildPointsBody(Context context, List<BoutAction> actions) {
     const headerCellHeight = 40.0;
     const roundCellHeight = 35.0;
     const breakCellHeight = 15.0;
@@ -287,7 +288,7 @@ class ScoreSheet {
     TableRow buildRound({required int round}) {
       final periodDurMin = boutState.boutConfig.periodDuration * round;
       final periodDurMax = periodDurMin + boutState.boutConfig.periodDuration;
-      final periodActions = boutState.actions.where(
+      final periodActions = actions.where(
           (element) => element.duration.compareTo(periodDurMax) <= 0 && element.duration.compareTo(periodDurMin) > 0);
       final periodActionsRed = periodActions.where((element) => element.role == BoutRole.red);
       final periodActionsBlue = periodActions.where((element) => element.role == BoutRole.blue);

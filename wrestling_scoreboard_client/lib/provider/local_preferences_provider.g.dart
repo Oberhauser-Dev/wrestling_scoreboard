@@ -6,9 +6,11 @@ part of 'local_preferences_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$localeNotifierHash() => r'2ca23cc335f49de714177d96b5cae259e0bb6c82';
+String _$localeNotifierHash() => r'e1e390bd02d18a8474b484ee33bc40edca7e9c3d';
 
-/// See also [LocaleNotifier].
+/// Null value represents the system locale `Platform.localeName`.
+///
+/// Copied from [LocaleNotifier].
 @ProviderFor(LocaleNotifier)
 final localeNotifierProvider =
     NotifierProvider<LocaleNotifier, Raw<Future<Locale?>>>.internal(
@@ -22,7 +24,7 @@ final localeNotifierProvider =
 );
 
 typedef _$LocaleNotifier = Notifier<Raw<Future<Locale?>>>;
-String _$themeModeNotifierHash() => r'636cb7ced09d6210926f37b6a7125a319c8c3146';
+String _$themeModeNotifierHash() => r'29aedc145964f8e32034ab495a26ee3ccedfed82';
 
 /// See also [ThemeModeNotifier].
 @ProviderFor(ThemeModeNotifier)
@@ -39,7 +41,7 @@ final themeModeNotifierProvider =
 
 typedef _$ThemeModeNotifier = Notifier<Raw<Future<ThemeMode>>>;
 String _$webSocketUrlNotifierHash() =>
-    r'564a3b169707ebea25c15321da539663197d4e17';
+    r'3e384b28903aca1717d43fa65ace0651b39b668a';
 
 /// See also [WebSocketUrlNotifier].
 @ProviderFor(WebSocketUrlNotifier)
@@ -55,7 +57,7 @@ final webSocketUrlNotifierProvider =
 );
 
 typedef _$WebSocketUrlNotifier = Notifier<Raw<Future<String>>>;
-String _$apiUrlNotifierHash() => r'663e24725a46a95f904ee162e65ec2303955ca05';
+String _$apiUrlNotifierHash() => r'8c063b9ec135234c56970345957760282a21fbde';
 
 /// See also [ApiUrlNotifier].
 @ProviderFor(ApiUrlNotifier)
@@ -71,7 +73,7 @@ final apiUrlNotifierProvider =
 );
 
 typedef _$ApiUrlNotifier = Notifier<Raw<Future<String>>>;
-String _$bellSoundNotifierHash() => r'6116009aeebf8e9d450d7fd5968791a98e90cce4';
+String _$bellSoundNotifierHash() => r'1c9d805977f6f32cd7b44e7bd1ecfecd15447ddd';
 
 /// See also [BellSoundNotifier].
 @ProviderFor(BellSoundNotifier)

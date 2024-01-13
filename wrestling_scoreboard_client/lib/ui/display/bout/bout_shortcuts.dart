@@ -102,14 +102,8 @@ class BoutScreenActionIntent extends Intent {
   const BoutScreenActionIntent.blueUndo() : type = BoutScreenActions.blueUndo;
   final BoutScreenActions type;
 
-  Future<void> handle(
-      ObservableStopwatch stopwatch,
-      TeamMatch match,
-      List<Bout> bouts,
-      List<BoutAction> Function() getActions,
-      void Function(List<BoutAction> actions) setActions,
-      int boutIndex,
-      Function(BoutScreenActions action) doAction,
+  Future<void> handle(ObservableStopwatch stopwatch, TeamMatch match, List<Bout> bouts,
+      Future<List<BoutAction>> Function() getActions, int boutIndex, Function(BoutScreenActions action) doAction,
       {BuildContext? context}) async {
     final bout = bouts[boutIndex];
     switch (type) {
@@ -153,20 +147,17 @@ class BoutScreenActionIntent extends Intent {
       case BoutScreenActions.redOne:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redTwo:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redThree:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redFour:
         var action = BoutAction(
@@ -176,26 +167,22 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 4,
         );
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redPassivity:
         var action =
             BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.passivity);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redCaution:
         var action =
             BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.caution);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redDismissal:
         var action =
             BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.dismissal);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redActivityTime:
         doAction(BoutScreenActions.redActivityTime);
@@ -205,11 +192,10 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.redUndo:
         if (bout.r != null) {
-          final actions = getActions();
+          final actions = await getActions();
           final rActions = actions.where((el) => el.role == BoutRole.red);
           if (rActions.isNotEmpty) {
             final action = rActions.last;
-            setActions(actions..remove(action));
             dataProvider.deleteSingle<BoutAction>(action);
           }
         }
@@ -217,52 +203,44 @@ class BoutScreenActionIntent extends Intent {
       case BoutScreenActions.blueOne:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueTwo:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueThree:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFour:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 4);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
         var action =
             BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.passivity);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueCaution:
         var action =
             BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.caution);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueDismissal:
         var action =
             BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.dismissal);
-        action = action.copyWithId(await dataProvider.createOrUpdateSingle(action));
-        setActions(getActions()..add(action));
+        await dataProvider.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueUndo:
         if (bout.b != null) {
-          final actions = getActions();
+          final actions = await getActions();
           final bActions = actions.where((el) => el.role == BoutRole.blue);
           if (bActions.isNotEmpty) {
             final action = bActions.last;
-            setActions(actions..remove(action));
             dataProvider.deleteSingle<BoutAction>(action);
           }
         }
@@ -274,10 +252,9 @@ class BoutScreenActionIntent extends Intent {
         doAction(BoutScreenActions.blueInjuryTime);
         break;
       case BoutScreenActions.undo:
-        final actions = getActions();
+        final actions = await getActions();
         if (actions.isNotEmpty) {
           final action = actions.last;
-          setActions(actions..remove(action));
           dataProvider.deleteSingle<BoutAction>(action);
         }
         break;
@@ -293,8 +270,7 @@ class BoutActionHandler extends StatelessWidget {
   final ObservableStopwatch stopwatch;
   final TeamMatch match;
   final List<Bout> bouts;
-  final List<BoutAction> Function() getActions;
-  final void Function(List<BoutAction> actions) setActions;
+  final Future<List<BoutAction>> Function() getActions;
   final int boutIndex;
   final Function(BoutScreenActions action) doAction;
 
@@ -306,11 +282,10 @@ class BoutActionHandler extends StatelessWidget {
       required this.getActions,
       required this.boutIndex,
       required this.doAction,
-      required this.setActions,
       super.key});
 
   Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
-    await intent.handle(stopwatch, match, bouts, getActions, setActions, boutIndex, doAction, context: context);
+    await intent.handle(stopwatch, match, bouts, getActions, boutIndex, doAction, context: context);
   }
 
   @override
