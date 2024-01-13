@@ -34,15 +34,15 @@ dependencies:
   flutter_markdown: ^0.6.18+2
   google_fonts: ^6.1.0
   window_manager: ^0.3.7
-  flutter_riverpod: ^2.4.9
-  riverpod_annotation: ^2.3.3
+  flutter_riverpod: ^3.0.0-dev.3
+  riverpod_annotation: ^3.0.0-dev.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^3.0.1
-  riverpod_generator: ^2.3.9
+  riverpod_generator: ^3.0.0-dev.11
   build_runner: ^2.4.7
 
 dependency_overrides:

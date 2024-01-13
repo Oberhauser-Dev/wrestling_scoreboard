@@ -99,15 +99,10 @@ class MatchDisplay extends StatelessWidget {
                                       child: IntrinsicHeight(
                                         child: ManyConsumer<BoutAction, Bout>(
                                           filterObject: bouts[index],
-                                          builder: (context, actions) => Row(
-                                            children:
-                                                BoutListItemTwo(match: match, bout: bouts[index], actions: actions)
-                                                    .build(context)
-                                                    .asMap()
-                                                    .entries
-                                                    .map((entry) =>
-                                                        Expanded(flex: flexWidths[entry.key], child: entry.value))
-                                                    .toList(),
+                                          builder: (context, actions) => BoutListItem(
+                                            match: match,
+                                            bout: bouts[index],
+                                            actions: actions,
                                           ),
                                         ),
                                       ),
@@ -135,12 +130,12 @@ class MatchDisplay extends StatelessWidget {
   }
 }
 
-class BoutListItemTwo {
+class BoutListItem extends StatelessWidget {
   final TeamMatch match;
   final Bout bout;
   final List<BoutAction> actions;
 
-  const BoutListItemTwo({required this.match, required this.bout, required this.actions});
+  const BoutListItem({super.key, required this.match, required this.bout, required this.actions});
 
   displayName({ParticipantState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
     return ThemedContainer(
@@ -195,72 +190,90 @@ class BoutListItemTwo {
     );
   }
 
-  List<Widget> build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
     final padding = width / 100;
     final edgeInsets = EdgeInsets.all(padding);
-    return [
-      Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              padding: edgeInsets,
-              child: Center(
-                  child: ScaledText(
-                '${bout.weightClass.weight} $weightUnit',
-                softWrap: false,
-                minFontSize: 10,
-              )),
-            ),
-          ),
-          Expanded(
-              child: Center(
-                  child: ScaledText(
-            styleToAbbr(bout.weightClass.style, context),
-            minFontSize: 12,
-          ))),
-        ],
-      ),
-      displayName(pStatus: bout.r, role: BoutRole.red, context: context),
-      Row(
-        children: [
-          Expanded(
-            flex: 50,
-            child: displayParticipantState(pState: bout.r, role: BoutRole.red),
-          ),
-          Expanded(
-            flex: 100,
-            child: SingleConsumer<Bout>(
-              id: bout.id,
-              initialData: bout,
-              builder: (context, data) => Column(
+    return SingleConsumer<Bout>(
+        initialData: bout,
+        id: bout.id,
+        builder: (context, bout) {
+          if (bout == null) {
+            return ExceptionWidget(localizations.notFoundException);
+          }
+          return Row(
+            children: [
+              Row(
                 children: [
                   Expanded(
-                      flex: 70,
-                      child: ThemedContainer(
-                        color: data?.winnerRole != null ? getColorFromBoutRole(data!.winnerRole!).shade800 : null,
-                        child: Center(
-                          child: ScaledText(getAbbreviationFromBoutResult(data?.result, context), fontSize: 12),
-                        ),
-                      )),
-                  Expanded(
-                      flex: 50,
+                    flex: 2,
+                    child: Container(
+                      padding: edgeInsets,
                       child: Center(
-                        child:
-                            data?.winnerRole != null ? ScaledText(durationToString(data!.duration), fontSize: 8) : null,
+                          child: ScaledText(
+                        '${bout.weightClass.weight} $weightUnit',
+                        softWrap: false,
+                        minFontSize: 10,
                       )),
+                    ),
+                  ),
+                  Expanded(
+                      child: Center(
+                          child: ScaledText(
+                    styleToAbbr(bout.weightClass.style, context),
+                    minFontSize: 12,
+                  ))),
                 ],
               ),
-            ),
-          ),
-          Expanded(
-            flex: 50,
-            child: displayParticipantState(pState: bout.b, role: BoutRole.blue),
-          ),
-        ],
-      ),
-      displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
-    ];
+              displayName(pStatus: bout.r, role: BoutRole.red, context: context),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 50,
+                    child: displayParticipantState(pState: bout.r, role: BoutRole.red),
+                  ),
+                  Expanded(
+                    flex: 100,
+                    child: SingleConsumer<Bout>(
+                      id: bout.id,
+                      initialData: bout,
+                      builder: (context, data) => Column(
+                        children: [
+                          Expanded(
+                              flex: 70,
+                              child: ThemedContainer(
+                                color:
+                                    data?.winnerRole != null ? getColorFromBoutRole(data!.winnerRole!).shade800 : null,
+                                child: Center(
+                                  child: ScaledText(getAbbreviationFromBoutResult(data?.result, context), fontSize: 12),
+                                ),
+                              )),
+                          Expanded(
+                              flex: 50,
+                              child: Center(
+                                child: data?.winnerRole != null
+                                    ? ScaledText(durationToString(data!.duration), fontSize: 8)
+                                    : null,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 50,
+                    child: displayParticipantState(pState: bout.b, role: BoutRole.blue),
+                  ),
+                ],
+              ),
+              displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
+            ]
+                .asMap()
+                .entries
+                .map((entry) => Expanded(flex: MatchDisplay.flexWidths[entry.key], child: entry.value))
+                .toList(),
+          );
+        });
   }
 }

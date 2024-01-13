@@ -43,7 +43,7 @@ class ScoreSheet {
 
   Bout get bout => boutState.bout;
 
-  TeamMatch get event => boutState.match;
+  TeamMatch get event => boutState.widget.match;
   final PdfColor baseColor;
   final PdfColor accentColor;
 

@@ -68,7 +68,12 @@ class BoutDisplay extends StatelessWidget {
                 }
                 final currentBout = bouts.singleWhere((element) => element.id == boutId);
                 final currentBoutIndex = bouts.indexOf(currentBout);
-                return BoutScreen(match, bouts, currentBout, currentBoutIndex);
+                return SingleConsumer<Bout>(
+                    id: currentBout.id,
+                    initialData: currentBout,
+                    builder: (context, bout) {
+                      return BoutScreen(match: match, bouts: bouts, boutIndex: currentBoutIndex, bout: currentBout);
+                    });
               });
         });
   }
@@ -82,7 +87,13 @@ class BoutScreen extends ConsumerStatefulWidget {
   final Bout bout;
   final int boutIndex;
 
-  const BoutScreen(this.match, this.bouts, this.bout, this.boutIndex, {super.key});
+  const BoutScreen({
+    required this.match,
+    required this.bouts,
+    required this.bout,
+    required this.boutIndex,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => BoutState();
@@ -91,28 +102,23 @@ class BoutScreen extends ConsumerStatefulWidget {
 class BoutState extends ConsumerState<BoutScreen> {
   static const flexWidths = [50, 30, 50];
 
-  late TeamMatch match;
-  late Bout bout;
-  late List<Bout> bouts;
-  late int boutIndex;
   late ObservableStopwatch stopwatch;
   late ObservableStopwatch _boutStopwatch;
   late ObservableStopwatch _breakStopwatch;
   late ParticipantStateModel _r;
   late ParticipantStateModel _b;
   late BoutConfig boutConfig;
+
+  late Bout bout;
   int period = 1;
 
   @override
   initState() {
     super.initState();
     HornSound();
-    match = widget.match;
-    bouts = widget.bouts;
     // TODO: may overwrite in settings to be more flexible
-    boutConfig = match.league?.boutConfig ?? const BoutConfig();
-    boutIndex = widget.boutIndex;
-    bout = widget.bouts[boutIndex];
+    boutConfig = widget.match.league?.boutConfig ?? const BoutConfig();
+    bout = widget.bout;
     _r = ParticipantStateModel(bout.r);
     _b = ParticipantStateModel(bout.b);
     _r.injuryStopwatch.limit = boutConfig.injuryDuration;
@@ -194,10 +200,19 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   void handleAction(BoutScreenActionIntent intent) {
-    intent.handle(stopwatch, match, bouts, getActions, boutIndex, doAction, context: context);
+    intent.handle(
+      stopwatch,
+      widget.match,
+      widget.bouts,
+      getActions,
+      widget.boutIndex,
+      doAction,
+      context: context,
+    );
   }
 
-  Future<List<BoutAction>> getActions() => ref.read(manyDataStreamProvider<BoutAction, Bout>(filterObject: bout).future);
+  Future<List<BoutAction>> getActions() =>
+      ref.read(manyDataStreamProvider<BoutAction, Bout>(filterObject: bout).future);
 
   displayName(ParticipantState? pStatus, double padding) {
     return Expanded(
@@ -229,7 +244,8 @@ class BoutState extends ConsumerState<BoutScreen> {
   displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding) {
     return Consumer(
       builder: (context, ref, child) {
-        ref.watch(manyDataStreamProvider<BoutAction, Bout>(filterObject: widget.bout)); // TODO: replace by participantNotifierProvider
+        ref.watch(manyDataStreamProvider<BoutAction, Bout>(
+            filterObject: bout)); // TODO: replace by participantNotifierProvider
         return pStatus?.classificationPoints != null
             ? ThemedContainer(
                 color: color.shade800,
@@ -252,8 +268,8 @@ class BoutState extends ConsumerState<BoutScreen> {
       flex: 33,
       child: TechnicalPoints(
         pStatusModel: pStatus,
-        role: role, 
-        bout: widget.bout,
+        role: role,
+        bout: bout,
       ),
     );
   }
@@ -296,7 +312,6 @@ class BoutState extends ConsumerState<BoutScreen> {
           setState(() {
             psm.activityStopwatch = null;
           });
-          handleAction(const BoutScreenActionIntent.horn());
         });
         break;
       case BoutScreenActions.redInjuryTime:
@@ -365,103 +380,100 @@ class BoutState extends ConsumerState<BoutScreen> {
       },
     );
     return ManyConsumer<BoutAction, Bout>(
-    filterObject: widget.bout,
-    builder: (context, actions) {
-        return BoutActionHandler(
-          stopwatch: stopwatch,
-          match: match,
-          getActions: () async => actions,
-          bouts: bouts,
-          boutIndex: boutIndex,
-          doAction: doAction,
-          child: Consumer(builder: (context, ref, child) {
-            return LoadingBuilder<WindowState>(
-              future: ref.watch(windowStateNotifierProvider),
-              builder: (BuildContext context, WindowState data) {
-                final isFullScreen = data == WindowState.fullscreen;
-                return Scaffold(
-                  appBar: isFullScreen
-                      ? null
-                      : AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context, ref)]),
-                  body: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        row(
-                            padding: bottomPadding,
-                            children: CommonElements.getTeamHeader(match, bouts, context)
-                                .asMap()
-                                .entries
-                                .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                                .toList()),
-                        row(padding: bottomPadding, children: [
-                          Expanded(
-                            flex: 50,
-                            child: displayParticipant(bout.r, BoutRole.red, padding),
-                          ),
-                          Expanded(
-                              flex: 20,
-                              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                Row(children: [
-                                  Expanded(
-                                      child: Center(
-                                          child: ScaledText(
-                                    '${AppLocalizations.of(context)!.bout} ${boutIndex + 1}',
-                                    minFontSize: 10,
-                                  ))),
-                                ]),
-                                Center(
-                                    child: ScaledText(
-                                  '${styleToString(bout.weightClass.style, context)}',
-                                  minFontSize: 10,
-                                )),
-                                Center(
-                                    child: ScaledText(
-                                  bout.weightClass.name,
-                                  minFontSize: 10,
-                                )),
-                              ])),
-                          Expanded(
-                            flex: 50,
-                            child: displayParticipant(bout.b, BoutRole.blue, padding),
-                          ),
-                        ]),
-                        row(
-                          padding: bottomPadding,
-                          children: [
-                            displayTechnicalPoints(_r, BoutRole.red),
-                            BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+        filterObject: bout,
+        builder: (context, actions) {
+          return BoutActionHandler(
+            stopwatch: stopwatch,
+            match: widget.match,
+            getActions: () async => actions,
+            bouts: widget.bouts,
+            boutIndex: widget.boutIndex,
+            doAction: doAction,
+            child: Consumer(builder: (context, ref, child) {
+              return LoadingBuilder<WindowState>(
+                future: ref.watch(windowStateNotifierProvider),
+                builder: (BuildContext context, WindowState data) {
+                  final isFullScreen = data == WindowState.fullscreen;
+                  return Scaffold(
+                    appBar: isFullScreen
+                        ? null
+                        : AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context, ref)]),
+                    body: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          row(
+                              padding: bottomPadding,
+                              children: CommonElements.getTeamHeader(widget.match, widget.bouts, context)
+                                  .asMap()
+                                  .entries
+                                  .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                                  .toList()),
+                          row(padding: bottomPadding, children: [
                             Expanded(
                               flex: 50,
-                              child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100)),
+                              child: displayParticipant(bout.r, BoutRole.red, padding),
                             ),
-                            BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
-                            displayTechnicalPoints(_b, BoutRole.blue),
-                          ],
-                        ),
-                        Container(
-                          padding: bottomPadding,
-                          child: ActionsWidget(actions),
-                        ),
-                        Container(
+                            Expanded(
+                                flex: 20,
+                                child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                  Row(children: [
+                                    Expanded(
+                                        child: Center(
+                                            child: ScaledText(
+                                      '${AppLocalizations.of(context)!.bout} ${widget.boutIndex + 1}',
+                                      minFontSize: 10,
+                                    ))),
+                                  ]),
+                                  Center(
+                                      child: ScaledText(
+                                    '${styleToString(bout.weightClass.style, context)}',
+                                    minFontSize: 10,
+                                  )),
+                                  Center(
+                                      child: ScaledText(
+                                    bout.weightClass.name,
+                                    minFontSize: 10,
+                                  )),
+                                ])),
+                            Expanded(
+                              flex: 50,
+                              child: displayParticipant(bout.b, BoutRole.blue, padding),
+                            ),
+                          ]),
+                          row(
                             padding: bottomPadding,
-                            child: BoutMainControls(
-                              handleAction,
-                              this
-                            )),
-                      ],
+                            children: [
+                              displayTechnicalPoints(_r, BoutRole.red),
+                              BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+                              Expanded(
+                                flex: 50,
+                                child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100)),
+                              ),
+                              BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
+                              displayTechnicalPoints(_b, BoutRole.blue),
+                            ],
+                          ),
+                          Container(
+                            padding: bottomPadding,
+                            child: ActionsWidget(actions),
+                          ),
+                          Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          }),
-        );
-      }
-    );
+                  );
+                },
+              );
+            }),
+          );
+        });
   }
 
   @override
   void dispose() async {
+    // Save time to database when dispose
+    await dataProvider.createOrUpdateSingle(bout);
+
     super.dispose();
     _boutStopwatch.dispose();
     _breakStopwatch.dispose();

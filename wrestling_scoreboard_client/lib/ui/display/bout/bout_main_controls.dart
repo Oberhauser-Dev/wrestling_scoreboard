@@ -40,7 +40,7 @@ class BoutMainControlsState extends State<BoutMainControls> {
             child: Row(
               children: [
                 Expanded(
-                    child: widget.boutState.bouts.first == widget.boutState.bout
+                    child: widget.boutState.widget.bouts.first == widget.boutState.bout
                         ? IconButton(
                             color: Theme.of(context).disabledColor,
                             icon: const Icon(Icons.close),
@@ -64,7 +64,7 @@ class BoutMainControlsState extends State<BoutMainControls> {
                         onPressed: () => widget.callback(const BoutScreenActionIntent.horn()),
                         icon: const Icon(Icons.campaign))),
                 Expanded(
-                    child: widget.boutState.bouts.last == widget.boutState.bout
+                    child: widget.boutState.widget.bouts.last == widget.boutState.bout
                         ? IconButton(
                             color: Theme.of(context).disabledColor,
                             icon: const Icon(Icons.close),

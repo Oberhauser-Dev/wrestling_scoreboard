@@ -1,12 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
+class SingleConsumer<T extends DataObject> extends ConsumerWidget {
+  final T? initialData;
+  final int? id;
+  final Widget Function(BuildContext context, T? data) builder;
+
+  const SingleConsumer({
+    required this.builder,
+    required this.id,
+    this.initialData,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (id == null) {
+      return builder(context, initialData);
+    }
+    final stream = ref.watch(singleDataStreamProvider<T>(initialData: initialData, id: id!).future);
+    return LoadingBuilder<T>(
+      builder: builder,
+      future: stream,
+      initialData: initialData,
+      onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
+    );
+  }
+}
+
+class ManyConsumer<T extends DataObject, S extends DataObject?> extends ConsumerWidget {
+  final List<T>? initialData;
+  final S? filterObject;
+  final Widget Function(BuildContext context, List<T> data) builder;
+
+  const ManyConsumer({required this.builder, this.initialData, this.filterObject, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stream = ref.watch(manyDataStreamProvider<T, S>(initialData: initialData, filterObject: filterObject).future);
+    return LoadingBuilder<List<T>>(
+      builder: builder,
+      future: stream,
+      initialData: initialData,
+      onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
+    );
+  }
+}
+
+/*
+// TODO: can be removed, if only relying on riverpod and https://github.com/rrousselGit/riverpod/issues/1119 is solved
 class SingleConsumer<T extends DataObject> extends StatefulWidget {
   final int? id;
   final T? initialData;
@@ -38,7 +84,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
     return StreamBuilder(
       stream: webSocketConnectionStream,
       builder: (context, snapshot) => widget.id == null
-          ? widget.builder(context, null)
+          ? widget.builder(context, widget.initialData)
           : StreamBuilder<T>(
               stream:
                   widget.id == null ? null : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null),
@@ -59,7 +105,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
   }
 }
 
-/*class ManyConsumer<T extends DataObject, S extends DataObject?> extends StatefulWidget {
+class ManyConsumer<T extends DataObject, S extends DataObject?> extends StatefulWidget {
   final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
@@ -97,23 +143,5 @@ class ManyConsumerState<T extends DataObject, S extends DataObject?> extends Sta
       },
     );
   }
-}*/
-
-class ManyConsumer<T extends DataObject, S extends DataObject?> extends ConsumerWidget {
-  final List<T>? initialData;
-  final S? filterObject;
-  final Widget Function(BuildContext context, List<T> data) builder;
-
-  const ManyConsumer({required this.builder, this.initialData, this.filterObject, super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final stream = ref.watch(manyDataStreamProvider<T, S>(initialData: initialData, filterObject: filterObject).future);
-    return LoadingBuilder<List<T>>(
-      builder: builder,
-      future: stream,
-      initialData: initialData,
-      onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
-    );
-  }
 }
+*/
