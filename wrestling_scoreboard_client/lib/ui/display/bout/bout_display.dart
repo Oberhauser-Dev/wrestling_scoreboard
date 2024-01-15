@@ -19,7 +19,7 @@ import 'package:wrestling_scoreboard_client/ui/display/bout/technical_points.dar
 import 'package:wrestling_scoreboard_client/ui/display/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/common.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
