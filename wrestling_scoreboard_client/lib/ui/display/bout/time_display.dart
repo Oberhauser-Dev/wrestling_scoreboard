@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/data/time.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/utils.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -29,8 +30,7 @@ class TimeDisplayState extends State<TimeDisplay> {
   updateDisplayTime(Duration duration) {
     if (mounted) {
       setState(() {
-        _currentTime =
-            '${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+        _currentTime = formatTime(duration);
       });
     }
   }

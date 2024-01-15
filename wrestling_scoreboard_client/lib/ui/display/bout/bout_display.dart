@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
-import 'package:wrestling_scoreboard_client/data/bout_role.dart';
+import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -221,7 +221,7 @@ class BoutState extends ConsumerState<BoutScreen> {
               padding: EdgeInsets.all(padding),
               child: Center(
                 child: ScaledText(
-                  pStatus?.participation.membership.person.fullName ?? AppLocalizations.of(context)!.participantVacant,
+                  getParticipationStateName(context, pStatus),
                   color: pStatus == null ? Colors.white30 : Colors.white,
                   fontSize: 28,
                   minFontSize: 20,

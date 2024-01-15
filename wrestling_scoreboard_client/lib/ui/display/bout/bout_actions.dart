@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/data/bout_role.dart';
+import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';

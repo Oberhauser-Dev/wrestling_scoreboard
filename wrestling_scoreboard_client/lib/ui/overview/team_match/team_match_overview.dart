@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/team_match/team_match_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -153,35 +154,35 @@ class TeamMatchOverview extends StatelessWidget {
                                 )),
                       ],
                     ),
-                    ManyConsumer<Bout, TeamMatch>(
+                    ManyConsumer<TeamMatchBout, TeamMatch>(
                       filterObject: match,
-                      builder: (BuildContext context, List<Bout> bouts) {
+                      builder: (BuildContext context, List<TeamMatchBout> teamMatchBouts) {
                         return ListGroup(
                           header: HeadingItem(
                             title: localizations.bouts,
-                            /*trailing: IconButton(
+                            trailing: IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => BoutEdit(
-                                    initialMatch: match,
+                                  builder: (context) => TeamMatchBoutEdit(
+                                    initialTeamMatch: match,
                                   ),
                                 ),
                               ),
-                            ),*/
+                            ),
                           ),
-                          items: bouts.map((bout) => SingleConsumer<Bout>(
+                          items: teamMatchBouts.map(
+                            (bout) => SingleConsumer<TeamMatchBout>(
                               id: bout.id,
                               initialData: bout,
-                              builder: (context, team) => ContentItem(
-                                    title:
-                                        '${bout.weightClass.name}, ${styleToAbbr(bout.weightClass.style, context)} | '
-                                        '${bout.r?.participation.membership.person.fullName ?? localizations.participantVacant} vs. '
-                                        '${bout.b?.participation.membership.person.fullName ?? localizations.participantVacant}',
-                                    icon: Icons.sports_kabaddi,
-                                    onTap: () => handleSelectedBout(bout, context),
-                                  ))),
+                              builder: (context, teamMatchBout) => ContentItem(
+                                title: getBoutTitle(context, teamMatchBout.bout),
+                                icon: Icons.sports_kabaddi,
+                                onTap: () => handleSelectedBout(teamMatchBout, context),
+                              ),
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -194,8 +195,8 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  handleSelectedBout(Bout bout, BuildContext context) {
-    context.push('/${BoutOverview.route}/${bout.id}');
+  handleSelectedBout(TeamMatchBout bout, BuildContext context) {
+    context.push('/${TeamMatchBoutOverview.route}/${bout.id}');
   }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {

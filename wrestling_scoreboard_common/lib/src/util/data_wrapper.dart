@@ -131,6 +131,12 @@ Future<int?> handleFromJson(
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
+    case const (TeamMatchBout):
+      return _handleFromJsonGeneric<TeamMatchBout>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     case const (Competition):
       return _handleFromJsonGeneric<Competition>(json,
           handleSingle: handleSingle,

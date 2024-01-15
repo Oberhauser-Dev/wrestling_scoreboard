@@ -114,6 +114,8 @@
 
   "red": "Red",
   "blue": "Blue",
+  "winner": "Winner",
+  "result": "Result",
   "wrestlingStyle": "Style",
   "freeStyle": "Freestyle",
   "freeStyleAbbr": "F",
@@ -123,6 +125,7 @@
   "activityTimeAbbr": "AT",
   "injuryTime": "injury time",
   "injuryTimeShort": "IT",
+  "duration": "Duration",
   "durations": "Durations",
   "periodDurationInSecs": "Period duration (in seconds)",
   "breakDurationInSecs": "Break duration (in seconds)",
