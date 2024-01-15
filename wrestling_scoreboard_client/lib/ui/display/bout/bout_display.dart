@@ -212,7 +212,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   Future<List<BoutAction>> getActions() =>
-      ref.read(manyDataStreamProvider<BoutAction, Bout>(filterObject: bout).future);
+      ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   displayName(ParticipantState? pStatus, double padding) {
     return Expanded(
@@ -245,7 +245,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     return Consumer(
       builder: (context, ref, child) {
         ref.watch(manyDataStreamProvider<BoutAction, Bout>(
-            filterObject: bout)); // TODO: replace by participantNotifierProvider
+            ManyProviderData<BoutAction, Bout>(filterObject: bout))); // TODO: replace by participantNotifierProvider
         return pStatus?.classificationPoints != null
             ? ThemedContainer(
                 color: color.shade800,

@@ -22,7 +22,8 @@ class SingleConsumer<T extends DataObject> extends ConsumerWidget {
     if (id == null) {
       return builder(context, initialData);
     }
-    final stream = ref.watch(singleDataStreamProvider<T>(initialData: initialData, id: id!).future);
+    final stream =
+        ref.watch(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: initialData, id: id!)).future);
     return LoadingBuilder<T>(
       builder: builder,
       future: stream,
@@ -41,7 +42,9 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stream = ref.watch(manyDataStreamProvider<T, S>(initialData: initialData, filterObject: filterObject).future);
+    final stream = ref.watch(
+        manyDataStreamProvider<T, S>(ManyProviderData<T, S>(initialData: initialData, filterObject: filterObject))
+            .future);
     return LoadingBuilder<List<T>>(
       builder: builder,
       future: stream,

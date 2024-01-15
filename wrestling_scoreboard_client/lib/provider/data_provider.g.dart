@@ -6,7 +6,7 @@ part of 'data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$singleDataStreamHash() => r'b1c83c1bed6ae98086dac08fcb71ffb2a3d18f06';
+String _$singleDataStreamHash() => r'4f7017064a58e5fbf7ee99bef94e7ba626e07309';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -53,24 +53,21 @@ class SingleDataStreamFamily extends Family {
   String? get name => r'singleDataStreamProvider';
 
   /// See also [singleDataStream].
-  SingleDataStreamProvider<T> call<T extends DataObject>({
-    required int id,
-    T? initialData,
-  }) {
+  SingleDataStreamProvider<T> call<T extends DataObject>(
+    SingleProviderData<T> pData,
+  ) {
     return SingleDataStreamProvider<T>(
-      id: id,
-      initialData: initialData,
+      pData,
     );
   }
 
   @visibleForOverriding
   @override
   SingleDataStreamProvider<DataObject> getProviderOverride(
-    covariant SingleDataStreamProvider<DataObject> provider,
+    covariant SingleDataStreamProvider provider,
   ) {
     return call(
-      id: provider.id,
-      initialData: provider.initialData,
+      provider.pData,
     );
   }
 
@@ -92,8 +89,8 @@ class _$SingleDataStreamFamilyOverride implements FamilyOverride {
   final SingleDataStreamFamily overriddenFamily;
 
   @override
-  SingleDataStreamProvider getProviderOverride(
-    covariant SingleDataStreamProvider provider,
+  SingleDataStreamProvider<DataObject> getProviderOverride(
+    covariant SingleDataStreamProvider<DataObject> provider,
   ) {
     return provider._copyWith(create);
   }
@@ -103,14 +100,12 @@ class _$SingleDataStreamFamilyOverride implements FamilyOverride {
 class SingleDataStreamProvider<T extends DataObject>
     extends AutoDisposeStreamProvider<T> {
   /// See also [singleDataStream].
-  SingleDataStreamProvider({
-    required int id,
-    T? initialData,
-  }) : this._internal(
+  SingleDataStreamProvider(
+    SingleProviderData<T> pData,
+  ) : this._internal(
           (ref) => singleDataStream<T>(
             ref as SingleDataStreamRef<T>,
-            id: id,
-            initialData: initialData,
+            pData,
           ),
           from: singleDataStreamProvider,
           name: r'singleDataStreamProvider',
@@ -121,8 +116,7 @@ class SingleDataStreamProvider<T extends DataObject>
           dependencies: SingleDataStreamFamily._dependencies,
           allTransitiveDependencies:
               SingleDataStreamFamily._allTransitiveDependencies,
-          id: id,
-          initialData: initialData,
+          pData: pData,
         );
 
   SingleDataStreamProvider._internal(
@@ -132,12 +126,10 @@ class SingleDataStreamProvider<T extends DataObject>
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.id,
-    required this.initialData,
+    required this.pData,
   }) : super.internal();
 
-  final int id;
-  final T? initialData;
+  final SingleProviderData<T> pData;
 
   @override
   Override overrideWith(
@@ -152,21 +144,14 @@ class SingleDataStreamProvider<T extends DataObject>
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        id: id,
-        initialData: initialData,
+        pData: pData,
       ),
     );
   }
 
   @override
-  ({
-    int id,
-    T? initialData,
-  }) get argument {
-    return (
-      id: id,
-      initialData: initialData,
-    );
+  (SingleProviderData<T>,) get argument {
+    return (pData,);
   }
 
   @override
@@ -184,8 +169,7 @@ class SingleDataStreamProvider<T extends DataObject>
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      id: id,
-      initialData: initialData,
+      pData: pData,
     );
   }
 
@@ -193,15 +177,13 @@ class SingleDataStreamProvider<T extends DataObject>
   bool operator ==(Object other) {
     return other is SingleDataStreamProvider &&
         other.runtimeType == runtimeType &&
-        other.id == id &&
-        other.initialData == initialData;
+        other.pData == pData;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
-    hash = _SystemHash.combine(hash, initialData.hashCode);
+    hash = _SystemHash.combine(hash, pData.hashCode);
     hash = _SystemHash.combine(hash, T.hashCode);
 
     return _SystemHash.finish(hash);
@@ -210,11 +192,8 @@ class SingleDataStreamProvider<T extends DataObject>
 
 mixin SingleDataStreamRef<T extends DataObject>
     on AutoDisposeStreamProviderRef<T> {
-  /// The parameter `id` of this provider.
-  int get id;
-
-  /// The parameter `initialData` of this provider.
-  T? get initialData;
+  /// The parameter `pData` of this provider.
+  SingleProviderData<T> get pData;
 }
 
 class _SingleDataStreamProviderElement<T extends DataObject>
@@ -222,12 +201,11 @@ class _SingleDataStreamProviderElement<T extends DataObject>
   _SingleDataStreamProviderElement(super.provider);
 
   @override
-  int get id => (origin as SingleDataStreamProvider<T>).id;
-  @override
-  T? get initialData => (origin as SingleDataStreamProvider<T>).initialData;
+  SingleProviderData<T> get pData =>
+      (origin as SingleDataStreamProvider<T>).pData;
 }
 
-String _$manyDataStreamHash() => r'49089cdc4cfef3e619053020a56ac9835bcc4bc4';
+String _$manyDataStreamHash() => r'd9024a6583a8732e86e397989bed313960f9dc89';
 
 /// See also [manyDataStream].
 @ProviderFor(manyDataStream)
@@ -254,13 +232,11 @@ class ManyDataStreamFamily extends Family {
 
   /// See also [manyDataStream].
   ManyDataStreamProvider<T, S>
-      call<T extends DataObject, S extends DataObject?>({
-    S? filterObject,
-    List<T>? initialData,
-  }) {
+      call<T extends DataObject, S extends DataObject?>(
+    ManyProviderData<T, S> pData,
+  ) {
     return ManyDataStreamProvider<T, S>(
-      filterObject: filterObject,
-      initialData: initialData,
+      pData,
     );
   }
 
@@ -270,8 +246,7 @@ class ManyDataStreamFamily extends Family {
     covariant ManyDataStreamProvider<DataObject, DataObject?> provider,
   ) {
     return call(
-      filterObject: provider.filterObject,
-      initialData: provider.initialData,
+      provider.pData,
     );
   }
 
@@ -305,14 +280,12 @@ class _$ManyDataStreamFamilyOverride implements FamilyOverride {
 class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
     extends AutoDisposeStreamProvider<List<T>> {
   /// See also [manyDataStream].
-  ManyDataStreamProvider({
-    S? filterObject,
-    List<T>? initialData,
-  }) : this._internal(
+  ManyDataStreamProvider(
+    ManyProviderData<T, S> pData,
+  ) : this._internal(
           (ref) => manyDataStream<T, S>(
             ref as ManyDataStreamRef<T, S>,
-            filterObject: filterObject,
-            initialData: initialData,
+            pData,
           ),
           from: manyDataStreamProvider,
           name: r'manyDataStreamProvider',
@@ -323,8 +296,7 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
           dependencies: ManyDataStreamFamily._dependencies,
           allTransitiveDependencies:
               ManyDataStreamFamily._allTransitiveDependencies,
-          filterObject: filterObject,
-          initialData: initialData,
+          pData: pData,
         );
 
   ManyDataStreamProvider._internal(
@@ -334,12 +306,10 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.filterObject,
-    required this.initialData,
+    required this.pData,
   }) : super.internal();
 
-  final S? filterObject;
-  final List<T>? initialData;
+  final ManyProviderData<T, S> pData;
 
   @override
   Override overrideWith(
@@ -354,26 +324,19 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        filterObject: filterObject,
-        initialData: initialData,
+        pData: pData,
       ),
     );
   }
 
   @override
-  ({
-    S? filterObject,
-    List<T>? initialData,
-  }) get argument {
-    return (
-      filterObject: filterObject,
-      initialData: initialData,
-    );
+  (ManyProviderData<T, S>,) get argument {
+    return (pData,);
   }
 
   @override
   AutoDisposeStreamProviderElement<List<T>> createElement() {
-    return _ManyDataStreamProviderElement(this);
+    return _ManyDataStreamProviderElement<T, S>(this);
   }
 
   ManyDataStreamProvider _copyWith(
@@ -388,8 +351,7 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      filterObject: filterObject,
-      initialData: initialData,
+      pData: pData,
     );
   }
 
@@ -397,15 +359,13 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   bool operator ==(Object other) {
     return other is ManyDataStreamProvider &&
         other.runtimeType == runtimeType &&
-        other.filterObject == filterObject &&
-        other.initialData == initialData;
+        other.pData == pData;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, filterObject.hashCode);
-    hash = _SystemHash.combine(hash, initialData.hashCode);
+    hash = _SystemHash.combine(hash, pData.hashCode);
     hash = _SystemHash.combine(hash, T.hashCode);
     hash = _SystemHash.combine(hash, S.hashCode);
 
@@ -415,11 +375,8 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
 
 mixin ManyDataStreamRef<T extends DataObject, S extends DataObject?>
     on AutoDisposeStreamProviderRef<List<T>> {
-  /// The parameter `filterObject` of this provider.
-  S? get filterObject;
-
-  /// The parameter `initialData` of this provider.
-  List<T>? get initialData;
+  /// The parameter `pData` of this provider.
+  ManyProviderData<T, S> get pData;
 }
 
 class _ManyDataStreamProviderElement<T extends DataObject,
@@ -428,10 +385,8 @@ class _ManyDataStreamProviderElement<T extends DataObject,
   _ManyDataStreamProviderElement(super.provider);
 
   @override
-  S? get filterObject => (origin as ManyDataStreamProvider<T, S>).filterObject;
-  @override
-  List<T>? get initialData =>
-      (origin as ManyDataStreamProvider<T, S>).initialData;
+  ManyProviderData<T, S> get pData =>
+      (origin as ManyDataStreamProvider<T, S>).pData;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
