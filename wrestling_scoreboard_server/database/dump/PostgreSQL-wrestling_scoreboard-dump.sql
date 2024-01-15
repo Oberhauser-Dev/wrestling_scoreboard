@@ -1199,11 +1199,11 @@ COPY public.team_match (id, date, location, visitors_count, comment, no, home_id
 
 COPY public.team_match_bout (id, team_match_id, bout_id, pos) FROM stdin;
 19	1	21	0
-20	1	22	0
-21	1	23	0
-22	1	24	0
-23	1	25	0
-24	1	26	0
+20	1	22	1
+21	1	23	2
+22	1	24	3
+23	1	25	4
+24	1	26	5
 \.
 
 
