@@ -34,6 +34,7 @@
   "optionSelect": "select",
   "edit": "Edit",
   "save": "Save",
+  "saveAndGenerate": "Save & Generate",
   "add": "Add",
   "remove": "Remove",
   "cancel": "Cancel",
@@ -50,6 +51,7 @@
   "noWebSocketConnection": "The connection to the server could not be established or was interrupted.",
   "notFoundException": "Element was not found :/",
   "invalidParameterException": "The change was not successful, please check your input parameters.",
+  "warningBoutGenerate": "This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?",
   "retry": "Retry",
 
   "date": "Date",

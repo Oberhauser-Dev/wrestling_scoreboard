@@ -211,7 +211,7 @@ class TeamMatchOverview extends StatelessWidget {
             weightClasses: weightClasses,
             participations: participations,
             lineup: lineup,
-            onSubmit: () {
+            onSubmitGenerate: () {
               dataProvider.generateBouts<TeamMatch>(match, false);
             },
           );

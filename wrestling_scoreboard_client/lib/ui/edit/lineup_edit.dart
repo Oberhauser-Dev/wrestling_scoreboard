@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/components/font.dart';
+import 'package:wrestling_scoreboard_client/ui/components/ok_dialog.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -15,14 +16,14 @@ class LineupEdit extends StatefulWidget {
   final List<WeightClass> weightClasses;
   final List<Participation> participations;
 
-  final Function()? onSubmit;
+  final Function()? onSubmitGenerate;
 
   const LineupEdit({
     super.key,
     required this.lineup,
     required this.weightClasses,
     required this.participations,
-    this.onSubmit,
+    this.onSubmitGenerate,
   });
 
   @override
@@ -40,26 +41,6 @@ class LineupEditState extends State<LineupEdit> {
   final HashSet<Participation> _deleteParticipations = HashSet();
   final HashSet<Participation> _createOrUpdateParticipations = HashSet();
 
-  Future<List<Membership>> filterMemberships(String? filter) async {
-    memberships ??= await dataProvider.readMany<Membership, Club>(filterObject: widget.lineup.team.club);
-    return (filter == null ? memberships! : memberships!.where((element) => element.person.fullName.contains(filter)))
-        .toList();
-  }
-
-  Future<void> handleSubmit(NavigatorState navigator) async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      await dataProvider
-          .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
-      await Future.forEach(
-          _deleteParticipations, (Participation element) => dataProvider.deleteSingle<Participation>(element));
-      await Future.forEach(
-          _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
-      if (widget.onSubmit != null) widget.onSubmit!();
-      navigator.pop();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -72,17 +53,63 @@ class LineupEditState extends State<LineupEdit> {
     }));
   }
 
+  Future<List<Membership>> filterMemberships(String? filter) async {
+    memberships ??= await dataProvider.readMany<Membership, Club>(filterObject: widget.lineup.team.club);
+    return (filter == null ? memberships! : memberships!.where((element) => element.person.fullName.contains(filter)))
+        .toList();
+  }
+
+  Future<void> handleSubmit(NavigatorState navigator, {void Function()? onSubmitGenerate}) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      await dataProvider
+          .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
+      await Future.forEach(
+          _deleteParticipations, (Participation element) => dataProvider.deleteSingle<Participation>(element));
+      await Future.forEach(
+          _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
+      if (onSubmitGenerate != null) onSubmitGenerate();
+      navigator.pop();
+    }
+  }
+
+  List<Widget> _buildActions(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
+    return [
+      EditAction(
+        icon: const Icon(Icons.save),
+        label: Text(localizations.save),
+        onSubmit: () => handleSubmit(navigator),
+      ),
+      EditAction(
+        icon: const Icon(Icons.autorenew),
+        label: Text(localizations.saveAndGenerate),
+        onSubmit: () async {
+          final hasConfirmed = await showDialog(
+            context: context,
+            builder: (context) => OkDialog(
+              getResult: () => true,
+              child: Text(localizations.warningBoutGenerate),
+            ),
+          );
+          if (hasConfirmed == true) {
+            await handleSubmit(navigator, onSubmitGenerate: widget.onSubmitGenerate);
+          }
+        },
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final navigator = Navigator.of(context);
-
     return Form(
         key: _formKey,
-        child: EditWidget(
+        child: CustomizableEditWidget(
           typeLocalization: localizations.lineup,
           id: widget.lineup.id,
-          onSubmit: () => handleSubmit(navigator),
+          buildActions: _buildActions,
           items: [
             ListTile(title: HeadingText(widget.lineup.team.name)),
             ListTile(
