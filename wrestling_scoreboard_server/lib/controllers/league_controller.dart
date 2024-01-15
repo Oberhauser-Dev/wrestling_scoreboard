@@ -39,7 +39,7 @@ class LeagueController extends EntityController<League> {
 
   Future<Response> requestLeagueWeightClasses(Request request, String id) async {
     return EntityController.handleRequestManyOfController(LeagueWeightClassController(),
-        isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id}, orderBy: 'pos');
+        isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id}, orderBy: ['pos']);
   }
 
   Future<Response> requestLeagueTeamParticipations(Request request, String id) async {

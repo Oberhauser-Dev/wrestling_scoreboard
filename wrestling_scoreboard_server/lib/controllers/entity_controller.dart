@@ -193,7 +193,7 @@ abstract class EntityController<T extends DataObject> {
     List<String>? conditions,
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
-    String? orderBy,
+    List<String> orderBy = const [],
   }) async {
     return Future.wait((await getManyRaw(
             conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy))
@@ -207,13 +207,14 @@ abstract class EntityController<T extends DataObject> {
         .toList());
   }
 
-  Future<List<Map<String, dynamic>>> getManyRaw(
-      {List<String>? conditions,
-      Conjunction conjunction = Conjunction.and,
-      Map<String, dynamic>? substitutionValues,
-      String? orderBy}) async {
+  Future<List<Map<String, dynamic>>> getManyRaw({
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+    List<String> orderBy = const [],
+  }) async {
     return getManyRawFromQuery(
-        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} ${orderBy == null ? '' : 'ORDER BY $orderBy'};',
+        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} ${orderBy.isEmpty ? '' : 'ORDER BY ${orderBy.join(',')}'};',
         substitutionValues: substitutionValues);
   }
 
@@ -284,7 +285,7 @@ abstract class EntityController<T extends DataObject> {
     List<String>? conditions,
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
-    String? orderBy,
+    List<String> orderBy = const [],
   }) async {
     if (isRaw) {
       final many = await controller.getManyRaw(
