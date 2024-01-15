@@ -280,7 +280,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     return ThemedContainer(
       color: color,
       child: IntrinsicHeight(
-        child: SingleConsumer<ParticipantState>(
+        child: NullableSingleConsumer<ParticipantState>(
           id: pStatus?.id,
           initialData: pStatus,
           builder: (context, pStatus) {
