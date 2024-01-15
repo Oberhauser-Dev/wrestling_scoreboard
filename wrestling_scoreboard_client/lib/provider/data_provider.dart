@@ -26,14 +26,17 @@ class SingleProviderData<T extends DataObject> {
 Stream<T> singleDataStream<T extends DataObject>(
   SingleDataStreamRef ref, 
   SingleProviderData<T> pData,
-) {
+) async* {
   // Reload, whenever the stream connects or disconnects
   // TODO: integrate in updating websocket URL from stream provider
   ref.watch(webSocketStateStreamProvider);
 
   // ref.onDispose(webSocketConnectionStream.close);
   // TODO: e.g. may be triggered twice
-  return dataProvider.streamSingle<T>(pData.id, init: pData.initialData == null);
+  if(pData.initialData != null) {
+    yield pData.initialData!;
+  }
+  yield* dataProvider.streamSingle<T>(pData.id, init: pData.initialData == null);
 }
 
 /// Class to wrap equal many data for providers.
@@ -58,14 +61,17 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
 Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   ManyDataStreamRef ref, 
   ManyProviderData<T,S> pData,
-) {
+) async* {
   // Reload, whenever the stream connects or disconnects
   // TODO: integrate in updating websocket URL from stream provider
   ref.watch(webSocketStateStreamProvider);
 
   // ref.onDispose(webSocketConnectionStream.close);
   // TODO: e.g. bout action event triggered twice
-  return dataProvider
+  if(pData.initialData != null) {
+    yield pData.initialData!;
+  }
+  yield* dataProvider
       .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
       .map((event) => event.data);
 }
