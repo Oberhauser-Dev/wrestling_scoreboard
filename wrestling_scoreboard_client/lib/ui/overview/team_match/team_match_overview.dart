@@ -7,7 +7,8 @@ import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/lineup_edit.dart';
-import 'package:wrestling_scoreboard_client/ui/edit/team_match_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/edit/team_match/team_match_edit.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -179,7 +180,7 @@ class TeamMatchOverview extends StatelessWidget {
                                         '${bout.r?.participation.membership.person.fullName ?? localizations.participantVacant} vs. '
                                         '${bout.b?.participation.membership.person.fullName ?? localizations.participantVacant}',
                                     icon: Icons.sports_kabaddi,
-                                    /*onTap: () => handleSelectedBout(bout, context),*/
+                                    onTap: () => handleSelectedBout(bout, context),
                                   ))),
                         );
                       },
@@ -193,9 +194,9 @@ class TeamMatchOverview extends StatelessWidget {
         });
   }
 
-  /*handleSelectedBout(Bout bout, BuildContext context) {
+  handleSelectedBout(Bout bout, BuildContext context) {
     context.push('/${BoutOverview.route}/${bout.id}');
-  }*/
+  }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');

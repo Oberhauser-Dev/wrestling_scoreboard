@@ -3,11 +3,11 @@ import 'package:wrestling_scoreboard_client/ui/app_navigation.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/club_overview.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/league_overview.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/league_team_participation_overview.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/league_weight_class_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/league_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/league_team_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/membership_overview.dart';
-import 'package:wrestling_scoreboard_client/ui/overview/team_match_overview.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
 
 final router = GoRouter(
