@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class SingleConsumer<T extends DataObject> extends ConsumerWidget {
+class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
   final T? initialData;
   final int? id;
   final Widget Function(BuildContext context, T? data) builder;
 
-  const SingleConsumer({
+  const NullableSingleConsumer({
     required this.builder,
     required this.id,
     this.initialData,
@@ -27,9 +29,32 @@ class SingleConsumer<T extends DataObject> extends ConsumerWidget {
     return LoadingBuilder<T>(
       builder: builder,
       future: stream,
-      initialData: initialData,
+      initialData: null, // Handle initial data via the stream
       onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
     );
+  }
+}
+
+class SingleConsumer<T extends DataObject> extends StatelessWidget {
+  final T? initialData;
+  final int? id;
+  final Widget Function(BuildContext context, T data) builder;
+
+  const SingleConsumer({
+    required this.builder,
+    required this.id,
+    this.initialData,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (id == null && initialData == null) {
+      final localizations = AppLocalizations.of(context)!;
+      return ExceptionWidget(localizations.notFoundException);
+    }
+    return NullableSingleConsumer(
+        builder: (BuildContext context, T? data) => builder(context, data!), id: id, initialData: initialData);
   }
 }
 
@@ -48,7 +73,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
     return LoadingBuilder<List<T>>(
       builder: builder,
       future: stream,
-      initialData: initialData,
+      initialData: null, // Handle initial data via the stream
       onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
     );
   }

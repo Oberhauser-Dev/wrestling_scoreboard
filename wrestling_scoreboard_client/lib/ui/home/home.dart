@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/club_edit.dart';
@@ -103,7 +102,6 @@ class HomeState extends State<Home> {
                         id: e.id!,
                         initialData: e,
                         builder: (context, data) {
-                          if (data == null) return ExceptionWidget(localizations.notFoundException);
                           return ContentItem(
                             title: data.name,
                             icon: Icons.foundation,
@@ -132,7 +130,6 @@ class HomeState extends State<Home> {
                         id: e.id!,
                         initialData: e,
                         builder: (context, data) {
-                          if (data == null) return ExceptionWidget(localizations.notFoundException);
                           return ContentItem(
                             title: data.name,
                             icon: Icons.emoji_events,

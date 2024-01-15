@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
@@ -27,7 +26,6 @@ abstract class WeightClassOverview extends StatelessWidget implements AbstractOv
       id: dataId,
       initialData: initialData,
       builder: (context, data) {
-        if (data == null) return ExceptionWidget(localizations.notFoundException);
         final description = InfoWidget(
           obj: data,
           editPage: editPage,

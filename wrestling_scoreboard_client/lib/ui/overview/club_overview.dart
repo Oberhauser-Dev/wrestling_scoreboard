@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/club_edit.dart';
@@ -29,7 +28,6 @@ class ClubOverview extends StatelessWidget {
       id: id,
       initialData: club,
       builder: (context, data) {
-        if (data == null) return ExceptionWidget(localizations.notFoundException);
         final description = InfoWidget(
           obj: data,
           editPage: ClubEdit(
@@ -73,7 +71,6 @@ class ClubOverview extends StatelessWidget {
                       id: team.id,
                       initialData: team,
                       builder: (context, team) {
-                        if (team == null) return ExceptionWidget(localizations.notFoundException);
                         return ContentItem(
                             title: team.name, icon: Icons.group, onTap: () => handleSelectedTeam(team, context));
                       })),

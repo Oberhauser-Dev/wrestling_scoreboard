@@ -7,7 +7,6 @@ import 'package:wrestling_scoreboard_client/data/bout_role.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
@@ -29,15 +28,12 @@ class MatchDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-
     double width = MediaQuery.of(context).size.width;
     double padding = width / 140;
     return SingleConsumer<TeamMatch>(
       id: id,
       initialData: teamMatch,
       builder: (context, match) {
-        if (match == null) return ExceptionWidget(localizations.notFoundException);
         return Consumer(builder: (context, ref, child) {
           return LoadingBuilder<WindowState>(
               future: ref.watch(windowStateNotifierProvider),
@@ -155,7 +151,7 @@ class BoutListItem extends StatelessWidget {
 
   Widget displayParticipantState({ParticipantState? pState, required BoutRole role}) {
     final color = (role == bout.winnerRole) ? getColorFromBoutRole(role).shade800 : null;
-    return SingleConsumer<ParticipantState>(
+    return NullableSingleConsumer<ParticipantState>(
       id: pState?.id,
       initialData: pState,
       builder: (context, pState) => Column(
@@ -192,7 +188,6 @@ class BoutListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
     final padding = width / 100;
     final edgeInsets = EdgeInsets.all(padding);
@@ -200,9 +195,6 @@ class BoutListItem extends StatelessWidget {
         initialData: bout,
         id: bout.id,
         builder: (context, bout) {
-          if (bout == null) {
-            return ExceptionWidget(localizations.notFoundException);
-          }
           return Row(
             children: [
               Row(
@@ -245,16 +237,16 @@ class BoutListItem extends StatelessWidget {
                               flex: 70,
                               child: ThemedContainer(
                                 color:
-                                    data?.winnerRole != null ? getColorFromBoutRole(data!.winnerRole!).shade800 : null,
+                                    data.winnerRole != null ? getColorFromBoutRole(data.winnerRole!).shade800 : null,
                                 child: Center(
-                                  child: ScaledText(getAbbreviationFromBoutResult(data?.result, context), fontSize: 12),
+                                  child: ScaledText(getAbbreviationFromBoutResult(data.result, context), fontSize: 12),
                                 ),
                               )),
                           Expanded(
                               flex: 50,
                               child: Center(
-                                child: data?.winnerRole != null
-                                    ? ScaledText(durationToString(data!.duration), fontSize: 8)
+                                child: data.winnerRole != null
+                                    ? ScaledText(durationToString(data.duration), fontSize: 8)
                                     : null,
                               )),
                         ],

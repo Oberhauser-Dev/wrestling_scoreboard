@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_edit.dart';
@@ -32,7 +31,6 @@ class LeagueOverview extends StatelessWidget {
       id: id,
       initialData: league,
       builder: (context, data) {
-        if (data == null) return ExceptionWidget(localizations.notFoundException);
         final description = InfoWidget(
           obj: data,
           editPage: LeagueEdit(
@@ -85,7 +83,6 @@ class LeagueOverview extends StatelessWidget {
                         id: e.id,
                         initialData: e,
                         builder: (context, data) {
-                          if (data == null) return ExceptionWidget(localizations.notFoundException);
                           return ContentItem(
                             title: data.team.name,
                             icon: Icons.group,
@@ -118,7 +115,6 @@ class LeagueOverview extends StatelessWidget {
                       id: e.id,
                       initialData: e,
                       builder: (context, data) {
-                        if (data == null) return ExceptionWidget(localizations.notFoundException);
                         return ContentItem(
                             title: '${data.weightClass.name} ${styleToString(data.weightClass.style, context)}',
                             icon: Icons.fitness_center,

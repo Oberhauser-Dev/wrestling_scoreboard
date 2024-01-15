@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/person_overview.dart';
@@ -23,7 +22,6 @@ class MembershipOverview extends PersonOverview {
       id: id,
       initialData: membership,
       builder: (context, membership) {
-        if (membership == null) return ExceptionWidget(localizations.notFoundException);
         return buildOverview(
           context,
           dataId: membership.person.id!,

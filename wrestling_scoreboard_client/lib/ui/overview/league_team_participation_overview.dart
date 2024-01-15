@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/league_team_participation_edit.dart';
@@ -24,7 +23,6 @@ class LeagueTeamParticipationOverview extends StatelessWidget {
       id: id,
       initialData: leagueTeamParticipation,
       builder: (context, data) {
-        if (data == null) return ExceptionWidget(localizations.notFoundException);
         final description = InfoWidget(
             obj: data,
             editPage: LeagueTeamParticipationEdit(
