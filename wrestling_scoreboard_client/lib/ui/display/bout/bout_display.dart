@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
-import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
@@ -54,7 +53,6 @@ class BoutDisplay extends StatelessWidget {
         id: matchId,
         initialData: initialMatch,
         builder: (context, match) {
-          if (match == null) return ExceptionWidget(localizations.notFoundException);
           return ManyConsumer<Bout, TeamMatch>(
               filterObject: match,
               builder: (context, bouts) {
@@ -72,7 +70,7 @@ class BoutDisplay extends StatelessWidget {
                     id: currentBout.id,
                     initialData: currentBout,
                     builder: (context, bout) {
-                      return BoutScreen(match: match, bouts: bouts, boutIndex: currentBoutIndex, bout: currentBout);
+                      return BoutScreen(match: match, bouts: bouts, boutIndex: currentBoutIndex, bout: bout);
                     });
               });
         });
@@ -471,11 +469,11 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   @override
   void dispose() async {
-    // Save time to database when dispose
-    await dataProvider.createOrUpdateSingle(bout);
-
     super.dispose();
     _boutStopwatch.dispose();
     _breakStopwatch.dispose();
+
+    // Save time to database when dispose
+    await dataProvider.createOrUpdateSingle(bout);
   }
 }
