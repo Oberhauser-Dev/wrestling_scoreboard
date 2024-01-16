@@ -143,6 +143,8 @@ class BoutState extends ConsumerState<BoutScreen> {
     HornSound();
     boutConfig = widget.boutConfig;
     bout = widget.bout;
+    // Set the current period based on the duration:
+    period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
     _r = ParticipantStateModel(bout.r);
     _b = ParticipantStateModel(bout.b);
     _r.injuryStopwatch.limit = boutConfig.injuryDuration;
@@ -183,6 +185,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         if (stopwatch == _boutStopwatch) {
           bout = bout.copyWith(duration: event);
 
+          // If is above the time of the current period, then trigger the break
           if (bout.duration.compareTo(boutConfig.periodDuration * period) >= 0) {
             _boutStopwatch.stop();
             if (_r.activityStopwatch != null) {
