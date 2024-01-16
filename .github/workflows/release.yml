@@ -32,8 +32,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ github.token }}
-          file: ./wrestling_scoreboard_server/build/wrestling-scoreboard-server-${{ github.ref_name }}-${{ matrix.platform }}-x86_64.tar.gz
-          asset_name: wrestling-scoreboard-server-${{ github.ref_name }}-${{ matrix.platform }}-x86_64.tar.gz
+          file: ./wrestling_scoreboard_server/build/wrestling_scoreboard_server-${{ matrix.platform }}-${{ github.ref_name }}.tar.gz
+          asset_name: wrestling_scoreboard_server-${{ matrix.platform }}-${{ github.ref_name }}.tar.gz
           tag: ${{ github.ref }}
     
   release-client:
