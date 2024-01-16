@@ -20,7 +20,7 @@ jobs:
 
   deploy-github-pages:
     needs:
-      - call-build-app
+      - call-build-client
     permissions:
       pages: write
       id-token: write
