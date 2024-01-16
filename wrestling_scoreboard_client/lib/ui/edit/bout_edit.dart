@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
@@ -30,12 +31,14 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
   WeightClass? _weightClass;
   Participation? _redParticipation;
   Participation? _blueParticipation;
+  int? _durationInSecs;
 
   Future<List<WeightClass>> get availableWeightClasses;
 
   @override
   void initState() {
     super.initState();
+    _durationInSecs = widget.bout?.duration.inSeconds;
     _winnerRole = widget.bout?.winnerRole;
     _boutResult = widget.bout?.result;
     _weightClass = widget.bout?.weightClass;
@@ -131,6 +134,21 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
           ),
         ),
       ),
+      ListTile(
+        leading: const Icon(Icons.timelapse),
+        title: TextFormField(
+          initialValue: _durationInSecs.toString(),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: '${localizations.duration} (seconds)',
+          ),
+          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
+          onSaved: (String? value) {
+            _durationInSecs = int.tryParse(value ?? '') ?? 0;
+          },
+        ),
+      ),
     ];
 
     return Form(
@@ -168,7 +186,7 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
         winnerRole: _winnerRole,
         r: await updateParticipantState(_redParticipation, widget.bout?.r),
         b: await updateParticipantState(_blueParticipation, widget.bout?.b),
-        duration: widget.bout?.duration ?? Duration.zero,
+        duration: Duration(seconds: _durationInSecs ?? 0),
         pool: widget.bout?.pool,
       );
 
