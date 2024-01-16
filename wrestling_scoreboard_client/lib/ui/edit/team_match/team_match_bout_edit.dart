@@ -38,7 +38,7 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
           onSaved: (String? value) {
-            _pos = value != null ? int.parse(value) : 0;
+            _pos = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),

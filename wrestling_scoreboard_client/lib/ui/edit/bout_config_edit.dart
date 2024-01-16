@@ -44,7 +44,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
-            _periodDurationInSecs = value != null ? int.parse(value) : 0;
+            _periodDurationInSecs = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),
@@ -59,7 +59,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
-            _breakDurationInSecs = value != null ? int.parse(value) : 0;
+            _breakDurationInSecs = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),
@@ -75,7 +75,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
-            _activityDurationInSecs = value != null ? int.parse(value) : 0;
+            _activityDurationInSecs = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),
@@ -90,7 +90,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
-            _injuryDurationInSecs = value != null ? int.parse(value) : 0;
+            _injuryDurationInSecs = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),
@@ -105,7 +105,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,2}'))],
           onSaved: (String? value) {
-            _periodCount = value != null ? int.parse(value) : 0;
+            _periodCount = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),

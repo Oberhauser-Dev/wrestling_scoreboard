@@ -52,7 +52,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
           onSaved: (String? value) {
-            _weight = value != null ? int.parse(value) : 0;
+            _weight = int.tryParse(value ?? '') ?? 0;
           },
         ),
       ),
