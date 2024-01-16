@@ -21,9 +21,9 @@ TeamMatchBout _$TeamMatchBoutFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TeamMatchBout {
   int? get id => throw _privateConstructorUsedError;
+  int get pos => throw _privateConstructorUsedError;
   TeamMatch get teamMatch => throw _privateConstructorUsedError;
   Bout get bout => throw _privateConstructorUsedError;
-  int get pos => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +37,7 @@ abstract class $TeamMatchBoutCopyWith<$Res> {
           TeamMatchBout value, $Res Function(TeamMatchBout) then) =
       _$TeamMatchBoutCopyWithImpl<$Res, TeamMatchBout>;
   @useResult
-  $Res call({int? id, TeamMatch teamMatch, Bout bout, int pos});
+  $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
 
   $TeamMatchCopyWith<$Res> get teamMatch;
   $BoutCopyWith<$Res> get bout;
@@ -57,15 +57,19 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout>
   @override
   $Res call({
     Object? id = freezed,
+    Object? pos = null,
     Object? teamMatch = null,
     Object? bout = null,
-    Object? pos = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      pos: null == pos
+          ? _value.pos
+          : pos // ignore: cast_nullable_to_non_nullable
+              as int,
       teamMatch: null == teamMatch
           ? _value.teamMatch
           : teamMatch // ignore: cast_nullable_to_non_nullable
@@ -74,10 +78,6 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout>
           ? _value.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
-      pos: null == pos
-          ? _value.pos
-          : pos // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 
@@ -101,12 +101,12 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout>
 /// @nodoc
 abstract class _$$TeamMatchBoutImplCopyWith<$Res>
     implements $TeamMatchBoutCopyWith<$Res> {
-  factory _$$TeamMatchBoutImplCopyWith(_$TeamMatchBoutImpl value,
-          $Res Function(_$TeamMatchBoutImpl) then) =
+  factory _$$TeamMatchBoutImplCopyWith(
+          _$TeamMatchBoutImpl value, $Res Function(_$TeamMatchBoutImpl) then) =
       __$$TeamMatchBoutImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, TeamMatch teamMatch, Bout bout, int pos});
+  $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
 
   @override
   $TeamMatchCopyWith<$Res> get teamMatch;
@@ -126,15 +126,19 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? pos = null,
     Object? teamMatch = null,
     Object? bout = null,
-    Object? pos = null,
   }) {
     return _then(_$TeamMatchBoutImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      pos: null == pos
+          ? _value.pos
+          : pos // ignore: cast_nullable_to_non_nullable
+              as int,
       teamMatch: null == teamMatch
           ? _value.teamMatch
           : teamMatch // ignore: cast_nullable_to_non_nullable
@@ -143,10 +147,6 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res>
           ? _value.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
-      pos: null == pos
-          ? _value.pos
-          : pos // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -155,10 +155,7 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TeamMatchBoutImpl extends _TeamMatchBout {
   const _$TeamMatchBoutImpl(
-      {this.id,
-      required this.teamMatch,
-      required this.bout,
-      required this.pos})
+      {this.id, required this.pos, required this.teamMatch, required this.bout})
       : super._();
 
   factory _$TeamMatchBoutImpl.fromJson(Map<String, dynamic> json) =>
@@ -167,39 +164,38 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
   @override
   final int? id;
   @override
+  final int pos;
+  @override
   final TeamMatch teamMatch;
   @override
   final Bout bout;
-  @override
-  final int pos;
 
   @override
   String toString() {
-    return 'TeamMatchBout(id: $id, teamMatch: $teamMatch, bout: $bout, pos: $pos)';
+    return 'TeamMatchBout(id: $id, pos: $pos, teamMatch: $teamMatch, bout: $bout)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TeamMatchBoutImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.teamMatch, teamMatch) ||
                 other.teamMatch == teamMatch) &&
-            (identical(other.bout, bout) || other.bout == bout) &&
-            (identical(other.pos, pos) || other.pos == pos));
+            (identical(other.bout, bout) || other.bout == bout));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, teamMatch, bout, pos);
+  int get hashCode => Object.hash(runtimeType, id, pos, teamMatch, bout);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith =>
-      __$$TeamMatchBoutImplCopyWithImpl<_$TeamMatchBoutImpl>(
-          this, _$identity);
+      __$$TeamMatchBoutImplCopyWithImpl<_$TeamMatchBoutImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -212,9 +208,9 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
 abstract class _TeamMatchBout extends TeamMatchBout {
   const factory _TeamMatchBout(
       {final int? id,
+      required final int pos,
       required final TeamMatch teamMatch,
-      required final Bout bout,
-      required final int pos}) = _$TeamMatchBoutImpl;
+      required final Bout bout}) = _$TeamMatchBoutImpl;
   const _TeamMatchBout._() : super._();
 
   factory _TeamMatchBout.fromJson(Map<String, dynamic> json) =
@@ -223,11 +219,11 @@ abstract class _TeamMatchBout extends TeamMatchBout {
   @override
   int? get id;
   @override
+  int get pos;
+  @override
   TeamMatch get teamMatch;
   @override
   Bout get bout;
-  @override
-  int get pos;
   @override
   @JsonKey(ignore: true)
   _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith =>

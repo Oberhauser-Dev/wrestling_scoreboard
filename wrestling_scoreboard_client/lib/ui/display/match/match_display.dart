@@ -204,20 +204,27 @@ class BoutListItem extends StatelessWidget {
                     flex: 2,
                     child: Container(
                       padding: edgeInsets,
-                      child: Center(
-                          child: ScaledText(
-                        '${bout.weightClass.weight} $weightUnit',
-                        softWrap: false,
-                        minFontSize: 10,
-                      )),
+                      child: bout.weightClass == null
+                          ? null
+                          : Center(
+                              child: ScaledText(
+                                '${bout.weightClass!.weight} $weightUnit',
+                                softWrap: false,
+                                minFontSize: 10,
+                              ),
+                            ),
                     ),
                   ),
                   Expanded(
-                      child: Center(
-                          child: ScaledText(
-                    styleToAbbr(bout.weightClass.style, context),
-                    minFontSize: 12,
-                  ))),
+                    child: Center(
+                      child: bout.weightClass == null
+                          ? null
+                          : ScaledText(
+                              styleToAbbr(bout.weightClass!.style, context),
+                              minFontSize: 12,
+                            ),
+                    ),
+                  ),
                 ],
               ),
               displayName(pStatus: bout.r, role: BoutRole.red, context: context),

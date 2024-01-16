@@ -49,7 +49,7 @@ abstract class BoutOverview extends StatelessWidget implements AbstractOverview<
               icon: Icons.person,
             ),
             ContentItem(
-              title: data.weightClass.name,
+              title: data.weightClass?.name ?? '-',
               subtitle: localizations.weight,
               icon: Icons.fitness_center,
             ),

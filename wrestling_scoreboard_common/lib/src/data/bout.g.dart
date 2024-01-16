@@ -14,8 +14,9 @@ _$BoutImpl _$$BoutImplFromJson(Map<String, dynamic> json) => _$BoutImpl(
       b: json['b'] == null
           ? null
           : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
-      weightClass:
-          WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
+      weightClass: json['weightClass'] == null
+          ? null
+          : WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
       pool: json['pool'] as int?,
       winnerRole: $enumDecodeNullable(_$BoutRoleEnumMap, json['winnerRole']),
       result: $enumDecodeNullable(_$BoutResultEnumMap, json['result']),
@@ -29,7 +30,7 @@ Map<String, dynamic> _$$BoutImplToJson(_$BoutImpl instance) =>
       'id': instance.id,
       'r': instance.r?.toJson(),
       'b': instance.b?.toJson(),
-      'weightClass': instance.weightClass.toJson(),
+      'weightClass': instance.weightClass?.toJson(),
       'pool': instance.pool,
       'winnerRole': _$BoutRoleEnumMap[instance.winnerRole],
       'result': _$BoutResultEnumMap[instance.result],

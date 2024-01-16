@@ -19,7 +19,7 @@ class Bout with _$Bout implements DataObject {
     int? id,
     ParticipantState? r, // red
     ParticipantState? b, // blue
-    required WeightClass weightClass,
+    WeightClass? weightClass,
     int? pool,
     BoutRole? winnerRole,
     BoutResult? result,
@@ -34,7 +34,7 @@ class Bout with _$Bout implements DataObject {
       if (id != null) 'id': id,
       'red_id': r?.id,
       'blue_id': b?.id,
-      'weight_class_id': weightClass.id,
+      'weight_class_id': weightClass?.id,
       'winner_role': winnerRole?.name,
       'bout_result': result?.name,
       'duration_millis': duration.inMilliseconds,
@@ -46,13 +46,13 @@ class Bout with _$Bout implements DataObject {
     final blueId = e['blue_id'] as int?;
     final winner = e['winner_role'] as String?;
     final boutResult = e['bout_result'] as String?;
-    final weightClass = await getSingle<WeightClass>(e['weight_class_id'] as int);
+    final weightClassId = e['weight_class_id'] as int?;
     final durationMillis = e['duration_millis'] as int?;
     return Bout(
       id: e['id'] as int?,
       r: redId == null ? null : await getSingle<ParticipantState>(redId),
       b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
-      weightClass: weightClass!,
+      weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
       winnerRole: winner == null ? null : BoutRoleParser.valueOf(winner),
       result: boutResult == null ? null : BoutResultParser.valueOf(boutResult),
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),

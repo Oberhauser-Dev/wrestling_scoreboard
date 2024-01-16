@@ -23,7 +23,7 @@ mixin _$Bout {
   int? get id => throw _privateConstructorUsedError;
   ParticipantState? get r => throw _privateConstructorUsedError; // red
   ParticipantState? get b => throw _privateConstructorUsedError; // blue
-  WeightClass get weightClass => throw _privateConstructorUsedError;
+  WeightClass? get weightClass => throw _privateConstructorUsedError;
   int? get pool => throw _privateConstructorUsedError;
   BoutRole? get winnerRole => throw _privateConstructorUsedError;
   BoutResult? get result => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $BoutCopyWith<$Res> {
       {int? id,
       ParticipantState? r,
       ParticipantState? b,
-      WeightClass weightClass,
+      WeightClass? weightClass,
       int? pool,
       BoutRole? winnerRole,
       BoutResult? result,
@@ -51,7 +51,7 @@ abstract class $BoutCopyWith<$Res> {
 
   $ParticipantStateCopyWith<$Res>? get r;
   $ParticipantStateCopyWith<$Res>? get b;
-  $WeightClassCopyWith<$Res> get weightClass;
+  $WeightClassCopyWith<$Res>? get weightClass;
 }
 
 /// @nodoc
@@ -70,7 +70,7 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout>
     Object? id = freezed,
     Object? r = freezed,
     Object? b = freezed,
-    Object? weightClass = null,
+    Object? weightClass = freezed,
     Object? pool = freezed,
     Object? winnerRole = freezed,
     Object? result = freezed,
@@ -89,10 +89,10 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout>
           ? _value.b
           : b // ignore: cast_nullable_to_non_nullable
               as ParticipantState?,
-      weightClass: null == weightClass
+      weightClass: freezed == weightClass
           ? _value.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass,
+              as WeightClass?,
       pool: freezed == pool
           ? _value.pool
           : pool // ignore: cast_nullable_to_non_nullable
@@ -138,8 +138,12 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout>
 
   @override
   @pragma('vm:prefer-inline')
-  $WeightClassCopyWith<$Res> get weightClass {
-    return $WeightClassCopyWith<$Res>(_value.weightClass, (value) {
+  $WeightClassCopyWith<$Res>? get weightClass {
+    if (_value.weightClass == null) {
+      return null;
+    }
+
+    return $WeightClassCopyWith<$Res>(_value.weightClass!, (value) {
       return _then(_value.copyWith(weightClass: value) as $Val);
     });
   }
@@ -156,7 +160,7 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
       {int? id,
       ParticipantState? r,
       ParticipantState? b,
-      WeightClass weightClass,
+      WeightClass? weightClass,
       int? pool,
       BoutRole? winnerRole,
       BoutResult? result,
@@ -167,15 +171,14 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
   @override
   $ParticipantStateCopyWith<$Res>? get b;
   @override
-  $WeightClassCopyWith<$Res> get weightClass;
+  $WeightClassCopyWith<$Res>? get weightClass;
 }
 
 /// @nodoc
 class __$$BoutImplCopyWithImpl<$Res>
     extends _$BoutCopyWithImpl<$Res, _$BoutImpl>
     implements _$$BoutImplCopyWith<$Res> {
-  __$$BoutImplCopyWithImpl(
-      _$BoutImpl _value, $Res Function(_$BoutImpl) _then)
+  __$$BoutImplCopyWithImpl(_$BoutImpl _value, $Res Function(_$BoutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -184,7 +187,7 @@ class __$$BoutImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? r = freezed,
     Object? b = freezed,
-    Object? weightClass = null,
+    Object? weightClass = freezed,
     Object? pool = freezed,
     Object? winnerRole = freezed,
     Object? result = freezed,
@@ -203,10 +206,10 @@ class __$$BoutImplCopyWithImpl<$Res>
           ? _value.b
           : b // ignore: cast_nullable_to_non_nullable
               as ParticipantState?,
-      weightClass: null == weightClass
+      weightClass: freezed == weightClass
           ? _value.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass,
+              as WeightClass?,
       pool: freezed == pool
           ? _value.pool
           : pool // ignore: cast_nullable_to_non_nullable
@@ -234,7 +237,7 @@ class _$BoutImpl extends _Bout {
       {this.id,
       this.r,
       this.b,
-      required this.weightClass,
+      this.weightClass,
       this.pool,
       this.winnerRole,
       this.result,
@@ -253,7 +256,7 @@ class _$BoutImpl extends _Bout {
   final ParticipantState? b;
 // blue
   @override
-  final WeightClass weightClass;
+  final WeightClass? weightClass;
   @override
   final int? pool;
   @override
@@ -270,7 +273,7 @@ class _$BoutImpl extends _Bout {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BoutImpl &&
@@ -311,7 +314,7 @@ abstract class _Bout extends Bout {
       {final int? id,
       final ParticipantState? r,
       final ParticipantState? b,
-      required final WeightClass weightClass,
+      final WeightClass? weightClass,
       final int? pool,
       final BoutRole? winnerRole,
       final BoutResult? result,
@@ -327,7 +330,7 @@ abstract class _Bout extends Bout {
   @override // red
   ParticipantState? get b;
   @override // blue
-  WeightClass get weightClass;
+  WeightClass? get weightClass;
   @override
   int? get pool;
   @override

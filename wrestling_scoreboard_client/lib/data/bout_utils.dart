@@ -8,9 +8,9 @@ MaterialColor getColorFromBoutRole(BoutRole role) {
 }
 
 String getBoutTitle(BuildContext context, Bout bout) {
-  return '${bout.weightClass.name}, ${styleToAbbr(bout.weightClass.style, context)} | '
-      '${getParticipationStateName(context, bout.r)} vs. '
-      '${getParticipationStateName(context, bout.b)}';
+  final weightClass = bout.weightClass;
+  return '${weightClass == null ? '' : '${weightClass.name}, ${styleToAbbr(weightClass.style, context)} | '}'
+      '${getParticipationStateName(context, bout.r)} vs. ${getParticipationStateName(context, bout.b)}';
 }
 
 String getParticipationStateName(BuildContext context, ParticipantState? participantState) {

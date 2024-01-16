@@ -136,7 +136,7 @@ class ScoreSheet {
       ]);
     }
 
-    final isFreeStyle = bout.weightClass.style == WrestlingStyle.free;
+    final isFreeStyle = bout.weightClass?.style == WrestlingStyle.free;
 
     final wrestlingEvent = event;
     Person? matChairman;
@@ -190,8 +190,8 @@ class ScoreSheet {
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(
-                title: '${localizations.weightClass} (${bout.weightClass.unit.toAbbr()})',
-                content: bout.weightClass.weight.toString(),
+                title: '${localizations.weightClass} (${bout.weightClass?.unit.toAbbr()})',
+                content: bout.weightClass?.weight.toString(),
                 color: PdfColors.grey300,
                 pencilColor: _pencilColor),
             buildFormCell(

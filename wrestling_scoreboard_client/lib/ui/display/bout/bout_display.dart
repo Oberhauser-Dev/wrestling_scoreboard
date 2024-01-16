@@ -81,7 +81,8 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                         onPressBoutInfo: (BuildContext context) {
                           context.push('/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
                         },
-                        navigateToBoutByIndex: (context, index) => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
+                        navigateToBoutByIndex: (context, index) =>
+                            navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
                         home: match.home.team,
                         guest: match.guest.team,
                       );
@@ -451,16 +452,18 @@ class BoutState extends ConsumerState<BoutScreen> {
                                       minFontSize: 10,
                                     ))),
                                   ]),
-                                  Center(
-                                      child: ScaledText(
-                                    '${styleToString(bout.weightClass.style, context)}',
-                                    minFontSize: 10,
-                                  )),
-                                  Center(
-                                      child: ScaledText(
-                                    bout.weightClass.name,
-                                    minFontSize: 10,
-                                  )),
+                                  if (bout.weightClass != null)
+                                    Center(
+                                        child: ScaledText(
+                                      '${styleToString(bout.weightClass!.style, context)}',
+                                      minFontSize: 10,
+                                    )),
+                                  if (bout.weightClass != null)
+                                    Center(
+                                        child: ScaledText(
+                                      bout.weightClass!.name,
+                                      minFontSize: 10,
+                                    )),
                                 ])),
                             Expanded(
                               flex: 50,

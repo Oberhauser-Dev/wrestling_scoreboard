@@ -24,14 +24,14 @@ abstract class BoutEdit extends StatefulWidget {
 abstract class BoutEditState<T extends BoutEdit> extends State<T> implements AbstractEditState<Bout> {
   final _formKey = GlobalKey<FormState>();
 
-  late WeightClass _weightClass;
+  WeightClass? _weightClass;
   Participation? _redParticipation;
   Participation? _blueParticipation;
 
   @override
   void initState() {
     super.initState();
-    _weightClass = widget.bout!.weightClass;
+    _weightClass = widget.bout?.weightClass;
     _redParticipation = widget.bout?.r?.participation;
     _blueParticipation = widget.bout?.b?.participation;
   }

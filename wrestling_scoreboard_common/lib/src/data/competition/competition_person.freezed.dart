@@ -179,7 +179,7 @@ class _$CompetitionPersonImpl extends _CompetitionPerson {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CompetitionPersonImpl &&

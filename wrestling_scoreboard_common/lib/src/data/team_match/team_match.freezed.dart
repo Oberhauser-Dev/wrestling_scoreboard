@@ -436,7 +436,7 @@ class _$TeamMatchImpl extends _TeamMatch {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TeamMatchImpl &&

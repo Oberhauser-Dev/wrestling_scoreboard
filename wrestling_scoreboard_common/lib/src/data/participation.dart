@@ -18,14 +18,14 @@ class Participation with _$Participation implements DataObject {
     int? id,
     required Membership membership,
     required Lineup lineup,
-    required WeightClass weightClass,
+    WeightClass? weightClass,
     double? weight,
   }) = _Participation;
 
   factory Participation.fromJson(Map<String, Object?> json) => _$ParticipationFromJson(json);
 
   static Future<Participation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    final weightClass = await getSingle<WeightClass>(e['weight_class_id'] as int);
+    final weightClassId = e['weight_class_id'] as int?;
     final lineup = await getSingle<Lineup>(e['lineup_id'] as int);
     final membership = await getSingle<Membership>(e['membership_id'] as int);
     final weightEncoded = e['weight'];
@@ -36,7 +36,7 @@ class Participation with _$Participation implements DataObject {
 
     return Participation(
       id: e['id'] as int?,
-      weightClass: weightClass!,
+      weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
       lineup: lineup!,
       membership: membership!,
       weight: weight,
@@ -47,7 +47,7 @@ class Participation with _$Participation implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'weight_class_id': weightClass.id,
+      'weight_class_id': weightClass?.id,
       'lineup_id': lineup.id,
       'membership_id': membership.id,
       'weight': weight?.toString(),

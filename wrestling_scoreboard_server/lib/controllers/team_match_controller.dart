@@ -69,7 +69,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
         JOIN team_match_bout AS tmf ON f.id = tmf.bout_id
         ${hasRed ? 'JOIN participant_state AS ps_red ON ps_red.id = f.red_id' : ''}
         ${hasBlue ? 'JOIN participant_state AS ps_blue ON ps_blue.id = f.blue_id' : ''}
-        WHERE f.weight_class_id = ${bout.weightClass.id}
+        WHERE f.weight_class_id = ${bout.weightClass!.id}
         AND tmf.team_match_id = ${teamMatch.id}
         AND ${hasRed ? 'ps_red.participation_id = ${bout.r!.participation.id}' : 'f.red_id IS NULL'}
         AND ${hasBlue ? 'ps_blue.participation_id = ${bout.b!.participation.id}' : 'f.blue_id IS NULL'};

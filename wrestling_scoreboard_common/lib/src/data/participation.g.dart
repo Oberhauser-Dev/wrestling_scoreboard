@@ -12,8 +12,9 @@ _$ParticipationImpl _$$ParticipationImplFromJson(Map<String, dynamic> json) =>
       membership:
           Membership.fromJson(json['membership'] as Map<String, dynamic>),
       lineup: Lineup.fromJson(json['lineup'] as Map<String, dynamic>),
-      weightClass:
-          WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
+      weightClass: json['weightClass'] == null
+          ? null
+          : WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
       weight: (json['weight'] as num?)?.toDouble(),
     );
 
@@ -22,6 +23,6 @@ Map<String, dynamic> _$$ParticipationImplToJson(_$ParticipationImpl instance) =>
       'id': instance.id,
       'membership': instance.membership.toJson(),
       'lineup': instance.lineup.toJson(),
-      'weightClass': instance.weightClass.toJson(),
+      'weightClass': instance.weightClass?.toJson(),
       'weight': instance.weight,
     };

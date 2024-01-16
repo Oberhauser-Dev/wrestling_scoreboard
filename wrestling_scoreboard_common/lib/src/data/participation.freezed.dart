@@ -23,7 +23,7 @@ mixin _$Participation {
   int? get id => throw _privateConstructorUsedError;
   Membership get membership => throw _privateConstructorUsedError;
   Lineup get lineup => throw _privateConstructorUsedError;
-  WeightClass get weightClass => throw _privateConstructorUsedError;
+  WeightClass? get weightClass => throw _privateConstructorUsedError;
   double? get weight => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,12 +42,12 @@ abstract class $ParticipationCopyWith<$Res> {
       {int? id,
       Membership membership,
       Lineup lineup,
-      WeightClass weightClass,
+      WeightClass? weightClass,
       double? weight});
 
   $MembershipCopyWith<$Res> get membership;
   $LineupCopyWith<$Res> get lineup;
-  $WeightClassCopyWith<$Res> get weightClass;
+  $WeightClassCopyWith<$Res>? get weightClass;
 }
 
 /// @nodoc
@@ -66,7 +66,7 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation>
     Object? id = freezed,
     Object? membership = null,
     Object? lineup = null,
-    Object? weightClass = null,
+    Object? weightClass = freezed,
     Object? weight = freezed,
   }) {
     return _then(_value.copyWith(
@@ -82,10 +82,10 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation>
           ? _value.lineup
           : lineup // ignore: cast_nullable_to_non_nullable
               as Lineup,
-      weightClass: null == weightClass
+      weightClass: freezed == weightClass
           ? _value.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass,
+              as WeightClass?,
       weight: freezed == weight
           ? _value.weight
           : weight // ignore: cast_nullable_to_non_nullable
@@ -111,8 +111,12 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation>
 
   @override
   @pragma('vm:prefer-inline')
-  $WeightClassCopyWith<$Res> get weightClass {
-    return $WeightClassCopyWith<$Res>(_value.weightClass, (value) {
+  $WeightClassCopyWith<$Res>? get weightClass {
+    if (_value.weightClass == null) {
+      return null;
+    }
+
+    return $WeightClassCopyWith<$Res>(_value.weightClass!, (value) {
       return _then(_value.copyWith(weightClass: value) as $Val);
     });
   }
@@ -130,7 +134,7 @@ abstract class _$$ParticipationImplCopyWith<$Res>
       {int? id,
       Membership membership,
       Lineup lineup,
-      WeightClass weightClass,
+      WeightClass? weightClass,
       double? weight});
 
   @override
@@ -138,7 +142,7 @@ abstract class _$$ParticipationImplCopyWith<$Res>
   @override
   $LineupCopyWith<$Res> get lineup;
   @override
-  $WeightClassCopyWith<$Res> get weightClass;
+  $WeightClassCopyWith<$Res>? get weightClass;
 }
 
 /// @nodoc
@@ -155,7 +159,7 @@ class __$$ParticipationImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? membership = null,
     Object? lineup = null,
-    Object? weightClass = null,
+    Object? weightClass = freezed,
     Object? weight = freezed,
   }) {
     return _then(_$ParticipationImpl(
@@ -171,10 +175,10 @@ class __$$ParticipationImplCopyWithImpl<$Res>
           ? _value.lineup
           : lineup // ignore: cast_nullable_to_non_nullable
               as Lineup,
-      weightClass: null == weightClass
+      weightClass: freezed == weightClass
           ? _value.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass,
+              as WeightClass?,
       weight: freezed == weight
           ? _value.weight
           : weight // ignore: cast_nullable_to_non_nullable
@@ -190,7 +194,7 @@ class _$ParticipationImpl extends _Participation {
       {this.id,
       required this.membership,
       required this.lineup,
-      required this.weightClass,
+      this.weightClass,
       this.weight})
       : super._();
 
@@ -204,7 +208,7 @@ class _$ParticipationImpl extends _Participation {
   @override
   final Lineup lineup;
   @override
-  final WeightClass weightClass;
+  final WeightClass? weightClass;
   @override
   final double? weight;
 
@@ -214,7 +218,7 @@ class _$ParticipationImpl extends _Participation {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ParticipationImpl &&
@@ -251,7 +255,7 @@ abstract class _Participation extends Participation {
       {final int? id,
       required final Membership membership,
       required final Lineup lineup,
-      required final WeightClass weightClass,
+      final WeightClass? weightClass,
       final double? weight}) = _$ParticipationImpl;
   const _Participation._() : super._();
 
@@ -265,7 +269,7 @@ abstract class _Participation extends Participation {
   @override
   Lineup get lineup;
   @override
-  WeightClass get weightClass;
+  WeightClass? get weightClass;
   @override
   double? get weight;
   @override

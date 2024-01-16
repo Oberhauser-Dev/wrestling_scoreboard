@@ -171,7 +171,7 @@ class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CompetitionTeamParticipationImpl &&
@@ -188,7 +188,8 @@ class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl>
+  _$$CompetitionTeamParticipationImplCopyWith<
+          _$CompetitionTeamParticipationImpl>
       get copyWith => __$$CompetitionTeamParticipationImplCopyWithImpl<
           _$CompetitionTeamParticipationImpl>(this, _$identity);
 
@@ -219,6 +220,7 @@ abstract class _CompetitionTeamParticipation
   Team get team;
   @override
   @JsonKey(ignore: true)
-  _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl>
+  _$$CompetitionTeamParticipationImplCopyWith<
+          _$CompetitionTeamParticipationImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
