@@ -34,6 +34,11 @@ class TeamMatchController extends EntityController<TeamMatch> {
         isRaw: isRaw(request), sqlQuery: _boutsQuery, substitutionValues: {'id': id});
   }
 
+  Future<Response> requestTeamMatchBouts(Request request, String id) async {
+    return EntityController.handleRequestManyOfController(TeamMatchBoutController(),
+        isRaw: isRaw(request), conditions: ['team_match_id = @id'], substitutionValues: {'id': id}, orderBy: ['pos']);
+  }
+
   Future<List<Bout>> getBouts(String id) {
     return BoutController().getManyFromQuery(_boutsQuery, substitutionValues: {'id': id});
   }

@@ -146,7 +146,6 @@ class ParticipantSelectTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
     return ListTile(
       title: Row(
         children: [

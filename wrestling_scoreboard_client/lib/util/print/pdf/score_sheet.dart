@@ -43,7 +43,7 @@ class ScoreSheet {
 
   Bout get bout => boutState.bout;
 
-  TeamMatch get event => boutState.widget.match;
+  WrestlingEvent get event => boutState.widget.wrestlingEvent;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -59,7 +59,7 @@ class ScoreSheet {
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
     final actions = await boutState.getActions();
 
-    // Add page to the PDF
+// Add page to the PDF
     doc.addPage(
       MultiPage(
         pageTheme: _buildTheme(
@@ -138,6 +138,20 @@ class ScoreSheet {
 
     final isFreeStyle = bout.weightClass.style == WrestlingStyle.free;
 
+    final wrestlingEvent = event;
+    Person? matChairman;
+    Person? referee;
+    Person? judge;
+    if (wrestlingEvent is TeamMatch) {
+      matChairman = wrestlingEvent.matChairman;
+      referee = wrestlingEvent.referee;
+      judge = wrestlingEvent.judge;
+    } else if (wrestlingEvent is Competition) {
+      // TODO: get referees from bout
+      // matChairman = bout.matChairman;
+      // referee = bout.referee;
+      // judge = bout.judge;
+    }
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -149,9 +163,9 @@ class ScoreSheet {
             Text(localizations.grecoRoman, style: const TextStyle(fontSize: 7)),
           ]),
           Table(children: [
-            buildJudges(title: localizations.matChairman.toUpperCase(), no: event.matChairman?.id.toString() ?? ''),
-            buildJudges(title: localizations.referee.toUpperCase(), no: event.referee?.id.toString() ?? ''),
-            buildJudges(title: 'PUNKTRICHTER', no: event.judge?.id.toString() ?? ''),
+            buildJudges(title: localizations.matChairman.toUpperCase(), no: matChairman?.id.toString() ?? ''),
+            buildJudges(title: localizations.referee.toUpperCase(), no: referee?.id.toString() ?? ''),
+            buildJudges(title: localizations.judge.toUpperCase(), no: judge?.id.toString() ?? ''),
           ]),
         ]);
   }

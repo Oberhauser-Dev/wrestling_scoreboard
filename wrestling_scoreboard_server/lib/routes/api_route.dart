@@ -110,6 +110,7 @@ class ApiRoute {
     router.get('/team_match/<id|[0-9]+>', matchController.requestSingle);
     router.post('/team_match/<id|[0-9]+>/bouts/generate', matchController.generateBouts);
     router.get('/team_match/<id|[0-9]+>/bouts', matchController.requestBouts);
+    router.get('/team_match/<id|[0-9]+>/team_match_bouts', matchController.requestTeamMatchBouts);
 
     final teamMatchBoutController = TeamMatchBoutController();
     router.post('/team_match_bout', teamMatchBoutController.postSingle);

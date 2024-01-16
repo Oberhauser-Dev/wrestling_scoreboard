@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_client/ui/display/bout/technical_points.dar
 import 'package:wrestling_scoreboard_client/ui/display/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/common.dart';
 import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.dart';
+import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
@@ -26,22 +27,22 @@ import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToBoutScreen(BuildContext context, TeamMatch match, Bout bout) async {
-  context.push('/${TeamMatchOverview.route}/${match.id}/${BoutDisplay.route}/${bout.id}');
+void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) async {
+  context.push('/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutDisplay.route}/${bout.id}');
 }
 
 /// Class to load a single bout, while also consider the previous and the next bout.
 /// So must load the whole list of bouts to keep track of what comes next.
 /// TODO: This may can be done server side with its own request in the future.
-class BoutDisplay extends StatelessWidget {
-  static const route = 'bout';
+class TeamMatchBoutDisplay extends StatelessWidget {
+  static const route = 'team_match_bout';
   final int matchId;
-  final int boutId;
+  final int teamMatchBoutId;
   final TeamMatch? initialMatch;
 
-  const BoutDisplay({
+  const TeamMatchBoutDisplay({
     required this.matchId,
-    required this.boutId,
+    required this.teamMatchBoutId,
     this.initialMatch,
     super.key,
   });
@@ -53,10 +54,10 @@ class BoutDisplay extends StatelessWidget {
         id: matchId,
         initialData: initialMatch,
         builder: (context, match) {
-          return ManyConsumer<Bout, TeamMatch>(
+          return ManyConsumer<TeamMatchBout, TeamMatch>(
               filterObject: match,
-              builder: (context, bouts) {
-                if (bouts.isEmpty) {
+              builder: (context, teamMatchBouts) {
+                if (teamMatchBouts.isEmpty) {
                   return Center(
                     child: Text(
                       localizations.noItems,
@@ -64,13 +65,26 @@ class BoutDisplay extends StatelessWidget {
                     ),
                   );
                 }
-                final currentBout = bouts.singleWhere((element) => element.id == boutId);
-                final currentBoutIndex = bouts.indexOf(currentBout);
+                final teamMatchBout = teamMatchBouts.singleWhere((element) => element.id == teamMatchBoutId);
+                final teamMatchBoutIndex = teamMatchBouts.indexOf(teamMatchBout);
+                // Use bout to get the actual state, but use teamMatchBout for navigation.
                 return SingleConsumer<Bout>(
-                    id: currentBout.id,
-                    initialData: currentBout,
+                    id: teamMatchBout.bout.id,
+                    initialData: teamMatchBout.bout,
                     builder: (context, bout) {
-                      return BoutScreen(match: match, bouts: bouts, boutIndex: currentBoutIndex, bout: bout);
+                      return BoutScreen(
+                        wrestlingEvent: match,
+                        boutConfig: match.league?.boutConfig ?? const BoutConfig(),
+                        bouts: teamMatchBouts.map((e) => e.bout).toList(),
+                        boutIndex: teamMatchBoutIndex,
+                        bout: bout,
+                        onPressBoutInfo: (BuildContext context) {
+                          context.push('/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
+                        },
+                        navigateToBoutByIndex: (context, index) => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
+                        home: match.home.team,
+                        guest: match.guest.team,
+                      );
                     });
               });
         });
@@ -80,16 +94,28 @@ class BoutDisplay extends StatelessWidget {
 /// Initialize with default values, but do not synchronize with live data, as during a bout the connection could be interrupted. So the client always sends data, but never should receive any.
 /// If closing and reopening screen, data should be updated though.
 class BoutScreen extends ConsumerStatefulWidget {
-  final TeamMatch match;
+  final WrestlingEvent wrestlingEvent;
   final List<Bout> bouts;
   final Bout bout;
+
+  // TODO: may overwrite in settings to be more flexible
+  final BoutConfig boutConfig;
+  final Team home;
+  final Team guest;
   final int boutIndex;
+  final void Function(BuildContext context) onPressBoutInfo;
+  final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
 
   const BoutScreen({
-    required this.match,
     required this.bouts,
     required this.bout,
     required this.boutIndex,
+    required this.home,
+    required this.guest,
+    required this.onPressBoutInfo,
+    required this.navigateToBoutByIndex,
+    required this.boutConfig,
+    required this.wrestlingEvent,
     super.key,
   });
 
@@ -114,8 +140,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   initState() {
     super.initState();
     HornSound();
-    // TODO: may overwrite in settings to be more flexible
-    boutConfig = widget.match.league?.boutConfig ?? const BoutConfig();
+    boutConfig = widget.boutConfig;
     bout = widget.bout;
     _r = ParticipantStateModel(bout.r);
     _b = ParticipantStateModel(bout.b);
@@ -200,12 +225,12 @@ class BoutState extends ConsumerState<BoutScreen> {
   void handleAction(BoutScreenActionIntent intent) {
     intent.handle(
       stopwatch,
-      widget.match,
       widget.bouts,
       getActions,
       widget.boutIndex,
       doAction,
       context: context,
+      navigateToBoutByIndex: widget.navigateToBoutByIndex,
     );
   }
 
@@ -377,16 +402,20 @@ class BoutState extends ConsumerState<BoutScreen> {
         Printing.sharePdf(bytes: bytes);
       },
     );
+    final infoAction = IconButton(
+      icon: const Icon(Icons.info),
+      onPressed: () => widget.onPressBoutInfo(context),
+    );
     return ManyConsumer<BoutAction, Bout>(
         filterObject: bout,
         builder: (context, actions) {
           return BoutActionHandler(
             stopwatch: stopwatch,
-            match: widget.match,
             getActions: () async => actions,
             bouts: widget.bouts,
             boutIndex: widget.boutIndex,
             doAction: doAction,
+            navigateToBoutByIndex: widget.navigateToBoutByIndex,
             child: Consumer(builder: (context, ref, child) {
               return LoadingBuilder<WindowState>(
                 future: ref.watch(windowStateNotifierProvider),
@@ -395,13 +424,13 @@ class BoutState extends ConsumerState<BoutScreen> {
                   return Scaffold(
                     appBar: isFullScreen
                         ? null
-                        : AppBar(actions: [shareAction, CommonElements.getFullScreenAction(context, ref)]),
+                        : AppBar(actions: [infoAction, shareAction, CommonElements.getFullScreenAction(context, ref)]),
                     body: SingleChildScrollView(
                       child: Column(
                         children: [
                           row(
                               padding: bottomPadding,
-                              children: CommonElements.getTeamHeader(widget.match, widget.bouts, context)
+                              children: CommonElements.getTeamHeader(widget.home, widget.guest, widget.bouts, context)
                                   .asMap()
                                   .entries
                                   .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))

@@ -47,9 +47,9 @@ class MatchDisplay extends StatelessWidget {
                   appBar: isFullScreen
                       ? null
                       : AppBar(actions: [infoAction, CommonElements.getFullScreenAction(context, ref)]),
-                  body: ManyConsumer<Bout, TeamMatch>(
+                  body: ManyConsumer<TeamMatchBout, TeamMatch>(
                     filterObject: match,
-                    builder: (context, bouts) {
+                    builder: (context, teamMatchBouts) {
                       final matchInfos = [
                         match.league?.name,
                         '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
@@ -71,7 +71,8 @@ class MatchDisplay extends StatelessWidget {
                               fontSize: 12,
                               minFontSize: 10,
                             ))),
-                        ...CommonElements.getTeamHeader(match, bouts, context),
+                        ...CommonElements.getTeamHeader(
+                            match.home.team, match.guest.team, teamMatchBouts.map((e) => e.bout).toList(), context),
                       ];
                       final column = Column(
                         children: [
@@ -86,18 +87,18 @@ class MatchDisplay extends StatelessWidget {
                           ),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: bouts.length,
+                              itemCount: teamMatchBouts.length,
                               itemBuilder: (context, index) {
                                 return Column(
                                   children: [
                                     InkWell(
-                                      onTap: () => navigateToBoutScreen(context, match, bouts[index]),
+                                      onTap: () => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
                                       child: IntrinsicHeight(
                                         child: ManyConsumer<BoutAction, Bout>(
-                                          filterObject: bouts[index],
+                                          filterObject: teamMatchBouts[index].bout,
                                           builder: (context, actions) => BoutListItem(
                                             match: match,
-                                            bout: bouts[index],
+                                            bout: teamMatchBouts[index].bout,
                                             actions: actions,
                                           ),
                                         ),
@@ -236,8 +237,7 @@ class BoutListItem extends StatelessWidget {
                           Expanded(
                               flex: 70,
                               child: ThemedContainer(
-                                color:
-                                    data.winnerRole != null ? getColorFromBoutRole(data.winnerRole!).shade800 : null,
+                                color: data.winnerRole != null ? getColorFromBoutRole(data.winnerRole!).shade800 : null,
                                 child: Center(
                                   child: ScaledText(getAbbreviationFromBoutResult(data.result, context), fontSize: 12),
                                 ),

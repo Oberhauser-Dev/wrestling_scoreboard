@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_client/ui/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CommonElements {
-  static List<Widget> getTeamHeader(TeamMatch match, List<Bout> bouts, BuildContext context) {
+  static List<Widget> getTeamHeader(Team home, Team guest, List<Bout> bouts, BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final padding = width / 100;
     final edgeInsets = EdgeInsets.all(padding);
@@ -16,7 +16,7 @@ class CommonElements {
           padding: edgeInsets,
           child: Center(
             child: ScaledText(
-              match.home.team.name,
+              home.name,
               fontSize: 28,
               minFontSize: 16,
             ),
@@ -56,7 +56,7 @@ class CommonElements {
         padding: edgeInsets,
         child: Center(
           child: ScaledText(
-            match.guest.team.name,
+            guest.name,
             fontSize: 28,
             minFontSize: 16,
           ),

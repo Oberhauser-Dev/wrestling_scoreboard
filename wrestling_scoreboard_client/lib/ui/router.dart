@@ -35,11 +35,11 @@ final router = GoRouter(
             builder: (context, state) => MatchDisplay(id: int.parse(state.pathParameters['match_id']!)),
           ),
           GoRoute(
-            path: '${BoutDisplay.route}/:bout_id',
+            path: '${TeamMatchBoutDisplay.route}/:team_match_bout_id',
             builder: (context, state) {
               final matchId = int.parse(state.pathParameters['match_id']!);
-              final boutId = int.parse(state.pathParameters['bout_id']!);
-              return BoutDisplay(matchId: matchId, boutId: boutId);
+              final teamMatchBoutId = int.parse(state.pathParameters['team_match_bout_id']!);
+              return TeamMatchBoutDisplay(matchId: matchId, teamMatchBoutId: teamMatchBoutId);
             },
           ),
         ],

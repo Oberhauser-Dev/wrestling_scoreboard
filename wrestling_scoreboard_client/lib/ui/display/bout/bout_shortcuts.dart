@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -102,9 +101,15 @@ class BoutScreenActionIntent extends Intent {
   const BoutScreenActionIntent.blueUndo() : type = BoutScreenActions.blueUndo;
   final BoutScreenActions type;
 
-  Future<void> handle(ObservableStopwatch stopwatch, TeamMatch match, List<Bout> bouts,
-      Future<List<BoutAction>> Function() getActions, int boutIndex, Function(BoutScreenActions action) doAction,
-      {BuildContext? context}) async {
+  Future<void> handle(
+    ObservableStopwatch stopwatch,
+    List<Bout> bouts,
+    Future<List<BoutAction>> Function() getActions,
+    int boutIndex,
+    Function(BoutScreenActions action) doAction, {
+    BuildContext? context,
+    required void Function(BuildContext context, int boutIndex) navigateToBoutByIndex,
+  }) async {
     final bout = bouts[boutIndex];
     switch (type) {
       case BoutScreenActions.startStop:
@@ -128,7 +133,7 @@ class BoutScreenActionIntent extends Intent {
           int index = boutIndex + 1;
           if (index < bouts.length) {
             context.pop();
-            navigateToBoutScreen(context, match, bouts[index]);
+            navigateToBoutByIndex(context, index);
           }
         }
         break;
@@ -137,7 +142,7 @@ class BoutScreenActionIntent extends Intent {
           int index = boutIndex - 1;
           if (index >= 0) {
             context.pop();
-            navigateToBoutScreen(context, match, bouts[index]);
+            navigateToBoutByIndex(context, index);
           }
         }
         break;
@@ -268,24 +273,25 @@ class BoutScreenActionIntent extends Intent {
 class BoutActionHandler extends StatelessWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
-  final TeamMatch match;
   final List<Bout> bouts;
   final Future<List<BoutAction>> Function() getActions;
   final int boutIndex;
   final Function(BoutScreenActions action) doAction;
+  final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
 
   const BoutActionHandler(
       {required this.child,
       required this.stopwatch,
-      required this.match,
       required this.bouts,
       required this.getActions,
       required this.boutIndex,
       required this.doAction,
-      super.key});
+      super.key,
+      required this.navigateToBoutByIndex});
 
   Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
-    await intent.handle(stopwatch, match, bouts, getActions, boutIndex, doAction, context: context);
+    await intent.handle(stopwatch, bouts, getActions, boutIndex, doAction,
+        context: context, navigateToBoutByIndex: navigateToBoutByIndex);
   }
 
   @override
