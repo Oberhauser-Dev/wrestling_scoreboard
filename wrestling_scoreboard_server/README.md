@@ -6,9 +6,7 @@ in `lib/`, and example unit test in `test/`.
 ## Build package
 
 ```shell
-dart pub get
-dart compile exe bin/server.dart -o ./bin/wrestling-scoreboard-server
-chmod +x ./bin/wrestling-scoreboard-server
+./build.sh -v 0.0.1
 ```
 
 ## Environment variables:

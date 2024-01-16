@@ -6,4 +6,4 @@
 # Conventional directory for build output.
 build/
 bin/server
-bin/wrestling-scoreboard-server
+bin/wrestling-scoreboard-server*
