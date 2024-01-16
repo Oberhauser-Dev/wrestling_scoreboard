@@ -6,8 +6,40 @@ on:
       - '*'
 
 jobs:
-  release:
-    name: Release for ${{ matrix.platform }}
+  release-server:
+    name: Release Server for ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: wrestling_scoreboard_server
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: android
+          - os: windows-latest
+            platform: windows
+          - os: macos-latest
+            platform: macow
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.2'
+          channel: 'stable'
+      - name: Build
+        run: ./build.sh -v ${{ github.ref_name }}
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ inputs.token }}
+          file: wrestling_scoreboard_server/build/wrestling-scoreboard-server-${{ github.ref_name }}-${{ matrix.platform }}-x86_64.tar.gz
+          asset_name: wrestling-scoreboard-server-${{ github.ref_name }}-${{ matrix.platform }}-x86_64.tar.gz
+          tag: ${{ github.ref }}
+    
+  release-client:
+    name: Release Client for ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:

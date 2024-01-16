@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  call-build-app:
+  call-build-client:
     uses: ./.github/workflows/build-app.yml
     with:
       upload_pages_artifact: true
