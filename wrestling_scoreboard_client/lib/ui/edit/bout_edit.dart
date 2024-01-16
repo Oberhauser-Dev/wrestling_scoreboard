@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
@@ -24,13 +25,19 @@ abstract class BoutEdit extends StatefulWidget {
 abstract class BoutEditState<T extends BoutEdit> extends State<T> implements AbstractEditState<Bout> {
   final _formKey = GlobalKey<FormState>();
 
+  BoutRole? _winnerRole;
+  BoutResult? _boutResult;
   WeightClass? _weightClass;
   Participation? _redParticipation;
   Participation? _blueParticipation;
 
+  Future<List<WeightClass>> get availableWeightClasses;
+
   @override
   void initState() {
     super.initState();
+    _winnerRole = widget.bout?.winnerRole;
+    _boutResult = widget.bout?.result;
     _weightClass = widget.bout?.weightClass;
     _redParticipation = widget.bout?.r?.participation;
     _blueParticipation = widget.bout?.b?.participation;
@@ -62,8 +69,68 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
         createOrUpdateParticipantState: (participation) => _blueParticipation = participation,
         deleteParticipantState: (participation) => _blueParticipation = null,
       ),
-      // TODO: remove the need for a weight class.
-      // TODO: select from existing weight classes.
+      ListTile(
+        title: getDropdown<WeightClass>(
+          icon: const Icon(Icons.fitness_center),
+          selectedItem: _weightClass,
+          label: AppLocalizations.of(context)!.weightClass,
+          context: context,
+          onSaved: (WeightClass? value) => setState(() {
+            _weightClass = value;
+          }),
+          itemAsString: (u) => u.name,
+          onFind: (String? filter) async {
+            final boutWeightClasses = await availableWeightClasses;
+            return (filter == null
+                    ? boutWeightClasses
+                    : boutWeightClasses.where((element) => element.name.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.emoji_events),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<BoutRole>(
+            hint: localizations.winner,
+            isNullable: true,
+            selected: _winnerRole,
+            options: BoutRole.values.map(
+              (BoutRole value) => MapEntry(
+                value,
+                Text(
+                  value.name,
+                ),
+              ),
+            ),
+            onChange: (BoutRole? newValue) => setState(() {
+              _winnerRole = newValue;
+            }),
+          ),
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.label),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<BoutResult>(
+            hint: localizations.result,
+            isNullable: true,
+            selected: _boutResult,
+            options: BoutResult.values.map(
+              (BoutResult value) => MapEntry(
+                  value,
+                  Tooltip(
+                      message: getDescriptionFromBoutResult(value, context),
+                      child: Text(getAbbreviationFromBoutResult(value, context)))),
+            ),
+            onChange: (BoutResult? newValue) => setState(() {
+              _boutResult = newValue;
+            }),
+          ),
+        ),
+      ),
     ];
 
     return Form(
@@ -97,8 +164,8 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
       var bout = Bout(
         id: widget.bout?.id,
         weightClass: _weightClass,
-        result: widget.bout?.result,
-        winnerRole: widget.bout?.winnerRole,
+        result: _boutResult,
+        winnerRole: _winnerRole,
         r: await updateParticipantState(_redParticipation, widget.bout?.r),
         b: await updateParticipantState(_blueParticipation, widget.bout?.b),
         duration: widget.bout?.duration ?? Duration.zero,
@@ -147,6 +214,7 @@ class ParticipantSelectTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
+      leading: const Icon(Icons.person),
       title: Row(
         children: [
           Expanded(

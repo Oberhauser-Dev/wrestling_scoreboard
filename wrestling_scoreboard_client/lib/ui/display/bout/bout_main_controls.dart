@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
+import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
@@ -90,26 +90,25 @@ class BoutMainControlsState extends State<BoutMainControls> {
     ParticipantState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
     ParticipantState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
     // Empty List, if pStatus is empty
-    List<DropdownMenuItem<BoutResult?>> items = [];
+    final List<MapEntry<BoutResult, Widget>> boutResultOptions = [];
     if (pStatus != null) {
-      final boutResultValues = BoutResult.values.toList();
+      final boutResultValues = List.of(BoutResult.values);
       if (pStatusOpponent == null) {
         // Cannot select this option, as there is no opponent
         boutResultValues.remove(BoutResult.dsq2);
       }
-      items.addAll(boutResultValues.map((BoutResult? value) {
-        return DropdownMenuItem<BoutResult?>(
-          value: value,
-          child: Tooltip(
-              message: getDescriptionFromBoutResult(value, context),
-              child: Text(getAbbreviationFromBoutResult(value, context))),
-        );
-      }).toList());
+      boutResultOptions.addAll(boutResultValues.map(
+        (BoutResult value) => MapEntry(
+          value,
+          Tooltip(
+            message: getDescriptionFromBoutResult(value, context),
+            child: Text(
+              getAbbreviationFromBoutResult(value, context),
+            ),
+          ),
+        ),
+      ));
     }
-    items.add(DropdownMenuItem<BoutResult?>(
-      value: null,
-      child: Text(AppLocalizations.of(context)!.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
-    ));
     return ThemedContainer(
       color: role == widget.boutState.bout.winnerRole ? getColorFromBoutRole(role) : null,
       child: ButtonTheme(
@@ -117,13 +116,13 @@ class BoutMainControlsState extends State<BoutMainControls> {
           child: ManyConsumer<BoutAction, Bout>(
             filterObject: widget.boutState.bout,
             builder: (context, actions) {
-              return DropdownButton<BoutResult?>(
-                isExpanded: true,
-                value: role == widget.boutState.bout.winnerRole || widget.boutState.bout.result == BoutResult.dsq2
+              return SimpleDropdown<BoutResult>(
+                isNullable: true,
+                selected: role == widget.boutState.bout.winnerRole || widget.boutState.bout.result == BoutResult.dsq2
                     ? widget.boutState.bout.result
                     : null,
-                items: items,
-                onChanged: (val) {
+                options: boutResultOptions,
+                onChange: (BoutResult? val) {
                   setState(() {
                     var bout = widget.boutState.bout.copyWith(
                       winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
