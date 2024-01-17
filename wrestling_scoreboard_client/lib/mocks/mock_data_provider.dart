@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MockDataProvider extends DataProvider {
+class MockDataManager extends DataManager {
   final latency = const Duration(milliseconds: 100);
 
   @override

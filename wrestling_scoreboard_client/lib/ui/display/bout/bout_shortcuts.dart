@@ -104,7 +104,7 @@ class BoutScreenActionIntent extends Intent {
   final BoutScreenActions type;
 
   Future<void> handle(
-    DataProvider dataProvider,
+    DataManager dataManager,
     ObservableStopwatch stopwatch,
     List<Bout> bouts,
     Future<List<BoutAction>> Function() getActions,
@@ -155,17 +155,17 @@ class BoutScreenActionIntent extends Intent {
       case BoutScreenActions.redOne:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redTwo:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redThree:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redFour:
         var action = BoutAction(
@@ -175,22 +175,22 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 4,
         );
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redPassivity:
         var action =
             BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.passivity);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redCaution:
         var action =
             BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.caution);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redDismissal:
         var action =
             BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.dismissal);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redActivityTime:
         doAction(BoutScreenActions.redActivityTime);
@@ -204,44 +204,44 @@ class BoutScreenActionIntent extends Intent {
           final rActions = actions.where((el) => el.role == BoutRole.red);
           if (rActions.isNotEmpty) {
             final action = rActions.last;
-            dataProvider.deleteSingle<BoutAction>(action);
+            dataManager.deleteSingle<BoutAction>(action);
           }
         }
         break;
       case BoutScreenActions.blueOne:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueTwo:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueThree:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFour:
         var action = BoutAction(
             bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 4);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
         var action =
             BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.passivity);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueCaution:
         var action =
             BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.caution);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueDismissal:
         var action =
             BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.dismissal);
-        await dataProvider.createOrUpdateSingle(action);
+        await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueUndo:
         if (bout.b != null) {
@@ -249,7 +249,7 @@ class BoutScreenActionIntent extends Intent {
           final bActions = actions.where((el) => el.role == BoutRole.blue);
           if (bActions.isNotEmpty) {
             final action = bActions.last;
-            dataProvider.deleteSingle<BoutAction>(action);
+            dataManager.deleteSingle<BoutAction>(action);
           }
         }
         break;
@@ -263,7 +263,7 @@ class BoutScreenActionIntent extends Intent {
         final actions = await getActions();
         if (actions.isNotEmpty) {
           final action = actions.last;
-          dataProvider.deleteSingle<BoutAction>(action);
+          dataManager.deleteSingle<BoutAction>(action);
         }
         break;
       case BoutScreenActions.horn:

@@ -208,7 +208,7 @@ class TeamMatchOverview extends ConsumerWidget {
   }
 
   handleSelectedLineup(
-      Lineup lineup, League league, TeamMatch match, NavigatorState navigator, DataProvider dataManager) async {
+      Lineup lineup, League league, TeamMatch match, NavigatorState navigator, DataManager dataManager) async {
     final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
     final weightClasses = await dataManager.readMany<WeightClass, League>(filterObject: league);
     navigator.push(

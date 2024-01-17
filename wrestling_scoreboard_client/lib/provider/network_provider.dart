@@ -13,13 +13,13 @@ final _isMock = Env.appEnvironment.fromString() == 'mock';
 @Riverpod(keepAlive: true)
 class DataManagerNotifier extends _$DataManagerNotifier {
   @override
-  Raw<Future<DataProvider>> build() async {
+  Raw<Future<DataManager>> build() async {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
     final wsUrl = await ref.watch(webSocketUrlNotifierProvider);
 
     // TODO: override with mock via rivperpod overrides.
-    final dataProvider = _isMock ? MockDataProvider() : RestDataProvider(apiUrl: apiUrl, wsUrl: wsUrl);
-    return dataProvider;
+    final dataManager = _isMock ? MockDataManager() : RestDataManager(apiUrl: apiUrl, wsUrl: wsUrl);
+    return dataManager;
   }
 }
 

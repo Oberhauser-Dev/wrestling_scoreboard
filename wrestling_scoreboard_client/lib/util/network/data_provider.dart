@@ -4,7 +4,7 @@ import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart'
 import 'package:wrestling_scoreboard_common/common.dart';
 
 /// Data exchange layer with CRUD operations
-abstract class DataProvider {
+abstract class DataManager {
   
   WebSocketManager get webSocketManager;
   

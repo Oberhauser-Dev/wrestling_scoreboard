@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class RestDataProvider extends DataProvider {
+class RestDataManager extends DataManager {
   static const rawQueryParameter = {
     'isRaw': 'true',
   };
@@ -18,7 +18,7 @@ class RestDataProvider extends DataProvider {
   @override
   late final WebSocketManager webSocketManager;
 
-  RestDataProvider({required String? apiUrl, this.wsUrl}) {
+  RestDataManager({required String? apiUrl, this.wsUrl}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
     _initUpdateStream();
   }
