@@ -26,14 +26,20 @@ jobs:
           flutter-version: '3.16.2'
           channel: 'stable'
       - name: Build
-        run: ./build.sh -v ${{ github.ref_name }}
+        id: build
+        shell: bash
+        run: |
+          ARTIFACT_PATH=$(./build.sh -v ${{ github.ref_name }} | tail -1)
+          ARTIFACT_NAME=$(basename "$ARTIFACT_PATH")
+          echo "artifact-path=$(echo $ARTIFACT_PATH)" >> $GITHUB_OUTPUT
+          echo "artifact-name=$(echo $ARTIFACT_NAME)" >> $GITHUB_OUTPUT
         working-directory: wrestling_scoreboard_server
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ github.token }}
-          file: ./wrestling_scoreboard_server/build/wrestling_scoreboard_server-${{ matrix.platform }}-${{ github.ref_name }}.tar.gz
-          asset_name: wrestling_scoreboard_server-${{ matrix.platform }}-${{ github.ref_name }}.tar.gz
+          file: wrestling_scoreboard_server/${{ steps.build.outputs.artifact-path }}
+          asset_name: ${{ steps.build.outputs.artifact-name }}
           tag: ${{ github.ref }}
     
   release-client:
