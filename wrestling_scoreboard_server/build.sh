@@ -8,9 +8,17 @@ do
 done
 
 VERSION=${VERSION:-v$(grep -oP '^version:\s*\K[0-9A-Za-z.\-]*\s*$' pubspec.yaml)}
+ARCH=$(uname -m)
+case $ARCH in
+    i386)   ARCH="amd32" ;;
+    i686)   ARCH="amd32" ;;
+    x86_64) ARCH="amd64" ;;
+    arm)    ARCH="arm32" ;;
+    aarch64)   ARCH="arm64" ;;
+esac
 
 echo "Version: $VERSION";
-echo "Arch: $(uname -m)";
+echo "Arch: $ARCH ($(uname -m))";
 
 if [[ "$OSTYPE" =~ ^msys ]]; then
     EXEC_NAME="wrestling-scoreboard-server.exe"
@@ -27,4 +35,6 @@ mkdir ./build
 dart pub get
 dart compile exe bin/server.dart -o ./bin/${EXEC_NAME}
 chmod +x ./bin/${EXEC_NAME}
-tar -czf build/wrestling_scoreboard_server-${PLATFORM}-${VERSION}.tar.gz bin/${EXEC_NAME} public .env.example
+OUTPUT_PATH="build/wrestling_scoreboard_server-${PLATFORM}-${ARCH}-${VERSION}.tar.gz"
+tar -czf ${OUTPUT_PATH} bin/${EXEC_NAME} public .env.example
+echo ${OUTPUT_PATH}
