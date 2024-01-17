@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class LeagueTeamParticipationEdit extends StatefulWidget {
+class LeagueTeamParticipationEdit extends ConsumerStatefulWidget {
   final LeagueTeamParticipation? participation;
   final Team? initialTeam;
   final League? initialLeague;
@@ -18,10 +20,10 @@ class LeagueTeamParticipationEdit extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => TeamEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => TeamEditState();
 }
 
-class TeamEditState extends State<LeagueTeamParticipationEdit> {
+class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
   final _formKey = GlobalKey<FormState>();
 
   List<Team>? availableTeams;
@@ -53,7 +55,7 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableTeams ??= await dataProvider.readMany<Team, Null>();
+            availableTeams ??= await ref.read(dataManagerProvider).readMany<Team, Null>();
             return (filter == null
                     ? availableTeams!
                     : availableTeams!.where((element) => element.name.contains(filter)))
@@ -72,7 +74,7 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            _availableLeagues ??= await dataProvider.readMany<League, Null>();
+            _availableLeagues ??= await ref.read(dataManagerProvider).readMany<League, Null>();
             return (filter == null
                     ? _availableLeagues!
                     : _availableLeagues!.where((element) => element.name.contains(filter)))
@@ -96,11 +98,11 @@ class TeamEditState extends State<LeagueTeamParticipationEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(LeagueTeamParticipation(
-        id: widget.participation?.id,
-        team: _team!,
-        league: _league!,
-      ));
+      await ref.read(dataManagerProvider).createOrUpdateSingle(LeagueTeamParticipation(
+            id: widget.participation?.id,
+            team: _team!,
+            league: _league!,
+          ));
       navigator.pop();
     }
   }

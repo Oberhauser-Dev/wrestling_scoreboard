@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/ui/components/scaled_text.dart';
@@ -22,7 +23,6 @@ import 'package:wrestling_scoreboard_client/ui/models/participant_state_model.da
 import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/util/units.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -174,7 +174,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       _b.activityStopwatch?.stop();
 
       // Save time to database on each stop
-      dataProvider.createOrUpdateSingle(bout);
+      ref.read(dataManagerProvider).createOrUpdateSingle(bout);
     });
     _boutStopwatch.onAdd.stream.listen((event) {
       _r.activityStopwatch?.addDuration(event);
@@ -228,6 +228,7 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   void handleAction(BoutScreenActionIntent intent) {
     intent.handle(
+      ref.read(dataManagerProvider),
       stopwatch,
       widget.bouts,
       getActions,
@@ -509,6 +510,6 @@ class BoutState extends ConsumerState<BoutScreen> {
     _breakStopwatch.dispose();
 
     // Save time to database when dispose
-    await dataProvider.createOrUpdateSingle(bout);
+    await ref.read(dataManagerProvider).createOrUpdateSingle(bout);
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
@@ -15,7 +17,7 @@ import 'package:wrestling_scoreboard_client/util/date_time.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class TeamMatchOverview extends StatelessWidget {
+class TeamMatchOverview extends ConsumerWidget {
   static const route = 'match';
 
   final int id;
@@ -24,7 +26,7 @@ class TeamMatchOverview extends StatelessWidget {
   const TeamMatchOverview({required this.id, this.match, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context);
 
@@ -62,7 +64,7 @@ class TeamMatchOverview extends StatelessWidget {
                         editPage: TeamMatchEdit(
                           teamMatch: match,
                         ),
-                        onDelete: () => dataProvider.deleteSingle<TeamMatch>(match),
+                        onDelete: () => ref.read(dataManagerProvider).deleteSingle<TeamMatch>(match),
                         classLocale: localizations.match,
                         children: [
                           ContentItem(
@@ -142,6 +144,7 @@ class TeamMatchOverview extends StatelessWidget {
                                   match.league ?? League.outOfCompetition,
                                   match,
                                   navigator,
+                                  ref.read(dataManagerProvider),
                                 )),
                         ContentItem(
                             title: guestLineup.team.name,
@@ -151,6 +154,7 @@ class TeamMatchOverview extends StatelessWidget {
                                   match.league ?? League.outOfCompetition,
                                   match,
                                   navigator,
+                                  ref.read(dataManagerProvider),
                                 )),
                       ],
                     ),
@@ -203,9 +207,10 @@ class TeamMatchOverview extends StatelessWidget {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 
-  handleSelectedLineup(Lineup lineup, League league, TeamMatch match, NavigatorState navigator) async {
-    final participations = await dataProvider.readMany<Participation, Lineup>(filterObject: lineup);
-    final weightClasses = await dataProvider.readMany<WeightClass, League>(filterObject: league);
+  handleSelectedLineup(
+      Lineup lineup, League league, TeamMatch match, NavigatorState navigator, DataProvider dataManager) async {
+    final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
+    final weightClasses = await dataManager.readMany<WeightClass, League>(filterObject: league);
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
@@ -214,7 +219,7 @@ class TeamMatchOverview extends StatelessWidget {
             participations: participations,
             lineup: lineup,
             onSubmitGenerate: () {
-              dataProvider.generateBouts<TeamMatch>(match, false);
+              dataManager.generateBouts<TeamMatch>(match, false);
             },
           );
         },

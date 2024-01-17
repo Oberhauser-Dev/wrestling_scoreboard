@@ -6,7 +6,7 @@ part of 'data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$singleDataStreamHash() => r'4f7017064a58e5fbf7ee99bef94e7ba626e07309';
+String _$singleDataStreamHash() => r'2b1d0c01a55c09adc14c94b565ac7a001039d318';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -64,7 +64,7 @@ class SingleDataStreamFamily extends Family {
   @visibleForOverriding
   @override
   SingleDataStreamProvider<DataObject> getProviderOverride(
-    covariant SingleDataStreamProvider provider,
+    covariant SingleDataStreamProvider<DataObject> provider,
   ) {
     return call(
       provider.pData,
@@ -205,7 +205,7 @@ class _SingleDataStreamProviderElement<T extends DataObject>
       (origin as SingleDataStreamProvider<T>).pData;
 }
 
-String _$manyDataStreamHash() => r'd9024a6583a8732e86e397989bed313960f9dc89';
+String _$manyDataStreamHash() => r'07e862d584b53513ec428fcf5f103355aeeb16c2';
 
 /// See also [manyDataStream].
 @ProviderFor(manyDataStream)

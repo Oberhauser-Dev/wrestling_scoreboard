@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:wrestling_scoreboard_client/mocks/mocks.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MockDataProvider extends DataProvider {
@@ -106,11 +107,11 @@ class MockDataProvider extends DataProvider {
     List<List<Participation>> teamParticipations;
     List<WeightClass> weightClasses;
     if (wrestlingEvent is TeamMatch) {
-      final homeParticipations = await dataProvider.readMany<Participation, Lineup>(filterObject: wrestlingEvent.home);
+      final homeParticipations = await readMany<Participation, Lineup>(filterObject: wrestlingEvent.home);
       final guestParticipations =
-          await dataProvider.readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
+          await readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
-      weightClasses = await dataProvider.readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
+      weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
     } else if (wrestlingEvent is Competition) {
       // TODO get all participations
       teamParticipations = [];
@@ -391,4 +392,8 @@ class MockDataProvider extends DataProvider {
       throw DataUnimplementedError(crud, obj.runtimeType);
     }
   }
+
+  @override
+  // TODO: implement webSocketManager
+  WebSocketManager get webSocketManager => throw UnimplementedError();
 }

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/common.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class WeightClassEdit extends StatefulWidget {
+abstract class WeightClassEdit extends ConsumerStatefulWidget {
   final WeightClass? weightClass;
 
   const WeightClassEdit({this.weightClass, super.key});
 }
 
-abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>
+abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerState<T>
     implements AbstractEditState<WeightClass> {
   final _formKey = GlobalKey<FormState>();
 
@@ -123,7 +124,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends State<T>
       _formKey.currentState!.save();
       var weightClass = WeightClass(
           id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
-      weightClass = weightClass.copyWithId(await dataProvider.createOrUpdateSingle(weightClass));
+      weightClass = weightClass.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(weightClass));
       await handleNested(weightClass);
       navigator.pop();
     }

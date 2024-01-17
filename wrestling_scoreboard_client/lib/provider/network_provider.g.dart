@@ -7,12 +7,12 @@ part of 'network_provider.dart';
 // **************************************************************************
 
 String _$webSocketStateStreamHash() =>
-    r'3c3b0310b088715d5a1e58b0ff5d2888d9a16394';
+    r'724acc900d53840a78018b4e53e95d0c1c053b45';
 
 /// See also [webSocketStateStream].
 @ProviderFor(webSocketStateStream)
 final webSocketStateStreamProvider =
-    Provider<Raw<Stream<WebSocketConnectionState>>>.internal(
+    StreamProvider<WebSocketConnectionState>.internal(
   webSocketStateStream,
   name: r'webSocketStateStreamProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,7 +22,21 @@ final webSocketStateStreamProvider =
   allTransitiveDependencies: null,
 );
 
-typedef WebSocketStateStreamRef
-    = ProviderRef<Raw<Stream<WebSocketConnectionState>>>;
+typedef WebSocketStateStreamRef = StreamProviderRef<WebSocketConnectionState>;
+String _$dataManagerHash() => r'5c94263367326024f3d8fe004371537ad9c5843d';
+
+/// See also [DataManager].
+@ProviderFor(DataManager)
+final dataManagerProvider =
+    NotifierProvider<DataManager, Raw<DataProvider>>.internal(
+  DataManager.new,
+  name: r'dataManagerProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$dataManagerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$DataManager = Notifier<Raw<DataProvider>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

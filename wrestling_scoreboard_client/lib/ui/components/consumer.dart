@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/exception.dart';
 import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
@@ -30,7 +31,12 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
+      onRetry: () => ref
+          .read(dataManagerProvider)
+          .webSocketManager
+          .onWebSocketConnection
+          .sink
+          .add(WebSocketConnectionState.connecting),
     );
   }
 }
@@ -58,7 +64,9 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
             return ExceptionWidget(AppLocalizations.of(context)!.notFoundException);
           }
           return builder(context, data);
-        }, id: id, initialData: initialData);
+        },
+        id: id,
+        initialData: initialData);
   }
 }
 
@@ -78,7 +86,12 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () => WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
+      onRetry: () => ref
+          .read(dataManagerProvider)
+          .webSocketManager
+          .onWebSocketConnection
+          .sink
+          .add(WebSocketConnectionState.connecting),
     );
   }
 }
@@ -119,7 +132,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
           ? widget.builder(context, widget.initialData)
           : StreamBuilder<T>(
               stream:
-                  widget.id == null ? null : dataProvider.streamSingle<T>(widget.id!, init: widget.initialData == null),
+                  widget.id == null ? null :  ref.read(dataManagerProvider).streamSingle<T>(widget.id!, init: widget.initialData == null),
               initialData: widget.initialData,
               builder: (BuildContext context, AsyncSnapshot<T> snap) {
                 if (snap.hasError) {
@@ -164,7 +177,7 @@ class ManyConsumerState<T extends DataObject, S extends DataObject?> extends Sta
       stream: webSocketConnectionStream,
       builder: (context, snapshot) {
         final stream =
-            dataProvider.streamMany<T, S>(filterObject: widget.filterObject, init: widget.initialData == null);
+             ref.read(dataManagerProvider).streamMany<T, S>(filterObject: widget.filterObject, init: widget.initialData == null);
         final initialData = widget.initialData == null ? null : ManyDataObject<T>(data: widget.initialData!);
         return LoadingStreamBuilder(
           builder: (context, data) => widget.builder(context, data.data),

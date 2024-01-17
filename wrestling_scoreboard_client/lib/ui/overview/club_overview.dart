@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
@@ -10,10 +12,9 @@ import 'package:wrestling_scoreboard_client/ui/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/team_overview.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class ClubOverview extends StatelessWidget {
+class ClubOverview extends ConsumerWidget {
   static const route = 'club';
 
   final int id;
@@ -22,7 +23,7 @@ class ClubOverview extends StatelessWidget {
   const ClubOverview({super.key, required this.id, this.club});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Club>(
       id: id,
@@ -33,7 +34,7 @@ class ClubOverview extends StatelessWidget {
           editPage: ClubEdit(
             club: data,
           ),
-          onDelete: () => dataProvider.deleteSingle<Club>(data),
+          onDelete: () => ref.read(dataManagerProvider).deleteSingle<Club>(data),
           classLocale: localizations.club,
           children: [
             ContentItem(

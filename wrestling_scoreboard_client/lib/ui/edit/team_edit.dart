@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class TeamEdit extends StatefulWidget {
+class TeamEdit extends ConsumerStatefulWidget {
   final Team? team;
   final Club? initialClub;
 
   const TeamEdit({this.team, this.initialClub, super.key});
 
   @override
-  State<StatefulWidget> createState() => TeamEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => TeamEditState();
 }
 
-class TeamEditState extends State<TeamEdit> {
+class TeamEditState extends ConsumerState<TeamEdit> {
   final _formKey = GlobalKey<FormState>();
 
   List<Club>? availableClubs;
@@ -74,7 +75,7 @@ class TeamEditState extends State<TeamEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableClubs ??= await dataProvider.readMany<Club, Null>();
+            availableClubs ??= await ref.read(dataManagerProvider).readMany<Club, Null>();
             return (filter == null
                     ? availableClubs!
                     : availableClubs!.where((element) => element.name.contains(filter)))
@@ -98,12 +99,12 @@ class TeamEditState extends State<TeamEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(Team(
-        id: widget.team?.id,
-        name: _name!,
-        description: _description,
-        club: _club!,
-      ));
+      await ref.read(dataManagerProvider).createOrUpdateSingle(Team(
+            id: widget.team?.id,
+            name: _name!,
+            description: _description,
+            club: _club!,
+          ));
       navigator.pop();
     }
   }

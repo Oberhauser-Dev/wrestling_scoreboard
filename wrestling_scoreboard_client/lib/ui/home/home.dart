@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/responsive_container.dart';
@@ -11,18 +13,19 @@ import 'package:wrestling_scoreboard_client/ui/overview/team_match/league_overvi
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
   @override
-  State<StatefulWidget> createState() => HomeState();
+  ConsumerState<ConsumerStatefulWidget> createState() => HomeState();
 }
 
-class HomeState extends State<Home> {
+class HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     super.initState();
-    WebSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
+    final webSocketManager = ref.read(dataManagerProvider).webSocketManager;
+    webSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
       if (mounted && connectionState == WebSocketConnectionState.disconnected) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final localizations = AppLocalizations.of(context)!;
@@ -38,7 +41,7 @@ class HomeState extends State<Home> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    WebSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+                    webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
                   },
                   child: Text(localizations.retry),
                 ),

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -102,6 +104,7 @@ class BoutScreenActionIntent extends Intent {
   final BoutScreenActions type;
 
   Future<void> handle(
+    DataProvider dataProvider,
     ObservableStopwatch stopwatch,
     List<Bout> bouts,
     Future<List<BoutAction>> Function() getActions,
@@ -270,7 +273,7 @@ class BoutScreenActionIntent extends Intent {
   }
 }
 
-class BoutActionHandler extends StatelessWidget {
+class BoutActionHandler extends ConsumerWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
   final List<Bout> bouts;
@@ -289,13 +292,13 @@ class BoutActionHandler extends StatelessWidget {
       super.key,
       required this.navigateToBoutByIndex});
 
-  Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
-    await intent.handle(stopwatch, bouts, getActions, boutIndex, doAction,
-        context: context, navigateToBoutByIndex: navigateToBoutByIndex);
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
+      await intent.handle(ref.read(dataManagerProvider), stopwatch, bouts, getActions, boutIndex, doAction,
+          context: context, navigateToBoutByIndex: navigateToBoutByIndex);
+    }
+
     const redOneIntent = BoutScreenActionIntent.redOne();
     const redTwoIntent = BoutScreenActionIntent.redTwo();
     const redThreeIntent = BoutScreenActionIntent.redThree();

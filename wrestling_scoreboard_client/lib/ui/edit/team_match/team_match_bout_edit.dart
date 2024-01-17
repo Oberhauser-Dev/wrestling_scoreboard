@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/bout_edit.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchBoutEdit extends BoutEdit {
@@ -17,7 +18,7 @@ class TeamMatchBoutEdit extends BoutEdit {
         );
 
   @override
-  State<StatefulWidget> createState() => TeamMatchBoutEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => TeamMatchBoutEditState();
 }
 
 class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
@@ -49,10 +50,10 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
   Future<void> handleNested(bout) async {
     var teamMatchBout =
         TeamMatchBout(id: widget.teamMatchBout?.id, teamMatch: widget.initialTeamMatch, pos: _pos, bout: bout);
-    teamMatchBout = teamMatchBout.copyWithId(await dataProvider.createOrUpdateSingle(teamMatchBout));
+    teamMatchBout = teamMatchBout.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(teamMatchBout));
   }
 
   @override
   Future<List<WeightClass>> get availableWeightClasses =>
-      dataProvider.readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league);
+      ref.read(dataManagerProvider).readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league);
 }

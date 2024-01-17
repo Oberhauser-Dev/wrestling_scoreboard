@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/bout_config_edit.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueEdit extends BoutConfigEdit {
@@ -11,7 +12,7 @@ class LeagueEdit extends BoutConfigEdit {
   LeagueEdit({this.league, super.key}) : super(boutConfig: league?.boutConfig);
 
   @override
-  State<StatefulWidget> createState() => LeagueEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => LeagueEditState();
 }
 
 class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
@@ -74,7 +75,7 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
 
   @override
   Future<void> handleNested(BoutConfig dataObject) async {
-    await dataProvider.createOrUpdateSingle(
+    await ref.read(dataManagerProvider).createOrUpdateSingle(
         League(id: widget.league?.id, name: _name!, startDate: _startDate, boutConfig: dataObject));
   }
 }

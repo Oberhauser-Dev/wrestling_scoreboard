@@ -7,13 +7,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/components/font.dart';
 import 'package:wrestling_scoreboard_client/ui/components/ok_dialog.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
 
 // TODO: dynamically add or remove participants without weight class
 class LineupEdit extends ConsumerStatefulWidget {
@@ -61,12 +60,13 @@ class LineupEditState extends ConsumerState<LineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator, {void Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider
+      await ref
+          .read(dataManagerProvider)
           .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
-      await Future.forEach(
-          _deleteParticipations, (Participation element) => dataProvider.deleteSingle<Participation>(element));
-      await Future.forEach(
-          _createOrUpdateParticipations, (Participation element) => dataProvider.createOrUpdateSingle(element));
+      await Future.forEach(_deleteParticipations,
+          (Participation element) => ref.read(dataManagerProvider).deleteSingle<Participation>(element));
+      await Future.forEach(_createOrUpdateParticipations,
+          (Participation element) => ref.read(dataManagerProvider).createOrUpdateSingle(element));
       if (onSubmitGenerate != null) onSubmitGenerate();
       navigator.pop();
     }

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/common.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class BoutConfigEdit extends StatefulWidget {
+abstract class BoutConfigEdit extends ConsumerStatefulWidget {
   final BoutConfig? boutConfig;
 
   const BoutConfigEdit({this.boutConfig, super.key});
 }
 
-abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> implements AbstractEditState<BoutConfig> {
+abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerState<T>
+    implements AbstractEditState<BoutConfig> {
   final _formKey = GlobalKey<FormState>();
 
   int? _periodDurationInSecs;
@@ -133,7 +135,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends State<T> im
         injuryDuration: Duration(seconds: _injuryDurationInSecs!),
         periodCount: _periodCount!,
       );
-      boutConfig = boutConfig.copyWithId(await dataProvider.createOrUpdateSingle(boutConfig));
+      boutConfig = boutConfig.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(boutConfig));
       await handleNested(boutConfig);
       navigator.pop();
     }

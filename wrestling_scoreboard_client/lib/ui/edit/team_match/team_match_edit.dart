@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class TeamMatchEdit extends StatefulWidget {
+class TeamMatchEdit extends ConsumerStatefulWidget {
   final TeamMatch? teamMatch;
   final Team? initialHomeTeam;
   final Team? initialGuestTeam;
@@ -21,10 +22,10 @@ class TeamMatchEdit extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => TeamMatchEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => TeamMatchEditState();
 }
 
-class TeamMatchEditState extends State<TeamMatchEdit> {
+class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   final _formKey = GlobalKey<FormState>();
 
   List<League>? _availableLeagues;
@@ -115,7 +116,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
-            _availableTeams ??= await dataProvider.readMany<Team, Null>();
+            _availableTeams ??= await ref.read(dataManagerProvider).readMany<Team, Null>();
             return (filter == null
                     ? _availableTeams!
                     : _availableTeams!.where((element) => element.name.contains(filter)))
@@ -135,7 +136,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
-            _availableTeams ??= await dataProvider.readMany<Team, Null>();
+            _availableTeams ??= await ref.read(dataManagerProvider).readMany<Team, Null>();
             return (filter == null
                     ? _availableTeams!
                     : _availableTeams!.where((element) => element.name.contains(filter)))
@@ -154,7 +155,7 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            _availableLeagues ??= await dataProvider.readMany<League, Null>();
+            _availableLeagues ??= await ref.read(dataManagerProvider).readMany<League, Null>();
             return (filter == null
                     ? _availableLeagues!
                     : _availableLeagues!.where((element) => element.name.contains(filter)))
@@ -181,33 +182,33 @@ class TeamMatchEditState extends State<TeamMatchEdit> {
 
       var home = widget.teamMatch?.home;
       if (home == null) {
-        final homeId = await dataProvider.createOrUpdateSingle(Lineup(team: _homeTeam!));
+        final homeId = await ref.read(dataManagerProvider).createOrUpdateSingle(Lineup(team: _homeTeam!));
         home = Lineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await dataProvider.createOrUpdateSingle(Lineup(id: home.id, team: _homeTeam!));
+        await ref.read(dataManagerProvider).createOrUpdateSingle(Lineup(id: home.id, team: _homeTeam!));
       }
 
       var guest = widget.teamMatch?.guest;
       if (guest == null) {
-        final guestId = await dataProvider.createOrUpdateSingle(Lineup(team: _guestTeam!));
+        final guestId = await ref.read(dataManagerProvider).createOrUpdateSingle(Lineup(team: _guestTeam!));
         guest = Lineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await dataProvider.createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
+        await ref.read(dataManagerProvider).createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
       }
 
-      await dataProvider.createOrUpdateSingle(
-        TeamMatch(
-          id: widget.teamMatch?.id,
-          location: _location!,
-          no: _no,
-          home: home,
-          guest: guest,
-          date: _date,
-          league: _league,
-        ),
-      );
+      await ref.read(dataManagerProvider).createOrUpdateSingle(
+            TeamMatch(
+              id: widget.teamMatch?.id,
+              location: _location!,
+              no: _no,
+              home: home,
+              guest: guest,
+              date: _date,
+              league: _league,
+            ),
+          );
       navigator.pop();
     }
   }

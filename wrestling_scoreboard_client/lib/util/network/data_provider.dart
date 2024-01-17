@@ -1,16 +1,13 @@
 import 'dart:async';
 
-import 'package:wrestling_scoreboard_client/mocks/mock_data_provider.dart';
-import 'package:wrestling_scoreboard_client/util/environment.dart';
-import 'package:wrestling_scoreboard_client/util/network/remote/rest.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-final _isMock = Env.appEnvironment.fromString() == 'mock';
-
-final dataProvider = _isMock ? MockDataProvider() : RestDataProvider();
 
 /// Data exchange layer with CRUD operations
 abstract class DataProvider {
+  
+  WebSocketManager get webSocketManager;
+  
   /// READ: get a single object
   Future<T> readSingle<T extends DataObject>(int id);
 

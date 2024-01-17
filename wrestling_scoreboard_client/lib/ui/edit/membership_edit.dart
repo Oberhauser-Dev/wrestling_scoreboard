@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/person_edit.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MembershipEdit extends PersonEdit {
@@ -11,7 +12,7 @@ class MembershipEdit extends PersonEdit {
   MembershipEdit({this.membership, required this.initialClub, super.key}) : super(person: membership?.person);
 
   @override
-  State<StatefulWidget> createState() => MembershipEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => MembershipEditState();
 }
 
 class MembershipEditState extends PersonEditState<MembershipEdit> {
@@ -38,6 +39,6 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
   @override
   Future<void> handleNested(person) async {
     var membership = Membership(id: widget.membership?.id, person: person, club: widget.initialClub, no: _no);
-    membership = membership.copyWithId(await dataProvider.createOrUpdateSingle(membership));
+    membership = membership.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(membership));
   }
 }

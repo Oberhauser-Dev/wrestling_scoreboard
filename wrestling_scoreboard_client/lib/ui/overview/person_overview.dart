@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/gender.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class PersonOverview extends StatelessWidget implements AbstractOverview<Person> {
+abstract class PersonOverview extends ConsumerWidget implements AbstractOverview<Person> {
   static const route = 'person';
 
   const PersonOverview({super.key});
 
   @override
   Widget buildOverview(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required String classLocale,
     required Widget editPage,
     required VoidCallback onDelete,
@@ -34,7 +36,7 @@ abstract class PersonOverview extends StatelessWidget implements AbstractOvervie
           editPage: editPage,
           onDelete: () {
             onDelete();
-            dataProvider.deleteSingle<Person>(person);
+            ref.read(dataManagerProvider).deleteSingle<Person>(person);
           },
           classLocale: classLocale,
           children: [

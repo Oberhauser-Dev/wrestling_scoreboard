@@ -4,13 +4,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/common.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class BoutEdit extends StatefulWidget {
+abstract class BoutEdit extends ConsumerStatefulWidget {
   final Bout? bout;
   final Lineup lineupRed;
   final Lineup lineupBlue;
@@ -23,7 +23,7 @@ abstract class BoutEdit extends StatefulWidget {
   });
 }
 
-abstract class BoutEditState<T extends BoutEdit> extends State<T> implements AbstractEditState<Bout> {
+abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implements AbstractEditState<Bout> {
   final _formKey = GlobalKey<FormState>();
 
   BoutRole? _winnerRole;
@@ -165,12 +165,12 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
           Participation? newParticipation, ParticipantState? oldParticipantState) async {
         if (newParticipation != oldParticipantState?.participation) {
           if (oldParticipantState != null) {
-            await dataProvider.deleteSingle<ParticipantState>(oldParticipantState);
+            await ref.read(dataManagerProvider).deleteSingle<ParticipantState>(oldParticipantState);
           }
           if (newParticipation != null) {
             final newParticipantState = ParticipantState(participation: newParticipation);
-            return newParticipantState
-                .copyWithId(await dataProvider.createOrUpdateSingle<ParticipantState>(newParticipantState));
+            return newParticipantState.copyWithId(
+                await ref.read(dataManagerProvider).createOrUpdateSingle<ParticipantState>(newParticipantState));
           } else {
             return null;
           }
@@ -190,7 +190,7 @@ abstract class BoutEditState<T extends BoutEdit> extends State<T> implements Abs
         pool: widget.bout?.pool,
       );
 
-      bout = bout.copyWithId(await dataProvider.createOrUpdateSingle(bout));
+      bout = bout.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(bout));
       await handleNested(bout);
       navigator.pop();
     }

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/gender.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/common.dart';
 import 'package:wrestling_scoreboard_client/util/date_time.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class PersonEdit extends StatefulWidget {
+abstract class PersonEdit extends ConsumerStatefulWidget {
   final Person? person;
 
   const PersonEdit({this.person, super.key});
 }
 
-abstract class PersonEditState<T extends PersonEdit> extends State<T> implements AbstractEditState<Person> {
+abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> implements AbstractEditState<Person> {
   final _formKey = GlobalKey<FormState>();
 
   String? _prename;
@@ -140,7 +141,7 @@ abstract class PersonEditState<T extends PersonEdit> extends State<T> implements
         birthDate: _dateOfBirth,
         gender: _gender,
       );
-      person = person.copyWithId(await dataProvider.createOrUpdateSingle(person));
+      person = person.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(person));
       await handleNested(person);
       navigator.pop();
     }

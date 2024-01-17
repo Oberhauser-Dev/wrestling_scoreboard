@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/weight_class_edit.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueWeightClassEdit extends WeightClassEdit {
@@ -13,7 +14,7 @@ class LeagueWeightClassEdit extends WeightClassEdit {
       : super(weightClass: leagueWeightClass?.weightClass);
 
   @override
-  State<StatefulWidget> createState() => LeagueWeightClassEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => LeagueWeightClassEditState();
 }
 
 class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassEdit> {
@@ -45,6 +46,7 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
   Future<void> handleNested(weightClass) async {
     var leagueWeightClass = LeagueWeightClass(
         id: widget.leagueWeightClass?.id, league: widget.initialLeague, pos: _pos, weightClass: weightClass);
-    leagueWeightClass = leagueWeightClass.copyWithId(await dataProvider.createOrUpdateSingle(leagueWeightClass));
+    leagueWeightClass =
+        leagueWeightClass.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(leagueWeightClass));
   }
 }

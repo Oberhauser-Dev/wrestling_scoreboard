@@ -15,7 +15,7 @@ class RestDataProvider extends DataProvider {
   static const headers = {"Content-Type": "application/json"};
 
   String _apiUrl = Env.apiUrl.fromString();
-  late final WebSocketManager _webSocketManager;
+  late final WebSocketManager webSocketManager;
 
   RestDataProvider() {
     Preferences.getString(Preferences.keyApiUrl).then((value) {
@@ -109,7 +109,7 @@ class RestDataProvider extends DataProvider {
       getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 
-    _webSocketManager = WebSocketManager((message) {
+    webSocketManager = WebSocketManager((message) {
       final json = jsonDecode(message);
       handleFromJson(json,
           handleSingle: handleSingle,
@@ -150,7 +150,7 @@ class RestDataProvider extends DataProvider {
 
   @override
   Future<void> deleteSingle<T extends DataObject>(T single) async {
-    _webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
+    webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
   }
 }
 

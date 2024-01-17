@@ -3,7 +3,7 @@
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'data_provider.g.dart';
@@ -24,19 +24,19 @@ class SingleProviderData<T extends DataObject> {
 
 @riverpod
 Stream<T> singleDataStream<T extends DataObject>(
-  SingleDataStreamRef ref, 
+  SingleDataStreamRef ref,
   SingleProviderData<T> pData,
 ) async* {
-  // Reload, whenever the stream connects or disconnects
-  // TODO: integrate in updating websocket URL from stream provider
-  ref.watch(webSocketStateStreamProvider);
-
-  // ref.onDispose(webSocketConnectionStream.close);
-  // TODO: e.g. may be triggered twice
-  if(pData.initialData != null) {
-    yield pData.initialData!;
+  // Reload, whenever the stream is connected
+  final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);
+  if (wsConnectionState == WebSocketConnectionState.connected) {
+    // TODO: e.g. may be triggered twice
+    if (pData.initialData != null) {
+      yield pData.initialData!;
+    }
+    final dataManager = ref.watch(dataManagerProvider);
+    yield* dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
   }
-  yield* dataProvider.streamSingle<T>(pData.id, init: pData.initialData == null);
 }
 
 /// Class to wrap equal many data for providers.
@@ -59,19 +59,19 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
 
 @riverpod
 Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
-  ManyDataStreamRef ref, 
-  ManyProviderData<T,S> pData,
+  ManyDataStreamRef ref,
+  ManyProviderData<T, S> pData,
 ) async* {
-  // Reload, whenever the stream connects or disconnects
-  // TODO: integrate in updating websocket URL from stream provider
-  ref.watch(webSocketStateStreamProvider);
-
-  // ref.onDispose(webSocketConnectionStream.close);
-  // TODO: e.g. bout action event triggered twice
-  if(pData.initialData != null) {
-    yield pData.initialData!;
+  // Reload, whenever the stream is connected
+  final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);
+  if (wsConnectionState == WebSocketConnectionState.connected) {
+    // TODO: e.g. bout action event triggered twice
+    if (pData.initialData != null) {
+      yield pData.initialData!;
+    }
+    final dataManager = ref.watch(dataManagerProvider);
+    yield* dataManager
+        .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
+        .map((event) => event.data);
   }
-  yield* dataProvider
-      .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
-      .map((event) => event.data);
 }

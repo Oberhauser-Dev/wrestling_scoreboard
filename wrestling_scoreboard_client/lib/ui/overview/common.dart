@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class AbstractOverview<T extends DataObject> {
   Widget buildOverview(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required String classLocale,
     required Widget editPage,
     required VoidCallback onDelete,

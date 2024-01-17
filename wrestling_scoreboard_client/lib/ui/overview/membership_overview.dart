@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/ui/overview/person_overview.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MembershipOverview extends PersonOverview {
@@ -16,7 +17,7 @@ class MembershipOverview extends PersonOverview {
   const MembershipOverview({super.key, required this.id, this.membership});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Membership>(
       id: id,
@@ -24,6 +25,7 @@ class MembershipOverview extends PersonOverview {
       builder: (context, membership) {
         return buildOverview(
           context,
+          ref,
           dataId: membership.person.id!,
           initialData: membership.person,
           classLocale: localizations.membership,
@@ -31,7 +33,7 @@ class MembershipOverview extends PersonOverview {
             membership: membership,
             initialClub: membership.club,
           ),
-          onDelete: () => dataProvider.deleteSingle<Membership>(membership),
+          onDelete: () => ref.read(dataManagerProvider).deleteSingle<Membership>(membership),
           tiles: [
             ContentItem(
               title: membership.no ?? '-',

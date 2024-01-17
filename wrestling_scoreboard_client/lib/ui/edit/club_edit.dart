@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/edit.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class ClubEdit extends StatefulWidget {
+class ClubEdit extends ConsumerStatefulWidget {
   final Club? club;
 
   const ClubEdit({this.club, super.key});
 
   @override
-  State<StatefulWidget> createState() => ClubEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => ClubEditState();
 }
 
-class ClubEditState extends State<ClubEdit> {
+class ClubEditState extends ConsumerState<ClubEdit> {
   final _formKey = GlobalKey<FormState>();
 
   String? _name;
@@ -69,7 +71,7 @@ class ClubEditState extends State<ClubEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await dataProvider.createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
+      await ref.read(dataManagerProvider).createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
       navigator.pop();
     }
   }

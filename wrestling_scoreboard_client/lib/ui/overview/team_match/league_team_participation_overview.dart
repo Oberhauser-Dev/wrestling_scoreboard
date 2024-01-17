@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/ui/components/info.dart';
@@ -8,7 +10,7 @@ import 'package:wrestling_scoreboard_client/ui/overview/common.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class LeagueTeamParticipationOverview extends StatelessWidget {
+class LeagueTeamParticipationOverview extends ConsumerWidget {
   static const route = 'league_team_participation';
 
   final int id;
@@ -17,7 +19,7 @@ class LeagueTeamParticipationOverview extends StatelessWidget {
   const LeagueTeamParticipationOverview({super.key, required this.id, this.leagueTeamParticipation});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<LeagueTeamParticipation>(
       id: id,
@@ -28,7 +30,7 @@ class LeagueTeamParticipationOverview extends StatelessWidget {
             editPage: LeagueTeamParticipationEdit(
               participation: data,
             ),
-            onDelete: () => dataProvider.deleteSingle<LeagueTeamParticipation>(data),
+            onDelete: () => ref.read(dataManagerProvider).deleteSingle<LeagueTeamParticipation>(data),
             classLocale: localizations.team,
             children: [
               ContentItem(

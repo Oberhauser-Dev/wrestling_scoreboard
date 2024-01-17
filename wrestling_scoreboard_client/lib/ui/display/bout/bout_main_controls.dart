@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/data/bout_result.dart';
 import 'package:wrestling_scoreboard_client/data/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/ui/components/consumer.dart';
 import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
@@ -9,17 +11,17 @@ import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart'
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class BoutMainControls extends StatefulWidget {
+class BoutMainControls extends ConsumerStatefulWidget {
   final Function(BoutScreenActionIntent) callback;
   final BoutState boutState;
 
   const BoutMainControls(this.callback, this.boutState, {super.key});
 
   @override
-  State<StatefulWidget> createState() => BoutMainControlsState();
+  ConsumerState<ConsumerStatefulWidget> createState() => BoutMainControlsState();
 }
 
-class BoutMainControlsState extends State<BoutMainControls> {
+class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   IconData _pausePlayButton = Icons.play_arrow;
 
   @override
@@ -129,9 +131,10 @@ class BoutMainControlsState extends State<BoutMainControls> {
                       result: val,
                     );
                     bout = bout.updateClassificationPoints(actions);
-                    dataProvider.createOrUpdateSingle(bout);
-                    if (bout.r != null) dataProvider.createOrUpdateSingle(bout.r!);
-                    if (bout.b != null) dataProvider.createOrUpdateSingle(bout.b!);
+                    final dataManager = ref.read(dataManagerProvider);
+                    dataManager.createOrUpdateSingle(bout);
+                    if (bout.r != null) dataManager.createOrUpdateSingle(bout.r!);
+                    if (bout.b != null) dataManager.createOrUpdateSingle(bout.b!);
                     widget.boutState.bout = bout;
                   });
                 },
