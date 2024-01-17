@@ -24,33 +24,34 @@ class HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     super.initState();
-    // final webSocketManager = (await ref.read(dataManagerProvider)).webSocketManager;
-    // webSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
-    //   if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       final localizations = AppLocalizations.of(context)!;
-    //       showDialog<String>(
-    //         context: context,
-    //         builder: (BuildContext context) => AlertDialog(
-    //           content: Text(localizations.noWebSocketConnection),
-    //           actions: <Widget>[
-    //             TextButton(
-    //               onPressed: () => Navigator.pop(context),
-    //               child: Text(localizations.cancel),
-    //             ),
-    //             TextButton(
-    //               onPressed: () {
-    //                 Navigator.of(context).pop();
-    //                 webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
-    //               },
-    //               child: Text(localizations.retry),
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //     });
-    //   }
-    // });
+    ref.read(dataManagerNotifierProvider).then((dataManager) {
+      dataManager.webSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
+        if (mounted && connectionState == WebSocketConnectionState.disconnected) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final localizations = AppLocalizations.of(context)!;
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                content: Text(localizations.noWebSocketConnection),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(localizations.cancel),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      dataManager.webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+                    },
+                    child: Text(localizations.retry),
+                  ),
+                ],
+              ),
+            );
+          });
+        }
+      });
+    });
   }
 
   @override

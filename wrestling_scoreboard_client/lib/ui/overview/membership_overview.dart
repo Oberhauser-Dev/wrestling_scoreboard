@@ -33,7 +33,7 @@ class MembershipOverview extends PersonOverview {
             membership: membership,
             initialClub: membership.club,
           ),
-          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Membership>(membership),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Membership>(membership),
           tiles: [
             ContentItem(
               title: membership.no ?? '-',

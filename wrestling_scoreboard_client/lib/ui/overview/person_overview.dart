@@ -36,7 +36,7 @@ abstract class PersonOverview extends ConsumerWidget implements AbstractOverview
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerProvider)).deleteSingle<Person>(person);
+            (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person);
           },
           classLocale: classLocale,
           children: [

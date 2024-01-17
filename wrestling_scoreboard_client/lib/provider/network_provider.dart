@@ -11,7 +11,7 @@ part 'network_provider.g.dart';
 final _isMock = Env.appEnvironment.fromString() == 'mock';
 
 @Riverpod(keepAlive: true)
-class DataManager extends _$DataManager {
+class DataManagerNotifier extends _$DataManagerNotifier {
   @override
   Raw<Future<DataProvider>> build() async {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
@@ -25,7 +25,7 @@ class DataManager extends _$DataManager {
 
 @Riverpod(keepAlive: true)
 Stream<WebSocketConnectionState> webSocketStateStream(WebSocketStateStreamRef ref) async* {
-  final dataManager = await ref.watch(dataManagerProvider);
+  final dataManager = await ref.watch(dataManagerNotifierProvider);
   // TODO: integrate in updating websocket URL from stream provider
   final webSocketConnectionStream = dataManager.webSocketManager.onWebSocketConnection.stream
       .distinct()

@@ -55,7 +55,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableTeams ??= await (await ref.read(dataManagerProvider)).readMany<Team, Null>();
+            availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
             return (filter == null
                     ? availableTeams!
                     : availableTeams!.where((element) => element.name.contains(filter)))
@@ -74,7 +74,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            _availableLeagues ??= await (await ref.read(dataManagerProvider)).readMany<League, Null>();
+            _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
             return (filter == null
                     ? _availableLeagues!
                     : _availableLeagues!.where((element) => element.name.contains(filter)))
@@ -98,7 +98,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(LeagueTeamParticipation(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(LeagueTeamParticipation(
             id: widget.participation?.id,
             team: _team!,
             league: _league!,

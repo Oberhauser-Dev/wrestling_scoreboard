@@ -28,7 +28,7 @@ class LeagueWeightClassOverview extends WeightClassOverview {
               leagueWeightClass: data,
               initialLeague: data.league,
             ),
-            onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<LeagueWeightClass>(data),
+            onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueWeightClass>(data),
             tiles: [],
             dataId: data.weightClass.id!,
             initialData: data.weightClass);

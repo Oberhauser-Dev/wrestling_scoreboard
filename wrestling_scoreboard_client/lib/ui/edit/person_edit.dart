@@ -141,7 +141,7 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
         birthDate: _dateOfBirth,
         gender: _gender,
       );
-      person = person.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(person));
+      person = person.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(person));
       await handleNested(person);
       navigator.pop();
     }

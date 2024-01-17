@@ -39,6 +39,6 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
   @override
   Future<void> handleNested(person) async {
     var membership = Membership(id: widget.membership?.id, person: person, club: widget.initialClub, no: _no);
-    membership = membership.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(membership));
+    membership = membership.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(membership));
   }
 }

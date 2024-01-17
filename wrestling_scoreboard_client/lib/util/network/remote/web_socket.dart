@@ -27,7 +27,6 @@ class WebSocketManager {
     if (url != null) {
       _wsUrl = adaptLocalhost(url);
     }
-    onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
     onWebSocketConnection.stream.listen((connectionState) async {
       if (connectionState == WebSocketConnectionState.connecting && _wsUrl != null) {
         await _channel?.sink.close(4210);
@@ -64,6 +63,7 @@ class WebSocketManager {
         _channel = null;
       }
     });
+    onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
   }
 
   dynamic addToSink(String val) {

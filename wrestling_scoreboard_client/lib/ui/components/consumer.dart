@@ -31,7 +31,7 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () async => (await ref.read(dataManagerProvider))
+      onRetry: () async => (await ref.read(dataManagerNotifierProvider))
           .webSocketManager
           .onWebSocketConnection
           .sink
@@ -85,7 +85,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () async => (await ref.read(dataManagerProvider))
+      onRetry: () async => (await ref.read(dataManagerNotifierProvider))
           .webSocketManager
           .onWebSocketConnection
           .sink
@@ -130,7 +130,7 @@ class SingleConsumerState<T extends DataObject> extends State<SingleConsumer<T>>
           ? widget.builder(context, widget.initialData)
           : StreamBuilder<T>(
               stream:
-                  widget.id == null ? null :  ref.read(dataManagerProvider).streamSingle<T>(widget.id!, init: widget.initialData == null),
+                  widget.id == null ? null :  ref.read(dataManagerNotifierProvider).streamSingle<T>(widget.id!, init: widget.initialData == null),
               initialData: widget.initialData,
               builder: (BuildContext context, AsyncSnapshot<T> snap) {
                 if (snap.hasError) {
@@ -175,7 +175,7 @@ class ManyConsumerState<T extends DataObject, S extends DataObject?> extends Sta
       stream: webSocketConnectionStream,
       builder: (context, snapshot) {
         final stream =
-             ref.read(dataManagerProvider).streamMany<T, S>(filterObject: widget.filterObject, init: widget.initialData == null);
+             ref.read(dataManagerNotifierProvider).streamMany<T, S>(filterObject: widget.filterObject, init: widget.initialData == null);
         final initialData = widget.initialData == null ? null : ManyDataObject<T>(data: widget.initialData!);
         return LoadingStreamBuilder(
           builder: (context, data) => widget.builder(context, data.data),

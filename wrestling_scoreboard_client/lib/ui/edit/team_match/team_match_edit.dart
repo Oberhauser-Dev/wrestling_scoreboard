@@ -116,7 +116,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
-            _availableTeams ??= await (await ref.read(dataManagerProvider)).readMany<Team, Null>();
+            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
             return (filter == null
                     ? _availableTeams!
                     : _availableTeams!.where((element) => element.name.contains(filter)))
@@ -136,7 +136,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
-            _availableTeams ??= await (await ref.read(dataManagerProvider)).readMany<Team, Null>();
+            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
             return (filter == null
                     ? _availableTeams!
                     : _availableTeams!.where((element) => element.name.contains(filter)))
@@ -155,7 +155,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            _availableLeagues ??= await (await ref.read(dataManagerProvider)).readMany<League, Null>();
+            _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
             return (filter == null
                     ? _availableLeagues!
                     : _availableLeagues!.where((element) => element.name.contains(filter)))
@@ -182,23 +182,23 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
       var home = widget.teamMatch?.home;
       if (home == null) {
-        final homeId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(Lineup(team: _homeTeam!));
+        final homeId = await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _homeTeam!));
         home = Lineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(Lineup(id: home.id, team: _homeTeam!));
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(id: home.id, team: _homeTeam!));
       }
 
       var guest = widget.teamMatch?.guest;
       if (guest == null) {
-        final guestId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(Lineup(team: _guestTeam!));
+        final guestId = await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _guestTeam!));
         guest = Lineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
       }
 
-      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
             TeamMatch(
               id: widget.teamMatch?.id,
               location: _location!,

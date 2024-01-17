@@ -50,10 +50,10 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
   Future<void> handleNested(bout) async {
     var teamMatchBout =
         TeamMatchBout(id: widget.teamMatchBout?.id, teamMatch: widget.initialTeamMatch, pos: _pos, bout: bout);
-    teamMatchBout = teamMatchBout.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(teamMatchBout));
+    teamMatchBout = teamMatchBout.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(teamMatchBout));
   }
 
   @override
   Future<List<WeightClass>> get availableWeightClasses async =>
-      (await ref.read(dataManagerProvider)).readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league);
+      (await ref.read(dataManagerNotifierProvider)).readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league);
 }

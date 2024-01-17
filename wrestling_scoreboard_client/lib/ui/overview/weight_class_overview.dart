@@ -33,7 +33,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerProvider)).deleteSingle<WeightClass>(data);
+            (await ref.read(dataManagerNotifierProvider)).deleteSingle<WeightClass>(data);
           },
           classLocale: classLocale,
           children: [

@@ -60,12 +60,12 @@ class LineupEditState extends ConsumerState<LineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator, {void Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerProvider))
+      await (await ref.read(dataManagerNotifierProvider))
           .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
       await Future.forEach(_deleteParticipations,
-          (Participation element) async => (await ref.read(dataManagerProvider)).deleteSingle<Participation>(element));
+          (Participation element) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Participation>(element));
       await Future.forEach(_createOrUpdateParticipations,
-          (Participation element) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(element));
+          (Participation element) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(element));
       if (onSubmitGenerate != null) onSubmitGenerate();
       navigator.pop();
     }

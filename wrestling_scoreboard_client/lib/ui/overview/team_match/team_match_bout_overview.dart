@@ -28,7 +28,7 @@ class TeamMatchBoutOverview extends BoutOverview {
               teamMatchBout: data,
               initialTeamMatch: data.teamMatch,
             ),
-            onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatchBout>(data),
+            onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchBout>(data),
             tiles: [],
             dataId: data.bout.id!,
             initialData: data.bout);

@@ -124,7 +124,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                     : null,
                 options: boutResultOptions,
                 onChange: (BoutResult? val) async {
-                  final dataManager = await ref.read(dataManagerProvider);
+                  final dataManager = await ref.read(dataManagerNotifierProvider);
                   var bout = widget.boutState.bout.copyWith(
                     winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
                     result: val,

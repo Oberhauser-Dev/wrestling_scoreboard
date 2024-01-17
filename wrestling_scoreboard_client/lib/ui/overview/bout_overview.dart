@@ -36,7 +36,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerProvider)).deleteSingle<Bout>(data);
+            (await ref.read(dataManagerNotifierProvider)).deleteSingle<Bout>(data);
           },
           classLocale: classLocale,
           children: [
