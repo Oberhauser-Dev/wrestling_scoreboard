@@ -169,12 +169,12 @@ class BoutState extends ConsumerState<BoutScreen> {
       _r.activityStopwatch?.start();
       _b.activityStopwatch?.start();
     });
-    _boutStopwatch.onStop.stream.listen((event) {
+    _boutStopwatch.onStop.stream.listen((event) async {
       _r.activityStopwatch?.stop();
       _b.activityStopwatch?.stop();
 
       // Save time to database on each stop
-      ref.read(dataManagerProvider).createOrUpdateSingle(bout);
+      (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout);
     });
     _boutStopwatch.onAdd.stream.listen((event) {
       _r.activityStopwatch?.addDuration(event);
@@ -226,9 +226,9 @@ class BoutState extends ConsumerState<BoutScreen> {
     });
   }
 
-  void handleAction(BoutScreenActionIntent intent) {
+  void handleAction(BoutScreenActionIntent intent) async {
     intent.handle(
-      ref.read(dataManagerProvider),
+      (await ref.read(dataManagerProvider)),
       stopwatch,
       widget.bouts,
       getActions,
@@ -510,6 +510,6 @@ class BoutState extends ConsumerState<BoutScreen> {
     _breakStopwatch.dispose();
 
     // Save time to database when dispose
-    await ref.read(dataManagerProvider).createOrUpdateSingle(bout);
+    await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout);
   }
 }

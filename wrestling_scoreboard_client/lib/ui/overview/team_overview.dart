@@ -30,7 +30,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
               editPage: TeamEdit(
                 team: data,
               ),
-              onDelete: () => ref.read(dataManagerProvider).deleteSingle<Team>(data),
+              onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Team>(data),
               classLocale: localizations.team,
               children: [
                 ContentItem(

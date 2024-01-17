@@ -165,12 +165,12 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
           Participation? newParticipation, ParticipantState? oldParticipantState) async {
         if (newParticipation != oldParticipantState?.participation) {
           if (oldParticipantState != null) {
-            await ref.read(dataManagerProvider).deleteSingle<ParticipantState>(oldParticipantState);
+            await (await ref.read(dataManagerProvider)).deleteSingle<ParticipantState>(oldParticipantState);
           }
           if (newParticipation != null) {
             final newParticipantState = ParticipantState(participation: newParticipation);
             return newParticipantState.copyWithId(
-                await ref.read(dataManagerProvider).createOrUpdateSingle<ParticipantState>(newParticipantState));
+                await (await ref.read(dataManagerProvider)).createOrUpdateSingle<ParticipantState>(newParticipantState));
           } else {
             return null;
           }
@@ -190,7 +190,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         pool: widget.bout?.pool,
       );
 
-      bout = bout.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(bout));
+      bout = bout.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout));
       await handleNested(bout);
       navigator.pop();
     }

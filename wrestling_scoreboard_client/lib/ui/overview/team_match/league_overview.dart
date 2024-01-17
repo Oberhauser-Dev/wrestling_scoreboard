@@ -37,7 +37,7 @@ class LeagueOverview extends ConsumerWidget {
           editPage: LeagueEdit(
             league: data,
           ),
-          onDelete: () => ref.read(dataManagerProvider).deleteSingle<League>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
             ContentItem(

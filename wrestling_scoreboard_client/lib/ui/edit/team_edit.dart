@@ -75,7 +75,7 @@ class TeamEditState extends ConsumerState<TeamEdit> {
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableClubs ??= await ref.read(dataManagerProvider).readMany<Club, Null>();
+            availableClubs ??= await (await ref.read(dataManagerProvider)).readMany<Club, Null>();
             return (filter == null
                     ? availableClubs!
                     : availableClubs!.where((element) => element.name.contains(filter)))
@@ -99,7 +99,7 @@ class TeamEditState extends ConsumerState<TeamEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await ref.read(dataManagerProvider).createOrUpdateSingle(Team(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(Team(
             id: widget.team?.id,
             name: _name!,
             description: _description,

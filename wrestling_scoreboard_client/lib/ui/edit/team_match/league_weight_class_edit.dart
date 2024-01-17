@@ -47,6 +47,6 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
     var leagueWeightClass = LeagueWeightClass(
         id: widget.leagueWeightClass?.id, league: widget.initialLeague, pos: _pos, weightClass: weightClass);
     leagueWeightClass =
-        leagueWeightClass.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(leagueWeightClass));
+        leagueWeightClass.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(leagueWeightClass));
   }
 }

@@ -71,7 +71,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await ref.read(dataManagerProvider).createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
       navigator.pop();
     }
   }

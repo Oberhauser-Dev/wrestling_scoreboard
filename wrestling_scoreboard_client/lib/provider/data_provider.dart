@@ -34,7 +34,7 @@ Stream<T> singleDataStream<T extends DataObject>(
     if (pData.initialData != null) {
       yield pData.initialData!;
     }
-    final dataManager = ref.watch(dataManagerProvider);
+    final dataManager = await ref.watch(dataManagerProvider);
     yield* dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
   }
 }
@@ -69,7 +69,7 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
     if (pData.initialData != null) {
       yield pData.initialData!;
     }
-    final dataManager = ref.watch(dataManagerProvider);
+    final dataManager = await ref.watch(dataManagerProvider);
     yield* dataManager
         .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
         .map((event) => event.data);

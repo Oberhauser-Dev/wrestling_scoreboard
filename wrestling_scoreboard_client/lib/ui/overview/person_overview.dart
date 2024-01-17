@@ -34,9 +34,9 @@ abstract class PersonOverview extends ConsumerWidget implements AbstractOverview
         final description = InfoWidget(
           obj: person,
           editPage: editPage,
-          onDelete: () {
+          onDelete: () async {
             onDelete();
-            ref.read(dataManagerProvider).deleteSingle<Person>(person);
+            (await ref.read(dataManagerProvider)).deleteSingle<Person>(person);
           },
           classLocale: classLocale,
           children: [

@@ -34,9 +34,9 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
         final description = InfoWidget(
           obj: data,
           editPage: editPage,
-          onDelete: () {
+          onDelete: () async {
             onDelete();
-            ref.read(dataManagerProvider).deleteSingle<Bout>(data);
+            (await ref.read(dataManagerProvider)).deleteSingle<Bout>(data);
           },
           classLocale: classLocale,
           children: [

@@ -135,7 +135,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         injuryDuration: Duration(seconds: _injuryDurationInSecs!),
         periodCount: _periodCount!,
       );
-      boutConfig = boutConfig.copyWithId(await ref.read(dataManagerProvider).createOrUpdateSingle(boutConfig));
+      boutConfig = boutConfig.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(boutConfig));
       await handleNested(boutConfig);
       navigator.pop();
     }

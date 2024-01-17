@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
-import 'package:wrestling_scoreboard_client/util/environment.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
 
 enum WebSocketConnectionState {
@@ -20,21 +18,21 @@ enum WebSocketConnectionState {
 class WebSocketManager {
   late Function(dynamic message) messageHandler;
   WebSocketChannel? _channel;
-  String? wsUrl;
+  String? _wsUrl;
 
   /// Manages connection state of WebSocket
   final StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
 
-  WebSocketManager(this.messageHandler) {
-    Preferences.onChangeWsUrlWebSocket.stream.listen((url) {
-      wsUrl = adaptLocalhost(url);
-      onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
-    });
+  WebSocketManager(this.messageHandler, {String? url}) {
+    if (url != null) {
+      _wsUrl = adaptLocalhost(url);
+    }
+    onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
     onWebSocketConnection.stream.listen((connectionState) async {
-      if (connectionState == WebSocketConnectionState.connecting && wsUrl != null) {
+      if (connectionState == WebSocketConnectionState.connecting && _wsUrl != null) {
         await _channel?.sink.close(4210);
         try {
-          _channel = WebSocketChannel.connect(Uri.parse(wsUrl!));
+          _channel = WebSocketChannel.connect(Uri.parse(_wsUrl!));
           _channel?.stream.listen(messageHandler, onError: (e) {
             if (e is WebSocketChannelException) {
               log('Websocket connection refused by server');
@@ -54,7 +52,7 @@ class WebSocketManager {
             _channel = null;
           });
           await _channel?.ready.timeout(const Duration(seconds: 5));
-          log('Websocket connection established: $wsUrl');
+          log('Websocket connection established: $_wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
         } on SocketException catch (e) {
           // Thrown, when connection failed, waiting for `ready` state.
@@ -66,8 +64,6 @@ class WebSocketManager {
         _channel = null;
       }
     });
-    Preferences.getString(Preferences.keyWsUrl)
-        .then((value) => Preferences.onChangeWsUrlWebSocket.sink.add(value ?? Env.webSocketUrl.fromString()));
   }
 
   dynamic addToSink(String val) {

@@ -295,7 +295,7 @@ class BoutActionHandler extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
-      await intent.handle(ref.read(dataManagerProvider), stopwatch, bouts, getActions, boutIndex, doAction,
+      await intent.handle(await ref.read(dataManagerProvider), stopwatch, bouts, getActions, boutIndex, doAction,
           context: context, navigateToBoutByIndex: navigateToBoutByIndex);
     }
 

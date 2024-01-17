@@ -34,7 +34,7 @@ class ClubOverview extends ConsumerWidget {
           editPage: ClubEdit(
             club: data,
           ),
-          onDelete: () => ref.read(dataManagerProvider).deleteSingle<Club>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Club>(data),
           classLocale: localizations.club,
           children: [
             ContentItem(

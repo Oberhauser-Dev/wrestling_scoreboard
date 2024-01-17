@@ -64,7 +64,7 @@ class TeamMatchOverview extends ConsumerWidget {
                         editPage: TeamMatchEdit(
                           teamMatch: match,
                         ),
-                        onDelete: () => ref.read(dataManagerProvider).deleteSingle<TeamMatch>(match),
+                        onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatch>(match),
                         classLocale: localizations.match,
                         children: [
                           ContentItem(
@@ -139,22 +139,22 @@ class TeamMatchOverview extends ConsumerWidget {
                         ContentItem(
                             title: homeLineup.team.name,
                             icon: Icons.view_list,
-                            onTap: () => handleSelectedLineup(
+                            onTap: () async => handleSelectedLineup(
                                   homeLineup,
                                   match.league ?? League.outOfCompetition,
                                   match,
                                   navigator,
-                                  ref.read(dataManagerProvider),
+                                  (await ref.read(dataManagerProvider)),
                                 )),
                         ContentItem(
                             title: guestLineup.team.name,
                             icon: Icons.view_list,
-                            onTap: () => handleSelectedLineup(
+                            onTap: () async => handleSelectedLineup(
                                   guestLineup,
                                   match.league ?? League.outOfCompetition,
                                   match,
                                   navigator,
-                                  ref.read(dataManagerProvider),
+                                  (await ref.read(dataManagerProvider)),
                                 )),
                       ],
                     ),

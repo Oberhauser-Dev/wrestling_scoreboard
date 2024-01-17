@@ -75,7 +75,7 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
 
   @override
   Future<void> handleNested(BoutConfig dataObject) async {
-    await ref.read(dataManagerProvider).createOrUpdateSingle(
+    await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         League(id: widget.league?.id, name: _name!, startDate: _startDate, boutConfig: dataObject));
   }
 }

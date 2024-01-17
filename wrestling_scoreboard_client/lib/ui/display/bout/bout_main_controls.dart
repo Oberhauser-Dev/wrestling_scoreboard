@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard_client/ui/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/ui/components/themed.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/ui/display/bout/bout_shortcuts.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class BoutMainControls extends ConsumerStatefulWidget {
@@ -124,17 +123,18 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                     ? widget.boutState.bout.result
                     : null,
                 options: boutResultOptions,
-                onChange: (BoutResult? val) {
+                onChange: (BoutResult? val) async {
+                  final dataManager = await ref.read(dataManagerProvider);
+                  var bout = widget.boutState.bout.copyWith(
+                    winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
+                    result: val,
+                  );
+                  bout = bout.updateClassificationPoints(actions);
+                  dataManager.createOrUpdateSingle(bout);
+                  if (bout.r != null) dataManager.createOrUpdateSingle(bout.r!);
+                  if (bout.b != null) dataManager.createOrUpdateSingle(bout.b!);
+
                   setState(() {
-                    var bout = widget.boutState.bout.copyWith(
-                      winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
-                      result: val,
-                    );
-                    bout = bout.updateClassificationPoints(actions);
-                    final dataManager = ref.read(dataManagerProvider);
-                    dataManager.createOrUpdateSingle(bout);
-                    if (bout.r != null) dataManager.createOrUpdateSingle(bout.r!);
-                    if (bout.b != null) dataManager.createOrUpdateSingle(bout.b!);
                     widget.boutState.bout = bout;
                   });
                 },

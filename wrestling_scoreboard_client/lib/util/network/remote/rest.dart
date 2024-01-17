@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
-import 'package:wrestling_scoreboard_client/util/environment.dart';
 import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/url.dart';
 import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
@@ -14,17 +12,15 @@ class RestDataProvider extends DataProvider {
   };
   static const headers = {"Content-Type": "application/json"};
 
-  String _apiUrl = Env.apiUrl.fromString();
+  final String? wsUrl;
+  late final String? _apiUrl;
+
+  @override
   late final WebSocketManager webSocketManager;
 
-  RestDataProvider() {
-    Preferences.getString(Preferences.keyApiUrl).then((value) {
-      _apiUrl = adaptLocalhost((value ?? Env.apiUrl.fromString()));
-      _initUpdateStream();
-    });
-    Preferences.onChangeApiUrl.stream.listen((event) {
-      _apiUrl = adaptLocalhost(event);
-    });
+  RestDataProvider({required String? apiUrl, this.wsUrl}) {
+    _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
+    _initUpdateStream();
   }
 
   String _getPathFromType(Type t) {
@@ -116,7 +112,7 @@ class RestDataProvider extends DataProvider {
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    });
+    }, url: wsUrl);
   }
 
   @override

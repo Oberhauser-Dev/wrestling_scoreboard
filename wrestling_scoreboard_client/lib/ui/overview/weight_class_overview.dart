@@ -31,9 +31,9 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
         final description = InfoWidget(
           obj: data,
           editPage: editPage,
-          onDelete: () {
+          onDelete: () async {
             onDelete();
-            ref.read(dataManagerProvider).deleteSingle<WeightClass>(data);
+            (await ref.read(dataManagerProvider)).deleteSingle<WeightClass>(data);
           },
           classLocale: classLocale,
           children: [

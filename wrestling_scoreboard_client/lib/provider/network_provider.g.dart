@@ -7,7 +7,7 @@ part of 'network_provider.dart';
 // **************************************************************************
 
 String _$webSocketStateStreamHash() =>
-    r'724acc900d53840a78018b4e53e95d0c1c053b45';
+    r'c2e1d1beacf1b2787622218daa6945200f4b27ee';
 
 /// See also [webSocketStateStream].
 @ProviderFor(webSocketStateStream)
@@ -23,12 +23,12 @@ final webSocketStateStreamProvider =
 );
 
 typedef WebSocketStateStreamRef = StreamProviderRef<WebSocketConnectionState>;
-String _$dataManagerHash() => r'5c94263367326024f3d8fe004371537ad9c5843d';
+String _$dataManagerHash() => r'7cb308ac16bac0355060736e0892351b51899cd2';
 
 /// See also [DataManager].
 @ProviderFor(DataManager)
 final dataManagerProvider =
-    NotifierProvider<DataManager, Raw<DataProvider>>.internal(
+    NotifierProvider<DataManager, Raw<Future<DataProvider>>>.internal(
   DataManager.new,
   name: r'dataManagerProvider',
   debugGetCreateSourceHash:
@@ -37,6 +37,6 @@ final dataManagerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$DataManager = Notifier<Raw<DataProvider>>;
+typedef _$DataManager = Notifier<Raw<Future<DataProvider>>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
