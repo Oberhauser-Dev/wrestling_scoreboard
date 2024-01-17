@@ -39,13 +39,16 @@ class WebSocketManager {
             }
           }, onDone: () {
             if (_channel?.closeCode == 4210) {
-              log('Websocket connection reconnecting');
+              log('Websocket connection reconnecting: ${_channel?.closeReason}');
               onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
             } else if (_channel?.closeCode == 1001) {
-              log('Websocket connection closed by client');
+              log('Websocket connection closed by client ${_channel?.closeReason}');
               onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
-            } else {
+            } else if (_channel?.closeCode == null) {
               log('Websocket connection closed by server');
+              // Avoid overriding previous SocketException with setting a disconnected state
+            } else {
+              log('Websocket connection closed by server ${_channel?.closeReason}');
               onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
             }
             _channel = null;
@@ -56,7 +59,7 @@ class WebSocketManager {
         } on SocketException catch (e) {
           // Thrown, when connection failed, waiting for `ready` state.
           log('Websocket connection refused by server: $e');
-          onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+          onWebSocketConnection.sink.addError(e);
         }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {
         await _channel?.sink.close(1001);

@@ -36,6 +36,8 @@ Stream<T> singleDataStream<T extends DataObject>(
     }
     final dataManager = await ref.watch(dataManagerNotifierProvider);
     yield* dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
+  } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
+    yield* Stream.error('Server disconnected');
   }
 }
 
@@ -73,5 +75,7 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
     yield* dataManager
         .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
         .map((event) => event.data);
+  } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
+    yield* Stream.error('Server disconnected');
   }
 }

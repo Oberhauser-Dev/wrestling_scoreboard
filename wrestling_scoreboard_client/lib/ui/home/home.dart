@@ -25,31 +25,45 @@ class HomeState extends ConsumerState<Home> {
   void initState() {
     super.initState();
     ref.read(dataManagerNotifierProvider).then((dataManager) {
-      dataManager.webSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
-        if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final localizations = AppLocalizations.of(context)!;
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                content: Text(localizations.noWebSocketConnection),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(localizations.cancel),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      dataManager.webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
-                    },
-                    child: Text(localizations.retry),
-                  ),
-                ],
+      void showDisconnectedAlert([Object? exception]) {
+        final localizations = AppLocalizations.of(context)!;
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SelectableText(localizations.noWebSocketConnection),
+                // TODO: add show more button
+                // if (exception != null)
+                //   SelectableText(exception.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(localizations.cancel),
               ),
-            );
-          });
-        }
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  dataManager.webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+                },
+                child: Text(localizations.retry),
+              ),
+            ],
+          ),
+        );
+      }
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        dataManager.webSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
+          if (mounted && connectionState == WebSocketConnectionState.disconnected) {
+            showDisconnectedAlert();
+          }
+        }, onError: (e, [trace]) {
+          showDisconnectedAlert(e);
+        });
       });
     });
   }
