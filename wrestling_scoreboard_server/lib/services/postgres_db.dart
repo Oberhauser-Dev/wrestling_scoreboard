@@ -11,7 +11,7 @@ class PostgresDb {
   final String postgresDatabaseName = env['DATABASE_NAME'] ?? 'wrestling_scoreboard';
 
   static final PostgresDb _singleton = PostgresDb._internal();
-  late final psql.Connection connection;
+  late psql.Connection connection;
 
   factory PostgresDb() {
     return _singleton;
@@ -32,5 +32,9 @@ class PostgresDb {
         settings: psql.ConnectionSettings(
           sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable,
         ));
+  }
+
+  Future<void> close() async {
+    await connection.close();
   }
 }

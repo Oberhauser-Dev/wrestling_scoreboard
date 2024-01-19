@@ -241,7 +241,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
 
 Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
-  final controller = EntityController.getControllerFromDataType<T>();
+  final controller = EntityController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
     await controller.updateSingle(single);
     broadcast(jsonEncode(singleToJson(single, T, operation)));
@@ -260,7 +260,7 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
 Future<int> handleSingleRaw<T extends DataObject>(
     {required CRUD operation, required Map<String, dynamic> single}) async {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}/${single['id']}');
-  final controller = EntityController.getControllerFromDataType<T>();
+  final controller = EntityController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
     await controller.updateSingleRaw(single);
     broadcast(jsonEncode(singleToJson(single, T, operation)));

@@ -38,8 +38,7 @@ typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
 typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
 
-Future<int?> handleFromJson(
-  Map<String, Object?> json, {
+Future<int?> handleFromJson(Map<String, Object?> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,
@@ -160,8 +159,7 @@ Future<int?> handleFromJson(
   }
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(
-  Map<String, dynamic> json, {
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,
@@ -287,3 +285,24 @@ Type getTypeFromTableName(String tableName) {
       throw UnimplementedError('Type for "${tableName.toString()}" not found.');
   }
 }
+
+/// Hierarchically ordered data types
+final dataTypes = [
+  BoutAction,
+  ParticipantState,
+  TeamMatchBout,
+  Bout,
+  LeagueTeamParticipation,
+  Participation,
+  TeamMatch,
+  LeagueWeightClass,
+  BoutConfig,
+  Lineup,
+  Membership,
+  Person,
+  Team,
+  Club,
+  League,
+  WeightClass,
+  Competition,
+];

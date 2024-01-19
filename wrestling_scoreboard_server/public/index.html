@@ -44,7 +44,7 @@
 <ul>
     <li><a href="/api">API Endpoint</a></li>
     <ul>
-        <li><a href="/api/bout_config">BoutConfigs</a></li>
+        <li><a href="/api/bout_configs">BoutConfigs</a></li>
         <li><a href="/api/clubs">Clubs</a></li>
         <li><a href="/api/bouts">Bouts</a></li>
         <li><a href="/api/bout_actions">BoutActions</a></li>
@@ -62,6 +62,18 @@
         <li><a href="/api/competitions">Competitions</a></li>
         <li><a href="/api/competition_bouts">CompetitionBouts</a></li>
         <li><a href="/api/weight_classs">WeightClasses</a></li>
+        <form action='/api/database/reset' method='POST'
+              onsubmit="return confirm('Are you sure you want to reset the database?');">
+            <input type='submit' value="Reset">
+        </form>
+        <form action='/api/database/upgrade' method='POST'
+              onsubmit="return confirm('Are you sure you want to upgrade the database?');">
+            <input type='submit' value="Upgrade">
+        </form>
+        <form action='/api/database/restore' method='POST'
+              onsubmit="return confirm('Are you sure you want to restore the database?');">
+            <input type='submit' value="Restore">
+        </form>
     </ul>
     <li><a href="/ws">Websocket Endpoint</a>
         <!-- <li><code>/sum/&lt;a|[0-9]+&gt;/&lt;b|[0-9]+&gt;</code></li>-->

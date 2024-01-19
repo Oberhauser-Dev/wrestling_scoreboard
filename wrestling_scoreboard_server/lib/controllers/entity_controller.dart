@@ -320,53 +320,53 @@ abstract class EntityController<T extends DataObject> {
   }
 
   static Future<T?> getSingleFromDataType<T extends DataObject>(int id) {
-    return getControllerFromDataType<T>().getSingle(id);
+    return getControllerFromDataType(T).getSingle(id) as Future<T?>;
   }
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>(
       {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
-    return getControllerFromDataType<T>().getMany(
-        conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
+    return getControllerFromDataType(T)
+        .getMany(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
   }
 
-  static EntityController<T> getControllerFromDataType<T extends DataObject>() {
-    switch (T) {
+  static EntityController getControllerFromDataType(Type t) {
+    switch (t) {
       case BoutConfig:
-        return BoutConfigController() as EntityController<T>;
+        return BoutConfigController();
       case Club:
-        return ClubController() as EntityController<T>;
+        return ClubController();
       case Bout:
-        return BoutController() as EntityController<T>;
+        return BoutController();
       case BoutAction:
-        return BoutActionController() as EntityController<T>;
+        return BoutActionController();
       case League:
-        return LeagueController() as EntityController<T>;
+        return LeagueController();
       case LeagueWeightClass:
-        return LeagueWeightClassController() as EntityController<T>;
+        return LeagueWeightClassController();
       case LeagueTeamParticipation:
-        return LeagueTeamParticipationController() as EntityController<T>;
+        return LeagueTeamParticipationController();
       case Lineup:
-        return LineupController() as EntityController<T>;
+        return LineupController();
       case Membership:
-        return MembershipController() as EntityController<T>;
+        return MembershipController();
       case Participation:
-        return ParticipationController() as EntityController<T>;
+        return ParticipationController();
       case ParticipantState:
-        return ParticipantStateController() as EntityController<T>;
+        return ParticipantStateController();
       case Person:
-        return PersonController() as EntityController<T>;
+        return PersonController();
       case Team:
-        return TeamController() as EntityController<T>;
+        return TeamController();
       case TeamMatch:
-        return TeamMatchController() as EntityController<T>;
+        return TeamMatchController();
       case TeamMatchBout:
-        return TeamMatchBoutController() as EntityController<T>;
+        return TeamMatchBoutController();
       case Competition:
-        return CompetitionController() as EntityController<T>;
+        return CompetitionController();
       case WeightClass:
-        return WeightClassController() as EntityController<T>;
+        return WeightClassController();
       default:
-        throw UnimplementedError('Controller not available for type: $T');
+        throw UnimplementedError('Controller not available for type: $t');
     }
   }
 }

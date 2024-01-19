@@ -23,6 +23,14 @@ On Linux you may want to login as postgres user: `sudo -u postgres -i`
 - List all users: `\du`
 - Start the server: `postgres -D /.../PostgreSQL/16/data`
 
+Login as admin:
+```shell
+# sudo -u postgres psql # Use this on peer authentication
+PGPASSWORD=mypassword
+psql -U postgres
+postgres=#
+```
+
 ### Setup User: 
 
 Create own user `wrestling`, replace `my_password` with the password of your choice:
@@ -32,15 +40,13 @@ psql -U postgres -c "CREATE USER wrestling WITH PASSWORD 'my_password';"
 
 ### Import / Restore prepopulated database & schema
 
+You can `Restore`, `Reset` or `Upgrade` your database from the server web page.
+Or you execute these steps manually:
+
 Reset current database:
 ```shell
-# sudo -u postgres psql # Use this on peer authentication
-psql -U postgres
-postgres=#
-```
-```postgresql
-DROP DATABASE IF EXISTS wrestling_scoreboard;
-CREATE DATABASE wrestling_scoreboard WITH OWNER = wrestling;
+psql -U postgres -c "DROP DATABASE IF EXISTS wrestling_scoreboard;"
+psql -U postgres -c "CREATE DATABASE wrestling_scoreboard WITH OWNER = wrestling;"
 ```
 
 Restore prepopulated database, execute in directory `server`:

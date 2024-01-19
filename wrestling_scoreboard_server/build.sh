@@ -36,5 +36,5 @@ dart pub get
 dart compile exe bin/server.dart -o ./bin/${EXEC_NAME}
 chmod +x ./bin/${EXEC_NAME}
 OUTPUT_PATH="build/wrestling_scoreboard_server-${PLATFORM}-${ARCH}-${VERSION}.tar.gz"
-tar -czf ${OUTPUT_PATH} bin/${EXEC_NAME} public .env.example
+tar -czf ${OUTPUT_PATH} bin/${EXEC_NAME} public database .env.example
 echo ${OUTPUT_PATH}
