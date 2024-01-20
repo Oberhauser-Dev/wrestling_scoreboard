@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
@@ -13,9 +13,9 @@ class WeightClassController extends EntityController<WeightClass> {
   WeightClassController._internal() : super(tableName: 'weight_class');
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+  Map<String, psql.Type?> getPostgresDataTypes() {
     return {
-      'weight': PostgreSQLDataType.smallInteger,
+      'weight': psql.Type.smallInteger,
       'style': null,
       'unit': null,
     };

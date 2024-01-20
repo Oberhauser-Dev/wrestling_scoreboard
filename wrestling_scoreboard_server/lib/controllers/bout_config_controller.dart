@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 
 class BoutConfigController extends EntityController<BoutConfig> {
@@ -12,9 +12,9 @@ class BoutConfigController extends EntityController<BoutConfig> {
   BoutConfigController._internal() : super(tableName: 'bout_config');
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+  Map<String, psql.Type?> getPostgresDataTypes() {
     return {
-      'period_count': PostgreSQLDataType.smallInteger,
+      'period_count': psql.Type.smallInteger,
     };
   }
 }

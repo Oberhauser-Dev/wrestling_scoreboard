@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:postgres/postgres.dart';
+import 'package:postgres/legacy.dart';
+import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
@@ -16,42 +18,41 @@ import 'package:wrestling_scoreboard_server/controllers/participant_state_contro
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
-Map<Type, PostgreSQLDataType> typeDartToCodeMap = {
-  String: PostgreSQLDataType.varChar,
-  // 'int2': PostgreSQLDataType.smallInteger,
-  int: PostgreSQLDataType.integer,
-  // 'int8': PostgreSQLDataType.bigInteger,
-  // 'float4': PostgreSQLDataType.real,
-  double: PostgreSQLDataType.double,
-  bool: PostgreSQLDataType.boolean,
-  DateTime: PostgreSQLDataType.date,
-  // 'timestamp': PostgreSQLDataType.timestampWithoutTimezone,
-  // 'timestamptz': PostgreSQLDataType.timestampWithTimezone,
-  // 'interval': PostgreSQLDataType.interval,
-  PgPoint: PostgreSQLDataType.point,
-  // 'jsonb': PostgreSQLDataType.jsonb,
-  // 'bytea': PostgreSQLDataType.byteArray,
-  // 'name': PostgreSQLDataType.name,
-  // 'uuid': PostgreSQLDataType.uuid,
-  // 'json': PostgreSQLDataType.json,
-  // 'point': PostgreSQLDataType.point,
-  List<int>: PostgreSQLDataType.integerArray,
-  List<String>: PostgreSQLDataType.textArray,
-  List<double>: PostgreSQLDataType.doubleArray,
-  // 'varchar': PostgreSQLDataType.varChar,
-  // '_jsonb': PostgreSQLDataType.jsonbArray,
+Map<Type, psql.Type> typeDartToCodeMap = {
+  String: psql.Type.varChar,
+  // 'int2': psql.Type.smallInteger,
+  int: psql.Type.integer,
+  // 'int8': psql.Type.bigInteger,
+  // 'float4': psql.Type.real,
+  double: psql.Type.double,
+  bool: psql.Type.boolean,
+  DateTime: psql.Type.date,
+  // 'timestamp': psql.Type.timestampWithoutTimezone,
+  // 'timestamptz': psql.Type.timestampWithTimezone,
+  // 'interval': psql.Type.interval,
+  // PgPoint: psql.Type.point,
+  // 'jsonb': psql.Type.jsonb,
+  // 'bytea': psql.Type.byteArray,
+  // 'name': psql.Type.name,
+  // 'uuid': psql.Type.uuid,
+  // 'json': psql.Type.json,
+  // 'point': psql.Type.point,
+  List<int>: psql.Type.integerArray,
+  List<String>: psql.Type.textArray,
+  List<double>: psql.Type.doubleArray,
+  // 'varchar': psql.Type.varChar,
+  // '_jsonb': psql.Type.jsonbArray,
 };
 
 class PostgresMap {
   Map<String, dynamic> map;
-  Map<String, PostgreSQLDataType?> types;
+  Map<String, psql.Type?> types;
 
   PostgresMap(this.map, [this.types = const {}]);
 }
@@ -83,13 +84,14 @@ abstract class EntityController<T extends DataObject> {
     return DataObject.fromRaw<T>(single, getSingleFromDataType);
   }
 
+  late final getSingleRawStmt =
+      PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
+
   Future<Map<String, dynamic>?> getSingleRaw(int id) async {
-    final res = await PostgresDb()
-        .connection
-        .mappedResultsQuery('SELECT * FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
-    final many = mapToTable(res);
-    if (many.isEmpty) return Future.value(null);
-    return many.first;
+    final res = (await getSingleRawStmt).bind({'id': id});
+    final many = res.toColumnMap();
+    if (await many.isEmpty) return Future.value(null);
+    return await many.first;
   }
 
   Future<int> createSingle(T dataObject) async {
@@ -104,19 +106,24 @@ abstract class EntityController<T extends DataObject> {
       final postgresType =
           postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
       // Trim all strings before inserting into db
-      if (postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
+      if (postgresType == psql.Type.varChar || postgresType == psql.Type.text) {
         data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
       }
       return PostgreSQLFormat.id(e.key, type: postgresType);
     }).join(', ')}) RETURNING $primaryKeyName;
         ''';
     try {
-      final res = await PostgresDb().connection.query(sql, substitutionValues: data);
-      return res.last[0] as int;
-    } on PostgreSQLException catch (e) {
+      final stmt = await PostgresDb().connection.prepare(sql);
+      final res = stmt.bind(data);
+      if (await res.isEmpty || (await res.last).isEmpty) {
+        throw InvalidParameterException(
+            'The data object of table $tableName could not be updated. Check the attributes: $data');
+      }
+      return (await res.last)[0] as int;
+    } on psql.PgException catch (e) {
       throw InvalidParameterException(
           'The data object of table $tableName could not be created. Check the attributes: $data\n'
-          'PostgreSQLException: {"code": ${e.code}}');
+          'PgException: {"message": ${e.message}}');
     }
   }
 
@@ -132,7 +139,7 @@ abstract class EntityController<T extends DataObject> {
       final postgresType =
           postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
       // Trim all strings before inserting into db
-      if (postgresType == PostgreSQLDataType.varChar || postgresType == PostgreSQLDataType.text) {
+      if (postgresType == psql.Type.varChar || postgresType == psql.Type.text) {
         data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
       }
       return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
@@ -140,25 +147,28 @@ abstract class EntityController<T extends DataObject> {
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
     try {
-      final res = await PostgresDb().connection.query(sql, substitutionValues: data);
-      if (res.isEmpty || res.last.isEmpty) {
+      final stmt = await PostgresDb().connection.prepare(sql);
+      final res = stmt.bind(data);
+      if (await res.isEmpty || (await res.last).isEmpty) {
         throw InvalidParameterException(
             'The data object of table $tableName could not be updated. Check the attributes: $data');
       }
-      return res.last[0] as int;
-    } on PostgreSQLException catch (e) {
+      return (await res.last)[0] as int;
+    } on psql.PgException catch (e) {
       throw InvalidParameterException(
           'The data object of table $tableName could not be updated. Check the attributes: $data'
-          '\nPostgreSQLException: {"code": ${e.code}');
+          '\nPgException: {"message": ${e.message}');
     }
   }
 
+  late final deleteSingleStmt =
+      PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
+
   Future<bool> deleteSingle(int id) async {
     try {
-      await PostgresDb()
-          .connection
-          .query('DELETE FROM $tableName WHERE $primaryKeyName = @id;', substitutionValues: {'id': id});
-    } on PostgreSQLException catch (_) {
+      final res = (await deleteSingleStmt).bind({'id': id});
+      await res.drain();
+    } on psql.PgException catch (_) {
       return false;
     }
     return true;
@@ -182,7 +192,9 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<void> setManyRawFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
-    await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues);
+    final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
+    final res = stmt.bind(substitutionValues);
+    return await res.drain();
   }
 
   Future<Response> requestMany(Request request) async {
@@ -220,8 +232,9 @@ abstract class EntityController<T extends DataObject> {
 
   Future<List<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
       {Map<String, dynamic>? substitutionValues}) async {
-    final res = await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues);
-    return mapToTable(res);
+    final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
+    final res = stmt.bind(substitutionValues);
+    return await res.toColumnMap().toList();
   }
 
   Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
@@ -231,18 +244,15 @@ abstract class EntityController<T extends DataObject> {
     }));
   }
 
-  List<Map<String, dynamic>> mapToTable(List<Map<String, Map<String, dynamic>>> res) {
-    return res.map((row) => row[tableName]!).toList();
-  }
-
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() => {};
+  Map<String, psql.Type?> getPostgresDataTypes() => {};
 
   bool isRaw(Request request) {
     return (request.url.queryParameters['isRaw'] ?? '').parseBool();
   }
 
-  static Future<Map<String, dynamic>> query(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
-    return (await PostgresDb().connection.mappedResultsQuery(sqlQuery, substitutionValues: substitutionValues)).single;
+  static Future<Map<String, dynamic>> query(psql.Statement stmt, {Map<String, dynamic>? substitutionValues}) async {
+    final res = stmt.bind(substitutionValues);
+    return res.toColumnMap().single;
   }
 
   static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, Object?> json) async {
@@ -315,8 +325,8 @@ abstract class EntityController<T extends DataObject> {
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>(
       {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
-    return getControllerFromDataType<T>()
-        .getMany(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues);
+    return getControllerFromDataType<T>().getMany(
+        conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
   }
 
   static EntityController<T> getControllerFromDataType<T extends DataObject>() {
@@ -370,4 +380,24 @@ class InvalidParameterException implements Exception {
   String message;
 
   InvalidParameterException(this.message);
+}
+
+extension on Map<String, dynamic> {
+  /// Parse custom postgres types
+  /// https://github.com/isoos/postgresql-dart/issues/276
+  Map<String, dynamic> parse() {
+    return map((key, value) => MapEntry(key, value is psql.UndecodedBytes ? value.asString : value));
+  }
+}
+
+extension on psql.ResultStream {
+  /// Parse custom postgres types
+  /// https://github.com/isoos/postgresql-dart/issues/276
+  Stream<Iterable<dynamic>> parse() {
+    return map((row) => row.map((value) => value is psql.UndecodedBytes ? value.asString : value));
+  }
+
+  Stream<Map<String, dynamic>> toColumnMap() {
+    return map((row) => row.toColumnMap().parse());
+  }
 }

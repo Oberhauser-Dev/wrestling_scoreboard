@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
@@ -13,7 +13,7 @@ class ParticipantStateController extends EntityController<ParticipantState> {
   ParticipantStateController._internal() : super(tableName: 'participant_state');
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
-    return {'classification_points': PostgreSQLDataType.smallInteger};
+  Map<String, psql.Type?> getPostgresDataTypes() {
+    return {'classification_points': psql.Type.smallInteger};
   }
 }

@@ -261,10 +261,10 @@ packages:
     dependency: "direct main"
     description:
       name: postgres
-      sha256: fce8406bbe8b7018c768e76816be24adf302f44c06d7176c912d2501ea6aac2a
+      sha256: d384c0cce2c30f9b349a133812f976ca16fa916fd567882bb6a01741b194c22a
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.3"
+    version: "3.0.6"
   pub_semver:
     dependency: transitive
     description:

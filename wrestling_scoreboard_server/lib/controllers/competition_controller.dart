@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
@@ -24,7 +24,7 @@ class CompetitionController extends EntityController<Competition> {
   }
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
-    return {'comment': PostgreSQLDataType.text};
+  Map<String, psql.Type?> getPostgresDataTypes() {
+    return {'comment': psql.Type.text};
   }
 }

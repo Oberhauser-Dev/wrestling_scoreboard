@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
@@ -13,7 +13,7 @@ class PersonController extends EntityController<Person> {
   PersonController._internal() : super(tableName: 'person');
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+  Map<String, psql.Type?> getPostgresDataTypes() {
     return {
       'gender': null,
     };

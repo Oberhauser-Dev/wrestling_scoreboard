@@ -5,13 +5,13 @@
 import 'dart:io';
 
 import 'package:dotenv/dotenv.dart' show DotEnv;
-import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
-import 'package:wrestling_scoreboard_server/routes/api_route.dart';
-import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
+import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/routes/api_route.dart';
+import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'middleware/cors.dart';
 
@@ -45,7 +45,7 @@ Future init() async {
     port,
   );
 
-  await PostgresDb().connection.open();
+  await PostgresDb().open();
 
   final serverUrl = 'http://${server.address.host}:${server.port}';
   print('Serving API at $serverUrl/api');

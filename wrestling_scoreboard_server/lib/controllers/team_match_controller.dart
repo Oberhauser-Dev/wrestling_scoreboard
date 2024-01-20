@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
@@ -10,8 +10,8 @@ import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controll
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
-import 'entity_controller.dart';
 import 'bout_controller.dart';
+import 'entity_controller.dart';
 
 class TeamMatchController extends EntityController<TeamMatch> {
   static final TeamMatchController _singleton = TeamMatchController._internal();
@@ -83,23 +83,20 @@ class TeamMatchController extends EntityController<TeamMatch> {
           bout = bout.copyWith(b: bout.b!.copyWithId(await ParticipantStateController().createSingle(bout.b!)));
         }
         bout = bout.copyWithId(await BoutController().createSingle(bout));
-        await TeamMatchBoutController()
-            .createSingle(TeamMatchBout(teamMatch: teamMatch, bout: bout, pos: entry.key));
+        await TeamMatchBoutController().createSingle(TeamMatchBout(teamMatch: teamMatch, bout: bout, pos: entry.key));
         bouts[entry.key] = bout;
       } else {
         bout = bout.copyWithId(res.first['id']);
         bouts[entry.key] = await Bout.fromRaw(res.first, EntityController.getSingleFromDataType);
-        await PostgresDb()
-            .connection
-            .query('UPDATE team_match_bout SET pos = ${entry.key} WHERE bout_id = ${bout.id};');
+        final conn = PostgresDb().connection;
+        await conn.execute('UPDATE team_match_bout SET pos = ${entry.key} WHERE bout_id = ${bout.id};');
       }
     });
     if (isReset) {
       await Future.forEach(oldBouts, (Bout bout) async {
         if (bout.id != null) {
           // TODO may also delete boutActions, participantState etc.
-          await TeamMatchBoutController()
-              .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
+          await TeamMatchBoutController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
           await BoutController().deleteSingle(bout.id!);
         }
       });
@@ -109,19 +106,19 @@ class TeamMatchController extends EntityController<TeamMatch> {
       await Future.forEach(unusedBouts, (Bout bout) async {
         if (bout.id != null) {
           // TODO may also delete boutActions, participantState etc.
-          await TeamMatchBoutController()
-              .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
+          await TeamMatchBoutController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
           await BoutController().deleteSingle(bout.id!);
         }
       });
     }
-    broadcast(jsonEncode(manyToJson(bouts, Bout, CRUD.update, isRaw: false, filterType: TeamMatch, filterId: teamMatch.id)));
+    broadcast(
+        jsonEncode(manyToJson(bouts, Bout, CRUD.update, isRaw: false, filterType: TeamMatch, filterId: teamMatch.id)));
 
     return Response.ok('{"status": "success"}');
   }
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
-    return {'comment': PostgreSQLDataType.text};
+  Map<String, psql.Type?> getPostgresDataTypes() {
+    return {'comment': psql.Type.text};
   }
 }

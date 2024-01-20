@@ -1,5 +1,6 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:shelf/shelf.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'entity_controller.dart';
 import 'participation_controller.dart';
@@ -11,7 +12,7 @@ class LineupController extends EntityController<Lineup> {
     return _singleton;
   }
 
-  static final teamIdQuery = 'SELECT team_id FROM lineup WHERE id = @id';
+  static final teamIdStmt = PostgresDb().connection.prepare('SELECT team_id FROM lineup WHERE id = @id');
 
   LineupController._internal() : super(tableName: 'lineup');
 

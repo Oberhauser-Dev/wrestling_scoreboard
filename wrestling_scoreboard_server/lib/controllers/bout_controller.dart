@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 
 import 'entity_controller.dart';
@@ -20,7 +20,7 @@ class BoutController extends EntityController<Bout> {
   }
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
+  Map<String, psql.Type?> getPostgresDataTypes() {
     return {
       'winner_role': null,
       'bout_result': null,

@@ -208,13 +208,13 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == TeamMatch) {
     final teamMatchController = TeamMatchController();
 
-    final homeTeamId = (await EntityController.query(LineupController.teamIdQuery,
+    final homeTeamId = (await EntityController.query(await LineupController.teamIdStmt,
         substitutionValues: {'id': single['home_id']}))['team_id'];
     final homeMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': homeTeamId});
     broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: homeTeamId)));
 
-    final guestTeamId = (await EntityController.query(LineupController.teamIdQuery,
+    final guestTeamId = (await EntityController.query(await LineupController.teamIdStmt,
         substitutionValues: {'id': single['guest_id']}))['team_id'];
     final guestMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': guestTeamId});

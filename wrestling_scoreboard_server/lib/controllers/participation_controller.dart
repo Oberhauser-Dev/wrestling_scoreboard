@@ -1,5 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:postgres/postgres.dart';
+import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
@@ -13,7 +13,7 @@ class ParticipationController extends EntityController<Participation> {
   ParticipationController._internal() : super(tableName: 'participation');
 
   @override
-  Map<String, PostgreSQLDataType?> getPostgresDataTypes() {
-    return {'weight': PostgreSQLDataType.numeric};
+  Map<String, psql.Type?> getPostgresDataTypes() {
+    return {'weight': psql.Type.numeric};
   }
 }
