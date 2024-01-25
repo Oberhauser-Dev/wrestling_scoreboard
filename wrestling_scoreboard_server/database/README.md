@@ -40,7 +40,7 @@ psql -U postgres -c "CREATE USER wrestling WITH PASSWORD 'my_password';"
 
 ### Import / Restore prepopulated database & schema
 
-You can `Restore`, `Reset` or `Upgrade` your database from the server web page.
+You can `Export`, `Restore`, `Reset` or `Upgrade` your database from the server web page.
 Or you execute these steps manually:
 
 Reset current database:

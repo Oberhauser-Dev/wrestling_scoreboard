@@ -30,6 +30,7 @@ class ApiRoute {
     final databaseController = DatabaseController();
     router.post('/database/reset', databaseController.reset);
     router.post('/database/upgrade', databaseController.upgrade);
+    router.post('/database/export', databaseController.export);
     router.post('/database/restore', databaseController.restore);
 
     final boutConfigController = BoutConfigController();

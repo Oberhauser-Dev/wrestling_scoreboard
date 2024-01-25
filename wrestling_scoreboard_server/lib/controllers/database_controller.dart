@@ -20,6 +20,33 @@ class DatabaseController {
   }
 
   /// Restore a database dump
+  Future<Response> export(Request request) async {
+    final db = PostgresDb();
+    final args = <String>[
+      '--file',
+      './database/dump/${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
+          'PostgreSQL-wrestling_scoreboard-dump.sql',
+      '--username',
+      db.dbUser,
+      '--host',
+      db.postgresHost,
+      '--port',
+      db.postgresPort.toString(),
+      '--dbname',
+      db.postgresDatabaseName,
+      '--schema',
+      'public'
+    ];
+    final process = await Process.run('pg_dump', args, environment: {'PGPASSWORD': db.dbPW});
+
+    if (process.exitCode == 0) {
+      return Response.ok('{"status": "success"}');
+    } else {
+      return Response.internalServerError(body: '{"err": "${process.stderr}"}');
+    }
+  }
+
+  /// Restore a database dump
   Future<Response> restore(Request request) async {
     final db = PostgresDb();
     final conn = db.connection;
