@@ -33,7 +33,7 @@ dependencies:
   package_info_plus: ^5.0.1
   flutter_markdown: ^0.6.18+2
   google_fonts: ^6.1.0
-  window_manager: ^0.3.7
+  window_manager: ^0.3.8
   flutter_riverpod: ^3.0.0-dev.3
   riverpod_annotation: ^3.0.0-dev.3
   collection: ^1.18.0
@@ -45,13 +45,6 @@ dev_dependencies:
   flutter_lints: ^3.0.1
   riverpod_generator: ^3.0.0-dev.11
   build_runner: ^2.4.7
-
-dependency_overrides:
-  # TODO(gustl22): Remove if solved https://github.com/leanflutter/window_manager/pull/409
-  window_manager:
-    git:
-      url: https://github.com/damywise/window_manager.git
-      ref: fullscreen-events
 
 flutter:
   generate: true
