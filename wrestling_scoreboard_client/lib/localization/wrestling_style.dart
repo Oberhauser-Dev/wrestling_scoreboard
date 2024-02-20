@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-styleToString(WrestlingStyle style, BuildContext context) {
-  if (style == WrestlingStyle.free) return AppLocalizations.of(context)!.freeStyle;
-  return AppLocalizations.of(context)!.grecoRoman;
-}
+extension WrestlingStyleLocalization on WrestlingStyle {
+  localize(BuildContext context) {
+    if (this == WrestlingStyle.free) return AppLocalizations.of(context)!.freeStyle;
+    return AppLocalizations.of(context)!.grecoRoman;
+  }
 
-styleToAbbr(WrestlingStyle style, BuildContext context) {
-  if (style == WrestlingStyle.free) return AppLocalizations.of(context)!.freeStyleAbbr;
-  return AppLocalizations.of(context)!.grecoRomanAbbr;
+  abbreviation(BuildContext context) {
+    if (this == WrestlingStyle.free) return AppLocalizations.of(context)!.freeStyleAbbr;
+    return AppLocalizations.of(context)!.grecoRomanAbbr;
+  }
 }

@@ -41,12 +41,12 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
           children: [
             ...tiles,
             ContentItem(
-              title: getParticipationStateName(context, data.r),
+              title: data.r?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.red,
               icon: Icons.person,
             ),
             ContentItem(
-              title: getParticipationStateName(context, data.b),
+              title: data.b?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.blue,
               icon: Icons.person,
             ),
@@ -60,16 +60,19 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
               subtitle: localizations.winner,
               icon: Icons.emoji_events,
             ),
-            Tooltip(
-              message: getDescriptionFromBoutResult(data.result, context),
-              child: ContentItem(
-                title: getAbbreviationFromBoutResult(data.result, context),
-                subtitle: localizations.result,
-                icon: Icons.label,
+            TooltipVisibility(
+              visible: data.result != null,
+              child: Tooltip(
+                message: data.result?.description(context) ?? '-',
+                child: ContentItem(
+                  title: data.result?.abbreviation(context) ?? '-',
+                  subtitle: localizations.result,
+                  icon: Icons.label,
+                ),
               ),
             ),
             ContentItem(
-              title: formatTime(data.duration),
+              title: data.duration.formatMinutesAndSeconds(),
               subtitle: localizations.duration,
               icon: Icons.timelapse,
             ),
@@ -77,7 +80,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
         );
         return Scaffold(
           appBar: AppBar(
-            title: AppBarTitle(label: classLocale, details: getBoutTitle(context, data)),
+            title: AppBarTitle(label: classLocale, details: data.title(context)),
           ),
           body: GroupedList(items: [
             description,

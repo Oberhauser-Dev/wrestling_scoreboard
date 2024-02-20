@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutEdit extends ConsumerStatefulWidget {
@@ -122,11 +122,8 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
             isNullable: true,
             selected: _boutResult,
             options: BoutResult.values.map(
-              (BoutResult value) => MapEntry(
-                  value,
-                  Tooltip(
-                      message: getDescriptionFromBoutResult(value, context),
-                      child: Text(getAbbreviationFromBoutResult(value, context)))),
+              (BoutResult boutResult) => MapEntry(boutResult,
+                  Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context)))),
             ),
             onChange: (BoutResult? newValue) => setState(() {
               _boutResult = newValue;
@@ -169,8 +166,8 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
           }
           if (newParticipation != null) {
             final newParticipantState = ParticipantState(participation: newParticipation);
-            return newParticipantState.copyWithId(
-                await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<ParticipantState>(newParticipantState));
+            return newParticipantState.copyWithId(await (await ref.read(dataManagerNotifierProvider))
+                .createOrUpdateSingle<ParticipantState>(newParticipantState));
           } else {
             return null;
           }

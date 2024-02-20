@@ -3,10 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassOverview extends ConsumerWidget implements AbstractOverview<WeightClass> {
@@ -44,7 +44,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
               icon: Icons.fitness_center,
             ),
             ContentItem(
-              title: styleToString(data.style, context),
+              title: data.style.localize(context),
               subtitle: localizations.wrestlingStyle,
               icon: Icons.style,
             ),

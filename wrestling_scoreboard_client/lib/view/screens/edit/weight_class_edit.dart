@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassEdit extends ConsumerStatefulWidget {
@@ -64,10 +64,10 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
           child: DropdownButton<WrestlingStyle>(
             hint: Text(localizations.wrestlingStyle),
             isExpanded: true,
-            items: WrestlingStyle.values.map((WrestlingStyle value) {
+            items: WrestlingStyle.values.map((WrestlingStyle style) {
               return DropdownMenuItem<WrestlingStyle>(
-                value: value,
-                child: Text('${styleToString(value, context)} (${styleToAbbr(value, context)})'),
+                value: style,
+                child: Text('${style.localize(context)} (${style.abbreviation(context)})'),
               );
             }).toList(),
             value: _wrestlingStyle,
@@ -124,7 +124,8 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
       _formKey.currentState!.save();
       var weightClass = WeightClass(
           id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
-      weightClass = weightClass.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(weightClass));
+      weightClass =
+          weightClass.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(weightClass));
       await handleNested(weightClass);
       navigator.pop();
     }

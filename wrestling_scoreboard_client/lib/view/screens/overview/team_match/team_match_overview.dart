@@ -181,7 +181,7 @@ class TeamMatchOverview extends ConsumerWidget {
                               id: bout.id,
                               initialData: bout,
                               builder: (context, teamMatchBout) => ContentItem(
-                                title: getBoutTitle(context, teamMatchBout.bout),
+                                title: teamMatchBout.bout.title(context),
                                 icon: Icons.sports_kabaddi,
                                 onTap: () => handleSelectedBout(teamMatchBout, context),
                               ),

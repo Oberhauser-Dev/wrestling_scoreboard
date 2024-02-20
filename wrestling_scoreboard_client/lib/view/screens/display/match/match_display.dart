@@ -6,15 +6,15 @@ import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
+import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
-import 'package:wrestling_scoreboard_client/utils/units.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MatchDisplay extends StatelessWidget {
@@ -136,7 +136,7 @@ class BoutListItem extends StatelessWidget {
 
   displayName({ParticipantState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
     return ThemedContainer(
-      color: getColorFromBoutRole(role),
+      color: role.color(),
       child: Center(
         child: ScaledText(
           pStatus == null
@@ -151,7 +151,7 @@ class BoutListItem extends StatelessWidget {
   }
 
   Widget displayParticipantState({ParticipantState? pState, required BoutRole role}) {
-    final color = (role == bout.winnerRole) ? getColorFromBoutRole(role).shade800 : null;
+    final color = (role == bout.winnerRole) ? role.color().shade800 : null;
     return NullableSingleConsumer<ParticipantState>(
       id: pState?.id,
       initialData: pState,
@@ -220,7 +220,7 @@ class BoutListItem extends StatelessWidget {
                       child: bout.weightClass == null
                           ? null
                           : ScaledText(
-                              styleToAbbr(bout.weightClass!.style, context),
+                              bout.weightClass!.style.abbreviation(context),
                               minFontSize: 12,
                             ),
                     ),
@@ -239,25 +239,29 @@ class BoutListItem extends StatelessWidget {
                     child: SingleConsumer<Bout>(
                       id: bout.id,
                       initialData: bout,
-                      builder: (context, data) => Column(
-                        children: [
-                          Expanded(
-                              flex: 70,
-                              child: ThemedContainer(
-                                color: data.winnerRole != null ? getColorFromBoutRole(data.winnerRole!).shade800 : null,
-                                child: Center(
-                                  child: ScaledText(getAbbreviationFromBoutResult(data.result, context), fontSize: 12),
-                                ),
-                              )),
-                          Expanded(
+                      builder: (context, data) {
+                        final winnerRole = data.winnerRole;
+                        return Column(
+                          children: [
+                            Expanded(
+                                flex: 70,
+                                child: ThemedContainer(
+                                  color: winnerRole?.color().shade800,
+                                  child: Center(
+                                    child: ScaledText(data.result?.abbreviation(context) ?? '-', fontSize: 12),
+                                  ),
+                                )),
+                            Expanded(
                               flex: 50,
                               child: Center(
-                                child: data.winnerRole != null
+                                child: winnerRole != null
                                     ? ScaledText(durationToString(data.duration), fontSize: 8)
                                     : null,
-                              )),
-                        ],
-                      ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                   Expanded(

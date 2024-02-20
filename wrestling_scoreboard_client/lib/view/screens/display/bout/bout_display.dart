@@ -8,10 +8,10 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
+import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
+import 'package:wrestling_scoreboard_client/utils/units.dart';
+import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_action_controls.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_main_controls.dart';
@@ -19,12 +19,12 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_short
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/technical_points.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
-import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
-import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
-import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
-import 'package:wrestling_scoreboard_client/utils/units.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) async {
@@ -243,6 +243,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   displayName(ParticipantState? pStatus, double padding) {
+    final localizations = AppLocalizations.of(context)!;
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -251,7 +252,7 @@ class BoutState extends ConsumerState<BoutScreen> {
               padding: EdgeInsets.all(padding),
               child: Center(
                 child: ScaledText(
-                  getParticipationStateName(context, pStatus),
+                  pStatus?.fullName(context) ?? localizations.participantVacant,
                   color: pStatus == null ? Colors.white30 : Colors.white,
                   fontSize: 28,
                   minFontSize: 20,
@@ -303,7 +304,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   displayParticipant(ParticipantState? pStatus, BoutRole role, double padding) {
-    var color = getColorFromBoutRole(role);
+    var color = role.color();
 
     return ThemedContainer(
       color: color,
@@ -459,7 +460,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                                   if (bout.weightClass != null)
                                     Center(
                                         child: ScaledText(
-                                      '${styleToString(bout.weightClass!.style, context)}',
+                                      '${bout.weightClass!.style.localize(context)}',
                                       minFontSize: 10,
                                     )),
                                   if (bout.weightClass != null)

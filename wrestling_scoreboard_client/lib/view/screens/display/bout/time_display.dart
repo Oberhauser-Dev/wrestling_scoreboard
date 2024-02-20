@@ -30,7 +30,7 @@ class TimeDisplayState extends State<TimeDisplay> {
   updateDisplayTime(Duration duration) {
     if (mounted) {
       setState(() {
-        _currentTime = formatTime(duration);
+        _currentTime = duration.formatMinutesAndSeconds();
       });
     }
   }

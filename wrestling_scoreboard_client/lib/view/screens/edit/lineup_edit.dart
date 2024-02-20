@@ -62,8 +62,10 @@ class LineupEditState extends ConsumerState<LineupEdit> {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider))
           .createOrUpdateSingle(Lineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach));
-      await Future.forEach(_deleteParticipations,
-          (Participation element) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Participation>(element));
+      await Future.forEach(
+          _deleteParticipations,
+          (Participation element) async =>
+              (await ref.read(dataManagerNotifierProvider)).deleteSingle<Participation>(element));
       await Future.forEach(_createOrUpdateParticipations,
           (Participation element) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(element));
       if (onSubmitGenerate != null) onSubmitGenerate();
@@ -191,7 +193,7 @@ class ParticipationEditTile extends ConsumerWidget {
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
               child: getDropdown<Membership>(
                 selectedItem: participation?.membership,
-                label: '${localizations.weightClass} ${weightClass.name} ${styleToAbbr(weightClass.style, context)}',
+                label: '${localizations.weightClass} ${weightClass.name} ${weightClass.style.abbreviation(context)}',
                 context: context,
                 onSaved: (Membership? newMembership) {
                   if (participation?.membership == newMembership) return;

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_weight_class_edit.dart';
@@ -14,7 +12,9 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueOverview extends ConsumerWidget {
@@ -117,7 +117,7 @@ class LeagueOverview extends ConsumerWidget {
                       initialData: e,
                       builder: (context, data) {
                         return ContentItem(
-                            title: '${data.weightClass.name} ${styleToString(data.weightClass.style, context)}',
+                            title: '${data.weightClass.name} ${data.weightClass.style.localize(context)}',
                             icon: Icons.fitness_center,
                             onTap: () => handleSelectedWeightClass(data, context));
                       },

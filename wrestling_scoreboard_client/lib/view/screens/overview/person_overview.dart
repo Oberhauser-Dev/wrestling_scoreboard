@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class PersonOverview extends ConsumerWidget implements AbstractOverview<Person> {
@@ -57,7 +57,7 @@ abstract class PersonOverview extends ConsumerWidget implements AbstractOverview
               icon: Icons.cake,
             ),
             ContentItem(
-              title: genderToString(person.gender, context),
+              title: person.gender?.localize(context) ?? '-',
               subtitle: localizations.gender,
               icon: Icons.description,
             ),

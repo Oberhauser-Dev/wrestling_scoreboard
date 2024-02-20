@@ -108,7 +108,7 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
             items: Gender.values.map((Gender value) {
               return DropdownMenuItem<Gender>(
                 value: value,
-                child: Text(genderToString(value, context)),
+                child: Text(value.localize(context)),
               );
             }).toList(),
             value: _gender,

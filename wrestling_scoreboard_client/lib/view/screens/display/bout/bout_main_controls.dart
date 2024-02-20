@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class BoutMainControls extends ConsumerStatefulWidget {
@@ -99,19 +99,17 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
         boutResultValues.remove(BoutResult.dsq2);
       }
       boutResultOptions.addAll(boutResultValues.map(
-        (BoutResult value) => MapEntry(
-          value,
+        (BoutResult boutResult) => MapEntry(
+          boutResult,
           Tooltip(
-            message: getDescriptionFromBoutResult(value, context),
-            child: Text(
-              getAbbreviationFromBoutResult(value, context),
-            ),
+            message: boutResult.description(context),
+            child: Text(boutResult.abbreviation(context)),
           ),
         ),
       ));
     }
     return ThemedContainer(
-      color: role == widget.boutState.bout.winnerRole ? getColorFromBoutRole(role) : null,
+      color: role == widget.boutState.bout.winnerRole ? role.color() : null,
       child: ButtonTheme(
           alignedDropdown: true,
           child: ManyConsumer<BoutAction, Bout>(
