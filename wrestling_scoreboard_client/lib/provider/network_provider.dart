@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/mocks/mock_data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/util/environment.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
-import 'package:wrestling_scoreboard_client/util/network/remote/rest.dart';
-import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/utils/environment.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
+import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 
 part 'network_provider.g.dart';
 

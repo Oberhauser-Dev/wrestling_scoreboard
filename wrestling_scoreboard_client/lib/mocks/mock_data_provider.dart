@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:wrestling_scoreboard_client/mocks/mocks.dart';
-import 'package:wrestling_scoreboard_client/util/network/data_provider.dart';
-import 'package:wrestling_scoreboard_client/util/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MockDataManager extends DataManager {

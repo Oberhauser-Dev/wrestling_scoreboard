@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:wrestling_scoreboard_client/ui/utils.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 
 part 'app_state_provider.g.dart';
 

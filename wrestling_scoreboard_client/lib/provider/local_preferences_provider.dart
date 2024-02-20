@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
-import 'package:wrestling_scoreboard_client/util/environment.dart';
+import 'package:wrestling_scoreboard_client/utils/environment.dart';
 
 part 'local_preferences_provider.g.dart';
 

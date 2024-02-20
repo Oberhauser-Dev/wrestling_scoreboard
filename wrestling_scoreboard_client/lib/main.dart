@@ -11,12 +11,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/ui/components/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/ui/router.dart';
-import 'package:wrestling_scoreboard_client/ui/shortcuts/app_shortcuts.dart';
-import 'package:wrestling_scoreboard_client/ui/utils.dart';
-import 'package:wrestling_scoreboard_client/util/audio/audio.dart';
-import 'package:wrestling_scoreboard_client/util/environment.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/routes/router.dart';
+import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
+import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
+import 'package:wrestling_scoreboard_client/utils/environment.dart';
 
 late PackageInfo packageInfo;
 
