@@ -23,13 +23,13 @@ class LoadingBuilder<T> extends StatelessWidget {
         if (snapshot.hasError) {
           return ExceptionWidget(snapshot.error!, onRetry: onRetry);
         }
-        if (snapshot.hasData) {
-          return builder(context, snapshot.data as T);
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
         }
-        if(initialData != null) {
+        if (initialData != null) {
           return builder(context, initialData as T);
         }
-        return const Center(child: CircularProgressIndicator());
+        return builder(context, snapshot.data as T);
       },
     );
   }
@@ -54,14 +54,14 @@ class LoadingStreamBuilder<T> extends StatelessWidget {
     return StreamBuilder<T>(
       stream: stream,
       initialData: initialData,
-      builder: (BuildContext context, AsyncSnapshot<T> snap) {
-        if (snap.hasError) {
-          return ExceptionWidget(snap.error!, onRetry: onRetry);
+      builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
+        if (snapshot.hasError) {
+          return ExceptionWidget(snapshot.error!, onRetry: onRetry);
         }
-        if (snap.data == null) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        return builder(context, snap.data as T);
+        return builder(context, snapshot.data as T);
       },
     );
   }
