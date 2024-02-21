@@ -27,7 +27,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) async {
+void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) {
   context.push('/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutDisplay.route}/${bout.id}');
 }
 
@@ -81,8 +81,10 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                         onPressBoutInfo: (BuildContext context) {
                           context.push('/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
                         },
-                        navigateToBoutByIndex: (context, index) =>
-                            navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
+                        navigateToBoutByIndex: (context, index) {
+                          context.pop();
+                          navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
+                        },
                         home: match.home.team,
                         guest: match.guest.team,
                       );
@@ -235,7 +237,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       widget.boutIndex,
       doAction,
       context: context,
-      navigateToBoutByIndex: widget.navigateToBoutByIndex,
+      navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
     );
   }
 
@@ -412,101 +414,115 @@ class BoutState extends ConsumerState<BoutScreen> {
       icon: const Icon(Icons.info),
       onPressed: () => widget.onPressBoutInfo(context),
     );
-    return ManyConsumer<BoutAction, Bout>(
-        filterObject: bout,
-        builder: (context, actions) {
-          return BoutActionHandler(
-            stopwatch: stopwatch,
-            getActions: () async => actions,
-            bouts: widget.bouts,
-            boutIndex: widget.boutIndex,
-            doAction: doAction,
-            navigateToBoutByIndex: widget.navigateToBoutByIndex,
-            child: Consumer(builder: (context, ref, child) {
-              return LoadingBuilder<WindowState>(
-                future: ref.watch(windowStateNotifierProvider),
-                builder: (BuildContext context, WindowState data) {
-                  final isFullScreen = data == WindowState.fullscreen;
-                  return Scaffold(
-                    appBar: isFullScreen
-                        ? null
-                        : AppBar(actions: [infoAction, shareAction, CommonElements.getFullScreenAction(context, ref)]),
-                    body: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          row(
-                              padding: bottomPadding,
-                              children: CommonElements.getTeamHeader(widget.home, widget.guest, widget.bouts, context)
-                                  .asMap()
-                                  .entries
-                                  .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                                  .toList()),
-                          row(padding: bottomPadding, children: [
-                            Expanded(
-                              flex: 50,
-                              child: displayParticipant(bout.r, BoutRole.red, padding),
-                            ),
-                            Expanded(
-                                flex: 20,
-                                child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                  Row(children: [
-                                    Expanded(
-                                        child: Center(
-                                            child: ScaledText(
-                                      '${AppLocalizations.of(context)!.bout} ${widget.boutIndex + 1}',
-                                      minFontSize: 10,
-                                    ))),
-                                  ]),
-                                  if (bout.weightClass != null)
-                                    Center(
-                                        child: ScaledText(
-                                      '${bout.weightClass!.style.localize(context)}',
-                                      minFontSize: 10,
-                                    )),
-                                  if (bout.weightClass != null)
-                                    Center(
-                                        child: ScaledText(
-                                      bout.weightClass!.name,
-                                      minFontSize: 10,
-                                    )),
-                                ])),
-                            Expanded(
-                              flex: 50,
-                              child: displayParticipant(bout.b, BoutRole.blue, padding),
-                            ),
-                          ]),
-                          row(
-                            padding: bottomPadding,
-                            children: [
-                              displayTechnicalPoints(_r, BoutRole.red),
-                              BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        await save();
+        if (mounted) {
+          Navigator.pop(context);
+        }
+      },
+      child: ManyConsumer<BoutAction, Bout>(
+          filterObject: bout,
+          builder: (context, actions) {
+            return BoutActionHandler(
+              stopwatch: stopwatch,
+              getActions: () async => actions,
+              bouts: widget.bouts,
+              boutIndex: widget.boutIndex,
+              doAction: doAction,
+              navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
+              child: Consumer(builder: (context, ref, child) {
+                return LoadingBuilder<WindowState>(
+                  future: ref.watch(windowStateNotifierProvider),
+                  builder: (BuildContext context, WindowState data) {
+                    final isFullScreen = data == WindowState.fullscreen;
+                    return Scaffold(
+                      appBar: isFullScreen
+                          ? null
+                          : AppBar(
+                              actions: [infoAction, shareAction, CommonElements.getFullScreenAction(context, ref)]),
+                      body: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            row(
+                                padding: bottomPadding,
+                                children: CommonElements.getTeamHeader(widget.home, widget.guest, widget.bouts, context)
+                                    .asMap()
+                                    .entries
+                                    .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                                    .toList()),
+                            row(padding: bottomPadding, children: [
                               Expanded(
                                 flex: 50,
-                                child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100)),
+                                child: displayParticipant(bout.r, BoutRole.red, padding),
                               ),
-                              BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
-                              displayTechnicalPoints(_b, BoutRole.blue),
-                            ],
-                          ),
-                          Container(
-                            padding: bottomPadding,
-                            child: ActionsWidget(actions),
-                          ),
-                          Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
-                        ],
+                              Expanded(
+                                  flex: 20,
+                                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                    Row(children: [
+                                      Expanded(
+                                          child: Center(
+                                              child: ScaledText(
+                                        '${AppLocalizations.of(context)!.bout} ${widget.boutIndex + 1}',
+                                        minFontSize: 10,
+                                      ))),
+                                    ]),
+                                    if (bout.weightClass != null)
+                                      Center(
+                                          child: ScaledText(
+                                        '${bout.weightClass!.style.localize(context)}',
+                                        minFontSize: 10,
+                                      )),
+                                    if (bout.weightClass != null)
+                                      Center(
+                                          child: ScaledText(
+                                        bout.weightClass!.name,
+                                        minFontSize: 10,
+                                      )),
+                                  ])),
+                              Expanded(
+                                flex: 50,
+                                child: displayParticipant(bout.b, BoutRole.blue, padding),
+                              ),
+                            ]),
+                            row(
+                              padding: bottomPadding,
+                              children: [
+                                displayTechnicalPoints(_r, BoutRole.red),
+                                BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+                                Expanded(
+                                  flex: 50,
+                                  child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100)),
+                                ),
+                                BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
+                                displayTechnicalPoints(_b, BoutRole.blue),
+                              ],
+                            ),
+                            Container(
+                              padding: bottomPadding,
+                              child: ActionsWidget(actions),
+                            ),
+                            Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
-            }),
-          );
-        });
+                    );
+                  },
+                );
+              }),
+            );
+          }),
+    );
   }
 
-  @override
-  void dispose() async {
-    super.dispose();
+  Future<void> saveAndNavigateToBoutByIndex(BuildContext context, int boutIndex) async {
+    await save();
+    if (!context.mounted) return;
+    widget.navigateToBoutByIndex(context, boutIndex);
+  }
+
+  Future<void> save() async {
     _boutStopwatch.dispose();
     _breakStopwatch.dispose();
 

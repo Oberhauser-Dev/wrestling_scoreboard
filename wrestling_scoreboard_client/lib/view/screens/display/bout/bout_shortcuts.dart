@@ -135,7 +135,6 @@ class BoutScreenActionIntent extends Intent {
         if (context != null) {
           int index = boutIndex + 1;
           if (index < bouts.length) {
-            context.pop();
             navigateToBoutByIndex(context, index);
           }
         }
@@ -144,7 +143,6 @@ class BoutScreenActionIntent extends Intent {
         if (context != null) {
           int index = boutIndex - 1;
           if (index >= 0) {
-            context.pop();
             navigateToBoutByIndex(context, index);
           }
         }
