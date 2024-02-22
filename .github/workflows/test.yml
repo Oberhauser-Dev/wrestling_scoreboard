@@ -1,0 +1,58 @@
+name: test
+on:
+  workflow_dispatch:
+    inputs:
+      flutter_version:
+        description: 'Flutter Version'
+        required: false
+        default: 'any'
+        type: choice
+        options:
+          - 'any'
+          - '3.16.x'
+      flutter_channel:
+        description: 'Flutter Channel'
+        required: false
+        default: 'stable'
+        type: choice
+        options:
+          - 'stable'
+          - 'beta'
+          - 'dev'
+          - 'master'
+      fatal_warnings:
+        description: 'Treat warnings as fatal'
+        required: false
+        default: true
+        type: boolean
+
+  workflow_call:
+    inputs:
+      flutter_version:
+        required: false
+        default: '3.16.8'
+        type: string
+      flutter_channel:
+        required: false
+        default: 'stable'
+        type: string
+      fatal_warnings:
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ inputs.flutter_version }}
+          channel: ${{ inputs.flutter_channel }}
+      - uses: bluefireteam/melos-action@main
+      - run: melos run format-check
+      - run: melos run analyze -- ${{ inputs.fatal_warnings && '--fatal-infos' || '--no-fatal-warnings --no-fatal-infos' }}
+      - run: melos run test

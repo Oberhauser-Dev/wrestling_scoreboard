@@ -1,4 +1,4 @@
-name: build app
+name: build client
 on:
   workflow_dispatch:
     inputs:
@@ -10,8 +10,6 @@ on:
         options:
           - 'any'
           - '3.16.x'
-          - '3.13.x'
-          - '3.10.x'
       enable_android:
         description: 'Build Android'
         required: false
@@ -51,7 +49,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.16.2'
+        default: '3.16.9'
         type: string
       enable_android:
         required: false
@@ -98,6 +96,7 @@ jobs:
         working-directory: ./wrestling_scoreboard_client
         run: |
           flutter build web \
+            --build-name=0.0.0-nightly.$(echo $GITHUB_SHA::7) \
             --base-href ${{ inputs.upload_pages_artifact && '"/wrestling_scoreboard/"' || '"/"' }} \
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
