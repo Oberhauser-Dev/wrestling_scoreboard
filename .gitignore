@@ -31,6 +31,10 @@
 .pub/
 /build/
 
+# Ignore overrides in melos project
+pubspec_overrides.yaml
+/pubspec.lock
+
 # Web related
 lib/generated_plugin_registrant.dart
 
