@@ -27,14 +27,12 @@ mixin _$LeagueWeightClass {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $LeagueWeightClassCopyWith<LeagueWeightClass> get copyWith =>
-      throw _privateConstructorUsedError;
+  $LeagueWeightClassCopyWith<LeagueWeightClass> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LeagueWeightClassCopyWith<$Res> {
-  factory $LeagueWeightClassCopyWith(
-          LeagueWeightClass value, $Res Function(LeagueWeightClass) then) =
+  factory $LeagueWeightClassCopyWith(LeagueWeightClass value, $Res Function(LeagueWeightClass) then) =
       _$LeagueWeightClassCopyWithImpl<$Res, LeagueWeightClass>;
   @useResult
   $Res call({int? id, int pos, League league, WeightClass weightClass});
@@ -99,10 +97,8 @@ class _$LeagueWeightClassCopyWithImpl<$Res, $Val extends LeagueWeightClass>
 }
 
 /// @nodoc
-abstract class _$$LeagueWeightClassImplCopyWith<$Res>
-    implements $LeagueWeightClassCopyWith<$Res> {
-  factory _$$LeagueWeightClassImplCopyWith(_$LeagueWeightClassImpl value,
-          $Res Function(_$LeagueWeightClassImpl) then) =
+abstract class _$$LeagueWeightClassImplCopyWith<$Res> implements $LeagueWeightClassCopyWith<$Res> {
+  factory _$$LeagueWeightClassImplCopyWith(_$LeagueWeightClassImpl value, $Res Function(_$LeagueWeightClassImpl) then) =
       __$$LeagueWeightClassImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -115,11 +111,9 @@ abstract class _$$LeagueWeightClassImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LeagueWeightClassImplCopyWithImpl<$Res>
-    extends _$LeagueWeightClassCopyWithImpl<$Res, _$LeagueWeightClassImpl>
+class __$$LeagueWeightClassImplCopyWithImpl<$Res> extends _$LeagueWeightClassCopyWithImpl<$Res, _$LeagueWeightClassImpl>
     implements _$$LeagueWeightClassImplCopyWith<$Res> {
-  __$$LeagueWeightClassImplCopyWithImpl(_$LeagueWeightClassImpl _value,
-      $Res Function(_$LeagueWeightClassImpl) _then)
+  __$$LeagueWeightClassImplCopyWithImpl(_$LeagueWeightClassImpl _value, $Res Function(_$LeagueWeightClassImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -154,15 +148,10 @@ class __$$LeagueWeightClassImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LeagueWeightClassImpl extends _LeagueWeightClass {
-  const _$LeagueWeightClassImpl(
-      {this.id,
-      required this.pos,
-      required this.league,
-      required this.weightClass})
+  const _$LeagueWeightClassImpl({this.id, required this.pos, required this.league, required this.weightClass})
       : super._();
 
-  factory _$LeagueWeightClassImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LeagueWeightClassImplFromJson(json);
+  factory _$LeagueWeightClassImpl.fromJson(Map<String, dynamic> json) => _$$LeagueWeightClassImplFromJson(json);
 
   @override
   final int? id;
@@ -186,8 +175,7 @@ class _$LeagueWeightClassImpl extends _LeagueWeightClass {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.weightClass, weightClass) ||
-                other.weightClass == weightClass));
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass));
   }
 
   @JsonKey(ignore: true)
@@ -198,8 +186,7 @@ class _$LeagueWeightClassImpl extends _LeagueWeightClass {
   @override
   @pragma('vm:prefer-inline')
   _$$LeagueWeightClassImplCopyWith<_$LeagueWeightClassImpl> get copyWith =>
-      __$$LeagueWeightClassImplCopyWithImpl<_$LeagueWeightClassImpl>(
-          this, _$identity);
+      __$$LeagueWeightClassImplCopyWithImpl<_$LeagueWeightClassImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -217,8 +204,7 @@ abstract class _LeagueWeightClass extends LeagueWeightClass {
       required final WeightClass weightClass}) = _$LeagueWeightClassImpl;
   const _LeagueWeightClass._() : super._();
 
-  factory _LeagueWeightClass.fromJson(Map<String, dynamic> json) =
-      _$LeagueWeightClassImpl.fromJson;
+  factory _LeagueWeightClass.fromJson(Map<String, dynamic> json) = _$LeagueWeightClassImpl.fromJson;
 
   @override
   int? get id;
@@ -230,6 +216,5 @@ abstract class _LeagueWeightClass extends LeagueWeightClass {
   WeightClass get weightClass;
   @override
   @JsonKey(ignore: true)
-  _$$LeagueWeightClassImplCopyWith<_$LeagueWeightClassImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$LeagueWeightClassImplCopyWith<_$LeagueWeightClassImpl> get copyWith => throw _privateConstructorUsedError;
 }

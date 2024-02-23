@@ -64,7 +64,8 @@ class TeamMatchOverview extends ConsumerWidget {
                         editPage: TeamMatchEdit(
                           teamMatch: match,
                         ),
-                        onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
+                        onDelete: () async =>
+                            (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
                         classLocale: localizations.match,
                         children: [
                           ContentItem(

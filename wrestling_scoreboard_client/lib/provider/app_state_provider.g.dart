@@ -6,18 +6,14 @@ part of 'app_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$windowStateNotifierHash() =>
-    r'929e42278b3ca7b70a11395dce93897096154217';
+String _$windowStateNotifierHash() => r'929e42278b3ca7b70a11395dce93897096154217';
 
 /// See also [WindowStateNotifier].
 @ProviderFor(WindowStateNotifier)
-final windowStateNotifierProvider =
-    NotifierProvider<WindowStateNotifier, Raw<Future<WindowState>>>.internal(
+final windowStateNotifierProvider = NotifierProvider<WindowStateNotifier, Raw<Future<WindowState>>>.internal(
   WindowStateNotifier.new,
   name: r'windowStateNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$windowStateNotifierHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$windowStateNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

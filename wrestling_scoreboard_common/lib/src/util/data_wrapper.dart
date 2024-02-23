@@ -38,7 +38,8 @@ typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
 typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
 
-Future<int?> handleFromJson(Map<String, Object?> json, {
+Future<int?> handleFromJson(
+  Map<String, Object?> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,
@@ -159,7 +160,8 @@ Future<int?> handleFromJson(Map<String, Object?> json, {
   }
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(Map<String, dynamic> json, {
+Future<int?> _handleFromJsonGeneric<T extends DataObject>(
+  Map<String, dynamic> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,

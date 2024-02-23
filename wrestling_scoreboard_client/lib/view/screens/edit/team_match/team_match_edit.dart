@@ -182,7 +182,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
       var home = widget.teamMatch?.home;
       if (home == null) {
-        final homeId = await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _homeTeam!));
+        final homeId =
+            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _homeTeam!));
         home = Lineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
@@ -191,24 +192,26 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
       var guest = widget.teamMatch?.guest;
       if (guest == null) {
-        final guestId = await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _guestTeam!));
+        final guestId =
+            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _guestTeam!));
         guest = Lineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
+        await (await ref.read(dataManagerNotifierProvider))
+            .createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
       }
 
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
-            TeamMatch(
-              id: widget.teamMatch?.id,
-              location: _location!,
-              no: _no,
-              home: home,
-              guest: guest,
-              date: _date,
-              league: _league,
-            ),
-          );
+        TeamMatch(
+          id: widget.teamMatch?.id,
+          location: _location!,
+          no: _no,
+          home: home,
+          guest: guest,
+          date: _date,
+          league: _league,
+        ),
+      );
       navigator.pop();
     }
   }

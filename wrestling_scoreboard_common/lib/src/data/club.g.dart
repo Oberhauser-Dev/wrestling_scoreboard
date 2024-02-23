@@ -12,8 +12,7 @@ _$ClubImpl _$$ClubImplFromJson(Map<String, dynamic> json) => _$ClubImpl(
       no: json['no'] as String?,
     );
 
-Map<String, dynamic> _$$ClubImplToJson(_$ClubImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$ClubImplToJson(_$ClubImpl instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'no': instance.no,

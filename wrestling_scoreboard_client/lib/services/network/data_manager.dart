@@ -5,9 +5,8 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 /// Data exchange layer with CRUD operations
 abstract class DataManager {
-  
   WebSocketManager get webSocketManager;
-  
+
   /// READ: get a single object
   Future<T> readSingle<T extends DataObject>(int id);
 

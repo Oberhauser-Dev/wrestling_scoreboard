@@ -26,14 +26,12 @@ mixin _$ParticipantState {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ParticipantStateCopyWith<ParticipantState> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ParticipantStateCopyWith<ParticipantState> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ParticipantStateCopyWith<$Res> {
-  factory $ParticipantStateCopyWith(
-          ParticipantState value, $Res Function(ParticipantState) then) =
+  factory $ParticipantStateCopyWith(ParticipantState value, $Res Function(ParticipantState) then) =
       _$ParticipantStateCopyWithImpl<$Res, ParticipantState>;
   @useResult
   $Res call({int? id, Participation participation, int? classificationPoints});
@@ -42,8 +40,7 @@ abstract class $ParticipantStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState>
-    implements $ParticipantStateCopyWith<$Res> {
+class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implements $ParticipantStateCopyWith<$Res> {
   _$ParticipantStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -84,10 +81,8 @@ class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState>
 }
 
 /// @nodoc
-abstract class _$$ParticipantStateImplCopyWith<$Res>
-    implements $ParticipantStateCopyWith<$Res> {
-  factory _$$ParticipantStateImplCopyWith(_$ParticipantStateImpl value,
-          $Res Function(_$ParticipantStateImpl) then) =
+abstract class _$$ParticipantStateImplCopyWith<$Res> implements $ParticipantStateCopyWith<$Res> {
+  factory _$$ParticipantStateImplCopyWith(_$ParticipantStateImpl value, $Res Function(_$ParticipantStateImpl) then) =
       __$$ParticipantStateImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -98,11 +93,9 @@ abstract class _$$ParticipantStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ParticipantStateImplCopyWithImpl<$Res>
-    extends _$ParticipantStateCopyWithImpl<$Res, _$ParticipantStateImpl>
+class __$$ParticipantStateImplCopyWithImpl<$Res> extends _$ParticipantStateCopyWithImpl<$Res, _$ParticipantStateImpl>
     implements _$$ParticipantStateImplCopyWith<$Res> {
-  __$$ParticipantStateImplCopyWithImpl(_$ParticipantStateImpl _value,
-      $Res Function(_$ParticipantStateImpl) _then)
+  __$$ParticipantStateImplCopyWithImpl(_$ParticipantStateImpl _value, $Res Function(_$ParticipantStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -132,12 +125,9 @@ class __$$ParticipantStateImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ParticipantStateImpl extends _ParticipantState {
-  const _$ParticipantStateImpl(
-      {this.id, required this.participation, this.classificationPoints})
-      : super._();
+  const _$ParticipantStateImpl({this.id, required this.participation, this.classificationPoints}) : super._();
 
-  factory _$ParticipantStateImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ParticipantStateImplFromJson(json);
+  factory _$ParticipantStateImpl.fromJson(Map<String, dynamic> json) => _$$ParticipantStateImplFromJson(json);
 
   @override
   final int? id;
@@ -157,23 +147,20 @@ class _$ParticipantStateImpl extends _ParticipantState {
         (other.runtimeType == runtimeType &&
             other is _$ParticipantStateImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.participation, participation) ||
-                other.participation == participation) &&
+            (identical(other.participation, participation) || other.participation == participation) &&
             (identical(other.classificationPoints, classificationPoints) ||
                 other.classificationPoints == classificationPoints));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, participation, classificationPoints);
+  int get hashCode => Object.hash(runtimeType, id, participation, classificationPoints);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith =>
-      __$$ParticipantStateImplCopyWithImpl<_$ParticipantStateImpl>(
-          this, _$identity);
+      __$$ParticipantStateImplCopyWithImpl<_$ParticipantStateImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -190,8 +177,7 @@ abstract class _ParticipantState extends ParticipantState {
       final int? classificationPoints}) = _$ParticipantStateImpl;
   const _ParticipantState._() : super._();
 
-  factory _ParticipantState.fromJson(Map<String, dynamic> json) =
-      _$ParticipantStateImpl.fromJson;
+  factory _ParticipantState.fromJson(Map<String, dynamic> json) = _$ParticipantStateImpl.fromJson;
 
   @override
   int? get id;
@@ -201,6 +187,5 @@ abstract class _ParticipantState extends ParticipantState {
   int? get classificationPoints;
   @override
   @JsonKey(ignore: true)
-  _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith => throw _privateConstructorUsedError;
 }

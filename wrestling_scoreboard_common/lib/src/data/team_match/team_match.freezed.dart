@@ -37,14 +37,12 @@ mixin _$TeamMatch {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TeamMatchCopyWith<TeamMatch> get copyWith =>
-      throw _privateConstructorUsedError;
+  $TeamMatchCopyWith<TeamMatch> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TeamMatchCopyWith<$Res> {
-  factory $TeamMatchCopyWith(TeamMatch value, $Res Function(TeamMatch) then) =
-      _$TeamMatchCopyWithImpl<$Res, TeamMatch>;
+  factory $TeamMatchCopyWith(TeamMatch value, $Res Function(TeamMatch) then) = _$TeamMatchCopyWithImpl<$Res, TeamMatch>;
   @useResult
   $Res call(
       {int? id,
@@ -73,8 +71,7 @@ abstract class $TeamMatchCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch>
-    implements $TeamMatchCopyWith<$Res> {
+class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatchCopyWith<$Res> {
   _$TeamMatchCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -250,10 +247,8 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch>
 }
 
 /// @nodoc
-abstract class _$$TeamMatchImplCopyWith<$Res>
-    implements $TeamMatchCopyWith<$Res> {
-  factory _$$TeamMatchImplCopyWith(
-          _$TeamMatchImpl value, $Res Function(_$TeamMatchImpl) then) =
+abstract class _$$TeamMatchImplCopyWith<$Res> implements $TeamMatchCopyWith<$Res> {
+  factory _$$TeamMatchImplCopyWith(_$TeamMatchImpl value, $Res Function(_$TeamMatchImpl) then) =
       __$$TeamMatchImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -292,12 +287,9 @@ abstract class _$$TeamMatchImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TeamMatchImplCopyWithImpl<$Res>
-    extends _$TeamMatchCopyWithImpl<$Res, _$TeamMatchImpl>
+class __$$TeamMatchImplCopyWithImpl<$Res> extends _$TeamMatchCopyWithImpl<$Res, _$TeamMatchImpl>
     implements _$$TeamMatchImplCopyWith<$Res> {
-  __$$TeamMatchImplCopyWithImpl(
-      _$TeamMatchImpl _value, $Res Function(_$TeamMatchImpl) _then)
-      : super(_value, _then);
+  __$$TeamMatchImplCopyWithImpl(_$TeamMatchImpl _value, $Res Function(_$TeamMatchImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -398,8 +390,7 @@ class _$TeamMatchImpl extends _TeamMatch {
       this.comment})
       : super._();
 
-  factory _$TeamMatchImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TeamMatchImplFromJson(json);
+  factory _$TeamMatchImpl.fromJson(Map<String, dynamic> json) => _$$TeamMatchImplFromJson(json);
 
   @override
   final int? id;
@@ -444,41 +435,22 @@ class _$TeamMatchImpl extends _TeamMatch {
             (identical(other.home, home) || other.home == home) &&
             (identical(other.guest, guest) || other.guest == guest) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.matChairman, matChairman) ||
-                other.matChairman == matChairman) &&
+            (identical(other.matChairman, matChairman) || other.matChairman == matChairman) &&
             (identical(other.referee, referee) || other.referee == referee) &&
             (identical(other.judge, judge) || other.judge == judge) &&
-            (identical(other.timeKeeper, timeKeeper) ||
-                other.timeKeeper == timeKeeper) &&
-            (identical(other.transcriptWriter, transcriptWriter) ||
-                other.transcriptWriter == transcriptWriter) &&
+            (identical(other.timeKeeper, timeKeeper) || other.timeKeeper == timeKeeper) &&
+            (identical(other.transcriptWriter, transcriptWriter) || other.transcriptWriter == transcriptWriter) &&
             (identical(other.no, no) || other.no == no) &&
-            (identical(other.location, location) ||
-                other.location == location) &&
+            (identical(other.location, location) || other.location == location) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.visitorsCount, visitorsCount) ||
-                other.visitorsCount == visitorsCount) &&
+            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      home,
-      guest,
-      league,
-      matChairman,
-      referee,
-      judge,
-      timeKeeper,
-      transcriptWriter,
-      no,
-      location,
-      date,
-      visitorsCount,
-      comment);
+  int get hashCode => Object.hash(runtimeType, id, home, guest, league, matChairman, referee, judge, timeKeeper,
+      transcriptWriter, no, location, date, visitorsCount, comment);
 
   @JsonKey(ignore: true)
   @override
@@ -512,8 +484,7 @@ abstract class _TeamMatch extends TeamMatch {
       final String? comment}) = _$TeamMatchImpl;
   const _TeamMatch._() : super._();
 
-  factory _TeamMatch.fromJson(Map<String, dynamic> json) =
-      _$TeamMatchImpl.fromJson;
+  factory _TeamMatch.fromJson(Map<String, dynamic> json) = _$TeamMatchImpl.fromJson;
 
   @override
   int? get id;
@@ -545,6 +516,5 @@ abstract class _TeamMatch extends TeamMatch {
   String? get comment;
   @override
   @JsonKey(ignore: true)
-  _$$TeamMatchImplCopyWith<_$TeamMatchImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$TeamMatchImplCopyWith<_$TeamMatchImpl> get copyWith => throw _privateConstructorUsedError;
 }

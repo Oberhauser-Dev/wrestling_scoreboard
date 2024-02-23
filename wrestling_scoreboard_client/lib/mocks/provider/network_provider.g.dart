@@ -6,18 +6,14 @@ part of 'network_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mockDataManagerNotifierHash() =>
-    r'9c3e0e3c990b61d515e8b2f23636bb3ca9201415';
+String _$mockDataManagerNotifierHash() => r'9c3e0e3c990b61d515e8b2f23636bb3ca9201415';
 
 /// See also [MockDataManagerNotifier].
 @ProviderFor(MockDataManagerNotifier)
-final mockDataManagerNotifierProvider = NotifierProvider<
-    MockDataManagerNotifier, Raw<Future<DataManager>>>.internal(
+final mockDataManagerNotifierProvider = NotifierProvider<MockDataManagerNotifier, Raw<Future<DataManager>>>.internal(
   MockDataManagerNotifier.new,
   name: r'mockDataManagerNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$mockDataManagerNotifierHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$mockDataManagerNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

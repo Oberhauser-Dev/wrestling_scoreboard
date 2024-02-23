@@ -1,13 +1,13 @@
 enum Env {
   apiUrl,
   webSocketUrl,
-  
+
   /// 'mock' -> debug and mock data
   /// 'development' -> debug and connect to API
   /// 'production' -> connect to API
   appEnvironment,
   bellSoundPath,
-  
+
   /// Use [PathUrlStrategy] instead of the [HashUrlStrategy]. This must be supported by your server, see
   /// https://docs.flutter.dev/ui/navigation/url-strategies#configuring-your-web-server
   usePathUrlStrategy;

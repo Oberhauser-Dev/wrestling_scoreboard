@@ -13,8 +13,7 @@ _$TeamImpl _$$TeamImplFromJson(Map<String, dynamic> json) => _$TeamImpl(
       description: json['description'] as String?,
     );
 
-Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'club': instance.club.toJson(),

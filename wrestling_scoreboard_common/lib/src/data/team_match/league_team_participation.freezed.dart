@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-LeagueTeamParticipation _$LeagueTeamParticipationFromJson(
-    Map<String, dynamic> json) {
+LeagueTeamParticipation _$LeagueTeamParticipationFromJson(Map<String, dynamic> json) {
   return _LeagueTeamParticipation.fromJson(json);
 }
 
@@ -27,14 +26,12 @@ mixin _$LeagueTeamParticipation {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $LeagueTeamParticipationCopyWith<LeagueTeamParticipation> get copyWith =>
-      throw _privateConstructorUsedError;
+  $LeagueTeamParticipationCopyWith<LeagueTeamParticipation> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LeagueTeamParticipationCopyWith<$Res> {
-  factory $LeagueTeamParticipationCopyWith(LeagueTeamParticipation value,
-          $Res Function(LeagueTeamParticipation) then) =
+  factory $LeagueTeamParticipationCopyWith(LeagueTeamParticipation value, $Res Function(LeagueTeamParticipation) then) =
       _$LeagueTeamParticipationCopyWithImpl<$Res, LeagueTeamParticipation>;
   @useResult
   $Res call({int? id, League league, Team team});
@@ -44,8 +41,7 @@ abstract class $LeagueTeamParticipationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LeagueTeamParticipationCopyWithImpl<$Res,
-        $Val extends LeagueTeamParticipation>
+class _$LeagueTeamParticipationCopyWithImpl<$Res, $Val extends LeagueTeamParticipation>
     implements $LeagueTeamParticipationCopyWith<$Res> {
   _$LeagueTeamParticipationCopyWithImpl(this._value, this._then);
 
@@ -95,11 +91,9 @@ class _$LeagueTeamParticipationCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$LeagueTeamParticipationImplCopyWith<$Res>
-    implements $LeagueTeamParticipationCopyWith<$Res> {
+abstract class _$$LeagueTeamParticipationImplCopyWith<$Res> implements $LeagueTeamParticipationCopyWith<$Res> {
   factory _$$LeagueTeamParticipationImplCopyWith(
-          _$LeagueTeamParticipationImpl value,
-          $Res Function(_$LeagueTeamParticipationImpl) then) =
+          _$LeagueTeamParticipationImpl value, $Res Function(_$LeagueTeamParticipationImpl) then) =
       __$$LeagueTeamParticipationImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -113,12 +107,10 @@ abstract class _$$LeagueTeamParticipationImplCopyWith<$Res>
 
 /// @nodoc
 class __$$LeagueTeamParticipationImplCopyWithImpl<$Res>
-    extends _$LeagueTeamParticipationCopyWithImpl<$Res,
-        _$LeagueTeamParticipationImpl>
+    extends _$LeagueTeamParticipationCopyWithImpl<$Res, _$LeagueTeamParticipationImpl>
     implements _$$LeagueTeamParticipationImplCopyWith<$Res> {
   __$$LeagueTeamParticipationImplCopyWithImpl(
-      _$LeagueTeamParticipationImpl _value,
-      $Res Function(_$LeagueTeamParticipationImpl) _then)
+      _$LeagueTeamParticipationImpl _value, $Res Function(_$LeagueTeamParticipationImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -148,9 +140,7 @@ class __$$LeagueTeamParticipationImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LeagueTeamParticipationImpl extends _LeagueTeamParticipation {
-  const _$LeagueTeamParticipationImpl(
-      {this.id, required this.league, required this.team})
-      : super._();
+  const _$LeagueTeamParticipationImpl({this.id, required this.league, required this.team}) : super._();
 
   factory _$LeagueTeamParticipationImpl.fromJson(Map<String, dynamic> json) =>
       _$$LeagueTeamParticipationImplFromJson(json);
@@ -184,9 +174,8 @@ class _$LeagueTeamParticipationImpl extends _LeagueTeamParticipation {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl>
-      get copyWith => __$$LeagueTeamParticipationImplCopyWithImpl<
-          _$LeagueTeamParticipationImpl>(this, _$identity);
+  _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl> get copyWith =>
+      __$$LeagueTeamParticipationImplCopyWithImpl<_$LeagueTeamParticipationImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -197,14 +186,11 @@ class _$LeagueTeamParticipationImpl extends _LeagueTeamParticipation {
 }
 
 abstract class _LeagueTeamParticipation extends LeagueTeamParticipation {
-  const factory _LeagueTeamParticipation(
-      {final int? id,
-      required final League league,
-      required final Team team}) = _$LeagueTeamParticipationImpl;
+  const factory _LeagueTeamParticipation({final int? id, required final League league, required final Team team}) =
+      _$LeagueTeamParticipationImpl;
   const _LeagueTeamParticipation._() : super._();
 
-  factory _LeagueTeamParticipation.fromJson(Map<String, dynamic> json) =
-      _$LeagueTeamParticipationImpl.fromJson;
+  factory _LeagueTeamParticipation.fromJson(Map<String, dynamic> json) = _$LeagueTeamParticipationImpl.fromJson;
 
   @override
   int? get id;
@@ -214,6 +200,6 @@ abstract class _LeagueTeamParticipation extends LeagueTeamParticipation {
   Team get team;
   @override
   @JsonKey(ignore: true)
-  _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

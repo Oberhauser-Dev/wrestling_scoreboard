@@ -31,14 +31,12 @@ mixin _$Competition {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CompetitionCopyWith<Competition> get copyWith =>
-      throw _privateConstructorUsedError;
+  $CompetitionCopyWith<Competition> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CompetitionCopyWith<$Res> {
-  factory $CompetitionCopyWith(
-          Competition value, $Res Function(Competition) then) =
+  factory $CompetitionCopyWith(Competition value, $Res Function(Competition) then) =
       _$CompetitionCopyWithImpl<$Res, Competition>;
   @useResult
   $Res call(
@@ -55,8 +53,7 @@ abstract class $CompetitionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionCopyWithImpl<$Res, $Val extends Competition>
-    implements $CompetitionCopyWith<$Res> {
+class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $CompetitionCopyWith<$Res> {
   _$CompetitionCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -122,10 +119,8 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition>
 }
 
 /// @nodoc
-abstract class _$$CompetitionImplCopyWith<$Res>
-    implements $CompetitionCopyWith<$Res> {
-  factory _$$CompetitionImplCopyWith(
-          _$CompetitionImpl value, $Res Function(_$CompetitionImpl) then) =
+abstract class _$$CompetitionImplCopyWith<$Res> implements $CompetitionCopyWith<$Res> {
+  factory _$$CompetitionImplCopyWith(_$CompetitionImpl value, $Res Function(_$CompetitionImpl) then) =
       __$$CompetitionImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -144,11 +139,9 @@ abstract class _$$CompetitionImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CompetitionImplCopyWithImpl<$Res>
-    extends _$CompetitionCopyWithImpl<$Res, _$CompetitionImpl>
+class __$$CompetitionImplCopyWithImpl<$Res> extends _$CompetitionCopyWithImpl<$Res, _$CompetitionImpl>
     implements _$$CompetitionImplCopyWith<$Res> {
-  __$$CompetitionImplCopyWithImpl(
-      _$CompetitionImpl _value, $Res Function(_$CompetitionImpl) _then)
+  __$$CompetitionImplCopyWithImpl(_$CompetitionImpl _value, $Res Function(_$CompetitionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -214,8 +207,7 @@ class _$CompetitionImpl extends _Competition {
       this.comment})
       : super._();
 
-  factory _$CompetitionImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CompetitionImplFromJson(json);
+  factory _$CompetitionImpl.fromJson(Map<String, dynamic> json) => _$$CompetitionImplFromJson(json);
 
   @override
   final int? id;
@@ -246,21 +238,17 @@ class _$CompetitionImpl extends _Competition {
             other is _$CompetitionImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.boutConfig, boutConfig) ||
-                other.boutConfig == boutConfig) &&
-            (identical(other.location, location) ||
-                other.location == location) &&
+            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
+            (identical(other.location, location) || other.location == location) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.no, no) || other.no == no) &&
-            (identical(other.visitorsCount, visitorsCount) ||
-                other.visitorsCount == visitorsCount) &&
+            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, boutConfig, location,
-      date, no, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, name, boutConfig, location, date, no, visitorsCount, comment);
 
   @JsonKey(ignore: true)
   @override
@@ -288,8 +276,7 @@ abstract class _Competition extends Competition {
       final String? comment}) = _$CompetitionImpl;
   const _Competition._() : super._();
 
-  factory _Competition.fromJson(Map<String, dynamic> json) =
-      _$CompetitionImpl.fromJson;
+  factory _Competition.fromJson(Map<String, dynamic> json) = _$CompetitionImpl.fromJson;
 
   @override
   int? get id;
@@ -309,6 +296,5 @@ abstract class _Competition extends Competition {
   String? get comment;
   @override
   @JsonKey(ignore: true)
-  _$$CompetitionImplCopyWith<_$CompetitionImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CompetitionImplCopyWith<_$CompetitionImpl> get copyWith => throw _privateConstructorUsedError;
 }

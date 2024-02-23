@@ -19,6 +19,27 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, competition, tou
 
 ## Setup & Installation
 
+Wrestling Scoreboard is a monorepo.
+Therefor it uses [Melos](https://github.com/invertase/melos) to manage the project and dependencies.
+All the commands can be found in the [melos.yaml](melos.yaml) file.
+
+To install Melos, run the following command from your terminal:
+
+```bash
+flutter pub global activate melos
+```
+
+Next, at the root of your locally cloned repository bootstrap the projects dependencies:
+
+```bash
+melos bs
+```
+
+To format your code, call:
+```bash
+melos format
+```
+
 Please read the documentation for setting up the according components:
 - [Server](wrestling_scoreboard_server/README.md)
 - [Database](wrestling_scoreboard_server/database/README.md)

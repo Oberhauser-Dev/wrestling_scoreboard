@@ -33,20 +33,13 @@ mixin _$Person {
 
 /// @nodoc
 abstract class $PersonCopyWith<$Res> {
-  factory $PersonCopyWith(Person value, $Res Function(Person) then) =
-      _$PersonCopyWithImpl<$Res, Person>;
+  factory $PersonCopyWith(Person value, $Res Function(Person) then) = _$PersonCopyWithImpl<$Res, Person>;
   @useResult
-  $Res call(
-      {int? id,
-      String prename,
-      String surname,
-      Gender? gender,
-      DateTime? birthDate});
+  $Res call({int? id, String prename, String surname, Gender? gender, DateTime? birthDate});
 }
 
 /// @nodoc
-class _$PersonCopyWithImpl<$Res, $Val extends Person>
-    implements $PersonCopyWith<$Res> {
+class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith<$Res> {
   _$PersonCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -90,26 +83,17 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person>
 
 /// @nodoc
 abstract class _$$PersonImplCopyWith<$Res> implements $PersonCopyWith<$Res> {
-  factory _$$PersonImplCopyWith(
-          _$PersonImpl value, $Res Function(_$PersonImpl) then) =
+  factory _$$PersonImplCopyWith(_$PersonImpl value, $Res Function(_$PersonImpl) then) =
       __$$PersonImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int? id,
-      String prename,
-      String surname,
-      Gender? gender,
-      DateTime? birthDate});
+  $Res call({int? id, String prename, String surname, Gender? gender, DateTime? birthDate});
 }
 
 /// @nodoc
-class __$$PersonImplCopyWithImpl<$Res>
-    extends _$PersonCopyWithImpl<$Res, _$PersonImpl>
+class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$PersonImpl>
     implements _$$PersonImplCopyWith<$Res> {
-  __$$PersonImplCopyWithImpl(
-      _$PersonImpl _value, $Res Function(_$PersonImpl) _then)
-      : super(_value, _then);
+  __$$PersonImplCopyWithImpl(_$PersonImpl _value, $Res Function(_$PersonImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -148,16 +132,9 @@ class __$$PersonImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PersonImpl extends _Person {
-  const _$PersonImpl(
-      {this.id,
-      required this.prename,
-      required this.surname,
-      this.gender,
-      this.birthDate})
-      : super._();
+  const _$PersonImpl({this.id, required this.prename, required this.surname, this.gender, this.birthDate}) : super._();
 
-  factory _$PersonImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PersonImplFromJson(json);
+  factory _$PersonImpl.fromJson(Map<String, dynamic> json) => _$$PersonImplFromJson(json);
 
   @override
   final int? id;
@@ -184,20 +161,17 @@ class _$PersonImpl extends _Person {
             (identical(other.prename, prename) || other.prename == prename) &&
             (identical(other.surname, surname) || other.surname == surname) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.birthDate, birthDate) ||
-                other.birthDate == birthDate));
+            (identical(other.birthDate, birthDate) || other.birthDate == birthDate));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, prename, surname, gender, birthDate);
+  int get hashCode => Object.hash(runtimeType, id, prename, surname, gender, birthDate);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PersonImplCopyWith<_$PersonImpl> get copyWith =>
-      __$$PersonImplCopyWithImpl<_$PersonImpl>(this, _$identity);
+  _$$PersonImplCopyWith<_$PersonImpl> get copyWith => __$$PersonImplCopyWithImpl<_$PersonImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -230,6 +204,5 @@ abstract class _Person extends Person {
   DateTime? get birthDate;
   @override
   @JsonKey(ignore: true)
-  _$$PersonImplCopyWith<_$PersonImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$PersonImplCopyWith<_$PersonImpl> get copyWith => throw _privateConstructorUsedError;
 }

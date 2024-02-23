@@ -36,8 +36,7 @@ mixin _$Bout {
 
 /// @nodoc
 abstract class $BoutCopyWith<$Res> {
-  factory $BoutCopyWith(Bout value, $Res Function(Bout) then) =
-      _$BoutCopyWithImpl<$Res, Bout>;
+  factory $BoutCopyWith(Bout value, $Res Function(Bout) then) = _$BoutCopyWithImpl<$Res, Bout>;
   @useResult
   $Res call(
       {int? id,
@@ -55,8 +54,7 @@ abstract class $BoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoutCopyWithImpl<$Res, $Val extends Bout>
-    implements $BoutCopyWith<$Res> {
+class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res> {
   _$BoutCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -151,9 +149,7 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout>
 
 /// @nodoc
 abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
-  factory _$$BoutImplCopyWith(
-          _$BoutImpl value, $Res Function(_$BoutImpl) then) =
-      __$$BoutImplCopyWithImpl<$Res>;
+  factory _$$BoutImplCopyWith(_$BoutImpl value, $Res Function(_$BoutImpl) then) = __$$BoutImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -175,11 +171,8 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$BoutImplCopyWithImpl<$Res>
-    extends _$BoutCopyWithImpl<$Res, _$BoutImpl>
-    implements _$$BoutImplCopyWith<$Res> {
-  __$$BoutImplCopyWithImpl(_$BoutImpl _value, $Res Function(_$BoutImpl) _then)
-      : super(_value, _then);
+class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl> implements _$$BoutImplCopyWith<$Res> {
+  __$$BoutImplCopyWithImpl(_$BoutImpl _value, $Res Function(_$BoutImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -244,8 +237,7 @@ class _$BoutImpl extends _Bout {
       this.duration = Duration.zero})
       : super._();
 
-  factory _$BoutImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BoutImplFromJson(json);
+  factory _$BoutImpl.fromJson(Map<String, dynamic> json) => _$$BoutImplFromJson(json);
 
   @override
   final int? id;
@@ -280,26 +272,21 @@ class _$BoutImpl extends _Bout {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
-            (identical(other.weightClass, weightClass) ||
-                other.weightClass == weightClass) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
             (identical(other.pool, pool) || other.pool == pool) &&
-            (identical(other.winnerRole, winnerRole) ||
-                other.winnerRole == winnerRole) &&
+            (identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole) &&
             (identical(other.result, result) || other.result == result) &&
-            (identical(other.duration, duration) ||
-                other.duration == duration));
+            (identical(other.duration, duration) || other.duration == duration));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, r, b, weightClass, pool, winnerRole, result, duration);
+  int get hashCode => Object.hash(runtimeType, id, r, b, weightClass, pool, winnerRole, result, duration);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BoutImplCopyWith<_$BoutImpl> get copyWith =>
-      __$$BoutImplCopyWithImpl<_$BoutImpl>(this, _$identity);
+  _$$BoutImplCopyWith<_$BoutImpl> get copyWith => __$$BoutImplCopyWithImpl<_$BoutImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -341,6 +328,5 @@ abstract class _Bout extends Bout {
   Duration get duration;
   @override
   @JsonKey(ignore: true)
-  _$$BoutImplCopyWith<_$BoutImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BoutImplCopyWith<_$BoutImpl> get copyWith => throw _privateConstructorUsedError;
 }

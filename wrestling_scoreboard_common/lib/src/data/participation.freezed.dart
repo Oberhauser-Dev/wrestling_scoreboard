@@ -28,22 +28,15 @@ mixin _$Participation {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ParticipationCopyWith<Participation> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ParticipationCopyWith<Participation> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ParticipationCopyWith<$Res> {
-  factory $ParticipationCopyWith(
-          Participation value, $Res Function(Participation) then) =
+  factory $ParticipationCopyWith(Participation value, $Res Function(Participation) then) =
       _$ParticipationCopyWithImpl<$Res, Participation>;
   @useResult
-  $Res call(
-      {int? id,
-      Membership membership,
-      Lineup lineup,
-      WeightClass? weightClass,
-      double? weight});
+  $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
 
   $MembershipCopyWith<$Res> get membership;
   $LineupCopyWith<$Res> get lineup;
@@ -51,8 +44,7 @@ abstract class $ParticipationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ParticipationCopyWithImpl<$Res, $Val extends Participation>
-    implements $ParticipationCopyWith<$Res> {
+class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $ParticipationCopyWith<$Res> {
   _$ParticipationCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -123,19 +115,12 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation>
 }
 
 /// @nodoc
-abstract class _$$ParticipationImplCopyWith<$Res>
-    implements $ParticipationCopyWith<$Res> {
-  factory _$$ParticipationImplCopyWith(
-          _$ParticipationImpl value, $Res Function(_$ParticipationImpl) then) =
+abstract class _$$ParticipationImplCopyWith<$Res> implements $ParticipationCopyWith<$Res> {
+  factory _$$ParticipationImplCopyWith(_$ParticipationImpl value, $Res Function(_$ParticipationImpl) then) =
       __$$ParticipationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int? id,
-      Membership membership,
-      Lineup lineup,
-      WeightClass? weightClass,
-      double? weight});
+  $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
 
   @override
   $MembershipCopyWith<$Res> get membership;
@@ -146,11 +131,9 @@ abstract class _$$ParticipationImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ParticipationImplCopyWithImpl<$Res>
-    extends _$ParticipationCopyWithImpl<$Res, _$ParticipationImpl>
+class __$$ParticipationImplCopyWithImpl<$Res> extends _$ParticipationCopyWithImpl<$Res, _$ParticipationImpl>
     implements _$$ParticipationImplCopyWith<$Res> {
-  __$$ParticipationImplCopyWithImpl(
-      _$ParticipationImpl _value, $Res Function(_$ParticipationImpl) _then)
+  __$$ParticipationImplCopyWithImpl(_$ParticipationImpl _value, $Res Function(_$ParticipationImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -190,16 +173,10 @@ class __$$ParticipationImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ParticipationImpl extends _Participation {
-  const _$ParticipationImpl(
-      {this.id,
-      required this.membership,
-      required this.lineup,
-      this.weightClass,
-      this.weight})
+  const _$ParticipationImpl({this.id, required this.membership, required this.lineup, this.weightClass, this.weight})
       : super._();
 
-  factory _$ParticipationImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ParticipationImplFromJson(json);
+  factory _$ParticipationImpl.fromJson(Map<String, dynamic> json) => _$$ParticipationImplFromJson(json);
 
   @override
   final int? id;
@@ -223,18 +200,15 @@ class _$ParticipationImpl extends _Participation {
         (other.runtimeType == runtimeType &&
             other is _$ParticipationImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.membership, membership) ||
-                other.membership == membership) &&
+            (identical(other.membership, membership) || other.membership == membership) &&
             (identical(other.lineup, lineup) || other.lineup == lineup) &&
-            (identical(other.weightClass, weightClass) ||
-                other.weightClass == weightClass) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
             (identical(other.weight, weight) || other.weight == weight));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
+  int get hashCode => Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
 
   @JsonKey(ignore: true)
   @override
@@ -259,8 +233,7 @@ abstract class _Participation extends Participation {
       final double? weight}) = _$ParticipationImpl;
   const _Participation._() : super._();
 
-  factory _Participation.fromJson(Map<String, dynamic> json) =
-      _$ParticipationImpl.fromJson;
+  factory _Participation.fromJson(Map<String, dynamic> json) = _$ParticipationImpl.fromJson;
 
   @override
   int? get id;
@@ -274,6 +247,5 @@ abstract class _Participation extends Participation {
   double? get weight;
   @override
   @JsonKey(ignore: true)
-  _$$ParticipationImplCopyWith<_$ParticipationImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ParticipationImplCopyWith<_$ParticipationImpl> get copyWith => throw _privateConstructorUsedError;
 }
