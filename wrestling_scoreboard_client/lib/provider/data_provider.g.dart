@@ -6,7 +6,7 @@ part of 'data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$singleDataStreamHash() => r'62a6a9c6b737eeae1772a657924d94cd2451deb2';
+String _$singleDataStreamHash() => r'50dcde28e62121bc26b9c2b70a254ed0f3217d27';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -205,7 +205,7 @@ class _SingleDataStreamProviderElement<T extends DataObject>
       (origin as SingleDataStreamProvider<T>).pData;
 }
 
-String _$manyDataStreamHash() => r'618eb0733df82420c92eb4fbaf5d47264e153233';
+String _$manyDataStreamHash() => r'61ddb2c86c206435d72abedf3803853a3a8b5e88';
 
 /// See also [manyDataStream].
 @ProviderFor(manyDataStream)
@@ -336,7 +336,7 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
 
   @override
   AutoDisposeStreamProviderElement<List<T>> createElement() {
-    return _ManyDataStreamProviderElement<T, S>(this);
+    return _ManyDataStreamProviderElement(this);
   }
 
   ManyDataStreamProvider _copyWith(

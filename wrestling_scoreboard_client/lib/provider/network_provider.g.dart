@@ -7,7 +7,7 @@ part of 'network_provider.dart';
 // **************************************************************************
 
 String _$webSocketStateStreamHash() =>
-    r'bfe80bc0287789e7b15b8dadde53d53820c4e0c8';
+    r'04de839e83ee6df7389b8831f579692fbe40e400';
 
 /// See also [webSocketStateStream].
 @ProviderFor(webSocketStateStream)
@@ -24,7 +24,7 @@ final webSocketStateStreamProvider =
 
 typedef WebSocketStateStreamRef = StreamProviderRef<WebSocketConnectionState>;
 String _$dataManagerNotifierHash() =>
-    r'f5b3a82d377333a757b5078f845e780a9e0bec37';
+    r'5b99bb7d219662dd70ff7bf93f67d89a4c48f2e7';
 
 /// See also [DataManagerNotifier].
 @ProviderFor(DataManagerNotifier)
