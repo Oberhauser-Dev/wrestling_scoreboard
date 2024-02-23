@@ -11,11 +11,18 @@ extension DateTimeFormatter on DateTime {
   }
 
   String toTimeString(BuildContext context) {
-    return DateFormat.Hm(Localizations.localeOf(context).toLanguageTag()).format(this);
+    return toTimeStringFromLocaleName(Localizations.localeOf(context).toLanguageTag());
+  }
+
+  String toTimeStringFromLocaleName(String localeName) {
+    return DateFormat.Hm(localeName).format(this);
   }
 
   String toDateTimeString(BuildContext context) {
-    final locale = Localizations.localeOf(context);
-    return '${DateFormat.yMMMd(locale.toLanguageTag()).format(this)} ${DateFormat.Hm(locale.toLanguageTag()).format(this)}';
+    return toDateTimeStringFromLocaleName(Localizations.localeOf(context).toLanguageTag());
+  }
+
+  String toDateTimeStringFromLocaleName(String localeName) {
+    return DateFormat.yMMMd(localeName).add_Hm().format(this);
   }
 }
