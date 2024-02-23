@@ -313,7 +313,7 @@ class ManyDataStreamProvider<T extends DataObject, S extends DataObject?> extend
 
   @override
   AutoDisposeStreamProviderElement<List<T>> createElement() {
-    return _ManyDataStreamProviderElement(this);
+    return _ManyDataStreamProviderElement<T, S>(this);
   }
 
   ManyDataStreamProvider _copyWith(
