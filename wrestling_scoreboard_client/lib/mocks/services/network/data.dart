@@ -157,8 +157,7 @@ List<Bout> getBoutsOfTeamMatch(TeamMatch match) {
 
 List<BoutAction> getBoutActions() => _boutActions;
 
-List<BoutAction> getBoutActionsOfBout(Bout bout) =>
-    getBoutActions().where((element) => element.bout == bout).toList();
+List<BoutAction> getBoutActionsOfBout(Bout bout) => getBoutActions().where((element) => element.bout == bout).toList();
 
 List<League> getLeagues() => _leagues;
 

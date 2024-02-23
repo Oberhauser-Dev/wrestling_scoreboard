@@ -32,8 +32,7 @@ mixin _$Team {
 
 /// @nodoc
 abstract class $TeamCopyWith<$Res> {
-  factory $TeamCopyWith(Team value, $Res Function(Team) then) =
-      _$TeamCopyWithImpl<$Res, Team>;
+  factory $TeamCopyWith(Team value, $Res Function(Team) then) = _$TeamCopyWithImpl<$Res, Team>;
   @useResult
   $Res call({int? id, String name, Club club, String? description});
 
@@ -41,8 +40,7 @@ abstract class $TeamCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamCopyWithImpl<$Res, $Val extends Team>
-    implements $TeamCopyWith<$Res> {
+class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res> {
   _$TeamCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -89,9 +87,7 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
 
 /// @nodoc
 abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
-  factory _$$TeamImplCopyWith(
-          _$TeamImpl value, $Res Function(_$TeamImpl) then) =
-      __$$TeamImplCopyWithImpl<$Res>;
+  factory _$$TeamImplCopyWith(_$TeamImpl value, $Res Function(_$TeamImpl) then) = __$$TeamImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int? id, String name, Club club, String? description});
@@ -101,11 +97,8 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$TeamImplCopyWithImpl<$Res>
-    extends _$TeamCopyWithImpl<$Res, _$TeamImpl>
-    implements _$$TeamImplCopyWith<$Res> {
-  __$$TeamImplCopyWithImpl(_$TeamImpl _value, $Res Function(_$TeamImpl) _then)
-      : super(_value, _then);
+class __$$TeamImplCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res, _$TeamImpl> implements _$$TeamImplCopyWith<$Res> {
+  __$$TeamImplCopyWithImpl(_$TeamImpl _value, $Res Function(_$TeamImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -139,12 +132,9 @@ class __$$TeamImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$TeamImpl extends _Team {
-  const _$TeamImpl(
-      {this.id, required this.name, required this.club, this.description})
-      : super._();
+  const _$TeamImpl({this.id, required this.name, required this.club, this.description}) : super._();
 
-  factory _$TeamImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TeamImplFromJson(json);
+  factory _$TeamImpl.fromJson(Map<String, dynamic> json) => _$$TeamImplFromJson(json);
 
   @override
   final int? id;
@@ -168,8 +158,7 @@ class _$TeamImpl extends _Team {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.club, club) || other.club == club) &&
-            (identical(other.description, description) ||
-                other.description == description));
+            (identical(other.description, description) || other.description == description));
   }
 
   @JsonKey(ignore: true)
@@ -179,8 +168,7 @@ class _$TeamImpl extends _Team {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TeamImplCopyWith<_$TeamImpl> get copyWith =>
-      __$$TeamImplCopyWithImpl<_$TeamImpl>(this, _$identity);
+  _$$TeamImplCopyWith<_$TeamImpl> get copyWith => __$$TeamImplCopyWithImpl<_$TeamImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -192,10 +180,7 @@ class _$TeamImpl extends _Team {
 
 abstract class _Team extends Team {
   const factory _Team(
-      {final int? id,
-      required final String name,
-      required final Club club,
-      final String? description}) = _$TeamImpl;
+      {final int? id, required final String name, required final Club club, final String? description}) = _$TeamImpl;
   const _Team._() : super._();
 
   factory _Team.fromJson(Map<String, dynamic> json) = _$TeamImpl.fromJson;
@@ -210,6 +195,5 @@ abstract class _Team extends Team {
   String? get description;
   @override
   @JsonKey(ignore: true)
-  _$$TeamImplCopyWith<_$TeamImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$TeamImplCopyWith<_$TeamImpl> get copyWith => throw _privateConstructorUsedError;
 }

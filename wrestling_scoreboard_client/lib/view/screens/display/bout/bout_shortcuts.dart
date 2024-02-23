@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 enum BoutScreenActions {
@@ -293,7 +293,8 @@ class BoutActionHandler extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
-      await intent.handle(await ref.read(dataManagerNotifierProvider), stopwatch, bouts, getActions, boutIndex, doAction,
+      await intent.handle(
+          await ref.read(dataManagerNotifierProvider), stopwatch, bouts, getActions, boutIndex, doAction,
           context: context, navigateToBoutByIndex: navigateToBoutByIndex);
     }
 

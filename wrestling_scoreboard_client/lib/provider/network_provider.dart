@@ -1,14 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wrestling_scoreboard_client/mocks/mock_data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/utils/environment.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 
 part 'network_provider.g.dart';
-
-final _isMock = Env.appEnvironment.fromString() == 'mock';
 
 @Riverpod(keepAlive: true)
 class DataManagerNotifier extends _$DataManagerNotifier {
@@ -17,9 +13,7 @@ class DataManagerNotifier extends _$DataManagerNotifier {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
     final wsUrl = await ref.watch(webSocketUrlNotifierProvider);
 
-    // TODO: override with mock via rivperpod overrides.
-    final dataManager = _isMock ? MockDataManager() : RestDataManager(apiUrl: apiUrl, wsUrl: wsUrl);
-    return dataManager;
+    return RestDataManager(apiUrl: apiUrl, wsUrl: wsUrl);
   }
 }
 

@@ -1,0 +1,48 @@
+name: build server
+on:
+  workflow_dispatch:
+    inputs:
+      flutter_version:
+        description: 'Flutter Version'
+        required: false
+        default: 'any'
+        type: choice
+        options:
+          - 'any'
+          - '3.16.x'
+  workflow_call:
+    inputs:
+      flutter_version:
+        required: false
+        default: '3.16.9'
+        type: string
+
+jobs:
+  build-server:
+    name: Build Server for ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: windows
+          - os: macos-latest
+            platform: macos
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ inputs.flutter_version }}
+          channel: 'stable'
+      - name: Build
+        id: build
+        shell: bash
+        run: |
+          ARTIFACT_PATH=$(./build.sh -v 0.0.0-nightly.${GITHUB_SHA::7} | tail -1)
+          ARTIFACT_NAME=$(basename "$ARTIFACT_PATH")
+          echo "artifact-path=$(echo $ARTIFACT_PATH)" >> $GITHUB_OUTPUT
+          echo "artifact-name=$(echo $ARTIFACT_NAME)" >> $GITHUB_OUTPUT
+        working-directory: wrestling_scoreboard_server

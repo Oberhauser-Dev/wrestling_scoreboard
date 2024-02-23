@@ -32,8 +32,7 @@ mixin _$League {
 
 /// @nodoc
 abstract class $LeagueCopyWith<$Res> {
-  factory $LeagueCopyWith(League value, $Res Function(League) then) =
-      _$LeagueCopyWithImpl<$Res, League>;
+  factory $LeagueCopyWith(League value, $Res Function(League) then) = _$LeagueCopyWithImpl<$Res, League>;
   @useResult
   $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig});
 
@@ -41,8 +40,7 @@ abstract class $LeagueCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LeagueCopyWithImpl<$Res, $Val extends League>
-    implements $LeagueCopyWith<$Res> {
+class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith<$Res> {
   _$LeagueCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -89,8 +87,7 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League>
 
 /// @nodoc
 abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
-  factory _$$LeagueImplCopyWith(
-          _$LeagueImpl value, $Res Function(_$LeagueImpl) then) =
+  factory _$$LeagueImplCopyWith(_$LeagueImpl value, $Res Function(_$LeagueImpl) then) =
       __$$LeagueImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -101,12 +98,9 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$LeagueImplCopyWithImpl<$Res>
-    extends _$LeagueCopyWithImpl<$Res, _$LeagueImpl>
+class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$LeagueImpl>
     implements _$$LeagueImplCopyWith<$Res> {
-  __$$LeagueImplCopyWithImpl(
-      _$LeagueImpl _value, $Res Function(_$LeagueImpl) _then)
-      : super(_value, _then);
+  __$$LeagueImplCopyWithImpl(_$LeagueImpl _value, $Res Function(_$LeagueImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -140,15 +134,9 @@ class __$$LeagueImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LeagueImpl extends _League {
-  const _$LeagueImpl(
-      {this.id,
-      required this.name,
-      required this.startDate,
-      required this.boutConfig})
-      : super._();
+  const _$LeagueImpl({this.id, required this.name, required this.startDate, required this.boutConfig}) : super._();
 
-  factory _$LeagueImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LeagueImplFromJson(json);
+  factory _$LeagueImpl.fromJson(Map<String, dynamic> json) => _$$LeagueImplFromJson(json);
 
   @override
   final int? id;
@@ -171,10 +159,8 @@ class _$LeagueImpl extends _League {
             other is _$LeagueImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.startDate, startDate) ||
-                other.startDate == startDate) &&
-            (identical(other.boutConfig, boutConfig) ||
-                other.boutConfig == boutConfig));
+            (identical(other.startDate, startDate) || other.startDate == startDate) &&
+            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig));
   }
 
   @JsonKey(ignore: true)
@@ -184,8 +170,7 @@ class _$LeagueImpl extends _League {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith =>
-      __$$LeagueImplCopyWithImpl<_$LeagueImpl>(this, _$identity);
+  _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => __$$LeagueImplCopyWithImpl<_$LeagueImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -215,6 +200,5 @@ abstract class _League extends League {
   BoutConfig get boutConfig;
   @override
   @JsonKey(ignore: true)
-  _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => throw _privateConstructorUsedError;
 }

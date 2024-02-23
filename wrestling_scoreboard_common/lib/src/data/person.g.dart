@@ -11,13 +11,10 @@ _$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
       prename: json['prename'] as String,
       surname: json['surname'] as String,
       gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),
-      birthDate: json['birthDate'] == null
-          ? null
-          : DateTime.parse(json['birthDate'] as String),
+      birthDate: json['birthDate'] == null ? null : DateTime.parse(json['birthDate'] as String),
     );
 
-Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) => <String, dynamic>{
       'id': instance.id,
       'prename': instance.prename,
       'surname': instance.surname,

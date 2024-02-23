@@ -6,18 +6,15 @@ part of 'weight_class.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$WeightClassImpl _$$WeightClassImplFromJson(Map<String, dynamic> json) =>
-    _$WeightClassImpl(
+_$WeightClassImpl _$$WeightClassImplFromJson(Map<String, dynamic> json) => _$WeightClassImpl(
       id: json['id'] as int?,
       weight: json['weight'] as int,
       style: $enumDecode(_$WrestlingStyleEnumMap, json['style']),
       suffix: json['suffix'] as String?,
-      unit: $enumDecodeNullable(_$WeightUnitEnumMap, json['unit']) ??
-          WeightUnit.kilogram,
+      unit: $enumDecodeNullable(_$WeightUnitEnumMap, json['unit']) ?? WeightUnit.kilogram,
     );
 
-Map<String, dynamic> _$$WeightClassImplToJson(_$WeightClassImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$WeightClassImplToJson(_$WeightClassImpl instance) => <String, dynamic>{
       'id': instance.id,
       'weight': instance.weight,
       'style': _$WrestlingStyleEnumMap[instance.style]!,

@@ -27,14 +27,12 @@ mixin _$TeamMatchBout {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TeamMatchBoutCopyWith<TeamMatchBout> get copyWith =>
-      throw _privateConstructorUsedError;
+  $TeamMatchBoutCopyWith<TeamMatchBout> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TeamMatchBoutCopyWith<$Res> {
-  factory $TeamMatchBoutCopyWith(
-          TeamMatchBout value, $Res Function(TeamMatchBout) then) =
+  factory $TeamMatchBoutCopyWith(TeamMatchBout value, $Res Function(TeamMatchBout) then) =
       _$TeamMatchBoutCopyWithImpl<$Res, TeamMatchBout>;
   @useResult
   $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
@@ -44,8 +42,7 @@ abstract class $TeamMatchBoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout>
-    implements $TeamMatchBoutCopyWith<$Res> {
+class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $TeamMatchBoutCopyWith<$Res> {
   _$TeamMatchBoutCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -99,10 +96,8 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout>
 }
 
 /// @nodoc
-abstract class _$$TeamMatchBoutImplCopyWith<$Res>
-    implements $TeamMatchBoutCopyWith<$Res> {
-  factory _$$TeamMatchBoutImplCopyWith(
-          _$TeamMatchBoutImpl value, $Res Function(_$TeamMatchBoutImpl) then) =
+abstract class _$$TeamMatchBoutImplCopyWith<$Res> implements $TeamMatchBoutCopyWith<$Res> {
+  factory _$$TeamMatchBoutImplCopyWith(_$TeamMatchBoutImpl value, $Res Function(_$TeamMatchBoutImpl) then) =
       __$$TeamMatchBoutImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -115,11 +110,9 @@ abstract class _$$TeamMatchBoutImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TeamMatchBoutImplCopyWithImpl<$Res>
-    extends _$TeamMatchBoutCopyWithImpl<$Res, _$TeamMatchBoutImpl>
+class __$$TeamMatchBoutImplCopyWithImpl<$Res> extends _$TeamMatchBoutCopyWithImpl<$Res, _$TeamMatchBoutImpl>
     implements _$$TeamMatchBoutImplCopyWith<$Res> {
-  __$$TeamMatchBoutImplCopyWithImpl(
-      _$TeamMatchBoutImpl _value, $Res Function(_$TeamMatchBoutImpl) _then)
+  __$$TeamMatchBoutImplCopyWithImpl(_$TeamMatchBoutImpl _value, $Res Function(_$TeamMatchBoutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -154,12 +147,9 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$TeamMatchBoutImpl extends _TeamMatchBout {
-  const _$TeamMatchBoutImpl(
-      {this.id, required this.pos, required this.teamMatch, required this.bout})
-      : super._();
+  const _$TeamMatchBoutImpl({this.id, required this.pos, required this.teamMatch, required this.bout}) : super._();
 
-  factory _$TeamMatchBoutImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TeamMatchBoutImplFromJson(json);
+  factory _$TeamMatchBoutImpl.fromJson(Map<String, dynamic> json) => _$$TeamMatchBoutImplFromJson(json);
 
   @override
   final int? id;
@@ -182,8 +172,7 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
             other is _$TeamMatchBoutImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.pos, pos) || other.pos == pos) &&
-            (identical(other.teamMatch, teamMatch) ||
-                other.teamMatch == teamMatch) &&
+            (identical(other.teamMatch, teamMatch) || other.teamMatch == teamMatch) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
@@ -213,8 +202,7 @@ abstract class _TeamMatchBout extends TeamMatchBout {
       required final Bout bout}) = _$TeamMatchBoutImpl;
   const _TeamMatchBout._() : super._();
 
-  factory _TeamMatchBout.fromJson(Map<String, dynamic> json) =
-      _$TeamMatchBoutImpl.fromJson;
+  factory _TeamMatchBout.fromJson(Map<String, dynamic> json) = _$TeamMatchBoutImpl.fromJson;
 
   @override
   int? get id;
@@ -226,6 +214,5 @@ abstract class _TeamMatchBout extends TeamMatchBout {
   Bout get bout;
   @override
   @JsonKey(ignore: true)
-  _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith => throw _privateConstructorUsedError;
 }

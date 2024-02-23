@@ -28,27 +28,19 @@ mixin _$WeightClass {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $WeightClassCopyWith<WeightClass> get copyWith =>
-      throw _privateConstructorUsedError;
+  $WeightClassCopyWith<WeightClass> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $WeightClassCopyWith<$Res> {
-  factory $WeightClassCopyWith(
-          WeightClass value, $Res Function(WeightClass) then) =
+  factory $WeightClassCopyWith(WeightClass value, $Res Function(WeightClass) then) =
       _$WeightClassCopyWithImpl<$Res, WeightClass>;
   @useResult
-  $Res call(
-      {int? id,
-      int weight,
-      WrestlingStyle style,
-      String? suffix,
-      WeightUnit unit});
+  $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
 }
 
 /// @nodoc
-class _$WeightClassCopyWithImpl<$Res, $Val extends WeightClass>
-    implements $WeightClassCopyWith<$Res> {
+class _$WeightClassCopyWithImpl<$Res, $Val extends WeightClass> implements $WeightClassCopyWith<$Res> {
   _$WeightClassCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -91,27 +83,18 @@ class _$WeightClassCopyWithImpl<$Res, $Val extends WeightClass>
 }
 
 /// @nodoc
-abstract class _$$WeightClassImplCopyWith<$Res>
-    implements $WeightClassCopyWith<$Res> {
-  factory _$$WeightClassImplCopyWith(
-          _$WeightClassImpl value, $Res Function(_$WeightClassImpl) then) =
+abstract class _$$WeightClassImplCopyWith<$Res> implements $WeightClassCopyWith<$Res> {
+  factory _$$WeightClassImplCopyWith(_$WeightClassImpl value, $Res Function(_$WeightClassImpl) then) =
       __$$WeightClassImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int? id,
-      int weight,
-      WrestlingStyle style,
-      String? suffix,
-      WeightUnit unit});
+  $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
 }
 
 /// @nodoc
-class __$$WeightClassImplCopyWithImpl<$Res>
-    extends _$WeightClassCopyWithImpl<$Res, _$WeightClassImpl>
+class __$$WeightClassImplCopyWithImpl<$Res> extends _$WeightClassCopyWithImpl<$Res, _$WeightClassImpl>
     implements _$$WeightClassImplCopyWith<$Res> {
-  __$$WeightClassImplCopyWithImpl(
-      _$WeightClassImpl _value, $Res Function(_$WeightClassImpl) _then)
+  __$$WeightClassImplCopyWithImpl(_$WeightClassImpl _value, $Res Function(_$WeightClassImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -152,15 +135,10 @@ class __$$WeightClassImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WeightClassImpl extends _WeightClass {
   const _$WeightClassImpl(
-      {this.id,
-      required this.weight,
-      required this.style,
-      this.suffix,
-      this.unit = WeightUnit.kilogram})
+      {this.id, required this.weight, required this.style, this.suffix, this.unit = WeightUnit.kilogram})
       : super._();
 
-  factory _$WeightClassImpl.fromJson(Map<String, dynamic> json) =>
-      _$$WeightClassImplFromJson(json);
+  factory _$WeightClassImpl.fromJson(Map<String, dynamic> json) => _$$WeightClassImplFromJson(json);
 
   @override
   final int? id;
@@ -202,8 +180,7 @@ abstract class _WeightClass extends WeightClass {
       final WeightUnit unit}) = _$WeightClassImpl;
   const _WeightClass._() : super._();
 
-  factory _WeightClass.fromJson(Map<String, dynamic> json) =
-      _$WeightClassImpl.fromJson;
+  factory _WeightClass.fromJson(Map<String, dynamic> json) = _$WeightClassImpl.fromJson;
 
   @override
   int? get id;
@@ -217,6 +194,5 @@ abstract class _WeightClass extends WeightClass {
   WeightUnit get unit;
   @override
   @JsonKey(ignore: true)
-  _$$WeightClassImplCopyWith<_$WeightClassImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$WeightClassImplCopyWith<_$WeightClassImpl> get copyWith => throw _privateConstructorUsedError;
 }

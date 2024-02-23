@@ -31,15 +31,13 @@ mixin _$Club {
 
 /// @nodoc
 abstract class $ClubCopyWith<$Res> {
-  factory $ClubCopyWith(Club value, $Res Function(Club) then) =
-      _$ClubCopyWithImpl<$Res, Club>;
+  factory $ClubCopyWith(Club value, $Res Function(Club) then) = _$ClubCopyWithImpl<$Res, Club>;
   @useResult
   $Res call({int? id, String name, String? no});
 }
 
 /// @nodoc
-class _$ClubCopyWithImpl<$Res, $Val extends Club>
-    implements $ClubCopyWith<$Res> {
+class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res> {
   _$ClubCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -73,20 +71,15 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club>
 
 /// @nodoc
 abstract class _$$ClubImplCopyWith<$Res> implements $ClubCopyWith<$Res> {
-  factory _$$ClubImplCopyWith(
-          _$ClubImpl value, $Res Function(_$ClubImpl) then) =
-      __$$ClubImplCopyWithImpl<$Res>;
+  factory _$$ClubImplCopyWith(_$ClubImpl value, $Res Function(_$ClubImpl) then) = __$$ClubImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int? id, String name, String? no});
 }
 
 /// @nodoc
-class __$$ClubImplCopyWithImpl<$Res>
-    extends _$ClubCopyWithImpl<$Res, _$ClubImpl>
-    implements _$$ClubImplCopyWith<$Res> {
-  __$$ClubImplCopyWithImpl(_$ClubImpl _value, $Res Function(_$ClubImpl) _then)
-      : super(_value, _then);
+class __$$ClubImplCopyWithImpl<$Res> extends _$ClubCopyWithImpl<$Res, _$ClubImpl> implements _$$ClubImplCopyWith<$Res> {
+  __$$ClubImplCopyWithImpl(_$ClubImpl _value, $Res Function(_$ClubImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -117,8 +110,7 @@ class __$$ClubImplCopyWithImpl<$Res>
 class _$ClubImpl extends _Club {
   const _$ClubImpl({this.id, required this.name, this.no}) : super._();
 
-  factory _$ClubImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ClubImplFromJson(json);
+  factory _$ClubImpl.fromJson(Map<String, dynamic> json) => _$$ClubImplFromJson(json);
 
   @override
   final int? id;
@@ -149,8 +141,7 @@ class _$ClubImpl extends _Club {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ClubImplCopyWith<_$ClubImpl> get copyWith =>
-      __$$ClubImplCopyWithImpl<_$ClubImpl>(this, _$identity);
+  _$$ClubImplCopyWith<_$ClubImpl> get copyWith => __$$ClubImplCopyWithImpl<_$ClubImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -161,10 +152,7 @@ class _$ClubImpl extends _Club {
 }
 
 abstract class _Club extends Club {
-  const factory _Club(
-      {final int? id,
-      required final String name,
-      final String? no}) = _$ClubImpl;
+  const factory _Club({final int? id, required final String name, final String? no}) = _$ClubImpl;
   const _Club._() : super._();
 
   factory _Club.fromJson(Map<String, dynamic> json) = _$ClubImpl.fromJson;
@@ -177,6 +165,5 @@ abstract class _Club extends Club {
   String? get no;
   @override
   @JsonKey(ignore: true)
-  _$$ClubImplCopyWith<_$ClubImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ClubImplCopyWith<_$ClubImpl> get copyWith => throw _privateConstructorUsedError;
 }

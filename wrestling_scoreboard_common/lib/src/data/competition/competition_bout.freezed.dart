@@ -26,14 +26,12 @@ mixin _$CompetitionBout {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CompetitionBoutCopyWith<CompetitionBout> get copyWith =>
-      throw _privateConstructorUsedError;
+  $CompetitionBoutCopyWith<CompetitionBout> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CompetitionBoutCopyWith<$Res> {
-  factory $CompetitionBoutCopyWith(
-          CompetitionBout value, $Res Function(CompetitionBout) then) =
+  factory $CompetitionBoutCopyWith(CompetitionBout value, $Res Function(CompetitionBout) then) =
       _$CompetitionBoutCopyWithImpl<$Res, CompetitionBout>;
   @useResult
   $Res call({int? id, Competition competition, Bout bout});
@@ -43,8 +41,7 @@ abstract class $CompetitionBoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout>
-    implements $CompetitionBoutCopyWith<$Res> {
+class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout> implements $CompetitionBoutCopyWith<$Res> {
   _$CompetitionBoutCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -93,10 +90,8 @@ class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout>
 }
 
 /// @nodoc
-abstract class _$$CompetitionBoutImplCopyWith<$Res>
-    implements $CompetitionBoutCopyWith<$Res> {
-  factory _$$CompetitionBoutImplCopyWith(_$CompetitionBoutImpl value,
-          $Res Function(_$CompetitionBoutImpl) then) =
+abstract class _$$CompetitionBoutImplCopyWith<$Res> implements $CompetitionBoutCopyWith<$Res> {
+  factory _$$CompetitionBoutImplCopyWith(_$CompetitionBoutImpl value, $Res Function(_$CompetitionBoutImpl) then) =
       __$$CompetitionBoutImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -109,11 +104,9 @@ abstract class _$$CompetitionBoutImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CompetitionBoutImplCopyWithImpl<$Res>
-    extends _$CompetitionBoutCopyWithImpl<$Res, _$CompetitionBoutImpl>
+class __$$CompetitionBoutImplCopyWithImpl<$Res> extends _$CompetitionBoutCopyWithImpl<$Res, _$CompetitionBoutImpl>
     implements _$$CompetitionBoutImplCopyWith<$Res> {
-  __$$CompetitionBoutImplCopyWithImpl(
-      _$CompetitionBoutImpl _value, $Res Function(_$CompetitionBoutImpl) _then)
+  __$$CompetitionBoutImplCopyWithImpl(_$CompetitionBoutImpl _value, $Res Function(_$CompetitionBoutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -143,12 +136,9 @@ class __$$CompetitionBoutImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CompetitionBoutImpl extends _CompetitionBout {
-  const _$CompetitionBoutImpl(
-      {this.id, required this.competition, required this.bout})
-      : super._();
+  const _$CompetitionBoutImpl({this.id, required this.competition, required this.bout}) : super._();
 
-  factory _$CompetitionBoutImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CompetitionBoutImplFromJson(json);
+  factory _$CompetitionBoutImpl.fromJson(Map<String, dynamic> json) => _$$CompetitionBoutImplFromJson(json);
 
   @override
   final int? id;
@@ -168,8 +158,7 @@ class _$CompetitionBoutImpl extends _CompetitionBout {
         (other.runtimeType == runtimeType &&
             other is _$CompetitionBoutImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
+            (identical(other.competition, competition) || other.competition == competition) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
@@ -181,8 +170,7 @@ class _$CompetitionBoutImpl extends _CompetitionBout {
   @override
   @pragma('vm:prefer-inline')
   _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith =>
-      __$$CompetitionBoutImplCopyWithImpl<_$CompetitionBoutImpl>(
-          this, _$identity);
+      __$$CompetitionBoutImplCopyWithImpl<_$CompetitionBoutImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -193,14 +181,11 @@ class _$CompetitionBoutImpl extends _CompetitionBout {
 }
 
 abstract class _CompetitionBout extends CompetitionBout {
-  const factory _CompetitionBout(
-      {final int? id,
-      required final Competition competition,
-      required final Bout bout}) = _$CompetitionBoutImpl;
+  const factory _CompetitionBout({final int? id, required final Competition competition, required final Bout bout}) =
+      _$CompetitionBoutImpl;
   const _CompetitionBout._() : super._();
 
-  factory _CompetitionBout.fromJson(Map<String, dynamic> json) =
-      _$CompetitionBoutImpl.fromJson;
+  factory _CompetitionBout.fromJson(Map<String, dynamic> json) = _$CompetitionBoutImpl.fromJson;
 
   @override
   int? get id;
@@ -210,6 +195,5 @@ abstract class _CompetitionBout extends CompetitionBout {
   Bout get bout;
   @override
   @JsonKey(ignore: true)
-  _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith => throw _privateConstructorUsedError;
 }

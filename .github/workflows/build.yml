@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   call-build-client:
-    uses: ./.github/workflows/build-app.yml
+    uses: ./.github/workflows/build-client.yml
     with:
       upload_pages_artifact: true
 

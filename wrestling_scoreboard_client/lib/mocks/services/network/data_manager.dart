@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:wrestling_scoreboard_client/mocks/mocks.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/mocks/services/network/data.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -108,8 +108,7 @@ class MockDataManager extends DataManager {
     List<WeightClass> weightClasses;
     if (wrestlingEvent is TeamMatch) {
       final homeParticipations = await readMany<Participation, Lineup>(filterObject: wrestlingEvent.home);
-      final guestParticipations =
-          await readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
+      final guestParticipations = await readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
       weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
     } else if (wrestlingEvent is Competition) {
@@ -394,6 +393,26 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  // TODO: implement webSocketManager
-  WebSocketManager get webSocketManager => throw UnimplementedError();
+  WebSocketManager get webSocketManager => MockWebSocketManager((message) {
+        // TODO: implement messageHandler
+        return null;
+      });
+}
+
+class MockWebSocketManager implements WebSocketManager {
+  MockWebSocketManager(this.messageHandler, {String? url}) {
+    // TODO: implement
+  }
+
+  @override
+  Function(dynamic message) messageHandler;
+
+  @override
+  addToSink(String val) {
+    // TODO: implement addToSink
+    throw UnimplementedError();
+  }
+
+  @override
+  StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
 }

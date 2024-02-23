@@ -6,19 +6,14 @@ part of 'competition_person.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CompetitionPersonImpl _$$CompetitionPersonImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CompetitionPersonImpl(
+_$CompetitionPersonImpl _$$CompetitionPersonImplFromJson(Map<String, dynamic> json) => _$CompetitionPersonImpl(
       id: json['id'] as int?,
-      competition:
-          Competition.fromJson(json['competition'] as Map<String, dynamic>),
+      competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
       person: Person.fromJson(json['person'] as Map<String, dynamic>),
       role: $enumDecode(_$PersonRoleEnumMap, json['role']),
     );
 
-Map<String, dynamic> _$$CompetitionPersonImplToJson(
-        _$CompetitionPersonImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$CompetitionPersonImplToJson(_$CompetitionPersonImpl instance) => <String, dynamic>{
       'id': instance.id,
       'competition': instance.competition.toJson(),
       'person': instance.person.toJson(),

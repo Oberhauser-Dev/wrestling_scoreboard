@@ -14,7 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_ma
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchOverview extends ConsumerWidget {
@@ -64,7 +64,8 @@ class TeamMatchOverview extends ConsumerWidget {
                         editPage: TeamMatchEdit(
                           teamMatch: match,
                         ),
-                        onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
+                        onDelete: () async =>
+                            (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
                         classLocale: localizations.match,
                         children: [
                           ContentItem(

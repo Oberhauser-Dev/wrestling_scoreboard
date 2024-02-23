@@ -42,10 +42,7 @@ enum BoutResult {
 }
 
 extension BoutResultParser on BoutResult {
-  String get name =>
-      toString()
-          .split('.')
-          .last;
+  String get name => toString().split('.').last;
 
   static BoutResult valueOf(String name) => BoutResult.values.singleWhere((element) => element.name == name);
 }

@@ -30,7 +30,8 @@ class CompetitionTeamParticipation with _$CompetitionTeamParticipation implement
     };
   }
 
-  static Future<CompetitionTeamParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
+  static Future<CompetitionTeamParticipation> fromRaw(
+          Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
       CompetitionTeamParticipation(
         id: e['id'] as int?,
         competition: (await getSingle<Competition>(e['competition_id'] as int))!,

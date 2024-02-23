@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-CompetitionTeamParticipation _$CompetitionTeamParticipationFromJson(
-    Map<String, dynamic> json) {
+CompetitionTeamParticipation _$CompetitionTeamParticipationFromJson(Map<String, dynamic> json) {
   return _CompetitionTeamParticipation.fromJson(json);
 }
 
@@ -27,17 +26,15 @@ mixin _$CompetitionTeamParticipation {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CompetitionTeamParticipationCopyWith<CompetitionTeamParticipation>
-      get copyWith => throw _privateConstructorUsedError;
+  $CompetitionTeamParticipationCopyWith<CompetitionTeamParticipation> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CompetitionTeamParticipationCopyWith<$Res> {
   factory $CompetitionTeamParticipationCopyWith(
-          CompetitionTeamParticipation value,
-          $Res Function(CompetitionTeamParticipation) then) =
-      _$CompetitionTeamParticipationCopyWithImpl<$Res,
-          CompetitionTeamParticipation>;
+          CompetitionTeamParticipation value, $Res Function(CompetitionTeamParticipation) then) =
+      _$CompetitionTeamParticipationCopyWithImpl<$Res, CompetitionTeamParticipation>;
   @useResult
   $Res call({int? id, Competition competition, Team team});
 
@@ -46,8 +43,7 @@ abstract class $CompetitionTeamParticipationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionTeamParticipationCopyWithImpl<$Res,
-        $Val extends CompetitionTeamParticipation>
+class _$CompetitionTeamParticipationCopyWithImpl<$Res, $Val extends CompetitionTeamParticipation>
     implements $CompetitionTeamParticipationCopyWith<$Res> {
   _$CompetitionTeamParticipationCopyWithImpl(this._value, this._then);
 
@@ -100,8 +96,7 @@ class _$CompetitionTeamParticipationCopyWithImpl<$Res,
 abstract class _$$CompetitionTeamParticipationImplCopyWith<$Res>
     implements $CompetitionTeamParticipationCopyWith<$Res> {
   factory _$$CompetitionTeamParticipationImplCopyWith(
-          _$CompetitionTeamParticipationImpl value,
-          $Res Function(_$CompetitionTeamParticipationImpl) then) =
+          _$CompetitionTeamParticipationImpl value, $Res Function(_$CompetitionTeamParticipationImpl) then) =
       __$$CompetitionTeamParticipationImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -115,12 +110,10 @@ abstract class _$$CompetitionTeamParticipationImplCopyWith<$Res>
 
 /// @nodoc
 class __$$CompetitionTeamParticipationImplCopyWithImpl<$Res>
-    extends _$CompetitionTeamParticipationCopyWithImpl<$Res,
-        _$CompetitionTeamParticipationImpl>
+    extends _$CompetitionTeamParticipationCopyWithImpl<$Res, _$CompetitionTeamParticipationImpl>
     implements _$$CompetitionTeamParticipationImplCopyWith<$Res> {
   __$$CompetitionTeamParticipationImplCopyWithImpl(
-      _$CompetitionTeamParticipationImpl _value,
-      $Res Function(_$CompetitionTeamParticipationImpl) _then)
+      _$CompetitionTeamParticipationImpl _value, $Res Function(_$CompetitionTeamParticipationImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -150,12 +143,9 @@ class __$$CompetitionTeamParticipationImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
-  const _$CompetitionTeamParticipationImpl(
-      {this.id, required this.competition, required this.team})
-      : super._();
+  const _$CompetitionTeamParticipationImpl({this.id, required this.competition, required this.team}) : super._();
 
-  factory _$CompetitionTeamParticipationImpl.fromJson(
-          Map<String, dynamic> json) =>
+  factory _$CompetitionTeamParticipationImpl.fromJson(Map<String, dynamic> json) =>
       _$$CompetitionTeamParticipationImplFromJson(json);
 
   @override
@@ -176,8 +166,7 @@ class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
         (other.runtimeType == runtimeType &&
             other is _$CompetitionTeamParticipationImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
+            (identical(other.competition, competition) || other.competition == competition) &&
             (identical(other.team, team) || other.team == team));
   }
 
@@ -188,10 +177,8 @@ class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CompetitionTeamParticipationImplCopyWith<
-          _$CompetitionTeamParticipationImpl>
-      get copyWith => __$$CompetitionTeamParticipationImplCopyWithImpl<
-          _$CompetitionTeamParticipationImpl>(this, _$identity);
+  _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl> get copyWith =>
+      __$$CompetitionTeamParticipationImplCopyWithImpl<_$CompetitionTeamParticipationImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -201,8 +188,7 @@ class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
   }
 }
 
-abstract class _CompetitionTeamParticipation
-    extends CompetitionTeamParticipation {
+abstract class _CompetitionTeamParticipation extends CompetitionTeamParticipation {
   const factory _CompetitionTeamParticipation(
       {final int? id,
       required final Competition competition,
@@ -220,7 +206,6 @@ abstract class _CompetitionTeamParticipation
   Team get team;
   @override
   @JsonKey(ignore: true)
-  _$$CompetitionTeamParticipationImplCopyWith<
-          _$CompetitionTeamParticipationImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

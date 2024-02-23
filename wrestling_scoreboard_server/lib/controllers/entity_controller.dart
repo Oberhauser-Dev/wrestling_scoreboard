@@ -109,6 +109,7 @@ abstract class EntityController<T extends DataObject> {
       if (postgresType == psql.Type.varChar || postgresType == psql.Type.text) {
         data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
       }
+      // ignore: deprecated_member_use
       return PostgreSQLFormat.id(e.key, type: postgresType);
     }).join(', ')}) RETURNING $primaryKeyName;
         ''';
@@ -142,6 +143,7 @@ abstract class EntityController<T extends DataObject> {
       if (postgresType == psql.Type.varChar || postgresType == psql.Type.text) {
         data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
       }
+      // ignore: deprecated_member_use
       return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
     }).join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
@@ -325,8 +327,8 @@ abstract class EntityController<T extends DataObject> {
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>(
       {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
-    return getControllerFromDataType(T)
-        .getMany(conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
+    return getControllerFromDataType(T).getMany(
+        conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
   }
 
   static EntityController getControllerFromDataType(Type t) {
@@ -393,6 +395,7 @@ extension on Map<String, dynamic> {
 extension on psql.ResultStream {
   /// Parse custom postgres types
   /// https://github.com/isoos/postgresql-dart/issues/276
+  // ignore: unused_element
   Stream<Iterable<dynamic>> parse() {
     return map((row) => row.map((value) => value is psql.UndecodedBytes ? value.asString : value));
   }

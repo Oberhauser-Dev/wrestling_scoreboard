@@ -29,14 +29,12 @@ mixin _$BoutConfig {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $BoutConfigCopyWith<BoutConfig> get copyWith =>
-      throw _privateConstructorUsedError;
+  $BoutConfigCopyWith<BoutConfig> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $BoutConfigCopyWith<$Res> {
-  factory $BoutConfigCopyWith(
-          BoutConfig value, $Res Function(BoutConfig) then) =
+  factory $BoutConfigCopyWith(BoutConfig value, $Res Function(BoutConfig) then) =
       _$BoutConfigCopyWithImpl<$Res, BoutConfig>;
   @useResult
   $Res call(
@@ -49,8 +47,7 @@ abstract class $BoutConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig>
-    implements $BoutConfigCopyWith<$Res> {
+class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig> implements $BoutConfigCopyWith<$Res> {
   _$BoutConfigCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -98,10 +95,8 @@ class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig>
 }
 
 /// @nodoc
-abstract class _$$BoutConfigImplCopyWith<$Res>
-    implements $BoutConfigCopyWith<$Res> {
-  factory _$$BoutConfigImplCopyWith(
-          _$BoutConfigImpl value, $Res Function(_$BoutConfigImpl) then) =
+abstract class _$$BoutConfigImplCopyWith<$Res> implements $BoutConfigCopyWith<$Res> {
+  factory _$$BoutConfigImplCopyWith(_$BoutConfigImpl value, $Res Function(_$BoutConfigImpl) then) =
       __$$BoutConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -115,12 +110,9 @@ abstract class _$$BoutConfigImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$BoutConfigImplCopyWithImpl<$Res>
-    extends _$BoutConfigCopyWithImpl<$Res, _$BoutConfigImpl>
+class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res, _$BoutConfigImpl>
     implements _$$BoutConfigImplCopyWith<$Res> {
-  __$$BoutConfigImplCopyWithImpl(
-      _$BoutConfigImpl _value, $Res Function(_$BoutConfigImpl) _then)
-      : super(_value, _then);
+  __$$BoutConfigImplCopyWithImpl(_$BoutConfigImpl _value, $Res Function(_$BoutConfigImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -173,8 +165,7 @@ class _$BoutConfigImpl extends _BoutConfig {
       this.periodCount = BoutConfig.defaultPeriodCount})
       : super._();
 
-  factory _$BoutConfigImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BoutConfigImplFromJson(json);
+  factory _$BoutConfigImpl.fromJson(Map<String, dynamic> json) => _$$BoutConfigImplFromJson(json);
 
   @override
   final int? id;
@@ -205,22 +196,17 @@ class _$BoutConfigImpl extends _BoutConfig {
         (other.runtimeType == runtimeType &&
             other is _$BoutConfigImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.periodDuration, periodDuration) ||
-                other.periodDuration == periodDuration) &&
-            (identical(other.breakDuration, breakDuration) ||
-                other.breakDuration == breakDuration) &&
-            (identical(other.activityDuration, activityDuration) ||
-                other.activityDuration == activityDuration) &&
-            (identical(other.injuryDuration, injuryDuration) ||
-                other.injuryDuration == injuryDuration) &&
-            (identical(other.periodCount, periodCount) ||
-                other.periodCount == periodCount));
+            (identical(other.periodDuration, periodDuration) || other.periodDuration == periodDuration) &&
+            (identical(other.breakDuration, breakDuration) || other.breakDuration == breakDuration) &&
+            (identical(other.activityDuration, activityDuration) || other.activityDuration == activityDuration) &&
+            (identical(other.injuryDuration, injuryDuration) || other.injuryDuration == injuryDuration) &&
+            (identical(other.periodCount, periodCount) || other.periodCount == periodCount));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, periodDuration,
-      breakDuration, activityDuration, injuryDuration, periodCount);
+  int get hashCode =>
+      Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration, periodCount);
 
   @JsonKey(ignore: true)
   @override
@@ -246,8 +232,7 @@ abstract class _BoutConfig extends BoutConfig {
       final int periodCount}) = _$BoutConfigImpl;
   const _BoutConfig._() : super._();
 
-  factory _BoutConfig.fromJson(Map<String, dynamic> json) =
-      _$BoutConfigImpl.fromJson;
+  factory _BoutConfig.fromJson(Map<String, dynamic> json) = _$BoutConfigImpl.fromJson;
 
   @override
   int? get id;
@@ -263,6 +248,5 @@ abstract class _BoutConfig extends BoutConfig {
   int get periodCount;
   @override
   @JsonKey(ignore: true)
-  _$$BoutConfigImplCopyWith<_$BoutConfigImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BoutConfigImplCopyWith<_$BoutConfigImpl> get copyWith => throw _privateConstructorUsedError;
 }

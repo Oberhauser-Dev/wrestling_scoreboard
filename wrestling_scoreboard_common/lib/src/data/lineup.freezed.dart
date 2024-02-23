@@ -22,8 +22,7 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
 mixin _$Lineup {
   int? get id => throw _privateConstructorUsedError;
   Team get team => throw _privateConstructorUsedError;
-  Membership? get leader =>
-      throw _privateConstructorUsedError; // Mannschaftsführer
+  Membership? get leader => throw _privateConstructorUsedError; // Mannschaftsführer
   Membership? get coach => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -33,8 +32,7 @@ mixin _$Lineup {
 
 /// @nodoc
 abstract class $LineupCopyWith<$Res> {
-  factory $LineupCopyWith(Lineup value, $Res Function(Lineup) then) =
-      _$LineupCopyWithImpl<$Res, Lineup>;
+  factory $LineupCopyWith(Lineup value, $Res Function(Lineup) then) = _$LineupCopyWithImpl<$Res, Lineup>;
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
@@ -44,8 +42,7 @@ abstract class $LineupCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LineupCopyWithImpl<$Res, $Val extends Lineup>
-    implements $LineupCopyWith<$Res> {
+class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith<$Res> {
   _$LineupCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -116,8 +113,7 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup>
 
 /// @nodoc
 abstract class _$$LineupImplCopyWith<$Res> implements $LineupCopyWith<$Res> {
-  factory _$$LineupImplCopyWith(
-          _$LineupImpl value, $Res Function(_$LineupImpl) then) =
+  factory _$$LineupImplCopyWith(_$LineupImpl value, $Res Function(_$LineupImpl) then) =
       __$$LineupImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -132,12 +128,9 @@ abstract class _$$LineupImplCopyWith<$Res> implements $LineupCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$LineupImplCopyWithImpl<$Res>
-    extends _$LineupCopyWithImpl<$Res, _$LineupImpl>
+class __$$LineupImplCopyWithImpl<$Res> extends _$LineupCopyWithImpl<$Res, _$LineupImpl>
     implements _$$LineupImplCopyWith<$Res> {
-  __$$LineupImplCopyWithImpl(
-      _$LineupImpl _value, $Res Function(_$LineupImpl) _then)
-      : super(_value, _then);
+  __$$LineupImplCopyWithImpl(_$LineupImpl _value, $Res Function(_$LineupImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -171,11 +164,9 @@ class __$$LineupImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LineupImpl extends _Lineup {
-  const _$LineupImpl({this.id, required this.team, this.leader, this.coach})
-      : super._();
+  const _$LineupImpl({this.id, required this.team, this.leader, this.coach}) : super._();
 
-  factory _$LineupImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LineupImplFromJson(json);
+  factory _$LineupImpl.fromJson(Map<String, dynamic> json) => _$$LineupImplFromJson(json);
 
   @override
   final int? id;
@@ -210,8 +201,7 @@ class _$LineupImpl extends _Lineup {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LineupImplCopyWith<_$LineupImpl> get copyWith =>
-      __$$LineupImplCopyWithImpl<_$LineupImpl>(this, _$identity);
+  _$$LineupImplCopyWith<_$LineupImpl> get copyWith => __$$LineupImplCopyWithImpl<_$LineupImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -222,11 +212,8 @@ class _$LineupImpl extends _Lineup {
 }
 
 abstract class _Lineup extends Lineup {
-  const factory _Lineup(
-      {final int? id,
-      required final Team team,
-      final Membership? leader,
-      final Membership? coach}) = _$LineupImpl;
+  const factory _Lineup({final int? id, required final Team team, final Membership? leader, final Membership? coach}) =
+      _$LineupImpl;
   const _Lineup._() : super._();
 
   factory _Lineup.fromJson(Map<String, dynamic> json) = _$LineupImpl.fromJson;
@@ -241,6 +228,5 @@ abstract class _Lineup extends Lineup {
   Membership? get coach;
   @override
   @JsonKey(ignore: true)
-  _$$LineupImplCopyWith<_$LineupImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$LineupImplCopyWith<_$LineupImpl> get copyWith => throw _privateConstructorUsedError;
 }

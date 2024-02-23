@@ -100,11 +100,11 @@ class TeamEditState extends ConsumerState<TeamEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Team(
-            id: widget.team?.id,
-            name: _name!,
-            description: _description,
-            club: _club!,
-          ));
+        id: widget.team?.id,
+        name: _name!,
+        description: _description,
+        club: _club!,
+      ));
       navigator.pop();
     }
   }

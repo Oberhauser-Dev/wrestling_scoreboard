@@ -23,11 +23,11 @@ class LoadingBuilder<T> extends StatelessWidget {
         if (snapshot.hasError) {
           return ExceptionWidget(snapshot.error!, onRetry: onRetry);
         }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
         if (initialData != null) {
           return builder(context, initialData as T);
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
         }
         return builder(context, snapshot.data as T);
       },

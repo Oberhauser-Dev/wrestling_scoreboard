@@ -27,14 +27,12 @@ mixin _$CompetitionPerson {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CompetitionPersonCopyWith<CompetitionPerson> get copyWith =>
-      throw _privateConstructorUsedError;
+  $CompetitionPersonCopyWith<CompetitionPerson> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CompetitionPersonCopyWith<$Res> {
-  factory $CompetitionPersonCopyWith(
-          CompetitionPerson value, $Res Function(CompetitionPerson) then) =
+  factory $CompetitionPersonCopyWith(CompetitionPerson value, $Res Function(CompetitionPerson) then) =
       _$CompetitionPersonCopyWithImpl<$Res, CompetitionPerson>;
   @useResult
   $Res call({int? id, Competition competition, Person person, PersonRole role});
@@ -99,10 +97,8 @@ class _$CompetitionPersonCopyWithImpl<$Res, $Val extends CompetitionPerson>
 }
 
 /// @nodoc
-abstract class _$$CompetitionPersonImplCopyWith<$Res>
-    implements $CompetitionPersonCopyWith<$Res> {
-  factory _$$CompetitionPersonImplCopyWith(_$CompetitionPersonImpl value,
-          $Res Function(_$CompetitionPersonImpl) then) =
+abstract class _$$CompetitionPersonImplCopyWith<$Res> implements $CompetitionPersonCopyWith<$Res> {
+  factory _$$CompetitionPersonImplCopyWith(_$CompetitionPersonImpl value, $Res Function(_$CompetitionPersonImpl) then) =
       __$$CompetitionPersonImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -115,11 +111,9 @@ abstract class _$$CompetitionPersonImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CompetitionPersonImplCopyWithImpl<$Res>
-    extends _$CompetitionPersonCopyWithImpl<$Res, _$CompetitionPersonImpl>
+class __$$CompetitionPersonImplCopyWithImpl<$Res> extends _$CompetitionPersonCopyWithImpl<$Res, _$CompetitionPersonImpl>
     implements _$$CompetitionPersonImplCopyWith<$Res> {
-  __$$CompetitionPersonImplCopyWithImpl(_$CompetitionPersonImpl _value,
-      $Res Function(_$CompetitionPersonImpl) _then)
+  __$$CompetitionPersonImplCopyWithImpl(_$CompetitionPersonImpl _value, $Res Function(_$CompetitionPersonImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -154,15 +148,10 @@ class __$$CompetitionPersonImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CompetitionPersonImpl extends _CompetitionPerson {
-  const _$CompetitionPersonImpl(
-      {this.id,
-      required this.competition,
-      required this.person,
-      required this.role})
+  const _$CompetitionPersonImpl({this.id, required this.competition, required this.person, required this.role})
       : super._();
 
-  factory _$CompetitionPersonImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CompetitionPersonImplFromJson(json);
+  factory _$CompetitionPersonImpl.fromJson(Map<String, dynamic> json) => _$$CompetitionPersonImplFromJson(json);
 
   @override
   final int? id;
@@ -184,8 +173,7 @@ class _$CompetitionPersonImpl extends _CompetitionPerson {
         (other.runtimeType == runtimeType &&
             other is _$CompetitionPersonImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
+            (identical(other.competition, competition) || other.competition == competition) &&
             (identical(other.person, person) || other.person == person) &&
             (identical(other.role, role) || other.role == role));
   }
@@ -198,8 +186,7 @@ class _$CompetitionPersonImpl extends _CompetitionPerson {
   @override
   @pragma('vm:prefer-inline')
   _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith =>
-      __$$CompetitionPersonImplCopyWithImpl<_$CompetitionPersonImpl>(
-          this, _$identity);
+      __$$CompetitionPersonImplCopyWithImpl<_$CompetitionPersonImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -217,8 +204,7 @@ abstract class _CompetitionPerson extends CompetitionPerson {
       required final PersonRole role}) = _$CompetitionPersonImpl;
   const _CompetitionPerson._() : super._();
 
-  factory _CompetitionPerson.fromJson(Map<String, dynamic> json) =
-      _$CompetitionPersonImpl.fromJson;
+  factory _CompetitionPerson.fromJson(Map<String, dynamic> json) = _$CompetitionPersonImpl.fromJson;
 
   @override
   int? get id;
@@ -230,6 +216,5 @@ abstract class _CompetitionPerson extends CompetitionPerson {
   PersonRole get role;
   @override
   @JsonKey(ignore: true)
-  _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith => throw _privateConstructorUsedError;
 }

@@ -6,35 +6,27 @@ part of 'network_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$webSocketStateStreamHash() =>
-    r'bfe80bc0287789e7b15b8dadde53d53820c4e0c8';
+String _$webSocketStateStreamHash() => r'04de839e83ee6df7389b8831f579692fbe40e400';
 
 /// See also [webSocketStateStream].
 @ProviderFor(webSocketStateStream)
-final webSocketStateStreamProvider =
-    StreamProvider<WebSocketConnectionState>.internal(
+final webSocketStateStreamProvider = StreamProvider<WebSocketConnectionState>.internal(
   webSocketStateStream,
   name: r'webSocketStateStreamProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$webSocketStateStreamHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$webSocketStateStreamHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 typedef WebSocketStateStreamRef = StreamProviderRef<WebSocketConnectionState>;
-String _$dataManagerNotifierHash() =>
-    r'f5b3a82d377333a757b5078f845e780a9e0bec37';
+String _$dataManagerNotifierHash() => r'5b99bb7d219662dd70ff7bf93f67d89a4c48f2e7';
 
 /// See also [DataManagerNotifier].
 @ProviderFor(DataManagerNotifier)
-final dataManagerNotifierProvider =
-    NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>>.internal(
+final dataManagerNotifierProvider = NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>>.internal(
   DataManagerNotifier.new,
   name: r'dataManagerNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$dataManagerNotifierHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$dataManagerNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
