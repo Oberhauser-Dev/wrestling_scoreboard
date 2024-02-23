@@ -41,7 +41,7 @@ jobs:
         id: build
         shell: bash
         run: |
-          ARTIFACT_PATH=$(./build.sh -v 0.0.0-nightly.$(echo $GITHUB_SHA::7) | tail -1)
+          ARTIFACT_PATH=$(./build.sh -v 0.0.0-nightly.${GITHUB_SHA::7} | tail -1)
           ARTIFACT_NAME=$(basename "$ARTIFACT_PATH")
           echo "artifact-path=$(echo $ARTIFACT_PATH)" >> $GITHUB_OUTPUT
           echo "artifact-name=$(echo $ARTIFACT_NAME)" >> $GITHUB_OUTPUT
