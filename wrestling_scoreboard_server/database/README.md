@@ -25,10 +25,15 @@ On Linux you may want to login as postgres user: `sudo -u postgres -i`
 
 Login as admin:
 ```shell
-# sudo -u postgres psql # Use this on peer authentication
 PGPASSWORD=mypassword
 psql -U postgres
 postgres=#
+```
+
+Use this on peer authentication:
+```shell
+sudo -u postgres psql postgres # For creation
+sudo -u postgres psql wrestling_scoreboard # For altering database wrestling_scoreboard
 ```
 
 ### Setup User: 
@@ -47,7 +52,10 @@ Reset current database:
 ```shell
 psql -U postgres -c "DROP DATABASE IF EXISTS wrestling_scoreboard;"
 psql -U postgres -c "CREATE DATABASE wrestling_scoreboard WITH OWNER = wrestling;"
+psql -U postgres -d wrestling_scoreboard -c "ALTER SCHEMA public OWNER TO wrestling;"
 ```
+
+For peer authentication execute these commands inside the according psql shell.
 
 Restore prepopulated database, execute in directory `server`:
 ```shell

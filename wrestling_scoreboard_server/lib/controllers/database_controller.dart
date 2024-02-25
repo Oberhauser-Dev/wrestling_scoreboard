@@ -50,11 +50,15 @@ class DatabaseController {
   Future<Response> restore(Request request) async {
     final db = PostgresDb();
     final conn = db.connection;
-    await conn.execute('DROP SCHEMA IF EXISTS public CASCADE;');
-    await db.close();
-    // await conn.execute('CREATE SCHEMA public;');
-    // await conn.execute('GRANT ALL ON SCHEMA public TO postgres;');
-    // await conn.execute('GRANT ALL ON SCHEMA public TO public;');
+    try {
+      await conn.execute('DROP SCHEMA IF EXISTS public CASCADE;');
+      await db.close();
+      // await conn.execute('CREATE SCHEMA public;');
+      // await conn.execute('GRANT ALL ON SCHEMA public TO postgres;');
+      // await conn.execute('GRANT ALL ON SCHEMA public TO public;');
+    } catch (e) {
+      return Response.internalServerError(body: '{"err": "$e"}');
+    }
 
     final args = <String>[
       '--file',

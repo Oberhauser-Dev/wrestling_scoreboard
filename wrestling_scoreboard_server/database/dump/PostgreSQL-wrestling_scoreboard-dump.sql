@@ -17,16 +17,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: pg_database_owner
+-- Name: public; Type: SCHEMA; Schema: -; Owner: wrestling
 --
 
 CREATE SCHEMA public;
 
 
-ALTER SCHEMA public OWNER TO pg_database_owner;
+ALTER SCHEMA public OWNER TO wrestling;
 
 --
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: wrestling
 --
 
 COMMENT ON SCHEMA public IS 'standard public schema';
@@ -1873,7 +1873,7 @@ ALTER TABLE ONLY public.team_match
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: wrestling
 --
 
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
