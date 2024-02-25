@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Development Local" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="additionalArgs" value="--dart-define=APP_ENVIRONMENT=development --dart-define=API_URL=&quot;http://localhost:8080/api&quot; --dart-define=WEB_SOCKET_URL=&quot;ws://localhost:8080/ws&quot;" />
+    <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
