@@ -22,6 +22,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
@@ -229,16 +230,29 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   void handleAction(BoutScreenActionIntent intent) async {
-    intent.handle(
-      (await ref.read(dataManagerNotifierProvider)),
-      stopwatch,
-      widget.bouts,
-      getActions,
-      widget.boutIndex,
-      doAction,
-      context: context,
-      navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
-    );
+    final tmpContext = context;
+    final dataManager = await ref.read(dataManagerNotifierProvider);
+    if (tmpContext.mounted) {
+      try {
+        await intent.handle(
+          dataManager,
+          stopwatch,
+          widget.bouts,
+          getActions,
+          widget.boutIndex,
+          doAction,
+          context: tmpContext,
+          navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
+        );
+      } on Exception catch (e) {
+        if (context.mounted) {
+          await showExceptionDialog(
+            context: tmpContext,
+            exception: e,
+          );
+        }
+      }
+    }
   }
 
   Future<List<BoutAction>> getActions() =>

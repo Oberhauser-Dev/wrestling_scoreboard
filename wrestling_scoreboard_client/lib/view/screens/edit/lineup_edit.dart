@@ -11,7 +11,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/ok_dialog.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
@@ -88,7 +88,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         onSubmit: () async {
           final hasConfirmed = await showDialog(
             context: context,
-            builder: (context) => OkDialog(
+            builder: (context) => OkCancelDialog(
               getResult: () => true,
               child: Text(localizations.warningBoutGenerate),
             ),

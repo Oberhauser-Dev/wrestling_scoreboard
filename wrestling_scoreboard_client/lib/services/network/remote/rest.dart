@@ -154,4 +154,9 @@ class RestException implements Exception {
   String message;
 
   RestException(this.message);
+
+  @override
+  String toString() {
+    return 'RestException: $message';
+  }
 }

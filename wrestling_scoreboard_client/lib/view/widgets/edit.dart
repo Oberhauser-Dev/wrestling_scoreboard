@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 
@@ -103,34 +104,12 @@ class EditAction extends StatelessWidget {
   }
 
   void _handleSubmit(BuildContext context) async {
-    final localizations = AppLocalizations.of(context)!;
     try {
       await onSubmit();
     } on RestException catch (e) {
       developer.log(e.message);
       if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: Column(
-              children: [
-                Text(localizations.invalidParameterException),
-                Text(
-                  e.message,
-                  style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(localizations.ok),
-              ),
-            ],
-          ),
-        );
+        await showExceptionDialog(context: context, exception: e);
       }
     }
   }

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/ok_dialog.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
@@ -280,7 +280,7 @@ class TextInputDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? result;
-    return OkDialog(
+    return OkCancelDialog(
         child: TextFormField(
           initialValue: initialValue,
           onChanged: (value) => result = value,
@@ -316,7 +316,7 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return OkDialog<T?>(
+    return OkCancelDialog<T?>(
         child: ListView.builder(
           key: Key(result.toString()),
           shrinkWrap: true,
