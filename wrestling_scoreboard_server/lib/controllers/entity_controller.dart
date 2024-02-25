@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:postgres/legacy.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -50,13 +50,6 @@ Map<Type, psql.Type> typeDartToCodeMap = {
   // '_jsonb': psql.Type.jsonbArray,
 };
 
-class PostgresMap {
-  Map<String, dynamic> map;
-  Map<String, psql.Type?> types;
-
-  PostgresMap(this.map, [this.types = const {}]);
-}
-
 abstract class EntityController<T extends DataObject> {
   String tableName;
   String primaryKeyName;
@@ -70,6 +63,7 @@ abstract class EntityController<T extends DataObject> {
     } on FormatException catch (e) {
       final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
           '\nFormatException: ${e.message}';
+      log(errMessage.toString());
       return Response.notFound(errMessage);
     }
   }
@@ -88,10 +82,10 @@ abstract class EntityController<T extends DataObject> {
       PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
 
   Future<Map<String, dynamic>?> getSingleRaw(int id) async {
-    final res = (await getSingleRawStmt).bind({'id': id});
-    final many = res.toColumnMap();
-    if (await many.isEmpty) return Future.value(null);
-    return await many.first;
+    final resStream = (await getSingleRawStmt).bind({'id': id});
+    final many = await resStream.toColumnMap().toList();
+    if (many.isEmpty) return null;
+    return many.first;
   }
 
   Future<int> createSingle(T dataObject) async {
@@ -99,28 +93,19 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
-    final postgresTypes = getPostgresDataTypes();
     final sql = '''
         INSERT INTO $tableName (${data.keys.join(',')}) 
-        VALUES (${Map.of(data).entries.map((e) {
-      final postgresType =
-          postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
-      // Trim all strings before inserting into db
-      if (postgresType == psql.Type.varChar || postgresType == psql.Type.text) {
-        data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
-      }
-      // ignore: deprecated_member_use
-      return PostgreSQLFormat.id(e.key, type: postgresType);
-    }).join(', ')}) RETURNING $primaryKeyName;
+        VALUES (${data.keys.map((key) => '@$key').join(', ')}) RETURNING $primaryKeyName;
         ''';
     try {
-      final stmt = await PostgresDb().connection.prepare(sql);
-      final res = stmt.bind(data);
-      if (await res.isEmpty || (await res.last).isEmpty) {
+      final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sql));
+      final bindingData = _prepareBindingData(data);
+      final res = await stmt.bind(bindingData).toList();
+      if (res.isEmpty || res.last.isEmpty) {
         throw InvalidParameterException(
             'The data object of table $tableName could not be updated. Check the attributes: $data');
       }
-      return (await res.last)[0] as int;
+      return res.last[0] as int;
     } on psql.PgException catch (e) {
       throw InvalidParameterException(
           'The data object of table $tableName could not be created. Check the attributes: $data\n'
@@ -133,29 +118,22 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> updateSingleRaw(Map<String, dynamic> data) async {
-    final postgresTypes = getPostgresDataTypes();
     final sql = '''
         UPDATE $tableName 
-        SET ${Map.of(data).entries.map((e) {
-      final postgresType =
-          postgresTypes.containsKey(e.key) ? postgresTypes[e.key] : typeDartToCodeMap[e.value.runtimeType];
-      // Trim all strings before inserting into db
-      if (postgresType == psql.Type.varChar || postgresType == psql.Type.text) {
-        data[e.key] = e.value != null ? (e.value as String).trim() : e.value;
-      }
-      // ignore: deprecated_member_use
-      return '${e.key} = ${PostgreSQLFormat.id(e.key, type: postgresType)}';
+        SET ${data.keys.map((key) {
+      return '$key = @$key';
     }).join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
     try {
-      final stmt = await PostgresDb().connection.prepare(sql);
-      final res = stmt.bind(data);
-      if (await res.isEmpty || (await res.last).isEmpty) {
+      final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sql));
+      final bindingData = _prepareBindingData(data);
+      final res = await stmt.bind(bindingData).toList();
+      if (res.isEmpty || res.last.isEmpty) {
         throw InvalidParameterException(
             'The data object of table $tableName could not be updated. Check the attributes: $data');
       }
-      return (await res.last)[0] as int;
+      return res.last[0] as int;
     } on psql.PgException catch (e) {
       throw InvalidParameterException(
           'The data object of table $tableName could not be updated. Check the attributes: $data'
@@ -163,13 +141,24 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
+  Map<String, dynamic> _prepareBindingData(Map<String, dynamic> data) {
+    final postgresTypes = getPostgresDataTypes();
+    return data.map((key, value) {
+      final postgresType = postgresTypes.containsKey(key) ? postgresTypes[key] : typeDartToCodeMap[value.runtimeType];
+      // Trim all strings before inserting into db
+      if (postgresType == psql.Type.varChar || postgresType == psql.Type.text && value != null) {
+        value = (value as String).trim();
+      }
+      return MapEntry(key, postgresType == null ? value : psql.TypedValue(postgresType, value));
+    });
+  }
+
   late final deleteSingleStmt =
       PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
 
   Future<bool> deleteSingle(int id) async {
     try {
-      final res = (await deleteSingleStmt).bind({'id': id});
-      await res.drain();
+      await (await deleteSingleStmt).bind({'id': id}).toList();
     } on psql.PgException catch (_) {
       return false;
     }
@@ -195,8 +184,7 @@ abstract class EntityController<T extends DataObject> {
 
   Future<void> setManyRawFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
     final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
-    final res = stmt.bind(substitutionValues);
-    return await res.drain();
+    await stmt.bind(substitutionValues).toList();
   }
 
   Future<Response> requestMany(Request request) async {
@@ -235,8 +223,8 @@ abstract class EntityController<T extends DataObject> {
   Future<List<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
       {Map<String, dynamic>? substitutionValues}) async {
     final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
-    final res = stmt.bind(substitutionValues);
-    return await res.toColumnMap().toList();
+    final resStream = stmt.bind(substitutionValues);
+    return await resStream.toColumnMap().toList();
   }
 
   Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
@@ -253,8 +241,8 @@ abstract class EntityController<T extends DataObject> {
   }
 
   static Future<Map<String, dynamic>> query(psql.Statement stmt, {Map<String, dynamic>? substitutionValues}) async {
-    final res = stmt.bind(substitutionValues);
-    return res.toColumnMap().single;
+    final resStream = stmt.bind(substitutionValues);
+    return resStream.toColumnMap().single;
   }
 
   static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, Object?> json) async {
