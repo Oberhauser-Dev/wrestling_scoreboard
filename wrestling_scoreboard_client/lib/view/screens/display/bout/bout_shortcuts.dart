@@ -293,9 +293,9 @@ class BoutActionHandler extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> handleIntent(BoutScreenActionIntent intent, {BuildContext? context}) async {
+    Future<void> handleIntent(BoutScreenActionIntent intent, {required BuildContext context}) async {
       final dataManager = await ref.read(dataManagerNotifierProvider);
-      if (context != null && context.mounted) {
+      if (context.mounted) {
         try {
           await intent.handle(dataManager, stopwatch, bouts, getActions, boutIndex, doAction,
               context: context, navigateToBoutByIndex: navigateToBoutByIndex);
@@ -340,31 +340,31 @@ class BoutActionHandler extends ConsumerWidget {
             onInvoke: (BoutScreenActionIntent intent) => handleIntent(intent, context: context),
           )
         },
-        child: RawKeyboardListener(
+        child: KeyboardListener(
           focusNode: FocusNode(),
           child: Focus(autofocus: true, child: child),
-          onKey: (RawKeyEvent event) {
-            if (event.runtimeType.toString() == 'RawKeyDownEvent') {
+          onKeyEvent: (KeyEvent event) {
+            if (event is KeyDownEvent) {
               if (event.physicalKey == PhysicalKeyboardKey.keyF) {
-                handleIntent(redOneIntent);
+                handleIntent(redOneIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyD) {
-                handleIntent(redTwoIntent);
+                handleIntent(redTwoIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyS) {
-                handleIntent(redThreeIntent);
+                handleIntent(redThreeIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyA) {
-                handleIntent(redFourIntent);
+                handleIntent(redFourIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyJ ||
-                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit1)) {
-                handleIntent(blueOneIntent);
+                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit1)) {
+                handleIntent(blueOneIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyK ||
-                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit2)) {
-                handleIntent(blueTwoIntent);
+                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit2)) {
+                handleIntent(blueTwoIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyL ||
-                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3)) {
-                handleIntent(blueThreeIntent);
+                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3)) {
+                handleIntent(blueThreeIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.semicolon ||
-                  (event.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit4)) {
-                handleIntent(blueFourIntent);
+                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit4)) {
+                handleIntent(blueFourIntent, context: context);
               }
             }
           },

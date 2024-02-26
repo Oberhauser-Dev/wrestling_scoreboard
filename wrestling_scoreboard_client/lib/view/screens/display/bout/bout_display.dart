@@ -432,7 +432,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       canPop: false,
       onPopInvoked: (didPop) async {
         await save();
-        if (mounted) {
+        if (context.mounted) {
           Navigator.pop(context);
         }
       },
