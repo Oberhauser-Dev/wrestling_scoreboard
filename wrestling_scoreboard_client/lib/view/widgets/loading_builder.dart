@@ -26,7 +26,7 @@ class LoadingBuilder<T> extends StatelessWidget {
         if (initialData != null) {
           return builder(context, initialData as T);
         }
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null) {
           return const Center(child: CircularProgressIndicator());
         }
         return builder(context, snapshot.data as T);
