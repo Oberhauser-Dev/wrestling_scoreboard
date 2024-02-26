@@ -9,12 +9,13 @@ on:
         type: choice
         options:
           - 'any'
+          - '3.19.x'
           - '3.16.x'
   workflow_call:
     inputs:
       flutter_version:
         required: false
-        default: '3.16.9'
+        default: '3.19.1'
         type: string
 
 jobs:
