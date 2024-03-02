@@ -5,7 +5,7 @@
 A simple usage example:
 
 ```dart
-import 'package:common/common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 main() {
   var club = Club(name: 'MyClubName');
