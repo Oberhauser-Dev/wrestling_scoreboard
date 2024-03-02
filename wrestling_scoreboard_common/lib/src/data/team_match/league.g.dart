@@ -11,6 +11,7 @@ _$LeagueImpl _$$LeagueImplFromJson(Map<String, dynamic> json) => _$LeagueImpl(
       name: json['name'] as String,
       startDate: DateTime.parse(json['startDate'] as String),
       boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
+      seasonPartitions: json['seasonPartitions'] as int,
     );
 
 Map<String, dynamic> _$$LeagueImplToJson(_$LeagueImpl instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$LeagueImplToJson(_$LeagueImpl instance) => <String, dyna
       'name': instance.name,
       'startDate': instance.startDate.toIso8601String(),
       'boutConfig': instance.boutConfig.toJson(),
+      'seasonPartitions': instance.seasonPartitions,
     };

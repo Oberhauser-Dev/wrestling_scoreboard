@@ -9,8 +9,12 @@ part 'league.g.dart';
 /// The league in which the team is bouting.
 @freezed
 class League with _$League implements DataObject {
-  static League outOfCompetition =
-      League(name: 'Out of competition', startDate: DateTime(DateTime.now().year), boutConfig: BoutConfig());
+  static League outOfCompetition = League(
+    name: 'Out of competition',
+    startDate: DateTime(DateTime.now().year),
+    boutConfig: BoutConfig(),
+    seasonPartitions: 1,
+  );
 
   const League._();
 
@@ -19,6 +23,7 @@ class League with _$League implements DataObject {
     required String name,
     required DateTime startDate,
     required BoutConfig boutConfig,
+    required int seasonPartitions,
   }) = _League;
 
   factory League.fromJson(Map<String, Object?> json) => _$LeagueFromJson(json);
@@ -29,6 +34,7 @@ class League with _$League implements DataObject {
       id: e['id'] as int?,
       name: e['name'] as String,
       startDate: e['start_date'] as DateTime,
+      seasonPartitions: e['season_partitions'] as int,
       boutConfig: boutConfig!,
     );
   }
@@ -40,6 +46,7 @@ class League with _$League implements DataObject {
       'name': name,
       'start_date': startDate,
       'bout_config_id': boutConfig.id,
+      'season_partitions': seasonPartitions,
     };
   }
 

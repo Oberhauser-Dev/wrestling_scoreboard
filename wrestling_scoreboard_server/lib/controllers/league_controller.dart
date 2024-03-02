@@ -1,3 +1,4 @@
+import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
@@ -5,7 +6,6 @@ import 'package:wrestling_scoreboard_server/controllers/league_weight_class_cont
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
-import 'package:shelf/shelf.dart';
 
 class LeagueController extends EntityController<League> {
   static final LeagueController _singleton = LeagueController._internal();
@@ -21,25 +21,31 @@ class LeagueController extends EntityController<League> {
         isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id});
   }
 
-  static const _weightClassesQuery = '''
+  static String _weightClassesQuery(bool filterBySeasonPartition) => '''
         SELECT wc.* 
         FROM weight_class as wc
         JOIN league_weight_class AS lwc ON lwc.weight_class_id = wc.id
-        WHERE lwc.league_id = @id
+        WHERE lwc.league_id = @id ${filterBySeasonPartition ? 'AND lwc.season_partition = @season_partition' : ''}
         ORDER BY lwc.pos;''';
 
   Future<Response> requestWeightClasses(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(WeightClassController(),
-        isRaw: isRaw(request), sqlQuery: _weightClassesQuery, substitutionValues: {'id': id});
+        isRaw: isRaw(request), sqlQuery: _weightClassesQuery(false), substitutionValues: {'id': id});
   }
 
-  Future<List<WeightClass>> getWeightClasses(String id) {
-    return WeightClassController().getManyFromQuery(_weightClassesQuery, substitutionValues: {'id': id});
+  Future<List<WeightClass>> getWeightClasses(String id, {int? seasonPartition}) {
+    return WeightClassController().getManyFromQuery(_weightClassesQuery(seasonPartition != null), substitutionValues: {
+      'id': id,
+      if (seasonPartition != null) 'season_partition': seasonPartition,
+    });
   }
 
   Future<Response> requestLeagueWeightClasses(Request request, String id) async {
     return EntityController.handleRequestManyOfController(LeagueWeightClassController(),
-        isRaw: isRaw(request), conditions: ['league_id = @id'], substitutionValues: {'id': id}, orderBy: ['pos']);
+        isRaw: isRaw(request),
+        conditions: ['league_id = @id'],
+        substitutionValues: {'id': id},
+        orderBy: ['season_partition', 'pos']);
   }
 
   Future<Response> requestLeagueTeamParticipations(Request request, String id) async {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchEdit extends ConsumerStatefulWidget {
@@ -36,6 +38,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   Team? _homeTeam;
   Team? _guestTeam;
   League? _league;
+  int? _seasonPartition;
   late DateTime _date;
 
   @override
@@ -45,6 +48,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     _guestTeam = widget.teamMatch?.guest.team ?? widget.initialGuestTeam;
     _date = widget.teamMatch?.date ?? DateTime.now();
     _league = widget.teamMatch?.league ?? widget.initialLeague;
+    // Set initial season partition to 0, if match has a league.
+    _seasonPartition = widget.teamMatch?.seasonPartition ?? (_league != null ? 0 : null);
   }
 
   @override
@@ -163,6 +168,17 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           },
         ),
       ),
+      if (_league != null && _league!.seasonPartitions > 1)
+        ListTile(
+          leading: const Icon(Icons.sunny_snowing),
+          title: IndexedToggleButtons(
+            label: localizations.seasonPartition,
+            onPressed: (e) => setState(() => _seasonPartition = e),
+            selected: _seasonPartition,
+            numOptions: _league!.seasonPartitions,
+            getTitle: (e) => e.asSeasonPartition(context, _league!.seasonPartitions),
+          ),
+        ),
     ];
 
     return Form(
@@ -210,6 +226,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           guest: guest,
           date: _date,
           league: _league,
+          seasonPartition: _seasonPartition,
         ),
       );
       navigator.pop();

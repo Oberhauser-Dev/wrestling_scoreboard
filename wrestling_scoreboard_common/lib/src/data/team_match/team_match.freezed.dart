@@ -12,7 +12,7 @@ part of 'team_match.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
   return _TeamMatch.fromJson(json);
@@ -24,6 +24,7 @@ mixin _$TeamMatch {
   Lineup get home => throw _privateConstructorUsedError;
   Lineup get guest => throw _privateConstructorUsedError;
   League? get league => throw _privateConstructorUsedError;
+  int? get seasonPartition => throw _privateConstructorUsedError;
   Person? get matChairman => throw _privateConstructorUsedError;
   Person? get referee => throw _privateConstructorUsedError;
   Person? get judge => throw _privateConstructorUsedError;
@@ -49,6 +50,7 @@ abstract class $TeamMatchCopyWith<$Res> {
       Lineup home,
       Lineup guest,
       League? league,
+      int? seasonPartition,
       Person? matChairman,
       Person? referee,
       Person? judge,
@@ -86,6 +88,7 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
     Object? home = null,
     Object? guest = null,
     Object? league = freezed,
+    Object? seasonPartition = freezed,
     Object? matChairman = freezed,
     Object? referee = freezed,
     Object? judge = freezed,
@@ -114,6 +117,10 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
           ? _value.league
           : league // ignore: cast_nullable_to_non_nullable
               as League?,
+      seasonPartition: freezed == seasonPartition
+          ? _value.seasonPartition
+          : seasonPartition // ignore: cast_nullable_to_non_nullable
+              as int?,
       matChairman: freezed == matChairman
           ? _value.matChairman
           : matChairman // ignore: cast_nullable_to_non_nullable
@@ -257,6 +264,7 @@ abstract class _$$TeamMatchImplCopyWith<$Res> implements $TeamMatchCopyWith<$Res
       Lineup home,
       Lineup guest,
       League? league,
+      int? seasonPartition,
       Person? matChairman,
       Person? referee,
       Person? judge,
@@ -298,6 +306,7 @@ class __$$TeamMatchImplCopyWithImpl<$Res> extends _$TeamMatchCopyWithImpl<$Res, 
     Object? home = null,
     Object? guest = null,
     Object? league = freezed,
+    Object? seasonPartition = freezed,
     Object? matChairman = freezed,
     Object? referee = freezed,
     Object? judge = freezed,
@@ -326,6 +335,10 @@ class __$$TeamMatchImplCopyWithImpl<$Res> extends _$TeamMatchCopyWithImpl<$Res, 
           ? _value.league
           : league // ignore: cast_nullable_to_non_nullable
               as League?,
+      seasonPartition: freezed == seasonPartition
+          ? _value.seasonPartition
+          : seasonPartition // ignore: cast_nullable_to_non_nullable
+              as int?,
       matChairman: freezed == matChairman
           ? _value.matChairman
           : matChairman // ignore: cast_nullable_to_non_nullable
@@ -378,6 +391,7 @@ class _$TeamMatchImpl extends _TeamMatch {
       required this.home,
       required this.guest,
       this.league,
+      this.seasonPartition,
       this.matChairman,
       this.referee,
       this.judge,
@@ -401,6 +415,8 @@ class _$TeamMatchImpl extends _TeamMatch {
   @override
   final League? league;
   @override
+  final int? seasonPartition;
+  @override
   final Person? matChairman;
   @override
   final Person? referee;
@@ -423,7 +439,7 @@ class _$TeamMatchImpl extends _TeamMatch {
 
   @override
   String toString() {
-    return 'TeamMatch(id: $id, home: $home, guest: $guest, league: $league, matChairman: $matChairman, referee: $referee, judge: $judge, timeKeeper: $timeKeeper, transcriptWriter: $transcriptWriter, no: $no, location: $location, date: $date, visitorsCount: $visitorsCount, comment: $comment)';
+    return 'TeamMatch(id: $id, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, matChairman: $matChairman, referee: $referee, judge: $judge, timeKeeper: $timeKeeper, transcriptWriter: $transcriptWriter, no: $no, location: $location, date: $date, visitorsCount: $visitorsCount, comment: $comment)';
   }
 
   @override
@@ -435,6 +451,7 @@ class _$TeamMatchImpl extends _TeamMatch {
             (identical(other.home, home) || other.home == home) &&
             (identical(other.guest, guest) || other.guest == guest) &&
             (identical(other.league, league) || other.league == league) &&
+            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition) &&
             (identical(other.matChairman, matChairman) || other.matChairman == matChairman) &&
             (identical(other.referee, referee) || other.referee == referee) &&
             (identical(other.judge, judge) || other.judge == judge) &&
@@ -449,8 +466,8 @@ class _$TeamMatchImpl extends _TeamMatch {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, home, guest, league, matChairman, referee, judge, timeKeeper,
-      transcriptWriter, no, location, date, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, home, guest, league, seasonPartition, matChairman, referee, judge,
+      timeKeeper, transcriptWriter, no, location, date, visitorsCount, comment);
 
   @JsonKey(ignore: true)
   @override
@@ -472,6 +489,7 @@ abstract class _TeamMatch extends TeamMatch {
       required final Lineup home,
       required final Lineup guest,
       final League? league,
+      final int? seasonPartition,
       final Person? matChairman,
       final Person? referee,
       final Person? judge,
@@ -494,6 +512,8 @@ abstract class _TeamMatch extends TeamMatch {
   Lineup get guest;
   @override
   League? get league;
+  @override
+  int? get seasonPartition;
   @override
   Person? get matChairman;
   @override

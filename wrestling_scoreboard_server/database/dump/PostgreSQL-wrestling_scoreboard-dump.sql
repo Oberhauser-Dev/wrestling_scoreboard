@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
+-- Dumped from database version 13.6 (Ubuntu 13.6-0ubuntu0.21.10.1)
+-- Dumped by pg_dump version 15.6 (Ubuntu 15.6-0ubuntu0.23.10.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -42,7 +42,7 @@ CREATE TYPE public.bout_action_type AS ENUM (
     'verbal',
     'caution',
     'dismissal'
-);
+    );
 
 
 ALTER TYPE public.bout_action_type OWNER TO wrestling;
@@ -62,7 +62,7 @@ CREATE TYPE public.bout_result AS ENUM (
     'vfo',
     'dsq',
     'dsq2'
-);
+    );
 
 
 ALTER TYPE public.bout_result OWNER TO wrestling;
@@ -74,7 +74,7 @@ ALTER TYPE public.bout_result OWNER TO wrestling;
 CREATE TYPE public.bout_role AS ENUM (
     'red',
     'blue'
-);
+    );
 
 
 ALTER TYPE public.bout_role OWNER TO wrestling;
@@ -87,7 +87,7 @@ CREATE TYPE public.gender AS ENUM (
     'male',
     'female',
     'other'
-);
+    );
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
@@ -102,7 +102,7 @@ CREATE TYPE public.person_role AS ENUM (
     'timeKeeper',
     'matPresident',
     'steward'
-);
+    );
 
 
 ALTER TYPE public.person_role OWNER TO wrestling;
@@ -114,7 +114,7 @@ ALTER TYPE public.person_role OWNER TO wrestling;
 CREATE TYPE public.weight_unit AS ENUM (
     'pound',
     'kilogram'
-);
+    );
 
 
 ALTER TYPE public.weight_unit OWNER TO wrestling;
@@ -126,7 +126,7 @@ ALTER TYPE public.weight_unit OWNER TO wrestling;
 CREATE TYPE public.wrestling_style AS ENUM (
     'free',
     'greco'
-);
+    );
 
 
 ALTER TYPE public.wrestling_style OWNER TO wrestling;
@@ -140,13 +140,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.bout (
-    id integer NOT NULL,
-    red_id integer,
-    blue_id integer,
-    weight_class_id integer,
-    winner_role public.bout_role,
-    bout_result public.bout_result,
-    duration_millis integer
+                             id integer NOT NULL,
+                             red_id integer,
+                             blue_id integer,
+                             weight_class_id integer,
+                             winner_role public.bout_role,
+                             bout_result public.bout_result,
+                             duration_millis integer
 );
 
 
@@ -157,12 +157,12 @@ ALTER TABLE public.bout OWNER TO wrestling;
 --
 
 CREATE TABLE public.bout_action (
-    id integer NOT NULL,
-    duration_millis integer NOT NULL,
-    point_count smallint,
-    action_type public.bout_action_type NOT NULL,
-    bout_role public.bout_role NOT NULL,
-    bout_id integer NOT NULL
+                                    id integer NOT NULL,
+                                    duration_millis integer NOT NULL,
+                                    point_count smallint,
+                                    action_type public.bout_action_type NOT NULL,
+                                    bout_role public.bout_role NOT NULL,
+                                    bout_id integer NOT NULL
 );
 
 
@@ -181,7 +181,7 @@ CREATE SEQUENCE public.bout_action_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bout_action_id_seq OWNER TO wrestling;
+ALTER TABLE public.bout_action_id_seq OWNER TO wrestling;
 
 --
 -- Name: bout_action_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -195,12 +195,12 @@ ALTER SEQUENCE public.bout_action_id_seq OWNED BY public.bout_action.id;
 --
 
 CREATE TABLE public.bout_config (
-    id integer NOT NULL,
-    period_duration_secs integer,
-    break_duration_secs integer,
-    activity_duration_secs integer,
-    injury_duration_secs integer,
-    period_count smallint
+                                    id integer NOT NULL,
+                                    period_duration_secs integer,
+                                    break_duration_secs integer,
+                                    activity_duration_secs integer,
+                                    injury_duration_secs integer,
+                                    period_count smallint
 );
 
 
@@ -219,7 +219,7 @@ CREATE SEQUENCE public.bout_config_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bout_config_id_seq OWNER TO wrestling;
+ALTER TABLE public.bout_config_id_seq OWNER TO wrestling;
 
 --
 -- Name: bout_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -241,7 +241,7 @@ CREATE SEQUENCE public.bout_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bout_id_seq OWNER TO wrestling;
+ALTER TABLE public.bout_id_seq OWNER TO wrestling;
 
 --
 -- Name: bout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -255,9 +255,9 @@ ALTER SEQUENCE public.bout_id_seq OWNED BY public.bout.id;
 --
 
 CREATE TABLE public.club (
-    id integer NOT NULL,
-    no character varying(8),
-    name character varying(255) NOT NULL
+                             id integer NOT NULL,
+                             no character varying(8),
+                             name character varying(255) NOT NULL
 );
 
 
@@ -276,7 +276,7 @@ CREATE SEQUENCE public.club_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.club_id_seq OWNER TO wrestling;
+ALTER TABLE public.club_id_seq OWNER TO wrestling;
 
 --
 -- Name: club_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -290,12 +290,12 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 --
 
 CREATE TABLE public.wrestling_event (
-    id integer NOT NULL,
-    date date,
-    location character varying(100),
-    visitors_count integer,
-    comment text,
-    no character varying(16)
+                                        id integer NOT NULL,
+                                        date date,
+                                        location character varying(100),
+                                        visitors_count integer,
+                                        comment text,
+                                        no character varying(16)
 );
 
 
@@ -306,10 +306,10 @@ ALTER TABLE public.wrestling_event OWNER TO wrestling;
 --
 
 CREATE TABLE public.competition (
-    name character varying(127),
-    bout_config_id integer NOT NULL
+                                    name character varying(127),
+                                    bout_config_id integer NOT NULL
 )
-INHERITS (public.wrestling_event);
+    INHERITS (public.wrestling_event);
 
 
 ALTER TABLE public.competition OWNER TO wrestling;
@@ -319,9 +319,9 @@ ALTER TABLE public.competition OWNER TO wrestling;
 --
 
 CREATE TABLE public.competition_bout (
-    id integer NOT NULL,
-    competition_id integer NOT NULL,
-    bout_id integer
+                                         id integer NOT NULL,
+                                         competition_id integer NOT NULL,
+                                         bout_id integer
 );
 
 
@@ -340,7 +340,7 @@ CREATE SEQUENCE public.competition_bout_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.competition_bout_id_seq OWNER TO wrestling;
+ALTER TABLE public.competition_bout_id_seq OWNER TO wrestling;
 
 --
 -- Name: competition_bout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -362,7 +362,7 @@ CREATE SEQUENCE public.competition_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.competition_id_seq OWNER TO wrestling;
+ALTER TABLE public.competition_id_seq OWNER TO wrestling;
 
 --
 -- Name: competition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -376,10 +376,10 @@ ALTER SEQUENCE public.competition_id_seq OWNED BY public.competition.id;
 --
 
 CREATE TABLE public.competition_person (
-    id integer NOT NULL,
-    competition_id integer NOT NULL,
-    person_id integer NOT NULL,
-    person_role public.person_role
+                                           id integer NOT NULL,
+                                           competition_id integer NOT NULL,
+                                           person_id integer NOT NULL,
+                                           person_role public.person_role
 );
 
 
@@ -398,7 +398,7 @@ CREATE SEQUENCE public.event_person_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.event_person_id_seq OWNER TO wrestling;
+ALTER TABLE public.event_person_id_seq OWNER TO wrestling;
 
 --
 -- Name: event_person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -412,10 +412,11 @@ ALTER SEQUENCE public.event_person_id_seq OWNED BY public.competition_person.id;
 --
 
 CREATE TABLE public.league (
-    id integer NOT NULL,
-    name character varying(127) NOT NULL,
-    start_date date NOT NULL,
-    bout_config_id integer NOT NULL
+                               id integer NOT NULL,
+                               name character varying(127) NOT NULL,
+                               start_date date NOT NULL,
+                               bout_config_id integer NOT NULL,
+                               season_partitions integer DEFAULT 1 NOT NULL
 );
 
 
@@ -434,7 +435,7 @@ CREATE SEQUENCE public.league_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.league_id_seq OWNER TO wrestling;
+ALTER TABLE public.league_id_seq OWNER TO wrestling;
 
 --
 -- Name: league_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -448,9 +449,9 @@ ALTER SEQUENCE public.league_id_seq OWNED BY public.league.id;
 --
 
 CREATE TABLE public.league_team_participation (
-    id integer NOT NULL,
-    league_id integer NOT NULL,
-    team_id integer NOT NULL
+                                                  id integer NOT NULL,
+                                                  league_id integer NOT NULL,
+                                                  team_id integer NOT NULL
 );
 
 
@@ -469,7 +470,7 @@ CREATE SEQUENCE public.league_team_participation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.league_team_participation_id_seq OWNER TO wrestling;
+ALTER TABLE public.league_team_participation_id_seq OWNER TO wrestling;
 
 --
 -- Name: league_team_participation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -483,10 +484,11 @@ ALTER SEQUENCE public.league_team_participation_id_seq OWNED BY public.league_te
 --
 
 CREATE TABLE public.league_weight_class (
-    id integer NOT NULL,
-    league_id integer NOT NULL,
-    weight_class_id integer NOT NULL,
-    pos integer DEFAULT 0 NOT NULL
+                                            id integer NOT NULL,
+                                            league_id integer NOT NULL,
+                                            weight_class_id integer NOT NULL,
+                                            pos integer DEFAULT 0 NOT NULL,
+                                            season_partition integer
 );
 
 
@@ -505,7 +507,7 @@ CREATE SEQUENCE public.league_weight_class_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.league_weight_class_id_seq OWNER TO wrestling;
+ALTER TABLE public.league_weight_class_id_seq OWNER TO wrestling;
 
 --
 -- Name: league_weight_class_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -519,10 +521,10 @@ ALTER SEQUENCE public.league_weight_class_id_seq OWNED BY public.league_weight_c
 --
 
 CREATE TABLE public.lineup (
-    id integer NOT NULL,
-    team_id integer,
-    leader_id integer,
-    coach_id integer
+                               id integer NOT NULL,
+                               team_id integer,
+                               leader_id integer,
+                               coach_id integer
 );
 
 
@@ -541,7 +543,7 @@ CREATE SEQUENCE public.lineup_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.lineup_id_seq OWNER TO wrestling;
+ALTER TABLE public.lineup_id_seq OWNER TO wrestling;
 
 --
 -- Name: lineup_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -555,10 +557,10 @@ ALTER SEQUENCE public.lineup_id_seq OWNED BY public.lineup.id;
 --
 
 CREATE TABLE public.membership (
-    id integer NOT NULL,
-    person_id integer NOT NULL,
-    club_id integer NOT NULL,
-    no character varying(55)
+                                   id integer NOT NULL,
+                                   person_id integer NOT NULL,
+                                   club_id integer NOT NULL,
+                                   no character varying(55)
 );
 
 
@@ -577,7 +579,7 @@ CREATE SEQUENCE public.membership_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.membership_id_seq OWNER TO wrestling;
+ALTER TABLE public.membership_id_seq OWNER TO wrestling;
 
 --
 -- Name: membership_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -591,9 +593,9 @@ ALTER SEQUENCE public.membership_id_seq OWNED BY public.membership.id;
 --
 
 CREATE TABLE public.participant_state (
-    id integer NOT NULL,
-    participation_id integer NOT NULL,
-    classification_points smallint
+                                          id integer NOT NULL,
+                                          participation_id integer NOT NULL,
+                                          classification_points smallint
 );
 
 
@@ -612,7 +614,7 @@ CREATE SEQUENCE public.participant_state_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.participant_state_id_seq OWNER TO wrestling;
+ALTER TABLE public.participant_state_id_seq OWNER TO wrestling;
 
 --
 -- Name: participant_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -626,11 +628,11 @@ ALTER SEQUENCE public.participant_state_id_seq OWNED BY public.participant_state
 --
 
 CREATE TABLE public.participation (
-    id integer NOT NULL,
-    membership_id integer NOT NULL,
-    lineup_id integer NOT NULL,
-    weight_class_id integer,
-    weight numeric(5,2)
+                                      id integer NOT NULL,
+                                      membership_id integer NOT NULL,
+                                      lineup_id integer NOT NULL,
+                                      weight_class_id integer,
+                                      weight numeric(5,2)
 );
 
 
@@ -649,7 +651,7 @@ CREATE SEQUENCE public.participation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.participation_id_seq OWNER TO wrestling;
+ALTER TABLE public.participation_id_seq OWNER TO wrestling;
 
 --
 -- Name: participation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -663,11 +665,11 @@ ALTER SEQUENCE public.participation_id_seq OWNED BY public.participation.id;
 --
 
 CREATE TABLE public.person (
-    id integer NOT NULL,
-    prename character varying(100) NOT NULL,
-    surname character varying(100) NOT NULL,
-    birth_date date,
-    gender public.gender
+                               id integer NOT NULL,
+                               prename character varying(100) NOT NULL,
+                               surname character varying(100) NOT NULL,
+                               birth_date date,
+                               gender public.gender
 );
 
 
@@ -686,7 +688,7 @@ CREATE SEQUENCE public.person_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.person_id_seq OWNER TO wrestling;
+ALTER TABLE public.person_id_seq OWNER TO wrestling;
 
 --
 -- Name: person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -700,10 +702,10 @@ ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 --
 
 CREATE TABLE public.team (
-    id integer NOT NULL,
-    name character varying(100) NOT NULL,
-    description character varying(255),
-    club_id integer NOT NULL
+                             id integer NOT NULL,
+                             name character varying(100) NOT NULL,
+                             description character varying(255),
+                             club_id integer NOT NULL
 );
 
 
@@ -722,7 +724,7 @@ CREATE SEQUENCE public.team_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.team_id_seq OWNER TO wrestling;
+ALTER TABLE public.team_id_seq OWNER TO wrestling;
 
 --
 -- Name: team_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -736,21 +738,22 @@ ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
 --
 
 CREATE TABLE public.team_match (
-    id integer,
-    date date,
-    location character varying(100),
-    visitors_count integer,
-    comment text,
-    home_id integer,
-    guest_id integer,
-    referee_id integer,
-    transcript_writer_id integer,
-    time_keeper_id integer,
-    mat_chairman_id integer,
-    league_id integer,
-    judge_id integer
+                                   id integer,
+                                   date date,
+                                   location character varying(100),
+                                   visitors_count integer,
+                                   comment text,
+                                   home_id integer,
+                                   guest_id integer,
+                                   referee_id integer,
+                                   transcript_writer_id integer,
+                                   time_keeper_id integer,
+                                   mat_chairman_id integer,
+                                   league_id integer,
+                                   judge_id integer,
+                                   season_partition integer
 )
-INHERITS (public.wrestling_event);
+    INHERITS (public.wrestling_event);
 
 
 ALTER TABLE public.team_match OWNER TO wrestling;
@@ -760,10 +763,10 @@ ALTER TABLE public.team_match OWNER TO wrestling;
 --
 
 CREATE TABLE public.team_match_bout (
-    id integer NOT NULL,
-    team_match_id integer NOT NULL,
-    bout_id integer NOT NULL,
-    pos integer DEFAULT 0 NOT NULL
+                                        id integer NOT NULL,
+                                        team_match_id integer NOT NULL,
+                                        bout_id integer NOT NULL,
+                                        pos integer DEFAULT 0 NOT NULL
 );
 
 
@@ -782,7 +785,7 @@ CREATE SEQUENCE public.team_match_bout_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.team_match_bout_id_seq OWNER TO wrestling;
+ALTER TABLE public.team_match_bout_id_seq OWNER TO wrestling;
 
 --
 -- Name: team_match_bout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -804,7 +807,7 @@ CREATE SEQUENCE public.team_match_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.team_match_id_seq OWNER TO wrestling;
+ALTER TABLE public.team_match_id_seq OWNER TO wrestling;
 
 --
 -- Name: team_match_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -818,11 +821,11 @@ ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
 --
 
 CREATE TABLE public.weight_class (
-    id integer NOT NULL,
-    suffix character varying(255),
-    weight smallint NOT NULL,
-    style public.wrestling_style DEFAULT 'free'::public.wrestling_style NOT NULL,
-    unit public.weight_unit
+                                     id integer NOT NULL,
+                                     suffix character varying(255),
+                                     weight smallint NOT NULL,
+                                     style public.wrestling_style DEFAULT 'free'::public.wrestling_style NOT NULL,
+                                     unit public.weight_unit
 );
 
 
@@ -841,7 +844,7 @@ CREATE SEQUENCE public.weight_class_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.weight_class_id_seq OWNER TO wrestling;
+ALTER TABLE public.weight_class_id_seq OWNER TO wrestling;
 
 --
 -- Name: weight_class_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -863,7 +866,7 @@ CREATE SEQUENCE public.wrestling_event_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.wrestling_event_id_seq OWNER TO wrestling;
+ALTER TABLE public.wrestling_event_id_seq OWNER TO wrestling;
 
 --
 -- Name: wrestling_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
@@ -1086,10 +1089,10 @@ COPY public.competition_person (id, competition_id, person_id, person_role) FROM
 -- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.league (id, name, start_date, bout_config_id) FROM stdin;
-2	Real Pro Wrestling Jn	2021-10-01	1
-3	National League	2021-10-01	1
-1	Real Pro Wrestling	2021-10-01	1
+COPY public.league (id, name, start_date, bout_config_id, season_partitions) FROM stdin;
+2	Real Pro Wrestling Jn	2021-10-01	1	1
+3	National League	2021-10-01	1	2
+1	Real Pro Wrestling	2021-10-01	1	3
 \.
 
 
@@ -1110,14 +1113,14 @@ COPY public.league_team_participation (id, league_id, team_id) FROM stdin;
 -- Data for Name: league_weight_class; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.league_weight_class (id, league_id, weight_class_id, pos) FROM stdin;
-1	1	1	1
-2	1	3	3
-3	1	4	4
-4	1	7	7
-5	1	2	2
-6	1	10	10
-7	2	1	5
+COPY public.league_weight_class (id, league_id, weight_class_id, pos, season_partition) FROM stdin;
+1	1	1	1	\N
+2	1	3	3	\N
+3	1	4	4	\N
+4	1	7	7	\N
+5	1	2	2	\N
+6	1	10	10	\N
+7	2	1	5	\N
 \.
 
 
@@ -1213,8 +1216,8 @@ COPY public.team (id, name, description, club_id) FROM stdin;
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id) FROM stdin;
-1	2021-07-10	Springfield	\N	\N	\N	1	2	9	\N	\N	\N	1	\N
+COPY public.team_match (id, date, location, visitors_count, comment, no, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id, season_partition) FROM stdin;
+1	2021-07-10	Springfield	\N	\N		1	2	\N	\N	\N	\N	1	\N	1
 \.
 
 

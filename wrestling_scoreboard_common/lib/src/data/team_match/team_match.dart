@@ -24,6 +24,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
     required Lineup home,
     required Lineup guest,
     League? league,
+    int? seasonPartition,
     Person? matChairman,
     Person? referee,
     Person? judge,
@@ -68,6 +69,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
       transcriptWriter: transcriptWriterId == null ? null : await getSingle<Person>(transcriptWriterId),
       timeKeeper: timeKeeperId == null ? null : await getSingle<Person>(timeKeeperId),
       league: leagueId == null ? null : await getSingle<League>(leagueId),
+      seasonPartition: e['season_partition'] as int?,
     );
   }
 
@@ -78,6 +80,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
         'home_id': home.id,
         'guest_id': guest.id,
         'league_id': league?.id,
+        'season_partition': seasonPartition,
         'referee_id': referee?.id,
         'judge_id': judge?.id,
         'mat_chairman_id': matChairman?.id,

@@ -16,6 +16,7 @@ class LeagueWeightClass with _$LeagueWeightClass implements DataObject {
     required int pos,
     required League league,
     required WeightClass weightClass,
+    int? seasonPartition,
   }) = _LeagueWeightClass;
 
   factory LeagueWeightClass.fromJson(Map<String, Object?> json) => _$LeagueWeightClassFromJson(json);
@@ -27,6 +28,7 @@ class LeagueWeightClass with _$LeagueWeightClass implements DataObject {
       'pos': pos,
       'league_id': league.id,
       'weight_class_id': weightClass.id,
+      'season_partition': seasonPartition,
     };
   }
 
@@ -35,7 +37,8 @@ class LeagueWeightClass with _$LeagueWeightClass implements DataObject {
         id: e['id'] as int?,
         league: (await getSingle<League>(e['league_id'] as int))!,
         weightClass: (await getSingle<WeightClass>(e['weight_class_id'] as int))!,
-        pos: e['pos'],
+        pos: e['pos'] as int,
+        seasonPartition: e['season_partition'] as int?,
       );
 
   @override

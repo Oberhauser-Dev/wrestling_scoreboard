@@ -50,7 +50,8 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final oldBouts = (await getBouts(id));
     final weightClasses = teamMatch.league?.id == null
         ? <WeightClass>[]
-        : (await LeagueController().getWeightClasses(teamMatch.league!.id.toString()));
+        : (await LeagueController()
+            .getWeightClasses(teamMatch.league!.id.toString(), seasonPartition: teamMatch.seasonPartition));
     final homeParticipations = await ParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id});
     final guestParticipations = await ParticipationController()

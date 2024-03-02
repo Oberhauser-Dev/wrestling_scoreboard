@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
@@ -52,7 +53,12 @@ class LeagueOverview extends ConsumerWidget {
               // '${localizations.injuryDurationInSecs}: ${data.boutConfig.injuryDuration.inSeconds}',
               subtitle: localizations.periodDurationInSecs, // Start date
               icon: Icons.timer,
-            )
+            ),
+            ContentItem(
+              title: data.seasonPartitions.toString(),
+              subtitle: localizations.seasonPartitions,
+              icon: Icons.sunny_snowing,
+            ),
           ],
         );
         return Scaffold(
@@ -117,7 +123,8 @@ class LeagueOverview extends ConsumerWidget {
                       initialData: e,
                       builder: (context, data) {
                         return ContentItem(
-                            title: '${data.weightClass.name} ${data.weightClass.style.localize(context)}',
+                            title:
+                                '${data.weightClass.name} ${data.weightClass.style.localize(context)} ${data.seasonPartition == null ? '' : '(${data.seasonPartition!.asSeasonPartition(context, data.league.seasonPartitions)})'}',
                             icon: Icons.fitness_center,
                             onTap: () => handleSelectedWeightClass(data, context));
                       },

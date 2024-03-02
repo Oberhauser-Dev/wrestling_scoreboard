@@ -15,7 +15,7 @@ sudo apt install postgresql-client-common
 sudo apt-get install postgresql-client
 ```
 
-On Linux you may want to login as postgres user: `sudo -u postgres -i`
+On Linux you may want to log in as postgres user: `sudo -u postgres -i`
 
 #### Tipps:
 

@@ -12,7 +12,7 @@ part of 'league.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 League _$LeagueFromJson(Map<String, dynamic> json) {
   return _League.fromJson(json);
@@ -24,6 +24,7 @@ mixin _$League {
   String get name => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   BoutConfig get boutConfig => throw _privateConstructorUsedError;
+  int get seasonPartitions => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,7 @@ mixin _$League {
 abstract class $LeagueCopyWith<$Res> {
   factory $LeagueCopyWith(League value, $Res Function(League) then) = _$LeagueCopyWithImpl<$Res, League>;
   @useResult
-  $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig});
+  $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig, int seasonPartitions});
 
   $BoutConfigCopyWith<$Res> get boutConfig;
 }
@@ -55,6 +56,7 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
     Object? name = null,
     Object? startDate = null,
     Object? boutConfig = null,
+    Object? seasonPartitions = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -73,6 +75,10 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
           ? _value.boutConfig
           : boutConfig // ignore: cast_nullable_to_non_nullable
               as BoutConfig,
+      seasonPartitions: null == seasonPartitions
+          ? _value.seasonPartitions
+          : seasonPartitions // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -91,7 +97,7 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
       __$$LeagueImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig});
+  $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig, int seasonPartitions});
 
   @override
   $BoutConfigCopyWith<$Res> get boutConfig;
@@ -109,6 +115,7 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
     Object? name = null,
     Object? startDate = null,
     Object? boutConfig = null,
+    Object? seasonPartitions = null,
   }) {
     return _then(_$LeagueImpl(
       id: freezed == id
@@ -127,6 +134,10 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
           ? _value.boutConfig
           : boutConfig // ignore: cast_nullable_to_non_nullable
               as BoutConfig,
+      seasonPartitions: null == seasonPartitions
+          ? _value.seasonPartitions
+          : seasonPartitions // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -134,7 +145,9 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
 /// @nodoc
 @JsonSerializable()
 class _$LeagueImpl extends _League {
-  const _$LeagueImpl({this.id, required this.name, required this.startDate, required this.boutConfig}) : super._();
+  const _$LeagueImpl(
+      {this.id, required this.name, required this.startDate, required this.boutConfig, required this.seasonPartitions})
+      : super._();
 
   factory _$LeagueImpl.fromJson(Map<String, dynamic> json) => _$$LeagueImplFromJson(json);
 
@@ -146,10 +159,12 @@ class _$LeagueImpl extends _League {
   final DateTime startDate;
   @override
   final BoutConfig boutConfig;
+  @override
+  final int seasonPartitions;
 
   @override
   String toString() {
-    return 'League(id: $id, name: $name, startDate: $startDate, boutConfig: $boutConfig)';
+    return 'League(id: $id, name: $name, startDate: $startDate, boutConfig: $boutConfig, seasonPartitions: $seasonPartitions)';
   }
 
   @override
@@ -160,12 +175,13 @@ class _$LeagueImpl extends _League {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.startDate, startDate) || other.startDate == startDate) &&
-            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig));
+            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
+            (identical(other.seasonPartitions, seasonPartitions) || other.seasonPartitions == seasonPartitions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, startDate, boutConfig);
+  int get hashCode => Object.hash(runtimeType, id, name, startDate, boutConfig, seasonPartitions);
 
   @JsonKey(ignore: true)
   @override
@@ -185,7 +201,8 @@ abstract class _League extends League {
       {final int? id,
       required final String name,
       required final DateTime startDate,
-      required final BoutConfig boutConfig}) = _$LeagueImpl;
+      required final BoutConfig boutConfig,
+      required final int seasonPartitions}) = _$LeagueImpl;
   const _League._() : super._();
 
   factory _League.fromJson(Map<String, dynamic> json) = _$LeagueImpl.fromJson;
@@ -198,6 +215,8 @@ abstract class _League extends League {
   DateTime get startDate;
   @override
   BoutConfig get boutConfig;
+  @override
+  int get seasonPartitions;
   @override
   @JsonKey(ignore: true)
   _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => throw _privateConstructorUsedError;

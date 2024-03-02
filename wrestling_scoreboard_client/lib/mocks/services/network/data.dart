@@ -5,18 +5,21 @@ League _leagueMenRPW = League(
   name: 'Real Pro Wrestling',
   startDate: DateTime(2021),
   boutConfig: const BoutConfig(id: 1),
+  seasonPartitions: 2,
 );
 League _leagueJnRPW = League(
   id: 2,
   name: 'Real Pro Wrestling Jn',
   startDate: DateTime(2021),
   boutConfig: const BoutConfig(id: 2),
+  seasonPartitions: 2,
 );
 League _leagueNational = League(
   id: 3,
   name: 'National League',
   startDate: DateTime(2021),
   boutConfig: const BoutConfig(id: 3),
+  seasonPartitions: 2,
 );
 
 Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers');

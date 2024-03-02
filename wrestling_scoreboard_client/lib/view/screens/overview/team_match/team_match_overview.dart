@@ -3,18 +3,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchOverview extends ConsumerWidget {
@@ -97,6 +98,12 @@ class TeamMatchOverview extends ConsumerWidget {
                             title: match.league?.name ?? '-',
                             subtitle: localizations.league,
                             icon: Icons.emoji_events,
+                          ),
+                          ContentItem(
+                            title: match.seasonPartition?.asSeasonPartition(context, match.league?.seasonPartitions) ??
+                                '-',
+                            subtitle: localizations.seasonPartition,
+                            icon: Icons.sunny_snowing,
                           ),
                         ]),
                     ListGroup(
@@ -211,12 +218,14 @@ class TeamMatchOverview extends ConsumerWidget {
   handleSelectedLineup(
       Lineup lineup, League league, TeamMatch match, NavigatorState navigator, DataManager dataManager) async {
     final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
-    final weightClasses = await dataManager.readMany<WeightClass, League>(filterObject: league);
+    final weightClasses = (await dataManager.readMany<LeagueWeightClass, League>(filterObject: league))
+        .where((element) => element.seasonPartition == match.seasonPartition)
+        .toList();
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
           return LineupEdit(
-            weightClasses: weightClasses,
+            weightClasses: weightClasses.map((e) => e.weightClass).toList(),
             participations: participations,
             lineup: lineup,
             onSubmitGenerate: () {

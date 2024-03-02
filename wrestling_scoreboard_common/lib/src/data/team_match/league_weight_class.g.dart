@@ -11,6 +11,7 @@ _$LeagueWeightClassImpl _$$LeagueWeightClassImplFromJson(Map<String, dynamic> js
       pos: json['pos'] as int,
       league: League.fromJson(json['league'] as Map<String, dynamic>),
       weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
+      seasonPartition: json['seasonPartition'] as int?,
     );
 
 Map<String, dynamic> _$$LeagueWeightClassImplToJson(_$LeagueWeightClassImpl instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$LeagueWeightClassImplToJson(_$LeagueWeightClassImpl inst
       'pos': instance.pos,
       'league': instance.league.toJson(),
       'weightClass': instance.weightClass.toJson(),
+      'seasonPartition': instance.seasonPartition,
     };

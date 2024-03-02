@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_config_edit.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueEdit extends BoutConfigEdit {
@@ -17,11 +18,13 @@ class LeagueEdit extends BoutConfigEdit {
 
 class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
   String? _name;
+  late int _seasonPartitions;
   late DateTime _startDate;
 
   @override
   void initState() {
     _startDate = widget.league?.startDate ?? DateTime.now();
+    _seasonPartitions = widget.league?.seasonPartitions ?? 1;
     super.initState();
   }
 
@@ -70,12 +73,33 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
           initialValue: _startDate.toDateString(context),
         ),
       ),
+      ListTile(
+        leading: const Icon(Icons.sunny_snowing),
+        title: TextFormField(
+          initialValue: widget.league?.seasonPartitions.toString() ?? '',
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.seasonPartitions,
+          ),
+          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d'))],
+          onSaved: (String? value) {
+            _seasonPartitions = int.tryParse(value ?? '') ?? 1;
+            if (_seasonPartitions < 1) _seasonPartitions = 1;
+          },
+        ),
+      ),
     ]);
   }
 
   @override
   Future<void> handleNested(BoutConfig dataObject) async {
-    await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
-        League(id: widget.league?.id, name: _name!, startDate: _startDate, boutConfig: dataObject));
+    await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(League(
+      id: widget.league?.id,
+      name: _name!,
+      startDate: _startDate,
+      boutConfig: dataObject,
+      seasonPartitions: _seasonPartitions,
+    ));
   }
 }

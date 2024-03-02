@@ -12,7 +12,7 @@ part of 'league_weight_class.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 LeagueWeightClass _$LeagueWeightClassFromJson(Map<String, dynamic> json) {
   return _LeagueWeightClass.fromJson(json);
@@ -24,6 +24,7 @@ mixin _$LeagueWeightClass {
   int get pos => throw _privateConstructorUsedError;
   League get league => throw _privateConstructorUsedError;
   WeightClass get weightClass => throw _privateConstructorUsedError;
+  int? get seasonPartition => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $LeagueWeightClassCopyWith<$Res> {
   factory $LeagueWeightClassCopyWith(LeagueWeightClass value, $Res Function(LeagueWeightClass) then) =
       _$LeagueWeightClassCopyWithImpl<$Res, LeagueWeightClass>;
   @useResult
-  $Res call({int? id, int pos, League league, WeightClass weightClass});
+  $Res call({int? id, int pos, League league, WeightClass weightClass, int? seasonPartition});
 
   $LeagueCopyWith<$Res> get league;
   $WeightClassCopyWith<$Res> get weightClass;
@@ -58,6 +59,7 @@ class _$LeagueWeightClassCopyWithImpl<$Res, $Val extends LeagueWeightClass>
     Object? pos = null,
     Object? league = null,
     Object? weightClass = null,
+    Object? seasonPartition = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -76,6 +78,10 @@ class _$LeagueWeightClassCopyWithImpl<$Res, $Val extends LeagueWeightClass>
           ? _value.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
               as WeightClass,
+      seasonPartition: freezed == seasonPartition
+          ? _value.seasonPartition
+          : seasonPartition // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -102,7 +108,7 @@ abstract class _$$LeagueWeightClassImplCopyWith<$Res> implements $LeagueWeightCl
       __$$LeagueWeightClassImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, int pos, League league, WeightClass weightClass});
+  $Res call({int? id, int pos, League league, WeightClass weightClass, int? seasonPartition});
 
   @override
   $LeagueCopyWith<$Res> get league;
@@ -123,6 +129,7 @@ class __$$LeagueWeightClassImplCopyWithImpl<$Res> extends _$LeagueWeightClassCop
     Object? pos = null,
     Object? league = null,
     Object? weightClass = null,
+    Object? seasonPartition = freezed,
   }) {
     return _then(_$LeagueWeightClassImpl(
       id: freezed == id
@@ -141,6 +148,10 @@ class __$$LeagueWeightClassImplCopyWithImpl<$Res> extends _$LeagueWeightClassCop
           ? _value.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
               as WeightClass,
+      seasonPartition: freezed == seasonPartition
+          ? _value.seasonPartition
+          : seasonPartition // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -148,7 +159,8 @@ class __$$LeagueWeightClassImplCopyWithImpl<$Res> extends _$LeagueWeightClassCop
 /// @nodoc
 @JsonSerializable()
 class _$LeagueWeightClassImpl extends _LeagueWeightClass {
-  const _$LeagueWeightClassImpl({this.id, required this.pos, required this.league, required this.weightClass})
+  const _$LeagueWeightClassImpl(
+      {this.id, required this.pos, required this.league, required this.weightClass, this.seasonPartition})
       : super._();
 
   factory _$LeagueWeightClassImpl.fromJson(Map<String, dynamic> json) => _$$LeagueWeightClassImplFromJson(json);
@@ -161,10 +173,12 @@ class _$LeagueWeightClassImpl extends _LeagueWeightClass {
   final League league;
   @override
   final WeightClass weightClass;
+  @override
+  final int? seasonPartition;
 
   @override
   String toString() {
-    return 'LeagueWeightClass(id: $id, pos: $pos, league: $league, weightClass: $weightClass)';
+    return 'LeagueWeightClass(id: $id, pos: $pos, league: $league, weightClass: $weightClass, seasonPartition: $seasonPartition)';
   }
 
   @override
@@ -175,12 +189,13 @@ class _$LeagueWeightClassImpl extends _LeagueWeightClass {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass));
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
+            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, pos, league, weightClass);
+  int get hashCode => Object.hash(runtimeType, id, pos, league, weightClass, seasonPartition);
 
   @JsonKey(ignore: true)
   @override
@@ -201,7 +216,8 @@ abstract class _LeagueWeightClass extends LeagueWeightClass {
       {final int? id,
       required final int pos,
       required final League league,
-      required final WeightClass weightClass}) = _$LeagueWeightClassImpl;
+      required final WeightClass weightClass,
+      final int? seasonPartition}) = _$LeagueWeightClassImpl;
   const _LeagueWeightClass._() : super._();
 
   factory _LeagueWeightClass.fromJson(Map<String, dynamic> json) = _$LeagueWeightClassImpl.fromJson;
@@ -214,6 +230,8 @@ abstract class _LeagueWeightClass extends LeagueWeightClass {
   League get league;
   @override
   WeightClass get weightClass;
+  @override
+  int? get seasonPartition;
   @override
   @JsonKey(ignore: true)
   _$$LeagueWeightClassImplCopyWith<_$LeagueWeightClassImpl> get copyWith => throw _privateConstructorUsedError;
