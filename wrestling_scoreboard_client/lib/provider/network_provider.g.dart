@@ -6,31 +6,123 @@ part of 'network_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$webSocketStateStreamHash() => r'04de839e83ee6df7389b8831f579692fbe40e400';
+@ProviderFor(DataManagerNotifier)
+const dataManagerNotifierProvider = DataManagerNotifierProvider._();
 
-/// See also [webSocketStateStream].
-@ProviderFor(webSocketStateStream)
-final webSocketStateStreamProvider = StreamProvider<WebSocketConnectionState>.internal(
-  webSocketStateStream,
-  name: r'webSocketStateStreamProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$webSocketStateStreamHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>> {
+  const DataManagerNotifierProvider._({super.runNotifierBuildOverride, DataManagerNotifier Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'dataManagerNotifierProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
 
-typedef WebSocketStateStreamRef = StreamProviderRef<WebSocketConnectionState>;
+  final DataManagerNotifier Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$dataManagerNotifierHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<DataManager>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<DataManager>>>(value),
+    );
+  }
+
+  @$internal
+  @override
+  DataManagerNotifier create() => _createCb?.call() ?? DataManagerNotifier();
+
+  @$internal
+  @override
+  DataManagerNotifierProvider $copyWithCreate(
+    DataManagerNotifier Function() create,
+  ) {
+    return DataManagerNotifierProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  DataManagerNotifierProvider $copyWithBuild(
+    Raw<Future<DataManager>> Function(
+      Ref<Raw<Future<DataManager>>>,
+      DataManagerNotifier,
+    ) build,
+  ) {
+    return DataManagerNotifierProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<DataManagerNotifier, Raw<Future<DataManager>>> $createElement(ProviderContainer container) =>
+      $NotifierProviderElement(this, container);
+}
+
 String _$dataManagerNotifierHash() => r'5b99bb7d219662dd70ff7bf93f67d89a4c48f2e7';
 
-/// See also [DataManagerNotifier].
-@ProviderFor(DataManagerNotifier)
-final dataManagerNotifierProvider = NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>>.internal(
-  DataManagerNotifier.new,
-  name: r'dataManagerNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$dataManagerNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
+  Raw<Future<DataManager>> build();
+  @$internal
+  @override
+  Raw<Future<DataManager>> runBuild() => build();
+}
 
-typedef _$DataManagerNotifier = Notifier<Raw<Future<DataManager>>>;
+typedef WebSocketStateStreamRef = Ref<AsyncValue<WebSocketConnectionState>>;
+
+@ProviderFor(webSocketStateStream)
+const webSocketStateStreamProvider = WebSocketStateStreamProvider._();
+
+final class WebSocketStateStreamProvider extends $FunctionalProvider<AsyncValue<WebSocketConnectionState>,
+        Stream<WebSocketConnectionState>, WebSocketStateStreamRef>
+    with $FutureModifier<WebSocketConnectionState>, $StreamProvider<WebSocketConnectionState, WebSocketStateStreamRef> {
+  const WebSocketStateStreamProvider._(
+      {Stream<WebSocketConnectionState> Function(
+        WebSocketStateStreamRef ref,
+      )? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'webSocketStateStreamProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final Stream<WebSocketConnectionState> Function(
+    WebSocketStateStreamRef ref,
+  )? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$webSocketStateStreamHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<WebSocketConnectionState> $createElement(ProviderContainer container) =>
+      $StreamProviderElement(this, container);
+
+  @override
+  WebSocketStateStreamProvider $copyWithCreate(
+    Stream<WebSocketConnectionState> Function(
+      WebSocketStateStreamRef ref,
+    ) create,
+  ) {
+    return WebSocketStateStreamProvider._(create: create);
+  }
+
+  @override
+  Stream<WebSocketConnectionState> create(WebSocketStateStreamRef ref) {
+    final _$cb = _createCb ?? webSocketStateStream;
+    return _$cb(ref);
+  }
+}
+
+String _$webSocketStateStreamHash() => r'04de839e83ee6df7389b8831f579692fbe40e400';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member

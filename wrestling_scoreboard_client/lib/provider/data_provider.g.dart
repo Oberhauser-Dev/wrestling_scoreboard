@@ -6,357 +6,273 @@ part of 'data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$singleDataStreamHash() => r'50dcde28e62121bc26b9c2b70a254ed0f3217d27';
+typedef SingleDataStreamRef<T extends DataObject> = Ref<AsyncValue<T>>;
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [singleDataStream].
 @ProviderFor(singleDataStream)
-const singleDataStreamProvider = SingleDataStreamFamily();
+const singleDataStreamProvider = SingleDataStreamFamily._();
 
-/// See also [singleDataStream].
-class SingleDataStreamFamily extends Family {
-  /// See also [singleDataStream].
-  const SingleDataStreamFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
-
-  @override
-  String? get name => r'singleDataStreamProvider';
-
-  /// See also [singleDataStream].
-  SingleDataStreamProvider<T> call<T extends DataObject>(
-    SingleProviderData<T> pData,
-  ) {
-    return SingleDataStreamProvider<T>(
-      pData,
-    );
-  }
-
-  @visibleForOverriding
-  @override
-  SingleDataStreamProvider<DataObject> getProviderOverride(
-    covariant SingleDataStreamProvider<DataObject> provider,
-  ) {
-    return call(
-      provider.pData,
-    );
-  }
-
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(Stream<T> Function<T extends DataObject>(SingleDataStreamRef ref) create) {
-    return _$SingleDataStreamFamilyOverride(this, create);
-  }
-}
-
-class _$SingleDataStreamFamilyOverride implements FamilyOverride {
-  _$SingleDataStreamFamilyOverride(this.overriddenFamily, this.create);
-
-  final Stream<T> Function<T extends DataObject>(SingleDataStreamRef ref) create;
-
-  @override
-  final SingleDataStreamFamily overriddenFamily;
-
-  @override
-  SingleDataStreamProvider getProviderOverride(
-    covariant SingleDataStreamProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [singleDataStream].
-class SingleDataStreamProvider<T extends DataObject> extends AutoDisposeStreamProvider<T> {
-  /// See also [singleDataStream].
-  SingleDataStreamProvider(
-    SingleProviderData<T> pData,
-  ) : this._internal(
-          (ref) => singleDataStream<T>(
-            ref as SingleDataStreamRef<T>,
-            pData,
-          ),
-          from: singleDataStreamProvider,
+final class SingleDataStreamProvider<T extends DataObject>
+    extends $FunctionalProvider<AsyncValue<T>, Stream<T>, SingleDataStreamRef<T>>
+    with $FutureModifier<T>, $StreamProvider<T, SingleDataStreamRef<T>> {
+  const SingleDataStreamProvider._(
+      {required SingleDataStreamFamily super.from,
+      required SingleProviderData<T> super.argument,
+      Stream<T> Function(
+        SingleDataStreamRef<T> ref,
+        SingleProviderData<T> pData,
+      )? create})
+      : _createCb = create,
+        super(
           name: r'singleDataStreamProvider',
-          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$singleDataStreamHash,
-          dependencies: SingleDataStreamFamily._dependencies,
-          allTransitiveDependencies: SingleDataStreamFamily._allTransitiveDependencies,
-          pData: pData,
+          isAutoDispose: true,
+          dependencies: null,
+          allTransitiveDependencies: null,
         );
 
-  SingleDataStreamProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.pData,
-  }) : super.internal();
-
-  final SingleProviderData<T> pData;
+  final Stream<T> Function(
+    SingleDataStreamRef<T> ref,
+    SingleProviderData<T> pData,
+  )? _createCb;
 
   @override
-  Override overrideWith(
-    Stream<T> Function(SingleDataStreamRef<T> ref) create,
+  String debugGetCreateSourceHash() => _$singleDataStreamHash();
+
+  SingleDataStreamProvider<T> _copyWithCreate(
+    Stream<T> Function<T extends DataObject>(
+      SingleDataStreamRef<T> ref,
+      SingleProviderData<T> pData,
+    ) create,
   ) {
-    return ProviderOverride(
-      origin: this,
-      override: SingleDataStreamProvider<T>._internal(
-        (ref) => create(ref as SingleDataStreamRef<T>),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        pData: pData,
-      ),
-    );
+    return SingleDataStreamProvider<T>._(
+        argument: argument as SingleProviderData<T>, from: from! as SingleDataStreamFamily, create: create<T>);
   }
 
   @override
-  (SingleProviderData<T>,) get argument {
-    return (pData,);
+  String toString() {
+    return r'singleDataStreamProvider'
+        '<${T}>'
+        '($argument)';
   }
+
+  @$internal
+  @override
+  $StreamProviderElement<T> $createElement(ProviderContainer container) => $StreamProviderElement(this, container);
 
   @override
-  AutoDisposeStreamProviderElement<T> createElement() {
-    return _SingleDataStreamProviderElement(this);
-  }
-
-  SingleDataStreamProvider _copyWith(
-    Stream<T> Function<T extends DataObject>(SingleDataStreamRef ref) create,
+  SingleDataStreamProvider<T> $copyWithCreate(
+    Stream<T> Function(
+      SingleDataStreamRef<T> ref,
+    ) create,
   ) {
-    return SingleDataStreamProvider._internal(
-      (ref) => create(ref as SingleDataStreamRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      pData: pData,
+    return SingleDataStreamProvider<T>._(
+        argument: argument as SingleProviderData<T>,
+        from: from! as SingleDataStreamFamily,
+        create: (
+          ref,
+          SingleProviderData<T> pData,
+        ) =>
+            create(ref));
+  }
+
+  @override
+  Stream<T> create(SingleDataStreamRef<T> ref) {
+    final _$cb = _createCb ?? singleDataStream<T>;
+    final argument = this.argument as SingleProviderData<T>;
+    return _$cb(
+      ref,
+      argument,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SingleDataStreamProvider && other.runtimeType == runtimeType && other.pData == pData;
+    return other is SingleDataStreamProvider && other.runtimeType == runtimeType && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, pData.hashCode);
-    hash = _SystemHash.combine(hash, T.hashCode);
-
-    return _SystemHash.finish(hash);
+    return Object.hash(runtimeType, argument);
   }
 }
 
-mixin SingleDataStreamRef<T extends DataObject> on AutoDisposeStreamProviderRef<T> {
-  /// The parameter `pData` of this provider.
-  SingleProviderData<T> get pData;
-}
+String _$singleDataStreamHash() => r'50dcde28e62121bc26b9c2b70a254ed0f3217d27';
 
-class _SingleDataStreamProviderElement<T extends DataObject> extends AutoDisposeStreamProviderElement<T>
-    with SingleDataStreamRef<T> {
-  _SingleDataStreamProviderElement(super.provider);
+final class SingleDataStreamFamily extends Family {
+  const SingleDataStreamFamily._()
+      : super(
+          name: r'singleDataStreamProvider',
+          dependencies: null,
+          allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  SingleDataStreamProvider<T> call<T extends DataObject>(
+    SingleProviderData<T> pData,
+  ) =>
+      SingleDataStreamProvider<T>._(argument: pData, from: this);
 
   @override
-  SingleProviderData<T> get pData => (origin as SingleDataStreamProvider<T>).pData;
+  String debugGetCreateSourceHash() => _$singleDataStreamHash();
+
+  @override
+  String toString() => r'singleDataStreamProvider';
+
+  /// {@macro riverpod.override_with}
+  Override overrideWith(
+    Stream<T> Function<T extends DataObject>(
+      SingleDataStreamRef<T> ref,
+      SingleProviderData<T> args,
+    ) create,
+  ) {
+    return $FamilyOverride(
+      from: this,
+      createElement: (container, provider) {
+        provider as SingleDataStreamProvider;
+
+        return provider._copyWithCreate(<T extends DataObject>(
+          ref,
+          SingleProviderData<T> pData,
+        ) {
+          return create(ref, pData);
+        }).$createElement(container);
+      },
+    );
+  }
+}
+
+typedef ManyDataStreamRef<T extends DataObject, S extends DataObject?> = Ref<AsyncValue<List<T>>>;
+
+@ProviderFor(manyDataStream)
+const manyDataStreamProvider = ManyDataStreamFamily._();
+
+final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
+    extends $FunctionalProvider<AsyncValue<List<T>>, Stream<List<T>>, ManyDataStreamRef<T, S>>
+    with $FutureModifier<List<T>>, $StreamProvider<List<T>, ManyDataStreamRef<T, S>> {
+  const ManyDataStreamProvider._(
+      {required ManyDataStreamFamily super.from,
+      required ManyProviderData<T, S> super.argument,
+      Stream<List<T>> Function(
+        ManyDataStreamRef<T, S> ref,
+        ManyProviderData<T, S> pData,
+      )? create})
+      : _createCb = create,
+        super(
+          name: r'manyDataStreamProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final Stream<List<T>> Function(
+    ManyDataStreamRef<T, S> ref,
+    ManyProviderData<T, S> pData,
+  )? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$manyDataStreamHash();
+
+  ManyDataStreamProvider<T, S> _copyWithCreate(
+    Stream<List<T>> Function<T extends DataObject, S extends DataObject?>(
+      ManyDataStreamRef<T, S> ref,
+      ManyProviderData<T, S> pData,
+    ) create,
+  ) {
+    return ManyDataStreamProvider<T, S>._(
+        argument: argument as ManyProviderData<T, S>, from: from! as ManyDataStreamFamily, create: create<T, S>);
+  }
+
+  @override
+  String toString() {
+    return r'manyDataStreamProvider'
+        '<${T}, ${S}>'
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<T>> $createElement(ProviderContainer container) =>
+      $StreamProviderElement(this, container);
+
+  @override
+  ManyDataStreamProvider<T, S> $copyWithCreate(
+    Stream<List<T>> Function(
+      ManyDataStreamRef<T, S> ref,
+    ) create,
+  ) {
+    return ManyDataStreamProvider<T, S>._(
+        argument: argument as ManyProviderData<T, S>,
+        from: from! as ManyDataStreamFamily,
+        create: (
+          ref,
+          ManyProviderData<T, S> pData,
+        ) =>
+            create(ref));
+  }
+
+  @override
+  Stream<List<T>> create(ManyDataStreamRef<T, S> ref) {
+    final _$cb = _createCb ?? manyDataStream<T, S>;
+    final argument = this.argument as ManyProviderData<T, S>;
+    return _$cb(
+      ref,
+      argument,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ManyDataStreamProvider && other.runtimeType == runtimeType && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(runtimeType, argument);
+  }
 }
 
 String _$manyDataStreamHash() => r'61ddb2c86c206435d72abedf3803853a3a8b5e88';
 
-/// See also [manyDataStream].
-@ProviderFor(manyDataStream)
-const manyDataStreamProvider = ManyDataStreamFamily();
-
-/// See also [manyDataStream].
-class ManyDataStreamFamily extends Family {
-  /// See also [manyDataStream].
-  const ManyDataStreamFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
-
-  @override
-  String? get name => r'manyDataStreamProvider';
-
-  /// See also [manyDataStream].
-  ManyDataStreamProvider<T, S> call<T extends DataObject, S extends DataObject?>(
-    ManyProviderData<T, S> pData,
-  ) {
-    return ManyDataStreamProvider<T, S>(
-      pData,
-    );
-  }
-
-  @visibleForOverriding
-  @override
-  ManyDataStreamProvider<DataObject, DataObject?> getProviderOverride(
-    covariant ManyDataStreamProvider<DataObject, DataObject?> provider,
-  ) {
-    return call(
-      provider.pData,
-    );
-  }
-
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(
-      Stream<List<T>> Function<T extends DataObject, S extends DataObject?>(ManyDataStreamRef ref) create) {
-    return _$ManyDataStreamFamilyOverride(this, create);
-  }
-}
-
-class _$ManyDataStreamFamilyOverride implements FamilyOverride {
-  _$ManyDataStreamFamilyOverride(this.overriddenFamily, this.create);
-
-  final Stream<List<T>> Function<T extends DataObject, S extends DataObject?>(ManyDataStreamRef ref) create;
-
-  @override
-  final ManyDataStreamFamily overriddenFamily;
-
-  @override
-  ManyDataStreamProvider getProviderOverride(
-    covariant ManyDataStreamProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [manyDataStream].
-class ManyDataStreamProvider<T extends DataObject, S extends DataObject?> extends AutoDisposeStreamProvider<List<T>> {
-  /// See also [manyDataStream].
-  ManyDataStreamProvider(
-    ManyProviderData<T, S> pData,
-  ) : this._internal(
-          (ref) => manyDataStream<T, S>(
-            ref as ManyDataStreamRef<T, S>,
-            pData,
-          ),
-          from: manyDataStreamProvider,
+final class ManyDataStreamFamily extends Family {
+  const ManyDataStreamFamily._()
+      : super(
           name: r'manyDataStreamProvider',
-          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$manyDataStreamHash,
-          dependencies: ManyDataStreamFamily._dependencies,
-          allTransitiveDependencies: ManyDataStreamFamily._allTransitiveDependencies,
-          pData: pData,
+          dependencies: null,
+          allTransitiveDependencies: null,
+          isAutoDispose: true,
         );
 
-  ManyDataStreamProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.pData,
-  }) : super.internal();
-
-  final ManyProviderData<T, S> pData;
+  ManyDataStreamProvider<T, S> call<T extends DataObject, S extends DataObject?>(
+    ManyProviderData<T, S> pData,
+  ) =>
+      ManyDataStreamProvider<T, S>._(argument: pData, from: this);
 
   @override
+  String debugGetCreateSourceHash() => _$manyDataStreamHash();
+
+  @override
+  String toString() => r'manyDataStreamProvider';
+
+  /// {@macro riverpod.override_with}
   Override overrideWith(
-    Stream<List<T>> Function(ManyDataStreamRef<T, S> ref) create,
+    Stream<List<T>> Function<T extends DataObject, S extends DataObject?>(
+      ManyDataStreamRef<T, S> ref,
+      ManyProviderData<T, S> args,
+    ) create,
   ) {
-    return ProviderOverride(
-      origin: this,
-      override: ManyDataStreamProvider<T, S>._internal(
-        (ref) => create(ref as ManyDataStreamRef<T, S>),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        pData: pData,
-      ),
+    return $FamilyOverride(
+      from: this,
+      createElement: (container, provider) {
+        provider as ManyDataStreamProvider;
+
+        return provider._copyWithCreate(<T extends DataObject, S extends DataObject?>(
+          ref,
+          ManyProviderData<T, S> pData,
+        ) {
+          return create(ref, pData);
+        }).$createElement(container);
+      },
     );
   }
-
-  @override
-  (ManyProviderData<T, S>,) get argument {
-    return (pData,);
-  }
-
-  @override
-  AutoDisposeStreamProviderElement<List<T>> createElement() {
-    return _ManyDataStreamProviderElement<T, S>(this);
-  }
-
-  ManyDataStreamProvider _copyWith(
-    Stream<List<T>> Function<T extends DataObject, S extends DataObject?>(ManyDataStreamRef ref) create,
-  ) {
-    return ManyDataStreamProvider._internal(
-      (ref) => create(ref as ManyDataStreamRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      pData: pData,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is ManyDataStreamProvider && other.runtimeType == runtimeType && other.pData == pData;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, pData.hashCode);
-    hash = _SystemHash.combine(hash, T.hashCode);
-    hash = _SystemHash.combine(hash, S.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-mixin ManyDataStreamRef<T extends DataObject, S extends DataObject?> on AutoDisposeStreamProviderRef<List<T>> {
-  /// The parameter `pData` of this provider.
-  ManyProviderData<T, S> get pData;
-}
-
-class _ManyDataStreamProviderElement<T extends DataObject, S extends DataObject?>
-    extends AutoDisposeStreamProviderElement<List<T>> with ManyDataStreamRef<T, S> {
-  _ManyDataStreamProviderElement(super.provider);
-
-  @override
-  ManyProviderData<T, S> get pData => (origin as ManyDataStreamProvider<T, S>).pData;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member
