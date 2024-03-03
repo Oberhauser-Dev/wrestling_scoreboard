@@ -8,10 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
@@ -151,7 +151,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
   }
 }
 
-class ParticipationEditTile extends ConsumerWidget {
+class ParticipationEditTile extends ConsumerStatefulWidget {
   final Participation? participation;
   final WeightClass weightClass;
   final Lineup lineup;
@@ -182,7 +182,52 @@ class ParticipationEditTile extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ParticipationEditTile> createState() => _ParticipationEditTileState();
+}
+
+class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
+  Membership? _curMembership;
+  double? _curWeight;
+
+  @override
+  void initState() {
+    super.initState();
+    _curMembership = widget.participation?.membership;
+    _curWeight = widget.participation?.weight;
+  }
+
+  void onSave() {
+    if (widget.participation?.membership == _curMembership && widget.participation?.weight == _curWeight) return;
+
+    // Delete old participation, if membership is null
+    if (_curMembership == null) {
+      if (widget.participation?.id != null) {
+        widget.deleteParticipation(widget.participation!);
+      }
+    } else {
+      Participation curParticipation;
+      if (widget.participation?.id != null) {
+        // Reuse old participation if present
+        curParticipation = widget.participation!.copyWith(
+          membership: _curMembership!,
+          lineup: widget.lineup,
+          weightClass: widget.weightClass,
+          weight: _curWeight,
+        );
+      } else {
+        curParticipation = Participation(
+          membership: _curMembership!,
+          lineup: widget.lineup,
+          weightClass: widget.weightClass,
+          weight: _curWeight,
+        );
+      }
+      widget.createOrUpdateParticipation(curParticipation);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return ListTile(
       title: Row(
@@ -192,31 +237,16 @@ class ParticipationEditTile extends ConsumerWidget {
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
               child: getDropdown<Membership>(
-                selectedItem: participation?.membership,
-                label: '${localizations.weightClass} ${weightClass.name} ${weightClass.style.abbreviation(context)}',
+                selectedItem: widget.participation?.membership,
+                label:
+                    '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
                 context: context,
-                onSaved: (Membership? newMembership) {
-                  if (participation?.membership == newMembership) return;
-
-                  // Delete old participation, if not null
-                  if (participation?.id != null) {
-                    deleteParticipation(participation!);
-                  }
-
-                  // Add new participation, if not null
-                  final addParticipation = newMembership == null
-                      ? null
-                      : Participation(
-                          membership: newMembership,
-                          lineup: lineup,
-                          weightClass: weightClass,
-                        );
-                  if (addParticipation != null) {
-                    createOrUpdateParticipation(addParticipation);
-                  }
+                onChanged: (Membership? newMembership) {
+                  _curMembership = newMembership;
                 },
+                onSaved: (Membership? newMembership) => onSave(),
                 itemAsString: (u) => u.person.fullName,
-                onFind: (String? filter) => ParticipationEditTile.filterMemberships(ref, filter, lineup),
+                onFind: (String? filter) => ParticipationEditTile.filterMemberships(ref, filter, widget.lineup),
               ),
             ),
           ),
@@ -225,7 +255,7 @@ class ParticipationEditTile extends ConsumerWidget {
             child: Container(
               padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
               child: TextFormField(
-                initialValue: participation?.weight?.toString() ?? '',
+                initialValue: widget.participation?.weight?.toString() ?? '',
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(vertical: 20),
@@ -234,12 +264,9 @@ class ParticipationEditTile extends ConsumerWidget {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))
                 ],
-                onSaved: (String? value) {
-                  if (participation != null) {
-                    final newValue = (value == null || value.isEmpty) ? null : double.parse(value);
-                    if (participation!.weight == newValue) return;
-                    createOrUpdateParticipation(participation!.copyWith(weight: newValue));
-                  }
+                onChanged: (String? value) {
+                  final newValue = (value == null || value.isEmpty) ? null : double.parse(value);
+                  _curWeight = newValue;
                 },
               ),
             ),
