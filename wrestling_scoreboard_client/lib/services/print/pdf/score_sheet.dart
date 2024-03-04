@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
+import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
@@ -345,7 +346,7 @@ class ScoreSheet {
         roundRows.add(buildRound(round: round));
         if (round < (rounds - 1)) {
           final breakDurationStr =
-              '${localizations.breakDurationInSecs}: ${boutState.boutConfig.breakDuration.inSeconds}';
+              '${localizations.breakDuration}: ${boutState.boutConfig.breakDuration.formatMinutesAndSeconds()}';
           roundRows.add(TableRow(children: [
             Container(color: _homeColor, height: breakCellHeight),
             buildTextCell(

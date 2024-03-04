@@ -38,8 +38,8 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
     final items = [
       ...fields,
       ListTile(
-        leading: const Icon(Icons.timer),
-        subtitle: Text(localizations.periodDurationInSecs),
+        leading: const Icon(Icons.timelapse),
+        subtitle: Text(localizations.periodDuration),
         title: DurationFormField(
           initialValue: widget.boutConfig?.periodDuration ?? BoutConfig.defaultPeriodDuration,
           maxValue: const Duration(hours: 1),
@@ -49,8 +49,8 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.timer),
-        subtitle: Text(localizations.breakDurationInSecs),
+        leading: const Icon(Icons.timelapse),
+        subtitle: Text(localizations.breakDuration),
         title: DurationFormField(
           initialValue: widget.boutConfig?.breakDuration ?? BoutConfig.defaultBreakDuration,
           maxValue: const Duration(hours: 1),
@@ -60,8 +60,8 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.timer),
-        subtitle: Text(localizations.activityDurationInSecs),
+        leading: const Icon(Icons.timelapse),
+        subtitle: Text(localizations.activityDuration),
         title: DurationFormField(
           initialValue: widget.boutConfig?.activityDuration ?? BoutConfig.defaultActivityDuration,
           maxValue: const Duration(hours: 1),
@@ -71,8 +71,8 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.timer),
-        subtitle: Text(localizations.injuryDurationInSecs),
+        leading: const Icon(Icons.timelapse),
+        subtitle: Text(localizations.injuryDuration),
         title: DurationFormField(
           initialValue: widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration,
           maxValue: const Duration(hours: 1),

@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -44,15 +45,27 @@ class LeagueOverview extends ConsumerWidget {
             ContentItem(
               title: data.startDate.toDateString(context),
               subtitle: localizations.date, // Start date
-              icon: Icons.emoji_events,
+              icon: Icons.event,
             ),
             ContentItem(
-              title: '${data.boutConfig.periodDuration.inSeconds} ✕ ${data.boutConfig.periodCount}',
-              // '${localizations.breakDurationInSecs}: ${data.boutConfig.breakDuration.inSeconds}, '
-              // '${localizations.activityDurationInSecs}: ${data.boutConfig.activityDuration.inSeconds}, '
-              // '${localizations.injuryDurationInSecs}: ${data.boutConfig.injuryDuration.inSeconds}',
-              subtitle: localizations.periodDurationInSecs, // Start date
-              icon: Icons.timer,
+              title: '${data.boutConfig.periodDuration.formatMinutesAndSeconds()} ✕ ${data.boutConfig.periodCount}',
+              subtitle: localizations.periodDuration,
+              icon: Icons.timelapse,
+            ),
+            ContentItem(
+              title: data.boutConfig.breakDuration.formatMinutesAndSeconds(),
+              subtitle: localizations.breakDuration,
+              icon: Icons.timelapse,
+            ),
+            ContentItem(
+              title: data.boutConfig.activityDuration.formatMinutesAndSeconds(),
+              subtitle: localizations.activityDuration,
+              icon: Icons.timelapse,
+            ),
+            ContentItem(
+              title: data.boutConfig.injuryDuration.formatMinutesAndSeconds(),
+              subtitle: localizations.injuryDuration,
+              icon: Icons.timelapse,
             ),
             ContentItem(
               title: data.seasonPartitions.toString(),

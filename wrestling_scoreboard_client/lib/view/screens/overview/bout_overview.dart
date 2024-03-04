@@ -74,7 +74,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
             ContentItem(
               title: data.duration.formatMinutesAndSeconds(),
               subtitle: localizations.duration,
-              icon: Icons.timelapse,
+              icon: Icons.timer,
             ),
           ],
         );

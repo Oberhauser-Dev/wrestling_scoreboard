@@ -134,7 +134,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.timelapse),
+        leading: const Icon(Icons.timer),
         subtitle: Text(localizations.duration),
         title: DurationFormField(
           initialValue: _boutDuration,
