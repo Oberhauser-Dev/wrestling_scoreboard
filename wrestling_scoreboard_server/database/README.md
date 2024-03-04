@@ -1,13 +1,13 @@
-## PostgreSQL
+# PostgreSQL Database
 
-### Installation
+## Installation
 
-#### Windows: 
+### Windows: 
 
 [Install Postgres](https://www.postgresql.org/download/windows/).
-Then add path the variable `C:/Program Files/PostgreSQL/<version>/bin/`
+Then add this to your system PATH variable `C:/Program Files/PostgreSQL/<version>/bin/`
 
-#### Linux:
+### Debian:
 
 ```shell
 sudo apt-get install postgresql
@@ -15,13 +15,13 @@ sudo apt install postgresql-client-common
 sudo apt-get install postgresql-client
 ```
 
-On Linux you may want to log in as postgres user: `sudo -u postgres -i`
+## Setup
 
-#### Tipps:
+### Tipps:
 
 - Open psql command line: `psql -U postgres`
 - List all users: `\du`
-- Start the server: `postgres -D /.../PostgreSQL/16/data`
+- Start the database server: `postgres -D /.../PostgreSQL/16/data`
 
 Login as admin:
 ```shell
@@ -30,13 +30,15 @@ psql -U postgres
 postgres=#
 ```
 
+On Linux you may want to log in as postgres user: `sudo -u postgres -i`
+
 Use this on peer authentication:
 ```shell
 sudo -u postgres psql postgres # For creation
 sudo -u postgres psql wrestling_scoreboard # For altering database wrestling_scoreboard
 ```
 
-### Setup User: 
+### User
 
 Create own user `wrestling`, replace `my_password` with the password of your choice:
 ```shell

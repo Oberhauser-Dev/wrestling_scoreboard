@@ -1,22 +1,19 @@
 # Wrestling Scoreboard Server
 
-A HTTP-server application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+Wrestling software server for managing team matches and competitions.
 
-## Build package
+## Setup
 
-```shell
-./build.sh -v 0.0.1
-```
+See [database docs](./database/README.md), to set up the Postgres database.
 
-## Environment variables:
+### Environment variables:
 
-Create file `.env` in `wrestling-scoreboard-server` directory. 
+Create file `.env` in `wrestling_scoreboard_server` directory.
 A pre-configuration can be found in `.env.example` file. Change the values to your needs.
 
-## Run server
+### Run server
 
-Execute the `./bin/wrestling-scoreboard-server` executable from within the `wrestling-scoreboard-server` directory, to handle resource paths correctly.
+Execute the `./bin/wrestling-scoreboard-server` executable from within the `wrestling_scoreboard_server` directory, to handle resource paths correctly.
 
 ### Linux Systemd service
 
@@ -44,4 +41,12 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 sudo systemctl enable wrestling-scoreboard-server.service
 sudo systemctl start wrestling-scoreboard-server.service
+```
+
+## Development
+
+### Build package
+
+```shell
+./build.sh -v 0.0.1
 ```

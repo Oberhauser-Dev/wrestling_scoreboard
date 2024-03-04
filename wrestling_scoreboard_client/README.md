@@ -1,8 +1,6 @@
 # Wrestling Scoreboard Client
 
-Wrestling software for managing team matches and competitions.
-
-Tags: scoreboard, wrestling, scoring, bracket, mat, team bout, competition
+Wrestling software client for managing team matches and competitions.
 
 ## Deployment
 
@@ -28,7 +26,6 @@ flutter build web
 ```
 
 Publish files in `build/web`.
-
 
 ### Icons & AppName
 

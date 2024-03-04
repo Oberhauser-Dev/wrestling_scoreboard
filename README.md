@@ -1,8 +1,9 @@
 # Wrestling Scoreboard
 
-Repository for managing Wrestling software client, server and shared libraries.
+Repository for managing Wrestling software: client, server and shared libraries.
+Available for Linux, Windows, macOS, Web, Android and iOS.
 
-Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, competition, tournament
+Tags: scoreboard, wrestling, scoring, bracket, mat, team, fight, competition, tournament, display, points, bracket, team, athlete, bout
 
 ## Screenshots
 
@@ -17,7 +18,18 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team fight, competition, tou
   </tr>
 </table>
 
-## Setup & Installation
+## Installation
+
+The App consists of three components, the client, the server and the database.
+You can download the client and the server for your preferred platforms from the [Releases section](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases).
+
+For setting up the database and hosting a server, see:
+- [Database](wrestling_scoreboard_server/database/README.md)
+- [Server](wrestling_scoreboard_server/README.md#setup)
+
+## Development
+
+All the code is based on Dart and Flutter. For setting up Flutter, see the [getting started guide](https://docs.flutter.dev/get-started).
 
 Wrestling Scoreboard is a monorepo.
 Therefor it uses [Melos](https://github.com/invertase/melos) to manage the project and dependencies.
@@ -46,8 +58,8 @@ melos version --all --manual-version wrestling_scoreboard_client:0.0.1-beta.8 --
 ```
 
 Please read the documentation for setting up the according components:
-- [Server](wrestling_scoreboard_server/README.md)
 - [Database](wrestling_scoreboard_server/database/README.md)
+- [Server](wrestling_scoreboard_server/README.md#development)
 - [Client](wrestling_scoreboard_client/README.md)
 
 If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can take advantage of [these config](docs/nginx) files.
