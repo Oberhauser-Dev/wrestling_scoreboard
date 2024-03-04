@@ -124,7 +124,7 @@ class LeagueOverview extends ConsumerWidget {
                       builder: (context, data) {
                         return ContentItem(
                             title:
-                                '${data.weightClass.name} ${data.weightClass.style.localize(context)} ${data.seasonPartition == null ? '' : '(${data.seasonPartition!.asSeasonPartition(context, data.league.seasonPartitions)})'}',
+                                '${data.pos}. ${data.weightClass.name} ${data.weightClass.style.localize(context)} ${data.seasonPartition == null ? '' : '(${data.seasonPartition!.asSeasonPartition(context, data.league.seasonPartitions)})'}',
                             icon: Icons.fitness_center,
                             onTap: () => handleSelectedWeightClass(data, context));
                       },

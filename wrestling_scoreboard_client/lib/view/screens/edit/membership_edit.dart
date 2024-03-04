@@ -28,6 +28,7 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.membershipNumber,
+            hintText: localizations.optional,
           ),
           initialValue: widget.membership?.no,
           onSaved: (newValue) => _no = newValue,

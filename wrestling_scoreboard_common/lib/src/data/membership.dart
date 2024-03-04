@@ -42,6 +42,10 @@ class Membership with _$Membership implements DataObject {
     };
   }
 
+  String get info {
+    return '${no ?? '-'},\t ${person.fullName},\t${person.age}';
+  }
+
   @override
   String get tableName => 'membership';
 

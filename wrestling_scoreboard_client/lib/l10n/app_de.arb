@@ -44,6 +44,7 @@
   "description": "Beschreibung",
   "position": "Position",
   "noItems": "Keine Einträge vorhanden.",
+  "optional": "Optional",
   "mandatoryField": "Das ist ein Pflichtfeld.",
   "noWebSocketConnection": "Die Verbindung zum Server konnte nicht aufgebaut werden oder wurde unterbrochen.",
   "notFoundException": "Element wurde nicht gefunden :/",

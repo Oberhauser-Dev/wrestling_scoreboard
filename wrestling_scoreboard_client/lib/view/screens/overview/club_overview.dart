@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
@@ -96,13 +97,17 @@ class ClubOverview extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  items: memberships.map((membership) => SingleConsumer<Membership>(
+                  items: memberships.map(
+                    (membership) => SingleConsumer<Membership>(
                       id: membership.id,
                       initialData: membership,
                       builder: (context, team) => ContentItem(
-                          title: membership.person.fullName,
-                          icon: Icons.person,
-                          onTap: () => handleSelectedMembership(membership, context)))),
+                        title: '${membership.info},\t${membership.person.gender?.localize(context)}',
+                        icon: Icons.person,
+                        onTap: () => handleSelectedMembership(membership, context),
+                      ),
+                    ),
+                  ),
                 );
               },
             ),

@@ -103,6 +103,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: localizations.suffix,
+            hintText: localizations.optional,
           ),
           initialValue: widget.weightClass?.suffix ?? '',
           onSaved: (newValue) => _suffix = newValue,

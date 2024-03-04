@@ -47,6 +47,7 @@
   "description": "Description",
   "position": "Position",
   "noItems": "No items available.",
+  "optional": "Optional",
   "mandatoryField": "This is a mandatory field.",
   "noWebSocketConnection": "The connection to the server could not be established or was interrupted.",
   "notFoundException": "Element was not found :/",
