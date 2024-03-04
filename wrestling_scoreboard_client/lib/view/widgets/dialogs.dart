@@ -101,7 +101,12 @@ class DurationDialog extends StatelessWidget {
   final Duration minValue;
   final Duration maxValue;
 
-  const DurationDialog({this.initialValue = Duration.zero, super.key, required this.minValue, required this.maxValue});
+  const DurationDialog({
+    this.initialValue = Duration.zero,
+    super.key,
+    this.minValue = Duration.zero,
+    required this.maxValue,
+  });
 
   @override
   Widget build(BuildContext context) {

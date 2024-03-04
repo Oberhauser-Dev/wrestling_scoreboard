@@ -39,7 +39,7 @@ class DurationPicker extends StatefulWidget {
   const DurationPicker({
     super.key,
     required this.initialValue,
-    required this.minValue,
+    this.minValue = Duration.zero,
     required this.maxValue,
     required this.onChange,
   });

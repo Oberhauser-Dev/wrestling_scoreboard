@@ -120,13 +120,13 @@ class BoutScreenActionIntent extends Intent {
         stopwatch.startStop();
         break;
       case BoutScreenActions.addOneSec:
-        stopwatch.addDuration(const Duration(seconds: 1));
+        stopwatch.add(const Duration(seconds: 1));
         break;
       case BoutScreenActions.rmOneSec:
         if (stopwatch.elapsed > const Duration(seconds: 1)) {
-          stopwatch.addDuration(-const Duration(seconds: 1));
+          stopwatch.add(-const Duration(seconds: 1));
         } else {
-          stopwatch.addDuration(-stopwatch.elapsed);
+          stopwatch.add(-stopwatch.elapsed);
         } // Do not reset, as it will may stop the timer
         break;
       case BoutScreenActions.reset:

@@ -14,8 +14,15 @@ class TechnicalPoints extends StatelessWidget {
   final BoutRole role;
   final ParticipantStateModel pStatusModel;
   final Bout bout;
+  final BoutConfig boutConfig;
 
-  const TechnicalPoints({required this.role, required this.pStatusModel, required this.bout, super.key});
+  const TechnicalPoints({
+    required this.role,
+    required this.pStatusModel,
+    required this.bout,
+    required this.boutConfig,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,12 @@ class TechnicalPoints extends StatelessWidget {
                 flex: 40,
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                   ScaledText(AppLocalizations.of(context)!.activityTimeAbbr, fontSize: 18),
-                  TimeDisplay(pStatusModel.activityStopwatch!, white, fontSize: 18)
+                  TimeDisplay(
+                    pStatusModel.activityStopwatch!,
+                    white,
+                    fontSize: 18,
+                    maxDuration: boutConfig.activityDuration,
+                  )
                 ])),
           if (pStatusModel.isInjury)
             Expanded(
@@ -52,7 +64,12 @@ class TechnicalPoints extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ScaledText(AppLocalizations.of(context)!.injuryTimeShort, fontSize: 18),
-                  TimeDisplay(pStatusModel.injuryStopwatch, white, fontSize: 18)
+                  TimeDisplay(
+                    pStatusModel.injuryStopwatch,
+                    white,
+                    fontSize: 18,
+                    maxDuration: boutConfig.injuryDuration,
+                  )
                 ],
               ),
             ),

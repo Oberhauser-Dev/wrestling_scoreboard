@@ -30,7 +30,11 @@ class ObservableStopwatch extends Stopwatch {
   @override
   Duration get elapsed => super.elapsed + presetDuration;
 
-  void addDuration(Duration duration) {
+  set elapsed(Duration duration) {
+    add(duration - elapsed);
+  }
+
+  void add(Duration duration) {
     presetDuration += duration;
     onAdd.add(duration);
     _handleTick();
@@ -50,7 +54,7 @@ class ObservableStopwatch extends Stopwatch {
 
   void _handleTick() {
     final elapsed = this.elapsed;
-    onChange.add(this.elapsed);
+    onChange.add(elapsed);
     if (elapsed.inSeconds != _prevDuration.inSeconds) {
       onChangeSecond.add(this.elapsed);
       if (elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute.add(this.elapsed);

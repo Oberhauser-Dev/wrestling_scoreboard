@@ -51,7 +51,6 @@ class ActionsWidget extends ConsumerWidget {
                                 builder: (BuildContext context) {
                                   return DurationDialog(
                                     initialValue: action.duration,
-                                    minValue: Duration.zero,
                                     maxValue: boutConfig.totalPeriodDuration,
                                   );
                                 },

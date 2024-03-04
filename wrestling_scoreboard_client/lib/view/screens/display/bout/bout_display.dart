@@ -180,8 +180,8 @@ class BoutState extends ConsumerState<BoutScreen> {
       (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
     });
     _boutStopwatch.onAdd.stream.listen((event) {
-      _r.activityStopwatch?.addDuration(event);
-      _b.activityStopwatch?.addDuration(event);
+      _r.activityStopwatch?.add(event);
+      _b.activityStopwatch?.add(event);
     });
     _boutStopwatch.onChangeSecond.stream.listen(
       (event) {
@@ -214,7 +214,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         }
       },
     );
-    stopwatch.addDuration(bout.duration);
+    stopwatch.add(bout.duration);
     _breakStopwatch = ObservableStopwatch(
       limit: boutConfig.breakDuration,
     );
@@ -315,6 +315,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         pStatusModel: pStatus,
         role: role,
         bout: bout,
+        boutConfig: boutConfig,
       ),
     );
   }
@@ -507,7 +508,14 @@ class BoutState extends ConsumerState<BoutScreen> {
                                 BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
                                 Expanded(
                                   flex: 50,
-                                  child: Center(child: TimeDisplay(stopwatch, stopwatchColor, fontSize: 100)),
+                                  child: Center(
+                                    child: TimeDisplay(
+                                      stopwatch,
+                                      stopwatchColor,
+                                      fontSize: 100,
+                                      maxDuration: boutConfig.totalPeriodDuration,
+                                    ),
+                                  ),
                                 ),
                                 BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
                                 displayTechnicalPoints(_b, BoutRole.blue),
