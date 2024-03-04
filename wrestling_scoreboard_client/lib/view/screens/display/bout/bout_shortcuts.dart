@@ -152,43 +152,56 @@ class BoutScreenActionIntent extends Intent {
         if (context != null) context.pop();
         break;
       case BoutScreenActions.redOne:
+        // NOTE: Do not used bout.duration as time, as it is not up to date.
         var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
+            bout: bout,
+            role: BoutRole.red,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 1);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redTwo:
         var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
+            bout: bout,
+            role: BoutRole.red,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 2);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redThree:
         var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
+            bout: bout,
+            role: BoutRole.red,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 3);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redFour:
         var action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: bout.duration,
+          duration: stopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 4,
         );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redPassivity:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.passivity);
+        var action = BoutAction(
+            bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.passivity);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redCaution:
         var action =
-            BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.caution);
+            BoutAction(bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.caution);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redDismissal:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.red, duration: bout.duration, actionType: BoutActionType.dismissal);
+        var action = BoutAction(
+            bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.dismissal);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redActivityTime:
@@ -209,37 +222,53 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.blueOne:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 1);
+            bout: bout,
+            role: BoutRole.blue,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 1);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueTwo:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 2);
+            bout: bout,
+            role: BoutRole.blue,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 2);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueThree:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 3);
+            bout: bout,
+            role: BoutRole.blue,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 3);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFour:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.points, pointCount: 4);
+            bout: bout,
+            role: BoutRole.blue,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 4);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.passivity);
+        var action = BoutAction(
+            bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.passivity);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueCaution:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.caution);
+        var action = BoutAction(
+            bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.caution);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueDismissal:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.blue, duration: bout.duration, actionType: BoutActionType.dismissal);
+        var action = BoutAction(
+            bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.dismissal);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueUndo:
