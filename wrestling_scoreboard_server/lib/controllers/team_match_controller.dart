@@ -96,7 +96,6 @@ class TeamMatchController extends EntityController<TeamMatch> {
     if (isReset) {
       await Future.forEach(oldBouts, (Bout bout) async {
         if (bout.id != null) {
-          // TODO may also delete boutActions, participantState etc.
           await TeamMatchBoutController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
           await BoutController().deleteSingle(bout.id!);
         }
@@ -106,7 +105,6 @@ class TeamMatchController extends EntityController<TeamMatch> {
       final unusedBouts = oldBouts.where((oldBout) => bouts.every((newBout) => newBout.id != oldBout.id));
       await Future.forEach(unusedBouts, (Bout bout) async {
         if (bout.id != null) {
-          // TODO may also delete boutActions, participantState etc.
           await TeamMatchBoutController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
           await BoutController().deleteSingle(bout.id!);
         }
