@@ -4,14 +4,15 @@ import 'dart:convert';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/server.dart';
 
@@ -127,6 +128,14 @@ void broadcastSingle<T extends DataObject>(T single) async {
       )));
     }
   } else if (single is TeamMatchBout) {
+    broadcast(jsonEncode(manyToJson(
+        await TeamMatchBoutController()
+            .getMany(conditions: ['team_match_id = @id'], substitutionValues: {'id': single.teamMatch.id}),
+        TeamMatchBout,
+        CRUD.update,
+        isRaw: false,
+        filterType: TeamMatch,
+        filterId: single.teamMatch.id)));
   } else if (single is WeightClass) {
   } else {
     throw DataUnimplementedError(CRUD.update, T);
@@ -239,6 +248,14 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
       )));
     }
   } else if (T == TeamMatchBout) {
+    broadcast(jsonEncode(manyToJson(
+        await TeamMatchBoutController()
+            .getManyRaw(conditions: ['team_match_id = @id'], substitutionValues: {'id': single['team_match_id']}),
+        TeamMatchBout,
+        CRUD.update,
+        isRaw: true,
+        filterType: TeamMatch,
+        filterId: single['team_match_id'])));
   } else if (T == WeightClass) {
   } else {
     throw DataUnimplementedError(CRUD.update, T);
