@@ -276,6 +276,9 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
     broadcastSingle<T>(single);
+  } else if (operation == CRUD.update && single is BoutAction) {
+    // Update nonetheless, if it changes order of items
+    broadcastSingle<T>(single);
   }
   return single.id!;
 }
@@ -293,6 +296,10 @@ Future<int> handleSingleRaw<T extends DataObject>(
     await controller.deleteSingle(single['id']);
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
+    // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
+    broadcastSingleRaw<T>(single);
+  } else if (operation == CRUD.update && T == BoutAction) {
+    // Update nonetheless, if it changes order of items
     broadcastSingleRaw<T>(single);
   }
   return single['id'];
