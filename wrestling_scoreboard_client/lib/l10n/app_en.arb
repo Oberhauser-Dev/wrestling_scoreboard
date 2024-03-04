@@ -57,6 +57,8 @@
 
   "date": "Date",
   "place": "Place",
+  "minutes": "Minutes",
+  "seconds": "Seconds",
 
   "wrestlingRulesPdf": "https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf",
   "participantVacant": "vacant",

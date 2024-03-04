@@ -166,7 +166,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     });
 
     stopwatch = _boutStopwatch = ObservableStopwatch(
-      limit: boutConfig.periodDuration * boutConfig.periodCount,
+      limit: boutConfig.totalPeriodDuration,
     );
     _boutStopwatch.onStart.stream.listen((event) {
       _r.activityStopwatch?.start();
@@ -515,7 +515,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                             ),
                             Container(
                               padding: bottomPadding,
-                              child: ActionsWidget(actions),
+                              child: ActionsWidget(actions, boutConfig: boutConfig),
                             ),
                             Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
                           ],

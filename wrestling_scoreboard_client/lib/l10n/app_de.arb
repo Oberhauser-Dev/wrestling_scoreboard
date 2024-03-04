@@ -54,6 +54,8 @@
 
   "date": "Datum",
   "place": "Ort",
+  "minutes": "Minuten",
+  "seconds": "Sekunden",
 
   "wrestlingRulesPdf": "https://www.ringen.de/wp-content/uploads/2019/01/Internationales-Regelwerk_Januar-2019_.pdf",
   "participantVacant": "unbesetzt",

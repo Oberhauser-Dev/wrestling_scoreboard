@@ -58,6 +58,8 @@ class BoutConfig with _$BoutConfig implements DataObject {
   @override
   String get tableName => 'bout_config';
 
+  Duration get totalPeriodDuration => periodDuration * periodCount;
+
   @override
   BoutConfig copyWithId(int? id) {
     return copyWith(id: id);

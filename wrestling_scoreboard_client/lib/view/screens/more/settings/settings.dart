@@ -4,11 +4,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
   const CustomSettingsScreen({super.key});
@@ -269,73 +269,5 @@ class SettingsSection extends StatelessWidget {
         ),
       ),
     ]);
-  }
-}
-
-class TextInputDialog extends StatelessWidget {
-  final String? initialValue;
-
-  const TextInputDialog({required this.initialValue, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    String? result;
-    return OkCancelDialog(
-        child: TextFormField(
-          initialValue: initialValue,
-          onChanged: (value) => result = value,
-        ),
-        getResult: () => result);
-  }
-}
-
-class RadioDialog<T> extends StatefulWidget {
-  final List<MapEntry<T?, String>> values;
-  final T? initialValue;
-  final void Function(T? value)? onChanged;
-
-  const RadioDialog({
-    super.key,
-    required this.values,
-    required this.initialValue,
-    this.onChanged,
-  });
-
-  @override
-  State<RadioDialog<T>> createState() => _RadioDialogState<T>();
-}
-
-class _RadioDialogState<T> extends State<RadioDialog<T>> {
-  T? result;
-
-  @override
-  void initState() {
-    result = widget.initialValue;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return OkCancelDialog<T?>(
-        child: ListView.builder(
-          key: Key(result.toString()),
-          shrinkWrap: true,
-          itemCount: widget.values.length,
-          itemBuilder: (context, index) {
-            final entry = widget.values[index];
-            return RadioListTile<T?>(
-              value: entry.key,
-              groupValue: result,
-              onChanged: (v) {
-                if (widget.onChanged != null) widget.onChanged!(v);
-                setState(() {
-                  result = v;
-                });
-              },
-              title: Text(entry.value),
-            );
-          },
-        ),
-        getResult: () => result);
   }
 }

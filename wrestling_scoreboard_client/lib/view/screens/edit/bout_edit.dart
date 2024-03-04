@@ -138,7 +138,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.duration} (seconds)',
+            labelText: '${localizations.duration} (${localizations.seconds})',
           ),
           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
           onSaved: (String? value) {
