@@ -30,7 +30,7 @@ class BoutAction with _$BoutAction implements DataObject {
         duration: Duration(milliseconds: e['duration_millis']),
         role: BoutRoleParser.valueOf(e['bout_role']),
         pointCount: e['point_count'] as int?,
-        bout: (await getSingle<Bout>(e['bout_id'] as int))!,
+        bout: (await getSingle<Bout>(e['bout_id'] as int)),
       );
 
   @override

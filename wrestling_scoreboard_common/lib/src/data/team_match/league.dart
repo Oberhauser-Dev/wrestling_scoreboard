@@ -35,7 +35,7 @@ class League with _$League implements DataObject {
       name: e['name'] as String,
       startDate: e['start_date'] as DateTime,
       seasonPartitions: e['season_partitions'] as int,
-      boutConfig: boutConfig!,
+      boutConfig: boutConfig,
     );
   }
 

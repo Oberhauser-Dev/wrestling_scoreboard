@@ -34,8 +34,8 @@ class CompetitionTeamParticipation with _$CompetitionTeamParticipation implement
           Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
       CompetitionTeamParticipation(
         id: e['id'] as int?,
-        competition: (await getSingle<Competition>(e['competition_id'] as int))!,
-        team: (await getSingle<Team>(e['team_id'] as int))!,
+        competition: (await getSingle<Competition>(e['competition_id'] as int)),
+        team: (await getSingle<Team>(e['team_id'] as int)),
       );
 
   @override

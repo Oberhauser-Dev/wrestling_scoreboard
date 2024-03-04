@@ -35,8 +35,8 @@ class LeagueWeightClass with _$LeagueWeightClass implements DataObject {
   static Future<LeagueWeightClass> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
       LeagueWeightClass(
         id: e['id'] as int?,
-        league: (await getSingle<League>(e['league_id'] as int))!,
-        weightClass: (await getSingle<WeightClass>(e['weight_class_id'] as int))!,
+        league: (await getSingle<League>(e['league_id'] as int)),
+        weightClass: (await getSingle<WeightClass>(e['weight_class_id'] as int)),
         pos: e['pos'] as int,
         seasonPartition: e['season_partition'] as int?,
       );

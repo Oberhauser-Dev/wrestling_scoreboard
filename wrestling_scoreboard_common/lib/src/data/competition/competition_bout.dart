@@ -25,8 +25,8 @@ class CompetitionBout with _$CompetitionBout implements DataObject {
 
     return CompetitionBout(
       id: e['id'] as int?,
-      competition: competition!,
-      bout: bout!,
+      competition: competition,
+      bout: bout,
     );
   }
 

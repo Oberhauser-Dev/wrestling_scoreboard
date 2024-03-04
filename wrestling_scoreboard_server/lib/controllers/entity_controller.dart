@@ -72,19 +72,18 @@ abstract class EntityController<T extends DataObject> {
     return handleRequestSingleOfController(this, int.parse(id), isRaw: isRaw(request));
   }
 
-  Future<T?> getSingle(int id) async {
+  Future<T> getSingle(int id) async {
     final single = await getSingleRaw(id);
-    if (single == null) return Future.value(null);
     return DataObject.fromRaw<T>(single, getSingleFromDataType);
   }
 
   late final getSingleRawStmt =
       PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
 
-  Future<Map<String, dynamic>?> getSingleRaw(int id) async {
+  Future<Map<String, dynamic>> getSingleRaw(int id) async {
     final resStream = (await getSingleRawStmt).bind({'id': id});
     final many = await resStream.toColumnMap().toList();
-    if (many.isEmpty) return null;
+    if (many.isEmpty) throw Exception('$T with id "$id" not found');
     return many.first;
   }
 
@@ -264,18 +263,10 @@ abstract class EntityController<T extends DataObject> {
       {bool isRaw = false}) async {
     if (isRaw) {
       final single = await controller.getSingleRaw(id);
-      if (single == null) {
-        return Response.notFound('Object with ID $id not found in ${controller.tableName}');
-      } else {
-        return Response.ok(rawJsonEncode(single));
-      }
+      return Response.ok(rawJsonEncode(single));
     } else {
       final single = await controller.getSingle(id);
-      if (single == null) {
-        return Response.notFound('Object with ID $id not found in ${controller.tableName}');
-      } else {
-        return Response.ok(jsonEncode(single));
-      }
+      return Response.ok(jsonEncode(single));
     }
   }
 
@@ -309,8 +300,8 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
-  static Future<T?> getSingleFromDataType<T extends DataObject>(int id) {
-    return getControllerFromDataType(T).getSingle(id) as Future<T?>;
+  static Future<T> getSingleFromDataType<T extends DataObject>(int id) {
+    return getControllerFromDataType(T).getSingle(id) as Future<T>;
   }
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>(

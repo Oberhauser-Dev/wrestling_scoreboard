@@ -25,7 +25,7 @@ class Team with _$Team implements DataObject {
     return Team(
       id: e['id'] as int?,
       name: e['name'] as String,
-      club: club!,
+      club: club,
       description: e['description'] as String?,
     );
   }

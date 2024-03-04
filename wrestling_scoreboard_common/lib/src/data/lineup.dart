@@ -28,7 +28,7 @@ class Lineup with _$Lineup implements DataObject {
     final leader = leaderId == null ? null : await getSingle<Membership>(leaderId);
     final coachId = e['coach_id'] as int?;
     final coach = coachId == null ? null : await getSingle<Membership>(coachId);
-    return Lineup(id: id, team: team!, leader: leader, coach: coach);
+    return Lineup(id: id, team: team, leader: leader, coach: coach);
   }
 
   @override

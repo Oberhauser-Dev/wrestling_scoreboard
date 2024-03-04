@@ -32,8 +32,8 @@ class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObje
   static Future<LeagueTeamParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
       LeagueTeamParticipation(
         id: e['id'] as int?,
-        league: (await getSingle<League>(e['league_id'] as int))!,
-        team: (await getSingle<Team>(e['team_id'] as int))!,
+        league: (await getSingle<League>(e['league_id'] as int)),
+        team: (await getSingle<Team>(e['team_id'] as int)),
       );
 
   @override

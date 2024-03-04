@@ -37,8 +37,8 @@ class Participation with _$Participation implements DataObject {
     return Participation(
       id: e['id'] as int?,
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
-      lineup: lineup!,
-      membership: membership!,
+      lineup: lineup,
+      membership: membership,
       weight: weight,
     );
   }

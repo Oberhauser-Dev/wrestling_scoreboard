@@ -27,8 +27,8 @@ class Membership with _$Membership implements DataObject {
     return Membership(
       id: e['id'] as int?,
       no: e['no'] as String?,
-      person: person!,
-      club: club!,
+      person: person,
+      club: club,
     );
   }
 

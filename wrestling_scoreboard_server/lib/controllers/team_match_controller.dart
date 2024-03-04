@@ -46,7 +46,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
   /// isReset: delete all previous Bouts and TeamMatchBouts, else reuse the states
   Future<Response> generateBouts(Request request, String id) async {
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
-    final teamMatch = (await getSingle(int.parse(id)))!;
+    final teamMatch = (await getSingle(int.parse(id)));
     final oldBouts = (await getBouts(id));
     final weightClasses = teamMatch.league?.id == null
         ? <WeightClass>[]

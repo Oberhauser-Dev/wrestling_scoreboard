@@ -26,7 +26,7 @@ class ParticipantState with _$ParticipantState implements DataObject {
     final participation = await getSingle<Participation>(e['participation_id'] as int);
     return ParticipantState(
       id: e['id'] as int?,
-      participation: participation!,
+      participation: participation,
       classificationPoints: e['classification_points'] as int?,
     );
   }

@@ -27,8 +27,8 @@ class TeamMatchBout with _$TeamMatchBout implements DataObject {
 
     return TeamMatchBout(
       id: e['id'] as int?,
-      teamMatch: teamMatch!,
-      bout: bout!,
+      teamMatch: teamMatch,
+      bout: bout,
       pos: e['pos'],
     );
   }

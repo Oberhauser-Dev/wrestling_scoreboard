@@ -25,8 +25,8 @@ class CompetitionPerson with _$CompetitionPerson implements DataObject {
   static Future<CompetitionPerson> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
       CompetitionPerson(
         id: e['id'] as int?,
-        competition: (await getSingle<Competition>(e['competition_id'] as int))!,
-        person: (await getSingle<Person>(e['person_id'] as int))!,
+        competition: (await getSingle<Competition>(e['competition_id'] as int)),
+        person: (await getSingle<Person>(e['person_id'] as int)),
         role: PersonRoleParser.valueOf(e['person_role']),
       );
 

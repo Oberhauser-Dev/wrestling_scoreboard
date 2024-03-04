@@ -1,7 +1,7 @@
 import '../data.dart';
 import '../enums/crud.dart';
 
-typedef GetSingleOfTypeCallback = Future<T?> Function<T extends DataObject>(int id);
+typedef GetSingleOfTypeCallback = Future<T> Function<T extends DataObject>(int id);
 
 abstract class DataObject {
   int? get id;

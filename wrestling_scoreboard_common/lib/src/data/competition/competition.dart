@@ -38,7 +38,7 @@ class Competition extends WrestlingEvent with _$Competition {
       date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
       comment: e['comment'] as String?,
-      boutConfig: boutConfig!,
+      boutConfig: boutConfig,
     );
   }
 
