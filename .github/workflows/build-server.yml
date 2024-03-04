@@ -38,6 +38,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
       - name: Build
         id: build
         shell: bash

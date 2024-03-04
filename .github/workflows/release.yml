@@ -25,6 +25,7 @@ jobs:
         with:
           flutter-version: '3.19.2'
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
       - name: Build
         id: build
         shell: bash
@@ -77,6 +78,7 @@ jobs:
         with:
           flutter-version: '3.19.2'
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update

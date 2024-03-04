@@ -92,6 +92,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
 
       - name: Build Web app
         working-directory: ./wrestling_scoreboard_client
@@ -122,6 +123,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
 
       - name: Build Android APK
         working-directory: ./wrestling_scoreboard_client
@@ -137,6 +139,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
 
       - name: Build iOS
         working-directory: ./wrestling_scoreboard_client
@@ -152,6 +155,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
 
       - name: Build macOS
         working-directory: ./wrestling_scoreboard_client
@@ -167,6 +171,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
 
       - name: Build Windows app
         working-directory: ./wrestling_scoreboard_client
@@ -182,6 +187,7 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
 
       - name: Install Flutter requirements for Linux
         run: |
