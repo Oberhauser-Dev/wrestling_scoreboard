@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 
 class OkDialog extends StatelessWidget {
   final Widget child;
@@ -113,107 +113,13 @@ class DurationDialog extends StatelessWidget {
                 initialTimerDuration: initialValue,
                 onTimerDurationChanged: (value) => result = value,
               )
-            : _DurationPicker(
+            : DurationPicker(
                 minValue: minValue,
                 maxValue: maxValue,
                 initialValue: initialValue,
                 onChange: (value) => result = value,
               ),
         getResult: () => result);
-  }
-}
-
-class _DurationPicker extends StatefulWidget {
-  final Duration initialValue;
-  final Duration minValue;
-  final Duration maxValue;
-  final void Function(Duration?) onChange;
-
-  const _DurationPicker({
-    required this.initialValue,
-    required this.minValue,
-    required this.maxValue,
-    required this.onChange,
-  });
-
-  @override
-  State<_DurationPicker> createState() => _DurationPickerState();
-}
-
-class _DurationPickerState extends State<_DurationPicker> {
-  late int _minutes;
-  late int _seconds;
-
-  @override
-  void initState() {
-    _minutes = widget.initialValue.inMinutes;
-    _seconds = widget.initialValue.inSeconds;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: TextFormField(
-            initialValue: widget.initialValue.inMinutes.toString(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.minutes,
-            ),
-            inputFormatters: <TextInputFormatter>[
-              _NumericalRangeFormatter(
-                  min: widget.minValue.inMinutes.toDouble(), max: widget.maxValue.inMinutes.toDouble())
-            ],
-            onChanged: (String? value) {
-              _minutes = int.tryParse(value ?? '') ?? 0;
-              widget.onChange(Duration(minutes: _minutes, seconds: _seconds));
-            },
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: TextFormField(
-            initialValue: widget.initialValue.inSeconds.toString(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.seconds,
-            ),
-            inputFormatters: <TextInputFormatter>[_NumericalRangeFormatter(min: 0, max: 59)],
-            onChanged: (String? value) {
-              _seconds = int.tryParse(value ?? '') ?? 0;
-              widget.onChange(Duration(minutes: _minutes, seconds: _seconds));
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _NumericalRangeFormatter extends TextInputFormatter {
-  final double min;
-  final double max;
-
-  _NumericalRangeFormatter({required this.min, required this.max});
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    if (newValue.text == '') {
-      return newValue;
-    } else if (int.parse(newValue.text) < min) {
-      return const TextEditingValue().copyWith(text: min.toStringAsFixed(2));
-    } else {
-      return int.parse(newValue.text) > max ? oldValue : newValue;
-    }
   }
 }
 

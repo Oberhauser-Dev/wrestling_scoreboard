@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
@@ -7,17 +6,20 @@ import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutEdit extends ConsumerStatefulWidget {
   final Bout? bout;
+  final BoutConfig boutConfig;
   final Lineup lineupRed;
   final Lineup lineupBlue;
 
   const BoutEdit({
     super.key,
     this.bout,
+    required this.boutConfig,
     required this.lineupRed,
     required this.lineupBlue,
   });
@@ -31,14 +33,14 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
   WeightClass? _weightClass;
   Participation? _redParticipation;
   Participation? _blueParticipation;
-  int? _durationInSecs;
+  Duration? _boutDuration;
 
   Future<List<WeightClass>> get availableWeightClasses;
 
   @override
   void initState() {
     super.initState();
-    _durationInSecs = widget.bout?.duration.inSeconds;
+    _boutDuration = widget.bout?.duration;
     _winnerRole = widget.bout?.winnerRole;
     _boutResult = widget.bout?.result;
     _weightClass = widget.bout?.weightClass;
@@ -133,16 +135,12 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
       ),
       ListTile(
         leading: const Icon(Icons.timelapse),
-        title: TextFormField(
-          initialValue: _durationInSecs.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.duration} (${localizations.seconds})',
-          ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
-          onSaved: (String? value) {
-            _durationInSecs = int.tryParse(value ?? '') ?? 0;
+        subtitle: Text(localizations.duration),
+        title: DurationFormField(
+          initialValue: _boutDuration,
+          maxValue: widget.boutConfig.totalPeriodDuration,
+          onSaved: (Duration? value) {
+            _boutDuration = value;
           },
         ),
       ),
@@ -183,7 +181,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         winnerRole: _winnerRole,
         r: await updateParticipantState(_redParticipation, widget.bout?.r),
         b: await updateParticipantState(_blueParticipation, widget.bout?.b),
-        duration: Duration(seconds: _durationInSecs ?? 0),
+        duration: _boutDuration ?? Duration.zero,
         pool: widget.bout?.pool,
       );
 

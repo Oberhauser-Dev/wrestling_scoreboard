@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassEdit extends ConsumerStatefulWidget {
@@ -51,7 +52,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             labelText: localizations.weight,
           ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
           onSaved: (String? value) {
             _weight = int.tryParse(value ?? '') ?? 0;
           },

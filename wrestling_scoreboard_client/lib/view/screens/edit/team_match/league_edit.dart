@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_config_edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueEdit extends BoutConfigEdit {
@@ -82,7 +83,7 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             labelText: localizations.seasonPartitions,
           ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d'))],
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
           onSaved: (String? value) {
             _seasonPartitions = int.tryParse(value ?? '') ?? 1;
             if (_seasonPartitions < 1) _seasonPartitions = 1;

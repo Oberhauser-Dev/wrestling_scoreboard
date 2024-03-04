@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/weight_class_edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -42,7 +43,7 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             labelText: localizations.position,
           ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
           onSaved: (String? value) {
             _pos = int.tryParse(value ?? '') ?? 0;
           },

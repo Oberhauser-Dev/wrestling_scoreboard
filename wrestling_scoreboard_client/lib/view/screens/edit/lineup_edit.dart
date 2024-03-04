@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
@@ -261,9 +262,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                   contentPadding: const EdgeInsets.symmetric(vertical: 20),
                   labelText: localizations.weight,
                 ),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}(\.\d{0,2})?'))
-                ],
+                inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
                 onChanged: (String? value) {
                   final newValue = (value == null || value.isEmpty) ? null : double.parse(value);
                   _curWeight = newValue;

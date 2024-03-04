@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchBoutEdit extends BoutEdit {
@@ -15,6 +16,7 @@ class TeamMatchBoutEdit extends BoutEdit {
           bout: teamMatchBout?.bout,
           lineupRed: initialTeamMatch.home,
           lineupBlue: initialTeamMatch.guest,
+          boutConfig: initialTeamMatch.league?.boutConfig ?? const BoutConfig(),
         );
 
   @override
@@ -37,7 +39,7 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             labelText: localizations.position,
           ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,3}'))],
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
           onSaved: (String? value) {
             _pos = int.tryParse(value ?? '') ?? 0;
           },

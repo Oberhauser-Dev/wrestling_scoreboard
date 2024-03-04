@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutConfigEdit extends ConsumerStatefulWidget {
@@ -17,10 +19,10 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
     implements AbstractEditState<BoutConfig> {
   final _formKey = GlobalKey<FormState>();
 
-  int? _periodDurationInSecs;
-  int? _breakDurationInSecs;
-  int? _activityDurationInSecs;
-  int? _injuryDurationInSecs;
+  Duration? _periodDuration;
+  Duration? _breakDuration;
+  Duration? _activityDuration;
+  Duration? _injuryDuration;
   int? _periodCount;
 
   @override
@@ -37,62 +39,45 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
       ...fields,
       ListTile(
         leading: const Icon(Icons.timer),
-        title: TextFormField(
-          initialValue: (widget.boutConfig?.periodDuration ?? BoutConfig.defaultPeriodDuration).inSeconds.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.periodDurationInSecs,
-          ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
-          onSaved: (String? value) {
-            _periodDurationInSecs = int.tryParse(value ?? '') ?? 0;
+        subtitle: Text(localizations.periodDurationInSecs),
+        title: DurationFormField(
+          initialValue: widget.boutConfig?.periodDuration ?? BoutConfig.defaultPeriodDuration,
+          maxValue: const Duration(hours: 1),
+          onSaved: (Duration? value) {
+            _periodDuration = value;
           },
         ),
       ),
       ListTile(
         leading: const Icon(Icons.timer),
-        title: TextFormField(
-          initialValue: (widget.boutConfig?.breakDuration ?? BoutConfig.defaultBreakDuration).inSeconds.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.breakDurationInSecs,
-          ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
-          onSaved: (String? value) {
-            _breakDurationInSecs = int.tryParse(value ?? '') ?? 0;
+        subtitle: Text(localizations.breakDurationInSecs),
+        title: DurationFormField(
+          initialValue: widget.boutConfig?.breakDuration ?? BoutConfig.defaultBreakDuration,
+          maxValue: const Duration(hours: 1),
+          onSaved: (Duration? value) {
+            _breakDuration = value;
           },
         ),
       ),
       ListTile(
         leading: const Icon(Icons.timer),
-        title: TextFormField(
-          initialValue:
-              (widget.boutConfig?.activityDuration ?? BoutConfig.defaultActivityDuration).inSeconds.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.activityDurationInSecs,
-          ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
-          onSaved: (String? value) {
-            _activityDurationInSecs = int.tryParse(value ?? '') ?? 0;
+        subtitle: Text(localizations.activityDurationInSecs),
+        title: DurationFormField(
+          initialValue: widget.boutConfig?.activityDuration ?? BoutConfig.defaultActivityDuration,
+          maxValue: const Duration(hours: 1),
+          onSaved: (Duration? value) {
+            _activityDuration = value;
           },
         ),
       ),
       ListTile(
         leading: const Icon(Icons.timer),
-        title: TextFormField(
-          initialValue: (widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration).inSeconds.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.injuryDurationInSecs,
-          ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,4}'))],
-          onSaved: (String? value) {
-            _injuryDurationInSecs = int.tryParse(value ?? '') ?? 0;
+        subtitle: Text(localizations.injuryDurationInSecs),
+        title: DurationFormField(
+          initialValue: widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration,
+          maxValue: const Duration(hours: 1),
+          onSaved: (Duration? value) {
+            _injuryDuration = value;
           },
         ),
       ),
@@ -105,7 +90,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             labelText: localizations.periodCount,
           ),
-          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d{1,2}'))],
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
           onSaved: (String? value) {
             _periodCount = int.tryParse(value ?? '') ?? 0;
           },
@@ -129,10 +114,10 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
       _formKey.currentState!.save();
       var boutConfig = BoutConfig(
         id: widget.boutConfig?.id,
-        periodDuration: Duration(seconds: _periodDurationInSecs!),
-        breakDuration: Duration(seconds: _breakDurationInSecs!),
-        activityDuration: Duration(seconds: _activityDurationInSecs!),
-        injuryDuration: Duration(seconds: _injuryDurationInSecs!),
+        periodDuration: _periodDuration!,
+        breakDuration: _breakDuration!,
+        activityDuration: _activityDuration!,
+        injuryDuration: _injuryDuration!,
         periodCount: _periodCount!,
       );
       boutConfig =
