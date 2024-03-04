@@ -31,7 +31,13 @@ class MembershipEditState extends PersonEditState<MembershipEdit> {
             hintText: localizations.optional,
           ),
           initialValue: widget.membership?.no,
-          onSaved: (newValue) => _no = newValue,
+          onSaved: (newValue) {
+            if (newValue == null || newValue.isEmpty) {
+              _no = null;
+            } else {
+              _no = newValue;
+            }
+          },
         ),
       ),
     ]);
