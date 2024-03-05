@@ -74,9 +74,9 @@
               onsubmit="return confirm('Are you sure you want to export the database?');">
             <input type='submit' value="Export">
         </form>
-        <form action='/api/database/restore' method='POST'
-              onsubmit="return confirm('Are you sure you want to restore the database?');">
-            <input type='submit' value="Restore">
+        <form action='/api/database/restore_default' method='POST'
+              onsubmit="return confirm('Are you sure you want to restore the default database?');">
+            <input type='submit' value="Restore Default">
         </form>
     </ul>
     <li><a href="/ws">Websocket Endpoint</a>

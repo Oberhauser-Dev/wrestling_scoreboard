@@ -9,9 +9,15 @@ import 'entity_controller.dart';
 class DatabaseController {
   /// Reset all tables
   Future<Response> reset(Request request) async {
-    Iterable<EntityController> entityControllers = dataTypes.map((t) => EntityController.getControllerFromDataType(t));
-    await Future.forEach(entityControllers, (e) => e.deleteMany());
-    return Response.ok('{"status": "success"}');
+    try {
+      await _restoreDefault();
+      Iterable<EntityController> entityControllers =
+          dataTypes.map((t) => EntityController.getControllerFromDataType(t));
+      await Future.forEach(entityControllers, (e) => e.deleteMany());
+      return Response.ok('{"status": "success"}');
+    } catch (err) {
+      return Response.internalServerError(body: '{"err": "$err"}');
+    }
   }
 
   /// Upgrade the existing database
@@ -46,18 +52,22 @@ class DatabaseController {
     }
   }
 
-  /// Restore a database dump
-  Future<Response> restore(Request request) async {
+  /// Restore the default database dump
+  Future<Response> restoreDefault(Request request) async {
+    try {
+      await _restoreDefault();
+      return Response.ok('{"status": "success"}');
+    } catch (err) {
+      return Response.internalServerError(body: '{"err": "$err"}');
+    }
+  }
+
+  Future<void> _restoreDefault() async {
     final db = PostgresDb();
     final conn = db.connection;
-    try {
+    {
       await conn.execute('DROP SCHEMA IF EXISTS public CASCADE;');
       await db.close();
-      // await conn.execute('CREATE SCHEMA public;');
-      // await conn.execute('GRANT ALL ON SCHEMA public TO postgres;');
-      // await conn.execute('GRANT ALL ON SCHEMA public TO public;');
-    } catch (e) {
-      return Response.internalServerError(body: '{"err": "$e"}');
     }
 
     final args = <String>[
@@ -71,27 +81,11 @@ class DatabaseController {
       db.postgresPort.toString(),
       db.postgresDatabaseName,
     ];
-    final process = await Process.run('psql', args, environment: {'PGPASSWORD': db.dbPW});
-
-    // final dumpFile = File('./database/dump/PostgreSQL-wrestling_scoreboard-dump.sql');
-    // final dumpContent = await dumpFile.readAsLines();
-    // dumpContent.removeWhere((element) => element.isEmpty);
-    // dumpContent.removeWhere((element) => element.startsWith('--'));
-    // final dumpStr = dumpContent.reduce((value, element) => value + element);
-    // final sqls = dumpStr.split(';');
-    // for (var sql in sqls) {
-    //   try {
-    //     await conn.execute('$sql;');
-    //   } catch (_) {
-    //     print('Executed SQL command: $sql');
-    //     rethrow;
-    //   }
-    // }
+    final processResult = await Process.run('psql', args, environment: {'PGPASSWORD': db.dbPW});
     await db.open();
-    if (process.exitCode == 0) {
-      return Response.ok('{"status": "success"}');
-    } else {
-      return Response.internalServerError(body: '{"err": "${process.stderr}"}');
+
+    if (processResult.exitCode != 0) {
+      throw processResult.stderr;
     }
   }
 }
