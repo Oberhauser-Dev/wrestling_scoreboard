@@ -397,6 +397,30 @@ class MockDataManager extends DataManager {
         // TODO: implement messageHandler
         return null;
       });
+
+  @override
+  Future<String> exportDatabase() {
+    // TODO: implement exportDatabase
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetDatabase() {
+    // TODO: implement resetDatabase
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> restoreDefaultDatabase() {
+    // TODO: implement restoreDatabase
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> restoreDatabase(String sqlDump) {
+    // TODO: implement restoreDatabase
+    throw UnimplementedError();
+  }
 }
 
 class MockWebSocketManager implements WebSocketManager {

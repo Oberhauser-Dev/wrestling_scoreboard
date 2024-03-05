@@ -148,6 +148,44 @@ class RestDataManager extends DataManager {
   Future<void> deleteSingle<T extends DataObject>(T single) async {
     webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
   }
+
+  @override
+  Future<String> exportDatabase() async {
+    final uri = Uri.parse('$_apiUrl/database/export');
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Failed to export the database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+    }
+  }
+
+  @override
+  Future<void> resetDatabase() async {
+    final uri = Uri.parse('$_apiUrl/database/reset');
+    final response = await http.post(uri);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to reset the database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+    }
+  }
+
+  @override
+  Future<void> restoreDefaultDatabase() async {
+    final uri = Uri.parse('$_apiUrl/database/restore_default');
+    final response = await http.post(uri);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to restore the default database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+    }
+  }
+
+  @override
+  Future<void> restoreDatabase(String sqlDump) async {
+    final uri = Uri.parse('$_apiUrl/database/restore');
+    final response = await http.post(uri, headers: headers, body: sqlDump);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to restore the database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+    }
+  }
 }
 
 class RestException implements Exception {

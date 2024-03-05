@@ -18,6 +18,10 @@
   "themeModeDark": "Dark mode",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "exportDatabase": "Export database",
+  "restoreDatabase": "Restore database",
+  "restoreDefaultDatabase": "Restore default database",
+  "resetDatabase": "Reset database",
   "bellSound": "Bell sound",
 
   "imprint": "Imprint",

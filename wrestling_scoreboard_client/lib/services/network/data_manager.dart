@@ -70,6 +70,14 @@ abstract class DataManager {
   /// If [isReset] is true, then delete all previous Bouts and TeamMatchBouts, else reuse the states.
   Future<void> generateBouts<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);
 
+  Future<String> exportDatabase();
+
+  Future<void> restoreDatabase(String sqlDump);
+
+  Future<void> restoreDefaultDatabase();
+
+  Future<void> resetDatabase();
+
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject<dynamic>>>> _manyStreamControllers = {};
   final Map<Type, StreamController<Map<String, dynamic>>> _singleRawStreamControllers = {};

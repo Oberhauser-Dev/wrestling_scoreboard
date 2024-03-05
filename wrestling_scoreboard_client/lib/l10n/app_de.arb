@@ -15,6 +15,10 @@
   "themeModeDark": "Dunkler Modus",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "exportDatabase": "Datenbank exportieren",
+  "restoreDatabase": "Datenbank wiederherstellen",
+  "restoreDefaultDatabase": "Standard-Datenbank wiederherstellen",
+  "resetDatabase": "Datenbank zurücksetzen",
   "bellSound": "Glocken-Sound",
 
   "imprint": "Impressum",

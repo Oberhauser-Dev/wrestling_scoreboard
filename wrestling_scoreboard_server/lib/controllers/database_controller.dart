@@ -7,6 +7,8 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'entity_controller.dart';
 
 class DatabaseController {
+  // TODO: migration should be handled automatically at server start.
+
   /// Reset all tables
   Future<Response> reset(Request request) async {
     try {
@@ -20,18 +22,13 @@ class DatabaseController {
     }
   }
 
-  /// Upgrade the existing database
-  Future<Response> upgrade(Request request) async {
-    return Response.notFound('{"status": "not yet implemented"}');
-  }
-
-  /// Restore a database dump
+  /// Export a database to dump
   Future<Response> export(Request request) async {
     final db = PostgresDb();
     final args = <String>[
-      '--file',
-      './database/dump/${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-          'PostgreSQL-wrestling_scoreboard-dump.sql',
+      // '--file',
+      // './database/dump/${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
+      //     'PostgreSQL-wrestling_scoreboard-dump.sql',
       '--username',
       db.dbUser,
       '--host',
@@ -46,9 +43,23 @@ class DatabaseController {
     final process = await Process.run('pg_dump', args, environment: {'PGPASSWORD': db.dbPW});
 
     if (process.exitCode == 0) {
-      return Response.ok('{"status": "success"}');
+      return Response.ok(process.stdout);
     } else {
       return Response.internalServerError(body: '{"err": "${process.stderr}"}');
+    }
+  }
+
+  /// Restore a database dump
+  Future<Response> restore(Request request) async {
+    try {
+      final message = await request.readAsString();
+      File file =
+          File('${Directory.systemTemp.path}/${message.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0')}.sql');
+      await file.writeAsString(message);
+      await _restore(file.path);
+      return Response.ok('{"status": "success"}');
+    } catch (err) {
+      return Response.internalServerError(body: '{"err": "$err"}');
     }
   }
 
@@ -62,7 +73,9 @@ class DatabaseController {
     }
   }
 
-  Future<void> _restoreDefault() async {
+  Future<void> _restoreDefault() => _restore('./database/dump/PostgreSQL-wrestling_scoreboard-dump.sql');
+
+  Future<void> _restore(String dumpPath) async {
     final db = PostgresDb();
     final conn = db.connection;
     {
@@ -72,7 +85,7 @@ class DatabaseController {
 
     final args = <String>[
       '--file',
-      './database/dump/PostgreSQL-wrestling_scoreboard-dump.sql',
+      dumpPath,
       '--username',
       db.dbUser,
       '--host',

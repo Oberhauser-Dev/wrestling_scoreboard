@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -148,7 +153,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                       ListTile(
                         subtitle: Text(apiUrl),
                         title: Text(localizations.apiUrl),
-                        leading: const Icon(Icons.storage),
+                        leading: const Icon(Icons.link),
                         onTap: () async {
                           final val = await showDialog<String>(
                             context: context,
@@ -163,7 +168,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         },
                       ),
                       ListTile(
-                        leading: const Icon(Icons.storage),
+                        leading: const Icon(Icons.link),
                         title: Text(localizations.wsUrl),
                         subtitle: Text(wsUrl),
                         onTap: () async {
@@ -176,6 +181,54 @@ class CustomSettingsScreen extends ConsumerWidget {
                           if (val != null) {
                             Preferences.onChangeWsUrlWebSocket.add(val);
                             await Preferences.setString(Preferences.keyWsUrl, val);
+                          }
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.cloud_download),
+                        title: Text(localizations.exportDatabase),
+                        onTap: () async {
+                          String? outputPath = await FilePicker.platform.saveFile(
+                            fileName:
+                                '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
+                                'PostgreSQL-wrestling_scoreboard-dump.sql',
+                          );
+                          if (outputPath != null) {
+                            final dataManager = await ref.read(dataManagerNotifierProvider);
+                            final sqlString = await dataManager.exportDatabase();
+                            final outputFile = File(outputPath);
+                            await outputFile.writeAsString(sqlString, encoding: const Utf8Codec());
+                          }
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.settings_backup_restore),
+                        title: Text(localizations.resetDatabase),
+                        onTap: () async {
+                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          await dataManager.resetDatabase();
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.history),
+                        title: Text(localizations.restoreDefaultDatabase),
+                        onTap: () async {
+                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          await dataManager.restoreDefaultDatabase();
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.cloud_upload),
+                        title: Text(localizations.restoreDatabase),
+                        onTap: () async {
+                          FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['sql'],
+                          );
+                          if (filePickerResult != null) {
+                            File file = File(filePickerResult.files.single.path!);
+                            final dataManager = await ref.read(dataManagerNotifierProvider);
+                            await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
                           }
                         },
                       ),

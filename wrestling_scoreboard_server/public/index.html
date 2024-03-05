@@ -62,17 +62,13 @@
         <li><a href="/api/competitions">Competitions</a></li>
         <li><a href="/api/competition_bouts">CompetitionBouts</a></li>
         <li><a href="/api/weight_classs">WeightClasses</a></li>
+        <form action='/api/database/export' method='GET'
+              onsubmit="return confirm('Are you sure you want to export the database?');">
+            <input type='submit' value="Export">
+        </form>
         <form action='/api/database/reset' method='POST'
               onsubmit="return confirm('Are you sure you want to reset the database?');">
             <input type='submit' value="Reset">
-        </form>
-        <form action='/api/database/upgrade' method='POST'
-              onsubmit="return confirm('Are you sure you want to upgrade the database?');">
-            <input type='submit' value="Upgrade">
-        </form>
-        <form action='/api/database/export' method='POST'
-              onsubmit="return confirm('Are you sure you want to export the database?');">
-            <input type='submit' value="Export">
         </form>
         <form action='/api/database/restore_default' method='POST'
               onsubmit="return confirm('Are you sure you want to restore the default database?');">
