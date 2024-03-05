@@ -67,6 +67,7 @@ String _$windowStateNotifierHash() => r'929e42278b3ca7b70a11395dce93897096154217
 
 abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>> {
   Raw<Future<WindowState>> build();
+
   @$internal
   @override
   Raw<Future<WindowState>> runBuild() => build();

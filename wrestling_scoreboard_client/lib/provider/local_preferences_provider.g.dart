@@ -70,7 +70,6 @@ String _$localeNotifierHash() => r'e1e390bd02d18a8474b484ee33bc40edca7e9c3d';
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
-
   @$internal
   @override
   Raw<Future<Locale?>> runBuild() => build();
@@ -137,10 +136,75 @@ String _$themeModeNotifierHash() => r'29aedc145964f8e32034ab495a26ee3ccedfed82';
 
 abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   Raw<Future<ThemeMode>> build();
-
   @$internal
   @override
   Raw<Future<ThemeMode>> runBuild() => build();
+}
+
+@ProviderFor(FontFamilyNotifier)
+const fontFamilyNotifierProvider = FontFamilyNotifierProvider._();
+
+final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotifier, Raw<Future<String?>>> {
+  const FontFamilyNotifierProvider._({super.runNotifierBuildOverride, FontFamilyNotifier Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'fontFamilyNotifierProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final FontFamilyNotifier Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$fontFamilyNotifierHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<String?>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<String?>>>(value),
+    );
+  }
+
+  @$internal
+  @override
+  FontFamilyNotifier create() => _createCb?.call() ?? FontFamilyNotifier();
+
+  @$internal
+  @override
+  FontFamilyNotifierProvider $copyWithCreate(
+    FontFamilyNotifier Function() create,
+  ) {
+    return FontFamilyNotifierProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  FontFamilyNotifierProvider $copyWithBuild(
+    Raw<Future<String?>> Function(
+      Ref<Raw<Future<String?>>>,
+      FontFamilyNotifier,
+    ) build,
+  ) {
+    return FontFamilyNotifierProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<FontFamilyNotifier, Raw<Future<String?>>> $createElement(ProviderContainer container) =>
+      $NotifierProviderElement(this, container);
+}
+
+String _$fontFamilyNotifierHash() => r'ed5b02ebac1257f7cfe1c2b3a37fc57b06b90090';
+
+abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
+  Raw<Future<String?>> build();
+  @$internal
+  @override
+  Raw<Future<String?>> runBuild() => build();
 }
 
 @ProviderFor(WebSocketUrlNotifier)
@@ -204,7 +268,6 @@ String _$webSocketUrlNotifierHash() => r'3e384b28903aca1717d43fa65ace0651b39b668
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -271,7 +334,6 @@ String _$networkTimeoutNotifierHash() => r'2c6a26f2904896d01c9ddd31fd4ae7637030a
 
 abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
-
   @$internal
   @override
   Raw<Future<Duration>> runBuild() => build();
@@ -338,7 +400,6 @@ String _$apiUrlNotifierHash() => r'8c063b9ec135234c56970345957760282a21fbde';
 
 abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -405,7 +466,6 @@ String _$bellSoundNotifierHash() => r'1c9d805977f6f32cd7b44e7bd1ecfecd15447ddd';
 
 abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();

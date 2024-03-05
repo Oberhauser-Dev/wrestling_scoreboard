@@ -6,6 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
@@ -30,13 +32,11 @@ class CustomSettingsScreen extends ConsumerWidget {
       return true;
     }
 
-    String getTranslationOfLocale([String? locale]) {
-      switch (locale) {
+    String getTranslationOfLocale([Locale? locale]) {
+      switch (locale?.languageCode) {
         case 'de':
-        case 'de_DE':
           return localizations.de_DE + (isDisplayInternational() ? ' | German' : '');
         case 'en':
-        case 'en_US':
           return localizations.en_US + (isDisplayInternational() ? ' | English (US)' : '');
         default:
           return localizations.systemSetting + (isDisplayInternational() ? ' | System setting' : '');
@@ -60,72 +60,130 @@ class CustomSettingsScreen extends ConsumerWidget {
       ),
       body: ResponsiveColumn(
         children: [
-          FutureBuilder<Locale?>(
+          LoadingBuilder<Locale?>(
             future: ref.watch(localeNotifierProvider),
-            builder: (context, localeSnapshot) {
-              var locale = localeSnapshot.data;
+            builder: (context, locale) {
               return LoadingBuilder<ThemeMode>(
                 future: ref.watch(themeModeNotifierProvider),
                 builder: (context, themeMode) {
-                  return SettingsSection(
-                    title: localizations.general,
-                    action: TextButton(
-                      onPressed: () {
-                        locale = null;
-                        Preferences.setString(Preferences.keyLocale, locale?.toLanguageTag());
-                        Preferences.onChangeLocale.add(locale);
+                  return LoadingBuilder<String?>(
+                      future: ref.watch(fontFamilyNotifierProvider),
+                      builder: (context, fontFamily) {
+                        return SettingsSection(
+                          title: localizations.general,
+                          action: TextButton(
+                            onPressed: () {
+                              locale = null;
+                              Preferences.setString(Preferences.keyLocale, locale?.toLanguageTag());
+                              Preferences.onChangeLocale.add(locale);
 
-                        themeMode = ThemeMode.system;
-                        Preferences.setString(Preferences.keyThemeMode, themeMode.name);
-                        Preferences.onChangeThemeMode.add(themeMode);
-                      },
-                      child: Text(localizations.reset),
-                    ),
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.translate),
-                        title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
-                        subtitle: Text(getTranslationOfLocale(locale?.toLanguageTag())),
-                        onTap: () async {
-                          final val = await showDialog<String?>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              final List<MapEntry<String?, String>> languageSettingValues = Preferences
-                                  .supportedLanguages
-                                  .map((key, value) => MapEntry<String?, String>(key, getTranslationOfLocale(key)))
-                                  .entries
-                                  .toList();
-                              languageSettingValues.add(MapEntry(null, getTranslationOfLocale()));
-                              return RadioDialog<String>(
-                                  values: languageSettingValues, initialValue: locale?.toLanguageTag());
+                              themeMode = ThemeMode.system;
+                              Preferences.setString(Preferences.keyThemeMode, themeMode.name);
+                              Preferences.onChangeThemeMode.add(themeMode);
+
+                              const defaultFontFamily = 'Roboto';
+                              Preferences.setString(Preferences.keyFontFamily, defaultFontFamily);
+                              Preferences.onChangeFontFamily.add(defaultFontFamily);
                             },
-                          );
-                          Preferences.onChangeLocale.add(Preferences.supportedLanguages[val]);
-                          await Preferences.setString(Preferences.keyLocale, val);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.brush),
-                        title: Text(localizations.themeMode),
-                        subtitle: Text(getTranslationOfThemeMode(themeMode)),
-                        onTap: () async {
-                          final val = await showDialog<ThemeMode>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              final List<MapEntry<ThemeMode, String>> themeModeValues = ThemeMode.values
-                                  .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
-                                  .toList();
-                              return RadioDialog<ThemeMode>(values: themeModeValues, initialValue: themeMode);
-                            },
-                          );
-                          if (val != null) {
-                            Preferences.onChangeThemeMode.add(val);
-                            await Preferences.setString(Preferences.keyThemeMode, val.name);
-                          }
-                        },
-                      ),
-                    ],
-                  );
+                            child: Text(localizations.reset),
+                          ),
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.translate),
+                              title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
+                              subtitle: Text(getTranslationOfLocale(locale)),
+                              onTap: () async {
+                                final val = await showDialog<Locale?>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    final List<MapEntry<Locale?, String>> languageSettingValues =
+                                        Preferences.supportedLanguages.map((locale) {
+                                      return MapEntry<Locale?, String>(locale, getTranslationOfLocale(locale));
+                                    }).toList();
+                                    languageSettingValues.insert(0, MapEntry(null, getTranslationOfLocale()));
+                                    return RadioDialog<Locale?>(values: languageSettingValues, initialValue: locale);
+                                  },
+                                );
+                                Preferences.onChangeLocale.add(val);
+                                await Preferences.setString(Preferences.keyLocale, val?.toLanguageTag());
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.brush),
+                              title: Text(localizations.themeMode),
+                              subtitle: Text(getTranslationOfThemeMode(themeMode)),
+                              onTap: () async {
+                                final val = await showDialog<ThemeMode>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    final List<MapEntry<ThemeMode, String>> themeModeValues = ThemeMode.values
+                                        .map((value) =>
+                                            MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
+                                        .toList();
+                                    return RadioDialog<ThemeMode>(values: themeModeValues, initialValue: themeMode);
+                                  },
+                                );
+                                if (val != null) {
+                                  Preferences.onChangeThemeMode.add(val);
+                                  await Preferences.setString(Preferences.keyThemeMode, val.name);
+                                }
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.abc),
+                              trailing: IconButton(
+                                tooltip: 'Google Fonts',
+                                icon: const Icon(Icons.link),
+                                onPressed: () => launchUrl(Uri.parse('https://fonts.google.com/')),
+                              ),
+                              title: Text(localizations.fontFamily),
+                              subtitle: Text(fontFamily ?? localizations.systemSetting),
+                              onTap: () async {
+                                final currentTextTheme = Theme.of(context).textTheme;
+                                final val = await showDialog<String?>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    final List<MapEntry<String?, String>> fontFamilies = GoogleFonts.asMap()
+                                        .keys
+                                        .map((String e) => MapEntry<String?, String>(e, e))
+                                        .toList();
+                                    fontFamilies.insert(
+                                        0, MapEntry<String?, String>(null, localizations.systemSetting));
+                                    return RadioDialog<String?>(
+                                        itemCount: fontFamilies.length,
+                                        builder: (index) {
+                                          final fontFamily = fontFamilies[index];
+                                          return (
+                                            fontFamily.key,
+                                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                              Text(fontFamily.value),
+                                              IconButton(
+                                                  onPressed: () => showDialog(
+                                                        context: context,
+                                                        builder: (context) => OkDialog(
+                                                          child: Text(
+                                                              'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
+                                                              style: fontFamily.key != null
+                                                                  ? GoogleFonts.getTextTheme(
+                                                                          fontFamily.key!, currentTextTheme)
+                                                                      .headlineMedium
+                                                                  : null),
+                                                        ),
+                                                      ),
+                                                  icon: const Icon(Icons.visibility))
+                                            ])
+                                          );
+                                        },
+                                        initialValue: fontFamily);
+                                  },
+                                );
+                                Preferences.onChangeFontFamily.add(val);
+                                await Preferences.setString(Preferences.keyFontFamily, val);
+                              },
+                            ),
+                          ],
+                        );
+                      });
                 },
               );
             },
@@ -160,7 +218,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         final val = await showDialog<String>(
                           context: context,
                           builder: (BuildContext context) {
-                            return RadioDialog(
+                            return RadioDialog<String>(
                               values: bellSoundValues,
                               initialValue: bellSoundPath,
                               onChanged: (value) async {

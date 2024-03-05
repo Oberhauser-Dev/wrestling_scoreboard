@@ -28,11 +28,14 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     HornSound.init();
   }
 
-  ThemeData _buildTheme(brightness) {
-    var baseTheme = ThemeData(brightness: brightness);
-    return baseTheme.copyWith(
-      textTheme: GoogleFonts.robotoTextTheme(baseTheme.textTheme),
-    );
+  ThemeData _buildTheme(Brightness brightness, String? fontFamily) {
+    final baseTheme = ThemeData(brightness: brightness);
+    if (fontFamily != null) {
+      return baseTheme.copyWith(
+        textTheme: GoogleFonts.getTextTheme(fontFamily),
+      );
+    }
+    return baseTheme;
   }
 
   @override
@@ -43,32 +46,37 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
         return LoadingBuilder<ThemeMode>(
           future: ref.watch(themeModeNotifierProvider),
           builder: (context, themeMode) {
-            final materialApp = MaterialApp.router(
-              title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-              theme: _buildTheme(Brightness.light),
-              darkTheme: _buildTheme(Brightness.dark),
-              themeMode: themeMode,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: Preferences.supportedLanguages.values,
-              locale: localeSnapshot.data,
-              routerConfig: router,
-            );
-            return Shortcuts(
-              shortcuts: appShortcuts,
-              child: Consumer(
-                builder: (context, ref, child) {
-                  return Actions(actions: <Type, Action<Intent>>{
-                    AppActionIntent: CallbackAction<AppActionIntent>(
-                      onInvoke: (AppActionIntent intent) => intent.handle(context, ref),
-                    )
-                  }, child: materialApp);
-                },
-              ),
+            return LoadingBuilder<String?>(
+              future: ref.watch(fontFamilyNotifierProvider),
+              builder: (context, fontFamily) {
+                final materialApp = MaterialApp.router(
+                  title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
+                  theme: _buildTheme(Brightness.light, fontFamily),
+                  darkTheme: _buildTheme(Brightness.dark, fontFamily),
+                  themeMode: themeMode,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: Preferences.supportedLanguages,
+                  locale: localeSnapshot.data,
+                  routerConfig: router,
+                );
+                return Shortcuts(
+                  shortcuts: appShortcuts,
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      return Actions(actions: <Type, Action<Intent>>{
+                        AppActionIntent: CallbackAction<AppActionIntent>(
+                          onInvoke: (AppActionIntent intent) => intent.handle(context, ref),
+                        )
+                      }, child: materialApp);
+                    },
+                  ),
+                );
+              },
             );
           },
         );

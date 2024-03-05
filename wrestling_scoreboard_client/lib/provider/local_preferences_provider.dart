@@ -46,6 +46,18 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
 }
 
 @Riverpod(keepAlive: true)
+class FontFamilyNotifier extends _$FontFamilyNotifier {
+  @override
+  Raw<Future<String?>> build() async {
+    final fontFamily = await Preferences.getString(Preferences.keyFontFamily);
+    Preferences.onChangeFontFamily.stream.distinct().listen((event) {
+      state = Future.value(event);
+    });
+    return fontFamily;
+  }
+}
+
+@Riverpod(keepAlive: true)
 class WebSocketUrlNotifier extends _$WebSocketUrlNotifier {
   @override
   Raw<Future<String>> build() async {

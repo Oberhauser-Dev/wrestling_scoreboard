@@ -13,6 +13,7 @@
   "themeMode": "Themen Modus",
   "themeModeLight": "Heller Modus",
   "themeModeDark": "Dunkler Modus",
+  "fontFamily": "Schriftart",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
   "database": "Datenbank",

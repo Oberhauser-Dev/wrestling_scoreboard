@@ -38,14 +38,10 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return AlertDialog(
+      // Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
       content: SizedBox(
         width: 300,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            child,
-          ],
-        ),
+        child: child,
       ),
       actions: <Widget>[
         TextButton(
@@ -129,16 +125,20 @@ class DurationDialog extends StatelessWidget {
 }
 
 class RadioDialog<T> extends StatefulWidget {
-  final List<MapEntry<T?, String>> values;
+  final List<MapEntry<T?, String>>? values;
+  final (T?, Widget) Function(int index)? builder;
   final T? initialValue;
+  final int? itemCount;
   final void Function(T? value)? onChanged;
 
   const RadioDialog({
     super.key,
-    required this.values,
+    this.values,
+    this.builder,
     required this.initialValue,
     this.onChanged,
-  });
+    this.itemCount,
+  }) : assert(values != null || builder != null);
 
   @override
   State<RadioDialog<T>> createState() => _RadioDialogState<T>();
@@ -159,11 +159,19 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
         child: ListView.builder(
           key: Key(result.toString()),
           shrinkWrap: true,
-          itemCount: widget.values.length,
+          itemCount: widget.itemCount ?? widget.values?.length,
           itemBuilder: (context, index) {
-            final entry = widget.values[index];
+            final T? key;
+            final Widget child;
+            if (widget.values != null) {
+              final entry = widget.values![index];
+              key = entry.key;
+              child = Text(entry.value);
+            } else {
+              (key, child) = widget.builder!(index);
+            }
             return RadioListTile<T?>(
-              value: entry.key,
+              value: key,
               groupValue: result,
               onChanged: (v) {
                 if (widget.onChanged != null) widget.onChanged!(v);
@@ -171,7 +179,7 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
                   result = v;
                 });
               },
-              title: Text(entry.value),
+              title: child,
             );
           },
         ),

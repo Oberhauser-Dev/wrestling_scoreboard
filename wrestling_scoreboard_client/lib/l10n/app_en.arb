@@ -16,6 +16,7 @@
   "themeMode": "Theme mode",
   "themeModeLight": "Light mode",
   "themeModeDark": "Dark mode",
+  "fontFamily": "Font family",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
   "database": "Database",

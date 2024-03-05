@@ -174,7 +174,8 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/database/restore_default');
     final response = await http.post(uri);
     if (response.statusCode != 200) {
-      throw Exception('Failed to restore the default database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw Exception(
+          'Failed to restore the default database: ${response.reasonPhrase ?? response.statusCode.toString()}');
     }
   }
 

@@ -8,21 +8,24 @@ class Preferences {
   static const keyThemeMode = 'theme-mode';
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
-  static const keyBellSound = 'bell-sound';
 
   /// Network timeout in milliseconds.
   static const keyNetworkTimeout = 'network-timeout';
+
+  static const keyBellSound = 'bell-sound';
+  static const keyFontFamily = 'font-family';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
   static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();
   static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
   static final StreamController<String> onChangeWsUrlWebSocket = StreamController.broadcast();
-  static final StreamController<String> onChangeBellSound = StreamController.broadcast();
   static final StreamController<Duration> onChangeNetworkTimeout = StreamController.broadcast();
+  static final StreamController<String> onChangeBellSound = StreamController.broadcast();
+  static final StreamController<String?> onChangeFontFamily = StreamController.broadcast();
 
   static final supportedLanguages = {
-    'en_US': const Locale('en', 'US'),
-    'de_DE': const Locale('de', 'DE'),
+    const Locale('en', 'US'),
+    const Locale('de', 'DE'),
   };
 
   static Future<void> setString(String key, String? value) async {
