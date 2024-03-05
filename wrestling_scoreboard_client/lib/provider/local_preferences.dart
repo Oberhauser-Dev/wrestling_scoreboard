@@ -9,6 +9,8 @@ class Preferences {
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
   static const keyBellSound = 'bell-sound';
+
+  /// Network timeout in milliseconds.
   static const keyNetworkTimeout = 'network-timeout';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
@@ -27,6 +29,15 @@ class Preferences {
     final prefs = await SharedPreferences.getInstance();
     if (value != null) {
       await prefs.setString(key, value);
+    } else {
+      await prefs.remove(key);
+    }
+  }
+
+  static Future<void> setInt(String key, int? value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value != null) {
+      await prefs.setInt(key, value);
     } else {
       await prefs.remove(key);
     }

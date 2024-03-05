@@ -15,6 +15,7 @@
   "themeModeDark": "Dunkler Modus",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "database": "Datenbank",
   "exportDatabase": "Datenbank exportieren",
   "restoreDatabase": "Datenbank wiederherstellen",
   "restoreDefaultDatabase": "Standard-Datenbank wiederherstellen",
@@ -55,6 +56,7 @@
   "invalidParameterException": "Die Änderung war nicht erfolgreich, bitte überprüfe deine Eingabeparameter.",
   "warningBoutGenerate": "Diese Aktion überschreibt alle existierenden Kämpfe dieser Begegnung. Um einzelne Kämpfe zu bearbeiten, nutze die Seite zur Kampf-Bearbeitung. Bist du sicher, dass du fortfahren möchtest?",
   "retry": "Erneut versuchen",
+  "networkTimeout": "Netzwerk-Timeout",
 
   "date": "Datum",
   "place": "Ort",

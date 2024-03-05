@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -130,115 +131,6 @@ class CustomSettingsScreen extends ConsumerWidget {
             },
           ),
           LoadingBuilder<String>(
-            future: ref.watch(apiUrlNotifierProvider),
-            builder: (context, apiUrl) {
-              return LoadingBuilder<String>(
-                future: ref.watch(webSocketUrlNotifierProvider),
-                builder: (context, wsUrl) {
-                  return SettingsSection(
-                    title: localizations.network,
-                    action: TextButton(
-                      onPressed: () {
-                        apiUrl = Env.apiUrl.fromString();
-                        Preferences.setString(Preferences.keyApiUrl, apiUrl);
-                        Preferences.onChangeApiUrl.add(apiUrl);
-
-                        wsUrl = Env.webSocketUrl.fromString();
-                        Preferences.setString(Preferences.keyWsUrl, wsUrl);
-                        Preferences.onChangeWsUrlWebSocket.add(wsUrl);
-                      },
-                      child: Text(localizations.reset),
-                    ),
-                    children: [
-                      ListTile(
-                        subtitle: Text(apiUrl),
-                        title: Text(localizations.apiUrl),
-                        leading: const Icon(Icons.link),
-                        onTap: () async {
-                          final val = await showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return TextInputDialog(initialValue: apiUrl);
-                            },
-                          );
-                          if (val != null) {
-                            Preferences.onChangeApiUrl.add(val);
-                            await Preferences.setString(Preferences.keyApiUrl, val);
-                          }
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.link),
-                        title: Text(localizations.wsUrl),
-                        subtitle: Text(wsUrl),
-                        onTap: () async {
-                          final val = await showDialog<String?>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return TextInputDialog(initialValue: wsUrl);
-                            },
-                          );
-                          if (val != null) {
-                            Preferences.onChangeWsUrlWebSocket.add(val);
-                            await Preferences.setString(Preferences.keyWsUrl, val);
-                          }
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.cloud_download),
-                        title: Text(localizations.exportDatabase),
-                        onTap: () async {
-                          String? outputPath = await FilePicker.platform.saveFile(
-                            fileName:
-                                '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-                                'PostgreSQL-wrestling_scoreboard-dump.sql',
-                          );
-                          if (outputPath != null) {
-                            final dataManager = await ref.read(dataManagerNotifierProvider);
-                            final sqlString = await dataManager.exportDatabase();
-                            final outputFile = File(outputPath);
-                            await outputFile.writeAsString(sqlString, encoding: const Utf8Codec());
-                          }
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.settings_backup_restore),
-                        title: Text(localizations.resetDatabase),
-                        onTap: () async {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
-                          await dataManager.resetDatabase();
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.history),
-                        title: Text(localizations.restoreDefaultDatabase),
-                        onTap: () async {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
-                          await dataManager.restoreDefaultDatabase();
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.cloud_upload),
-                        title: Text(localizations.restoreDatabase),
-                        onTap: () async {
-                          FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['sql'],
-                          );
-                          if (filePickerResult != null) {
-                            File file = File(filePickerResult.files.single.path!);
-                            final dataManager = await ref.read(dataManagerNotifierProvider);
-                            await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          LoadingBuilder<String>(
             future: ref.watch(bellSoundNotifierProvider),
             builder: (context, bellSoundPath) {
               return SettingsSection(
@@ -292,6 +184,148 @@ class CustomSettingsScreen extends ConsumerWidget {
                 ],
               );
             },
+          ),
+          LoadingBuilder<Duration>(
+              future: ref.watch(networkTimeoutNotifierProvider),
+              builder: (context, networkTimeout) {
+                return LoadingBuilder<String>(
+                  future: ref.watch(apiUrlNotifierProvider),
+                  builder: (context, apiUrl) {
+                    return LoadingBuilder<String>(
+                      future: ref.watch(webSocketUrlNotifierProvider),
+                      builder: (context, wsUrl) {
+                        return SettingsSection(
+                          title: localizations.network,
+                          action: TextButton(
+                            onPressed: () {
+                              apiUrl = Env.apiUrl.fromString();
+                              Preferences.setString(Preferences.keyApiUrl, apiUrl);
+                              Preferences.onChangeApiUrl.add(apiUrl);
+
+                              wsUrl = Env.webSocketUrl.fromString();
+                              Preferences.setString(Preferences.keyWsUrl, wsUrl);
+                              Preferences.onChangeWsUrlWebSocket.add(wsUrl);
+
+                              const defaultNetworkTimeout = Duration(seconds: 10);
+                              Preferences.setInt(Preferences.keyNetworkTimeout, defaultNetworkTimeout.inMilliseconds);
+                              Preferences.onChangeNetworkTimeout.add(defaultNetworkTimeout);
+                            },
+                            child: Text(localizations.reset),
+                          ),
+                          children: [
+                            ListTile(
+                              subtitle: Text(apiUrl),
+                              title: Text(localizations.apiUrl),
+                              leading: const Icon(Icons.link),
+                              onTap: () async {
+                                final val = await showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return TextInputDialog(initialValue: apiUrl);
+                                  },
+                                );
+                                if (val != null) {
+                                  Preferences.onChangeApiUrl.add(val);
+                                  await Preferences.setString(Preferences.keyApiUrl, val);
+                                }
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.link),
+                              title: Text(localizations.wsUrl),
+                              subtitle: Text(wsUrl),
+                              onTap: () async {
+                                final val = await showDialog<String?>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return TextInputDialog(initialValue: wsUrl);
+                                  },
+                                );
+                                if (val != null) {
+                                  Preferences.onChangeWsUrlWebSocket.add(val);
+                                  await Preferences.setString(Preferences.keyWsUrl, val);
+                                }
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.running_with_errors),
+                              title: Text(localizations.networkTimeout),
+                              subtitle: Text(networkTimeout.formatSecondsAndMilliseconds()),
+                              onTap: () async {
+                                final val = await showDialog<Duration?>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DurationDialog(
+                                      initialValue: networkTimeout,
+                                      maxValue: const Duration(hours: 1),
+                                    );
+                                  },
+                                );
+                                if (val != null) {
+                                  Preferences.onChangeNetworkTimeout.add(val);
+                                  await Preferences.setInt(Preferences.keyNetworkTimeout, val.inMilliseconds);
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              }),
+          SettingsSection(
+            title: localizations.database,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.cloud_download),
+                title: Text(localizations.exportDatabase),
+                onTap: () async {
+                  String? outputPath = await FilePicker.platform.saveFile(
+                    fileName:
+                        '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
+                        'PostgreSQL-wrestling_scoreboard-dump.sql',
+                  );
+                  if (outputPath != null) {
+                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    final sqlString = await dataManager.exportDatabase();
+                    final outputFile = File(outputPath);
+                    await outputFile.writeAsString(sqlString, encoding: const Utf8Codec());
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings_backup_restore),
+                title: Text(localizations.resetDatabase),
+                onTap: () async {
+                  final dataManager = await ref.read(dataManagerNotifierProvider);
+                  await dataManager.resetDatabase();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.history),
+                title: Text(localizations.restoreDefaultDatabase),
+                onTap: () async {
+                  final dataManager = await ref.read(dataManagerNotifierProvider);
+                  await dataManager.restoreDefaultDatabase();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.cloud_upload),
+                title: Text(localizations.restoreDatabase),
+                onTap: () async {
+                  FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['sql'],
+                  );
+                  if (filePickerResult != null) {
+                    File file = File(filePickerResult.files.single.path!);
+                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
+                  }
+                },
+              ),
+            ],
           ),
         ],
       ),
