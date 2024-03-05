@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 
-class LoadingBuilder<T> extends StatelessWidget {
+class LoadingBuilder<T> extends ConsumerWidget {
   final Future<T> future;
   final T? initialData;
   final void Function()? onRetry;
@@ -16,9 +18,9 @@ class LoadingBuilder<T> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<T>(
-      future: future,
+      future: ref.read(networkTimeoutNotifierProvider).then((timeout) => future.timeout(timeout)),
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
           return ExceptionWidget(snapshot.error!, onRetry: onRetry);

@@ -59,6 +59,18 @@ class WebSocketUrlNotifier extends _$WebSocketUrlNotifier {
 }
 
 @Riverpod(keepAlive: true)
+class NetworkTimeoutNotifier extends _$NetworkTimeoutNotifier {
+  @override
+  Raw<Future<Duration>> build() async {
+    var networkTimeout = await Preferences.getInt(Preferences.keyNetworkTimeout);
+    Preferences.onChangeNetworkTimeout.stream.distinct().listen((event) {
+      state = Future.value(event);
+    });
+    return Duration(milliseconds: networkTimeout ?? 10000);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class ApiUrlNotifier extends _$ApiUrlNotifier {
   @override
   Raw<Future<String>> build() async {

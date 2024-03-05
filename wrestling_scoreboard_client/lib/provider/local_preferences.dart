@@ -9,12 +9,14 @@ class Preferences {
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
   static const keyBellSound = 'bell-sound';
+  static const keyNetworkTimeout = 'network-timeout';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
   static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();
   static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
   static final StreamController<String> onChangeWsUrlWebSocket = StreamController.broadcast();
   static final StreamController<String> onChangeBellSound = StreamController.broadcast();
+  static final StreamController<Duration> onChangeNetworkTimeout = StreamController.broadcast();
 
   static final supportedLanguages = {
     'en_US': const Locale('en', 'US'),
@@ -31,4 +33,6 @@ class Preferences {
   }
 
   static Future<String?> getString(String key) => SharedPreferences.getInstance().then((value) => value.getString(key));
+
+  static Future<int?> getInt(String key) => SharedPreferences.getInstance().then((value) => value.getInt(key));
 }
