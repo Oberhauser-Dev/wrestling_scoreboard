@@ -89,7 +89,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
       });
   }
 
-  static int getHomePoints(List<Bout> bouts) {
+  static int getHomePoints(Iterable<Bout> bouts) {
     var res = 0;
     for (final bout in bouts) {
       res += bout.r?.classificationPoints ?? 0;
@@ -97,7 +97,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
     return res;
   }
 
-  static int getGuestPoints(List<Bout> bouts) {
+  static int getGuestPoints(Iterable<Bout> bouts) {
     var res = 0;
     for (final bout in bouts) {
       res += bout.b?.classificationPoints ?? 0;

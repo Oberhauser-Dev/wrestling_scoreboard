@@ -42,7 +42,7 @@ CREATE TYPE public.bout_action_type AS ENUM (
     'verbal',
     'caution',
     'dismissal'
-    );
+);
 
 
 ALTER TYPE public.bout_action_type OWNER TO wrestling;
@@ -62,7 +62,7 @@ CREATE TYPE public.bout_result AS ENUM (
     'vfo',
     'dsq',
     'dsq2'
-    );
+);
 
 
 ALTER TYPE public.bout_result OWNER TO wrestling;
@@ -74,7 +74,7 @@ ALTER TYPE public.bout_result OWNER TO wrestling;
 CREATE TYPE public.bout_role AS ENUM (
     'red',
     'blue'
-    );
+);
 
 
 ALTER TYPE public.bout_role OWNER TO wrestling;
@@ -87,7 +87,7 @@ CREATE TYPE public.gender AS ENUM (
     'male',
     'female',
     'other'
-    );
+);
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
@@ -102,7 +102,7 @@ CREATE TYPE public.person_role AS ENUM (
     'timeKeeper',
     'matPresident',
     'steward'
-    );
+);
 
 
 ALTER TYPE public.person_role OWNER TO wrestling;
@@ -114,7 +114,7 @@ ALTER TYPE public.person_role OWNER TO wrestling;
 CREATE TYPE public.weight_unit AS ENUM (
     'pound',
     'kilogram'
-    );
+);
 
 
 ALTER TYPE public.weight_unit OWNER TO wrestling;
@@ -126,7 +126,7 @@ ALTER TYPE public.weight_unit OWNER TO wrestling;
 CREATE TYPE public.wrestling_style AS ENUM (
     'free',
     'greco'
-    );
+);
 
 
 ALTER TYPE public.wrestling_style OWNER TO wrestling;
@@ -140,13 +140,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.bout (
-                             id integer NOT NULL,
-                             red_id integer,
-                             blue_id integer,
-                             weight_class_id integer,
-                             winner_role public.bout_role,
-                             bout_result public.bout_result,
-                             duration_millis integer
+    id integer NOT NULL,
+    red_id integer,
+    blue_id integer,
+    weight_class_id integer,
+    winner_role public.bout_role,
+    bout_result public.bout_result,
+    duration_millis integer
 );
 
 
@@ -157,12 +157,12 @@ ALTER TABLE public.bout OWNER TO wrestling;
 --
 
 CREATE TABLE public.bout_action (
-                                    id integer NOT NULL,
-                                    duration_millis integer NOT NULL,
-                                    point_count smallint,
-                                    action_type public.bout_action_type NOT NULL,
-                                    bout_role public.bout_role NOT NULL,
-                                    bout_id integer NOT NULL
+    id integer NOT NULL,
+    duration_millis integer NOT NULL,
+    point_count smallint,
+    action_type public.bout_action_type NOT NULL,
+    bout_role public.bout_role NOT NULL,
+    bout_id integer NOT NULL
 );
 
 
@@ -195,12 +195,12 @@ ALTER SEQUENCE public.bout_action_id_seq OWNED BY public.bout_action.id;
 --
 
 CREATE TABLE public.bout_config (
-                                    id integer NOT NULL,
-                                    period_duration_secs integer,
-                                    break_duration_secs integer,
-                                    activity_duration_secs integer,
-                                    injury_duration_secs integer,
-                                    period_count smallint
+    id integer NOT NULL,
+    period_duration_secs integer,
+    break_duration_secs integer,
+    activity_duration_secs integer,
+    injury_duration_secs integer,
+    period_count smallint
 );
 
 
@@ -255,9 +255,9 @@ ALTER SEQUENCE public.bout_id_seq OWNED BY public.bout.id;
 --
 
 CREATE TABLE public.club (
-                             id integer NOT NULL,
-                             no character varying(8),
-                             name character varying(255) NOT NULL
+    id integer NOT NULL,
+    no character varying(8),
+    name character varying(255) NOT NULL
 );
 
 
@@ -290,12 +290,12 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 --
 
 CREATE TABLE public.wrestling_event (
-                                        id integer NOT NULL,
-                                        date date,
-                                        location character varying(100),
-                                        visitors_count integer,
-                                        comment text,
-                                        no character varying(16)
+    id integer NOT NULL,
+    date date,
+    location character varying(100),
+    visitors_count integer,
+    comment text,
+    no character varying(16)
 );
 
 
@@ -306,10 +306,10 @@ ALTER TABLE public.wrestling_event OWNER TO wrestling;
 --
 
 CREATE TABLE public.competition (
-                                    name character varying(127),
-                                    bout_config_id integer NOT NULL
+    name character varying(127),
+    bout_config_id integer NOT NULL
 )
-    INHERITS (public.wrestling_event);
+INHERITS (public.wrestling_event);
 
 
 ALTER TABLE public.competition OWNER TO wrestling;
@@ -319,9 +319,9 @@ ALTER TABLE public.competition OWNER TO wrestling;
 --
 
 CREATE TABLE public.competition_bout (
-                                         id integer NOT NULL,
-                                         competition_id integer NOT NULL,
-                                         bout_id integer
+    id integer NOT NULL,
+    competition_id integer NOT NULL,
+    bout_id integer
 );
 
 
@@ -376,10 +376,10 @@ ALTER SEQUENCE public.competition_id_seq OWNED BY public.competition.id;
 --
 
 CREATE TABLE public.competition_person (
-                                           id integer NOT NULL,
-                                           competition_id integer NOT NULL,
-                                           person_id integer NOT NULL,
-                                           person_role public.person_role
+    id integer NOT NULL,
+    competition_id integer NOT NULL,
+    person_id integer NOT NULL,
+    person_role public.person_role
 );
 
 
@@ -412,11 +412,11 @@ ALTER SEQUENCE public.event_person_id_seq OWNED BY public.competition_person.id;
 --
 
 CREATE TABLE public.league (
-                               id integer NOT NULL,
-                               name character varying(127) NOT NULL,
-                               start_date date NOT NULL,
-                               bout_config_id integer NOT NULL,
-                               season_partitions integer DEFAULT 1 NOT NULL
+    id integer NOT NULL,
+    name character varying(127) NOT NULL,
+    start_date date NOT NULL,
+    bout_config_id integer NOT NULL,
+    season_partitions integer DEFAULT 1 NOT NULL
 );
 
 
@@ -449,9 +449,9 @@ ALTER SEQUENCE public.league_id_seq OWNED BY public.league.id;
 --
 
 CREATE TABLE public.league_team_participation (
-                                                  id integer NOT NULL,
-                                                  league_id integer NOT NULL,
-                                                  team_id integer NOT NULL
+    id integer NOT NULL,
+    league_id integer NOT NULL,
+    team_id integer NOT NULL
 );
 
 
@@ -484,11 +484,11 @@ ALTER SEQUENCE public.league_team_participation_id_seq OWNED BY public.league_te
 --
 
 CREATE TABLE public.league_weight_class (
-                                            id integer NOT NULL,
-                                            league_id integer NOT NULL,
-                                            weight_class_id integer NOT NULL,
-                                            pos integer DEFAULT 0 NOT NULL,
-                                            season_partition integer
+    id integer NOT NULL,
+    league_id integer NOT NULL,
+    weight_class_id integer NOT NULL,
+    pos integer DEFAULT 0 NOT NULL,
+    season_partition integer
 );
 
 
@@ -521,10 +521,10 @@ ALTER SEQUENCE public.league_weight_class_id_seq OWNED BY public.league_weight_c
 --
 
 CREATE TABLE public.lineup (
-                               id integer NOT NULL,
-                               team_id integer,
-                               leader_id integer,
-                               coach_id integer
+    id integer NOT NULL,
+    team_id integer,
+    leader_id integer,
+    coach_id integer
 );
 
 
@@ -557,10 +557,10 @@ ALTER SEQUENCE public.lineup_id_seq OWNED BY public.lineup.id;
 --
 
 CREATE TABLE public.membership (
-                                   id integer NOT NULL,
-                                   person_id integer NOT NULL,
-                                   club_id integer NOT NULL,
-                                   no character varying(55)
+    id integer NOT NULL,
+    person_id integer NOT NULL,
+    club_id integer NOT NULL,
+    no character varying(55)
 );
 
 
@@ -593,9 +593,9 @@ ALTER SEQUENCE public.membership_id_seq OWNED BY public.membership.id;
 --
 
 CREATE TABLE public.participant_state (
-                                          id integer NOT NULL,
-                                          participation_id integer NOT NULL,
-                                          classification_points smallint
+    id integer NOT NULL,
+    participation_id integer NOT NULL,
+    classification_points smallint
 );
 
 
@@ -628,11 +628,11 @@ ALTER SEQUENCE public.participant_state_id_seq OWNED BY public.participant_state
 --
 
 CREATE TABLE public.participation (
-                                      id integer NOT NULL,
-                                      membership_id integer NOT NULL,
-                                      lineup_id integer NOT NULL,
-                                      weight_class_id integer,
-                                      weight numeric(5,2)
+    id integer NOT NULL,
+    membership_id integer NOT NULL,
+    lineup_id integer NOT NULL,
+    weight_class_id integer,
+    weight numeric(5,2)
 );
 
 
@@ -665,11 +665,12 @@ ALTER SEQUENCE public.participation_id_seq OWNED BY public.participation.id;
 --
 
 CREATE TABLE public.person (
-                               id integer NOT NULL,
-                               prename character varying(100) NOT NULL,
-                               surname character varying(100) NOT NULL,
-                               birth_date date,
-                               gender public.gender
+    id integer NOT NULL,
+    prename character varying(100) NOT NULL,
+    surname character varying(100) NOT NULL,
+    birth_date date,
+    gender public.gender,
+    nationality character(3) DEFAULT NULL::bpchar
 );
 
 
@@ -702,10 +703,10 @@ ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 --
 
 CREATE TABLE public.team (
-                             id integer NOT NULL,
-                             name character varying(100) NOT NULL,
-                             description character varying(255),
-                             club_id integer NOT NULL
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(255),
+    club_id integer NOT NULL
 );
 
 
@@ -738,22 +739,22 @@ ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
 --
 
 CREATE TABLE public.team_match (
-                                   id integer,
-                                   date date,
-                                   location character varying(100),
-                                   visitors_count integer,
-                                   comment text,
-                                   home_id integer,
-                                   guest_id integer,
-                                   referee_id integer,
-                                   transcript_writer_id integer,
-                                   time_keeper_id integer,
-                                   mat_chairman_id integer,
-                                   league_id integer,
-                                   judge_id integer,
-                                   season_partition integer
+    id integer,
+    date date,
+    location character varying(100),
+    visitors_count integer,
+    comment text,
+    home_id integer,
+    guest_id integer,
+    referee_id integer,
+    transcript_writer_id integer,
+    time_keeper_id integer,
+    mat_chairman_id integer,
+    league_id integer,
+    judge_id integer,
+    season_partition integer
 )
-    INHERITS (public.wrestling_event);
+INHERITS (public.wrestling_event);
 
 
 ALTER TABLE public.team_match OWNER TO wrestling;
@@ -763,10 +764,10 @@ ALTER TABLE public.team_match OWNER TO wrestling;
 --
 
 CREATE TABLE public.team_match_bout (
-                                        id integer NOT NULL,
-                                        team_match_id integer NOT NULL,
-                                        bout_id integer NOT NULL,
-                                        pos integer DEFAULT 0 NOT NULL
+    id integer NOT NULL,
+    team_match_id integer NOT NULL,
+    bout_id integer NOT NULL,
+    pos integer DEFAULT 0 NOT NULL
 );
 
 
@@ -821,11 +822,11 @@ ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
 --
 
 CREATE TABLE public.weight_class (
-                                     id integer NOT NULL,
-                                     suffix character varying(255),
-                                     weight smallint NOT NULL,
-                                     style public.wrestling_style DEFAULT 'free'::public.wrestling_style NOT NULL,
-                                     unit public.weight_unit
+    id integer NOT NULL,
+    suffix character varying(255),
+    weight smallint NOT NULL,
+    style public.wrestling_style DEFAULT 'free'::public.wrestling_style NOT NULL,
+    unit public.weight_unit
 );
 
 
@@ -1167,11 +1168,9 @@ COPY public.lineup (id, team_id, leader_id, coach_id) FROM stdin;
 --
 
 COPY public.membership (id, person_id, club_id, no) FROM stdin;
-1	1	2	\N
 2	2	2	\N
 3	3	2	\N
 4	4	2	\N
-6	6	1	\N
 7	7	1	\N
 8	8	1	\N
 10	11	1	\N
@@ -1189,6 +1188,8 @@ COPY public.membership (id, person_id, club_id, no) FROM stdin;
 20	21	2	\N
 21	22	2	\N
 22	23	2	\N
+6	6	1	\N
+1	1	2	\N
 \.
 
 
@@ -1267,30 +1268,30 @@ COPY public.participation (id, membership_id, lineup_id, weight_class_id, weight
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.person (id, prename, surname, birth_date, gender) FROM stdin;
-1	Lisa	Simpson	2010-07-08	female
-2	Bart	Simpson	2007-07-08	male
-3	March	Simpson	1980-07-08	female
-4	Homer	Simpson	1975-07-08	male
-6	Meg	Griffin	2007-03-08	female
-7	Lois	Griffin	1979-03-08	female
-8	Peter	Griffin	1975-03-08	male
-9	Mr	Referee	\N	other
-11	Brian	Griffin	2000-03-07	male
-12	Joe	Swanson	1976-03-08	male
-5	Chris	Griffin	2005-03-08	male
-10	Glenn	Quagmire	1982-03-08	male
-13	Cleveland	Brown	1985-03-08	male
-14	Stewie	Griffin	2021-03-07	male
-15	Adam	West	1967-03-08	male
-16	Bonnie	Swanson	1991-03-08	female
-17	Mr.	Burns	1925-03-08	male
-18	Ned	Flanders	1964-03-08	male
-19	Milhouse	Van Houten	2004-03-07	male
-20	Krusty	Clown	1983-03-08	male
-21	Moe	Szyslak	1981-03-08	male
-22	Maggie	Simpson	2020-03-07	female
-23	Nelson	Muntz	\N	male
+COPY public.person (id, prename, surname, birth_date, gender, nationality) FROM stdin;
+2	Bart	Simpson	2007-07-08	male	\N
+3	March	Simpson	1980-07-08	female	\N
+4	Homer	Simpson	1975-07-08	male	\N
+7	Lois	Griffin	1979-03-08	female	\N
+8	Peter	Griffin	1975-03-08	male	\N
+9	Mr	Referee	\N	other	\N
+11	Brian	Griffin	2000-03-07	male	\N
+12	Joe	Swanson	1976-03-08	male	\N
+5	Chris	Griffin	2005-03-08	male	\N
+10	Glenn	Quagmire	1982-03-08	male	\N
+13	Cleveland	Brown	1985-03-08	male	\N
+14	Stewie	Griffin	2021-03-07	male	\N
+15	Adam	West	1967-03-08	male	\N
+16	Bonnie	Swanson	1991-03-08	female	\N
+17	Mr.	Burns	1925-03-08	male	\N
+18	Ned	Flanders	1964-03-08	male	\N
+19	Milhouse	Van Houten	2004-03-07	male	\N
+20	Krusty	Clown	1983-03-08	male	\N
+21	Moe	Szyslak	1981-03-08	male	\N
+22	Maggie	Simpson	2020-03-07	female	\N
+23	Nelson	Muntz	\N	male	\N
+6	Meg	Griffin	2007-03-08	female	\N
+1	Lisa	Simpson	2010-07-08	female	USA
 \.
 
 

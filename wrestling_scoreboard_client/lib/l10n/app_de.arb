@@ -16,6 +16,9 @@
   "fontFamily": "Schriftart",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "services": "Dienste",
+  "apiProvider": "API-Anbieter",
+  "reportProvider": "Report-Anbieter",
   "database": "Datenbank",
   "exportDatabase": "Datenbank exportieren",
   "restoreDatabase": "Datenbank wiederherstellen",
@@ -35,6 +38,7 @@
   "about_development_phrase": "Oberhauser Dev\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)",
 
   "optionSelect": "Auswählen",
+  "noneSelected": "Nichts ausgewählt",
   "edit": "Bearbeite",
   "save": "Speichern",
   "saveAndGenerate": "Speichern & Generieren",
@@ -161,5 +165,6 @@
   "gender": "Geschlecht",
   "genderMale": "Männlich",
   "genderFemale": "Weiblich",
-  "genderTransgender": "Divers"
+  "genderTransgender": "Divers",
+  "nationality": "Nationalität"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'local_preferences_provider.g.dart';
 
@@ -92,6 +93,42 @@ class ApiUrlNotifier extends _$ApiUrlNotifier {
       state = Future.value(event);
     });
     return apiUrl;
+  }
+}
+
+@riverpod
+class ApiProviderNotifier extends _$ApiProviderNotifier {
+  @override
+  Raw<Future<WrestlingApiProvider?>> build() async {
+    Preferences.onChangeApiProvider.stream.distinct().listen((event) {
+      state = Future.value(event);
+    });
+    final apiProviderStr = await Preferences.getString(Preferences.keyApiProvider);
+    final WrestlingApiProvider? apiProvider;
+    if (apiProviderStr != null) {
+      apiProvider = WrestlingApiProvider.values.byName(apiProviderStr);
+    } else {
+      apiProvider = null;
+    }
+    return apiProvider;
+  }
+}
+
+@riverpod
+class ReportProviderNotifier extends _$ReportProviderNotifier {
+  @override
+  Raw<Future<WrestlingReportProvider?>> build() async {
+    Preferences.onChangeReportProvider.stream.distinct().listen((event) {
+      state = Future.value(event);
+    });
+    final apiProviderStr = await Preferences.getString(Preferences.keyReportProvider);
+    final WrestlingReportProvider? apiProvider;
+    if (apiProviderStr != null) {
+      apiProvider = WrestlingReportProvider.values.byName(apiProviderStr);
+    } else {
+      apiProvider = null;
+    }
+    return apiProvider;
   }
 }
 

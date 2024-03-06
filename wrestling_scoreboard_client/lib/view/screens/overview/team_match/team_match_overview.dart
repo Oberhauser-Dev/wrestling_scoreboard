@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
@@ -14,6 +20,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_ma
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -42,6 +49,42 @@ class TeamMatchOverview extends ConsumerWidget {
                 details: '${match.home.team.name} - ${match.guest.team.name}',
               ),
               actions: [
+                // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
+                IconButton(
+                    onPressed: () async {
+                      final reporter = (await ref.read(reportProviderNotifierProvider))?.reporter;
+                      if (reporter != null) {
+                        final fileNameBuilder = [
+                          match.date.toIso8601String().substring(0, 10),
+                          match.league?.name,
+                          match.no,
+                          match.home.team.name,
+                          '–',
+                          '${match.guest.team.name}.rdb',
+                        ];
+                        fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
+                        final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+                        String? outputPath = await FilePicker.platform.saveFile(
+                          fileName: fileName,
+                        );
+                        if (outputPath != null) {
+                          final bouts = await _getBouts(ref, match: match);
+                          final boutMap = Map.fromEntries(await Future.wait(
+                              bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
+                          final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+                          final outputFile = File(outputPath);
+                          await outputFile.writeAsString(reportStr, encoding: const Utf8Codec());
+                        }
+                      } else {
+                        if (context.mounted) {
+                          showExceptionDialog(
+                            context: context,
+                            exception: Exception('Please select a report provider in the settings'),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.description)),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   child: ElevatedButton.icon(
@@ -206,6 +249,12 @@ class TeamMatchOverview extends ConsumerWidget {
           );
         });
   }
+
+  Future<List<Bout>> _getBouts(WidgetRef ref, {required TeamMatch match}) =>
+      ref.read(manyDataStreamProvider<Bout, TeamMatch>(ManyProviderData<Bout, TeamMatch>(filterObject: match)).future);
+
+  Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) =>
+      ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   handleSelectedBout(TeamMatchBout bout, BuildContext context) {
     context.push('/${TeamMatchBoutOverview.route}/${bout.id}');

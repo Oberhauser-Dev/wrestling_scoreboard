@@ -17,6 +17,7 @@ import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
   const CustomSettingsScreen({super.key});
@@ -244,94 +245,162 @@ class CustomSettingsScreen extends ConsumerWidget {
             },
           ),
           LoadingBuilder<Duration>(
-              future: ref.watch(networkTimeoutNotifierProvider),
-              builder: (context, networkTimeout) {
-                return LoadingBuilder<String>(
-                  future: ref.watch(apiUrlNotifierProvider),
-                  builder: (context, apiUrl) {
-                    return LoadingBuilder<String>(
-                      future: ref.watch(webSocketUrlNotifierProvider),
-                      builder: (context, wsUrl) {
-                        return SettingsSection(
-                          title: localizations.network,
-                          action: TextButton(
-                            onPressed: () {
-                              apiUrl = Env.apiUrl.fromString();
-                              Preferences.setString(Preferences.keyApiUrl, apiUrl);
-                              Preferences.onChangeApiUrl.add(apiUrl);
+            future: ref.watch(networkTimeoutNotifierProvider),
+            builder: (context, networkTimeout) {
+              return LoadingBuilder<String>(
+                future: ref.watch(apiUrlNotifierProvider),
+                builder: (context, apiUrl) {
+                  return LoadingBuilder<String>(
+                    future: ref.watch(webSocketUrlNotifierProvider),
+                    builder: (context, wsUrl) {
+                      return SettingsSection(
+                        title: localizations.network,
+                        action: TextButton(
+                          onPressed: () {
+                            apiUrl = Env.apiUrl.fromString();
+                            Preferences.setString(Preferences.keyApiUrl, apiUrl);
+                            Preferences.onChangeApiUrl.add(apiUrl);
 
-                              wsUrl = Env.webSocketUrl.fromString();
-                              Preferences.setString(Preferences.keyWsUrl, wsUrl);
-                              Preferences.onChangeWsUrlWebSocket.add(wsUrl);
+                            wsUrl = Env.webSocketUrl.fromString();
+                            Preferences.setString(Preferences.keyWsUrl, wsUrl);
+                            Preferences.onChangeWsUrlWebSocket.add(wsUrl);
 
-                              const defaultNetworkTimeout = Duration(seconds: 10);
-                              Preferences.setInt(Preferences.keyNetworkTimeout, defaultNetworkTimeout.inMilliseconds);
-                              Preferences.onChangeNetworkTimeout.add(defaultNetworkTimeout);
+                            const defaultNetworkTimeout = Duration(seconds: 10);
+                            Preferences.setInt(Preferences.keyNetworkTimeout, defaultNetworkTimeout.inMilliseconds);
+                            Preferences.onChangeNetworkTimeout.add(defaultNetworkTimeout);
+                          },
+                          child: Text(localizations.reset),
+                        ),
+                        children: [
+                          ListTile(
+                            subtitle: Text(apiUrl),
+                            title: Text(localizations.apiUrl),
+                            leading: const Icon(Icons.link),
+                            onTap: () async {
+                              final val = await showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return TextInputDialog(initialValue: apiUrl);
+                                },
+                              );
+                              if (val != null) {
+                                Preferences.onChangeApiUrl.add(val);
+                                await Preferences.setString(Preferences.keyApiUrl, val);
+                              }
                             },
-                            child: Text(localizations.reset),
                           ),
-                          children: [
-                            ListTile(
-                              subtitle: Text(apiUrl),
-                              title: Text(localizations.apiUrl),
-                              leading: const Icon(Icons.link),
-                              onTap: () async {
-                                final val = await showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return TextInputDialog(initialValue: apiUrl);
-                                  },
-                                );
-                                if (val != null) {
-                                  Preferences.onChangeApiUrl.add(val);
-                                  await Preferences.setString(Preferences.keyApiUrl, val);
-                                }
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.link),
-                              title: Text(localizations.wsUrl),
-                              subtitle: Text(wsUrl),
-                              onTap: () async {
-                                final val = await showDialog<String?>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return TextInputDialog(initialValue: wsUrl);
-                                  },
-                                );
-                                if (val != null) {
-                                  Preferences.onChangeWsUrlWebSocket.add(val);
-                                  await Preferences.setString(Preferences.keyWsUrl, val);
-                                }
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.running_with_errors),
-                              title: Text(localizations.networkTimeout),
-                              subtitle: Text(networkTimeout.formatSecondsAndMilliseconds()),
-                              onTap: () async {
-                                final val = await showDialog<Duration?>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return DurationDialog(
-                                      initialValue: networkTimeout,
-                                      maxValue: const Duration(hours: 1),
-                                    );
-                                  },
-                                );
-                                if (val != null) {
-                                  Preferences.onChangeNetworkTimeout.add(val);
-                                  await Preferences.setInt(Preferences.keyNetworkTimeout, val.inMilliseconds);
-                                }
-                              },
-                            ),
-                          ],
-                        );
+                          ListTile(
+                            leading: const Icon(Icons.link),
+                            title: Text(localizations.wsUrl),
+                            subtitle: Text(wsUrl),
+                            onTap: () async {
+                              final val = await showDialog<String?>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return TextInputDialog(initialValue: wsUrl);
+                                },
+                              );
+                              if (val != null) {
+                                Preferences.onChangeWsUrlWebSocket.add(val);
+                                await Preferences.setString(Preferences.keyWsUrl, val);
+                              }
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.running_with_errors),
+                            title: Text(localizations.networkTimeout),
+                            subtitle: Text(networkTimeout.formatSecondsAndMilliseconds()),
+                            onTap: () async {
+                              final val = await showDialog<Duration?>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DurationDialog(
+                                    initialValue: networkTimeout,
+                                    maxValue: const Duration(hours: 1),
+                                  );
+                                },
+                              );
+                              if (val != null) {
+                                Preferences.onChangeNetworkTimeout.add(val);
+                                await Preferences.setInt(Preferences.keyNetworkTimeout, val.inMilliseconds);
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          ),
+          LoadingBuilder<WrestlingApiProvider?>(
+            future: ref.watch(apiProviderNotifierProvider),
+            builder: (context, apiProvider) {
+              return LoadingBuilder<WrestlingReportProvider?>(
+                future: ref.watch(reportProviderNotifierProvider),
+                builder: (context, reportProvider) {
+                  return SettingsSection(
+                    title: localizations.services,
+                    action: TextButton(
+                      onPressed: () {
+                        Preferences.setString(Preferences.keyApiProvider, null);
+                        Preferences.onChangeApiProvider.add(null);
+
+                        Preferences.setString(Preferences.keyReportProvider, null);
+                        Preferences.onChangeReportProvider.add(null);
                       },
-                    );
-                  },
-                );
-              }),
+                      child: Text(localizations.reset),
+                    ),
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.api),
+                        title: Text(localizations.apiProvider),
+                        subtitle: Text(apiProvider?.name ?? localizations.noneSelected),
+                        onTap: () async {
+                          final val = await showDialog<WrestlingApiProvider>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              final List<MapEntry<WrestlingApiProvider?, String>> providerValues =
+                                  WrestlingApiProvider.values.map((provider) {
+                                return MapEntry<WrestlingApiProvider?, String>(provider, provider.name);
+                              }).toList();
+                              providerValues.insert(0, MapEntry(null, localizations.noneSelected));
+                              return RadioDialog<WrestlingApiProvider?>(
+                                  values: providerValues, initialValue: apiProvider);
+                            },
+                          );
+                          Preferences.onChangeApiProvider.add(val);
+                          await Preferences.setString(Preferences.keyApiProvider, val?.name);
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.description),
+                        title: Text(localizations.reportProvider),
+                        subtitle: Text(reportProvider?.name ?? localizations.noneSelected),
+                        onTap: () async {
+                          final val = await showDialog<WrestlingReportProvider>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              final List<MapEntry<WrestlingReportProvider?, String>> providerValues =
+                                  WrestlingReportProvider.values.map((provider) {
+                                return MapEntry<WrestlingReportProvider?, String>(provider, provider.name);
+                              }).toList();
+                              providerValues.insert(0, MapEntry(null, localizations.noneSelected));
+                              return RadioDialog<WrestlingReportProvider?>(
+                                  values: providerValues, initialValue: reportProvider);
+                            },
+                          );
+                          Preferences.onChangeReportProvider.add(val);
+                          await Preferences.setString(Preferences.keyReportProvider, val?.name);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
           SettingsSection(
             title: localizations.database,
             children: [

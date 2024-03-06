@@ -1,11 +1,13 @@
+import 'package:country/country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class PersonEdit extends ConsumerStatefulWidget {
@@ -21,11 +23,13 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
   String? _surname;
   DateTime? _dateOfBirth;
   Gender? _gender;
+  Country? _nationality;
 
   @override
   void initState() {
     _dateOfBirth = widget.person?.birthDate;
     _gender = widget.person?.gender;
+    _nationality = widget.person?.nationality;
     super.initState();
   }
 
@@ -118,6 +122,26 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
           ),
         ),
       ),
+      ListTile(
+        title: getDropdown<Country>(
+          // TODO: replace icon with home_pin when available, also in overview
+          //  https://github.com/flutter/flutter/issues/102560
+          icon: const Icon(Icons.location_on),
+          selectedItem: _nationality,
+          label: localizations.nationality,
+          context: context,
+          onSaved: (Country? value) => setState(() {
+            _nationality = value;
+          }),
+          itemAsString: (u) => '${u.nationality} (${u.isoShortName})',
+          onFind: (String? filter) async {
+            return (filter == null
+                    ? Countries.values
+                    : Countries.values.where((element) => element.nationality.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
     ];
 
     return Form(
@@ -140,6 +164,7 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
         surname: _surname!,
         birthDate: _dateOfBirth,
         gender: _gender,
+        nationality: _nationality,
       );
       person = person.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(person));
       await handleNested(person);

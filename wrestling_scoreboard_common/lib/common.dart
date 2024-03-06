@@ -3,4 +3,5 @@ library wrestling_scoreboard_common;
 
 export 'src/data.dart';
 export 'src/enums.dart';
+export 'src/services.dart';
 export 'src/util.dart';

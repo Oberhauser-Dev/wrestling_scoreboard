@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class Preferences {
   static const keyLocale = 'locale';
   static const keyThemeMode = 'theme-mode';
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
+  static const keyApiProvider = 'api-provider';
+  static const keyReportProvider = 'report-provider';
 
   /// Network timeout in milliseconds.
   static const keyNetworkTimeout = 'network-timeout';
@@ -19,6 +22,8 @@ class Preferences {
   static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();
   static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
   static final StreamController<String> onChangeWsUrlWebSocket = StreamController.broadcast();
+  static final StreamController<WrestlingApiProvider?> onChangeApiProvider = StreamController.broadcast();
+  static final StreamController<WrestlingReportProvider?> onChangeReportProvider = StreamController.broadcast();
   static final StreamController<Duration> onChangeNetworkTimeout = StreamController.broadcast();
   static final StreamController<String> onChangeBellSound = StreamController.broadcast();
   static final StreamController<String?> onChangeFontFamily = StreamController.broadcast();

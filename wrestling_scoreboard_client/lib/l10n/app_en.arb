@@ -19,6 +19,9 @@
   "fontFamily": "Font family",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
+  "services": "Services",
+  "apiProvider": "API Provider",
+  "reportProvider": "Report Provider",
   "database": "Database",
   "exportDatabase": "Export database",
   "restoreDatabase": "Restore database",
@@ -38,6 +41,7 @@
   "about_development_phrase": "August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)",
 
   "optionSelect": "select",
+  "noneSelected": "None selected",
   "edit": "Edit",
   "save": "Save",
   "saveAndGenerate": "Save & Generate",
@@ -164,5 +168,6 @@
   "gender": "Gender",
   "genderMale": "Male",
   "genderFemale": "Female",
-  "genderTransgender": "Diverse"
+  "genderTransgender": "Diverse",
+  "nationality": "Nationality"
 }

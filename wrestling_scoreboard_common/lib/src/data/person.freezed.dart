@@ -25,6 +25,8 @@ mixin _$Person {
   String get surname => throw _privateConstructorUsedError;
   Gender? get gender => throw _privateConstructorUsedError;
   DateTime? get birthDate => throw _privateConstructorUsedError;
+  @CountryJsonConverter()
+  Country? get nationality => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +37,13 @@ mixin _$Person {
 abstract class $PersonCopyWith<$Res> {
   factory $PersonCopyWith(Person value, $Res Function(Person) then) = _$PersonCopyWithImpl<$Res, Person>;
   @useResult
-  $Res call({int? id, String prename, String surname, Gender? gender, DateTime? birthDate});
+  $Res call(
+      {int? id,
+      String prename,
+      String surname,
+      Gender? gender,
+      DateTime? birthDate,
+      @CountryJsonConverter() Country? nationality});
 }
 
 /// @nodoc
@@ -55,6 +63,7 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
     Object? surname = null,
     Object? gender = freezed,
     Object? birthDate = freezed,
+    Object? nationality = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -77,6 +86,10 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
           ? _value.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      nationality: freezed == nationality
+          ? _value.nationality
+          : nationality // ignore: cast_nullable_to_non_nullable
+              as Country?,
     ) as $Val);
   }
 }
@@ -87,7 +100,13 @@ abstract class _$$PersonImplCopyWith<$Res> implements $PersonCopyWith<$Res> {
       __$$PersonImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String prename, String surname, Gender? gender, DateTime? birthDate});
+  $Res call(
+      {int? id,
+      String prename,
+      String surname,
+      Gender? gender,
+      DateTime? birthDate,
+      @CountryJsonConverter() Country? nationality});
 }
 
 /// @nodoc
@@ -103,6 +122,7 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
     Object? surname = null,
     Object? gender = freezed,
     Object? birthDate = freezed,
+    Object? nationality = freezed,
   }) {
     return _then(_$PersonImpl(
       id: freezed == id
@@ -125,6 +145,10 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
           ? _value.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      nationality: freezed == nationality
+          ? _value.nationality
+          : nationality // ignore: cast_nullable_to_non_nullable
+              as Country?,
     ));
   }
 }
@@ -132,7 +156,14 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
 /// @nodoc
 @JsonSerializable()
 class _$PersonImpl extends _Person {
-  const _$PersonImpl({this.id, required this.prename, required this.surname, this.gender, this.birthDate}) : super._();
+  const _$PersonImpl(
+      {this.id,
+      required this.prename,
+      required this.surname,
+      this.gender,
+      this.birthDate,
+      @CountryJsonConverter() this.nationality})
+      : super._();
 
   factory _$PersonImpl.fromJson(Map<String, dynamic> json) => _$$PersonImplFromJson(json);
 
@@ -146,10 +177,13 @@ class _$PersonImpl extends _Person {
   final Gender? gender;
   @override
   final DateTime? birthDate;
+  @override
+  @CountryJsonConverter()
+  final Country? nationality;
 
   @override
   String toString() {
-    return 'Person(id: $id, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate)';
+    return 'Person(id: $id, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
   }
 
   @override
@@ -161,12 +195,13 @@ class _$PersonImpl extends _Person {
             (identical(other.prename, prename) || other.prename == prename) &&
             (identical(other.surname, surname) || other.surname == surname) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.birthDate, birthDate) || other.birthDate == birthDate));
+            (identical(other.birthDate, birthDate) || other.birthDate == birthDate) &&
+            (identical(other.nationality, nationality) || other.nationality == nationality));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, prename, surname, gender, birthDate);
+  int get hashCode => Object.hash(runtimeType, id, prename, surname, gender, birthDate, nationality);
 
   @JsonKey(ignore: true)
   @override
@@ -187,7 +222,8 @@ abstract class _Person extends Person {
       required final String prename,
       required final String surname,
       final Gender? gender,
-      final DateTime? birthDate}) = _$PersonImpl;
+      final DateTime? birthDate,
+      @CountryJsonConverter() final Country? nationality}) = _$PersonImpl;
   const _Person._() : super._();
 
   factory _Person.fromJson(Map<String, dynamic> json) = _$PersonImpl.fromJson;
@@ -202,6 +238,9 @@ abstract class _Person extends Person {
   Gender? get gender;
   @override
   DateTime? get birthDate;
+  @override
+  @CountryJsonConverter()
+  Country? get nationality;
   @override
   @JsonKey(ignore: true)
   _$$PersonImplCopyWith<_$PersonImpl> get copyWith => throw _privateConstructorUsedError;

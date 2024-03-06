@@ -12,6 +12,7 @@ _$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
       surname: json['surname'] as String,
       gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),
       birthDate: json['birthDate'] == null ? null : DateTime.parse(json['birthDate'] as String),
+      nationality: _$JsonConverterFromJson<String, Country>(json['nationality'], const CountryJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) => <String, dynamic>{
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) => <String, dyna
       'surname': instance.surname,
       'gender': _$GenderEnumMap[instance.gender],
       'birthDate': instance.birthDate?.toIso8601String(),
+      'nationality': _$JsonConverterToJson<String, Country>(instance.nationality, const CountryJsonConverter().toJson),
     };
 
 const _$GenderEnumMap = {
@@ -27,3 +29,15 @@ const _$GenderEnumMap = {
   Gender.female: 'female',
   Gender.other: 'other',
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

@@ -61,6 +61,13 @@ abstract class PersonOverview extends ConsumerWidget implements AbstractOverview
               subtitle: localizations.gender,
               icon: Icons.description,
             ),
+            ContentItem(
+              title: person.nationality == null
+                  ? '-'
+                  : '${person.nationality?.nationality} (${person.nationality?.isoShortName})',
+              subtitle: localizations.nationality,
+              icon: Icons.location_on,
+            ),
           ],
         );
         return Scaffold(

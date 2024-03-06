@@ -1,3 +1,4 @@
+import 'package:country/country.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/gender.dart';
@@ -6,6 +7,16 @@ import 'data_object.dart';
 
 part 'person.freezed.dart';
 part 'person.g.dart';
+
+class CountryJsonConverter extends JsonConverter<Country, String> {
+  const CountryJsonConverter();
+
+  @override
+  Country fromJson(String json) => Countries.values.singleWhere((country) => country.alpha3 == json);
+
+  @override
+  String toJson(Country object) => object.alpha3;
+}
 
 /// The persons information.
 @freezed
@@ -18,18 +29,21 @@ class Person with _$Person implements DataObject {
     required String surname,
     Gender? gender,
     DateTime? birthDate,
+    @CountryJsonConverter() Country? nationality,
   }) = _Person;
 
   factory Person.fromJson(Map<String, Object?> json) => _$PersonFromJson(json);
 
   static Future<Person> fromRaw(Map<String, dynamic> e) async {
     final gender = e['gender'] as String?;
+    final nationality = e['nationality'] as String?;
     return Person(
       id: e['id'] as int?,
       prename: e['prename'] as String,
       surname: e['surname'] as String,
       gender: gender == null ? null : GenderParser.valueOf(gender),
       birthDate: e['birth_date'] as DateTime?,
+      nationality: nationality == null ? null : CountryJsonConverter().fromJson(nationality),
     );
   }
 
@@ -41,6 +55,7 @@ class Person with _$Person implements DataObject {
       'surname': surname,
       'gender': gender?.name,
       'birth_date': birthDate,
+      'nationality': nationality == null ? null : CountryJsonConverter().toJson(nationality!),
     };
   }
 

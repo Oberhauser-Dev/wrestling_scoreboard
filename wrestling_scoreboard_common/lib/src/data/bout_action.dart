@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/bout_action_type.dart';
 import '../enums/bout_role.dart';
-import 'data_object.dart';
 import 'bout.dart';
+import 'data_object.dart';
 
 part 'bout_action.freezed.dart';
 part 'bout_action.g.dart';
@@ -46,7 +46,9 @@ class BoutAction with _$BoutAction implements DataObject {
   }
 
   @override
-  String toString() {
+  String get tableName => 'bout_action';
+
+  String get actionValue {
     switch (actionType) {
       case BoutActionType.points:
         return pointCount?.toString() ?? '0';
@@ -62,9 +64,6 @@ class BoutAction with _$BoutAction implements DataObject {
         return '';
     }
   }
-
-  @override
-  String get tableName => 'bout_action';
 
   @override
   BoutAction copyWithId(int? id) {

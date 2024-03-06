@@ -69,7 +69,7 @@ class ActionsWidget extends ConsumerWidget {
                         padding: EdgeInsets.all(padding),
                         color: color,
                         child: ScaledText(
-                          action.toString(),
+                          action.actionValue,
                           fontSize: 22,
                           softWrap: false,
                         ),
