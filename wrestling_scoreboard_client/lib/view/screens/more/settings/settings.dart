@@ -159,19 +159,16 @@ class CustomSettingsScreen extends ConsumerWidget {
                                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                               Text(fontFamily.value),
                                               IconButton(
-                                                  onPressed: () => showDialog(
-                                                        context: context,
-                                                        builder: (context) => OkDialog(
-                                                          child: Text(
-                                                              'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
-                                                              style: fontFamily.key != null
-                                                                  ? GoogleFonts.getTextTheme(
-                                                                          fontFamily.key!, currentTextTheme)
-                                                                      .headlineMedium
-                                                                  : null),
-                                                        ),
-                                                      ),
-                                                  icon: const Icon(Icons.visibility))
+                                                onPressed: () => showOkDialog(
+                                                  context: context,
+                                                  child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
+                                                      style: fontFamily.key != null
+                                                          ? GoogleFonts.getTextTheme(fontFamily.key!, currentTextTheme)
+                                                              .headlineMedium
+                                                          : null),
+                                                ),
+                                                icon: const Icon(Icons.visibility),
+                                              ),
                                             ])
                                           );
                                         },
@@ -427,6 +424,9 @@ class CustomSettingsScreen extends ConsumerWidget {
                 onTap: () async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   await dataManager.resetDatabase();
+                  if (context.mounted) {
+                    await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                  }
                 },
               ),
               ListTile(
@@ -435,6 +435,9 @@ class CustomSettingsScreen extends ConsumerWidget {
                 onTap: () async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   await dataManager.restoreDefaultDatabase();
+                  if (context.mounted) {
+                    await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                  }
                 },
               ),
               ListTile(
@@ -449,6 +452,9 @@ class CustomSettingsScreen extends ConsumerWidget {
                     File file = File(filePickerResult.files.single.path!);
                     final dataManager = await ref.read(dataManagerNotifierProvider);
                     await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
+                    if (context.mounted) {
+                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                    }
                   }
                 },
               ),

@@ -59,6 +59,7 @@
   "noItems": "No items available.",
   "optional": "Optional",
   "mandatoryField": "This is a mandatory field.",
+  "actionSuccessful": "The action was successful.",
   "noWebSocketConnection": "The connection to the server could not be established or was interrupted.",
   "notFoundException": "Element was not found :/",
   "invalidParameterException": "The change was not successful, please check your input parameters.",

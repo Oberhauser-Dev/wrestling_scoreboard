@@ -28,6 +28,15 @@ class OkDialog extends StatelessWidget {
   }
 }
 
+Future<void> showOkDialog({required BuildContext context, required Widget child}) async {
+  await showDialog(
+    context: context,
+    builder: (context) => OkDialog(
+      child: child,
+    ),
+  );
+}
+
 class OkCancelDialog<T extends Object?> extends StatelessWidget {
   final Widget child;
   final T Function() getResult;
@@ -57,21 +66,33 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
   }
 }
 
+Future<T?> showOkCanelDialog<T>({
+  required BuildContext context,
+  required Widget child,
+  required T Function() getResult,
+}) async {
+  return await showDialog<T>(
+    context: context,
+    builder: (context) => OkCancelDialog<T>(
+      getResult: getResult,
+      child: child,
+    ),
+  );
+}
+
 Future<void> showExceptionDialog({required BuildContext context, required Exception exception}) async {
   final localizations = AppLocalizations.of(context)!;
-  await showDialog(
+  await showOkDialog(
     context: context,
-    builder: (context) => OkDialog(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (exception is RestException) SelectableText(localizations.invalidParameterException),
-          SelectableText(
-            exception.toString(),
-            style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
-          ),
-        ],
-      ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (exception is RestException) SelectableText(localizations.invalidParameterException),
+        SelectableText(
+          exception.toString(),
+          style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
+        ),
+      ],
     ),
   );
 }
@@ -85,11 +106,12 @@ class TextInputDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     String? result;
     return OkCancelDialog(
-        child: TextFormField(
-          initialValue: initialValue,
-          onChanged: (value) => result = value,
-        ),
-        getResult: () => result);
+      child: TextFormField(
+        initialValue: initialValue,
+        onChanged: (value) => result = value,
+      ),
+      getResult: () => result,
+    );
   }
 }
 
