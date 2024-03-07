@@ -325,14 +325,18 @@ class BoutActionHandler extends ConsumerWidget {
     Future<void> handleIntent(BoutScreenActionIntent intent, {required BuildContext context}) async {
       final dataManager = await ref.read(dataManagerNotifierProvider);
       if (context.mounted) {
-        try {
-          await intent.handle(dataManager, stopwatch, bouts, getActions, boutIndex, doAction,
-              context: context, navigateToBoutByIndex: navigateToBoutByIndex);
-        } on Exception catch (e) {
-          if (context.mounted) {
-            await showExceptionDialog(context: context, exception: e);
-          }
-        }
+        await catchAsync(context, () async {
+          await intent.handle(
+            dataManager,
+            stopwatch,
+            bouts,
+            getActions,
+            boutIndex,
+            doAction,
+            context: context,
+            navigateToBoutByIndex: navigateToBoutByIndex,
+          );
+        });
       }
     }
 

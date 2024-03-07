@@ -1,10 +1,7 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
-import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 
 class EditWidget extends StatelessWidget {
   final String typeLocalization;
@@ -97,20 +94,9 @@ class EditAction extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: ElevatedButton.icon(
         icon: icon,
-        onPressed: () => _handleSubmit(context),
+        onPressed: () => catchAsync(context, onSubmit),
         label: label,
       ),
     );
-  }
-
-  void _handleSubmit(BuildContext context) async {
-    try {
-      await onSubmit();
-    } on RestException catch (e) {
-      developer.log(e.message);
-      if (context.mounted) {
-        await showExceptionDialog(context: context, exception: e);
-      }
-    }
   }
 }

@@ -80,7 +80,7 @@ Future<T?> showOkCanelDialog<T>({
   );
 }
 
-Future<void> showExceptionDialog({required BuildContext context, required Exception exception}) async {
+Future<void> showExceptionDialog({required BuildContext context, required Object exception}) async {
   final localizations = AppLocalizations.of(context)!;
   await showOkDialog(
     context: context,
@@ -95,6 +95,16 @@ Future<void> showExceptionDialog({required BuildContext context, required Except
       ],
     ),
   );
+}
+
+Future<void> catchAsync(BuildContext context, Future<void> Function() doAsync) async {
+  try {
+    await doAsync();
+  } catch (exception) {
+    if (context.mounted) {
+      showExceptionDialog(context: context, exception: exception);
+    }
+  }
 }
 
 class TextInputDialog extends StatelessWidget {

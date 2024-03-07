@@ -404,46 +404,46 @@ class CustomSettingsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.cloud_download),
                 title: Text(localizations.exportDatabase),
-                onTap: () async {
+                onTap: () => catchAsync(context, () async {
+                  final dataManager = await ref.read(dataManagerNotifierProvider);
+                  final sqlString = await dataManager.exportDatabase();
                   String? outputPath = await FilePicker.platform.saveFile(
                     fileName:
                         '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
                         'PostgreSQL-wrestling_scoreboard-dump.sql',
                   );
                   if (outputPath != null) {
-                    final dataManager = await ref.read(dataManagerNotifierProvider);
-                    final sqlString = await dataManager.exportDatabase();
                     final outputFile = File(outputPath);
                     await outputFile.writeAsString(sqlString, encoding: const Utf8Codec());
                   }
-                },
+                }),
               ),
               ListTile(
                 leading: const Icon(Icons.settings_backup_restore),
                 title: Text(localizations.resetDatabase),
-                onTap: () async {
+                onTap: () => catchAsync(context, () async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   await dataManager.resetDatabase();
                   if (context.mounted) {
                     await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                   }
-                },
+                }),
               ),
               ListTile(
                 leading: const Icon(Icons.history),
                 title: Text(localizations.restoreDefaultDatabase),
-                onTap: () async {
+                onTap: () => catchAsync(context, () async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   await dataManager.restoreDefaultDatabase();
                   if (context.mounted) {
                     await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                   }
-                },
+                }),
               ),
               ListTile(
                 leading: const Icon(Icons.cloud_upload),
                 title: Text(localizations.restoreDatabase),
-                onTap: () async {
+                onTap: () => catchAsync(context, () async {
                   FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['sql'],
@@ -456,7 +456,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                       await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                     }
                   }
-                },
+                }),
               ),
             ],
           ),

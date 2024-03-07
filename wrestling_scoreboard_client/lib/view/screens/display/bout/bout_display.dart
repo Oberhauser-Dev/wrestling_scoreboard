@@ -233,8 +233,9 @@ class BoutState extends ConsumerState<BoutScreen> {
     final tmpContext = context;
     final dataManager = await ref.read(dataManagerNotifierProvider);
     if (tmpContext.mounted) {
-      try {
-        await intent.handle(
+      await catchAsync(
+        tmpContext,
+        () => intent.handle(
           dataManager,
           stopwatch,
           widget.bouts,
@@ -243,15 +244,8 @@ class BoutState extends ConsumerState<BoutScreen> {
           doAction,
           context: tmpContext,
           navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
-        );
-      } on Exception catch (e) {
-        if (context.mounted) {
-          await showExceptionDialog(
-            context: tmpContext,
-            exception: e,
-          );
-        }
-      }
+        ),
+      );
     }
   }
 
