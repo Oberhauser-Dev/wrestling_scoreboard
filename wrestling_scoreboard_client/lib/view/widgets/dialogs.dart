@@ -63,6 +63,7 @@ Future<void> showExceptionDialog({required BuildContext context, required Except
     context: context,
     builder: (context) => OkDialog(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (exception is RestException) SelectableText(localizations.invalidParameterException),
           SelectableText(

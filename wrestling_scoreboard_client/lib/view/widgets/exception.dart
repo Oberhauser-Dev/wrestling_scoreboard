@@ -19,17 +19,16 @@ class ExceptionWidget extends StatelessWidget {
         : SelectableText(exception.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error));
     return Center(
       child: PaddedCard(
-        child: Wrap(children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              errorText,
-              if (onRetry != null) const SizedBox(height: 16),
-              if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
-            ],
-          ),
-        ]),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            errorText,
+            if (onRetry != null) const SizedBox(height: 16),
+            if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
+          ],
+        ),
       ),
     );
   }
