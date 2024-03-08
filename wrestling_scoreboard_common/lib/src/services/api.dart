@@ -1,4 +1,6 @@
-export 'reports/germany_nrw.dart';
+import '../../common.dart';
+
+export 'apis/germany_nrw.dart';
 
 enum WrestlingApiProvider {
   deNwRingenApi;
@@ -6,10 +8,12 @@ enum WrestlingApiProvider {
   WrestlingApi get api {
     switch (this) {
       case WrestlingApiProvider.deNwRingenApi:
-        throw UnimplementedError();
+        return NrwGermanyWrestlingApi();
     }
   }
 }
 
 /// Abstraction for providing an api interface.
-abstract class WrestlingApi {}
+abstract class WrestlingApi {
+  Future<List<League>> importLeagues({int? season});
+}

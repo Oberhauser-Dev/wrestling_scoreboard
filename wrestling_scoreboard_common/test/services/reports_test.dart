@@ -80,7 +80,7 @@ void main() {
 
   group('Reports', () {
     test('Germany, NRW', () {
-      final wrestlingReport = NrwGermanyWrestlingReporter();
+      final wrestlingReport = WrestlingReportProvider.deNwRdb274.reporter;
       final report = wrestlingReport.exportTeamMatchReport(
         teamMatch,
         {
