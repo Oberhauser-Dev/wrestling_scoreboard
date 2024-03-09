@@ -58,6 +58,7 @@
   "mandatoryField": "Das ist ein Pflichtfeld.",
   "actionSuccessful": "Die Aktion war erfolgreich.",
   "noWebSocketConnection": "Die Verbindung zum Server konnte nicht aufgebaut werden oder wurde unterbrochen.",
+  "errorOccurred": "Etwas ist schief gelaufen :/",
   "notFoundException": "Element wurde nicht gefunden :/",
   "invalidParameterException": "Die Änderung war nicht erfolgreich, bitte überprüfe deine Eingabeparameter.",
   "warningBoutGenerate": "Diese Aktion überschreibt alle existierenden Kämpfe dieser Begegnung. Um einzelne Kämpfe zu bearbeiten, nutze die Seite zur Kampf-Bearbeitung. Bist du sicher, dass du fortfahren möchtest?",

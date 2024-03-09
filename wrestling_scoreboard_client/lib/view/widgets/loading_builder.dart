@@ -23,7 +23,7 @@ class LoadingBuilder<T> extends ConsumerWidget {
       future: ref.read(networkTimeoutNotifierProvider).then((timeout) => future.timeout(timeout)),
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
-          return ExceptionWidget(snapshot.error!, onRetry: onRetry);
+          return ExceptionWidget(snapshot.error!, stackTrace: snapshot.stackTrace, onRetry: onRetry);
         }
         if (initialData != null) {
           return builder(context, initialData as T);
@@ -58,7 +58,7 @@ class LoadingStreamBuilder<T> extends StatelessWidget {
       initialData: initialData,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
-          return ExceptionWidget(snapshot.error!, onRetry: onRetry);
+          return ExceptionWidget(snapshot.error!, onRetry: onRetry, stackTrace: snapshot.stackTrace);
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

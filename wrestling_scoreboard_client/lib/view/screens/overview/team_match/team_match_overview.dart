@@ -80,6 +80,7 @@ class TeamMatchOverview extends ConsumerWidget {
                           showExceptionDialog(
                             context: context,
                             exception: Exception('Please select a report provider in the settings'),
+                            stackTrace: null,
                           );
                         }
                       }

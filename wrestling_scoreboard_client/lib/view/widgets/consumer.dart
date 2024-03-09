@@ -55,12 +55,12 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (id == null && initialData == null) {
-      return ExceptionWidget(AppLocalizations.of(context)!.notFoundException);
+      return ExceptionWidget(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
     }
     return NullableSingleConsumer(
         builder: (BuildContext context, T? data) {
           if (data == null) {
-            return ExceptionWidget(AppLocalizations.of(context)!.notFoundException);
+            return ExceptionWidget(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
           }
           return builder(context, data);
         },

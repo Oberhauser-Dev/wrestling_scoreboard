@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 
 class OkDialog extends StatelessWidget {
   final Widget child;
@@ -80,29 +81,20 @@ Future<T?> showOkCanelDialog<T>({
   );
 }
 
-Future<void> showExceptionDialog({required BuildContext context, required Object exception}) async {
-  final localizations = AppLocalizations.of(context)!;
+Future<void> showExceptionDialog(
+    {required BuildContext context, required Object exception, required StackTrace? stackTrace}) async {
   await showOkDialog(
     context: context,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (exception is RestException) SelectableText(localizations.invalidParameterException),
-        SelectableText(
-          exception.toString(),
-          style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 10),
-        ),
-      ],
-    ),
+    child: ExceptionInfo(exception, stackTrace: stackTrace),
   );
 }
 
 Future<void> catchAsync(BuildContext context, Future<void> Function() doAsync) async {
   try {
     await doAsync();
-  } catch (exception) {
+  } catch (exception, stackTrace) {
     if (context.mounted) {
-      showExceptionDialog(context: context, exception: exception);
+      showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace);
     }
   }
 }
