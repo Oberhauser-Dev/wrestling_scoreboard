@@ -1,25 +1,47 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 
-League _leagueMenRPW = League(
+const _organization = Organization(name: 'Deutscher Ringer Bund (DRB)');
+
+final _adultDivision = Division(
+  id: 1,
+  name: 'Adult',
+  startDate: DateTime(2021),
+  endDate: DateTime(2022),
+  boutConfig: const BoutConfig(id: 1),
+  seasonPartitions: 2,
+  organization: _organization,
+);
+
+final _juniorDivision = Division(
+  id: 2,
+  name: 'Junior',
+  startDate: DateTime(2021),
+  endDate: DateTime(2022),
+  boutConfig: const BoutConfig(id: 1),
+  seasonPartitions: 2,
+  organization: _organization,
+);
+
+final _leagueMenRPW = League(
   id: 1,
   name: 'Real Pro Wrestling',
   startDate: DateTime(2021),
-  boutConfig: const BoutConfig(id: 1),
-  seasonPartitions: 2,
+  endDate: DateTime(2022),
+  division: _adultDivision,
 );
-League _leagueJnRPW = League(
+final _leagueJnRPW = League(
   id: 2,
   name: 'Real Pro Wrestling Jn',
   startDate: DateTime(2021),
-  boutConfig: const BoutConfig(id: 2),
-  seasonPartitions: 2,
+  endDate: DateTime(2022),
+  division: _juniorDivision,
 );
-League _leagueNational = League(
+final _leagueNational = League(
   id: 3,
   name: 'National League',
   startDate: DateTime(2021),
-  boutConfig: const BoutConfig(id: 3),
-  seasonPartitions: 2,
+  endDate: DateTime(2022),
+  division: _adultDivision,
 );
 
 Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers');
@@ -85,8 +107,10 @@ Membership b4 = Membership(id: 8, person: p8, club: _guestClub);
 final List<Club> _clubs = [_homeClub, _guestClub];
 final List<Bout> _bouts = [];
 final List<BoutAction> _boutActions = []; // TODO fill
+final List<Organization> _organizations = [_organization];
+final List<Division> _divisions = [_juniorDivision, _adultDivision];
 final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
-final List<LeagueWeightClass> _leagueWeightClasses = []; // TODO fill
+final List<DivisionWeightClass> _divisionWeightClasses = []; // TODO fill
 final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
 final List<Lineup> _lineups = [];
 final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
@@ -162,12 +186,16 @@ List<BoutAction> getBoutActions() => _boutActions;
 
 List<BoutAction> getBoutActionsOfBout(Bout bout) => getBoutActions().where((element) => element.bout == bout).toList();
 
+List<Organization> getOrganizations() => _organizations;
+
+List<Division> getDivisions() => _divisions;
+
 List<League> getLeagues() => _leagues;
 
-List<LeagueWeightClass> getLeagueWeightClasses() => _leagueWeightClasses;
+List<DivisionWeightClass> getDivisionWeightClasses() => _divisionWeightClasses;
 
-List<LeagueWeightClass> getLeagueWeightClassesOfLeague(League league) {
-  return getLeagueWeightClasses().where((element) => element.league == league).toList();
+List<DivisionWeightClass> getDivisionWeightClassesOfDivision(Division division) {
+  return getDivisionWeightClasses().where((element) => element.division == division).toList();
 }
 
 List<LeagueTeamParticipation> getLeagueTeamParticipations() => _leagueTeamParticipations;
@@ -224,8 +252,8 @@ List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
 
 List<WeightClass> getWeightClasses() => _weightClasses;
 
-List<WeightClass> getWeightClassesOfLeague(League league) {
-  return (getLeagueWeightClassesOfLeague(league).toList()..sort((a, b) => a.pos - b.pos))
+List<WeightClass> getWeightClassesOfDivision(Division league) {
+  return (getDivisionWeightClassesOfDivision(league).toList()..sort((a, b) => a.pos - b.pos))
       .map((e) => e.weightClass)
       .toList();
 }

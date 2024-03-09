@@ -9,35 +9,35 @@ import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class LeagueWeightClassEdit extends WeightClassEdit {
-  final LeagueWeightClass? leagueWeightClass;
-  final League initialLeague;
+class DivisionWeightClassEdit extends WeightClassEdit {
+  final DivisionWeightClass? divisionWeightClass;
+  final Division initialDivision;
 
-  LeagueWeightClassEdit({this.leagueWeightClass, required this.initialLeague, super.key})
-      : super(weightClass: leagueWeightClass?.weightClass);
+  DivisionWeightClassEdit({this.divisionWeightClass, required this.initialDivision, super.key})
+      : super(weightClass: divisionWeightClass?.weightClass);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => LeagueWeightClassEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => DivisionWeightClassEditState();
 }
 
-class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassEdit> {
+class DivisionWeightClassEditState extends WeightClassEditState<DivisionWeightClassEdit> {
   int _pos = 0;
   late int _seasonPartition;
 
   @override
   void initState() {
     super.initState();
-    _seasonPartition = widget.leagueWeightClass?.seasonPartition ?? 0;
+    _seasonPartition = widget.divisionWeightClass?.seasonPartition ?? 0;
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return buildEdit(context, id: widget.leagueWeightClass?.id, classLocale: localizations.weightClass, fields: [
+    return buildEdit(context, id: widget.divisionWeightClass?.id, classLocale: localizations.weightClass, fields: [
       ListTile(
         leading: const Icon(Icons.format_list_numbered),
         title: TextFormField(
-          initialValue: widget.leagueWeightClass?.pos.toString() ?? '',
+          initialValue: widget.divisionWeightClass?.pos.toString() ?? '',
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
@@ -49,15 +49,15 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
           },
         ),
       ),
-      if (widget.initialLeague.seasonPartitions > 1)
+      if (widget.initialDivision.seasonPartitions > 1)
         ListTile(
           leading: const Icon(Icons.sunny_snowing),
           title: IndexedToggleButtons(
             label: localizations.seasonPartition,
             onPressed: (e) => setState(() => _seasonPartition = e),
             selected: _seasonPartition,
-            numOptions: widget.initialLeague.seasonPartitions,
-            getTitle: (e) => e.asSeasonPartition(context, widget.initialLeague.seasonPartitions),
+            numOptions: widget.initialDivision.seasonPartitions,
+            getTitle: (e) => e.asSeasonPartition(context, widget.initialDivision.seasonPartitions),
           ),
         ),
     ]);
@@ -65,14 +65,14 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
 
   @override
   Future<void> handleNested(weightClass) async {
-    var leagueWeightClass = LeagueWeightClass(
-      id: widget.leagueWeightClass?.id,
-      league: widget.initialLeague,
+    var divisionWeightClass = DivisionWeightClass(
+      id: widget.divisionWeightClass?.id,
+      division: widget.initialDivision,
       pos: _pos,
       weightClass: weightClass,
       seasonPartition: _seasonPartition,
     );
-    leagueWeightClass = leagueWeightClass
-        .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(leagueWeightClass));
+    divisionWeightClass = divisionWeightClass
+        .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(divisionWeightClass));
   }
 }

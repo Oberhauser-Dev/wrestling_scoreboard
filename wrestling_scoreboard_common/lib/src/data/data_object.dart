@@ -24,10 +24,14 @@ abstract class DataObject {
         return Bout.fromJson(json) as T;
       case const (BoutAction):
         return BoutAction.fromJson(json) as T;
+      case const (Organization):
+        return Organization.fromJson(json) as T;
+      case const (Division):
+        return Division.fromJson(json) as T;
       case const (League):
         return League.fromJson(json) as T;
-      case const (LeagueWeightClass):
-        return LeagueWeightClass.fromJson(json) as T;
+      case const (DivisionWeightClass):
+        return DivisionWeightClass.fromJson(json) as T;
       case const (LeagueTeamParticipation):
         return LeagueTeamParticipation.fromJson(json) as T;
       case const (Lineup):
@@ -66,15 +70,19 @@ abstract class DataObject {
       case const (BoutConfig):
         return (await BoutConfig.fromRaw(raw)) as T;
       case const (Club):
-        return (await Club.fromRaw(raw)) as T;
+        return (await Club.fromRaw(raw, getSingle)) as T;
       case const (Bout):
         return (await Bout.fromRaw(raw, getSingle)) as T;
       case const (BoutAction):
         return (await BoutAction.fromRaw(raw, getSingle)) as T;
+      case const (Organization):
+        return (await Organization.fromRaw(raw, getSingle)) as T;
+      case const (Division):
+        return (await Division.fromRaw(raw, getSingle)) as T;
       case const (League):
         return (await League.fromRaw(raw, getSingle)) as T;
-      case const (LeagueWeightClass):
-        return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
+      case const (DivisionWeightClass):
+        return (await DivisionWeightClass.fromRaw(raw, getSingle)) as T;
       case const (LeagueTeamParticipation):
         return (await LeagueTeamParticipation.fromRaw(raw, getSingle)) as T;
       case const (Lineup):

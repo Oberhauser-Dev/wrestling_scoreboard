@@ -9,6 +9,7 @@ Widget getDropdown<T>({
   void Function(T? value)? onSaved,
   required Future<List<T>> Function(String? filter) onFind,
   required String Function(T u) itemAsString,
+  bool allowEmpty = true,
   required BuildContext context,
   Widget? icon,
 }) {
@@ -25,6 +26,7 @@ Widget getDropdown<T>({
     itemAsString: (T? u) => u != null ? itemAsString(u) : 'empty value',
     selectedItem: selectedItem,
     onChanged: onChanged,
+    validator: (val) => (val == null && !allowEmpty) ? 'This field is mandatory' : null,
     onSaved: onSaved,
   );
 }

@@ -19,7 +19,7 @@ class TeamEdit extends ConsumerStatefulWidget {
 class TeamEditState extends ConsumerState<TeamEdit> {
   final _formKey = GlobalKey<FormState>();
 
-  List<Club>? availableClubs;
+  Iterable<Club>? _availableClubs;
   String? _name;
   String? _description;
   Club? _club;
@@ -68,17 +68,17 @@ class TeamEditState extends ConsumerState<TeamEdit> {
         title: getDropdown<Club>(
           icon: const Icon(Icons.foundation),
           selectedItem: _club,
-          label: AppLocalizations.of(context)!.club,
+          label: localizations.club,
           context: context,
           onSaved: (Club? value) => setState(() {
             _club = value;
           }),
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
-            availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
+            _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
             return (filter == null
-                    ? availableClubs!
-                    : availableClubs!.where((element) => element.name.contains(filter)))
+                    ? _availableClubs!
+                    : _availableClubs!.where((element) => element.name.contains(filter)))
                 .toList();
           },
         ),

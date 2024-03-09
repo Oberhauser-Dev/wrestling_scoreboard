@@ -1,39 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/bout_config_edit.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class LeagueEdit extends BoutConfigEdit {
+class LeagueEdit extends ConsumerStatefulWidget {
   final League? league;
+  final Division? initialDivision;
 
-  LeagueEdit({this.league, super.key}) : super(boutConfig: league?.boutConfig);
+  const LeagueEdit({this.league, this.initialDivision, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => LeagueEditState();
 }
 
-class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
+class LeagueEditState extends ConsumerState<LeagueEdit> {
+  final _formKey = GlobalKey<FormState>();
+
+  Iterable<Division>? _availableDivisions;
+
   String? _name;
-  late int _seasonPartitions;
   late DateTime _startDate;
+  late DateTime _endDate;
+  Division? _division;
 
   @override
   void initState() {
     _startDate = widget.league?.startDate ?? DateTime.now();
-    _seasonPartitions = widget.league?.seasonPartitions ?? 1;
+    _endDate = widget.league?.endDate ?? DateTime.now();
+    _division = widget.league?.division ?? widget.initialDivision;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final navigator = Navigator.of(context);
 
-    return buildEdit(context, id: widget.league?.id, classLocale: localizations.league, fields: [
+    final items = [
       ListTile(
         leading: const Icon(Icons.description),
         title: TextFormField(
@@ -58,7 +65,7 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
           readOnly: true,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
-            labelText: localizations.date,
+            labelText: localizations.startDate,
           ),
           onTap: () => showDatePicker(
             initialDatePickerMode: DatePickerMode.year,
@@ -75,32 +82,71 @@ class LeagueEditState extends BoutConfigEditState<LeagueEdit> {
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.sunny_snowing),
+        leading: const Icon(Icons.date_range),
         title: TextFormField(
-          initialValue: widget.league?.seasonPartitions.toString() ?? '',
-          keyboardType: TextInputType.number,
+          key: ValueKey(_endDate),
+          readOnly: true,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.seasonPartitions,
+            border: const UnderlineInputBorder(),
+            labelText: localizations.endDate,
           ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
-          onSaved: (String? value) {
-            _seasonPartitions = int.tryParse(value ?? '') ?? 1;
-            if (_seasonPartitions < 1) _seasonPartitions = 1;
+          onTap: () => showDatePicker(
+            initialDatePickerMode: DatePickerMode.year,
+            context: context,
+            initialDate: _endDate,
+            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+          ).then((value) {
+            if (value != null) {
+              setState(() => _endDate = value);
+            }
+          }),
+          initialValue: _endDate.toDateString(context),
+        ),
+      ),
+      ListTile(
+        title: getDropdown<Division>(
+          icon: const Icon(Icons.inventory),
+          selectedItem: _division,
+          label: localizations.division,
+          context: context,
+          onSaved: (Division? value) => setState(() {
+            _division = value;
+          }),
+          itemAsString: (u) => u.fullname,
+          allowEmpty: false,
+          onFind: (String? filter) async {
+            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
+            return (filter == null
+                    ? _availableDivisions!
+                    : _availableDivisions!.where((element) => element.fullname.contains(filter)))
+                .toList();
           },
         ),
       ),
-    ]);
+    ];
+    return Form(
+      key: _formKey,
+      child: EditWidget(
+        typeLocalization: localizations.league,
+        id: widget.league?.id,
+        onSubmit: () => handleSubmit(navigator),
+        items: items,
+      ),
+    );
   }
 
-  @override
-  Future<void> handleNested(BoutConfig dataObject) async {
-    await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(League(
-      id: widget.league?.id,
-      name: _name!,
-      startDate: _startDate,
-      boutConfig: dataObject,
-      seasonPartitions: _seasonPartitions,
-    ));
+  Future<void> handleSubmit(NavigatorState navigator) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(League(
+        id: widget.league?.id,
+        name: _name!,
+        startDate: _startDate,
+        endDate: _endDate,
+        division: _division!,
+      ));
+      navigator.pop();
+    }
   }
 }

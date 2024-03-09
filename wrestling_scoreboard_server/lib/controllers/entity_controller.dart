@@ -9,9 +9,11 @@ import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.d
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
@@ -320,10 +322,14 @@ abstract class EntityController<T extends DataObject> {
         return BoutController();
       case BoutAction:
         return BoutActionController();
+      case Organization:
+        return OrganizationController();
+      case Division:
+        return DivisionController();
       case League:
         return LeagueController();
-      case LeagueWeightClass:
-        return LeagueWeightClassController();
+      case DivisionWeightClass:
+        return DivisionWeightClassController();
       case LeagueTeamParticipation:
         return LeagueTeamParticipationController();
       case Lineup:

@@ -2,7 +2,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_server/controllers/database_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 
 import '../controllers/bout_action_controller.dart';
 import '../controllers/bout_config_controller.dart';
@@ -10,6 +10,8 @@ import '../controllers/bout_controller.dart';
 import '../controllers/club_controller.dart';
 import '../controllers/competition_bout_controller.dart';
 import '../controllers/competition_controller.dart';
+import '../controllers/organization_controller.dart';
+import '../controllers/division_controller.dart';
 import '../controllers/league_controller.dart';
 import '../controllers/lineup_controller.dart';
 import '../controllers/membership_controller.dart';
@@ -39,7 +41,6 @@ class ApiRoute {
     router.get('/bout_config/<id|[0-9]+>', boutConfigController.requestSingle);
 
     final clubController = ClubController();
-    // A handler can have more that one route.
     router.post('/club', clubController.postSingle);
     router.get('/clubs', clubController.requestMany);
     router.get('/club/<id|[0-9]+>', clubController.requestSingle);
@@ -58,20 +59,36 @@ class ApiRoute {
     router.get('/bout_actions', boutActionController.requestMany);
     router.get('/bout_action/<id|[0-9]+>', boutActionController.requestSingle);
 
+    final organizationController = OrganizationController();
+    router.post('/organization', organizationController.postSingle);
+    router.get('/organizations', organizationController.requestMany);
+    router.get('/organization/<id|[0-9]+>', organizationController.requestSingle);
+    router.get('/organization/<id|[0-9]+>/organizations', organizationController.requestChildOrganizations);
+    router.get('/organization/<id|[0-9]+>/divisions', organizationController.requestDivisions);
+    router.get('/organization/<id|[0-9]+>/clubs', organizationController.requestClubs);
+    router.get('/organization/<id|[0-9]+>/competitions', organizationController.requestCompetitions);
+
+    final divisionController = DivisionController();
+    router.post('/division', divisionController.postSingle);
+    router.get('/divisions', divisionController.requestMany);
+    router.get('/division/<id|[0-9]+>', divisionController.requestSingle);
+    router.get('/division/<id|[0-9]+>/leagues', divisionController.requestLeagues);
+    router.get('/division/<id|[0-9]+>/divisions', divisionController.requestChildDivisions);
+    router.get('/division/<id|[0-9]+>/weight_classs', divisionController.requestWeightClasses);
+    router.get('/division/<id|[0-9]+>/division_weight_classs', divisionController.requestDivisionWeightClasses);
+
     final leagueController = LeagueController();
     router.post('/league', leagueController.postSingle);
     router.get('/leagues', leagueController.requestMany);
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
     router.get('/league/<id|[0-9]+>/teams', leagueController.requestTeams);
-    router.get('/league/<id|[0-9]+>/weight_classs', leagueController.requestWeightClasses);
-    router.get('/league/<id|[0-9]+>/league_weight_classs', leagueController.requestLeagueWeightClasses);
     router.get('/league/<id|[0-9]+>/league_team_participations', leagueController.requestLeagueTeamParticipations);
     router.get('/league/<id|[0-9]+>/team_matchs', leagueController.requestTeamMatchs);
 
-    final leagueWeightClassController = LeagueWeightClassController();
-    router.post('/league_weight_class', leagueWeightClassController.postSingle);
-    router.get('/league_weight_classs', leagueWeightClassController.requestMany);
-    router.get('/league_weight_class/<id|[0-9]+>', leagueWeightClassController.requestSingle);
+    final divisionWeightClassController = DivisionWeightClassController();
+    router.post('/division_weight_class', divisionWeightClassController.postSingle);
+    router.get('/division_weight_classs', divisionWeightClassController.requestMany);
+    router.get('/division_weight_class/<id|[0-9]+>', divisionWeightClassController.requestSingle);
 
     final leagueTeamParticipationController = LeagueTeamParticipationController();
     router.post('/league_team_participation', leagueTeamParticipationController.postSingle);

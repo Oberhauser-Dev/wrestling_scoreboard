@@ -51,7 +51,7 @@ class MatchDisplay extends StatelessWidget {
                     filterObject: match,
                     builder: (context, teamMatchBouts) {
                       final matchInfos = [
-                        match.league?.name,
+                        match.league?.fullname,
                         '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
                         if (match.referee != null)
                           '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',

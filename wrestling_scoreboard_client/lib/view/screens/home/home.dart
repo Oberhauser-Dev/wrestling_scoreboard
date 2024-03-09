@@ -108,8 +108,8 @@ class HomeState extends ConsumerState<Home> {
         ),
         body: const TabBarView(
           children: [
-            LeaguesView(),
             ClubsView(),
+            LeaguesView(),
             CompetitionsView(),
           ],
         ),

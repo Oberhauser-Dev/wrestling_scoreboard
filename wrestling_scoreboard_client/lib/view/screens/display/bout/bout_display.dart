@@ -75,7 +75,7 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                     builder: (context, bout) {
                       return BoutScreen(
                         wrestlingEvent: match,
-                        boutConfig: match.league?.boutConfig ?? const BoutConfig(),
+                        boutConfig: match.league?.division.boutConfig ?? const BoutConfig(),
                         bouts: teamMatchBouts.map((e) => e.bout).toList(),
                         boutIndex: teamMatchBoutIndex,
                         bout: bout,

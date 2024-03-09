@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
@@ -48,10 +48,10 @@ class TeamMatchController extends EntityController<TeamMatch> {
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)));
     final oldBouts = (await getBouts(id));
-    final weightClasses = teamMatch.league?.id == null
+    final weightClasses = teamMatch.league?.division.id == null
         ? <WeightClass>[]
-        : (await LeagueController()
-            .getWeightClasses(teamMatch.league!.id.toString(), seasonPartition: teamMatch.seasonPartition));
+        : (await DivisionController()
+            .getWeightClasses(teamMatch.league!.division.id.toString(), seasonPartition: teamMatch.seasonPartition));
     final homeParticipations = await ParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id});
     final guestParticipations = await ParticipationController()

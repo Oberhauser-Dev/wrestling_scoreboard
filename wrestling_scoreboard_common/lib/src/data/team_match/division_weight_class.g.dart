@@ -1,23 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'league_weight_class.dart';
+part of 'division_weight_class.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LeagueWeightClassImpl _$$LeagueWeightClassImplFromJson(Map<String, dynamic> json) => _$LeagueWeightClassImpl(
+_$DivisionWeightClassImpl _$$DivisionWeightClassImplFromJson(Map<String, dynamic> json) => _$DivisionWeightClassImpl(
       id: json['id'] as int?,
       pos: json['pos'] as int,
-      league: League.fromJson(json['league'] as Map<String, dynamic>),
+      division: Division.fromJson(json['division'] as Map<String, dynamic>),
       weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
       seasonPartition: json['seasonPartition'] as int?,
     );
 
-Map<String, dynamic> _$$LeagueWeightClassImplToJson(_$LeagueWeightClassImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$$DivisionWeightClassImplToJson(_$DivisionWeightClassImpl instance) => <String, dynamic>{
       'id': instance.id,
       'pos': instance.pos,
-      'league': instance.league.toJson(),
+      'division': instance.division.toJson(),
       'weightClass': instance.weightClass.toJson(),
       'seasonPartition': instance.seasonPartition,
     };

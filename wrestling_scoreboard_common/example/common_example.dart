@@ -1,6 +1,6 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void main() {
-  final club = Club(name: 'Quahog Hunters');
-  print('name: ${club.name}');
+  final organization = Organization(name: 'Deutscher Ringer Bund', abbreviation: 'DRB');
+  print('name: ${organization.name}');
 }

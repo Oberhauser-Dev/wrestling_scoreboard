@@ -3,9 +3,25 @@ import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void main() {
-  final league = League(name: 'Test League', startDate: DateTime(1999), boutConfig: BoutConfig(), seasonPartitions: 2);
-  final clubA = Club(name: 'Club A');
-  final clubB = Club(name: 'Club B');
+  final organization = Organization(name: 'Deutscher Ringer Bund', abbreviation: 'DRB');
+  final division = Division(
+    name: 'Test Division',
+    startDate: DateTime(1999),
+    endDate: DateTime(2000),
+    boutConfig: BoutConfig(),
+    seasonPartitions: 2,
+    organization: Organization(
+      name: 'Test Organization',
+    ),
+  );
+  final league = League(
+    name: 'Test League',
+    startDate: DateTime(1999),
+    endDate: DateTime(2000),
+    division: division,
+  );
+  final clubA = Club(name: 'Club A', organization: organization);
+  final clubB = Club(name: 'Club B', organization: organization);
   final lineupA = Lineup(team: Team(name: 'Team A', club: clubA));
   final lineupB = Lineup(team: Team(name: 'Team B', club: clubB));
   final teamMatch = TeamMatch(

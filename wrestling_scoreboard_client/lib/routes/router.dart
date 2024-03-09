@@ -4,9 +4,11 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_displ
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
@@ -21,6 +23,14 @@ final router = GoRouter(
       GoRoute(
         path: '${ClubOverview.route}/:club_id',
         builder: (context, state) => ClubOverview(id: int.parse(state.pathParameters['club_id']!)),
+      ),
+      GoRoute(
+        path: '${OrganizationOverview.route}/:organization_id',
+        builder: (context, state) => OrganizationOverview(id: int.parse(state.pathParameters['organization_id']!)),
+      ),
+      GoRoute(
+        path: '${DivisionOverview.route}/:division_id',
+        builder: (context, state) => DivisionOverview(id: int.parse(state.pathParameters['division_id']!)),
       ),
       GoRoute(
         path: '${LeagueOverview.route}/:league_id',
@@ -50,9 +60,9 @@ final router = GoRouter(
             LeagueTeamParticipationOverview(id: int.parse(state.pathParameters['participation_id']!)),
       ),
       GoRoute(
-        path: '${LeagueWeightClassOverview.route}/:league_weight_class_id',
+        path: '${DivisionWeightClassOverview.route}/:division_weight_class_id',
         builder: (context, state) =>
-            LeagueWeightClassOverview(id: int.parse(state.pathParameters['league_weight_class_id']!)),
+            DivisionWeightClassOverview(id: int.parse(state.pathParameters['division_weight_class_id']!)),
       ),
       GoRoute(
         path: '${TeamMatchBoutOverview.route}/:team_match_bout_id',

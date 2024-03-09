@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'data_object.dart';
+import '../../common.dart';
 
 part 'club.freezed.dart';
 part 'club.g.dart';
@@ -13,6 +13,7 @@ class Club with _$Club implements DataObject {
   const factory Club({
     int? id,
     required String name,
+    required Organization organization,
     String? no, // Club-ID
   }) = _Club;
 
@@ -24,13 +25,15 @@ class Club with _$Club implements DataObject {
       if (id != null) 'id': id,
       'no': no,
       'name': name,
+      'organization_id': organization.id,
     };
   }
 
-  static Future<Club> fromRaw(Map<String, dynamic> e) async => Club(
+  static Future<Club> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => Club(
         id: e['id'] as int?,
         no: e['no'] as String?,
         name: e['name'] as String,
+        organization: (await getSingle<Organization>(e['organization_id'] as int)),
       );
 
   @override

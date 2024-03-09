@@ -56,11 +56,11 @@ class MockDataManager extends DataManager {
           if (filterObject is Team) return getTeamMatchesOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (WeightClass):
-          // TODO may remove in favor of getLeagueWeightClassesOfLeague
-          if (filterObject is League) return getWeightClassesOfLeague(filterObject).cast<T>();
+          // TODO may remove in favor of getDivisionWeightClassesOfLeague
+          if (filterObject is Division) return getWeightClassesOfDivision(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (LeagueWeightClass):
-          if (filterObject is League) return getLeagueWeightClassesOfLeague(filterObject).cast<T>();
+        case const (DivisionWeightClass):
+          if (filterObject is Division) return getDivisionWeightClassesOfDivision(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (LeagueTeamParticipation):
           if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
@@ -238,11 +238,11 @@ class MockDataManager extends DataManager {
       ));
     } else if (single is League) {
       getManyStreamController<League>()?.add(ManyDataObject(data: getLeagues()));
-    } else if (single is LeagueWeightClass) {
-      getManyStreamController<LeagueWeightClass>(filterType: League)?.add(ManyDataObject(
-        data: getLeagueWeightClassesOfLeague(single.league),
+    } else if (single is DivisionWeightClass) {
+      getManyStreamController<DivisionWeightClass>(filterType: League)?.add(ManyDataObject(
+        data: getDivisionWeightClassesOfDivision(single.division),
         filterType: League,
-        filterId: single.league.id,
+        filterId: single.division.id,
       ));
     } else if (single is Lineup) {
       // No filtered list needs to be handled.
@@ -296,10 +296,14 @@ class MockDataManager extends DataManager {
       return getBouts().cast<T>();
     } else if (obj is BoutAction) {
       return getBoutActions().cast<T>();
+    } else if (obj is Organization) {
+      return getOrganizations().cast<T>();
+    } else if (obj is Division) {
+      return getDivisions().cast<T>();
     } else if (obj is League) {
       return getLeagues().cast<T>();
-    } else if (obj is LeagueWeightClass) {
-      return getLeagueWeightClasses().cast<T>();
+    } else if (obj is DivisionWeightClass) {
+      return getDivisionWeightClasses().cast<T>();
     } else if (obj is Lineup) {
       return getLineups().cast<T>();
     } else if (obj is Membership) {
@@ -331,10 +335,14 @@ class MockDataManager extends DataManager {
         return getBouts().cast<T>();
       case const (BoutAction):
         return getBoutActions().cast<T>();
+      case const (Organization):
+        return getOrganizations().cast<T>();
+      case const (Division):
+        return getDivisions().cast<T>();
       case const (League):
         return getLeagues().cast<T>();
-      case const (LeagueWeightClass):
-        return getLeagueWeightClasses().cast<T>();
+      case const (DivisionWeightClass):
+        return getDivisionWeightClasses().cast<T>();
       case const (Lineup):
         return getLineups().cast<T>();
       case const (Membership):
@@ -365,10 +373,14 @@ class MockDataManager extends DataManager {
       return getSingleStreamController<Bout>() as StreamController<T>;
     } else if (obj is BoutAction) {
       return getSingleStreamController<BoutAction>() as StreamController<T>;
+    } else if (obj is Organization) {
+      return getSingleStreamController<Organization>() as StreamController<T>;
+    } else if (obj is Division) {
+      return getSingleStreamController<Division>() as StreamController<T>;
     } else if (obj is League) {
       return getSingleStreamController<League>() as StreamController<T>;
-    } else if (obj is LeagueWeightClass) {
-      return getSingleStreamController<LeagueWeightClass>() as StreamController<T>;
+    } else if (obj is DivisionWeightClass) {
+      return getSingleStreamController<DivisionWeightClass>() as StreamController<T>;
     } else if (obj is Lineup) {
       return getSingleStreamController<Lineup>() as StreamController<T>;
     } else if (obj is Membership) {

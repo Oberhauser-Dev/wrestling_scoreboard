@@ -168,15 +168,15 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           },
         ),
       ),
-      if (_league != null && _league!.seasonPartitions > 1)
+      if (_league != null && _league!.division.seasonPartitions > 1)
         ListTile(
           leading: const Icon(Icons.sunny_snowing),
           title: IndexedToggleButtons(
             label: localizations.seasonPartition,
             onPressed: (e) => setState(() => _seasonPartition = e),
             selected: _seasonPartition,
-            numOptions: _league!.seasonPartitions,
-            getTitle: (e) => e.asSeasonPartition(context, _league!.seasonPartitions),
+            numOptions: _league!.division.seasonPartitions,
+            getTitle: (e) => e.asSeasonPartition(context, _league!.division.seasonPartitions),
           ),
         ),
     ];

@@ -16,7 +16,7 @@ class TeamMatchBoutEdit extends BoutEdit {
           bout: teamMatchBout?.bout,
           lineupRed: initialTeamMatch.home,
           lineupBlue: initialTeamMatch.guest,
-          boutConfig: initialTeamMatch.league?.boutConfig ?? const BoutConfig(),
+          boutConfig: initialTeamMatch.league?.division.boutConfig ?? const BoutConfig(),
         );
 
   @override
@@ -58,5 +58,5 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
 
   @override
   Future<List<WeightClass>> get availableWeightClasses async => (await ref.read(dataManagerNotifierProvider))
-      .readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league);
+      .readMany<WeightClass, Division>(filterObject: widget.initialTeamMatch.league?.division);
 }

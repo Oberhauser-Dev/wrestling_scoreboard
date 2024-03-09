@@ -38,7 +38,7 @@ class LineupEdit extends ConsumerStatefulWidget {
 class LineupEditState extends ConsumerState<LineupEdit> {
   final _formKey = GlobalKey<FormState>();
 
-  Iterable<Membership>? memberships;
+  Iterable<Membership>? _memberships;
 
   Membership? _leader;
   Membership? _coach;
@@ -120,7 +120,10 @@ class LineupEditState extends ConsumerState<LineupEdit> {
                 _leader = value;
               }),
               itemAsString: (u) => u.person.fullName,
-              onFind: (String? filter) => ParticipationEditTile.filterMemberships(ref, filter, widget.lineup),
+              onFind: (String? filter) async {
+                _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
+                return _filterMemberships(ref, filter, widget.lineup, _memberships!);
+              },
             ),
           ),
           ListTile(
@@ -132,7 +135,10 @@ class LineupEditState extends ConsumerState<LineupEdit> {
                 _coach = value;
               }),
               itemAsString: (u) => u.person.fullName,
-              onFind: (String? filter) => ParticipationEditTile.filterMemberships(ref, filter, widget.lineup),
+              onFind: (String? filter) async {
+                _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
+                return _filterMemberships(ref, filter, widget.lineup, _memberships!);
+              },
             ),
           ),
           ..._participations.entries.map((mapEntry) {
@@ -166,25 +172,13 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
     required this.createOrUpdateParticipation,
   });
 
-  static Future<List<Membership>> filterMemberships(
-    WidgetRef ref,
-    String? filter,
-    Lineup lineup,
-  ) async {
-    final memberships = await _getMemberships(ref, club: lineup.team.club);
-    return (filter == null ? memberships : memberships.where((element) => element.person.fullName.contains(filter)))
-        .toList();
-  }
-
-  static Future<List<Membership>> _getMemberships(WidgetRef ref, {required Club club}) async {
-    return ref.watch(manyDataStreamProvider<Membership, Club>(ManyProviderData(filterObject: club)).future);
-  }
-
   @override
   ConsumerState<ParticipationEditTile> createState() => _ParticipationEditTileState();
 }
 
 class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
+  Iterable<Membership>? _memberships;
+
   Membership? _curMembership;
   double? _curWeight;
 
@@ -245,7 +239,10 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                 },
                 onSaved: (Membership? newMembership) => onSave(),
                 itemAsString: (u) => u.person.fullName,
-                onFind: (String? filter) => ParticipationEditTile.filterMemberships(ref, filter, widget.lineup),
+                onFind: (String? filter) async {
+                  _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
+                  return _filterMemberships(ref, filter, widget.lineup, _memberships!);
+                },
               ),
             ),
           ),
@@ -272,4 +269,18 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
       ),
     );
   }
+}
+
+Future<List<Membership>> _filterMemberships(
+  WidgetRef ref,
+  String? filter,
+  Lineup lineup,
+  Iterable<Membership> memberships,
+) async {
+  return (filter == null ? memberships : memberships.where((element) => element.person.fullName.contains(filter)))
+      .toList();
+}
+
+Future<List<Membership>> _getMemberships(WidgetRef ref, {required Club club}) async {
+  return ref.watch(manyDataStreamProvider<Membership, Club>(ManyProviderData(filterObject: club)).future);
 }

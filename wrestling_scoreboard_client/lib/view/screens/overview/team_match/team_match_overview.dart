@@ -56,7 +56,7 @@ class TeamMatchOverview extends ConsumerWidget {
                       if (reporter != null) {
                         final fileNameBuilder = [
                           match.date.toIso8601String().substring(0, 10),
-                          match.league?.name,
+                          match.league?.fullname,
                           match.no,
                           match.home.team.name,
                           '–',
@@ -139,12 +139,13 @@ class TeamMatchOverview extends ConsumerWidget {
                             icon: Icons.group,
                           ),
                           ContentItem(
-                            title: match.league?.name ?? '-',
+                            title: match.league?.fullname ?? '-',
                             subtitle: localizations.league,
                             icon: Icons.emoji_events,
                           ),
                           ContentItem(
-                            title: match.seasonPartition?.asSeasonPartition(context, match.league?.seasonPartitions) ??
+                            title: match.seasonPartition
+                                    ?.asSeasonPartition(context, match.league?.division.seasonPartitions) ??
                                 '-',
                             subtitle: localizations.seasonPartition,
                             icon: Icons.sunny_snowing,
@@ -185,31 +186,32 @@ class TeamMatchOverview extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    ListGroup(
-                      header: HeadingItem(title: localizations.lineups),
-                      items: [
-                        ContentItem(
-                            title: homeLineup.team.name,
-                            icon: Icons.view_list,
-                            onTap: () async => handleSelectedLineup(
-                                  homeLineup,
-                                  match.league ?? League.outOfCompetition,
-                                  match,
-                                  navigator,
-                                  (await ref.read(dataManagerNotifierProvider)),
-                                )),
-                        ContentItem(
-                            title: guestLineup.team.name,
-                            icon: Icons.view_list,
-                            onTap: () async => handleSelectedLineup(
-                                  guestLineup,
-                                  match.league ?? League.outOfCompetition,
-                                  match,
-                                  navigator,
-                                  (await ref.read(dataManagerNotifierProvider)),
-                                )),
-                      ],
-                    ),
+                    if (match.league != null)
+                      ListGroup(
+                        header: HeadingItem(title: localizations.lineups),
+                        items: [
+                          ContentItem(
+                              title: homeLineup.team.name,
+                              icon: Icons.view_list,
+                              onTap: () async => handleSelectedLineup(
+                                    homeLineup,
+                                    match,
+                                    navigator,
+                                    (await ref.read(dataManagerNotifierProvider)),
+                                    league: match.league!,
+                                  )),
+                          ContentItem(
+                              title: guestLineup.team.name,
+                              icon: Icons.view_list,
+                              onTap: () async => handleSelectedLineup(
+                                    guestLineup,
+                                    match,
+                                    navigator,
+                                    (await ref.read(dataManagerNotifierProvider)),
+                                    league: match.league!,
+                                  )),
+                        ],
+                      ),
                     ManyConsumer<TeamMatchBout, TeamMatch>(
                       filterObject: match,
                       builder: (BuildContext context, List<TeamMatchBout> teamMatchBouts) {
@@ -265,10 +267,10 @@ class TeamMatchOverview extends ConsumerWidget {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 
-  handleSelectedLineup(
-      Lineup lineup, League league, TeamMatch match, NavigatorState navigator, DataManager dataManager) async {
+  handleSelectedLineup(Lineup lineup, TeamMatch match, NavigatorState navigator, DataManager dataManager,
+      {required League league}) async {
     final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
-    final weightClasses = (await dataManager.readMany<LeagueWeightClass, League>(filterObject: league))
+    final weightClasses = (await dataManager.readMany<DivisionWeightClass, Division>(filterObject: league.division))
         .where((element) => element.seasonPartition == match.seasonPartition)
         .toList();
     navigator.push(

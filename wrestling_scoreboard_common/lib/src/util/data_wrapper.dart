@@ -71,14 +71,26 @@ Future<int?> handleFromJson(
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
+    case const (Organization):
+      return _handleFromJsonGeneric<Organization>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
+    case const (Division):
+      return _handleFromJsonGeneric<Division>(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
     case const (League):
       return _handleFromJsonGeneric<League>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
           handleManyRaw: handleManyRaw);
-    case const (LeagueWeightClass):
-      return _handleFromJsonGeneric<LeagueWeightClass>(json,
+    case const (DivisionWeightClass):
+      return _handleFromJsonGeneric<DivisionWeightClass>(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
@@ -216,10 +228,14 @@ String getTableNameFromType(Type t) {
       return 'bout';
     case const (BoutAction):
       return 'bout_action';
+    case const (Organization):
+      return 'organization';
+    case const (Division):
+      return 'division';
     case const (League):
       return 'league';
-    case const (LeagueWeightClass):
-      return 'league_weight_class';
+    case const (DivisionWeightClass):
+      return 'division_weight_class';
     case const (LeagueTeamParticipation):
       return 'league_team_participation';
     case const (Lineup):
@@ -257,10 +273,14 @@ Type getTypeFromTableName(String tableName) {
       return Bout;
     case 'bout_action':
       return BoutAction;
+    case 'organization':
+      return Organization;
+    case 'division':
+      return Division;
     case 'league':
       return League;
-    case 'league_weight_class':
-      return LeagueWeightClass;
+    case 'division_weight_class':
+      return DivisionWeightClass;
     case 'league_team_participation':
       return LeagueTeamParticipation;
     case 'lineup':
@@ -297,14 +317,14 @@ final dataTypes = [
   LeagueTeamParticipation,
   Participation,
   TeamMatch,
-  LeagueWeightClass,
+  DivisionWeightClass,
   BoutConfig,
   Lineup,
   Membership,
   Person,
   Team,
   Club,
-  League,
+  Division,
   WeightClass,
   Competition,
 ];

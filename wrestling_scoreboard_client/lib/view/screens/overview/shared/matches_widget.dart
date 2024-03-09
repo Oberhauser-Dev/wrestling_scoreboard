@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MatchesWidget<T extends DataObject?> extends StatelessWidget {

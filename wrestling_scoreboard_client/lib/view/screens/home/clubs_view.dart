@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubsView extends StatelessWidget {
@@ -15,25 +15,25 @@ class ClubsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return ResponsiveScrollView(
-      child: ManyConsumer<League, Null>(
-        builder: (BuildContext context, List<League> leagues) {
+      child: ManyConsumer<Club, Null>(
+        builder: (BuildContext context, List<Club> clubs) {
           return ListGroup(
             header: HeadingItem(
-              title: localizations.leagues,
+              title: localizations.clubs,
               trailing: IconButton(
                 icon: const Icon(Icons.add),
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LeagueEdit())),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ClubEdit())),
               ),
             ),
-            items: leagues.map(
-              (e) => SingleConsumer<League>(
+            items: clubs.map(
+              (e) => SingleConsumer<Club>(
                 id: e.id!,
                 initialData: e,
                 builder: (context, data) {
                   return ContentItem(
                     title: data.name,
-                    icon: Icons.emoji_events,
-                    onTap: () => handleSelectedLeague(data, context),
+                    icon: Icons.foundation,
+                    onTap: () => handleSelectedClub(data, context),
                   );
                 },
               ),
@@ -44,7 +44,7 @@ class ClubsView extends StatelessWidget {
     );
   }
 
-  handleSelectedLeague(League league, BuildContext context) {
-    context.push('/${LeagueOverview.route}/${league.id}');
+  handleSelectedClub(Club club, BuildContext context) {
+    context.push('/${ClubOverview.route}/${club.id}');
   }
 }

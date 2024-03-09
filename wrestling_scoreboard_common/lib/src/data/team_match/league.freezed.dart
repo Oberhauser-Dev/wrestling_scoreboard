@@ -23,8 +23,8 @@ mixin _$League {
   int? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
-  BoutConfig get boutConfig => throw _privateConstructorUsedError;
-  int get seasonPartitions => throw _privateConstructorUsedError;
+  DateTime get endDate => throw _privateConstructorUsedError;
+  Division get division => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,9 +35,9 @@ mixin _$League {
 abstract class $LeagueCopyWith<$Res> {
   factory $LeagueCopyWith(League value, $Res Function(League) then) = _$LeagueCopyWithImpl<$Res, League>;
   @useResult
-  $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig, int seasonPartitions});
+  $Res call({int? id, String name, DateTime startDate, DateTime endDate, Division division});
 
-  $BoutConfigCopyWith<$Res> get boutConfig;
+  $DivisionCopyWith<$Res> get division;
 }
 
 /// @nodoc
@@ -55,8 +55,8 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
     Object? id = freezed,
     Object? name = null,
     Object? startDate = null,
-    Object? boutConfig = null,
-    Object? seasonPartitions = null,
+    Object? endDate = null,
+    Object? division = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -71,22 +71,22 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      boutConfig: null == boutConfig
-          ? _value.boutConfig
-          : boutConfig // ignore: cast_nullable_to_non_nullable
-              as BoutConfig,
-      seasonPartitions: null == seasonPartitions
-          ? _value.seasonPartitions
-          : seasonPartitions // ignore: cast_nullable_to_non_nullable
-              as int,
+      endDate: null == endDate
+          ? _value.endDate
+          : endDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      division: null == division
+          ? _value.division
+          : division // ignore: cast_nullable_to_non_nullable
+              as Division,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $BoutConfigCopyWith<$Res> get boutConfig {
-    return $BoutConfigCopyWith<$Res>(_value.boutConfig, (value) {
-      return _then(_value.copyWith(boutConfig: value) as $Val);
+  $DivisionCopyWith<$Res> get division {
+    return $DivisionCopyWith<$Res>(_value.division, (value) {
+      return _then(_value.copyWith(division: value) as $Val);
     });
   }
 }
@@ -97,10 +97,10 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
       __$$LeagueImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String name, DateTime startDate, BoutConfig boutConfig, int seasonPartitions});
+  $Res call({int? id, String name, DateTime startDate, DateTime endDate, Division division});
 
   @override
-  $BoutConfigCopyWith<$Res> get boutConfig;
+  $DivisionCopyWith<$Res> get division;
 }
 
 /// @nodoc
@@ -114,8 +114,8 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
     Object? id = freezed,
     Object? name = null,
     Object? startDate = null,
-    Object? boutConfig = null,
-    Object? seasonPartitions = null,
+    Object? endDate = null,
+    Object? division = null,
   }) {
     return _then(_$LeagueImpl(
       id: freezed == id
@@ -130,14 +130,14 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      boutConfig: null == boutConfig
-          ? _value.boutConfig
-          : boutConfig // ignore: cast_nullable_to_non_nullable
-              as BoutConfig,
-      seasonPartitions: null == seasonPartitions
-          ? _value.seasonPartitions
-          : seasonPartitions // ignore: cast_nullable_to_non_nullable
-              as int,
+      endDate: null == endDate
+          ? _value.endDate
+          : endDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      division: null == division
+          ? _value.division
+          : division // ignore: cast_nullable_to_non_nullable
+              as Division,
     ));
   }
 }
@@ -146,7 +146,7 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
 @JsonSerializable()
 class _$LeagueImpl extends _League {
   const _$LeagueImpl(
-      {this.id, required this.name, required this.startDate, required this.boutConfig, required this.seasonPartitions})
+      {this.id, required this.name, required this.startDate, required this.endDate, required this.division})
       : super._();
 
   factory _$LeagueImpl.fromJson(Map<String, dynamic> json) => _$$LeagueImplFromJson(json);
@@ -158,13 +158,13 @@ class _$LeagueImpl extends _League {
   @override
   final DateTime startDate;
   @override
-  final BoutConfig boutConfig;
+  final DateTime endDate;
   @override
-  final int seasonPartitions;
+  final Division division;
 
   @override
   String toString() {
-    return 'League(id: $id, name: $name, startDate: $startDate, boutConfig: $boutConfig, seasonPartitions: $seasonPartitions)';
+    return 'League(id: $id, name: $name, startDate: $startDate, endDate: $endDate, division: $division)';
   }
 
   @override
@@ -175,13 +175,13 @@ class _$LeagueImpl extends _League {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.startDate, startDate) || other.startDate == startDate) &&
-            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
-            (identical(other.seasonPartitions, seasonPartitions) || other.seasonPartitions == seasonPartitions));
+            (identical(other.endDate, endDate) || other.endDate == endDate) &&
+            (identical(other.division, division) || other.division == division));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, startDate, boutConfig, seasonPartitions);
+  int get hashCode => Object.hash(runtimeType, id, name, startDate, endDate, division);
 
   @JsonKey(ignore: true)
   @override
@@ -201,8 +201,8 @@ abstract class _League extends League {
       {final int? id,
       required final String name,
       required final DateTime startDate,
-      required final BoutConfig boutConfig,
-      required final int seasonPartitions}) = _$LeagueImpl;
+      required final DateTime endDate,
+      required final Division division}) = _$LeagueImpl;
   const _League._() : super._();
 
   factory _League.fromJson(Map<String, dynamic> json) = _$LeagueImpl.fromJson;
@@ -214,9 +214,9 @@ abstract class _League extends League {
   @override
   DateTime get startDate;
   @override
-  BoutConfig get boutConfig;
+  DateTime get endDate;
   @override
-  int get seasonPartitions;
+  Division get division;
   @override
   @JsonKey(ignore: true)
   _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => throw _privateConstructorUsedError;
