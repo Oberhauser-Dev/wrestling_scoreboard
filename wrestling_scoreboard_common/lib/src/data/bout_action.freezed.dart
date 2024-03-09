@@ -182,6 +182,11 @@ class _$BoutActionImpl extends _BoutAction {
   final int? pointCount;
 
   @override
+  String toString() {
+    return 'BoutAction(id: $id, actionType: $actionType, bout: $bout, duration: $duration, role: $role, pointCount: $pointCount)';
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
