@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
@@ -82,10 +81,13 @@ Future<T?> showOkCanelDialog<T>({
 }
 
 Future<void> showExceptionDialog(
-    {required BuildContext context, required Object exception, required StackTrace? stackTrace}) async {
+    {required BuildContext context,
+    required Object exception,
+    required StackTrace? stackTrace,
+    Function()? onRetry}) async {
   await showOkDialog(
     context: context,
-    child: ExceptionInfo(exception, stackTrace: stackTrace),
+    child: ExceptionInfo(exception, stackTrace: stackTrace, onRetry: onRetry),
   );
 }
 

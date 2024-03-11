@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/clubs_view.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/competitions_view.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/leagues_view.dart';
-import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -19,44 +20,20 @@ class HomeState extends ConsumerState<Home> {
   void initState() {
     super.initState();
     ref.read(dataManagerNotifierProvider).then((dataManager) {
-      void showDisconnectedAlert([Object? exception]) {
-        final localizations = AppLocalizations.of(context)!;
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SelectableText(localizations.noWebSocketConnection),
-                // TODO: add show more button
-                // if (exception != null)
-                //   SelectableText(exception.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(localizations.cancel),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  dataManager.webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
-                },
-                child: Text(localizations.retry),
-              ),
-            ],
-          ),
-        );
+      void onRetry() {
+        Navigator.of(context).pop();
+        dataManager.webSocketManager.onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         dataManager.webSocketManager.onWebSocketConnection.stream.distinct().listen((connectionState) {
           if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-            showDisconnectedAlert();
+            final localizations = AppLocalizations.of(context)!;
+            showExceptionDialog(
+                context: context, exception: localizations.noWebSocketConnection, stackTrace: null, onRetry: onRetry);
           }
         }, onError: (e, [trace]) {
-          showDisconnectedAlert(e);
+          showExceptionDialog(exception: e, context: context, stackTrace: trace, onRetry: onRetry);
         });
       });
     });
