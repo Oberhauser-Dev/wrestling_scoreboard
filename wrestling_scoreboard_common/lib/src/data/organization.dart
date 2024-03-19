@@ -15,6 +15,7 @@ class Organization with _$Organization implements DataObject {
     required String name,
     String? abbreviation,
     Organization? parent,
+    WrestlingApiProvider? apiProvider,
   }) = _Organization;
 
   factory Organization.fromJson(Map<String, Object?> json) => _$OrganizationFromJson(json);
@@ -37,6 +38,7 @@ class Organization with _$Organization implements DataObject {
       'name': name,
       'abbreviation': abbreviation,
       'parent_id': parent?.id,
+      'api_provider': apiProvider,
     };
   }
 
@@ -44,6 +46,8 @@ class Organization with _$Organization implements DataObject {
   String get tableName => 'organization';
 
   String get fullname => '$name ($abbreviation)';
+
+  WrestlingApi? getApi(GetSingleOfProvider getSingle) => apiProvider?.getApi(this, getSingle: getSingle);
 
   @override
   Organization copyWithId(int? id) {

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:country/country.dart';
 
 import '../../../common.dart';
+import '../../services.dart';
+import '../report.dart';
 
 extension StatusParser on Person {
   String toStatus() {
@@ -51,6 +53,11 @@ extension GerBoutResultAbbreviation on BoutResult {
 /// TODO: https://github.com/Oberhauser-Dev/wrestling_scoreboard/issues/1
 class NrwGermanyWrestlingReporter extends WrestlingReporter {
   static const HtmlEscape _htmlEscape = HtmlEscape(HtmlEscapeMode(escapeLtGt: true));
+
+  @override
+  final Organization organization;
+
+  NrwGermanyWrestlingReporter(this.organization);
 
   /// Comments must be HTML escaped and must be longer than 200 characters.
   String _handleComment(String comment) {

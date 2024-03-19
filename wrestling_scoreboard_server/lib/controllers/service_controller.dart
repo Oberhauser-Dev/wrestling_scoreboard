@@ -1,13 +1,34 @@
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 
 class ServiceController {
-  Future<Response> import(Request request, String provider) async {
-    final apiProvider = WrestlingApiProvider.values.byName(provider);
+  GetSingleOfProvider getSingle = <T extends DataObject>(String providerId) async {
+    switch (T) {
+      case const (Club):
+        throw UnimplementedError();
+      default:
+        throw UnimplementedError();
+    }
+  };
+
+  Future<Response> import(Request request, String organizationId) async {
     try {
-      final leagues = await apiProvider.api.importLeagues(season: 2023);
+      final organization = await OrganizationController().getSingle(int.parse(organizationId));
+      final apiProvider = organization.getApi(getSingle);
+      if (apiProvider == null) throw Exception('No API provider selected');
+
+      final divisions = await apiProvider.importDivisions();
+      await DivisionController().createMany(divisions.toList());
+
+      final clubs = await apiProvider.importClubs();
+      await ClubController().createMany(clubs.toList());
+      
+      final clubs = await apiProvider.importTeams(club: club);
+      await ClubController().createMany(clubs.toList());
+
       // Iterable<EntityController> entityControllers =
       //     dataTypes.map((t) => EntityController.getControllerFromDataType(t));
       // await Future.forEach(entityControllers, (e) => e.deleteMany());

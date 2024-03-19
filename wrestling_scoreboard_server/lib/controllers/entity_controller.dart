@@ -9,13 +9,13 @@ import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.d
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
@@ -91,6 +91,10 @@ abstract class EntityController<T extends DataObject> {
 
   Future<int> createSingle(T dataObject) async {
     return await createSingleRaw(dataObject.toRaw());
+  }
+
+  Future<List<int>> createMany(List<T> dataObjects) async {
+    return await Future.wait(dataObjects.map((element) => createSingle(element)));
   }
 
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
