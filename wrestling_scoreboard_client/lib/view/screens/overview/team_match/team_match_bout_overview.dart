@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchBoutOverview extends BoutOverview {

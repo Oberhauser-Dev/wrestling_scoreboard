@@ -73,18 +73,17 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
             border: const UnderlineInputBorder(),
             labelText: localizations.startDate,
           ),
-          onTap: () =>
-              showDatePicker(
-                initialDatePickerMode: DatePickerMode.year,
-                context: context,
-                initialDate: _startDate,
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-              ).then((value) {
-                if (value != null) {
-                  setState(() => _startDate = value);
-                }
-              }),
+          onTap: () => showDatePicker(
+            initialDatePickerMode: DatePickerMode.year,
+            context: context,
+            initialDate: _startDate,
+            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+          ).then((value) {
+            if (value != null) {
+              setState(() => _startDate = value);
+            }
+          }),
           initialValue: _startDate.toDateString(context),
         ),
       ),
@@ -97,18 +96,17 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
             border: const UnderlineInputBorder(),
             labelText: localizations.endDate,
           ),
-          onTap: () =>
-              showDatePicker(
-                initialDatePickerMode: DatePickerMode.year,
-                context: context,
-                initialDate: _endDate,
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-              ).then((value) {
-                if (value != null) {
-                  setState(() => _endDate = value);
-                }
-              }),
+          onTap: () => showDatePicker(
+            initialDatePickerMode: DatePickerMode.year,
+            context: context,
+            initialDate: _endDate,
+            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+          ).then((value) {
+            if (value != null) {
+              setState(() => _endDate = value);
+            }
+          }),
           initialValue: _endDate.toDateString(context),
         ),
       ),
@@ -134,18 +132,17 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
           selectedItem: _organization,
           label: localizations.organization,
           context: context,
-          onSaved: (Organization? value) =>
-              setState(() {
-                _organization = value;
-              }),
+          onSaved: (Organization? value) => setState(() {
+            _organization = value;
+          }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             _availableOrganizations ??=
-            await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
             return (filter == null
-                ? _availableOrganizations!
-                : _availableOrganizations!.where((element) => element.name.contains(filter)))
+                    ? _availableOrganizations!
+                    : _availableOrganizations!.where((element) => element.name.contains(filter)))
                 .toList();
           },
         ),
@@ -156,17 +153,15 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
           selectedItem: _parentDivision,
           label: localizations.division,
           context: context,
-          onSaved: (Division? value) =>
-              setState(() {
-                _parentDivision = value;
-              }),
+          onSaved: (Division? value) => setState(() {
+            _parentDivision = value;
+          }),
           itemAsString: (u) => u.fullname,
           onFind: (String? filter) async {
-            _availableDivisions ??=
-            await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
+            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
             return (filter == null
-                ? _availableDivisions!
-                : _availableDivisions!.where((element) => element.fullname.contains(filter)))
+                    ? _availableDivisions!
+                    : _availableDivisions!.where((element) => element.fullname.contains(filter)))
                 .toList();
           },
         ),

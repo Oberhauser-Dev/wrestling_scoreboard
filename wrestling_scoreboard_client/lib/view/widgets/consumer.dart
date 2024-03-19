@@ -3,9 +3,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
-import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {

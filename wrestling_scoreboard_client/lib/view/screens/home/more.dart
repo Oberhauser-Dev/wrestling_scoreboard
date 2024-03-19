@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});

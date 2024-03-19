@@ -1,9 +1,8 @@
-import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
 part 'app_state_provider.g.dart';

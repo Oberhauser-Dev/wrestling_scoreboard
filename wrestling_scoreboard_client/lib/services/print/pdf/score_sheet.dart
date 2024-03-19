@@ -6,10 +6,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-import 'package:wrestling_scoreboard_client/localization/duration.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: Replace boutState with individual dataTypes or introduce model.
@@ -148,10 +148,10 @@ class ScoreSheet {
       referee = wrestlingEvent.referee;
       judge = wrestlingEvent.judge;
     } else if (wrestlingEvent is Competition) {
-      // TODO: get referees from bout
-      // matChairman = bout.matChairman;
-      // referee = bout.referee;
-      // judge = bout.judge;
+// TODO: get referees from bout
+// matChairman = bout.matChairman;
+// referee = bout.referee;
+// judge = bout.judge;
     }
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
