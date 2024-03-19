@@ -9,8 +9,10 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_weight_class_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
@@ -102,8 +104,41 @@ class DivisionOverview extends ConsumerWidget {
                         builder: (context, data) {
                           return ContentItem(
                             title: data.fullname,
-                            icon: Icons.group,
+                            icon: Icons.inventory,
                             onTap: () => handleSelectedChildDivision(data, context),
+                          );
+                        }),
+                  ),
+                );
+              },
+            ),
+            ManyConsumer<League, Division>(
+              filterObject: data,
+              builder: (BuildContext context, List<League> leagues) {
+                return ListGroup(
+                  header: HeadingItem(
+                    title: localizations.leagues,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LeagueEdit(
+                            initialDivision: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: leagues.map(
+                    (e) => SingleConsumer<League>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                            title: data.fullname,
+                            icon: Icons.emoji_events,
+                            onTap: () => handleSelectedLeague(data, context),
                           );
                         }),
                   ),
@@ -150,6 +185,10 @@ class DivisionOverview extends ConsumerWidget {
 
   handleSelectedChildDivision(Division division, BuildContext context) {
     context.push('/${DivisionOverview.route}/${division.id}');
+  }
+
+  handleSelectedLeague(League league, BuildContext context) {
+    context.push('/${LeagueOverview.route}/${league.id}');
   }
 
   handleSelectedWeightClass(DivisionWeightClass divisionWeightClass, BuildContext context) {

@@ -3,10 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -39,7 +40,12 @@ class OrganizationOverview extends ConsumerWidget {
             ContentItem(
               title: data.name,
               subtitle: localizations.name,
-              icon: Icons.label,
+              icon: Icons.description,
+            ),
+            ContentItem(
+              title: data.abbreviation ?? '-',
+              subtitle: localizations.abbreviation,
+              icon: Icons.short_text,
             ),
           ],
         );
@@ -49,12 +55,45 @@ class OrganizationOverview extends ConsumerWidget {
           ),
           body: GroupedList(items: [
             description,
-            ManyConsumer<Division, Organization>(
+            ManyConsumer<Organization, Organization>(
               filterObject: data,
-              builder: (BuildContext context, List<Division> teamParticipations) {
+              builder: (BuildContext context, List<Organization> childOrganizations) {
                 return ListGroup(
                   header: HeadingItem(
-                    title: localizations.participatingTeams,
+                    title: localizations.organizations,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrganizationEdit(
+                            initialParent: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: childOrganizations.map(
+                    (e) => SingleConsumer<Organization>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                            title: data.fullname,
+                            icon: Icons.inventory,
+                            onTap: () => handleSelectedChildOrganization(data, context),
+                          );
+                        }),
+                  ),
+                );
+              },
+            ),
+            ManyConsumer<Division, Organization>(
+              filterObject: data,
+              builder: (BuildContext context, List<Division> organizations) {
+                return ListGroup(
+                  header: HeadingItem(
+                    title: localizations.divisions,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -67,22 +106,54 @@ class OrganizationOverview extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  items: teamParticipations.map(
+                  items: organizations.map(
                     (e) => SingleConsumer<Division>(
                         id: e.id,
                         initialData: e,
                         builder: (context, data) {
                           return ContentItem(
                             title: data.fullname,
-                            icon: Icons.group,
-                            onTap: () => handleSelectedTeam(data, context),
+                            icon: Icons.inventory,
+                            onTap: () => handleSelectedDivision(data, context),
                           );
                         }),
                   ),
                 );
               },
             ),
-            MatchesWidget<Organization>(filterObject: data),
+            ManyConsumer<Club, Organization>(
+              filterObject: data,
+              builder: (BuildContext context, List<Club> clubs) {
+                return ListGroup(
+                  header: HeadingItem(
+                    title: localizations.clubs,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ClubEdit(
+                            initialOrganization: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: clubs.map(
+                    (e) => SingleConsumer<Club>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                            title: data.name,
+                            icon: Icons.foundation,
+                            onTap: () => handleSelectedClub(data, context),
+                          );
+                        }),
+                  ),
+                );
+              },
+            ),
             ManyConsumer<Competition, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Competition> competitions) {
@@ -122,8 +193,16 @@ class OrganizationOverview extends ConsumerWidget {
     );
   }
 
-  handleSelectedTeam(Division division, BuildContext context) {
+  handleSelectedChildOrganization(Organization organization, BuildContext context) {
+    context.push('/${OrganizationOverview.route}/${organization.id}');
+  }
+
+  handleSelectedDivision(Division division, BuildContext context) {
     context.push('/${DivisionOverview.route}/${division.id}');
+  }
+
+  handleSelectedClub(Club club, BuildContext context) {
+    context.push('/${ClubOverview.route}/${club.id}');
   }
 
   handleSelectedCompetition(Competition competition, BuildContext context) {

@@ -3,10 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
-import 'package:wrestling_scoreboard_client/view/screens/home/clubs_view.dart';
-import 'package:wrestling_scoreboard_client/view/screens/home/competitions_view.dart';
-import 'package:wrestling_scoreboard_client/view/screens/home/leagues_view.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -42,55 +40,71 @@ class HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(localizations.home),
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.foundation),
-                    const SizedBox(width: 8),
-                    Text(localizations.clubs),
-                  ],
-                ),
-              ),
-              Tab(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.emoji_events),
-                    const SizedBox(width: 8),
-                    Text(localizations.leagues),
-                  ],
-                ),
-              ),
-              Tab(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // const Icon(Icons.social_leaderboard),
-                    const Icon(Icons.leaderboard),
-                    const SizedBox(width: 8),
-                    Text(localizations.competitions),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(title: Text(localizations.home)),
+      body: ResponsiveColumn(children: [
+        ListTile(title: Text(localizations.leagues), leading: const Icon(Icons.emoji_events)),
+        GridView.extent(
+          maxCrossAxisExtent: 150,
+          shrinkWrap: true,
+          children: _generateDummies(4),
         ),
-        body: const TabBarView(
-          children: [
-            ClubsView(),
-            LeaguesView(),
-            CompetitionsView(),
-          ],
+        const SizedBox(height: 16),
+        ListTile(title: Text(localizations.clubs), leading: const Icon(Icons.foundation)),
+        GridView.extent(
+          maxCrossAxisExtent: 150,
+          shrinkWrap: true,
+          children: _generateDummies(1),
         ),
-      ),
+        const SizedBox(height: 16),
+        ListTile(title: Text(localizations.teams), leading: const Icon(Icons.group)),
+        GridView.extent(
+          maxCrossAxisExtent: 150,
+          shrinkWrap: true,
+          children: _generateDummies(3),
+        ),
+        const SizedBox(height: 16),
+        ListTile(title: Text(localizations.persons), leading: const Icon(Icons.person)),
+        GridView.extent(
+          maxCrossAxisExtent: 150,
+          shrinkWrap: true,
+          children: _generateDummies(5),
+        ),
+        const SizedBox(height: 16),
+        ListTile(title: Text(localizations.competitions), leading: const Icon(Icons.leaderboard)),
+        GridView.extent(
+          maxCrossAxisExtent: 150,
+          shrinkWrap: true,
+          children: _generateDummies(3),
+        ),
+      ]),
     );
+  }
+
+  List<Widget> _generateDummies(int i) {
+    return Iterable.generate(
+      i,
+      (index) {
+        return Card(
+            clipBehavior: Clip.hardEdge,
+            child: Container(
+              decoration:
+                  const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/icons/launcher.png'))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      color: const Color.fromARGB(125, 0, 0, 0),
+                      child: const Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Sample item'),
+                      ))),
+                ],
+              ),
+            ));
+      },
+    ).toList();
   }
 }

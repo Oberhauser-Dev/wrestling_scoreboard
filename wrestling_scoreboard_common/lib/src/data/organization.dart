@@ -43,6 +43,8 @@ class Organization with _$Organization implements DataObject {
   @override
   String get tableName => 'organization';
 
+  String get fullname => '$name ($abbreviation)';
+
   @override
   Organization copyWithId(int? id) {
     return copyWith(id: id);

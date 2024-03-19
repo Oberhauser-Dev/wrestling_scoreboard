@@ -1,6 +1,7 @@
 {
   "appName": "Ringerkampf-Anzeige",
   "home": "Start",
+  "explore": "Erkunden",
   "more": "Mehr",
   "settings": "Einstellungen",
   "general": "Allgemein",
@@ -52,6 +53,7 @@
   "display": "Anzeige",
   "name": "Name",
   "description": "Beschreibung",
+  "abbreviation": "Abkürzung",
   "position": "Position",
   "noItems": "Keine Einträge vorhanden.",
   "optional": "Optional",

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubEdit extends ConsumerStatefulWidget {
   final Club? club;
+  final Organization? initialOrganization;
 
-  const ClubEdit({this.club, super.key});
+  const ClubEdit({this.club, this.initialOrganization, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => ClubEditState();
@@ -16,9 +18,17 @@ class ClubEdit extends ConsumerStatefulWidget {
 
 class ClubEditState extends ConsumerState<ClubEdit> {
   final _formKey = GlobalKey<FormState>();
+  Iterable<Organization>? _availableOrganizations;
 
   String? _name;
   String? _no;
+  late Organization? _organization;
+
+  @override
+  void initState() {
+    _organization = widget.club?.organization ?? widget.initialOrganization;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +64,27 @@ class ClubEditState extends ConsumerState<ClubEdit> {
           onSaved: (newValue) => _no = newValue,
         ),
       ),
+      ListTile(
+        title: getDropdown<Organization>(
+          icon: const Icon(Icons.corporate_fare),
+          selectedItem: _organization,
+          label: localizations.organization,
+          context: context,
+          onSaved: (Organization? value) => setState(() {
+            _organization = value;
+          }),
+          allowEmpty: false,
+          itemAsString: (u) => u.name,
+          onFind: (String? filter) async {
+            _availableOrganizations ??=
+                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+            return (filter == null
+                    ? _availableOrganizations!
+                    : _availableOrganizations!.where((element) => element.name.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
     ];
 
     return Form(
@@ -70,8 +101,12 @@ class ClubEditState extends ConsumerState<ClubEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider))
-          .createOrUpdateSingle(Club(id: widget.club?.id, name: _name!, no: _no));
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Club(
+        id: widget.club?.id,
+        name: _name!,
+        no: _no,
+        organization: _organization!,
+      ));
       navigator.pop();
     }
   }

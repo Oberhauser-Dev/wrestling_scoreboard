@@ -4,6 +4,7 @@
     "description": "The internationalized app name"
   },
   "home": "Home",
+  "explore": "Explore",
   "more": "More",
   "settings": "Settings",
   "general": "General",
@@ -55,6 +56,7 @@
   "display": "Display",
   "name": "Name",
   "description": "Description",
+  "abbreviation": "Abbreviation",
   "position": "Position",
   "noItems": "No items available.",
   "optional": "Optional",

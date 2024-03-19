@@ -44,8 +44,8 @@ final _leagueNational = League(
   division: _adultDivision,
 );
 
-Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers');
-Club _guestClub = const Club(id: 2, name: 'Quahog Hunters');
+Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers', organization: _organization);
+Club _guestClub = const Club(id: 2, name: 'Quahog Hunters', organization: _organization);
 
 Team _homeTeam = Team(
   id: 1,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 
@@ -16,6 +17,7 @@ class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     const Home(),
+    const Explore(),
     const MoreScreen(),
   ];
 
@@ -27,6 +29,7 @@ class _AppNavigationState extends State<AppNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -36,11 +39,15 @@ class _AppNavigationState extends State<AppNavigation> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
-            label: AppLocalizations.of(context)!.home,
+            label: localizations.home,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.explore),
+            label: localizations.explore,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.more_horiz),
-            label: AppLocalizations.of(context)!.more,
+            label: localizations.more,
           ),
         ],
         currentIndex: _selectedIndex,

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class OrganizationEdit extends ConsumerStatefulWidget {
   final Organization? organization;
+  final Organization? initialParent;
 
-  const OrganizationEdit({this.organization, super.key});
+  const OrganizationEdit({this.organization, this.initialParent, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _OrganizationEditState();
@@ -16,8 +18,17 @@ class OrganizationEdit extends ConsumerStatefulWidget {
 
 class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
   final _formKey = GlobalKey<FormState>();
+  Iterable<Organization>? _availableOrganizations;
 
   String? _name;
+  String? _abbreviation;
+  Organization? _parent;
+
+  @override
+  void initState() {
+    _parent = widget.organization?.parent ?? widget.initialParent;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +53,38 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           onSaved: (newValue) => _name = newValue,
         ),
       ),
+      ListTile(
+        leading: const Icon(Icons.short_text),
+        title: TextFormField(
+          decoration: InputDecoration(
+            border: const UnderlineInputBorder(),
+            labelText: localizations.abbreviation,
+          ),
+          initialValue: widget.organization?.abbreviation,
+          onSaved: (newValue) => _abbreviation = newValue,
+        ),
+      ),
+      ListTile(
+        title: getDropdown<Organization>(
+          icon: const Icon(Icons.corporate_fare),
+          selectedItem: _parent,
+          label: localizations.organization,
+          context: context,
+          onSaved: (Organization? value) => setState(() {
+            _parent = value;
+          }),
+          allowEmpty: false,
+          itemAsString: (u) => u.name,
+          onFind: (String? filter) async {
+            _availableOrganizations ??=
+                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+            return (filter == null
+                    ? _availableOrganizations!
+                    : _availableOrganizations!.where((element) => element.name.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
     ];
 
     return Form(
@@ -58,8 +101,12 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider))
-          .createOrUpdateSingle(Organization(id: widget.organization?.id, name: _name!));
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Organization(
+        id: widget.organization?.id,
+        name: _name!,
+        abbreviation: _abbreviation,
+        parent: _parent,
+      ));
       navigator.pop();
     }
   }
