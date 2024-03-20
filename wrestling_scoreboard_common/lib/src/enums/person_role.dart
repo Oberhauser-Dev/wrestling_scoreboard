@@ -5,11 +5,7 @@ enum PersonRole {
   judge,
   transcriptWriter,
   timeKeeper,
-  steward,
-}
+  steward;
 
-extension PersonRoleParser on PersonRole {
   String get name => toString().split('.').last;
-
-  static PersonRole valueOf(String name) => PersonRole.values.singleWhere((element) => element.name == name);
 }

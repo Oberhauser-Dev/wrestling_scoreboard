@@ -181,7 +181,8 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(
 }) async {
   final isMany = json['isMany'] as bool;
   final isRaw = json['isRaw'] as bool;
-  final operation = CrudParser.valueOf(json['operation']);
+  final operation = CRUD.values.byName(json['operation']);
+
   if (isMany) {
     final List<dynamic> data = json['data'];
     final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);

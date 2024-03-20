@@ -26,9 +26,9 @@ class BoutAction with _$BoutAction implements DataObject {
 
   static Future<BoutAction> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => BoutAction(
         id: e['id'] as int?,
-        actionType: BoutActionTypeParser.valueOf(e['action_type']),
+        actionType: BoutActionType.values.byName(e['action_type']),
         duration: Duration(milliseconds: e['duration_millis']),
-        role: BoutRoleParser.valueOf(e['bout_role']),
+        role: BoutRole.values.byName(e['bout_role']),
         pointCount: e['point_count'] as int?,
         bout: (await getSingle<Bout>(e['bout_id'] as int)),
       );

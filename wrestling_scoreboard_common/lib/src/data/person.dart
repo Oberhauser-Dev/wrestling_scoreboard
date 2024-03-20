@@ -41,7 +41,7 @@ class Person with _$Person implements DataObject {
       id: e['id'] as int?,
       prename: e['prename'] as String,
       surname: e['surname'] as String,
-      gender: gender == null ? null : GenderParser.valueOf(gender),
+      gender: gender == null ? null : Gender.values.byName(gender),
       birthDate: e['birth_date'] as DateTime?,
       nationality: nationality == null ? null : CountryJsonConverter().fromJson(nationality),
     );

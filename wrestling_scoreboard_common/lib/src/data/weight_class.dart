@@ -27,8 +27,8 @@ class WeightClass with _$WeightClass implements DataObject {
         id: e['id'] as int?,
         suffix: e['suffix'] as String?,
         weight: e['weight'] as int,
-        unit: WeightUnitParser.valueOf(e['unit']),
-        style: WrestlingStyleParser.valueOf(e['style']),
+        unit: WeightUnit.values.byName(e['unit']),
+        style: WrestlingStyle.values.byName(e['style']),
       );
 
   @override

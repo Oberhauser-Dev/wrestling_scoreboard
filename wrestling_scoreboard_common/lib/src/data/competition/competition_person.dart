@@ -27,7 +27,7 @@ class CompetitionPerson with _$CompetitionPerson implements DataObject {
         id: e['id'] as int?,
         competition: (await getSingle<Competition>(e['competition_id'] as int)),
         person: (await getSingle<Person>(e['person_id'] as int)),
-        role: PersonRoleParser.valueOf(e['person_role']),
+        role: PersonRole.values.byName(e['person_role']),
       );
 
   @override

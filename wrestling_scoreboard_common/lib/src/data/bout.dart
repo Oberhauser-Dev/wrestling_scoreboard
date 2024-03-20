@@ -53,8 +53,8 @@ class Bout with _$Bout implements DataObject {
       r: redId == null ? null : await getSingle<ParticipantState>(redId),
       b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
-      winnerRole: winner == null ? null : BoutRoleParser.valueOf(winner),
-      result: boutResult == null ? null : BoutResultParser.valueOf(boutResult),
+      winnerRole: winner == null ? null : BoutRole.values.byName(winner),
+      result: boutResult == null ? null : BoutResult.values.byName(boutResult),
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
     );
   }

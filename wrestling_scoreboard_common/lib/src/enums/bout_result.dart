@@ -38,11 +38,7 @@ enum BoutResult {
 
   /// In case both wrestlers have been disqualified due to infringement of the rules
   /// Beide Ringer disqualifiziert wegen Unsportlichkeit / Regelwidrigkeit (DQ2)
-  dsq2,
-}
+  dsq2;
 
-extension BoutResultParser on BoutResult {
   String get name => toString().split('.').last;
-
-  static BoutResult valueOf(String name) => BoutResult.values.singleWhere((element) => element.name == name);
 }
