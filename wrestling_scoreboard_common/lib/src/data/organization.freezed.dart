@@ -25,6 +25,7 @@ mixin _$Organization {
   String? get abbreviation => throw _privateConstructorUsedError;
   Organization? get parent => throw _privateConstructorUsedError;
   WrestlingApiProvider? get apiProvider => throw _privateConstructorUsedError;
+  WrestlingReportProvider? get reportProvider => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +37,13 @@ abstract class $OrganizationCopyWith<$Res> {
   factory $OrganizationCopyWith(Organization value, $Res Function(Organization) then) =
       _$OrganizationCopyWithImpl<$Res, Organization>;
   @useResult
-  $Res call({int? id, String name, String? abbreviation, Organization? parent, WrestlingApiProvider? apiProvider});
+  $Res call(
+      {int? id,
+      String name,
+      String? abbreviation,
+      Organization? parent,
+      WrestlingApiProvider? apiProvider,
+      WrestlingReportProvider? reportProvider});
 
   $OrganizationCopyWith<$Res>? get parent;
 }
@@ -58,6 +65,7 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
     Object? abbreviation = freezed,
     Object? parent = freezed,
     Object? apiProvider = freezed,
+    Object? reportProvider = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -80,6 +88,10 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
           ? _value.apiProvider
           : apiProvider // ignore: cast_nullable_to_non_nullable
               as WrestlingApiProvider?,
+      reportProvider: freezed == reportProvider
+          ? _value.reportProvider
+          : reportProvider // ignore: cast_nullable_to_non_nullable
+              as WrestlingReportProvider?,
     ) as $Val);
   }
 
@@ -102,7 +114,13 @@ abstract class _$$OrganizationImplCopyWith<$Res> implements $OrganizationCopyWit
       __$$OrganizationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String name, String? abbreviation, Organization? parent, WrestlingApiProvider? apiProvider});
+  $Res call(
+      {int? id,
+      String name,
+      String? abbreviation,
+      Organization? parent,
+      WrestlingApiProvider? apiProvider,
+      WrestlingReportProvider? reportProvider});
 
   @override
   $OrganizationCopyWith<$Res>? get parent;
@@ -122,6 +140,7 @@ class __$$OrganizationImplCopyWithImpl<$Res> extends _$OrganizationCopyWithImpl<
     Object? abbreviation = freezed,
     Object? parent = freezed,
     Object? apiProvider = freezed,
+    Object? reportProvider = freezed,
   }) {
     return _then(_$OrganizationImpl(
       id: freezed == id
@@ -144,6 +163,10 @@ class __$$OrganizationImplCopyWithImpl<$Res> extends _$OrganizationCopyWithImpl<
           ? _value.apiProvider
           : apiProvider // ignore: cast_nullable_to_non_nullable
               as WrestlingApiProvider?,
+      reportProvider: freezed == reportProvider
+          ? _value.reportProvider
+          : reportProvider // ignore: cast_nullable_to_non_nullable
+              as WrestlingReportProvider?,
     ));
   }
 }
@@ -151,7 +174,9 @@ class __$$OrganizationImplCopyWithImpl<$Res> extends _$OrganizationCopyWithImpl<
 /// @nodoc
 @JsonSerializable()
 class _$OrganizationImpl extends _Organization {
-  const _$OrganizationImpl({this.id, required this.name, this.abbreviation, this.parent, this.apiProvider}) : super._();
+  const _$OrganizationImpl(
+      {this.id, required this.name, this.abbreviation, this.parent, this.apiProvider, this.reportProvider})
+      : super._();
 
   factory _$OrganizationImpl.fromJson(Map<String, dynamic> json) => _$$OrganizationImplFromJson(json);
 
@@ -165,10 +190,12 @@ class _$OrganizationImpl extends _Organization {
   final Organization? parent;
   @override
   final WrestlingApiProvider? apiProvider;
+  @override
+  final WrestlingReportProvider? reportProvider;
 
   @override
   String toString() {
-    return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider)';
+    return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider)';
   }
 
   @override
@@ -180,12 +207,13 @@ class _$OrganizationImpl extends _Organization {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation) &&
             (identical(other.parent, parent) || other.parent == parent) &&
-            (identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider));
+            (identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider) &&
+            (identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider);
+  int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
 
   @JsonKey(ignore: true)
   @override
@@ -207,7 +235,8 @@ abstract class _Organization extends Organization {
       required final String name,
       final String? abbreviation,
       final Organization? parent,
-      final WrestlingApiProvider? apiProvider}) = _$OrganizationImpl;
+      final WrestlingApiProvider? apiProvider,
+      final WrestlingReportProvider? reportProvider}) = _$OrganizationImpl;
   const _Organization._() : super._();
 
   factory _Organization.fromJson(Map<String, dynamic> json) = _$OrganizationImpl.fromJson;
@@ -222,6 +251,8 @@ abstract class _Organization extends Organization {
   Organization? get parent;
   @override
   WrestlingApiProvider? get apiProvider;
+  @override
+  WrestlingReportProvider? get reportProvider;
   @override
   @JsonKey(ignore: true)
   _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith => throw _privateConstructorUsedError;

@@ -1,3 +1,4 @@
+final listSaisonJson = r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -168,3 +169,4 @@
     }
   }
 }
+''';

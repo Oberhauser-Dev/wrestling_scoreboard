@@ -21,13 +21,14 @@ Division _$DivisionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Division {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization get organization => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   DateTime get endDate => throw _privateConstructorUsedError;
   BoutConfig get boutConfig => throw _privateConstructorUsedError;
   int get seasonPartitions => throw _privateConstructorUsedError;
   Division? get parent => throw _privateConstructorUsedError;
-  Organization get organization => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,17 +41,18 @@ abstract class $DivisionCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization organization,
       String name,
       DateTime startDate,
       DateTime endDate,
       BoutConfig boutConfig,
       int seasonPartitions,
-      Division? parent,
-      Organization organization});
+      Division? parent});
 
+  $OrganizationCopyWith<$Res> get organization;
   $BoutConfigCopyWith<$Res> get boutConfig;
   $DivisionCopyWith<$Res>? get parent;
-  $OrganizationCopyWith<$Res> get organization;
 }
 
 /// @nodoc
@@ -66,19 +68,28 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = null,
     Object? name = null,
     Object? startDate = null,
     Object? endDate = null,
     Object? boutConfig = null,
     Object? seasonPartitions = null,
     Object? parent = freezed,
-    Object? organization = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: null == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -103,11 +114,15 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
           ? _value.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as Division?,
-      organization: null == organization
-          ? _value.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res> get organization {
+    return $OrganizationCopyWith<$Res>(_value.organization, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
   }
 
   @override
@@ -129,14 +144,6 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
       return _then(_value.copyWith(parent: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $OrganizationCopyWith<$Res> get organization {
-    return $OrganizationCopyWith<$Res>(_value.organization, (value) {
-      return _then(_value.copyWith(organization: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -147,20 +154,21 @@ abstract class _$$DivisionImplCopyWith<$Res> implements $DivisionCopyWith<$Res> 
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization organization,
       String name,
       DateTime startDate,
       DateTime endDate,
       BoutConfig boutConfig,
       int seasonPartitions,
-      Division? parent,
-      Organization organization});
+      Division? parent});
 
+  @override
+  $OrganizationCopyWith<$Res> get organization;
   @override
   $BoutConfigCopyWith<$Res> get boutConfig;
   @override
   $DivisionCopyWith<$Res>? get parent;
-  @override
-  $OrganizationCopyWith<$Res> get organization;
 }
 
 /// @nodoc
@@ -172,19 +180,28 @@ class __$$DivisionImplCopyWithImpl<$Res> extends _$DivisionCopyWithImpl<$Res, _$
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = null,
     Object? name = null,
     Object? startDate = null,
     Object? endDate = null,
     Object? boutConfig = null,
     Object? seasonPartitions = null,
     Object? parent = freezed,
-    Object? organization = null,
   }) {
     return _then(_$DivisionImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: null == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -209,10 +226,6 @@ class __$$DivisionImplCopyWithImpl<$Res> extends _$DivisionCopyWithImpl<$Res, _$
           ? _value.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as Division?,
-      organization: null == organization
-          ? _value.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization,
     ));
   }
 }
@@ -222,19 +235,24 @@ class __$$DivisionImplCopyWithImpl<$Res> extends _$DivisionCopyWithImpl<$Res, _$
 class _$DivisionImpl extends _Division {
   const _$DivisionImpl(
       {this.id,
+      this.orgSyncId,
+      required this.organization,
       required this.name,
       required this.startDate,
       required this.endDate,
       required this.boutConfig,
       required this.seasonPartitions,
-      this.parent,
-      required this.organization})
+      this.parent})
       : super._();
 
   factory _$DivisionImpl.fromJson(Map<String, dynamic> json) => _$$DivisionImplFromJson(json);
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization organization;
   @override
   final String name;
   @override
@@ -247,12 +265,10 @@ class _$DivisionImpl extends _Division {
   final int seasonPartitions;
   @override
   final Division? parent;
-  @override
-  final Organization organization;
 
   @override
   String toString() {
-    return 'Division(id: $id, name: $name, startDate: $startDate, endDate: $endDate, boutConfig: $boutConfig, seasonPartitions: $seasonPartitions, parent: $parent, organization: $organization)';
+    return 'Division(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, startDate: $startDate, endDate: $endDate, boutConfig: $boutConfig, seasonPartitions: $seasonPartitions, parent: $parent)';
   }
 
   @override
@@ -261,19 +277,20 @@ class _$DivisionImpl extends _Division {
         (other.runtimeType == runtimeType &&
             other is _$DivisionImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.startDate, startDate) || other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
             (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
             (identical(other.seasonPartitions, seasonPartitions) || other.seasonPartitions == seasonPartitions) &&
-            (identical(other.parent, parent) || other.parent == parent) &&
-            (identical(other.organization, organization) || other.organization == organization));
+            (identical(other.parent, parent) || other.parent == parent));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, startDate, endDate, boutConfig, seasonPartitions, parent, organization);
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, name, startDate, endDate, boutConfig, seasonPartitions, parent);
 
   @JsonKey(ignore: true)
   @override
@@ -292,19 +309,24 @@ class _$DivisionImpl extends _Division {
 abstract class _Division extends Division {
   const factory _Division(
       {final int? id,
+      final String? orgSyncId,
+      required final Organization organization,
       required final String name,
       required final DateTime startDate,
       required final DateTime endDate,
       required final BoutConfig boutConfig,
       required final int seasonPartitions,
-      final Division? parent,
-      required final Organization organization}) = _$DivisionImpl;
+      final Division? parent}) = _$DivisionImpl;
   const _Division._() : super._();
 
   factory _Division.fromJson(Map<String, dynamic> json) = _$DivisionImpl.fromJson;
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization get organization;
   @override
   String get name;
   @override
@@ -317,8 +339,6 @@ abstract class _Division extends Division {
   int get seasonPartitions;
   @override
   Division? get parent;
-  @override
-  Organization get organization;
   @override
   @JsonKey(ignore: true)
   _$$DivisionImplCopyWith<_$DivisionImpl> get copyWith => throw _privateConstructorUsedError;

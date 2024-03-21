@@ -1,3 +1,4 @@
+final wrestlerJson = r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -31,3 +32,4 @@
     "birthplace": "Neuss"
   }
 }
+''';

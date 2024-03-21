@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'data_object.dart';
-import 'lineup.dart';
-import 'membership.dart';
-import 'weight_class.dart';
+import '../../common.dart';
 
 part 'participation.freezed.dart';
 part 'participation.g.dart';
@@ -61,4 +58,10 @@ class Participation with _$Participation implements DataObject {
   Participation copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

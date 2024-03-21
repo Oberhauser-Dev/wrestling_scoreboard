@@ -21,8 +21,9 @@ Club _$ClubFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Club {
   int? get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
   Organization get organization => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   String? get no => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +35,7 @@ mixin _$Club {
 abstract class $ClubCopyWith<$Res> {
   factory $ClubCopyWith(Club value, $Res Function(Club) then) = _$ClubCopyWithImpl<$Res, Club>;
   @useResult
-  $Res call({int? id, String name, Organization organization, String? no});
+  $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
 
   $OrganizationCopyWith<$Res> get organization;
 }
@@ -52,8 +53,9 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? name = null,
+    Object? orgSyncId = freezed,
     Object? organization = null,
+    Object? name = null,
     Object? no = freezed,
   }) {
     return _then(_value.copyWith(
@@ -61,14 +63,18 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
       organization: null == organization
           ? _value.organization
           : organization // ignore: cast_nullable_to_non_nullable
               as Organization,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       no: freezed == no
           ? _value.no
           : no // ignore: cast_nullable_to_non_nullable
@@ -90,7 +96,7 @@ abstract class _$$ClubImplCopyWith<$Res> implements $ClubCopyWith<$Res> {
   factory _$$ClubImplCopyWith(_$ClubImpl value, $Res Function(_$ClubImpl) then) = __$$ClubImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String name, Organization organization, String? no});
+  $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
 
   @override
   $OrganizationCopyWith<$Res> get organization;
@@ -104,8 +110,9 @@ class __$$ClubImplCopyWithImpl<$Res> extends _$ClubCopyWithImpl<$Res, _$ClubImpl
   @override
   $Res call({
     Object? id = freezed,
-    Object? name = null,
+    Object? orgSyncId = freezed,
     Object? organization = null,
+    Object? name = null,
     Object? no = freezed,
   }) {
     return _then(_$ClubImpl(
@@ -113,14 +120,18 @@ class __$$ClubImplCopyWithImpl<$Res> extends _$ClubCopyWithImpl<$Res, _$ClubImpl
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
       organization: null == organization
           ? _value.organization
           : organization // ignore: cast_nullable_to_non_nullable
               as Organization,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       no: freezed == no
           ? _value.no
           : no // ignore: cast_nullable_to_non_nullable
@@ -132,22 +143,24 @@ class __$$ClubImplCopyWithImpl<$Res> extends _$ClubCopyWithImpl<$Res, _$ClubImpl
 /// @nodoc
 @JsonSerializable()
 class _$ClubImpl extends _Club {
-  const _$ClubImpl({this.id, required this.name, required this.organization, this.no}) : super._();
+  const _$ClubImpl({this.id, this.orgSyncId, required this.organization, required this.name, this.no}) : super._();
 
   factory _$ClubImpl.fromJson(Map<String, dynamic> json) => _$$ClubImplFromJson(json);
 
   @override
   final int? id;
   @override
-  final String name;
+  final String? orgSyncId;
   @override
   final Organization organization;
+  @override
+  final String name;
   @override
   final String? no;
 
   @override
   String toString() {
-    return 'Club(id: $id, name: $name, organization: $organization, no: $no)';
+    return 'Club(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, no: $no)';
   }
 
   @override
@@ -156,14 +169,15 @@ class _$ClubImpl extends _Club {
         (other.runtimeType == runtimeType &&
             other is _$ClubImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.no, no) || other.no == no));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, organization, no);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, no);
 
   @JsonKey(ignore: true)
   @override
@@ -181,8 +195,9 @@ class _$ClubImpl extends _Club {
 abstract class _Club extends Club {
   const factory _Club(
       {final int? id,
-      required final String name,
+      final String? orgSyncId,
       required final Organization organization,
+      required final String name,
       final String? no}) = _$ClubImpl;
   const _Club._() : super._();
 
@@ -191,9 +206,11 @@ abstract class _Club extends Club {
   @override
   int? get id;
   @override
-  String get name;
+  String? get orgSyncId;
   @override
   Organization get organization;
+  @override
+  String get name;
   @override
   String? get no;
   @override

@@ -1,10 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/bout_action_type.dart';
-import '../enums/bout_role.dart';
-import 'data_object.dart';
-import 'bout_action.dart';
-import 'participation.dart';
+import '../../common.dart';
 
 part 'participant_state.freezed.dart';
 part 'participant_state.g.dart';
@@ -59,4 +55,10 @@ class ParticipantState with _$ParticipantState implements DataObject {
   ParticipantState copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

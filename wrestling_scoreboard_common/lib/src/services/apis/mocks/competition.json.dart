@@ -1,3 +1,4 @@
+final competitionJson = r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -510,3 +511,4 @@
     ]
   }
 }
+''';

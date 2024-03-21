@@ -79,22 +79,35 @@ abstract class EntityController<T extends DataObject> {
     return DataObject.fromRaw<T>(single, getSingleFromDataType);
   }
 
+  /// Get a single data object via a foreign id (sync id), given by an organization.
+  Future<T> getSingleOfOrg(String orgSyncId, {required int orgId}) async {
+    final single = await getSingleOfOrgRaw(orgSyncId, orgId: orgId);
+    return DataObject.fromRaw<T>(single, getSingleFromDataType);
+  }
+
   late final getSingleRawStmt =
       PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
 
   Future<Map<String, dynamic>> getSingleRaw(int id) async {
     final resStream = (await getSingleRawStmt).bind({'id': id});
     final many = await resStream.toColumnMap().toList();
-    if (many.isEmpty) throw Exception('$T with id "$id" not found');
+    if (many.isEmpty) throw InvalidParameterException('$T with id "$id" not found');
+    return many.first;
+  }
+
+  late final getSingleOfOrgRawStmt = PostgresDb()
+      .connection
+      .prepare(psql.Sql.named('SELECT * FROM $tableName WHERE organization_id = @orgId AND org_sync_id = @orgSyncId;'));
+
+  Future<Map<String, dynamic>> getSingleOfOrgRaw(String orgSyncId, {required int orgId}) async {
+    final resStream = (await getSingleOfOrgRawStmt).bind({'orgSyncId': orgSyncId, 'orgId': orgId});
+    final many = await resStream.toColumnMap().toList();
+    if (many.isEmpty) throw InvalidParameterException('$T with id "$orgSyncId" not found');
     return many.first;
   }
 
   Future<int> createSingle(T dataObject) async {
     return await createSingleRaw(dataObject.toRaw());
-  }
-
-  Future<List<int>> createMany(List<T> dataObjects) async {
-    return await Future.wait(dataObjects.map((element) => createSingle(element)));
   }
 
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
@@ -116,6 +129,37 @@ abstract class EntityController<T extends DataObject> {
           'The data object of table $tableName could not be created. Check the attributes: $data\n'
           'PgException: {"message": ${e.message}}');
     }
+  }
+
+  Future<T> createSingleReturn(T dataObject) async {
+    return dataObject.copyWithId(await createSingle(dataObject)) as T;
+  }
+
+  Future<T> getOrCreateSingleOfOrg(T dataObject) async {
+    if (dataObject.id != null) {
+      throw Exception('Data object already has an id: $dataObject');
+    }
+    if (dataObject.organization?.id == null || dataObject.orgSyncId == null) {
+      throw Exception('Organization id and sync id must not be null: $dataObject');
+    }
+    try {
+      final single = await getSingleOfOrg(dataObject.orgSyncId!, orgId: dataObject.organization!.id!);
+      return single;
+    } on InvalidParameterException catch (_) {
+      return createSingleReturn(dataObject);
+    }
+  }
+
+  Future<List<int>> createMany(List<T> dataObjects) async {
+    return await Future.wait(dataObjects.map((element) => createSingle(element)));
+  }
+
+  Future<List<T>> createManyReturn(List<T> dataObjects) async {
+    return await Future.wait(dataObjects.map((element) => createSingleReturn(element)));
+  }
+
+  Future<List<T>> getOrCreateManyOfOrg(List<T> dataObjects) async {
+    return await Future.wait(dataObjects.map((element) => getOrCreateSingleOfOrg(element)));
   }
 
   Future<int> updateSingle(T dataObject) async {
@@ -308,6 +352,10 @@ abstract class EntityController<T extends DataObject> {
 
   static Future<T> getSingleFromDataType<T extends DataObject>(int id) {
     return getControllerFromDataType(T).getSingle(id) as Future<T>;
+  }
+
+  static Future<T> getSingleFromDataTypeOfOrg<T extends DataObject>(String orgSyncId, {required int orgId}) {
+    return getControllerFromDataType(T).getSingleOfOrg(orgSyncId, orgId: orgId) as Future<T>;
   }
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>(

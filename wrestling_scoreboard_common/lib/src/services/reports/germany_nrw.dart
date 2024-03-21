@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:country/country.dart';
 
 import '../../../common.dart';
-import '../../services.dart';
-import '../report.dart';
 
 extension StatusParser on Person {
   String toStatus() {

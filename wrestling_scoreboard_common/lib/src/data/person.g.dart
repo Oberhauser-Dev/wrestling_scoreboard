@@ -8,6 +8,9 @@ part of 'person.dart';
 
 _$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
       id: json['id'] as int?,
+      orgSyncId: json['orgSyncId'] as String?,
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       prename: json['prename'] as String,
       surname: json['surname'] as String,
       gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),
@@ -17,6 +20,8 @@ _$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
 
 Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) => <String, dynamic>{
       'id': instance.id,
+      'orgSyncId': instance.orgSyncId,
+      'organization': instance.organization?.toJson(),
       'prename': instance.prename,
       'surname': instance.surname,
       'gender': _$GenderEnumMap[instance.gender],

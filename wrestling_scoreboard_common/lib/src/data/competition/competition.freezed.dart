@@ -21,6 +21,8 @@ Competition _$CompetitionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Competition {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization? get organization => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   BoutConfig get boutConfig => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
@@ -41,6 +43,8 @@ abstract class $CompetitionCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization? organization,
       String name,
       BoutConfig boutConfig,
       String? location,
@@ -49,6 +53,7 @@ abstract class $CompetitionCopyWith<$Res> {
       int? visitorsCount,
       String? comment});
 
+  $OrganizationCopyWith<$Res>? get organization;
   $BoutConfigCopyWith<$Res> get boutConfig;
 }
 
@@ -65,6 +70,8 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? name = null,
     Object? boutConfig = null,
     Object? location = freezed,
@@ -78,6 +85,14 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -111,6 +126,18 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
 
   @override
   @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $BoutConfigCopyWith<$Res> get boutConfig {
     return $BoutConfigCopyWith<$Res>(_value.boutConfig, (value) {
       return _then(_value.copyWith(boutConfig: value) as $Val);
@@ -126,6 +153,8 @@ abstract class _$$CompetitionImplCopyWith<$Res> implements $CompetitionCopyWith<
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization? organization,
       String name,
       BoutConfig boutConfig,
       String? location,
@@ -134,6 +163,8 @@ abstract class _$$CompetitionImplCopyWith<$Res> implements $CompetitionCopyWith<
       int? visitorsCount,
       String? comment});
 
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
   @override
   $BoutConfigCopyWith<$Res> get boutConfig;
 }
@@ -148,6 +179,8 @@ class __$$CompetitionImplCopyWithImpl<$Res> extends _$CompetitionCopyWithImpl<$R
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? name = null,
     Object? boutConfig = null,
     Object? location = freezed,
@@ -161,6 +194,14 @@ class __$$CompetitionImplCopyWithImpl<$Res> extends _$CompetitionCopyWithImpl<$R
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -198,6 +239,8 @@ class __$$CompetitionImplCopyWithImpl<$Res> extends _$CompetitionCopyWithImpl<$R
 class _$CompetitionImpl extends _Competition {
   const _$CompetitionImpl(
       {this.id,
+      this.orgSyncId,
+      this.organization,
       required this.name,
       required this.boutConfig,
       this.location,
@@ -211,6 +254,10 @@ class _$CompetitionImpl extends _Competition {
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final String name;
   @override
@@ -228,7 +275,7 @@ class _$CompetitionImpl extends _Competition {
 
   @override
   String toString() {
-    return 'Competition(id: $id, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
   }
 
   @override
@@ -237,6 +284,8 @@ class _$CompetitionImpl extends _Competition {
         (other.runtimeType == runtimeType &&
             other is _$CompetitionImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
             (identical(other.location, location) || other.location == location) &&
@@ -248,7 +297,8 @@ class _$CompetitionImpl extends _Competition {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, boutConfig, location, date, no, visitorsCount, comment);
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
 
   @JsonKey(ignore: true)
   @override
@@ -267,6 +317,8 @@ class _$CompetitionImpl extends _Competition {
 abstract class _Competition extends Competition {
   const factory _Competition(
       {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
       required final String name,
       required final BoutConfig boutConfig,
       final String? location,
@@ -280,6 +332,10 @@ abstract class _Competition extends Competition {
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization? get organization;
   @override
   String get name;
   @override

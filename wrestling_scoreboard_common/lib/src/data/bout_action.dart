@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/bout_action_type.dart';
-import '../enums/bout_role.dart';
-import 'bout.dart';
-import 'data_object.dart';
+import '../../common.dart';
 
 part 'bout_action.freezed.dart';
 part 'bout_action.g.dart';
@@ -69,4 +66,10 @@ class BoutAction with _$BoutAction implements DataObject {
   BoutAction copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

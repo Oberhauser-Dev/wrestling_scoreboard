@@ -10,7 +10,7 @@ class DatabaseController {
   // TODO: migration should be handled automatically at server start.
 
   /// Reset all tables
-  Future<Response> reset(Request request) async {
+  Future<Response> reset([Request? request]) async {
     try {
       await _restoreDefault();
       Iterable<EntityController> entityControllers =

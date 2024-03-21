@@ -1,3 +1,4 @@
+final listCompetitionJson = r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -84,3 +85,4 @@
     }
   }
 }
+''';

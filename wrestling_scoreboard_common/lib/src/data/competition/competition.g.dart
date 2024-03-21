@@ -8,6 +8,9 @@ part of 'competition.dart';
 
 _$CompetitionImpl _$$CompetitionImplFromJson(Map<String, dynamic> json) => _$CompetitionImpl(
       id: json['id'] as int?,
+      orgSyncId: json['orgSyncId'] as String?,
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,
       boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
       location: json['location'] as String?,
@@ -19,6 +22,8 @@ _$CompetitionImpl _$$CompetitionImplFromJson(Map<String, dynamic> json) => _$Com
 
 Map<String, dynamic> _$$CompetitionImplToJson(_$CompetitionImpl instance) => <String, dynamic>{
       'id': instance.id,
+      'orgSyncId': instance.orgSyncId,
+      'organization': instance.organization?.toJson(),
       'name': instance.name,
       'boutConfig': instance.boutConfig.toJson(),
       'location': instance.location,

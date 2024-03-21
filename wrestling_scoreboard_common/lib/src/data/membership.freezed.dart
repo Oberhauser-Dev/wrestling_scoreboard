@@ -21,6 +21,8 @@ Membership _$MembershipFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Membership {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization? get organization => throw _privateConstructorUsedError;
   String? get no => throw _privateConstructorUsedError; // Vereinsnummer
   Club get club => throw _privateConstructorUsedError;
   Person get person => throw _privateConstructorUsedError;
@@ -35,8 +37,9 @@ abstract class $MembershipCopyWith<$Res> {
   factory $MembershipCopyWith(Membership value, $Res Function(Membership) then) =
       _$MembershipCopyWithImpl<$Res, Membership>;
   @useResult
-  $Res call({int? id, String? no, Club club, Person person});
+  $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
 
+  $OrganizationCopyWith<$Res>? get organization;
   $ClubCopyWith<$Res> get club;
   $PersonCopyWith<$Res> get person;
 }
@@ -54,6 +57,8 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? no = freezed,
     Object? club = null,
     Object? person = null,
@@ -63,6 +68,14 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       no: freezed == no
           ? _value.no
           : no // ignore: cast_nullable_to_non_nullable
@@ -76,6 +89,18 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
           : person // ignore: cast_nullable_to_non_nullable
               as Person,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
   }
 
   @override
@@ -101,8 +126,10 @@ abstract class _$$MembershipImplCopyWith<$Res> implements $MembershipCopyWith<$R
       __$$MembershipImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String? no, Club club, Person person});
+  $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
 
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
   @override
   $ClubCopyWith<$Res> get club;
   @override
@@ -118,6 +145,8 @@ class __$$MembershipImplCopyWithImpl<$Res> extends _$MembershipCopyWithImpl<$Res
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? no = freezed,
     Object? club = null,
     Object? person = null,
@@ -127,6 +156,14 @@ class __$$MembershipImplCopyWithImpl<$Res> extends _$MembershipCopyWithImpl<$Res
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       no: freezed == no
           ? _value.no
           : no // ignore: cast_nullable_to_non_nullable
@@ -146,12 +183,18 @@ class __$$MembershipImplCopyWithImpl<$Res> extends _$MembershipCopyWithImpl<$Res
 /// @nodoc
 @JsonSerializable()
 class _$MembershipImpl extends _Membership {
-  const _$MembershipImpl({this.id, this.no, required this.club, required this.person}) : super._();
+  const _$MembershipImpl(
+      {this.id, this.orgSyncId, this.organization, this.no, required this.club, required this.person})
+      : super._();
 
   factory _$MembershipImpl.fromJson(Map<String, dynamic> json) => _$$MembershipImplFromJson(json);
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final String? no;
 // Vereinsnummer
@@ -162,7 +205,7 @@ class _$MembershipImpl extends _Membership {
 
   @override
   String toString() {
-    return 'Membership(id: $id, no: $no, club: $club, person: $person)';
+    return 'Membership(id: $id, orgSyncId: $orgSyncId, organization: $organization, no: $no, club: $club, person: $person)';
   }
 
   @override
@@ -171,6 +214,8 @@ class _$MembershipImpl extends _Membership {
         (other.runtimeType == runtimeType &&
             other is _$MembershipImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.no, no) || other.no == no) &&
             (identical(other.club, club) || other.club == club) &&
             (identical(other.person, person) || other.person == person));
@@ -178,7 +223,7 @@ class _$MembershipImpl extends _Membership {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, no, club, person);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, no, club, person);
 
   @JsonKey(ignore: true)
   @override
@@ -195,14 +240,23 @@ class _$MembershipImpl extends _Membership {
 }
 
 abstract class _Membership extends Membership {
-  const factory _Membership({final int? id, final String? no, required final Club club, required final Person person}) =
-      _$MembershipImpl;
+  const factory _Membership(
+      {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
+      final String? no,
+      required final Club club,
+      required final Person person}) = _$MembershipImpl;
   const _Membership._() : super._();
 
   factory _Membership.fromJson(Map<String, dynamic> json) = _$MembershipImpl.fromJson;
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization? get organization;
   @override
   String? get no;
   @override // Vereinsnummer

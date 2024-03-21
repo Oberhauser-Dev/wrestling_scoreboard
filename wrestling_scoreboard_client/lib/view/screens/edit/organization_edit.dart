@@ -23,10 +23,14 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
   String? _name;
   String? _abbreviation;
   Organization? _parent;
+  WrestlingApiProvider? _apiProvider;
+  WrestlingReportProvider? _reportProvider;
 
   @override
   void initState() {
     _parent = widget.organization?.parent ?? widget.initialParent;
+    _apiProvider = widget.organization?.apiProvider;
+    _reportProvider = widget.organization?.reportProvider;
     super.initState();
   }
 
@@ -73,7 +77,7 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           onSaved: (Organization? value) => setState(() {
             _parent = value;
           }),
-          allowEmpty: false,
+          allowEmpty: true,
           itemAsString: (u) => u.name,
           onFind: (String? filter) async {
             _availableOrganizations ??=
@@ -83,6 +87,44 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
                     : _availableOrganizations!.where((element) => element.name.contains(filter)))
                 .toList();
           },
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.api),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<WrestlingApiProvider>(
+            isNullable: true,
+            hint: localizations.apiProvider,
+            isExpanded: true,
+            options: WrestlingApiProvider.values.map((value) => MapEntry(
+                  value,
+                  Text(value.name),
+                )),
+            selected: _apiProvider,
+            onChange: (newValue) => setState(() {
+              _apiProvider = newValue;
+            }),
+          ),
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.description),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<WrestlingReportProvider>(
+            isNullable: true,
+            hint: localizations.apiProvider,
+            isExpanded: true,
+            options: WrestlingReportProvider.values.map((value) => MapEntry(
+                  value,
+                  Text(value.name),
+                )),
+            selected: _reportProvider,
+            onChange: (newValue) => setState(() {
+              _reportProvider = newValue;
+            }),
+          ),
         ),
       ),
     ];
@@ -106,6 +148,8 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
         name: _name!,
         abbreviation: _abbreviation,
         parent: _parent,
+        reportProvider: _reportProvider,
+        apiProvider: _apiProvider,
       ));
       navigator.pop();
     }

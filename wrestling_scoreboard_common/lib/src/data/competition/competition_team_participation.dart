@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data_object.dart';
-import '../team.dart';
-import 'competition.dart';
+import '../../../common.dart';
 
 part 'competition_team_participation.freezed.dart';
 part 'competition_team_participation.g.dart';
@@ -45,4 +43,10 @@ class CompetitionTeamParticipation with _$CompetitionTeamParticipation implement
   CompetitionTeamParticipation copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

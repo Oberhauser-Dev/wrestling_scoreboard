@@ -10,9 +10,10 @@ void main() {
   testWidgets('App launched', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(mockProviderScope);
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.byIcon(Icons.home), findsOneWidget);
+    expect(find.byIcon(Icons.explore), findsOneWidget);
     expect(find.byIcon(Icons.more_horiz), findsOneWidget);
 
     // Tap more icon.

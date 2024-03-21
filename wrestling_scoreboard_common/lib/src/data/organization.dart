@@ -16,6 +16,7 @@ class Organization with _$Organization implements DataObject {
     String? abbreviation,
     Organization? parent,
     WrestlingApiProvider? apiProvider,
+    WrestlingReportProvider? reportProvider,
   }) = _Organization;
 
   factory Organization.fromJson(Map<String, Object?> json) => _$OrganizationFromJson(json);
@@ -23,10 +24,14 @@ class Organization with _$Organization implements DataObject {
   static Future<Organization> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final parentId = e['parent_id'] as int?;
     final parent = parentId == null ? null : await getSingle<Organization>(parentId);
+    final apiProviderStr = e['api_provider'] as String?;
+    final reportProviderStr = e['report_provider'] as String?;
     return Organization(
       id: e['id'] as int?,
       name: e['name'] as String,
       abbreviation: e['abbreviation'] as String?,
+      apiProvider: apiProviderStr == null ? null : WrestlingApiProvider.values.byName(apiProviderStr),
+      reportProvider: reportProviderStr == null ? null : WrestlingReportProvider.values.byName(reportProviderStr),
       parent: parent,
     );
   }
@@ -38,7 +43,8 @@ class Organization with _$Organization implements DataObject {
       'name': name,
       'abbreviation': abbreviation,
       'parent_id': parent?.id,
-      'api_provider': apiProvider,
+      'api_provider': apiProvider?.name,
+      'report_provider': reportProvider?.name,
     };
   }
 
@@ -47,10 +53,18 @@ class Organization with _$Organization implements DataObject {
 
   String get fullname => '$name ($abbreviation)';
 
-  WrestlingApi? getApi(GetSingleOfProvider getSingle) => apiProvider?.getApi(this, getSingle: getSingle);
+  WrestlingApi? getApi(GetSingleOfOrg getSingle) => apiProvider?.getApi(this, getSingleOfOrg: getSingle);
+
+  WrestlingReporter? getReporter() => reportProvider?.getReporter(this);
 
   @override
   Organization copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

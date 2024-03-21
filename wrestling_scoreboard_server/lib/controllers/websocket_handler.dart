@@ -7,9 +7,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
@@ -43,12 +43,12 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterType: Bout,
         filterId: single.bout.id)));
   } else if (single is Organization) {
-    // TODO
+    // SpecialCase: the full Organization list has to be updated with no filter, shouldn't occur often
+    broadcast(
+        jsonEncode(manyToJson(await OrganizationController().getMany(), Organization, CRUD.update, isRaw: false)));
   } else if (single is Division) {
     // TODO
   } else if (single is League) {
-    // SpecialCase: the full League list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await LeagueController().getMany(), League, CRUD.update, isRaw: false)));
   } else if (single is DivisionWeightClass) {
     broadcast(jsonEncode(manyToJson(
         await DivisionWeightClassController()
@@ -162,12 +162,12 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterType: Bout,
         filterId: single['bout_id'])));
   } else if (T == Organization) {
-    // TODO
+    // SpecialCase: the full Organization list has to be updated with no filter, shouldn't occur often
+    broadcast(
+        jsonEncode(manyToJson(await OrganizationController().getManyRaw(), Organization, CRUD.update, isRaw: true)));
   } else if (T == Division) {
     // TODO
   } else if (T == League) {
-    // SpecialCase: the full League list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await LeagueController().getManyRaw(), League, CRUD.update, isRaw: true)));
   } else if (T == DivisionWeightClass) {
     broadcast(jsonEncode(manyToJson(
         await DivisionWeightClassController()

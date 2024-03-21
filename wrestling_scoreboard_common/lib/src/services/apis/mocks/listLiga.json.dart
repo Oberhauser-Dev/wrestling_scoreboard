@@ -1,3 +1,4 @@
+final listLigaJson = r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -282,3 +283,4 @@
     }
   }
 }
+''';

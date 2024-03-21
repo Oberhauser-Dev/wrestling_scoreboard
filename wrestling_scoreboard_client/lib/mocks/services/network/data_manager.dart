@@ -432,6 +432,12 @@ class MockDataManager extends DataManager {
     // TODO: implement restoreDatabase
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> organizationImport(int id) {
+    // TODO: implement organizationImport
+    throw UnimplementedError();
+  }
 }
 
 class MockWebSocketManager implements WebSocketManager {

@@ -1,14 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data_object.dart';
-import '../bout.dart';
-import '../lineup.dart';
-import '../participant_state.dart';
-import '../participation.dart';
-import '../person.dart';
-import '../weight_class.dart';
-import '../wrestling_event.dart';
-import 'league.dart';
+import '../../../common.dart';
 
 part 'team_match.freezed.dart';
 part 'team_match.g.dart';
@@ -19,8 +11,11 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
   // TODO add missing stewards to extra table
   const TeamMatch._();
 
+  /// The [seasonPartition] is started counting at 0.
   const factory TeamMatch({
     int? id,
+    String? orgSyncId,
+    Organization? organization,
     required Lineup home,
     required Lineup guest,
     League? league,
@@ -48,6 +43,7 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
     final int? timeKeeperId = e['time_keeper_id'];
     final int? transcriptWriterId = e['transcript_writer_id'];
     final int? leagueId = e['league_id'];
+    final organizationId = e['organization_id'] as int?;
     // TODO ditch weightclasses, always handle at client
     // final weightClasses = home != null && home.team.league != null
     // ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
@@ -56,6 +52,8 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
 
     return TeamMatch(
       id: e['id'] as int?,
+      orgSyncId: e['org_sync_id'] as String?,
+      organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       no: e['no'] as String?,
       location: e['location'] as String?,
       date: e['date'] as DateTime,

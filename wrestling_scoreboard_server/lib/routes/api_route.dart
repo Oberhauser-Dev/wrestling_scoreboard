@@ -18,7 +18,6 @@ import '../controllers/membership_controller.dart';
 import '../controllers/participant_state_controller.dart';
 import '../controllers/participation_controller.dart';
 import '../controllers/person_controller.dart';
-import '../controllers/service_controller.dart';
 import '../controllers/team_controller.dart';
 import '../controllers/team_match_bout_controller.dart';
 import '../controllers/team_match_controller.dart';
@@ -35,9 +34,6 @@ class ApiRoute {
     router.post('/database/reset', databaseController.reset);
     router.post('/database/restore', databaseController.restore);
     router.post('/database/restore_default', databaseController.restoreDefault);
-
-    final serviceController = ServiceController();
-    router.post('/service/api/<provider>/import', serviceController.import);
 
     final boutConfigController = BoutConfigController();
     router.post('/bout_config', boutConfigController.postSingle);
@@ -64,6 +60,7 @@ class ApiRoute {
     router.get('/bout_action/<id|[0-9]+>', boutActionController.requestSingle);
 
     final organizationController = OrganizationController();
+    router.post('/organization/<id|[0-9]+>/api/import', organizationController.import);
     router.post('/organization', organizationController.postSingle);
     router.get('/organizations', organizationController.requestMany);
     router.get('/organization/<id|[0-9]+>', organizationController.requestSingle);

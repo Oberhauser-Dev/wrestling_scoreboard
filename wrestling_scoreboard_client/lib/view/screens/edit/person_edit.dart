@@ -106,18 +106,17 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
         leading: const Icon(Icons.transgender),
         title: ButtonTheme(
           alignedDropdown: true,
-          child: DropdownButton<Gender>(
-            hint: Text(localizations.gender),
+          child: SimpleDropdown<Gender>(
+            isNullable: true,
+            hint: localizations.gender,
             isExpanded: true,
-            items: Gender.values.map((Gender value) {
-              return DropdownMenuItem<Gender>(
-                value: value,
-                child: Text(value.localize(context)),
-              );
-            }).toList(),
-            value: _gender,
-            onChanged: (newValue) => setState(() {
-              _gender = newValue!;
+            options: Gender.values.map((Gender value) => MapEntry(
+                  value,
+                  Text(value.localize(context)),
+                )),
+            selected: _gender,
+            onChange: (newValue) => setState(() {
+              _gender = newValue;
             }),
           ),
         ),
