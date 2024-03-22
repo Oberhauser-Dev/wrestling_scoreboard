@@ -39,9 +39,10 @@ Future<void> showOkDialog({required BuildContext context, required Widget child}
 
 class OkCancelDialog<T extends Object?> extends StatelessWidget {
   final Widget child;
+  final String? okText;
   final T Function() getResult;
 
-  const OkCancelDialog({required this.child, required this.getResult, super.key});
+  const OkCancelDialog({required this.child, required this.getResult, this.okText, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,44 +60,65 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, getResult()),
-          child: Text(localizations.ok),
+          child: Text(okText ?? localizations.ok),
         ),
       ],
     );
   }
 }
 
-Future<T?> showOkCanelDialog<T>({
+Future<T?> showOkCancelDialog<T>({
   required BuildContext context,
   required Widget child,
   required T Function() getResult,
+  String? okText,
 }) async {
   return await showDialog<T>(
     context: context,
     builder: (context) => OkCancelDialog<T>(
       getResult: getResult,
+      okText: okText,
       child: child,
     ),
   );
 }
 
-Future<void> showExceptionDialog(
-    {required BuildContext context,
-    required Object exception,
-    required StackTrace? stackTrace,
-    Function()? onRetry}) async {
-  await showOkDialog(
+Future<void> showExceptionDialog({
+  required BuildContext context,
+  required Object exception,
+  required StackTrace? stackTrace,
+  Function()? onRetry,
+}) async {
+  if (onRetry == null) {
+    return await showOkDialog(
+      context: context,
+      child: ExceptionInfo(
+        exception,
+        stackTrace: stackTrace,
+      ),
+    );
+  }
+  await showOkCancelDialog(
     context: context,
-    child: ExceptionInfo(exception, stackTrace: stackTrace, onRetry: onRetry),
+    getResult: onRetry,
+    okText: AppLocalizations.of(context)!.retry,
+    child: ExceptionInfo(
+      exception,
+      stackTrace: stackTrace,
+    ),
   );
 }
 
-Future<void> catchAsync(BuildContext context, Future<void> Function() doAsync) async {
+Future<void> catchAsync(
+  BuildContext context,
+  Future<void> Function() doAsync, {
+  Function()? onRetry,
+}) async {
   try {
     await doAsync();
   } catch (exception, stackTrace) {
     if (context.mounted) {
-      showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace);
+      showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
     }
   }
 }

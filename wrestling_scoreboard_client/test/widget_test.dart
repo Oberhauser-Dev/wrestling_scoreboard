@@ -17,7 +17,7 @@ void main() {
 
     // Tap more icon.
     await tester.tap(find.byIcon(Icons.more_horiz));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Verify the more page has loaded.
     expect(find.byIcon(Icons.settings), findsOneWidget);

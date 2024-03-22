@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class AppNavigation extends StatefulWidget {
-  const AppNavigation({super.key});
+  final Widget child;
+
+  const AppNavigation({super.key, required this.child});
 
   @override
   State<AppNavigation> createState() => _AppNavigationState();
@@ -15,14 +18,20 @@ class AppNavigation extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 0;
-  static final List<Widget> _widgetOptions = <Widget>[
-    const Home(),
-    const Explore(),
-    const MoreScreen(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
+      switch (index) {
+        case 0:
+          context.go('/${Home.route}');
+          break;
+        case 1:
+          context.go('/${Explore.route}');
+          break;
+        default:
+          context.go('/${MoreScreen.route}');
+          break;
+      }
       _selectedIndex = index;
     });
   }
@@ -31,9 +40,7 @@ class _AppNavigationState extends State<AppNavigation> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[

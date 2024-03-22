@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/url.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 enum WebSocketConnectionState {
   connecting,
@@ -16,14 +19,52 @@ enum WebSocketConnectionState {
 /// Custom:
 /// - 4210: Client attempts to reconnect
 class WebSocketManager {
-  late Function(dynamic message) messageHandler;
+  final DataManager dataManager;
   WebSocketChannel? _channel;
   String? _wsUrl;
 
   /// Manages connection state of WebSocket
   final StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
 
-  WebSocketManager(this.messageHandler, {String? url}) {
+  WebSocketManager(this.dataManager, {String? url}) {
+    Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
+      if (operation == CRUD.update) {
+        dataManager.getSingleStreamController<T>()?.sink.add(single);
+      }
+      return single.id!;
+    }
+
+    Future<int> handleSingleRaw<T extends DataObject>(
+        {required CRUD operation, required Map<String, dynamic> single}) async {
+      if (operation == CRUD.update) {
+        dataManager.getSingleRawStreamController<T>()?.sink.add(single);
+      }
+      return single['id'];
+    }
+
+    Future<void> handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async {
+      final tmp = ManyDataObject<T>(data: many.data, filterId: many.filterId, filterType: many.filterType);
+      final filterType = many.filterType;
+      dataManager.getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
+    }
+
+    Future<void> handleManyRaw<T extends DataObject>(
+        {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
+      final tmp =
+          ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
+      final filterType = many.filterType;
+      dataManager.getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
+    }
+
+    messageHandler(dynamic message) {
+      final json = jsonDecode(message);
+      handleFromJson(json,
+          handleSingle: handleSingle,
+          handleMany: handleMany,
+          handleSingleRaw: handleSingleRaw,
+          handleManyRaw: handleManyRaw);
+    }
+
     if (url != null) {
       _wsUrl = adaptLocalhost(url);
     }

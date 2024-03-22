@@ -12,15 +12,12 @@ class RestDataManager extends DataManager {
   };
   static const headers = {"Content-Type": "application/json"};
 
-  final String? wsUrl;
   late final String? _apiUrl;
 
-  @override
-  late final WebSocketManager webSocketManager;
+  late WebSocketManager _webSocketManager;
 
-  RestDataManager({required String? apiUrl, this.wsUrl}) {
+  RestDataManager({required String? apiUrl}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
-    _initUpdateStream();
   }
 
   String _getPathFromType(Type t) {
@@ -73,46 +70,6 @@ class RestDataManager extends DataManager {
     }
   }
 
-  _initUpdateStream() {
-    Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
-      if (operation == CRUD.update) {
-        getSingleStreamController<T>()?.sink.add(single);
-      }
-      return single.id!;
-    }
-
-    Future<int> handleSingleRaw<T extends DataObject>(
-        {required CRUD operation, required Map<String, dynamic> single}) async {
-      if (operation == CRUD.update) {
-        getSingleRawStreamController<T>()?.sink.add(single);
-      }
-      return single['id'];
-    }
-
-    Future<void> handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async {
-      final tmp = ManyDataObject<T>(data: many.data, filterId: many.filterId, filterType: many.filterType);
-      final filterType = many.filterType;
-      getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
-    }
-
-    Future<void> handleManyRaw<T extends DataObject>(
-        {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
-      final tmp =
-          ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
-      final filterType = many.filterType;
-      getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
-    }
-
-    webSocketManager = WebSocketManager((message) {
-      final json = jsonDecode(message);
-      handleFromJson(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    }, url: wsUrl);
-  }
-
   @override
   Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
     final prepend = '${_getPathFromType(T)}/${wrestlingEvent.id}';
@@ -143,7 +100,7 @@ class RestDataManager extends DataManager {
 
   @override
   Future<void> deleteSingle<T extends DataObject>(T single) async {
-    webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
+    _webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
   }
 
   @override
@@ -182,6 +139,11 @@ class RestDataManager extends DataManager {
     if (response.statusCode != 200) {
       throw RestException('Failed to restore the database', response: response);
     }
+  }
+
+  @override
+  set webSocketManager(WebSocketManager manager) {
+    _webSocketManager = manager;
   }
 }
 

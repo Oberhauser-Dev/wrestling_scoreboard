@@ -87,7 +87,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         icon: const Icon(Icons.autorenew),
         label: Text(localizations.saveAndGenerate),
         onSubmit: () async {
-          final hasConfirmed = await showOkCanelDialog(
+          final hasConfirmed = await showOkCancelDialog(
             context: context,
             getResult: () => true,
             child: Text(localizations.warningBoutGenerate),

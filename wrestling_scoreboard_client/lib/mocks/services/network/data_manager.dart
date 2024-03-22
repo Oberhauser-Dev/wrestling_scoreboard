@@ -405,10 +405,9 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  WebSocketManager get webSocketManager => MockWebSocketManager((message) {
-        // TODO: implement messageHandler
-        return null;
-      });
+  set webSocketManager(WebSocketManager manager) {
+    // TODO: implement webSocketManager
+  }
 
   @override
   Future<String> exportDatabase() {
@@ -436,12 +435,12 @@ class MockDataManager extends DataManager {
 }
 
 class MockWebSocketManager implements WebSocketManager {
-  MockWebSocketManager(this.messageHandler, {String? url}) {
+  MockWebSocketManager(this.dataManager, {String? url}) {
     // TODO: implement
   }
 
   @override
-  Function(dynamic message) messageHandler;
+  DataManager dataManager;
 
   @override
   addToSink(String val) {

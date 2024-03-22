@@ -11,17 +11,28 @@ class DataManagerNotifier extends _$DataManagerNotifier {
   @override
   Raw<Future<DataManager>> build() async {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
-    final wsUrl = await ref.watch(webSocketUrlNotifierProvider);
+    return RestDataManager(apiUrl: apiUrl);
+  }
+}
 
-    return RestDataManager(apiUrl: apiUrl, wsUrl: wsUrl);
+@Riverpod(keepAlive: true)
+class WebSocketManagerNotifier extends _$WebSocketManagerNotifier {
+  @override
+  Raw<Future<WebSocketManager>> build() async {
+    final wsUrl = await ref.watch(webSocketUrlNotifierProvider);
+    final dataManager = await ref.watch(dataManagerNotifierProvider);
+
+    final webSocketManager = WebSocketManager(dataManager, url: wsUrl);
+    dataManager.webSocketManager = webSocketManager;
+
+    return webSocketManager;
   }
 }
 
 @Riverpod(keepAlive: true)
 Stream<WebSocketConnectionState> webSocketStateStream(WebSocketStateStreamRef ref) async* {
-  final dataManager = await ref.watch(dataManagerNotifierProvider);
-  // TODO: integrate in updating websocket URL from stream provider
-  final webSocketConnectionStream = dataManager.webSocketManager.onWebSocketConnection.stream
+  final webSocketManager = await ref.watch(webSocketManagerNotifierProvider);
+  final webSocketConnectionStream = webSocketManager.onWebSocketConnection.stream
       .distinct()
       .where((event) => event == WebSocketConnectionState.disconnected || event == WebSocketConnectionState.connected);
   yield* webSocketConnectionStream;

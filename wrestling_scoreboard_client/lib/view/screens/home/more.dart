@@ -6,6 +6,8 @@ import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class MoreScreen extends StatelessWidget {
+  static const route = 'more';
+
   const MoreScreen({super.key});
 
   @override

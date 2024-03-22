@@ -31,8 +31,7 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () async => (await ref.read(dataManagerNotifierProvider))
-          .webSocketManager
+      onRetry: () async => (await ref.read(webSocketManagerNotifierProvider))
           .onWebSocketConnection
           .sink
           .add(WebSocketConnectionState.connecting),
@@ -55,12 +54,12 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (id == null && initialData == null) {
-      return ExceptionWidget(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
+      return ExceptionCard(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
     }
     return NullableSingleConsumer(
         builder: (BuildContext context, T? data) {
           if (data == null) {
-            return ExceptionWidget(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
+            return ExceptionCard(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
           }
           return builder(context, data);
         },
@@ -85,8 +84,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () async => (await ref.read(dataManagerNotifierProvider))
-          .webSocketManager
+      onRetry: () async => (await ref.read(webSocketManagerNotifierProvider))
           .onWebSocketConnection
           .sink
           .add(WebSocketConnectionState.connecting),

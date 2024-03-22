@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 final mockProviderScope = ProviderScope(
   overrides: [
     dataManagerNotifierProvider.overrideWith(() => MockDataManagerNotifier()),
+    webSocketManagerNotifierProvider.overrideWith(() => MockWebsocketManagerNotifier()),
   ],
   child: const WrestlingScoreboardApp(),
 );
