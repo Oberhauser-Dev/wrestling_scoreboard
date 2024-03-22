@@ -48,8 +48,7 @@ class RestDataManager extends DataManager {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception(
-          'Failed to READ single ${T.toString()}: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to READ single ${T.toString()}', response: response);
     }
   }
 
@@ -70,8 +69,7 @@ class RestDataManager extends DataManager {
       final List<dynamic> json = jsonDecode(response.body);
       return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
     } else {
-      throw Exception(
-          'Failed to READ many ${T.toString()}: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to READ many ${T.toString()}', response: response);
     }
   }
 
@@ -123,8 +121,7 @@ class RestDataManager extends DataManager {
     final response = await http.post(uri, headers: headers);
 
     if (response.statusCode >= 400) {
-      throw Exception(
-          'Failed to CREATE generated bouts ${wrestlingEvent.toString()}: \n${response.reasonPhrase ?? response.statusCode.toString()}\nBody: ${response.body}');
+      throw RestException('Failed to CREATE generated bouts ${wrestlingEvent.toString()}', response: response);
     }
   }
 
@@ -139,8 +136,8 @@ class RestDataManager extends DataManager {
     if (response.statusCode < 400) {
       return jsonDecode(response.body);
     } else {
-      throw RestException(
-          'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}: \n${response.reasonPhrase ?? response.statusCode.toString()}\nBody: ${response.body}');
+      throw RestException('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}',
+          response: response);
     }
   }
 
@@ -156,7 +153,7 @@ class RestDataManager extends DataManager {
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      throw Exception('Failed to export the database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to export the database', response: response);
     }
   }
 
@@ -165,7 +162,7 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/database/reset');
     final response = await http.post(uri);
     if (response.statusCode != 200) {
-      throw Exception('Failed to reset the database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to reset the database', response: response);
     }
   }
 
@@ -174,8 +171,7 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/database/restore_default');
     final response = await http.post(uri);
     if (response.statusCode != 200) {
-      throw Exception(
-          'Failed to restore the default database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to restore the default database', response: response);
     }
   }
 
@@ -184,18 +180,21 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/database/restore');
     final response = await http.post(uri, headers: headers, body: sqlDump);
     if (response.statusCode != 200) {
-      throw Exception('Failed to restore the database: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to restore the database', response: response);
     }
   }
 }
 
 class RestException implements Exception {
   String message;
+  http.Response response;
 
-  RestException(this.message);
+  RestException(this.message, {required this.response});
 
   @override
   String toString() {
-    return 'RestException: $message';
+    return 'RestException: $message:\n'
+        '\tReason: ${response.reasonPhrase} (${response.statusCode.toString()}):\n'
+        '\tBody: ${response.body}';
   }
 }
