@@ -5,7 +5,7 @@ publish_to: 'none'
 
 homepage: 'https://wrestling-scoreboard.oberhauser.dev'
 repository: 'https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/main/wrestling_scoreboard_client'
-version: 0.0.1-beta.8
+version: 0.0.1-beta.9
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

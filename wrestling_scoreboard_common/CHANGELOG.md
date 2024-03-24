@@ -1,3 +1,17 @@
+## 0.0.1-beta.9
+
+ - **REFACTOR**: Convert enum names. ([a4eaa319](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a4eaa319d1417dc3167966981e68e27c001b3143))
+ - **REFACTOR**: Run build_runner. ([bb1a8e05](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bb1a8e05d74ac1d97ed368e4612769005965cb34))
+ - **FIX**(server): Throw exception on null values in getSingle. ([2da48fe5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2da48fe5be8243c7d707fce507dcefddf694d245))
+ - **FIX**: Minor fixes and improvements. ([832aee56](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/832aee5606a301a5a6d4cd3c939a12af908d3dea))
+ - **FEAT**: Basic support for API providers ([#47](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/47)). ([fea89a89](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fea89a893043198566f9bda9052940308ae8ba20))
+ - **FEAT**(client): GUI for organizations, divisions, favorites. ([ab30f8ac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ab30f8ac2b5943ad17f6e122a889dc2723b6eb87))
+ - **FEAT**: Division and Organization. ([bf182c22](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bf182c22687c8d42c7843e41aab9e5e232ee9a9b))
+ - **FEAT**: Results report for germany NRW ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([5d57411a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d57411a77e0af92bbe9fd121c2a11a8380fc413))
+ - **FEAT**: Edit duration. ([e3b12f46](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e3b12f460a44a9d900f5f972e50435681e6f389a))
+ - **FEAT**: Delete button for bout action (closes [#38](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/38)). ([471126c2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/471126c24b9614bb7829bc9a731aa6991a53f823))
+ - **FEAT**: Adding season partition (closes [#3](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3)). ([b7836868](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b78368684ff49e81b30eb35a2cb7a4d41236a141))
+
 ## 0.0.1-beta.8
 
 > Note: This release has breaking changes.

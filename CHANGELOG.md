@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-03-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.0.1-beta.9`](#wrestling_scoreboard_client---v001-beta9)
+ - [`wrestling_scoreboard_common` - `v0.0.1-beta.9`](#wrestling_scoreboard_common---v001-beta9)
+ - [`wrestling_scoreboard_server` - `v0.0.1-beta.9`](#wrestling_scoreboard_server---v001-beta9)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.0.1-beta.9`
+
+ - **REFACTOR**: Dart format. ([ace81ead](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ace81eadbd6d7a1c5eb6cb62435229e78bddee49))
+ - **FIX**: Height of exception widgets. ([fb62a31e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fb62a31ed7dd4b141d5bd7f24f98d32c09abe638))
+ - **FIX**: Use stopwatch for bout action duration. ([5152595f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5152595fb280fb6f65976094fe35ddade4ae447e))
+ - **FIX**: Save empty membership no as null. ([5891d59e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5891d59ea258cbc8926a1fc21255dbbd8a4f8500))
+ - **FIX**(client): Saving Lineup. ([3bc02dac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3bc02dacc12b6de2b17b2f125188ca59286100fd))
+ - **FIX**: Minor fixes and improvements. ([832aee56](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/832aee5606a301a5a6d4cd3c939a12af908d3dea))
+ - **FEAT**: Basic support for API providers ([#47](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/47)). ([fea89a89](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fea89a893043198566f9bda9052940308ae8ba20))
+ - **FEAT**: Exception Dialogs, Shortcuts and Navigation. ([c4ab7fea](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c4ab7feaddb4e82bc8de604d4e5e1516059e29cb))
+ - **FEAT**: Improve output of RestException. ([97a94441](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/97a94441da7684e278478f030865a250c1ff8d77))
+ - **FEAT**(client): GUI for organizations, divisions, favorites. ([ab30f8ac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ab30f8ac2b5943ad17f6e122a889dc2723b6eb87))
+ - **FEAT**: Use exception dialog when websocket connection closed. ([1a727f2b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1a727f2b30d2be5d6f2faae58c82a18b6ed0d8b7))
+ - **FEAT**: Division and Organization. ([bf182c22](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bf182c22687c8d42c7843e41aab9e5e232ee9a9b))
+ - **FEAT**: StackTrace for ExceptionWidget. ([c0b1231b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c0b1231bec25d8aad44103e446725c0e8efde466))
+ - **FEAT**: Async exception widget. ([64c524b7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/64c524b7ce2d069c602f10c804869b767b841053))
+ - **FEAT**: Feedback on reset / restore DB, simplify Dialogs. ([a45e8463](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a45e846321e727cd1c0eb4a28ac2514ad1922fdc))
+ - **FEAT**: Results report for germany NRW ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([5d57411a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d57411a77e0af92bbe9fd121c2a11a8380fc413))
+ - **FEAT**: Language and Font settings (closes [#24](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/24)). ([86c8bcbd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/86c8bcbdaa0ce21e9bd1c9331820568bf62b05c5))
+ - **FEAT**: Add network timeout setting, reorder settings. ([d63e7ce9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d63e7ce9459d774a6b44586a5d57be16caa49897))
+ - **FEAT**: Database export and restore from client. ([3bec47a0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3bec47a0b471b80520f4bf2618d7875f17d6ec37))
+ - **FEAT**: Show network timeout ([#44](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/44)). ([bdbda2ae](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bdbda2aec4739bca52ce1658e7a26adc5fcbbfb4))
+ - **FEAT**: Format seconds to readable string. ([b1d58e10](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b1d58e105958a7e86dc56010b1065a65b3435d62))
+ - **FEAT**: Edit duration. ([e3b12f46](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e3b12f460a44a9d900f5f972e50435681e6f389a))
+ - **FEAT**: Apply duration picker. ([94e07d29](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/94e07d294e5251e7bdfa13c017c90ec4edb78241))
+ - **FEAT**: Delete button for bout action (closes [#38](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/38)). ([471126c2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/471126c24b9614bb7829bc9a731aa6991a53f823))
+ - **FEAT**: Adding season partition (closes [#3](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3)). ([b7836868](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b78368684ff49e81b30eb35a2cb7a4d41236a141))
+ - **DOCS**: Update READMEs. ([91786fad](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91786fad183eb139892284a5b86666eb85112782))
+
+#### `wrestling_scoreboard_common` - `v0.0.1-beta.9`
+
+ - **REFACTOR**: Convert enum names. ([a4eaa319](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a4eaa319d1417dc3167966981e68e27c001b3143))
+ - **REFACTOR**: Run build_runner. ([bb1a8e05](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bb1a8e05d74ac1d97ed368e4612769005965cb34))
+ - **FIX**(server): Throw exception on null values in getSingle. ([2da48fe5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2da48fe5be8243c7d707fce507dcefddf694d245))
+ - **FIX**: Minor fixes and improvements. ([832aee56](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/832aee5606a301a5a6d4cd3c939a12af908d3dea))
+ - **FEAT**: Basic support for API providers ([#47](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/47)). ([fea89a89](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fea89a893043198566f9bda9052940308ae8ba20))
+ - **FEAT**(client): GUI for organizations, divisions, favorites. ([ab30f8ac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ab30f8ac2b5943ad17f6e122a889dc2723b6eb87))
+ - **FEAT**: Division and Organization. ([bf182c22](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bf182c22687c8d42c7843e41aab9e5e232ee9a9b))
+ - **FEAT**: Results report for germany NRW ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([5d57411a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d57411a77e0af92bbe9fd121c2a11a8380fc413))
+ - **FEAT**: Edit duration. ([e3b12f46](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e3b12f460a44a9d900f5f972e50435681e6f389a))
+ - **FEAT**: Delete button for bout action (closes [#38](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/38)). ([471126c2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/471126c24b9614bb7829bc9a731aa6991a53f823))
+ - **FEAT**: Adding season partition (closes [#3](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3)). ([b7836868](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b78368684ff49e81b30eb35a2cb7a4d41236a141))
+
+#### `wrestling_scoreboard_server` - `v0.0.1-beta.9`
+
+ - **FIX**: Update bout actions on editing time. ([50242488](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/50242488ff5efb1f4e49665d90c4dbf75707925a))
+ - **FIX**(server): Update bouts in match ([#40](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/40)). ([1dbb9ef6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1dbb9ef6bddf864a36aded31f0bcfe5cd6b66fc2))
+ - **FIX**(server): Throw exception on null values in getSingle. ([2da48fe5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2da48fe5be8243c7d707fce507dcefddf694d245))
+ - **FIX**(server): Delete bout dependencies. ([d34e088f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d34e088f25ae4bf610695deca7e1a59df5893716))
+ - **FEAT**: Basic support for API providers ([#47](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/47)). ([fea89a89](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fea89a893043198566f9bda9052940308ae8ba20))
+ - **FEAT**: Division and Organization. ([bf182c22](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bf182c22687c8d42c7843e41aab9e5e232ee9a9b))
+ - **FEAT**: Results report for germany NRW ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([5d57411a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d57411a77e0af92bbe9fd121c2a11a8380fc413))
+ - **FEAT**: Database export and restore from client. ([3bec47a0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3bec47a0b471b80520f4bf2618d7875f17d6ec37))
+ - **FEAT**(server): Restore default. ([e78e02ea](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e78e02ea45c853a3e1904a2bd3fa96c1be81a627))
+ - **FEAT**: Adding season partition (closes [#3](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3)). ([b7836868](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b78368684ff49e81b30eb35a2cb7a4d41236a141))
+ - **DOCS**: Update READMEs. ([91786fad](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91786fad183eb139892284a5b86666eb85112782))
+
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 ## 2024-02-26
 
 ### Changes

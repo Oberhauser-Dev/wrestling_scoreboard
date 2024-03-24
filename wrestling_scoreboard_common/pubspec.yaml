@@ -1,6 +1,6 @@
 name: wrestling_scoreboard_common
 description: Collection of common code for wrestling scoreboard client and server.
-version: 0.0.1-beta.8
+version: 0.0.1-beta.9
 publish_to: 'none'
 
 environment:
