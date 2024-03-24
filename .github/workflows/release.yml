@@ -66,10 +66,10 @@ jobs:
           - os: ubuntu-latest
             platform: Web
             release-type: web
-          - os: macos-latest
+          - os: macos-14
             platform: macOS
             release-type: macos
-#          - os: macos-latest
+#          - os: macos-14
 #            platform: iOS
 #            release-type: ipa
     steps:
