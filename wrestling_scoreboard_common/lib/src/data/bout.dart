@@ -1,11 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/bout_result.dart';
-import '../enums/bout_role.dart';
-import 'data_object.dart';
-import 'bout_action.dart';
-import 'participant_state.dart';
-import 'weight_class.dart';
+import '../../common.dart';
 
 part 'bout.freezed.dart';
 part 'bout.g.dart';
@@ -185,4 +180,10 @@ class Bout with _$Bout implements DataObject {
   Bout copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

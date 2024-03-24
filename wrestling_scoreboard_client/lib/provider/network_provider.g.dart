@@ -67,7 +67,6 @@ String _$dataManagerNotifierHash() => r'ca415c0257cc0041067af426ad3887c4353f72e2
 
 abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
-
   @$internal
   @override
   Raw<Future<DataManager>> runBuild() => build();

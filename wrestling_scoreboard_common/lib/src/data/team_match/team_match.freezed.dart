@@ -21,6 +21,8 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TeamMatch {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization? get organization => throw _privateConstructorUsedError;
   Lineup get home => throw _privateConstructorUsedError;
   Lineup get guest => throw _privateConstructorUsedError;
   League? get league => throw _privateConstructorUsedError;
@@ -47,6 +49,8 @@ abstract class $TeamMatchCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization? organization,
       Lineup home,
       Lineup guest,
       League? league,
@@ -62,6 +66,7 @@ abstract class $TeamMatchCopyWith<$Res> {
       int? visitorsCount,
       String? comment});
 
+  $OrganizationCopyWith<$Res>? get organization;
   $LineupCopyWith<$Res> get home;
   $LineupCopyWith<$Res> get guest;
   $LeagueCopyWith<$Res>? get league;
@@ -85,6 +90,8 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? home = null,
     Object? guest = null,
     Object? league = freezed,
@@ -105,6 +112,14 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       home: null == home
           ? _value.home
           : home // ignore: cast_nullable_to_non_nullable
@@ -162,6 +177,18 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
           : comment // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
   }
 
   @override
@@ -261,6 +288,8 @@ abstract class _$$TeamMatchImplCopyWith<$Res> implements $TeamMatchCopyWith<$Res
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization? organization,
       Lineup home,
       Lineup guest,
       League? league,
@@ -276,6 +305,8 @@ abstract class _$$TeamMatchImplCopyWith<$Res> implements $TeamMatchCopyWith<$Res
       int? visitorsCount,
       String? comment});
 
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
   @override
   $LineupCopyWith<$Res> get home;
   @override
@@ -303,6 +334,8 @@ class __$$TeamMatchImplCopyWithImpl<$Res> extends _$TeamMatchCopyWithImpl<$Res, 
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? home = null,
     Object? guest = null,
     Object? league = freezed,
@@ -323,6 +356,14 @@ class __$$TeamMatchImplCopyWithImpl<$Res> extends _$TeamMatchCopyWithImpl<$Res, 
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       home: null == home
           ? _value.home
           : home // ignore: cast_nullable_to_non_nullable
@@ -388,6 +429,8 @@ class __$$TeamMatchImplCopyWithImpl<$Res> extends _$TeamMatchCopyWithImpl<$Res, 
 class _$TeamMatchImpl extends _TeamMatch {
   const _$TeamMatchImpl(
       {this.id,
+      this.orgSyncId,
+      this.organization,
       required this.home,
       required this.guest,
       this.league,
@@ -408,6 +451,10 @@ class _$TeamMatchImpl extends _TeamMatch {
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final Lineup home;
   @override
@@ -439,7 +486,7 @@ class _$TeamMatchImpl extends _TeamMatch {
 
   @override
   String toString() {
-    return 'TeamMatch(id: $id, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, matChairman: $matChairman, referee: $referee, judge: $judge, timeKeeper: $timeKeeper, transcriptWriter: $transcriptWriter, no: $no, location: $location, date: $date, visitorsCount: $visitorsCount, comment: $comment)';
+    return 'TeamMatch(id: $id, orgSyncId: $orgSyncId, organization: $organization, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, matChairman: $matChairman, referee: $referee, judge: $judge, timeKeeper: $timeKeeper, transcriptWriter: $transcriptWriter, no: $no, location: $location, date: $date, visitorsCount: $visitorsCount, comment: $comment)';
   }
 
   @override
@@ -448,6 +495,8 @@ class _$TeamMatchImpl extends _TeamMatch {
         (other.runtimeType == runtimeType &&
             other is _$TeamMatchImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.home, home) || other.home == home) &&
             (identical(other.guest, guest) || other.guest == guest) &&
             (identical(other.league, league) || other.league == league) &&
@@ -466,8 +515,8 @@ class _$TeamMatchImpl extends _TeamMatch {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, home, guest, league, seasonPartition, matChairman, referee, judge,
-      timeKeeper, transcriptWriter, no, location, date, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, home, guest, league, seasonPartition,
+      matChairman, referee, judge, timeKeeper, transcriptWriter, no, location, date, visitorsCount, comment);
 
   @JsonKey(ignore: true)
   @override
@@ -486,6 +535,8 @@ class _$TeamMatchImpl extends _TeamMatch {
 abstract class _TeamMatch extends TeamMatch {
   const factory _TeamMatch(
       {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
       required final Lineup home,
       required final Lineup guest,
       final League? league,
@@ -506,6 +557,10 @@ abstract class _TeamMatch extends TeamMatch {
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization? get organization;
   @override
   Lineup get home;
   @override

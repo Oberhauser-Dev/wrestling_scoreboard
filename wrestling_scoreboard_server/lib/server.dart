@@ -48,6 +48,7 @@ Future init() async {
   await PostgresDb().open();
 
   final serverUrl = 'http://${server.address.host}:${server.port}';
+  print('Serving at $serverUrl');
   print('Serving API at $serverUrl/api');
   print('Serving Websocket at $serverUrl/ws');
 }

@@ -6,6 +6,10 @@ typedef GetSingleOfTypeCallback = Future<T> Function<T extends DataObject>(int i
 abstract class DataObject {
   int? get id;
 
+  String? get orgSyncId => null;
+
+  Organization? get organization => null;
+
   Map<String, Object?> toJson();
 
   Map<String, dynamic> toRaw();
@@ -94,7 +98,7 @@ abstract class DataObject {
       case const (ParticipantState):
         return (await ParticipantState.fromRaw(raw, getSingle)) as T;
       case const (Person):
-        return (await Person.fromRaw(raw)) as T;
+        return (await Person.fromRaw(raw, getSingle)) as T;
       case const (Team):
         return (await Team.fromRaw(raw, getSingle)) as T;
       case const (TeamMatch):

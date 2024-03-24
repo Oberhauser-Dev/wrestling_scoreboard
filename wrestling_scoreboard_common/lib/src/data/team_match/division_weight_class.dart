@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data_object.dart';
-import '../weight_class.dart';
-import 'division.dart';
+import '../../../common.dart';
 
 part 'division_weight_class.freezed.dart';
 part 'division_weight_class.g.dart';
@@ -11,6 +9,7 @@ part 'division_weight_class.g.dart';
 class DivisionWeightClass with _$DivisionWeightClass implements DataObject {
   const DivisionWeightClass._();
 
+  /// The [seasonPartition] is started counting at 0.
   const factory DivisionWeightClass({
     int? id,
     required int pos,
@@ -48,4 +47,10 @@ class DivisionWeightClass with _$DivisionWeightClass implements DataObject {
   DivisionWeightClass copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

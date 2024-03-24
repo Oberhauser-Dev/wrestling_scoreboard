@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -47,12 +48,30 @@ class OrganizationOverview extends ConsumerWidget {
               subtitle: localizations.abbreviation,
               icon: Icons.short_text,
             ),
+            ContentItem(
+              title: data.apiProvider?.name ?? '-',
+              subtitle: localizations.apiProvider,
+              icon: Icons.api,
+            ),
+            ContentItem(
+              title: data.reportProvider?.name ?? '-',
+              subtitle: localizations.reportProvider,
+              icon: Icons.description,
+            ),
           ],
         );
         return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: localizations.organization, details: data.name),
-          ),
+          appBar: AppBar(title: AppBarTitle(label: localizations.organization, details: data.name), actions: [
+            IconButton(
+                onPressed: () => catchAsync(context, () async {
+                      final dataManager = await ref.read(dataManagerNotifierProvider);
+                      await dataManager.organizationImport(id);
+                      if (context.mounted) {
+                        await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                      }
+                    }),
+                icon: const Icon(Icons.api)),
+          ]),
           body: GroupedList(items: [
             description,
             ManyConsumer<Organization, Organization>(

@@ -33,6 +33,18 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 --
+-- Name: api_provider; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.api_provider AS ENUM (
+    'deNwRingenApi',
+    'deByRingenApi'
+);
+
+
+ALTER TYPE public.api_provider OWNER TO wrestling;
+
+--
 -- Name: bout_action_type; Type: TYPE; Schema: public; Owner: wrestling
 --
 
@@ -108,6 +120,17 @@ CREATE TYPE public.person_role AS ENUM (
 ALTER TYPE public.person_role OWNER TO wrestling;
 
 --
+-- Name: report_provider; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.report_provider AS ENUM (
+    'deNwRdb274'
+);
+
+
+ALTER TYPE public.report_provider OWNER TO wrestling;
+
+--
 -- Name: weight_unit; Type: TYPE; Schema: public; Owner: wrestling
 --
 
@@ -146,7 +169,8 @@ CREATE TABLE public.bout (
     weight_class_id integer,
     winner_role public.bout_role,
     bout_result public.bout_result,
-    duration_millis integer
+    duration_millis integer,
+    org_sync_id character varying(127)
 );
 
 
@@ -258,7 +282,8 @@ CREATE TABLE public.club (
     id integer NOT NULL,
     no character varying(8),
     name character varying(255) NOT NULL,
-    organization_id integer NOT NULL
+    organization_id integer NOT NULL,
+    org_sync_id character varying(127)
 );
 
 
@@ -296,7 +321,9 @@ CREATE TABLE public.wrestling_event (
     location character varying(100),
     visitors_count integer,
     comment text,
-    no character varying(16)
+    no character varying(16),
+    organization_id integer,
+    org_sync_id character varying(127)
 );
 
 
@@ -308,8 +335,7 @@ ALTER TABLE public.wrestling_event OWNER TO wrestling;
 
 CREATE TABLE public.competition (
     name character varying(127),
-    bout_config_id integer NOT NULL,
-    organization_id integer
+    bout_config_id integer NOT NULL
 )
 INHERITS (public.wrestling_event);
 
@@ -399,7 +425,8 @@ CREATE TABLE public.division (
     bout_config_id integer NOT NULL,
     season_partitions integer DEFAULT 1 NOT NULL,
     parent_id integer,
-    organization_id integer NOT NULL
+    organization_id integer NOT NULL,
+    org_sync_id character varying(127)
 );
 
 
@@ -495,7 +522,9 @@ CREATE TABLE public.league (
     name character varying(127) NOT NULL,
     start_date date NOT NULL,
     end_date date NOT NULL,
-    division_id integer NOT NULL
+    division_id integer NOT NULL,
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -602,7 +631,9 @@ CREATE TABLE public.membership (
     id integer NOT NULL,
     person_id integer NOT NULL,
     club_id integer NOT NULL,
-    no character varying(55)
+    no character varying(55),
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -638,7 +669,9 @@ CREATE TABLE public.organization (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     abbreviation character varying(64),
-    parent_id integer
+    parent_id integer,
+    api_provider public.api_provider,
+    report_provider public.report_provider
 );
 
 
@@ -748,7 +781,9 @@ CREATE TABLE public.person (
     surname character varying(100) NOT NULL,
     birth_date date,
     gender public.gender,
-    nationality character(3) DEFAULT NULL::bpchar
+    nationality character(3) DEFAULT NULL::bpchar,
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -784,7 +819,9 @@ CREATE TABLE public.team (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
     description character varying(255),
-    club_id integer NOT NULL
+    club_id integer NOT NULL,
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -1112,21 +1149,21 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result, duration_millis) FROM stdin;
-27	31	32	19	\N	\N	0
-28	33	34	20	\N	\N	0
-29	35	36	21	\N	\N	0
-32	40	41	22	\N	\N	0
-34	44	45	23	\N	\N	0
-35	46	47	24	\N	\N	0
-37	50	51	25	\N	\N	0
-38	52	53	26	\N	\N	0
-40	56	57	27	\N	\N	0
-43	62	\N	28	\N	\N	0
-45	65	66	29	\N	\N	0
-47	69	70	30	\N	\N	0
-49	73	74	31	\N	\N	0
-50	75	76	32	\N	\N	0
+COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result, duration_millis, org_sync_id) FROM stdin;
+28	33	34	20	\N	\N	0	\N
+29	35	36	21	\N	\N	0	\N
+32	40	41	22	\N	\N	0	\N
+34	44	45	23	\N	\N	0	\N
+35	46	47	24	\N	\N	0	\N
+37	50	51	25	\N	\N	0	\N
+38	52	53	26	\N	\N	0	\N
+40	56	57	27	\N	\N	0	\N
+43	62	\N	28	\N	\N	0	\N
+45	65	66	29	\N	\N	0	\N
+47	69	70	30	\N	\N	0	\N
+49	73	74	31	\N	\N	0	\N
+50	75	76	32	\N	\N	0	\N
+27	31	32	19	\N	\N	0	\N
 \.
 
 
@@ -1151,9 +1188,9 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 -- Data for Name: club; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.club (id, no, name, organization_id) FROM stdin;
-2	12345	Springfield Wrestlers	1
-1	05432	Quahog Hunters	1
+COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
+2	12345	Springfield Wrestlers	1	\N
+1	05432	Quahog Hunters	1	\N
 \.
 
 
@@ -1161,8 +1198,8 @@ COPY public.club (id, no, name, organization_id) FROM stdin;
 -- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition (id, date, location, visitors_count, comment, no, name, bout_config_id, organization_id) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	The Griffin-Simpson Competition	1	\N
+COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id) FROM stdin;
+1	2021-07-17	Quahog	15	\N	\N	\N	\N	The Griffin-Simpson Competition	1
 \.
 
 
@@ -1186,9 +1223,9 @@ COPY public.competition_person (id, competition_id, person_id, person_role) FROM
 -- Data for Name: division; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.division (id, name, start_date, end_date, bout_config_id, season_partitions, parent_id, organization_id) FROM stdin;
-1	National League	2024-01-01	2025-01-01	1	2	\N	1
-2	National League Junior	2024-01-01	2025-01-01	1	2	\N	1
+COPY public.division (id, name, start_date, end_date, bout_config_id, season_partitions, parent_id, organization_id, org_sync_id) FROM stdin;
+1	National League	2024-01-01	2025-01-01	1	2	\N	1	\N
+2	National League Junior	2024-01-01	2025-01-01	1	2	\N	1	\N
 \.
 
 
@@ -1233,10 +1270,10 @@ COPY public.division_weight_class (id, division_id, weight_class_id, pos, season
 -- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.league (id, name, start_date, end_date, division_id) FROM stdin;
-3	North	2021-10-01	2022-10-01	1
-1	South	2021-10-01	2022-10-01	1
-2	North Jn	2021-10-01	2022-10-01	2
+COPY public.league (id, name, start_date, end_date, division_id, org_sync_id, organization_id) FROM stdin;
+3	North	2021-10-01	2022-10-01	1	\N	\N
+1	South	2021-10-01	2022-10-01	1	\N	\N
+2	North Jn	2021-10-01	2022-10-01	2	\N	\N
 \.
 
 
@@ -1269,29 +1306,29 @@ COPY public.lineup (id, team_id, leader_id, coach_id) FROM stdin;
 -- Data for Name: membership; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.membership (id, person_id, club_id, no) FROM stdin;
-2	2	2	\N
-3	3	2	\N
-4	4	2	\N
-7	7	1	\N
-8	8	1	\N
-10	11	1	\N
-11	12	1	\N
-5	5	1	1234
-9	10	1	\N
-12	13	1	\N
-13	14	1	\N
-14	15	1	\N
-15	16	1	\N
-16	17	2	\N
-17	18	2	\N
-18	19	2	\N
-19	20	2	\N
-20	21	2	\N
-21	22	2	\N
-22	23	2	\N
-6	6	1	\N
-1	1	2	\N
+COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id) FROM stdin;
+2	2	2	\N	\N	\N
+3	3	2	\N	\N	\N
+4	4	2	\N	\N	\N
+7	7	1	\N	\N	\N
+8	8	1	\N	\N	\N
+10	11	1	\N	\N	\N
+11	12	1	\N	\N	\N
+5	5	1	1234	\N	\N
+9	10	1	\N	\N	\N
+12	13	1	\N	\N	\N
+13	14	1	\N	\N	\N
+14	15	1	\N	\N	\N
+15	16	1	\N	\N	\N
+16	17	2	\N	\N	\N
+17	18	2	\N	\N	\N
+18	19	2	\N	\N	\N
+19	20	2	\N	\N	\N
+20	21	2	\N	\N	\N
+21	22	2	\N	\N	\N
+22	23	2	\N	\N	\N
+6	6	1	\N	\N	\N
+1	1	2	\N	\N	\N
 \.
 
 
@@ -1299,8 +1336,8 @@ COPY public.membership (id, person_id, club_id, no) FROM stdin;
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.organization (id, name, abbreviation, parent_id) FROM stdin;
-1	United World Wrestling	UWW	\N
+COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
+1	United World Wrestling	UWW	\N	deByRingenApi	deNwRdb274
 \.
 
 
@@ -1379,30 +1416,30 @@ COPY public.participation (id, membership_id, lineup_id, weight_class_id, weight
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.person (id, prename, surname, birth_date, gender, nationality) FROM stdin;
-2	Bart	Simpson	2007-07-08	male	\N
-3	March	Simpson	1980-07-08	female	\N
-4	Homer	Simpson	1975-07-08	male	\N
-7	Lois	Griffin	1979-03-08	female	\N
-8	Peter	Griffin	1975-03-08	male	\N
-9	Mr	Referee	\N	other	\N
-11	Brian	Griffin	2000-03-07	male	\N
-12	Joe	Swanson	1976-03-08	male	\N
-5	Chris	Griffin	2005-03-08	male	\N
-10	Glenn	Quagmire	1982-03-08	male	\N
-13	Cleveland	Brown	1985-03-08	male	\N
-14	Stewie	Griffin	2021-03-07	male	\N
-15	Adam	West	1967-03-08	male	\N
-16	Bonnie	Swanson	1991-03-08	female	\N
-17	Mr.	Burns	1925-03-08	male	\N
-18	Ned	Flanders	1964-03-08	male	\N
-19	Milhouse	Van Houten	2004-03-07	male	\N
-20	Krusty	Clown	1983-03-08	male	\N
-21	Moe	Szyslak	1981-03-08	male	\N
-22	Maggie	Simpson	2020-03-07	female	\N
-23	Nelson	Muntz	\N	male	\N
-6	Meg	Griffin	2007-03-08	female	\N
-1	Lisa	Simpson	2010-07-08	female	USA
+COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id) FROM stdin;
+2	Bart	Simpson	2007-07-08	male	\N	\N	\N
+3	March	Simpson	1980-07-08	female	\N	\N	\N
+4	Homer	Simpson	1975-07-08	male	\N	\N	\N
+7	Lois	Griffin	1979-03-08	female	\N	\N	\N
+8	Peter	Griffin	1975-03-08	male	\N	\N	\N
+9	Mr	Referee	\N	other	\N	\N	\N
+11	Brian	Griffin	2000-03-07	male	\N	\N	\N
+12	Joe	Swanson	1976-03-08	male	\N	\N	\N
+5	Chris	Griffin	2005-03-08	male	\N	\N	\N
+10	Glenn	Quagmire	1982-03-08	male	\N	\N	\N
+13	Cleveland	Brown	1985-03-08	male	\N	\N	\N
+14	Stewie	Griffin	2021-03-07	male	\N	\N	\N
+15	Adam	West	1967-03-08	male	\N	\N	\N
+16	Bonnie	Swanson	1991-03-08	female	\N	\N	\N
+17	Mr.	Burns	1925-03-08	male	\N	\N	\N
+18	Ned	Flanders	1964-03-08	male	\N	\N	\N
+19	Milhouse	Van Houten	2004-03-07	male	\N	\N	\N
+20	Krusty	Clown	1983-03-08	male	\N	\N	\N
+21	Moe	Szyslak	1981-03-08	male	\N	\N	\N
+22	Maggie	Simpson	2020-03-07	female	\N	\N	\N
+23	Nelson	Muntz	\N	male	\N	\N	\N
+6	Meg	Griffin	2007-03-08	female	\N	\N	\N
+1	Lisa	Simpson	2010-07-08	female	USA	\N	\N
 \.
 
 
@@ -1410,10 +1447,10 @@ COPY public.person (id, prename, surname, birth_date, gender, nationality) FROM 
 -- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team (id, name, description, club_id) FROM stdin;
-1	Springfield Wrestlers	1. Team Men	2
-2	Springfield Wrestlers Jn	Juniors	2
-3	Quahog Hunters II	2. Team Men	1
+COPY public.team (id, name, description, club_id, org_sync_id, organization_id) FROM stdin;
+1	Springfield Wrestlers	1. Team Men	2	\N	\N
+2	Springfield Wrestlers Jn	Juniors	2	\N	\N
+3	Quahog Hunters II	2. Team Men	1	\N	\N
 \.
 
 
@@ -1421,8 +1458,8 @@ COPY public.team (id, name, description, club_id) FROM stdin;
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id, season_partition) FROM stdin;
-1	2021-07-10	Springfield	\N	\N		1	2	\N	\N	\N	\N	1	\N	1
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id, season_partition) FROM stdin;
+1	2021-07-10	Springfield	\N	\N		\N	\N	1	2	\N	\N	\N	\N	1	\N	1
 \.
 
 
@@ -1492,7 +1529,7 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 -- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.wrestling_event (id, date, location, visitors_count, comment, no) FROM stdin;
+COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id) FROM stdin;
 \.
 
 
@@ -1535,14 +1572,14 @@ SELECT pg_catalog.setval('public.competition_bout_id_seq', 1, false);
 -- Name: competition_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.competition_id_seq', 1, false);
+SELECT pg_catalog.setval('public.competition_id_seq', 1, true);
 
 
 --
 -- Name: division_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.division_id_seq', 1, false);
+SELECT pg_catalog.setval('public.division_id_seq', 2, true);
 
 
 --
@@ -1563,14 +1600,14 @@ SELECT pg_catalog.setval('public.event_person_id_seq', 1, false);
 -- Name: league_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.league_id_seq', 7, true);
+SELECT pg_catalog.setval('public.league_id_seq', 3, true);
 
 
 --
 -- Name: league_team_participation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.league_team_participation_id_seq', 1, false);
+SELECT pg_catalog.setval('public.league_team_participation_id_seq', 5, true);
 
 
 --
@@ -1591,7 +1628,7 @@ SELECT pg_catalog.setval('public.membership_id_seq', 22, true);
 -- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.organization_id_seq', 1, false);
+SELECT pg_catalog.setval('public.organization_id_seq', 1, true);
 
 
 --
@@ -1736,6 +1773,14 @@ ALTER TABLE ONLY public.league
 
 ALTER TABLE ONLY public.league_team_participation
     ADD CONSTRAINT league_team_participation_pk PRIMARY KEY (id);
+
+
+--
+-- Name: league_team_participation league_team_participation_pk2; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_team_participation
+    ADD CONSTRAINT league_team_participation_pk2 UNIQUE (league_id, team_id);
 
 
 --
@@ -1941,14 +1986,6 @@ ALTER TABLE ONLY public.competition
 
 
 --
--- Name: competition competition_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.competition
-    ADD CONSTRAINT competition_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
-
-
---
 -- Name: division division_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2013,6 +2050,14 @@ ALTER TABLE ONLY public.league
 
 
 --
+-- Name: league league_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league
+    ADD CONSTRAINT league_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
 -- Name: league_team_participation league_team_participation_league_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2050,6 +2095,14 @@ ALTER TABLE ONLY public.lineup
 
 ALTER TABLE ONLY public.membership
     ADD CONSTRAINT membership_club_id_fk FOREIGN KEY (club_id) REFERENCES public.club(id);
+
+
+--
+-- Name: membership membership_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.membership
+    ADD CONSTRAINT membership_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
 
 
 --
@@ -2098,6 +2151,14 @@ ALTER TABLE ONLY public.participation
 
 ALTER TABLE ONLY public.participation
     ADD CONSTRAINT participation_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
+
+
+--
+-- Name: person person_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.person
+    ADD CONSTRAINT person_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
 
 
 --
@@ -2186,6 +2247,22 @@ ALTER TABLE ONLY public.team_match
 
 ALTER TABLE ONLY public.team_match
     ADD CONSTRAINT team_match_person_id_fk_5 FOREIGN KEY (judge_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team team_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team
+    ADD CONSTRAINT team_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: wrestling_event wrestling_event_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.wrestling_event
+    ADD CONSTRAINT wrestling_event_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
 
 
 --

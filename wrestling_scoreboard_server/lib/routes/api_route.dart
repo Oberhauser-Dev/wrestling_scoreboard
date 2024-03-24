@@ -1,8 +1,5 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:wrestling_scoreboard_server/controllers/database_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 
 import '../controllers/bout_action_controller.dart';
 import '../controllers/bout_config_controller.dart';
@@ -10,9 +7,12 @@ import '../controllers/bout_controller.dart';
 import '../controllers/club_controller.dart';
 import '../controllers/competition_bout_controller.dart';
 import '../controllers/competition_controller.dart';
+import '../controllers/database_controller.dart';
+import '../controllers/division_weight_class_controller.dart';
 import '../controllers/organization_controller.dart';
 import '../controllers/division_controller.dart';
 import '../controllers/league_controller.dart';
+import '../controllers/league_team_participation_controller.dart';
 import '../controllers/lineup_controller.dart';
 import '../controllers/membership_controller.dart';
 import '../controllers/participant_state_controller.dart';
@@ -60,6 +60,7 @@ class ApiRoute {
     router.get('/bout_action/<id|[0-9]+>', boutActionController.requestSingle);
 
     final organizationController = OrganizationController();
+    router.post('/organization/<id|[0-9]+>/api/import', organizationController.import);
     router.post('/organization', organizationController.postSingle);
     router.get('/organizations', organizationController.requestMany);
     router.get('/organization/<id|[0-9]+>', organizationController.requestSingle);

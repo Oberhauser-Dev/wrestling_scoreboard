@@ -79,6 +79,8 @@ abstract class DataManager {
 
   Future<void> resetDatabase();
 
+  Future<void> organizationImport(int id);
+
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject<dynamic>>>> _manyStreamControllers = {};
   final Map<Type, StreamController<Map<String, dynamic>>> _singleRawStreamControllers = {};

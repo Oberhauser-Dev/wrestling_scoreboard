@@ -1,9 +1,7 @@
 import 'package:country/country.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/gender.dart';
-import '../util.dart';
-import 'data_object.dart';
+import '../../common.dart';
 
 part 'person.freezed.dart';
 part 'person.g.dart';
@@ -25,6 +23,8 @@ class Person with _$Person implements DataObject {
 
   const factory Person({
     int? id,
+    String? orgSyncId,
+    Organization? organization,
     required String prename,
     required String surname,
     Gender? gender,
@@ -34,11 +34,14 @@ class Person with _$Person implements DataObject {
 
   factory Person.fromJson(Map<String, Object?> json) => _$PersonFromJson(json);
 
-  static Future<Person> fromRaw(Map<String, dynamic> e) async {
+  static Future<Person> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final gender = e['gender'] as String?;
     final nationality = e['nationality'] as String?;
+    final organizationId = e['organization_id'] as int?;
     return Person(
       id: e['id'] as int?,
+      orgSyncId: e['org_sync_id'] as String?,
+      organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       prename: e['prename'] as String,
       surname: e['surname'] as String,
       gender: gender == null ? null : Gender.values.byName(gender),
@@ -51,6 +54,8 @@ class Person with _$Person implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
+      if (orgSyncId != null) 'org_sync_id': orgSyncId,
+      if (organization != null) 'organization_id': organization?.id,
       'prename': prename,
       'surname': surname,
       'gender': gender?.name,

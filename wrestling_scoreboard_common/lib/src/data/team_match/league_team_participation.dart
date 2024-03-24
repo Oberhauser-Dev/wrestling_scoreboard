@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data_object.dart';
-import '../team.dart';
-import 'league.dart';
+import '../../../common.dart';
 
 part 'league_team_participation.freezed.dart';
 part 'league_team_participation.g.dart';
@@ -43,4 +41,10 @@ class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObje
   LeagueTeamParticipation copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

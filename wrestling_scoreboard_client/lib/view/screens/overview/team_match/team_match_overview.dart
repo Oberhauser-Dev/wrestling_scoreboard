@@ -10,7 +10,6 @@ import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
@@ -52,7 +51,7 @@ class TeamMatchOverview extends ConsumerWidget {
                 // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
                 IconButton(
                     onPressed: () async {
-                      final reporter = (await ref.read(reportProviderNotifierProvider))?.reporter;
+                      final reporter = match.organization?.getReporter();
                       if (reporter != null) {
                         final fileNameBuilder = [
                           match.date.toIso8601String().substring(0, 10),

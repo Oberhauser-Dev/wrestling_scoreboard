@@ -145,6 +145,16 @@ class RestDataManager extends DataManager {
   set webSocketManager(WebSocketManager manager) {
     _webSocketManager = manager;
   }
+
+  @override
+  Future<void> organizationImport(int id) async {
+    final uri = Uri.parse('$_apiUrl/organization/$id/api/import');
+    final response = await http.post(uri);
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to import from organization $id: ${response.reasonPhrase ?? response.statusCode.toString()}');
+    }
+  }
 }
 
 class RestException implements Exception {

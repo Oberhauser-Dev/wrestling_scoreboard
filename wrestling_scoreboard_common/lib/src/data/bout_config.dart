@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'data_object.dart';
+import '../../common.dart';
 
 part 'bout_config.freezed.dart';
 part 'bout_config.g.dart';
@@ -64,4 +64,10 @@ class BoutConfig with _$BoutConfig implements DataObject {
   BoutConfig copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

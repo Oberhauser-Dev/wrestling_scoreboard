@@ -12,8 +12,9 @@ class Club with _$Club implements DataObject {
 
   const factory Club({
     int? id,
-    required String name,
+    String? orgSyncId,
     required Organization organization,
+    required String name,
     String? no, // Club-ID
   }) = _Club;
 
@@ -23,17 +24,19 @@ class Club with _$Club implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
+      if (orgSyncId != null) 'org_sync_id': orgSyncId,
+      'organization_id': organization.id,
       'no': no,
       'name': name,
-      'organization_id': organization.id,
     };
   }
 
   static Future<Club> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => Club(
         id: e['id'] as int?,
+        orgSyncId: e['org_sync_id'] as String?,
+        organization: (await getSingle<Organization>(e['organization_id'] as int)),
         no: e['no'] as String?,
         name: e['name'] as String,
-        organization: (await getSingle<Organization>(e['organization_id'] as int)),
       );
 
   @override

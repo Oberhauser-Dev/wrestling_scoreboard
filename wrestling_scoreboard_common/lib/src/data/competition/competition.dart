@@ -1,11 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../bout_config.dart';
-import '../data_object.dart';
-import '../bout.dart';
-import '../participation.dart';
-import '../weight_class.dart';
-import '../wrestling_event.dart';
+import '../../../common.dart';
 
 part 'competition.freezed.dart';
 part 'competition.g.dart';
@@ -17,6 +12,8 @@ class Competition extends WrestlingEvent with _$Competition {
 
   const factory Competition({
     int? id,
+    String? orgSyncId,
+    Organization? organization,
     required String name,
     required BoutConfig boutConfig,
     String? location,
@@ -30,9 +27,12 @@ class Competition extends WrestlingEvent with _$Competition {
 
   static Future<Competition> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final boutConfig = await getSingle<BoutConfig>(e['bout_config_id'] as int);
-    // TODO fetch lineups, referees, weightClasses, etc.
+    final organizationId = e['organization_id'] as int?;
+    // TODO: fetch lineups, referees, weightClasses, etc.
     return Competition(
       id: e['id'] as int?,
+      orgSyncId: e['org_sync_id'] as String?,
+      organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       name: e['name'],
       location: e['location'] as String?,
       date: e['date'] as DateTime,
@@ -46,7 +46,6 @@ class Competition extends WrestlingEvent with _$Competition {
   Map<String, dynamic> toRaw() {
     return super.toRaw()
       ..addAll({
-        if (id != null) 'id': id,
         'name': name,
         'bout_config_id': boutConfig.id,
       });

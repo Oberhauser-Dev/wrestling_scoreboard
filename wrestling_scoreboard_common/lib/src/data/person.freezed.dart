@@ -21,6 +21,8 @@ Person _$PersonFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Person {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization? get organization => throw _privateConstructorUsedError;
   String get prename => throw _privateConstructorUsedError;
   String get surname => throw _privateConstructorUsedError;
   Gender? get gender => throw _privateConstructorUsedError;
@@ -39,11 +41,15 @@ abstract class $PersonCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization? organization,
       String prename,
       String surname,
       Gender? gender,
       DateTime? birthDate,
       @CountryJsonConverter() Country? nationality});
+
+  $OrganizationCopyWith<$Res>? get organization;
 }
 
 /// @nodoc
@@ -59,6 +65,8 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? prename = null,
     Object? surname = null,
     Object? gender = freezed,
@@ -70,6 +78,14 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       prename: null == prename
           ? _value.prename
           : prename // ignore: cast_nullable_to_non_nullable
@@ -92,6 +108,18 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
               as Country?,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -102,11 +130,16 @@ abstract class _$$PersonImplCopyWith<$Res> implements $PersonCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
+      Organization? organization,
       String prename,
       String surname,
       Gender? gender,
       DateTime? birthDate,
       @CountryJsonConverter() Country? nationality});
+
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
 }
 
 /// @nodoc
@@ -118,6 +151,8 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? prename = null,
     Object? surname = null,
     Object? gender = freezed,
@@ -129,6 +164,14 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       prename: null == prename
           ? _value.prename
           : prename // ignore: cast_nullable_to_non_nullable
@@ -158,6 +201,8 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
 class _$PersonImpl extends _Person {
   const _$PersonImpl(
       {this.id,
+      this.orgSyncId,
+      this.organization,
       required this.prename,
       required this.surname,
       this.gender,
@@ -169,6 +214,10 @@ class _$PersonImpl extends _Person {
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final String prename;
   @override
@@ -183,7 +232,7 @@ class _$PersonImpl extends _Person {
 
   @override
   String toString() {
-    return 'Person(id: $id, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
+    return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
   }
 
   @override
@@ -192,6 +241,8 @@ class _$PersonImpl extends _Person {
         (other.runtimeType == runtimeType &&
             other is _$PersonImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.prename, prename) || other.prename == prename) &&
             (identical(other.surname, surname) || other.surname == surname) &&
             (identical(other.gender, gender) || other.gender == gender) &&
@@ -201,7 +252,8 @@ class _$PersonImpl extends _Person {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, prename, surname, gender, birthDate, nationality);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, prename, surname, gender, birthDate, nationality);
 
   @JsonKey(ignore: true)
   @override
@@ -219,6 +271,8 @@ class _$PersonImpl extends _Person {
 abstract class _Person extends Person {
   const factory _Person(
       {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
       required final String prename,
       required final String surname,
       final Gender? gender,
@@ -230,6 +284,10 @@ abstract class _Person extends Person {
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization? get organization;
   @override
   String get prename;
   @override

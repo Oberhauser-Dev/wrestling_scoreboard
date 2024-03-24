@@ -21,6 +21,8 @@ League _$LeagueFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$League {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization? get organization => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   DateTime get endDate => throw _privateConstructorUsedError;
@@ -35,8 +37,16 @@ mixin _$League {
 abstract class $LeagueCopyWith<$Res> {
   factory $LeagueCopyWith(League value, $Res Function(League) then) = _$LeagueCopyWithImpl<$Res, League>;
   @useResult
-  $Res call({int? id, String name, DateTime startDate, DateTime endDate, Division division});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      DateTime startDate,
+      DateTime endDate,
+      Division division});
 
+  $OrganizationCopyWith<$Res>? get organization;
   $DivisionCopyWith<$Res> get division;
 }
 
@@ -53,6 +63,8 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? name = null,
     Object? startDate = null,
     Object? endDate = null,
@@ -63,6 +75,14 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -84,6 +104,18 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
 
   @override
   @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $DivisionCopyWith<$Res> get division {
     return $DivisionCopyWith<$Res>(_value.division, (value) {
       return _then(_value.copyWith(division: value) as $Val);
@@ -97,8 +129,17 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
       __$$LeagueImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String name, DateTime startDate, DateTime endDate, Division division});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      DateTime startDate,
+      DateTime endDate,
+      Division division});
 
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
   @override
   $DivisionCopyWith<$Res> get division;
 }
@@ -112,6 +153,8 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? name = null,
     Object? startDate = null,
     Object? endDate = null,
@@ -122,6 +165,14 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -146,13 +197,23 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
 @JsonSerializable()
 class _$LeagueImpl extends _League {
   const _$LeagueImpl(
-      {this.id, required this.name, required this.startDate, required this.endDate, required this.division})
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      required this.name,
+      required this.startDate,
+      required this.endDate,
+      required this.division})
       : super._();
 
   factory _$LeagueImpl.fromJson(Map<String, dynamic> json) => _$$LeagueImplFromJson(json);
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final String name;
   @override
@@ -164,7 +225,7 @@ class _$LeagueImpl extends _League {
 
   @override
   String toString() {
-    return 'League(id: $id, name: $name, startDate: $startDate, endDate: $endDate, division: $division)';
+    return 'League(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, startDate: $startDate, endDate: $endDate, division: $division)';
   }
 
   @override
@@ -173,6 +234,8 @@ class _$LeagueImpl extends _League {
         (other.runtimeType == runtimeType &&
             other is _$LeagueImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.startDate, startDate) || other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
@@ -181,7 +244,7 @@ class _$LeagueImpl extends _League {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, startDate, endDate, division);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, startDate, endDate, division);
 
   @JsonKey(ignore: true)
   @override
@@ -199,6 +262,8 @@ class _$LeagueImpl extends _League {
 abstract class _League extends League {
   const factory _League(
       {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
       required final String name,
       required final DateTime startDate,
       required final DateTime endDate,
@@ -209,6 +274,10 @@ abstract class _League extends League {
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization? get organization;
   @override
   String get name;
   @override

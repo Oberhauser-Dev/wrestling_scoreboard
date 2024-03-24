@@ -8,6 +8,9 @@ part of 'team_match.dart';
 
 _$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) => _$TeamMatchImpl(
       id: json['id'] as int?,
+      orgSyncId: json['orgSyncId'] as String?,
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
       guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
       league: json['league'] == null ? null : League.fromJson(json['league'] as Map<String, dynamic>),
@@ -27,6 +30,8 @@ _$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) => _$TeamMat
 
 Map<String, dynamic> _$$TeamMatchImplToJson(_$TeamMatchImpl instance) => <String, dynamic>{
       'id': instance.id,
+      'orgSyncId': instance.orgSyncId,
+      'organization': instance.organization?.toJson(),
       'home': instance.home.toJson(),
       'guest': instance.guest.toJson(),
       'league': instance.league?.toJson(),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -62,17 +63,17 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
         leading: const Icon(Icons.style),
         title: ButtonTheme(
           alignedDropdown: true,
-          child: DropdownButton<WrestlingStyle>(
-            hint: Text(localizations.wrestlingStyle),
+          child: SimpleDropdown<WrestlingStyle>(
+            hint: localizations.wrestlingStyle,
             isExpanded: true,
-            items: WrestlingStyle.values.map((WrestlingStyle style) {
-              return DropdownMenuItem<WrestlingStyle>(
-                value: style,
-                child: Text('${style.localize(context)} (${style.abbreviation(context)})'),
+            options: WrestlingStyle.values.map((WrestlingStyle style) {
+              return MapEntry(
+                style,
+                Text('${style.localize(context)} (${style.abbreviation(context)})'),
               );
-            }).toList(),
-            value: _wrestlingStyle,
-            onChanged: (newValue) => setState(() {
+            }),
+            selected: _wrestlingStyle,
+            onChange: (newValue) => setState(() {
               _wrestlingStyle = newValue!;
             }),
           ),
@@ -82,17 +83,14 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
         leading: const Icon(Icons.straighten),
         title: ButtonTheme(
           alignedDropdown: true,
-          child: DropdownButton<WeightUnit>(
-            hint: Text(localizations.weightUnit),
+          child: SimpleDropdown<WeightUnit>(
+            hint: localizations.weightUnit,
             isExpanded: true,
-            items: WeightUnit.values.map((WeightUnit value) {
-              return DropdownMenuItem<WeightUnit>(
-                value: value,
-                child: Text(value.toAbbr()),
-              );
-            }).toList(),
-            value: _unit,
-            onChanged: (newValue) => setState(() {
+            options: WeightUnit.values.map((WeightUnit value) {
+              return MapEntry(value, Text(value.toAbbr()));
+            }),
+            selected: _unit,
+            onChange: (newValue) => setState(() {
               _unit = newValue!;
             }),
           ),

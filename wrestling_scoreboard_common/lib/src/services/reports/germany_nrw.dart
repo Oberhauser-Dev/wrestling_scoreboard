@@ -52,6 +52,11 @@ extension GerBoutResultAbbreviation on BoutResult {
 class NrwGermanyWrestlingReporter extends WrestlingReporter {
   static const HtmlEscape _htmlEscape = HtmlEscape(HtmlEscapeMode(escapeLtGt: true));
 
+  @override
+  final Organization organization;
+
+  NrwGermanyWrestlingReporter(this.organization);
+
   /// Comments must be HTML escaped and must be longer than 200 characters.
   String _handleComment(String comment) {
     bool isSubstring = false;

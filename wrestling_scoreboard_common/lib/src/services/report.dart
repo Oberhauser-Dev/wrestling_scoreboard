@@ -7,16 +7,18 @@ export 'reports/germany_nrw.dart';
 enum WrestlingReportProvider {
   deNwRdb274; // NRW, RDB 2.7.4 für Mannschaftskämpfe
 
-  WrestlingReporter get reporter {
+  WrestlingReporter getReporter(Organization organization) {
     switch (this) {
       case WrestlingReportProvider.deNwRdb274:
-        return NrwGermanyWrestlingReporter();
+        return NrwGermanyWrestlingReporter(organization);
     }
   }
 }
 
 /// Abstraction for importing and exporting file reports.
 abstract class WrestlingReporter {
+  Organization get organization;
+
   String exportTeamMatchReport(TeamMatch teamMatch, Map<Bout, List<BoutAction>> boutMap);
 
   (TeamMatch teamMatch, Map<Bout, List<BoutAction>> boutMap) importTeamMatchReport(String report);

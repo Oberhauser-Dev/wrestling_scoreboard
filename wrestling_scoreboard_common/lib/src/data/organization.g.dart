@@ -11,6 +11,8 @@ _$OrganizationImpl _$$OrganizationImplFromJson(Map<String, dynamic> json) => _$O
       name: json['name'] as String,
       abbreviation: json['abbreviation'] as String?,
       parent: json['parent'] == null ? null : Organization.fromJson(json['parent'] as Map<String, dynamic>),
+      apiProvider: $enumDecodeNullable(_$WrestlingApiProviderEnumMap, json['apiProvider']),
+      reportProvider: $enumDecodeNullable(_$WrestlingReportProviderEnumMap, json['reportProvider']),
     );
 
 Map<String, dynamic> _$$OrganizationImplToJson(_$OrganizationImpl instance) => <String, dynamic>{
@@ -18,4 +20,15 @@ Map<String, dynamic> _$$OrganizationImplToJson(_$OrganizationImpl instance) => <
       'name': instance.name,
       'abbreviation': instance.abbreviation,
       'parent': instance.parent?.toJson(),
+      'apiProvider': _$WrestlingApiProviderEnumMap[instance.apiProvider],
+      'reportProvider': _$WrestlingReportProviderEnumMap[instance.reportProvider],
     };
+
+const _$WrestlingApiProviderEnumMap = {
+  WrestlingApiProvider.deNwRingenApi: 'deNwRingenApi',
+  WrestlingApiProvider.deByRingenApi: 'deByRingenApi',
+};
+
+const _$WrestlingReportProviderEnumMap = {
+  WrestlingReportProvider.deNwRdb274: 'deNwRdb274',
+};

@@ -1,11 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data_object.dart';
-import '../bout.dart';
-import 'team_match.dart';
+import '../../../common.dart';
 
 part 'team_match_bout.freezed.dart';
-
 part 'team_match_bout.g.dart';
 
 @freezed
@@ -50,4 +47,10 @@ class TeamMatchBout with _$TeamMatchBout implements DataObject {
   TeamMatchBout copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

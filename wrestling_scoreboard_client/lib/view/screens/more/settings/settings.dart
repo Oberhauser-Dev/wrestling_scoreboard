@@ -17,7 +17,6 @@ import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
-import 'package:wrestling_scoreboard_common/common.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
   const CustomSettingsScreen({super.key});
@@ -331,73 +330,14 @@ class CustomSettingsScreen extends ConsumerWidget {
               );
             },
           ),
-          LoadingBuilder<WrestlingApiProvider?>(
-            future: ref.watch(apiProviderNotifierProvider),
-            builder: (context, apiProvider) {
-              return LoadingBuilder<WrestlingReportProvider?>(
-                future: ref.watch(reportProviderNotifierProvider),
-                builder: (context, reportProvider) {
-                  return SettingsSection(
-                    title: localizations.services,
-                    action: TextButton(
-                      onPressed: () {
-                        Preferences.setString(Preferences.keyApiProvider, null);
-                        Preferences.onChangeApiProvider.add(null);
-
-                        Preferences.setString(Preferences.keyReportProvider, null);
-                        Preferences.onChangeReportProvider.add(null);
-                      },
-                      child: Text(localizations.reset),
-                    ),
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.api),
-                        title: Text(localizations.apiProvider),
-                        subtitle: Text(apiProvider?.name ?? localizations.noneSelected),
-                        onTap: () async {
-                          final val = await showDialog<WrestlingApiProvider>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              final List<MapEntry<WrestlingApiProvider?, String>> providerValues =
-                                  WrestlingApiProvider.values.map((provider) {
-                                return MapEntry<WrestlingApiProvider?, String>(provider, provider.name);
-                              }).toList();
-                              providerValues.insert(0, MapEntry(null, localizations.noneSelected));
-                              return RadioDialog<WrestlingApiProvider?>(
-                                  values: providerValues, initialValue: apiProvider);
-                            },
-                          );
-                          Preferences.onChangeApiProvider.add(val);
-                          await Preferences.setString(Preferences.keyApiProvider, val?.name);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.description),
-                        title: Text(localizations.reportProvider),
-                        subtitle: Text(reportProvider?.name ?? localizations.noneSelected),
-                        onTap: () async {
-                          final val = await showDialog<WrestlingReportProvider>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              final List<MapEntry<WrestlingReportProvider?, String>> providerValues =
-                                  WrestlingReportProvider.values.map((provider) {
-                                return MapEntry<WrestlingReportProvider?, String>(provider, provider.name);
-                              }).toList();
-                              providerValues.insert(0, MapEntry(null, localizations.noneSelected));
-                              return RadioDialog<WrestlingReportProvider?>(
-                                  values: providerValues, initialValue: reportProvider);
-                            },
-                          );
-                          Preferences.onChangeReportProvider.add(val);
-                          await Preferences.setString(Preferences.keyReportProvider, val?.name);
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+          // SettingsSection(
+          //   title: localizations.services,
+          //   action: TextButton(
+          //     onPressed: () {},
+          //     child: Text(localizations.reset),
+          //   ),
+          //   children: [],
+          // ),
           SettingsSection(
             title: localizations.database,
             children: [

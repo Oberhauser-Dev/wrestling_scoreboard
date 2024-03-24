@@ -2,8 +2,9 @@ import 'package:country/country.dart';
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
+import 'shared.dart';
+
 void main() {
-  final organization = Organization(name: 'Deutscher Ringer Bund', abbreviation: 'DRB');
   final division = Division(
     name: 'Test Division',
     startDate: DateTime(1999),
@@ -20,8 +21,8 @@ void main() {
     endDate: DateTime(2000),
     division: division,
   );
-  final clubA = Club(name: 'Club A', organization: organization);
-  final clubB = Club(name: 'Club B', organization: organization);
+  final clubA = Club(name: 'Club A', organization: organizationNRW);
+  final clubB = Club(name: 'Club B', organization: organizationDRB);
   final lineupA = Lineup(team: Team(name: 'Team A', club: clubA));
   final lineupB = Lineup(team: Team(name: 'Team B', club: clubB));
   final teamMatch = TeamMatch(
@@ -80,7 +81,7 @@ void main() {
 
   group('Reports', () {
     test('Germany, NRW', () {
-      final wrestlingReport = NrwGermanyWrestlingReporter();
+      final wrestlingReport = WrestlingReportProvider.deNwRdb274.getReporter(organizationNRW);
       final report = wrestlingReport.exportTeamMatchReport(
         teamMatch,
         {

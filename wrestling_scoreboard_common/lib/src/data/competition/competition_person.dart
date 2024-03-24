@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../enums/person_role.dart';
-import '../data_object.dart';
-import '../person.dart';
-import 'competition.dart';
+import '../../../common.dart';
 
 part 'competition_person.freezed.dart';
 part 'competition_person.g.dart';
@@ -47,4 +44,10 @@ class CompetitionPerson with _$CompetitionPerson implements DataObject {
   CompetitionPerson copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

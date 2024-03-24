@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data_object.dart';
-import '../bout.dart';
-import 'competition.dart';
+import '../../../common.dart';
 
 part 'competition_bout.freezed.dart';
 part 'competition_bout.g.dart';
@@ -46,4 +44,10 @@ class CompetitionBout with _$CompetitionBout implements DataObject {
   CompetitionBout copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

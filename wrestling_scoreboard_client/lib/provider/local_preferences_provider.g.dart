@@ -70,7 +70,6 @@ String _$localeNotifierHash() => r'e1e390bd02d18a8474b484ee33bc40edca7e9c3d';
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
-
   @$internal
   @override
   Raw<Future<Locale?>> runBuild() => build();
@@ -137,7 +136,6 @@ String _$themeModeNotifierHash() => r'29aedc145964f8e32034ab495a26ee3ccedfed82';
 
 abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   Raw<Future<ThemeMode>> build();
-
   @$internal
   @override
   Raw<Future<ThemeMode>> runBuild() => build();
@@ -204,7 +202,6 @@ String _$fontFamilyNotifierHash() => r'38c577d6ba358636b04947a2d8d33bb02f7a8bfc'
 
 abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
-
   @$internal
   @override
   Raw<Future<String?>> runBuild() => build();
@@ -271,7 +268,6 @@ String _$webSocketUrlNotifierHash() => r'3e384b28903aca1717d43fa65ace0651b39b668
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -338,7 +334,6 @@ String _$networkTimeoutNotifierHash() => r'2c6a26f2904896d01c9ddd31fd4ae7637030a
 
 abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
-
   @$internal
   @override
   Raw<Future<Duration>> runBuild() => build();
@@ -405,148 +400,9 @@ String _$apiUrlNotifierHash() => r'8c063b9ec135234c56970345957760282a21fbde';
 
 abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
-}
-
-@ProviderFor(ApiProviderNotifier)
-const apiProviderNotifierProvider = ApiProviderNotifierProvider._();
-
-final class ApiProviderNotifierProvider
-    extends $NotifierProvider<ApiProviderNotifier, Raw<Future<WrestlingApiProvider?>>> {
-  const ApiProviderNotifierProvider._({super.runNotifierBuildOverride, ApiProviderNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          name: r'apiProviderNotifierProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
-
-  final ApiProviderNotifier Function()? _createCb;
-
-  @override
-  String debugGetCreateSourceHash() => _$apiProviderNotifierHash();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Raw<Future<WrestlingApiProvider?>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<WrestlingApiProvider?>>>(value),
-    );
-  }
-
-  @$internal
-  @override
-  ApiProviderNotifier create() => _createCb?.call() ?? ApiProviderNotifier();
-
-  @$internal
-  @override
-  ApiProviderNotifierProvider $copyWithCreate(
-    ApiProviderNotifier Function() create,
-  ) {
-    return ApiProviderNotifierProvider._(create: create);
-  }
-
-  @$internal
-  @override
-  ApiProviderNotifierProvider $copyWithBuild(
-    Raw<Future<WrestlingApiProvider?>> Function(
-      Ref<Raw<Future<WrestlingApiProvider?>>>,
-      ApiProviderNotifier,
-    ) build,
-  ) {
-    return ApiProviderNotifierProvider._(runNotifierBuildOverride: build);
-  }
-
-  @$internal
-  @override
-  $NotifierProviderElement<ApiProviderNotifier, Raw<Future<WrestlingApiProvider?>>> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
-}
-
-String _$apiProviderNotifierHash() => r'f44b0c800a10b30fda681d7b30ff5ffedf40301d';
-
-abstract class _$ApiProviderNotifier extends $Notifier<Raw<Future<WrestlingApiProvider?>>> {
-  Raw<Future<WrestlingApiProvider?>> build();
-
-  @$internal
-  @override
-  Raw<Future<WrestlingApiProvider?>> runBuild() => build();
-}
-
-@ProviderFor(ReportProviderNotifier)
-const reportProviderNotifierProvider = ReportProviderNotifierProvider._();
-
-final class ReportProviderNotifierProvider
-    extends $NotifierProvider<ReportProviderNotifier, Raw<Future<WrestlingReportProvider?>>> {
-  const ReportProviderNotifierProvider._({super.runNotifierBuildOverride, ReportProviderNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          name: r'reportProviderNotifierProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
-
-  final ReportProviderNotifier Function()? _createCb;
-
-  @override
-  String debugGetCreateSourceHash() => _$reportProviderNotifierHash();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Raw<Future<WrestlingReportProvider?>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<WrestlingReportProvider?>>>(value),
-    );
-  }
-
-  @$internal
-  @override
-  ReportProviderNotifier create() => _createCb?.call() ?? ReportProviderNotifier();
-
-  @$internal
-  @override
-  ReportProviderNotifierProvider $copyWithCreate(
-    ReportProviderNotifier Function() create,
-  ) {
-    return ReportProviderNotifierProvider._(create: create);
-  }
-
-  @$internal
-  @override
-  ReportProviderNotifierProvider $copyWithBuild(
-    Raw<Future<WrestlingReportProvider?>> Function(
-      Ref<Raw<Future<WrestlingReportProvider?>>>,
-      ReportProviderNotifier,
-    ) build,
-  ) {
-    return ReportProviderNotifierProvider._(runNotifierBuildOverride: build);
-  }
-
-  @$internal
-  @override
-  $NotifierProviderElement<ReportProviderNotifier, Raw<Future<WrestlingReportProvider?>>> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
-}
-
-String _$reportProviderNotifierHash() => r'03af15f0301c652c2af440e19bf176af7624a618';
-
-abstract class _$ReportProviderNotifier extends $Notifier<Raw<Future<WrestlingReportProvider?>>> {
-  Raw<Future<WrestlingReportProvider?>> build();
-
-  @$internal
-  @override
-  Raw<Future<WrestlingReportProvider?>> runBuild() => build();
 }
 
 @ProviderFor(BellSoundNotifier)
@@ -610,7 +466,6 @@ String _$bellSoundNotifierHash() => r'1c9d805977f6f32cd7b44e7bd1ecfecd15447ddd';
 
 abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();

@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/weight_unit.dart';
-import '../enums/wrestling_style.dart';
-import 'data_object.dart';
+import '../../common.dart';
 
 part 'weight_class.freezed.dart';
 part 'weight_class.g.dart';
@@ -61,4 +59,10 @@ class WeightClass with _$WeightClass implements DataObject {
   WeightClass copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  @override
+  String? get orgSyncId => throw UnimplementedError();
+
+  @override
+  Organization? get organization => throw UnimplementedError();
 }

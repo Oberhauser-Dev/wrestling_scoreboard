@@ -13,6 +13,8 @@ class League with _$League implements DataObject {
 
   const factory League({
     int? id,
+    String? orgSyncId,
+    Organization? organization,
     required String name,
     required DateTime startDate,
     required DateTime endDate,
@@ -23,8 +25,11 @@ class League with _$League implements DataObject {
 
   static Future<League> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final division = await getSingle<Division>(e['division_id'] as int);
+    final organizationId = e['organization_id'] as int?;
     return League(
       id: e['id'] as int?,
+      orgSyncId: e['org_sync_id'] as String?,
+      organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       name: e['name'] as String,
       startDate: e['start_date'] as DateTime,
       endDate: e['end_date'] as DateTime,
@@ -36,6 +41,8 @@ class League with _$League implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
+      if (orgSyncId != null) 'org_sync_id': orgSyncId,
+      if (organization != null) 'organization_id': organization?.id,
       'name': name,
       'start_date': startDate,
       'end_date': endDate,
