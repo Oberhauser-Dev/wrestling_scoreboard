@@ -46,130 +46,109 @@ Future<int?> handleFromJson(
   required HandleManyRawCallback handleManyRaw,
 }) {
   final type = getTypeFromTableName(json['tableName'] as String);
-  switch (type) {
-    case const (BoutConfig):
-      return _handleFromJsonGeneric<BoutConfig>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Club):
-      return _handleFromJsonGeneric<Club>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Bout):
-      return _handleFromJsonGeneric<Bout>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (BoutAction):
-      return _handleFromJsonGeneric<BoutAction>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Organization):
-      return _handleFromJsonGeneric<Organization>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Division):
-      return _handleFromJsonGeneric<Division>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (League):
-      return _handleFromJsonGeneric<League>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (DivisionWeightClass):
-      return _handleFromJsonGeneric<DivisionWeightClass>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (LeagueTeamParticipation):
-      return _handleFromJsonGeneric<LeagueTeamParticipation>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Lineup):
-      return _handleFromJsonGeneric<Lineup>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Membership):
-      return _handleFromJsonGeneric<Membership>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Participation):
-      return _handleFromJsonGeneric<Participation>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (ParticipantState):
-      return _handleFromJsonGeneric<ParticipantState>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Person):
-      return _handleFromJsonGeneric<Person>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Team):
-      return _handleFromJsonGeneric<Team>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (TeamMatch):
-      return _handleFromJsonGeneric<TeamMatch>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (TeamMatchBout):
-      return _handleFromJsonGeneric<TeamMatchBout>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (Competition):
-      return _handleFromJsonGeneric<Competition>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (CompetitionTeamParticipation):
-      return _handleFromJsonGeneric<CompetitionTeamParticipation>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    case const (WeightClass):
-      return _handleFromJsonGeneric<WeightClass>(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
-    default:
-      throw UnimplementedError('Cannot handle Json for type "${type.toString()}".');
-  }
+  return switch (type) {
+    const (BoutConfig) => _handleFromJsonGeneric<BoutConfig>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Club) => _handleFromJsonGeneric<Club>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Bout) => _handleFromJsonGeneric<Bout>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (BoutAction) => _handleFromJsonGeneric<BoutAction>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Organization) => _handleFromJsonGeneric<Organization>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Division) => _handleFromJsonGeneric<Division>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (League) => _handleFromJsonGeneric<League>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (DivisionWeightClass) => _handleFromJsonGeneric<DivisionWeightClass>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (LeagueTeamParticipation) => _handleFromJsonGeneric<LeagueTeamParticipation>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Lineup) => _handleFromJsonGeneric<Lineup>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Membership) => _handleFromJsonGeneric<Membership>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Participation) => _handleFromJsonGeneric<Participation>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (ParticipantState) => _handleFromJsonGeneric<ParticipantState>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Person) => _handleFromJsonGeneric<Person>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Team) => _handleFromJsonGeneric<Team>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (TeamMatch) => _handleFromJsonGeneric<TeamMatch>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (TeamMatchBout) => _handleFromJsonGeneric<TeamMatchBout>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (Competition) => _handleFromJsonGeneric<Competition>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (CompetitionTeamParticipation) => _handleFromJsonGeneric<CompetitionTeamParticipation>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (WeightClass) => _handleFromJsonGeneric<WeightClass>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    _ => throw UnimplementedError('Cannot handle Json for type "${type.toString()}".'),
+  };
 }
 
 Future<int?> _handleFromJsonGeneric<T extends DataObject>(
@@ -220,93 +199,53 @@ class ManyDataObject<T> {
 
 // TODO: deprecate in favor of Type.tableName
 String getTableNameFromType(Type t) {
-  switch (t) {
-    case const (BoutConfig):
-      return 'bout_config';
-    case const (Club):
-      return 'club';
-    case const (Bout):
-      return 'bout';
-    case const (BoutAction):
-      return 'bout_action';
-    case const (Organization):
-      return 'organization';
-    case const (Division):
-      return 'division';
-    case const (League):
-      return 'league';
-    case const (DivisionWeightClass):
-      return 'division_weight_class';
-    case const (LeagueTeamParticipation):
-      return 'league_team_participation';
-    case const (Lineup):
-      return 'lineup';
-    case const (Membership):
-      return 'membership';
-    case const (Participation):
-      return 'participation';
-    case const (ParticipantState):
-      return 'participant_state';
-    case const (Person):
-      return 'person';
-    case const (Team):
-      return 'team';
-    case const (TeamMatch):
-      return 'team_match';
-    case const (TeamMatchBout):
-      return 'team_match_bout';
-    case const (Competition):
-      return 'competition';
-    case const (WeightClass):
-      return 'weight_class';
-    default:
-      throw UnimplementedError('ClassName for "${t.toString()}" not found.');
-  }
+  return switch (t) {
+    const (BoutConfig) => 'bout_config',
+    const (Club) => 'club',
+    const (Bout) => 'bout',
+    const (BoutAction) => 'bout_action',
+    const (Organization) => 'organization',
+    const (Division) => 'division',
+    const (League) => 'league',
+    const (DivisionWeightClass) => 'division_weight_class',
+    const (LeagueTeamParticipation) => 'league_team_participation',
+    const (Lineup) => 'lineup',
+    const (Membership) => 'membership',
+    const (Participation) => 'participation',
+    const (ParticipantState) => 'participant_state',
+    const (Person) => 'person',
+    const (Team) => 'team',
+    const (TeamMatch) => 'team_match',
+    const (TeamMatchBout) => 'team_match_bout',
+    const (Competition) => 'competition',
+    const (WeightClass) => 'weight_class',
+    _ => throw UnimplementedError('ClassName for "${t.toString()}" not found.'),
+  };
 }
 
 Type getTypeFromTableName(String tableName) {
-  switch (tableName) {
-    case 'bout_config':
-      return BoutConfig;
-    case 'club':
-      return Club;
-    case 'bout':
-      return Bout;
-    case 'bout_action':
-      return BoutAction;
-    case 'organization':
-      return Organization;
-    case 'division':
-      return Division;
-    case 'league':
-      return League;
-    case 'division_weight_class':
-      return DivisionWeightClass;
-    case 'league_team_participation':
-      return LeagueTeamParticipation;
-    case 'lineup':
-      return Lineup;
-    case 'membership':
-      return Membership;
-    case 'participation':
-      return Participation;
-    case 'participant_state':
-      return ParticipantState;
-    case 'person':
-      return Person;
-    case 'team':
-      return Team;
-    case 'team_match':
-      return TeamMatch;
-    case 'team_match_bout':
-      return TeamMatchBout;
-    case 'competition':
-      return Competition;
-    case 'weight_class':
-      return WeightClass;
-    default:
-      throw UnimplementedError('Type for "${tableName.toString()}" not found.');
-  }
+  return switch (tableName) {
+    'bout_config' => BoutConfig,
+    'club' => Club,
+    'bout' => Bout,
+    'bout_action' => BoutAction,
+    'organization' => Organization,
+    'division' => Division,
+    'league' => League,
+    'division_weight_class' => DivisionWeightClass,
+    'league_team_participation' => LeagueTeamParticipation,
+    'lineup' => Lineup,
+    'membership' => Membership,
+    'participation' => Participation,
+    'participant_state' => ParticipantState,
+    'person' => Person,
+    'team' => Team,
+    'team_match' => TeamMatch,
+    'team_match_bout' => TeamMatchBout,
+    'competition' => Competition,
+    'weight_class' => WeightClass,
+    _ => throw UnimplementedError('Type for "${tableName.toString()}" not found.'),
+  };
 }
 
 /// Hierarchically ordered data types.
