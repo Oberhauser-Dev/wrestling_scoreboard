@@ -54,10 +54,10 @@ class LeagueOverview extends ConsumerWidget {
             ),
           ],
         );
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: localizations.league, details: data.name),
-          ),
+        return OverviewScaffold<League>(
+          dataObject: data,
+          label: localizations.league,
+          details: data.name,
           body: GroupedList(items: [
             description,
             ManyConsumer<LeagueTeamParticipation, League>(

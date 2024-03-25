@@ -3,9 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/division_weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
-import 'package:wrestling_scoreboard_client/localization/season.dart';
-import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_weight_class_edit.dart';
@@ -73,10 +72,10 @@ class DivisionOverview extends ConsumerWidget {
             ),
           ],
         );
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: localizations.division, details: data.name),
-          ),
+        return OverviewScaffold<Division>(
+          dataObject: data,
+          label: localizations.division,
+          details: data.name,
           body: GroupedList(items: [
             description,
             ManyConsumer<Division, Division>(
@@ -167,8 +166,7 @@ class DivisionOverview extends ConsumerWidget {
                       initialData: e,
                       builder: (context, data) {
                         return ContentItem(
-                            title:
-                                '${data.pos}. ${data.weightClass.name} ${data.weightClass.style.localize(context)} ${data.seasonPartition == null ? '' : '(${data.seasonPartition!.asSeasonPartition(context, data.division.seasonPartitions)})'}',
+                            title: data.localize(context),
                             icon: Icons.fitness_center,
                             onTap: () => handleSelectedWeightClass(data, context));
                       },

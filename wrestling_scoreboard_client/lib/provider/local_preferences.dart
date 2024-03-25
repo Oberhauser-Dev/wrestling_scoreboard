@@ -14,6 +14,7 @@ class Preferences {
 
   static const keyBellSound = 'bell-sound';
   static const keyFontFamily = 'font-family';
+  static const keyFavorites = 'favorites';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
   static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();
@@ -46,7 +47,19 @@ class Preferences {
     }
   }
 
+  static Future<void> setStringList(String key, List<String>? value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value != null) {
+      await prefs.setStringList(key, value);
+    } else {
+      await prefs.remove(key);
+    }
+  }
+
   static Future<String?> getString(String key) => SharedPreferences.getInstance().then((value) => value.getString(key));
 
   static Future<int?> getInt(String key) => SharedPreferences.getInstance().then((value) => value.getInt(key));
+
+  static Future<List<String>?> getStringList(String key) =>
+      SharedPreferences.getInstance().then((value) => value.getStringList(key));
 }

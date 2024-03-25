@@ -44,10 +44,10 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
                 icon: Icons.emoji_events,
               ),
             ]);
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: localizations.participatingTeam, details: data.team.name),
-          ),
+        return OverviewScaffold<LeagueTeamParticipation>(
+          dataObject: data,
+          label: localizations.participatingTeam,
+          details: data.team.name,
           body: GroupedList(items: [
             description,
           ]),

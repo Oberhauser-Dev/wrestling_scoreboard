@@ -12,6 +12,8 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<Bout> {
+  static const route = 'bout';
+
   const BoutOverview({super.key});
 
   @override
@@ -78,10 +80,10 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
             ),
           ],
         );
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: classLocale, details: data.title(context)),
-          ),
+        return OverviewScaffold<Bout>(
+          dataObject: data,
+          label: classLocale,
+          details: data.title(context),
           body: GroupedList(items: [
             description,
           ]),

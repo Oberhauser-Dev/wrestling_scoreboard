@@ -107,3 +107,40 @@ class BellSoundNotifier extends _$BellSoundNotifier {
     return bellSoundPath;
   }
 }
+
+@Riverpod(keepAlive: true)
+class FavoritesNotifier extends _$FavoritesNotifier {
+  @override
+  Raw<Future<Map<String, Set<int>>>> build() async {
+    final favoriteStrList = await Preferences.getStringList(Preferences.keyFavorites);
+    final favorites = (favoriteStrList ?? []).map((rawStr) {
+      final parts = rawStr.split('=');
+      return MapEntry(parts[0], parts[1].split(',').map((e) => int.parse(e)).toSet());
+    });
+    return Map.fromEntries(favorites);
+  }
+
+  Future<void> _setFavorites(Map<String, Set<int>> favorites) async {
+    state = Future.value(favorites);
+    final preferenceList = favorites.entries.map((e) {
+      return '${e.key}=${e.value.join(',')}';
+    }).toList();
+    await Preferences.setStringList(Preferences.keyFavorites, preferenceList);
+  }
+
+  void addFavorite(String tableName, int id) async {
+    final favorites = await state;
+    favorites.putIfAbsent(tableName, () => {});
+    favorites[tableName]?.add(id);
+    await _setFavorites(favorites);
+  }
+
+  void removeFavorite(String tableName, int id) async {
+    final favorites = await state;
+    favorites[tableName]?.remove(id);
+    if (favorites[tableName]?.isEmpty ?? false) {
+      favorites.remove(tableName);
+    }
+    await _setFavorites(favorites);
+  }
+}

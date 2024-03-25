@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class AbstractOverview<T extends DataObject> {
@@ -31,6 +33,52 @@ class AppBarTitle extends StatelessWidget {
           style: TextStyle(color: Theme.of(context).disabledColor),
         ),
       ],
+    );
+  }
+}
+
+class OverviewScaffold<T extends DataObject> extends ConsumerWidget {
+  const OverviewScaffold({
+    super.key,
+    required this.body,
+    required this.label,
+    required this.details,
+    this.actions,
+    required this.dataObject,
+  });
+
+  final Widget body;
+  final String label;
+  final String details;
+  final List<Widget>? actions;
+  final T dataObject;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tableName = getTableNameFromType(T);
+    return Scaffold(
+      appBar: AppBar(
+        title: AppBarTitle(label: label, details: details),
+        actions: [
+          ...?actions,
+          LoadingBuilder(
+              future: ref.watch(favoritesNotifierProvider),
+              builder: (BuildContext context, favorites) {
+                final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
+                return IconButton(
+                    onPressed: () {
+                      final notifier = ref.read(favoritesNotifierProvider.notifier);
+                      if (isFavorite) {
+                        notifier.removeFavorite(tableName, dataObject.id!);
+                      } else {
+                        notifier.addFavorite(tableName, dataObject.id!);
+                      }
+                    },
+                    icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline));
+              }),
+        ],
+      ),
+      body: body,
     );
   }
 }

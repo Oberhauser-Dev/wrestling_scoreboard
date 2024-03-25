@@ -45,10 +45,10 @@ class ClubOverview extends ConsumerWidget {
             )
           ],
         );
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: localizations.club, details: data.name),
-          ),
+        return OverviewScaffold<Club>(
+          dataObject: data,
+          label: localizations.club,
+          details: data.name,
           body: GroupedList(items: [
             description,
             ManyConsumer<Team, Club>(

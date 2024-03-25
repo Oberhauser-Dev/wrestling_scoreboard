@@ -10,6 +10,8 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassOverview extends ConsumerWidget implements AbstractOverview<WeightClass> {
+  static const route = 'weight_class';
+
   const WeightClassOverview({super.key});
 
   @override
@@ -60,10 +62,10 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
             ),
           ],
         );
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: classLocale, details: data.name),
-          ),
+        return OverviewScaffold<WeightClass>(
+          dataObject: data,
+          label: classLocale,
+          details: data.name,
           body: GroupedList(items: [
             description,
           ]),

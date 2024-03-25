@@ -41,60 +41,57 @@ class TeamMatchOverview extends ConsumerWidget {
         id: id,
         initialData: match,
         builder: (context, match) {
-          return Scaffold(
-            appBar: AppBar(
-              title: AppBarTitle(
-                label: localizations.match,
-                details: '${match.home.team.name} - ${match.guest.team.name}',
-              ),
-              actions: [
-                // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
-                IconButton(
-                    onPressed: () async {
-                      final reporter = match.organization?.getReporter();
-                      if (reporter != null) {
-                        final fileNameBuilder = [
-                          match.date.toIso8601String().substring(0, 10),
-                          match.league?.fullname,
-                          match.no,
-                          match.home.team.name,
-                          '–',
-                          '${match.guest.team.name}.rdb',
-                        ];
-                        fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-                        final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
-                        String? outputPath = await FilePicker.platform.saveFile(
-                          fileName: fileName,
-                        );
-                        if (outputPath != null) {
-                          final bouts = await _getBouts(ref, match: match);
-                          final boutMap = Map.fromEntries(await Future.wait(
-                              bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
-                          final reportStr = reporter.exportTeamMatchReport(match, boutMap);
-                          final outputFile = File(outputPath);
-                          await outputFile.writeAsString(reportStr, encoding: const Utf8Codec());
-                        }
-                      } else {
-                        if (context.mounted) {
-                          showExceptionDialog(
-                            context: context,
-                            exception: Exception('Please select a report provider in the settings'),
-                            stackTrace: null,
-                          );
-                        }
+          return OverviewScaffold<TeamMatch>(
+            dataObject: match,
+            label: localizations.match,
+            details: '${match.home.team.name} - ${match.guest.team.name}',
+            actions: [
+              // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
+              IconButton(
+                  onPressed: () async {
+                    final reporter = match.organization?.getReporter();
+                    if (reporter != null) {
+                      final fileNameBuilder = [
+                        match.date.toIso8601String().substring(0, 10),
+                        match.league?.fullname,
+                        match.no,
+                        match.home.team.name,
+                        '–',
+                        '${match.guest.team.name}.rdb',
+                      ];
+                      fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
+                      final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+                      String? outputPath = await FilePicker.platform.saveFile(
+                        fileName: fileName,
+                      );
+                      if (outputPath != null) {
+                        final bouts = await _getBouts(ref, match: match);
+                        final boutMap = Map.fromEntries(await Future.wait(
+                            bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
+                        final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+                        final outputFile = File(outputPath);
+                        await outputFile.writeAsString(reportStr, encoding: const Utf8Codec());
                       }
-                    },
-                    icon: const Icon(Icons.description)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.tv),
-                    onPressed: () => handleSelectedMatchSequence(match, context),
-                    label: Text(localizations.display),
-                  ),
-                )
-              ],
-            ),
+                    } else {
+                      if (context.mounted) {
+                        showExceptionDialog(
+                          context: context,
+                          exception: Exception('Please select a report provider in the settings'),
+                          stackTrace: null,
+                        );
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.description)),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.tv),
+                  onPressed: () => handleSelectedMatchSequence(match, context),
+                  label: Text(localizations.display),
+                ),
+              )
+            ],
             body: SingleConsumer<Lineup>(
               id: match.home.id!,
               initialData: match.home,

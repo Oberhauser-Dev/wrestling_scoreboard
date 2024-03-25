@@ -44,10 +44,10 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                   icon: Icons.foundation,
                 ),
               ]);
-          return Scaffold(
-            appBar: AppBar(
-              title: AppBarTitle(label: localizations.team, details: data.name),
-            ),
+          return OverviewScaffold<Team>(
+            dataObject: data,
+            label: localizations.team,
+            details: data.name,
             body: GroupedList(items: [
               description,
               MatchesWidget<Team>(filterObject: data),

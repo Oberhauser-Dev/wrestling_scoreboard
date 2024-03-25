@@ -60,8 +60,11 @@ class OrganizationOverview extends ConsumerWidget {
             ),
           ],
         );
-        return Scaffold(
-          appBar: AppBar(title: AppBarTitle(label: localizations.organization, details: data.name), actions: [
+        return OverviewScaffold<Organization>(
+          dataObject: data,
+          label: localizations.organization,
+          details: data.name,
+          actions: [
             IconButton(
                 onPressed: () => catchAsync(context, () async {
                       final dataManager = await ref.read(dataManagerNotifierProvider);
@@ -71,7 +74,7 @@ class OrganizationOverview extends ConsumerWidget {
                       }
                     }),
                 icon: const Icon(Icons.api)),
-          ]),
+          ],
           body: GroupedList(items: [
             description,
             ManyConsumer<Organization, Organization>(

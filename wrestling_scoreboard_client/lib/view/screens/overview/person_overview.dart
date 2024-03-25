@@ -70,10 +70,10 @@ abstract class PersonOverview extends ConsumerWidget implements AbstractOverview
             ),
           ],
         );
-        return Scaffold(
-          appBar: AppBar(
-            title: AppBarTitle(label: classLocale, details: person.fullName),
-          ),
+        return OverviewScaffold<Person>(
+          dataObject: person,
+          label: classLocale,
+          details: person.fullName,
           body: GroupedList(items: [
             description,
           ]),

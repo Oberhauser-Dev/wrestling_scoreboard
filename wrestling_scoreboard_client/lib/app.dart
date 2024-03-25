@@ -53,6 +53,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
               future: ref.watch(fontFamilyNotifierProvider),
               builder: (context, fontFamily) {
                 return MaterialApp.router(
+                  //debugShowCheckedModeBanner: false,
                   title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
                   theme: _buildTheme(Brightness.light, fontFamily),
                   darkTheme: _buildTheme(Brightness.dark, fontFamily),
