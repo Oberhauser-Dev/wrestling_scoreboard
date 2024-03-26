@@ -180,6 +180,7 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
       seasonPartitions: _seasonPartitions,
       organization: _organization!,
       parent: _parentDivision,
+      orgSyncId: widget.division?.orgSyncId,
     ));
   }
 }

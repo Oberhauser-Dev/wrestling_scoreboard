@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -32,6 +33,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
   List<League>? _availableLeagues;
   List<Team>? _availableTeams;
+  List<Person>? _availablePersons;
 
   String? _location;
   String? _no;
@@ -40,6 +42,14 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   League? _league;
   int? _seasonPartition;
   late DateTime _date;
+  String? _comment;
+
+  // Persons
+  Person? _referee;
+  Person? _matChairman;
+  Person? _judge;
+  Person? _timeKeeper;
+  Person? _transcriptWriter;
 
   @override
   void initState() {
@@ -47,9 +57,18 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     _homeTeam = widget.teamMatch?.home.team ?? widget.initialHomeTeam;
     _guestTeam = widget.teamMatch?.guest.team ?? widget.initialGuestTeam;
     _date = widget.teamMatch?.date ?? DateTime.now();
+    _comment = widget.teamMatch?.comment;
     _league = widget.teamMatch?.league ?? widget.initialLeague;
     // Set initial season partition to 0, if match has a league.
     _seasonPartition = widget.teamMatch?.seasonPartition ?? (_league != null ? 0 : null);
+
+    // Persons
+    _referee = widget.teamMatch?.referee;
+    _matChairman = widget.teamMatch?.matChairman;
+    _judge = widget.teamMatch?.judge;
+    _timeKeeper = widget.teamMatch?.timeKeeper;
+    _transcriptWriter = widget.teamMatch?.transcriptWriter;
+    // TODO: steward from list
   }
 
   @override
@@ -77,12 +96,6 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             labelText: localizations.place,
           ),
           initialValue: widget.teamMatch?.location,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
           onSaved: (newValue) => _location = newValue,
         ),
       ),
@@ -150,6 +163,17 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.comment),
+        title: TextFormField(
+          decoration: InputDecoration(
+            border: const UnderlineInputBorder(),
+            labelText: localizations.comment,
+          ),
+          initialValue: widget.teamMatch?.comment,
+          onSaved: (newValue) => _comment = newValue,
+        ),
+      ),
+      ListTile(
         title: getDropdown<League>(
           icon: const Icon(Icons.emoji_events),
           selectedItem: _league,
@@ -179,6 +203,102 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             getTitle: (e) => e.asSeasonPartition(context, _league!.division.seasonPartitions),
           ),
         ),
+      HeadingItem(title: localizations.persons),
+      ListTile(
+        title: getDropdown<Person>(
+          icon: const Icon(Icons.sports),
+          selectedItem: _referee,
+          label: localizations.referee,
+          context: context,
+          onSaved: (Person? value) => setState(() {
+            _referee = value;
+          }),
+          itemAsString: (u) => u.fullName,
+          onFind: (String? filter) async {
+            _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
+            return (filter == null
+                    ? _availablePersons!
+                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
+      ListTile(
+        title: getDropdown<Person>(
+          icon: const Icon(Icons.manage_accounts),
+          selectedItem: _matChairman,
+          label: localizations.matChairman,
+          context: context,
+          onSaved: (Person? value) => setState(() {
+            _matChairman = value;
+          }),
+          itemAsString: (u) => u.fullName,
+          onFind: (String? filter) async {
+            _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
+            return (filter == null
+                    ? _availablePersons!
+                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
+      ListTile(
+        title: getDropdown<Person>(
+          icon: const Icon(Icons.manage_accounts),
+          selectedItem: _judge,
+          label: localizations.judge,
+          context: context,
+          onSaved: (Person? value) => setState(() {
+            _judge = value;
+          }),
+          itemAsString: (u) => u.fullName,
+          onFind: (String? filter) async {
+            _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
+            return (filter == null
+                    ? _availablePersons!
+                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
+      ListTile(
+        title: getDropdown<Person>(
+          icon: const Icon(Icons.pending_actions),
+          selectedItem: _timeKeeper,
+          label: localizations.timeKeeper,
+          context: context,
+          onSaved: (Person? value) => setState(() {
+            _timeKeeper = value;
+          }),
+          itemAsString: (u) => u.fullName,
+          onFind: (String? filter) async {
+            _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
+            return (filter == null
+                    ? _availablePersons!
+                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
+      ListTile(
+        title: getDropdown<Person>(
+          icon: const Icon(Icons.history_edu),
+          selectedItem: _transcriptWriter,
+          label: localizations.transcriptionWriter,
+          context: context,
+          onSaved: (Person? value) => setState(() {
+            _transcriptWriter = value;
+          }),
+          itemAsString: (u) => u.fullName,
+          onFind: (String? filter) async {
+            _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
+            return (filter == null
+                    ? _availablePersons!
+                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
+                .toList();
+          },
+        ),
+      ),
     ];
 
     return Form(
@@ -220,6 +340,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
         TeamMatch(
           id: widget.teamMatch?.id,
+          organization: widget.teamMatch?.organization ?? widget.initialLeague?.organization,
+          orgSyncId: widget.teamMatch?.orgSyncId,
           location: _location!,
           no: _no,
           home: home,
@@ -227,6 +349,12 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           date: _date,
           league: _league,
           seasonPartition: _seasonPartition,
+          referee: _referee,
+          matChairman: _matChairman,
+          judge: _judge,
+          timeKeeper: _timeKeeper,
+          transcriptWriter: _transcriptWriter,
+          comment: _comment,
         ),
       );
       navigator.pop();

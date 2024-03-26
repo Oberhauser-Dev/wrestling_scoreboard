@@ -76,7 +76,9 @@ class TeamMatchOverview extends ConsumerWidget {
                       if (context.mounted) {
                         showExceptionDialog(
                           context: context,
-                          exception: Exception('Please select a report provider in the settings'),
+                          exception: Exception(match.organization == null
+                              ? 'No organization applied to match with id ${match.id}. Please contact the development team.'
+                              : 'No reporter selected for the organization ${match.organization?.name}. Please select one in the organization editor.'),
                           stackTrace: null,
                         );
                       }
@@ -133,6 +135,11 @@ class TeamMatchOverview extends ConsumerWidget {
                             title: guestLineup.team.name,
                             subtitle: '${localizations.team} ${localizations.blue}',
                             icon: Icons.group,
+                          ),
+                          ContentItem(
+                            title: match.comment ?? '-',
+                            subtitle: localizations.comment,
+                            icon: Icons.comment,
                           ),
                           ContentItem(
                             title: match.league?.fullname ?? '-',

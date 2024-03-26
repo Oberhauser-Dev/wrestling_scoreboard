@@ -141,6 +141,8 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(League(
         id: widget.league?.id,
+        organization: widget.league?.organization ?? widget.initialDivision?.organization,
+        orgSyncId: widget.league?.orgSyncId,
         name: _name!,
         startDate: _startDate,
         endDate: _endDate,

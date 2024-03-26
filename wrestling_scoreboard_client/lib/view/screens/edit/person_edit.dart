@@ -11,9 +11,10 @@ import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class PersonEdit extends ConsumerStatefulWidget {
+  final Organization initialOrganization;
   final Person? person;
 
-  const PersonEdit({this.person, super.key});
+  const PersonEdit({this.person, required this.initialOrganization, super.key});
 }
 
 abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> implements AbstractEditState<Person> {
@@ -159,6 +160,8 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
       _formKey.currentState!.save();
       var person = Person(
         id: widget.person?.id,
+        orgSyncId: widget.person?.orgSyncId,
+        organization: widget.person?.organization ?? widget.initialOrganization,
         prename: _prename!,
         surname: _surname!,
         birthDate: _dateOfBirth,

@@ -53,6 +53,7 @@
   "display": "Anzeige",
   "name": "Name",
   "description": "Beschreibung",
+  "comment": "Kommentar",
   "abbreviation": "Abkürzung",
   "position": "Position",
   "noItems": "Keine Einträge vorhanden.",

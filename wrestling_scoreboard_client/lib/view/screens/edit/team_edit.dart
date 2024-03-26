@@ -101,6 +101,8 @@ class TeamEditState extends ConsumerState<TeamEdit> {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Team(
         id: widget.team?.id,
+        orgSyncId: widget.team?.orgSyncId,
+        organization: widget.team?.organization ?? widget.initialClub?.organization,
         name: _name!,
         description: _description,
         club: _club!,

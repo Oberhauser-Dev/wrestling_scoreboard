@@ -9,7 +9,11 @@ class MembershipEdit extends PersonEdit {
   final Membership? membership;
   final Club initialClub;
 
-  MembershipEdit({this.membership, required this.initialClub, super.key}) : super(person: membership?.person);
+  MembershipEdit({
+    this.membership,
+    required this.initialClub,
+    super.key,
+  }) : super(person: membership?.person, initialOrganization: initialClub.organization);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MembershipEditState();

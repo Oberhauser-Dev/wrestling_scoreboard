@@ -1199,7 +1199,7 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 --
 
 COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	\N	\N	The Griffin-Simpson Competition	1
+1	2021-07-17	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1
 \.
 
 
@@ -1271,9 +1271,9 @@ COPY public.division_weight_class (id, division_id, weight_class_id, pos, season
 --
 
 COPY public.league (id, name, start_date, end_date, division_id, org_sync_id, organization_id) FROM stdin;
-3	North	2021-10-01	2022-10-01	1	\N	\N
-1	South	2021-10-01	2022-10-01	1	\N	\N
-2	North Jn	2021-10-01	2022-10-01	2	\N	\N
+2	North Jn	2021-10-01	2022-10-01	2	\N	1
+1	South	2021-10-01	2022-10-01	1	\N	1
+3	North	2021-10-01	2022-10-01	1	\N	1
 \.
 
 
@@ -1307,28 +1307,28 @@ COPY public.lineup (id, team_id, leader_id, coach_id) FROM stdin;
 --
 
 COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id) FROM stdin;
-2	2	2	\N	\N	\N
-3	3	2	\N	\N	\N
-4	4	2	\N	\N	\N
-7	7	1	\N	\N	\N
-8	8	1	\N	\N	\N
-10	11	1	\N	\N	\N
-11	12	1	\N	\N	\N
-5	5	1	1234	\N	\N
-9	10	1	\N	\N	\N
-12	13	1	\N	\N	\N
-13	14	1	\N	\N	\N
-14	15	1	\N	\N	\N
-15	16	1	\N	\N	\N
-16	17	2	\N	\N	\N
-17	18	2	\N	\N	\N
-18	19	2	\N	\N	\N
-19	20	2	\N	\N	\N
-20	21	2	\N	\N	\N
-21	22	2	\N	\N	\N
-22	23	2	\N	\N	\N
-6	6	1	\N	\N	\N
-1	1	2	\N	\N	\N
+22	23	2	\N	\N	1
+20	21	2	\N	\N	1
+18	19	2	\N	\N	1
+17	18	2	\N	\N	1
+11	12	1	\N	\N	1
+13	14	1	\N	\N	1
+9	10	1	\N	\N	1
+3	3	2	\N	\N	1
+2	2	2	\N	\N	1
+4	4	2	\N	\N	1
+7	7	1	\N	\N	1
+5	5	1	1234	\N	1
+16	17	2	\N	\N	1
+8	8	1	\N	\N	1
+21	22	2	\N	\N	1
+1	1	2	\N	\N	1
+10	11	1	\N	\N	1
+12	13	1	\N	\N	1
+19	20	2	\N	\N	1
+6	6	1	\N	\N	1
+15	16	1	\N	\N	1
+14	15	1	\N	\N	1
 \.
 
 
@@ -1417,29 +1417,29 @@ COPY public.participation (id, membership_id, lineup_id, weight_class_id, weight
 --
 
 COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id) FROM stdin;
-2	Bart	Simpson	2007-07-08	male	\N	\N	\N
-3	March	Simpson	1980-07-08	female	\N	\N	\N
-4	Homer	Simpson	1975-07-08	male	\N	\N	\N
-7	Lois	Griffin	1979-03-08	female	\N	\N	\N
-8	Peter	Griffin	1975-03-08	male	\N	\N	\N
-9	Mr	Referee	\N	other	\N	\N	\N
-11	Brian	Griffin	2000-03-07	male	\N	\N	\N
-12	Joe	Swanson	1976-03-08	male	\N	\N	\N
-5	Chris	Griffin	2005-03-08	male	\N	\N	\N
-10	Glenn	Quagmire	1982-03-08	male	\N	\N	\N
-13	Cleveland	Brown	1985-03-08	male	\N	\N	\N
-14	Stewie	Griffin	2021-03-07	male	\N	\N	\N
-15	Adam	West	1967-03-08	male	\N	\N	\N
-16	Bonnie	Swanson	1991-03-08	female	\N	\N	\N
-17	Mr.	Burns	1925-03-08	male	\N	\N	\N
-18	Ned	Flanders	1964-03-08	male	\N	\N	\N
-19	Milhouse	Van Houten	2004-03-07	male	\N	\N	\N
-20	Krusty	Clown	1983-03-08	male	\N	\N	\N
-21	Moe	Szyslak	1981-03-08	male	\N	\N	\N
-22	Maggie	Simpson	2020-03-07	female	\N	\N	\N
-23	Nelson	Muntz	\N	male	\N	\N	\N
-6	Meg	Griffin	2007-03-08	female	\N	\N	\N
-1	Lisa	Simpson	2010-07-08	female	USA	\N	\N
+18	Ned	Flanders	1964-03-08	male	\N	\N	1
+22	Maggie	Simpson	2020-03-07	female	\N	\N	1
+15	Adam	West	1967-03-08	male	\N	\N	1
+13	Cleveland	Brown	1985-03-08	male	\N	\N	1
+23	Nelson	Muntz	\N	male	\N	\N	1
+20	Krusty	Clown	1983-03-08	male	\N	\N	1
+9	Mr	Referee	\N	other	\N	\N	1
+10	Glenn	Quagmire	1982-03-08	male	\N	\N	1
+12	Joe	Swanson	1976-03-08	male	\N	\N	1
+11	Brian	Griffin	2000-03-07	male	\N	\N	1
+21	Moe	Szyslak	1981-03-08	male	\N	\N	1
+19	Milhouse	Van Houten	2004-03-07	male	\N	\N	1
+17	Mr.	Burns	1925-03-08	male	\N	\N	1
+16	Bonnie	Swanson	1991-03-08	female	\N	\N	1
+14	Stewie	Griffin	2021-03-07	male	\N	\N	1
+5	Chris	Griffin	2005-03-08	male	\N	\N	1
+8	Peter	Griffin	1975-03-08	male	\N	\N	1
+7	Lois	Griffin	1979-03-08	female	\N	\N	1
+4	Homer	Simpson	1975-07-08	male	\N	\N	1
+2	Bart	Simpson	2007-07-08	male	\N	\N	1
+3	March	Simpson	1980-07-08	female	\N	\N	1
+6	Meg	Griffin	2007-03-08	female	\N	\N	1
+1	Lisa	Simpson	2010-07-08	female	USA	\N	1
 \.
 
 
@@ -1448,9 +1448,9 @@ COPY public.person (id, prename, surname, birth_date, gender, nationality, org_s
 --
 
 COPY public.team (id, name, description, club_id, org_sync_id, organization_id) FROM stdin;
-1	Springfield Wrestlers	1. Team Men	2	\N	\N
-2	Springfield Wrestlers Jn	Juniors	2	\N	\N
-3	Quahog Hunters II	2. Team Men	1	\N	\N
+3	Quahog Hunters II	2. Team Men	1	\N	1
+2	Springfield Wrestlers Jn	Juniors	2	\N	1
+1	Springfield Wrestlers	1. Team Men	2	\N	1
 \.
 
 
@@ -1459,7 +1459,7 @@ COPY public.team (id, name, description, club_id, org_sync_id, organization_id) 
 --
 
 COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id, season_partition) FROM stdin;
-1	2021-07-10	Springfield	\N	\N		\N	\N	1	2	\N	\N	\N	\N	1	\N	1
+1	2021-07-10	Springfield	\N	\N		1	\N	1	2	\N	\N	\N	\N	1	\N	1
 \.
 
 

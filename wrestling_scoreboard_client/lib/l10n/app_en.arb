@@ -56,6 +56,7 @@
   "display": "Display",
   "name": "Name",
   "description": "Description",
+  "comment": "Comment",
   "abbreviation": "Abbreviation",
   "position": "Position",
   "noItems": "No items available.",

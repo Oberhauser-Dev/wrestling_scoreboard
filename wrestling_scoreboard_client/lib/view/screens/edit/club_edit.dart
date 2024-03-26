@@ -103,6 +103,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Club(
         id: widget.club?.id,
+        orgSyncId: widget.club?.orgSyncId,
         name: _name!,
         no: _no,
         organization: _organization!,
