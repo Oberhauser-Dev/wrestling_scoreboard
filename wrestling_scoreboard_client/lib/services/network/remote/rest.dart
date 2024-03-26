@@ -151,8 +151,7 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/organization/$id/api/import');
     final response = await http.post(uri);
     if (response.statusCode != 200) {
-      throw Exception(
-          'Failed to import from organization $id: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      throw RestException('Failed to import from organization $id', response: response);
     }
   }
 }
