@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart' as file_selector;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
+import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -347,14 +349,26 @@ class CustomSettingsScreen extends ConsumerWidget {
                 onTap: () => catchAsync(context, () async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   final sqlString = await dataManager.exportDatabase();
-                  String? outputPath = await FilePicker.platform.saveFile(
-                    fileName:
-                        '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-                        'PostgreSQL-wrestling_scoreboard-dump.sql',
-                  );
-                  if (outputPath != null) {
-                    final outputFile = File(outputPath);
-                    await outputFile.writeAsString(sqlString, encoding: const Utf8Codec());
+                  final fileName =
+                      '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
+                      'PostgreSQL-wrestling_scoreboard-dump.sql';
+
+                  if (kIsWeb) {
+                    void saveFile(String text, String fileName) {
+                      html.AnchorElement()
+                        ..href = '${Uri.dataFromString(text, mimeType: 'application/sql', encoding: utf8)}'
+                        ..download = fileName
+                        ..style.display = 'none'
+                        ..click();
+                    }
+
+                    saveFile(sqlString, fileName);
+                  } else {
+                    String? outputPath = (await file_selector.getSaveLocation(suggestedName: fileName))?.path;
+                    if (outputPath != null) {
+                      final outputFile = File(outputPath);
+                      await outputFile.writeAsString(sqlString, encoding: const Utf8Codec());
+                    }
                   }
                 }),
               ),
@@ -384,12 +398,14 @@ class CustomSettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.cloud_upload),
                 title: Text(localizations.restoreDatabase),
                 onTap: () => catchAsync(context, () async {
-                  FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['sql'],
+                  const typeGroup = file_selector.XTypeGroup(
+                    label: 'SQL',
+                    extensions: <String>['sql'],
                   );
-                  if (filePickerResult != null) {
-                    File file = File(filePickerResult.files.single.path!);
+                  file_selector.XFile? fileSelectorResult =
+                      await file_selector.openFile(acceptedTypeGroups: [typeGroup]);
+                  if (fileSelectorResult != null) {
+                    File file = File(fileSelectorResult.path);
                     final dataManager = await ref.read(dataManagerNotifierProvider);
                     await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
                     if (context.mounted) {

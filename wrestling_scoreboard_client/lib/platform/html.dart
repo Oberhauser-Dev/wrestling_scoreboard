@@ -10,3 +10,13 @@ class HTMLDocument {
 }
 
 final document = HTMLDocument();
+
+class AnchorElement {
+  set href(String str) {}
+
+  set download(String str) {}
+
+  dynamic get style => throw UnimplementedError();
+
+  void click() {}
+}

@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
+  file_selector_windows
   printing
   screen_retriever
   url_launcher_windows

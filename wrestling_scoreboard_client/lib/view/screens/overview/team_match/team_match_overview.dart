@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,9 +61,9 @@ class TeamMatchOverview extends ConsumerWidget {
                       ];
                       fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
                       final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
-                      String? outputPath = await FilePicker.platform.saveFile(
-                        fileName: fileName,
-                      );
+                      String? outputPath = (await file_selector.getSaveLocation(
+                        suggestedName: fileName,
+                      ))?.path;
                       if (outputPath != null) {
                         final bouts = await _getBouts(ref, match: match);
                         final boutMap = Map.fromEntries(await Future.wait(
