@@ -167,7 +167,7 @@ class ApiRoute {
   }
 
   Handler get pipeline {
-    final pipeline = Pipeline().addMiddleware(contentTypeJsonConfig).addHandler(router);
+    final pipeline = Pipeline().addMiddleware(contentTypeJsonConfig).addHandler(router.call);
     return pipeline;
   }
 }

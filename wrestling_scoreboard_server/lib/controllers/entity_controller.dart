@@ -366,43 +366,43 @@ abstract class EntityController<T extends DataObject> {
 
   static EntityController getControllerFromDataType(Type t) {
     switch (t) {
-      case BoutConfig:
+      case const (BoutConfig):
         return BoutConfigController();
-      case Club:
+      case const (Club):
         return ClubController();
-      case Bout:
+      case const (Bout):
         return BoutController();
-      case BoutAction:
+      case const (BoutAction):
         return BoutActionController();
-      case Organization:
+      case const (Organization):
         return OrganizationController();
-      case Division:
+      case const (Division):
         return DivisionController();
-      case League:
+      case const (League):
         return LeagueController();
-      case DivisionWeightClass:
+      case const (DivisionWeightClass):
         return DivisionWeightClassController();
-      case LeagueTeamParticipation:
+      case const (LeagueTeamParticipation):
         return LeagueTeamParticipationController();
-      case Lineup:
+      case const (Lineup):
         return LineupController();
-      case Membership:
+      case const (Membership):
         return MembershipController();
-      case Participation:
+      case const (Participation):
         return ParticipationController();
-      case ParticipantState:
+      case const (ParticipantState):
         return ParticipantStateController();
-      case Person:
+      case const (Person):
         return PersonController();
-      case Team:
+      case const (Team):
         return TeamController();
-      case TeamMatch:
+      case const (TeamMatch):
         return TeamMatchController();
-      case TeamMatchBout:
+      case const (TeamMatchBout):
         return TeamMatchBoutController();
-      case Competition:
+      case const (Competition):
         return CompetitionController();
-      case WeightClass:
+      case const (WeightClass):
         return WeightClassController();
       default:
         throw UnimplementedError('Controller not available for type: $t');

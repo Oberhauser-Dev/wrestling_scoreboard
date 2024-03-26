@@ -29,7 +29,7 @@ Future init() async {
       // First, serve files from the 'public' directory
       .add(_staticHandler)
       // If a corresponding file is not found, send requests to a `Router`
-      .add(_router);
+      .add(_router.call);
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
   final pipeline = Pipeline()

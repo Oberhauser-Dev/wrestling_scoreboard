@@ -22,7 +22,7 @@ dependencies:
   dropdown_search: ^5.0.6
   audioplayers: ^6.0.0
   web_socket_channel: ^2.3.0
-  go_router: ^12.1.1
+  go_router: ^13.2.1
   path_provider: ^2.0.8
   shared_preferences: ^2.0.13
   wrestling_scoreboard_common:
@@ -37,7 +37,7 @@ dependencies:
   flutter_riverpod: ^3.0.0-dev.3
   riverpod_annotation: ^3.0.0-dev.3
   collection: ^1.18.0
-  file_picker: ^6.2.0
+  file_picker: ^8.0.0+1
   country: ^4.1.3
 
 dev_dependencies:
