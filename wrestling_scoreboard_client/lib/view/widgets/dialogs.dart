@@ -16,7 +16,7 @@ class OkDialog extends StatelessWidget {
     return AlertDialog(
       content: SizedBox(
         width: 300,
-        child: child,
+        child: SingleChildScrollView(child: child),
       ),
       actions: <Widget>[
         TextButton(
@@ -51,7 +51,7 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
       // Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
       content: SizedBox(
         width: 300,
-        child: child,
+        child: SingleChildScrollView(child: child),
       ),
       actions: <Widget>[
         TextButton(
