@@ -32,7 +32,7 @@ enum WrestlingApiProvider {
           organization,
           getSingleOfOrg: getSingleOfOrg,
           apiUrl: 'https://www.brv-ringen.de/Api/v1/cs/',
-          authService: authService as BasicAuthService,
+          authService: authService as BasicAuthService?,
         );
     }
   }
