@@ -56,22 +56,22 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: Android
-            release-type: apk
+            build-type: apk
           - os: windows-latest
             platform: Windows
-            release-type: windows
+            build-type: windows
           - os: ubuntu-latest
             platform: Linux
-            release-type: debian
+            build-type: debian
           - os: ubuntu-latest
             platform: Web
-            release-type: web
+            build-type: web
           - os: macos-14
             platform: macOS
-            release-type: macos
+            build-type: macos
 #          - os: macos-14
 #            platform: iOS
-#            release-type: ipa
+#            build-type: ipa
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -92,17 +92,78 @@ jobs:
           sudo apt-get install -y libunwind-dev
           sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - name: Build
-        uses: oberhauser-dev/flutter-release-action@v0
+        uses: oberhauser-dev/flutter-release-action@dev
         with:
+          working-directory: wrestling_scoreboard_client
           app-name: 'wrestling_scoreboard_client'
           app-version: ${{ github.ref_name }}
           tag: ${{ github.ref }}
-          release-type: ${{ matrix.release-type }}
+          build-type: ${{ matrix.build-type }}
           token: ${{ github.token }}
           build-args: |-
             --dart-define=APP_ENVIRONMENT=production
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
             --dart-define=USE_PATH_URL_STRATEGY=true
-          working-directory: wrestling_scoreboard_client
+          android-keystore-file-base64: ${{ secrets.ANDROID_KEYSTORE }}
+          android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          android-key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
+  publish-client:
+    needs: release-client
+    name: Release Client for ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: wrestling_scoreboard_client
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: Android
+            publish-distributor: androidGooglePlay
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.4'
+          channel: 'stable'
+      - uses: actions/setup-java@v3
+        if: ${{ matrix.platform == 'Android' }}
+        with:
+          # AGP8 needs JDK 17
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: bluefireteam/melos-action@v3
+      - name: Install Linux Dependencies
+        if: ${{ matrix.platform == 'Linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libunwind-dev
+          sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - name: Publish
+        uses: oberhauser-dev/flutter-release-action@dev
+        with:
+          working-directory: wrestling_scoreboard_client
+          app-name: 'wrestling_scoreboard_client'
+          app-version: ${{ github.ref_name }}
+          tag: ${{ github.ref }}
+          build-type: ${{ matrix.build-type }}
+          token: ${{ github.token }}
+          build-args: |-
+            --dart-define=APP_ENVIRONMENT=production
+            --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api
+            --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
+            --dart-define=USE_PATH_URL_STRATEGY=true
+          publish-dry-run: true
+          publish-stage: internal
+          publish-distributor: ${{ matrix.publish-distributor }}
+          publish-android-fastlane-secrets-json-base64: ${{ secrets.ANDROID_GOOGLE_PLAY_JSON }}
+          android-keystore-file-base64: ${{ secrets.ANDROID_KEYSTORE }}
+          android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          android-key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
