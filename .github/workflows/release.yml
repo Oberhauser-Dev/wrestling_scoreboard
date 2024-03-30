@@ -44,7 +44,7 @@ jobs:
           tag: ${{ github.ref }}
     
   release-client:
-    name: Release Client for ${{ matrix.platform }}
+    name: Release Client as ${{ matrix.build-type }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -112,7 +112,7 @@ jobs:
 
   publish-client:
     needs: release-client
-    name: Release Client for ${{ matrix.platform }}
+    name: Publish Client on ${{ matrix.publish-distributor }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -124,7 +124,7 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: Android
-            publish-distributor: androidGooglePlay
+            publish-distributor: android-google-play
 
     steps:
       - uses: actions/checkout@v4
