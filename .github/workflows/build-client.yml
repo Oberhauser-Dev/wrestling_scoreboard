@@ -127,7 +127,8 @@ jobs:
 
       - name: Build Android APK
         working-directory: ./wrestling_scoreboard_client
-        run: flutter build apk --release
+        # Build on debug to avoid code signing
+        run: flutter build apk --debug
 
   ios:
     runs-on: macos-14
