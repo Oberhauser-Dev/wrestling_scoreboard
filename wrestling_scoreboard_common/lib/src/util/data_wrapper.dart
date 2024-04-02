@@ -1,5 +1,4 @@
-import '../data.dart';
-import '../enums/crud.dart';
+import '../../common.dart';
 
 Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
   return <String, dynamic>{
@@ -200,6 +199,7 @@ class ManyDataObject<T> {
 // TODO: deprecate in favor of Type.tableName
 String getTableNameFromType(Type t) {
   return switch (t) {
+    const (BasicAuthService) => 'basic_auth_service', // Only used for type encoding
     const (BoutConfig) => 'bout_config',
     const (Club) => 'club',
     const (Bout) => 'bout',
@@ -225,6 +225,7 @@ String getTableNameFromType(Type t) {
 
 Type getTypeFromTableName(String tableName) {
   return switch (tableName) {
+    'basic_auth_service' => BasicAuthService, // Only used for type decoding
     'bout_config' => BoutConfig,
     'club' => Club,
     'bout' => Bout,

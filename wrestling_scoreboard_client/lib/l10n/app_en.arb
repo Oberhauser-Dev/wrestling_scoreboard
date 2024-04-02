@@ -22,6 +22,8 @@
   "wsUrl": "Websocket-Url",
   "services": "Services",
   "apiProvider": "API Provider",
+  "syncWithApiProvider": "Sync with API provider",
+  "warningSyncWithApiProvider": "This action synchronizes all objects of this organization. Are you sure, you want to continue?",
   "reportProvider": "Report Provider",
   "database": "Database",
   "exportDatabase": "Export database",
@@ -29,6 +31,9 @@
   "restoreDefaultDatabase": "Restore default database",
   "resetDatabase": "Reset database",
   "bellSound": "Bell sound",
+
+  "username": "Username",
+  "password": "Password",
 
   "imprint": "Imprint",
   "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",

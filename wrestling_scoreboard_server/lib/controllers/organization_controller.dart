@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
@@ -46,12 +48,22 @@ class OrganizationController extends EntityController<Organization> {
 
   Future<Response> import(Request request, String id) async {
     try {
+      AuthService? authService;
+      final message = await request.readAsString();
+      if (message.isNotEmpty) {
+        final jsonDecodedMessage = jsonDecode(message);
+        final authType = getTypeFromTableName(jsonDecodedMessage['tableName']);
+        if (authType == BasicAuthService) {
+          authService = BasicAuthService.fromJson(jsonDecodedMessage['data']);
+        }
+      }
+
       final organization = await getSingle(int.parse(id));
-      final apiProvider = organization.getApi(EntityController.getSingleFromDataTypeOfOrg);
+      final apiProvider = organization.getApi(EntityController.getSingleFromDataTypeOfOrg, authService: authService);
       if (apiProvider == null) {
         return Response.notFound('No API provider selected');
       }
-      apiProvider.isMock = true;
+      // apiProvider.isMock = true;
 
       final clubs = await apiProvider.importClubs();
       await Future.forEach(clubs, (club) async {

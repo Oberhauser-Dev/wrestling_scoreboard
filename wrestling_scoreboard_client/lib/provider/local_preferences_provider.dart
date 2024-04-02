@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'local_preferences_provider.g.dart';
 
@@ -142,5 +145,62 @@ class FavoritesNotifier extends _$FavoritesNotifier {
       favorites.remove(tableName);
     }
     await _setFavorites(favorites);
+  }
+}
+
+@riverpod
+class OrgAuthNotifier extends _$OrgAuthNotifier {
+  @override
+  Raw<Future<Map<int, AuthService>>> build() async {
+    final orgAuthStrList = await Preferences.getStringList(Preferences.keyOrganizationAuth);
+    try {
+      final orgAuths = (orgAuthStrList ?? []).map((rawStr) {
+        final parts = rawStr.split('=');
+        final orgId = int.parse(parts[0]);
+        final authTypeStr = parts[1];
+        final authType = getTypeFromTableName(authTypeStr);
+        final authJson = jsonDecode(Uri.decodeFull(parts[2]));
+        final authService = switch (authType) {
+          const (BasicAuthService) => BasicAuthService.fromJson(authJson),
+          _ => throw UnimplementedError('AuthService $authTypeStr not known'),
+        };
+        return MapEntry(orgId, authService);
+      });
+      return Map.fromEntries(orgAuths);
+    } on UnimplementedError catch (e) {
+      debugPrint((e.message ?? e.toString()) + e.stackTrace.toString());
+      await Preferences.setStringList(Preferences.keyOrganizationAuth, []);
+    }
+    return {};
+  }
+
+  Future<void> _setOrgAuthServices(Map<int, AuthService> orgAuthServices) async {
+    state = Future.value(orgAuthServices);
+    final orgAuthList = orgAuthServices.entries.map((e) {
+      final authService = e.value;
+      final String authType;
+      final String authJson;
+      if (authService is BasicAuthService) {
+        authType = getTableNameFromType(BasicAuthService);
+        authJson = Uri.encodeFull(jsonEncode(authService.toJson()));
+      } else {
+        throw UnimplementedError('AuthService ${e.runtimeType} not known');
+      }
+      return '${e.key}=$authType=$authJson';
+    }).toList();
+    // TODO: use secure storage: https://pub.dev/packages/flutter_secure_storage
+    await Preferences.setStringList(Preferences.keyOrganizationAuth, orgAuthList);
+  }
+
+  void addOrgAuthService(int id, AuthService authService) async {
+    final authServiceMap = await state;
+    authServiceMap[id] = authService;
+    await _setOrgAuthServices(authServiceMap);
+  }
+
+  void removeOrgAuthService(int id) async {
+    final authServiceMap = await state;
+    authServiceMap.remove(id);
+    await _setOrgAuthServices(authServiceMap);
   }
 }

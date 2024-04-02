@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
@@ -66,14 +67,26 @@ class OrganizationOverview extends ConsumerWidget {
           details: data.name,
           actions: [
             IconButton(
-                onPressed: () => catchAsync(context, () async {
-                      final dataManager = await ref.read(dataManagerNotifierProvider);
-                      await dataManager.organizationImport(id);
-                      if (context.mounted) {
-                        await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                      }
-                    }),
-                icon: const Icon(Icons.api)),
+              tooltip: localizations.syncWithApiProvider,
+              onPressed: () async {
+                final result = await showOkCancelDialog(
+                  context: context,
+                  child: Text(localizations.warningSyncWithApiProvider),
+                  getResult: () => true,
+                );
+                if (result == true && context.mounted) {
+                  catchAsync(context, () async {
+                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    final authService = (await ref.read(orgAuthNotifierProvider))[id];
+                    await dataManager.organizationImport(id, authService: authService);
+                    if (context.mounted) {
+                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                    }
+                  });
+                }
+              },
+              icon: const Icon(Icons.api),
+            ),
           ],
           body: GroupedList(items: [
             description,

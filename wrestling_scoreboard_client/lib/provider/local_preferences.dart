@@ -15,6 +15,7 @@ class Preferences {
   static const keyBellSound = 'bell-sound';
   static const keyFontFamily = 'font-family';
   static const keyFavorites = 'favorites';
+  static const keyOrganizationAuth = 'org-auth';
 
   static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
   static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();

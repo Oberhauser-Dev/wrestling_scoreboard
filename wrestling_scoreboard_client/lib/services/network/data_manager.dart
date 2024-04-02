@@ -79,7 +79,7 @@ abstract class DataManager {
 
   Future<void> resetDatabase();
 
-  Future<void> organizationImport(int id);
+  Future<void> organizationImport(int id, {AuthService? authService});
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};
   final Map<Type, Map<Type, StreamController<ManyDataObject<dynamic>>>> _manyStreamControllers = {};

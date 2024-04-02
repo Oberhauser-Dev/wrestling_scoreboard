@@ -63,7 +63,8 @@ class TeamMatchOverview extends ConsumerWidget {
                       final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
                       String? outputPath = (await file_selector.getSaveLocation(
                         suggestedName: fileName,
-                      ))?.path;
+                      ))
+                          ?.path;
                       if (outputPath != null) {
                         final bouts = await _getBouts(ref, match: match);
                         final boutMap = Map.fromEntries(await Future.wait(

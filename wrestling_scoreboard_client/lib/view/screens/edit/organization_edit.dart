@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -26,12 +27,23 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
   WrestlingApiProvider? _apiProvider;
   WrestlingReportProvider? _reportProvider;
 
+  // Auth for API provider
+  AuthService? _apiProviderAuth;
+
   @override
   void initState() {
+    super.initState();
     _parent = widget.organization?.parent ?? widget.initialParent;
     _apiProvider = widget.organization?.apiProvider;
     _reportProvider = widget.organization?.reportProvider;
-    super.initState();
+
+    if (widget.organization?.id != null) {
+      ref.read(orgAuthNotifierProvider).then((value) {
+        setState(() {
+          _apiProviderAuth = value[widget.organization!.id];
+        });
+      });
+    }
   }
 
   @override
@@ -108,13 +120,57 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           ),
         ),
       ),
+      if (_apiProvider == WrestlingApiProvider.deByRingenApi)
+        ListTile(
+          leading: const Icon(Icons.account_circle),
+          title: TextFormField(
+            key: Key(_apiProviderAuth.toString()),
+            // Workaround to update initialValue
+            autofillHints: const [AutofillHints.username],
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: localizations.username,
+            ),
+            initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).username : null,
+            onSaved: (newValue) {
+              final currentAuth = _apiProviderAuth;
+              if (currentAuth is BasicAuthService) {
+                _apiProviderAuth = currentAuth.copyWith(username: newValue ?? '');
+              } else {
+                _apiProviderAuth = BasicAuthService(username: newValue ?? '', password: '');
+              }
+            },
+          ),
+        ),
+      if (_apiProvider == WrestlingApiProvider.deByRingenApi)
+        ListTile(
+          key: Key(_apiProviderAuth.toString()), // Workaround to update initialValue
+          leading: const Icon(Icons.password),
+          title: TextFormField(
+            autofillHints: const [AutofillHints.password],
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: localizations.password,
+            ),
+            initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).password : null,
+            onSaved: (newValue) {
+              final currentAuth = _apiProviderAuth;
+              if (currentAuth is BasicAuthService) {
+                _apiProviderAuth = currentAuth.copyWith(password: newValue ?? '');
+              } else {
+                _apiProviderAuth = BasicAuthService(username: '', password: newValue ?? '');
+              }
+            },
+            obscureText: true,
+          ),
+        ),
       ListTile(
         leading: const Icon(Icons.description),
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<WrestlingReportProvider>(
             isNullable: true,
-            hint: localizations.apiProvider,
+            hint: localizations.reportProvider,
             isExpanded: true,
             options: WrestlingReportProvider.values.map((value) => MapEntry(
                   value,
@@ -151,6 +207,9 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
         reportProvider: _reportProvider,
         apiProvider: _apiProvider,
       ));
+      if (widget.organization?.id != null && _apiProviderAuth != null) {
+        ref.read(orgAuthNotifierProvider.notifier).addOrgAuthService(widget.organization!.id!, _apiProviderAuth!);
+      }
       navigator.pop();
     }
   }

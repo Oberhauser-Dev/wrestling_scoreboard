@@ -70,7 +70,6 @@ String _$localeNotifierHash() => r'e1e390bd02d18a8474b484ee33bc40edca7e9c3d';
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
-
   @$internal
   @override
   Raw<Future<Locale?>> runBuild() => build();
@@ -137,7 +136,6 @@ String _$themeModeNotifierHash() => r'29aedc145964f8e32034ab495a26ee3ccedfed82';
 
 abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   Raw<Future<ThemeMode>> build();
-
   @$internal
   @override
   Raw<Future<ThemeMode>> runBuild() => build();
@@ -204,7 +202,6 @@ String _$fontFamilyNotifierHash() => r'38c577d6ba358636b04947a2d8d33bb02f7a8bfc'
 
 abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
-
   @$internal
   @override
   Raw<Future<String?>> runBuild() => build();
@@ -271,7 +268,6 @@ String _$webSocketUrlNotifierHash() => r'3e384b28903aca1717d43fa65ace0651b39b668
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -338,7 +334,6 @@ String _$networkTimeoutNotifierHash() => r'2c6a26f2904896d01c9ddd31fd4ae7637030a
 
 abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
-
   @$internal
   @override
   Raw<Future<Duration>> runBuild() => build();
@@ -405,7 +400,6 @@ String _$apiUrlNotifierHash() => r'8c063b9ec135234c56970345957760282a21fbde';
 
 abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -472,7 +466,6 @@ String _$bellSoundNotifierHash() => r'1c9d805977f6f32cd7b44e7bd1ecfecd15447ddd';
 
 abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -536,14 +529,80 @@ final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifie
       $NotifierProviderElement(this, container);
 }
 
-String _$favoritesNotifierHash() => r'63f7251d6178c2069f3521edeeaa1737f435b21f';
+String _$favoritesNotifierHash() => r'97f2d02bbc78a039c8a97863a8900b91e623730f';
 
 abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<int>>>>> {
   Raw<Future<Map<String, Set<int>>>> build();
-
   @$internal
   @override
   Raw<Future<Map<String, Set<int>>>> runBuild() => build();
+}
+
+@ProviderFor(OrgAuthNotifier)
+const orgAuthNotifierProvider = OrgAuthNotifierProvider._();
+
+final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> {
+  const OrgAuthNotifierProvider._({super.runNotifierBuildOverride, OrgAuthNotifier Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'orgAuthNotifierProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final OrgAuthNotifier Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$orgAuthNotifierHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<Map<int, AuthService>>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<Map<int, AuthService>>>>(value),
+    );
+  }
+
+  @$internal
+  @override
+  OrgAuthNotifier create() => _createCb?.call() ?? OrgAuthNotifier();
+
+  @$internal
+  @override
+  OrgAuthNotifierProvider $copyWithCreate(
+    OrgAuthNotifier Function() create,
+  ) {
+    return OrgAuthNotifierProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  OrgAuthNotifierProvider $copyWithBuild(
+    Raw<Future<Map<int, AuthService>>> Function(
+      Ref<Raw<Future<Map<int, AuthService>>>>,
+      OrgAuthNotifier,
+    ) build,
+  ) {
+    return OrgAuthNotifierProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> $createElement(
+          ProviderContainer container) =>
+      $NotifierProviderElement(this, container);
+}
+
+String _$orgAuthNotifierHash() => r'4ea0cb1cf146ff4c48b962f8bbee907e98c24f9a';
+
+abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthService>>>> {
+  Raw<Future<Map<int, AuthService>>> build();
+  @$internal
+  @override
+  Raw<Future<Map<int, AuthService>>> runBuild() => build();
 }
 
 // ignore_for_file: type=lint
