@@ -73,7 +73,7 @@ class OrganizationController extends EntityController<Organization> {
         await TeamController().getOrCreateManyOfOrg(teams.toList());
       });
 
-      final divisions = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year));
+      final divisions = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
       await Future.forEach(divisions, (division) async {
         // TODO: Don't create bout config or delete old one, if division already exists.
         final boutConfig = await BoutConfigController().createSingleReturn(division.boutConfig);

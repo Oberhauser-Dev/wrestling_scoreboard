@@ -6,12 +6,12 @@ final competitionJson = r'''
     "rdb": "3.0.8 \\\/ 3.0.9",
     "jrcs": "1.0.3"
   },
-  "year": "2021",
-  "sid": "2019",
+  "year": "2023",
+  "sid": "2013",
   "cid": "001006a",
   "flags": 0,
   "competition": {
-    "saisonId": "2019",
+    "saisonId": "2023",
     "competitionId": "001006a",
     "ligaId": "Oberliga",
     "tableId": "Nord",
@@ -27,7 +27,7 @@ final competitionJson = r'''
     "opponentTeamName": "RSV Schonungen ",
     "homePoints": "21",
     "opponentPoints": "8",
-    "boutDate": "2019-10-05",
+    "boutDate": "2023-10-05",
     "scaleTime": "19:00:00",
     "audience": "305",
     "location": "Windeckhalle, Grasmanndorf Str. 2b, 96138 Burgebrach",
@@ -35,11 +35,11 @@ final competitionJson = r'''
     "editorComment": "61KG RSV Schonungen 07 Khachik Gaspariyan mit 56,9kg Untergewicht; ",
     "refereeName": "Rankl",
     "refereeGivenname": "Konrad",
-    "lastModified": "2019-10-06 11:25:31",
-    "editedAt": "2019-10-06 11:03:02",
+    "lastModified": "2023-10-06 11:25:31",
+    "editedAt": "2023-10-06 11:03:02",
     "editedBy": "j.heinz@brv-ringen.de",
     "editedIpAddr": "87.166.225.222",
-    "controlledAt": "2019-10-06 11:03:41",
+    "controlledAt": "2023-10-06 11:03:41",
     "controlledBy": "j.heinz@brv-ringen.de",
     "controllerComment": "",
     "validatedHomePoints": "21",
@@ -47,7 +47,7 @@ final competitionJson = r'''
     "decision": "home",
     "_boutList": [
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "1",
         "weightClass": "57",
@@ -75,7 +75,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "1",
               "round": "1",
@@ -83,7 +83,7 @@ final competitionJson = r'''
               "value": "1b39,1b67,Pr75,1b101,Ar124,1b148,1b197,2b294,2r355"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "1",
               "round": "1",
@@ -94,7 +94,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "2",
         "weightClass": "61",
@@ -122,7 +122,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "2",
               "round": "1",
@@ -133,7 +133,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "3",
         "weightClass": "66",
@@ -161,7 +161,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "3",
               "round": "1",
@@ -169,7 +169,7 @@ final competitionJson = r'''
               "value": "2b60,2b79,Pr98,2b107,2b112,2b130,2b139,2b151,2b160"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "3",
               "round": "1",
@@ -180,7 +180,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "4",
         "weightClass": "71",
@@ -208,7 +208,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "4",
               "round": "1",
@@ -216,7 +216,7 @@ final competitionJson = r'''
               "value": "4r21,2r28,2r57,Pb88,1r88,2r101,4r151"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "4",
               "round": "1",
@@ -227,7 +227,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "5",
         "weightClass": "75 A",
@@ -255,7 +255,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "5",
               "round": "1",
@@ -263,7 +263,7 @@ final competitionJson = r'''
               "value": "1b31,Pr105,Ar148,2r160,2r180,2r285"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "5",
               "round": "1",
@@ -274,7 +274,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "6",
         "weightClass": "75 B",
@@ -302,7 +302,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "6",
               "round": "1",
@@ -310,7 +310,7 @@ final competitionJson = r'''
               "value": "Pr96,1b96,2b115,2r130,2r151,1b220,1b256,1b348"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "6",
               "round": "1",
@@ -321,7 +321,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "7",
         "weightClass": "80",
@@ -349,7 +349,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "7",
               "round": "1",
@@ -357,7 +357,7 @@ final competitionJson = r'''
               "value": "1b54,4r88,2r108,2r125,2r175,2r199,2b219,2r249,2r266,2r286"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "7",
               "round": "1",
@@ -368,7 +368,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "8",
         "weightClass": "86",
@@ -396,7 +396,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "8",
               "round": "1",
@@ -404,7 +404,7 @@ final competitionJson = r'''
               "value": "Pb92,1r92,Pb231,1r231,1r274,0b292,2r292,2r308,1r316,0b334,2r334,1r350"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "8",
               "round": "1",
@@ -415,7 +415,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "9",
         "weightClass": "98",
@@ -443,7 +443,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "9",
               "round": "1",
@@ -451,7 +451,7 @@ final competitionJson = r'''
               "value": "Pr68,1r75,Ar116,1b149,2b239"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "9",
               "round": "1",
@@ -462,7 +462,7 @@ final competitionJson = r'''
         }
       },
       {
-        "saisonId": "2019",
+        "saisonId": "2023",
         "competitionId": "001006a",
         "order": "10",
         "weightClass": "130",
@@ -490,7 +490,7 @@ final competitionJson = r'''
         "annotation": {
           "1": {
             "points": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "10",
               "round": "1",
@@ -498,7 +498,7 @@ final competitionJson = r'''
               "value": "4r100,Pb121,1r121,2r132,2r135,Pb243,1r243,2r253,2r256,2r281"
             },
             "duration": {
-              "saisonId": "2019",
+              "saisonId": "2023",
               "competitionId": "001006a",
               "order": "10",
               "round": "1",

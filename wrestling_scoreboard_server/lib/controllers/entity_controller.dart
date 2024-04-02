@@ -100,9 +100,13 @@ abstract class EntityController<T extends DataObject> {
       .prepare(psql.Sql.named('SELECT * FROM $tableName WHERE organization_id = @orgId AND org_sync_id = @orgSyncId;'));
 
   Future<Map<String, dynamic>> getSingleOfOrgRaw(String orgSyncId, {required int orgId}) async {
+    if (orgSyncId != orgSyncId.trim()) {
+      orgSyncId = orgSyncId.trim();
+      print('$T with orgSyncId "$orgSyncId" was trimmed');
+    }
     final resStream = (await getSingleOfOrgRawStmt).bind({'orgSyncId': orgSyncId, 'orgId': orgId});
     final many = await resStream.toColumnMap().toList();
-    if (many.isEmpty) throw InvalidParameterException('$T with id "$orgSyncId" not found');
+    if (many.isEmpty) throw InvalidParameterException('$T with orgSyncId "$orgSyncId" not found');
     return many.first;
   }
 

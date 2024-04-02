@@ -1,16 +1,17 @@
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_common/src/services/auth/authorization.dart';
 
 import 'shared.dart';
 
 void main() {
   late WrestlingApi wrestlingApi;
+  MockableDateTime.isMocked = true;
+  MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
 
   final testDivision = Division(
     name: '(S) Bezirksliga',
-    startDate: DateTime(2023),
-    endDate: DateTime(2024),
+    startDate: DateTime.utc(2023),
+    endDate: DateTime.utc(2024),
     boutConfig: BoutConfig(),
     seasonPartitions: 2,
     organization: organizationNRW,
@@ -54,13 +55,13 @@ void main() {
   group('APIs', () {
     group('Germany, NRW', () {
       test('Divisions', () async {
-        final divisions = await wrestlingApi.importDivisions(minDate: DateTime(2023));
+        final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
         expect(divisions, [
           testDivision,
           Division(
             name: '(S) Finalrunde',
-            startDate: DateTime(2023),
-            endDate: DateTime(2024),
+            startDate: DateTime.utc(2023),
+            endDate: DateTime.utc(2024),
             boutConfig: BoutConfig(),
             seasonPartitions: 2,
             organization: organizationNRW,
@@ -68,8 +69,8 @@ void main() {
           ),
           Division(
             name: 'Bayernliga',
-            startDate: DateTime(2023),
-            endDate: DateTime(2024),
+            startDate: DateTime.utc(2023),
+            endDate: DateTime.utc(2024),
             boutConfig: BoutConfig(),
             seasonPartitions: 2,
             organization: organizationNRW,
@@ -77,8 +78,8 @@ void main() {
           ),
           Division(
             name: 'Gruppenoberliga',
-            startDate: DateTime(2023),
-            endDate: DateTime(2024),
+            startDate: DateTime.utc(2023),
+            endDate: DateTime.utc(2024),
             boutConfig: BoutConfig(),
             seasonPartitions: 2,
             organization: organizationNRW,
@@ -86,8 +87,8 @@ void main() {
           ),
           Division(
             name: 'Landesliga',
-            startDate: DateTime(2023),
-            endDate: DateTime(2024),
+            startDate: DateTime.utc(2023),
+            endDate: DateTime.utc(2024),
             boutConfig: BoutConfig(),
             seasonPartitions: 2,
             organization: organizationNRW,
@@ -95,8 +96,8 @@ void main() {
           ),
           Division(
             name: 'Oberliga',
-            startDate: DateTime(2023),
-            endDate: DateTime(2024),
+            startDate: DateTime.utc(2023),
+            endDate: DateTime.utc(2024),
             boutConfig: BoutConfig(),
             seasonPartitions: 2,
             organization: organizationNRW,
@@ -318,7 +319,7 @@ void main() {
                 organization: organizationNRW,
               ),
             ),
-            date: DateTime(2021, 9, 25, 17, 45),
+            date: DateTime(2023, 9, 25, 17, 45),
             visitorsCount: 100,
             location: 'Geiselhöringer Hof, Straubinger Str. 5, 94333 Geiselhöring',
             referee: Person(
@@ -350,7 +351,7 @@ void main() {
                   organization: organizationNRW,
                   orgSyncId: 'TV Geiselhöring II'),
             ),
-            date: DateTime(2021, 10, 02, 19),
+            date: DateTime(2023, 10, 02, 19),
             visitorsCount: null,
             location: 'Mehrzweckturnhalle in Karlstein, Schmalschlägerstr. 5, 83435 Bad Reichenhall / Karlstein',
             referee: null,

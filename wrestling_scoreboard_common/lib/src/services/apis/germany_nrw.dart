@@ -5,7 +5,6 @@ import 'package:country/country.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../common.dart';
-import '../auth/authorization.dart';
 import 'mocks/competition.json.dart';
 import 'mocks/listCompetition.json.dart';
 import 'mocks/listLiga.json.dart';
@@ -40,24 +39,34 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Iterable<Division>> importDivisions({DateTime? minDate, DateTime? maxDate}) async {
-    final json = await _getLeagueList(seasonId: minDate?.year.toString());
-    final year = minDate?.year ?? int.parse(json['year']); // FIXME: year not matching the request.
-    final divisionList = json['ligaList'];
-    if (divisionList is Map<String, dynamic>) {
-      return await Future.wait(divisionList.entries.map(
-        (entry) async => Division(
-          organization: organization,
-          name: entry.key,
-          startDate: DateTime(year),
-          endDate: DateTime(year + 1),
-          boutConfig: BoutConfig(),
-          // TODO: get from "boutSchemeId" inside league list
-          seasonPartitions: 2,
-          orgSyncId: '${year}_${entry.key}',
-        ),
-      ));
-    }
-    return [];
+    maxDate ??= MockableDateTime.now();
+    minDate ??= DateTime.utc(maxDate.year - 1);
+    final years = List<int>.generate(maxDate.year - minDate.year + 1, (index) => minDate!.year + index);
+    final divisions = await Future.wait(years.map((year) async {
+      final json = await _getLeagueList(seasonId: year.toString());
+      if (json.isEmpty) return <Division>{};
+      if (year != int.tryParse(json['year'])) throw "Years don't match: $year & ${json['year']}";
+      final divisionList = json['ligaList'];
+      Iterable<Division> divisions;
+      if (divisionList is Map<String, dynamic>) {
+        divisions = await Future.wait(divisionList.entries.map(
+          (entry) async => Division(
+            organization: organization,
+            name: entry.key,
+            startDate: DateTime.utc(year),
+            endDate: DateTime.utc(year + 1),
+            boutConfig: BoutConfig(),
+            // TODO: get from "boutSchemeId" inside league list
+            seasonPartitions: 2,
+            orgSyncId: '${year}_${entry.key}',
+          ),
+        ));
+      } else {
+        divisions = <Division>[];
+      }
+      return divisions;
+    }));
+    return divisions.expand((element) => element);
   }
 
   @override
@@ -66,6 +75,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
     final competitions = await importTeamMatches(league: leagues.first);
     final json = await _getCompetition(
         seasonId: division.startDate.year.toString(), competitionId: competitions.first.orgSyncId!);
+    if (json.isEmpty) return <DivisionWeightClass>{};
     final List<dynamic> boutList = json['competition']['_boutList'];
     final weightClassCount = boutList.length;
     final weightClassesPartitition1 = boutList.asMap().entries.map((e) {
@@ -97,7 +107,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Iterable<Club>> importClubs() async {
-    final divisions = await importDivisions();
+    final divisions = await importDivisions(minDate: DateTime.utc(MockableDateTime.now().year - 1));
     final leagues = (await Future.wait(divisions.map((e) => importLeagues(division: e)))).expand((element) => element);
     final clubs = (await Future.wait(leagues.map((league) async {
       final json = await _getCompetitionList(
@@ -105,31 +115,40 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
         regionId: league.name,
         seasonId: league.startDate.year.toString(),
       );
+      if (json.isEmpty) return <Club>{};
 
-      final Map<String, dynamic> competitionList = json['competitionList'];
-      final listHome = await Future.wait(competitionList.entries.map((entry) async {
-        final Map<String, dynamic> values = entry.value;
-        return Club(
-          name: values['homeTeamName'],
-          organization: organization,
-          orgSyncId: values['homeTeamName'],
-          // TODO: read 'no' from endpoint, when available
-          no: null,
-        );
-      }));
+      final competitionList = json['competitionList'];
+      final Iterable<Club> clubs;
+      if (competitionList is Map<String, dynamic>) {
+        Future<List<Club>> getClubOfCompetition(String key) async {
+          return (await Future.wait(competitionList.entries.map((entry) async {
+            final Map<String, dynamic> values = entry.value;
+            String? clubName = values[key];
+            if (clubName == null) return null;
+            if (clubName != clubName.trim()) {
+              clubName = clubName.trim();
+              print('Club with club name "$clubName" was trimmed');
+            }
+            return Club(
+              name: clubName,
+              // TODO: read 'no' from endpoint, when available
+              no: null,
+              orgSyncId: clubName,
+              organization: organization,
+            );
+          })))
+              .whereNotNull()
+              .toList();
+        }
 
-      final listGuest = await Future.wait(competitionList.entries.map((entry) async {
-        final Map<String, dynamic> values = entry.value;
-        return Club(
-          name: values['opponentTeamName'],
-          organization: organization,
-          orgSyncId: values['opponentTeamName'],
-          // TODO: read 'no' from endpoint, when available
-          no: null,
-        );
-      }));
+        final listHome = await getClubOfCompetition('homeTeamName');
+        final listGuest = await getClubOfCompetition('opponentTeamName');
 
-      return [...listHome, ...listGuest];
+        clubs = [...listHome, ...listGuest];
+      } else {
+        clubs = [];
+      }
+      return clubs;
     })))
         .expand((element) => element);
     return clubs.toSet();
@@ -137,7 +156,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Iterable<Membership>> importMemberships({required Club club}) async {
-    final divisions = await importDivisions(minDate: DateTime(DateTime.now().year - 1));
+    final divisions = await importDivisions(minDate: DateTime.utc(MockableDateTime.now().year - 1));
     final leagues = (await Future.wait(divisions.map((e) => importLeagues(division: e)))).expand((element) => element);
     final teamMatches =
         (await Future.wait(leagues.map((e) => importTeamMatches(league: e)))).expand((element) => element);
@@ -145,6 +164,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
       teamMatches.map((teamMatch) async {
         final json = await _getCompetition(
             seasonId: teamMatch.league!.startDate.year.toString(), competitionId: teamMatch.orgSyncId!);
+        if (json.isEmpty) return <Membership>{};
         final List<dynamic> boutList = json['competition']['_boutList'];
 
         final homeLicenseIds = boutList.map((boutJson) => int.tryParse(boutJson['homeWrestlerLicId'] ?? ''));
@@ -152,6 +172,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
         final licenseIds = [...homeLicenseIds, ...opponentLicenseIds].whereNotNull();
         final memberships = await Future.wait(licenseIds.map((e) async {
           final json = await _getSaisonWrestler(passCode: e);
+          if (json.isEmpty) return null;
           final wrestlerJson = json['wrestler'];
           if (wrestlerJson == null || wrestlerJson['clubCode'] != club.no) {
             // FIXME: comparison may not is correct!
@@ -184,7 +205,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Iterable<Team>> importTeams({required Club club}) async {
-    final divisions = await importDivisions();
+    final divisions = await importDivisions(minDate: DateTime.utc(MockableDateTime.now().year - 1));
     final leagues = (await Future.wait(divisions.map((e) => importLeagues(division: e)))).expand((element) => element);
     final teams = (await Future.wait(leagues.map((league) async {
       final json = await _getCompetitionList(
@@ -192,29 +213,40 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
         regionId: league.name,
         seasonId: league.startDate.year.toString(),
       );
+      if (json.isEmpty) return <Team>{};
 
-      final Map<String, dynamic> competitionList = json['competitionList'];
-      Future<List<Team>> getTeamOfCompetition(String key) async {
-        return (await Future.wait(competitionList.entries.map((entry) async {
-          final Map<String, dynamic> values = entry.value;
-          final teamName = values[key];
-          if (teamName != club.name) return null;
-          return Team(
-            name: teamName,
-            club: await _getSingleBySyncId<Club>(teamName),
-            orgSyncId: teamName,
-            organization: organization,
-          );
-        })))
-            .whereNotNull()
-            .toList();
+      final competitionList = json['competitionList'];
+      final Iterable<Team> teams;
+      if (competitionList is Map<String, dynamic>) {
+        Future<List<Team>> getTeamOfCompetition(String key) async {
+          return (await Future.wait(competitionList.entries.map((entry) async {
+            final Map<String, dynamic> values = entry.value;
+            String? teamName = values[key];
+            if (teamName == null) return null;
+            if (teamName != teamName.trim()) {
+              teamName = teamName.trim();
+              print('Team with team name "$teamName" was trimmed');
+            }
+            if (teamName != club.name) return null;
+            return Team(
+              name: teamName,
+              club: await _getSingleBySyncId<Club>(teamName),
+              orgSyncId: teamName,
+              organization: organization,
+            );
+          })))
+              .whereNotNull()
+              .toList();
+        }
+
+        final listHome = await getTeamOfCompetition('homeTeamName');
+        final listGuest = await getTeamOfCompetition('opponentTeamName');
+
+        teams = [...listHome, ...listGuest];
+      } else {
+        teams = [];
       }
-
-      final listHome = await getTeamOfCompetition('homeTeamName');
-      final listGuest = await getTeamOfCompetition('opponentTeamName');
-
-      listHome.addAll(listGuest);
-      return listHome;
+      return teams;
     })))
         .expand((element) => element);
     return teams.toSet().where((element) => element.club == club);
@@ -223,10 +255,12 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
   @override
   Future<Iterable<League>> importLeagues({required Division division}) async {
     final json = await _getLeagueList(seasonId: division.startDate.year.toString());
+    if (json.isEmpty) return <League>{};
 
     final leagueList = json['ligaList'][division.name];
+    Iterable<League> leagues;
     if (leagueList is Map<String, dynamic>) {
-      return await Future.wait(
+      leagues = await Future.wait(
         leagueList.entries.map(
           (entry) async => League(
             name: entry.key,
@@ -238,8 +272,10 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
           ),
         ),
       );
+    } else {
+      leagues = [];
     }
-    return [];
+    return leagues;
   }
 
   @override
@@ -249,6 +285,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
       regionId: league.name,
       seasonId: league.startDate.year.toString(),
     );
+    if (json.isEmpty) return <TeamMatch>{};
 
     final competitionList = json['competitionList'];
     if (competitionList is Map<String, dynamic>) {
@@ -291,16 +328,21 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
     return person.copyWith(orgSyncId: '${person.fullName}_${person.birthDate}', organization: organization);
   }
 
+  Iterable<String>? cachedSeasonList;
+
   /// Get all seasons
   // ignore: unused_element
   Future<Iterable<String>> _getSeasonList() async {
+    if (cachedSeasonList != null) return cachedSeasonList!;
+
     final uri = Uri.parse(apiUrl).replace(queryParameters: {
       'op': 'listSaison',
     });
 
     String body;
     if (!isMock) {
-      final response = await http.get(uri);
+      print('Call API: $uri');
+      final response = await http.get(uri).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception('Failed to get the saison list: ${response.reasonPhrase ?? response.statusCode.toString()}');
       }
@@ -310,31 +352,44 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
     }
     final Map<String, dynamic> json = jsonDecode(body);
     final Map<String, dynamic> competitionList = json['ligaList'];
-    return await Future.wait(competitionList.entries.map((entry) async => entry.value.toString()));
+    cachedSeasonList = await Future.wait(competitionList.entries.map((entry) async => entry.value.toString()));
+    return cachedSeasonList!;
   }
+
+  final Map<String, Map<String, dynamic>> cachedLeagueList = {};
 
   /// Get leagues of a season
   Future<Map<String, dynamic>> _getLeagueList({
     String? seasonId,
   }) async {
-    seasonId ??= DateTime.now().year.toString();
+    seasonId ??= MockableDateTime.now().year.toString();
+    final cacheId = 's:$seasonId';
+    if (cachedLeagueList[cacheId] != null) return cachedLeagueList[cacheId]!;
     final uri = Uri.parse(apiUrl).replace(queryParameters: {
       'op': 'listLiga',
       'sid': seasonId,
     });
     String body;
     if (!isMock) {
-      final response = await http.get(uri);
+      print('Call API: $uri');
+      final response = await http.get(uri).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception(
             'Failed to get the liga list (seasonId: $seasonId): ${response.reasonPhrase ?? response.statusCode.toString()}');
       }
       body = response.body;
     } else {
-      body = listLigaJson;
+      if (seasonId == '2023') {
+        body = listLigaJson;
+      } else {
+        body = '{}';
+      }
     }
-    return jsonDecode(body);
+    cachedLeagueList[cacheId] = jsonDecode(body);
+    return cachedLeagueList[cacheId]!;
   }
+
+  final Map<String, Map<String, dynamic>> cachedCompetitionList = {};
 
   /// Get team matches of a league
   Future<Map<String, dynamic>> _getCompetitionList({
@@ -342,6 +397,8 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
     required String ligaId,
     required String regionId,
   }) async {
+    final cacheId = 's:$seasonId,l:$ligaId,r:$regionId';
+    if (cachedCompetitionList[cacheId] != null) return cachedCompetitionList[cacheId]!;
     final uri = Uri.parse(apiUrl).replace(queryParameters: {
       'op': 'listCompetition',
       'sid': seasonId,
@@ -351,22 +408,32 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
     String body;
     if (!isMock) {
-      final response = await http.get(uri);
+      print('Call API: $uri');
+      final response = await http.get(uri).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception(
             'Failed to get the competition list (seasonId: $seasonId, ligaId: $ligaId, rid: $regionId): ${response.reasonPhrase ?? response.statusCode.toString()}');
       }
       body = response.body;
     } else {
-      body = listCompetitionJson;
+      if (seasonId == '2023') {
+        body = listCompetitionJson;
+      } else {
+        body = '{}';
+      }
     }
-    return jsonDecode(body);
+    cachedCompetitionList[cacheId] = jsonDecode(body);
+    return cachedCompetitionList[cacheId]!;
   }
+
+  final Map<String, Map<String, dynamic>> cachedCompetitions = {};
 
   Future<Map<String, dynamic>> _getCompetition({
     required String seasonId,
     required String competitionId,
   }) async {
+    final cacheId = 's:$seasonId,c:$competitionId';
+    if (cachedCompetitions[cacheId] != null) return cachedCompetitions[cacheId]!;
     final uri = Uri.parse(apiUrl).replace(queryParameters: {
       'op': 'getCompetition',
       'sid': seasonId,
@@ -375,21 +442,31 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
     String body;
     if (!isMock) {
-      final response = await http.get(uri);
+      print('Call API: $uri');
+      final response = await http.get(uri).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception(
             'Failed to get the competition list (seasonId: $seasonId, competitionId: $competitionId): ${response.reasonPhrase ?? response.statusCode.toString()}');
       }
       body = response.body;
     } else {
-      body = competitionJson;
+      if (seasonId == '2023') {
+        body = competitionJson;
+      } else {
+        body = '{}';
+      }
     }
-    return jsonDecode(body);
+    cachedCompetitions[cacheId] = jsonDecode(body);
+    return cachedCompetitions[cacheId]!;
   }
+
+  final Map<String, Map<String, dynamic>> cachedWrestlers = {};
 
   Future<Map<String, dynamic>> _getSaisonWrestler({
     required int passCode,
   }) async {
+    final cacheId = 'p:$passCode';
+    if (cachedWrestlers[cacheId] != null) return cachedWrestlers[cacheId]!;
     final uri = Uri.parse(apiUrl).replace(queryParameters: {
       'op': 'getSaisonWrestler',
       'passcode': passCode.toString(),
@@ -401,7 +478,8 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
         print('No credentials given. Operation `getSaisonWrestler` skipped.');
         return {};
       }
-      final response = await http.get(uri, headers: authService?.header);
+      print('Call API: $uri');
+      final response = await http.get(uri, headers: authService?.header).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception(
             'Failed to get the competition list (passcode: $passCode): ${response.reasonPhrase ?? response.statusCode.toString()}');
@@ -410,6 +488,7 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
     } else {
       body = wrestlerJson;
     }
-    return jsonDecode(body);
+    cachedWrestlers[cacheId] = jsonDecode(body);
+    return cachedWrestlers[cacheId]!;
   }
 }

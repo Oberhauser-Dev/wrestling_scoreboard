@@ -6,7 +6,7 @@ final listLigaJson = r'''
     "rdb": "3.0.8 \\\/ 3.0.9",
     "jrcs": "1.0.3"
   },
-  "year": "2021",
+  "year": "2023",
   "sid": "2023",
   "ligaList": {
     "(S) Bezirksliga": {

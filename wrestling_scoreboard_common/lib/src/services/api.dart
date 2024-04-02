@@ -39,6 +39,8 @@ enum WrestlingApiProvider {
 
 /// Abstraction for providing an api interface.
 abstract class WrestlingApi {
+  final timeout = Duration(seconds: 10);
+
   set isMock(bool isMock);
 
   Organization get organization;
