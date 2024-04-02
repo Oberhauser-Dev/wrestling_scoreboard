@@ -135,7 +135,7 @@ class DivisionOverview extends ConsumerWidget {
                         initialData: e,
                         builder: (context, data) {
                           return ContentItem(
-                            title: data.fullname,
+                            title: '${data.fullname}, ${data.startDate.year}',
                             icon: Icons.emoji_events,
                             onTap: () => handleSelectedLeague(data, context),
                           );

@@ -147,7 +147,7 @@ class OrganizationOverview extends ConsumerWidget {
                         initialData: e,
                         builder: (context, data) {
                           return ContentItem(
-                            title: data.fullname,
+                            title: '${data.fullname}, ${data.startDate.year}',
                             icon: Icons.inventory,
                             onTap: () => handleSelectedDivision(data, context),
                           );
