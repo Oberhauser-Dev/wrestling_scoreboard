@@ -17,7 +17,8 @@ class TeamController extends EntityController<Team> {
         SELECT tm.*
         FROM team_match AS tm
         JOIN lineup AS lu ON tm.home_id = lu.id OR tm.guest_id = lu.id
-        WHERE lu.team_id = @id;''';
+        WHERE lu.team_id = @id
+        ORDER BY date;''';
 
   Future<Response> requestTeamMatches(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(TeamMatchController(),
