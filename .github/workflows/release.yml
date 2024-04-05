@@ -125,6 +125,9 @@ jobs:
           - os: ubuntu-latest
             platform: Android
             publish-distributor: android-google-play
+          - os: ubuntu-latest
+            platform: Web
+            publish-distributor: web-server
 
     steps:
       - uses: actions/checkout@v4
@@ -149,6 +152,7 @@ jobs:
         uses: oberhauser-dev/flutter-release-action@v0
         with:
           working-directory: wrestling_scoreboard_client
+          dry-run: true
           app-name: 'wrestling_scoreboard_client'
           app-version: ${{ github.ref_name }}
           tag: ${{ github.ref }}
@@ -158,11 +162,17 @@ jobs:
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
             --dart-define=USE_PATH_URL_STRATEGY=true
-          publish-dry-run: true
           publish-stage: internal
           publish-distributor: ${{ matrix.publish-distributor }}
+          # Android
           publish-android-fastlane-secrets-json-base64: ${{ secrets.ANDROID_GOOGLE_PLAY_JSON }}
           android-keystore-file-base64: ${{ secrets.ANDROID_KEYSTORE }}
           android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           android-key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
           android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          # Web
+          publish-web-host: ${{ secrets.WEB_HOST }}
+          publish-web-path: ${{ secrets.WEB_PATH }}
+          publish-web-ssh-port: ${{ secrets.WEB_SSH_PORT }}
+          publish-web-ssh-user: ${{ secrets.WEB_SSH_USER }}
+          publish-web-ssh-private-key-base64: ${{ secrets.WEB_SSH_PRIVATE_KEY }}
