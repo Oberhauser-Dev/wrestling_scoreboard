@@ -13,7 +13,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  call-test:
+    uses: ./.github/workflows/test.yml
   call-build-client:
+    needs:
+      - call-test
     uses: ./.github/workflows/build-client.yml
     with:
       upload_pages_artifact: true

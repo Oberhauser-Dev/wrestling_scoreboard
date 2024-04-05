@@ -78,7 +78,7 @@ jobs:
         with:
           flutter-version: '3.19.4'
           channel: 'stable'
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         if: ${{ matrix.platform == 'Android' }}
         with:
           # AGP8 needs JDK 17
@@ -136,7 +136,7 @@ jobs:
         with:
           flutter-version: '3.19.4'
           channel: 'stable'
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         if: ${{ matrix.platform == 'Android' }}
         with:
           # AGP8 needs JDK 17
