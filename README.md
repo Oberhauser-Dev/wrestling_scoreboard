@@ -54,7 +54,7 @@ melos format
 
 To create a new version of all packages, call:
 ```bash
-melos version --all --manual-version wrestling_scoreboard_client:0.0.1-beta.8 --manual-version wrestling_scoreboard_common:0.0.1-beta.8 --manual-version wrestling_scoreboard_server:0.0.1-beta.8 --no-git-tag-version --no-git-commit-version 
+melos version --all --prerelease --preid=beta --diff=v0.0.1-beta.9 --no-git-tag-version
 ```
 
 Please read the documentation for setting up the according components:

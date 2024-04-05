@@ -152,7 +152,7 @@ jobs:
         uses: oberhauser-dev/flutter-release-action@v0
         with:
           working-directory: wrestling_scoreboard_client
-          dry-run: true
+          dry-run: false
           app-name: 'wrestling_scoreboard_client'
           app-version: ${{ github.ref_name }}
           tag: ${{ github.ref }}
