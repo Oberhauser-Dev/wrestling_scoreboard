@@ -1,3 +1,9 @@
+## 0.0.1-beta.10
+
+ - **FIX**: Live organization import. ([e5d12c06](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5d12c065b379dde396ce727175ae69341212f8e))
+ - **FEAT**(server): Order team matches by date. ([8743d117](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8743d117a153d881b5be085242752cb398a52186))
+ - **FEAT**: Add organization info when editing. ([25ea14be](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/25ea14be3afe92b32e281727b9762b47b2fabc5d))
+
 ## 0.0.1-beta.9
 
  - **FIX**: Update bout actions on editing time. ([50242488](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/50242488ff5efb1f4e49665d90c4dbf75707925a))

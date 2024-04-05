@@ -1,3 +1,9 @@
+## 0.0.1-beta.10
+
+ - **REFACTOR**: Replace switch case with expression. ([2c1ac540](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2c1ac5407fb433bb6b331e965952df013be86f9f))
+ - **FIX**: Live organization import. ([e5d12c06](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5d12c065b379dde396ce727175ae69341212f8e))
+ - **FIX**: Make BasicAuthService nullable. ([3c771214](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3c77121451bab9240ffe9a1fb318788175a94cf3))
+
 ## 0.0.1-beta.9
 
  - **REFACTOR**: Convert enum names. ([a4eaa319](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a4eaa319d1417dc3167966981e68e27c001b3143))

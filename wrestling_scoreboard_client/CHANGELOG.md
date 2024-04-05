@@ -1,3 +1,14 @@
+## 0.0.1-beta.10
+
+ - **FIX**: Download on web. ([b51b493e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b51b493ee6fe9363b90c937325d4f7073152ee95))
+ - **FIX**: Show body on import operation exception. ([50190efd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/50190efd60dd7f360f37f27c34191a3de28bb3a8))
+ - **FIX**: Scroll on dialogs. ([10494eec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/10494eecd2ec441225e063eb1854ea81faeafef5))
+ - **FEAT**: Append year of divisions and leagues. ([055fe1b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/055fe1b07e8aefc91c78716021a898a769966a37))
+ - **FEAT**: Improve colors of favorite cards. ([97e9e2dd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/97e9e2ddc5d030df64c1e18d3a03f57380fa537d))
+ - **FEAT**: Enable signing for Android. ([ff525e37](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ff525e377cb60bf00182ef698d74700439dd7006))
+ - **FEAT**: Add organization info when editing. ([25ea14be](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/25ea14be3afe92b32e281727b9762b47b2fabc5d))
+ - **FEAT**: Favorites (closes [#28](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/28)). ([77aa0f7d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/77aa0f7de83299d3702a28d5c83f5afc9ae5c9bd))
+
 ## 0.0.1-beta.9
 
  - **REFACTOR**: Dart format. ([ace81ead](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ace81eadbd6d7a1c5eb6cb62435229e78bddee49))

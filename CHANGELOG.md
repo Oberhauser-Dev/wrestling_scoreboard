@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-04-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.0.1-beta.10`](#wrestling_scoreboard_client---v001-beta10)
+ - [`wrestling_scoreboard_common` - `v0.0.1-beta.10`](#wrestling_scoreboard_common---v001-beta10)
+ - [`wrestling_scoreboard_server` - `v0.0.1-beta.10`](#wrestling_scoreboard_server---v001-beta10)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.0.1-beta.10`
+
+ - **FIX**: Download on web. ([b51b493e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b51b493ee6fe9363b90c937325d4f7073152ee95))
+ - **FIX**: Show body on import operation exception. ([50190efd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/50190efd60dd7f360f37f27c34191a3de28bb3a8))
+ - **FIX**: Scroll on dialogs. ([10494eec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/10494eecd2ec441225e063eb1854ea81faeafef5))
+ - **FEAT**: Append year of divisions and leagues. ([055fe1b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/055fe1b07e8aefc91c78716021a898a769966a37))
+ - **FEAT**: Improve colors of favorite cards. ([97e9e2dd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/97e9e2ddc5d030df64c1e18d3a03f57380fa537d))
+ - **FEAT**: Enable signing for Android. ([ff525e37](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ff525e377cb60bf00182ef698d74700439dd7006))
+ - **FEAT**: Add organization info when editing. ([25ea14be](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/25ea14be3afe92b32e281727b9762b47b2fabc5d))
+ - **FEAT**: Favorites (closes [#28](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/28)). ([77aa0f7d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/77aa0f7de83299d3702a28d5c83f5afc9ae5c9bd))
+
+#### `wrestling_scoreboard_common` - `v0.0.1-beta.10`
+
+ - **REFACTOR**: Replace switch case with expression. ([2c1ac540](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2c1ac5407fb433bb6b331e965952df013be86f9f))
+ - **FIX**: Live organization import. ([e5d12c06](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5d12c065b379dde396ce727175ae69341212f8e))
+ - **FIX**: Make BasicAuthService nullable. ([3c771214](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3c77121451bab9240ffe9a1fb318788175a94cf3))
+
+#### `wrestling_scoreboard_server` - `v0.0.1-beta.10`
+
+ - **FIX**: Live organization import. ([e5d12c06](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5d12c065b379dde396ce727175ae69341212f8e))
+ - **FEAT**(server): Order team matches by date. ([8743d117](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8743d117a153d881b5be085242752cb398a52186))
+ - **FEAT**: Add organization info when editing. ([25ea14be](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/25ea14be3afe92b32e281727b9762b47b2fabc5d))
+
+
 ## 2024-03-24
 
 ### Changes
