@@ -82,6 +82,7 @@ on:
 
 jobs:
   include-jobs:
+    name: Prepare build matrix
     runs-on: ubuntu-latest
     outputs:
       jobs: ${{ steps.include-jobs.outputs.jobs }}
