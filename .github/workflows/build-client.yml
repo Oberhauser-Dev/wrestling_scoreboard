@@ -141,6 +141,7 @@ jobs:
             --build-name=0.0.0-nightly.${GITHUB_SHA::7} \
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
+        shell: bash
       - name: Upload pages artifact
         if: inputs.upload_pages_artifact && matrix.platform == 'web'
         uses: actions/upload-pages-artifact@v3
