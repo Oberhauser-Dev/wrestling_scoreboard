@@ -10,7 +10,6 @@ on:
         options:
           - 'any'
           - '3.19.x'
-          - '3.16.x'
       enable_android:
         description: 'Build Android'
         required: false
@@ -50,7 +49,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.19.4'
+        default: '3.19.5'
         type: string
       enable_android:
         required: false
@@ -82,10 +81,35 @@ on:
         type: boolean
 
 jobs:
-  web:
+  include-jobs:
     runs-on: ubuntu-latest
+    outputs:
+      jobs: ${{ steps.include-jobs.outputs.jobs }}
+    steps:
+      - id: include-jobs
+        # See: https://github.com/actions/runner/issues/1985#issuecomment-1573518052
+        run: |
+          content='
+            ${{ inputs.enable_web && '{"platform": "web", "os": "ubuntu-latest", "build-type": "web"},' || '' }}
+            ${{ inputs.enable_android && '{"platform": "android", "os": "ubuntu-latest", "build-type": "apk"},' || '' }}
+            ${{ inputs.enable_ios && '{"platform": "ios", "os": "macos-14", "build-type": "ipa"},' || '' }}
+            ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-latest", "build-type": "windows"},' || '' }}
+            ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-latest", "build-type": "linux"},' || '' }}
+            ${{ inputs.enable_macos && '{"platform": "macos", "os": "macos-14", "build-type": "macos"},' || '' }}
+          '
+          # Remove last ',' with ::-1
+          echo 'jobs=[${content::-1}]' | tr -d '[:space:]' >> $GITHUB_OUTPUT
+
+  build-client:
+    needs: include-jobs
+    name: Build Client for ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    if: inputs.enable_web
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.include-jobs.outputs.jobs) }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -93,113 +117,32 @@ jobs:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
       - uses: bluefireteam/melos-action@v3
-
-      - name: Build Web app
+      - uses: actions/setup-java@v4
+        if: matrix.platform == 'android'
+        with:
+          # AGP8 needs JDK 17
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install Linux Dependencies
+        if: matrix.platform == 'linux'
+        # Install libunwind-dev, see https://github.com/actions/runner-images/issues/6399#issuecomment-1285011525
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+          sudo apt-get install -y libunwind-dev
+          sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - name: Build
         working-directory: ./wrestling_scoreboard_client
         run: |
-          flutter build web \
+          flutter build ${{ matrix.build-type }} \
+            ${{ matrix.platform == 'android' && '--debug' || '--release' }} \
+            ${{ matrix.platform == 'ios' && '--no-codesign' || '' }} \
             --build-name=0.0.0-nightly.${GITHUB_SHA::7} \
             --base-href ${{ inputs.upload_pages_artifact && '"/wrestling_scoreboard/"' || '"/"' }} \
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
       - name: Upload pages artifact
-        if: inputs.upload_pages_artifact
+        if: inputs.upload_pages_artifact && matrix.platform == 'web'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./wrestling_scoreboard_client/build/web
-
-  android:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    if: inputs.enable_android
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          # AGP8 needs JDK 17
-          distribution: 'temurin'
-          java-version: '17'
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-
-      - name: Build Android APK
-        working-directory: ./wrestling_scoreboard_client
-        # Build on debug to avoid code signing
-        run: flutter build apk --debug
-
-  ios:
-    runs-on: macos-14
-    timeout-minutes: 30
-    if: inputs.enable_ios
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-
-      - name: Build iOS
-        working-directory: ./wrestling_scoreboard_client
-        run: flutter build ios --release --no-codesign
-
-  macos:
-    runs-on: macos-14
-    timeout-minutes: 30
-    if: inputs.enable_macos
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-
-      - name: Build macOS
-        working-directory: ./wrestling_scoreboard_client
-        run: flutter build macos --release
-
-  windows:
-    runs-on: windows-latest
-    timeout-minutes: 30
-    if: inputs.enable_windows
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-
-      - name: Build Windows app
-        working-directory: ./wrestling_scoreboard_client
-        run: flutter build windows --release
-
-  linux:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    if: inputs.enable_linux
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-
-      - name: Install Flutter requirements for Linux
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
-      - name: Install GStreamer
-        # Install libunwind-dev, see https://github.com/actions/runner-images/issues/6399#issuecomment-1285011525
-        run: |
-          sudo apt-get install -y libunwind-dev
-          sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-
-      - name: Build Linux app
-        working-directory: ./wrestling_scoreboard_client
-        run: flutter build linux --release

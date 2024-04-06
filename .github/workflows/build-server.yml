@@ -10,18 +10,18 @@ on:
         options:
           - 'any'
           - '3.19.x'
-          - '3.16.x'
   workflow_call:
     inputs:
       flutter_version:
         required: false
-        default: '3.19.4'
+        default: '3.19.5'
         type: string
 
 jobs:
   build-server:
     name: Build Server for ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
