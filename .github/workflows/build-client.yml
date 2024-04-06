@@ -137,8 +137,8 @@ jobs:
           flutter build ${{ matrix.build-type }} \
             ${{ matrix.platform == 'android' && '--debug' || '--release' }} \
             ${{ matrix.platform == 'ios' && '--no-codesign' || '' }} \
+            ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href "/wrestling_scoreboard/"' || '' }} \
             --build-name=0.0.0-nightly.${GITHUB_SHA::7} \
-            --base-href ${{ inputs.upload_pages_artifact && '"/wrestling_scoreboard/"' || '"/"' }} \
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
       - name: Upload pages artifact
