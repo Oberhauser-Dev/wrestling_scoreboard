@@ -37,3 +37,4 @@ Runner/GeneratedPluginRegistrant.*
 *.cer
 *.certSigningRequest
 *.p12
+*.p8

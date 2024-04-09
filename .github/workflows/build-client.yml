@@ -98,7 +98,7 @@ jobs:
             ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-latest", "build-type": "linux"},' || '' }}
             ${{ inputs.enable_macos && '{"platform": "macos", "os": "macos-14", "build-type": "macos"},' || '' }}
           '
-          # Remove last ',' with ::-1
+          # Remove last ',' with ::-1 ❤️
           echo "jobs=[${content::-1}]" | tr -d '[:space:]' >> $GITHUB_OUTPUT
 
   build-client:
