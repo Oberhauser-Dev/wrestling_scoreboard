@@ -75,7 +75,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         deleteParticipantState: (participation) => _blueParticipation = null,
       ),
       ListTile(
-        title: getDropdown<WeightClass>(
+        title: SearchableDropdown<WeightClass>(
           icon: const Icon(Icons.fitness_center),
           selectedItem: _weightClass,
           label: AppLocalizations.of(context)!.weightClass,
@@ -84,12 +84,9 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
             _weightClass = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             final boutWeightClasses = await availableWeightClasses;
-            return (filter == null
-                    ? boutWeightClasses
-                    : boutWeightClasses.where((element) => element.name.contains(filter)))
-                .toList();
+            return boutWeightClasses.toList();
           },
         ),
       ),
@@ -234,7 +231,7 @@ class ParticipantSelectTile extends ConsumerWidget {
             flex: 80,
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: getDropdown<Participation>(
+              child: SearchableDropdown<Participation>(
                 selectedItem: participation,
                 label: label,
                 context: context,
@@ -251,7 +248,7 @@ class ParticipantSelectTile extends ConsumerWidget {
                   }
                 },
                 itemAsString: (u) => u.membership.person.fullName,
-                onFind: (String? filter) => _filterParticipants(ref, filter, lineup),
+                asyncItems: (String filter) => _filterParticipants(ref, filter, lineup),
               ),
             ),
           ),

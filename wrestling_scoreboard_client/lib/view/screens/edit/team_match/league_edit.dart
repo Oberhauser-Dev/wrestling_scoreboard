@@ -105,7 +105,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<Division>(
+        title: SearchableDropdown<Division>(
           icon: const Icon(Icons.inventory),
           selectedItem: _division,
           label: localizations.division,
@@ -115,12 +115,9 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           }),
           itemAsString: (u) => u.fullname,
           allowEmpty: false,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
-            return (filter == null
-                    ? _availableDivisions!
-                    : _availableDivisions!.where((element) => element.fullname.contains(filter)))
-                .toList();
+            return _availableDivisions!.toList();
           },
         ),
       ),

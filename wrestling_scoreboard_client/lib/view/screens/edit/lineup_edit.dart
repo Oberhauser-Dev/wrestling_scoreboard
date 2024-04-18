@@ -116,7 +116,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         items: [
           ListTile(title: HeadingText(widget.lineup.team.name)),
           ListTile(
-            title: getDropdown<Membership>(
+            title: SearchableDropdown<Membership>(
               selectedItem: _leader,
               label: localizations.leader,
               context: context,
@@ -124,25 +124,27 @@ class LineupEditState extends ConsumerState<LineupEdit> {
                 _leader = value;
               }),
               itemAsString: (u) => u.person.fullName,
-              onFind: (String? filter) async {
+              asyncItems: (String filter) async {
                 _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
                 return _filterMemberships(ref, filter, widget.lineup, _memberships!);
               },
+              isFilterOnline: true,
             ),
           ),
           ListTile(
-            title: getDropdown<Membership>(
+            title: SearchableDropdown<Membership>(
               selectedItem: _coach,
               label: localizations.coach,
               context: context,
               onSaved: (Membership? value) => setState(() {
                 _coach = value;
               }),
-              itemAsString: (u) => u.person.fullName,
-              onFind: (String? filter) async {
+              itemAsString: (u) => u.info,
+              asyncItems: (String filter) async {
                 _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
                 return _filterMemberships(ref, filter, widget.lineup, _memberships!);
               },
+              isFilterOnline: true,
             ),
           ),
           ..._participations.entries.map((mapEntry) {
@@ -233,7 +235,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
             flex: 80,
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: getDropdown<Membership>(
+              child: SearchableDropdown<Membership>(
                 selectedItem: widget.participation?.membership,
                 label:
                     '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
@@ -242,11 +244,12 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                   _curMembership = newMembership;
                 },
                 onSaved: (Membership? newMembership) => onSave(),
-                itemAsString: (u) => u.person.fullName,
-                onFind: (String? filter) async {
+                itemAsString: (u) => u.info,
+                asyncItems: (String filter) async {
                   _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
                   return _filterMemberships(ref, filter, widget.lineup, _memberships!);
                 },
+                isFilterOnline: true,
               ),
             ),
           ),
@@ -277,12 +280,24 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
 
 Future<List<Membership>> _filterMemberships(
   WidgetRef ref,
-  String? filter,
+  String filter,
   Lineup lineup,
   Iterable<Membership> memberships,
 ) async {
-  return (filter == null ? memberships : memberships.where((element) => element.person.fullName.contains(filter)))
-      .toList();
+  filter = filter.trim().toLowerCase();
+  if (filter.isEmpty) {
+    return memberships.toList();
+  }
+  final number = int.tryParse(filter);
+  if (number == null) {
+    return memberships.where((item) => item.person.fullName.toLowerCase().contains(filter)).toList();
+  }
+
+  // If filter string is a number, search for membership no or at API provider, if present.
+  filter = number.toString();
+  final filteredMemberships =
+      memberships.where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false));
+  return filteredMemberships.toList();
 }
 
 Future<List<Membership>> _getMemberships(WidgetRef ref, {required Club club}) async {

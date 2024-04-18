@@ -65,7 +65,7 @@ class TeamEditState extends ConsumerState<TeamEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<Club>(
+        title: SearchableDropdown<Club>(
           icon: const Icon(Icons.foundation),
           selectedItem: _club,
           label: localizations.club,
@@ -74,12 +74,9 @@ class TeamEditState extends ConsumerState<TeamEdit> {
             _club = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
-            return (filter == null
-                    ? _availableClubs!
-                    : _availableClubs!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableClubs!.toList();
           },
         ),
       ),

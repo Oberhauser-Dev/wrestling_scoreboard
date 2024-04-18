@@ -44,7 +44,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
 
     final items = [
       ListTile(
-        title: getDropdown<Team>(
+        title: SearchableDropdown<Team>(
           icon: const Icon(Icons.group),
           selectedItem: _team,
           label: localizations.team,
@@ -53,17 +53,14 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
             _team = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
-            return (filter == null
-                    ? availableTeams!
-                    : availableTeams!.where((element) => element.name.contains(filter)))
-                .toList();
+            return availableTeams!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<League>(
+        title: SearchableDropdown<League>(
           icon: const Icon(Icons.emoji_events),
           selectedItem: _league,
           label: localizations.league,
@@ -72,12 +69,9 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
             _league = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
-            return (filter == null
-                    ? _availableLeagues!
-                    : _availableLeagues!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableLeagues!.toList();
           },
         ),
       ),

@@ -123,7 +123,7 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
         ),
       ),
       ListTile(
-        title: getDropdown<Country>(
+        title: SearchableDropdown<Country>(
           // TODO: replace icon with home_pin when available, also in overview
           //  https://github.com/flutter/flutter/issues/102560
           icon: const Icon(Icons.location_on),
@@ -134,11 +134,11 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
             _nationality = value;
           }),
           itemAsString: (u) => '${u.nationality} (${u.isoShortName})',
-          onFind: (String? filter) async {
-            return (filter == null
-                    ? Countries.values
-                    : Countries.values.where((element) => element.nationality.contains(filter)))
-                .toList();
+          asyncItems: (String filter) async {
+            return Countries.values;
+          },
+          onFilter: (Country item, String filter) {
+            return item.nationality.toLowerCase().contains(filter);
           },
         ),
       ),

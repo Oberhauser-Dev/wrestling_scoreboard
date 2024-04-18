@@ -48,7 +48,7 @@ class Membership with _$Membership implements DataObject {
   }
 
   String get info {
-    return '${no ?? '-'},\t ${person.fullName},\t${person.age}';
+    return '${no == null ? '' : 'No. $no, '}\t ${person.fullName},\t${person.age}';
   }
 
   @override

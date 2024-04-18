@@ -65,7 +65,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<Organization>(
+        title: SearchableDropdown<Organization>(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _organization,
           label: localizations.organization,
@@ -75,13 +75,10 @@ class ClubEditState extends ConsumerState<ClubEdit> {
           }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableOrganizations ??=
                 await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
-            return (filter == null
-                    ? _availableOrganizations!
-                    : _availableOrganizations!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableOrganizations!.toList();
           },
         ),
       ),

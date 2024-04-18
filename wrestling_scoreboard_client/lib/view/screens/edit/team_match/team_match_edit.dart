@@ -123,7 +123,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<Team>(
+        title: SearchableDropdown<Team>(
           icon: const Icon(Icons.group),
           selectedItem: _homeTeam,
           label: '${localizations.team} ${localizations.red}',
@@ -132,18 +132,15 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _homeTeam = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
-            // TODO: filter by teams of same league, but may add an option to search all teams
+          asyncItems: (String filter) async {
+            // TODO: filter by teams of same league, but may add an option to search all teams, needs isFilterOnline option
             _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
-            return (filter == null
-                    ? _availableTeams!
-                    : _availableTeams!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableTeams!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<Team>(
+        title: SearchableDropdown<Team>(
           icon: const Icon(Icons.group),
           selectedItem: _guestTeam,
           label: '${localizations.team} ${localizations.blue}',
@@ -152,13 +149,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _guestTeam = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
             _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
-            return (filter == null
-                    ? _availableTeams!
-                    : _availableTeams!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableTeams!.toList();
           },
         ),
       ),
@@ -174,7 +168,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<League>(
+        title: SearchableDropdown<League>(
           icon: const Icon(Icons.emoji_events),
           selectedItem: _league,
           label: localizations.league,
@@ -183,12 +177,9 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _league = value;
           }),
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
-            return (filter == null
-                    ? _availableLeagues!
-                    : _availableLeagues!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableLeagues!.toList();
           },
         ),
       ),
@@ -205,7 +196,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         ),
       HeadingItem(title: localizations.persons),
       ListTile(
-        title: getDropdown<Person>(
+        title: SearchableDropdown<Person>(
           icon: const Icon(Icons.sports),
           selectedItem: _referee,
           label: localizations.referee,
@@ -214,17 +205,14 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _referee = value;
           }),
           itemAsString: (u) => u.fullName,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
-            return (filter == null
-                    ? _availablePersons!
-                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
-                .toList();
+            return _availablePersons!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<Person>(
+        title: SearchableDropdown<Person>(
           icon: const Icon(Icons.manage_accounts),
           selectedItem: _matChairman,
           label: localizations.matChairman,
@@ -233,17 +221,14 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _matChairman = value;
           }),
           itemAsString: (u) => u.fullName,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
-            return (filter == null
-                    ? _availablePersons!
-                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
-                .toList();
+            return _availablePersons!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<Person>(
+        title: SearchableDropdown<Person>(
           icon: const Icon(Icons.manage_accounts),
           selectedItem: _judge,
           label: localizations.judge,
@@ -252,17 +237,14 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _judge = value;
           }),
           itemAsString: (u) => u.fullName,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
-            return (filter == null
-                    ? _availablePersons!
-                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
-                .toList();
+            return _availablePersons!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<Person>(
+        title: SearchableDropdown<Person>(
           icon: const Icon(Icons.pending_actions),
           selectedItem: _timeKeeper,
           label: localizations.timeKeeper,
@@ -271,17 +253,14 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _timeKeeper = value;
           }),
           itemAsString: (u) => u.fullName,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
-            return (filter == null
-                    ? _availablePersons!
-                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
-                .toList();
+            return _availablePersons!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<Person>(
+        title: SearchableDropdown<Person>(
           icon: const Icon(Icons.history_edu),
           selectedItem: _transcriptWriter,
           label: localizations.transcriptionWriter,
@@ -290,12 +269,9 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             _transcriptWriter = value;
           }),
           itemAsString: (u) => u.fullName,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
-            return (filter == null
-                    ? _availablePersons!
-                    : _availablePersons!.where((element) => element.fullName.contains(filter)))
-                .toList();
+            return _availablePersons!.toList();
           },
         ),
       ),

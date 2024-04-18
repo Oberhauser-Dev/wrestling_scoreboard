@@ -81,7 +81,7 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<Organization>(
+        title: SearchableDropdown<Organization>(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _parent,
           label: localizations.organization,
@@ -91,13 +91,10 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           }),
           allowEmpty: true,
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableOrganizations ??=
                 await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
-            return (filter == null
-                    ? _availableOrganizations!
-                    : _availableOrganizations!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableOrganizations!.toList();
           },
         ),
       ),

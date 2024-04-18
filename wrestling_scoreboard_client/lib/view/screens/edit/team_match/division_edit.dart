@@ -127,7 +127,7 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
         ),
       ),
       ListTile(
-        title: getDropdown<Organization>(
+        title: SearchableDropdown<Organization>(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _organization,
           label: localizations.organization,
@@ -137,18 +137,15 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
           }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableOrganizations ??=
                 await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
-            return (filter == null
-                    ? _availableOrganizations!
-                    : _availableOrganizations!.where((element) => element.name.contains(filter)))
-                .toList();
+            return _availableOrganizations!.toList();
           },
         ),
       ),
       ListTile(
-        title: getDropdown<Division>(
+        title: SearchableDropdown<Division>(
           icon: const Icon(Icons.inventory),
           selectedItem: _parentDivision,
           label: localizations.division,
@@ -157,12 +154,9 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
             _parentDivision = value;
           }),
           itemAsString: (u) => u.fullname,
-          onFind: (String? filter) async {
+          asyncItems: (String filter) async {
             _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
-            return (filter == null
-                    ? _availableDivisions!
-                    : _availableDivisions!.where((element) => element.fullname.contains(filter)))
-                .toList();
+            return _availableDivisions!.toList();
           },
         ),
       ),
