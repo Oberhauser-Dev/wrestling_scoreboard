@@ -59,6 +59,8 @@
   "info": "Info",
   "details": "Details",
   "display": "Display",
+  "toggleFullscreen": "Toggle Fullscreen",
+  "favorite": "Favorite",
   "name": "Name",
   "description": "Description",
   "comment": "Comment",

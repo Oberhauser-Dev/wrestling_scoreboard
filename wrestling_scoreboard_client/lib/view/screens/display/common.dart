@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -63,12 +61,5 @@ class CommonElements {
         ),
       ),
     ];
-  }
-
-  static Widget getFullScreenAction(BuildContext context, WidgetRef ref) {
-    return IconButton(
-      icon: const Icon(Icons.fullscreen),
-      onPressed: () => const AppActionIntent(type: AppAction.toggleFullScreen).handle(context, ref),
-    );
   }
 }

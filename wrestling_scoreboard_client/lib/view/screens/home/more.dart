@@ -4,6 +4,7 @@ import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 
 class MoreScreen extends StatelessWidget {
   static const route = 'more';
@@ -22,8 +23,8 @@ class MoreScreen extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text(localizations.more)),
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.more),
       body: ResponsiveScrollView(
         child: Card(
           child: Column(

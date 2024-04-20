@@ -26,6 +26,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/weight_class_o
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -41,8 +42,8 @@ class HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(localizations.home)),
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.home),
       body: LoadingBuilder(
           future: ref.watch(favoritesNotifierProvider),
           builder: (context, favorites) {

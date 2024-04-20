@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
-import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -34,90 +32,81 @@ class MatchDisplay extends StatelessWidget {
       id: id,
       initialData: teamMatch,
       builder: (context, match) {
-        return Consumer(builder: (context, ref, child) {
-          return LoadingBuilder<WindowState>(
-              future: ref.watch(windowStateNotifierProvider),
-              builder: (BuildContext context, WindowState data) {
-                final isFullScreen = data == WindowState.fullscreen;
-                final infoAction = IconButton(
-                  icon: const Icon(Icons.info),
-                  onPressed: () => handleSelectedTeamMatch(match, context),
-                );
-                return Scaffold(
-                  appBar: isFullScreen
-                      ? null
-                      : AppBar(actions: [infoAction, CommonElements.getFullScreenAction(context, ref)]),
-                  body: ManyConsumer<TeamMatchBout, TeamMatch>(
-                    filterObject: match,
-                    builder: (context, teamMatchBouts) {
-                      final matchInfos = [
-                        match.league?.fullname,
-                        '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
-                        if (match.referee != null)
-                          '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
-                        // Not enough space to display all three referees
-                        // if (match.matChairman != null)
-                        //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
-                        // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
-                      ];
+        final infoAction = IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () => handleSelectedTeamMatch(match, context),
+        );
+        return WindowStateScaffold(
+          hideAppBarOnFullscreen: true,
+          actions: [infoAction],
+          body: ManyConsumer<TeamMatchBout, TeamMatch>(
+            filterObject: match,
+            builder: (context, teamMatchBouts) {
+              final matchInfos = [
+                match.league?.fullname,
+                '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
+                if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
+                // Not enough space to display all three referees
+                // if (match.matChairman != null)
+                //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
+                // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
+              ];
 
-                      final headerItems = <Widget>[
-                        Padding(
-                            padding: EdgeInsets.all(padding),
-                            child: Center(
-                                child: ScaledText(
-                              matchInfos.join('\n'),
-                              softWrap: false,
-                              fontSize: 12,
-                              minFontSize: 10,
-                            ))),
-                        ...CommonElements.getTeamHeader(
-                            match.home.team, match.guest.team, teamMatchBouts.map((e) => e.bout).toList(), context),
-                      ];
-                      final column = Column(
-                        children: [
-                          IntrinsicHeight(
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: headerItems
-                                    .asMap()
-                                    .entries
-                                    .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                                    .toList()),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: teamMatchBouts.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
-                                      child: IntrinsicHeight(
-                                        child: ManyConsumer<BoutAction, Bout>(
-                                          filterObject: teamMatchBouts[index].bout,
-                                          builder: (context, actions) => BoutListItem(
-                                            match: match,
-                                            bout: teamMatchBouts[index].bout,
-                                            actions: actions,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const Divider(height: 1),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                      return column;
-                    },
+              final headerItems = <Widget>[
+                Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: Center(
+                        child: ScaledText(
+                      matchInfos.join('\n'),
+                      softWrap: false,
+                      fontSize: 12,
+                      minFontSize: 10,
+                    ))),
+                ...CommonElements.getTeamHeader(
+                    match.home.team, match.guest.team, teamMatchBouts.map((e) => e.bout).toList(), context),
+              ];
+              final column = Column(
+                children: [
+                  IntrinsicHeight(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: headerItems
+                            .asMap()
+                            .entries
+                            .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                            .toList()),
                   ),
-                );
-              });
-        });
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: teamMatchBouts.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
+                              child: IntrinsicHeight(
+                                child: ManyConsumer<BoutAction, Bout>(
+                                  filterObject: teamMatchBouts[index].bout,
+                                  builder: (context, actions) => BoutListItem(
+                                    match: match,
+                                    bout: teamMatchBouts[index].bout,
+                                    actions: actions,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Divider(height: 1),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+              return column;
+            },
+          ),
+        );
       },
     );
   }

@@ -14,16 +14,16 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
     if (kIsWeb) {
       html.document.addEventListener('fullscreenchange', (event) {
         if (html.document.fullscreenElement != null) {
-          _setNewState(WindowState.fullscreen);
+          _setWindowState(WindowState.fullscreen);
         } else {
-          _setNewState(WindowState.windowed);
+          _setWindowState(WindowState.windowed);
         }
       });
     } else if (isDesktop) {
       windowManager.addListener(this);
     } else {
       await SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
-        await _setNewState(systemOverlaysAreVisible ? WindowState.windowed : WindowState.fullscreen);
+        await _setWindowState(systemOverlaysAreVisible ? WindowState.windowed : WindowState.fullscreen);
       });
     }
 
@@ -36,7 +36,7 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
   /// For Desktop only.
   @override
   void onWindowEnterFullScreen() {
-    _setNewState(WindowState.fullscreen);
+    _setWindowState(WindowState.fullscreen);
   }
 
   /// For Desktop only.
@@ -46,48 +46,77 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
     // Therefore, the state is updated after the window finished adapting.
     // Unfortunately, no state is provided, when the window finished leaving fullscreen mode.
     Future.delayed(const Duration(milliseconds: 400)).then((value) {
-      _setNewState(WindowState.windowed);
+      _setWindowState(WindowState.windowed);
     });
   }
 
   Future<void> requestToggleFullScreen() async {
     final currentState = await state;
-    if (currentState == WindowState.fullscreen) {
-      await requestState(WindowState.windowed);
+    if (currentState.isFullscreen()) {
+      await requestWindowState(isFullscreen: false);
     } else {
-      await requestState(WindowState.fullscreen);
+      await requestWindowState(isFullscreen: true);
     }
   }
 
-  Future<void> requestState(WindowState windowState) async {
-    switch (windowState) {
-      case WindowState.windowed:
-        if (kIsWeb) {
-          html.document.exitFullscreen();
-        } else if (isDesktop) {
-          await windowManager.setFullScreen(false);
-        } else {
-          await SystemChrome.setEnabledSystemUIMode(
-            SystemUiMode.manual,
-            overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
-          );
+  // Save datetime as id for last action.
+  final _lastWindowStateAction = <DateTime>[];
+  final _appBarHideDuration = const Duration(seconds: 1);
+
+  // Only calls Appbar if in fullscreen state.
+  Future<void> setFullscreenState({required bool showAppbar}) async {
+    final actionId = DateTime.now();
+    _lastWindowStateAction.add(actionId);
+    if (!showAppbar) {
+      await Future.delayed(_appBarHideDuration);
+    }
+    // Skip, if it's not the last action
+    if (actionId == _lastWindowStateAction.last) {
+      final currentState = await state;
+      if (currentState.isFullscreen()) {
+        final newState = showAppbar ? WindowState.fullscreenAppbar : WindowState.fullscreen;
+        if (currentState != newState) {
+          state = Future.value(newState);
         }
-        break;
-      case WindowState.fullscreen:
-        if (kIsWeb) {
-          html.document.documentElement?.requestFullscreen();
-        } else if (isDesktop) {
-          await windowManager.setFullScreen(true);
-        } else {
-          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-        }
-        break;
+      }
+    }
+    if (showAppbar) {
+      Future.delayed(_appBarHideDuration).then((value) {
+        // Need to wait removing the last showAppBar action to ensure the check still is valid.
+        return _lastWindowStateAction.remove(actionId);
+      });
+    } else {
+      _lastWindowStateAction.remove(actionId);
     }
   }
 
-  Future<void> _setNewState(WindowState newState) async {
+  Future<void> requestWindowState({required bool isFullscreen}) async {
+    if (isFullscreen) {
+      if (kIsWeb) {
+        html.document.documentElement?.requestFullscreen();
+      } else if (isDesktop) {
+        await windowManager.setFullScreen(true);
+      } else {
+        await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+      }
+    } else {
+      if (kIsWeb) {
+        html.document.exitFullscreen();
+      } else if (isDesktop) {
+        await windowManager.setFullScreen(false);
+      } else {
+        await SystemChrome.setEnabledSystemUIMode(
+          SystemUiMode.manual,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+        );
+      }
+    }
+  }
+
+  Future<void> _setWindowState(WindowState newState) async {
     final currentState = await state;
-    if (newState != currentState) {
+    // Do not set a new state, if fullscreen and already is in fullscreen to avoid toggling Appbar with callback.
+    if (newState != currentState && !(currentState.isFullscreen() && newState.isFullscreen())) {
       state = Future.value(newState);
     }
   }
@@ -96,4 +125,9 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
 enum WindowState {
   windowed,
   fullscreen,
+  fullscreenAppbar;
+
+  bool isFullscreen() {
+    return this == WindowState.fullscreen || this == WindowState.fullscreenAppbar;
+  }
 }

@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
   const CustomSettingsScreen({super.key});
@@ -56,10 +57,8 @@ class CustomSettingsScreen extends ConsumerWidget {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.settings),
-      ),
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.settings),
       body: ResponsiveColumn(
         children: [
           LoadingBuilder<Locale?>(

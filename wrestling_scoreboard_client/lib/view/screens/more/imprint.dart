@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 
 class ImprintScreen extends StatelessWidget {
   const ImprintScreen({super.key});
@@ -12,8 +13,8 @@ class ImprintScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(localizations.imprint)),
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.imprint),
       body: ResponsiveScrollView(
         child: PaddedCard(
           child: Column(

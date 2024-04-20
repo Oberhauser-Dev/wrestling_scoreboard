@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/main.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 
 const loadCompleteChangelog = false;
 
@@ -36,8 +37,8 @@ class AboutScreen extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text(localizations.about)),
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.about),
       body: ResponsiveColumn(
         children: [
           PaddedCard(
