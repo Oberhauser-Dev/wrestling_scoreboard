@@ -1,3 +1,8 @@
+## 0.0.1-beta.11
+
+ - **FIX**: Searchable dropdown filters. ([edfd27cf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/edfd27cfb4ec6882568cc4baabb3a4e9d4883b8d))
+ - **FEAT**: Exit fullscreen mechanism (closes [#52](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/52)). ([ec20df3b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ec20df3bb6efdb1b5aa037860916938383dd566a))
+
 ## 0.0.1-beta.10
 
  - **FIX**: Download on web. ([b51b493e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b51b493ee6fe9363b90c937325d4f7073152ee95))

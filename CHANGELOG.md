@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-04-20
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.0.1-beta.11`](#wrestling_scoreboard_client---v001-beta11)
+ - [`wrestling_scoreboard_common` - `v0.0.1-beta.11`](#wrestling_scoreboard_common---v001-beta11)
+ - [`wrestling_scoreboard_server` - `v0.0.1-beta.11`](#wrestling_scoreboard_server---v001-beta11)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `wrestling_scoreboard_server` - `v0.0.1-beta.11`
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.0.1-beta.11`
+
+ - **FIX**: Searchable dropdown filters. ([edfd27cf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/edfd27cfb4ec6882568cc4baabb3a4e9d4883b8d))
+ - **FEAT**: Exit fullscreen mechanism (closes [#52](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/52)). ([ec20df3b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ec20df3bb6efdb1b5aa037860916938383dd566a))
+
+#### `wrestling_scoreboard_common` - `v0.0.1-beta.11`
+
+ - **FIX**: Searchable dropdown filters. ([edfd27cf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/edfd27cfb4ec6882568cc4baabb3a4e9d4883b8d))
+
+
 ## 2024-04-05
 
 ### Changes

@@ -1,3 +1,7 @@
+## 0.0.1-beta.11
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-beta.10
 
  - **FIX**: Live organization import. ([e5d12c06](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5d12c065b379dde396ce727175ae69341212f8e))

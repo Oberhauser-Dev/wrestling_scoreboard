@@ -1,3 +1,7 @@
+## 0.0.1-beta.11
+
+ - **FIX**: Searchable dropdown filters. ([edfd27cf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/edfd27cfb4ec6882568cc4baabb3a4e9d4883b8d))
+
 ## 0.0.1-beta.10
 
  - **REFACTOR**: Replace switch case with expression. ([2c1ac540](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2c1ac5407fb433bb6b331e965952df013be86f9f))
