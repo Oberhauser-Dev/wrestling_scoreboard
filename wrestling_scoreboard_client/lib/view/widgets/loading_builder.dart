@@ -8,11 +8,13 @@ class LoadingBuilder<T> extends ConsumerWidget {
   final T? initialData;
   final void Function()? onRetry;
   final Widget Function(BuildContext context, T data) builder;
+  final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
 
   const LoadingBuilder({
     super.key,
     required this.future,
     required this.builder,
+    this.onException,
     this.initialData,
     this.onRetry,
   });
@@ -23,7 +25,8 @@ class LoadingBuilder<T> extends ConsumerWidget {
       future: ref.read(networkTimeoutNotifierProvider).then((timeout) => future.timeout(timeout)),
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
-          return ExceptionCard(snapshot.error!, stackTrace: snapshot.stackTrace, onRetry: onRetry);
+          return onException?.call(context, snapshot.error!, stackTrace: snapshot.stackTrace) ??
+              ExceptionCard(snapshot.error!, stackTrace: snapshot.stackTrace, onRetry: onRetry);
         }
         if (initialData != null) {
           return builder(context, initialData as T);

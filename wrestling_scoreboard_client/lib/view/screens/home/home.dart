@@ -24,6 +24,8 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
@@ -130,7 +132,34 @@ class HomeState extends ConsumerState<Home> {
   }
 
   Widget _createItem<T extends DataObject>(int id, String route, String Function(T dataObject) getTitle) {
+    final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<T>(
+        onException: (context, exception, {stackTrace}) => Card(
+              child: Center(
+                child: IconButton(
+                    onPressed: () async {
+                      final removeItem = await showOkCancelDialog(
+                        okText: localizations.remove,
+                        getResult: () => true,
+                        context: context,
+                        child: Column(
+                          children: [
+                            Text('There was a problem with the object of type $T and id $id.'),
+                            ExceptionInfo(
+                              exception ?? localizations.errorOccurred,
+                              stackTrace: stackTrace,
+                            ),
+                          ],
+                        ),
+                      );
+                      if (removeItem == true) {
+                        final notifier = ref.read(favoritesNotifierProvider.notifier);
+                        notifier.removeFavorite(getTableNameFromType(T), id);
+                      }
+                    },
+                    icon: const Icon(Icons.warning)),
+              ),
+            ),
         id: id,
         builder: (context, data) {
           return InkWell(

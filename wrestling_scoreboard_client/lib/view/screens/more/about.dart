@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/main.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
@@ -14,6 +15,7 @@ const loadCompleteChangelog = false;
 
 class AboutScreen extends StatelessWidget {
   static const route = 'about';
+
   const AboutScreen({super.key});
 
   Future<String> _loadChangelog() async {
@@ -60,29 +62,21 @@ class AboutScreen extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.list),
                   title: Text(localizations.about_Changelog),
-                  onTap: () => showDialog(
+                  onTap: () => showOkDialog(
                     context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      actions: [
-                        TextButton(
-                          child: Text(localizations.ok),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
-                      content: LoadingBuilder(
-                        future: _loadChangelog(),
-                        builder: (context, data) {
-                          return SingleChildScrollView(
-                            child: MarkdownBody(
-                              listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
-                              shrinkWrap: true,
-                              selectable: true,
-                              data: data,
-                              onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
-                            ),
-                          );
-                        },
-                      ),
+                    child: LoadingBuilder(
+                      future: _loadChangelog(),
+                      builder: (context, data) {
+                        return SingleChildScrollView(
+                          child: MarkdownBody(
+                            listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
+                            shrinkWrap: true,
+                            selectable: true,
+                            data: data,
+                            onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

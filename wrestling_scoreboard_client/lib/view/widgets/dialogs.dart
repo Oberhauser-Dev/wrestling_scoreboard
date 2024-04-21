@@ -5,6 +5,25 @@ import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 
+class SizedDialog extends StatelessWidget {
+  /// Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
+  const SizedDialog({super.key, required this.actions, required this.child});
+
+  final List<Widget> actions;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: SizedBox(
+        width: 300,
+        child: SingleChildScrollView(child: child),
+      ),
+      actions: actions,
+    );
+  }
+}
+
 class OkDialog extends StatelessWidget {
   final Widget child;
 
@@ -13,17 +32,14 @@ class OkDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return AlertDialog(
-      content: SizedBox(
-        width: 300,
-        child: SingleChildScrollView(child: child),
-      ),
-      actions: <Widget>[
+    return SizedDialog(
+      actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(localizations.ok),
         ),
       ],
+      child: child,
     );
   }
 }
@@ -47,12 +63,7 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return AlertDialog(
-      // Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
-      content: SizedBox(
-        width: 300,
-        child: SingleChildScrollView(child: child),
-      ),
+    return SizedDialog(
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -63,6 +74,7 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
           child: Text(okText ?? localizations.ok),
         ),
       ],
+      child: child,
     );
   }
 }
