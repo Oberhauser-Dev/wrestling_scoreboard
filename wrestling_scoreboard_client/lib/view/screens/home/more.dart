@@ -17,14 +17,6 @@ class MoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    navigateTo(Widget screen) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => screen,
-        ),
-      );
-    }
-
     return WindowStateScaffold(
       appBarTitle: Text(localizations.more),
       body: ResponsiveScrollView(
