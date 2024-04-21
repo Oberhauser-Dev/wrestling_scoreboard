@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 
 class ImprintScreen extends StatelessWidget {
+  static const route = 'imprint';
   const ImprintScreen({super.key});
 
   @override

@@ -7,6 +7,10 @@ import 'package:wrestling_scoreboard_client/view/screens/display/match/match_dis
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/privacy_policy.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
@@ -102,6 +106,24 @@ getRouter() {
           GoRoute(
             path: '/${MoreScreen.route}',
             builder: (context, state) => const MoreScreen(),
+            routes: [
+              GoRoute(
+                path: CustomSettingsScreen.route,
+                builder: (context, state) => const CustomSettingsScreen(),
+              ),
+              GoRoute(
+                path: AboutScreen.route,
+                builder: (context, state) => const AboutScreen(),
+              ),
+              GoRoute(
+                path: ImprintScreen.route,
+                builder: (context, state) => const ImprintScreen(),
+              ),
+              GoRoute(
+                path: PrivacyPolicyScreen.route,
+                builder: (context, state) => const PrivacyPolicyScreen(),
+              ),
+            ],
           ),
         ],
       ),

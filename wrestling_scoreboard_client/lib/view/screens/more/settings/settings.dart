@@ -22,6 +22,8 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
+  static const route = 'settings';
+
   const CustomSettingsScreen({super.key});
 
   String getBellNameOfPath(String value) => value.split('/').last.replaceAll('.mp3', '');

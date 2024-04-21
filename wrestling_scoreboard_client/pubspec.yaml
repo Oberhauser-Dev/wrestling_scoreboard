@@ -82,6 +82,7 @@ flutter:
 
   assets:
     - assets/audio/
+    - assets/docs/
     - assets/images/icons/
     - CHANGELOG.md
 

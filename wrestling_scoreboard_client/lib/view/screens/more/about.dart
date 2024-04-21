@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 const loadCompleteChangelog = false;
 
 class AboutScreen extends StatelessWidget {
+  static const route = 'about';
   const AboutScreen({super.key});
 
   Future<String> _loadChangelog() async {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/privacy_policy.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
@@ -34,19 +36,25 @@ class MoreScreen extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: Text(localizations.settings),
-                  onTap: () => navigateTo(const CustomSettingsScreen()),
+                  onTap: () => context.go('/${MoreScreen.route}/${CustomSettingsScreen.route}'),
                 ),
                 const Divider(height: 0),
                 ListTile(
                   leading: const Icon(Icons.info),
                   title: Text(localizations.imprint),
-                  onTap: () => navigateTo(const ImprintScreen()),
+                  onTap: () => context.go('/${MoreScreen.route}/${ImprintScreen.route}'),
                 ),
                 const Divider(height: 0),
                 ListTile(
                   leading: const Icon(Icons.info),
                   title: Text(localizations.about),
-                  onTap: () => navigateTo(const AboutScreen()),
+                  onTap: () => context.go('/${MoreScreen.route}/${AboutScreen.route}'),
+                ),
+                const Divider(height: 0),
+                ListTile(
+                  leading: const Icon(Icons.policy),
+                  title: Text(localizations.privacy_policy),
+                  onTap: () => context.go('/${MoreScreen.route}/${PrivacyPolicyScreen.route}'),
                 ),
               ],
             ).toList(),
