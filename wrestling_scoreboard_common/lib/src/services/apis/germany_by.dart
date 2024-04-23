@@ -11,7 +11,7 @@ import 'mocks/listLiga.json.dart';
 import 'mocks/listSaison.json.dart';
 import 'mocks/wrestler.json.dart';
 
-class NrwGermanyWrestlingApi extends WrestlingApi {
+class ByGermanyWrestlingApi extends WrestlingApi {
   final String apiUrl;
 
   @override
@@ -27,10 +27,10 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
   late Future<T> Function<T extends DataObject>(String orgSyncId) _getSingleBySyncId;
 
-  NrwGermanyWrestlingApi(
+  ByGermanyWrestlingApi(
     this.organization, {
     required this.getSingleOfOrg,
-    this.apiUrl = 'https://www.brv-ringen.de/Api/v1/cs/',
+    this.apiUrl = 'https://www.brv-ringen.de/Api/dev/cs/',
     this.authService,
   }) {
     _getSingleBySyncId =
@@ -71,38 +71,53 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Iterable<DivisionWeightClass>> importDivisionWeightClasses({required Division division}) async {
-    final leagues = await importLeagues(division: division);
-    final competitions = await importTeamMatches(league: leagues.first);
-    final json = await _getCompetition(
-        seasonId: division.startDate.year.toString(), competitionId: competitions.first.orgSyncId!);
+    final json = await _getLeagueList(seasonId: division.startDate.year.toString());
     if (json.isEmpty) return <DivisionWeightClass>{};
-    final List<dynamic> boutList = json['competition']['_boutList'];
-    final weightClassCount = boutList.length;
-    final weightClassesPartitition1 = boutList.asMap().entries.map((e) {
-      final Map<String, dynamic> item = e.value;
-      final String weightClassStr = item['weightClass'];
-      final intInStr = RegExp(r'^\d+');
-      final weightStr = intInStr.firstMatch(weightClassStr)!.group(0)!;
-      final suffix = weightClassStr.replaceFirst(weightStr, '').trim();
-      return DivisionWeightClass(
-        // Alter order of weightclasses
-        pos: e.key < (weightClassCount / 2) ? e.key * 2 : (weightClassCount - e.key - 1) * 2 + 1,
-        seasonPartition: 0,
-        division: division,
-        weightClass: WeightClass(
-          style: item['style'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
-          weight: int.parse(weightStr),
+
+    final leagueList = json['ligaList'][division.name];
+    Iterable<DivisionWeightClass> divisionWeightClasses;
+    if (leagueList is Map<String, dynamic> && leagueList.isNotEmpty) {
+      // Get division bout scheme from first league
+      final firstLeague = leagueList.entries.first.value;
+      final List<dynamic> boutSchemeMap = firstLeague['boutScheme'];
+
+      final weightClassCount = boutSchemeMap.length;
+      divisionWeightClasses = boutSchemeMap.map((item) {
+        final originalPos = int.parse(item['order']) - 1;
+        final suffix = item['suffix'].trim();
+        final weightClassP1 = WeightClass(
+          style: item['styleA'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
+          weight: int.parse(item['weight']),
           suffix: suffix.isEmpty ? null : suffix,
           unit: WeightUnit.kilogram,
-        ),
-      );
+        );
+        final divisionWeightClassPartition1 = DivisionWeightClass(
+          // Alter order of weightclasses
+          pos: originalPos < (weightClassCount / 2) ? originalPos * 2 : (weightClassCount - originalPos - 1) * 2 + 1,
+          seasonPartition: 0,
+          division: division,
+          weightClass: weightClassP1,
+        );
+        final divisionWeightClassPartition2 = divisionWeightClassPartition1.copyWith(
+            seasonPartition: 1,
+            weightClass: weightClassP1.copyWith(
+              style: item['styleB'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
+            ));
+        return [divisionWeightClassPartition1, divisionWeightClassPartition2];
+      }).expand((element) => element);
+    } else {
+      divisionWeightClasses = [];
+    }
+    return divisionWeightClasses.sorted((a, b) {
+      if (a.seasonPartition == null || b.seasonPartition == null) {
+        return a.pos.compareTo(b.pos);
+      }
+      int comparison = a.seasonPartition!.compareTo(b.seasonPartition!);
+      if (comparison == 0) {
+        comparison = a.pos.compareTo(b.pos);
+      }
+      return comparison;
     });
-    final weightClassesPartition2 = weightClassesPartitition1.map((e) => e.copyWith(
-        seasonPartition: 1,
-        weightClass: e.weightClass.copyWith(
-          style: e.weightClass.style == WrestlingStyle.greco ? WrestlingStyle.free : WrestlingStyle.greco,
-        )));
-    return [...weightClassesPartitition1, ...weightClassesPartition2];
   }
 
   @override
@@ -262,14 +277,21 @@ class NrwGermanyWrestlingApi extends WrestlingApi {
     if (leagueList is Map<String, dynamic>) {
       leagues = await Future.wait(
         leagueList.entries.map(
-          (entry) async => League(
-            name: entry.key,
-            startDate: division.startDate,
-            endDate: division.endDate,
-            division: division,
-            orgSyncId: '${division.orgSyncId}_${entry.key}',
-            organization: organization,
-          ),
+          (entry) async {
+            String leagueName = entry.key.trim();
+            if (leagueName.isEmpty) {
+              // If division has only one leage it is the league for whole Bavarian.
+              leagueName = 'Bayern';
+            }
+            return League(
+              name: leagueName,
+              startDate: division.startDate,
+              endDate: division.endDate,
+              division: division,
+              orgSyncId: '${division.orgSyncId}_$leagueName',
+              organization: organization,
+            );
+          },
         ),
       );
     } else {

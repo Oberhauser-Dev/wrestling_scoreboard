@@ -1,6 +1,5 @@
 import '../../common.dart';
-
-export 'apis/germany_nrw.dart';
+import 'apis/germany_by.dart';
 
 typedef GetSingleOfOrg = Future<T> Function<T extends DataObject>(String orgSyncId, {required int orgId});
 
@@ -17,20 +16,20 @@ enum WrestlingApiProvider {
   }) {
     switch (this) {
       case WrestlingApiProvider.deNwRingenApi:
-        return NrwGermanyWrestlingApi(
+        return ByGermanyWrestlingApi(
           organization,
           getSingleOfOrg: getSingleOfOrg,
-          apiUrl: 'https://www.brv-ringen.de/Api/v1/cs/',
+          apiUrl: 'https://www.brv-ringen.de/Api/dev/cs/',
           authService: authService as BasicAuthService,
         );
       case WrestlingApiProvider.deByRingenApi:
         if (authService != null && authService is! BasicAuthService) {
           throw 'Auth service is not valid for this API provider';
         }
-        return NrwGermanyWrestlingApi(
+        return ByGermanyWrestlingApi(
           organization,
           getSingleOfOrg: getSingleOfOrg,
-          apiUrl: 'https://www.brv-ringen.de/Api/v1/cs/',
+          apiUrl: 'https://www.brv-ringen.de/Api/dev/cs/',
           authService: authService as BasicAuthService?,
         );
     }

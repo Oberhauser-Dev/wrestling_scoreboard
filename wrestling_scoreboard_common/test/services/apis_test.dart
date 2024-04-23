@@ -18,6 +18,16 @@ void main() {
     orgSyncId: '2023_(S) Bezirksliga',
   );
 
+  final testDivisionBayernliga = Division(
+    name: 'Bayernliga',
+    startDate: DateTime.utc(2023),
+    endDate: DateTime.utc(2024),
+    boutConfig: BoutConfig(),
+    seasonPartitions: 2,
+    organization: organizationNRW,
+    orgSyncId: '2023_Bayernliga',
+  );
+
   final testLeague = League(
     name: 'Grenzlandliga',
     startDate: testDivision.startDate,
@@ -67,15 +77,7 @@ void main() {
             organization: organizationNRW,
             orgSyncId: '2023_(S) Finalrunde',
           ),
-          Division(
-            name: 'Bayernliga',
-            startDate: DateTime.utc(2023),
-            endDate: DateTime.utc(2024),
-            boutConfig: BoutConfig(),
-            seasonPartitions: 2,
-            organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga',
-          ),
+          testDivisionBayernliga,
           Division(
             name: 'Gruppenoberliga',
             startDate: DateTime.utc(2023),
@@ -107,129 +109,129 @@ void main() {
       });
 
       test('DivisionWeightClasses', () async {
-        final divisionWeightClasses = await wrestlingApi.importDivisionWeightClasses(division: testDivision);
+        final divisionWeightClasses = await wrestlingApi.importDivisionWeightClasses(division: testDivisionBayernliga);
         expect(divisionWeightClasses, [
           // Season partition 1
           DivisionWeightClass(
             pos: 0,
             seasonPartition: 0,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 57, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 1,
+            seasonPartition: 0,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 130, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 2,
             seasonPartition: 0,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 61, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 3,
+            seasonPartition: 0,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.free, weight: 98, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 4,
             seasonPartition: 0,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 66, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 5,
+            seasonPartition: 0,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 86, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 6,
             seasonPartition: 0,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 71, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 7,
+            seasonPartition: 0,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.free, weight: 80, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 8,
             seasonPartition: 0,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 75, suffix: 'A', unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 9,
             seasonPartition: 0,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 75, suffix: 'B', unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 7,
-            seasonPartition: 0,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.free, weight: 80, suffix: null, unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 5,
-            seasonPartition: 0,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 86, suffix: null, unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 3,
-            seasonPartition: 0,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.free, weight: 98, suffix: null, unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 1,
-            seasonPartition: 0,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 130, suffix: null, unit: WeightUnit.kilogram),
           ),
           // Season partition 2
           DivisionWeightClass(
             pos: 0,
             seasonPartition: 1,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 57, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 1,
+            seasonPartition: 1,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.free, weight: 130, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 2,
             seasonPartition: 1,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 61, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 3,
+            seasonPartition: 1,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 98, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 4,
             seasonPartition: 1,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 66, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 5,
+            seasonPartition: 1,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.free, weight: 86, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 6,
             seasonPartition: 1,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 71, suffix: null, unit: WeightUnit.kilogram),
+          ),
+          DivisionWeightClass(
+            pos: 7,
+            seasonPartition: 1,
+            division: testDivisionBayernliga,
+            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 80, suffix: null, unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 8,
             seasonPartition: 1,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 75, suffix: 'A', unit: WeightUnit.kilogram),
           ),
           DivisionWeightClass(
             pos: 9,
             seasonPartition: 1,
-            division: testDivision,
+            division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 75, suffix: 'B', unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 7,
-            seasonPartition: 1,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 80, suffix: null, unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 5,
-            seasonPartition: 1,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.free, weight: 86, suffix: null, unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 3,
-            seasonPartition: 1,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.greco, weight: 98, suffix: null, unit: WeightUnit.kilogram),
-          ),
-          DivisionWeightClass(
-            pos: 1,
-            seasonPartition: 1,
-            division: testDivision,
-            weightClass: WeightClass(style: WrestlingStyle.free, weight: 130, suffix: null, unit: WeightUnit.kilogram),
           ),
         ]);
       });
