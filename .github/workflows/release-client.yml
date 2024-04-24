@@ -3,50 +3,26 @@ name: Release
 on:
   push:
     tags:
-      - '*'
+      - 'wrestling_scoreboard_client-*'
   workflow_dispatch:
 
 jobs:
-  release-server:
-    name: Release Server for ${{ matrix.platform }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            platform: linux
-          - os: windows-latest
-            platform: windows
-          - os: macos-latest
-            platform: macos
+  pre-run:
+    name: Calculate release version
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.5'
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-      - name: Build
-        id: build
-        shell: bash
+      - id: release-version
         run: |
-          ARTIFACT_PATH=$(./build.sh -v ${{ github.ref_name }} | tail -1)
-          ARTIFACT_NAME=$(basename "$ARTIFACT_PATH")
-          echo "artifact-path=$(echo $ARTIFACT_PATH)" >> $GITHUB_OUTPUT
-          echo "artifact-name=$(echo $ARTIFACT_NAME)" >> $GITHUB_OUTPUT
-        working-directory: wrestling_scoreboard_server
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ github.token }}
-          file: wrestling_scoreboard_server/${{ steps.build.outputs.artifact-path }}
-          asset_name: ${{ steps.build.outputs.artifact-name }}
-          tag: ${{ github.ref }}
-    
+          TAG="${{ github.ref_name }}"
+          RELEASE_VERSION="${TAG#*wrestling_scoreboard_client-}"
+          echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+    outputs:
+      release-version: ${{ steps.release-version.outputs.version }}
+
   release-client:
     name: Release Client as ${{ matrix.build-type }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
+    needs: pre-run
     defaults:
       run:
         working-directory: wrestling_scoreboard_client
@@ -70,9 +46,9 @@ jobs:
           - os: macos-14
             platform: macos
             build-type: macos
-#          - os: macos-14
-#            platform: ios
-#            build-type: ipa
+    #          - os: macos-14
+    #            platform: ios
+    #            build-type: ipa
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -99,7 +75,7 @@ jobs:
           working-directory: wrestling_scoreboard_client
           dry-run: false
           app-name: 'wrestling_scoreboard_client'
-          app-version: ${{ github.ref_name }}
+          app-version: ${{ needs.pre-run.outputs.release-version }}
           tag: ${{ github.ref }}
           build-type: ${{ matrix.build-type }}
           token: ${{ github.token }}
@@ -114,7 +90,7 @@ jobs:
           android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
   publish-client:
-    needs: release-client
+    needs: [ release-client, pre-run ]
     name: Publish Client on ${{ matrix.publish-distributor }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
     defaults:
@@ -160,7 +136,7 @@ jobs:
           working-directory: wrestling_scoreboard_client
           dry-run: false
           app-name: 'wrestling_scoreboard_client'
-          app-version: ${{ github.ref_name }}
+          app-version: ${{ needs.pre-run.outputs.release-version }}
           tag: ${{ github.ref }}
           token: ${{ github.token }}
           build-args: |-
