@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-04-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.0.1-beta.12`](#wrestling_scoreboard_client---v001-beta12)
+ - [`wrestling_scoreboard_common` - `v0.0.1-beta.12`](#wrestling_scoreboard_common---v001-beta12)
+ - [`wrestling_scoreboard_server` - `v0.0.1-beta.12`](#wrestling_scoreboard_server---v001-beta12)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.0.1-beta.12`
+
+ - **REFACTOR**: Remove unused `navigateTo` method. ([053275b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/053275b0e498cc7d385f3cb5cb555164690d87b6))
+ - **FEAT**: Favorite remove option (closes [#53](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/53)). ([e5f5c92e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5f5c92e2b061c058d2997d9a6dfa1c4196d0d31))
+ - **FEAT**: Add privacy policy. ([58b8fb35](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/58b8fb3593696453da4b8300e1f4b8587e14af71))
+
+#### `wrestling_scoreboard_common` - `v0.0.1-beta.12`
+
+ - **FEAT**: BRV bout scheme integration. ([51297973](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51297973a0fafcfe73a7982c3ae8c551ec30105b))
+
+#### `wrestling_scoreboard_server` - `v0.0.1-beta.12`
+
+ - **FEAT**: BRV bout scheme integration. ([51297973](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51297973a0fafcfe73a7982c3ae8c551ec30105b))
+
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 ## 2024-04-20
 
 ### Changes

@@ -1,3 +1,7 @@
+## 0.0.1-beta.12
+
+ - **FEAT**: BRV bout scheme integration. ([51297973](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51297973a0fafcfe73a7982c3ae8c551ec30105b))
+
 ## 0.0.1-beta.11
 
  - Update a dependency to the latest release.

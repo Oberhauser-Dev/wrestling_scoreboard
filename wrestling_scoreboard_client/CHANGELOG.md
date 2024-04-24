@@ -1,3 +1,9 @@
+## 0.0.1-beta.12
+
+ - **REFACTOR**: Remove unused `navigateTo` method. ([053275b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/053275b0e498cc7d385f3cb5cb555164690d87b6))
+ - **FEAT**: Favorite remove option (closes [#53](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/53)). ([e5f5c92e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e5f5c92e2b061c058d2997d9a6dfa1c4196d0d31))
+ - **FEAT**: Add privacy policy. ([58b8fb35](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/58b8fb3593696453da4b8300e1f4b8587e14af71))
+
 ## 0.0.1-beta.11
 
  - **FIX**: Searchable dropdown filters. ([edfd27cf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/edfd27cfb4ec6882568cc4baabb3a4e9d4883b8d))
