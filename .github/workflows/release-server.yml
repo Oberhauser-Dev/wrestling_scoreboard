@@ -55,3 +55,46 @@ jobs:
             public
             database
             .env.example
+
+  deploy-server:
+    name: Deploy Server for ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    needs: pre-run
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.5'
+          channel: 'stable'
+      - uses: bluefireteam/melos-action@v3
+      - name: Release
+        uses: oberhauser-dev/dart-release-action@v0
+        with:
+          working-directory: wrestling_scoreboard_server
+          dry-run: true
+          main-path: 'bin/server.dart'
+          app-name: 'wrestling_scoreboard_server'
+          app-version: ${{ needs.pre-run.outputs.release-version }}
+          tag: ${{ github.ref }}
+          token: ${{ github.token }}
+          # build-args: |-
+          include-paths: |-
+            public
+            database
+            .env.example
+          # Deploy
+          deploy-web-host: ${{ secrets.WEB_HOST }}
+          deploy-web-path: ${{ secrets.SERVER_DEPLOY_PATH }}
+          deploy-web-ssh-port: ${{ secrets.WEB_SSH_PORT }}
+          deploy-web-ssh-user: ${{ secrets.WEB_SSH_USER }}
+          deploy-web-ssh-private-key-base64: ${{ secrets.WEB_SSH_PRIVATE_KEY }}
+          deploy-pre-run: |
+            systemctl --user stop my-dart-app.service 
+          deploy-post-run: |
+            systemctl --user start my-dart-app.service
