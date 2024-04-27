@@ -7,9 +7,22 @@ on:
   workflow_dispatch:
 
 jobs:
+  pre-run:
+    name: Calculate release version
+    runs-on: ubuntu-latest
+    steps:
+      - id: release-version
+        run: |
+          TAG="${{ github.ref_name }}"
+          RELEASE_VERSION="${TAG#*wrestling_scoreboard_server-}"
+          echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+    outputs:
+      release-version: ${{ steps.release-version.outputs.version }}
+
   release-server:
     name: Release Server for ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
+    needs: pre-run
     strategy:
       fail-fast: false
       matrix:
@@ -27,20 +40,18 @@ jobs:
           flutter-version: '3.19.5'
           channel: 'stable'
       - uses: bluefireteam/melos-action@v3
-      - name: Build
-        id: build
-        shell: bash
-        run: |
-          TAG="${{ github.ref_name }}"
-          ARTIFACT_PATH=$(./build.sh -v "${TAG#*wrestling_scoreboard_server-}" | tail -1)
-          ARTIFACT_NAME=$(basename "$ARTIFACT_PATH")
-          echo "artifact-path=$(echo $ARTIFACT_PATH)" >> $GITHUB_OUTPUT
-          echo "artifact-name=$(echo $ARTIFACT_NAME)" >> $GITHUB_OUTPUT
-        working-directory: wrestling_scoreboard_server
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+      - name: Release
+        uses: oberhauser-dev/dart-release-action@v0
         with:
-          repo_token: ${{ github.token }}
-          file: wrestling_scoreboard_server/${{ steps.build.outputs.artifact-path }}
-          asset_name: ${{ steps.build.outputs.artifact-name }}
+          working-directory: wrestling_scoreboard_server
+          dry-run: false
+          main-path: 'bin/server.dart'
+          app-name: 'wrestling_scoreboard_server'
+          app-version: ${{ needs.pre-run.outputs.release-version }}
           tag: ${{ github.ref }}
+          token: ${{ github.token }}
+          # build-args: |-
+          include-paths: |-
+            public
+            database
+            .env.example
