@@ -88,6 +88,7 @@ jobs:
             public
             database
             .env.example
+            pubspec.yaml
           # Deploy
           deploy-web-host: ${{ secrets.WEB_HOST }}
           deploy-web-path: ${{ secrets.SERVER_DEPLOY_PATH }}
@@ -95,6 +96,6 @@ jobs:
           deploy-web-ssh-user: ${{ secrets.WEB_SSH_USER }}
           deploy-web-ssh-private-key-base64: ${{ secrets.WEB_SSH_PRIVATE_KEY }}
           deploy-pre-run: |
-            systemctl --user stop my-dart-app.service 
+            systemctl --user stop wrestling-scoreboard-server.service
           deploy-post-run: |
-            systemctl --user start my-dart-app.service
+            systemctl --user start wrestling-scoreboard-server.service
