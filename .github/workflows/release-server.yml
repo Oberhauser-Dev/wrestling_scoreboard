@@ -77,7 +77,7 @@ jobs:
         uses: oberhauser-dev/dart-release-action@v0
         with:
           working-directory: wrestling_scoreboard_server
-          dry-run: true
+          dry-run: false
           main-path: 'bin/server.dart'
           app-name: 'wrestling_scoreboard_server'
           app-version: ${{ needs.pre-run.outputs.release-version }}
