@@ -5,6 +5,7 @@
 import 'dart:io';
 
 import 'package:dotenv/dotenv.dart' show DotEnv;
+import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
@@ -17,8 +18,23 @@ import 'middleware/cors.dart';
 
 final env = DotEnv();
 
+Pubspec? pubspec;
+
+Future<Pubspec> _parsePubspec() async {
+  if (pubspec == null) {
+    final file = File('pubspec.yaml');
+    if (await file.exists()) {
+      pubspec = Pubspec.parse(await file.readAsString());
+    } else {
+      throw FileSystemException('No file found', file.absolute.path);
+    }
+  }
+  return pubspec!;
+}
+
 Future init() async {
   env.load(); // Load dotenv variables
+  await _parsePubspec();
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
@@ -72,4 +88,12 @@ final _router = shelf_router.Router()
       print('Error thrown by handler.\n$error');
       return Response.internalServerError();
     }
+  })
+  ..mount('/about', (Request request) async {
+    final pubspec = await _parsePubspec();
+    return Response.ok('''
+    Name: ${pubspec.name}
+    Description: ${pubspec.description}
+    Version: ${pubspec.version}
+    ''');
   });
