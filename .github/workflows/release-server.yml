@@ -73,7 +73,7 @@ jobs:
           flutter-version: '3.19.5'
           channel: 'stable'
       - uses: bluefireteam/melos-action@v3
-      - name: Release
+      - name: Deploy
         uses: oberhauser-dev/dart-release-action@v0
         with:
           working-directory: wrestling_scoreboard_server
