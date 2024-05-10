@@ -20,6 +20,8 @@ A pre-configuration can be found in `.env.example` file. Change the values to yo
 
 Execute the `./bin/wrestling-scoreboard-server` executable from within the `wrestling_scoreboard_server` directory, to handle resource paths correctly.
 
+## Deployment
+
 ### Linux Systemd service
 
 ```shell
@@ -52,6 +54,10 @@ Additionally, enable session for user `www` on boot:
 ```bash
 sudo loginctl enable-linger www
 ```
+
+### Web server
+
+If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can take advantage of [this config](docs/nginx/wrestling-scoreboard-server.conf) files.
 
 ## Development
 

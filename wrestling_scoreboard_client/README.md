@@ -4,6 +4,18 @@ Wrestling software client for managing team matches and competitions.
 
 ## Deployment
 
+### Web Server
+
+```shell
+flutter build web
+```
+
+Publish files in `build/web`.
+
+If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can take advantage of [this config](docs/nginx/wrestling-scoreboard-client-web.conf) files.
+
+## Development
+
 ### Environment variables:
 
 ```shell
@@ -18,14 +30,6 @@ Values for `APP_ENVIRONMENT`:
 - `mock`: debug and mock data
 - `production`: connect to API
 - `development`: debug and connect to API
-
-### Web
-
-```shell
-flutter build web
-```
-
-Publish files in `build/web`.
 
 ### Icons & AppName
 

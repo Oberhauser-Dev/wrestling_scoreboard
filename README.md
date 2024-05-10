@@ -62,8 +62,6 @@ Please read the documentation for setting up the according components:
 - [Server](wrestling_scoreboard_server/README.md#development)
 - [Client](wrestling_scoreboard_client/README.md)
 
-If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can take advantage of [these config](docs/nginx) files.
-
 ## License
 
 Published under [MIT license](./LICENSE.md).
