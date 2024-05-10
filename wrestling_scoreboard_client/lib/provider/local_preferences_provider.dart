@@ -23,10 +23,12 @@ class LocaleNotifier extends _$LocaleNotifier {
         locale = Locale(splits[0]);
       }
     }
-    Preferences.onChangeLocale.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return locale;
+  }
+
+  Future<void> setState(Locale? val) async {
+    await Preferences.setString(Preferences.keyLocale, val?.toLanguageTag());
+    state = Future.value(val);
   }
 }
 
@@ -41,10 +43,12 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
     } else {
       themeMode = ThemeMode.system;
     }
-    Preferences.onChangeThemeMode.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return themeMode;
+  }
+
+  Future<void> setState(ThemeMode val) async {
+    await Preferences.setString(Preferences.keyThemeMode, val.name);
+    state = Future.value(val);
   }
 }
 
@@ -53,10 +57,12 @@ class FontFamilyNotifier extends _$FontFamilyNotifier {
   @override
   Raw<Future<String?>> build() async {
     final fontFamily = await Preferences.getString(Preferences.keyFontFamily);
-    Preferences.onChangeFontFamily.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return fontFamily;
+  }
+
+  Future<void> setState(String? val) async {
+    await Preferences.setString(Preferences.keyFontFamily, val);
+    state = Future.value(val);
   }
 }
 
@@ -66,10 +72,12 @@ class WebSocketUrlNotifier extends _$WebSocketUrlNotifier {
   Raw<Future<String>> build() async {
     var webSocketUrl = await Preferences.getString(Preferences.keyWsUrl);
     webSocketUrl ??= Env.webSocketUrl.fromString();
-    Preferences.onChangeWsUrlWebSocket.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return webSocketUrl;
+  }
+
+  Future<void> setState(String? val) async {
+    await Preferences.setString(Preferences.keyWsUrl, val);
+    state = Future.value(val);
   }
 }
 
@@ -78,10 +86,12 @@ class NetworkTimeoutNotifier extends _$NetworkTimeoutNotifier {
   @override
   Raw<Future<Duration>> build() async {
     var networkTimeout = await Preferences.getInt(Preferences.keyNetworkTimeout);
-    Preferences.onChangeNetworkTimeout.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return Duration(milliseconds: networkTimeout ?? 10000);
+  }
+
+  Future<void> setState(Duration? val) async {
+    Preferences.setInt(Preferences.keyNetworkTimeout, val?.inMilliseconds);
+    state = Future.value(val);
   }
 }
 
@@ -91,10 +101,12 @@ class ApiUrlNotifier extends _$ApiUrlNotifier {
   Raw<Future<String>> build() async {
     var apiUrl = await Preferences.getString(Preferences.keyApiUrl);
     apiUrl ??= Env.apiUrl.fromString();
-    Preferences.onChangeApiUrl.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return apiUrl;
+  }
+
+  Future<void> setState(String? val) async {
+    await Preferences.setString(Preferences.keyApiUrl, val);
+    state = Future.value(val);
   }
 }
 
@@ -104,10 +116,12 @@ class BellSoundNotifier extends _$BellSoundNotifier {
   Raw<Future<String>> build() async {
     var bellSoundPath = await Preferences.getString(Preferences.keyBellSound);
     bellSoundPath ??= Env.bellSoundPath.fromString();
-    Preferences.onChangeBellSound.stream.distinct().listen((event) {
-      state = Future.value(event);
-    });
     return bellSoundPath;
+  }
+
+  Future<void> setState(String? val) async {
+    await Preferences.setString(Preferences.keyBellSound, val);
+    state = Future.value(val);
   }
 }
 

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -295,7 +294,7 @@ class BoutScreenActionIntent extends Intent {
         }
         break;
       case BoutScreenActions.horn:
-        HornSound.play();
+        doAction(BoutScreenActions.horn);
         break;
     }
   }

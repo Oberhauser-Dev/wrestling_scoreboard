@@ -75,18 +75,15 @@ class CustomSettingsScreen extends ConsumerWidget {
                         return SettingsSection(
                           title: localizations.general,
                           action: TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               locale = null;
-                              Preferences.setString(Preferences.keyLocale, locale?.toLanguageTag());
-                              Preferences.onChangeLocale.add(locale);
+                              await ref.read(localeNotifierProvider.notifier).setState(locale);
 
                               themeMode = ThemeMode.system;
-                              Preferences.setString(Preferences.keyThemeMode, themeMode.name);
-                              Preferences.onChangeThemeMode.add(themeMode);
+                              await ref.read(themeModeNotifierProvider.notifier).setState(themeMode);
 
                               const defaultFontFamily = 'Roboto';
-                              Preferences.setString(Preferences.keyFontFamily, defaultFontFamily);
-                              Preferences.onChangeFontFamily.add(defaultFontFamily);
+                              await ref.read(fontFamilyNotifierProvider.notifier).setState(defaultFontFamily);
                             },
                             child: Text(localizations.reset),
                           ),
@@ -107,8 +104,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                     return RadioDialog<Locale?>(values: languageSettingValues, initialValue: locale);
                                   },
                                 );
-                                Preferences.onChangeLocale.add(val);
-                                await Preferences.setString(Preferences.keyLocale, val?.toLanguageTag());
+                                await ref.read(localeNotifierProvider.notifier).setState(val);
                               },
                             ),
                             ListTile(
@@ -127,8 +123,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                   },
                                 );
                                 if (val != null) {
-                                  Preferences.onChangeThemeMode.add(val);
-                                  await Preferences.setString(Preferences.keyThemeMode, val.name);
+                                  await ref.read(themeModeNotifierProvider.notifier).setState(val);
                                 }
                               },
                             ),
@@ -177,8 +172,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                         initialValue: fontFamily);
                                   },
                                 );
-                                Preferences.onChangeFontFamily.add(val);
-                                await Preferences.setString(Preferences.keyFontFamily, val);
+                                await ref.read(fontFamilyNotifierProvider.notifier).setState(val);
                               },
                             ),
                           ],
@@ -194,10 +188,9 @@ class CustomSettingsScreen extends ConsumerWidget {
               return SettingsSection(
                 title: localizations.scoreboard,
                 action: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     bellSoundPath = Env.bellSoundPath.fromString();
-                    Preferences.setString(Preferences.keyBellSound, bellSoundPath);
-                    Preferences.onChangeBellSound.add(bellSoundPath);
+                    await ref.read(bellSoundNotifierProvider.notifier).setState(bellSoundPath);
                   },
                   child: Text(localizations.reset),
                 ),
@@ -231,8 +224,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                           },
                         );
                         if (val != null) {
-                          Preferences.onChangeBellSound.add(val);
-                          await Preferences.setString(Preferences.keyBellSound, val);
+                          await ref.read(bellSoundNotifierProvider.notifier).setState(bellSoundPath);
                         }
                       }
                     },
@@ -255,18 +247,15 @@ class CustomSettingsScreen extends ConsumerWidget {
                       return SettingsSection(
                         title: localizations.network,
                         action: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             apiUrl = Env.apiUrl.fromString();
-                            Preferences.setString(Preferences.keyApiUrl, apiUrl);
-                            Preferences.onChangeApiUrl.add(apiUrl);
+                            await ref.read(apiUrlNotifierProvider.notifier).setState(apiUrl);
 
                             wsUrl = Env.webSocketUrl.fromString();
-                            Preferences.setString(Preferences.keyWsUrl, wsUrl);
-                            Preferences.onChangeWsUrlWebSocket.add(wsUrl);
+                            await ref.read(webSocketUrlNotifierProvider.notifier).setState(wsUrl);
 
                             const defaultNetworkTimeout = Duration(seconds: 10);
-                            Preferences.setInt(Preferences.keyNetworkTimeout, defaultNetworkTimeout.inMilliseconds);
-                            Preferences.onChangeNetworkTimeout.add(defaultNetworkTimeout);
+                            await ref.read(networkTimeoutNotifierProvider.notifier).setState(defaultNetworkTimeout);
                           },
                           child: Text(localizations.reset),
                         ),
@@ -283,8 +272,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                 },
                               );
                               if (val != null) {
-                                Preferences.onChangeApiUrl.add(val);
-                                await Preferences.setString(Preferences.keyApiUrl, val);
+                                await ref.read(apiUrlNotifierProvider.notifier).setState(val);
                               }
                             },
                           ),
@@ -300,8 +288,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                 },
                               );
                               if (val != null) {
-                                Preferences.onChangeWsUrlWebSocket.add(val);
-                                await Preferences.setString(Preferences.keyWsUrl, val);
+                                await ref.read(webSocketUrlNotifierProvider.notifier).setState(val);
                               }
                             },
                           ),
@@ -320,8 +307,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                 },
                               );
                               if (val != null) {
-                                Preferences.onChangeNetworkTimeout.add(val);
-                                await Preferences.setInt(Preferences.keyNetworkTimeout, val.inMilliseconds);
+                                await ref.read(networkTimeoutNotifierProvider.notifier).setState(val);
                               }
                             },
                           ),

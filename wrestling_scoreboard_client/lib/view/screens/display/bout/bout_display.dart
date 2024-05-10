@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/provider/audio_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
@@ -142,7 +142,6 @@ class BoutState extends ConsumerState<BoutScreen> {
   @override
   initState() {
     super.initState();
-    HornSound();
     boutConfig = widget.boutConfig;
     bout = widget.bout;
     // Set the current period based on the duration:
@@ -390,6 +389,12 @@ class BoutState extends ConsumerState<BoutScreen> {
         } else {
           psm.injuryStopwatch.stop();
         }
+        break;
+      case BoutScreenActions.horn:
+        ref.read(bellPlayerNotifierProvider).then((player) async {
+          await player.stop();
+          await player.resume();
+        });
         break;
       default:
         break;

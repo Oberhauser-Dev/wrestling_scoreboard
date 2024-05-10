@@ -69,6 +69,7 @@ String _$mockDataManagerNotifierHash() => r'9c3e0e3c990b61d515e8b2f23636bb3ca920
 
 abstract class _$MockDataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
+
   @$internal
   @override
   Raw<Future<DataManager>> runBuild() => build();
@@ -138,6 +139,7 @@ String _$mockWebsocketManagerNotifierHash() => r'709ed2a007d7a6ac50c4c2680f750b6
 
 abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
+
   @$internal
   @override
   Raw<Future<WebSocketManager>> runBuild() => build();

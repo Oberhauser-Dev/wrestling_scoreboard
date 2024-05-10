@@ -66,10 +66,11 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
       $NotifierProviderElement(this, container);
 }
 
-String _$localeNotifierHash() => r'e1e390bd02d18a8474b484ee33bc40edca7e9c3d';
+String _$localeNotifierHash() => r'd1a158392a814010eadb717b29bdbd563f79c97f';
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
+
   @$internal
   @override
   Raw<Future<Locale?>> runBuild() => build();
@@ -132,10 +133,11 @@ final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifie
       $NotifierProviderElement(this, container);
 }
 
-String _$themeModeNotifierHash() => r'29aedc145964f8e32034ab495a26ee3ccedfed82';
+String _$themeModeNotifierHash() => r'87a0d4c71b037664266350d35d9e4c54be1d1dd8';
 
 abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   Raw<Future<ThemeMode>> build();
+
   @$internal
   @override
   Raw<Future<ThemeMode>> runBuild() => build();
@@ -198,10 +200,11 @@ final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotif
       $NotifierProviderElement(this, container);
 }
 
-String _$fontFamilyNotifierHash() => r'38c577d6ba358636b04947a2d8d33bb02f7a8bfc';
+String _$fontFamilyNotifierHash() => r'58f6c3cdeafa1c63986ffa5ad4de5ca9b8865b64';
 
 abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
+
   @$internal
   @override
   Raw<Future<String?>> runBuild() => build();
@@ -264,10 +267,11 @@ final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlN
       $NotifierProviderElement(this, container);
 }
 
-String _$webSocketUrlNotifierHash() => r'3e384b28903aca1717d43fa65ace0651b39b668a';
+String _$webSocketUrlNotifierHash() => r'4ea4f9c1880f05b6b6d0d718e043c04145e2a589';
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
+
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -330,10 +334,11 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
       $NotifierProviderElement(this, container);
 }
 
-String _$networkTimeoutNotifierHash() => r'2c6a26f2904896d01c9ddd31fd4ae7637030a027';
+String _$networkTimeoutNotifierHash() => r'686b1e7acba03732bd54aa332f2e5805cf5f526c';
 
 abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
+
   @$internal
   @override
   Raw<Future<Duration>> runBuild() => build();
@@ -396,10 +401,11 @@ final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw
       $NotifierProviderElement(this, container);
 }
 
-String _$apiUrlNotifierHash() => r'8c063b9ec135234c56970345957760282a21fbde';
+String _$apiUrlNotifierHash() => r'84cce7dfdf5727e4be7430397825e6dc984b7c04';
 
 abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
+
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -462,10 +468,11 @@ final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifie
       $NotifierProviderElement(this, container);
 }
 
-String _$bellSoundNotifierHash() => r'1c9d805977f6f32cd7b44e7bd1ecfecd15447ddd';
+String _$bellSoundNotifierHash() => r'44cc9ac294b4cf03b9ddeeb822cb5985d3c8cfe3';
 
 abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
+
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -533,6 +540,7 @@ String _$favoritesNotifierHash() => r'97f2d02bbc78a039c8a97863a8900b91e623730f';
 
 abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<int>>>>> {
   Raw<Future<Map<String, Set<int>>>> build();
+
   @$internal
   @override
   Raw<Future<Map<String, Set<int>>>> runBuild() => build();
@@ -596,10 +604,11 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
       $NotifierProviderElement(this, container);
 }
 
-String _$orgAuthNotifierHash() => r'4ea0cb1cf146ff4c48b962f8bbee907e98c24f9a';
+String _$orgAuthNotifierHash() => r'0c4640e47bee1b05ac64d6f5ec26a85eaad2e13f';
 
 abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthService>>>> {
   Raw<Future<Map<int, AuthService>>> build();
+
   @$internal
   @override
   Raw<Future<Map<int, AuthService>>> runBuild() => build();

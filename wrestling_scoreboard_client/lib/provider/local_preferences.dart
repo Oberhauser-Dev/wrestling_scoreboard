@@ -17,14 +17,6 @@ class Preferences {
   static const keyFavorites = 'favorites';
   static const keyOrganizationAuth = 'org-auth';
 
-  static final StreamController<Locale?> onChangeLocale = StreamController.broadcast();
-  static final StreamController<ThemeMode> onChangeThemeMode = StreamController.broadcast();
-  static final StreamController<String> onChangeApiUrl = StreamController.broadcast();
-  static final StreamController<String> onChangeWsUrlWebSocket = StreamController.broadcast();
-  static final StreamController<Duration> onChangeNetworkTimeout = StreamController.broadcast();
-  static final StreamController<String> onChangeBellSound = StreamController.broadcast();
-  static final StreamController<String?> onChangeFontFamily = StreamController.broadcast();
-
   static final supportedLanguages = {
     const Locale('en', 'US'),
     const Locale('de', 'DE'),

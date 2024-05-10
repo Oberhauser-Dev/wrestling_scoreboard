@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
-import 'package:wrestling_scoreboard_client/services/audio/audio.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -28,7 +27,6 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
 
     // Need to init to listen to changes of settings.
     AudioCache.instance = AudioCache(prefix: '');
-    HornSound.init();
   }
 
   ThemeData _buildTheme(Brightness brightness, String? fontFamily) {
