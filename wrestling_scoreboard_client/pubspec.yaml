@@ -81,10 +81,11 @@ flutter:
   uses-material-design: true
 
   assets:
+    - CHANGELOG.md
     - assets/audio/
     - assets/docs/
     - assets/images/icons/
-    - CHANGELOG.md
+    - assets/fonts/google/
 
 flutter_launcher_icons:
   android: "ic_launcher"

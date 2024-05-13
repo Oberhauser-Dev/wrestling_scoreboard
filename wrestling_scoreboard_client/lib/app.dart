@@ -33,7 +33,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     final baseTheme = ThemeData(brightness: brightness);
     if (fontFamily != null) {
       return baseTheme.copyWith(
-        textTheme: GoogleFonts.getTextTheme(fontFamily),
+        textTheme: GoogleFonts.getTextTheme(fontFamily, baseTheme.textTheme),
       );
     }
     return baseTheme;
