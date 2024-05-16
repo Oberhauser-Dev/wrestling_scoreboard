@@ -9,6 +9,7 @@ on:
         type: choice
         options:
           - 'any'
+          - '3.22.x'
           - '3.19.x'
       enable_android:
         description: 'Build Android'
@@ -49,7 +50,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.19.5'
+        default: '3.22.0'
         type: string
       enable_android:
         required: false
@@ -138,6 +139,7 @@ jobs:
           flutter build ${{ matrix.build-type }} \
             ${{ matrix.platform == 'android' && '--debug' || '--release' }} \
             ${{ matrix.platform == 'ios' && '--no-codesign' || '' }} \
+            ${{ matrix.platform == 'web' && '--wasm' || '' }} \
             ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href "/wrestling_scoreboard/"' || '' }} \
             --build-name=0.0.0-nightly.${GITHUB_SHA::7} \
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \

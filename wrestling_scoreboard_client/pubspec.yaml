@@ -17,12 +17,12 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  intl: ^0.18.0
+  intl: ^0.19.0
   http: ^1.1.0
   dropdown_search: ^5.0.6
   audioplayers: ^6.0.0
   web_socket_channel: ^2.3.0
-  go_router: ^13.2.1
+  go_router: ^14.1.1
   path_provider: ^2.0.8
   shared_preferences: ^2.0.13
   wrestling_scoreboard_common:
@@ -30,8 +30,8 @@ dependencies:
   pdf: ^3.10.1
   printing: ^5.11.1  
   url_launcher: ^6.2.2
-  package_info_plus: ^6.0.0
-  flutter_markdown: ^0.6.18+2
+  package_info_plus: ^8.0.0
+  flutter_markdown: ^0.7.1
   google_fonts: ^6.1.0
   window_manager: ^0.3.8
   flutter_riverpod: ^3.0.0-dev.3
@@ -44,12 +44,23 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
   riverpod_generator: ^3.0.0-dev.11
   build_runner: ^2.4.7
 
-# TODO(gustl22): Remove when published: https://github.com/rrousselGit/riverpod/commit/d7816cfc6748d9df0f0d9e75e75834f1c89714dc
 dependency_overrides:
+  # TODO(gustl22): Remove when published: https://github.com/DavBfr/dart_pdf/commit/67f451ae1a4726653fb05c946e849f0491d5898a
+  pdf:
+    git:
+      url: https://github.com/DavBfr/dart_pdf.git
+      path: pdf
+      ref: 5c0425551ab14ea3451ef5e68ec0823ac4952a07 # master
+  printing:
+    git:
+      url: https://github.com/DavBfr/dart_pdf.git
+      path: printing
+      ref: 5c0425551ab14ea3451ef5e68ec0823ac4952a07 # master
+  # TODO(gustl22): Remove when published: https://github.com/rrousselGit/riverpod/commit/d7816cfc6748d9df0f0d9e75e75834f1c89714dc
   riverpod:
     git:
       url: https://github.com/rrousselGit/riverpod.git

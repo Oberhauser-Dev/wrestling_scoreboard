@@ -414,7 +414,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);
 
-    Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onBackground;
+    Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onSurface;
 
     final shareAction = IconButton(
       icon: const Icon(Icons.share),

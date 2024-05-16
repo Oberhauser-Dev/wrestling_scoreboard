@@ -19,7 +19,7 @@ class ThemedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor =
-        ThemeData.estimateBrightnessForColor(color ?? Theme.of(context).colorScheme.background) == Brightness.light
+        ThemeData.estimateBrightnessForColor(color ?? Theme.of(context).colorScheme.surface) == Brightness.light
             ? Colors.black
             : Colors.white;
     return Container(
