@@ -1,3 +1,5 @@
+import 'package:wrestling_scoreboard_macros/macros.dart';
+
 import '../../common.dart';
 
 Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
@@ -189,6 +191,7 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(
 }
 
 class ManyDataObject<T> {
+  @Observable()
   List<T> data;
   final Type? filterType;
   final int? filterId;
@@ -196,78 +199,25 @@ class ManyDataObject<T> {
   ManyDataObject({required this.data, this.filterType, this.filterId});
 }
 
-// TODO: deprecate in favor of Type.tableName
-String getTableNameFromType(Type t) {
-  return switch (t) {
-    const (BasicAuthService) => 'basic_auth_service', // Only used for type encoding
-    const (BoutConfig) => 'bout_config',
-    const (Club) => 'club',
-    const (Bout) => 'bout',
-    const (BoutAction) => 'bout_action',
-    const (Organization) => 'organization',
-    const (Division) => 'division',
-    const (League) => 'league',
-    const (DivisionWeightClass) => 'division_weight_class',
-    const (LeagueTeamParticipation) => 'league_team_participation',
-    const (Lineup) => 'lineup',
-    const (Membership) => 'membership',
-    const (Participation) => 'participation',
-    const (ParticipantState) => 'participant_state',
-    const (Person) => 'person',
-    const (Team) => 'team',
-    const (TeamMatch) => 'team_match',
-    const (TeamMatchBout) => 'team_match_bout',
-    const (Competition) => 'competition',
-    const (WeightClass) => 'weight_class',
-    _ => throw UnimplementedError('ClassName for "${t.toString()}" not found.'),
-  };
-}
-
-Type getTypeFromTableName(String tableName) {
-  return switch (tableName) {
-    'basic_auth_service' => BasicAuthService, // Only used for type decoding
-    'bout_config' => BoutConfig,
-    'club' => Club,
-    'bout' => Bout,
-    'bout_action' => BoutAction,
-    'organization' => Organization,
-    'division' => Division,
-    'league' => League,
-    'division_weight_class' => DivisionWeightClass,
-    'league_team_participation' => LeagueTeamParticipation,
-    'lineup' => Lineup,
-    'membership' => Membership,
-    'participation' => Participation,
-    'participant_state' => ParticipantState,
-    'person' => Person,
-    'team' => Team,
-    'team_match' => TeamMatch,
-    'team_match_bout' => TeamMatchBout,
-    'competition' => Competition,
-    'weight_class' => WeightClass,
-    _ => throw UnimplementedError('Type for "${tableName.toString()}" not found.'),
-  };
-}
-
 /// Hierarchically ordered data types.
-final dataTypes = [
-  BoutAction,
-  ParticipantState,
-  TeamMatchBout,
-  Bout,
-  Participation,
-  TeamMatch,
-  Competition,
-  Lineup,
-  LeagueTeamParticipation,
-  League,
-  BoutConfig,
-  Membership,
-  Person,
-  Team,
-  Club,
-  DivisionWeightClass,
-  Division,
-  WeightClass,
-  Organization,
-];
+// final dataTypes = [
+//   BoutAction,
+//   ParticipantState,
+//   TeamMatchBout,
+//   Bout,
+//   Participation,
+//   TeamMatch,
+//   Competition,
+//   Lineup,
+//   LeagueTeamParticipation,
+//   League,
+//   BoutConfig,
+//   Membership,
+//   Person,
+//   Team,
+//   Club,
+//   DivisionWeightClass,
+//   Division,
+//   WeightClass,
+//   Organization,
+// ];

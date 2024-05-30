@@ -1,4 +1,5 @@
 name: wrestling_scoreboard
+repository: https://github.com/Oberhauser-Dev/wrestling_scoreboard
 environment:
   sdk: '>=3.0.0 <4.0.0'
 

@@ -3,6 +3,7 @@ description: Server for a wrestling scoreboard.
 version: 0.0.1-beta.12
 homepage: https://server.wrestling-scoreboard.oberhauser.dev
 publish_to: 'none'
+repository: https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/main/wrestling_scoreboard_server
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
