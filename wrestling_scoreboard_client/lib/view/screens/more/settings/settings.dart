@@ -148,11 +148,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         final val = await showDialog<String?>(
                           context: context,
                           builder: (BuildContext context) {
-                            final List<MapEntry<String?, String>> fontFamilies =
-                                GoogleFonts.asMap().keys.map((String e) => MapEntry<String?, String>(e, e)).toList();
-                            fontFamilies.insert(0, MapEntry<String?, String>(null, localizations.systemSetting));
-                            return FontDialog(
-                                fontFamilies: fontFamilies, currentTextTheme: currentTextTheme, fontFamily: fontFamily);
+                            return FontDialog(currentTextTheme: currentTextTheme, fontFamily: fontFamily);
                           },
                         );
                         await ref.read(fontFamilyNotifierProvider.notifier).setState(val);
@@ -388,42 +384,61 @@ class CustomSettingsScreen extends ConsumerWidget {
   }
 }
 
-class FontDialog extends StatelessWidget {
-  const FontDialog({
-    super.key,
-    required this.fontFamilies,
-    required this.currentTextTheme,
-    required this.fontFamily,
-  });
-
-  final List<MapEntry<String?, String>> fontFamilies;
+class FontDialog extends StatefulWidget {
   final TextTheme currentTextTheme;
   final String? fontFamily;
+
+  const FontDialog({super.key, required this.currentTextTheme, required this.fontFamily});
+
+  @override
+  State<StatefulWidget> createState() => FontDialogState();
+}
+
+class FontDialogState extends State<FontDialog> {
+  final List<String> fontStock = [];
+  final List<String> fontFamilies = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fontStock.addAll(GoogleFonts.asMap().keys);
+    lazyLoadFonts(0);
+  }
+
+  void lazyLoadFonts(int counter) async {
+    if (counter >= fontStock.length) return;
+
+    setState(() => fontFamilies.add(fontStock[counter]));
+    await Future.delayed(const Duration(microseconds: 300));
+
+    lazyLoadFonts(counter+1);
+  }
 
   @override
   Widget build(BuildContext context) {
     return RadioDialog<String?>(
-        itemCount: fontFamilies.length,
-        builder: (index) {
-          final fontFamily = fontFamilies[index];
-          return (
-            fontFamily.key,
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(fontFamily.value),
-              IconButton(
-                onPressed: () => showOkDialog(
-                  context: context,
-                  child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
-                      style: fontFamily.key != null
-                          ? GoogleFonts.getTextTheme(fontFamily.key!, currentTextTheme).headlineMedium
-                          : null),
+      itemCount: fontFamilies.length,
+      builder: (index) {
+        final fontFamily = fontFamilies[index];
+        return (
+          fontFamily,
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(fontFamily),
+            IconButton(
+              onPressed: () => showOkDialog(
+                context: context,
+                child: Text(
+                  'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
+                  style: GoogleFonts.getTextTheme(fontFamily, widget.currentTextTheme).headlineMedium,
                 ),
-                icon: const Icon(Icons.visibility),
               ),
-            ])
-          );
-        },
-        initialValue: fontFamily);
+              icon: const Icon(Icons.visibility),
+            ),
+          ])
+        );
+      },
+      initialValue: widget.fontFamily,
+    );
   }
 }
 
