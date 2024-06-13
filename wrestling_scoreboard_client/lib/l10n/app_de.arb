@@ -15,6 +15,7 @@
   "themeModeLight": "Heller Modus",
   "themeModeDark": "Dunkler Modus",
   "fontFamily": "Schriftart",
+  "systemFont": "System-Schrift",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
   "services": "Dienste",

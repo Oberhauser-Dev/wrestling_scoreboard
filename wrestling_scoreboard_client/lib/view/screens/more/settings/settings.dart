@@ -410,7 +410,7 @@ class _FontSelectionDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(fontFamily ?? localizations.systemSetting, style: fontStyle),
+              Text(fontFamily ?? localizations.systemFont, style: fontStyle),
               IconButton(
                 onPressed: () => showOkDialog(
                   context: context,
