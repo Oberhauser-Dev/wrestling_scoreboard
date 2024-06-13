@@ -146,32 +146,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         final val = await showDialog<String?>(
                           context: context,
                           builder: (BuildContext context) {
-                            final List<MapEntry<String?, String>> fontFamilies =
-                                GoogleFonts.asMap().keys.map((String e) => MapEntry<String?, String>(e, e)).toList();
-                            fontFamilies.insert(0, MapEntry<String?, String>(null, localizations.systemSetting));
-                            return RadioDialog<String?>(
-                                itemCount: fontFamilies.length,
-                                builder: (index) {
-                                  final fontFamily = fontFamilies[index];
-                                  return (
-                                    fontFamily.key,
-                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                      Text(fontFamily.value),
-                                      IconButton(
-                                        onPressed: () => showOkDialog(
-                                          context: context,
-                                          child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
-                                              style: fontFamily.key != null
-                                                  ? GoogleFonts.getTextTheme(fontFamily.key!, currentTextTheme)
-                                                      .headlineMedium
-                                                  : null),
-                                        ),
-                                        icon: const Icon(Icons.visibility),
-                                      ),
-                                    ])
-                                  );
-                                },
-                                initialValue: fontFamily);
+                            return _FontSelectionDialog(currentTextTheme: currentTextTheme, fontFamily: fontFamily);
                           },
                         );
                         await ref.read(fontFamilyNotifierProvider.notifier).setState(val);
@@ -403,6 +378,51 @@ class CustomSettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FontSelectionDialog extends StatelessWidget {
+  final TextTheme currentTextTheme;
+  final String? fontFamily;
+
+  const _FontSelectionDialog({required this.currentTextTheme, required this.fontFamily});
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    final List<String?> fontFamilies = [null];
+    fontFamilies.addAll(GoogleFonts.asMap().keys.toList());
+    return RadioDialog<String?>(
+      shrinkWrap: false,
+      itemCount: fontFamilies.length,
+      builder: (index) {
+        final fontFamily = fontFamilies[index];
+        final fontStyle = fontFamily != null
+            ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
+            : Theme.of(context)
+                .textTheme
+                .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
+                .headlineMedium;
+        return (
+          fontFamily,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(fontFamily ?? localizations.systemFont, style: fontStyle),
+              IconButton(
+                onPressed: () => showOkDialog(
+                  context: context,
+                  child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz', style: fontStyle),
+                ),
+                icon: const Icon(Icons.abc),
+              ),
+            ],
+          ),
+        );
+      },
+      initialValue: fontFamily,
     );
   }
 }

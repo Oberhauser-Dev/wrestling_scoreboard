@@ -18,6 +18,7 @@
   "themeModeLight": "Light mode",
   "themeModeDark": "Dark mode",
   "fontFamily": "Font family",
+  "systemFont": "System font",
   "apiUrl": "Api-Url",
   "wsUrl": "Websocket-Url",
   "services": "Services",

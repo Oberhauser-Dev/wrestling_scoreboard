@@ -7,17 +7,23 @@ import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 
 class SizedDialog extends StatelessWidget {
   /// Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
-  const SizedDialog({super.key, required this.actions, required this.child});
+  const SizedDialog({
+    super.key,
+    required this.actions,
+    required this.child,
+    this.isScrollable = true,
+  });
 
   final List<Widget> actions;
   final Widget child;
+  final bool isScrollable;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: SizedBox(
         width: 300,
-        child: SingleChildScrollView(child: child),
+        child: isScrollable ? SingleChildScrollView(child: child) : child,
       ),
       actions: actions,
     );
@@ -57,13 +63,21 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
   final Widget child;
   final String? okText;
   final T Function() getResult;
+  final bool isScrollable;
 
-  const OkCancelDialog({required this.child, required this.getResult, this.okText, super.key});
+  const OkCancelDialog({
+    required this.child,
+    required this.getResult,
+    this.okText,
+    super.key,
+    this.isScrollable = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return SizedDialog(
+      isScrollable: isScrollable,
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -191,6 +205,7 @@ class RadioDialog<T> extends StatefulWidget {
   final T? initialValue;
   final int? itemCount;
   final void Function(T? value)? onChanged;
+  final bool shrinkWrap;
 
   const RadioDialog({
     super.key,
@@ -199,6 +214,7 @@ class RadioDialog<T> extends StatefulWidget {
     required this.initialValue,
     this.onChanged,
     this.itemCount,
+    this.shrinkWrap = true,
   }) : assert(values != null || builder != null);
 
   @override
@@ -217,9 +233,10 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
   @override
   Widget build(BuildContext context) {
     return OkCancelDialog<T?>(
+        isScrollable: widget.shrinkWrap,
         child: ListView.builder(
-          key: Key(result.toString()),
-          shrinkWrap: true,
+          // key: Key(result.toString()), // Specifying a key will reset the list position, so try to avoid it.
+          shrinkWrap: widget.shrinkWrap,
           itemCount: widget.itemCount ?? widget.values?.length,
           itemBuilder: (context, index) {
             final T? key;
