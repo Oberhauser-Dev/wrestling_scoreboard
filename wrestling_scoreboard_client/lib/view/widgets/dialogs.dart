@@ -235,7 +235,7 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
     return OkCancelDialog<T?>(
         isScrollable: widget.shrinkWrap,
         child: ListView.builder(
-          key: Key(result.toString()),
+          // key: Key(result.toString()), // Specifying a key will reset the list position, so try to avoid it.
           shrinkWrap: widget.shrinkWrap,
           itemCount: widget.itemCount ?? widget.values?.length,
           itemBuilder: (context, index) {

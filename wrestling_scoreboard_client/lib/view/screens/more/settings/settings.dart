@@ -392,28 +392,31 @@ class _FontSelectionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    final List<MapEntry<String?, String>> fontFamilies = [MapEntry<String?, String>(null, localizations.systemSetting)];
-    fontFamilies.addAll(GoogleFonts.asMap().keys.map((String e) => MapEntry<String?, String>(e, e)).toList());
+    final List<String?> fontFamilies = [null];
+    fontFamilies.addAll(GoogleFonts.asMap().keys.toList());
     return RadioDialog<String?>(
       shrinkWrap: false,
       itemCount: fontFamilies.length,
       builder: (index) {
         final fontFamily = fontFamilies[index];
+        final fontStyle = fontFamily != null
+            ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
+            : Theme.of(context)
+                .textTheme
+                .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
+                .headlineMedium;
         return (
-          fontFamily.key,
+          fontFamily,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(fontFamily.value),
+              Text(fontFamily ?? localizations.systemSetting, style: fontStyle),
               IconButton(
                 onPressed: () => showOkDialog(
                   context: context,
-                  child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
-                      style: fontFamily.key != null
-                          ? GoogleFonts.getTextTheme(fontFamily.key!, currentTextTheme).headlineMedium
-                          : null),
+                  child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz', style: fontStyle),
                 ),
-                icon: const Icon(Icons.visibility),
+                icon: const Icon(Icons.abc),
               ),
             ],
           ),
