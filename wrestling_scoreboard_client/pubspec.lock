@@ -745,11 +745,10 @@ packages:
   pdf:
     dependency: "direct main"
     description:
-      path: pdf
-      ref: "5c0425551ab14ea3451ef5e68ec0823ac4952a07"
-      resolved-ref: "5c0425551ab14ea3451ef5e68ec0823ac4952a07"
-      url: "https://github.com/DavBfr/dart_pdf.git"
-    source: git
+      name: pdf
+      sha256: "243f05342fc0bdf140eba5b069398985cdbdd3dbb1d776cf43d5ea29cc570ba6"
+      url: "https://pub.dev"
+    source: hosted
     version: "3.10.8"
   pdf_widget_wrapper:
     dependency: transitive
@@ -794,12 +793,11 @@ packages:
   printing:
     dependency: "direct main"
     description:
-      path: printing
-      ref: "5c0425551ab14ea3451ef5e68ec0823ac4952a07"
-      resolved-ref: "5c0425551ab14ea3451ef5e68ec0823ac4952a07"
-      url: "https://github.com/DavBfr/dart_pdf.git"
-    source: git
-    version: "5.13.0"
+      name: printing
+      sha256: "1c99cab90ebcc1fff65831d264627d5b529359d563e53f33ab9b8117f2d280bc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.12.0"
   pub_semver:
     dependency: transitive
     description:
