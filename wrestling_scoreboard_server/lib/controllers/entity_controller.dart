@@ -24,6 +24,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controll
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 Map<Type, psql.Type> typeDartToCodeMap = {
@@ -71,7 +72,7 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<Response> requestSingle(Request request, String id) async {
-    return handleRequestSingleOfController(this, int.parse(id), isRaw: isRaw(request));
+    return handleRequestSingleOfController(this, int.parse(id), isRaw: request.isRaw);
   }
 
   Future<T> getSingle(int id) async {
@@ -241,8 +242,54 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<Response> requestMany(Request request) async {
-    return handleRequestManyOfController(this, isRaw: isRaw(request));
+    return handleRequestManyOfController(this, isRaw: request.isRaw);
   }
+
+  Future<Map<String, dynamic>?> getManyJsonLike(bool isRaw, String searchStr, {int? organizationId}) async {
+    final postgresTypes = getPostgresDataTypes();
+    bool needsPreciseSearch = false;
+    final orConditions = getSearchableAttributes()
+        .map((attr) {
+          // TODO: get postgres types generated from attributes via macros.
+          final postgresType = postgresTypes.containsKey(attr) ? postgresTypes[attr] : psql.Type.varChar;
+          if (((postgresType == psql.Type.integer || postgresType == psql.Type.smallInteger) &&
+                  int.tryParse(searchStr) != null) ||
+              (postgresType == psql.Type.double && double.tryParse(searchStr) != null)) {
+            needsPreciseSearch = true;
+            return '$attr = @preciseSearch';
+          } else if (postgresType == psql.Type.varChar) {
+            return '$attr ILIKE @search';
+          }
+          return null;
+        })
+        .nonNulls
+        .toList();
+
+    final List<String> conditions = [];
+    if (orConditions.isNotEmpty) {
+      conditions.add(orConditions.join(' OR '));
+      // TODO: remove hacky OR composition by allowing nested query conditions.
+    }
+    if (organizationId != null) {
+      // TODO: Check, which entities support queries with organization_id
+      conditions.add('organization_id = @org');
+    }
+
+    return await getManyJson(
+      isRaw: isRaw,
+      conditions: conditions,
+      substitutionValues: {
+        'search': '%$searchStr%',
+        if (needsPreciseSearch) 'preciseSearch': searchStr,
+        if (organizationId != null) 'org': organizationId,
+      },
+      conjunction: Conjunction.and,
+    );
+  }
+
+  /// Returns a list of searchable attributes.
+  /// TODO: with macros, apply it to the property @Searchable.
+  Set<String> getSearchableAttributes() => {};
 
   Future<List<T>> getMany({
     List<String>? conditions,
@@ -268,9 +315,15 @@ abstract class EntityController<T extends DataObject> {
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
   }) async {
-    return getManyRawFromQuery(
-        'SELECT * FROM $tableName ${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} ${orderBy.isEmpty ? '' : 'ORDER BY ${orderBy.join(',')}'};',
-        substitutionValues: substitutionValues);
+    if (conditions != null && conditions.isEmpty) {
+      // If the list of conditions is empty, nothing fulfills this requirement,
+      // in contrast to the conditions are null, that means everything fulfills the requirement.
+      return [];
+    }
+    final query = 'SELECT * FROM $tableName '
+        '${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} '
+        '${orderBy.isEmpty ? '' : 'ORDER BY ${orderBy.join(',')}'};';
+    return getManyRawFromQuery(query, substitutionValues: substitutionValues);
   }
 
   Future<List<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
@@ -278,6 +331,30 @@ abstract class EntityController<T extends DataObject> {
     final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
     final resStream = stmt.bind(substitutionValues);
     return await resStream.toColumnMap().toList();
+  }
+
+  Future<Map<String, dynamic>?> getManyJson({
+    bool isRaw = false,
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+    List<String> orderBy = const [],
+  }) async {
+    if (isRaw) {
+      final many = await getManyRaw(
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+      if (many.isEmpty) {
+        return null;
+      }
+      return manyToJson(many, T, CRUD.read, isRaw: true);
+    } else {
+      final many = await getMany(
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+      if (many.isEmpty) {
+        return null;
+      }
+      return manyToJson(many, T, CRUD.read, isRaw: false);
+    }
   }
 
   Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
@@ -288,10 +365,6 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Map<String, psql.Type?> getPostgresDataTypes() => {};
-
-  bool isRaw(Request request) {
-    return (request.url.queryParameters['isRaw'] ?? '').parseBool();
-  }
 
   static Future<Map<String, dynamic>> query(psql.Statement stmt, {Map<String, dynamic>? substitutionValues}) async {
     final resStream = stmt.bind(substitutionValues);

@@ -60,6 +60,7 @@ class SimpleDropdown<T> extends StatelessWidget {
   final bool isExpanded;
   final bool isNullable;
   final String? hint;
+  final AlignmentGeometry alignment;
 
   const SimpleDropdown({
     required this.options,
@@ -69,6 +70,7 @@ class SimpleDropdown<T> extends StatelessWidget {
     this.isExpanded = true,
     super.key,
     this.hint,
+    this.alignment = AlignmentDirectional.centerStart,
   });
 
   @override
@@ -94,6 +96,7 @@ class SimpleDropdown<T> extends StatelessWidget {
       value: selected,
       onChanged: onChange,
       items: items,
+      alignment: alignment,
     );
   }
 }

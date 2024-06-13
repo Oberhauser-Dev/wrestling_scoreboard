@@ -2,6 +2,7 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'bout_action_controller.dart';
 import 'entity_controller.dart';
@@ -17,7 +18,7 @@ class BoutController extends EntityController<Bout> {
 
   Future<Response> requestBoutActions(Request request, String id) async {
     return EntityController.handleRequestManyOfController(BoutActionController(),
-        isRaw: isRaw(request), conditions: ['bout_id = @id'], substitutionValues: {'id': id});
+        isRaw: request.isRaw, conditions: ['bout_id = @id'], substitutionValues: {'id': id});
   }
 
   @override

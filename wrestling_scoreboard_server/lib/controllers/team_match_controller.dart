@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_server/controllers/participant_state_contro
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'bout_controller.dart';
@@ -31,12 +32,12 @@ class TeamMatchController extends EntityController<TeamMatch> {
 
   Future<Response> requestBouts(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(BoutController(),
-        isRaw: isRaw(request), sqlQuery: _boutsQuery, substitutionValues: {'id': id});
+        isRaw: request.isRaw, sqlQuery: _boutsQuery, substitutionValues: {'id': id});
   }
 
   Future<Response> requestTeamMatchBouts(Request request, String id) async {
     return EntityController.handleRequestManyOfController(TeamMatchBoutController(),
-        isRaw: isRaw(request), conditions: ['team_match_id = @id'], substitutionValues: {'id': id}, orderBy: ['pos']);
+        isRaw: request.isRaw, conditions: ['team_match_id = @id'], substitutionValues: {'id': id}, orderBy: ['pos']);
   }
 
   Future<List<Bout>> getBouts(String id) {
@@ -120,4 +121,7 @@ class TeamMatchController extends EntityController<TeamMatch> {
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {'comment': psql.Type.text};
   }
+
+  @override
+  Set<String> getSearchableAttributes() => {'no', 'location', 'comment'};
 }

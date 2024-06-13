@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'bout_config_controller.dart';
 import 'league_controller.dart';
@@ -28,22 +29,22 @@ class OrganizationController extends EntityController<Organization> {
 
   Future<Response> requestDivisions(Request request, String id) async {
     return EntityController.handleRequestManyOfController(DivisionController(),
-        isRaw: isRaw(request), conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+        isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestClubs(Request request, String id) async {
     return EntityController.handleRequestManyOfController(ClubController(),
-        isRaw: isRaw(request), conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+        isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestCompetitions(Request request, String id) async {
     return EntityController.handleRequestManyOfController(CompetitionController(),
-        isRaw: isRaw(request), conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+        isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestChildOrganizations(Request request, String id) async {
     return EntityController.handleRequestManyOfController(OrganizationController(),
-        isRaw: isRaw(request), conditions: ['parent_id = @id'], substitutionValues: {'id': id});
+        isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> import(Request request, String id) async {
@@ -133,4 +134,7 @@ class OrganizationController extends EntityController<Organization> {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     }
   }
+
+  @override
+  Set<String> getSearchableAttributes() => {'name', 'abbreviation'};
 }

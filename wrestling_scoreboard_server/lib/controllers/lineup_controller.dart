@@ -1,6 +1,7 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'entity_controller.dart';
@@ -20,6 +21,6 @@ class LineupController extends EntityController<Lineup> {
 
   Future<Response> requestParticipations(Request request, String id) async {
     return EntityController.handleRequestManyOfController(ParticipationController(),
-        isRaw: isRaw(request), conditions: ['lineup_id = @id'], substitutionValues: {'id': id});
+        isRaw: request.isRaw, conditions: ['lineup_id = @id'], substitutionValues: {'id': id});
   }
 }

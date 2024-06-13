@@ -1,5 +1,5 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart' as psql;
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
 
@@ -18,4 +18,13 @@ class PersonController extends EntityController<Person> {
       'gender': null,
     };
   }
+
+  @override
+  Set<String> getSearchableAttributes() => {
+        'prename',
+        'surname',
+        // 'gender', // Cannot currently search non-string values
+        'nationality',
+        // 'birth_date', // Cannot currently search non-string values
+      };
 }

@@ -438,6 +438,12 @@ class MockDataManager extends DataManager {
     // TODO: implement organizationImport
     throw UnimplementedError();
   }
+
+  @override
+  Future<Map<String, List<DataObject>>> search({required String searchTerm, Type? type, Organization? organization}) {
+    // TODO: implement search
+    throw UnimplementedError();
+  }
 }
 
 class MockWebSocketManager implements WebSocketManager {

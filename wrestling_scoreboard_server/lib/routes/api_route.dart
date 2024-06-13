@@ -8,16 +8,17 @@ import '../controllers/club_controller.dart';
 import '../controllers/competition_bout_controller.dart';
 import '../controllers/competition_controller.dart';
 import '../controllers/database_controller.dart';
-import '../controllers/division_weight_class_controller.dart';
-import '../controllers/organization_controller.dart';
 import '../controllers/division_controller.dart';
+import '../controllers/division_weight_class_controller.dart';
 import '../controllers/league_controller.dart';
 import '../controllers/league_team_participation_controller.dart';
 import '../controllers/lineup_controller.dart';
 import '../controllers/membership_controller.dart';
+import '../controllers/organization_controller.dart';
 import '../controllers/participant_state_controller.dart';
 import '../controllers/participation_controller.dart';
 import '../controllers/person_controller.dart';
+import '../controllers/search_controller.dart';
 import '../controllers/team_controller.dart';
 import '../controllers/team_match_bout_controller.dart';
 import '../controllers/team_match_controller.dart';
@@ -34,6 +35,9 @@ class ApiRoute {
     router.post('/database/reset', databaseController.reset);
     router.post('/database/restore', databaseController.restore);
     router.post('/database/restore_default', databaseController.restoreDefault);
+
+    final searchController = SearchController();
+    router.get('/search', searchController.search);
 
     final boutConfigController = BoutConfigController();
     router.post('/bout_config', boutConfigController.postSingle);

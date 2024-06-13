@@ -63,6 +63,7 @@
   "display": "Display",
   "toggleFullscreen": "Toggle Fullscreen",
   "favorite": "Favorite",
+  "favorites": "Favorites",
   "name": "Name",
   "description": "Description",
   "comment": "Comment",

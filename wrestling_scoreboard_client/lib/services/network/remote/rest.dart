@@ -160,6 +160,57 @@ class RestDataManager extends DataManager {
       throw RestException('Failed to import from organization $id', response: response);
     }
   }
+
+  @override
+  Future<Map<String, List<DataObject>>> search({
+    required String searchTerm,
+    Type? type,
+    Organization? organization,
+  }) async {
+    final uri = Uri.parse('$_apiUrl/search').replace(queryParameters: {
+      if (searchTerm.isNotEmpty) 'like': searchTerm,
+      if (type != null) 'type': getTableNameFromType(type),
+      if (organization != null) 'org': organization.id.toString(),
+    });
+    final response = await http.get(uri);
+    if (response.statusCode != 200) {
+      throw RestException('Failed to search $type with term "$searchTerm"', response: response);
+    }
+
+    final json = jsonDecode(response.body);
+    if (json is! List) {
+      throw RestException('Search $type with term "$searchTerm" should return a list', response: response);
+    }
+
+    final Map<String, List<DataObject>> result = {};
+
+    Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
+      throw RestException('There should not be returned single data on a search', response: response);
+    }
+
+    Future<int> handleSingleRaw<T extends DataObject>(
+        {required CRUD operation, required Map<String, dynamic> single}) async {
+      throw RestException('There should not be returned single raw data on a search', response: response);
+    }
+
+    Future<void> handleManyRaw<T extends DataObject>(
+        {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
+      throw RestException('There should not be returned many raw data on a search', response: response);
+    }
+
+    for (final jsonType in json) {
+      await handleFromJson(
+        jsonType,
+        handleSingle: handleSingle,
+        handleMany: <T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async {
+          result[getTableNameFromType(T)] = many.data;
+        },
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw,
+      );
+    }
+    return result;
+  }
 }
 
 class RestException implements Exception {

@@ -10,4 +10,7 @@ class MembershipController extends EntityController<Membership> {
   }
 
   MembershipController._internal() : super(tableName: 'membership');
+
+  @override
+  Set<String> getSearchableAttributes() => {'no'};
 }

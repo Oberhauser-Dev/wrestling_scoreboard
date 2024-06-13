@@ -1,5 +1,5 @@
-import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart' as psql;
+import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
 
@@ -20,4 +20,10 @@ class WeightClassController extends EntityController<WeightClass> {
       'unit': null,
     };
   }
+
+  @override
+  Set<String> getSearchableAttributes() => {
+        'weight',
+        'suffix',
+      };
 }

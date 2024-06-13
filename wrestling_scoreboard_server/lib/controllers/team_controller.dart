@@ -1,6 +1,7 @@
+import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
-import 'package:shelf/shelf.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'entity_controller.dart';
 
@@ -22,6 +23,9 @@ class TeamController extends EntityController<Team> {
 
   Future<Response> requestTeamMatches(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(TeamMatchController(),
-        isRaw: isRaw(request), sqlQuery: teamMatchesQuery, substitutionValues: {'id': id});
+        isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id});
   }
+
+  @override
+  Set<String> getSearchableAttributes() => {'name', 'description'};
 }

@@ -1,6 +1,7 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'entity_controller.dart';
 import 'bout_controller.dart';
@@ -16,7 +17,7 @@ class CompetitionController extends EntityController<Competition> {
 
   Future<Response> requestBouts(Request request, String id) async {
     return EntityController.handleRequestManyOfControllerFromQuery(BoutController(),
-        isRaw: isRaw(request), sqlQuery: '''
+        isRaw: request.isRaw, sqlQuery: '''
         SELECT f.* 
         FROM bout as f 
         JOIN competition_bout AS tof ON tof.bout_id = f.id

@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/division_weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
@@ -25,6 +26,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.
 import 'package:wrestling_scoreboard_client/view/screens/overview/weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -41,12 +43,49 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class HomeState extends ConsumerState<Home> {
+  Map<String, List<DataObject>>? searchResults;
+  Type? searchType;
+  Organization? searchOrganization;
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return WindowStateScaffold(
-      appBarTitle: Text(localizations.home),
-      body: LoadingBuilder(
+
+    final Widget gridEntries;
+    if (searchResults != null) {
+      if (searchResults!.isEmpty) {
+        gridEntries = Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Text(localizations.noItems),
+        );
+      } else {
+        gridEntries = _EntityGrid(
+          entities: searchResults!.map(
+              (key, resultsOfType) => MapEntry(key, Map.fromEntries(resultsOfType.map((r) => MapEntry(r.id!, r))))),
+          onHandleException: <T extends DataObject>({
+            required BuildContext context,
+            required int id,
+            Object? exception,
+            StackTrace? stackTrace,
+          }) async {
+            final localizations = AppLocalizations.of(context)!;
+            await showOkDialog(
+              context: context,
+              child: Column(
+                children: [
+                  Text('There was a problem with the object of type $T and id $id.'),
+                  ExceptionInfo(
+                    exception ?? localizations.errorOccurred,
+                    stackTrace: stackTrace,
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      }
+    } else {
+      gridEntries = LoadingBuilder(
           future: ref.watch(favoritesNotifierProvider),
           builder: (context, favorites) {
             if (favorites.isEmpty) {
@@ -67,100 +106,297 @@ class HomeState extends ConsumerState<Home> {
                 ),
               );
             }
-            final children = favorites.entries.map((entry) {
-              final tableName = entry.key;
-              final ids = entry.value;
-              return switch (tableName) {
-                // 'bout_config' => buildGroup<BoutConfig>(localizations.boutConfigs, Icons.question_mark, ids, (d) => d.id.toString()),
-                'bout' => buildGroup<Bout>(
-                    localizations.bouts, Icons.sports_kabaddi, ids, BoutOverview.route, (d) => d.title(context)),
-                // 'bout_action' => buildGroup<BoutAction>(localizations.actions, Icons.question_mark, ids, BoutOverview.route, (d) => d.id.toString()),
-                'club' =>
-                  buildGroup<Club>(localizations.clubs, Icons.foundation, ids, ClubOverview.route, (d) => d.name),
-                'organization' => buildGroup<Organization>(
-                    localizations.organizations, Icons.corporate_fare, ids, OrganizationOverview.route, (d) => d.name),
-                'division' => buildGroup<Division>(
-                    localizations.divisions, Icons.inventory, ids, DivisionOverview.route, (d) => d.name),
-                'league' => buildGroup<League>(
-                    localizations.leagues, Icons.emoji_events, ids, LeagueOverview.route, (d) => d.fullname),
-                'division_weight_class' => buildGroup<DivisionWeightClass>(localizations.weightClasses,
-                    Icons.fitness_center, ids, DivisionWeightClassOverview.route, (d) => d.localize(context)),
-                'league_team_participation' => buildGroup<LeagueTeamParticipation>(localizations.participatingTeam,
-                    Icons.group, ids, LeagueTeamParticipationOverview.route, (d) => d.team.name),
-                // 'lineup' => buildGroup<Lineup>(localizations.lineups, Icons.view_list, ids, LineupOverview.route, (d) => d.team.name),
-                'membership' => buildGroup<Membership>(
-                    localizations.memberships, Icons.person, ids, MembershipOverview.route, (d) => d.info),
-                // 'participation' => buildGroup<Participation>(localizations.participations, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
-                // 'participant_state' => buildGroup<ParticipantState>(localizations.participantStates, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
-                'person' =>
-                  buildGroup<Person>(localizations.persons, Icons.person, ids, PersonOverview.route, (d) => d.fullName),
-                'team' => buildGroup<Team>(localizations.teams, Icons.group, ids, TeamOverview.route, (d) => d.name),
-                'team_match' => buildGroup<TeamMatch>(
-                    localizations.matches, Icons.event, ids, TeamMatchOverview.route, (d) => d.localize(context)),
-                'team_match_bout' => buildGroup<TeamMatchBout>(localizations.bouts, Icons.sports_kabaddi, ids,
-                    TeamMatchBoutOverview.route, (d) => d.bout.title(context)),
-                // 'competition' =>
-                //   buildGroup<Competition>(localizations.competitions, Icons.leaderboard, ids, CompetitionOverview.route, (d) => d.name),
-                'weight_class' => buildGroup<WeightClass>(
-                    localizations.weightClasses, Icons.fitness_center, ids, WeightClassOverview.route, (d) => d.name),
-                _ => throw UnimplementedError(
-                    'Data type $tableName not supported for favorites, please contact the developer.'),
-              };
-            });
-            return ResponsiveColumn(children: children.toList());
-          }),
+            return _EntityGrid(
+              entities: favorites.map((k, ids) => MapEntry(k, Map.fromEntries(ids.map((id) => MapEntry(id, null))))),
+              onHandleException: <T extends DataObject>({
+                required BuildContext context,
+                required int id,
+                Object? exception,
+                StackTrace? stackTrace,
+              }) async {
+                final localizations = AppLocalizations.of(context)!;
+                final removeItem = await showOkCancelDialog(
+                  okText: localizations.remove,
+                  getResult: () => true,
+                  context: context,
+                  child: Column(
+                    children: [
+                      Text('There was a problem with the object of type $T and id $id.'),
+                      ExceptionInfo(
+                        exception ?? localizations.errorOccurred,
+                        stackTrace: stackTrace,
+                      ),
+                    ],
+                  ),
+                );
+                if (removeItem == true) {
+                  final notifier = ref.read(favoritesNotifierProvider.notifier);
+                  notifier.removeFavorite(getTableNameFromType(T), id);
+                }
+              },
+            );
+          });
+    }
+
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.home),
+      body: ResponsiveContainer(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: SearchBar(
+                padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+                leading: const Icon(Icons.search),
+                elevation: WidgetStateProperty.all(0),
+                side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
+                backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
+                onChanged: (searchTerm) async {
+                  if (searchTerm.length < 3 && (double.tryParse(searchTerm) == null)) {
+                    setState(() {
+                      searchResults = null;
+                    });
+                  } else {
+                    try {
+                      final results = await (await ref.read(dataManagerNotifierProvider))
+                          .search(searchTerm: searchTerm, type: searchType, organization: searchOrganization);
+                      setState(() {
+                        searchResults = results;
+                      });
+                    } catch (e, st) {
+                      if (context.mounted) {
+                        showExceptionDialog(context: context, exception: e, stackTrace: st);
+                      }
+                    }
+                  }
+                },
+              ),
+            ),
+            Row(children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SimpleDropdown<Type?>(
+                  options: [null, ...dataTypes..remove(ParticipantState)].map((type) => MapEntry(
+                        type,
+                        Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
+                      )),
+                  selected: searchType,
+                  onChange: (value) {
+                    setState(() {
+                      searchType = value;
+                    });
+                  },
+                  isExpanded: false,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child:
+                    ManyConsumer<Organization, Null>(builder: (BuildContext context, List<Organization> organizations) {
+                  return SimpleDropdown<Organization?>(
+                    options: [null, ...organizations].map((organization) => MapEntry(
+                          organization,
+                          Text(organization != null
+                              ? organization.name
+                              : '${localizations.optionSelect} ${localizations.organization}'),
+                        )),
+                    selected: searchOrganization,
+                    onChange: (value) {
+                      setState(() {
+                        searchOrganization = value;
+                      });
+                    },
+                    isExpanded: false,
+                  );
+                }),
+              ),
+            ]),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text(
+                searchResults == null ? localizations.favorites : 'Search results',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            Expanded(child: SingleChildScrollView(child: gridEntries)),
+          ],
+        ),
+      ),
     );
   }
+}
 
-  Widget buildGroup<T extends DataObject>(
+class _EntityGrid extends StatelessWidget {
+  final Map<String, Map<int, DataObject?>> entities;
+  final Future<void> Function<T extends DataObject>({
+    required int id,
+    required BuildContext context,
+    Object? exception,
+    StackTrace? stackTrace,
+  }) onHandleException;
+
+  const _EntityGrid({required this.entities, required this.onHandleException});
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final children = entities.entries.map((entry) {
+      final tableName = entry.key;
+      final ids = entry.value;
+      return switch (tableName) {
+        // 'bout_config' => buildGroup<BoutConfig>(localizations.boutConfigs, Icons.question_mark, ids, (d) => d.id.toString()),
+        'bout' => _buildGroup<Bout>(
+            localizations.bouts,
+            Icons.sports_kabaddi,
+            ids.map((id, value) => MapEntry(id, value as Bout?)),
+            BoutOverview.route,
+            (d) => d.title(context),
+            context: context,
+          ),
+        // 'bout_action' => buildGroup<BoutAction>(localizations.actions, Icons.question_mark, ids, BoutOverview.route, (d) => d.id.toString()),
+        'club' => _buildGroup<Club>(
+            localizations.clubs,
+            Icons.foundation,
+            ids.map((id, value) => MapEntry(id, value as Club?)),
+            ClubOverview.route,
+            (d) => d.name,
+            context: context,
+          ),
+        'organization' => _buildGroup<Organization>(
+            localizations.organizations,
+            Icons.corporate_fare,
+            ids.map((id, value) => MapEntry(id, value as Organization?)),
+            OrganizationOverview.route,
+            (d) => d.name,
+            context: context,
+          ),
+        'division' => _buildGroup<Division>(
+            localizations.divisions,
+            Icons.inventory,
+            ids.map((id, value) => MapEntry(id, value as Division?)),
+            DivisionOverview.route,
+            (d) => d.name,
+            context: context,
+          ),
+        'league' => _buildGroup<League>(
+            localizations.leagues,
+            Icons.emoji_events,
+            ids.map((id, value) => MapEntry(id, value as League?)),
+            LeagueOverview.route,
+            (d) => d.fullname,
+            context: context,
+          ),
+        'division_weight_class' => _buildGroup<DivisionWeightClass>(
+            localizations.weightClasses,
+            Icons.fitness_center,
+            ids.map((id, value) => MapEntry(id, value as DivisionWeightClass?)),
+            DivisionWeightClassOverview.route,
+            (d) => d.localize(context),
+            context: context,
+          ),
+        'league_team_participation' => _buildGroup<LeagueTeamParticipation>(
+            localizations.participatingTeam,
+            Icons.group,
+            ids.map((id, value) => MapEntry(id, value as LeagueTeamParticipation?)),
+            LeagueTeamParticipationOverview.route,
+            (d) => d.team.name,
+            context: context,
+          ),
+        // 'lineup' => buildGroup<Lineup>(localizations.lineups, Icons.view_list, ids, LineupOverview.route, (d) => d.team.name),
+        'membership' => _buildGroup<Membership>(
+            localizations.memberships,
+            Icons.person,
+            ids.map((id, value) => MapEntry(id, value as Membership?)),
+            MembershipOverview.route,
+            (d) => d.info,
+            context: context,
+          ),
+        // 'participation' => buildGroup<Participation>(localizations.participations, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
+        // 'participant_state' => buildGroup<ParticipantState>(localizations.participantStates, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
+        'person' => _buildGroup<Person>(
+            localizations.persons,
+            Icons.person,
+            ids.map((id, value) => MapEntry(id, value as Person?)),
+            PersonOverview.route,
+            (d) => d.fullName,
+            context: context,
+          ),
+        'team' => _buildGroup<Team>(
+            localizations.teams,
+            Icons.group,
+            ids.map((id, value) => MapEntry(id, value as Team?)),
+            TeamOverview.route,
+            (d) => d.name,
+            context: context,
+          ),
+        'team_match' => _buildGroup<TeamMatch>(
+            localizations.matches,
+            Icons.event,
+            ids.map((id, value) => MapEntry(id, value as TeamMatch?)),
+            TeamMatchOverview.route,
+            (d) => d.localize(context),
+            context: context,
+          ),
+        'team_match_bout' => _buildGroup<TeamMatchBout>(
+            localizations.bouts,
+            Icons.sports_kabaddi,
+            ids.map((id, value) => MapEntry(id, value as TeamMatchBout?)),
+            TeamMatchBoutOverview.route,
+            (d) => d.bout.title(context),
+            context: context,
+          ),
+        // 'competition' =>
+        //   buildGroup<Competition>(localizations.competitions, Icons.leaderboard, ids, CompetitionOverview.route, (d) => d.name),
+        'weight_class' => _buildGroup<WeightClass>(
+            localizations.weightClasses,
+            Icons.fitness_center,
+            ids.map((id, value) => MapEntry(id, value as WeightClass?)),
+            WeightClassOverview.route,
+            (d) => d.name,
+            context: context,
+          ),
+        _ =>
+          throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.'),
+      };
+    });
+    return Column(children: children.toList());
+  }
+
+  Widget _buildGroup<T extends DataObject>(
     String groupTitle,
     IconData iconData,
-    Set<int> ids,
+    Map<int, T?> ids,
     String route,
-    String Function(T dataObject) getTitle,
-  ) {
+    String Function(T dataObject) getTitle, {
+    required BuildContext context,
+  }) {
     return Column(
       children: [
         ListTile(title: Text(groupTitle), leading: Icon(iconData)),
         GridView.extent(
           maxCrossAxisExtent: 150,
           shrinkWrap: true,
-          children: ids.map((id) => _createItem<T>(id, route, getTitle)).toList(),
+          children: ids.entries
+              .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
+              .toList(),
         ),
       ],
     );
   }
 
-  Widget _createItem<T extends DataObject>(int id, String route, String Function(T dataObject) getTitle) {
-    final localizations = AppLocalizations.of(context)!;
+  Widget _createItem<T extends DataObject>(int id, T? initialData, String route, String Function(T dataObject) getTitle,
+      {required BuildContext context}) {
     return SingleConsumer<T>(
         onException: (context, exception, {stackTrace}) => Card(
               child: Center(
                 child: IconButton(
-                    onPressed: () async {
-                      final removeItem = await showOkCancelDialog(
-                        okText: localizations.remove,
-                        getResult: () => true,
-                        context: context,
-                        child: Column(
-                          children: [
-                            Text('There was a problem with the object of type $T and id $id.'),
-                            ExceptionInfo(
-                              exception ?? localizations.errorOccurred,
-                              stackTrace: stackTrace,
-                            ),
-                          ],
-                        ),
-                      );
-                      if (removeItem == true) {
-                        final notifier = ref.read(favoritesNotifierProvider.notifier);
-                        notifier.removeFavorite(getTableNameFromType(T), id);
-                      }
-                    },
+                    onPressed: () =>
+                        onHandleException<T>(id: id, context: context, exception: exception, stackTrace: stackTrace),
                     icon: const Icon(Icons.warning)),
               ),
             ),
         id: id,
+        initialData: initialData,
         builder: (context, data) {
           return InkWell(
             onTap: () {
