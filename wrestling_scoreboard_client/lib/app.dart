@@ -21,6 +21,9 @@ class WrestlingScoreboardApp extends ConsumerStatefulWidget {
 }
 
 class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> {
+  // Initialize router once to avoid reloading initial path on rebuild.
+  final routerConfig = getRouter();
+
   @override
   void initState() {
     super.initState();
@@ -65,7 +68,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
                   supportedLocales: Preferences.supportedLanguages,
                   builder: (context, child) => GlobalWidget(child: child ?? const CircularProgressIndicator()),
                   locale: locale,
-                  routerConfig: getRouter(),
+                  routerConfig: routerConfig,
                 );
               },
             );
