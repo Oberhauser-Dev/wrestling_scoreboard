@@ -60,7 +60,7 @@ class CustomSettingsScreen extends ConsumerWidget {
     }
 
     Future<(Locale?, ThemeMode, String?)> loadGeneralSettings() async {
-      var results = await Future.wait([
+      final results = await Future.wait([
         ref.watch(localeNotifierProvider),
         ref.watch(themeModeNotifierProvider),
         ref.watch(fontFamilyNotifierProvider)
@@ -76,9 +76,7 @@ class CustomSettingsScreen extends ConsumerWidget {
           LoadingBuilder<(Locale?, ThemeMode, String?)>(
               future: loadGeneralSettings(),
               builder: (context, generalSettings) {
-                var locale = generalSettings.$1;
-                var themeMode = generalSettings.$2;
-                var fontFamily = generalSettings.$3;
+                var (locale, themeMode, fontFamily) = generalSettings;
 
                 return SettingsSection(
                   title: localizations.general,
@@ -409,9 +407,9 @@ class FontDialogState extends State<FontDialog> {
     if (counter >= fontStock.length) return;
 
     setState(() => fontFamilies.add(fontStock[counter]));
-    await Future.delayed(const Duration(microseconds: 300));
+    await Future.delayed(const Duration(microseconds: 1000));
 
-    lazyLoadFonts(counter+1);
+    lazyLoadFonts(counter + 1);
   }
 
   @override
