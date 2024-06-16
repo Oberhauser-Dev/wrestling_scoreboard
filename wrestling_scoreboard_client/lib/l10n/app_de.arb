@@ -149,6 +149,9 @@
   "boutResultVfoAbbr": "DN",
   "boutResultDsqAbbr": "DQ",
   "boutResultDsq2Abbr": "DQ2",
+  "actions": "Aktionen",
+  "participations": "Teilnahmen",
+  "boutConfig": "Kampf-Konfiguration",
 
   "red": "Red",
   "blue": "Blue",

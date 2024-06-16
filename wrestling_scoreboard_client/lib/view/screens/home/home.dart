@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/division_weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/team_match.dart';
+import 'package:wrestling_scoreboard_client/localization/type.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
@@ -239,14 +240,12 @@ class _EntityGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     final children = entities.entries.map((entry) {
       final tableName = entry.key;
       final ids = entry.value;
       return switch (tableName) {
         // 'bout_config' => buildGroup<BoutConfig>(localizations.boutConfigs, Icons.question_mark, ids, (d) => d.id.toString()),
         'bout' => _buildGroup<Bout>(
-            localizations.bouts,
             Icons.sports_kabaddi,
             ids.map((id, value) => MapEntry(id, value as Bout?)),
             BoutOverview.route,
@@ -255,7 +254,6 @@ class _EntityGrid extends StatelessWidget {
           ),
         // 'bout_action' => buildGroup<BoutAction>(localizations.actions, Icons.question_mark, ids, BoutOverview.route, (d) => d.id.toString()),
         'club' => _buildGroup<Club>(
-            localizations.clubs,
             Icons.foundation,
             ids.map((id, value) => MapEntry(id, value as Club?)),
             ClubOverview.route,
@@ -263,7 +261,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'organization' => _buildGroup<Organization>(
-            localizations.organizations,
             Icons.corporate_fare,
             ids.map((id, value) => MapEntry(id, value as Organization?)),
             OrganizationOverview.route,
@@ -271,7 +268,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'division' => _buildGroup<Division>(
-            localizations.divisions,
             Icons.inventory,
             ids.map((id, value) => MapEntry(id, value as Division?)),
             DivisionOverview.route,
@@ -279,7 +275,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'league' => _buildGroup<League>(
-            localizations.leagues,
             Icons.emoji_events,
             ids.map((id, value) => MapEntry(id, value as League?)),
             LeagueOverview.route,
@@ -287,7 +282,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'division_weight_class' => _buildGroup<DivisionWeightClass>(
-            localizations.weightClasses,
             Icons.fitness_center,
             ids.map((id, value) => MapEntry(id, value as DivisionWeightClass?)),
             DivisionWeightClassOverview.route,
@@ -295,7 +289,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'league_team_participation' => _buildGroup<LeagueTeamParticipation>(
-            localizations.participatingTeam,
             Icons.group,
             ids.map((id, value) => MapEntry(id, value as LeagueTeamParticipation?)),
             LeagueTeamParticipationOverview.route,
@@ -304,7 +297,6 @@ class _EntityGrid extends StatelessWidget {
           ),
         // 'lineup' => buildGroup<Lineup>(localizations.lineups, Icons.view_list, ids, LineupOverview.route, (d) => d.team.name),
         'membership' => _buildGroup<Membership>(
-            localizations.memberships,
             Icons.person,
             ids.map((id, value) => MapEntry(id, value as Membership?)),
             MembershipOverview.route,
@@ -314,7 +306,6 @@ class _EntityGrid extends StatelessWidget {
         // 'participation' => buildGroup<Participation>(localizations.participations, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
         // 'participant_state' => buildGroup<ParticipantState>(localizations.participantStates, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
         'person' => _buildGroup<Person>(
-            localizations.persons,
             Icons.person,
             ids.map((id, value) => MapEntry(id, value as Person?)),
             PersonOverview.route,
@@ -322,7 +313,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'team' => _buildGroup<Team>(
-            localizations.teams,
             Icons.group,
             ids.map((id, value) => MapEntry(id, value as Team?)),
             TeamOverview.route,
@@ -330,7 +320,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'team_match' => _buildGroup<TeamMatch>(
-            localizations.matches,
             Icons.event,
             ids.map((id, value) => MapEntry(id, value as TeamMatch?)),
             TeamMatchOverview.route,
@@ -338,7 +327,6 @@ class _EntityGrid extends StatelessWidget {
             context: context,
           ),
         'team_match_bout' => _buildGroup<TeamMatchBout>(
-            localizations.bouts,
             Icons.sports_kabaddi,
             ids.map((id, value) => MapEntry(id, value as TeamMatchBout?)),
             TeamMatchBoutOverview.route,
@@ -348,7 +336,6 @@ class _EntityGrid extends StatelessWidget {
         // 'competition' =>
         //   buildGroup<Competition>(localizations.competitions, Icons.leaderboard, ids, CompetitionOverview.route, (d) => d.name),
         'weight_class' => _buildGroup<WeightClass>(
-            localizations.weightClasses,
             Icons.fitness_center,
             ids.map((id, value) => MapEntry(id, value as WeightClass?)),
             WeightClassOverview.route,
@@ -363,7 +350,6 @@ class _EntityGrid extends StatelessWidget {
   }
 
   Widget _buildGroup<T extends DataObject>(
-    String groupTitle,
     IconData iconData,
     Map<int, T?> ids,
     String route,
@@ -372,7 +358,7 @@ class _EntityGrid extends StatelessWidget {
   }) {
     return Column(
       children: [
-        ListTile(title: Text(groupTitle), leading: Icon(iconData)),
+        ListTile(title: Text(localizeType(context, T)), leading: Icon(iconData)),
         GridView.extent(
           maxCrossAxisExtent: 150,
           shrinkWrap: true,

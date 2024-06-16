@@ -152,6 +152,9 @@
   "boutResultVfoAbbr": "VFO",
   "boutResultDsqAbbr": "DSQ",
   "boutResultDsq2Abbr": "DSQ2",
+  "actions": "Actions",
+  "participations": "Participations",
+  "boutConfig": "Bout configuration",
 
   "red": "Red",
   "blue": "Blue",
