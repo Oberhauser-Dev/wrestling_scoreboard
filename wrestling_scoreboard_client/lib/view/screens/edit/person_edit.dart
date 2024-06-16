@@ -10,14 +10,15 @@ import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class PersonEdit extends ConsumerStatefulWidget {
-  final Organization initialOrganization;
+abstract class AbstractPersonEdit extends ConsumerStatefulWidget {
+  final Organization? initialOrganization;
   final Person? person;
 
-  const PersonEdit({this.person, required this.initialOrganization, super.key});
+  const AbstractPersonEdit({this.person, required this.initialOrganization, super.key});
 }
 
-abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> implements AbstractEditState<Person> {
+abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends ConsumerState<T>
+    implements AbstractEditState<Person> {
   final _formKey = GlobalKey<FormState>();
 
   String? _prename;
@@ -173,4 +174,26 @@ abstract class PersonEditState<T extends PersonEdit> extends ConsumerState<T> im
       navigator.pop();
     }
   }
+}
+
+class PersonEdit extends AbstractPersonEdit {
+  const PersonEdit({
+    super.person,
+    super.key,
+    required super.initialOrganization,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => PersonEditState();
+}
+
+class PersonEditState extends AbstractPersonEditState<PersonEdit> {
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return buildEdit(context, id: widget.person?.id, classLocale: localizations.person, fields: []);
+  }
+
+  @override
+  Future<void> handleNested(person) async {}
 }

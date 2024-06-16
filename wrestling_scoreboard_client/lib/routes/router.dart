@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
@@ -100,6 +101,10 @@ getRouter() {
               GoRoute(
                 path: '${MembershipOverview.route}/:membership_id',
                 builder: (context, state) => MembershipOverview(id: int.parse(state.pathParameters['membership_id']!)),
+              ),
+              GoRoute(
+                path: '${PersonOverview.route}/:person_id',
+                builder: (context, state) => PersonOverview(id: int.parse(state.pathParameters['person_id']!)),
               ),
             ],
           ),

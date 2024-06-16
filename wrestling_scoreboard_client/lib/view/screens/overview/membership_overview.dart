@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MembershipOverview extends PersonOverview {
+class MembershipOverview extends AbstractPersonOverview {
   static const route = 'membership';
 
   final int id;
@@ -39,6 +39,11 @@ class MembershipOverview extends PersonOverview {
               title: membership.no ?? '-',
               subtitle: localizations.membershipNumber,
               icon: Icons.tag,
+            ),
+            ContentItem(
+              title: membership.club.name,
+              subtitle: localizations.club,
+              icon: Icons.foundation,
             )
           ],
         );

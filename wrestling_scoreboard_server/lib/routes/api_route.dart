@@ -125,6 +125,7 @@ class ApiRoute {
     router.post('/person', personController.postSingle);
     router.get('/persons', personController.requestMany);
     router.get('/person/<id|[0-9]+>', personController.requestSingle);
+    router.get('/person/<id|[0-9]+>/memberships', personController.requestMemberships);
 
     final teamController = TeamController();
     router.post('/team', teamController.postSingle);

@@ -25,7 +25,7 @@ class LeagueTeamParticipationEdit extends ConsumerStatefulWidget {
 class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
   final _formKey = GlobalKey<FormState>();
 
-  List<Team>? availableTeams;
+  List<Team>? _availableTeams;
   List<League>? _availableLeagues;
   Team? _team;
   League? _league;
@@ -54,8 +54,8 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
-            return availableTeams!.toList();
+            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
+            return _availableTeams!.toList();
           },
         ),
       ),

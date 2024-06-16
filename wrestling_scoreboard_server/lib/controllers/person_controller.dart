@@ -1,5 +1,8 @@
 import 'package:postgres/postgres.dart' as psql;
+import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'entity_controller.dart';
 
@@ -11,6 +14,11 @@ class PersonController extends EntityController<Person> {
   }
 
   PersonController._internal() : super(tableName: 'person');
+
+  Future<Response> requestMemberships(Request request, String id) async {
+    return EntityController.handleRequestManyOfController(MembershipController(),
+        isRaw: request.isRaw, conditions: ['person_id = @id'], substitutionValues: {'id': id});
+  }
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
