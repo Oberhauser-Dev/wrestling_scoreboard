@@ -38,6 +38,7 @@ class ApiRoute {
 
     final searchController = SearchController();
     router.get('/search', searchController.search);
+    router.post('/search', searchController.search);
 
     final boutConfigController = BoutConfigController();
     router.post('/bout_config', boutConfigController.postSingle);

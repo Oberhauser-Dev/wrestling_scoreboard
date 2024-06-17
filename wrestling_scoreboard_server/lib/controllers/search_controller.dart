@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
 class SearchController {
@@ -11,27 +12,45 @@ class SearchController {
     final queryParams = request.requestedUri.queryParameters;
 
     final likeParam = queryParams['like'];
+    final querySearchType = queryParams['type'];
+    final searchOrganizationId = int.tryParse(queryParams['org'] ?? '');
+    final useProvider = bool.parse(queryParams['use_provider'] ?? 'false');
+    final isValidLikeSearch = likeParam != null && (likeParam.length >= 3 || double.tryParse(likeParam) != null);
+    final searchAllTypes = querySearchType == null;
+
+    if (useProvider && (!isValidLikeSearch || searchAllTypes || searchOrganizationId == null)) {
+      return Response.badRequest(
+          body:
+              'Searching the API provider without specifying a type, the organization and a search string is not supported!');
+    }
 
     final Iterable<String> searchTypes;
-    final querySearchType = queryParams['type'];
-    if (querySearchType != null) {
+    if (!searchAllTypes) {
       searchTypes = [querySearchType];
     } else {
       // All searchable types
       searchTypes = dataTypes.map((d) => getTableNameFromType(d));
     }
 
-    final searchOrganizationId = int.tryParse(queryParams['org'] ?? '');
-
     try {
       final raw = request.isRaw;
       List<Map<String, dynamic>> manyJsonList = [];
-      for (final searchType in searchTypes) {
-        final entityController = EntityController.getControllerFromDataType(getTypeFromTableName(searchType));
+      for (final tableName in searchTypes) {
+        final searchType = getTypeFromTableName(tableName);
+        final entityController = EntityController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
-        if (likeParam != null && (likeParam.length >= 3 || double.tryParse(likeParam) != null)) {
+        if (isValidLikeSearch) {
           manyJson = await entityController.getManyJsonLike(raw, likeParam, organizationId: searchOrganizationId);
-        } else if (querySearchType != null) {
+          if (!searchAllTypes && useProvider && searchOrganizationId != null) {
+            final orgSearchRes = await OrganizationController().search(
+              request,
+              searchOrganizationId,
+              searchStr: likeParam,
+              searchType: searchType,
+            );
+            manyJson = manyToJson(orgSearchRes, searchType, CRUD.read, isRaw: false);
+          }
+        } else if (!searchAllTypes) {
           manyJson = await entityController.getManyJson(
               isRaw: raw,
               conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,

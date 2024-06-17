@@ -159,8 +159,12 @@ class HomeState extends ConsumerState<Home> {
                     });
                   } else {
                     try {
-                      final results = await (await ref.read(dataManagerNotifierProvider))
-                          .search(searchTerm: searchTerm, type: searchType, organization: searchOrganization);
+                      final authService = (await ref.read(orgAuthNotifierProvider))[searchOrganization?.id];
+                      final results = await (await ref.read(dataManagerNotifierProvider)).search(
+                          searchTerm: searchTerm,
+                          type: searchType,
+                          organizationId: searchOrganization?.id,
+                          authService: authService);
                       setState(() {
                         searchResults = results;
                       });

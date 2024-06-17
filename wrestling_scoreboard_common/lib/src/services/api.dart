@@ -61,4 +61,6 @@ abstract class WrestlingApi {
   Future<Iterable<League>> importLeagues({required Division division});
 
   Future<Iterable<TeamMatch>> importTeamMatches({required League league});
+
+  Future<List<DataObject>> search({required String searchStr, required Type searchType});
 }

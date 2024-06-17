@@ -47,22 +47,26 @@ class OrganizationController extends EntityController<Organization> {
         isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
   }
 
+  Future<WrestlingApi?> _initApiProvider(Request request, int id) async {
+    AuthService? authService;
+    final message = await request.readAsString();
+    if (message.isNotEmpty) {
+      final jsonDecodedMessage = jsonDecode(message);
+      final authType = getTypeFromTableName(jsonDecodedMessage['tableName']);
+      if (authType == BasicAuthService) {
+        authService = BasicAuthService.fromJson(jsonDecodedMessage['data']);
+      }
+    }
+
+    final organization = await getSingle(id);
+    return organization.getApi(EntityController.getSingleFromDataTypeOfOrg, authService: authService);
+  }
+
   Future<Response> import(Request request, String id) async {
     try {
-      AuthService? authService;
-      final message = await request.readAsString();
-      if (message.isNotEmpty) {
-        final jsonDecodedMessage = jsonDecode(message);
-        final authType = getTypeFromTableName(jsonDecodedMessage['tableName']);
-        if (authType == BasicAuthService) {
-          authService = BasicAuthService.fromJson(jsonDecodedMessage['data']);
-        }
-      }
-
-      final organization = await getSingle(int.parse(id));
-      final apiProvider = organization.getApi(EntityController.getSingleFromDataTypeOfOrg, authService: authService);
+      final apiProvider = await _initApiProvider(request, int.parse(id));
       if (apiProvider == null) {
-        return Response.notFound('No API provider selected');
+        throw Exception('No API provider selected for the organization $id.');
       }
       // apiProvider.isMock = true;
 
@@ -133,6 +137,15 @@ class OrganizationController extends EntityController<Organization> {
     } catch (err, stackTrace) {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     }
+  }
+
+  Future<List<DataObject>> search(Request request, int id,
+      {required String searchStr, required Type searchType}) async {
+    final apiProvider = await _initApiProvider(request, id);
+    if (apiProvider == null) {
+      throw Exception('No API provider selected for the organization $id.');
+    }
+    return await apiProvider.search(searchStr: searchStr, searchType: searchType);
   }
 
   @override

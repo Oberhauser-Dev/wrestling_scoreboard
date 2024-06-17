@@ -14,6 +14,7 @@ class SearchableDropdown<T> extends StatelessWidget {
   final BuildContext context;
   final Widget? icon;
   final bool isFilterOnline;
+  final PopupBuilder? containerBuilder;
 
   const SearchableDropdown({
     required this.selectedItem,
@@ -28,6 +29,7 @@ class SearchableDropdown<T> extends StatelessWidget {
     this.icon,
     this.isFilterOnline = false,
     super.key,
+    this.containerBuilder,
   });
 
   @override
@@ -40,6 +42,7 @@ class SearchableDropdown<T> extends StatelessWidget {
         searchFieldProps: const TextFieldProps(decoration: InputDecoration(prefixIcon: Icon(Icons.search))),
         showSearchBox: true,
         isFilterOnline: isFilterOnline,
+        containerBuilder: containerBuilder,
       ),
       clearButtonProps: const ClearButtonProps(isVisible: true),
       asyncItems: asyncItems,

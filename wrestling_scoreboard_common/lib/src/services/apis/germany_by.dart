@@ -182,33 +182,11 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (json.isEmpty) return <Membership>{};
         final List<dynamic> boutList = json['competition']['_boutList'];
 
-        final homeLicenseIds = boutList.map((boutJson) => int.tryParse(boutJson['homeWrestlerLicId'] ?? ''));
-        final opponentLicenseIds = boutList.map((boutJson) => int.tryParse(boutJson['homeWrestlerLicId'] ?? ''));
-        final licenseIds = [...homeLicenseIds, ...opponentLicenseIds].whereNotNull();
-        final memberships = await Future.wait(licenseIds.map((e) async {
-          final json = await _getSaisonWrestler(passCode: e);
-          if (json.isEmpty) return null;
-          final wrestlerJson = json['wrestler'];
-          if (wrestlerJson == null || wrestlerJson['clubCode'] != club.no) {
-            // FIXME: comparison may not is correct!
-            return null;
-          }
-          return Membership(
-            club: club,
-            organization: organization,
-            no: json['passcode'],
-            orgSyncId: '${wrestlerJson['clubCode']}-${json['passcode']}',
-            person: _copyPersonWithOrg(Person(
-              prename: wrestlerJson['givenname'],
-              surname: wrestlerJson['name'],
-              gender: wrestlerJson['gender'] == 'm'
-                  ? Gender.male
-                  : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
-              birthDate: DateTime.parse(wrestlerJson['birthday']),
-              nationality: Countries.values
-                  .singleWhereOrNull((element) => element.unofficialNames.contains(wrestlerJson['nationality'])),
-            )),
-          );
+        final homeSyncIds = boutList.map((boutJson) => int.tryParse(boutJson['homeWrestlerId'] ?? ''));
+        final opponentSyncIds = boutList.map((boutJson) => int.tryParse(boutJson['opponentWrestlerId'] ?? ''));
+        final passCodes = [...homeSyncIds, ...opponentSyncIds].whereNotNull();
+        final memberships = await Future.wait(passCodes.map((passCode) async {
+          return await _getMembership(passCode: passCode, getClub: (clubId) async => club);
         }));
 
         return memberships.whereNotNull().toSet();
@@ -216,6 +194,35 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     ))
         .expand((element) => element);
     return memberships.toSet();
+  }
+
+  Future<Membership?> _getMembership({
+    required int passCode,
+    required Future<Club?> Function(String clubId) getClub,
+  }) async {
+    final json = await _getSaisonWrestler(passCode: passCode);
+    if (json.isEmpty) return null;
+    final wrestlerJson = json['wrestler'];
+    final club = await getClub(wrestlerJson['clubId']);
+    if (wrestlerJson == null || club == null) {
+      return null;
+    }
+    return Membership(
+      club: club,
+      organization: organization,
+      no: json['passcode'],
+      orgSyncId: '${wrestlerJson['clubId']}-${json['passcode']}',
+      person: _copyPersonWithOrg(Person(
+        prename: wrestlerJson['givenname'],
+        surname: wrestlerJson['name'],
+        gender: wrestlerJson['gender'] == 'm'
+            ? Gender.male
+            : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
+        birthDate: DateTime.parse(wrestlerJson['birthday']),
+        nationality: Countries.values
+            .singleWhereOrNull((element) => element.unofficialNames.contains(wrestlerJson['nationality'])),
+      )),
+    );
   }
 
   @override
@@ -245,7 +252,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             if (teamName != club.name) return null;
             return Team(
               name: teamName,
-              club: await _getSingleBySyncId<Club>(teamName),
+              club: await _getSingleBySyncId<Club>(teamName), // TODO: use club number
               orgSyncId: teamName,
               organization: organization,
             );
@@ -347,7 +354,32 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }
 
   Person _copyPersonWithOrg(Person person) {
-    return person.copyWith(orgSyncId: '${person.fullName}_${person.birthDate}', organization: organization);
+    return person.copyWith(
+        orgSyncId: '${person.prename}_${person.surname}_${person.birthDate?.toIso8601String().substring(0, 10)}',
+        organization: organization);
+  }
+
+  @override
+  Future<List<DataObject>> search({required String searchStr, required Type searchType}) async {
+    switch (searchType) {
+      case const (Membership):
+        final membership = await _getMembership(
+            passCode: int.parse(searchStr),
+            getClub: (clubId) async {
+              try {
+                return await _getSingleBySyncId<Club>(clubId);
+              } catch (_) {
+                // TODO: remove as soon as endpoint for clubs is available.
+                return Club(organization: Organization(name: 'dummy-org'), name: 'dummy-club');
+              }
+            });
+        if (membership == null) {
+          throw Exception('Membership with search string "$searchStr" and type "$searchType" was not found.');
+        }
+        return [membership];
+      default:
+        throw Exception('API provider search for type $searchType is not supported yet.');
+    }
   }
 
   Iterable<String>? cachedSeasonList;
@@ -468,7 +500,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       final response = await http.get(uri).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception(
-            'Failed to get the competition list (seasonId: $seasonId, competitionId: $competitionId): ${response.reasonPhrase ?? response.statusCode.toString()}');
+            'Failed to get the competition (seasonId: $seasonId, competitionId: $competitionId): ${response.reasonPhrase ?? response.statusCode.toString()}');
       }
       body = response.body;
     } else {
@@ -497,14 +529,13 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     String body;
     if (!isMock) {
       if (authService == null) {
-        print('No credentials given. Operation `getSaisonWrestler` skipped.');
-        return {};
+        throw Exception('Failed to get the wrestler (passcode: $passCode): No credentials given.');
       }
       print('Call API: $uri');
       final response = await http.get(uri, headers: authService?.header).timeout(timeout);
       if (response.statusCode != 200) {
         throw Exception(
-            'Failed to get the competition list (passcode: $passCode): ${response.reasonPhrase ?? response.statusCode.toString()}');
+            'Failed to get the wrestler (passcode: $passCode): ${response.reasonPhrase ?? response.statusCode.toString()}');
       }
       body = response.body;
     } else {

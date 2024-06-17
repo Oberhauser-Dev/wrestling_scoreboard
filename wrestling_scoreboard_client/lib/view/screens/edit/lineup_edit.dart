@@ -7,12 +7,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
@@ -67,12 +70,31 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         leader: _leader,
         coach: _coach,
       ));
-      await Future.forEach(
-          _deleteParticipations,
-          (Participation element) async =>
-              (await ref.read(dataManagerNotifierProvider)).deleteSingle<Participation>(element));
-      await Future.forEach(_createOrUpdateParticipations,
-          (Participation element) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(element));
+      await Future.forEach(_deleteParticipations, (Participation element) async {
+        await (await ref.read(dataManagerNotifierProvider)).deleteSingle<Participation>(element);
+      });
+      await Future.forEach(_createOrUpdateParticipations, (Participation participation) async {
+        // Create missing membership and person, if not present in database yet. This means, that the data was fetched from an API provider.
+        if (participation.membership.id == null) {
+          if (participation.membership.club.id == null) {
+            // TODO: Add club of current lineup team, if club does not exist. This should not occur as soon all clubs can be imported via API.
+            participation =
+                participation.copyWith(membership: participation.membership.copyWith(club: widget.lineup.team.club));
+          }
+
+          if (participation.membership.person.id == null) {
+            final personId = await (await ref.read(dataManagerNotifierProvider))
+                .createOrUpdateSingle<Person>(participation.membership.person);
+            participation = participation.copyWith(
+                membership:
+                    participation.membership.copyWith(person: participation.membership.person.copyWithId(personId)));
+          }
+          final membershipId = await (await ref.read(dataManagerNotifierProvider))
+              .createOrUpdateSingle<Membership>(participation.membership);
+          participation = participation.copyWith(membership: participation.membership.copyWithId(membershipId));
+        }
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<Participation>(participation);
+      });
       if (onSubmitGenerate != null) onSubmitGenerate();
       navigator.pop();
     }
@@ -104,6 +126,12 @@ class LineupEditState extends ConsumerState<LineupEdit> {
     ];
   }
 
+  Future<Iterable<Membership>> _getOrCreateMemberships() async {
+    _memberships ??= await ref.watch(
+        manyDataStreamProvider<Membership, Club>(ManyProviderData(filterObject: widget.lineup.team.club)).future);
+    return _memberships!;
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -116,39 +144,30 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         items: [
           ListTile(title: HeadingText(widget.lineup.team.name)),
           ListTile(
-            title: SearchableDropdown<Membership>(
-              selectedItem: _leader,
+            title: _MembershipDropdown(
               label: localizations.leader,
-              context: context,
-              onSaved: (Membership? value) => setState(() {
+              getOrSetMemberships: _getOrCreateMemberships,
+              organization: widget.lineup.organization,
+              selectedItem: _leader,
+              onSave: (Membership? value) => setState(() {
                 _leader = value;
               }),
-              itemAsString: (u) => u.person.fullName,
-              asyncItems: (String filter) async {
-                _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
-                return _filterMemberships(ref, filter, widget.lineup, _memberships!);
-              },
-              isFilterOnline: true,
             ),
           ),
           ListTile(
-            title: SearchableDropdown<Membership>(
-              selectedItem: _coach,
+            title: _MembershipDropdown(
               label: localizations.coach,
-              context: context,
-              onSaved: (Membership? value) => setState(() {
+              getOrSetMemberships: _getOrCreateMemberships,
+              organization: widget.lineup.organization,
+              selectedItem: _coach,
+              onSave: (Membership? value) => setState(() {
                 _coach = value;
               }),
-              itemAsString: (u) => u.info,
-              asyncItems: (String filter) async {
-                _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
-                return _filterMemberships(ref, filter, widget.lineup, _memberships!);
-              },
-              isFilterOnline: true,
             ),
           ),
           ..._participations.entries.map((mapEntry) {
             return ParticipationEditTile(
+              getOrSetMemberships: _getOrCreateMemberships,
               lineup: widget.lineup,
               participation: mapEntry.value,
               weightClass: mapEntry.key,
@@ -168,6 +187,7 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
   final Lineup lineup;
   final void Function(Participation participation) deleteParticipation;
   final void Function(Participation participation) createOrUpdateParticipation;
+  final Future<Iterable<Membership>> Function() getOrSetMemberships;
 
   const ParticipationEditTile({
     super.key,
@@ -176,6 +196,7 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
     required this.lineup,
     required this.deleteParticipation,
     required this.createOrUpdateParticipation,
+    required this.getOrSetMemberships,
   });
 
   @override
@@ -183,8 +204,6 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
 }
 
 class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
-  Iterable<Membership>? _memberships;
-
   Membership? _curMembership;
   double? _curWeight;
 
@@ -235,21 +254,16 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
             flex: 80,
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: SearchableDropdown<Membership>(
-                selectedItem: widget.participation?.membership,
+              child: _MembershipDropdown(
                 label:
                     '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
-                context: context,
-                onChanged: (Membership? newMembership) {
+                getOrSetMemberships: widget.getOrSetMemberships,
+                onChange: (Membership? newMembership) {
                   _curMembership = newMembership;
                 },
-                onSaved: (Membership? newMembership) => onSave(),
-                itemAsString: (u) => u.info,
-                asyncItems: (String filter) async {
-                  _memberships ??= await _getMemberships(ref, club: widget.lineup.team.club);
-                  return _filterMemberships(ref, filter, widget.lineup, _memberships!);
-                },
-                isFilterOnline: true,
+                organization: widget.lineup.organization,
+                selectedItem: widget.participation?.membership,
+                onSave: (_) => onSave(),
               ),
             ),
           ),
@@ -278,28 +292,94 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
   }
 }
 
-Future<List<Membership>> _filterMemberships(
-  WidgetRef ref,
-  String filter,
-  Lineup lineup,
-  Iterable<Membership> memberships,
-) async {
-  filter = filter.trim().toLowerCase();
-  if (filter.isEmpty) {
-    return memberships.toList();
-  }
-  final number = int.tryParse(filter);
-  if (number == null) {
-    return memberships.where((item) => item.person.fullName.toLowerCase().contains(filter)).toList();
+class _MembershipDropdown extends ConsumerWidget {
+  final Future<Iterable<Membership>> Function() getOrSetMemberships;
+  final void Function(Membership? membership)? onChange;
+  final void Function(Membership? membership)? onSave;
+  final Membership? selectedItem;
+  final String label;
+  final Organization? organization;
+
+  const _MembershipDropdown({
+    required this.getOrSetMemberships,
+    this.selectedItem,
+    required this.label,
+    this.organization,
+    this.onChange,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return LoadingBuilder<Map<int, AuthService>>(
+      future: ref.watch(orgAuthNotifierProvider),
+      builder: (context, authServiceMap) {
+        return SearchableDropdown<Membership>(
+          selectedItem: selectedItem,
+          label: label,
+          context: context,
+          onChanged: onChange,
+          onSaved: onSave,
+          itemAsString: (u) => u.info + (u.id == null ? ' (API)' : ''),
+          asyncItems: (String filter) async {
+            return _filterMemberships(ref, filter, organization, await getOrSetMemberships());
+          },
+          isFilterOnline: true,
+          containerBuilder: (context, popupWidget) {
+            return Column(
+              children: [
+                if (authServiceMap[organization?.id] == null)
+                  const PaddedCard(
+                    child: Text(
+                        "⚠ You have not specified any credentials for this organization, therefore you can't search for sensitive data."),
+                  ),
+                Expanded(child: popupWidget),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
-  // If filter string is a number, search for membership no or at API provider, if present.
-  filter = number.toString();
-  final filteredMemberships =
-      memberships.where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false));
-  return filteredMemberships.toList();
-}
+  Future<List<Membership>> _filterMemberships(
+    WidgetRef ref,
+    String filter,
+    Organization? organization,
+    Iterable<Membership> memberships,
+  ) async {
+    filter = filter.trim().toLowerCase();
+    if (filter.isEmpty) {
+      return memberships.toList();
+    }
+    final number = int.tryParse(filter);
+    if (number == null) {
+      return memberships.where((item) => item.person.fullName.toLowerCase().contains(filter)).toList();
+    }
 
-Future<List<Membership>> _getMemberships(WidgetRef ref, {required Club club}) async {
-  return ref.watch(manyDataStreamProvider<Membership, Club>(ManyProviderData(filterObject: club)).future);
+    // If filter string is a number, search for membership no or at API provider, if present.
+    filter = number.toString();
+    final filteredMemberships = memberships
+        .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
+        .toList();
+
+    const enableApiProviderSearch = true;
+    if (enableApiProviderSearch) {
+      final authService = (await ref.read(orgAuthNotifierProvider))[organization?.id];
+      if (authService != null) {
+        final providerResults = await (await ref.read(dataManagerNotifierProvider)).search(
+          searchTerm: filter,
+          type: Membership,
+          organizationId: organization?.id,
+          authService: authService,
+          includeApiProviderResults: true,
+        );
+        final providerMemberships =
+            providerResults[getTableNameFromType(Membership)]?.map((membership) => membership as Membership) ?? [];
+        filteredMemberships.addAll(providerMemberships);
+      }
+    }
+
+    return filteredMemberships;
+  }
 }

@@ -165,14 +165,24 @@ class RestDataManager extends DataManager {
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,
     Type? type,
-    Organization? organization,
+    int? organizationId,
+    AuthService? authService,
+    bool includeApiProviderResults = false,
   }) async {
+    // Auth is only needed for sensitive searches
+    String? body;
+    if (authService != null) {
+      if (authService is BasicAuthService) {
+        body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.read));
+      }
+    }
     final uri = Uri.parse('$_apiUrl/search').replace(queryParameters: {
       if (searchTerm.isNotEmpty) 'like': searchTerm,
       if (type != null) 'type': getTableNameFromType(type),
-      if (organization != null) 'org': organization.id.toString(),
+      if (organizationId != null) 'org': organizationId.toString(),
+      if (includeApiProviderResults) 'use_provider': includeApiProviderResults.toString(),
     });
-    final response = await http.get(uri);
+    final response = body == null ? await http.get(uri) : await http.post(uri, body: body);
     if (response.statusCode != 200) {
       throw RestException('Failed to search $type with term "$searchTerm"', response: response);
     }

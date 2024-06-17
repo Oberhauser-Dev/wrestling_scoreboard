@@ -440,7 +440,13 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<Map<String, List<DataObject>>> search({required String searchTerm, Type? type, Organization? organization}) {
+  Future<Map<String, List<DataObject>>> search({
+    required String searchTerm,
+    Type? type,
+    int? organizationId,
+    AuthService? authService,
+    bool includeApiProviderResults = false,
+  }) {
     // TODO: implement search
     throw UnimplementedError();
   }

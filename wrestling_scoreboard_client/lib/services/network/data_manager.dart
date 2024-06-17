@@ -84,7 +84,9 @@ abstract class DataManager {
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,
     Type? type,
-    Organization? organization,
+    int? organizationId,
+    AuthService? authService,
+    bool includeApiProviderResults,
   });
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};

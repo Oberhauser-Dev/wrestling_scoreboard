@@ -34,7 +34,7 @@ final listCompetitionJson = r'''
       "location": "Geiselh\u00f6ringer Hof, Straubinger Str. 5, 94333 Geiselh\u00f6ring",
       "editorName": "geiselhoering",
       "editorComment": "fair",
-      "refereeName": "Steinberger ",
+      "refereeName": "Unparteiisch ",
       "refereeGivenname": "Johannes",
       "lastModified": "2023-09-26 12:27:39",
       "editedAt": "2023-09-26 12:13:31",

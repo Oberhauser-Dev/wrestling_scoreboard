@@ -52,5 +52,5 @@ class Lineup with _$Lineup implements DataObject {
   String? get orgSyncId => throw UnimplementedError();
 
   @override
-  Organization? get organization => throw UnimplementedError();
+  Organization? get organization => team.organization;
 }

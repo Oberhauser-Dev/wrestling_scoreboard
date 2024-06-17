@@ -1,3 +1,4 @@
+import 'package:country/country.dart';
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -285,10 +286,26 @@ void main() {
       });
 
       // TODO: enable when endpoint for clubs is available.
-      /*test('Memberships', () async {
+      test('Memberships', () async {
         final memberships = await wrestlingApi.importMemberships(club: testClub);
-        expect(memberships, []);
-      });*/
+        expect(memberships, {
+          Membership(
+            no: '1234',
+            orgSyncId: '11472-1234',
+            organization: organizationNRW,
+            club: testClub,
+            person: Person(
+              orgSyncId: 'Max_Muster_2000-01-31',
+              organization: organizationNRW,
+              prename: 'Max',
+              surname: 'Muster',
+              gender: Gender.male,
+              birthDate: DateTime(2000, 1, 31),
+              nationality: Countries.deu,
+            ),
+          ),
+        });
+      });
 
       test('Teams', () async {
         final teams = await wrestlingApi.importTeams(club: testClub);
@@ -326,8 +343,8 @@ void main() {
             location: 'Geiselhöringer Hof, Straubinger Str. 5, 94333 Geiselhöring',
             referee: Person(
               prename: 'Johannes',
-              surname: 'Steinberger',
-              orgSyncId: 'Johannes Steinberger_null',
+              surname: 'Unparteiisch',
+              orgSyncId: 'Johannes_Unparteiisch_null',
               organization: organizationNRW,
             ),
             comment: 'fair',

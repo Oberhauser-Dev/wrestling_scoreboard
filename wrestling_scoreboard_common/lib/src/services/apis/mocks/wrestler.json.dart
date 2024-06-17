@@ -8,14 +8,14 @@ final wrestlerJson = r'''
   },
   "year": "2021",
   "sid": "2021",
-  "passcode": "4440",
+  "passcode": "1234",
   "nationCode": "GER",
   "authCode": "BRV",
   "wrestler": {
-    "name": "Scheffler",
-    "givenname": "Georg",
+    "name": "Muster",
+    "givenname": "Max",
     "gender": "m",
-    "birthday": "2002-05-27",
+    "birthday": "2000-01-31",
     "licenceCode": null,
     "authRating": null,
     "clubCode": null,
@@ -23,13 +23,13 @@ final wrestlerJson = r'''
     "passCode": null,
     "nationCode": null,
     "authCode": null,
-    "id": "rdb.4440",
+    "id": "rdb.1234",
     "active": "0",
-    "persId": "4633",
+    "persId": "1234",
     "licId": "0",
     "status": "",
     "clubId": "11472",
-    "birthplace": "Neuss"
+    "birthplace": "München"
   }
 }
 ''';
