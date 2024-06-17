@@ -360,8 +360,9 @@ class _EntityGrid extends StatelessWidget {
       children: [
         ListTile(title: Text(localizeType(context, T)), leading: Icon(iconData)),
         GridView.extent(
-          maxCrossAxisExtent: 150,
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          maxCrossAxisExtent: 150,
           children: ids.entries
               .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
               .toList(),
