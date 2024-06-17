@@ -32,14 +32,53 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     AudioCache.instance = AudioCache(prefix: '');
   }
 
-  ThemeData _buildTheme(Brightness brightness, String? fontFamily) {
-    final baseTheme = ThemeData(brightness: brightness);
-    if (fontFamily != null) {
-      return baseTheme.copyWith(
-        textTheme: GoogleFonts.getTextTheme(fontFamily, baseTheme.textTheme),
+  static MaterialColor primaryColor = _createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
+
+  static MaterialColor _createMaterialColor(Color color) {
+    final strengths = <double>[.05];
+    Map<int, Color> swatch = {};
+    final int r = color.red, g = color.green, b = color.blue;
+
+    for (int i = 1; i < 10; i++) {
+      strengths.add(0.1 * i);
+    }
+    for (final strength in strengths) {
+      final double ds = 0.5 - strength;
+      swatch[(strength * 1000).round()] = Color.fromRGBO(
+        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+        1,
       );
     }
-    return baseTheme;
+    return MaterialColor(color.value, swatch);
+  }
+
+  ThemeData _buildTheme(Brightness brightness, String? fontFamily) {
+    ThemeData theme;
+    if (brightness == Brightness.light) {
+      theme = ThemeData.light();
+      theme = theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: primaryColor,
+          secondary: primaryColor.shade800,
+        ),
+      );
+    } else {
+      theme = ThemeData.dark();
+      theme = theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: primaryColor,
+          secondary: primaryColor.shade300,
+        ),
+      );
+    }
+    if (fontFamily != null) {
+      return theme.copyWith(
+        textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme),
+      );
+    }
+    return theme;
   }
 
   @override
