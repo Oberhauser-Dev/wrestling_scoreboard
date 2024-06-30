@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../common.dart';
 import 'mocks/competition.json.dart';
+import 'mocks/listClubs.json.dart';
 import 'mocks/listCompetition.json.dart';
 import 'mocks/listLiga.json.dart';
 import 'mocks/listSaison.json.dart';
@@ -122,51 +123,25 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Iterable<Club>> importClubs() async {
-    final divisions = await importDivisions(minDate: DateTime.utc(MockableDateTime.now().year - 1));
-    final leagues = (await Future.wait(divisions.map((e) => importLeagues(division: e)))).expand((element) => element);
-    final clubs = (await Future.wait(leagues.map((league) async {
-      final json = await _getCompetitionList(
-        ligaId: league.division.name,
-        regionId: league.name,
-        seasonId: league.startDate.year.toString(),
-      );
-      if (json.isEmpty) return <Club>{};
+    final clubListJson = await _getClubList();
+    if (clubListJson.isEmpty) return <Club>{};
 
-      final competitionList = json['competitionList'];
-      final Iterable<Club> clubs;
-      if (competitionList is Map<String, dynamic>) {
-        Future<List<Club>> getClubOfCompetition(String key) async {
-          return (await Future.wait(competitionList.entries.map((entry) async {
-            final Map<String, dynamic> values = entry.value;
-            String? clubName = values[key];
-            if (clubName == null) return null;
-            if (clubName != clubName.trim()) {
-              clubName = clubName.trim();
-              print('Club with club name "$clubName" was trimmed');
-            }
-            return Club(
-              name: clubName,
-              // TODO: read 'no' from endpoint, when available
-              no: null,
-              orgSyncId: clubName,
-              organization: organization,
-            );
-          })))
-              .whereNotNull()
-              .toList();
-        }
-
-        final listHome = await getClubOfCompetition('homeTeamName');
-        final listGuest = await getClubOfCompetition('opponentTeamName');
-
-        clubs = [...listHome, ...listGuest];
-      } else {
-        clubs = [];
+    final clubs = clubListJson.map((json) {
+      String? clubName = json['name'];
+      String? clubId = json['clubId'];
+      if (clubName == null || clubId == null) return null;
+      if (clubName != clubName.trim()) {
+        clubName = clubName.trim();
+        print('Club with club name "$clubName" was trimmed');
       }
-      return clubs;
-    })))
-        .expand((element) => element);
-    return clubs.toSet();
+      return Club(
+        name: clubName,
+        no: clubId,
+        orgSyncId: clubId,
+        organization: organization,
+      );
+    });
+    return clubs.whereNotNull().toSet();
   }
 
   @override
@@ -240,20 +215,27 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       final competitionList = json['competitionList'];
       final Iterable<Team> teams;
       if (competitionList is Map<String, dynamic>) {
-        Future<List<Team>> getTeamOfCompetition(String key) async {
+        Future<List<Team>> getTeamOfCompetition(String prefix) async {
           return (await Future.wait(competitionList.entries.map((entry) async {
             final Map<String, dynamic> values = entry.value;
-            String? teamName = values[key];
-            if (teamName == null) return null;
+            String? teamId = values['${prefix}TeamId'];
+            String teamName = values['${prefix}TeamName'] ?? teamId;
+            if (teamId == null) return null;
             if (teamName != teamName.trim()) {
               teamName = teamName.trim();
-              print('Team with team name "$teamName" was trimmed');
+              print('Team with team name "$teamName" ($teamId) was trimmed');
+            }
+            List<String>? clubIds = values['${prefix}ClubIds'];
+            if (clubIds == null || clubIds.isEmpty) {
+              print('Team with team name "$teamName" ($teamId) does not belong to a club.');
+              return null;
             }
             if (teamName != club.name) return null;
             return Team(
               name: teamName,
-              club: await _getSingleBySyncId<Club>(teamName), // TODO: use club number
-              orgSyncId: teamName,
+              // TODO: allow to consist of multiple clubs
+              club: await _getSingleBySyncId<Club>(clubIds.first),
+              orgSyncId: teamId,
               organization: organization,
             );
           })))
@@ -261,8 +243,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               .toList();
         }
 
-        final listHome = await getTeamOfCompetition('homeTeamName');
-        final listGuest = await getTeamOfCompetition('opponentTeamName');
+        final listHome = await getTeamOfCompetition('home');
+        final listGuest = await getTeamOfCompetition('opponent');
 
         teams = [...listHome, ...listGuest];
       } else {
@@ -380,6 +362,33 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       default:
         throw Exception('API provider search for type $searchType is not supported yet.');
     }
+  }
+
+  Iterable<Map<String, dynamic>>? cachedClubList;
+
+  /// Get all clubs
+  Future<Iterable<Map<String, dynamic>>> _getClubList() async {
+    if (cachedClubList != null) return cachedClubList!;
+
+    final uri = Uri.parse(apiUrl).replace(queryParameters: {
+      'op': 'listClub',
+    });
+
+    String body;
+    if (!isMock) {
+      print('Call API: $uri');
+      final response = await http.get(uri).timeout(timeout);
+      if (response.statusCode != 200) {
+        throw Exception('Failed to get the saison list: ${response.reasonPhrase ?? response.statusCode.toString()}');
+      }
+      body = response.body;
+    } else {
+      body = listClubJson;
+    }
+    final Map<String, dynamic> json = jsonDecode(body);
+    final List<dynamic> competitionList = json['clubList'];
+    cachedClubList = await Future.wait(competitionList.map((entry) async => entry as Map<String, dynamic>));
+    return cachedClubList!;
   }
 
   Iterable<String>? cachedSeasonList;

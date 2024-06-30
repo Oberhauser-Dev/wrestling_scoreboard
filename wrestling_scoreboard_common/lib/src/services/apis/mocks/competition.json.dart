@@ -24,7 +24,15 @@ final competitionJson = r'''
     "planned": "0",
     "boutday": "5",
     "homeTeamName": "TSV Burgebrach I",
+    "homeTeamId": "001",
+    "homeClubIds": [
+        "40138"
+    ],
     "opponentTeamName": "RSV Schonungen ",
+    "opponentTeamId": "006",
+    "opponentClubIds": [
+        "61941"
+    ],
     "homePoints": "21",
     "opponentPoints": "8",
     "boutDate": "2023-10-05",

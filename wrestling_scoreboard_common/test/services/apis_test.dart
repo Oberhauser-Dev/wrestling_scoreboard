@@ -38,7 +38,7 @@ void main() {
     orgSyncId: '2023_(S) Bezirksliga_Grenzlandliga',
   );
 
-  final testClub = Club(name: 'TV Geiselhöring II', organization: organizationNRW, orgSyncId: 'TV Geiselhöring II');
+  final testClub = Club(name: 'TV Geiselhöring II', organization: organizationNRW, orgSyncId: '40138');
 
   setUp(() {
     wrestlingApi = WrestlingApiProvider.deNwRingenApi.getApi(
