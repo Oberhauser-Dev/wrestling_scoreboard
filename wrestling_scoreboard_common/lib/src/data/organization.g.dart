@@ -7,7 +7,7 @@ part of 'organization.dart';
 // **************************************************************************
 
 _$OrganizationImpl _$$OrganizationImplFromJson(Map<String, dynamic> json) => _$OrganizationImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
       abbreviation: json['abbreviation'] as String?,
       parent: json['parent'] == null ? null : Organization.fromJson(json['parent'] as Map<String, dynamic>),

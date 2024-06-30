@@ -12,6 +12,7 @@ class Bout with _$Bout implements DataObject {
 
   const factory Bout({
     int? id,
+    String? orgSyncId,
     ParticipantState? r, // red
     ParticipantState? b, // blue
     WeightClass? weightClass,
@@ -27,6 +28,7 @@ class Bout with _$Bout implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
+      if (orgSyncId != null) 'org_sync_id': orgSyncId,
       'red_id': r?.id,
       'blue_id': b?.id,
       'weight_class_id': weightClass?.id,
@@ -45,6 +47,7 @@ class Bout with _$Bout implements DataObject {
     final durationMillis = e['duration_millis'] as int?;
     return Bout(
       id: e['id'] as int?,
+      orgSyncId: e['org_sync_id'] as String?,
       r: redId == null ? null : await getSingle<ParticipantState>(redId),
       b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),

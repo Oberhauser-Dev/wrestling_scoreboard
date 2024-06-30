@@ -7,7 +7,7 @@ part of 'competition.dart';
 // **************************************************************************
 
 _$CompetitionImpl _$$CompetitionImplFromJson(Map<String, dynamic> json) => _$CompetitionImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
           json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
@@ -16,7 +16,7 @@ _$CompetitionImpl _$$CompetitionImplFromJson(Map<String, dynamic> json) => _$Com
       location: json['location'] as String?,
       date: DateTime.parse(json['date'] as String),
       no: json['no'] as String?,
-      visitorsCount: json['visitorsCount'] as int?,
+      visitorsCount: (json['visitorsCount'] as num?)?.toInt(),
       comment: json['comment'] as String?,
     );
 

@@ -21,12 +21,17 @@ DivisionWeightClass _$DivisionWeightClassFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$DivisionWeightClass {
   int? get id => throw _privateConstructorUsedError;
+
   int get pos => throw _privateConstructorUsedError;
+
   Division get division => throw _privateConstructorUsedError;
+
   WeightClass get weightClass => throw _privateConstructorUsedError;
+
   int? get seasonPartition => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $DivisionWeightClassCopyWith<DivisionWeightClass> get copyWith => throw _privateConstructorUsedError;
 }
@@ -35,10 +40,12 @@ mixin _$DivisionWeightClass {
 abstract class $DivisionWeightClassCopyWith<$Res> {
   factory $DivisionWeightClassCopyWith(DivisionWeightClass value, $Res Function(DivisionWeightClass) then) =
       _$DivisionWeightClassCopyWithImpl<$Res, DivisionWeightClass>;
+
   @useResult
   $Res call({int? id, int pos, Division division, WeightClass weightClass, int? seasonPartition});
 
   $DivisionCopyWith<$Res> get division;
+
   $WeightClassCopyWith<$Res> get weightClass;
 }
 
@@ -49,6 +56,7 @@ class _$DivisionWeightClassCopyWithImpl<$Res, $Val extends DivisionWeightClass>
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -107,12 +115,14 @@ abstract class _$$DivisionWeightClassImplCopyWith<$Res> implements $DivisionWeig
   factory _$$DivisionWeightClassImplCopyWith(
           _$DivisionWeightClassImpl value, $Res Function(_$DivisionWeightClassImpl) then) =
       __$$DivisionWeightClassImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, int pos, Division division, WeightClass weightClass, int? seasonPartition});
 
   @override
   $DivisionCopyWith<$Res> get division;
+
   @override
   $WeightClassCopyWith<$Res> get weightClass;
 }
@@ -221,20 +231,26 @@ abstract class _DivisionWeightClass extends DivisionWeightClass {
       required final Division division,
       required final WeightClass weightClass,
       final int? seasonPartition}) = _$DivisionWeightClassImpl;
+
   const _DivisionWeightClass._() : super._();
 
   factory _DivisionWeightClass.fromJson(Map<String, dynamic> json) = _$DivisionWeightClassImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   int get pos;
+
   @override
   Division get division;
+
   @override
   WeightClass get weightClass;
+
   @override
   int? get seasonPartition;
+
   @override
   @JsonKey(ignore: true)
   _$$DivisionWeightClassImplCopyWith<_$DivisionWeightClassImpl> get copyWith => throw _privateConstructorUsedError;

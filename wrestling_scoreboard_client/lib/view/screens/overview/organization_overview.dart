@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -65,35 +64,7 @@ class OrganizationOverview extends ConsumerWidget {
           dataObject: data,
           label: localizations.organization,
           details: data.name,
-          actions: [
-            IconButton(
-              tooltip: localizations.syncWithApiProvider,
-              onPressed: () async {
-                final result = await showOkCancelDialog(
-                  context: context,
-                  child: Text(localizations.warningSyncWithApiProvider),
-                  getResult: () => true,
-                );
-                if (result == true && context.mounted) {
-                  catchAsync(
-                    context,
-                    () => showLoadingDialog(
-                      runAsync: (BuildContext context) async {
-                        final dataManager = await ref.read(dataManagerNotifierProvider);
-                        final authService = (await ref.read(orgAuthNotifierProvider))[id];
-                        await dataManager.organizationImport(id, authService: authService);
-                        if (context.mounted) {
-                          await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                        }
-                      },
-                      context: context,
-                    ),
-                  );
-                }
-              },
-              icon: const Icon(Icons.api),
-            ),
-          ],
+          actions: [OrganizationImportAction(id: id, orgId: id, importType: OrganizationImportType.organization)],
           body: GroupedList(items: [
             description,
             ManyConsumer<Organization, Organization>(

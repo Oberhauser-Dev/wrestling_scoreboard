@@ -7,9 +7,9 @@ part of 'participant_state.dart';
 // **************************************************************************
 
 _$ParticipantStateImpl _$$ParticipantStateImplFromJson(Map<String, dynamic> json) => _$ParticipantStateImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       participation: Participation.fromJson(json['participation'] as Map<String, dynamic>),
-      classificationPoints: json['classificationPoints'] as int?,
+      classificationPoints: (json['classificationPoints'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ParticipantStateImplToJson(_$ParticipantStateImpl instance) => <String, dynamic>{

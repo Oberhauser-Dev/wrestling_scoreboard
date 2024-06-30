@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -48,6 +49,9 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             dataObject: data,
             label: localizations.team,
             details: data.name,
+            actions: [
+              OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.team)
+            ],
             body: GroupedList(items: [
               description,
               MatchesWidget<Team>(filterObject: data),

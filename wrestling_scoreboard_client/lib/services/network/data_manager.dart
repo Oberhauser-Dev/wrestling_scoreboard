@@ -81,6 +81,12 @@ abstract class DataManager {
 
   Future<void> organizationImport(int id, {AuthService? authService});
 
+  Future<void> organizationTeamImport(int id, {AuthService? authService});
+
+  Future<void> organizationLeagueImport(int id, {AuthService? authService});
+
+  Future<void> organizationCompetitionImport(int id, {AuthService? authService});
+
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,
     Type? type,

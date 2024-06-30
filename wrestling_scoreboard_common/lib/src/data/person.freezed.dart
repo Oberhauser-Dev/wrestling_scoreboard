@@ -21,16 +21,24 @@ Person _$PersonFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Person {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization? get organization => throw _privateConstructorUsedError;
+
   String get prename => throw _privateConstructorUsedError;
+
   String get surname => throw _privateConstructorUsedError;
+
   Gender? get gender => throw _privateConstructorUsedError;
+
   DateTime? get birthDate => throw _privateConstructorUsedError;
+
   @CountryJsonConverter()
   Country? get nationality => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $PersonCopyWith<Person> get copyWith => throw _privateConstructorUsedError;
 }
@@ -38,6 +46,7 @@ mixin _$Person {
 /// @nodoc
 abstract class $PersonCopyWith<$Res> {
   factory $PersonCopyWith(Person value, $Res Function(Person) then) = _$PersonCopyWithImpl<$Res, Person>;
+
   @useResult
   $Res call(
       {int? id,
@@ -58,6 +67,7 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -126,6 +136,7 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
 abstract class _$$PersonImplCopyWith<$Res> implements $PersonCopyWith<$Res> {
   factory _$$PersonImplCopyWith(_$PersonImpl value, $Res Function(_$PersonImpl) then) =
       __$$PersonImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
@@ -278,27 +289,36 @@ abstract class _Person extends Person {
       final Gender? gender,
       final DateTime? birthDate,
       @CountryJsonConverter() final Country? nationality}) = _$PersonImpl;
+
   const _Person._() : super._();
 
   factory _Person.fromJson(Map<String, dynamic> json) = _$PersonImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization? get organization;
+
   @override
   String get prename;
+
   @override
   String get surname;
+
   @override
   Gender? get gender;
+
   @override
   DateTime? get birthDate;
+
   @override
   @CountryJsonConverter()
   Country? get nationality;
+
   @override
   @JsonKey(ignore: true)
   _$$PersonImplCopyWith<_$PersonImpl> get copyWith => throw _privateConstructorUsedError;

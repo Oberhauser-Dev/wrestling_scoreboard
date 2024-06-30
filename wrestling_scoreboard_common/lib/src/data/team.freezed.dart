@@ -21,13 +21,19 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Team {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization? get organization => throw _privateConstructorUsedError;
+
   String get name => throw _privateConstructorUsedError;
+
   Club get club => throw _privateConstructorUsedError;
+
   String? get description => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $TeamCopyWith<Team> get copyWith => throw _privateConstructorUsedError;
 }
@@ -35,10 +41,12 @@ mixin _$Team {
 /// @nodoc
 abstract class $TeamCopyWith<$Res> {
   factory $TeamCopyWith(Team value, $Res Function(Team) then) = _$TeamCopyWithImpl<$Res, Team>;
+
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String name, Club club, String? description});
 
   $OrganizationCopyWith<$Res>? get organization;
+
   $ClubCopyWith<$Res> get club;
 }
 
@@ -48,6 +56,7 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -113,12 +122,14 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
 /// @nodoc
 abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
   factory _$$TeamImplCopyWith(_$TeamImpl value, $Res Function(_$TeamImpl) then) = __$$TeamImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String name, Club club, String? description});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
+
   @override
   $ClubCopyWith<$Res> get club;
 }
@@ -231,22 +242,29 @@ abstract class _Team extends Team {
       required final String name,
       required final Club club,
       final String? description}) = _$TeamImpl;
+
   const _Team._() : super._();
 
   factory _Team.fromJson(Map<String, dynamic> json) = _$TeamImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization? get organization;
+
   @override
   String get name;
+
   @override
   Club get club;
+
   @override
   String? get description;
+
   @override
   @JsonKey(ignore: true)
   _$$TeamImplCopyWith<_$TeamImpl> get copyWith => throw _privateConstructorUsedError;

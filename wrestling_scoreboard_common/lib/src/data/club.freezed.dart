@@ -21,12 +21,17 @@ Club _$ClubFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Club {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization get organization => throw _privateConstructorUsedError;
+
   String get name => throw _privateConstructorUsedError;
+
   String? get no => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $ClubCopyWith<Club> get copyWith => throw _privateConstructorUsedError;
 }
@@ -34,6 +39,7 @@ mixin _$Club {
 /// @nodoc
 abstract class $ClubCopyWith<$Res> {
   factory $ClubCopyWith(Club value, $Res Function(Club) then) = _$ClubCopyWithImpl<$Res, Club>;
+
   @useResult
   $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
 
@@ -46,6 +52,7 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -94,6 +101,7 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
 /// @nodoc
 abstract class _$$ClubImplCopyWith<$Res> implements $ClubCopyWith<$Res> {
   factory _$$ClubImplCopyWith(_$ClubImpl value, $Res Function(_$ClubImpl) then) = __$$ClubImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
@@ -199,20 +207,26 @@ abstract class _Club extends Club {
       required final Organization organization,
       required final String name,
       final String? no}) = _$ClubImpl;
+
   const _Club._() : super._();
 
   factory _Club.fromJson(Map<String, dynamic> json) = _$ClubImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization get organization;
+
   @override
   String get name;
+
   @override
   String? get no;
+
   @override
   @JsonKey(ignore: true)
   _$$ClubImplCopyWith<_$ClubImpl> get copyWith => throw _privateConstructorUsedError;

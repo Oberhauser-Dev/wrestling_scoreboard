@@ -21,9 +21,11 @@ BasicAuthService _$BasicAuthServiceFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$BasicAuthService {
   String get username => throw _privateConstructorUsedError;
+
   String get password => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $BasicAuthServiceCopyWith<BasicAuthService> get copyWith => throw _privateConstructorUsedError;
 }
@@ -32,6 +34,7 @@ mixin _$BasicAuthService {
 abstract class $BasicAuthServiceCopyWith<$Res> {
   factory $BasicAuthServiceCopyWith(BasicAuthService value, $Res Function(BasicAuthService) then) =
       _$BasicAuthServiceCopyWithImpl<$Res, BasicAuthService>;
+
   @useResult
   $Res call({String username, String password});
 }
@@ -42,6 +45,7 @@ class _$BasicAuthServiceCopyWithImpl<$Res, $Val extends BasicAuthService> implem
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -68,6 +72,7 @@ class _$BasicAuthServiceCopyWithImpl<$Res, $Val extends BasicAuthService> implem
 abstract class _$$BasicAuthServiceImplCopyWith<$Res> implements $BasicAuthServiceCopyWith<$Res> {
   factory _$$BasicAuthServiceImplCopyWith(_$BasicAuthServiceImpl value, $Res Function(_$BasicAuthServiceImpl) then) =
       __$$BasicAuthServiceImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({String username, String password});
@@ -145,14 +150,17 @@ class _$BasicAuthServiceImpl extends _BasicAuthService {
 abstract class _BasicAuthService extends BasicAuthService {
   const factory _BasicAuthService({required final String username, required final String password}) =
       _$BasicAuthServiceImpl;
+
   const _BasicAuthService._() : super._();
 
   factory _BasicAuthService.fromJson(Map<String, dynamic> json) = _$BasicAuthServiceImpl.fromJson;
 
   @override
   String get username;
+
   @override
   String get password;
+
   @override
   @JsonKey(ignore: true)
   _$$BasicAuthServiceImplCopyWith<_$BasicAuthServiceImpl> get copyWith => throw _privateConstructorUsedError;

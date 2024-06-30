@@ -7,8 +7,8 @@ part of 'weight_class.dart';
 // **************************************************************************
 
 _$WeightClassImpl _$$WeightClassImplFromJson(Map<String, dynamic> json) => _$WeightClassImpl(
-      id: json['id'] as int?,
-      weight: json['weight'] as int,
+      id: (json['id'] as num?)?.toInt(),
+      weight: (json['weight'] as num).toInt(),
       style: $enumDecode(_$WrestlingStyleEnumMap, json['style']),
       suffix: json['suffix'] as String?,
       unit: $enumDecodeNullable(_$WeightUnitEnumMap, json['unit']) ?? WeightUnit.kilogram,

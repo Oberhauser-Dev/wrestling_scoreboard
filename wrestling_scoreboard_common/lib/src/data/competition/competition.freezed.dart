@@ -21,17 +21,27 @@ Competition _$CompetitionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Competition {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization? get organization => throw _privateConstructorUsedError;
+
   String get name => throw _privateConstructorUsedError;
+
   BoutConfig get boutConfig => throw _privateConstructorUsedError;
+
   String? get location => throw _privateConstructorUsedError;
+
   DateTime get date => throw _privateConstructorUsedError;
+
   String? get no => throw _privateConstructorUsedError;
+
   int? get visitorsCount => throw _privateConstructorUsedError;
+
   String? get comment => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $CompetitionCopyWith<Competition> get copyWith => throw _privateConstructorUsedError;
 }
@@ -40,6 +50,7 @@ mixin _$Competition {
 abstract class $CompetitionCopyWith<$Res> {
   factory $CompetitionCopyWith(Competition value, $Res Function(Competition) then) =
       _$CompetitionCopyWithImpl<$Res, Competition>;
+
   @useResult
   $Res call(
       {int? id,
@@ -54,6 +65,7 @@ abstract class $CompetitionCopyWith<$Res> {
       String? comment});
 
   $OrganizationCopyWith<$Res>? get organization;
+
   $BoutConfigCopyWith<$Res> get boutConfig;
 }
 
@@ -63,6 +75,7 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -149,6 +162,7 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
 abstract class _$$CompetitionImplCopyWith<$Res> implements $CompetitionCopyWith<$Res> {
   factory _$$CompetitionImplCopyWith(_$CompetitionImpl value, $Res Function(_$CompetitionImpl) then) =
       __$$CompetitionImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
@@ -165,6 +179,7 @@ abstract class _$$CompetitionImplCopyWith<$Res> implements $CompetitionCopyWith<
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
+
   @override
   $BoutConfigCopyWith<$Res> get boutConfig;
 }
@@ -326,30 +341,41 @@ abstract class _Competition extends Competition {
       final String? no,
       final int? visitorsCount,
       final String? comment}) = _$CompetitionImpl;
+
   const _Competition._() : super._();
 
   factory _Competition.fromJson(Map<String, dynamic> json) = _$CompetitionImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization? get organization;
+
   @override
   String get name;
+
   @override
   BoutConfig get boutConfig;
+
   @override
   String? get location;
+
   @override
   DateTime get date;
+
   @override
   String? get no;
+
   @override
   int? get visitorsCount;
+
   @override
   String? get comment;
+
   @override
   @JsonKey(ignore: true)
   _$$CompetitionImplCopyWith<_$CompetitionImpl> get copyWith => throw _privateConstructorUsedError;

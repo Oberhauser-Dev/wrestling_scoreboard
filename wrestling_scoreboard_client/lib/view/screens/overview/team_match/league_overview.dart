@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -58,6 +59,9 @@ class LeagueOverview extends ConsumerWidget {
           dataObject: data,
           label: localizations.league,
           details: data.name,
+          actions: [
+            OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.league)
+          ],
           body: GroupedList(items: [
             description,
             ManyConsumer<LeagueTeamParticipation, League>(

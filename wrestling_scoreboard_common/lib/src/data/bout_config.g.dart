@@ -7,20 +7,20 @@ part of 'bout_config.dart';
 // **************************************************************************
 
 _$BoutConfigImpl _$$BoutConfigImplFromJson(Map<String, dynamic> json) => _$BoutConfigImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       periodDuration: json['periodDuration'] == null
           ? BoutConfig.defaultPeriodDuration
-          : Duration(microseconds: json['periodDuration'] as int),
+          : Duration(microseconds: (json['periodDuration'] as num).toInt()),
       breakDuration: json['breakDuration'] == null
           ? BoutConfig.defaultBreakDuration
-          : Duration(microseconds: json['breakDuration'] as int),
+          : Duration(microseconds: (json['breakDuration'] as num).toInt()),
       activityDuration: json['activityDuration'] == null
           ? BoutConfig.defaultActivityDuration
-          : Duration(microseconds: json['activityDuration'] as int),
+          : Duration(microseconds: (json['activityDuration'] as num).toInt()),
       injuryDuration: json['injuryDuration'] == null
           ? BoutConfig.defaultInjuryDuration
-          : Duration(microseconds: json['injuryDuration'] as int),
-      periodCount: json['periodCount'] as int? ?? BoutConfig.defaultPeriodCount,
+          : Duration(microseconds: (json['injuryDuration'] as num).toInt()),
+      periodCount: (json['periodCount'] as num?)?.toInt() ?? BoutConfig.defaultPeriodCount,
     );
 
 Map<String, dynamic> _$$BoutConfigImplToJson(_$BoutConfigImpl instance) => <String, dynamic>{

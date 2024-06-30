@@ -7,8 +7,8 @@ part of 'team_match_bout.dart';
 // **************************************************************************
 
 _$TeamMatchBoutImpl _$$TeamMatchBoutImplFromJson(Map<String, dynamic> json) => _$TeamMatchBoutImpl(
-      id: json['id'] as int?,
-      pos: json['pos'] as int,
+      id: (json['id'] as num?)?.toInt(),
+      pos: (json['pos'] as num).toInt(),
       teamMatch: TeamMatch.fromJson(json['teamMatch'] as Map<String, dynamic>),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
     );

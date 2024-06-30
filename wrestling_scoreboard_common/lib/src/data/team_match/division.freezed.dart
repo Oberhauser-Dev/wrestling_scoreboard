@@ -21,16 +21,25 @@ Division _$DivisionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Division {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization get organization => throw _privateConstructorUsedError;
+
   String get name => throw _privateConstructorUsedError;
+
   DateTime get startDate => throw _privateConstructorUsedError;
+
   DateTime get endDate => throw _privateConstructorUsedError;
+
   BoutConfig get boutConfig => throw _privateConstructorUsedError;
+
   int get seasonPartitions => throw _privateConstructorUsedError;
+
   Division? get parent => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $DivisionCopyWith<Division> get copyWith => throw _privateConstructorUsedError;
 }
@@ -38,6 +47,7 @@ mixin _$Division {
 /// @nodoc
 abstract class $DivisionCopyWith<$Res> {
   factory $DivisionCopyWith(Division value, $Res Function(Division) then) = _$DivisionCopyWithImpl<$Res, Division>;
+
   @useResult
   $Res call(
       {int? id,
@@ -51,7 +61,9 @@ abstract class $DivisionCopyWith<$Res> {
       Division? parent});
 
   $OrganizationCopyWith<$Res> get organization;
+
   $BoutConfigCopyWith<$Res> get boutConfig;
+
   $DivisionCopyWith<$Res>? get parent;
 }
 
@@ -61,6 +73,7 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -150,6 +163,7 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
 abstract class _$$DivisionImplCopyWith<$Res> implements $DivisionCopyWith<$Res> {
   factory _$$DivisionImplCopyWith(_$DivisionImpl value, $Res Function(_$DivisionImpl) then) =
       __$$DivisionImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
@@ -165,8 +179,10 @@ abstract class _$$DivisionImplCopyWith<$Res> implements $DivisionCopyWith<$Res> 
 
   @override
   $OrganizationCopyWith<$Res> get organization;
+
   @override
   $BoutConfigCopyWith<$Res> get boutConfig;
+
   @override
   $DivisionCopyWith<$Res>? get parent;
 }
@@ -317,28 +333,38 @@ abstract class _Division extends Division {
       required final BoutConfig boutConfig,
       required final int seasonPartitions,
       final Division? parent}) = _$DivisionImpl;
+
   const _Division._() : super._();
 
   factory _Division.fromJson(Map<String, dynamic> json) = _$DivisionImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization get organization;
+
   @override
   String get name;
+
   @override
   DateTime get startDate;
+
   @override
   DateTime get endDate;
+
   @override
   BoutConfig get boutConfig;
+
   @override
   int get seasonPartitions;
+
   @override
   Division? get parent;
+
   @override
   @JsonKey(ignore: true)
   _$$DivisionImplCopyWith<_$DivisionImpl> get copyWith => throw _privateConstructorUsedError;

@@ -21,11 +21,14 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Lineup {
   int? get id => throw _privateConstructorUsedError;
+
   Team get team => throw _privateConstructorUsedError;
+
   Membership? get leader => throw _privateConstructorUsedError; // Mannschaftsführer
   Membership? get coach => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $LineupCopyWith<Lineup> get copyWith => throw _privateConstructorUsedError;
 }
@@ -33,11 +36,14 @@ mixin _$Lineup {
 /// @nodoc
 abstract class $LineupCopyWith<$Res> {
   factory $LineupCopyWith(Lineup value, $Res Function(Lineup) then) = _$LineupCopyWithImpl<$Res, Lineup>;
+
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
   $TeamCopyWith<$Res> get team;
+
   $MembershipCopyWith<$Res>? get leader;
+
   $MembershipCopyWith<$Res>? get coach;
 }
 
@@ -47,6 +53,7 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -115,14 +122,17 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
 abstract class _$$LineupImplCopyWith<$Res> implements $LineupCopyWith<$Res> {
   factory _$$LineupImplCopyWith(_$LineupImpl value, $Res Function(_$LineupImpl) then) =
       __$$LineupImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
   @override
   $TeamCopyWith<$Res> get team;
+
   @override
   $MembershipCopyWith<$Res>? get leader;
+
   @override
   $MembershipCopyWith<$Res>? get coach;
 }
@@ -174,6 +184,7 @@ class _$LineupImpl extends _Lineup {
   final Team team;
   @override
   final Membership? leader;
+
 // Mannschaftsführer
   @override
   final Membership? coach;
@@ -214,18 +225,23 @@ class _$LineupImpl extends _Lineup {
 abstract class _Lineup extends Lineup {
   const factory _Lineup({final int? id, required final Team team, final Membership? leader, final Membership? coach}) =
       _$LineupImpl;
+
   const _Lineup._() : super._();
 
   factory _Lineup.fromJson(Map<String, dynamic> json) = _$LineupImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   Team get team;
+
   @override
   Membership? get leader;
+
   @override // Mannschaftsführer
   Membership? get coach;
+
   @override
   @JsonKey(ignore: true)
   _$$LineupImplCopyWith<_$LineupImpl> get copyWith => throw _privateConstructorUsedError;

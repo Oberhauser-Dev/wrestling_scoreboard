@@ -440,6 +440,24 @@ class MockDataManager extends DataManager {
   }
 
   @override
+  Future<void> organizationLeagueImport(int id, {AuthService? authService}) {
+    // TODO: implement organizationLeagueImport
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> organizationCompetitionImport(int id, {AuthService? authService}) {
+    // TODO: implement organizationCompetitionImport
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> organizationTeamImport(int id, {AuthService? authService}) {
+    // TODO: implement organizationTeamImport
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,
     Type? type,

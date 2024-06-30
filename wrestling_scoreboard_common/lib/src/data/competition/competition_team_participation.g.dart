@@ -8,7 +8,7 @@ part of 'competition_team_participation.dart';
 
 _$CompetitionTeamParticipationImpl _$$CompetitionTeamParticipationImplFromJson(Map<String, dynamic> json) =>
     _$CompetitionTeamParticipationImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
       team: Team.fromJson(json['team'] as Map<String, dynamic>),
     );

@@ -7,7 +7,7 @@ part of 'membership.dart';
 // **************************************************************************
 
 _$MembershipImpl _$$MembershipImplFromJson(Map<String, dynamic> json) => _$MembershipImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
           json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),

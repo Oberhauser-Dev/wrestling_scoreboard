@@ -21,13 +21,18 @@ Membership _$MembershipFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Membership {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization? get organization => throw _privateConstructorUsedError;
+
   String? get no => throw _privateConstructorUsedError; // Vereinsnummer
   Club get club => throw _privateConstructorUsedError;
+
   Person get person => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $MembershipCopyWith<Membership> get copyWith => throw _privateConstructorUsedError;
 }
@@ -36,11 +41,14 @@ mixin _$Membership {
 abstract class $MembershipCopyWith<$Res> {
   factory $MembershipCopyWith(Membership value, $Res Function(Membership) then) =
       _$MembershipCopyWithImpl<$Res, Membership>;
+
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
 
   $OrganizationCopyWith<$Res>? get organization;
+
   $ClubCopyWith<$Res> get club;
+
   $PersonCopyWith<$Res> get person;
 }
 
@@ -50,6 +58,7 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -124,14 +133,17 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
 abstract class _$$MembershipImplCopyWith<$Res> implements $MembershipCopyWith<$Res> {
   factory _$$MembershipImplCopyWith(_$MembershipImpl value, $Res Function(_$MembershipImpl) then) =
       __$$MembershipImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
+
   @override
   $ClubCopyWith<$Res> get club;
+
   @override
   $PersonCopyWith<$Res> get person;
 }
@@ -197,6 +209,7 @@ class _$MembershipImpl extends _Membership {
   final Organization? organization;
   @override
   final String? no;
+
 // Vereinsnummer
   @override
   final Club club;
@@ -247,22 +260,29 @@ abstract class _Membership extends Membership {
       final String? no,
       required final Club club,
       required final Person person}) = _$MembershipImpl;
+
   const _Membership._() : super._();
 
   factory _Membership.fromJson(Map<String, dynamic> json) = _$MembershipImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization? get organization;
+
   @override
   String? get no;
+
   @override // Vereinsnummer
   Club get club;
+
   @override
   Person get person;
+
   @override
   @JsonKey(ignore: true)
   _$$MembershipImplCopyWith<_$MembershipImpl> get copyWith => throw _privateConstructorUsedError;

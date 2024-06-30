@@ -79,7 +79,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
           details: person.fullName,
           body: GroupedList(items: [
             description,
-            if(buildRelations != null) ...buildRelations(person),
+            if (buildRelations != null) ...buildRelations(person),
           ]),
         );
       },

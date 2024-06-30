@@ -7,7 +7,7 @@ part of 'club.dart';
 // **************************************************************************
 
 _$ClubImpl _$$ClubImplFromJson(Map<String, dynamic> json) => _$ClubImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,

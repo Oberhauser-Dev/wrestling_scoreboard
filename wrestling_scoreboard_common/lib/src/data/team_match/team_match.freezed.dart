@@ -21,24 +21,41 @@ TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TeamMatch {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization? get organization => throw _privateConstructorUsedError;
+
   Lineup get home => throw _privateConstructorUsedError;
+
   Lineup get guest => throw _privateConstructorUsedError;
+
   League? get league => throw _privateConstructorUsedError;
+
   int? get seasonPartition => throw _privateConstructorUsedError;
+
   Person? get matChairman => throw _privateConstructorUsedError;
+
   Person? get referee => throw _privateConstructorUsedError;
+
   Person? get judge => throw _privateConstructorUsedError;
+
   Person? get timeKeeper => throw _privateConstructorUsedError;
+
   Person? get transcriptWriter => throw _privateConstructorUsedError;
+
   String? get no => throw _privateConstructorUsedError;
+
   String? get location => throw _privateConstructorUsedError;
+
   DateTime get date => throw _privateConstructorUsedError;
+
   int? get visitorsCount => throw _privateConstructorUsedError;
+
   String? get comment => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $TeamMatchCopyWith<TeamMatch> get copyWith => throw _privateConstructorUsedError;
 }
@@ -46,6 +63,7 @@ mixin _$TeamMatch {
 /// @nodoc
 abstract class $TeamMatchCopyWith<$Res> {
   factory $TeamMatchCopyWith(TeamMatch value, $Res Function(TeamMatch) then) = _$TeamMatchCopyWithImpl<$Res, TeamMatch>;
+
   @useResult
   $Res call(
       {int? id,
@@ -67,13 +85,21 @@ abstract class $TeamMatchCopyWith<$Res> {
       String? comment});
 
   $OrganizationCopyWith<$Res>? get organization;
+
   $LineupCopyWith<$Res> get home;
+
   $LineupCopyWith<$Res> get guest;
+
   $LeagueCopyWith<$Res>? get league;
+
   $PersonCopyWith<$Res>? get matChairman;
+
   $PersonCopyWith<$Res>? get referee;
+
   $PersonCopyWith<$Res>? get judge;
+
   $PersonCopyWith<$Res>? get timeKeeper;
+
   $PersonCopyWith<$Res>? get transcriptWriter;
 }
 
@@ -83,6 +109,7 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -284,6 +311,7 @@ class _$TeamMatchCopyWithImpl<$Res, $Val extends TeamMatch> implements $TeamMatc
 abstract class _$$TeamMatchImplCopyWith<$Res> implements $TeamMatchCopyWith<$Res> {
   factory _$$TeamMatchImplCopyWith(_$TeamMatchImpl value, $Res Function(_$TeamMatchImpl) then) =
       __$$TeamMatchImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
@@ -307,20 +335,28 @@ abstract class _$$TeamMatchImplCopyWith<$Res> implements $TeamMatchCopyWith<$Res
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
+
   @override
   $LineupCopyWith<$Res> get home;
+
   @override
   $LineupCopyWith<$Res> get guest;
+
   @override
   $LeagueCopyWith<$Res>? get league;
+
   @override
   $PersonCopyWith<$Res>? get matChairman;
+
   @override
   $PersonCopyWith<$Res>? get referee;
+
   @override
   $PersonCopyWith<$Res>? get judge;
+
   @override
   $PersonCopyWith<$Res>? get timeKeeper;
+
   @override
   $PersonCopyWith<$Res>? get transcriptWriter;
 }
@@ -551,44 +587,62 @@ abstract class _TeamMatch extends TeamMatch {
       required final DateTime date,
       final int? visitorsCount,
       final String? comment}) = _$TeamMatchImpl;
+
   const _TeamMatch._() : super._();
 
   factory _TeamMatch.fromJson(Map<String, dynamic> json) = _$TeamMatchImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization? get organization;
+
   @override
   Lineup get home;
+
   @override
   Lineup get guest;
+
   @override
   League? get league;
+
   @override
   int? get seasonPartition;
+
   @override
   Person? get matChairman;
+
   @override
   Person? get referee;
+
   @override
   Person? get judge;
+
   @override
   Person? get timeKeeper;
+
   @override
   Person? get transcriptWriter;
+
   @override
   String? get no;
+
   @override
   String? get location;
+
   @override
   DateTime get date;
+
   @override
   int? get visitorsCount;
+
   @override
   String? get comment;
+
   @override
   @JsonKey(ignore: true)
   _$$TeamMatchImplCopyWith<_$TeamMatchImpl> get copyWith => throw _privateConstructorUsedError;

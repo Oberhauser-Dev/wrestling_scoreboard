@@ -7,7 +7,7 @@ part of 'person.dart';
 // **************************************************************************
 
 _$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
           json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),

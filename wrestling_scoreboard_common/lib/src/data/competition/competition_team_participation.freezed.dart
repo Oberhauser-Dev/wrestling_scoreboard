@@ -21,10 +21,13 @@ CompetitionTeamParticipation _$CompetitionTeamParticipationFromJson(Map<String, 
 /// @nodoc
 mixin _$CompetitionTeamParticipation {
   int? get id => throw _privateConstructorUsedError;
+
   Competition get competition => throw _privateConstructorUsedError;
+
   Team get team => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $CompetitionTeamParticipationCopyWith<CompetitionTeamParticipation> get copyWith =>
       throw _privateConstructorUsedError;
@@ -35,10 +38,12 @@ abstract class $CompetitionTeamParticipationCopyWith<$Res> {
   factory $CompetitionTeamParticipationCopyWith(
           CompetitionTeamParticipation value, $Res Function(CompetitionTeamParticipation) then) =
       _$CompetitionTeamParticipationCopyWithImpl<$Res, CompetitionTeamParticipation>;
+
   @useResult
   $Res call({int? id, Competition competition, Team team});
 
   $CompetitionCopyWith<$Res> get competition;
+
   $TeamCopyWith<$Res> get team;
 }
 
@@ -49,6 +54,7 @@ class _$CompetitionTeamParticipationCopyWithImpl<$Res, $Val extends CompetitionT
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -98,12 +104,14 @@ abstract class _$$CompetitionTeamParticipationImplCopyWith<$Res>
   factory _$$CompetitionTeamParticipationImplCopyWith(
           _$CompetitionTeamParticipationImpl value, $Res Function(_$CompetitionTeamParticipationImpl) then) =
       __$$CompetitionTeamParticipationImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, Competition competition, Team team});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
+
   @override
   $TeamCopyWith<$Res> get team;
 }
@@ -193,6 +201,7 @@ abstract class _CompetitionTeamParticipation extends CompetitionTeamParticipatio
       {final int? id,
       required final Competition competition,
       required final Team team}) = _$CompetitionTeamParticipationImpl;
+
   const _CompetitionTeamParticipation._() : super._();
 
   factory _CompetitionTeamParticipation.fromJson(Map<String, dynamic> json) =
@@ -200,10 +209,13 @@ abstract class _CompetitionTeamParticipation extends CompetitionTeamParticipatio
 
   @override
   int? get id;
+
   @override
   Competition get competition;
+
   @override
   Team get team;
+
   @override
   @JsonKey(ignore: true)
   _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl> get copyWith =>

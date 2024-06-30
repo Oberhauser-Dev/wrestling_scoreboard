@@ -7,11 +7,11 @@ part of 'division_weight_class.dart';
 // **************************************************************************
 
 _$DivisionWeightClassImpl _$$DivisionWeightClassImplFromJson(Map<String, dynamic> json) => _$DivisionWeightClassImpl(
-      id: json['id'] as int?,
-      pos: json['pos'] as int,
+      id: (json['id'] as num?)?.toInt(),
+      pos: (json['pos'] as num).toInt(),
       division: Division.fromJson(json['division'] as Map<String, dynamic>),
       weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
-      seasonPartition: json['seasonPartition'] as int?,
+      seasonPartition: (json['seasonPartition'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$DivisionWeightClassImplToJson(_$DivisionWeightClassImpl instance) => <String, dynamic>{

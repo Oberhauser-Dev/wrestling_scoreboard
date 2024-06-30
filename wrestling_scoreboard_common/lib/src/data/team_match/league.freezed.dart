@@ -21,14 +21,21 @@ League _$LeagueFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$League {
   int? get id => throw _privateConstructorUsedError;
+
   String? get orgSyncId => throw _privateConstructorUsedError;
+
   Organization? get organization => throw _privateConstructorUsedError;
+
   String get name => throw _privateConstructorUsedError;
+
   DateTime get startDate => throw _privateConstructorUsedError;
+
   DateTime get endDate => throw _privateConstructorUsedError;
+
   Division get division => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $LeagueCopyWith<League> get copyWith => throw _privateConstructorUsedError;
 }
@@ -36,6 +43,7 @@ mixin _$League {
 /// @nodoc
 abstract class $LeagueCopyWith<$Res> {
   factory $LeagueCopyWith(League value, $Res Function(League) then) = _$LeagueCopyWithImpl<$Res, League>;
+
   @useResult
   $Res call(
       {int? id,
@@ -47,6 +55,7 @@ abstract class $LeagueCopyWith<$Res> {
       Division division});
 
   $OrganizationCopyWith<$Res>? get organization;
+
   $DivisionCopyWith<$Res> get division;
 }
 
@@ -56,6 +65,7 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -127,6 +137,7 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
 abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
   factory _$$LeagueImplCopyWith(_$LeagueImpl value, $Res Function(_$LeagueImpl) then) =
       __$$LeagueImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
@@ -140,6 +151,7 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
+
   @override
   $DivisionCopyWith<$Res> get division;
 }
@@ -268,24 +280,32 @@ abstract class _League extends League {
       required final DateTime startDate,
       required final DateTime endDate,
       required final Division division}) = _$LeagueImpl;
+
   const _League._() : super._();
 
   factory _League.fromJson(Map<String, dynamic> json) = _$LeagueImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String? get orgSyncId;
+
   @override
   Organization? get organization;
+
   @override
   String get name;
+
   @override
   DateTime get startDate;
+
   @override
   DateTime get endDate;
+
   @override
   Division get division;
+
   @override
   @JsonKey(ignore: true)
   _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => throw _privateConstructorUsedError;

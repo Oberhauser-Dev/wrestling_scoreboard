@@ -7,14 +7,14 @@ part of 'team_match.dart';
 // **************************************************************************
 
 _$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) => _$TeamMatchImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
           json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
       guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
       league: json['league'] == null ? null : League.fromJson(json['league'] as Map<String, dynamic>),
-      seasonPartition: json['seasonPartition'] as int?,
+      seasonPartition: (json['seasonPartition'] as num?)?.toInt(),
       matChairman: json['matChairman'] == null ? null : Person.fromJson(json['matChairman'] as Map<String, dynamic>),
       referee: json['referee'] == null ? null : Person.fromJson(json['referee'] as Map<String, dynamic>),
       judge: json['judge'] == null ? null : Person.fromJson(json['judge'] as Map<String, dynamic>),
@@ -24,7 +24,7 @@ _$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) => _$TeamMat
       no: json['no'] as String?,
       location: json['location'] as String?,
       date: DateTime.parse(json['date'] as String),
-      visitorsCount: json['visitorsCount'] as int?,
+      visitorsCount: (json['visitorsCount'] as num?)?.toInt(),
       comment: json['comment'] as String?,
     );
 

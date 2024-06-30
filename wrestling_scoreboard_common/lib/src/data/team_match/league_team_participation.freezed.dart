@@ -21,10 +21,13 @@ LeagueTeamParticipation _$LeagueTeamParticipationFromJson(Map<String, dynamic> j
 /// @nodoc
 mixin _$LeagueTeamParticipation {
   int? get id => throw _privateConstructorUsedError;
+
   League get league => throw _privateConstructorUsedError;
+
   Team get team => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $LeagueTeamParticipationCopyWith<LeagueTeamParticipation> get copyWith => throw _privateConstructorUsedError;
 }
@@ -33,10 +36,12 @@ mixin _$LeagueTeamParticipation {
 abstract class $LeagueTeamParticipationCopyWith<$Res> {
   factory $LeagueTeamParticipationCopyWith(LeagueTeamParticipation value, $Res Function(LeagueTeamParticipation) then) =
       _$LeagueTeamParticipationCopyWithImpl<$Res, LeagueTeamParticipation>;
+
   @useResult
   $Res call({int? id, League league, Team team});
 
   $LeagueCopyWith<$Res> get league;
+
   $TeamCopyWith<$Res> get team;
 }
 
@@ -47,6 +52,7 @@ class _$LeagueTeamParticipationCopyWithImpl<$Res, $Val extends LeagueTeamPartici
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -95,12 +101,14 @@ abstract class _$$LeagueTeamParticipationImplCopyWith<$Res> implements $LeagueTe
   factory _$$LeagueTeamParticipationImplCopyWith(
           _$LeagueTeamParticipationImpl value, $Res Function(_$LeagueTeamParticipationImpl) then) =
       __$$LeagueTeamParticipationImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, League league, Team team});
 
   @override
   $LeagueCopyWith<$Res> get league;
+
   @override
   $TeamCopyWith<$Res> get team;
 }
@@ -188,16 +196,20 @@ class _$LeagueTeamParticipationImpl extends _LeagueTeamParticipation {
 abstract class _LeagueTeamParticipation extends LeagueTeamParticipation {
   const factory _LeagueTeamParticipation({final int? id, required final League league, required final Team team}) =
       _$LeagueTeamParticipationImpl;
+
   const _LeagueTeamParticipation._() : super._();
 
   factory _LeagueTeamParticipation.fromJson(Map<String, dynamic> json) = _$LeagueTeamParticipationImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   League get league;
+
   @override
   Team get team;
+
   @override
   @JsonKey(ignore: true)
   _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl> get copyWith =>

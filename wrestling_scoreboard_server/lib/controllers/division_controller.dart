@@ -51,7 +51,7 @@ class DivisionController extends EntityController<Division> {
     return EntityController.handleRequestManyOfController(DivisionController(),
         isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
   }
-  
+
   @override
   Set<String> getSearchableAttributes() => {'name'};
 }

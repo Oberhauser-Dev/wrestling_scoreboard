@@ -7,7 +7,7 @@ part of 'competition_person.dart';
 // **************************************************************************
 
 _$CompetitionPersonImpl _$$CompetitionPersonImplFromJson(Map<String, dynamic> json) => _$CompetitionPersonImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
       person: Person.fromJson(json['person'] as Map<String, dynamic>),
       role: $enumDecode(_$PersonRoleEnumMap, json['role']),

@@ -7,11 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/competition_controller.d
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
@@ -47,7 +43,7 @@ class OrganizationController extends EntityController<Organization> {
         isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
   }
 
-  Future<WrestlingApi?> _initApiProvider(Request request, int id) async {
+  Future<WrestlingApi?> initApiProvider(Request request, int organizationId) async {
     AuthService? authService;
     final message = await request.readAsString();
     if (message.isNotEmpty) {
@@ -58,13 +54,13 @@ class OrganizationController extends EntityController<Organization> {
       }
     }
 
-    final organization = await getSingle(id);
+    final organization = await getSingle(organizationId);
     return organization.getApi(EntityController.getSingleFromDataTypeOfOrg, authService: authService);
   }
 
   Future<Response> import(Request request, String organizationId) async {
     try {
-      final apiProvider = await _initApiProvider(request, int.parse(organizationId));
+      final apiProvider = await initApiProvider(request, int.parse(organizationId));
       if (apiProvider == null) {
         throw Exception('No API provider selected for the organization $organizationId.');
       }
@@ -95,42 +91,6 @@ class OrganizationController extends EntityController<Organization> {
 
         var leagues = await apiProvider.importLeagues(division: division);
         leagues = await LeagueController().getOrCreateManyOfOrg(leagues.toList());
-
-        await Future.forEach(leagues, (league) async {
-          final teamMatchs = await apiProvider.importTeamMatches(league: league);
-
-          await Future.forEach(teamMatchs, (teamMatch) async {
-            teamMatch = teamMatch.copyWith(
-              // TODO: Don't create lineup or delete old one, if match already exists.
-              home: await LineupController().createSingleReturn(teamMatch.home),
-              guest: await LineupController().createSingleReturn(teamMatch.guest),
-              referee: teamMatch.referee == null
-                  ? null
-                  : await PersonController().getOrCreateSingleOfOrg(teamMatch.referee!),
-              judge: teamMatch.judge == null ? null : await PersonController().getOrCreateSingleOfOrg(teamMatch.judge!),
-              matChairman: teamMatch.matChairman == null
-                  ? null
-                  : await PersonController().getOrCreateSingleOfOrg(teamMatch.matChairman!),
-              transcriptWriter: teamMatch.transcriptWriter == null
-                  ? null
-                  : await PersonController().getOrCreateSingleOfOrg(teamMatch.transcriptWriter!),
-              timeKeeper: teamMatch.timeKeeper == null
-                  ? null
-                  : await PersonController().getOrCreateSingleOfOrg(teamMatch.timeKeeper!),
-            );
-            teamMatch = await TeamMatchController().getOrCreateSingleOfOrg(teamMatch);
-
-            // TODO: may do this in a separate import call for the participating teams:
-            try {
-              await LeagueTeamParticipationController()
-                  .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.home.team));
-              await LeagueTeamParticipationController()
-                  .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.guest.team));
-            } on InvalidParameterException catch (_) {
-              // Do not add teams multiple times.
-            }
-          });
-        });
       });
 
       return Response.ok('{"status": "success"}');
@@ -141,7 +101,7 @@ class OrganizationController extends EntityController<Organization> {
 
   Future<List<DataObject>> search(Request request, int id,
       {required String searchStr, required Type searchType}) async {
-    final apiProvider = await _initApiProvider(request, id);
+    final apiProvider = await initApiProvider(request, id);
     if (apiProvider == null) {
       throw Exception('No API provider selected for the organization $id.');
     }

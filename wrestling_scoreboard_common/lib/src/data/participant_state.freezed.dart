@@ -21,10 +21,13 @@ ParticipantState _$ParticipantStateFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ParticipantState {
   int? get id => throw _privateConstructorUsedError;
+
   Participation get participation => throw _privateConstructorUsedError;
+
   int? get classificationPoints => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $ParticipantStateCopyWith<ParticipantState> get copyWith => throw _privateConstructorUsedError;
 }
@@ -33,6 +36,7 @@ mixin _$ParticipantState {
 abstract class $ParticipantStateCopyWith<$Res> {
   factory $ParticipantStateCopyWith(ParticipantState value, $Res Function(ParticipantState) then) =
       _$ParticipantStateCopyWithImpl<$Res, ParticipantState>;
+
   @useResult
   $Res call({int? id, Participation participation, int? classificationPoints});
 
@@ -45,6 +49,7 @@ class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implem
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -84,6 +89,7 @@ class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implem
 abstract class _$$ParticipantStateImplCopyWith<$Res> implements $ParticipantStateCopyWith<$Res> {
   factory _$$ParticipantStateImplCopyWith(_$ParticipantStateImpl value, $Res Function(_$ParticipantStateImpl) then) =
       __$$ParticipantStateImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, Participation participation, int? classificationPoints});
@@ -175,16 +181,20 @@ abstract class _ParticipantState extends ParticipantState {
       {final int? id,
       required final Participation participation,
       final int? classificationPoints}) = _$ParticipantStateImpl;
+
   const _ParticipantState._() : super._();
 
   factory _ParticipantState.fromJson(Map<String, dynamic> json) = _$ParticipantStateImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   Participation get participation;
+
   @override
   int? get classificationPoints;
+
   @override
   @JsonKey(ignore: true)
   _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith => throw _privateConstructorUsedError;

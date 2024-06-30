@@ -21,12 +21,17 @@ WeightClass _$WeightClassFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$WeightClass {
   int? get id => throw _privateConstructorUsedError;
+
   int get weight => throw _privateConstructorUsedError;
+
   WrestlingStyle get style => throw _privateConstructorUsedError;
+
   String? get suffix => throw _privateConstructorUsedError;
+
   WeightUnit get unit => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $WeightClassCopyWith<WeightClass> get copyWith => throw _privateConstructorUsedError;
 }
@@ -35,6 +40,7 @@ mixin _$WeightClass {
 abstract class $WeightClassCopyWith<$Res> {
   factory $WeightClassCopyWith(WeightClass value, $Res Function(WeightClass) then) =
       _$WeightClassCopyWithImpl<$Res, WeightClass>;
+
   @useResult
   $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
 }
@@ -45,6 +51,7 @@ class _$WeightClassCopyWithImpl<$Res, $Val extends WeightClass> implements $Weig
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -86,6 +93,7 @@ class _$WeightClassCopyWithImpl<$Res, $Val extends WeightClass> implements $Weig
 abstract class _$$WeightClassImplCopyWith<$Res> implements $WeightClassCopyWith<$Res> {
   factory _$$WeightClassImplCopyWith(_$WeightClassImpl value, $Res Function(_$WeightClassImpl) then) =
       __$$WeightClassImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
@@ -178,20 +186,26 @@ abstract class _WeightClass extends WeightClass {
       required final WrestlingStyle style,
       final String? suffix,
       final WeightUnit unit}) = _$WeightClassImpl;
+
   const _WeightClass._() : super._();
 
   factory _WeightClass.fromJson(Map<String, dynamic> json) = _$WeightClassImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   int get weight;
+
   @override
   WrestlingStyle get style;
+
   @override
   String? get suffix;
+
   @override
   WeightUnit get unit;
+
   @override
   @JsonKey(ignore: true)
   _$$WeightClassImplCopyWith<_$WeightClassImpl> get copyWith => throw _privateConstructorUsedError;

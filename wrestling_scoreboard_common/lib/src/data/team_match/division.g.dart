@@ -7,14 +7,14 @@ part of 'division.dart';
 // **************************************************************************
 
 _$DivisionImpl _$$DivisionImplFromJson(Map<String, dynamic> json) => _$DivisionImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: DateTime.parse(json['endDate'] as String),
       boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
-      seasonPartitions: json['seasonPartitions'] as int,
+      seasonPartitions: (json['seasonPartitions'] as num).toInt(),
       parent: json['parent'] == null ? null : Division.fromJson(json['parent'] as Map<String, dynamic>),
     );
 

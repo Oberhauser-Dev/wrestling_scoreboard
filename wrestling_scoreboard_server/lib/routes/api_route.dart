@@ -84,6 +84,7 @@ class ApiRoute {
     router.get('/division/<id|[0-9]+>/division_weight_classs', divisionController.requestDivisionWeightClasses);
 
     final leagueController = LeagueController();
+    router.post('/league/<id|[0-9]+>/api/import', leagueController.import);
     router.post('/league', leagueController.postSingle);
     router.get('/leagues', leagueController.requestMany);
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
@@ -129,6 +130,7 @@ class ApiRoute {
     router.get('/person/<id|[0-9]+>/memberships', personController.requestMemberships);
 
     final teamController = TeamController();
+    router.post('/team/<id|[0-9]+>/api/import', teamController.import);
     router.post('/team', teamController.postSingle);
     router.get('/teams', teamController.requestMany);
     router.get('/team/<id|[0-9]+>', teamController.requestSingle);
@@ -149,6 +151,7 @@ class ApiRoute {
     router.get('/team_match_bout/<id|[0-9]+>', teamMatchBoutController.requestSingle);
 
     final competitionController = CompetitionController();
+    router.post('/competition/<id|[0-9]+>/api/import', competitionController.import);
     router.post('/competition', competitionController.postSingle);
     router.get('/competitions', competitionController.requestMany);
     router.get('/competition/<id|[0-9]+>', competitionController.requestSingle);

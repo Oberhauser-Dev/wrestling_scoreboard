@@ -7,12 +7,12 @@ part of 'bout_action.dart';
 // **************************************************************************
 
 _$BoutActionImpl _$$BoutActionImplFromJson(Map<String, dynamic> json) => _$BoutActionImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       actionType: $enumDecode(_$BoutActionTypeEnumMap, json['actionType']),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
-      duration: Duration(microseconds: json['duration'] as int),
+      duration: Duration(microseconds: (json['duration'] as num).toInt()),
       role: $enumDecode(_$BoutRoleEnumMap, json['role']),
-      pointCount: json['pointCount'] as int?,
+      pointCount: (json['pointCount'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$BoutActionImplToJson(_$BoutActionImpl instance) => <String, dynamic>{

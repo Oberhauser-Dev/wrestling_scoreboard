@@ -7,19 +7,21 @@ part of 'bout.dart';
 // **************************************************************************
 
 _$BoutImpl _$$BoutImplFromJson(Map<String, dynamic> json) => _$BoutImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      orgSyncId: json['orgSyncId'] as String?,
       r: json['r'] == null ? null : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
       b: json['b'] == null ? null : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
       weightClass:
           json['weightClass'] == null ? null : WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
-      pool: json['pool'] as int?,
+      pool: (json['pool'] as num?)?.toInt(),
       winnerRole: $enumDecodeNullable(_$BoutRoleEnumMap, json['winnerRole']),
       result: $enumDecodeNullable(_$BoutResultEnumMap, json['result']),
-      duration: json['duration'] == null ? Duration.zero : Duration(microseconds: json['duration'] as int),
+      duration: json['duration'] == null ? Duration.zero : Duration(microseconds: (json['duration'] as num).toInt()),
     );
 
 Map<String, dynamic> _$$BoutImplToJson(_$BoutImpl instance) => <String, dynamic>{
       'id': instance.id,
+      'orgSyncId': instance.orgSyncId,
       'r': instance.r?.toJson(),
       'b': instance.b?.toJson(),
       'weightClass': instance.weightClass?.toJson(),

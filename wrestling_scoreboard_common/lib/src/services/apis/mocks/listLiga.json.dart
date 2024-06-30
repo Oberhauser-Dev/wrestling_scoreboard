@@ -791,7 +791,7 @@ final listLigaJson = r'''
           }
         ]
       },
-      "S\u00c3\u00bcd": {
+      "S\u00fcd": {
         "saisonId": "2023",
         "ligaId": "Bayernliga",
         "fid": "BL",
@@ -1007,7 +1007,7 @@ final listLigaJson = r'''
           }
         ]
       },
-      "S\u00c3\u00bcd": {
+      "S\u00fcd": {
         "saisonId": "2023",
         "ligaId": "Gruppenoberliga",
         "fid": "GOL",
@@ -1251,7 +1251,7 @@ final listLigaJson = r'''
           }
         ]
       },
-      "S\u00c3\u00bcd": {
+      "S\u00fcd": {
         "saisonId": "2023",
         "ligaId": "Landesliga",
         "fid": "LL",

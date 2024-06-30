@@ -7,7 +7,7 @@ part of 'competition_bout.dart';
 // **************************************************************************
 
 _$CompetitionBoutImpl _$$CompetitionBoutImplFromJson(Map<String, dynamic> json) => _$CompetitionBoutImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
     );

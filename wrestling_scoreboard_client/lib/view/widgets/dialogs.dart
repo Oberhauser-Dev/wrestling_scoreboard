@@ -139,6 +139,7 @@ Future<void> showExceptionDialog({
 Future<void> showLoadingDialog({
   required BuildContext context,
   required Future<void> Function(BuildContext context) runAsync,
+  required String label,
 }) async {
   showDialog(
     useRootNavigator: false, // Pop from outside of this dialog.
@@ -149,7 +150,7 @@ Future<void> showLoadingDialog({
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(AppLocalizations.of(context)!.syncWithApiProvider),
+            Text(label),
             const Center(child: CircularProgressIndicator()),
           ],
         ),

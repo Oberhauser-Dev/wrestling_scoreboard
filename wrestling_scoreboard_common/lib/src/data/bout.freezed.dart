@@ -21,15 +21,23 @@ Bout _$BoutFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Bout {
   int? get id => throw _privateConstructorUsedError;
+
+  String? get orgSyncId => throw _privateConstructorUsedError;
+
   ParticipantState? get r => throw _privateConstructorUsedError; // red
   ParticipantState? get b => throw _privateConstructorUsedError; // blue
   WeightClass? get weightClass => throw _privateConstructorUsedError;
+
   int? get pool => throw _privateConstructorUsedError;
+
   BoutRole? get winnerRole => throw _privateConstructorUsedError;
+
   BoutResult? get result => throw _privateConstructorUsedError;
+
   Duration get duration => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $BoutCopyWith<Bout> get copyWith => throw _privateConstructorUsedError;
 }
@@ -37,9 +45,11 @@ mixin _$Bout {
 /// @nodoc
 abstract class $BoutCopyWith<$Res> {
   factory $BoutCopyWith(Bout value, $Res Function(Bout) then) = _$BoutCopyWithImpl<$Res, Bout>;
+
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
       ParticipantState? r,
       ParticipantState? b,
       WeightClass? weightClass,
@@ -49,7 +59,9 @@ abstract class $BoutCopyWith<$Res> {
       Duration duration});
 
   $ParticipantStateCopyWith<$Res>? get r;
+
   $ParticipantStateCopyWith<$Res>? get b;
+
   $WeightClassCopyWith<$Res>? get weightClass;
 }
 
@@ -59,6 +71,7 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -66,6 +79,7 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
     Object? r = freezed,
     Object? b = freezed,
     Object? weightClass = freezed,
@@ -79,6 +93,10 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
       r: freezed == r
           ? _value.r
           : r // ignore: cast_nullable_to_non_nullable
@@ -150,10 +168,12 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
 /// @nodoc
 abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
   factory _$$BoutImplCopyWith(_$BoutImpl value, $Res Function(_$BoutImpl) then) = __$$BoutImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
       {int? id,
+      String? orgSyncId,
       ParticipantState? r,
       ParticipantState? b,
       WeightClass? weightClass,
@@ -164,8 +184,10 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
 
   @override
   $ParticipantStateCopyWith<$Res>? get r;
+
   @override
   $ParticipantStateCopyWith<$Res>? get b;
+
   @override
   $WeightClassCopyWith<$Res>? get weightClass;
 }
@@ -178,6 +200,7 @@ class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
     Object? r = freezed,
     Object? b = freezed,
     Object? weightClass = freezed,
@@ -191,6 +214,10 @@ class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
       r: freezed == r
           ? _value.r
           : r // ignore: cast_nullable_to_non_nullable
@@ -228,6 +255,7 @@ class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl
 class _$BoutImpl extends _Bout {
   const _$BoutImpl(
       {this.id,
+      this.orgSyncId,
       this.r,
       this.b,
       this.weightClass,
@@ -242,10 +270,14 @@ class _$BoutImpl extends _Bout {
   @override
   final int? id;
   @override
+  final String? orgSyncId;
+  @override
   final ParticipantState? r;
+
 // red
   @override
   final ParticipantState? b;
+
 // blue
   @override
   final WeightClass? weightClass;
@@ -261,7 +293,7 @@ class _$BoutImpl extends _Bout {
 
   @override
   String toString() {
-    return 'Bout(id: $id, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 
   @override
@@ -270,6 +302,7 @@ class _$BoutImpl extends _Bout {
         (other.runtimeType == runtimeType &&
             other is _$BoutImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
             (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
@@ -281,7 +314,7 @@ class _$BoutImpl extends _Bout {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, r, b, weightClass, pool, winnerRole, result, duration);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, r, b, weightClass, pool, winnerRole, result, duration);
 
   @JsonKey(ignore: true)
   @override
@@ -299,6 +332,7 @@ class _$BoutImpl extends _Bout {
 abstract class _Bout extends Bout {
   const factory _Bout(
       {final int? id,
+      final String? orgSyncId,
       final ParticipantState? r,
       final ParticipantState? b,
       final WeightClass? weightClass,
@@ -306,26 +340,38 @@ abstract class _Bout extends Bout {
       final BoutRole? winnerRole,
       final BoutResult? result,
       final Duration duration}) = _$BoutImpl;
+
   const _Bout._() : super._();
 
   factory _Bout.fromJson(Map<String, dynamic> json) = _$BoutImpl.fromJson;
 
   @override
   int? get id;
+
+  @override
+  String? get orgSyncId;
+
   @override
   ParticipantState? get r;
+
   @override // red
   ParticipantState? get b;
+
   @override // blue
   WeightClass? get weightClass;
+
   @override
   int? get pool;
+
   @override
   BoutRole? get winnerRole;
+
   @override
   BoutResult? get result;
+
   @override
   Duration get duration;
+
   @override
   @JsonKey(ignore: true)
   _$$BoutImplCopyWith<_$BoutImpl> get copyWith => throw _privateConstructorUsedError;

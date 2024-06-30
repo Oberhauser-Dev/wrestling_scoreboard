@@ -7,7 +7,7 @@ part of 'participation.dart';
 // **************************************************************************
 
 _$ParticipationImpl _$$ParticipationImplFromJson(Map<String, dynamic> json) => _$ParticipationImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       membership: Membership.fromJson(json['membership'] as Map<String, dynamic>),
       lineup: Lineup.fromJson(json['lineup'] as Map<String, dynamic>),
       weightClass:

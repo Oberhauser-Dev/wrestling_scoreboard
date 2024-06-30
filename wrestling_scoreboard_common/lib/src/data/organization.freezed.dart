@@ -21,13 +21,19 @@ Organization _$OrganizationFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Organization {
   int? get id => throw _privateConstructorUsedError;
+
   String get name => throw _privateConstructorUsedError;
+
   String? get abbreviation => throw _privateConstructorUsedError;
+
   Organization? get parent => throw _privateConstructorUsedError;
+
   WrestlingApiProvider? get apiProvider => throw _privateConstructorUsedError;
+
   WrestlingReportProvider? get reportProvider => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $OrganizationCopyWith<Organization> get copyWith => throw _privateConstructorUsedError;
 }
@@ -36,6 +42,7 @@ mixin _$Organization {
 abstract class $OrganizationCopyWith<$Res> {
   factory $OrganizationCopyWith(Organization value, $Res Function(Organization) then) =
       _$OrganizationCopyWithImpl<$Res, Organization>;
+
   @useResult
   $Res call(
       {int? id,
@@ -54,6 +61,7 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -112,6 +120,7 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
 abstract class _$$OrganizationImplCopyWith<$Res> implements $OrganizationCopyWith<$Res> {
   factory _$$OrganizationImplCopyWith(_$OrganizationImpl value, $Res Function(_$OrganizationImpl) then) =
       __$$OrganizationImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
@@ -237,22 +246,29 @@ abstract class _Organization extends Organization {
       final Organization? parent,
       final WrestlingApiProvider? apiProvider,
       final WrestlingReportProvider? reportProvider}) = _$OrganizationImpl;
+
   const _Organization._() : super._();
 
   factory _Organization.fromJson(Map<String, dynamic> json) = _$OrganizationImpl.fromJson;
 
   @override
   int? get id;
+
   @override
   String get name;
+
   @override
   String? get abbreviation;
+
   @override
   Organization? get parent;
+
   @override
   WrestlingApiProvider? get apiProvider;
+
   @override
   WrestlingReportProvider? get reportProvider;
+
   @override
   @JsonKey(ignore: true)
   _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith => throw _privateConstructorUsedError;
