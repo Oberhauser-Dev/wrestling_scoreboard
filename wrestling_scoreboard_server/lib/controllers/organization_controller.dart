@@ -62,11 +62,11 @@ class OrganizationController extends EntityController<Organization> {
     return organization.getApi(EntityController.getSingleFromDataTypeOfOrg, authService: authService);
   }
 
-  Future<Response> import(Request request, String id) async {
+  Future<Response> import(Request request, String organizationId) async {
     try {
-      final apiProvider = await _initApiProvider(request, int.parse(id));
+      final apiProvider = await _initApiProvider(request, int.parse(organizationId));
       if (apiProvider == null) {
-        throw Exception('No API provider selected for the organization $id.');
+        throw Exception('No API provider selected for the organization $organizationId.');
       }
       // apiProvider.isMock = true;
 
