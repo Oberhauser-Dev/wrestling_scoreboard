@@ -75,14 +75,20 @@ class OrganizationOverview extends ConsumerWidget {
                   getResult: () => true,
                 );
                 if (result == true && context.mounted) {
-                  catchAsync(context, () async {
-                    final dataManager = await ref.read(dataManagerNotifierProvider);
-                    final authService = (await ref.read(orgAuthNotifierProvider))[id];
-                    await dataManager.organizationImport(id, authService: authService);
-                    if (context.mounted) {
-                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                    }
-                  });
+                  catchAsync(
+                    context,
+                    () => showLoadingDialog(
+                      runAsync: (BuildContext context) async {
+                        final dataManager = await ref.read(dataManagerNotifierProvider);
+                        final authService = (await ref.read(orgAuthNotifierProvider))[id];
+                        await dataManager.organizationImport(id, authService: authService);
+                        if (context.mounted) {
+                          await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                        }
+                      },
+                      context: context,
+                    ),
+                  );
                 }
               },
               icon: const Icon(Icons.api),

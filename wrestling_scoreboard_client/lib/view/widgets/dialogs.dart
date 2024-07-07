@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class SizedDialog extends StatelessWidget {
   /// Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
@@ -135,6 +136,36 @@ Future<void> showExceptionDialog({
   );
 }
 
+Future<void> showLoadingDialog({
+  required BuildContext context,
+  required Future<void> Function(BuildContext context) runAsync,
+}) async {
+  showDialog(
+    useRootNavigator: false, // Pop from outside of this dialog.
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => ResponsiveContainer(
+      child: Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(AppLocalizations.of(context)!.syncWithApiProvider),
+            const Center(child: CircularProgressIndicator()),
+          ],
+        ),
+      ),
+    ),
+  );
+  try {
+    await runAsync(context);
+  } finally {
+    if (context.mounted) {
+      // Pop loading dialog
+      Navigator.of(context).pop();
+    }
+  }
+}
+
 Future<void> catchAsync(
   BuildContext context,
   Future<void> Function() doAsync, {
@@ -144,7 +175,7 @@ Future<void> catchAsync(
     await doAsync();
   } catch (exception, stackTrace) {
     if (context.mounted) {
-      showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
+      await showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
     }
   }
 }
