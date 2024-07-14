@@ -99,7 +99,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     final boutInfos = boutMap.entries.map((entry) {
       final bout = entry.key;
       var points = entry.value.map((BoutAction action) {
-        return '${action.actionValue}${action.role == BoutRole.red ? 'R' : 'B'}${action.duration.inSeconds}';
+        return '${bout.weightClass?.style == WrestlingStyle.free && action.actionType == BoutActionType.passivity ? 'A' : action.actionValue}${action.role == BoutRole.red ? 'R' : 'B'}${action.duration.inSeconds}';
       }).join(',');
       if (points.isNotEmpty) {
         points = '(points $points)';

@@ -35,6 +35,11 @@ class BoutActionControls extends StatelessWidget {
         color,
       ),
       displayActionControl(
+        '5',
+        prepareCallback(const BoutScreenActionIntent.redFive(), const BoutScreenActionIntent.blueFive()),
+        color,
+      ),
+      displayActionControl(
         'P',
         prepareCallback(const BoutScreenActionIntent.redPassivity(), const BoutScreenActionIntent.bluePassivity()),
         color,
@@ -44,11 +49,11 @@ class BoutActionControls extends StatelessWidget {
         prepareCallback(const BoutScreenActionIntent.redCaution(), const BoutScreenActionIntent.blueCaution()),
         color,
       ),
-      /*displayActionControl(
-          'D',
-          prepareCallback(const BoutScreenActionIntent.RedDismissal(), BoutScreenActionIntent.BlueDismissal()),
-          color,
-          padding),*/
+      displayActionControl(
+        'D',
+        prepareCallback(const BoutScreenActionIntent.redDismissal(), const BoutScreenActionIntent.blueDismissal()),
+        color,
+      ),
       displayActionControl(
         AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
         prepareCallback(

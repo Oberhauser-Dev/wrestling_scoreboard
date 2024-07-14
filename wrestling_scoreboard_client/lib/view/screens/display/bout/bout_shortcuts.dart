@@ -23,6 +23,7 @@ enum BoutScreenActions {
   redTwo,
   redThree,
   redFour,
+  redFive,
   redPassivity,
   redCaution,
   redDismissal,
@@ -33,6 +34,7 @@ enum BoutScreenActions {
   blueTwo,
   blueThree,
   blueFour,
+  blueFive,
   bluePassivity,
   blueCaution,
   blueDismissal,
@@ -70,6 +72,8 @@ class BoutScreenActionIntent extends Intent {
 
   const BoutScreenActionIntent.redFour() : type = BoutScreenActions.redFour;
 
+  const BoutScreenActionIntent.redFive() : type = BoutScreenActions.redFive;
+
   const BoutScreenActionIntent.redPassivity() : type = BoutScreenActions.redPassivity;
 
   const BoutScreenActionIntent.redCaution() : type = BoutScreenActions.redCaution;
@@ -89,6 +93,8 @@ class BoutScreenActionIntent extends Intent {
   const BoutScreenActionIntent.blueThree() : type = BoutScreenActions.blueThree;
 
   const BoutScreenActionIntent.blueFour() : type = BoutScreenActions.blueFour;
+
+  const BoutScreenActionIntent.blueFive() : type = BoutScreenActions.blueFive;
 
   const BoutScreenActionIntent.bluePassivity() : type = BoutScreenActions.bluePassivity;
 
@@ -188,6 +194,16 @@ class BoutScreenActionIntent extends Intent {
         );
         await dataManager.createOrUpdateSingle(action);
         break;
+      case BoutScreenActions.redFive:
+        var action = BoutAction(
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 5,
+        );
+        await dataManager.createOrUpdateSingle(action);
+        break;
       case BoutScreenActions.redPassivity:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.passivity);
@@ -253,6 +269,15 @@ class BoutScreenActionIntent extends Intent {
             duration: stopwatch.elapsed,
             actionType: BoutActionType.points,
             pointCount: 4);
+        await dataManager.createOrUpdateSingle(action);
+        break;
+      case BoutScreenActions.blueFive:
+        var action = BoutAction(
+            bout: bout,
+            role: BoutRole.blue,
+            duration: stopwatch.elapsed,
+            actionType: BoutActionType.points,
+            pointCount: 5);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
@@ -343,11 +368,14 @@ class BoutActionHandler extends ConsumerWidget {
     const redTwoIntent = BoutScreenActionIntent.redTwo();
     const redThreeIntent = BoutScreenActionIntent.redThree();
     const redFourIntent = BoutScreenActionIntent.redFour();
+    const redFiveIntent = BoutScreenActionIntent.redFive();
 
     const blueOneIntent = BoutScreenActionIntent.blueOne();
     const blueTwoIntent = BoutScreenActionIntent.blueTwo();
     const blueThreeIntent = BoutScreenActionIntent.blueThree();
     const blueFourIntent = BoutScreenActionIntent.blueFour();
+    const blueFiveIntent = BoutScreenActionIntent.blueFive();
+
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
         LogicalKeySet(LogicalKeyboardKey.space): const BoutScreenActionIntent.startStop(),
@@ -361,10 +389,12 @@ class BoutActionHandler extends ConsumerWidget {
         LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
         LogicalKeySet(LogicalKeyboardKey.digit4): redFourIntent,
+        LogicalKeySet(LogicalKeyboardKey.digit5): redFiveIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad2): blueTwoIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad3): blueThreeIntent,
         LogicalKeySet(LogicalKeyboardKey.numpad4): blueFourIntent,
+        LogicalKeySet(LogicalKeyboardKey.numpad5): blueFiveIntent,
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
@@ -382,21 +412,23 @@ class BoutActionHandler extends ConsumerWidget {
               } else if (event.physicalKey == PhysicalKeyboardKey.keyD) {
                 handleIntent(redTwoIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyS) {
-                handleIntent(redThreeIntent, context: context);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyA) {
                 handleIntent(redFourIntent, context: context);
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyA) {
+                handleIntent(redFiveIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyJ ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit1)) {
                 handleIntent(blueOneIntent, context: context);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyK ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit2)) {
                 handleIntent(blueTwoIntent, context: context);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyL ||
-                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3)) {
+              } else if (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3) {
                 handleIntent(blueThreeIntent, context: context);
-              } else if (event.physicalKey == PhysicalKeyboardKey.semicolon ||
+              } else if (event.physicalKey == PhysicalKeyboardKey.keyL ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit4)) {
                 handleIntent(blueFourIntent, context: context);
+              } else if (event.physicalKey == PhysicalKeyboardKey.semicolon ||
+                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit5)) {
+                handleIntent(blueFiveIntent, context: context);
               }
             }
           },
