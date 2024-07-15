@@ -421,8 +421,18 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             BoutActionType actionType;
             switch (actionStr) {
               case 'A':
-              case 'P':
+                if (weightClass.style == WrestlingStyle.greco) {
+                  throw Exception('Activity Time "A" should be only available in free style: $boutJson');
+                }
+                // Germany handles passivity as activity period 'A' in free style.
                 actionType = BoutActionType.passivity;
+              case 'P':
+                if (weightClass.style == WrestlingStyle.greco) {
+                  actionType = BoutActionType.passivity;
+                } else {
+                  // Germany handles the first a verbal admonition before an activity period as passivity 'P' in free style.
+                  actionType = BoutActionType.verbal;
+                }
               case 'V':
                 actionType = BoutActionType.verbal;
               case 'O':

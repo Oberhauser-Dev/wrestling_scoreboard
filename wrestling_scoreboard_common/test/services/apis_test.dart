@@ -537,6 +537,7 @@ void main() {
             ),
           ),
         );
+        // "2R26,2B37,PB98,AB124,1R156,PR252,AR292,1B326,1R337,AB360,2B360"
         expect(bouts, <Bout, Iterable<BoutAction>>{
           expectedBout: <BoutAction>[
             BoutAction(
@@ -553,7 +554,7 @@ void main() {
                 bout: expectedBout),
             BoutAction(
                 role: BoutRole.blue,
-                actionType: BoutActionType.passivity,
+                actionType: BoutActionType.verbal,
                 duration: Duration(seconds: 98),
                 pointCount: null,
                 bout: expectedBout),
@@ -571,7 +572,7 @@ void main() {
                 bout: expectedBout),
             BoutAction(
                 role: BoutRole.red,
-                actionType: BoutActionType.passivity,
+                actionType: BoutActionType.verbal,
                 duration: Duration(seconds: 252),
                 pointCount: null,
                 bout: expectedBout),

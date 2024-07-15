@@ -98,8 +98,21 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     ].join(';');
     final boutInfos = boutMap.entries.map((entry) {
       final bout = entry.key;
-      var points = entry.value.map((BoutAction action) {
-        return '${bout.weightClass?.style == WrestlingStyle.free && action.actionType == BoutActionType.passivity ? 'A' : action.actionValue}${action.role == BoutRole.red ? 'R' : 'B'}${action.duration.inSeconds}';
+      var points = entry.value.asMap().entries.map((boutActionEntry) {
+        final boutActionIndex = boutActionEntry.key;
+        final action = boutActionEntry.value;
+        String actionValue = action.actionValue;
+        if (bout.weightClass?.style == WrestlingStyle.free) {
+          // In germany: 'P' is handled as 'A' activity period, whereas a verbal admonition 'V' before a passivity ('P' / 'A' in Germany) is written as first 'P'.
+          if (action.actionType == BoutActionType.passivity) {
+            actionValue = 'A';
+          } else if (action.actionType == BoutActionType.caution &&
+              entry.value.length > (boutActionIndex + 1) &&
+              entry.value[boutActionIndex + 1].actionType == BoutActionType.passivity) {
+            actionValue = 'P';
+          }
+        }
+        return '$actionValue${action.role == BoutRole.red ? 'R' : 'B'}${action.duration.inSeconds}';
       }).join(',');
       if (points.isNotEmpty) {
         points = '(points $points)';
