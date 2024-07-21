@@ -10,7 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/privacy_policy.dart';
-import 'package:wrestling_scoreboard_client/view/screens/more/settings/settings.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
