@@ -34,9 +34,9 @@ class Lineup with _$Lineup implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'team_id': team.id,
-      'leader_id': leader?.id,
-      'coach_id': coach?.id,
+      'team_id': team.id!,
+      'leader_id': leader?.id!,
+      'coach_id': coach?.id!,
     };
   }
 

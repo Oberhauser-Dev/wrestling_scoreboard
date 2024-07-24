@@ -23,8 +23,8 @@ class CompetitionTeamParticipation with _$CompetitionTeamParticipation implement
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'competition_id': competition.id,
-      'team_id': team.id,
+      'competition_id': competition.id!,
+      'team_id': team.id!,
     };
   }
 

@@ -31,8 +31,8 @@ class CompetitionPerson with _$CompetitionPerson implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'competition_id': competition.id,
-      'person_id': person.id,
+      'competition_id': competition.id!,
+      'person_id': person.id!,
       'person_role': role.name,
     };
   }

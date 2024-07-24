@@ -44,9 +44,9 @@ class Participation with _$Participation implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'weight_class_id': weightClass?.id,
-      'lineup_id': lineup.id,
-      'membership_id': membership.id,
+      'weight_class_id': weightClass?.id!,
+      'lineup_id': lineup.id!,
+      'membership_id': membership.id!,
       'weight': weight?.toString(),
     };
   }

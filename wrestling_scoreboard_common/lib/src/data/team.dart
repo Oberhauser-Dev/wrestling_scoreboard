@@ -39,10 +39,10 @@ class Team with _$Team implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id,
+      if (organization != null) 'organization_id': organization?.id!,
       'name': name,
       'description': description,
-      'club_id': club.id,
+      'club_id': club.id!,
     };
   }
 

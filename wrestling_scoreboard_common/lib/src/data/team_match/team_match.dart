@@ -75,15 +75,15 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
   Map<String, dynamic> toRaw() {
     return super.toRaw()
       ..addAll({
-        'home_id': home.id,
-        'guest_id': guest.id,
-        'league_id': league?.id,
+        'home_id': home.id!,
+        'guest_id': guest.id!,
+        'league_id': league?.id!,
         'season_partition': seasonPartition,
-        'referee_id': referee?.id,
-        'judge_id': judge?.id,
-        'mat_chairman_id': matChairman?.id,
-        'transcript_writer_id': transcriptWriter?.id,
-        'time_keeper_id': timeKeeper?.id,
+        'referee_id': referee?.id!,
+        'judge_id': judge?.id!,
+        'mat_chairman_id': matChairman?.id!,
+        'transcript_writer_id': transcriptWriter?.id!,
+        'time_keeper_id': timeKeeper?.id!,
       });
   }
 

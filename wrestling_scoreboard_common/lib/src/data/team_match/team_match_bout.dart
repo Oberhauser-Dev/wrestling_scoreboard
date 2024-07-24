@@ -35,8 +35,8 @@ class TeamMatchBout with _$TeamMatchBout implements DataObject {
     return {
       if (id != null) 'id': id,
       'pos': pos,
-      'team_match_id': teamMatch.id,
-      'bout_id': bout.id,
+      'team_match_id': teamMatch.id!,
+      'bout_id': bout.id!,
     };
   }
 

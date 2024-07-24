@@ -42,7 +42,7 @@ class Organization with _$Organization implements DataObject {
       if (id != null) 'id': id,
       'name': name,
       'abbreviation': abbreviation,
-      'parent_id': parent?.id,
+      'parent_id': parent?.id!,
       'api_provider': apiProvider?.name,
       'report_provider': reportProvider?.name,
     };

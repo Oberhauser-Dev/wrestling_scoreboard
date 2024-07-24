@@ -38,7 +38,7 @@ class BoutAction with _$BoutAction implements DataObject {
       'duration_millis': duration.inMilliseconds,
       'bout_role': role.name,
       'point_count': pointCount,
-      'bout_id': bout.id,
+      'bout_id': bout.id!,
     };
   }
 

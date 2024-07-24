@@ -47,13 +47,13 @@ class Division with _$Division implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      'organization_id': organization.id,
+      'organization_id': organization.id!,
       'name': name,
       'start_date': startDate,
       'end_date': endDate,
-      'bout_config_id': boutConfig.id,
+      'bout_config_id': boutConfig.id!,
       'season_partitions': seasonPartitions,
-      'parent_id': parent?.id,
+      'parent_id': parent?.id!,
     };
   }
 

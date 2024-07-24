@@ -25,7 +25,7 @@ class Club with _$Club implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      'organization_id': organization.id,
+      'organization_id': organization.id!,
       'no': no,
       'name': name,
     };

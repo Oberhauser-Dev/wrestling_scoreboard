@@ -25,8 +25,8 @@ class DivisionWeightClass with _$DivisionWeightClass implements DataObject {
     return {
       if (id != null) 'id': id,
       'pos': pos,
-      'division_id': division.id,
-      'weight_class_id': weightClass.id,
+      'division_id': division.id!,
+      'weight_class_id': weightClass.id!,
       'season_partition': seasonPartition,
     };
   }

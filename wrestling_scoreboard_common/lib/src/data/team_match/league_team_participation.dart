@@ -22,8 +22,8 @@ class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObje
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'league_id': league.id,
-      'team_id': team.id,
+      'league_id': league.id!,
+      'team_id': team.id!,
     };
   }
 

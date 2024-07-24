@@ -31,7 +31,7 @@ abstract class WrestlingEvent implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id,
+      if (organization != null) 'organization_id': organization?.id!,
       'no': no,
       'location': location,
       'date': date,

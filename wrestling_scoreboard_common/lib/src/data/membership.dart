@@ -40,9 +40,9 @@ class Membership with _$Membership implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id,
-      'person_id': person.id,
-      'club_id': club.id,
+      if (organization != null) 'organization_id': organization?.id!,
+      'person_id': person.id!,
+      'club_id': club.id!,
       'no': no,
     };
   }

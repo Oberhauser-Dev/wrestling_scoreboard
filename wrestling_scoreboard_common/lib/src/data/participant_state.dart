@@ -31,7 +31,7 @@ class ParticipantState with _$ParticipantState implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'participation_id': participation.id,
+      'participation_id': participation.id!,
       'classification_points': classificationPoints,
     };
   }

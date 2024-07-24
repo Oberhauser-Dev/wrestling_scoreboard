@@ -29,9 +29,9 @@ class Bout with _$Bout implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      'red_id': r?.id,
-      'blue_id': b?.id,
-      'weight_class_id': weightClass?.id,
+      'red_id': r?.id!,
+      'blue_id': b?.id!,
+      'weight_class_id': weightClass?.id!,
       'winner_role': winnerRole?.name,
       'bout_result': result?.name,
       'duration_millis': duration.inMilliseconds,

@@ -47,7 +47,7 @@ class Competition extends WrestlingEvent with _$Competition {
     return super.toRaw()
       ..addAll({
         'name': name,
-        'bout_config_id': boutConfig.id,
+        'bout_config_id': boutConfig.id!,
       });
   }
 

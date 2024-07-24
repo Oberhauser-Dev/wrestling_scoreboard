@@ -42,11 +42,11 @@ class League with _$League implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id,
+      if (organization != null) 'organization_id': organization?.id!,
       'name': name,
       'start_date': startDate,
       'end_date': endDate,
-      'division_id': division.id,
+      'division_id': division.id!,
     };
   }
 
