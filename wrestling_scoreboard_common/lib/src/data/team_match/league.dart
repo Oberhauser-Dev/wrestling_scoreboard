@@ -8,7 +8,7 @@ part 'league.g.dart';
 
 /// The league in which the team is bouting.
 @freezed
-class League with _$League implements DataObject {
+class League with _$League implements DataObject, Organizational {
   const League._();
 
   const factory League({

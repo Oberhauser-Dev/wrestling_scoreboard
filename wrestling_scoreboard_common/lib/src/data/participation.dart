@@ -58,10 +58,4 @@ class Participation with _$Participation implements DataObject {
   Participation copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => throw UnimplementedError();
 }

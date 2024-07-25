@@ -44,10 +44,4 @@ class CompetitionBout with _$CompetitionBout implements DataObject {
   CompetitionBout copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => throw UnimplementedError();
 }

@@ -64,10 +64,4 @@ class BoutConfig with _$BoutConfig implements DataObject {
   BoutConfig copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => throw UnimplementedError();
 }

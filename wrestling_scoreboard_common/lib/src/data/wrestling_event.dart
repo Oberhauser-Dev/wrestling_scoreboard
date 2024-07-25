@@ -1,6 +1,6 @@
 import '../data.dart';
 
-abstract class WrestlingEvent implements DataObject {
+abstract class WrestlingEvent implements DataObject, Organizational {
   const WrestlingEvent();
 
   DateTime get date;

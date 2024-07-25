@@ -7,7 +7,7 @@ part 'club.g.dart';
 
 /// The sports club.
 @freezed
-class Club with _$Club implements DataObject {
+class Club with _$Club implements DataObject, Organizational {
   const Club._();
 
   const factory Club({

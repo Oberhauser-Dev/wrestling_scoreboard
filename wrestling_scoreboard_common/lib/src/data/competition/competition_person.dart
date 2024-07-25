@@ -44,10 +44,4 @@ class CompetitionPerson with _$CompetitionPerson implements DataObject {
   CompetitionPerson copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => throw UnimplementedError();
 }

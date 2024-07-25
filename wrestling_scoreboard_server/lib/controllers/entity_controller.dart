@@ -144,11 +144,15 @@ abstract class EntityController<T extends DataObject> {
     if (dataObject.id != null) {
       throw Exception('Data object already has an id: $dataObject');
     }
-    if (dataObject.organization?.id == null || dataObject.orgSyncId == null) {
+    if (dataObject is! Organizational) {
+      throw Exception('Data object is not Organizational: $dataObject');
+    }
+    final organizational = (dataObject as Organizational);
+    if (organizational.organization?.id == null || organizational.orgSyncId == null) {
       throw Exception('Organization id and sync id must not be null: $dataObject');
     }
     try {
-      final single = await getSingleOfOrg(dataObject.orgSyncId!, orgId: dataObject.organization!.id!);
+      final single = await getSingleOfOrg(organizational.orgSyncId!, orgId: organizational.organization!.id!);
       return single;
     } on InvalidParameterException catch (_) {
       return createSingleReturn(dataObject);

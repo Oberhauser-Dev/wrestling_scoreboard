@@ -183,10 +183,4 @@ class Bout with _$Bout implements DataObject {
   Bout copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => throw UnimplementedError();
 }

@@ -6,10 +6,6 @@ typedef GetSingleOfTypeCallback = Future<T> Function<T extends DataObject>(int i
 abstract class DataObject {
   int? get id;
 
-  String? get orgSyncId => null;
-
-  Organization? get organization => null;
-
   Map<String, Object?> toJson();
 
   Map<String, dynamic> toRaw();
@@ -117,6 +113,12 @@ abstract class DataObject {
         throw UnimplementedError('Raw conversation for "$T" not found.');
     }
   }
+}
+
+abstract class Organizational {
+  String? get orgSyncId => null;
+
+  Organization? get organization => null;
 }
 
 class DataUnimplementedError extends UnimplementedError {

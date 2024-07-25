@@ -43,10 +43,4 @@ class CompetitionTeamParticipation with _$CompetitionTeamParticipation implement
   CompetitionTeamParticipation copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => throw UnimplementedError();
 }

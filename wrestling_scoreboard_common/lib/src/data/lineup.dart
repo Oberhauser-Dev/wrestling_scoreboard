@@ -47,10 +47,4 @@ class Lineup with _$Lineup implements DataObject {
   Lineup copyWithId(int? id) {
     return copyWith(id: id);
   }
-
-  @override
-  String? get orgSyncId => throw UnimplementedError();
-
-  @override
-  Organization? get organization => team.organization;
 }

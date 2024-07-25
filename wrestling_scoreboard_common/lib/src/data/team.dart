@@ -7,7 +7,7 @@ part 'team.g.dart';
 
 /// The team of a club.
 @freezed
-class Team with _$Team implements DataObject {
+class Team with _$Team implements DataObject, Organizational {
   const Team._();
 
   const factory Team({

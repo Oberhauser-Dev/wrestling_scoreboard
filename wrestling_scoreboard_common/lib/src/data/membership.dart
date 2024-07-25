@@ -7,7 +7,7 @@ part 'membership.g.dart';
 
 /// The membership of a person in a club.
 @freezed
-class Membership with _$Membership implements DataObject {
+class Membership with _$Membership implements DataObject, Organizational {
   const Membership._();
 
   const factory Membership({
