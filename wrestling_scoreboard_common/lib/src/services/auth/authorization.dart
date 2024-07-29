@@ -1,8 +1,8 @@
 import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'authorization.freezed.dart';
-
 part 'authorization.g.dart';
 
 abstract class AuthService {}

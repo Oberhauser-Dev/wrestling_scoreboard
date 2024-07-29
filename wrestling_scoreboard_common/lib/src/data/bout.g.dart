@@ -9,6 +9,8 @@ part of 'bout.dart';
 _$BoutImpl _$$BoutImplFromJson(Map<String, dynamic> json) => _$BoutImpl(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       r: json['r'] == null ? null : ParticipantState.fromJson(json['r'] as Map<String, dynamic>),
       b: json['b'] == null ? null : ParticipantState.fromJson(json['b'] as Map<String, dynamic>),
       weightClass:
@@ -22,6 +24,7 @@ _$BoutImpl _$$BoutImplFromJson(Map<String, dynamic> json) => _$BoutImpl(
 Map<String, dynamic> _$$BoutImplToJson(_$BoutImpl instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
+      'organization': instance.organization?.toJson(),
       'r': instance.r?.toJson(),
       'b': instance.b?.toJson(),
       'weightClass': instance.weightClass?.toJson(),

@@ -24,6 +24,8 @@ mixin _$Bout {
 
   String? get orgSyncId => throw _privateConstructorUsedError;
 
+  Organization? get organization => throw _privateConstructorUsedError;
+
   ParticipantState? get r => throw _privateConstructorUsedError; // red
   ParticipantState? get b => throw _privateConstructorUsedError; // blue
   WeightClass? get weightClass => throw _privateConstructorUsedError;
@@ -50,6 +52,7 @@ abstract class $BoutCopyWith<$Res> {
   $Res call(
       {int? id,
       String? orgSyncId,
+      Organization? organization,
       ParticipantState? r,
       ParticipantState? b,
       WeightClass? weightClass,
@@ -57,6 +60,8 @@ abstract class $BoutCopyWith<$Res> {
       BoutRole? winnerRole,
       BoutResult? result,
       Duration duration});
+
+  $OrganizationCopyWith<$Res>? get organization;
 
   $ParticipantStateCopyWith<$Res>? get r;
 
@@ -80,6 +85,7 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
   $Res call({
     Object? id = freezed,
     Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? r = freezed,
     Object? b = freezed,
     Object? weightClass = freezed,
@@ -97,6 +103,10 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
           ? _value.orgSyncId
           : orgSyncId // ignore: cast_nullable_to_non_nullable
               as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       r: freezed == r
           ? _value.r
           : r // ignore: cast_nullable_to_non_nullable
@@ -126,6 +136,18 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
           : duration // ignore: cast_nullable_to_non_nullable
               as Duration,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
   }
 
   @override
@@ -174,6 +196,7 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
   $Res call(
       {int? id,
       String? orgSyncId,
+      Organization? organization,
       ParticipantState? r,
       ParticipantState? b,
       WeightClass? weightClass,
@@ -181,6 +204,9 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
       BoutRole? winnerRole,
       BoutResult? result,
       Duration duration});
+
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
 
   @override
   $ParticipantStateCopyWith<$Res>? get r;
@@ -201,6 +227,7 @@ class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl
   $Res call({
     Object? id = freezed,
     Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? r = freezed,
     Object? b = freezed,
     Object? weightClass = freezed,
@@ -218,6 +245,10 @@ class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl
           ? _value.orgSyncId
           : orgSyncId // ignore: cast_nullable_to_non_nullable
               as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       r: freezed == r
           ? _value.r
           : r // ignore: cast_nullable_to_non_nullable
@@ -256,6 +287,7 @@ class _$BoutImpl extends _Bout {
   const _$BoutImpl(
       {this.id,
       this.orgSyncId,
+      this.organization,
       this.r,
       this.b,
       this.weightClass,
@@ -271,6 +303,8 @@ class _$BoutImpl extends _Bout {
   final int? id;
   @override
   final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final ParticipantState? r;
 
@@ -293,7 +327,7 @@ class _$BoutImpl extends _Bout {
 
   @override
   String toString() {
-    return 'Bout(id: $id, orgSyncId: $orgSyncId, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 
   @override
@@ -303,6 +337,7 @@ class _$BoutImpl extends _Bout {
             other is _$BoutImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
             (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
@@ -314,7 +349,8 @@ class _$BoutImpl extends _Bout {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, r, b, weightClass, pool, winnerRole, result, duration);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, r, b, weightClass, pool, winnerRole, result, duration);
 
   @JsonKey(ignore: true)
   @override
@@ -333,6 +369,7 @@ abstract class _Bout extends Bout {
   const factory _Bout(
       {final int? id,
       final String? orgSyncId,
+      final Organization? organization,
       final ParticipantState? r,
       final ParticipantState? b,
       final WeightClass? weightClass,
@@ -350,6 +387,9 @@ abstract class _Bout extends Bout {
 
   @override
   String? get orgSyncId;
+
+  @override
+  Organization? get organization;
 
   @override
   ParticipantState? get r;

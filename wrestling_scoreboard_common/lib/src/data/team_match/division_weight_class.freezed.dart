@@ -22,6 +22,10 @@ DivisionWeightClass _$DivisionWeightClassFromJson(Map<String, dynamic> json) {
 mixin _$DivisionWeightClass {
   int? get id => throw _privateConstructorUsedError;
 
+  String? get orgSyncId => throw _privateConstructorUsedError;
+
+  Organization? get organization => throw _privateConstructorUsedError;
+
   int get pos => throw _privateConstructorUsedError;
 
   Division get division => throw _privateConstructorUsedError;
@@ -42,7 +46,16 @@ abstract class $DivisionWeightClassCopyWith<$Res> {
       _$DivisionWeightClassCopyWithImpl<$Res, DivisionWeightClass>;
 
   @useResult
-  $Res call({int? id, int pos, Division division, WeightClass weightClass, int? seasonPartition});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      int pos,
+      Division division,
+      WeightClass weightClass,
+      int? seasonPartition});
+
+  $OrganizationCopyWith<$Res>? get organization;
 
   $DivisionCopyWith<$Res> get division;
 
@@ -64,6 +77,8 @@ class _$DivisionWeightClassCopyWithImpl<$Res, $Val extends DivisionWeightClass>
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? pos = null,
     Object? division = null,
     Object? weightClass = null,
@@ -74,6 +89,14 @@ class _$DivisionWeightClassCopyWithImpl<$Res, $Val extends DivisionWeightClass>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       pos: null == pos
           ? _value.pos
           : pos // ignore: cast_nullable_to_non_nullable
@@ -91,6 +114,18 @@ class _$DivisionWeightClassCopyWithImpl<$Res, $Val extends DivisionWeightClass>
           : seasonPartition // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
   }
 
   @override
@@ -118,7 +153,17 @@ abstract class _$$DivisionWeightClassImplCopyWith<$Res> implements $DivisionWeig
 
   @override
   @useResult
-  $Res call({int? id, int pos, Division division, WeightClass weightClass, int? seasonPartition});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      int pos,
+      Division division,
+      WeightClass weightClass,
+      int? seasonPartition});
+
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
 
   @override
   $DivisionCopyWith<$Res> get division;
@@ -139,6 +184,8 @@ class __$$DivisionWeightClassImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? pos = null,
     Object? division = null,
     Object? weightClass = null,
@@ -149,6 +196,14 @@ class __$$DivisionWeightClassImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       pos: null == pos
           ? _value.pos
           : pos // ignore: cast_nullable_to_non_nullable
@@ -173,13 +228,23 @@ class __$$DivisionWeightClassImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DivisionWeightClassImpl extends _DivisionWeightClass {
   const _$DivisionWeightClassImpl(
-      {this.id, required this.pos, required this.division, required this.weightClass, this.seasonPartition})
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      required this.pos,
+      required this.division,
+      required this.weightClass,
+      this.seasonPartition})
       : super._();
 
   factory _$DivisionWeightClassImpl.fromJson(Map<String, dynamic> json) => _$$DivisionWeightClassImplFromJson(json);
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final int pos;
   @override
@@ -191,7 +256,7 @@ class _$DivisionWeightClassImpl extends _DivisionWeightClass {
 
   @override
   String toString() {
-    return 'DivisionWeightClass(id: $id, pos: $pos, division: $division, weightClass: $weightClass, seasonPartition: $seasonPartition)';
+    return 'DivisionWeightClass(id: $id, orgSyncId: $orgSyncId, organization: $organization, pos: $pos, division: $division, weightClass: $weightClass, seasonPartition: $seasonPartition)';
   }
 
   @override
@@ -200,6 +265,8 @@ class _$DivisionWeightClassImpl extends _DivisionWeightClass {
         (other.runtimeType == runtimeType &&
             other is _$DivisionWeightClassImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.division, division) || other.division == division) &&
             (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
@@ -208,7 +275,8 @@ class _$DivisionWeightClassImpl extends _DivisionWeightClass {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, pos, division, weightClass, seasonPartition);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, pos, division, weightClass, seasonPartition);
 
   @JsonKey(ignore: true)
   @override
@@ -227,6 +295,8 @@ class _$DivisionWeightClassImpl extends _DivisionWeightClass {
 abstract class _DivisionWeightClass extends DivisionWeightClass {
   const factory _DivisionWeightClass(
       {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
       required final int pos,
       required final Division division,
       required final WeightClass weightClass,
@@ -238,6 +308,12 @@ abstract class _DivisionWeightClass extends DivisionWeightClass {
 
   @override
   int? get id;
+
+  @override
+  String? get orgSyncId;
+
+  @override
+  Organization? get organization;
 
   @override
   int get pos;

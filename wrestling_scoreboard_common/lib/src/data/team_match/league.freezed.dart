@@ -34,6 +34,8 @@ mixin _$League {
 
   Division get division => throw _privateConstructorUsedError;
 
+  int get boutDays => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -52,7 +54,8 @@ abstract class $LeagueCopyWith<$Res> {
       String name,
       DateTime startDate,
       DateTime endDate,
-      Division division});
+      Division division,
+      int boutDays});
 
   $OrganizationCopyWith<$Res>? get organization;
 
@@ -79,6 +82,7 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
     Object? startDate = null,
     Object? endDate = null,
     Object? division = null,
+    Object? boutDays = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -109,6 +113,10 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
           ? _value.division
           : division // ignore: cast_nullable_to_non_nullable
               as Division,
+      boutDays: null == boutDays
+          ? _value.boutDays
+          : boutDays // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -147,7 +155,8 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
       String name,
       DateTime startDate,
       DateTime endDate,
-      Division division});
+      Division division,
+      int boutDays});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
@@ -171,6 +180,7 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
     Object? startDate = null,
     Object? endDate = null,
     Object? division = null,
+    Object? boutDays = null,
   }) {
     return _then(_$LeagueImpl(
       id: freezed == id
@@ -201,6 +211,10 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
           ? _value.division
           : division // ignore: cast_nullable_to_non_nullable
               as Division,
+      boutDays: null == boutDays
+          ? _value.boutDays
+          : boutDays // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -215,7 +229,8 @@ class _$LeagueImpl extends _League {
       required this.name,
       required this.startDate,
       required this.endDate,
-      required this.division})
+      required this.division,
+      required this.boutDays})
       : super._();
 
   factory _$LeagueImpl.fromJson(Map<String, dynamic> json) => _$$LeagueImplFromJson(json);
@@ -234,10 +249,12 @@ class _$LeagueImpl extends _League {
   final DateTime endDate;
   @override
   final Division division;
+  @override
+  final int boutDays;
 
   @override
   String toString() {
-    return 'League(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, startDate: $startDate, endDate: $endDate, division: $division)';
+    return 'League(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, startDate: $startDate, endDate: $endDate, division: $division, boutDays: $boutDays)';
   }
 
   @override
@@ -251,12 +268,14 @@ class _$LeagueImpl extends _League {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.startDate, startDate) || other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
-            (identical(other.division, division) || other.division == division));
+            (identical(other.division, division) || other.division == division) &&
+            (identical(other.boutDays, boutDays) || other.boutDays == boutDays));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, startDate, endDate, division);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, startDate, endDate, division, boutDays);
 
   @JsonKey(ignore: true)
   @override
@@ -279,7 +298,8 @@ abstract class _League extends League {
       required final String name,
       required final DateTime startDate,
       required final DateTime endDate,
-      required final Division division}) = _$LeagueImpl;
+      required final Division division,
+      required final int boutDays}) = _$LeagueImpl;
 
   const _League._() : super._();
 
@@ -305,6 +325,9 @@ abstract class _League extends League {
 
   @override
   Division get division;
+
+  @override
+  int get boutDays;
 
   @override
   @JsonKey(ignore: true)

@@ -20,6 +20,7 @@ void main() {
     startDate: DateTime(1999),
     endDate: DateTime(2000),
     division: division,
+    boutDays: 14,
   );
   final clubA = Club(name: 'Club A', organization: organizationNRW);
   final clubB = Club(name: 'Club B', organization: organizationDRB);

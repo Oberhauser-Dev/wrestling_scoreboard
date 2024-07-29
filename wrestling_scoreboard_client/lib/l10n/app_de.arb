@@ -121,6 +121,8 @@
   "seasonFirstHalf": "Hinrunde",
   "seasonSecondHalf": "Rückrunde",
   "competitions": "Turniere",
+  "boutDay": "Kampftag",
+  "boutDays": "Kampftage",
   "match": "Begegnung",
   "matches": "Begegnungen",
   "matchNumber": "Begegnungs-ID / Kampf-ID",

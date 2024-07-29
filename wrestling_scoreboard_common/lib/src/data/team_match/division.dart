@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'division.freezed.dart';
-
 part 'division.g.dart';
 
 /// The league in which the team is bouting.

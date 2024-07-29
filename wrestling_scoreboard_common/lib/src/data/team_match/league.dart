@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'league.freezed.dart';
-
 part 'league.g.dart';
 
 /// The league in which the team is bouting.
@@ -19,6 +18,7 @@ class League with _$League implements DataObject, Organizational {
     required DateTime startDate,
     required DateTime endDate,
     required Division division,
+    required int boutDays,
   }) = _League;
 
   factory League.fromJson(Map<String, Object?> json) => _$LeagueFromJson(json);
@@ -34,6 +34,7 @@ class League with _$League implements DataObject, Organizational {
       startDate: e['start_date'] as DateTime,
       endDate: e['end_date'] as DateTime,
       division: division,
+      boutDays: e['bout_days'] as int,
     );
   }
 
@@ -47,6 +48,7 @@ class League with _$League implements DataObject, Organizational {
       'start_date': startDate,
       'end_date': endDate,
       'division_id': division.id!,
+      'bout_days': boutDays,
     };
   }
 

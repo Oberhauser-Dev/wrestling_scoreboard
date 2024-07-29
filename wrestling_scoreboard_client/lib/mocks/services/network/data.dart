@@ -28,6 +28,7 @@ final _leagueMenRPW = League(
   startDate: DateTime(2021),
   endDate: DateTime(2022),
   division: _adultDivision,
+  boutDays: 14,
 );
 final _leagueJnRPW = League(
   id: 2,
@@ -35,6 +36,7 @@ final _leagueJnRPW = League(
   startDate: DateTime(2021),
   endDate: DateTime(2022),
   division: _juniorDivision,
+  boutDays: 14,
 );
 final _leagueNational = League(
   id: 3,
@@ -42,6 +44,7 @@ final _leagueNational = League(
   startDate: DateTime(2021),
   endDate: DateTime(2022),
   division: _adultDivision,
+  boutDays: 14,
 );
 
 Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers', organization: _organization);

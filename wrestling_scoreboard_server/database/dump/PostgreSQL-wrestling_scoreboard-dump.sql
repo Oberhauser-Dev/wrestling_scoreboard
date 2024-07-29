@@ -170,7 +170,8 @@ CREATE TABLE public.bout (
     winner_role public.bout_role,
     bout_result public.bout_result,
     duration_millis integer,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -463,7 +464,9 @@ CREATE TABLE public.division_weight_class (
     division_id integer NOT NULL,
     weight_class_id integer NOT NULL,
     pos integer DEFAULT 0 NOT NULL,
-    season_partition integer
+    season_partition integer,
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -524,7 +527,8 @@ CREATE TABLE public.league (
     end_date date NOT NULL,
     division_id integer NOT NULL,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    bout_days integer DEFAULT 14 NOT NULL
 );
 
 
@@ -1149,21 +1153,21 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result, duration_millis, org_sync_id) FROM stdin;
-28	33	34	20	\N	\N	0	\N
-29	35	36	21	\N	\N	0	\N
-32	40	41	22	\N	\N	0	\N
-34	44	45	23	\N	\N	0	\N
-35	46	47	24	\N	\N	0	\N
-37	50	51	25	\N	\N	0	\N
-38	52	53	26	\N	\N	0	\N
-40	56	57	27	\N	\N	0	\N
-43	62	\N	28	\N	\N	0	\N
-45	65	66	29	\N	\N	0	\N
-47	69	70	30	\N	\N	0	\N
-49	73	74	31	\N	\N	0	\N
-50	75	76	32	\N	\N	0	\N
-27	31	32	19	\N	\N	0	\N
+COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
+28	33	34	20	\N	\N	0	\N	\N
+29	35	36	21	\N	\N	0	\N	\N
+32	40	41	22	\N	\N	0	\N	\N
+34	44	45	23	\N	\N	0	\N	\N
+35	46	47	24	\N	\N	0	\N	\N
+37	50	51	25	\N	\N	0	\N	\N
+38	52	53	26	\N	\N	0	\N	\N
+40	56	57	27	\N	\N	0	\N	\N
+43	62	\N	28	\N	\N	0	\N	\N
+45	65	66	29	\N	\N	0	\N	\N
+47	69	70	30	\N	\N	0	\N	\N
+49	73	74	31	\N	\N	0	\N	\N
+50	75	76	32	\N	\N	0	\N	\N
+27	31	32	19	\N	\N	0	\N	\N
 \.
 
 
@@ -1233,36 +1237,36 @@ COPY public.division (id, name, start_date, end_date, bout_config_id, season_par
 -- Data for Name: division_weight_class; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.division_weight_class (id, division_id, weight_class_id, pos, season_partition) FROM stdin;
-7	2	1	5	\N
-1	1	1	1	0
-6	1	10	2	0
-5	1	2	3	0
-2	1	3	5	0
-4	1	7	6	0
-3	1	4	7	0
-9	1	12	8	0
-10	1	13	9	0
-11	1	14	10	0
-13	1	16	12	0
-14	1	17	13	0
-15	1	18	14	0
-16	1	19	1	1
-17	1	20	2	1
-18	1	21	3	1
-19	1	22	4	1
-8	1	11	4	0
-12	1	15	11	0
-20	1	23	5	1
-21	1	24	6	1
-22	1	25	7	1
-23	1	26	8	1
-24	1	27	9	1
-25	1	28	10	1
-26	1	29	11	1
-27	1	30	12	1
-29	1	32	14	1
-28	1	31	13	1
+COPY public.division_weight_class (id, division_id, weight_class_id, pos, season_partition, org_sync_id, organization_id) FROM stdin;
+7	2	1	5	\N	\N	\N
+1	1	1	1	0	\N	\N
+6	1	10	2	0	\N	\N
+5	1	2	3	0	\N	\N
+2	1	3	5	0	\N	\N
+4	1	7	6	0	\N	\N
+3	1	4	7	0	\N	\N
+9	1	12	8	0	\N	\N
+10	1	13	9	0	\N	\N
+11	1	14	10	0	\N	\N
+13	1	16	12	0	\N	\N
+14	1	17	13	0	\N	\N
+15	1	18	14	0	\N	\N
+16	1	19	1	1	\N	\N
+17	1	20	2	1	\N	\N
+18	1	21	3	1	\N	\N
+19	1	22	4	1	\N	\N
+8	1	11	4	0	\N	\N
+12	1	15	11	0	\N	\N
+20	1	23	5	1	\N	\N
+21	1	24	6	1	\N	\N
+22	1	25	7	1	\N	\N
+23	1	26	8	1	\N	\N
+24	1	27	9	1	\N	\N
+25	1	28	10	1	\N	\N
+26	1	29	11	1	\N	\N
+27	1	30	12	1	\N	\N
+29	1	32	14	1	\N	\N
+28	1	31	13	1	\N	\N
 \.
 
 
@@ -1270,10 +1274,10 @@ COPY public.division_weight_class (id, division_id, weight_class_id, pos, season
 -- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.league (id, name, start_date, end_date, division_id, org_sync_id, organization_id) FROM stdin;
-2	North Jn	2021-10-01	2022-10-01	2	\N	1
-1	South	2021-10-01	2022-10-01	1	\N	1
-3	North	2021-10-01	2022-10-01	1	\N	1
+COPY public.league (id, name, start_date, end_date, division_id, org_sync_id, organization_id, bout_days) FROM stdin;
+2	North Jn	2021-10-01	2022-10-01	2	\N	1	14
+1	South	2021-10-01	2022-10-01	1	\N	1	14
+3	North	2021-10-01	2022-10-01	1	\N	1	14
 \.
 
 
@@ -1930,6 +1934,14 @@ ALTER TABLE ONLY public.bout_action
 
 
 --
+-- Name: bout bout_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout
+    ADD CONSTRAINT bout_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
 -- Name: bout bout_participant_state_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2015,6 +2027,14 @@ ALTER TABLE ONLY public.division
 
 ALTER TABLE ONLY public.division_weight_class
     ADD CONSTRAINT division_weight_class_league_id_fk FOREIGN KEY (division_id) REFERENCES public.league(id) ON DELETE CASCADE;
+
+
+--
+-- Name: division_weight_class division_weight_class_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.division_weight_class
+    ADD CONSTRAINT division_weight_class_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
 
 
 --

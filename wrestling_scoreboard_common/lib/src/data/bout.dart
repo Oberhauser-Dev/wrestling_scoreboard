@@ -7,12 +7,13 @@ part 'bout.g.dart';
 
 /// The bout between two persons, which are represented by a ParticipantStatus.
 @freezed
-class Bout with _$Bout implements DataObject {
+class Bout with _$Bout implements DataObject, Organizational {
   const Bout._();
 
   const factory Bout({
     int? id,
     String? orgSyncId,
+    Organization? organization,
     ParticipantState? r, // red
     ParticipantState? b, // blue
     WeightClass? weightClass,
@@ -29,6 +30,7 @@ class Bout with _$Bout implements DataObject {
     return {
       if (id != null) 'id': id,
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
+      if (organization != null) 'organization_id': organization?.id!,
       'red_id': r?.id!,
       'blue_id': b?.id!,
       'weight_class_id': weightClass?.id!,
@@ -45,9 +47,11 @@ class Bout with _$Bout implements DataObject {
     final boutResult = e['bout_result'] as String?;
     final weightClassId = e['weight_class_id'] as int?;
     final durationMillis = e['duration_millis'] as int?;
+    final organizationId = e['organization_id'] as int?;
     return Bout(
       id: e['id'] as int?,
       orgSyncId: e['org_sync_id'] as String?,
+      organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       r: redId == null ? null : await getSingle<ParticipantState>(redId),
       b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),

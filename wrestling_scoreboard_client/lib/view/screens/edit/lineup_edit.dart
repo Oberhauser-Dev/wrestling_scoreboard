@@ -147,7 +147,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
             title: _MembershipDropdown(
               label: localizations.leader,
               getOrSetMemberships: _getOrCreateMemberships,
-              organization: widget.lineup.organization,
+              organization: widget.lineup.team.organization,
               selectedItem: _leader,
               onSave: (Membership? value) => setState(() {
                 _leader = value;
@@ -158,7 +158,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
             title: _MembershipDropdown(
               label: localizations.coach,
               getOrSetMemberships: _getOrCreateMemberships,
-              organization: widget.lineup.organization,
+              organization: widget.lineup.team.organization,
               selectedItem: _coach,
               onSave: (Membership? value) => setState(() {
                 _coach = value;
@@ -261,7 +261,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;
                 },
-                organization: widget.lineup.organization,
+                organization: widget.lineup.team.organization,
                 selectedItem: widget.participation?.membership,
                 onSave: (_) => onSave(),
               ),

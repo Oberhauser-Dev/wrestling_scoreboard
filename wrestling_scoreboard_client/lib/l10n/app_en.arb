@@ -124,6 +124,8 @@
   "seasonFirstHalf": "First Half",
   "seasonSecondHalf": "Second Half",
   "competitions": "Competitions",
+  "boutDay": "Bout Day",
+  "boutDays": "Bout Days",
   "match": "Match",
   "matches": "Matches",
   "matchNumber": "Match-ID",

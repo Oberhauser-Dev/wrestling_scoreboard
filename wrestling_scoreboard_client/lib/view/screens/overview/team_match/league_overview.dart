@@ -49,6 +49,11 @@ class LeagueOverview extends ConsumerWidget {
               icon: Icons.event,
             ),
             ContentItem(
+              title: data.boutDays.toString(),
+              subtitle: localizations.boutDays,
+              icon: Icons.calendar_month,
+            ),
+            ContentItem(
               title: data.division.fullname,
               subtitle: localizations.division,
               icon: Icons.inventory,

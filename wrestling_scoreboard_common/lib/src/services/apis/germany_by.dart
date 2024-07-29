@@ -101,12 +101,19 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           seasonPartition: 0,
           division: division,
           weightClass: weightClassP1,
+          organization: organization,
+          orgSyncId:
+              _getDivisionWeightClassOrgSyncId(division: division, weightClass: weightClassP1, seasonPartition: 0),
+        );
+        final weightClassP2 = weightClassP1.copyWith(
+          style: item['styleB'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
         );
         final divisionWeightClassPartition2 = divisionWeightClassPartition1.copyWith(
-            seasonPartition: 1,
-            weightClass: weightClassP1.copyWith(
-              style: item['styleB'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
-            ));
+          seasonPartition: 1,
+          weightClass: weightClassP2,
+          orgSyncId:
+              _getDivisionWeightClassOrgSyncId(division: division, weightClass: weightClassP2, seasonPartition: 1),
+        );
         return [divisionWeightClassPartition1, divisionWeightClassPartition2];
       }).expand((element) => element);
     } else {
@@ -122,6 +129,14 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       }
       return comparison;
     });
+  }
+
+  String _getDivisionWeightClassOrgSyncId({
+    required Division division,
+    required WeightClass weightClass,
+    required int seasonPartition,
+  }) {
+    return '${division.orgSyncId}_${weightClass.name}_${weightClass.style.name}_$seasonPartition'.replaceAll(' ', '_');
   }
 
   @override
@@ -243,7 +258,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           (entry) async {
             String leagueName = entry.key.trim();
             if (leagueName.isEmpty) {
-              // If division has only one leage it is the league for whole Bavarian.
+              // If division has only one league it is the league for whole Bavarian.
               leagueName = 'Bayern';
             }
             return League(
@@ -251,6 +266,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               startDate: division.startDate,
               endDate: division.endDate,
               division: division,
+              boutDays: int.parse(entry.value['noOfBoutDays']),
               orgSyncId: '${division.orgSyncId}_$leagueName',
               organization: organization,
             );
@@ -304,8 +320,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           comment: values['editorComment'],
           league: league,
           no: entry.key,
-          // TODO: Save number of boutdays in league, and use them here.
-          seasonPartition: double.parse(values['boutday']) / 16 < 0.5 ? 1 : 2,
+          seasonPartition: double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1,
           organization: organization,
           orgSyncId: entry.key,
         );
@@ -327,13 +342,26 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         final boutActionMapEntries = await Future.wait(boutListJson.map((boutJson) async {
           final weightClassMatch = RegExp(r'(\d+)(\D*)').firstMatch(boutJson['weightClass'])!;
           final suffix = weightClassMatch.group(2)?.trim() ?? '';
-          final weightClass = WeightClass(
-            // TODO: id now known, search in the backend.
+          var weightClass = WeightClass(
             weight: int.parse(weightClassMatch.group(1)!), // Group 0 is the whole matched string
             suffix: suffix.isEmpty ? null : suffix,
             style: boutJson['style'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
             unit: WeightUnit.kilogram,
           );
+          try {
+            final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(_getDivisionWeightClassOrgSyncId(
+                division: event.league!.division,
+                weightClass: weightClass,
+                seasonPartition: event.seasonPartition ?? 0));
+            weightClass = divisionWeightClass.weightClass;
+          } catch (e, st) {
+            throw Exception(
+              'The division weight class $weightClass cannot be found. '
+              'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n'
+              '$e\n'
+              '$st',
+            );
+          }
 
           final homeSyncId = int.tryParse(boutJson['homeWrestlerId'] ?? '');
           final homeMembership = homeSyncId == null
@@ -383,6 +411,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           final bout = Bout(
             // TODO: Duration not available
             orgSyncId: '${event.orgSyncId}_${weightClass.name.replaceAll(' ', '_')}',
+            organization: organization,
             duration: Duration.zero,
             weightClass: weightClass,
             result: getBoutResult(boutJson['result']),
@@ -635,7 +664,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           body = response.body;
         } else {
           if (seasonId == '2023' && ligaId == 'Bayernliga' && regionId == 'Süd') {
-            body = listCompetitionS2023LBayerligaRSuedJson;
+            body = listCompetitionS2023LBayernligaRSuedJson;
           } else {
             body = '{}';
           }

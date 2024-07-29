@@ -15,6 +15,7 @@ _$LeagueImpl _$$LeagueImplFromJson(Map<String, dynamic> json) => _$LeagueImpl(
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: DateTime.parse(json['endDate'] as String),
       division: Division.fromJson(json['division'] as Map<String, dynamic>),
+      boutDays: (json['boutDays'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$LeagueImplToJson(_$LeagueImpl instance) => <String, dynamic>{
@@ -25,4 +26,5 @@ Map<String, dynamic> _$$LeagueImplToJson(_$LeagueImpl instance) => <String, dyna
       'startDate': instance.startDate.toIso8601String(),
       'endDate': instance.endDate.toIso8601String(),
       'division': instance.division.toJson(),
+      'boutDays': instance.boutDays,
     };

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueEdit extends ConsumerStatefulWidget {
@@ -26,12 +28,14 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
   late DateTime _startDate;
   late DateTime _endDate;
   Division? _division;
+  late int _boutDays;
 
   @override
   void initState() {
     _startDate = widget.league?.startDate ?? DateTime.now();
     _endDate = widget.league?.endDate ?? DateTime.now();
     _division = widget.league?.division ?? widget.initialDivision;
+    _boutDays = widget.league?.boutDays ?? 2;
     super.initState();
   }
 
@@ -105,6 +109,22 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.calendar_month),
+        title: TextFormField(
+          initialValue: (widget.league?.boutDays ?? 0).toString(),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.boutDays,
+          ),
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 100)],
+          onSaved: (String? value) {
+            _boutDays = int.tryParse(value ?? '') ?? 1;
+            if (_boutDays < 1) _boutDays = 2;
+          },
+        ),
+      ),
+      ListTile(
         title: SearchableDropdown<Division>(
           icon: const Icon(Icons.inventory),
           selectedItem: _division,
@@ -137,14 +157,14 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(League(
-        id: widget.league?.id,
-        organization: widget.league?.organization ?? widget.initialDivision?.organization,
-        orgSyncId: widget.league?.orgSyncId,
-        name: _name!,
-        startDate: _startDate,
-        endDate: _endDate,
-        division: _division!,
-      ));
+          id: widget.league?.id,
+          organization: widget.league?.organization ?? widget.initialDivision?.organization,
+          orgSyncId: widget.league?.orgSyncId,
+          name: _name!,
+          startDate: _startDate,
+          endDate: _endDate,
+          division: _division!,
+          boutDays: _boutDays));
       navigator.pop();
     }
   }
