@@ -5,6 +5,7 @@
 import 'dart:io';
 
 import 'package:dotenv/dotenv.dart' show DotEnv;
+import 'package:logging/logging.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
@@ -35,6 +36,18 @@ Future<Pubspec> _parsePubspec() async {
 Future init() async {
   env.load(); // Load dotenv variables
   await _parsePubspec();
+
+  // Init logger
+  Logger.root.level = Level.INFO;
+  Logger.root.onRecord.listen((record) {
+    print('[${record.time}] ${record.level.name}: ${record.message}');
+    if (record.error != null) {
+      print('Error: ${record.error}');
+      if (record.stackTrace != null) {
+        print('StackTrace: ${record.stackTrace}');
+      }
+    }
+  });
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port

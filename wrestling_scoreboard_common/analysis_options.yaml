@@ -5,6 +5,7 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     prefer_relative_imports: true
+    avoid_print: true
 
 
 # Needed for freezed package:

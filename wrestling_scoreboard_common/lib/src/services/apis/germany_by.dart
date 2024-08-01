@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:country/country.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
 import '../../../common.dart';
 import '../../util/transaction.dart';
@@ -17,6 +18,7 @@ import 'mocks/wrestler.json.dart';
 
 class ByGermanyWrestlingApi extends WrestlingApi {
   final String apiUrl;
+  final log = Logger('ByGermanyWrestlingApi');
 
   @override
   final BasicAuthService? authService;
@@ -150,7 +152,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       if (clubName == null || clubId == null) return null;
       if (clubName != clubName.trim()) {
         clubName = clubName.trim();
-        print('Club with club name "$clubName" was trimmed');
+        log.warning('Club with club name "$clubName" was trimmed');
       }
       return Club(
         name: clubName,
@@ -233,7 +235,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       if (teamName == null || teamId == null) return null;
       if (teamName != teamName.trim()) {
         teamName = teamName.trim();
-        print('Team with team name "$teamName" was trimmed');
+        log.warning('Team with team name "$teamName" was trimmed');
       }
       return Team(
         name: teamName,
@@ -393,8 +395,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 null => null,
                 _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),
               };
-            } catch (e) {
-              print(e);
+            } catch (e, st) {
+              log.severe('Could not parse bout result $result', e, st);
             }
             return null;
           }
@@ -472,7 +474,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 actionType = BoutActionType.points;
                 pointCount = int.tryParse(actionStr);
                 if (pointCount == null) {
-                  throw Exception('Action type "$actionStr" could not be parsed.');
+                  throw Exception('Action type "$actionStr" could not be parsed: $boutJson');
                 }
             }
 
@@ -487,13 +489,19 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           }
 
           final String boutActionsJson = boutJson['annotation']?['1']?['points']?['value'] ?? '';
-          final Iterable<BoutAction> boutActions =
-              boutActionsJson.split(',').where((str) => str.isNotEmpty).map((str) => parseActionStr(str));
+          final Iterable<BoutAction> boutActions = boutActionsJson.split(',').where((str) => str.isNotEmpty).map((str) {
+            try {
+              return parseActionStr(str);
+            } catch (e, st) {
+              log.severe('Could not parse action str $str', e, st);
+              return null;
+            }
+          }).whereNotNull();
           return MapEntry(bout, boutActions);
         }));
         return Map.fromEntries(boutActionMapEntries);
-      } on Exception catch (e) {
-        print(e);
+      } on Exception catch (e, st) {
+        log.severe('Could not import bouts from bout list: $boutListJson', e, st);
         return {};
       }
     }
@@ -540,7 +548,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          print('Call API: $uri');
+          log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
           if (response.statusCode != 200) {
             throw Exception(
@@ -575,7 +583,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          print('Call API: $uri');
+          log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
           if (response.statusCode != 200) {
             throw Exception(
@@ -612,7 +620,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         });
         String body;
         if (!isMock) {
-          print('Call API: $uri');
+          log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
           if (response.statusCode != 200) {
             throw Exception(
@@ -655,7 +663,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          print('Call API: $uri');
+          log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
           if (response.statusCode != 200) {
             throw Exception(
@@ -696,7 +704,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          print('Call API: $uri');
+          log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
           if (response.statusCode != 200) {
             throw Exception(
@@ -743,7 +751,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           if (authService == null) {
             throw Exception('Failed to get the wrestler (passcode: $passCode): No credentials given.');
           }
-          print('Call API: $uri');
+          log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode != 200) {
             throw Exception(
