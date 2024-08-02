@@ -392,6 +392,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 'DN' => BoutResult.vfo,
                 'DQ' => BoutResult.dsq,
                 'DQ2' => BoutResult.dsq2,
+                '' => null,
                 null => null,
                 _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),
               };
