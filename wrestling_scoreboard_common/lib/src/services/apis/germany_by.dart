@@ -161,7 +161,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         organization: organization,
       );
     });
-    return clubs.whereNotNull().toSet();
+    return clubs.nonNulls.toSet();
   }
 
   @override
@@ -182,7 +182,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         final opponentMemberships = bouts.keys
             .where((bout) => bout.b?.participation.membership.club == club)
             .map((bout) => bout.b!.participation.membership);
-        return [...homeMemberships, ...opponentMemberships].whereNotNull();
+        return [...homeMemberships, ...opponentMemberships].nonNulls;
       }),
     ))
         .expand((element) => element);
@@ -244,7 +244,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         club: club,
       );
     });
-    return teams.whereNotNull().toSet();
+    return teams.nonNulls.toSet();
   }
 
   @override
@@ -327,7 +327,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           orgSyncId: entry.key,
         );
       }));
-      return teamMatches.whereNotNull().toSet();
+      return teamMatches.nonNulls.toSet();
     }
     return [];
   }
@@ -497,7 +497,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               log.severe('Could not parse action str $str', e, st);
               return null;
             }
-          }).whereNotNull();
+          }).nonNulls;
           return MapEntry(bout, boutActions);
         }));
         return Map.fromEntries(boutActionMapEntries);
