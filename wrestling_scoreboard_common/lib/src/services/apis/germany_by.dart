@@ -411,11 +411,14 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             winnerRole = BoutRole.blue;
           }
 
-          final bout = Bout(
-            // TODO: Duration not available
+          final String boutDurationJson = boutJson['annotation']?['1']?['duration']?['value'] ?? '';
+          final boutDurationSeconds = int.tryParse(boutDurationJson);
+          final boutDuration = boutDurationSeconds == null ? Duration.zero : Duration(seconds: boutDurationSeconds);
+
+          var bout = Bout(
             orgSyncId: '${event.orgSyncId}_${weightClass.name.replaceAll(' ', '_')}',
             organization: organization,
-            duration: Duration.zero,
+            duration: boutDuration,
             weightClass: weightClass,
             result: getBoutResult(boutJson['result']),
             winnerRole: winnerRole,
@@ -498,6 +501,11 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               return null;
             }
           }).nonNulls;
+
+          // Duration is not available in the new RDB spec, so use the last action as duration.
+          if (bout.duration == Duration.zero && boutActions.isNotEmpty) {
+            bout = bout.copyWith(duration: boutActions.last.duration);
+          }
           return MapEntry(bout, boutActions);
         }));
         return Map.fromEntries(boutActionMapEntries);

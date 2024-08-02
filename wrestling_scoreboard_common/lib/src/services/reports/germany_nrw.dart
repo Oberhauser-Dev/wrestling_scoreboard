@@ -122,6 +122,10 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       if (comment.isNotEmpty) {
         comment = '(comment ${_handleComment(comment)})';
       }
+      var duration = '';
+      if (bout.duration != Duration.zero) {
+        duration = '(duration ${bout.duration.inSeconds})';
+      }
       return <Object>[
         bout.weightClass?.weight ?? '', // 0:weightClass
         bout.weightClass?.style == WrestlingStyle.greco ? 'GR' : 'LL', // 1:stil
@@ -136,7 +140,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
         bout.r?.classificationPoints ?? 0, // 10:HeimPunkte
         bout.b?.classificationPoints ?? 0, // 11:GastPunkte
         bout.result?.toGerman ?? '', // 12:Ergebnis
-        '${ParticipantState.getTechnicalPoints(entry.value, BoutRole.red)}:${ParticipantState.getTechnicalPoints(entry.value, BoutRole.blue)}$points$comment',
+        '${ParticipantState.getTechnicalPoints(entry.value, BoutRole.red)}:${ParticipantState.getTechnicalPoints(entry.value, BoutRole.blue)}$points$comment$duration',
       ].join(';');
     });
     return [teamMatchInfos, ...boutInfos].join('\n');
