@@ -201,7 +201,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 57, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_57_kg_0',
+            orgSyncId: '2023_Bayernliga_57_kg_free_0',
           ),
           DivisionWeightClass(
             pos: 1,
@@ -209,7 +209,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 130, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_130_kg_0',
+            orgSyncId: '2023_Bayernliga_130_kg_greco_0',
           ),
           DivisionWeightClass(
             pos: 2,
@@ -217,7 +217,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 61, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_61_kg_0',
+            orgSyncId: '2023_Bayernliga_61_kg_greco_0',
           ),
           DivisionWeightClass(
             pos: 3,
@@ -225,7 +225,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 98, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_98_kg_0',
+            orgSyncId: '2023_Bayernliga_98_kg_free_0',
           ),
           DivisionWeightClass(
             pos: 4,
@@ -233,7 +233,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 66, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_66_kg_0',
+            orgSyncId: '2023_Bayernliga_66_kg_free_0',
           ),
           DivisionWeightClass(
             pos: 5,
@@ -241,7 +241,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 86, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_86_kg_0',
+            orgSyncId: '2023_Bayernliga_86_kg_greco_0',
           ),
           DivisionWeightClass(
             pos: 6,
@@ -249,7 +249,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 71, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_71_kg_0',
+            orgSyncId: '2023_Bayernliga_71_kg_greco_0',
           ),
           DivisionWeightClass(
             pos: 7,
@@ -257,7 +257,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 80, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_80_kg_0',
+            orgSyncId: '2023_Bayernliga_80_kg_free_0',
           ),
           DivisionWeightClass(
             pos: 8,
@@ -265,7 +265,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 75, suffix: 'A', unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_75_kg_A_0',
+            orgSyncId: '2023_Bayernliga_75_kg_A_free_0',
           ),
           DivisionWeightClass(
             pos: 9,
@@ -273,7 +273,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 75, suffix: 'B', unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_75_kg_B_0',
+            orgSyncId: '2023_Bayernliga_75_kg_B_greco_0',
           ),
           // Season partition 2
           DivisionWeightClass(
@@ -282,7 +282,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 57, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_57_kg_1',
+            orgSyncId: '2023_Bayernliga_57_kg_greco_1',
           ),
           DivisionWeightClass(
             pos: 1,
@@ -290,7 +290,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 130, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_130_kg_1',
+            orgSyncId: '2023_Bayernliga_130_kg_free_1',
           ),
           DivisionWeightClass(
             pos: 2,
@@ -298,7 +298,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 61, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_61_kg_1',
+            orgSyncId: '2023_Bayernliga_61_kg_free_1',
           ),
           DivisionWeightClass(
             pos: 3,
@@ -306,7 +306,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 98, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_98_kg_1',
+            orgSyncId: '2023_Bayernliga_98_kg_greco_1',
           ),
           DivisionWeightClass(
             pos: 4,
@@ -314,7 +314,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 66, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_66_kg_1',
+            orgSyncId: '2023_Bayernliga_66_kg_greco_1',
           ),
           DivisionWeightClass(
             pos: 5,
@@ -322,7 +322,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 86, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_86_kg_1',
+            orgSyncId: '2023_Bayernliga_86_kg_free_1',
           ),
           DivisionWeightClass(
             pos: 6,
@@ -330,7 +330,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 71, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_71_kg_1',
+            orgSyncId: '2023_Bayernliga_71_kg_free_1',
           ),
           DivisionWeightClass(
             pos: 7,
@@ -338,7 +338,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 80, suffix: null, unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_80_kg_1',
+            orgSyncId: '2023_Bayernliga_80_kg_greco_1',
           ),
           DivisionWeightClass(
             pos: 8,
@@ -346,7 +346,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.greco, weight: 75, suffix: 'A', unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_75_kg_A_1',
+            orgSyncId: '2023_Bayernliga_75_kg_A_greco_1',
           ),
           DivisionWeightClass(
             pos: 9,
@@ -354,7 +354,7 @@ void main() {
             division: testDivisionBayernliga,
             weightClass: WeightClass(style: WrestlingStyle.free, weight: 75, suffix: 'B', unit: WeightUnit.kilogram),
             organization: organizationNRW,
-            orgSyncId: '2023_Bayernliga_75_kg_B_1',
+            orgSyncId: '2023_Bayernliga_75_kg_B_free_1',
           ),
         ]);
       });
