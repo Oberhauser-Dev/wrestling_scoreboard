@@ -1,53 +1,79 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/foundation.dart';
+import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 
-exportPNG(String fileName, Uint8List image) async {
-  if (kIsWeb) {
-    await _createOutputDownload(fileName, Uri.dataFromBytes(image as List<int>, mimeType: 'image/png'));
-  } else {
-    final outputFile = await _createOutputFile("$fileName.png");
-    await outputFile?.writeAsBytes(image as List<int>);
-  }
+exportPNG({required String fileName, required Uint8List image}) async {
+  await _createOutputDownload(
+    content: image,
+    fileExtension: 'png',
+    fileName: fileName,
+    mimeType: 'image/png',
+  );
 }
 
-exportSQL(String fileName, String sqlString) async {
-  if (kIsWeb) {
-    await _createOutputDownload(fileName, Uri.dataFromString(sqlString, mimeType: 'application/sql', encoding: utf8));
-  } else {
-    String? outputPath = (await file_selector.getSaveLocation(suggestedName: fileName))?.path;
-    if (outputPath != null) {
-      final outputFile = await _createOutputFile("$fileName.sql");
-      await outputFile?.writeAsString(sqlString, encoding: const Utf8Codec());
-    }
-  }
+exportSQL({required String fileName, required String sqlString}) async {
+  await _createOutputDownload(
+    content: sqlString,
+    fileExtension: 'sql',
+    fileName: fileName,
+    mimeType: 'application/sql',
+  );
 }
 
-exportCSV(String fileName, List<String> table) async {
+exportCSV({required String fileName, required List<String> table}) async {
   String content = table.join('\n');
 
+  await _createOutputDownload(
+    content: content,
+    fileExtension: 'csv',
+    fileName: fileName,
+    mimeType: 'text/csv',
+  );
+}
+
+Future<void> _createOutputDownload<T>({
+  required T content,
+  required String mimeType,
+  required String fileName,
+  required String fileExtension,
+}) async {
   if (kIsWeb) {
-    await _createOutputDownload(fileName, Uri.dataFromString(content, mimeType: 'text/csv', encoding: utf8));
+    final Uri uri;
+    if (content is String) {
+      uri = Uri.dataFromString(content, mimeType: mimeType, encoding: utf8);
+    } else if (content is List<int>) {
+      uri = Uri.dataFromBytes(content, mimeType: mimeType);
+    } else {
+      throw UnimplementedError('Data type not supported: $T');
+    }
+    html.AnchorElement()
+      ..href = uri.toString()
+      ..download = fileName
+      ..style.display = 'none'
+      ..click();
   } else {
-    final outputFile = await _createOutputFile("$fileName.csv");
-    await outputFile?.writeAsString(content, encoding: const Utf8Codec());
+    String? outputPath;
+    if (isDesktop) {
+      outputPath = (await file_selector.getSaveLocation(suggestedName: '$fileName.$fileExtension'))?.path;
+    } else {
+      // TODO: Not supported on iOS yet: https://github.com/flutter/flutter/issues/111583
+      String? filePath = await file_selector.getDirectoryPath();
+      if (filePath == null) return;
+      outputPath = '$filePath/$fileName.$fileExtension';
+    }
+    if (outputPath == null) return;
+    final outputFile = File(outputPath);
+
+    if (content is String) {
+      await outputFile.writeAsString(content, encoding: const Utf8Codec());
+    } else if (content is List<int>) {
+      await outputFile.writeAsBytes(content);
+    } else {
+      throw UnimplementedError('Data type not supported: $T');
+    }
   }
-}
-
-Future<void> _createOutputDownload(String fileName, Uri fileData) async {
-  html.AnchorElement()
-    ..href = '$fileData'
-    ..download = fileName
-    ..style.display = 'none'
-    ..click();
-}
-
-Future<File?> _createOutputFile(String fileName) async {
-  String? filePath = await file_selector.getDirectoryPath();
-
-  if (filePath == null) return null;
-  return File("$filePath/$fileName");
 }

@@ -312,7 +312,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                       '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
                       'PostgreSQL-wrestling_scoreboard-dump.sql';
 
-                  exportSQL(fileName, sqlString);
+                  exportSQL(fileName: fileName, sqlString: sqlString);
                 }),
               ),
               ListTile(
