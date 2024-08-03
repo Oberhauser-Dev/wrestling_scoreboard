@@ -1,5 +1,5 @@
 // https://www.brv-ringen.de/Api/v1/cs/?op=listCompetition&sid=2023&ligaId=Bayernliga&rid=Süd
-final listCompetitionS2023LBayerligaRSuedJson = r'''
+final listCompetitionS2023LBayernligaRSuedJson = r'''
 {
   "rpcid": null,
   "rc": "ok",

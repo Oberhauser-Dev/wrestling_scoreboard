@@ -47,7 +47,7 @@ void main() {
     division: testDivisionBayernliga,
     boutDays: 14,
     organization: organizationNRW,
-    orgSyncId: '2023_Bayerliga_Süd',
+    orgSyncId: '2023_Bayernliga_Süd',
   );
 
   final testClubGeiselhoering =
@@ -552,11 +552,12 @@ void main() {
         // Why activity and passivity at different times, or points at different times?
         final expectedBout = Bout(
           orgSyncId: '005029c_61_kg',
-          duration: Duration.zero,
+          duration: Duration(minutes: 6),
           result: BoutResult.vpo,
           weightClass: weightClass,
           winnerRole: BoutRole.blue,
           pool: null,
+          organization: organizationNRW,
           r: ParticipantState(
             classificationPoints: 0,
             participation: Participation(
