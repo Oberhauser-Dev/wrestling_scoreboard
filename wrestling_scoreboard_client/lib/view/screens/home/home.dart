@@ -177,45 +177,53 @@ class HomeState extends ConsumerState<Home> {
                 },
               ),
             ),
-            Row(children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SimpleDropdown<Type?>(
-                  options: [null, ...dataTypes..remove(ParticipantState)].map((type) => MapEntry(
-                        type,
-                        Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
-                      )),
-                  selected: searchType,
-                  onChange: (value) {
-                    setState(() {
-                      searchType = value;
-                    });
-                  },
-                  isExpanded: false,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child:
-                    ManyConsumer<Organization, Null>(builder: (BuildContext context, List<Organization> organizations) {
-                  return SimpleDropdown<Organization?>(
-                    options: [null, ...organizations].map((organization) => MapEntry(
-                          organization,
-                          Text(organization != null
-                              ? organization.name
-                              : '${localizations.optionSelect} ${localizations.organization}'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SimpleDropdown<Type?>(
+                    options: [null, ...dataTypes..remove(ParticipantState)].map((type) => MapEntry(
+                          type,
+                          Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
                         )),
-                    selected: searchOrganization,
+                    selected: searchType,
                     onChange: (value) {
                       setState(() {
-                        searchOrganization = value;
+                        searchType = value;
                       });
                     },
                     isExpanded: false,
-                  );
-                }),
-              ),
-            ]),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ManyConsumer<Organization, Null>(
+                    builder: (BuildContext context, List<Organization> organizations) {
+                      return SimpleDropdown<Organization?>(
+                        options: [null, ...organizations].map((organization) => MapEntry(
+                              organization,
+                              Text(organization != null
+                                  ? organization.name
+                                  : '${localizations.optionSelect} ${localizations.organization}'),
+                            )),
+                        selected: searchOrganization,
+                        onChange: (value) {
+                          setState(() {
+                            searchOrganization = value;
+                          });
+                        },
+                        isExpanded: false,
+                      );
+                    },
+                    onException: (context, exception, {stackTrace}) => SizedBox(
+                      width: 250,
+                      child: ExceptionInfo(AppLocalizations.of(context)!.notFoundException, stackTrace: stackTrace),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(

@@ -82,8 +82,9 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
   final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
+  final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
 
-  const ManyConsumer({required this.builder, this.initialData, this.filterObject, super.key});
+  const ManyConsumer({required this.builder, this.onException, this.initialData, this.filterObject, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,6 +99,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
           .onWebSocketConnection
           .sink
           .add(WebSocketConnectionState.connecting),
+      onException: onException,
     );
   }
 }
