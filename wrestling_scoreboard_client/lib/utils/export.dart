@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:csv/csv.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/foundation.dart';
 import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
@@ -24,9 +25,10 @@ exportSQL({required String fileName, required String sqlString}) async {
   );
 }
 
-exportCSV({required String fileName, required List<String> table}) async {
-  String content = table.join('\n');
-
+/// Exports a [table] (list of rows) as CSV to the specified [fileName] (without extension).
+exportCSV({required String fileName, required List<List<dynamic>> table}) async {
+  const converter = ListToCsvConverter();
+  final content = converter.convert(table);
   await _createOutputDownload(
     content: content,
     fileExtension: 'csv',
