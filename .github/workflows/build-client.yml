@@ -142,8 +142,8 @@ jobs:
             ${{ matrix.platform == 'web' && '--wasm' || '' }} \
             ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href "/wrestling_scoreboard/"' || '' }} \
             --build-name=0.0.0-nightly.${GITHUB_SHA::7} \
-            --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api \
-            --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
+            --dart-define=API_URL=https://dev.server.wrestling-scoreboard.oberhauser.dev/api \
+            --dart-define=WEB_SOCKET_URL=wss://dev.server.wrestling-scoreboard.oberhauser.dev/ws
         shell: bash
       - name: Upload pages artifact
         if: inputs.upload_pages_artifact && matrix.platform == 'web'
