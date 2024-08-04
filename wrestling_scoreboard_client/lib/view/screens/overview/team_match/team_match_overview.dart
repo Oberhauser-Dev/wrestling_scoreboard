@@ -1,7 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +8,7 @@ import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
+import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
@@ -57,22 +54,17 @@ class TeamMatchOverview extends ConsumerWidget {
                         match.no,
                         match.home.team.name,
                         '–',
-                        '${match.guest.team.name}.rdb',
+                        match.guest.team.name,
                       ];
                       fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
                       final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
-                      String? outputPath = (await file_selector.getSaveLocation(
-                        suggestedName: fileName,
-                      ))
-                          ?.path;
-                      if (outputPath != null) {
-                        final bouts = await _getBouts(ref, match: match);
-                        final boutMap = Map.fromEntries(await Future.wait(
-                            bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
-                        final reportStr = reporter.exportTeamMatchReport(match, boutMap);
-                        final outputFile = File(outputPath);
-                        await outputFile.writeAsString(reportStr, encoding: const Utf8Codec());
-                      }
+
+                      final bouts = await _getBouts(ref, match: match);
+                      final boutMap = Map.fromEntries(await Future.wait(
+                          bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
+                      final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+
+                      await exportRDB(fileName: fileName, rdbString: reportStr);
                     } else {
                       if (context.mounted) {
                         showExceptionDialog(

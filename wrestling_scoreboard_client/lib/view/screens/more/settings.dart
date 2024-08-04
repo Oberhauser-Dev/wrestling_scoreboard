@@ -14,11 +14,11 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
+import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
-import 'package:wrestling_scoreboard_client/utils/export.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
   static const route = 'settings';
@@ -311,8 +311,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                   final fileName =
                       '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
                       'PostgreSQL-wrestling_scoreboard-dump.sql';
-
-                  exportSQL(fileName: fileName, sqlString: sqlString);
+                  await exportSQL(fileName: fileName, sqlString: sqlString);
                 }),
               ),
               ListTile(

@@ -7,8 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
-exportPNG({required String fileName, required Uint8List image}) async {
-  await _createOutputDownload(
+Future<void> exportPNG({required String fileName, required Uint8List image}) async {
+  await downloadSelector(
     content: image,
     fileExtension: 'png',
     fileName: fileName,
@@ -16,8 +16,8 @@ exportPNG({required String fileName, required Uint8List image}) async {
   );
 }
 
-exportSQL({required String fileName, required String sqlString}) async {
-  await _createOutputDownload(
+Future<void> exportSQL({required String fileName, required String sqlString}) async {
+  await downloadSelector(
     content: sqlString,
     fileExtension: 'sql',
     fileName: fileName,
@@ -25,11 +25,20 @@ exportSQL({required String fileName, required String sqlString}) async {
   );
 }
 
+Future<void> exportRDB({required String fileName, required String rdbString}) async {
+  await downloadSelector(
+    content: rdbString,
+    fileExtension: 'rdb',
+    fileName: fileName,
+    mimeType: 'text/rdb',
+  );
+}
+
 /// Exports a [table] (list of rows) as CSV to the specified [fileName] (without extension).
-exportCSV({required String fileName, required List<List<dynamic>> table}) async {
+Future<void> exportCSV({required String fileName, required List<List<dynamic>> table}) async {
   const converter = ListToCsvConverter();
   final content = converter.convert(table);
-  await _createOutputDownload(
+  await downloadSelector(
     content: content,
     fileExtension: 'csv',
     fileName: fileName,
@@ -37,7 +46,7 @@ exportCSV({required String fileName, required List<List<dynamic>> table}) async 
   );
 }
 
-Future<void> _createOutputDownload<T>({
+Future<void> downloadSelector<T>({
   required T content,
   required String mimeType,
   required String fileName,
