@@ -308,10 +308,10 @@ class CustomSettingsScreen extends ConsumerWidget {
                 onTap: () => catchAsync(context, () async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   final sqlString = await dataManager.exportDatabase();
-                  final fileName =
+                  final fileBaseName =
                       '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-                      'PostgreSQL-wrestling_scoreboard-dump.sql';
-                  await exportSQL(fileName: fileName, sqlString: sqlString);
+                      'PostgreSQL-wrestling_scoreboard-dump';
+                  await exportSQL(fileBaseName: fileBaseName, sqlString: sqlString);
                 }),
               ),
               ListTile(

@@ -57,14 +57,14 @@ class TeamMatchOverview extends ConsumerWidget {
                         match.guest.team.name,
                       ];
                       fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-                      final fileName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+                      final fileBaseName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
 
                       final bouts = await _getBouts(ref, match: match);
                       final boutMap = Map.fromEntries(await Future.wait(
                           bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
                       final reportStr = reporter.exportTeamMatchReport(match, boutMap);
 
-                      await exportRDB(fileName: fileName, rdbString: reportStr);
+                      await exportRDB(fileBaseName: fileBaseName, rdbString: reportStr);
                     } else {
                       if (context.mounted) {
                         showExceptionDialog(

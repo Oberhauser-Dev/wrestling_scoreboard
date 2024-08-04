@@ -7,41 +7,41 @@ import 'package:flutter/foundation.dart';
 import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
-Future<void> exportPNG({required String fileName, required Uint8List image}) async {
+Future<void> exportPNG({required String fileBaseName, required Uint8List image}) async {
   await downloadSelector(
     content: image,
     fileExtension: 'png',
-    fileName: fileName,
+    fileBaseName: fileBaseName,
     mimeType: 'image/png',
   );
 }
 
-Future<void> exportSQL({required String fileName, required String sqlString}) async {
+Future<void> exportSQL({required String fileBaseName, required String sqlString}) async {
   await downloadSelector(
     content: sqlString,
     fileExtension: 'sql',
-    fileName: fileName,
+    fileBaseName: fileBaseName,
     mimeType: 'application/sql',
   );
 }
 
-Future<void> exportRDB({required String fileName, required String rdbString}) async {
+Future<void> exportRDB({required String fileBaseName, required String rdbString}) async {
   await downloadSelector(
     content: rdbString,
     fileExtension: 'rdb',
-    fileName: fileName,
+    fileBaseName: fileBaseName,
     mimeType: 'text/rdb',
   );
 }
 
-/// Exports a [table] (list of rows) as CSV to the specified [fileName] (without extension).
-Future<void> exportCSV({required String fileName, required List<List<dynamic>> table}) async {
+/// Exports a [table] (list of rows) as CSV to the specified [fileBaseName] (without extension).
+Future<void> exportCSV({required String fileBaseName, required List<List<dynamic>> table}) async {
   const converter = ListToCsvConverter();
   final content = converter.convert(table);
   await downloadSelector(
     content: content,
     fileExtension: 'csv',
-    fileName: fileName,
+    fileBaseName: fileBaseName,
     mimeType: 'text/csv',
   );
 }
@@ -49,9 +49,10 @@ Future<void> exportCSV({required String fileName, required List<List<dynamic>> t
 Future<void> downloadSelector<T>({
   required T content,
   required String mimeType,
-  required String fileName,
+  required String fileBaseName,
   required String fileExtension,
 }) async {
+  final fileName = '$fileBaseName.$fileExtension';
   if (kIsWeb) {
     final Uri uri;
     if (content is String) {
@@ -69,12 +70,12 @@ Future<void> downloadSelector<T>({
   } else {
     String? outputPath;
     if (isDesktop) {
-      outputPath = (await file_selector.getSaveLocation(suggestedName: '$fileName.$fileExtension'))?.path;
+      outputPath = (await file_selector.getSaveLocation(suggestedName: fileName))?.path;
     } else {
       // TODO: Not supported on iOS yet: https://github.com/flutter/flutter/issues/111583
       String? filePath = await file_selector.getDirectoryPath();
       if (filePath == null) return;
-      outputPath = '$filePath/$fileName.$fileExtension';
+      outputPath = '$filePath/$fileName';
     }
     if (outputPath == null) return;
     final outputFile = File(outputPath);
