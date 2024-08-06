@@ -92,7 +92,7 @@ abstract class DataManager {
     Type? type,
     int? organizationId,
     AuthService? authService,
-    bool includeApiProviderResults,
+    bool includeApiProviderResults = false,
   });
 
   final Map<Type, StreamController<DataObject>> _singleStreamControllers = {};

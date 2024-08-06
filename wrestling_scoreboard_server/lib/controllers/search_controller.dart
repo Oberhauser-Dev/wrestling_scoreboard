@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/organization_controller.
 import 'package:wrestling_scoreboard_server/request.dart';
 
 class SearchController {
-  /// Reset all tables
+  /// Search all tables
   Future<Response> search(Request request) async {
     final queryParams = request.requestedUri.queryParameters;
 
