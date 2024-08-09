@@ -36,27 +36,27 @@ class WindowStateScaffold extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     final alwaysShowAppBar = !hideAppBarOnFullscreen || isMobile;
-    final appBar = AppBar(
-      title: appBarTitle,
-      actions: [
-        ...?actions,
-        IconButton(
-          icon: const Icon(Icons.fullscreen),
-          onPressed: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
-          tooltip: localizations.toggleFullscreen,
-        ),
-      ],
-    );
-    if (alwaysShowAppBar) {
-      return Scaffold(
-        appBar: appBar,
-        body: body,
-      );
-    }
     return LoadingBuilder<WindowState>(
         future: ref.watch(windowStateNotifierProvider),
         builder: (BuildContext context, WindowState data) {
           final hideAppBar = data == WindowState.fullscreen;
+          final appBar = AppBar(
+            title: appBarTitle,
+            actions: [
+              ...?actions,
+              IconButton(
+                icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
+                onPressed: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
+                tooltip: localizations.toggleFullscreen,
+              ),
+            ],
+          );
+          if (alwaysShowAppBar) {
+            return Scaffold(
+              appBar: appBar,
+              body: body,
+            );
+          }
           return Stack(
             alignment: AlignmentDirectional.topStart,
             children: [
