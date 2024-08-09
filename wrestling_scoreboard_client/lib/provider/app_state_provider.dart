@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
 import 'package:wrestling_scoreboard_client/view/utils.dart';
+import 'package:web/web.dart' as web;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 part 'app_state_provider.g.dart';
 
@@ -12,8 +14,8 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
   @override
   Raw<Future<WindowState>> build() async {
     if (kIsWeb) {
-      html.document.addEventListener('fullscreenchange', (event) {
-        if (html.document.fullscreenElement != null) {
+      web.document.addEventListener('fullscreenchange', (event) {
+        if (web.document.fullscreenElement != null) {
           _setWindowState(WindowState.fullscreen);
         } else {
           _setWindowState(WindowState.windowed);
@@ -93,7 +95,8 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
   Future<void> requestWindowState({required bool isFullscreen}) async {
     if (isFullscreen) {
       if (kIsWeb) {
-        html.document.documentElement?.requestFullscreen();
+        await web.document.documentElement?.requestFullscreen();
+        await web.document.documentElement?.requestFullscreen();
       } else if (isDesktop) {
         await windowManager.setFullScreen(true);
       } else {
@@ -101,7 +104,7 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
       }
     } else {
       if (kIsWeb) {
-        html.document.exitFullscreen();
+        await web.document.exitFullscreen();
       } else if (isDesktop) {
         await windowManager.setFullScreen(false);
       } else {
