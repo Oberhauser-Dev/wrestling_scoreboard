@@ -1,58 +1,19 @@
-import 'dart:js_interop';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:web/web.dart' as web;
-import 'package:window_manager/window_manager.dart';
-import 'package:wrestling_scoreboard_client/view/utils.dart';
+import 'package:wrestling_scoreboard_client/platform/interface.dart';
+import 'package:wrestling_scoreboard_client/platform/none.dart'
+    if (dart.library.io) 'package:wrestling_scoreboard_client/platform/io.dart'
+    if (dart.library.js_interop) 'package:wrestling_scoreboard_client/platform/web.dart';
 
 part 'app_state_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
+class WindowStateNotifier extends _$WindowStateNotifier {
+  late WindowStateManager windowStateManager;
+
   @override
   Raw<Future<WindowState>> build() async {
-    if (kIsWeb) {
-      web.document.addEventListener(
-        'fullscreenchange',
-        (web.Event event) {
-          if (web.document.fullscreenElement != null) {
-            _setWindowState(WindowState.fullscreen);
-          } else {
-            _setWindowState(WindowState.windowed);
-          }
-        }.toJS,
-      );
-    } else if (isDesktop) {
-      windowManager.addListener(this);
-    } else {
-      await SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
-        await _setWindowState(systemOverlaysAreVisible ? WindowState.windowed : WindowState.fullscreen);
-      });
-    }
-
-    if (isDesktop && await windowManager.isFullScreen()) {
-      return WindowState.fullscreen;
-    }
-    return WindowState.windowed;
-  }
-
-  /// For Desktop only.
-  @override
-  void onWindowEnterFullScreen() {
-    _setWindowState(WindowState.fullscreen);
-  }
-
-  /// For Desktop only.
-  @override
-  void onWindowLeaveFullScreen() {
-    // FIXME: canvas state is not redrawn, if exiting fullscreen mode.
-    // Therefore, the state is updated after the window finished adapting.
-    // Unfortunately, no state is provided, when the window finished leaving fullscreen mode.
-    Future.delayed(const Duration(milliseconds: 400)).then((value) {
-      _setWindowState(WindowState.windowed);
-    });
+    windowStateManager = getWindowStateManager(setWindowState: _setWindowState);
+    return await windowStateManager.getInitialState();
   }
 
   Future<void> requestToggleFullScreen() async {
@@ -96,26 +57,7 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
   }
 
   Future<void> requestWindowState({required bool isFullscreen}) async {
-    if (isFullscreen) {
-      if (kIsWeb) {
-        await web.document.documentElement?.requestFullscreen().toDart;
-      } else if (isDesktop) {
-        await windowManager.setFullScreen(true);
-      } else {
-        await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-      }
-    } else {
-      if (kIsWeb) {
-        await web.document.exitFullscreen().toDart;
-      } else if (isDesktop) {
-        await windowManager.setFullScreen(false);
-      } else {
-        await SystemChrome.setEnabledSystemUIMode(
-          SystemUiMode.manual,
-          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
-        );
-      }
-    }
+    windowStateManager.requestWindowState(isFullscreen: isFullscreen);
   }
 
   Future<void> _setWindowState(WindowState newState) async {
@@ -124,15 +66,5 @@ class WindowStateNotifier extends _$WindowStateNotifier with WindowListener {
     if (newState != currentState && !(currentState.isFullscreen() && newState.isFullscreen())) {
       state = Future.value(newState);
     }
-  }
-}
-
-enum WindowState {
-  windowed,
-  fullscreen,
-  fullscreenAppbar;
-
-  bool isFullscreen() {
-    return this == WindowState.fullscreen || this == WindowState.fullscreenAppbar;
   }
 }

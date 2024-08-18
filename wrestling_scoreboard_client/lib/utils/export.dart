@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/foundation.dart';
-import 'package:wrestling_scoreboard_client/platform/html.dart' if (dart.library.html) 'dart:html' as html;
+import 'package:wrestling_scoreboard_client/platform/none.dart' if (dart.library.js_interop) 'package:web/web.dart'
+    as web;
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
 Future<void> exportPNG({required String fileBaseName, required Uint8List image}) async {
@@ -62,7 +63,7 @@ Future<void> downloadSelector<T>({
     } else {
       throw UnimplementedError('Data type not supported: $T');
     }
-    html.AnchorElement()
+    web.HTMLAnchorElement()
       ..href = uri.toString()
       ..download = fileName
       ..style.display = 'none'

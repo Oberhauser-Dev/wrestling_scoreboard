@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/platform/interface.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
