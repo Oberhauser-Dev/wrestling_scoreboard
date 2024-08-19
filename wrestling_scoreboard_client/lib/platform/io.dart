@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
-import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
 getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) => IOWindowStateManager(
