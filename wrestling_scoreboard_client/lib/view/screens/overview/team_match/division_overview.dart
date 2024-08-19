@@ -13,8 +13,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class DivisionOverview extends ConsumerWidget {
@@ -76,14 +78,19 @@ class DivisionOverview extends ConsumerWidget {
           dataObject: data,
           label: localizations.division,
           details: data.name,
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.divisions)),
+            Tab(child: HeadingText(localizations.leagues)),
+            Tab(child: HeadingText(localizations.weightClasses)),
+          ],
+          body: TabGroup(items: [
             description,
             ManyConsumer<Division, Division>(
               filterObject: data,
               builder: (BuildContext context, List<Division> childDivisions) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.divisions,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -114,9 +121,8 @@ class DivisionOverview extends ConsumerWidget {
             ManyConsumer<League, Division>(
               filterObject: data,
               builder: (BuildContext context, List<League> leagues) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.leagues,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -147,9 +153,8 @@ class DivisionOverview extends ConsumerWidget {
             ManyConsumer<DivisionWeightClass, Division>(
               filterObject: data,
               builder: (BuildContext context, List<DivisionWeightClass> divisionWeightClasses) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.weightClasses,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(

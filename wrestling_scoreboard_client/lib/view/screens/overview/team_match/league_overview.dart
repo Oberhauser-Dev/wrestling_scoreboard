@@ -11,8 +11,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueOverview extends ConsumerWidget {
@@ -67,14 +69,18 @@ class LeagueOverview extends ConsumerWidget {
           actions: [
             OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.league)
           ],
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.participatingTeams)),
+            Tab(child: HeadingText(localizations.matches)),
+          ],
+          body: TabGroup(items: [
             description,
             ManyConsumer<LeagueTeamParticipation, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueTeamParticipation> teamParticipations) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.participatingTeams,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(

@@ -11,8 +11,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class OrganizationOverview extends ConsumerWidget {
@@ -65,14 +67,20 @@ class OrganizationOverview extends ConsumerWidget {
           label: localizations.organization,
           details: data.name,
           actions: [OrganizationImportAction(id: id, orgId: id, importType: OrganizationImportType.organization)],
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.organizations)),
+            Tab(child: HeadingText(localizations.divisions)),
+            Tab(child: HeadingText(localizations.clubs)),
+            Tab(child: HeadingText(localizations.competitions))
+          ],
+          body: TabGroup(items: [
             description,
             ManyConsumer<Organization, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Organization> childOrganizations) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.organizations,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -103,9 +111,8 @@ class OrganizationOverview extends ConsumerWidget {
             ManyConsumer<Division, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Division> organizations) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.divisions,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -136,9 +143,8 @@ class OrganizationOverview extends ConsumerWidget {
             ManyConsumer<Club, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Club> clubs) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.clubs,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -169,9 +175,8 @@ class OrganizationOverview extends ConsumerWidget {
             ManyConsumer<Competition, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Competition> competitions) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.competitions,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {

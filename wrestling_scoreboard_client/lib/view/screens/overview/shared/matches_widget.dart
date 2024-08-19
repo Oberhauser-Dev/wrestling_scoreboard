@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
@@ -16,13 +15,11 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     return ManyConsumer<TeamMatch, T>(
       filterObject: filterObject,
       builder: (BuildContext context, List<TeamMatch> matches) {
-        return ListGroup(
+        return GroupedList(
           header: HeadingItem(
-            title: localizations.matches,
             trailing: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () => Navigator.push(

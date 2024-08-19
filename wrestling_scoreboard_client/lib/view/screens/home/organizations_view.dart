@@ -14,10 +14,10 @@ class OrganizationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return ResponsiveScrollView(
+    return ResponsiveContainer(
       child: ManyConsumer<Organization, Null>(
         builder: (BuildContext context, List<Organization> organizations) {
-          return ListGroup(
+          return GroupedList(
             header: HeadingItem(
               title: localizations.organizations,
               trailing: IconButton(

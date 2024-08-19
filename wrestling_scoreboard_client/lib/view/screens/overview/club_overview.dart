@@ -11,8 +11,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubOverview extends ConsumerWidget {
@@ -49,14 +51,19 @@ class ClubOverview extends ConsumerWidget {
           dataObject: data,
           label: localizations.club,
           details: data.name,
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.teams)),
+            Tab(child: HeadingText(localizations.memberships)),
+          ],
+          // TODO
+          body: TabGroup(items: [
             description,
             ManyConsumer<Team, Club>(
               filterObject: data,
               builder: (BuildContext context, List<Team> teams) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.teams,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(
@@ -82,9 +89,8 @@ class ClubOverview extends ConsumerWidget {
             ManyConsumer<Membership, Club>(
               filterObject: data,
               builder: (BuildContext context, List<Membership> memberships) {
-                return ListGroup(
+                return GroupedList(
                   header: HeadingItem(
-                    title: localizations.memberships,
                     trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () => Navigator.push(

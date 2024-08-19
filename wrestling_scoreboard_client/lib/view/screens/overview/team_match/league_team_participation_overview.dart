@@ -5,8 +5,10 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueTeamParticipationOverview extends ConsumerWidget {
@@ -48,7 +50,10 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
           dataObject: data,
           label: localizations.participatingTeam,
           details: data.team.name,
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+          ],
+          body: TabGroup(items: [
             description,
           ]),
         );

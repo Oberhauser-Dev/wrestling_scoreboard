@@ -10,8 +10,10 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class AbstractPersonOverview extends ConsumerWidget implements AbstractOverview<Person> {
@@ -25,7 +27,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
     required Widget editPage,
     required VoidCallback onDelete,
     List<Widget>? tiles,
-    List<Widget> Function(Person data)? buildRelations,
+    Map<Tab, Widget> Function(Person data)? buildRelations,
     required int dataId,
     Person? initialData,
   }) {
@@ -73,13 +75,18 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
             ),
           ],
         );
+        final relations = buildRelations != null ? buildRelations(person) : {};
         return OverviewScaffold<Person>(
           dataObject: person,
           label: classLocale,
           details: person.fullName,
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            ...relations.keys,
+          ],
+          body: TabGroup(items: [
             description,
-            if (buildRelations != null) ...buildRelations(person),
+            ...relations.values,
           ]),
         );
       },
@@ -110,13 +117,12 @@ class PersonOverview extends AbstractPersonOverview {
         initialOrganization: person?.organization ?? initialOrganization,
       ),
       onDelete: () async {},
-      buildRelations: (Person person) => [
-        ManyConsumer<Membership, Person>(
+      buildRelations: (Person person) => {
+        Tab(child: HeadingText(localizations.memberships)): ManyConsumer<Membership, Person>(
           filterObject: person,
           builder: (BuildContext context, List<Membership> memberships) {
-            return ListGroup(
+            return GroupedList(
               header: HeadingItem(
-                title: localizations.memberships,
                 trailing: IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () => Navigator.push(
@@ -143,7 +149,7 @@ class PersonOverview extends AbstractPersonOverview {
             );
           },
         ),
-      ],
+      },
     );
   }
 

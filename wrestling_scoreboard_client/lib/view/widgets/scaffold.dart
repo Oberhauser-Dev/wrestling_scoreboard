@@ -23,12 +23,14 @@ class WindowStateScaffold extends ConsumerWidget {
   const WindowStateScaffold({
     super.key,
     this.appBarTitle,
+    this.appBarBottom,
     required this.body,
     this.actions,
     this.hideAppBarOnFullscreen = false,
   });
 
   final Widget? appBarTitle;
+  final PreferredSizeWidget? appBarBottom;
   final bool hideAppBarOnFullscreen;
   final Widget body;
   final List<Widget>? actions;
@@ -43,6 +45,7 @@ class WindowStateScaffold extends ConsumerWidget {
           final hideAppBar = data == WindowState.fullscreen;
           final appBar = AppBar(
             title: appBarTitle,
+            bottom: appBarBottom,
             actions: [
               ...?actions,
               IconButton(

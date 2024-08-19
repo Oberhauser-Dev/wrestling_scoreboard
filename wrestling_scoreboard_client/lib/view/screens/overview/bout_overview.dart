@@ -7,8 +7,10 @@ import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<Bout> {
@@ -84,7 +86,10 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
           dataObject: data,
           label: classLocale,
           details: data.title(context),
-          body: GroupedList(items: [
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+          ],
+          body: TabGroup(items: [
             description,
           ]),
         );

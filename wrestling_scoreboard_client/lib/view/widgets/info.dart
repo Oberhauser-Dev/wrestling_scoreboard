@@ -23,9 +23,8 @@ class InfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return ListGroup(
+    return GroupedList(
       header: HeadingItem(
-        title: localizations.info,
         trailing: Wrap(
           children: [
             IconButton(

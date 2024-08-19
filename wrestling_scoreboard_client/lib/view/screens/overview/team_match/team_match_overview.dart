@@ -17,8 +17,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchOverview extends ConsumerWidget {
@@ -87,6 +89,12 @@ class TeamMatchOverview extends ConsumerWidget {
                 ),
               )
             ],
+            tabs: [
+              Tab(child: HeadingText(localizations.info)),
+              Tab(child: HeadingText(localizations.persons)),
+              if (match.league != null) Tab(child: HeadingText(localizations.lineups)),
+              Tab(child: HeadingText(localizations.bouts)),
+            ],
             body: SingleConsumer<Lineup>(
               id: match.home.id!,
               initialData: match.home,
@@ -147,8 +155,8 @@ class TeamMatchOverview extends ConsumerWidget {
                             icon: Icons.sunny_snowing,
                           ),
                         ]),
-                    ListGroup(
-                      header: HeadingItem(title: localizations.persons),
+                    GroupedList(
+                      header: const HeadingItem(),
                       items: [
                         ContentItem(
                           title: match.referee?.fullName ?? '-',
@@ -183,8 +191,8 @@ class TeamMatchOverview extends ConsumerWidget {
                       ],
                     ),
                     if (match.league != null)
-                      ListGroup(
-                        header: HeadingItem(title: localizations.lineups),
+                      GroupedList(
+                        header: const HeadingItem(),
                         items: [
                           ContentItem(
                               title: homeLineup.team.name,
@@ -211,9 +219,8 @@ class TeamMatchOverview extends ConsumerWidget {
                     ManyConsumer<TeamMatchBout, TeamMatch>(
                       filterObject: match,
                       builder: (BuildContext context, List<TeamMatchBout> teamMatchBouts) {
-                        return ListGroup(
+                        return GroupedList(
                           header: HeadingItem(
-                            title: localizations.bouts,
                             trailing: IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () => Navigator.push(
@@ -241,7 +248,7 @@ class TeamMatchOverview extends ConsumerWidget {
                       },
                     ),
                   ];
-                  return GroupedList(items: items);
+                  return TabGroup(items: items);
                 },
               ),
             ),

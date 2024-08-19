@@ -7,8 +7,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamOverview<T extends DataObject> extends ConsumerWidget {
@@ -52,7 +54,11 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             actions: [
               OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.team)
             ],
-            body: GroupedList(items: [
+            tabs: [
+              Tab(child: HeadingText(localizations.info)),
+              Tab(child: HeadingText(localizations.matches)),
+            ],
+            body: TabGroup(items: [
               description,
               MatchesWidget<Team>(filterObject: data),
             ]),

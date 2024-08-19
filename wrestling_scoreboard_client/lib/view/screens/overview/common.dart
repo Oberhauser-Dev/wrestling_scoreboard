@@ -47,6 +47,7 @@ class OverviewScaffold<T extends DataObject> extends ConsumerWidget {
     required this.details,
     this.actions,
     required this.dataObject,
+    required this.tabs,
   });
 
   final Widget body;
@@ -54,34 +55,39 @@ class OverviewScaffold<T extends DataObject> extends ConsumerWidget {
   final String details;
   final List<Widget>? actions;
   final T dataObject;
+  final List<Tab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     final tableName = getTableNameFromType(T);
-    return WindowStateScaffold(
-      appBarTitle: AppBarTitle(label: label, details: details),
-      actions: [
-        ...?actions,
-        LoadingBuilder(
-            future: ref.watch(favoritesNotifierProvider),
-            builder: (BuildContext context, favorites) {
-              final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
-              return IconButton(
-                onPressed: () {
-                  final notifier = ref.read(favoritesNotifierProvider.notifier);
-                  if (isFavorite) {
-                    notifier.removeFavorite(tableName, dataObject.id!);
-                  } else {
-                    notifier.addFavorite(tableName, dataObject.id!);
-                  }
-                },
-                icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
-                tooltip: localizations.favorite,
-              );
-            }),
-      ],
-      body: body,
+    return DefaultTabController(
+      length: tabs.length,
+      child: WindowStateScaffold(
+        appBarTitle: AppBarTitle(label: label, details: details),
+        appBarBottom: TabBar(tabs: tabs, tabAlignment: TabAlignment.center, isScrollable: true),
+        actions: [
+          ...?actions,
+          LoadingBuilder(
+              future: ref.watch(favoritesNotifierProvider),
+              builder: (BuildContext context, favorites) {
+                final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
+                return IconButton(
+                  onPressed: () {
+                    final notifier = ref.read(favoritesNotifierProvider.notifier);
+                    if (isFavorite) {
+                      notifier.removeFavorite(tableName, dataObject.id!);
+                    } else {
+                      notifier.addFavorite(tableName, dataObject.id!);
+                    }
+                  },
+                  icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
+                  tooltip: localizations.favorite,
+                );
+              }),
+        ],
+        body: body,
+      ),
     );
   }
 }

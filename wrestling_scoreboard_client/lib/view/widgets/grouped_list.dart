@@ -1,31 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
-
-/// The base class for the different types of items the list can contain.
-abstract class ListItem {
-  Widget? buildLeading(BuildContext context);
-
-  /// The title line to show in a list item.
-  Widget buildTitle(BuildContext context);
-
-  /// The subtitle line, if any, to show in a list item.
-  Widget? buildSubtitle(BuildContext context);
-
-  Function()? buildOnTab();
-}
 
 /// A ListItem that contains data to display a heading.
 class HeadingItem extends StatelessWidget {
-  final String title;
+  final String? title;
   final Widget? trailing;
 
-  const HeadingItem({required this.title, this.trailing, super.key});
+  const HeadingItem({this.title, this.trailing, super.key});
 
   @override
   Widget build(BuildContext context) => ListTile(
-        title: HeadingText(title),
+        title: title != null ? HeadingText(title!) : null,
         trailing: trailing,
       );
 }
@@ -52,11 +38,11 @@ class ContentItem extends StatelessWidget {
   }
 }
 
-class ListGroup extends StatelessWidget {
+class GroupedList extends StatelessWidget {
   final Widget header;
   final Iterable<Widget> items;
 
-  const ListGroup({required this.header, this.items = const [], super.key});
+  const GroupedList({required this.header, this.items = const [], super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,31 +59,6 @@ class ListGroup extends StatelessWidget {
         )),
       ));
     }
-    return Column(children: tiles);
-  }
-}
-
-class GroupedList extends StatelessWidget {
-  final List<Widget> items;
-
-  const GroupedList({required this.items, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ResponsiveContainer(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return Column(
-            children: [
-              if (index != 0) const Divider(indent: 16, endIndent: 16),
-              item,
-            ],
-          );
-        },
-      ),
-    );
+    return ListView(children: tiles);
   }
 }
