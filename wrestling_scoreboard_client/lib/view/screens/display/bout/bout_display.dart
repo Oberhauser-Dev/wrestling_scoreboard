@@ -28,14 +28,15 @@ import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) {
-  context.push('/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutDisplay.route}/${bout.id}');
+  context.push(
+      '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}');
 }
 
 /// Class to load a single bout, while also consider the previous and the next bout.
 /// So must load the whole list of bouts to keep track of what comes next.
 /// TODO: This may can be done server side with its own request in the future.
 class TeamMatchBoutDisplay extends StatelessWidget {
-  static const route = 'team_match_bout';
+  static const route = 'team_match_bout_display';
   final int matchId;
   final int teamMatchBoutId;
   final TeamMatch? initialMatch;
@@ -79,7 +80,9 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                         boutIndex: teamMatchBoutIndex,
                         bout: bout,
                         onPressBoutInfo: (BuildContext context) {
-                          context.push('/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
+                          // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+                          context.go(
+                              '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
                         },
                         navigateToBoutByIndex: (context, index) {
                           context.pop();

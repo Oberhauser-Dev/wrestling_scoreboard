@@ -73,14 +73,23 @@ getRouter() {
                     builder: (context, state) => MatchDisplay(id: int.parse(state.pathParameters['match_id']!)),
                   ),
                   GoRoute(
-                    path: '${TeamMatchBoutDisplay.route}/:team_match_bout_id',
-                    parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-                    builder: (context, state) {
-                      final matchId = int.parse(state.pathParameters['match_id']!);
-                      final teamMatchBoutId = int.parse(state.pathParameters['team_match_bout_id']!);
-                      return TeamMatchBoutDisplay(matchId: matchId, teamMatchBoutId: teamMatchBoutId);
-                    },
-                  ),
+                      path: '${TeamMatchBoutOverview.route}/:team_match_bout_id',
+                      parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                      builder: (context, state) {
+                        final teamMatchBoutId = int.parse(state.pathParameters['team_match_bout_id']!);
+                        return TeamMatchBoutOverview(id: teamMatchBoutId);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: TeamMatchBoutDisplay.route,
+                          parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                          builder: (context, state) {
+                            final matchId = int.parse(state.pathParameters['match_id']!);
+                            final teamMatchBoutId = int.parse(state.pathParameters['team_match_bout_id']!);
+                            return TeamMatchBoutDisplay(matchId: matchId, teamMatchBoutId: teamMatchBoutId);
+                          },
+                        ),
+                      ]),
                 ],
               ),
               GoRoute(

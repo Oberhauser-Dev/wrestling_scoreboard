@@ -112,7 +112,8 @@ class MatchDisplay extends StatelessWidget {
   }
 
   handleSelectedTeamMatch(TeamMatch match, BuildContext context) {
-    context.push('/${TeamMatchOverview.route}/${match.id}');
+    // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+    context.go('/${TeamMatchOverview.route}/${match.id}');
   }
 }
 
