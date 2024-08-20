@@ -399,7 +399,7 @@ class _EntityGrid extends StatelessWidget {
         builder: (context, data) {
           return InkWell(
             onTap: () {
-              context.go('/$route/$id');
+              context.push('/$route/$id');
             },
             child: Card(
                 clipBehavior: Clip.hardEdge,
