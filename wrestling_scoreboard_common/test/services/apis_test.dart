@@ -117,7 +117,7 @@ void main() {
     wrestlingApi = WrestlingApiProvider.deNwRingenApi.getApi(
       organizationNRW,
       authService: BasicAuthService(username: '', password: ''),
-      getSingleOfOrg: <T extends DataObject>(String orgSyncId, {required int orgId}) async {
+      getSingleOfOrg: <T extends Organizational>(String orgSyncId, {required int orgId}) async {
         switch (T) {
           case const (Club):
             return (await wrestlingApi.importClubs()).singleWhere((club) => club.orgSyncId == orgSyncId) as T;

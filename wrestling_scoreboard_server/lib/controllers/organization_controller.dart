@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/competition_controller.d
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -55,7 +56,7 @@ class OrganizationController extends EntityController<Organization> {
     }
 
     final organization = await getSingle(organizationId);
-    return organization.getApi(EntityController.getSingleFromDataTypeOfOrg, authService: authService);
+    return organization.getApi(OrganizationalController.getSingleFromDataTypeOfOrg, authService: authService);
   }
 
   Future<Response> import(Request request, String organizationId) async {

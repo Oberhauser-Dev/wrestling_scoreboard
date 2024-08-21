@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_server/controllers/league_team_participatio
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
@@ -16,7 +17,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'bout_controller.dart';
 
-class LeagueController extends EntityController<League> {
+class LeagueController extends OrganizationalController<League> {
   static final LeagueController _singleton = LeagueController._internal();
 
   factory LeagueController() {

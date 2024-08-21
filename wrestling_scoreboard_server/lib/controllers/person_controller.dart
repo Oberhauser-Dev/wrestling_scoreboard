@@ -2,11 +2,12 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'entity_controller.dart';
 
-class PersonController extends EntityController<Person> {
+class PersonController extends OrganizationalController<Person> {
   static final PersonController _singleton = PersonController._internal();
 
   factory PersonController() {

@@ -31,7 +31,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   @override
   GetSingleOfOrg getSingleOfOrg;
 
-  late Future<T> Function<T extends DataObject>(String orgSyncId) _getSingleBySyncId;
+  late Future<T> Function<T extends Organizational>(String orgSyncId) _getSingleBySyncId;
 
   ByGermanyWrestlingApi(
     this.organization, {
@@ -40,7 +40,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     this.authService,
   }) {
     _getSingleBySyncId =
-        <T extends DataObject>(String orgSyncId) => getSingleOfOrg<T>(orgSyncId, orgId: organization.id!);
+        <T extends Organizational>(String orgSyncId) => getSingleOfOrg<T>(orgSyncId, orgId: organization.id!);
   }
 
   @override

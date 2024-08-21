@@ -53,12 +53,44 @@ Future init() async {
   // https://cloud.google.com/run/docs/reference/container-contract#port
   final port = int.parse(env['PORT'] ?? '8080');
 
+  // Must open the database before initializing any routes.
+  await PostgresDb().open();
+
+  // Router instance to handler requests.
+  final router = shelf_router.Router()
+    ..mount('/api', ApiRoute().pipeline)
+    ..mount('/ws', (Request request) {
+      try {
+        return websocketHandler(request);
+      } on HijackException catch (error, _) {
+        // A HijackException should bypass the response-writing logic entirely.
+        print('Warning: HijackException thrown on WebsocketHandler.\n$error');
+        // TODO hide stack trace or handle better
+        // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
+        rethrow;
+      } catch (error, _) {
+        print('Error thrown by handler.\n$error');
+        return Response.internalServerError();
+      }
+    })
+    ..mount('/about', (Request request) async {
+      final pubspec = await _parsePubspec();
+      return Response.ok('''
+    Name: ${pubspec.name}
+    Description: ${pubspec.description}
+    Version: ${pubspec.version}
+    ''');
+    });
+
+  // Serve files from the file system.
+  final staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
+
   // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
       // First, serve files from the 'public' directory
-      .add(_staticHandler)
+      .add(staticHandler)
       // If a corresponding file is not found, send requests to a `Router`
-      .add(_router.call);
+      .add(router.call);
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
   final pipeline = Pipeline()
@@ -74,39 +106,8 @@ Future init() async {
     port,
   );
 
-  await PostgresDb().open();
-
   final serverUrl = 'http://${server.address.host}:${server.port}';
   print('Serving at $serverUrl');
   print('Serving API at $serverUrl/api');
   print('Serving Websocket at $serverUrl/ws');
 }
-
-// Serve files from the file system.
-final _staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
-
-// Router instance to handler requests.
-final _router = shelf_router.Router()
-  ..mount('/api', ApiRoute().pipeline)
-  ..mount('/ws', (Request request) {
-    try {
-      return websocketHandler(request);
-    } on HijackException catch (error, _) {
-      // A HijackException should bypass the response-writing logic entirely.
-      print('Warning: HijackException thrown on WebsocketHandler.\n$error');
-      // TODO hide stack trace or handle better
-      // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
-      rethrow;
-    } catch (error, _) {
-      print('Error thrown by handler.\n$error');
-      return Response.internalServerError();
-    }
-  })
-  ..mount('/about', (Request request) async {
-    final pubspec = await _parsePubspec();
-    return Response.ok('''
-    Name: ${pubspec.name}
-    Description: ${pubspec.description}
-    Version: ${pubspec.version}
-    ''');
-  });

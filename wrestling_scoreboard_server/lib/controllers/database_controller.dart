@@ -77,9 +77,8 @@ class DatabaseController {
 
   Future<void> _restore(String dumpPath) async {
     final db = PostgresDb();
-    final conn = db.connection;
     {
-      await conn.execute('DROP SCHEMA IF EXISTS public CASCADE;');
+      await db.connection.execute('DROP SCHEMA IF EXISTS public CASCADE;');
       await db.close();
     }
 
@@ -96,6 +95,9 @@ class DatabaseController {
     ];
     final processResult = await Process.run('psql', args, environment: {'PGPASSWORD': db.dbPW});
     await db.open();
+
+    Iterable<EntityController> entityControllers = dataTypes.map((t) => EntityController.getControllerFromDataType(t));
+    await Future.forEach(entityControllers, (e) => e.init());
 
     if (processResult.exitCode != 0) {
       throw processResult.stderr;

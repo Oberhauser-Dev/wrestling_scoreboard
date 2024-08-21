@@ -4,6 +4,7 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
@@ -14,7 +15,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'bout_controller.dart';
 import 'entity_controller.dart';
 
-class TeamMatchController extends EntityController<TeamMatch> {
+class TeamMatchController extends OrganizationalController<TeamMatch> {
   static final TeamMatchController _singleton = TeamMatchController._internal();
 
   factory TeamMatchController() {

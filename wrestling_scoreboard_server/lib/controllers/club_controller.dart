@@ -2,10 +2,11 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-class ClubController extends EntityController<Club> {
+class ClubController extends OrganizationalController<Club> {
   static final ClubController _singleton = ClubController._internal();
 
   factory ClubController() {

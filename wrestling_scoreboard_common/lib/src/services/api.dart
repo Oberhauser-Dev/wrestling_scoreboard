@@ -1,7 +1,7 @@
 import '../../common.dart';
 import 'apis/germany_by.dart';
 
-typedef GetSingleOfOrg = Future<T> Function<T extends DataObject>(String orgSyncId, {required int orgId});
+typedef GetSingleOfOrg = Future<T> Function<T extends Organizational>(String orgSyncId, {required int orgId});
 
 enum WrestlingApiProvider {
   deNwRingenApi,

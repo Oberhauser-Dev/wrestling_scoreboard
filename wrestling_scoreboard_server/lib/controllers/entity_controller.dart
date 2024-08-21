@@ -57,7 +57,20 @@ abstract class EntityController<T extends DataObject> {
   String tableName;
   String primaryKeyName;
 
-  EntityController({required this.tableName, this.primaryKeyName = 'id'});
+  late Future<psql.Statement> getSingleRawStmt;
+  late Future<psql.Statement> deleteSingleStmt;
+
+  EntityController({required this.tableName, this.primaryKeyName = 'id'}) {
+    init();
+  }
+
+  void init() {
+    getSingleRawStmt =
+        PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
+
+    deleteSingleStmt =
+        PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
+  }
 
   Future<Response> postSingle(Request request) async {
     final message = await request.readAsString();
@@ -80,34 +93,10 @@ abstract class EntityController<T extends DataObject> {
     return DataObject.fromRaw<T>(single, getSingleFromDataType);
   }
 
-  /// Get a single data object via a foreign id (sync id), given by an organization.
-  Future<T> getSingleOfOrg(String orgSyncId, {required int orgId}) async {
-    final single = await getSingleOfOrgRaw(orgSyncId, orgId: orgId);
-    return DataObject.fromRaw<T>(single, getSingleFromDataType);
-  }
-
-  late final getSingleRawStmt =
-      PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
-
   Future<Map<String, dynamic>> getSingleRaw(int id) async {
     final resStream = (await getSingleRawStmt).bind({'id': id});
     final many = await resStream.toColumnMap().toList();
     if (many.isEmpty) throw InvalidParameterException('$T with id "$id" not found');
-    return many.first;
-  }
-
-  late final getSingleOfOrgRawStmt = PostgresDb()
-      .connection
-      .prepare(psql.Sql.named('SELECT * FROM $tableName WHERE organization_id = @orgId AND org_sync_id = @orgSyncId;'));
-
-  Future<Map<String, dynamic>> getSingleOfOrgRaw(String orgSyncId, {required int orgId}) async {
-    if (orgSyncId != orgSyncId.trim()) {
-      orgSyncId = orgSyncId.trim();
-      print('$T with orgSyncId "$orgSyncId" was trimmed');
-    }
-    final resStream = (await getSingleOfOrgRawStmt).bind({'orgSyncId': orgSyncId, 'orgId': orgId});
-    final many = await resStream.toColumnMap().toList();
-    if (many.isEmpty) throw InvalidParameterException('$T with orgSyncId "$orgSyncId" not found');
     return many.first;
   }
 
@@ -140,35 +129,12 @@ abstract class EntityController<T extends DataObject> {
     return dataObject.copyWithId(await createSingle(dataObject)) as T;
   }
 
-  Future<T> getOrCreateSingleOfOrg(T dataObject) async {
-    if (dataObject.id != null) {
-      throw Exception('Data object already has an id: $dataObject');
-    }
-    if (dataObject is! Organizational) {
-      throw Exception('Data object is not Organizational: $dataObject');
-    }
-    final organizational = (dataObject as Organizational);
-    if (organizational.organization?.id == null || organizational.orgSyncId == null) {
-      throw Exception('Organization id and sync id must not be null: $dataObject');
-    }
-    try {
-      final single = await getSingleOfOrg(organizational.orgSyncId!, orgId: organizational.organization!.id!);
-      return single;
-    } on InvalidParameterException catch (_) {
-      return createSingleReturn(dataObject);
-    }
-  }
-
   Future<List<int>> createMany(List<T> dataObjects) async {
     return await Future.wait(dataObjects.map((element) => createSingle(element)));
   }
 
   Future<List<T>> createManyReturn(List<T> dataObjects) async {
     return await Future.wait(dataObjects.map((element) => createSingleReturn(element)));
-  }
-
-  Future<List<T>> getOrCreateManyOfOrg(List<T> dataObjects) async {
-    return await Future.wait(dataObjects.map((element) => getOrCreateSingleOfOrg(element)));
   }
 
   Future<int> updateSingle(T dataObject) async {
@@ -210,9 +176,6 @@ abstract class EntityController<T extends DataObject> {
       return MapEntry(key, postgresType == null ? value : psql.TypedValue(postgresType, value));
     });
   }
-
-  late final deleteSingleStmt =
-      PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
 
   Future<bool> deleteSingle(int id) async {
     try {
@@ -435,10 +398,6 @@ abstract class EntityController<T extends DataObject> {
     return getControllerFromDataType(T).getSingle(id) as Future<T>;
   }
 
-  static Future<T> getSingleFromDataTypeOfOrg<T extends DataObject>(String orgSyncId, {required int orgId}) {
-    return getControllerFromDataType(T).getSingleOfOrg(orgSyncId, orgId: orgId) as Future<T>;
-  }
-
   static Future<List<T>> getManyFromDataType<T extends DataObject>(
       {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
     return getControllerFromDataType(T).getMany(
@@ -507,7 +466,7 @@ class InvalidParameterException implements Exception {
   }
 }
 
-extension on Map<String, dynamic> {
+extension ToPsqlParser on Map<String, dynamic> {
   /// Parse custom postgres types
   /// https://github.com/isoos/postgresql-dart/issues/276
   Map<String, dynamic> parse() {
@@ -515,7 +474,7 @@ extension on Map<String, dynamic> {
   }
 }
 
-extension on psql.ResultStream {
+extension FromPsqlParser on psql.ResultStream {
   /// Parse custom postgres types
   /// https://github.com/isoos/postgresql-dart/issues/276
   // ignore: unused_element
