@@ -36,7 +36,7 @@ void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMa
 /// So must load the whole list of bouts to keep track of what comes next.
 /// TODO: This may can be done server side with its own request in the future.
 class TeamMatchBoutDisplay extends StatelessWidget {
-  static const route = 'team_match_bout_display';
+  static const route = 'display';
   final int matchId;
   final int teamMatchBoutId;
   final TeamMatch? initialMatch;
@@ -431,12 +431,9 @@ class BoutState extends ConsumerState<BoutScreen> {
       onPressed: () => widget.onPressBoutInfo(context),
     );
     return PopScope(
-      canPop: false,
+      canPop: true,
       onPopInvoked: (didPop) async {
         await save();
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
       },
       child: ManyConsumer<BoutAction, Bout>(
           filterObject: bout,

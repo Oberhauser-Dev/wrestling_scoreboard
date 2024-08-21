@@ -240,7 +240,7 @@ class TeamMatchOverview extends ConsumerWidget {
                               builder: (context, teamMatchBout) => ContentItem(
                                 title: teamMatchBout.bout.title(context),
                                 icon: Icons.sports_kabaddi,
-                                onTap: () => handleSelectedBout(teamMatchBout, context),
+                                onTap: () => handleSelectedBout(match, teamMatchBout, context),
                               ),
                             ),
                           ),
@@ -262,8 +262,8 @@ class TeamMatchOverview extends ConsumerWidget {
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) =>
       ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
-  handleSelectedBout(TeamMatchBout bout, BuildContext context) {
-    context.push('/${TeamMatchBoutOverview.route}/${bout.id}');
+  handleSelectedBout(TeamMatch match, TeamMatchBout bout, BuildContext context) {
+    context.push('/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${bout.id}');
   }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {

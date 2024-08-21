@@ -24,6 +24,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
+    List<Widget> actions = const [],
     required int dataId,
     WeightClass? initialData,
   }) {
@@ -71,6 +72,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
           tabs: [
             Tab(child: HeadingText(localizations.info)),
           ],
+          actions: actions,
           body: TabGroup(items: [
             description,
           ]),

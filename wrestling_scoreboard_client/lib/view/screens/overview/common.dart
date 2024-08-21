@@ -14,6 +14,7 @@ abstract class AbstractOverview<T extends DataObject> {
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
+    List<Widget> actions = const [],
     required int dataId,
     T? initialData,
   });

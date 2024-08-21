@@ -26,6 +26,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
+    List<Widget> actions = const [],
     required int dataId,
     Bout? initialData,
   }) {
@@ -89,6 +90,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
           tabs: [
             Tab(child: HeadingText(localizations.info)),
           ],
+          actions: actions,
           body: TabGroup(items: [
             description,
           ]),

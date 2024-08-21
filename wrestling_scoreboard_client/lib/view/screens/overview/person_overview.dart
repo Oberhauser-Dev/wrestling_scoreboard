@@ -27,6 +27,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
     required Widget editPage,
     required VoidCallback onDelete,
     List<Widget>? tiles,
+    List<Widget> actions = const [],
     Map<Tab, Widget> Function(Person data)? buildRelations,
     required int dataId,
     Person? initialData,
@@ -84,6 +85,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
             Tab(child: HeadingText(localizations.info)),
             ...relations.keys,
           ],
+          actions: actions,
           body: TabGroup(items: [
             description,
             ...relations.values,

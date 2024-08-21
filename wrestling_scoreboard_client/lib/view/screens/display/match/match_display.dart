@@ -16,7 +16,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MatchDisplay extends StatelessWidget {
-  static const route = 'match_display';
+  static const route = 'display';
   static const flexWidths = [17, 50, 30, 50];
 
   final int id;
