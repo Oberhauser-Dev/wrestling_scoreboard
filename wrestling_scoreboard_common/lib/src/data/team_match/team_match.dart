@@ -88,17 +88,17 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
   }
 
   static int getHomePoints(Iterable<Bout> bouts) {
-    var res = 0;
-    for (final bout in bouts) {
-      res += bout.r?.classificationPoints ?? 0;
-    }
-    return res;
+    return getClassificationPoints(bouts.map((bout) => bout.r));
   }
 
   static int getGuestPoints(Iterable<Bout> bouts) {
+    return getClassificationPoints(bouts.map((bout) => bout.b));
+  }
+
+  static int getClassificationPoints(Iterable<ParticipantState?> participationStates) {
     var res = 0;
-    for (final bout in bouts) {
-      res += bout.b?.classificationPoints ?? 0;
+    for (final state in participationStates) {
+      res += state?.classificationPoints ?? 0;
     }
     return res;
   }

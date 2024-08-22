@@ -140,40 +140,48 @@ class BoutListItem extends StatelessWidget {
     );
   }
 
-  Widget displayParticipantState({ParticipantState? pState, required BoutRole role}) {
+  Widget displayParticipantState({ParticipantState? pState, required Bout bout, required BoutRole role}) {
     final color = (role == bout.winnerRole) ? role.color().shade800 : null;
     return NullableSingleConsumer<ParticipantState>(
       id: pState?.id,
       initialData: pState,
-      builder: (context, pState) => Column(
-        children: [
-          Expanded(
-              flex: 70,
+      builder: (context, pState) {
+        final technicalPoints = ParticipantState.getTechnicalPoints(actions, role);
+        return Column(
+          children: [
+            Expanded(
+                flex: 70,
+                child: ThemedContainer(
+                  color: color,
+                  child: Center(
+                    child: bout.result != null
+                        ? ScaledText(
+                            pState?.classificationPoints?.toString() ?? '0',
+                            fontSize: 15,
+                          )
+                        : null,
+                  ),
+                )),
+            Expanded(
+              flex: 50,
               child: ThemedContainer(
                 color: color,
                 child: Center(
-                  child: ScaledText(
-                    pState?.classificationPoints?.toString() ?? '-',
-                    fontSize: 15,
-                  ),
+                  child: bout.result != null ||
+                          technicalPoints > 0 ||
+                          bout.duration > Duration.zero ||
+                          pState?.classificationPoints != null
+                      ? ScaledText(
+                          technicalPoints.toString(),
+                          fontSize: 8,
+                        )
+                      : null,
                 ),
-              )),
-          Expanded(
-            flex: 50,
-            child: ThemedContainer(
-              color: color,
-              child: Center(
-                child: pState?.classificationPoints != null
-                    ? ScaledText(
-                        ParticipantState.getTechnicalPoints(actions, role).toString(),
-                        fontSize: 8,
-                      )
-                    : null,
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -186,6 +194,7 @@ class BoutListItem extends StatelessWidget {
         initialData: bout,
         id: bout.id,
         builder: (context, bout) {
+          final winnerRole = bout.winnerRole;
           return Row(
             children: [
               Row(
@@ -222,41 +231,34 @@ class BoutListItem extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 50,
-                    child: displayParticipantState(pState: bout.r, role: BoutRole.red),
+                    child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout),
                   ),
                   Expanded(
                     flex: 100,
-                    child: SingleConsumer<Bout>(
-                      id: bout.id,
-                      initialData: bout,
-                      builder: (context, data) {
-                        final winnerRole = data.winnerRole;
-                        return Column(
-                          children: [
-                            Expanded(
-                                flex: 70,
-                                child: ThemedContainer(
-                                  color: winnerRole?.color().shade800,
-                                  child: Center(
-                                    child: ScaledText(data.result?.abbreviation(context) ?? '-', fontSize: 12),
-                                  ),
-                                )),
-                            Expanded(
-                              flex: 50,
+                    child: Column(
+                      children: [
+                        Expanded(
+                            flex: 70,
+                            child: ThemedContainer(
+                              color: winnerRole?.color().shade800,
                               child: Center(
-                                child: winnerRole != null
-                                    ? ScaledText(durationToString(data.duration), fontSize: 8)
-                                    : null,
+                                child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12),
                               ),
-                            ),
-                          ],
-                        );
-                      },
+                            )),
+                        Expanded(
+                          flex: 50,
+                          child: Center(
+                            child: bout.result != null || bout.duration > Duration.zero
+                                ? ScaledText(durationToString(bout.duration), fontSize: 8)
+                                : null,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
                     flex: 50,
-                    child: displayParticipantState(pState: bout.b, role: BoutRole.blue),
+                    child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout),
                   ),
                 ],
               ),
