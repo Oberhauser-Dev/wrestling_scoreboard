@@ -5,8 +5,6 @@ import 'package:wrestling_scoreboard_server/controllers/membership_controller.da
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-import 'entity_controller.dart';
-
 class PersonController extends OrganizationalController<Person> {
   static final PersonController _singleton = PersonController._internal();
 
@@ -17,8 +15,8 @@ class PersonController extends OrganizationalController<Person> {
   PersonController._internal() : super(tableName: 'person');
 
   Future<Response> requestMemberships(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(MembershipController(),
-        isRaw: request.isRaw, conditions: ['person_id = @id'], substitutionValues: {'id': id});
+    return MembershipController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['person_id = @id'], substitutionValues: {'id': id});
   }
 
   @override

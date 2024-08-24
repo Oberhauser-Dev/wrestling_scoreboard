@@ -32,12 +32,12 @@ class TeamMatchController extends OrganizationalController<TeamMatch> {
         ORDER BY tmf.pos;''';
 
   Future<Response> requestBouts(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(BoutController(),
-        isRaw: request.isRaw, sqlQuery: _boutsQuery, substitutionValues: {'id': id});
+    return BoutController()
+        .handleRequestManyFromQuery(isRaw: request.isRaw, sqlQuery: _boutsQuery, substitutionValues: {'id': id});
   }
 
   Future<Response> requestTeamMatchBouts(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(TeamMatchBoutController(),
+    return TeamMatchBoutController().handleRequestMany(
         isRaw: request.isRaw, conditions: ['team_match_id = @id'], substitutionValues: {'id': id}, orderBy: ['pos']);
   }
 
@@ -46,7 +46,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> {
   }
 
   /// isReset: delete all previous Bouts and TeamMatchBouts, else reuse the states
-  Future<Response> generateBouts(Request request, String id) async {
+  Future<Response> generateBouts(Request request, User user, String id) async {
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id)));
     final oldBouts = (await getBouts(id));

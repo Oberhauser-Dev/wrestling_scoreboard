@@ -15,3 +15,11 @@ Map<String, dynamic> _$$BasicAuthServiceImplToJson(_$BasicAuthServiceImpl instan
       'username': instance.username,
       'password': instance.password,
     };
+
+_$BearerAuthServiceImpl _$$BearerAuthServiceImplFromJson(Map<String, dynamic> json) => _$BearerAuthServiceImpl(
+      token: json['token'] as String,
+    );
+
+Map<String, dynamic> _$$BearerAuthServiceImplToJson(_$BearerAuthServiceImpl instance) => <String, dynamic>{
+      'token': instance.token,
+    };

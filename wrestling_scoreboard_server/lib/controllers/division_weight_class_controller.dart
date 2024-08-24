@@ -2,7 +2,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
 
-class DivisionWeightClassController extends EntityController<DivisionWeightClass> {
+class DivisionWeightClassController extends ShelfController<DivisionWeightClass> {
   static final DivisionWeightClassController _singleton = DivisionWeightClassController._internal();
 
   factory DivisionWeightClassController() {

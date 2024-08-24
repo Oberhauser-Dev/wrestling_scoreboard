@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -91,8 +92,7 @@ class DivisionOverview extends ConsumerWidget {
               builder: (BuildContext context, List<Division> childDivisions) {
                 return GroupedList(
                   header: HeadingItem(
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add),
+                    trailing: RestrictedAddButton(
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -123,8 +123,7 @@ class DivisionOverview extends ConsumerWidget {
               builder: (BuildContext context, List<League> leagues) {
                 return GroupedList(
                   header: HeadingItem(
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add),
+                    trailing: RestrictedAddButton(
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -155,8 +154,7 @@ class DivisionOverview extends ConsumerWidget {
               builder: (BuildContext context, List<DivisionWeightClass> divisionWeightClasses) {
                 return GroupedList(
                   header: HeadingItem(
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add),
+                    trailing: RestrictedAddButton(
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(

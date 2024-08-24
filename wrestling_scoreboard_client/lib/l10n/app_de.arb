@@ -30,8 +30,22 @@
   "resetDatabase": "Datenbank zurücksetzen",
   "bellSound": "Glocken-Sound",
 
+  "profile": "Profil",
   "username": "Nutzername",
   "password": "Passwort",
+  "email": "E-Mail",
+
+  "auth_signIn": "Anmelden",
+  "auth_signInPrompt_phrase": "Haben Sie bereits ein Konto? Hier anmelden",
+  "auth_signIntoAccount_phrase": "Melden Sie sich an",
+  "auth_signUp": "Registrieren",
+  "auth_signUpPrompt_phrase": "Noch kein Konto? Hier registrieren",
+  "auth_signOut": "Abmelden",
+  "auth_emailPrompt_phrase": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+  "auth_Password": "Passwort",
+  "auth_password_save_phrase": "Passwort speichern",
+  "auth_change_password": "Password ändern",
+  "auth_agreeTermsAndConditions_phrase": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und stimme ihnen zu",
 
   "imprint": "Impressum",
   "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",
@@ -183,7 +197,7 @@
   "timeKeeper": "Zeitnehmer",
   "transcriptionWriter": "Protokollführer",
   "steward": "Ordner",
-  
+
   "prename": "Vorname",
   "surname": "Nachname",
   "age": "Alter",

@@ -3,6 +3,7 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'network_provider.g.dart';
 
@@ -11,7 +12,8 @@ class DataManagerNotifier extends _$DataManagerNotifier {
   @override
   Raw<Future<DataManager>> build() async {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
-    return RestDataManager(apiUrl: apiUrl);
+    final jwtToken = await ref.watch(jwtNotifierProvider);
+    return RestDataManager(apiUrl: apiUrl, authService: jwtToken == null ? null : BearerAuthService(token: jwtToken));
   }
 }
 

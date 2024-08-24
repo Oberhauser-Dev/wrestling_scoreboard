@@ -10,14 +10,19 @@ class RestDataManager extends DataManager {
   static const rawQueryParameter = {
     'isRaw': 'true',
   };
-  static const headers = {"Content-Type": "application/json"};
+
+  late final Map<String, String> _headers;
 
   late final String? _apiUrl;
 
   late WebSocketManager _webSocketManager;
 
-  RestDataManager({required String? apiUrl}) {
+  RestDataManager({required String? apiUrl, super.authService}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
+    _headers = {
+      "Content-Type": "application/json",
+      ...?authService?.header,
+    };
   }
 
   String _getPathFromType(Type t) {
@@ -75,7 +80,7 @@ class RestDataManager extends DataManager {
     final prepend = '${_getPathFromType(T)}/${wrestlingEvent.id}';
     final uri = Uri.parse('$_apiUrl$prepend/bouts/generate')
         .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
-    final response = await http.post(uri, headers: headers);
+    final response = await http.post(uri, headers: _headers);
 
     if (response.statusCode >= 400) {
       throw RestException('Failed to CREATE generated bouts ${wrestlingEvent.toString()}', response: response);
@@ -88,7 +93,7 @@ class RestDataManager extends DataManager {
   Future<int> createOrUpdateSingle<T extends DataObject>(T obj) async {
     final body = jsonEncode(singleToJson(obj, T, obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
-    final response = await http.post(uri, headers: headers, body: body);
+    final response = await http.post(uri, headers: _headers, body: body);
 
     if (response.statusCode < 400) {
       return jsonDecode(response.body);
@@ -135,7 +140,7 @@ class RestDataManager extends DataManager {
   @override
   Future<void> restoreDatabase(String sqlDump) async {
     final uri = Uri.parse('$_apiUrl/database/restore');
-    final response = await http.post(uri, headers: headers, body: sqlDump);
+    final response = await http.post(uri, headers: _headers, body: sqlDump);
     if (response.statusCode != 200) {
       throw RestException('Failed to restore the database', response: response);
     }
@@ -254,7 +259,7 @@ class RestDataManager extends DataManager {
     }
 
     for (final jsonType in json) {
-      await handleFromJson(
+      await handleGenericJson(
         jsonType,
         handleSingle: handleSingle,
         handleMany: <T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async {
@@ -265,6 +270,64 @@ class RestDataManager extends DataManager {
       );
     }
     return result;
+  }
+
+  @override
+  Future<void> signUp(User user) async {
+    final body = jsonEncode(singleToJson(user, User, user.id != null ? CRUD.update : CRUD.create));
+    final uri = Uri.parse('$_apiUrl/auth/sign_up');
+    final response = await http.post(uri, headers: _headers, body: body);
+
+    if (response.statusCode < 400) {
+      return jsonDecode(response.body);
+    } else {
+      throw RestException('Failed to ${user.id != null ? 'UPDATE' : 'CREATE'} single ${user.tableName}',
+          response: response);
+    }
+  }
+
+  @override
+  Future<String> signIn(BasicAuthService authService) async {
+    final uri = Uri.parse('$_apiUrl/auth/sign_in');
+    final response = await http.post(uri, headers: {
+      ...authService.header,
+      ..._headers,
+    });
+
+    if (response.statusCode < 400) {
+      return response.body;
+    } else {
+      throw RestException('Failed to sign in with username ${authService.username}', response: response);
+    }
+  }
+
+  @override
+  Future<User?> getUser() async {
+    if (authService == null) return null;
+    final uri = Uri.parse('$_apiUrl/auth/user');
+    final response = await http.get(uri, headers: _headers);
+
+    if (response.statusCode < 400) {
+      return DataObject.fromJson<User>(jsonDecode(response.body));
+    } else {
+      throw RestException('Failed to sign in with token ${authService?.header}', response: response);
+    }
+  }
+
+  @override
+  Future<void> updateUser(User user) async {
+    final uri = Uri.parse('$_apiUrl/auth/user');
+    final response = await http.post(
+      uri,
+      headers: _headers,
+      body: jsonEncode(user.toJson()),
+    );
+
+    if (response.statusCode < 400) {
+      return;
+    } else {
+      throw RestException('Failed to change password', response: response);
+    }
   }
 }
 

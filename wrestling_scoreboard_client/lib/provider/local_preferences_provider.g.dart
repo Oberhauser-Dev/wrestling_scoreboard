@@ -70,7 +70,6 @@ String _$localeNotifierHash() => r'd1a158392a814010eadb717b29bdbd563f79c97f';
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
-
   @$internal
   @override
   Raw<Future<Locale?>> runBuild() => build();
@@ -137,7 +136,6 @@ String _$themeModeNotifierHash() => r'87a0d4c71b037664266350d35d9e4c54be1d1dd8';
 
 abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   Raw<Future<ThemeMode>> build();
-
   @$internal
   @override
   Raw<Future<ThemeMode>> runBuild() => build();
@@ -204,7 +202,6 @@ String _$fontFamilyNotifierHash() => r'58f6c3cdeafa1c63986ffa5ad4de5ca9b8865b64'
 
 abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
-
   @$internal
   @override
   Raw<Future<String?>> runBuild() => build();
@@ -271,7 +268,6 @@ String _$webSocketUrlNotifierHash() => r'4ea4f9c1880f05b6b6d0d718e043c04145e2a58
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -338,7 +334,6 @@ String _$networkTimeoutNotifierHash() => r'686b1e7acba03732bd54aa332f2e5805cf5f5
 
 abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
-
   @$internal
   @override
   Raw<Future<Duration>> runBuild() => build();
@@ -405,7 +400,6 @@ String _$apiUrlNotifierHash() => r'84cce7dfdf5727e4be7430397825e6dc984b7c04';
 
 abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -472,7 +466,6 @@ String _$bellSoundNotifierHash() => r'44cc9ac294b4cf03b9ddeeb822cb5985d3c8cfe3';
 
 abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
-
   @$internal
   @override
   Raw<Future<String>> runBuild() => build();
@@ -540,7 +533,6 @@ String _$favoritesNotifierHash() => r'97f2d02bbc78a039c8a97863a8900b91e623730f';
 
 abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<int>>>>> {
   Raw<Future<Map<String, Set<int>>>> build();
-
   @$internal
   @override
   Raw<Future<Map<String, Set<int>>>> runBuild() => build();
@@ -608,10 +600,75 @@ String _$orgAuthNotifierHash() => r'0c4640e47bee1b05ac64d6f5ec26a85eaad2e13f';
 
 abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthService>>>> {
   Raw<Future<Map<int, AuthService>>> build();
-
   @$internal
   @override
   Raw<Future<Map<int, AuthService>>> runBuild() => build();
+}
+
+@ProviderFor(JwtNotifier)
+const jwtNotifierProvider = JwtNotifierProvider._();
+
+final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Future<String?>>> {
+  const JwtNotifierProvider._({super.runNotifierBuildOverride, JwtNotifier Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'jwtNotifierProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final JwtNotifier Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$jwtNotifierHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<String?>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<String?>>>(value),
+    );
+  }
+
+  @$internal
+  @override
+  JwtNotifier create() => _createCb?.call() ?? JwtNotifier();
+
+  @$internal
+  @override
+  JwtNotifierProvider $copyWithCreate(
+    JwtNotifier Function() create,
+  ) {
+    return JwtNotifierProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  JwtNotifierProvider $copyWithBuild(
+    Raw<Future<String?>> Function(
+      Ref<Raw<Future<String?>>>,
+      JwtNotifier,
+    ) build,
+  ) {
+    return JwtNotifierProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<JwtNotifier, Raw<Future<String?>>> $createElement(ProviderContainer container) =>
+      $NotifierProviderElement(this, container);
+}
+
+String _$jwtNotifierHash() => r'0f7f485373404b743e171aa3683b04ac037877d3';
+
+abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
+  Raw<Future<String?>> build();
+  @$internal
+  @override
+  Raw<Future<String?>> runBuild() => build();
 }
 
 // ignore_for_file: type=lint

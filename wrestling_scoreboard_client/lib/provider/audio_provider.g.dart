@@ -63,7 +63,7 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
       $NotifierProviderElement(this, container);
 }
 
-String _$bellPlayerNotifierHash() => r'88097368818de3aaeb3c325b620749dab8ac16a1';
+String _$bellPlayerNotifierHash() => r'629ce6a4cd9db09a0250a179cd31607a10216d97';
 
 abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> {
   Raw<Future<AudioPlayer>> build();

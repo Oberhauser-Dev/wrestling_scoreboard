@@ -3,7 +3,7 @@ import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
-class ParticipationController extends EntityController<Participation> {
+class ParticipationController extends ShelfController<Participation> {
   static final ParticipationController _singleton = ParticipationController._internal();
 
   factory ParticipationController() {

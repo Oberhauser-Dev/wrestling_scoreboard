@@ -58,7 +58,7 @@ class WebSocketManager {
 
     messageHandler(dynamic message) {
       final json = jsonDecode(message);
-      handleFromJson(json,
+      handleGenericJson(json,
           handleSingle: handleSingle,
           handleMany: handleMany,
           handleSingleRaw: handleSingleRaw,
@@ -97,6 +97,10 @@ class WebSocketManager {
           await _channel?.ready.timeout(const Duration(seconds: 5));
           log('Websocket connection established: $_wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
+          // Send authentication token, if signed in.
+          if (dataManager.authService != null) {
+            addToSink(jsonEncode(dataManager.authService?.header));
+          }
         } on SocketException catch (e) {
           // Thrown, when connection failed, waiting for `ready` state.
           log('Websocket connection refused by server: $e');

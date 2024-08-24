@@ -63,7 +63,7 @@ final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNot
       $NotifierProviderElement(this, container);
 }
 
-String _$windowStateNotifierHash() => r'f67370ba7cd1b8c3b29ce1c16afe508efc0bed9c';
+String _$windowStateNotifierHash() => r'c450d92ac1e13d9404d9adb1e68f47177fb150f0';
 
 abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>> {
   Raw<Future<WindowState>> build();

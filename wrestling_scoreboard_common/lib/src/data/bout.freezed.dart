@@ -21,33 +21,28 @@ Bout _$BoutFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Bout {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization? get organization => throw _privateConstructorUsedError;
-
   ParticipantState? get r => throw _privateConstructorUsedError; // red
   ParticipantState? get b => throw _privateConstructorUsedError; // blue
   WeightClass? get weightClass => throw _privateConstructorUsedError;
-
   int? get pool => throw _privateConstructorUsedError;
-
   BoutRole? get winnerRole => throw _privateConstructorUsedError;
-
   BoutResult? get result => throw _privateConstructorUsedError;
-
   Duration get duration => throw _privateConstructorUsedError;
 
+  /// Serializes this Bout to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BoutCopyWith<Bout> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $BoutCopyWith<$Res> {
   factory $BoutCopyWith(Bout value, $Res Function(Bout) then) = _$BoutCopyWithImpl<$Res, Bout>;
-
   @useResult
   $Res call(
       {int? id,
@@ -62,11 +57,8 @@ abstract class $BoutCopyWith<$Res> {
       Duration duration});
 
   $OrganizationCopyWith<$Res>? get organization;
-
   $ParticipantStateCopyWith<$Res>? get r;
-
   $ParticipantStateCopyWith<$Res>? get b;
-
   $WeightClassCopyWith<$Res>? get weightClass;
 }
 
@@ -76,10 +68,11 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -138,6 +131,8 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
     ) as $Val);
   }
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
@@ -150,6 +145,8 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
     });
   }
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ParticipantStateCopyWith<$Res>? get r {
@@ -162,6 +159,8 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
     });
   }
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ParticipantStateCopyWith<$Res>? get b {
@@ -174,6 +173,8 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
     });
   }
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $WeightClassCopyWith<$Res>? get weightClass {
@@ -190,7 +191,6 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
 /// @nodoc
 abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
   factory _$$BoutImplCopyWith(_$BoutImpl value, $Res Function(_$BoutImpl) then) = __$$BoutImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -207,13 +207,10 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
-
   @override
   $ParticipantStateCopyWith<$Res>? get r;
-
   @override
   $ParticipantStateCopyWith<$Res>? get b;
-
   @override
   $WeightClassCopyWith<$Res>? get weightClass;
 }
@@ -222,6 +219,8 @@ abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
 class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl> implements _$$BoutImplCopyWith<$Res> {
   __$$BoutImplCopyWithImpl(_$BoutImpl _value, $Res Function(_$BoutImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -307,11 +306,9 @@ class _$BoutImpl extends _Bout {
   final Organization? organization;
   @override
   final ParticipantState? r;
-
 // red
   @override
   final ParticipantState? b;
-
 // blue
   @override
   final WeightClass? weightClass;
@@ -347,12 +344,14 @@ class _$BoutImpl extends _Bout {
             (identical(other.duration, duration) || other.duration == duration));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, orgSyncId, organization, r, b, weightClass, pool, winnerRole, result, duration);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BoutImplCopyWith<_$BoutImpl> get copyWith => __$$BoutImplCopyWithImpl<_$BoutImpl>(this, _$identity);
@@ -377,42 +376,34 @@ abstract class _Bout extends Bout {
       final BoutRole? winnerRole,
       final BoutResult? result,
       final Duration duration}) = _$BoutImpl;
-
   const _Bout._() : super._();
 
   factory _Bout.fromJson(Map<String, dynamic> json) = _$BoutImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization? get organization;
-
   @override
-  ParticipantState? get r;
-
-  @override // red
-  ParticipantState? get b;
-
-  @override // blue
+  ParticipantState? get r; // red
+  @override
+  ParticipantState? get b; // blue
+  @override
   WeightClass? get weightClass;
-
   @override
   int? get pool;
-
   @override
   BoutRole? get winnerRole;
-
   @override
   BoutResult? get result;
-
   @override
   Duration get duration;
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BoutImplCopyWith<_$BoutImpl> get copyWith => throw _privateConstructorUsedError;
 }

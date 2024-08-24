@@ -9,12 +9,14 @@ class LoadingBuilder<T> extends ConsumerWidget {
   final void Function()? onRetry;
   final Widget Function(BuildContext context, T data) builder;
   final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
+  final Widget Function(BuildContext context)? onLoad;
 
   const LoadingBuilder({
     super.key,
     required this.future,
     required this.builder,
     this.onException,
+    this.onLoad,
     this.initialData,
     this.onRetry,
   });
@@ -32,7 +34,7 @@ class LoadingBuilder<T> extends ConsumerWidget {
           return builder(context, initialData as T);
         }
         if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null) {
-          return const Center(child: CircularProgressIndicator());
+          return onLoad?.call(context) ?? const Center(child: CircularProgressIndicator());
         }
         return builder(context, snapshot.data as T);
       },

@@ -21,20 +21,18 @@ Organization _$OrganizationFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Organization {
   int? get id => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   String? get abbreviation => throw _privateConstructorUsedError;
-
   Organization? get parent => throw _privateConstructorUsedError;
-
   WrestlingApiProvider? get apiProvider => throw _privateConstructorUsedError;
-
   WrestlingReportProvider? get reportProvider => throw _privateConstructorUsedError;
 
+  /// Serializes this Organization to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OrganizationCopyWith<Organization> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -42,7 +40,6 @@ mixin _$Organization {
 abstract class $OrganizationCopyWith<$Res> {
   factory $OrganizationCopyWith(Organization value, $Res Function(Organization) then) =
       _$OrganizationCopyWithImpl<$Res, Organization>;
-
   @useResult
   $Res call(
       {int? id,
@@ -61,10 +58,11 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -103,6 +101,8 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
     ) as $Val);
   }
 
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get parent {
@@ -120,7 +120,6 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
 abstract class _$$OrganizationImplCopyWith<$Res> implements $OrganizationCopyWith<$Res> {
   factory _$$OrganizationImplCopyWith(_$OrganizationImpl value, $Res Function(_$OrganizationImpl) then) =
       __$$OrganizationImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -141,6 +140,8 @@ class __$$OrganizationImplCopyWithImpl<$Res> extends _$OrganizationCopyWithImpl<
   __$$OrganizationImplCopyWithImpl(_$OrganizationImpl _value, $Res Function(_$OrganizationImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -220,11 +221,13 @@ class _$OrganizationImpl extends _Organization {
             (identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith =>
@@ -246,30 +249,26 @@ abstract class _Organization extends Organization {
       final Organization? parent,
       final WrestlingApiProvider? apiProvider,
       final WrestlingReportProvider? reportProvider}) = _$OrganizationImpl;
-
   const _Organization._() : super._();
 
   factory _Organization.fromJson(Map<String, dynamic> json) = _$OrganizationImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String get name;
-
   @override
   String? get abbreviation;
-
   @override
   Organization? get parent;
-
   @override
   WrestlingApiProvider? get apiProvider;
-
   @override
   WrestlingReportProvider? get reportProvider;
 
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith => throw _privateConstructorUsedError;
 }

@@ -4,8 +4,6 @@ import 'package:wrestling_scoreboard_server/controllers/organizational_controlle
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-import 'entity_controller.dart';
-
 class TeamController extends OrganizationalController<Team> {
   static final TeamController _singleton = TeamController._internal();
 
@@ -23,11 +21,11 @@ class TeamController extends OrganizationalController<Team> {
         ORDER BY date;''';
 
   Future<Response> requestTeamMatches(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(TeamMatchController(),
-        isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id});
+    return TeamMatchController()
+        .handleRequestManyFromQuery(isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id});
   }
 
-  Future<Response> import(Request request, String teamId) async {
+  Future<Response> import(Request request, User user, String teamId) async {
     return Response.notFound('This operation is not supported yet!');
   }
 

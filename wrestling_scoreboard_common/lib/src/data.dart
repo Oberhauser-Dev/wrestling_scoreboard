@@ -20,5 +20,6 @@ export 'data/team_match/league.dart';
 export 'data/team_match/league_team_participation.dart';
 export 'data/team_match/team_match.dart';
 export 'data/team_match/team_match_bout.dart';
+export 'data/user.dart';
 export 'data/weight_class.dart';
 export 'data/wrestling_event.dart';

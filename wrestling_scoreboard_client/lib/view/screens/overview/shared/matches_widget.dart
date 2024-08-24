@@ -4,6 +4,7 @@ import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -20,8 +21,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
       builder: (BuildContext context, List<TeamMatch> matches) {
         return GroupedList(
           header: HeadingItem(
-            trailing: IconButton(
-              icon: const Icon(Icons.add),
+            trailing: RestrictedAddButton(
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(

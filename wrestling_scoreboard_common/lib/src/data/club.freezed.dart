@@ -21,25 +21,23 @@ Club _$ClubFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Club {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization get organization => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   String? get no => throw _privateConstructorUsedError;
 
+  /// Serializes this Club to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Club
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ClubCopyWith<Club> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ClubCopyWith<$Res> {
   factory $ClubCopyWith(Club value, $Res Function(Club) then) = _$ClubCopyWithImpl<$Res, Club>;
-
   @useResult
   $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
 
@@ -52,10 +50,11 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Club
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -89,6 +88,8 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
     ) as $Val);
   }
 
+  /// Create a copy of Club
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res> get organization {
@@ -101,7 +102,6 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club> implements $ClubCopyWith<$Res>
 /// @nodoc
 abstract class _$$ClubImplCopyWith<$Res> implements $ClubCopyWith<$Res> {
   factory _$$ClubImplCopyWith(_$ClubImpl value, $Res Function(_$ClubImpl) then) = __$$ClubImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
@@ -114,6 +114,8 @@ abstract class _$$ClubImplCopyWith<$Res> implements $ClubCopyWith<$Res> {
 class __$$ClubImplCopyWithImpl<$Res> extends _$ClubCopyWithImpl<$Res, _$ClubImpl> implements _$$ClubImplCopyWith<$Res> {
   __$$ClubImplCopyWithImpl(_$ClubImpl _value, $Res Function(_$ClubImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Club
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -183,11 +185,13 @@ class _$ClubImpl extends _Club {
             (identical(other.no, no) || other.no == no));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, no);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Club
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ClubImplCopyWith<_$ClubImpl> get copyWith => __$$ClubImplCopyWithImpl<_$ClubImpl>(this, _$identity);
@@ -207,27 +211,24 @@ abstract class _Club extends Club {
       required final Organization organization,
       required final String name,
       final String? no}) = _$ClubImpl;
-
   const _Club._() : super._();
 
   factory _Club.fromJson(Map<String, dynamic> json) = _$ClubImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization get organization;
-
   @override
   String get name;
-
   @override
   String? get no;
 
+  /// Create a copy of Club
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ClubImplCopyWith<_$ClubImpl> get copyWith => throw _privateConstructorUsedError;
 }

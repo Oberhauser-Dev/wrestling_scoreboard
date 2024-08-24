@@ -21,16 +21,16 @@ CompetitionPerson _$CompetitionPersonFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CompetitionPerson {
   int? get id => throw _privateConstructorUsedError;
-
   Competition get competition => throw _privateConstructorUsedError;
-
   Person get person => throw _privateConstructorUsedError;
-
   PersonRole get role => throw _privateConstructorUsedError;
 
+  /// Serializes this CompetitionPerson to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CompetitionPersonCopyWith<CompetitionPerson> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -38,12 +38,10 @@ mixin _$CompetitionPerson {
 abstract class $CompetitionPersonCopyWith<$Res> {
   factory $CompetitionPersonCopyWith(CompetitionPerson value, $Res Function(CompetitionPerson) then) =
       _$CompetitionPersonCopyWithImpl<$Res, CompetitionPerson>;
-
   @useResult
   $Res call({int? id, Competition competition, Person person, PersonRole role});
 
   $CompetitionCopyWith<$Res> get competition;
-
   $PersonCopyWith<$Res> get person;
 }
 
@@ -54,10 +52,11 @@ class _$CompetitionPersonCopyWithImpl<$Res, $Val extends CompetitionPerson>
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +85,8 @@ class _$CompetitionPersonCopyWithImpl<$Res, $Val extends CompetitionPerson>
     ) as $Val);
   }
 
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CompetitionCopyWith<$Res> get competition {
@@ -94,6 +95,8 @@ class _$CompetitionPersonCopyWithImpl<$Res, $Val extends CompetitionPerson>
     });
   }
 
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PersonCopyWith<$Res> get person {
@@ -107,14 +110,12 @@ class _$CompetitionPersonCopyWithImpl<$Res, $Val extends CompetitionPerson>
 abstract class _$$CompetitionPersonImplCopyWith<$Res> implements $CompetitionPersonCopyWith<$Res> {
   factory _$$CompetitionPersonImplCopyWith(_$CompetitionPersonImpl value, $Res Function(_$CompetitionPersonImpl) then) =
       __$$CompetitionPersonImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, Competition competition, Person person, PersonRole role});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
-
   @override
   $PersonCopyWith<$Res> get person;
 }
@@ -125,6 +126,8 @@ class __$$CompetitionPersonImplCopyWithImpl<$Res> extends _$CompetitionPersonCop
   __$$CompetitionPersonImplCopyWithImpl(_$CompetitionPersonImpl _value, $Res Function(_$CompetitionPersonImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -187,11 +190,13 @@ class _$CompetitionPersonImpl extends _CompetitionPerson {
             (identical(other.role, role) || other.role == role));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, competition, person, role);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith =>
@@ -211,24 +216,22 @@ abstract class _CompetitionPerson extends CompetitionPerson {
       required final Competition competition,
       required final Person person,
       required final PersonRole role}) = _$CompetitionPersonImpl;
-
   const _CompetitionPerson._() : super._();
 
   factory _CompetitionPerson.fromJson(Map<String, dynamic> json) = _$CompetitionPersonImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   Competition get competition;
-
   @override
   Person get person;
-
   @override
   PersonRole get role;
 
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith => throw _privateConstructorUsedError;
 }

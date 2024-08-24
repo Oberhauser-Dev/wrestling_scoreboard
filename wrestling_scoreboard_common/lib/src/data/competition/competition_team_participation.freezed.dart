@@ -21,14 +21,15 @@ CompetitionTeamParticipation _$CompetitionTeamParticipationFromJson(Map<String, 
 /// @nodoc
 mixin _$CompetitionTeamParticipation {
   int? get id => throw _privateConstructorUsedError;
-
   Competition get competition => throw _privateConstructorUsedError;
-
   Team get team => throw _privateConstructorUsedError;
 
+  /// Serializes this CompetitionTeamParticipation to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CompetitionTeamParticipationCopyWith<CompetitionTeamParticipation> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -38,12 +39,10 @@ abstract class $CompetitionTeamParticipationCopyWith<$Res> {
   factory $CompetitionTeamParticipationCopyWith(
           CompetitionTeamParticipation value, $Res Function(CompetitionTeamParticipation) then) =
       _$CompetitionTeamParticipationCopyWithImpl<$Res, CompetitionTeamParticipation>;
-
   @useResult
   $Res call({int? id, Competition competition, Team team});
 
   $CompetitionCopyWith<$Res> get competition;
-
   $TeamCopyWith<$Res> get team;
 }
 
@@ -54,10 +53,11 @@ class _$CompetitionTeamParticipationCopyWithImpl<$Res, $Val extends CompetitionT
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,6 +81,8 @@ class _$CompetitionTeamParticipationCopyWithImpl<$Res, $Val extends CompetitionT
     ) as $Val);
   }
 
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CompetitionCopyWith<$Res> get competition {
@@ -89,6 +91,8 @@ class _$CompetitionTeamParticipationCopyWithImpl<$Res, $Val extends CompetitionT
     });
   }
 
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamCopyWith<$Res> get team {
@@ -104,14 +108,12 @@ abstract class _$$CompetitionTeamParticipationImplCopyWith<$Res>
   factory _$$CompetitionTeamParticipationImplCopyWith(
           _$CompetitionTeamParticipationImpl value, $Res Function(_$CompetitionTeamParticipationImpl) then) =
       __$$CompetitionTeamParticipationImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, Competition competition, Team team});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
-
   @override
   $TeamCopyWith<$Res> get team;
 }
@@ -124,6 +126,8 @@ class __$$CompetitionTeamParticipationImplCopyWithImpl<$Res>
       _$CompetitionTeamParticipationImpl _value, $Res Function(_$CompetitionTeamParticipationImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -178,11 +182,13 @@ class _$CompetitionTeamParticipationImpl extends _CompetitionTeamParticipation {
             (identical(other.team, team) || other.team == team));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, competition, team);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl> get copyWith =>
@@ -201,7 +207,6 @@ abstract class _CompetitionTeamParticipation extends CompetitionTeamParticipatio
       {final int? id,
       required final Competition competition,
       required final Team team}) = _$CompetitionTeamParticipationImpl;
-
   const _CompetitionTeamParticipation._() : super._();
 
   factory _CompetitionTeamParticipation.fromJson(Map<String, dynamic> json) =
@@ -209,15 +214,15 @@ abstract class _CompetitionTeamParticipation extends CompetitionTeamParticipatio
 
   @override
   int? get id;
-
   @override
   Competition get competition;
-
   @override
   Team get team;
 
+  /// Create a copy of CompetitionTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CompetitionTeamParticipationImplCopyWith<_$CompetitionTeamParticipationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

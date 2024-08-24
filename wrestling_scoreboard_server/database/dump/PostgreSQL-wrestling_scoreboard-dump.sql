@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
+-- Dumped from database version 13.6 (Ubuntu 13.6-0ubuntu0.21.10.1)
+-- Dumped by pg_dump version 16.4 (Ubuntu 16.4-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -129,6 +129,20 @@ CREATE TYPE public.report_provider AS ENUM (
 
 
 ALTER TYPE public.report_provider OWNER TO wrestling;
+
+--
+-- Name: user_privilege; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.user_privilege AS ENUM (
+    'none',
+    'read',
+    'write',
+    'admin'
+);
+
+
+ALTER TYPE public.user_privilege OWNER TO wrestling;
 
 --
 -- Name: weight_unit; Type: TYPE; Schema: public; Owner: wrestling
@@ -816,6 +830,24 @@ ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 
 
 --
+-- Name: secured_user; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.secured_user (
+    id integer NOT NULL,
+    username character varying(127) NOT NULL,
+    password_hash bytea NOT NULL,
+    email character varying(127),
+    person_id integer,
+    salt character varying(127) NOT NULL,
+    created_at date NOT NULL,
+    privilege public.user_privilege DEFAULT 'none'::public.user_privilege NOT NULL
+);
+
+
+ALTER TABLE public.secured_user OWNER TO wrestling;
+
+--
 -- Name: team; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -934,6 +966,28 @@ ALTER SEQUENCE public.team_match_id_seq OWNER TO wrestling;
 --
 
 ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.user_id_seq OWNER TO wrestling;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.user_id_seq OWNED BY public.secured_user.id;
 
 
 --
@@ -1112,6 +1166,13 @@ ALTER TABLE ONLY public.participation ALTER COLUMN id SET DEFAULT nextval('publi
 --
 
 ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.person_id_seq'::regclass);
+
+
+--
+-- Name: secured_user id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.secured_user ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
 
 
 --
@@ -1448,6 +1509,15 @@ COPY public.person (id, prename, surname, birth_date, gender, nationality, org_s
 
 
 --
+-- Data for Name: secured_user; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.secured_user (id, username, password_hash, email, person_id, salt, created_at, privilege) FROM stdin;
+1	admin	\\xb2950268d52c1d17f1b35edd35c071be3d320b488c81425c6b144340963e524a		\N	924VOg==	2024-08-25	admin
+\.
+
+
+--
 -- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1678,6 +1748,13 @@ SELECT pg_catalog.setval('public.team_match_id_seq', 1, true);
 
 
 --
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.user_id_seq', 1, true);
+
+
+--
 -- Name: weight_class_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -1865,6 +1942,22 @@ ALTER TABLE ONLY public.team_match
 
 ALTER TABLE ONLY public.team
     ADD CONSTRAINT team_pk PRIMARY KEY (id);
+
+
+--
+-- Name: secured_user user_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.secured_user
+    ADD CONSTRAINT user_pk PRIMARY KEY (id);
+
+
+--
+-- Name: secured_user user_pk_2; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.secured_user
+    ADD CONSTRAINT user_pk_2 UNIQUE (username);
 
 
 --
@@ -2275,6 +2368,14 @@ ALTER TABLE ONLY public.team_match
 
 ALTER TABLE ONLY public.team
     ADD CONSTRAINT team_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: secured_user user_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.secured_user
+    ADD CONSTRAINT user_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
 
 
 --

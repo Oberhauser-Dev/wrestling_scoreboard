@@ -33,8 +33,22 @@
   "resetDatabase": "Reset database",
   "bellSound": "Bell sound",
 
+  "profile": "Profile",
   "username": "Username",
   "password": "Password",
+  "email": "Email",
+
+  "auth_signIn": "Sign in",
+  "auth_signInPrompt_phrase": "Already have an account? Sign In",
+  "auth_signIntoAccount_phrase": "Sign in to your account",
+  "auth_signUp": "Sign up",
+  "auth_signUpPrompt_phrase": "Don't have an account? Sign Up",
+  "auth_signOut": "Sign out",
+  "auth_emailPrompt_phrase": "Please enter your email address",
+  "auth_Password": "Password",
+  "auth_password_save_phrase": "Save password",
+  "auth_change_password": "Change password",
+  "auth_agreeTermsAndConditions_phrase": "I read and agree to Terms & Conditions",
 
   "imprint": "Imprint",
   "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'entity_controller.dart';
@@ -10,12 +11,16 @@ class DatabaseController {
   // TODO: migration should be handled automatically at server start.
 
   /// Reset all tables
-  Future<Response> reset([Request? request]) async {
+  Future<Response> reset(Request request, User user) async {
     try {
       await _restoreDefault();
-      Iterable<EntityController> entityControllers =
-          dataTypes.map((t) => EntityController.getControllerFromDataType(t));
+      Iterable<ShelfController> entityControllers = dataTypes.map((t) => ShelfController.getControllerFromDataType(t));
+      // Remove data
       await Future.forEach(entityControllers, (e) => e.deleteMany());
+      // Create default admin
+      await SecuredUserController().createSingle(
+          User(username: 'admin', createdAt: DateTime.now(), privilege: UserPrivilege.admin, password: 'admin')
+              .toSecuredUser());
       return Response.ok('{"status": "success"}');
     } catch (err) {
       return Response.internalServerError(body: '{"err": "$err"}');
@@ -23,7 +28,7 @@ class DatabaseController {
   }
 
   /// Export a database to dump
-  Future<Response> export(Request request) async {
+  Future<Response> export(Request request, User user) async {
     final db = PostgresDb();
     final args = <String>[
       // '--file',
@@ -50,7 +55,7 @@ class DatabaseController {
   }
 
   /// Restore a database dump
-  Future<Response> restore(Request request) async {
+  Future<Response> restore(Request request, User user) async {
     try {
       final message = await request.readAsString();
       File file =
@@ -64,7 +69,7 @@ class DatabaseController {
   }
 
   /// Restore the default database dump
-  Future<Response> restoreDefault(Request request) async {
+  Future<Response> restoreDefault(Request request, User user) async {
     try {
       await _restoreDefault();
       return Response.ok('{"status": "success"}');
@@ -96,7 +101,7 @@ class DatabaseController {
     final processResult = await Process.run('psql', args, environment: {'PGPASSWORD': db.dbPW});
     await db.open();
 
-    Iterable<EntityController> entityControllers = dataTypes.map((t) => EntityController.getControllerFromDataType(t));
+    Iterable<ShelfController> entityControllers = dataTypes.map((t) => ShelfController.getControllerFromDataType(t));
     await Future.forEach(entityControllers, (e) => e.init());
 
     if (processResult.exitCode != 0) {

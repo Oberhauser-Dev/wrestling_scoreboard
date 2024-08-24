@@ -2,7 +2,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
 
-class TeamMatchBoutController extends EntityController<TeamMatchBout> {
+class TeamMatchBoutController extends ShelfController<TeamMatchBout> {
   static final TeamMatchBoutController _singleton = TeamMatchBoutController._internal();
 
   factory TeamMatchBoutController() {

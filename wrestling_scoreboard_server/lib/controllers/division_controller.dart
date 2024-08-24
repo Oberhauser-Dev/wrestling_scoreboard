@@ -1,7 +1,6 @@
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
@@ -17,8 +16,8 @@ class DivisionController extends OrganizationalController<Division> {
   DivisionController._internal() : super(tableName: 'division');
 
   Future<Response> requestLeagues(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(LeagueController(),
-        isRaw: request.isRaw, conditions: ['division_id = @id'], substitutionValues: {'id': id});
+    return LeagueController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['division_id = @id'], substitutionValues: {'id': id});
   }
 
   static String _weightClassesQuery(bool filterBySeasonPartition) => '''
@@ -29,7 +28,7 @@ class DivisionController extends OrganizationalController<Division> {
         ORDER BY dwc.pos;''';
 
   Future<Response> requestWeightClasses(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(WeightClassController(),
+    return WeightClassController().handleRequestManyFromQuery(
         isRaw: request.isRaw, sqlQuery: _weightClassesQuery(false), substitutionValues: {'id': id});
   }
 
@@ -41,7 +40,7 @@ class DivisionController extends OrganizationalController<Division> {
   }
 
   Future<Response> requestDivisionWeightClasses(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(DivisionWeightClassController(),
+    return DivisionWeightClassController().handleRequestMany(
         isRaw: request.isRaw,
         conditions: ['division_id = @id'],
         substitutionValues: {'id': id},
@@ -49,8 +48,8 @@ class DivisionController extends OrganizationalController<Division> {
   }
 
   Future<Response> requestChildDivisions(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(DivisionController(),
-        isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
+    return DivisionController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
   }
 
   @override

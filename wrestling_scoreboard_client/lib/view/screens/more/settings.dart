@@ -15,10 +15,12 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class CustomSettingsScreen extends ConsumerWidget {
   static const route = 'settings';
@@ -299,64 +301,67 @@ class CustomSettingsScreen extends ConsumerWidget {
           //   ),
           //   children: [],
           // ),
-          SettingsSection(
-            title: localizations.database,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.cloud_download),
-                title: Text(localizations.exportDatabase),
-                onTap: () => catchAsync(context, () async {
-                  final dataManager = await ref.read(dataManagerNotifierProvider);
-                  final sqlString = await dataManager.exportDatabase();
-                  final fileBaseName =
-                      '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-                      'PostgreSQL-wrestling_scoreboard-dump';
-                  await exportSQL(fileBaseName: fileBaseName, sqlString: sqlString);
-                }),
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings_backup_restore),
-                title: Text(localizations.resetDatabase),
-                onTap: () => catchAsync(context, () async {
-                  final dataManager = await ref.read(dataManagerNotifierProvider);
-                  await dataManager.resetDatabase();
-                  if (context.mounted) {
-                    await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                  }
-                }),
-              ),
-              ListTile(
-                leading: const Icon(Icons.history),
-                title: Text(localizations.restoreDefaultDatabase),
-                onTap: () => catchAsync(context, () async {
-                  final dataManager = await ref.read(dataManagerNotifierProvider);
-                  await dataManager.restoreDefaultDatabase();
-                  if (context.mounted) {
-                    await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                  }
-                }),
-              ),
-              ListTile(
-                leading: const Icon(Icons.cloud_upload),
-                title: Text(localizations.restoreDatabase),
-                onTap: () => catchAsync(context, () async {
-                  const typeGroup = file_selector.XTypeGroup(
-                    label: 'SQL',
-                    extensions: <String>['sql'],
-                  );
-                  file_selector.XFile? fileSelectorResult =
-                      await file_selector.openFile(acceptedTypeGroups: [typeGroup]);
-                  if (fileSelectorResult != null) {
-                    File file = File(fileSelectorResult.path);
+          Restricted(
+            privilege: UserPrivilege.admin,
+            child: SettingsSection(
+              title: localizations.database,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.cloud_download),
+                  title: Text(localizations.exportDatabase),
+                  onTap: () => catchAsync(context, () async {
                     final dataManager = await ref.read(dataManagerNotifierProvider);
-                    await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
+                    final sqlString = await dataManager.exportDatabase();
+                    final fileBaseName =
+                        '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
+                        'PostgreSQL-wrestling_scoreboard-dump';
+                    await exportSQL(fileBaseName: fileBaseName, sqlString: sqlString);
+                  }),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.settings_backup_restore),
+                  title: Text(localizations.resetDatabase),
+                  onTap: () => catchAsync(context, () async {
+                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    await dataManager.resetDatabase();
                     if (context.mounted) {
                       await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                     }
-                  }
-                }),
-              ),
-            ],
+                  }),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: Text(localizations.restoreDefaultDatabase),
+                  onTap: () => catchAsync(context, () async {
+                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    await dataManager.restoreDefaultDatabase();
+                    if (context.mounted) {
+                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                    }
+                  }),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.cloud_upload),
+                  title: Text(localizations.restoreDatabase),
+                  onTap: () => catchAsync(context, () async {
+                    const typeGroup = file_selector.XTypeGroup(
+                      label: 'SQL',
+                      extensions: <String>['sql'],
+                    );
+                    file_selector.XFile? fileSelectorResult =
+                        await file_selector.openFile(acceptedTypeGroups: [typeGroup]);
+                    if (fileSelectorResult != null) {
+                      File file = File(fileSelectorResult.path);
+                      final dataManager = await ref.read(dataManagerNotifierProvider);
+                      await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
+                      if (context.mounted) {
+                        await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                      }
+                    }
+                  }),
+                ),
+              ],
+            ),
           ),
         ],
       ),

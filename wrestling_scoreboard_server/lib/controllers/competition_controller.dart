@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_controller.dart';
 import 'entity_controller.dart';
 
-class CompetitionController extends EntityController<Competition> {
+class CompetitionController extends ShelfController<Competition> {
   static final CompetitionController _singleton = CompetitionController._internal();
 
   factory CompetitionController() {
@@ -16,14 +16,14 @@ class CompetitionController extends EntityController<Competition> {
   CompetitionController._internal() : super(tableName: 'competition');
 
   Future<Response> requestBouts(Request request, String id) async {
-    return EntityController.handleRequestManyOfControllerFromQuery(BoutController(), isRaw: request.isRaw, sqlQuery: '''
+    return BoutController().handleRequestManyFromQuery(isRaw: request.isRaw, sqlQuery: '''
         SELECT f.* 
         FROM bout as f 
         JOIN competition_bout AS tof ON tof.bout_id = f.id
         WHERE tof.competition_id = $id;''');
   }
 
-  Future<Response> import(Request request, String teamId) async {
+  Future<Response> import(Request request, User user, String teamId) async {
     return Response.notFound('This operation is not supported yet!');
   }
 

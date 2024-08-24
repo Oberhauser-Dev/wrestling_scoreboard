@@ -21,33 +21,27 @@ Division _$DivisionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Division {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization get organization => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   DateTime get startDate => throw _privateConstructorUsedError;
-
   DateTime get endDate => throw _privateConstructorUsedError;
-
   BoutConfig get boutConfig => throw _privateConstructorUsedError;
-
   int get seasonPartitions => throw _privateConstructorUsedError;
-
   Division? get parent => throw _privateConstructorUsedError;
 
+  /// Serializes this Division to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DivisionCopyWith<Division> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $DivisionCopyWith<$Res> {
   factory $DivisionCopyWith(Division value, $Res Function(Division) then) = _$DivisionCopyWithImpl<$Res, Division>;
-
   @useResult
   $Res call(
       {int? id,
@@ -61,9 +55,7 @@ abstract class $DivisionCopyWith<$Res> {
       Division? parent});
 
   $OrganizationCopyWith<$Res> get organization;
-
   $BoutConfigCopyWith<$Res> get boutConfig;
-
   $DivisionCopyWith<$Res>? get parent;
 }
 
@@ -73,10 +65,11 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,6 +123,8 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
     ) as $Val);
   }
 
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res> get organization {
@@ -138,6 +133,8 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
     });
   }
 
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BoutConfigCopyWith<$Res> get boutConfig {
@@ -146,6 +143,8 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
     });
   }
 
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DivisionCopyWith<$Res>? get parent {
@@ -163,7 +162,6 @@ class _$DivisionCopyWithImpl<$Res, $Val extends Division> implements $DivisionCo
 abstract class _$$DivisionImplCopyWith<$Res> implements $DivisionCopyWith<$Res> {
   factory _$$DivisionImplCopyWith(_$DivisionImpl value, $Res Function(_$DivisionImpl) then) =
       __$$DivisionImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -179,10 +177,8 @@ abstract class _$$DivisionImplCopyWith<$Res> implements $DivisionCopyWith<$Res> 
 
   @override
   $OrganizationCopyWith<$Res> get organization;
-
   @override
   $BoutConfigCopyWith<$Res> get boutConfig;
-
   @override
   $DivisionCopyWith<$Res>? get parent;
 }
@@ -192,6 +188,8 @@ class __$$DivisionImplCopyWithImpl<$Res> extends _$DivisionCopyWithImpl<$Res, _$
     implements _$$DivisionImplCopyWith<$Res> {
   __$$DivisionImplCopyWithImpl(_$DivisionImpl _value, $Res Function(_$DivisionImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -303,12 +301,14 @@ class _$DivisionImpl extends _Division {
             (identical(other.parent, parent) || other.parent == parent));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, orgSyncId, organization, name, startDate, endDate, boutConfig, seasonPartitions, parent);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DivisionImplCopyWith<_$DivisionImpl> get copyWith =>
@@ -333,39 +333,32 @@ abstract class _Division extends Division {
       required final BoutConfig boutConfig,
       required final int seasonPartitions,
       final Division? parent}) = _$DivisionImpl;
-
   const _Division._() : super._();
 
   factory _Division.fromJson(Map<String, dynamic> json) = _$DivisionImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization get organization;
-
   @override
   String get name;
-
   @override
   DateTime get startDate;
-
   @override
   DateTime get endDate;
-
   @override
   BoutConfig get boutConfig;
-
   @override
   int get seasonPartitions;
-
   @override
   Division? get parent;
 
+  /// Create a copy of Division
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DivisionImplCopyWith<_$DivisionImpl> get copyWith => throw _privateConstructorUsedError;
 }

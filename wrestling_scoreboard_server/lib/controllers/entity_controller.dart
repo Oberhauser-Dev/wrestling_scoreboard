@@ -22,6 +22,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -53,6 +54,139 @@ Map<Type, psql.Type> typeDartToCodeMap = {
   // '_jsonb': psql.Type.jsonbArray,
 };
 
+abstract class ShelfController<T extends DataObject> extends EntityController<T> {
+  ShelfController({required super.tableName, super.primaryKeyName});
+
+  Future<Response> requestSingle(Request request, String id) async {
+    return handleRequestSingle(int.parse(id), isRaw: request.isRaw);
+  }
+
+  Future<Response> requestMany(Request request) async {
+    return handleRequestMany(isRaw: request.isRaw);
+  }
+
+  Future<Response> handleRequestSingle(int id, {bool isRaw = false}) async {
+    if (isRaw) {
+      final single = await getSingleRaw(id);
+      return Response.ok(rawJsonEncode(single));
+    } else {
+      final single = await getSingle(id);
+      return Response.ok(jsonEncode(single));
+    }
+  }
+
+  Future<Response> handleRequestMany({
+    bool isRaw = false,
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+    List<String> orderBy = const [],
+  }) async {
+    if (isRaw) {
+      final many = await getManyRaw(
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+      return Response.ok(rawJsonEncode(many.toList()));
+    } else {
+      final many = await getMany(
+          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+      return Response.ok(jsonEncode(many.toList()));
+    }
+  }
+
+  Future<Response> handleRequestManyFromQuery({
+    bool isRaw = false,
+    required String sqlQuery,
+    Map<String, dynamic>? substitutionValues,
+  }) async {
+    if (isRaw) {
+      final many = await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues);
+      return Response.ok(rawJsonEncode(many.toList()));
+    } else {
+      final many = await getManyFromQuery(sqlQuery, substitutionValues: substitutionValues);
+      return Response.ok(jsonEncode(many.toList()));
+    }
+  }
+
+  Future<T> readSingle(Request request) async {
+    final message = await request.readAsString();
+    return parseSingleJson<T>(jsonDecode(message));
+  }
+
+  Future<Response> postSingle(Request request, User user) async {
+    final message = await request.readAsString();
+    try {
+      return _handlePostSingle(jsonDecode(message));
+    } on FormatException catch (e) {
+      final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
+          '\nFormatException: ${e.message}';
+      log(errMessage.toString());
+      return Response.notFound(errMessage);
+    }
+  }
+
+  Future<Response> _handlePostSingle(Map<String, Object?> json) async {
+    try {
+      final id = await handleJson<T>(
+        json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw,
+      );
+      return Response.ok(jsonEncode(id));
+    } on InvalidParameterException catch (e) {
+      return Response.notFound(e.message);
+    }
+  }
+
+  static ShelfController getControllerFromDataType(Type t) {
+    switch (t) {
+      case const (BoutConfig):
+        return BoutConfigController();
+      case const (Club):
+        return ClubController();
+      case const (Bout):
+        return BoutController();
+      case const (BoutAction):
+        return BoutActionController();
+      case const (Organization):
+        return OrganizationController();
+      case const (Division):
+        return DivisionController();
+      case const (League):
+        return LeagueController();
+      case const (DivisionWeightClass):
+        return DivisionWeightClassController();
+      case const (LeagueTeamParticipation):
+        return LeagueTeamParticipationController();
+      case const (Lineup):
+        return LineupController();
+      case const (Membership):
+        return MembershipController();
+      case const (Participation):
+        return ParticipationController();
+      case const (ParticipantState):
+        return ParticipantStateController();
+      case const (Person):
+        return PersonController();
+      case const (SecuredUser):
+        return SecuredUserController();
+      case const (Team):
+        return TeamController();
+      case const (TeamMatch):
+        return TeamMatchController();
+      case const (TeamMatchBout):
+        return TeamMatchBoutController();
+      case const (Competition):
+        return CompetitionController();
+      case const (WeightClass):
+        return WeightClassController();
+      default:
+        throw UnimplementedError('Controller not available for type: $t');
+    }
+  }
+}
+
 abstract class EntityController<T extends DataObject> {
   String tableName;
   String primaryKeyName;
@@ -70,22 +204,6 @@ abstract class EntityController<T extends DataObject> {
 
     deleteSingleStmt =
         PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
-  }
-
-  Future<Response> postSingle(Request request) async {
-    final message = await request.readAsString();
-    try {
-      return handlePostSingleOfController(this, jsonDecode(message));
-    } on FormatException catch (e) {
-      final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
-          '\nFormatException: ${e.message}';
-      log(errMessage.toString());
-      return Response.notFound(errMessage);
-    }
-  }
-
-  Future<Response> requestSingle(Request request, String id) async {
-    return handleRequestSingleOfController(this, int.parse(id), isRaw: request.isRaw);
   }
 
   Future<T> getSingle(int id) async {
@@ -206,10 +324,6 @@ abstract class EntityController<T extends DataObject> {
   Future<void> setManyRawFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
     final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
     await stmt.bind(substitutionValues).toList();
-  }
-
-  Future<Response> requestMany(Request request) async {
-    return handleRequestManyOfController(this, isRaw: request.isRaw);
   }
 
   Future<Map<String, dynamic>?> getManyJsonLike(bool isRaw, String searchStr, {int? organizationId}) async {
@@ -338,115 +452,14 @@ abstract class EntityController<T extends DataObject> {
     return resStream.toColumnMap().single;
   }
 
-  static Future<Response> handlePostSingleOfController(EntityController controller, Map<String, Object?> json) async {
-    try {
-      final id = await handleFromJson(
-        json,
-        handleSingle: handleSingle,
-        handleMany: handleMany,
-        handleSingleRaw: handleSingleRaw,
-        handleManyRaw: handleManyRaw,
-      );
-      return Response.ok(jsonEncode(id));
-    } on InvalidParameterException catch (e) {
-      return Response.notFound(e.message);
-    }
-  }
-
-  static Future<Response> handleRequestSingleOfController(EntityController controller, int id,
-      {bool isRaw = false}) async {
-    if (isRaw) {
-      final single = await controller.getSingleRaw(id);
-      return Response.ok(rawJsonEncode(single));
-    } else {
-      final single = await controller.getSingle(id);
-      return Response.ok(jsonEncode(single));
-    }
-  }
-
-  static Future<Response> handleRequestManyOfController(
-    EntityController controller, {
-    bool isRaw = false,
-    List<String>? conditions,
-    Conjunction conjunction = Conjunction.and,
-    Map<String, dynamic>? substitutionValues,
-    List<String> orderBy = const [],
-  }) async {
-    if (isRaw) {
-      final many = await controller.getManyRaw(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
-      return Response.ok(rawJsonEncode(many.toList()));
-    } else {
-      final many = await controller.getMany(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
-      return Response.ok(jsonEncode(many.toList()));
-    }
-  }
-
-  static Future<Response> handleRequestManyOfControllerFromQuery(EntityController controller,
-      {bool isRaw = false, required String sqlQuery, Map<String, dynamic>? substitutionValues}) async {
-    if (isRaw) {
-      final many = await controller.getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues);
-      return Response.ok(rawJsonEncode(many.toList()));
-    } else {
-      final many = await controller.getManyFromQuery(sqlQuery, substitutionValues: substitutionValues);
-      return Response.ok(jsonEncode(many.toList()));
-    }
-  }
-
   static Future<T> getSingleFromDataType<T extends DataObject>(int id) {
-    return getControllerFromDataType(T).getSingle(id) as Future<T>;
+    return ShelfController.getControllerFromDataType(T).getSingle(id) as Future<T>;
   }
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>(
       {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
-    return getControllerFromDataType(T).getMany(
+    return ShelfController.getControllerFromDataType(T).getMany(
         conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
-  }
-
-  static EntityController getControllerFromDataType(Type t) {
-    switch (t) {
-      case const (BoutConfig):
-        return BoutConfigController();
-      case const (Club):
-        return ClubController();
-      case const (Bout):
-        return BoutController();
-      case const (BoutAction):
-        return BoutActionController();
-      case const (Organization):
-        return OrganizationController();
-      case const (Division):
-        return DivisionController();
-      case const (League):
-        return LeagueController();
-      case const (DivisionWeightClass):
-        return DivisionWeightClassController();
-      case const (LeagueTeamParticipation):
-        return LeagueTeamParticipationController();
-      case const (Lineup):
-        return LineupController();
-      case const (Membership):
-        return MembershipController();
-      case const (Participation):
-        return ParticipationController();
-      case const (ParticipantState):
-        return ParticipantStateController();
-      case const (Person):
-        return PersonController();
-      case const (Team):
-        return TeamController();
-      case const (TeamMatch):
-        return TeamMatchController();
-      case const (TeamMatchBout):
-        return TeamMatchBoutController();
-      case const (Competition):
-        return CompetitionController();
-      case const (WeightClass):
-        return WeightClassController();
-      default:
-        throw UnimplementedError('Controller not available for type: $t');
-    }
   }
 }
 

@@ -4,5 +4,6 @@ export 'enums/bout_role.dart';
 export 'enums/crud.dart';
 export 'enums/gender.dart';
 export 'enums/person_role.dart';
+export 'enums/user_privilege.dart';
 export 'enums/weight_unit.dart';
 export 'enums/wrestling_style.dart';

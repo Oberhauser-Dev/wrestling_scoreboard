@@ -15,6 +15,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_ma
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -221,8 +222,7 @@ class TeamMatchOverview extends ConsumerWidget {
                       builder: (BuildContext context, List<TeamMatchBout> teamMatchBouts) {
                         return GroupedList(
                           header: HeadingItem(
-                            trailing: IconButton(
-                              icon: const Icon(Icons.add),
+                            trailing: RestrictedAddButton(
                               onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -2,7 +2,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 
-class BoutConfigController extends EntityController<BoutConfig> {
+class BoutConfigController extends ShelfController<BoutConfig> {
   static final BoutConfigController _singleton = BoutConfigController._internal();
 
   factory BoutConfigController() {
