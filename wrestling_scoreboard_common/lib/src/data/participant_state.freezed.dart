@@ -21,14 +21,15 @@ ParticipantState _$ParticipantStateFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ParticipantState {
   int? get id => throw _privateConstructorUsedError;
-
   Participation get participation => throw _privateConstructorUsedError;
-
   int? get classificationPoints => throw _privateConstructorUsedError;
 
+  /// Serializes this ParticipantState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ParticipantStateCopyWith<ParticipantState> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -36,7 +37,6 @@ mixin _$ParticipantState {
 abstract class $ParticipantStateCopyWith<$Res> {
   factory $ParticipantStateCopyWith(ParticipantState value, $Res Function(ParticipantState) then) =
       _$ParticipantStateCopyWithImpl<$Res, ParticipantState>;
-
   @useResult
   $Res call({int? id, Participation participation, int? classificationPoints});
 
@@ -49,10 +49,11 @@ class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implem
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -76,6 +77,8 @@ class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implem
     ) as $Val);
   }
 
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ParticipationCopyWith<$Res> get participation {
@@ -89,7 +92,6 @@ class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implem
 abstract class _$$ParticipantStateImplCopyWith<$Res> implements $ParticipantStateCopyWith<$Res> {
   factory _$$ParticipantStateImplCopyWith(_$ParticipantStateImpl value, $Res Function(_$ParticipantStateImpl) then) =
       __$$ParticipantStateImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, Participation participation, int? classificationPoints});
@@ -104,6 +106,8 @@ class __$$ParticipantStateImplCopyWithImpl<$Res> extends _$ParticipantStateCopyW
   __$$ParticipantStateImplCopyWithImpl(_$ParticipantStateImpl _value, $Res Function(_$ParticipantStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -158,11 +162,13 @@ class _$ParticipantStateImpl extends _ParticipantState {
                 other.classificationPoints == classificationPoints));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, participation, classificationPoints);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith =>
@@ -181,21 +187,20 @@ abstract class _ParticipantState extends ParticipantState {
       {final int? id,
       required final Participation participation,
       final int? classificationPoints}) = _$ParticipantStateImpl;
-
   const _ParticipantState._() : super._();
 
   factory _ParticipantState.fromJson(Map<String, dynamic> json) = _$ParticipantStateImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   Participation get participation;
-
   @override
   int? get classificationPoints;
 
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith => throw _privateConstructorUsedError;
 }

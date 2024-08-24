@@ -218,3 +218,17 @@ class OrgAuthNotifier extends _$OrgAuthNotifier {
     await _setOrgAuthServices(authServiceMap);
   }
 }
+
+@Riverpod(keepAlive: true)
+class JwtNotifier extends _$JwtNotifier {
+  @override
+  Raw<Future<String?>> build() async {
+    return await Preferences.getString(Preferences.keyJwtToken);
+  }
+
+  Future<void> setState(String? val) async {
+    // TODO: use secure storage: https://pub.dev/packages/flutter_secure_storage
+    await Preferences.setString(Preferences.keyJwtToken, val);
+    state = Future.value(val);
+  }
+}

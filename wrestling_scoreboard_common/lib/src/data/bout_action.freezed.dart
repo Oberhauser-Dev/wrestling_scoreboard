@@ -21,20 +21,18 @@ BoutAction _$BoutActionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$BoutAction {
   int? get id => throw _privateConstructorUsedError;
-
   BoutActionType get actionType => throw _privateConstructorUsedError;
-
   Bout get bout => throw _privateConstructorUsedError;
-
   Duration get duration => throw _privateConstructorUsedError;
-
   BoutRole get role => throw _privateConstructorUsedError;
-
   int? get pointCount => throw _privateConstructorUsedError;
 
+  /// Serializes this BoutAction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BoutAction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BoutActionCopyWith<BoutAction> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -42,7 +40,6 @@ mixin _$BoutAction {
 abstract class $BoutActionCopyWith<$Res> {
   factory $BoutActionCopyWith(BoutAction value, $Res Function(BoutAction) then) =
       _$BoutActionCopyWithImpl<$Res, BoutAction>;
-
   @useResult
   $Res call({int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount});
 
@@ -55,10 +52,11 @@ class _$BoutActionCopyWithImpl<$Res, $Val extends BoutAction> implements $BoutAc
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BoutAction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +95,8 @@ class _$BoutActionCopyWithImpl<$Res, $Val extends BoutAction> implements $BoutAc
     ) as $Val);
   }
 
+  /// Create a copy of BoutAction
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BoutCopyWith<$Res> get bout {
@@ -110,7 +110,6 @@ class _$BoutActionCopyWithImpl<$Res, $Val extends BoutAction> implements $BoutAc
 abstract class _$$BoutActionImplCopyWith<$Res> implements $BoutActionCopyWith<$Res> {
   factory _$$BoutActionImplCopyWith(_$BoutActionImpl value, $Res Function(_$BoutActionImpl) then) =
       __$$BoutActionImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount});
@@ -124,6 +123,8 @@ class __$$BoutActionImplCopyWithImpl<$Res> extends _$BoutActionCopyWithImpl<$Res
     implements _$$BoutActionImplCopyWith<$Res> {
   __$$BoutActionImplCopyWithImpl(_$BoutActionImpl _value, $Res Function(_$BoutActionImpl) _then) : super(_value, _then);
 
+  /// Create a copy of BoutAction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -208,11 +209,13 @@ class _$BoutActionImpl extends _BoutAction {
             (identical(other.pointCount, pointCount) || other.pointCount == pointCount));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, actionType, bout, duration, role, pointCount);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BoutAction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BoutActionImplCopyWith<_$BoutActionImpl> get copyWith =>
@@ -234,30 +237,26 @@ abstract class _BoutAction extends BoutAction {
       required final Duration duration,
       required final BoutRole role,
       final int? pointCount}) = _$BoutActionImpl;
-
   const _BoutAction._() : super._();
 
   factory _BoutAction.fromJson(Map<String, dynamic> json) = _$BoutActionImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   BoutActionType get actionType;
-
   @override
   Bout get bout;
-
   @override
   Duration get duration;
-
   @override
   BoutRole get role;
-
   @override
   int? get pointCount;
 
+  /// Create a copy of BoutAction
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BoutActionImplCopyWith<_$BoutActionImpl> get copyWith => throw _privateConstructorUsedError;
 }

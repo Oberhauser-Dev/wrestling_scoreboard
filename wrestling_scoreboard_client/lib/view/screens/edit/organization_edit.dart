@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class OrganizationEdit extends ConsumerStatefulWidget {
@@ -140,26 +141,18 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           ),
         ),
       if (_apiProvider == WrestlingApiProvider.deByRingenApi)
-        ListTile(
+        PasswordInput(
+          isMandatory: true,
           key: Key(_apiProviderAuth.toString()), // Workaround to update initialValue
-          leading: const Icon(Icons.password),
-          title: TextFormField(
-            autofillHints: const [AutofillHints.password],
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: localizations.password,
-            ),
-            initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).password : null,
-            onSaved: (newValue) {
-              final currentAuth = _apiProviderAuth;
-              if (currentAuth is BasicAuthService) {
-                _apiProviderAuth = currentAuth.copyWith(password: newValue ?? '');
-              } else {
-                _apiProviderAuth = BasicAuthService(username: '', password: newValue ?? '');
-              }
-            },
-            obscureText: true,
-          ),
+          initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).password : null,
+          onSaved: (newValue) {
+            final currentAuth = _apiProviderAuth;
+            if (currentAuth is BasicAuthService) {
+              _apiProviderAuth = currentAuth.copyWith(password: newValue ?? '');
+            } else {
+              _apiProviderAuth = BasicAuthService(username: '', password: newValue ?? '');
+            }
+          },
         ),
       ListTile(
         leading: const Icon(Icons.description),

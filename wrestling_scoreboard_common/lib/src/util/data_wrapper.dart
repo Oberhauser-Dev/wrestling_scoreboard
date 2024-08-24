@@ -37,8 +37,40 @@ typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
 typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
     {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
 
-Future<int?> handleFromJson(
-  Map<String, Object?> json, {
+Map<String, dynamic> parseSingleRawJson(Map<String, dynamic> json) {
+  return json['data'];
+}
+
+T parseSingleJson<T extends DataObject>(Map<String, dynamic> json) {
+  return DataObject.fromJson<T>(json['data']);
+}
+
+ManyDataObject<Map<String, dynamic>> parseManyRawJson(Map<String, dynamic> json) {
+  final List<dynamic> data = json['data'];
+  final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
+  final int? filterId = json['filterId'];
+  return ManyDataObject<Map<String, dynamic>>(
+      data: data.map((e) {
+        return e as Map<String, dynamic>;
+      }).toList(),
+      filterType: filterType,
+      filterId: filterId);
+}
+
+ManyDataObject<T> parseManyJson<T extends DataObject>(Map<String, dynamic> json) {
+  final List<dynamic> data = json['data'];
+  final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
+  final int? filterId = json['filterId'];
+  return ManyDataObject<T>(
+      data: data.map((e) {
+        return DataObject.fromJson<T>(e as Map<String, dynamic>);
+      }).toList(),
+      filterType: filterType,
+      filterId: filterId);
+}
+
+Future<int?> handleGenericJson(
+  Map<String, dynamic> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
   required HandleSingleRawCallback handleSingleRaw,
@@ -46,102 +78,112 @@ Future<int?> handleFromJson(
 }) {
   final type = getTypeFromTableName(json['tableName'] as String);
   return switch (type) {
-    const (BoutConfig) => _handleFromJsonGeneric<BoutConfig>(json,
+    const (BoutConfig) => handleJson<BoutConfig>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Club) => _handleFromJsonGeneric<Club>(json,
+    const (Club) => handleJson<Club>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Bout) => _handleFromJsonGeneric<Bout>(json,
+    const (Bout) => handleJson<Bout>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (BoutAction) => _handleFromJsonGeneric<BoutAction>(json,
+    const (BoutAction) => handleJson<BoutAction>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Organization) => _handleFromJsonGeneric<Organization>(json,
+    const (Organization) => handleJson<Organization>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Division) => _handleFromJsonGeneric<Division>(json,
+    const (Division) => handleJson<Division>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (League) => _handleFromJsonGeneric<League>(json,
+    const (League) => handleJson<League>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (DivisionWeightClass) => _handleFromJsonGeneric<DivisionWeightClass>(json,
+    const (DivisionWeightClass) => handleJson<DivisionWeightClass>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (LeagueTeamParticipation) => _handleFromJsonGeneric<LeagueTeamParticipation>(json,
+    const (LeagueTeamParticipation) => handleJson<LeagueTeamParticipation>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Lineup) => _handleFromJsonGeneric<Lineup>(json,
+    const (Lineup) => handleJson<Lineup>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Membership) => _handleFromJsonGeneric<Membership>(json,
+    const (Membership) => handleJson<Membership>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Participation) => _handleFromJsonGeneric<Participation>(json,
+    const (Participation) => handleJson<Participation>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (ParticipantState) => _handleFromJsonGeneric<ParticipantState>(json,
+    const (ParticipantState) => handleJson<ParticipantState>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Person) => _handleFromJsonGeneric<Person>(json,
+    const (Person) => handleJson<Person>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Team) => _handleFromJsonGeneric<Team>(json,
+    const (SecuredUser) => handleJson<SecuredUser>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (TeamMatch) => _handleFromJsonGeneric<TeamMatch>(json,
+    const (Team) => handleJson<Team>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (TeamMatchBout) => _handleFromJsonGeneric<TeamMatchBout>(json,
+    const (TeamMatch) => handleJson<TeamMatch>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (Competition) => _handleFromJsonGeneric<Competition>(json,
+    const (TeamMatchBout) => handleJson<TeamMatchBout>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (CompetitionTeamParticipation) => _handleFromJsonGeneric<CompetitionTeamParticipation>(json,
+    const (User) => handleJson<User>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw),
-    const (WeightClass) => _handleFromJsonGeneric<WeightClass>(json,
+    const (Competition) => handleJson<Competition>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (CompetitionTeamParticipation) => handleJson<CompetitionTeamParticipation>(json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw),
+    const (WeightClass) => handleJson<WeightClass>(json,
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
@@ -150,7 +192,7 @@ Future<int?> handleFromJson(
   };
 }
 
-Future<int?> _handleFromJsonGeneric<T extends DataObject>(
+Future<int?> handleJson<T extends DataObject>(
   Map<String, dynamic> json, {
   required HandleSingleCallback handleSingle,
   required HandleManyCallback handleMany,
@@ -162,27 +204,20 @@ Future<int?> _handleFromJsonGeneric<T extends DataObject>(
   final operation = CRUD.values.byName(json['operation']);
 
   if (isMany) {
-    final List<dynamic> data = json['data'];
-    final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
-    final int? filterId = json['filterId'];
     if (isRaw) {
-      await handleManyRaw<T>(
-          operation: operation,
-          many: ManyDataObject<Map<String, dynamic>>(
-              data: data.map((e) => e as Map<String, dynamic>).toList(), filterType: filterType, filterId: filterId));
+      await handleManyRaw<T>(operation: operation, many: parseManyRawJson(json));
     } else {
       await handleMany<T>(
-          operation: operation,
-          many: ManyDataObject<T>(
-              data: data.map((e) => DataObject.fromJson<T>(e as Map<String, dynamic>)).toList(),
-              filterType: filterType,
-              filterId: filterId));
+        operation: operation,
+        many: parseManyJson<T>(json),
+      );
     }
   } else {
     if (isRaw) {
-      return await handleSingleRaw<T>(operation: operation, single: json['data']);
+      return await handleSingleRaw<T>(operation: operation, single: parseSingleRawJson(json));
     } else {
-      return await handleSingle<T>(operation: operation, single: DataObject.fromJson<T>(json['data']));
+      final single = parseSingleJson<T>(json);
+      return await handleSingle<T>(operation: operation, single: single);
     }
   }
   return null;
@@ -202,6 +237,7 @@ String getTableNameFromType(Type t) {
     const (BasicAuthService) => 'basic_auth_service', // Only used for type encoding
     const (BoutConfig) => 'bout_config',
     const (Club) => 'club',
+    const (Competition) => 'competition',
     const (Bout) => 'bout',
     const (BoutAction) => 'bout_action',
     const (Organization) => 'organization',
@@ -214,10 +250,11 @@ String getTableNameFromType(Type t) {
     const (Participation) => 'participation',
     const (ParticipantState) => 'participant_state',
     const (Person) => 'person',
+    const (SecuredUser) => 'user',
     const (Team) => 'team',
     const (TeamMatch) => 'team_match',
     const (TeamMatchBout) => 'team_match_bout',
-    const (Competition) => 'competition',
+    const (User) => 'user',
     const (WeightClass) => 'weight_class',
     _ => throw UnimplementedError('ClassName for "${t.toString()}" not found.'),
   };
@@ -243,6 +280,7 @@ Type getTypeFromTableName(String tableName) {
     'team' => Team,
     'team_match' => TeamMatch,
     'team_match_bout' => TeamMatchBout,
+    'user' => SecuredUser,
     'competition' => Competition,
     'weight_class' => WeightClass,
     _ => throw UnimplementedError('Type for "${tableName.toString()}" not found.'),

@@ -21,20 +21,18 @@ BoutConfig _$BoutConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$BoutConfig {
   int? get id => throw _privateConstructorUsedError;
-
   Duration get periodDuration => throw _privateConstructorUsedError;
-
   Duration get breakDuration => throw _privateConstructorUsedError;
-
   Duration get activityDuration => throw _privateConstructorUsedError;
-
   Duration get injuryDuration => throw _privateConstructorUsedError;
-
   int get periodCount => throw _privateConstructorUsedError;
 
+  /// Serializes this BoutConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BoutConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BoutConfigCopyWith<BoutConfig> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -42,7 +40,6 @@ mixin _$BoutConfig {
 abstract class $BoutConfigCopyWith<$Res> {
   factory $BoutConfigCopyWith(BoutConfig value, $Res Function(BoutConfig) then) =
       _$BoutConfigCopyWithImpl<$Res, BoutConfig>;
-
   @useResult
   $Res call(
       {int? id,
@@ -59,10 +56,11 @@ class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig> implements $BoutCo
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BoutConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -106,7 +104,6 @@ class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig> implements $BoutCo
 abstract class _$$BoutConfigImplCopyWith<$Res> implements $BoutConfigCopyWith<$Res> {
   factory _$$BoutConfigImplCopyWith(_$BoutConfigImpl value, $Res Function(_$BoutConfigImpl) then) =
       __$$BoutConfigImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -123,6 +120,8 @@ class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res
     implements _$$BoutConfigImplCopyWith<$Res> {
   __$$BoutConfigImplCopyWithImpl(_$BoutConfigImpl _value, $Res Function(_$BoutConfigImpl) _then) : super(_value, _then);
 
+  /// Create a copy of BoutConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -212,12 +211,14 @@ class _$BoutConfigImpl extends _BoutConfig {
             (identical(other.periodCount, periodCount) || other.periodCount == periodCount));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration, periodCount);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BoutConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BoutConfigImplCopyWith<_$BoutConfigImpl> get copyWith =>
@@ -239,30 +240,26 @@ abstract class _BoutConfig extends BoutConfig {
       final Duration activityDuration,
       final Duration injuryDuration,
       final int periodCount}) = _$BoutConfigImpl;
-
   const _BoutConfig._() : super._();
 
   factory _BoutConfig.fromJson(Map<String, dynamic> json) = _$BoutConfigImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   Duration get periodDuration;
-
   @override
   Duration get breakDuration;
-
   @override
   Duration get activityDuration;
-
   @override
   Duration get injuryDuration;
-
   @override
   int get periodCount;
 
+  /// Create a copy of BoutConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BoutConfigImplCopyWith<_$BoutConfigImpl> get copyWith => throw _privateConstructorUsedError;
 }

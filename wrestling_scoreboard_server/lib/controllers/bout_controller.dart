@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_action_controller.dart';
 import 'entity_controller.dart';
 
-class BoutController extends EntityController<Bout> {
+class BoutController extends ShelfController<Bout> {
   static final BoutController _singleton = BoutController._internal();
 
   factory BoutController() {
@@ -17,8 +17,8 @@ class BoutController extends EntityController<Bout> {
   BoutController._internal() : super(tableName: 'bout');
 
   Future<Response> requestBoutActions(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(BoutActionController(),
-        isRaw: request.isRaw, conditions: ['bout_id = @id'], substitutionValues: {'id': id});
+    return BoutActionController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['bout_id = @id'], substitutionValues: {'id': id});
   }
 
   @override

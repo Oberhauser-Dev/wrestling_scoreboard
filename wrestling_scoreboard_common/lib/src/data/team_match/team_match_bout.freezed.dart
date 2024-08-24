@@ -21,16 +21,16 @@ TeamMatchBout _$TeamMatchBoutFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TeamMatchBout {
   int? get id => throw _privateConstructorUsedError;
-
   int get pos => throw _privateConstructorUsedError;
-
   TeamMatch get teamMatch => throw _privateConstructorUsedError;
-
   Bout get bout => throw _privateConstructorUsedError;
 
+  /// Serializes this TeamMatchBout to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamMatchBoutCopyWith<TeamMatchBout> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -38,12 +38,10 @@ mixin _$TeamMatchBout {
 abstract class $TeamMatchBoutCopyWith<$Res> {
   factory $TeamMatchBoutCopyWith(TeamMatchBout value, $Res Function(TeamMatchBout) then) =
       _$TeamMatchBoutCopyWithImpl<$Res, TeamMatchBout>;
-
   @useResult
   $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
 
   $TeamMatchCopyWith<$Res> get teamMatch;
-
   $BoutCopyWith<$Res> get bout;
 }
 
@@ -53,10 +51,11 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,6 +84,8 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
     ) as $Val);
   }
 
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamMatchCopyWith<$Res> get teamMatch {
@@ -93,6 +94,8 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
     });
   }
 
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BoutCopyWith<$Res> get bout {
@@ -106,14 +109,12 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
 abstract class _$$TeamMatchBoutImplCopyWith<$Res> implements $TeamMatchBoutCopyWith<$Res> {
   factory _$$TeamMatchBoutImplCopyWith(_$TeamMatchBoutImpl value, $Res Function(_$TeamMatchBoutImpl) then) =
       __$$TeamMatchBoutImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
 
   @override
   $TeamMatchCopyWith<$Res> get teamMatch;
-
   @override
   $BoutCopyWith<$Res> get bout;
 }
@@ -124,6 +125,8 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res> extends _$TeamMatchBoutCopyWithImp
   __$$TeamMatchBoutImplCopyWithImpl(_$TeamMatchBoutImpl _value, $Res Function(_$TeamMatchBoutImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -185,11 +188,13 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
             (identical(other.bout, bout) || other.bout == bout));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, pos, teamMatch, bout);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith =>
@@ -209,24 +214,22 @@ abstract class _TeamMatchBout extends TeamMatchBout {
       required final int pos,
       required final TeamMatch teamMatch,
       required final Bout bout}) = _$TeamMatchBoutImpl;
-
   const _TeamMatchBout._() : super._();
 
   factory _TeamMatchBout.fromJson(Map<String, dynamic> json) = _$TeamMatchBoutImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   int get pos;
-
   @override
   TeamMatch get teamMatch;
-
   @override
   Bout get bout;
 
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamMatchBoutImplCopyWith<_$TeamMatchBoutImpl> get copyWith => throw _privateConstructorUsedError;
 }

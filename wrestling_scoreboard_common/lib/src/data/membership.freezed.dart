@@ -21,19 +21,18 @@ Membership _$MembershipFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Membership {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization? get organization => throw _privateConstructorUsedError;
-
   String? get no => throw _privateConstructorUsedError; // Vereinsnummer
   Club get club => throw _privateConstructorUsedError;
-
   Person get person => throw _privateConstructorUsedError;
 
+  /// Serializes this Membership to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MembershipCopyWith<Membership> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -41,14 +40,11 @@ mixin _$Membership {
 abstract class $MembershipCopyWith<$Res> {
   factory $MembershipCopyWith(Membership value, $Res Function(Membership) then) =
       _$MembershipCopyWithImpl<$Res, Membership>;
-
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
 
   $OrganizationCopyWith<$Res>? get organization;
-
   $ClubCopyWith<$Res> get club;
-
   $PersonCopyWith<$Res> get person;
 }
 
@@ -58,10 +54,11 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -100,6 +97,8 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
     ) as $Val);
   }
 
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
@@ -112,6 +111,8 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
     });
   }
 
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ClubCopyWith<$Res> get club {
@@ -120,6 +121,8 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
     });
   }
 
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PersonCopyWith<$Res> get person {
@@ -133,17 +136,14 @@ class _$MembershipCopyWithImpl<$Res, $Val extends Membership> implements $Member
 abstract class _$$MembershipImplCopyWith<$Res> implements $MembershipCopyWith<$Res> {
   factory _$$MembershipImplCopyWith(_$MembershipImpl value, $Res Function(_$MembershipImpl) then) =
       __$$MembershipImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
-
   @override
   $ClubCopyWith<$Res> get club;
-
   @override
   $PersonCopyWith<$Res> get person;
 }
@@ -153,6 +153,8 @@ class __$$MembershipImplCopyWithImpl<$Res> extends _$MembershipCopyWithImpl<$Res
     implements _$$MembershipImplCopyWith<$Res> {
   __$$MembershipImplCopyWithImpl(_$MembershipImpl _value, $Res Function(_$MembershipImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -209,7 +211,6 @@ class _$MembershipImpl extends _Membership {
   final Organization? organization;
   @override
   final String? no;
-
 // Vereinsnummer
   @override
   final Club club;
@@ -234,11 +235,13 @@ class _$MembershipImpl extends _Membership {
             (identical(other.person, person) || other.person == person));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, no, club, person);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MembershipImplCopyWith<_$MembershipImpl> get copyWith =>
@@ -260,30 +263,26 @@ abstract class _Membership extends Membership {
       final String? no,
       required final Club club,
       required final Person person}) = _$MembershipImpl;
-
   const _Membership._() : super._();
 
   factory _Membership.fromJson(Map<String, dynamic> json) = _$MembershipImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization? get organization;
-
   @override
-  String? get no;
-
-  @override // Vereinsnummer
+  String? get no; // Vereinsnummer
+  @override
   Club get club;
-
   @override
   Person get person;
 
+  /// Create a copy of Membership
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MembershipImplCopyWith<_$MembershipImpl> get copyWith => throw _privateConstructorUsedError;
 }

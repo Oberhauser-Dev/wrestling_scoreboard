@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.da
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -125,8 +126,7 @@ class PersonOverview extends AbstractPersonOverview {
           builder: (BuildContext context, List<Membership> memberships) {
             return GroupedList(
               header: HeadingItem(
-                trailing: IconButton(
-                  icon: const Icon(Icons.add),
+                trailing: RestrictedAddButton(
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(

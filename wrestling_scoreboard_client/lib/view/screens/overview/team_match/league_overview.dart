@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -81,8 +82,7 @@ class LeagueOverview extends ConsumerWidget {
               builder: (BuildContext context, List<LeagueTeamParticipation> teamParticipations) {
                 return GroupedList(
                   header: HeadingItem(
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add),
+                    trailing: RestrictedAddButton(
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(

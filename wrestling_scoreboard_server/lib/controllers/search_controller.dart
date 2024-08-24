@@ -37,7 +37,7 @@ class SearchController {
       List<Map<String, dynamic>> manyJsonList = [];
       for (final tableName in searchTypes) {
         final searchType = getTypeFromTableName(tableName);
-        final entityController = EntityController.getControllerFromDataType(searchType);
+        final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
         if (isValidLikeSearch) {
           manyJson = await entityController.getManyJsonLike(raw, likeParam, organizationId: searchOrganizationId);

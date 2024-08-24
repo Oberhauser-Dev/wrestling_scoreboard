@@ -1,5 +1,8 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/routes/router.dart';
 
 import '../controllers/bout_action_controller.dart';
 import '../controllers/bout_config_controller.dart';
@@ -31,22 +34,28 @@ class ApiRoute {
     final router = Router();
 
     final databaseController = DatabaseController();
-    router.get('/database/export', databaseController.export);
-    router.post('/database/reset', databaseController.reset);
-    router.post('/database/restore', databaseController.restore);
-    router.post('/database/restore_default', databaseController.restoreDefault);
+    router.restrictedGet('/database/export', databaseController.export, UserPrivilege.admin);
+    router.restrictedPost('/database/reset', databaseController.reset, UserPrivilege.admin);
+    router.restrictedPost('/database/restore', databaseController.restore, UserPrivilege.admin);
+    router.restrictedPost('/database/restore_default', databaseController.restoreDefault, UserPrivilege.admin);
+
+    final authController = AuthController();
+    router.restrictedGet('/auth/user', authController.requestUser);
+    router.post('/auth/sign_in', authController.signIn);
+    router.post('/auth/sign_up', authController.signUp);
+    router.restrictedPost('/auth/user', authController.updateSingle);
 
     final searchController = SearchController();
     router.get('/search', searchController.search);
     router.post('/search', searchController.search);
 
     final boutConfigController = BoutConfigController();
-    router.post('/bout_config', boutConfigController.postSingle);
+    router.restrictedPost('/bout_config', boutConfigController.postSingle);
     router.get('/bout_configs', boutConfigController.requestMany);
     router.get('/bout_config/<id|[0-9]+>', boutConfigController.requestSingle);
 
     final clubController = ClubController();
-    router.post('/club', clubController.postSingle);
+    router.restrictedPost('/club', clubController.postSingle);
     router.get('/clubs', clubController.requestMany);
     router.get('/club/<id|[0-9]+>', clubController.requestSingle);
     router.get('/club/<id|[0-9]+>/teams', clubController.requestTeams);
@@ -54,19 +63,19 @@ class ApiRoute {
     // router.get('/club/<no|[0-9]{5}>', clubRequest);
 
     final boutController = BoutController();
-    router.post('/bout', boutController.postSingle);
+    router.restrictedPost('/bout', boutController.postSingle);
     router.get('/bouts', boutController.requestMany);
     router.get('/bout/<id|[0-9]+>', boutController.requestSingle);
     router.get('/bout/<id|[0-9]+>/bout_actions', boutController.requestBoutActions);
 
     final boutActionController = BoutActionController();
-    router.post('/bout_action', boutActionController.postSingle);
+    router.restrictedPost('/bout_action', boutActionController.postSingle);
     router.get('/bout_actions', boutActionController.requestMany);
     router.get('/bout_action/<id|[0-9]+>', boutActionController.requestSingle);
 
     final organizationController = OrganizationController();
-    router.post('/organization/<id|[0-9]+>/api/import', organizationController.import);
-    router.post('/organization', organizationController.postSingle);
+    router.restrictedPostOne('/organization/<id|[0-9]+>/api/import', organizationController.import);
+    router.restrictedPost('/organization', organizationController.postSingle);
     router.get('/organizations', organizationController.requestMany);
     router.get('/organization/<id|[0-9]+>', organizationController.requestSingle);
     router.get('/organization/<id|[0-9]+>/organizations', organizationController.requestChildOrganizations);
@@ -75,7 +84,7 @@ class ApiRoute {
     router.get('/organization/<id|[0-9]+>/competitions', organizationController.requestCompetitions);
 
     final divisionController = DivisionController();
-    router.post('/division', divisionController.postSingle);
+    router.restrictedPost('/division', divisionController.postSingle);
     router.get('/divisions', divisionController.requestMany);
     router.get('/division/<id|[0-9]+>', divisionController.requestSingle);
     router.get('/division/<id|[0-9]+>/leagues', divisionController.requestLeagues);
@@ -84,8 +93,8 @@ class ApiRoute {
     router.get('/division/<id|[0-9]+>/division_weight_classs', divisionController.requestDivisionWeightClasses);
 
     final leagueController = LeagueController();
-    router.post('/league/<id|[0-9]+>/api/import', leagueController.import);
-    router.post('/league', leagueController.postSingle);
+    router.restrictedPostOne('/league/<id|[0-9]+>/api/import', leagueController.import);
+    router.restrictedPost('/league', leagueController.postSingle);
     router.get('/leagues', leagueController.requestMany);
     router.get('/league/<id|[0-9]+>', leagueController.requestSingle);
     router.get('/league/<id|[0-9]+>/teams', leagueController.requestTeams);
@@ -93,77 +102,77 @@ class ApiRoute {
     router.get('/league/<id|[0-9]+>/team_matchs', leagueController.requestTeamMatchs);
 
     final divisionWeightClassController = DivisionWeightClassController();
-    router.post('/division_weight_class', divisionWeightClassController.postSingle);
+    router.restrictedPost('/division_weight_class', divisionWeightClassController.postSingle);
     router.get('/division_weight_classs', divisionWeightClassController.requestMany);
     router.get('/division_weight_class/<id|[0-9]+>', divisionWeightClassController.requestSingle);
 
     final leagueTeamParticipationController = LeagueTeamParticipationController();
-    router.post('/league_team_participation', leagueTeamParticipationController.postSingle);
+    router.restrictedPost('/league_team_participation', leagueTeamParticipationController.postSingle);
     router.get('/league_team_participations', leagueTeamParticipationController.requestMany);
     router.get('/league_team_participation/<id|[0-9]+>', leagueTeamParticipationController.requestSingle);
 
     final lineupController = LineupController();
-    router.post('/lineup', lineupController.postSingle);
+    router.restrictedPost('/lineup', lineupController.postSingle);
     router.get('/lineups', lineupController.requestMany);
     router.get('/lineup/<id|[0-9]+>', lineupController.requestSingle);
     router.get('/lineup/<id|[0-9]+>/participations', lineupController.requestParticipations);
 
     final membershipController = MembershipController();
-    router.post('/membership', membershipController.postSingle);
+    router.restrictedPost('/membership', membershipController.postSingle);
     router.get('/memberships', membershipController.requestMany);
     router.get('/membership/<id|[0-9]+>', membershipController.requestSingle);
 
     final participantStateController = ParticipantStateController();
-    router.post('/participant_state', participantStateController.postSingle);
+    router.restrictedPost('/participant_state', participantStateController.postSingle);
     router.get('/participant_states', participantStateController.requestMany);
     router.get('/participant_state/<id|[0-9]+>', participantStateController.requestSingle);
 
     final participationController = ParticipationController();
-    router.post('/participation', participationController.postSingle);
+    router.restrictedPost('/participation', participationController.postSingle);
     router.get('/participations', participationController.requestMany);
     router.get('/participation/<id|[0-9]+>', participationController.requestSingle);
 
     final personController = PersonController();
-    router.post('/person', personController.postSingle);
+    router.restrictedPost('/person', personController.postSingle);
     router.get('/persons', personController.requestMany);
     router.get('/person/<id|[0-9]+>', personController.requestSingle);
     router.get('/person/<id|[0-9]+>/memberships', personController.requestMemberships);
 
     final teamController = TeamController();
-    router.post('/team/<id|[0-9]+>/api/import', teamController.import);
-    router.post('/team', teamController.postSingle);
+    router.restrictedPostOne('/team/<id|[0-9]+>/api/import', teamController.import);
+    router.restrictedPost('/team', teamController.postSingle);
     router.get('/teams', teamController.requestMany);
     router.get('/team/<id|[0-9]+>', teamController.requestSingle);
     router.get('/team/<id|[0-9]+>/team_matchs', teamController.requestTeamMatches);
 
     final matchController = TeamMatchController();
-    router.post('/team_match', matchController.postSingle);
+    router.restrictedPost('/team_match', matchController.postSingle);
     router.get('/team_matchs', matchController.requestMany);
     router.get('/team_matches', matchController.requestMany);
     router.get('/team_match/<id|[0-9]+>', matchController.requestSingle);
-    router.post('/team_match/<id|[0-9]+>/bouts/generate', matchController.generateBouts);
+    router.restrictedPostOne('/team_match/<id|[0-9]+>/bouts/generate', matchController.generateBouts);
     router.get('/team_match/<id|[0-9]+>/bouts', matchController.requestBouts);
     router.get('/team_match/<id|[0-9]+>/team_match_bouts', matchController.requestTeamMatchBouts);
 
     final teamMatchBoutController = TeamMatchBoutController();
-    router.post('/team_match_bout', teamMatchBoutController.postSingle);
+    router.restrictedPost('/team_match_bout', teamMatchBoutController.postSingle);
     router.get('/team_match_bouts', teamMatchBoutController.requestMany);
     router.get('/team_match_bout/<id|[0-9]+>', teamMatchBoutController.requestSingle);
 
     final competitionController = CompetitionController();
-    router.post('/competition/<id|[0-9]+>/api/import', competitionController.import);
-    router.post('/competition', competitionController.postSingle);
+    router.restrictedPostOne('/competition/<id|[0-9]+>/api/import', competitionController.import);
+    router.restrictedPost('/competition', competitionController.postSingle);
     router.get('/competitions', competitionController.requestMany);
     router.get('/competition/<id|[0-9]+>', competitionController.requestSingle);
     router.get('/competition/<id|[0-9]+>/bouts', competitionController.requestBouts);
 
     final competitionBoutController = CompetitionBoutController();
-    router.post('/competition_bout', competitionBoutController.postSingle);
+    router.restrictedPost('/competition_bout', competitionBoutController.postSingle);
     router.get('/competition_bouts', competitionBoutController.requestMany);
     router.get('/competition_bout/<id|[0-9]+>', competitionBoutController.requestSingle);
 
     final weightClassController = WeightClassController();
-    router.post('/weight_class', weightClassController.postSingle);
+    router.restrictedPost('/weight_class', weightClassController.postSingle);
     router.get('/weight_classs', weightClassController.requestMany);
     router.get('/weight_classes', weightClassController.requestMany);
     router.get('/weight_class/<id|[0-9]+>', weightClassController.requestSingle);

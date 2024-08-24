@@ -16,6 +16,7 @@ class Preferences {
   static const keyFontFamily = 'font-family';
   static const keyFavorites = 'favorites';
   static const keyOrganizationAuth = 'org-auth';
+  static const keyJwtToken = 'jwt';
 
   static final supportedLanguages = {
     const Locale('en', 'US'),

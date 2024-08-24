@@ -27,21 +27,21 @@ class LeagueController extends OrganizationalController<League> {
   LeagueController._internal() : super(tableName: 'league');
 
   Future<Response> requestTeams(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(TeamController(),
-        isRaw: request.isRaw, conditions: ['league_id = @id'], substitutionValues: {'id': id});
+    return TeamController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['league_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestLeagueTeamParticipations(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(LeagueTeamParticipationController(),
-        isRaw: request.isRaw, conditions: ['league_id = @id'], substitutionValues: {'id': id});
+    return LeagueTeamParticipationController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['league_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestTeamMatchs(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(TeamMatchController(),
+    return TeamMatchController().handleRequestMany(
         isRaw: request.isRaw, conditions: ['league_id = @id'], substitutionValues: {'id': id}, orderBy: ['date']);
   }
 
-  Future<Response> import(Request request, String leagueId) async {
+  Future<Response> import(Request request, User user, String leagueId) async {
     try {
       final league = await LeagueController().getSingle(int.parse(leagueId));
 

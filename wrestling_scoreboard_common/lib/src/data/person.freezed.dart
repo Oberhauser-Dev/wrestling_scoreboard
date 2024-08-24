@@ -21,32 +21,27 @@ Person _$PersonFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Person {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization? get organization => throw _privateConstructorUsedError;
-
   String get prename => throw _privateConstructorUsedError;
-
   String get surname => throw _privateConstructorUsedError;
-
   Gender? get gender => throw _privateConstructorUsedError;
-
   DateTime? get birthDate => throw _privateConstructorUsedError;
-
   @CountryJsonConverter()
   Country? get nationality => throw _privateConstructorUsedError;
 
+  /// Serializes this Person to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PersonCopyWith<Person> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PersonCopyWith<$Res> {
   factory $PersonCopyWith(Person value, $Res Function(Person) then) = _$PersonCopyWithImpl<$Res, Person>;
-
   @useResult
   $Res call(
       {int? id,
@@ -67,10 +62,11 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,6 +115,8 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
     ) as $Val);
   }
 
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
@@ -136,7 +134,6 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
 abstract class _$$PersonImplCopyWith<$Res> implements $PersonCopyWith<$Res> {
   factory _$$PersonImplCopyWith(_$PersonImpl value, $Res Function(_$PersonImpl) then) =
       __$$PersonImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -158,6 +155,8 @@ class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$Pers
     implements _$$PersonImplCopyWith<$Res> {
   __$$PersonImplCopyWithImpl(_$PersonImpl _value, $Res Function(_$PersonImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -261,12 +260,14 @@ class _$PersonImpl extends _Person {
             (identical(other.nationality, nationality) || other.nationality == nationality));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, orgSyncId, organization, prename, surname, gender, birthDate, nationality);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PersonImplCopyWith<_$PersonImpl> get copyWith => __$$PersonImplCopyWithImpl<_$PersonImpl>(this, _$identity);
@@ -289,37 +290,31 @@ abstract class _Person extends Person {
       final Gender? gender,
       final DateTime? birthDate,
       @CountryJsonConverter() final Country? nationality}) = _$PersonImpl;
-
   const _Person._() : super._();
 
   factory _Person.fromJson(Map<String, dynamic> json) = _$PersonImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization? get organization;
-
   @override
   String get prename;
-
   @override
   String get surname;
-
   @override
   Gender? get gender;
-
   @override
   DateTime? get birthDate;
-
   @override
   @CountryJsonConverter()
   Country? get nationality;
 
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PersonImplCopyWith<_$PersonImpl> get copyWith => throw _privateConstructorUsedError;
 }

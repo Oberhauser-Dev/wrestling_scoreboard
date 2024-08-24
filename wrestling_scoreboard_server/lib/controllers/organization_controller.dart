@@ -15,7 +15,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_config_controller.dart';
 import 'league_controller.dart';
 
-class OrganizationController extends EntityController<Organization> {
+class OrganizationController extends ShelfController<Organization> {
   static final OrganizationController _singleton = OrganizationController._internal();
 
   factory OrganizationController() {
@@ -25,23 +25,23 @@ class OrganizationController extends EntityController<Organization> {
   OrganizationController._internal() : super(tableName: 'organization');
 
   Future<Response> requestDivisions(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(DivisionController(),
-        isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+    return DivisionController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestClubs(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(ClubController(),
-        isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+    return ClubController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestCompetitions(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(CompetitionController(),
-        isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+    return CompetitionController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<Response> requestChildOrganizations(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(OrganizationController(),
-        isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
+    return OrganizationController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
   }
 
   Future<WrestlingApi?> initApiProvider(Request request, int organizationId) async {
@@ -59,7 +59,7 @@ class OrganizationController extends EntityController<Organization> {
     return organization.getApi(OrganizationalController.getSingleFromDataTypeOfOrg, authService: authService);
   }
 
-  Future<Response> import(Request request, String organizationId) async {
+  Future<Response> import(Request request, User user, String organizationId) async {
     try {
       final apiProvider = await initApiProvider(request, int.parse(organizationId));
       if (apiProvider == null) {

@@ -4,7 +4,12 @@ import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.d
 import 'package:wrestling_scoreboard_common/common.dart';
 
 /// Data exchange layer with CRUD operations
-abstract class DataManager {
+abstract class DataManager implements AuthManager {
+  /// The auth service, if avilable.
+  final AuthService? authService;
+
+  DataManager({this.authService});
+
   /// Only used for delete action. Should actually be a REST statement, or using WebsocketManager directly.
   set webSocketManager(WebSocketManager manager);
 
@@ -173,4 +178,14 @@ abstract class DataManager {
     }
     return streamController;
   }
+}
+
+abstract class AuthManager {
+  Future<String> signIn(BasicAuthService authService);
+
+  Future<void> signUp(User user);
+
+  Future<User?> getUser();
+
+  Future<void> updateUser(User user);
 }

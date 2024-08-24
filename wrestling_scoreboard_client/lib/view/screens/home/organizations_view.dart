@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -20,8 +21,7 @@ class OrganizationsView extends StatelessWidget {
           return GroupedList(
             header: HeadingItem(
               title: localizations.organizations,
-              trailing: IconButton(
-                icon: const Icon(Icons.add),
+              trailing: RestrictedAddButton(
                 onPressed: () =>
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const OrganizationEdit())),
               ),

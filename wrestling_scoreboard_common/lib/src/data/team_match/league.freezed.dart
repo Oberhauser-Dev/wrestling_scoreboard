@@ -21,31 +21,26 @@ League _$LeagueFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$League {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization? get organization => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   DateTime get startDate => throw _privateConstructorUsedError;
-
   DateTime get endDate => throw _privateConstructorUsedError;
-
   Division get division => throw _privateConstructorUsedError;
-
   int get boutDays => throw _privateConstructorUsedError;
 
+  /// Serializes this League to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LeagueCopyWith<League> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LeagueCopyWith<$Res> {
   factory $LeagueCopyWith(League value, $Res Function(League) then) = _$LeagueCopyWithImpl<$Res, League>;
-
   @useResult
   $Res call(
       {int? id,
@@ -58,7 +53,6 @@ abstract class $LeagueCopyWith<$Res> {
       int boutDays});
 
   $OrganizationCopyWith<$Res>? get organization;
-
   $DivisionCopyWith<$Res> get division;
 }
 
@@ -68,10 +62,11 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,6 +115,8 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
     ) as $Val);
   }
 
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
@@ -132,6 +129,8 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
     });
   }
 
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DivisionCopyWith<$Res> get division {
@@ -145,7 +144,6 @@ class _$LeagueCopyWithImpl<$Res, $Val extends League> implements $LeagueCopyWith
 abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
   factory _$$LeagueImplCopyWith(_$LeagueImpl value, $Res Function(_$LeagueImpl) then) =
       __$$LeagueImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -160,7 +158,6 @@ abstract class _$$LeagueImplCopyWith<$Res> implements $LeagueCopyWith<$Res> {
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
-
   @override
   $DivisionCopyWith<$Res> get division;
 }
@@ -170,6 +167,8 @@ class __$$LeagueImplCopyWithImpl<$Res> extends _$LeagueCopyWithImpl<$Res, _$Leag
     implements _$$LeagueImplCopyWith<$Res> {
   __$$LeagueImplCopyWithImpl(_$LeagueImpl _value, $Res Function(_$LeagueImpl) _then) : super(_value, _then);
 
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -272,12 +271,14 @@ class _$LeagueImpl extends _League {
             (identical(other.boutDays, boutDays) || other.boutDays == boutDays));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, orgSyncId, organization, name, startDate, endDate, division, boutDays);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => __$$LeagueImplCopyWithImpl<_$LeagueImpl>(this, _$identity);
@@ -300,36 +301,30 @@ abstract class _League extends League {
       required final DateTime endDate,
       required final Division division,
       required final int boutDays}) = _$LeagueImpl;
-
   const _League._() : super._();
 
   factory _League.fromJson(Map<String, dynamic> json) = _$LeagueImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization? get organization;
-
   @override
   String get name;
-
   @override
   DateTime get startDate;
-
   @override
   DateTime get endDate;
-
   @override
   Division get division;
-
   @override
   int get boutDays;
 
+  /// Create a copy of League
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LeagueImplCopyWith<_$LeagueImpl> get copyWith => throw _privateConstructorUsedError;
 }

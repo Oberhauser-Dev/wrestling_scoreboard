@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'entity_controller.dart';
 import 'participation_controller.dart';
 
-class LineupController extends EntityController<Lineup> {
+class LineupController extends ShelfController<Lineup> {
   static final LineupController _singleton = LineupController._internal();
 
   factory LineupController() {
@@ -20,7 +20,7 @@ class LineupController extends EntityController<Lineup> {
   LineupController._internal() : super(tableName: 'lineup');
 
   Future<Response> requestParticipations(Request request, String id) async {
-    return EntityController.handleRequestManyOfController(ParticipationController(),
-        isRaw: request.isRaw, conditions: ['lineup_id = @id'], substitutionValues: {'id': id});
+    return ParticipationController()
+        .handleRequestMany(isRaw: request.isRaw, conditions: ['lineup_id = @id'], substitutionValues: {'id': id});
   }
 }

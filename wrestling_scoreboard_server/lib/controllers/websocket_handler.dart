@@ -15,6 +15,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/server.dart';
+import 'package:wrestling_scoreboard_server/services/auth.dart';
 
 import 'entity_controller.dart';
 import 'league_team_participation_controller.dart';
@@ -270,15 +271,28 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   }
 }
 
-Future<int> handleSingle<T extends DataObject>({required CRUD operation, required T single}) async {
+Future<int> handleSingle<T extends DataObject>({
+  required CRUD operation,
+  required T single,
+  UserPrivilege privilege = UserPrivilege.write,
+}) async {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
-  final controller = EntityController.getControllerFromDataType(T);
+  final controller = ShelfController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
+    if (privilege < UserPrivilege.write) {
+      throw Exception('Not allowed to perform update operation on ${single.tableName}/${single.id}');
+    }
     await controller.updateSingle(single);
     broadcast(jsonEncode(singleToJson(single, T, operation)));
   } else if (operation == CRUD.create) {
+    if (privilege < UserPrivilege.write) {
+      throw Exception('Not allowed to perform create operation on ${single.tableName}/${single.id}');
+    }
     single = single.copyWithId(await controller.createSingle(single)) as T;
   } else if (operation == CRUD.delete) {
+    if (privilege < UserPrivilege.write) {
+      throw Exception('Not allowed to perform delete operation on ${single.tableName}/${single.id}');
+    }
     await controller.deleteSingle(single.id!);
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
@@ -291,16 +305,28 @@ Future<int> handleSingle<T extends DataObject>({required CRUD operation, require
   return single.id!;
 }
 
-Future<int> handleSingleRaw<T extends DataObject>(
-    {required CRUD operation, required Map<String, dynamic> single}) async {
+Future<int> handleSingleRaw<T extends DataObject>({
+  required CRUD operation,
+  required Map<String, dynamic> single,
+  UserPrivilege privilege = UserPrivilege.write,
+}) async {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}/${single['id']}');
-  final controller = EntityController.getControllerFromDataType(T);
+  final controller = ShelfController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
+    if (privilege < UserPrivilege.write) {
+      throw Exception('Not allowed to perform update operation on ${getTableNameFromType(T)}/${single['id']}');
+    }
     await controller.updateSingleRaw(single);
     broadcast(jsonEncode(singleToJson(single, T, operation)));
   } else if (operation == CRUD.create) {
+    if (privilege < UserPrivilege.write) {
+      throw Exception('Not allowed to perform create operation on ${getTableNameFromType(T)}/${single['id']}');
+    }
     single['id'] = await controller.createSingleRaw(single);
   } else if (operation == CRUD.delete) {
+    if (privilege < UserPrivilege.write) {
+      throw Exception('Not allowed to perform delete operation on ${getTableNameFromType(T)}/${single['id']}');
+    }
     await controller.deleteSingle(single['id']);
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
@@ -313,27 +339,47 @@ Future<int> handleSingleRaw<T extends DataObject>(
   return single['id'];
 }
 
-Future<void> handleMany<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) {
+Future<void> handleMany<T extends DataObject>({
+  required CRUD operation,
+  required ManyDataObject<T> many,
+  UserPrivilege privilege = UserPrivilege.none,
+}) {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 
-Future<void> handleManyRaw<T extends DataObject>(
-    {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) {
+Future<void> handleManyRaw<T extends DataObject>({
+  required CRUD operation,
+  required ManyDataObject<Map<String, dynamic>> many,
+  UserPrivilege privilege = UserPrivilege.none,
+}) {
   print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 
 final websocketHandler = webSocketHandler(
   (WebSocketChannel webSocket) {
+    UserPrivilege privilege = UserPrivilege.none;
     webSocketPool.add(webSocket);
-    webSocket.stream.listen((message) {
+    webSocket.stream.listen((message) async {
       final json = jsonDecode(message);
-      handleFromJson(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
+      if (json['authorization'] != null) {
+        final authService = BearerAuthService.fromHeader(json['authorization']);
+        final user = await authService.getUser();
+        privilege = user?.privilege ?? UserPrivilege.none;
+        return;
+      }
+      await handleGenericJson(json,
+          handleSingle: <T extends DataObject>({required CRUD operation, required T single}) async =>
+              handleSingle<T>(operation: operation, single: single, privilege: privilege),
+          handleMany: <T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async =>
+              handleMany<T>(operation: operation, many: many, privilege: privilege),
+          handleSingleRaw: <T extends DataObject>(
+                  {required CRUD operation, required Map<String, dynamic> single}) async =>
+              handleSingleRaw<T>(operation: operation, single: single, privilege: privilege),
+          handleManyRaw: <T extends DataObject>(
+                  {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async =>
+              handleManyRaw<T>(operation: operation, many: many, privilege: privilege));
     }, onDone: () {
       webSocketPool.remove(webSocket);
     });

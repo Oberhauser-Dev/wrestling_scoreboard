@@ -3,7 +3,7 @@ import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
-class BoutActionController extends EntityController<BoutAction> {
+class BoutActionController extends ShelfController<BoutAction> {
   static final BoutActionController _singleton = BoutActionController._internal();
 
   factory BoutActionController() {

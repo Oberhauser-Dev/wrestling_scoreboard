@@ -468,6 +468,34 @@ class MockDataManager extends DataManager {
     // TODO: implement search
     throw UnimplementedError();
   }
+
+  @override
+  Future<String> signIn(BasicAuthService authService) {
+    // TODO: implement signIn
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> signUp(User user) {
+    // TODO: implement signUp
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User?> getUser() async {
+    return User(
+      username: 'admin',
+      privilege: UserPrivilege.admin,
+      person: null,
+      createdAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<void> updateUser(User user) {
+    // TODO: implement changePassword
+    throw UnimplementedError();
+  }
 }
 
 class MockWebSocketManager implements WebSocketManager {

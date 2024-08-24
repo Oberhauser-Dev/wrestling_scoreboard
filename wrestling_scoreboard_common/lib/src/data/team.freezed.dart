@@ -21,32 +21,28 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Team {
   int? get id => throw _privateConstructorUsedError;
-
   String? get orgSyncId => throw _privateConstructorUsedError;
-
   Organization? get organization => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   Club get club => throw _privateConstructorUsedError;
-
   String? get description => throw _privateConstructorUsedError;
 
+  /// Serializes this Team to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamCopyWith<Team> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TeamCopyWith<$Res> {
   factory $TeamCopyWith(Team value, $Res Function(Team) then) = _$TeamCopyWithImpl<$Res, Team>;
-
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String name, Club club, String? description});
 
   $OrganizationCopyWith<$Res>? get organization;
-
   $ClubCopyWith<$Res> get club;
 }
 
@@ -56,10 +52,11 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,6 +95,8 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
     ) as $Val);
   }
 
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
@@ -110,6 +109,8 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
     });
   }
 
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ClubCopyWith<$Res> get club {
@@ -122,14 +123,12 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
 /// @nodoc
 abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
   factory _$$TeamImplCopyWith(_$TeamImpl value, $Res Function(_$TeamImpl) then) = __$$TeamImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String name, Club club, String? description});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
-
   @override
   $ClubCopyWith<$Res> get club;
 }
@@ -138,6 +137,8 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
 class __$$TeamImplCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res, _$TeamImpl> implements _$$TeamImplCopyWith<$Res> {
   __$$TeamImplCopyWithImpl(_$TeamImpl _value, $Res Function(_$TeamImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -217,11 +218,13 @@ class _$TeamImpl extends _Team {
             (identical(other.description, description) || other.description == description));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, club, description);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamImplCopyWith<_$TeamImpl> get copyWith => __$$TeamImplCopyWithImpl<_$TeamImpl>(this, _$identity);
@@ -242,30 +245,26 @@ abstract class _Team extends Team {
       required final String name,
       required final Club club,
       final String? description}) = _$TeamImpl;
-
   const _Team._() : super._();
 
   factory _Team.fromJson(Map<String, dynamic> json) = _$TeamImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   String? get orgSyncId;
-
   @override
   Organization? get organization;
-
   @override
   String get name;
-
   @override
   Club get club;
-
   @override
   String? get description;
 
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamImplCopyWith<_$TeamImpl> get copyWith => throw _privateConstructorUsedError;
 }

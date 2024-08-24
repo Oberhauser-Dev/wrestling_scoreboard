@@ -21,14 +21,15 @@ CompetitionBout _$CompetitionBoutFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CompetitionBout {
   int? get id => throw _privateConstructorUsedError;
-
   Competition get competition => throw _privateConstructorUsedError;
-
   Bout get bout => throw _privateConstructorUsedError;
 
+  /// Serializes this CompetitionBout to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CompetitionBoutCopyWith<CompetitionBout> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -36,12 +37,10 @@ mixin _$CompetitionBout {
 abstract class $CompetitionBoutCopyWith<$Res> {
   factory $CompetitionBoutCopyWith(CompetitionBout value, $Res Function(CompetitionBout) then) =
       _$CompetitionBoutCopyWithImpl<$Res, CompetitionBout>;
-
   @useResult
   $Res call({int? id, Competition competition, Bout bout});
 
   $CompetitionCopyWith<$Res> get competition;
-
   $BoutCopyWith<$Res> get bout;
 }
 
@@ -51,10 +50,11 @@ class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout> implemen
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -78,6 +78,8 @@ class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout> implemen
     ) as $Val);
   }
 
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CompetitionCopyWith<$Res> get competition {
@@ -86,6 +88,8 @@ class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout> implemen
     });
   }
 
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BoutCopyWith<$Res> get bout {
@@ -99,14 +103,12 @@ class _$CompetitionBoutCopyWithImpl<$Res, $Val extends CompetitionBout> implemen
 abstract class _$$CompetitionBoutImplCopyWith<$Res> implements $CompetitionBoutCopyWith<$Res> {
   factory _$$CompetitionBoutImplCopyWith(_$CompetitionBoutImpl value, $Res Function(_$CompetitionBoutImpl) then) =
       __$$CompetitionBoutImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, Competition competition, Bout bout});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
-
   @override
   $BoutCopyWith<$Res> get bout;
 }
@@ -117,6 +119,8 @@ class __$$CompetitionBoutImplCopyWithImpl<$Res> extends _$CompetitionBoutCopyWit
   __$$CompetitionBoutImplCopyWithImpl(_$CompetitionBoutImpl _value, $Res Function(_$CompetitionBoutImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -170,11 +174,13 @@ class _$CompetitionBoutImpl extends _CompetitionBout {
             (identical(other.bout, bout) || other.bout == bout));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, competition, bout);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith =>
@@ -191,21 +197,20 @@ class _$CompetitionBoutImpl extends _CompetitionBout {
 abstract class _CompetitionBout extends CompetitionBout {
   const factory _CompetitionBout({final int? id, required final Competition competition, required final Bout bout}) =
       _$CompetitionBoutImpl;
-
   const _CompetitionBout._() : super._();
 
   factory _CompetitionBout.fromJson(Map<String, dynamic> json) = _$CompetitionBoutImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   Competition get competition;
-
   @override
   Bout get bout;
 
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CompetitionBoutImplCopyWith<_$CompetitionBoutImpl> get copyWith => throw _privateConstructorUsedError;
 }

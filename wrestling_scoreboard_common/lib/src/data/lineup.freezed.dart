@@ -21,29 +21,27 @@ Lineup _$LineupFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Lineup {
   int? get id => throw _privateConstructorUsedError;
-
   Team get team => throw _privateConstructorUsedError;
-
   Membership? get leader => throw _privateConstructorUsedError; // Mannschaftsführer
   Membership? get coach => throw _privateConstructorUsedError;
 
+  /// Serializes this Lineup to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LineupCopyWith<Lineup> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LineupCopyWith<$Res> {
   factory $LineupCopyWith(Lineup value, $Res Function(Lineup) then) = _$LineupCopyWithImpl<$Res, Lineup>;
-
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
   $TeamCopyWith<$Res> get team;
-
   $MembershipCopyWith<$Res>? get leader;
-
   $MembershipCopyWith<$Res>? get coach;
 }
 
@@ -53,10 +51,11 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,6 +84,8 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
     ) as $Val);
   }
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamCopyWith<$Res> get team {
@@ -93,6 +94,8 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
     });
   }
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MembershipCopyWith<$Res>? get leader {
@@ -105,6 +108,8 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
     });
   }
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MembershipCopyWith<$Res>? get coach {
@@ -122,17 +127,14 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
 abstract class _$$LineupImplCopyWith<$Res> implements $LineupCopyWith<$Res> {
   factory _$$LineupImplCopyWith(_$LineupImpl value, $Res Function(_$LineupImpl) then) =
       __$$LineupImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
   @override
   $TeamCopyWith<$Res> get team;
-
   @override
   $MembershipCopyWith<$Res>? get leader;
-
   @override
   $MembershipCopyWith<$Res>? get coach;
 }
@@ -142,6 +144,8 @@ class __$$LineupImplCopyWithImpl<$Res> extends _$LineupCopyWithImpl<$Res, _$Line
     implements _$$LineupImplCopyWith<$Res> {
   __$$LineupImplCopyWithImpl(_$LineupImpl _value, $Res Function(_$LineupImpl) _then) : super(_value, _then);
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -184,7 +188,6 @@ class _$LineupImpl extends _Lineup {
   final Team team;
   @override
   final Membership? leader;
-
 // Mannschaftsführer
   @override
   final Membership? coach;
@@ -205,11 +208,13 @@ class _$LineupImpl extends _Lineup {
             (identical(other.coach, coach) || other.coach == coach));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, team, leader, coach);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LineupImplCopyWith<_$LineupImpl> get copyWith => __$$LineupImplCopyWithImpl<_$LineupImpl>(this, _$identity);
@@ -225,24 +230,22 @@ class _$LineupImpl extends _Lineup {
 abstract class _Lineup extends Lineup {
   const factory _Lineup({final int? id, required final Team team, final Membership? leader, final Membership? coach}) =
       _$LineupImpl;
-
   const _Lineup._() : super._();
 
   factory _Lineup.fromJson(Map<String, dynamic> json) = _$LineupImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   Team get team;
-
   @override
-  Membership? get leader;
-
-  @override // Mannschaftsführer
+  Membership? get leader; // Mannschaftsführer
+  @override
   Membership? get coach;
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LineupImplCopyWith<_$LineupImpl> get copyWith => throw _privateConstructorUsedError;
 }

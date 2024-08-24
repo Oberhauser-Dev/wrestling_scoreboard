@@ -10,6 +10,10 @@ import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/privacy_policy.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/profile.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/change_password.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_up.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
@@ -136,6 +140,22 @@ getRouter() {
               GoRoute(
                 path: PrivacyPolicyScreen.route,
                 builder: (context, state) => const PrivacyPolicyScreen(),
+              ),
+              GoRoute(
+                path: ProfileScreen.route,
+                builder: (context, state) => const ProfileScreen(),
+              ),
+              GoRoute(
+                path: SignInScreen.route,
+                builder: (context, state) => const SignInScreen(),
+              ),
+              GoRoute(
+                path: SignUpScreen.route,
+                builder: (context, state) => const SignUpScreen(),
+              ),
+              GoRoute(
+                path: ChangePasswordScreen.route,
+                builder: (context, state) => const ChangePasswordScreen(),
               ),
             ],
           ),

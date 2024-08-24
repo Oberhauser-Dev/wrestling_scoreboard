@@ -21,18 +21,17 @@ Participation _$ParticipationFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Participation {
   int? get id => throw _privateConstructorUsedError;
-
   Membership get membership => throw _privateConstructorUsedError;
-
   Lineup get lineup => throw _privateConstructorUsedError;
-
   WeightClass? get weightClass => throw _privateConstructorUsedError;
-
   double? get weight => throw _privateConstructorUsedError;
 
+  /// Serializes this Participation to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ParticipationCopyWith<Participation> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -40,14 +39,11 @@ mixin _$Participation {
 abstract class $ParticipationCopyWith<$Res> {
   factory $ParticipationCopyWith(Participation value, $Res Function(Participation) then) =
       _$ParticipationCopyWithImpl<$Res, Participation>;
-
   @useResult
   $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
 
   $MembershipCopyWith<$Res> get membership;
-
   $LineupCopyWith<$Res> get lineup;
-
   $WeightClassCopyWith<$Res>? get weightClass;
 }
 
@@ -57,10 +53,11 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -94,6 +91,8 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
     ) as $Val);
   }
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MembershipCopyWith<$Res> get membership {
@@ -102,6 +101,8 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
     });
   }
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LineupCopyWith<$Res> get lineup {
@@ -110,6 +111,8 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
     });
   }
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $WeightClassCopyWith<$Res>? get weightClass {
@@ -127,17 +130,14 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
 abstract class _$$ParticipationImplCopyWith<$Res> implements $ParticipationCopyWith<$Res> {
   factory _$$ParticipationImplCopyWith(_$ParticipationImpl value, $Res Function(_$ParticipationImpl) then) =
       __$$ParticipationImplCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
 
   @override
   $MembershipCopyWith<$Res> get membership;
-
   @override
   $LineupCopyWith<$Res> get lineup;
-
   @override
   $WeightClassCopyWith<$Res>? get weightClass;
 }
@@ -148,6 +148,8 @@ class __$$ParticipationImplCopyWithImpl<$Res> extends _$ParticipationCopyWithImp
   __$$ParticipationImplCopyWithImpl(_$ParticipationImpl _value, $Res Function(_$ParticipationImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -218,11 +220,13 @@ class _$ParticipationImpl extends _Participation {
             (identical(other.weight, weight) || other.weight == weight));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ParticipationImplCopyWith<_$ParticipationImpl> get copyWith =>
@@ -243,27 +247,24 @@ abstract class _Participation extends Participation {
       required final Lineup lineup,
       final WeightClass? weightClass,
       final double? weight}) = _$ParticipationImpl;
-
   const _Participation._() : super._();
 
   factory _Participation.fromJson(Map<String, dynamic> json) = _$ParticipationImpl.fromJson;
 
   @override
   int? get id;
-
   @override
   Membership get membership;
-
   @override
   Lineup get lineup;
-
   @override
   WeightClass? get weightClass;
-
   @override
   double? get weight;
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ParticipationImplCopyWith<_$ParticipationImpl> get copyWith => throw _privateConstructorUsedError;
 }
