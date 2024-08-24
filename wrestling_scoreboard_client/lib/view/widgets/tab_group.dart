@@ -10,9 +10,8 @@ class TabGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(
-        child: Expanded(
-            child: TabBarView(
+        child: TabBarView(
       children: items,
-    )));
+    ));
   }
 }
