@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
@@ -24,24 +25,40 @@ class OrganizationController extends ShelfController<Organization> {
 
   OrganizationController._internal() : super(tableName: 'organization');
 
-  Future<Response> requestDivisions(Request request, String id) async {
-    return DivisionController()
-        .handleRequestMany(isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+  Future<Response> requestDivisions(Request request, User? user, String id) async {
+    return DivisionController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['organization_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
-  Future<Response> requestClubs(Request request, String id) async {
-    return ClubController()
-        .handleRequestMany(isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+  Future<Response> requestClubs(Request request, User? user, String id) async {
+    return ClubController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['organization_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
-  Future<Response> requestCompetitions(Request request, String id) async {
-    return CompetitionController()
-        .handleRequestMany(isRaw: request.isRaw, conditions: ['organization_id = @id'], substitutionValues: {'id': id});
+  Future<Response> requestCompetitions(Request request, User? user, String id) async {
+    return CompetitionController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['organization_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
-  Future<Response> requestChildOrganizations(Request request, String id) async {
-    return OrganizationController()
-        .handleRequestMany(isRaw: request.isRaw, conditions: ['parent_id = @id'], substitutionValues: {'id': id});
+  Future<Response> requestChildOrganizations(Request request, User? user, String id) async {
+    return OrganizationController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['parent_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
   Future<WrestlingApi?> initApiProvider(Request request, int organizationId) async {
@@ -55,12 +72,16 @@ class OrganizationController extends ShelfController<Organization> {
       }
     }
 
-    final organization = await getSingle(organizationId);
-    return organization.getApi(OrganizationalController.getSingleFromDataTypeOfOrg, authService: authService);
+    final organization = await getSingle(organizationId, obfuscate: false);
+    return organization.getApi(
+        <T extends Organizational>(orgSyncId, {required int orgId}) =>
+            OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
+        authService: authService);
   }
 
-  Future<Response> import(Request request, User user, String organizationId) async {
+  Future<Response> import(Request request, User? user, String organizationId) async {
     try {
+      final bool obfuscate = user?.obfuscate ?? true;
       final apiProvider = await initApiProvider(request, int.parse(organizationId));
       if (apiProvider == null) {
         throw Exception('No API provider selected for the organization $organizationId.');
@@ -69,10 +90,10 @@ class OrganizationController extends ShelfController<Organization> {
 
       final clubs = await apiProvider.importClubs();
       await Future.forEach(clubs, (club) async {
-        club = await ClubController().getOrCreateSingleOfOrg(club);
+        club = await ClubController().getOrCreateSingleOfOrg(club, obfuscate: obfuscate);
 
         final teams = await apiProvider.importTeams(club: club);
-        await TeamController().getOrCreateManyOfOrg(teams.toList());
+        await TeamController().getOrCreateManyOfOrg(teams.toList(), obfuscate: obfuscate);
       });
 
       final divisions = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
@@ -80,7 +101,7 @@ class OrganizationController extends ShelfController<Organization> {
         // TODO: Don't create bout config or delete old one, if division already exists.
         final boutConfig = await BoutConfigController().createSingleReturn(division.boutConfig);
         division = division.copyWith(boutConfig: boutConfig);
-        division = await DivisionController().getOrCreateSingleOfOrg(division);
+        division = await DivisionController().getOrCreateSingleOfOrg(division, obfuscate: obfuscate);
 
         // TODO: Don't create (division) weight classes or delete old ones, if division already exists.
         final divisionWeightClasses = await apiProvider.importDivisionWeightClasses(division: division);
@@ -91,7 +112,7 @@ class OrganizationController extends ShelfController<Organization> {
         });
 
         var leagues = await apiProvider.importLeagues(division: division);
-        leagues = await LeagueController().getOrCreateManyOfOrg(leagues.toList());
+        leagues = await LeagueController().getOrCreateManyOfOrg(leagues.toList(), obfuscate: obfuscate);
       });
 
       return Response.ok('{"status": "success"}');

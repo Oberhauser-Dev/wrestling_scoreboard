@@ -16,9 +16,10 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
   }
 
   /// Get a single data object via a foreign id (sync id), given by an organization.
-  Future<T> getSingleOfOrg(String orgSyncId, {required int orgId}) async {
+  Future<T> getSingleOfOrg(String orgSyncId, {required int orgId, required bool obfuscate}) async {
     final single = await getSingleOfOrgRaw(orgSyncId, orgId: orgId);
-    return DataObject.fromRaw<T>(single, EntityController.getSingleFromDataType);
+    return DataObject.fromRaw<T>(
+        single, <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: obfuscate));
   }
 
   Future<Map<String, dynamic>> getSingleOfOrgRaw(String orgSyncId, {required int orgId}) async {
@@ -32,7 +33,7 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
     return many.first;
   }
 
-  Future<T> getOrCreateSingleOfOrg(T dataObject) async {
+  Future<T> getOrCreateSingleOfOrg(T dataObject, {required bool obfuscate}) async {
     if (dataObject.id != null) {
       throw Exception('Data object already has an id: $dataObject');
     }
@@ -41,19 +42,21 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
       throw Exception('Organization id and sync id must not be null: $dataObject');
     }
     try {
-      final single = await getSingleOfOrg(organizational.orgSyncId!, orgId: organizational.organization!.id!);
+      final single = await getSingleOfOrg(organizational.orgSyncId!,
+          orgId: organizational.organization!.id!, obfuscate: obfuscate);
       return single;
     } on InvalidParameterException catch (_) {
       return createSingleReturn(dataObject);
     }
   }
 
-  Future<List<T>> getOrCreateManyOfOrg(List<T> dataObjects) async {
-    return await Future.wait(dataObjects.map((element) => getOrCreateSingleOfOrg(element)));
+  Future<List<T>> getOrCreateManyOfOrg(List<T> dataObjects, {required bool obfuscate}) async {
+    return await Future.wait(dataObjects.map((element) => getOrCreateSingleOfOrg(element, obfuscate: obfuscate)));
   }
 
-  static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(String orgSyncId, {required int orgId}) {
+  static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(String orgSyncId,
+      {required int orgId, required bool obfuscate}) {
     return (ShelfController.getControllerFromDataType(T) as OrganizationalController<T>)
-        .getSingleOfOrg(orgSyncId, orgId: orgId);
+        .getSingleOfOrg(orgSyncId, orgId: orgId, obfuscate: obfuscate);
   }
 }

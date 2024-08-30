@@ -2,13 +2,16 @@ import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
 class SearchController {
   /// Search all tables
-  Future<Response> search(Request request) async {
+  Future<Response> search(Request request, User? user) async {
+    final bool obfuscate = user?.obfuscate ?? true;
+
     final queryParams = request.requestedUri.queryParameters;
 
     final likeParam = queryParams['like'];
@@ -40,7 +43,8 @@ class SearchController {
         final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
         if (isValidLikeSearch) {
-          manyJson = await entityController.getManyJsonLike(raw, likeParam, organizationId: searchOrganizationId);
+          manyJson = await entityController.getManyJsonLike(raw, likeParam,
+              organizationId: searchOrganizationId, obfuscate: obfuscate);
           if (!searchAllTypes && useProvider && searchOrganizationId != null) {
             final orgSearchRes = await OrganizationController().search(
               request,
@@ -54,7 +58,8 @@ class SearchController {
           manyJson = await entityController.getManyJson(
               isRaw: raw,
               conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,
-              substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null);
+              substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null,
+              obfuscate: obfuscate);
         } else {
           return Response.badRequest(
               body: 'You must either search by a type via "type", '

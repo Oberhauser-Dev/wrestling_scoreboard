@@ -28,12 +28,12 @@ class AuthController {
     return Response.ok('{"status": "success"}');
   }
 
-  Future<Response> updateSingle(Request request, User user) async {
+  Future<Response> updateSingle(Request request, User? user) async {
     final message = await request.readAsString();
     final updatedUser = User.fromJson(jsonDecode(message));
     final updatedSecuredUser = updatedUser.toSecuredUser();
 
-    SecuredUser securedUser = await SecuredUserController().getSingle(user.id!);
+    SecuredUser securedUser = await SecuredUserController().getSingle(user!.id!, obfuscate: false);
     securedUser = securedUser.copyWith(
       username: updatedSecuredUser.username,
       email: updatedSecuredUser.email,
@@ -46,7 +46,7 @@ class AuthController {
     return Response.ok('{"status": "success"}');
   }
 
-  Future<Response> requestUser(Request request, User user) async {
+  Future<Response> requestUser(Request request, User? user) async {
     return Response.ok(jsonEncode(user));
   }
 
@@ -84,4 +84,8 @@ class AuthController {
     );
     return token;
   }
+}
+
+extension AuthUserExtension on User {
+  bool get obfuscate => privilege <= UserPrivilege.none;
 }

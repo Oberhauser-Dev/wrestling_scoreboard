@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
@@ -47,7 +48,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () => catchAsync(context, () async {
                     _formKey.currentState!.save();
                     if (_formKey.currentState!.validate()) {
                       if (_password != _passwordAgain) {
@@ -62,7 +63,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                       }
                       if (context.mounted) Navigator.of(context).pop();
                     }
-                  },
+                  }),
                   child: Text(localizations.auth_password_save_phrase),
                 ),
               ),

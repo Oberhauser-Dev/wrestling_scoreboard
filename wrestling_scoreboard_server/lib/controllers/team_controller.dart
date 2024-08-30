@@ -1,5 +1,6 @@
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -20,12 +21,13 @@ class TeamController extends OrganizationalController<Team> {
         WHERE lu.team_id = @id
         ORDER BY date;''';
 
-  Future<Response> requestTeamMatches(Request request, String id) async {
-    return TeamMatchController()
-        .handleRequestManyFromQuery(isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id});
+  Future<Response> requestTeamMatches(Request request, User? user, String id) async {
+    final bool obfuscate = user?.obfuscate ?? true;
+    return TeamMatchController().handleRequestManyFromQuery(
+        isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
   }
 
-  Future<Response> import(Request request, User user, String teamId) async {
+  Future<Response> import(Request request, User? user, String teamId) async {
     return Response.notFound('This operation is not supported yet!');
   }
 
