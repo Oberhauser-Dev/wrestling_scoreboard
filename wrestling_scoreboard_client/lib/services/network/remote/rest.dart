@@ -45,7 +45,7 @@ class RestDataManager extends DataManager {
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id, {bool isRaw = true}) async {
     final uri =
         Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _headers);
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -65,7 +65,7 @@ class RestDataManager extends DataManager {
     }
     final uri =
         Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter : null);
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _headers);
 
     if (response.statusCode == 200) {
       final List<dynamic> json = jsonDecode(response.body);
@@ -111,7 +111,7 @@ class RestDataManager extends DataManager {
   @override
   Future<String> exportDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/export');
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _headers);
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -122,7 +122,7 @@ class RestDataManager extends DataManager {
   @override
   Future<void> resetDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/reset');
-    final response = await http.post(uri);
+    final response = await http.post(uri, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to reset the database', response: response);
     }
@@ -131,7 +131,7 @@ class RestDataManager extends DataManager {
   @override
   Future<void> restoreDefaultDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/restore_default');
-    final response = await http.post(uri);
+    final response = await http.post(uri, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to restore the default database', response: response);
     }
@@ -160,7 +160,7 @@ class RestDataManager extends DataManager {
       }
     }
     final uri = Uri.parse('$_apiUrl/organization/$id/api/import');
-    final response = await http.post(uri, body: body);
+    final response = await http.post(uri, body: body, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to import from organization $id', response: response);
     }
@@ -175,7 +175,7 @@ class RestDataManager extends DataManager {
       }
     }
     final uri = Uri.parse('$_apiUrl/league/$id/api/import');
-    final response = await http.post(uri, body: body);
+    final response = await http.post(uri, body: body, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to import from league $id', response: response);
     }
@@ -190,7 +190,7 @@ class RestDataManager extends DataManager {
       }
     }
     final uri = Uri.parse('$_apiUrl/competition/$id/api/import');
-    final response = await http.post(uri, body: body);
+    final response = await http.post(uri, body: body, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to import from competition $id', response: response);
     }
@@ -205,7 +205,7 @@ class RestDataManager extends DataManager {
       }
     }
     final uri = Uri.parse('$_apiUrl/team/$id/api/import');
-    final response = await http.post(uri, body: body);
+    final response = await http.post(uri, body: body, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to import from team $id', response: response);
     }
@@ -232,7 +232,8 @@ class RestDataManager extends DataManager {
       if (organizationId != null) 'org': organizationId.toString(),
       if (includeApiProviderResults) 'use_provider': includeApiProviderResults.toString(),
     });
-    final response = body == null ? await http.get(uri) : await http.post(uri, body: body);
+    final response =
+        body == null ? await http.get(uri, headers: _headers) : await http.post(uri, body: body, headers: _headers);
     if (response.statusCode != 200) {
       throw RestException('Failed to search $type with term "$searchTerm"', response: response);
     }

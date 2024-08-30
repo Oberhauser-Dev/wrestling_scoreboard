@@ -14,7 +14,7 @@ class Membership with _$Membership implements DataObject, Organizational {
     int? id,
     String? orgSyncId,
     Organization? organization,
-    String? no, // Vereinsnummer
+    String? no, // Mitgliedsnummer
     required Club club,
     required Person person,
   }) = _Membership;

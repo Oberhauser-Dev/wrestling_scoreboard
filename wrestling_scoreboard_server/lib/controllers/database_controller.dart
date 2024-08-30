@@ -11,7 +11,7 @@ class DatabaseController {
   // TODO: migration should be handled automatically at server start.
 
   /// Reset all tables
-  Future<Response> reset(Request request, User user) async {
+  Future<Response> reset(Request request, User? user) async {
     try {
       await _restoreDefault();
       Iterable<ShelfController> entityControllers = dataTypes.map((t) => ShelfController.getControllerFromDataType(t));
@@ -28,7 +28,7 @@ class DatabaseController {
   }
 
   /// Export a database to dump
-  Future<Response> export(Request request, User user) async {
+  Future<Response> export(Request request, User? user) async {
     final db = PostgresDb();
     final args = <String>[
       // '--file',
@@ -55,7 +55,7 @@ class DatabaseController {
   }
 
   /// Restore a database dump
-  Future<Response> restore(Request request, User user) async {
+  Future<Response> restore(Request request, User? user) async {
     try {
       final message = await request.readAsString();
       File file =
@@ -69,7 +69,7 @@ class DatabaseController {
   }
 
   /// Restore the default database dump
-  Future<Response> restoreDefault(Request request, User user) async {
+  Future<Response> restoreDefault(Request request, User? user) async {
     try {
       await _restoreDefault();
       return Response.ok('{"status": "success"}');

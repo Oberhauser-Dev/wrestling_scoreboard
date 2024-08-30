@@ -11,5 +11,11 @@ class MembershipController extends OrganizationalController<Membership> {
   MembershipController._internal() : super(tableName: 'membership');
 
   @override
+  Map<String, dynamic> obfuscate(Map<String, dynamic> raw) {
+    raw['no'] = null;
+    return raw;
+  }
+
+  @override
   Set<String> getSearchableAttributes() => {'no'};
 }

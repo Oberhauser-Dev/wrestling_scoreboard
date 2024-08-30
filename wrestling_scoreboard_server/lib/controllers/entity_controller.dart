@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
@@ -57,20 +58,31 @@ Map<Type, psql.Type> typeDartToCodeMap = {
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
   ShelfController({required super.tableName, super.primaryKeyName});
 
-  Future<Response> requestSingle(Request request, String id) async {
-    return handleRequestSingle(int.parse(id), isRaw: request.isRaw);
+  Future<Response> requestSingle(Request request, User? user, String id) async {
+    return handleRequestSingle(
+      int.parse(id),
+      isRaw: request.isRaw,
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
-  Future<Response> requestMany(Request request) async {
-    return handleRequestMany(isRaw: request.isRaw);
+  Future<Response> requestMany(Request request, User? user) async {
+    return handleRequestMany(
+      isRaw: request.isRaw,
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
-  Future<Response> handleRequestSingle(int id, {bool isRaw = false}) async {
+  Future<Response> handleRequestSingle(
+    int id, {
+    bool isRaw = false,
+    bool obfuscate = false,
+  }) async {
     if (isRaw) {
-      final single = await getSingleRaw(id);
+      final single = await getSingleRaw(id, obfuscate: obfuscate);
       return Response.ok(rawJsonEncode(single));
     } else {
-      final single = await getSingle(id);
+      final single = await getSingle(id, obfuscate: obfuscate);
       return Response.ok(jsonEncode(single));
     }
   }
@@ -81,14 +93,25 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
+    required bool obfuscate,
   }) async {
     if (isRaw) {
       final many = await getManyRaw(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+        conditions: conditions,
+        conjunction: conjunction,
+        substitutionValues: substitutionValues,
+        orderBy: orderBy,
+        obfuscate: obfuscate,
+      );
       return Response.ok(rawJsonEncode(many.toList()));
     } else {
       final many = await getMany(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+        conditions: conditions,
+        conjunction: conjunction,
+        substitutionValues: substitutionValues,
+        orderBy: orderBy,
+        obfuscate: obfuscate,
+      );
       return Response.ok(jsonEncode(many.toList()));
     }
   }
@@ -97,12 +120,13 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     bool isRaw = false,
     required String sqlQuery,
     Map<String, dynamic>? substitutionValues,
+    required bool obfuscate,
   }) async {
     if (isRaw) {
       final many = await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues);
       return Response.ok(rawJsonEncode(many.toList()));
     } else {
-      final many = await getManyFromQuery(sqlQuery, substitutionValues: substitutionValues);
+      final many = await getManyFromQuery(sqlQuery, substitutionValues: substitutionValues, obfuscate: obfuscate);
       return Response.ok(jsonEncode(many.toList()));
     }
   }
@@ -112,7 +136,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     return parseSingleJson<T>(jsonDecode(message));
   }
 
-  Future<Response> postSingle(Request request, User user) async {
+  Future<Response> postSingle(Request request, User? user) async {
     final message = await request.readAsString();
     try {
       return _handlePostSingle(jsonDecode(message));
@@ -206,16 +230,26 @@ abstract class EntityController<T extends DataObject> {
         PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
   }
 
-  Future<T> getSingle(int id) async {
-    final single = await getSingleRaw(id);
-    return DataObject.fromRaw<T>(single, getSingleFromDataType);
+  Future<T> getSingle(int id, {required bool obfuscate}) async {
+    final single = await getSingleRaw(id, obfuscate: obfuscate);
+    return DataObject.fromRaw<T>(
+        single, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate));
   }
 
-  Future<Map<String, dynamic>> getSingleRaw(int id) async {
+  Future<Map<String, dynamic>> getSingleRaw(
+    int id, {
+    required bool obfuscate,
+  }) async {
     final resStream = (await getSingleRawStmt).bind({'id': id});
     final many = await resStream.toColumnMap().toList();
     if (many.isEmpty) throw InvalidParameterException('$T with id "$id" not found');
-    return many.first;
+    var data = many.first;
+    return obfuscate ? this.obfuscate(data) : data;
+  }
+
+  /// This method can be overridden in order to obfuscate the attributes.
+  Map<String, dynamic> obfuscate(Map<String, dynamic> raw) {
+    return raw;
   }
 
   Future<int> createSingle(T dataObject) async {
@@ -326,7 +360,12 @@ abstract class EntityController<T extends DataObject> {
     await stmt.bind(substitutionValues).toList();
   }
 
-  Future<Map<String, dynamic>?> getManyJsonLike(bool isRaw, String searchStr, {int? organizationId}) async {
+  Future<Map<String, dynamic>?> getManyJsonLike(
+    bool isRaw,
+    String searchStr, {
+    int? organizationId,
+    required bool obfuscate,
+  }) async {
     final postgresTypes = getPostgresDataTypes();
     bool needsPreciseSearch = false;
     final orConditions = getSearchableAttributes()
@@ -365,6 +404,7 @@ abstract class EntityController<T extends DataObject> {
         if (organizationId != null) 'org': organizationId,
       },
       conjunction: Conjunction.and,
+      obfuscate: obfuscate,
     );
   }
 
@@ -377,16 +417,28 @@ abstract class EntityController<T extends DataObject> {
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
+    required bool obfuscate,
   }) async {
     return Future.wait((await getManyRaw(
-            conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy))
-        .map((e) async => await DataObject.fromRaw<T>(e, getSingleFromDataType))
+      conditions: conditions,
+      conjunction: conjunction,
+      substitutionValues: substitutionValues,
+      orderBy: orderBy,
+      obfuscate: obfuscate,
+    ))
+        .map((e) async => await DataObject.fromRaw<T>(
+            e, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate)))
         .toList());
   }
 
-  Future<List<T>> getManyFromQuery(String sqlQuery, {Map<String, dynamic>? substitutionValues}) async {
+  Future<List<T>> getManyFromQuery(
+    String sqlQuery, {
+    Map<String, dynamic>? substitutionValues,
+    required bool obfuscate,
+  }) async {
     return Future.wait((await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues))
-        .map((e) async => await DataObject.fromRaw<T>(e, getSingleFromDataType))
+        .map((e) async => await DataObject.fromRaw<T>(
+            e, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate)))
         .toList());
   }
 
@@ -395,6 +447,7 @@ abstract class EntityController<T extends DataObject> {
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
+    required bool obfuscate,
   }) async {
     if (conditions != null && conditions.isEmpty) {
       // If the list of conditions is empty, nothing fulfills this requirement,
@@ -404,7 +457,8 @@ abstract class EntityController<T extends DataObject> {
     final query = 'SELECT * FROM $tableName '
         '${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} '
         '${orderBy.isEmpty ? '' : 'ORDER BY ${orderBy.join(',')}'};';
-    return getManyRawFromQuery(query, substitutionValues: substitutionValues);
+    final many = await getManyRawFromQuery(query, substitutionValues: substitutionValues);
+    return obfuscate ? many.map((e) => this.obfuscate(e)).toList() : many;
   }
 
   Future<List<Map<String, dynamic>>> getManyRawFromQuery(String sqlQuery,
@@ -420,17 +474,28 @@ abstract class EntityController<T extends DataObject> {
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
+    required bool obfuscate,
   }) async {
     if (isRaw) {
       final many = await getManyRaw(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+        conditions: conditions,
+        conjunction: conjunction,
+        substitutionValues: substitutionValues,
+        orderBy: orderBy,
+        obfuscate: obfuscate,
+      );
       if (many.isEmpty) {
         return null;
       }
       return manyToJson(many, T, CRUD.read, isRaw: true);
     } else {
       final many = await getMany(
-          conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues, orderBy: orderBy);
+        conditions: conditions,
+        conjunction: conjunction,
+        substitutionValues: substitutionValues,
+        orderBy: orderBy,
+        obfuscate: obfuscate,
+      );
       if (many.isEmpty) {
         return null;
       }
@@ -438,10 +503,14 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
-  Future<List<T>> mapToEntity(List<Map<String, Map<String, dynamic>>> res) async {
+  Future<List<T>> mapToEntity(
+    List<Map<String, Map<String, dynamic>>> res, {
+    required bool obfuscate,
+  }) async {
     return Future.wait(res.map((row) async {
       final e = row[tableName]!;
-      return await DataObject.fromRaw<T>(e, getSingleFromDataType);
+      return await DataObject.fromRaw<T>(
+          e, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate));
     }));
   }
 
@@ -452,14 +521,24 @@ abstract class EntityController<T extends DataObject> {
     return resStream.toColumnMap().single;
   }
 
-  static Future<T> getSingleFromDataType<T extends DataObject>(int id) {
-    return ShelfController.getControllerFromDataType(T).getSingle(id) as Future<T>;
+  static Future<T> getSingleFromDataType<T extends DataObject>(
+    int id, {
+    required bool obfuscate,
+  }) {
+    return ShelfController.getControllerFromDataType(T).getSingle(id, obfuscate: obfuscate) as Future<T>;
   }
 
-  static Future<List<T>> getManyFromDataType<T extends DataObject>(
-      {List<String>? conditions, Conjunction conjunction = Conjunction.and, Map<String, dynamic>? substitutionValues}) {
+  static Future<List<T>> getManyFromDataType<T extends DataObject>({
+    List<String>? conditions,
+    Conjunction conjunction = Conjunction.and,
+    Map<String, dynamic>? substitutionValues,
+    required bool obfuscate,
+  }) {
     return ShelfController.getControllerFromDataType(T).getMany(
-        conditions: conditions, conjunction: conjunction, substitutionValues: substitutionValues) as Future<List<T>>;
+        conditions: conditions,
+        conjunction: conjunction,
+        substitutionValues: substitutionValues,
+        obfuscate: obfuscate) as Future<List<T>>;
   }
 }
 

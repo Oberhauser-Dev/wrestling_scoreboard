@@ -1,6 +1,7 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
@@ -19,8 +20,12 @@ class LineupController extends ShelfController<Lineup> {
 
   LineupController._internal() : super(tableName: 'lineup');
 
-  Future<Response> requestParticipations(Request request, String id) async {
-    return ParticipationController()
-        .handleRequestMany(isRaw: request.isRaw, conditions: ['lineup_id = @id'], substitutionValues: {'id': id});
+  Future<Response> requestParticipations(Request request, User? user, String id) async {
+    return ParticipationController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['lineup_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 }

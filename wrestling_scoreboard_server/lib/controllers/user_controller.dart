@@ -13,7 +13,11 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   SecuredUserController._internal() : super(tableName: 'secured_user');
 
   Future<SecuredUser?> getSingleByUsername(String username) async {
-    final many = await getMany(conditions: ['username = @username'], substitutionValues: {'username': username});
+    final many = await getMany(
+      conditions: ['username = @username'],
+      substitutionValues: {'username': username},
+      obfuscate: false,
+    );
     return many.singleOrNull;
   }
 

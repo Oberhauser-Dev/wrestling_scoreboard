@@ -1,6 +1,7 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'bout_controller.dart';
@@ -15,15 +16,19 @@ class CompetitionController extends ShelfController<Competition> {
 
   CompetitionController._internal() : super(tableName: 'competition');
 
-  Future<Response> requestBouts(Request request, String id) async {
-    return BoutController().handleRequestManyFromQuery(isRaw: request.isRaw, sqlQuery: '''
+  Future<Response> requestBouts(Request request, User? user, String id) async {
+    return BoutController().handleRequestManyFromQuery(
+      isRaw: request.isRaw,
+      sqlQuery: '''
         SELECT f.* 
         FROM bout as f 
         JOIN competition_bout AS tof ON tof.bout_id = f.id
-        WHERE tof.competition_id = $id;''');
+        WHERE tof.competition_id = $id;''',
+      obfuscate: user?.obfuscate ?? true,
+    );
   }
 
-  Future<Response> import(Request request, User user, String teamId) async {
+  Future<Response> import(Request request, User? user, String teamId) async {
     return Response.notFound('This operation is not supported yet!');
   }
 

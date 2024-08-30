@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:shelf_web_socket/shelf_web_socket.dart';
@@ -20,24 +19,30 @@ import 'package:wrestling_scoreboard_server/services/auth.dart';
 import 'entity_controller.dart';
 import 'league_team_participation_controller.dart';
 
-final Set<WebSocketChannel> webSocketPool = HashSet();
+final Map<WebSocketChannel, UserPrivilege> webSocketPool = <WebSocketChannel, UserPrivilege>{};
 
-void broadcast(String data) {
-  for (var element in webSocketPool) {
-    element.sink.add(data);
-  }
+void broadcast(Future<String> Function(bool obfuscate) builder) async {
+  final futureData = builder(false);
+  final futureObfuscatedData = builder(true);
+  // Use map to perform asynchronously
+  await Future.wait(webSocketPool.entries.map((poolEntry) async {
+    // Send obfuscated data to users with no read privilege
+    poolEntry.key.sink.add(poolEntry.value <= UserPrivilege.none ? (await futureObfuscatedData) : (await futureData));
+  }));
 }
 
 // Currently do not update list of all entities (as it should only be used in special cases)
 void broadcastSingle<T extends DataObject>(T single) async {
   if (single is Club) {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await ClubController().getMany(), Club, CRUD.update, isRaw: false)));
+    broadcast((obfuscate) async =>
+        jsonEncode(manyToJson(await ClubController().getMany(obfuscate: obfuscate), Club, CRUD.update, isRaw: false)));
   } else if (single is BoutConfig) {
   } else if (single is Bout) {
   } else if (single is BoutAction) {
-    broadcast(jsonEncode(manyToJson(
-        await BoutActionController().getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': single.bout.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await BoutActionController()
+            .getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': single.bout.id}, obfuscate: obfuscate),
         BoutAction,
         CRUD.update,
         isRaw: false,
@@ -45,15 +50,16 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterId: single.bout.id)));
   } else if (single is Organization) {
     // SpecialCase: the full Organization list has to be updated with no filter, shouldn't occur often
-    broadcast(
-        jsonEncode(manyToJson(await OrganizationController().getMany(), Organization, CRUD.update, isRaw: false)));
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await OrganizationController().getMany(obfuscate: obfuscate), Organization, CRUD.update,
+        isRaw: false)));
   } else if (single is Division) {
     // TODO
   } else if (single is League) {
   } else if (single is DivisionWeightClass) {
-    broadcast(jsonEncode(manyToJson(
-        await DivisionWeightClassController()
-            .getMany(conditions: ['division_id = @id'], substitutionValues: {'id': single.division.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await DivisionWeightClassController().getMany(
+            conditions: ['division_id = @id'], substitutionValues: {'id': single.division.id}, obfuscate: obfuscate),
         DivisionWeightClass,
         CRUD.update,
         isRaw: false,
@@ -61,17 +67,17 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterId: single.division.id)));
   } else if (single is LeagueTeamParticipation) {
     final leagueTeamParticipationController = LeagueTeamParticipationController();
-    broadcast(jsonEncode(manyToJson(
-        await leagueTeamParticipationController
-            .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await leagueTeamParticipationController.getMany(
+            conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}, obfuscate: obfuscate),
         LeagueTeamParticipation,
         CRUD.update,
         isRaw: false,
         filterType: League,
         filterId: single.league.id)));
-    broadcast(jsonEncode(manyToJson(
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
         await leagueTeamParticipationController
-            .getMany(conditions: ['team_id = @id'], substitutionValues: {'id': single.team.id}),
+            .getMany(conditions: ['team_id = @id'], substitutionValues: {'id': single.team.id}, obfuscate: obfuscate),
         LeagueTeamParticipation,
         CRUD.update,
         isRaw: false,
@@ -80,17 +86,18 @@ void broadcastSingle<T extends DataObject>(T single) async {
   } else if (single is Lineup) {
     // No filtered list needs to be handled.
   } else if (single is Membership) {
-    broadcast(jsonEncode(manyToJson(
-        await MembershipController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await MembershipController()
+            .getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}, obfuscate: obfuscate),
         Membership,
         CRUD.update,
         isRaw: false,
         filterType: Club,
         filterId: single.club.id)));
   } else if (single is Participation) {
-    broadcast(jsonEncode(manyToJson(
-        await ParticipationController()
-            .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await ParticipationController().getMany(
+            conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}, obfuscate: obfuscate),
         Participation,
         CRUD.update,
         isRaw: false,
@@ -100,8 +107,9 @@ void broadcastSingle<T extends DataObject>(T single) async {
   } else if (single is Person) {
     // No filtered list needs to be handled.
   } else if (single is Team) {
-    broadcast(jsonEncode(manyToJson(
-        await TeamController().getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await TeamController()
+            .getMany(conditions: ['club_id = @id'], substitutionValues: {'id': single.club.id}, obfuscate: obfuscate),
         Team,
         CRUD.update,
         isRaw: false,
@@ -110,32 +118,38 @@ void broadcastSingle<T extends DataObject>(T single) async {
   } else if (single is TeamMatch) {
     final teamMatchController = TeamMatchController();
 
-    final homeMatches = await teamMatchController
-        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.home.team.id});
-    broadcast(jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update,
-        isRaw: false, filterType: Team, filterId: single.home.team.id)));
+    broadcast((obfuscate) async {
+      final homeMatches = await teamMatchController.getManyFromQuery(TeamController.teamMatchesQuery,
+          substitutionValues: {'id': single.home.team.id}, obfuscate: obfuscate);
+      return jsonEncode(manyToJson(homeMatches, TeamMatch, CRUD.update,
+          isRaw: false, filterType: Team, filterId: single.home.team.id));
+    });
 
-    final guestMatches = await teamMatchController
-        .getManyFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': single.guest.team.id});
-    broadcast(jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update,
-        isRaw: false, filterType: Team, filterId: single.guest.team.id)));
+    broadcast((obfuscate) async {
+      final guestMatches = await teamMatchController.getManyFromQuery(TeamController.teamMatchesQuery,
+          substitutionValues: {'id': single.guest.team.id}, obfuscate: obfuscate);
+      return jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update,
+          isRaw: false, filterType: Team, filterId: single.guest.team.id));
+    });
 
     if (single.league?.id != null) {
-      final leagueMatches = await teamMatchController
-          .getMany(conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id});
-      broadcast(jsonEncode(manyToJson(
-        leagueMatches,
-        TeamMatch,
-        CRUD.update,
-        isRaw: false,
-        filterType: League,
-        filterId: single.league!.id,
-      )));
+      broadcast((obfuscate) async {
+        final leagueMatches = await teamMatchController.getMany(
+            conditions: ['league_id = @id'], substitutionValues: {'id': single.league!.id}, obfuscate: obfuscate);
+        return jsonEncode(manyToJson(
+          leagueMatches,
+          TeamMatch,
+          CRUD.update,
+          isRaw: false,
+          filterType: League,
+          filterId: single.league!.id,
+        ));
+      });
     }
   } else if (single is TeamMatchBout) {
-    broadcast(jsonEncode(manyToJson(
-        await TeamMatchBoutController()
-            .getMany(conditions: ['team_match_id = @id'], substitutionValues: {'id': single.teamMatch.id}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await TeamMatchBoutController().getMany(
+            conditions: ['team_match_id = @id'], substitutionValues: {'id': single.teamMatch.id}, obfuscate: obfuscate),
         TeamMatchBout,
         CRUD.update,
         isRaw: false,
@@ -150,13 +164,14 @@ void broadcastSingle<T extends DataObject>(T single) async {
 void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
   if (T == Club) {
     // SpecialCase: the full Club list has to be updated, shouldn't occur often
-    broadcast(jsonEncode(manyToJson(await ClubController().getManyRaw(), Club, CRUD.update, isRaw: true)));
+    broadcast((obfuscate) async => jsonEncode(
+        manyToJson(await ClubController().getManyRaw(obfuscate: obfuscate), Club, CRUD.update, isRaw: true)));
   } else if (T == BoutConfig) {
   } else if (T == Bout) {
   } else if (T == BoutAction) {
-    broadcast(jsonEncode(manyToJson(
-        await BoutActionController()
-            .getManyRaw(conditions: ['bout_id = @id'], substitutionValues: {'id': single['bout_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await BoutActionController().getManyRaw(
+            conditions: ['bout_id = @id'], substitutionValues: {'id': single['bout_id']}, obfuscate: obfuscate),
         BoutAction,
         CRUD.update,
         isRaw: true,
@@ -164,15 +179,16 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterId: single['bout_id'])));
   } else if (T == Organization) {
     // SpecialCase: the full Organization list has to be updated with no filter, shouldn't occur often
-    broadcast(
-        jsonEncode(manyToJson(await OrganizationController().getManyRaw(), Organization, CRUD.update, isRaw: true)));
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await OrganizationController().getManyRaw(obfuscate: obfuscate), Organization, CRUD.update,
+        isRaw: true)));
   } else if (T == Division) {
     // TODO
   } else if (T == League) {
   } else if (T == DivisionWeightClass) {
-    broadcast(jsonEncode(manyToJson(
-        await DivisionWeightClassController()
-            .getManyRaw(conditions: ['division_id = @id'], substitutionValues: {'id': single['division_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await DivisionWeightClassController().getManyRaw(
+            conditions: ['division_id = @id'], substitutionValues: {'id': single['division_id']}, obfuscate: obfuscate),
         DivisionWeightClass,
         CRUD.update,
         isRaw: true,
@@ -180,17 +196,17 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterId: single['division_id'])));
   } else if (T == LeagueTeamParticipation) {
     final leagueTeamParticipationController = LeagueTeamParticipationController();
-    broadcast(jsonEncode(manyToJson(
-        await leagueTeamParticipationController
-            .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await leagueTeamParticipationController.getManyRaw(
+            conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}, obfuscate: obfuscate),
         LeagueTeamParticipation,
         CRUD.update,
         isRaw: true,
         filterType: League,
         filterId: single['league_id'])));
-    broadcast(jsonEncode(manyToJson(
-        await leagueTeamParticipationController
-            .getManyRaw(conditions: ['team_id = @id'], substitutionValues: {'id': single['team_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await leagueTeamParticipationController.getManyRaw(
+            conditions: ['team_id = @id'], substitutionValues: {'id': single['team_id']}, obfuscate: obfuscate),
         LeagueTeamParticipation,
         CRUD.update,
         isRaw: true,
@@ -199,18 +215,18 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == Lineup) {
     // No filtered list needs to be handled.
   } else if (T == Membership) {
-    broadcast(jsonEncode(manyToJson(
-        await MembershipController()
-            .getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await MembershipController().getManyRaw(
+            conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}, obfuscate: obfuscate),
         Membership,
         CRUD.update,
         isRaw: true,
         filterType: Club,
         filterId: single['club_id'])));
   } else if (T == Participation) {
-    broadcast(jsonEncode(manyToJson(
-        await ParticipationController()
-            .getManyRaw(conditions: ['lineup_id = @id'], substitutionValues: {'id': single['lineup_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await ParticipationController().getManyRaw(
+            conditions: ['lineup_id = @id'], substitutionValues: {'id': single['lineup_id']}, obfuscate: obfuscate),
         Participation,
         CRUD.update,
         isRaw: true,
@@ -220,8 +236,9 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == Person) {
     // No filtered list needs to be handled.
   } else if (T == Team) {
-    broadcast(jsonEncode(manyToJson(
-        await TeamController().getManyRaw(conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await TeamController().getManyRaw(
+            conditions: ['club_id = @id'], substitutionValues: {'id': single['club_id']}, obfuscate: obfuscate),
         Team,
         CRUD.update,
         isRaw: true,
@@ -234,32 +251,36 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         substitutionValues: {'id': single['home_id']}))['team_id'];
     final homeMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': homeTeamId});
-    broadcast(jsonEncode(
+    broadcast((obfuscate) async => jsonEncode(
         manyToJson(homeMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: homeTeamId)));
 
     final guestTeamId = (await EntityController.query(await LineupController.teamIdStmt,
         substitutionValues: {'id': single['guest_id']}))['team_id'];
     final guestMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': guestTeamId});
-    broadcast(jsonEncode(
+    broadcast((obfuscate) async => jsonEncode(
         manyToJson(guestMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: guestTeamId)));
 
     if (single['league_id'] != null) {
-      final leagueMatches = await teamMatchController
-          .getManyRaw(conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']});
-      broadcast(jsonEncode(manyToJson(
-        leagueMatches,
-        TeamMatch,
-        CRUD.update,
-        isRaw: true,
-        filterType: League,
-        filterId: single['league_id'],
-      )));
+      broadcast((obfuscate) async {
+        final leagueMatches = await teamMatchController.getManyRaw(
+            conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}, obfuscate: obfuscate);
+        return jsonEncode(manyToJson(
+          leagueMatches,
+          TeamMatch,
+          CRUD.update,
+          isRaw: true,
+          filterType: League,
+          filterId: single['league_id'],
+        ));
+      });
     }
   } else if (T == TeamMatchBout) {
-    broadcast(jsonEncode(manyToJson(
-        await TeamMatchBoutController()
-            .getManyRaw(conditions: ['team_match_id = @id'], substitutionValues: {'id': single['team_match_id']}),
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await TeamMatchBoutController().getManyRaw(
+            conditions: ['team_match_id = @id'],
+            substitutionValues: {'id': single['team_match_id']},
+            obfuscate: obfuscate),
         TeamMatchBout,
         CRUD.update,
         isRaw: true,
@@ -283,7 +304,12 @@ Future<int> handleSingle<T extends DataObject>({
       throw Exception('Not allowed to perform update operation on ${single.tableName}/${single.id}');
     }
     await controller.updateSingle(single);
-    broadcast(jsonEncode(singleToJson(single, T, operation)));
+    broadcast((obfuscate) async {
+      // Need to provide an obfuscated version of the dataObject, but can reuse the `single` object for non obfuscated broadcast, to raise performance
+      return jsonEncode(
+        singleToJson(obfuscate ? await controller.getSingle(single.id!, obfuscate: true) : single, T, operation),
+      );
+    });
   } else if (operation == CRUD.create) {
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform create operation on ${single.tableName}/${single.id}');
@@ -317,7 +343,11 @@ Future<int> handleSingleRaw<T extends DataObject>({
       throw Exception('Not allowed to perform update operation on ${getTableNameFromType(T)}/${single['id']}');
     }
     await controller.updateSingleRaw(single);
-    broadcast(jsonEncode(singleToJson(single, T, operation)));
+    broadcast((obfuscate) async {
+      // Need to provide an obfuscated version of the dataObject, but can reuse the `single` object for non obfuscated broadcast, to raise performance
+      return jsonEncode(singleToJson(
+          obfuscate ? await controller.getSingleRaw(single['id'], obfuscate: true) : single, T, operation));
+    });
   } else if (operation == CRUD.create) {
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform create operation on ${getTableNameFromType(T)}/${single['id']}');
@@ -360,13 +390,15 @@ Future<void> handleManyRaw<T extends DataObject>({
 final websocketHandler = webSocketHandler(
   (WebSocketChannel webSocket) {
     UserPrivilege privilege = UserPrivilege.none;
-    webSocketPool.add(webSocket);
+    webSocketPool[webSocket] = privilege;
     webSocket.stream.listen((message) async {
       final json = jsonDecode(message);
       if (json['authorization'] != null) {
         final authService = BearerAuthService.fromHeader(json['authorization']);
         final user = await authService.getUser();
         privilege = user?.privilege ?? UserPrivilege.none;
+        // Upgrade privilege
+        webSocketPool[webSocket] = privilege;
         return;
       }
       await handleGenericJson(json,
