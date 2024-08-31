@@ -432,7 +432,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         await save();
       },
       child: ManyConsumer<BoutAction, Bout>(
