@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:logging/logging.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -18,6 +19,8 @@ import 'package:wrestling_scoreboard_server/services/auth.dart';
 
 import 'entity_controller.dart';
 import 'league_team_participation_controller.dart';
+
+final _logger = Logger('Websocket');
 
 final Map<WebSocketChannel, UserPrivilege> webSocketPool = <WebSocketChannel, UserPrivilege>{};
 
@@ -297,7 +300,7 @@ Future<int> handleSingle<T extends DataObject>({
   required T single,
   UserPrivilege privilege = UserPrivilege.write,
 }) async {
-  print('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
+  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
   final controller = ShelfController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
     if (privilege < UserPrivilege.write) {
@@ -336,7 +339,7 @@ Future<int> handleSingleRaw<T extends DataObject>({
   required Map<String, dynamic> single,
   UserPrivilege privilege = UserPrivilege.write,
 }) async {
-  print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}/${single['id']}');
+  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}/${single['id']}');
   final controller = ShelfController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
     if (privilege < UserPrivilege.write) {
@@ -374,7 +377,7 @@ Future<void> handleMany<T extends DataObject>({
   required ManyDataObject<T> many,
   UserPrivilege privilege = UserPrivilege.none,
 }) {
-  print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
+  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 
@@ -383,7 +386,7 @@ Future<void> handleManyRaw<T extends DataObject>({
   required ManyDataObject<Map<String, dynamic>> many,
   UserPrivilege privilege = UserPrivilege.none,
 }) {
-  print('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
+  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 

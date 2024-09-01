@@ -55,6 +55,9 @@ Additionally, enable session for user `www` on boot:
 sudo loginctl enable-linger www
 ```
 
+To view server logs: 
+`journalctl --user -u wrestling-scoreboard-server`
+
 ### Web server
 
 If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can take advantage of [this config](docs/nginx/wrestling-scoreboard-server.conf) files.
