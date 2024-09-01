@@ -1,9 +1,12 @@
+import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 abstract class OrganizationalController<T extends Organizational> extends ShelfController<T> {
+  final _logger = Logger('OrganizationalController');
+
   OrganizationalController({required super.tableName});
 
   late Future<psql.Statement> getSingleOfOrgRawStmt;
@@ -25,7 +28,7 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
   Future<Map<String, dynamic>> getSingleOfOrgRaw(String orgSyncId, {required int orgId}) async {
     if (orgSyncId != orgSyncId.trim()) {
       orgSyncId = orgSyncId.trim();
-      print('$T with orgSyncId "$orgSyncId" was trimmed');
+      _logger.warning('$T with orgSyncId "$orgSyncId" was trimmed');
     }
     final resStream = (await getSingleOfOrgRawStmt).bind({'orgSyncId': orgSyncId, 'orgId': orgId});
     final many = await resStream.toColumnMap().toList();

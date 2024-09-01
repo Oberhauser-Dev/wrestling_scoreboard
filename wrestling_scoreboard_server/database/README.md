@@ -34,7 +34,7 @@ On Linux you may want to log in as postgres user: `sudo -u postgres -i`
 
 Use this on peer authentication:
 ```shell
-sudo -u postgres psql postgres # For creation
+sudo -u postgres psql postgres # For creation and dropping
 sudo -u postgres psql wrestling_scoreboard # For altering database wrestling_scoreboard
 ```
 

@@ -38,16 +38,29 @@ Future init() async {
   await _parsePubspec();
 
   // Init logger
-  Logger.root.level = Level.INFO;
-  Logger.root.onRecord.listen((record) {
-    print('[${record.time}] ${record.level.name}: ${record.message}');
-    if (record.error != null) {
-      print('Error: ${record.error}');
-      if (record.stackTrace != null) {
-        print('StackTrace: ${record.stackTrace}');
+  Logger.root.level =
+      Level.LEVELS.where((level) => level.name == env['LOG_LEVEL']?.toUpperCase()).singleOrNull ?? Level.INFO;
+  Logger.root.onRecord.listen(
+    (record) async {
+      String text = '[${record.time}] ${record.level.name}: ${record.message}';
+      if (record.error != null) {
+        text += '\nError: ${record.error}';
+        if (record.stackTrace != null) {
+          text += 'StackTrace: ${record.stackTrace}';
+        }
       }
-    }
-  });
+      text = switch (record.level) {
+        Level.FINEST => '\x1B[38;5;247m$text\x1B[0m',
+        Level.FINER => '\x1B[38;5;248m$text\x1B[0m',
+        Level.FINE => '\x1B[38;5;249m$text\x1B[0m',
+        Level.CONFIG => '\x1B[34m$text\x1B[0m',
+        Level.WARNING => '\x1B[33m$text\x1B[0m',
+        Level.SEVERE || Level.SHOUT => '\x1B[31m$text\x1B[0m',
+        _ => text,
+      };
+      print(text);
+    },
+  );
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
@@ -55,6 +68,8 @@ Future init() async {
 
   // Must open the database before initializing any routes.
   await PostgresDb().open();
+
+  final webSocketLog = Logger('Websocket');
 
   // Router instance to handler requests.
   final router = shelf_router.Router()
@@ -64,12 +79,12 @@ Future init() async {
         return websocketHandler(request);
       } on HijackException catch (error, _) {
         // A HijackException should bypass the response-writing logic entirely.
-        print('Warning: HijackException thrown on WebsocketHandler.\n$error');
+        webSocketLog.warning('Warning: HijackException thrown on WebsocketHandler.\n$error');
         // TODO hide stack trace or handle better
         // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
         rethrow;
       } catch (error, _) {
-        print('Error thrown by handler.\n$error');
+        webSocketLog.severe('Error thrown by Websocket Handler handler.\n$error');
         return Response.internalServerError();
       }
     })
@@ -106,8 +121,11 @@ Future init() async {
     port,
   );
 
+  final serverLog = Logger('Server');
+
   final serverUrl = 'http://${server.address.host}:${server.port}';
-  print('Serving at $serverUrl');
-  print('Serving API at $serverUrl/api');
-  print('Serving Websocket at $serverUrl/ws');
+  serverLog.info('\n\n############## Server started at ${DateTime.now().toIso8601String()} ###########\n');
+  serverLog.info('Serving at $serverUrl');
+  serverLog.info('Serving API at $serverUrl/api');
+  serverLog.info('Serving Websocket at $serverUrl/ws');
 }
