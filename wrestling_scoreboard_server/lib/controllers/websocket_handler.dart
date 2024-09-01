@@ -14,8 +14,8 @@ import 'package:wrestling_scoreboard_server/controllers/participation_controller
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
-import 'package:wrestling_scoreboard_server/server.dart';
 import 'package:wrestling_scoreboard_server/services/auth.dart';
+import 'package:wrestling_scoreboard_server/services/environment.dart';
 
 import 'entity_controller.dart';
 import 'league_team_participation_controller.dart';
@@ -419,5 +419,5 @@ final websocketHandler = webSocketHandler(
       webSocketPool.remove(webSocket);
     });
   },
-  pingInterval: Duration(seconds: int.parse(env['WEB_SOCKET_PING_INTERVAL_SECS'] ?? '30')),
+  pingInterval: Duration(seconds: env.webSocketPingIntervalSecs ?? 30),
 );
