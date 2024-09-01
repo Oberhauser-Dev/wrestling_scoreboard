@@ -4,42 +4,23 @@
 
 import 'dart:io';
 
-import 'package:dotenv/dotenv.dart' show DotEnv;
 import 'package:logging/logging.dart';
-import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
+import 'package:wrestling_scoreboard_server/controllers/database_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/services/environment.dart';
+import 'package:wrestling_scoreboard_server/services/pubspec.dart';
 import 'package:wrestling_scoreboard_server/routes/api_route.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 import 'middleware/cors.dart';
 
-final env = DotEnv();
-
-Pubspec? pubspec;
-
-Future<Pubspec> _parsePubspec() async {
-  if (pubspec == null) {
-    final file = File('pubspec.yaml');
-    if (await file.exists()) {
-      pubspec = Pubspec.parse(await file.readAsString());
-    } else {
-      throw FileSystemException('No file found', file.absolute.path);
-    }
-  }
-  return pubspec!;
-}
-
 Future init() async {
-  env.load(); // Load dotenv variables
-  await _parsePubspec();
-
   // Init logger
-  Logger.root.level =
-      Level.LEVELS.where((level) => level.name == env['LOG_LEVEL']?.toUpperCase()).singleOrNull ?? Level.INFO;
+  Logger.root.level = env.logLevel ?? Level.INFO;
   Logger.root.onRecord.listen(
     (record) async {
       String text = '[${record.time}] ${record.level.name}: ${record.message}';
@@ -64,10 +45,11 @@ Future init() async {
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
-  final port = int.parse(env['PORT'] ?? '8080');
+  final port = env.port ?? 8080;
 
   // Must open the database before initializing any routes.
   await PostgresDb().open();
+  await DatabaseController().migrate();
 
   final webSocketLog = Logger('Websocket');
 
@@ -89,7 +71,7 @@ Future init() async {
       }
     })
     ..mount('/about', (Request request) async {
-      final pubspec = await _parsePubspec();
+      final pubspec = await parsePubspec();
       return Response.ok('''
     Name: ${pubspec.name}
     Description: ${pubspec.description}
@@ -117,7 +99,7 @@ Future init() async {
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
   final server = await shelf_io.serve(
     pipeline,
-    env['HOST'] ?? InternetAddress.anyIPv4, // Allows external connections
+    env.host ?? InternetAddress.anyIPv4, // Allows external connections
     port,
   );
 

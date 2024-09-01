@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.6 (Ubuntu 13.6-0ubuntu0.21.10.1)
--- Dumped by pg_dump version 16.4 (Ubuntu 16.4-0ubuntu0.24.04.1)
+-- Dumped from database version 16.1
+-- Dumped by pg_dump version 16.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -678,6 +678,17 @@ ALTER SEQUENCE public.membership_id_seq OWNER TO wrestling;
 
 ALTER SEQUENCE public.membership_id_seq OWNED BY public.membership.id;
 
+
+--
+-- Name: migration; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.migration (
+    semver character varying(127) DEFAULT '0.0.0'::character varying NOT NULL
+);
+
+
+ALTER TABLE public.migration OWNER TO wrestling;
 
 --
 -- Name: organization; Type: TABLE; Schema: public; Owner: wrestling
@@ -1394,6 +1405,15 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 6	6	1	\N	\N	1
 15	16	1	\N	\N	1
 14	15	1	\N	\N	1
+\.
+
+
+--
+-- Data for Name: migration; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.migration (semver) FROM stdin;
+0.0.1-beta.14
 \.
 
 

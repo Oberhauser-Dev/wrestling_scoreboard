@@ -1,14 +1,15 @@
 import 'package:postgres/postgres.dart' as psql;
-import 'package:wrestling_scoreboard_server/server.dart';
+
+import 'environment.dart';
 
 const _isReleaseMode = bool.fromEnvironment("dart.vm.product");
 
 class PostgresDb {
-  final String postgresHost = env['DATABASE_HOST'] ?? 'localhost';
-  final int postgresPort = int.parse(env['DATABASE_PORT'] ?? '5432');
-  final String dbUser = env['DATABASE_USER'] ?? 'postgres';
-  final String dbPW = env['DATABASE_PASSWORD'] ?? '';
-  final String postgresDatabaseName = env['DATABASE_NAME'] ?? 'wrestling_scoreboard';
+  final String postgresHost = env.databaseHost ?? 'localhost';
+  final int postgresPort = env.databasePort ?? 5432;
+  final String dbUser = env.databaseUser ?? 'postgres';
+  final String dbPW = env.databasePassword ?? '';
+  final String postgresDatabaseName = env.databaseName ?? 'wrestling_scoreboard';
 
   static final PostgresDb _singleton = PostgresDb._internal();
   late psql.Connection connection;

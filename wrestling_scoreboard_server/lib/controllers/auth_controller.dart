@@ -4,13 +4,13 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
-import 'package:wrestling_scoreboard_server/server.dart';
+import 'package:wrestling_scoreboard_server/services/environment.dart';
 
 class AuthController {
   late final String jwtSecret;
 
   AuthController() {
-    final jwtSecret = env['JWT_SECRET'];
+    final jwtSecret = env.jwtSecret;
     if (jwtSecret == null) {
       throw Exception('JWT_SECRET not specified!');
     }
@@ -66,8 +66,8 @@ class AuthController {
   }
 
   String _signToken(SecuredUser user) {
-    final int jwtExpiresInDays = int.parse(env['JWT_EXPIRES_IN_DAYS'] ?? '90');
-    final jwtIssuer = env['JWT_ISSUER'] ?? 'Wrestling Scoreboard (oberhauser.dev)';
+    final int jwtExpiresInDays = env.jwtExpiresInDays ?? 90;
+    final jwtIssuer = env.jwtIssuer ?? 'Wrestling Scoreboard (oberhauser.dev)';
 
     final jwt = JWT(
       // Payload

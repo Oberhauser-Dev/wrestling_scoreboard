@@ -2,7 +2,8 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
-import 'package:wrestling_scoreboard_server/server.dart';
+
+import 'environment.dart';
 
 extension AuthRequest on Request {
   Future<Response> restricted({
@@ -37,14 +38,12 @@ extension AuthRequest on Request {
   }
 }
 
-final jwtSecret = env['JWT_SECRET'];
-
 extension UserFromAuthService on BearerAuthService {
   Future<User?> getUser() async {
-    if (jwtSecret == null) {
+    if (env.jwtSecret == null) {
       throw Exception('JWT_SECRET not specified!');
     }
-    final jwt = JWT.verify(token, SecretKey(jwtSecret!));
+    final jwt = JWT.verify(token, SecretKey(env.jwtSecret!));
     final user = await SecuredUserController().getSingleByUsername(jwt.payload['username'] as String);
     return user?.toUser();
   }
