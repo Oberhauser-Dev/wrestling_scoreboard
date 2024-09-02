@@ -43,7 +43,7 @@ class SearchController {
         final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
         if (isValidLikeSearch) {
-          manyJson = await entityController.getManyJsonLike(raw, likeParam,
+          manyJson = await entityController?.getManyJsonLike(raw, likeParam,
               organizationId: searchOrganizationId, obfuscate: obfuscate);
           if (!searchAllTypes && useProvider && searchOrganizationId != null) {
             final orgSearchRes = await OrganizationController().search(
@@ -55,7 +55,7 @@ class SearchController {
             manyJson = manyToJson(orgSearchRes, searchType, CRUD.read, isRaw: false);
           }
         } else if (!searchAllTypes) {
-          manyJson = await entityController.getManyJson(
+          manyJson = await entityController?.getManyJson(
               isRaw: raw,
               conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,
               substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null,

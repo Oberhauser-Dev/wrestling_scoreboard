@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -49,7 +50,8 @@ class DatabaseController {
   Future<Response> reset(Request request, User? user) async {
     try {
       await _restoreDefault();
-      Iterable<ShelfController> entityControllers = dataTypes.map((t) => ShelfController.getControllerFromDataType(t));
+      Iterable<ShelfController> entityControllers =
+          dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
       // Remove data
       await Future.forEach(entityControllers, (e) => e.deleteMany());
       // No need to restore the database semantic version for migration,
@@ -142,7 +144,8 @@ class DatabaseController {
     final processResult = await Process.run('psql', args, environment: {'PGPASSWORD': db.dbPW});
     await db.open();
 
-    Iterable<ShelfController> entityControllers = dataTypes.map((t) => ShelfController.getControllerFromDataType(t));
+    Iterable<ShelfController> entityControllers =
+        dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
     await Future.forEach(entityControllers, (e) => e.init());
 
     if (processResult.exitCode != 0) {
