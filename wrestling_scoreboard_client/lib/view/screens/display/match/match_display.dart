@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
@@ -15,7 +19,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MatchDisplay extends StatelessWidget {
+class MatchDisplay extends ConsumerWidget {
   static const route = 'display';
   static const flexWidths = [17, 50, 30, 50];
 
@@ -25,7 +29,8 @@ class MatchDisplay extends StatelessWidget {
   const MatchDisplay({required this.id, this.teamMatch, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = AppLocalizations.of(context)!;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 140;
     return SingleConsumer<TeamMatch>(
@@ -36,16 +41,41 @@ class MatchDisplay extends StatelessWidget {
           icon: const Icon(Icons.info),
           onPressed: () => handleSelectedTeamMatch(match, context),
         );
+        final pdfAction = IconButton(
+          icon: const Icon(Icons.print),
+          onPressed: () async {
+            final teamMatchBouts = await ref.read(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+              ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
+            ).future);
+
+            final teamMatchBoutActions = Map.fromEntries(await Future.wait(teamMatchBouts.map((teamMatchBout) async {
+              final boutActions = await ref.read(manyDataStreamProvider<BoutAction, Bout>(
+                ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
+              ).future);
+              // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+              return MapEntry(teamMatchBout, boutActions);
+            })));
+            if (context.mounted) {
+              final bytes = await TeamMatchTranscript(
+                teamMatchBoutActions: teamMatchBoutActions,
+                buildContext: context,
+                teamMatch: match,
+                boutConfig: match.league?.division.boutConfig ?? const BoutConfig(),
+              ).buildPdf();
+              Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
+            }
+          },
+        );
         return WindowStateScaffold(
           hideAppBarOnFullscreen: true,
-          actions: [infoAction],
+          actions: [infoAction, pdfAction],
           body: ManyConsumer<TeamMatchBout, TeamMatch>(
             filterObject: match,
             builder: (context, teamMatchBouts) {
               final matchInfos = [
                 match.league?.fullname,
-                '${AppLocalizations.of(context)!.boutNo}: ${match.id ?? ''}',
-                if (match.referee != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.referee?.fullName}',
+                '${localizations.boutNo}: ${match.id ?? ''}',
+                if (match.referee != null) '${localizations.refereeAbbr}: ${match.referee?.fullName}',
                 // Not enough space to display all three referees
                 // if (match.matChairman != null)
                 //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',

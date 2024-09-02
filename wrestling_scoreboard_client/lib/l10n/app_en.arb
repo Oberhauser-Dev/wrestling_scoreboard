@@ -3,7 +3,9 @@
   "@appName": {
     "description": "The internationalized app name"
   },
+  "start": "Start",
   "home": "Home",
+  "guest": "Guest",
   "explore": "Explore",
   "more": "More",
   "settings": "Settings",
@@ -103,7 +105,18 @@
   "endDate": "End",
 
   "wrestlingRulesPdf": "https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf",
+  "transcriptTeamMatches": "Transcript for Team Matches",
+  "scoreSheetSingleCompetitions": "Score sheet for Single Competitions",
+  "signature": "Signature",
+  "pool": "Pool",
+  "round": "Round",
+  "mat": "Mat",
+  "status": "Status",
+  "visitors": "Visitors",
+  "numberAbbreviation": "No.",
+  "total": "Total",
   "participantVacant": "vacant",
+
   "weight": "Weight",
   "weightClass": "Weight Class",
   "weightClasses": "Weight Classes",
@@ -169,6 +182,10 @@
   "boutResultDsqAbbr": "DSQ",
   "boutResultDsq2Abbr": "DSQ2",
   "actions": "Actions",
+  "point": "point",
+  "points": "Points",
+  "technicalPoints": "Technical Points",
+  "classificationPoints": "Classification Points",
   "participations": "Participations",
   "boutConfig": "Bout configuration",
 

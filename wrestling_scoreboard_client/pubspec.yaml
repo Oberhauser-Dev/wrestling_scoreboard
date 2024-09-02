@@ -51,11 +51,12 @@ dev_dependencies:
   build_runner: ^2.4.7
 
 dependency_overrides:
-  # TODO(gustl22): Remove when published: https://github.com/bluefireteam/audioplayers/pull/1828
-  audioplayers_web:
+  # TODO(gustl22): Remove when published: https://github.com/DavBfr/dart_pdf/pull/1736
+  pdf:
     git:
-      url: https://github.com/bluefireteam/audioplayers.git
-      path: packages/audioplayers_web
+      url: https://github.com/Gustl22/dart_pdf.git
+      path: pdf
+      ref: 313-column-span
   # TODO(gustl22): Remove when published: https://github.com/fluttercommunity/plus_plugins/commit/05f8afb8fc43bc702ab5e3e14e3cba9d79983446
   package_info_plus:
     git:

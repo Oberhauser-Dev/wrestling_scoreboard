@@ -95,13 +95,12 @@ packages:
     source: hosted
     version: "7.0.0"
   audioplayers_web:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "packages/audioplayers_web"
-      ref: HEAD
-      resolved-ref: f284cc99038881abaf40b9f1961321b695dbc3e2
-      url: "https://github.com/bluefireteam/audioplayers.git"
-    source: git
+      name: audioplayers_web
+      sha256: "3609bdf0e05e66a3d9750ee40b1e37f2a622c4edb796cc600b53a90a30a2ace4"
+      url: "https://pub.dev"
+    source: hosted
     version: "5.0.1"
   audioplayers_windows:
     dependency: transitive
@@ -267,10 +266,10 @@ packages:
     dependency: transitive
     description:
       name: coverage
-      sha256: "7b594a150942e0d3be99cd45a1d0b5caff27ba5a27f292ed8e8d904ba3f167b5"
+      sha256: c1fb2dce3c0085f39dc72668e85f8e0210ec7de05345821ff58530567df345a5
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.1"
+    version: "1.9.2"
   cross_file:
     dependency: transitive
     description:
@@ -689,7 +688,7 @@ packages:
     description:
       path: "packages/package_info_plus/package_info_plus"
       ref: HEAD
-      resolved-ref: "91f48a6bc7d11c4238c9539ca06e6fa768995580"
+      resolved-ref: "4e6def451016ca07d1f1ce80b881225e1f52b577"
       url: "https://github.com/fluttercommunity/plus_plugins.git"
     source: git
     version: "8.0.2"
@@ -768,10 +767,11 @@ packages:
   pdf:
     dependency: "direct main"
     description:
-      name: pdf
-      sha256: "05df53f8791587402493ac97b9869d3824eccbc77d97855f4545cf72df3cae07"
-      url: "https://pub.dev"
-    source: hosted
+      path: pdf
+      ref: "313-column-span"
+      resolved-ref: a893e72cee6920ed3f6e0e340d408524b70874fd
+      url: "https://github.com/Gustl22/dart_pdf.git"
+    source: git
     version: "3.11.1"
   pdf_widget_wrapper:
     dependency: transitive
@@ -965,10 +965,10 @@ packages:
     dependency: transitive
     description:
       name: shelf_static
-      sha256: a41d3f53c4adf0f57480578c1d61d90342cd617de7fc8077b1304643c2d85c1e
+      sha256: c87c3875f91262785dade62d135760c2c69cb217ac759485334c5857ad89f6e3
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.3"
   shelf_web_socket:
     dependency: transitive
     description:
@@ -1186,10 +1186,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
+      sha256: f33d6bb662f0e4f79dcd7ada2e6170f3b3a2530c28fc41f49a411ddedd576a77
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.2"
+    version: "4.5.0"
   vector_math:
     dependency: transitive
     description:
