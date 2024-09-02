@@ -412,18 +412,26 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);
 
     Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onSurface;
 
-    final shareAction = IconButton(
-      icon: const Icon(Icons.share),
+    final pdfAction = IconButton(
+      icon: const Icon(Icons.print),
       onPressed: () async {
-        final bytes = await generateScoreSheet(this, localizations: localizations);
-        Printing.sharePdf(bytes: bytes);
+        final actions = await getActions();
+        if (context.mounted) {
+          final bytes = await ScoreSheet(
+            bout: bout,
+            buildContext: context,
+            boutActions: actions,
+            wrestlingEvent: widget.wrestlingEvent,
+            boutConfig: boutConfig,
+          ).buildPdf();
+          Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
+        }
       },
     );
     final infoAction = IconButton(
@@ -447,7 +455,7 @@ class BoutState extends ConsumerState<BoutScreen> {
               navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
               child: WindowStateScaffold(
                 hideAppBarOnFullscreen: true,
-                actions: [infoAction, shareAction],
+                actions: [infoAction, pdfAction],
                 body: SingleChildScrollView(
                   child: Column(
                     children: [

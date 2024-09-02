@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
@@ -41,6 +43,32 @@ class TeamMatchOverview extends ConsumerWidget {
         id: id,
         initialData: match,
         builder: (context, match) {
+          final pdfAction = IconButton(
+            icon: const Icon(Icons.print),
+            onPressed: () async {
+              final teamMatchBouts = await ref.read(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+                ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
+              ).future);
+
+              final teamMatchBoutActions = Map.fromEntries(await Future.wait(teamMatchBouts.map((teamMatchBout) async {
+                final boutActions = await ref.read(manyDataStreamProvider<BoutAction, Bout>(
+                  ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
+                ).future);
+                // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+                return MapEntry(teamMatchBout, boutActions);
+              })));
+              if (context.mounted) {
+                final bytes = await TeamMatchTranscript(
+                  teamMatchBoutActions: teamMatchBoutActions,
+                  buildContext: context,
+                  teamMatch: match,
+                  boutConfig: match.league?.division.boutConfig ?? const BoutConfig(),
+                ).buildPdf();
+                Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
+              }
+            },
+          );
+
           return OverviewScaffold<TeamMatch>(
             dataObject: match,
             label: localizations.match,
@@ -51,23 +79,12 @@ class TeamMatchOverview extends ConsumerWidget {
                   onPressed: () async {
                     final reporter = match.organization?.getReporter();
                     if (reporter != null) {
-                      final fileNameBuilder = [
-                        match.date.toIso8601String().substring(0, 10),
-                        match.league?.fullname,
-                        match.no,
-                        match.home.team.name,
-                        '–',
-                        match.guest.team.name,
-                      ];
-                      fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-                      final fileBaseName = fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
-
                       final bouts = await _getBouts(ref, match: match);
                       final boutMap = Map.fromEntries(await Future.wait(
                           bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
                       final reportStr = reporter.exportTeamMatchReport(match, boutMap);
 
-                      await exportRDB(fileBaseName: fileBaseName, rdbString: reportStr);
+                      await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
                     } else {
                       if (context.mounted) {
                         showExceptionDialog(
@@ -81,6 +98,7 @@ class TeamMatchOverview extends ConsumerWidget {
                     }
                   },
                   icon: const Icon(Icons.description)),
+              pdfAction,
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 child: ElevatedButton.icon(
@@ -185,7 +203,7 @@ class TeamMatchOverview extends ConsumerWidget {
                           icon: Icons.history_edu,
                         ),
                         ContentItem(
-                          title: '-', // Multiple stewards
+                          title: '-', // TODO: Multiple stewards
                           subtitle: localizations.steward,
                           icon: Icons.security,
                         ),
@@ -290,5 +308,20 @@ class TeamMatchOverview extends ConsumerWidget {
         },
       ),
     );
+  }
+}
+
+extension TeamMatchFileExt on TeamMatch {
+  String get fileBaseName {
+    final fileNameBuilder = [
+      date.toIso8601String().substring(0, 10),
+      league?.fullname,
+      no,
+      home.team.name,
+      '–',
+      guest.team.name,
+    ];
+    fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
+    return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
   }
 }

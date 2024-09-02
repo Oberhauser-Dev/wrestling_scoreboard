@@ -2,88 +2,67 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:printing/printing.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-// TODO: Replace boutState with individual dataTypes or introduce model.
-Future<Uint8List> generateScoreSheet(BoutState boutState,
-    {PdfPageFormat? pageFormat, required, required AppLocalizations localizations}) async {
-  final scoreSheet = ScoreSheet(
-    boutState: boutState,
-    localizations: localizations,
-    baseColor: PdfColors.blueGrey500,
-    accentColor: PdfColors.blueGrey900,
-  );
-
-  return await scoreSheet.buildPdf(pageFormat: pageFormat);
-}
-
-class ScoreSheet {
+class ScoreSheet extends PdfSheet {
   ScoreSheet({
-    required this.boutState,
-    required this.baseColor,
-    required this.accentColor,
-    required this.localizations,
+    required this.bout,
+    required this.boutActions,
+    required this.wrestlingEvent,
+    required this.boutConfig,
+    super.baseColor,
+    super.accentColor,
+    required super.buildContext,
   });
 
-  static const PdfPageFormat a4 =
-      PdfPageFormat(21.0 * PdfPageFormat.cm, 29.7 * PdfPageFormat.cm, marginAll: 1.0 * PdfPageFormat.cm);
+  final Bout bout;
+  final List<BoutAction> boutActions;
+  final BoutConfig boutConfig;
+  final WrestlingEvent wrestlingEvent;
 
-  static const horizontalGap = 8.0;
-  static const verticalGap = 8.0;
-
-  final BoutState boutState;
-  final AppLocalizations localizations;
-
-  Bout get bout => boutState.bout;
-
-  WrestlingEvent get event => boutState.widget.wrestlingEvent;
-  final PdfColor baseColor;
-  final PdfColor accentColor;
-
-  static const _pencilColor = PdfColors.blue900;
-  static const _homeColor = PdfColors.red;
-  static const _guestColor = PdfColors.blue;
+  WrestlingEvent get event => wrestlingEvent;
 
   String? _logo;
 
+  @override
   Future<Uint8List> buildPdf({PdfPageFormat? pageFormat}) async {
     final doc = Document();
 
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
-    final actions = await boutState.getActions();
+    final actions = boutActions;
 
-// Add page to the PDF
+    // Add page to the PDF
     doc.addPage(
       MultiPage(
-        pageTheme: _buildTheme(
-          pageFormat ?? a4,
-          await PdfGoogleFonts.robotoRegular(),
-          await PdfGoogleFonts.robotoBold(),
-          await PdfGoogleFonts.robotoItalic(),
-        ),
+        pageTheme: await buildTheme(),
         header: _buildHeader,
-        footer: _buildFooter,
+        footer: buildFooter,
         build: (context) => [
-          _buildInfoHeader1(context),
-          Container(height: verticalGap),
+          Container(height: PdfSheet.verticalGap),
+          buildInfo(context, event),
+          Container(height: PdfSheet.verticalGap),
           _buildInfoHeader2(context),
-          Container(height: verticalGap),
+          Container(height: PdfSheet.verticalGap),
           _buildParticipantsHeader(context),
-          Container(height: verticalGap),
+          Container(height: PdfSheet.verticalGap),
           _buildPointsBody(context, actions),
+          Container(height: PdfSheet.verticalGap),
+          Column(
+            children: [
+              ...buildReferees(context, event, width: 120.0),
+              ...buildStaff(context, event, width: 120.0),
+            ],
+          ),
         ],
       ),
     );
 
-// Return the PDF file content
+    // Return the PDF file content
     return doc.save();
   }
 
@@ -103,7 +82,7 @@ class ScoreSheet {
           height: 25,
           alignment: Alignment.centerLeft,
           child: Text(
-            'PUNKTZETTEL FÜR EINZELMEISTERSCHAFTEN',
+            localizations.scoreSheetSingleCompetitions.toUpperCase(),
             style: TextStyle(
               color: baseColor,
               fontWeight: FontWeight.bold,
@@ -115,63 +94,8 @@ class ScoreSheet {
     ]);
   }
 
-  Widget _buildInfoHeader1(Context context) {
-    buildCheckBox({bool isChecked = false}) => Container(
-        margin: const EdgeInsets.all(4),
-        height: 20,
-        width: 20,
-        foregroundDecoration: BoxDecoration(
-          border: Border.all(
-            color: PdfColors.grey,
-            width: .5,
-          ),
-        ),
-        alignment: Alignment.center,
-        child: isChecked ? Text('×', style: const TextStyle(fontSize: 20, color: _pencilColor)) : null);
-
-    buildJudges({required String title, String? no}) {
-      const cellHeight = 20.0;
-      return TableRow(children: [
-        buildTextCell(title, fontSize: 7, height: cellHeight),
-        buildFormCell(title: 'Nr.', content: no, height: cellHeight, width: 60),
-      ]);
-    }
-
-    final isFreeStyle = bout.weightClass?.style == WrestlingStyle.free;
-
-    final wrestlingEvent = event;
-    Person? matChairman;
-    Person? referee;
-    Person? judge;
-    if (wrestlingEvent is TeamMatch) {
-      matChairman = wrestlingEvent.matChairman;
-      referee = wrestlingEvent.referee;
-      judge = wrestlingEvent.judge;
-    } else if (wrestlingEvent is Competition) {
-// TODO: get referees from bout
-// matChairman = bout.matChairman;
-// referee = bout.referee;
-// judge = bout.judge;
-    }
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(children: [
-            Text(localizations.freeStyle, style: const TextStyle(fontSize: 7)),
-            buildCheckBox(isChecked: isFreeStyle),
-            buildCheckBox(isChecked: !isFreeStyle),
-            Text(localizations.grecoRoman, style: const TextStyle(fontSize: 7)),
-          ]),
-          Table(children: [
-            buildJudges(title: localizations.matChairman.toUpperCase(), no: matChairman?.id.toString() ?? ''),
-            buildJudges(title: localizations.referee.toUpperCase(), no: referee?.id.toString() ?? ''),
-            buildJudges(title: localizations.judge.toUpperCase(), no: judge?.id.toString() ?? ''),
-          ]),
-        ]);
-  }
-
   Widget _buildInfoHeader2(Context context) {
+    final isFreeStyle = bout.weightClass?.style == WrestlingStyle.free;
     return Table(
       columnWidths: {
         0: const FlexColumnWidth(2),
@@ -185,29 +109,48 @@ class ScoreSheet {
       children: [
         TableRow(
           children: [
-            buildFormCell(
-                title: localizations.date,
-                content: event.date.toDateStringFromLocaleName(localizations.localeName),
+            buildFormCellWidget(
+                title: localizations.wrestlingStyle,
+                content: Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(localizations.freeStyle, style: const TextStyle(fontSize: 7)),
+                  buildCheckBox(
+                      isChecked: isFreeStyle, pencilColor: PdfSheet.pencilColor, checkBoxColor: PdfColors.white),
+                  buildCheckBox(
+                      isChecked: !isFreeStyle, pencilColor: PdfSheet.pencilColor, checkBoxColor: PdfColors.white),
+                  Text(localizations.grecoRoman, style: const TextStyle(fontSize: 7)),
+                ]),
                 color: PdfColors.grey300,
-                pencilColor: _pencilColor),
+                pencilColor: PdfSheet.pencilColor),
             buildFormCell(
                 title: '${localizations.weightClass} (${bout.weightClass?.unit.toAbbr()})',
                 content: bout.weightClass?.weight.toString(),
                 color: PdfColors.grey300,
-                pencilColor: _pencilColor),
+                pencilColor: PdfSheet.pencilColor),
             buildFormCell(
                 title: localizations.boutNo, // TODO: change to boutNo
                 content: bout.id?.toString() ?? '',
                 color: PdfColors.grey300,
-                pencilColor: _pencilColor),
+                pencilColor: PdfSheet.pencilColor),
             buildFormCell(
-                title: 'POOL' /*localizations.pool*/,
+                title: localizations.pool.toUpperCase(),
                 content: bout.pool?.toString() ?? '',
                 color: PdfColors.grey300,
-                pencilColor: _pencilColor),
-            buildFormCell(title: 'RUNDE', content: '', color: PdfColors.grey300, pencilColor: _pencilColor),
-            buildFormCell(title: 'PLATZ', content: '', color: PdfColors.grey300, pencilColor: _pencilColor),
-            buildFormCell(title: 'MATTE', content: '', color: PdfColors.grey300, pencilColor: _pencilColor),
+                pencilColor: PdfSheet.pencilColor),
+            buildFormCell(
+                title: localizations.round.toUpperCase(),
+                content: '',
+                color: PdfColors.grey300,
+                pencilColor: PdfSheet.pencilColor),
+            buildFormCell(
+                title: localizations.place.toUpperCase(),
+                content: '',
+                color: PdfColors.grey300,
+                pencilColor: PdfSheet.pencilColor),
+            buildFormCell(
+                title: localizations.mat.toUpperCase(),
+                content: '',
+                color: PdfColors.grey300,
+                pencilColor: PdfSheet.pencilColor),
           ],
         ),
       ],
@@ -218,11 +161,15 @@ class ScoreSheet {
     Widget buildParticipantNameColumn({String? name, String? club, required PdfColor borderColor}) {
       return Column(children: [
         buildFormCell(
-            title: localizations.name, content: name, pencilColor: _pencilColor, height: 40, borderColor: borderColor),
+            title: localizations.name,
+            content: name,
+            pencilColor: PdfSheet.pencilColor,
+            height: 40,
+            borderColor: borderColor),
         buildFormCell(
             title: 'NATION / VERBAND / ${localizations.club}',
             content: club,
-            pencilColor: _pencilColor,
+            pencilColor: PdfSheet.pencilColor,
             height: 40,
             borderColor: borderColor),
       ]);
@@ -230,9 +177,9 @@ class ScoreSheet {
 
     Widget buildParticipantColumn({required bool isLeft, Membership? membership, required PdfColor borderColor}) {
       final numberCell = buildFormCell(
-          title: 'NR.',
+          title: localizations.numberAbbreviation.toUpperCase(),
           content: membership?.person.id?.toString() ?? '',
-          pencilColor: _pencilColor,
+          pencilColor: PdfSheet.pencilColor,
           height: 80,
           borderColor: borderColor);
       final content = [
@@ -271,9 +218,11 @@ class ScoreSheet {
     }
 
     return Row(children: [
-      buildParticipantColumn(isLeft: true, membership: bout.r?.participation.membership, borderColor: _homeColor),
-      Container(width: horizontalGap),
-      buildParticipantColumn(isLeft: false, membership: bout.b?.participation.membership, borderColor: _guestColor),
+      buildParticipantColumn(
+          isLeft: true, membership: bout.r?.participation.membership, borderColor: PdfSheet.homeColor),
+      Container(width: PdfSheet.horizontalGap),
+      buildParticipantColumn(
+          isLeft: false, membership: bout.b?.participation.membership, borderColor: PdfSheet.guestColor),
     ]);
   }
 
@@ -282,7 +231,7 @@ class ScoreSheet {
     const roundCellHeight = 35.0;
     const breakCellHeight = 15.0;
 
-    final rounds = boutState.boutConfig.periodCount;
+    final rounds = boutConfig.periodCount;
 
     Widget buildColorCell({required String colorStr, required PdfColor borderColor}) => Transform.rotateBox(
         angle: pi * 0.5,
@@ -290,19 +239,21 @@ class ScoreSheet {
         child: buildTextCell(
           colorStr,
           height: 40,
-          width: headerCellHeight + verticalGap + (rounds * roundCellHeight) + ((rounds - 1) * breakCellHeight),
+          width:
+              headerCellHeight + PdfSheet.verticalGap + (rounds * roundCellHeight) + ((rounds - 1) * breakCellHeight),
           borderColor: borderColor,
           textColor: borderColor,
           alignment: Alignment.center,
         ));
 
-    Widget buildTotalCell(PdfColor borderColor) =>
-        buildTextCell('TOTAL', height: headerCellHeight, borderColor: borderColor, alignment: Alignment.center);
-    Widget buildTechnicalPointsHeaderCell(PdfColor borderColor) => buildTextCell('TECHNISCHE PUNKTE',
+    Widget buildTotalCell(PdfColor borderColor) => buildTextCell(localizations.total.toUpperCase(),
         height: headerCellHeight, borderColor: borderColor, alignment: Alignment.center);
+    Widget buildTechnicalPointsHeaderCell(PdfColor borderColor) =>
+        buildTextCell(localizations.technicalPoints.toUpperCase(),
+            height: headerCellHeight, borderColor: borderColor, alignment: Alignment.center);
     TableRow buildRound({required int round}) {
-      final periodDurMin = boutState.boutConfig.periodDuration * round;
-      final periodDurMax = periodDurMin + boutState.boutConfig.periodDuration;
+      final periodDurMin = boutConfig.periodDuration * round;
+      final periodDurMax = periodDurMin + boutConfig.periodDuration;
       final periodActions = actions.where(
           (element) => element.duration.compareTo(periodDurMax) <= 0 && element.duration.compareTo(periodDurMin) > 0);
       final periodActionsRed = periodActions.where((element) => element.role == BoutRole.red);
@@ -314,20 +265,20 @@ class ScoreSheet {
                 .map((e) => e.pointCount ?? 0)
                 .fold<int>(0, (cur, next) => (cur + next))
                 .toString(),
-            borderColor: _homeColor,
+            borderColor: PdfSheet.homeColor,
             height: roundCellHeight),
         buildFormCell(
             content: periodActionsRed.map((e) => e.toString()).join(', '),
-            borderColor: _homeColor,
+            borderColor: PdfSheet.homeColor,
             height: roundCellHeight),
-        buildTextCell('ROUND\n${round + 1}',
+        buildTextCell('${localizations.round.toUpperCase()}\n${round + 1}',
             height: roundCellHeight,
-            margin: const EdgeInsets.symmetric(horizontal: horizontalGap),
+            margin: const EdgeInsets.symmetric(horizontal: PdfSheet.horizontalGap),
             fontSize: 8,
             alignment: Alignment.center),
         buildFormCell(
             content: periodActionsBlue.map((e) => e.toString()).join(', '),
-            borderColor: _guestColor,
+            borderColor: PdfSheet.guestColor,
             height: roundCellHeight),
         buildFormCell(
             content: periodActionsBlue
@@ -335,7 +286,7 @@ class ScoreSheet {
                 .map((e) => e.pointCount ?? 0)
                 .fold<int>(0, (cur, next) => (cur + next))
                 .toString(),
-            borderColor: _guestColor,
+            borderColor: PdfSheet.guestColor,
             height: roundCellHeight),
       ]);
     }
@@ -346,15 +297,15 @@ class ScoreSheet {
         roundRows.add(buildRound(round: round));
         if (round < (rounds - 1)) {
           final breakDurationStr =
-              '${localizations.breakDuration}: ${boutState.boutConfig.breakDuration.formatMinutesAndSeconds()}';
+              '${localizations.breakDuration}: ${boutConfig.breakDuration.formatMinutesAndSeconds()}';
           roundRows.add(TableRow(children: [
-            Container(color: _homeColor, height: breakCellHeight),
+            Container(color: PdfSheet.homeColor, height: breakCellHeight),
             buildTextCell(
               breakDurationStr,
               fontSize: 8,
               alignment: Alignment.center,
-              borderColor: _homeColor,
-              color: _homeColor,
+              borderColor: PdfSheet.homeColor,
+              color: PdfSheet.homeColor,
               textColor: PdfColors.white,
               height: breakCellHeight,
             ),
@@ -363,12 +314,12 @@ class ScoreSheet {
               breakDurationStr,
               fontSize: 8,
               alignment: Alignment.center,
-              borderColor: _guestColor,
-              color: _guestColor,
+              borderColor: PdfSheet.guestColor,
+              color: PdfSheet.guestColor,
               textColor: PdfColors.white,
               height: breakCellHeight,
             ),
-            Container(color: _guestColor, height: breakCellHeight),
+            Container(color: PdfSheet.guestColor, height: breakCellHeight),
           ]));
         }
       }
@@ -384,50 +335,22 @@ class ScoreSheet {
         },
         children: [
           TableRow(children: [
-            buildTotalCell(_homeColor),
-            buildTechnicalPointsHeaderCell(_homeColor),
+            buildTotalCell(PdfSheet.homeColor),
+            buildTechnicalPointsHeaderCell(PdfSheet.homeColor),
             Container(),
-            buildTechnicalPointsHeaderCell(_guestColor),
-            buildTotalCell(_guestColor),
+            buildTechnicalPointsHeaderCell(PdfSheet.guestColor),
+            buildTotalCell(PdfSheet.guestColor),
           ]),
-          TableRow(children: [Container(height: verticalGap)]),
+          TableRow(children: [Container(height: PdfSheet.verticalGap)]),
           ...roundRows,
         ],
       ));
     }
 
     return Row(children: [
-      buildColorCell(colorStr: localizations.red.toUpperCase(), borderColor: _homeColor),
+      buildColorCell(colorStr: localizations.red.toUpperCase(), borderColor: PdfSheet.homeColor),
       buildTechnicalPoints(),
-      buildColorCell(colorStr: localizations.blue.toUpperCase(), borderColor: _guestColor),
+      buildColorCell(colorStr: localizations.blue.toUpperCase(), borderColor: PdfSheet.guestColor),
     ]);
-  }
-
-  Widget _buildFooter(Context context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          '© ${DateTime.now().year} - August Oberhauser',
-          style: const TextStyle(fontSize: 6, color: PdfColors.grey500),
-        ),
-        Text(
-          'Page ${context.pageNumber}/${context.pagesCount}',
-          style: const TextStyle(fontSize: 8, color: PdfColors.grey800),
-        ),
-      ],
-    );
-  }
-
-  PageTheme _buildTheme(PdfPageFormat pageFormat, Font base, Font bold, Font italic) {
-    return PageTheme(
-      pageFormat: pageFormat,
-      theme: ThemeData.withFont(
-        base: base,
-        bold: bold,
-        italic: italic,
-      ),
-    );
   }
 }

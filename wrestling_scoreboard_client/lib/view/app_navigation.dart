@@ -46,7 +46,7 @@ class _AppNavigationState extends State<AppNavigation> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
-            label: localizations.home,
+            label: localizations.start,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.explore),

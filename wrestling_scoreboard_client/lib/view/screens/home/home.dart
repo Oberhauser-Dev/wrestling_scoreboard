@@ -140,7 +140,7 @@ class HomeState extends ConsumerState<Home> {
     }
 
     return WindowStateScaffold(
-      appBarTitle: Text(localizations.home),
+      appBarTitle: Text(localizations.start),
       body: ResponsiveContainer(
         child: Column(
           children: [
