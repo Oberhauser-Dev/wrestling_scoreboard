@@ -163,16 +163,18 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     }
   }
 
-  static ShelfController getControllerFromDataType(Type t) {
+  static ShelfController? getControllerFromDataType(Type t) {
     switch (t) {
-      case const (BoutConfig):
-        return BoutConfigController();
-      case const (Club):
-        return ClubController();
       case const (Bout):
         return BoutController();
       case const (BoutAction):
         return BoutActionController();
+      case const (BoutConfig):
+        return BoutConfigController();
+      case const (Club):
+        return ClubController();
+      case const (Competition):
+        return CompetitionController();
       case const (Organization):
         return OrganizationController();
       case const (Division):
@@ -201,12 +203,10 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return TeamMatchController();
       case const (TeamMatchBout):
         return TeamMatchBoutController();
-      case const (Competition):
-        return CompetitionController();
       case const (WeightClass):
         return WeightClassController();
       default:
-        throw UnimplementedError('Controller not available for type: $t');
+        return null;
     }
   }
 }
@@ -525,7 +525,7 @@ abstract class EntityController<T extends DataObject> {
     int id, {
     required bool obfuscate,
   }) {
-    return ShelfController.getControllerFromDataType(T).getSingle(id, obfuscate: obfuscate) as Future<T>;
+    return ShelfController.getControllerFromDataType(T)?.getSingle(id, obfuscate: obfuscate) as Future<T>;
   }
 
   static Future<List<T>> getManyFromDataType<T extends DataObject>({
@@ -534,7 +534,7 @@ abstract class EntityController<T extends DataObject> {
     Map<String, dynamic>? substitutionValues,
     required bool obfuscate,
   }) {
-    return ShelfController.getControllerFromDataType(T).getMany(
+    return ShelfController.getControllerFromDataType(T)?.getMany(
         conditions: conditions,
         conjunction: conjunction,
         substitutionValues: substitutionValues,

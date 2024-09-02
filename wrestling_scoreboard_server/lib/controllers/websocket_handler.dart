@@ -306,7 +306,7 @@ Future<int> handleSingle<T extends DataObject>({
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform update operation on ${single.tableName}/${single.id}');
     }
-    await controller.updateSingle(single);
+    await controller!.updateSingle(single);
     broadcast((obfuscate) async {
       // Need to provide an obfuscated version of the dataObject, but can reuse the `single` object for non obfuscated broadcast, to raise performance
       return jsonEncode(
@@ -317,12 +317,12 @@ Future<int> handleSingle<T extends DataObject>({
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform create operation on ${single.tableName}/${single.id}');
     }
-    single = single.copyWithId(await controller.createSingle(single)) as T;
+    single = single.copyWithId(await controller!.createSingle(single)) as T;
   } else if (operation == CRUD.delete) {
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform delete operation on ${single.tableName}/${single.id}');
     }
-    await controller.deleteSingle(single.id!);
+    await controller!.deleteSingle(single.id!);
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
@@ -345,7 +345,7 @@ Future<int> handleSingleRaw<T extends DataObject>({
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform update operation on ${getTableNameFromType(T)}/${single['id']}');
     }
-    await controller.updateSingleRaw(single);
+    await controller!.updateSingleRaw(single);
     broadcast((obfuscate) async {
       // Need to provide an obfuscated version of the dataObject, but can reuse the `single` object for non obfuscated broadcast, to raise performance
       return jsonEncode(singleToJson(
@@ -355,12 +355,12 @@ Future<int> handleSingleRaw<T extends DataObject>({
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform create operation on ${getTableNameFromType(T)}/${single['id']}');
     }
-    single['id'] = await controller.createSingleRaw(single);
+    single['id'] = await controller!.createSingleRaw(single);
   } else if (operation == CRUD.delete) {
     if (privilege < UserPrivilege.write) {
       throw Exception('Not allowed to perform delete operation on ${getTableNameFromType(T)}/${single['id']}');
     }
-    await controller.deleteSingle(single['id']);
+    await controller!.deleteSingle(single['id']);
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event

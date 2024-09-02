@@ -152,7 +152,7 @@ class SecuredUser with _$SecuredUser implements AbstractUser {
   }
 
   @override
-  String get tableName => 'user';
+  String get tableName => 'secured_user';
 
   @override
   SecuredUser copyWithId(int? id) {
