@@ -60,4 +60,6 @@ ALTER TABLE ONLY public.secured_user ADD CONSTRAINT user_person_id_fk FOREIGN KE
 alter table division_weight_class drop constraint division_weight_class_league_id_fk;
 alter table division_weight_class add constraint division_weight_class_division_id_fk foreign key (division_id) references division on delete cascade;
 
-
+alter table team_match_bout add org_sync_id varchar(127);
+alter table team_match_bout add organization_id integer;
+alter table team_match_bout add constraint team_match_bout_organization_id_fk foreign key (organization_id) references organization;

@@ -929,7 +929,9 @@ CREATE TABLE public.team_match_bout (
     id integer NOT NULL,
     team_match_id integer NOT NULL,
     bout_id integer NOT NULL,
-    pos integer DEFAULT 0 NOT NULL
+    pos integer DEFAULT 0 NOT NULL,
+    org_sync_id character varying(127),
+    organization_id integer
 );
 
 
@@ -1561,21 +1563,21 @@ COPY public.team_match (id, date, location, visitors_count, comment, no, organiz
 -- Data for Name: team_match_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match_bout (id, team_match_id, bout_id, pos) FROM stdin;
-25	1	27	0
-26	1	28	1
-27	1	29	2
-30	1	32	3
-32	1	34	4
-33	1	35	5
-35	1	37	6
-36	1	38	7
-38	1	40	8
-41	1	43	9
-43	1	45	10
-45	1	47	11
-47	1	49	12
-48	1	50	13
+COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organization_id) FROM stdin;
+25	1	27	0	\N	\N
+26	1	28	1	\N	\N
+27	1	29	2	\N	\N
+30	1	32	3	\N	\N
+32	1	34	4	\N	\N
+33	1	35	5	\N	\N
+35	1	37	6	\N	\N
+36	1	38	7	\N	\N
+38	1	40	8	\N	\N
+41	1	43	9	\N	\N
+43	1	45	10	\N	\N
+45	1	47	11	\N	\N
+47	1	49	12	\N	\N
+48	1	50	13	\N	\N
 \.
 
 
@@ -2308,6 +2310,14 @@ ALTER TABLE ONLY public.team
 
 ALTER TABLE ONLY public.team_match_bout
     ADD CONSTRAINT team_match_bout_bout_id_fk FOREIGN KEY (bout_id) REFERENCES public.bout(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_match_bout team_match_bout_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match_bout
+    ADD CONSTRAINT team_match_bout_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
 
 
 --

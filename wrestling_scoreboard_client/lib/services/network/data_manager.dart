@@ -92,6 +92,8 @@ abstract class DataManager implements AuthManager {
 
   Future<void> organizationCompetitionImport(int id, {AuthService? authService});
 
+  Future<void> organizationTeamMatchImport(int id, {AuthService? authService});
+
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,
     Type? type,

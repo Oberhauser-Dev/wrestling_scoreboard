@@ -551,7 +551,7 @@ void main() {
         // TODO: Evaluate this bout: https://www.brv-ringen.de/index.php?option=com_rdb&view=rdb&Itemid=512&tk=cs&sid=2023&yid=M&menu=1&op=lc&lid=Bayernliga&cntl=Ergebnisse&from=ll&cid=005029c
         // Why activity and passivity at different times, or points at different times?
         final expectedBout = Bout(
-          orgSyncId: '005029c_61_kg',
+          orgSyncId: '005029c_61_kg_free',
           duration: Duration(minutes: 6),
           result: BoutResult.vpo,
           weightClass: weightClass,

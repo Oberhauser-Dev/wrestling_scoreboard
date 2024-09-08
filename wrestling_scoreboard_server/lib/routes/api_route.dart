@@ -149,6 +149,7 @@ class ApiRoute {
     router.restrictedGetOne('/team/<id|[0-9]+>/team_matchs', teamController.requestTeamMatches);
 
     final matchController = TeamMatchController();
+    router.restrictedPostOne('/team_match/<id|[0-9]+>/api/import', matchController.import);
     router.restrictedPost('/team_match', matchController.postSingle);
     router.restrictedGet('/team_matchs', matchController.requestMany);
     router.restrictedGet('/team_matches', matchController.requestMany);

@@ -40,6 +40,8 @@ class OrganizationImportAction extends ConsumerWidget {
                     await dataManager.organizationLeagueImport(id, authService: authService);
                   case OrganizationImportType.competition:
                     await dataManager.organizationCompetitionImport(id, authService: authService);
+                  case OrganizationImportType.teamMatch:
+                    await dataManager.organizationTeamMatchImport(id, authService: authService);
                 }
                 if (context.mounted) {
                   await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
@@ -60,4 +62,5 @@ enum OrganizationImportType {
   team,
   league,
   competition,
+  teamMatch,
 }

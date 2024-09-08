@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -74,6 +75,8 @@ class TeamMatchOverview extends ConsumerWidget {
             label: localizations.match,
             details: '${match.home.team.name} - ${match.guest.team.name}',
             actions: [
+              OrganizationImportAction(
+                  id: id, orgId: match.organization!.id!, importType: OrganizationImportType.teamMatch),
               // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
               IconButton(
                   onPressed: () async {
