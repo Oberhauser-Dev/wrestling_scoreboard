@@ -2135,11 +2135,11 @@ ALTER TABLE ONLY public.division
 
 
 --
--- Name: division_weight_class division_weight_class_league_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: division_weight_class division_weight_class_division_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.division_weight_class
-    ADD CONSTRAINT division_weight_class_league_id_fk FOREIGN KEY (division_id) REFERENCES public.league(id) ON DELETE CASCADE;
+    ADD CONSTRAINT division_weight_class_division_id_fk FOREIGN KEY (division_id) REFERENCES public.division(id) ON DELETE CASCADE;
 
 
 --

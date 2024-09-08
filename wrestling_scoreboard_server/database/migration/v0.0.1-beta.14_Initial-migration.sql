@@ -57,3 +57,7 @@ ALTER TABLE ONLY public.division_weight_class ADD CONSTRAINT division_weight_cla
 
 ALTER TABLE ONLY public.secured_user ADD CONSTRAINT user_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
 
+alter table division_weight_class drop constraint division_weight_class_league_id_fk;
+alter table division_weight_class add constraint division_weight_class_division_id_fk foreign key (division_id) references division on delete cascade;
+
+
