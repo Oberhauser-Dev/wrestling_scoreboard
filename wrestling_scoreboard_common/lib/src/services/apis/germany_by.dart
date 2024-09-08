@@ -416,7 +416,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           final boutDuration = boutDurationSeconds == null ? Duration.zero : Duration(seconds: boutDurationSeconds);
 
           var bout = Bout(
-            orgSyncId: '${event.orgSyncId}_${weightClass.name.replaceAll(' ', '_')}',
+            orgSyncId: '${event.orgSyncId}_${weightClass.name}_${weightClass.style.name}'.replaceAll(' ', '_'),
             organization: organization,
             duration: boutDuration,
             weightClass: weightClass,

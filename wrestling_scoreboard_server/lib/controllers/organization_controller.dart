@@ -98,17 +98,19 @@ class OrganizationController extends ShelfController<Organization> {
 
       final divisions = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
       await Future.forEach(divisions, (division) async {
-        // TODO: Don't create bout config or delete old one, if division already exists.
-        final boutConfig = await BoutConfigController().createSingleReturn(division.boutConfig);
-        division = division.copyWith(boutConfig: boutConfig);
-        division = await DivisionController().getOrCreateSingleOfOrg(division, obfuscate: obfuscate);
+        division =
+            await DivisionController().getOrCreateSingleOfOrg(division, obfuscate: obfuscate, onCreate: () async {
+          final boutConfig = await BoutConfigController().createSingleReturn(division.boutConfig);
+          return division.copyWith(boutConfig: boutConfig);
+        });
 
-        // TODO: Don't create (division) weight classes or delete old ones, if division already exists.
         final divisionWeightClasses = await apiProvider.importDivisionWeightClasses(division: division);
         await Future.forEach(divisionWeightClasses, (divisionWeightClass) async {
-          final weightClass = await WeightClassController().createSingleReturn(divisionWeightClass.weightClass);
-          divisionWeightClass = divisionWeightClass.copyWith(weightClass: weightClass);
-          divisionWeightClass = await DivisionWeightClassController().createSingleReturn(divisionWeightClass);
+          await DivisionWeightClassController().getOrCreateSingleOfOrg(divisionWeightClass, obfuscate: obfuscate,
+              onCreate: () async {
+            final weightClass = await WeightClassController().createSingleReturn(divisionWeightClass.weightClass);
+            return divisionWeightClass.copyWith(weightClass: weightClass);
+          });
         });
 
         var leagues = await apiProvider.importLeagues(division: division);

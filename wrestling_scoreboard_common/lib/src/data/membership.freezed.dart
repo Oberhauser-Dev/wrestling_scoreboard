@@ -23,7 +23,7 @@ mixin _$Membership {
   int? get id => throw _privateConstructorUsedError;
   String? get orgSyncId => throw _privateConstructorUsedError;
   Organization? get organization => throw _privateConstructorUsedError;
-  String? get no => throw _privateConstructorUsedError; // Vereinsnummer
+  String? get no => throw _privateConstructorUsedError; // Mitgliedsnummer
   Club get club => throw _privateConstructorUsedError;
   Person get person => throw _privateConstructorUsedError;
 
@@ -211,7 +211,7 @@ class _$MembershipImpl extends _Membership {
   final Organization? organization;
   @override
   final String? no;
-// Vereinsnummer
+// Mitgliedsnummer
   @override
   final Club club;
   @override
@@ -274,7 +274,7 @@ abstract class _Membership extends Membership {
   @override
   Organization? get organization;
   @override
-  String? get no; // Vereinsnummer
+  String? get no; // Mitgliedsnummer
   @override
   Club get club;
   @override

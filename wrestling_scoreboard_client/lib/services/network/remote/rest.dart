@@ -182,6 +182,21 @@ class RestDataManager extends DataManager {
   }
 
   @override
+  Future<void> organizationTeamMatchImport(int id, {AuthService? authService}) async {
+    String? body;
+    if (authService != null) {
+      if (authService is BasicAuthService) {
+        body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
+      }
+    }
+    final uri = Uri.parse('$_apiUrl/team_match/$id/api/import');
+    final response = await http.post(uri, body: body, headers: _headers);
+    if (response.statusCode != 200) {
+      throw RestException('Failed to import from team_match $id', response: response);
+    }
+  }
+
+  @override
   Future<void> organizationCompetitionImport(int id, {AuthService? authService}) async {
     String? body;
     if (authService != null) {

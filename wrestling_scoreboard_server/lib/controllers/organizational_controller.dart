@@ -36,7 +36,7 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
     return many.first;
   }
 
-  Future<T> getOrCreateSingleOfOrg(T dataObject, {required bool obfuscate}) async {
+  Future<T> getOrCreateSingleOfOrg(T dataObject, {required bool obfuscate, Future<T> Function()? onCreate}) async {
     if (dataObject.id != null) {
       throw Exception('Data object already has an id: $dataObject');
     }
@@ -49,6 +49,9 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
           orgId: organizational.organization!.id!, obfuscate: obfuscate);
       return single;
     } on InvalidParameterException catch (_) {
+      if (onCreate != null) {
+        dataObject = await onCreate();
+      }
       return createSingleReturn(dataObject);
     }
   }

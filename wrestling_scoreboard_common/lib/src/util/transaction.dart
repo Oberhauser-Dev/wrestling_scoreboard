@@ -10,7 +10,7 @@ Future<T> runSynchronized<T>({
   required String key,
   bool Function()? canAbort,
   required Future<T> Function() runAsync,
-  Duration timeout = const Duration(seconds: 30),
+  Duration timeout = const Duration(seconds: 60),
 }) async {
   Completer? completer;
   try {

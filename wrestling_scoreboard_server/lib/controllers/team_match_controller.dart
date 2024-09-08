@@ -4,10 +4,14 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -137,6 +141,80 @@ class TeamMatchController extends OrganizationalController<TeamMatch> {
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {'comment': psql.Type.text};
+  }
+
+  Future<Response> import(Request request, User? user, String teamMatchId) async {
+    try {
+      final bool obfuscate = user?.obfuscate ?? true;
+      final teamMatch = await TeamMatchController().getSingle(int.parse(teamMatchId), obfuscate: false);
+
+      final organizationId = teamMatch.organization?.id;
+      if (organizationId == null) {
+        throw Exception('No organization found for league $teamMatchId.');
+      }
+
+      final apiProvider = await OrganizationController().initApiProvider(request, organizationId);
+      if (apiProvider == null) {
+        throw Exception('No API provider selected for the organization $organizationId.');
+      }
+      // apiProvider.isMock = true;
+
+      final boutMap = await apiProvider.importBouts(event: teamMatch);
+
+      // Handle bouts one after one, (NO Future.wait) as it may conflicts creating the same membership as once.
+      var index = 0;
+      for (final boutEntry in boutMap.entries) {
+        var bout = boutEntry.key;
+
+        final teamMatchBout = TeamMatchBout(
+          pos: index,
+          teamMatch: teamMatch,
+          bout: bout,
+          organization: teamMatch.organization,
+          orgSyncId: bout.orgSyncId,
+        );
+        await TeamMatchBoutController().getOrCreateSingleOfOrg(teamMatchBout, obfuscate: obfuscate, onCreate: () async {
+          bout = await BoutController().getOrCreateSingleOfOrg(
+            bout,
+            obfuscate: obfuscate,
+            onCreate: () async {
+              return bout.copyWith(
+                r: await _saveDeepParticipantState(bout.r, obfuscate: obfuscate),
+                b: await _saveDeepParticipantState(bout.b, obfuscate: obfuscate),
+              );
+            },
+          );
+
+          // Add missing id to bout of boutActions
+          final Iterable<BoutAction> boutActions = boutEntry.value.map((action) => action.copyWith(bout: bout));
+          await BoutActionController().createMany(boutActions.toList());
+          return teamMatchBout.copyWith(bout: bout);
+        });
+        index++;
+      }
+      return Response.ok('{"status": "success"}');
+    } catch (err, stackTrace) {
+      return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
+    }
+  }
+
+  Future<ParticipantState?> _saveDeepParticipantState(ParticipantState? participantState,
+      {required bool obfuscate}) async {
+    if (participantState != null) {
+      final person = await PersonController()
+          .getOrCreateSingleOfOrg(participantState.participation.membership.person, obfuscate: obfuscate);
+
+      final membership = await MembershipController().getOrCreateSingleOfOrg(
+          participantState.participation.membership.copyWith(person: person),
+          obfuscate: obfuscate);
+
+      final participation = await ParticipationController()
+          .createSingleReturn(participantState.participation.copyWith(membership: membership));
+
+      return await ParticipantStateController()
+          .createSingleReturn(participantState.copyWith(participation: participation));
+    }
+    return null;
   }
 
   @override

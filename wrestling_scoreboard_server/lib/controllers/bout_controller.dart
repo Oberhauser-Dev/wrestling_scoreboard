@@ -2,13 +2,13 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'bout_action_controller.dart';
-import 'entity_controller.dart';
 
-class BoutController extends ShelfController<Bout> {
+class BoutController extends OrganizationalController<Bout> {
   static final BoutController _singleton = BoutController._internal();
 
   factory BoutController() {

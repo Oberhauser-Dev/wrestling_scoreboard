@@ -21,6 +21,8 @@ TeamMatchBout _$TeamMatchBoutFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TeamMatchBout {
   int? get id => throw _privateConstructorUsedError;
+  String? get orgSyncId => throw _privateConstructorUsedError;
+  Organization? get organization => throw _privateConstructorUsedError;
   int get pos => throw _privateConstructorUsedError;
   TeamMatch get teamMatch => throw _privateConstructorUsedError;
   Bout get bout => throw _privateConstructorUsedError;
@@ -39,8 +41,9 @@ abstract class $TeamMatchBoutCopyWith<$Res> {
   factory $TeamMatchBoutCopyWith(TeamMatchBout value, $Res Function(TeamMatchBout) then) =
       _$TeamMatchBoutCopyWithImpl<$Res, TeamMatchBout>;
   @useResult
-  $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
+  $Res call({int? id, String? orgSyncId, Organization? organization, int pos, TeamMatch teamMatch, Bout bout});
 
+  $OrganizationCopyWith<$Res>? get organization;
   $TeamMatchCopyWith<$Res> get teamMatch;
   $BoutCopyWith<$Res> get bout;
 }
@@ -60,6 +63,8 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? pos = null,
     Object? teamMatch = null,
     Object? bout = null,
@@ -69,6 +74,14 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       pos: null == pos
           ? _value.pos
           : pos // ignore: cast_nullable_to_non_nullable
@@ -82,6 +95,20 @@ class _$TeamMatchBoutCopyWithImpl<$Res, $Val extends TeamMatchBout> implements $
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
     ) as $Val);
+  }
+
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_value.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
+      return _then(_value.copyWith(organization: value) as $Val);
+    });
   }
 
   /// Create a copy of TeamMatchBout
@@ -111,8 +138,10 @@ abstract class _$$TeamMatchBoutImplCopyWith<$Res> implements $TeamMatchBoutCopyW
       __$$TeamMatchBoutImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, int pos, TeamMatch teamMatch, Bout bout});
+  $Res call({int? id, String? orgSyncId, Organization? organization, int pos, TeamMatch teamMatch, Bout bout});
 
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
   @override
   $TeamMatchCopyWith<$Res> get teamMatch;
   @override
@@ -131,6 +160,8 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res> extends _$TeamMatchBoutCopyWithImp
   @override
   $Res call({
     Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
     Object? pos = null,
     Object? teamMatch = null,
     Object? bout = null,
@@ -140,6 +171,14 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res> extends _$TeamMatchBoutCopyWithImp
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _value.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
       pos: null == pos
           ? _value.pos
           : pos // ignore: cast_nullable_to_non_nullable
@@ -159,12 +198,18 @@ class __$$TeamMatchBoutImplCopyWithImpl<$Res> extends _$TeamMatchBoutCopyWithImp
 /// @nodoc
 @JsonSerializable()
 class _$TeamMatchBoutImpl extends _TeamMatchBout {
-  const _$TeamMatchBoutImpl({this.id, required this.pos, required this.teamMatch, required this.bout}) : super._();
+  const _$TeamMatchBoutImpl(
+      {this.id, this.orgSyncId, this.organization, required this.pos, required this.teamMatch, required this.bout})
+      : super._();
 
   factory _$TeamMatchBoutImpl.fromJson(Map<String, dynamic> json) => _$$TeamMatchBoutImplFromJson(json);
 
   @override
   final int? id;
+  @override
+  final String? orgSyncId;
+  @override
+  final Organization? organization;
   @override
   final int pos;
   @override
@@ -174,7 +219,7 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
 
   @override
   String toString() {
-    return 'TeamMatchBout(id: $id, pos: $pos, teamMatch: $teamMatch, bout: $bout)';
+    return 'TeamMatchBout(id: $id, orgSyncId: $orgSyncId, organization: $organization, pos: $pos, teamMatch: $teamMatch, bout: $bout)';
   }
 
   @override
@@ -183,6 +228,8 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
         (other.runtimeType == runtimeType &&
             other is _$TeamMatchBoutImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.teamMatch, teamMatch) || other.teamMatch == teamMatch) &&
             (identical(other.bout, bout) || other.bout == bout));
@@ -190,7 +237,7 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, pos, teamMatch, bout);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
 
   /// Create a copy of TeamMatchBout
   /// with the given fields replaced by the non-null parameter values.
@@ -211,6 +258,8 @@ class _$TeamMatchBoutImpl extends _TeamMatchBout {
 abstract class _TeamMatchBout extends TeamMatchBout {
   const factory _TeamMatchBout(
       {final int? id,
+      final String? orgSyncId,
+      final Organization? organization,
       required final int pos,
       required final TeamMatch teamMatch,
       required final Bout bout}) = _$TeamMatchBoutImpl;
@@ -220,6 +269,10 @@ abstract class _TeamMatchBout extends TeamMatchBout {
 
   @override
   int? get id;
+  @override
+  String? get orgSyncId;
+  @override
+  Organization? get organization;
   @override
   int get pos;
   @override
