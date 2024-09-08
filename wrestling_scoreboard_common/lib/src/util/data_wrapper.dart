@@ -287,27 +287,28 @@ Type getTypeFromTableName(String tableName) {
   };
 }
 
-/// Hierarchically ordered data types.
+/// Hierarchically ordered data types (least to most dependent).
+/// DO NOT CHANGE THE ORDER unless you know what you do!
 final dataTypes = [
-  Bout,
   BoutAction,
-  BoutConfig,
-  Club,
-  Competition,
-  Division,
-  DivisionWeightClass,
-  League,
-  LeagueTeamParticipation,
-  Lineup,
-  Membership,
-  Organization,
   ParticipantState,
-  Participation,
-  Person,
-  SecuredUser,
-  Team,
-  TeamMatch,
   TeamMatchBout,
-  User,
+  Bout,
+  Participation,
+  TeamMatch,
+  Competition,
+  Lineup,
+  LeagueTeamParticipation,
+  League,
+  BoutConfig,
+  Membership,
+  Person,
+  Team,
+  Club,
+  DivisionWeightClass,
+  Division,
   WeightClass,
+  Organization,
+  SecuredUser,
+  User,
 ];
