@@ -1,3 +1,24 @@
+## 0.1.0
+
+ - **REFACTOR**: Organizational interface. ([49c415d9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/49c415d9a4c36acca5ae3ec3fd73a425c75eb9fb))
+ - **FIX**: Improve database imports. ([a60d3610](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a60d3610c6fa766cb6b9e5e0b33caa0aacc50e63))
+ - **FIX**: Restore data types order. ([17e63c1f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/17e63c1fa830fcece8b96a4b5159c45e40eed447))
+ - **FIX**: SecuredUserController init after database reset. ([9020dfb4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9020dfb4554e1caa5f0769d0ea18151b29c8197a))
+ - **FIX**: Classification points and match display improvements (closes [#49](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/49)). ([061fdbb8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/061fdbb83fa36493d5bf904651ff7930e930dcbd))
+ - **FIX**: Refactor whereNotNull to nonNulls. ([890e5e64](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/890e5e6492d35821a13f79d02b81074966b1ae89))
+ - **FIX**: Parse empty bout result. ([fedf1ead](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fedf1ead2beef8d33b748adf8cba2a5453a30805))
+ - **FIX**: User german adaption for passivity P / activity period A. ([21413365](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/214133650943d297fd950aae3d6a595469befac1))
+ - **FEAT**: Obfuscate personal information without privileges. ([14dec0ac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/14dec0ac1c2ae84ae03c7df35aebf2afcf331159))
+ - **FEAT**: Authentication (closes [#2](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/2)). ([35aa99fe](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/35aa99feaefe94d7e5de17b9f13f1debc5e72f64))
+ - **FEAT**: Split into OrganizationalController, reinit prepared statements (closes [#44](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/44)). ([af15ca77](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/af15ca773a55be781800bc53a9c3bfe6a9de6ff5))
+ - **FEAT**: Duration for bouts. ([fca0bb2e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fca0bb2e5a5dc017d9c874ec436c292e27352b75))
+ - **FEAT**: Logging. ([fffac49e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fffac49e2f482e944b89d21d46409d620b1b9d56))
+ - **FEAT**: League boutDays, orgSyncId for DivisionWeightClass, organization for Bout. ([e956f37c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e956f37c9c6f75870af98b91733316a8b7e430ee))
+ - **FEAT**: Force id on toRaw. ([a2646697](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a26466971c6b7802d7bb5d9b67d681e3753b110e))
+ - **FEAT**: Club, Bout and BoutAction imports. ([1a99ec91](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1a99ec914434362651d46e595891991222a553b9))
+ - **FEAT**: Activity period and five points. ([eb9c0801](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eb9c080166c02abd45144e67cfe5fb4dc600615b))
+ - **FEAT**: Search API provider (closes [#51](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/51)). ([0e90e1da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0e90e1da48ea64a9315819e062ecf5a40907c5de))
+
 ## 0.0.1-beta.12
 
  - **FEAT**: BRV bout scheme integration. ([51297973](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51297973a0fafcfe73a7982c3ae8c551ec30105b))

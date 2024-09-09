@@ -1,3 +1,26 @@
+## 0.1.0
+
+ - **REFACTOR**: Organizational interface. ([49c415d9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/49c415d9a4c36acca5ae3ec3fd73a425c75eb9fb))
+ - **REFACTOR**: id to organizationId. ([4175e8f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4175e8f26e33dda4b45ccd8fd44b287e2049ee1d))
+ - **FIX**: Improve database imports. ([a60d3610](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a60d3610c6fa766cb6b9e5e0b33caa0aacc50e63))
+ - **FIX**: Division weight class foreign constraint. ([f64f9e9a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f64f9e9af75919c97be0d4961d3c29b42a4172ab))
+ - **FIX**: SecuredUserController init after database reset. ([9020dfb4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9020dfb4554e1caa5f0769d0ea18151b29c8197a))
+ - **FIX**: Default value for `includeApiProviderResults` on build modes release, profile. ([70a47628](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70a476281e1547bdf04afa91c358b3436da73484))
+ - **FEAT**: Database migration (closes [#29](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/29)). ([b2d9c3d3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b2d9c3d322fb4639161aa4c731ec75253404f306))
+ - **FEAT**: Improved logging (closes [#62](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/62)). ([e7568c88](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e7568c8825c3f953a00b84650fb6f03014f2fbe3))
+ - **FEAT**: Obfuscate personal information without privileges. ([14dec0ac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/14dec0ac1c2ae84ae03c7df35aebf2afcf331159))
+ - **FEAT**: Authentication (closes [#2](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/2)). ([35aa99fe](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/35aa99feaefe94d7e5de17b9f13f1debc5e72f64))
+ - **FEAT**: Split into OrganizationalController, reinit prepared statements (closes [#44](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/44)). ([af15ca77](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/af15ca773a55be781800bc53a9c3bfe6a9de6ff5))
+ - **FEAT**: Logging. ([fffac49e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fffac49e2f482e944b89d21d46409d620b1b9d56))
+ - **FEAT**: toString for InvalidParameterException. ([9881390b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9881390b80aa39c1408a36558610ef298006f040))
+ - **FEAT**: League boutDays, orgSyncId for DivisionWeightClass, organization for Bout. ([e956f37c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e956f37c9c6f75870af98b91733316a8b7e430ee))
+ - **FEAT**: Club, Bout and BoutAction imports. ([1a99ec91](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1a99ec914434362651d46e595891991222a553b9))
+ - **FEAT**: Search API provider (closes [#51](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/51)). ([0e90e1da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0e90e1da48ea64a9315819e062ecf5a40907c5de))
+ - **FEAT**: Edit persons and their memberships. ([cc30df7d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/cc30df7d81c489bf390a2c70b4f60890830a7296))
+ - **FEAT**: Support Search ([#51](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/51)). ([d1f5c305](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d1f5c305e1c4a6351c3d6f8bf71ecb991493ac19))
+ - **FEAT**(server): Add About section. ([86f5be84](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/86f5be844e5921136f3c6751522558e601fde0d6))
+ - **DOCS**: Deployment and Nginx as Web server. ([8b105094](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8b105094749cd2ec847a119a3ddcf8ed3ff952cd))
+
 ## 0.0.1-beta.12
 
  - **FEAT**: BRV bout scheme integration. ([51297973](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51297973a0fafcfe73a7982c3ae8c551ec30105b))
