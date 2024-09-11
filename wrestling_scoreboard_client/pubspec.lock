@@ -1260,7 +1260,7 @@ packages:
       path: "../wrestling_scoreboard_common"
       relative: true
     source: path
-    version: "0.0.1-beta.12"
+    version: "0.1.0"
   xdg_directories:
     dependency: transitive
     description:
