@@ -20,10 +20,4 @@ class WeightClassController extends ShelfController<WeightClass> {
       'unit': null,
     };
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {
-        'weight',
-        'suffix',
-      };
 }

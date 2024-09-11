@@ -123,15 +123,16 @@ class OrganizationController extends ShelfController<Organization> {
     }
   }
 
-  Future<List<DataObject>> search(Request request, int id,
-      {required String searchStr, required Type searchType}) async {
+  Future<List<DataObject>> search(
+    Request request,
+    int id, {
+    required String searchStr,
+    required Type searchType,
+  }) async {
     final apiProvider = await initApiProvider(request, id);
     if (apiProvider == null) {
       throw Exception('No API provider selected for the organization $id.');
     }
     return await apiProvider.search(searchStr: searchStr, searchType: searchType);
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'name', 'abbreviation'};
 }

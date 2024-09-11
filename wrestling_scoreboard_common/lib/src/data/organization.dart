@@ -65,4 +65,6 @@ class Organization with _$Organization implements DataObject {
   Organization copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {'name', 'abbreviation'};
 }

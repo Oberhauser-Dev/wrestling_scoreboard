@@ -312,3 +312,20 @@ final dataTypes = [
   SecuredUser,
   User,
 ];
+
+/// Returns a map of data types with searchable attributes.
+/// TODO: with macros, apply it to the property @Searchable.
+final Map<Type, Set<String>> searchableDataTypes = {
+  Person: Person.searchableAttributes,
+  Membership: Membership.searchableAttributes,
+  Club: Club.searchableAttributes,
+  Organization: Organization.searchableAttributes,
+  WeightClass: WeightClass.searchableAttributes,
+  // Uses same attributes as WrestlingEvent ATM
+  Competition: WrestlingEvent.searchableAttributes,
+  // Uses same attributes as WrestlingEvent ATM
+  TeamMatch: WrestlingEvent.searchableAttributes,
+  Division: Division.searchableAttributes,
+  League: League.searchableAttributes,
+  Team: Team.searchableAttributes,
+};

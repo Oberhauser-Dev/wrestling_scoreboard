@@ -104,7 +104,4 @@ class LeagueController extends OrganizationalController<League> {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     }
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'name'};
 }

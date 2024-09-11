@@ -41,13 +41,4 @@ class PersonController extends OrganizationalController<Person> {
       'gender': null,
     };
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {
-        'prename',
-        'surname',
-        // 'gender', // Cannot currently search non-string values
-        'nationality',
-        // 'birth_date', // Cannot currently search non-string values
-      };
 }

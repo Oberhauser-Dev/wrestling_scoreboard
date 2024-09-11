@@ -365,10 +365,11 @@ abstract class EntityController<T extends DataObject> {
     String searchStr, {
     int? organizationId,
     required bool obfuscate,
+    required Set<String> searchableAttributes,
   }) async {
     final postgresTypes = getPostgresDataTypes();
     bool needsPreciseSearch = false;
-    final orConditions = getSearchableAttributes()
+    final orConditions = searchableAttributes
         .map((attr) {
           // TODO: get postgres types generated from attributes via macros.
           final postgresType = postgresTypes.containsKey(attr) ? postgresTypes[attr] : psql.Type.varChar;
@@ -407,10 +408,6 @@ abstract class EntityController<T extends DataObject> {
       obfuscate: obfuscate,
     );
   }
-
-  /// Returns a list of searchable attributes.
-  /// TODO: with macros, apply it to the property @Searchable.
-  Set<String> getSearchableAttributes() => {};
 
   Future<List<T>> getMany({
     List<String>? conditions,

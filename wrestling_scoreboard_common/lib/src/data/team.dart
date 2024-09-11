@@ -53,4 +53,6 @@ class Team with _$Team implements DataObject, Organizational {
   Team copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {'name', 'description'};
 }

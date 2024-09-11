@@ -65,4 +65,6 @@ class Division with _$Division implements DataObject, Organizational {
   Division copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {'name'};
 }

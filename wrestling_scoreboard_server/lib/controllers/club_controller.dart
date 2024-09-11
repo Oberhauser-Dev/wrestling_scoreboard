@@ -32,7 +32,4 @@ class ClubController extends OrganizationalController<Club> {
       obfuscate: user?.obfuscate ?? true,
     );
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'no', 'name'};
 }

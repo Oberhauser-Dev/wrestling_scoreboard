@@ -46,4 +46,6 @@ class Club with _$Club implements DataObject, Organizational {
   Club copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {'no', 'name'};
 }

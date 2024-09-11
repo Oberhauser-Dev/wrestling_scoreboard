@@ -15,11 +15,11 @@ class SearchController {
     final queryParams = request.requestedUri.queryParameters;
 
     final likeParam = queryParams['like'];
-    final querySearchType = queryParams['type'];
+    final querySearchTypeStr = queryParams['type'];
     final searchOrganizationId = int.tryParse(queryParams['org'] ?? '');
     final useProvider = bool.parse(queryParams['use_provider'] ?? 'false');
     final isValidLikeSearch = likeParam != null && (likeParam.length >= 3 || double.tryParse(likeParam) != null);
-    final searchAllTypes = querySearchType == null;
+    final searchAllTypes = querySearchTypeStr == null;
 
     if (useProvider && (!isValidLikeSearch || searchAllTypes || searchOrganizationId == null)) {
       return Response.badRequest(
@@ -27,24 +27,32 @@ class SearchController {
               'Searching the API provider without specifying a type, the organization and a search string is not supported!');
     }
 
-    final Iterable<String> searchTypes;
+    final Map<Type, Set<String>> searchTypeMap;
     if (!searchAllTypes) {
-      searchTypes = [querySearchType];
+      final querySearchType = getTypeFromTableName(querySearchTypeStr);
+      final searchableAttr = searchableDataTypes[querySearchType];
+      searchTypeMap = {if (searchableAttr != null) querySearchType: searchableAttr};
     } else {
       // All searchable types
-      searchTypes = dataTypes.map((d) => getTableNameFromType(d));
+      searchTypeMap = searchableDataTypes;
     }
 
     try {
       final raw = request.isRaw;
       List<Map<String, dynamic>> manyJsonList = [];
-      for (final tableName in searchTypes) {
-        final searchType = getTypeFromTableName(tableName);
+      for (final searchTypeEntry in searchTypeMap.entries) {
+        final searchType = searchTypeEntry.key;
         final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
         if (isValidLikeSearch) {
-          manyJson = await entityController?.getManyJsonLike(raw, likeParam,
-              organizationId: searchOrganizationId, obfuscate: obfuscate);
+          final searchableAttributes = searchTypeEntry.value;
+          manyJson = await entityController?.getManyJsonLike(
+            raw,
+            likeParam,
+            organizationId: searchOrganizationId,
+            searchableAttributes: searchableAttributes,
+            obfuscate: obfuscate,
+          );
           if (!searchAllTypes && useProvider && searchOrganizationId != null) {
             final orgSearchRes = await OrganizationController().search(
               request,

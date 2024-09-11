@@ -30,7 +30,4 @@ class TeamController extends OrganizationalController<Team> {
   Future<Response> import(Request request, User? user, String teamId) async {
     return Response.notFound('This operation is not supported yet!');
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'name', 'description'};
 }

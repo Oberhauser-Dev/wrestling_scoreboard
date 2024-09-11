@@ -183,13 +183,7 @@ class HomeState extends ConsumerState<Home> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: SimpleDropdown<Type?>(
-                    options: [
-                      null,
-                      ...dataTypes
-                        ..remove(ParticipantState)
-                        ..remove(User)
-                        ..remove(SecuredUser)
-                    ].map((type) => MapEntry(
+                    options: [null, ...searchableDataTypes.keys].map((type) => MapEntry(
                           type,
                           Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
                         )),
