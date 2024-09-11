@@ -39,4 +39,6 @@ abstract class WrestlingEvent implements DataObject, Organizational {
       'comment': comment,
     };
   }
+
+  static Set<String> searchableAttributes = {'no', 'location', 'comment'};
 }

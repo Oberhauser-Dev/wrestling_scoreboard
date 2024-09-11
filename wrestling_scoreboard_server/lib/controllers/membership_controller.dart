@@ -15,7 +15,4 @@ class MembershipController extends OrganizationalController<Membership> {
     raw['no'] = null;
     return raw;
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'no'};
 }

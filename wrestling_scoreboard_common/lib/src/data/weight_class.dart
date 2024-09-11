@@ -59,4 +59,9 @@ class WeightClass with _$WeightClass implements DataObject {
   WeightClass copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {
+    'weight',
+    'suffix',
+  };
 }

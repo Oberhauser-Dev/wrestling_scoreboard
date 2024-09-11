@@ -88,4 +88,12 @@ class Person with _$Person implements DataObject, Organizational {
   Person copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {
+    'prename',
+    'surname',
+    // 'gender', // Cannot currently search non-string values
+    'nationality',
+    // 'birth_date', // Cannot currently search non-string values
+  };
 }

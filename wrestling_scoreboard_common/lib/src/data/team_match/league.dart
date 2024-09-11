@@ -61,4 +61,6 @@ class League with _$League implements DataObject, Organizational {
   League copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {'name'};
 }

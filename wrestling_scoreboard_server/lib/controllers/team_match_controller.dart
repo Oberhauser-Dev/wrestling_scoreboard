@@ -216,7 +216,4 @@ class TeamMatchController extends OrganizationalController<TeamMatch> {
     }
     return null;
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'no', 'location', 'comment'};
 }

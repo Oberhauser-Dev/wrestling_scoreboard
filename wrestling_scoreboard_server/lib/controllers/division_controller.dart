@@ -68,7 +68,4 @@ class DivisionController extends OrganizationalController<Division> {
       obfuscate: user?.obfuscate ?? true,
     );
   }
-
-  @override
-  Set<String> getSearchableAttributes() => {'name'};
 }
