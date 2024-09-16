@@ -1,10 +1,3 @@
-create table migration
-(
-    semver varchar(127) default '0.0.0'::character varying not null
-);
-alter table migration owner to wrestling;
-INSERT INTO public.migration (semver) VALUES ('0.0.0');
-
 CREATE TYPE public.user_privilege AS ENUM (
     'none',
     'read',
@@ -15,8 +8,8 @@ ALTER TYPE public.user_privilege OWNER TO wrestling;
 
 alter table public.bout add organization_id integer;
 
-alter table public.division_weight_class add organization_id integer;
 alter table public.division_weight_class add org_sync_id varchar(127);
+alter table public.division_weight_class add organization_id integer;
 
 alter table public.league add bout_days integer DEFAULT 14 NOT NULL;
 

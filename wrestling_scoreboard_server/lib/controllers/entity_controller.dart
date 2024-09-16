@@ -215,19 +215,24 @@ abstract class EntityController<T extends DataObject> {
   String tableName;
   String primaryKeyName;
 
-  late Future<psql.Statement> getSingleRawStmt;
-  late Future<psql.Statement> deleteSingleStmt;
+  late psql.Statement getSingleRawStmt;
+  late psql.Statement deleteSingleStmt;
 
-  EntityController({required this.tableName, this.primaryKeyName = 'id'}) {
-    init();
+  EntityController({required this.tableName, this.primaryKeyName = 'id'});
+
+  static Future<void> initAll() async {
+    // Reinit all prepared statements
+    Iterable<ShelfController> entityControllers =
+        dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
+    await Future.forEach(entityControllers, (e) => e.init());
   }
 
-  void init() {
+  Future<void> init() async {
     getSingleRawStmt =
-        PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
+        await PostgresDb().connection.prepare(psql.Sql.named('SELECT * FROM $tableName WHERE $primaryKeyName = @id;'));
 
     deleteSingleStmt =
-        PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
+        await PostgresDb().connection.prepare(psql.Sql.named('DELETE FROM $tableName WHERE $primaryKeyName = @id;'));
   }
 
   Future<T> getSingle(int id, {required bool obfuscate}) async {
@@ -240,7 +245,7 @@ abstract class EntityController<T extends DataObject> {
     int id, {
     required bool obfuscate,
   }) async {
-    final resStream = (await getSingleRawStmt).bind({'id': id});
+    final resStream = getSingleRawStmt.bind({'id': id});
     final many = await resStream.toColumnMap().toList();
     if (many.isEmpty) throw InvalidParameterException('$T with id "$id" not found');
     var data = many.first;
@@ -331,7 +336,7 @@ abstract class EntityController<T extends DataObject> {
 
   Future<bool> deleteSingle(int id) async {
     try {
-      await (await deleteSingleStmt).bind({'id': id}).toList();
+      await deleteSingleStmt.bind({'id': id}).toList();
     } on psql.PgException catch (_) {
       return false;
     }
