@@ -44,7 +44,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     steps:
@@ -56,4 +56,13 @@ jobs:
       - uses: bluefireteam/melos-action@v3
       - run: melos run format-check
       - run: melos run analyze -- ${{ inputs.fatal_warnings && '--fatal-infos' || '--no-fatal-warnings --no-fatal-infos' }}
+      - name: Prepare server
+        working-directory: wrestling_scoreboard_server
+        run: |
+          cp .env.example .env
+          source .env
+          sudo systemctl start postgresql.service
+          sudo -u postgres psql postgres -c "CREATE USER ${DATABASE_USER} WITH PASSWORD '${DATABASE_PASSWORD}';"
+          sudo -u postgres psql postgres -c "CREATE DATABASE ${DATABASE_NAME} WITH OWNER = ${DATABASE_USER};"
+          sudo -u postgres psql ${DATABASE_NAME} -c "ALTER SCHEMA public OWNER TO ${DATABASE_USER};"
       - run: melos run test

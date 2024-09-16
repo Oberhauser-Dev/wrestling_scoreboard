@@ -4,17 +4,19 @@ Wrestling software server for managing team matches and competitions.
 
 ## Setup
 
-See [database docs](./database/README.md), to set up the Postgres database.
-
-It is recommended to start the app with user privileges, here `www`. Avoid using root.
-
 Download the latest server version from the [releases section](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases)
-and extract it into e.g. inside `$HOME/.local/share/wrestling_scoreboard_server`
+and extract it into e.g. inside `$HOME/.local/share/wrestling_scoreboard_server`.
+
+It is recommended to start the app with user privileges, here `www`. Avoid using `root`, especially if the server is open to the public.
 
 ### Environment variables:
 
 Create file `.env` in the `wrestling_scoreboard_server` directory.
-A pre-configuration can be found in `.env.example` file. Change the values to your needs.
+A pre-configuration can be found in `.env.example` file (`cp .env.example .env`). Change the values to your needs.
+
+### Database
+
+For a manual / more detailed setup of the Postgres database, see the [database docs](./database/README.md).
 
 ### Run server
 
@@ -51,11 +53,12 @@ systemctl --user start wrestling-scoreboard-server.service
 ```
 
 Additionally, enable session for user `www` on boot:
+
 ```bash
 sudo loginctl enable-linger www
 ```
 
-To view server logs: 
+To view server logs:
 `journalctl --user -u wrestling-scoreboard-server`
 
 ### Web server

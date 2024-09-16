@@ -23,9 +23,7 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team, fight, competition, to
 The App consists of three components, the client, the server and the database.
 You can download the client and the server for your preferred platforms from the [Releases section](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases).
 
-For setting up the database and hosting a server, see:
-- [Database](wrestling_scoreboard_server/database/README.md)
-- [Server](wrestling_scoreboard_server/README.md#setup)
+For setting up the database and hosting a server, see the [Server Setup](wrestling_scoreboard_server/README.md#setup).
 
 ## Development
 

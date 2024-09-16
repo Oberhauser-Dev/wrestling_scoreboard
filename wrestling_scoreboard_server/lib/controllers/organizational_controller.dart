@@ -9,13 +9,13 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
 
   OrganizationalController({required super.tableName});
 
-  late Future<psql.Statement> getSingleOfOrgRawStmt;
+  late psql.Statement getSingleOfOrgRawStmt;
 
   @override
-  void init() {
-    getSingleOfOrgRawStmt = PostgresDb().connection.prepare(
+  Future<void> init() async {
+    await super.init();
+    getSingleOfOrgRawStmt = await PostgresDb().connection.prepare(
         psql.Sql.named('SELECT * FROM $tableName WHERE organization_id = @orgId AND org_sync_id = @orgSyncId;'));
-    super.init();
   }
 
   /// Get a single data object via a foreign id (sync id), given by an organization.
@@ -30,7 +30,7 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
       orgSyncId = orgSyncId.trim();
       _logger.warning('$T with orgSyncId "$orgSyncId" was trimmed');
     }
-    final resStream = (await getSingleOfOrgRawStmt).bind({'orgSyncId': orgSyncId, 'orgId': orgId});
+    final resStream = getSingleOfOrgRawStmt.bind({'orgSyncId': orgSyncId, 'orgId': orgId});
     final many = await resStream.toColumnMap().toList();
     if (many.isEmpty) throw InvalidParameterException('$T with orgSyncId "$orgSyncId" not found');
     return many.first;

@@ -9,16 +9,15 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
-import 'package:wrestling_scoreboard_server/controllers/database_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
-import 'package:wrestling_scoreboard_server/services/environment.dart';
-import 'package:wrestling_scoreboard_server/services/pubspec.dart';
 import 'package:wrestling_scoreboard_server/routes/api_route.dart';
+import 'package:wrestling_scoreboard_server/services/environment.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
+import 'package:wrestling_scoreboard_server/services/pubspec.dart';
 
 import 'middleware/cors.dart';
 
-Future init() async {
+Future<HttpServer> init() async {
   // Init logger
   Logger.root.level = env.logLevel ?? Level.INFO;
   Logger.root.onRecord.listen(
@@ -48,8 +47,9 @@ Future init() async {
   final port = env.port ?? 8080;
 
   // Must open the database before initializing any routes.
-  await PostgresDb().open();
-  await DatabaseController().migrate();
+  final db = PostgresDb();
+  await db.open();
+  await db.migrate();
 
   final webSocketLog = Logger('Websocket');
 
@@ -110,4 +110,6 @@ Future init() async {
   serverLog.info('Serving at $serverUrl');
   serverLog.info('Serving API at $serverUrl/api');
   serverLog.info('Serving Websocket at $serverUrl/ws');
+
+  return server;
 }
