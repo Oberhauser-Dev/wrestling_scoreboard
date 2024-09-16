@@ -15,8 +15,8 @@ ALTER TYPE public.user_privilege OWNER TO wrestling;
 
 alter table public.bout add organization_id integer;
 
-alter table public.division_weight_class add organization_id integer;
 alter table public.division_weight_class add org_sync_id varchar(127);
+alter table public.division_weight_class add organization_id integer;
 
 alter table public.league add bout_days integer DEFAULT 14 NOT NULL;
 

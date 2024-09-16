@@ -10,9 +10,9 @@ Then add this to your system PATH variable `C:/Program Files/PostgreSQL/<version
 ### Debian:
 
 ```shell
-sudo apt-get install postgresql
+sudo apt install postgresql
 sudo apt install postgresql-client-common
-sudo apt-get install postgresql-client
+sudo apt install postgresql-client
 ```
 
 ## Setup

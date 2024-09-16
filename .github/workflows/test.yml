@@ -56,4 +56,14 @@ jobs:
       - uses: bluefireteam/melos-action@v3
       - run: melos run format-check
       - run: melos run analyze -- ${{ inputs.fatal_warnings && '--fatal-infos' || '--no-fatal-warnings --no-fatal-infos' }}
+      - name: Prepare server
+        working-directory: wrestling_scoreboard_server
+        run: |
+          cp .env.example .env
+          source .env
+          sudo apt update
+          sudo apt-get -y install postgresql postgresql-client-common postgresql-client
+          psql -U postgres -c "CREATE USER ${DATABASE_USER} WITH PASSWORD '${DATABASE_PASSWORD}';"
+          psql -U postgres -c "CREATE DATABASE ${DATABASE_NAME} WITH OWNER = ${DATABASE_USER};"
+          psql -U postgres -d ${DATABASE_NAME} -c "ALTER SCHEMA public OWNER TO ${DATABASE_USER};"
       - run: melos run test
