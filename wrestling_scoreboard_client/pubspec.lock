@@ -258,10 +258,10 @@ packages:
     dependency: "direct main"
     description:
       name: country
-      sha256: "3c8b6edde72fde242f67a19e6c2d5ab1e1a51d486601bffe0473537dbcfcba9d"
+      sha256: "3a315b4bf04b63858a476239e7338949029a1fa6f446910e38f86918bfb14ae4"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.8"
+    version: "4.1.9"
   coverage:
     dependency: transitive
     description:
@@ -306,10 +306,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "99e066ce75c89d6b29903d788a7bb9369cf754f7b24bf70bf4b6d6d6b26853b9"
+      sha256: "7856d364b589d1f08986e140938578ed36ed948581fbc3bc9aef1805039ac5ab"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.6"
+    version: "2.3.7"
   dropdown_search:
     dependency: "direct main"
     description:
@@ -688,7 +688,7 @@ packages:
     description:
       path: "packages/package_info_plus/package_info_plus"
       ref: HEAD
-      resolved-ref: "4e6def451016ca07d1f1ce80b881225e1f52b577"
+      resolved-ref: b645a11412b887b12c801dd20b39506dfbb9e857
       url: "https://github.com/fluttercommunity/plus_plugins.git"
     source: git
     version: "8.0.2"
@@ -769,7 +769,7 @@ packages:
     description:
       path: pdf
       ref: "313-column-span"
-      resolved-ref: a893e72cee6920ed3f6e0e340d408524b70874fd
+      resolved-ref: dc20c86bd18c8907d142473541469b26b9f072e9
       url: "https://github.com/Gustl22/dart_pdf.git"
     source: git
     version: "3.11.1"
@@ -1066,10 +1066,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: a824e842b8a054f91a728b783c177c1e4731f6b124f9192468457a8913371255
+      sha256: "51b08572b9f091f8c3eb4d9d4be253f196ff0075d5ec9b10a884026d5b55d7bc"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.3.0+2"
   term_glyph:
     dependency: transitive
     description:
