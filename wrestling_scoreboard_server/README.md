@@ -16,6 +16,14 @@ A pre-configuration can be found in `.env.example` file (`cp .env.example .env`)
 
 ### Database
 
+You can run the database e.g. in a docker container:
+
+```shell
+source .env
+docker pull postgres:latest
+docker run --detach --name wrestling_scoreboard_database -p ${DATABASE_HOST}:${DATABASE_PORT}:5432 -e POSTGRES_USER=${DATABASE_USER} -e POSTGRES_DB=${DATABASE_NAME} -e POSTGRES_PASSWORD=${DATABASE_PASSWORD} postgres
+```
+
 For a manual / more detailed setup of the Postgres database, see the [database docs](./database/README.md).
 
 ### Run server
