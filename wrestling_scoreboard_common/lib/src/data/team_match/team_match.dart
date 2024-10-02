@@ -139,4 +139,79 @@ class TeamMatch extends WrestlingEvent with _$TeamMatch {
   TeamMatch copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static BoutConfig defaultBoutConfig = BoutConfig(
+    periodDuration: Duration(minutes: 3),
+    breakDuration: Duration(seconds: 30),
+    activityDuration: Duration(seconds: 30),
+    injuryDuration: Duration(minutes: 2),
+    periodCount: 2,
+  );
+
+  static List<BoutResultRule> defaultBoutResultRules = [
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vfa,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vin,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vca,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vsu,
+      technicalPointsDifference: 15,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vpo,
+      technicalPointsDifference: 8,
+      winnerClassificationPoints: 3,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vpo,
+      technicalPointsDifference: 3,
+      winnerClassificationPoints: 2,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vpo,
+      technicalPointsDifference: 1,
+      winnerClassificationPoints: 1,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vfo,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.dsq,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.dsq2,
+      winnerClassificationPoints: 0,
+      loserClassificationPoints: 0,
+    ),
+  ];
 }

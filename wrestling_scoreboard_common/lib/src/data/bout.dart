@@ -61,34 +61,29 @@ class Bout with _$Bout implements DataObject, Organizational {
     );
   }
 
-  Bout updateClassificationPoints(List<BoutAction> actions, {bool isCompetition = false}) {
+  Bout updateClassificationPoints(
+    List<BoutAction> actions, {
+    required List<BoutResultRule> rules,
+  }) {
     if (result != null && winnerRole != null) {
-      var winner = winnerRole == BoutRole.red ? r : b;
-      var looser = winnerRole == BoutRole.red ? b : r;
+      final resultRule = BoutConfig.resultRule(
+        result: result!,
+        style: weightClass?.style ?? WrestlingStyle.free,
+        technicalPointsWinner: ParticipantState.getTechnicalPoints(actions, winnerRole!),
+        technicalPointsLoser:
+            ParticipantState.getTechnicalPoints(actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
+        rules: rules,
+      );
 
-      int? winnerClassificationPoints;
-      int? looserClassificationPoints;
-      if (winner != null) {
-        winnerClassificationPoints = isCompetition
-            ? getClassificationPointsWinnerCompetition(result!)
-            : getClassificationPointsWinnerTeamMatch(
-                result!,
-                ParticipantState.getTechnicalPoints(actions, winnerRole!) -
-                    ParticipantState.getTechnicalPoints(
-                        actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red));
-      }
-
-      if (looser != null) {
-        looserClassificationPoints = isCompetition
-            ? getClassificationPointsLooserCompetition(result!)
-            : getClassificationPointsLooserTeamMatch(result!);
-      }
       return copyWith(
         r: r?.copyWith(
-          classificationPoints: winnerRole == BoutRole.red ? winnerClassificationPoints : looserClassificationPoints,
+          classificationPoints:
+              winnerRole == BoutRole.red ? resultRule.winnerClassificationPoints : resultRule.loserClassificationPoints,
         ),
         b: b?.copyWith(
-          classificationPoints: winnerRole == BoutRole.blue ? winnerClassificationPoints : looserClassificationPoints,
+          classificationPoints: winnerRole == BoutRole.blue
+              ? resultRule.winnerClassificationPoints
+              : resultRule.loserClassificationPoints,
         ),
       );
     } else {
@@ -108,80 +103,6 @@ class Bout with _$Bout implements DataObject, Organizational {
 
   @override
   String get tableName => 'bout';
-
-  static int getClassificationPointsWinnerCompetition(BoutResult result) {
-    switch (result) {
-      case BoutResult.vfa:
-      case BoutResult.vin:
-      case BoutResult.vca:
-      case BoutResult.vfo:
-      case BoutResult.dsq:
-        return 5;
-      case BoutResult.vsu:
-      case BoutResult.vsu1:
-        return 4;
-      case BoutResult.vpo:
-      case BoutResult.vpo1:
-        return 3;
-      case BoutResult.dsq2:
-      default:
-        return 0;
-    }
-  }
-
-  static int getClassificationPointsLooserCompetition(BoutResult result) {
-    switch (result) {
-      case BoutResult.vsu1:
-      case BoutResult.vpo1:
-        return 1;
-      case BoutResult.vfa:
-      case BoutResult.vin:
-      case BoutResult.vca:
-      case BoutResult.vfo:
-      case BoutResult.vsu:
-      case BoutResult.vpo:
-      case BoutResult.dsq:
-      case BoutResult.dsq2:
-      default:
-        return 0;
-    }
-  }
-
-  static int getClassificationPointsWinnerTeamMatch(BoutResult result, int diff) {
-    switch (result) {
-      case BoutResult.vfa:
-      case BoutResult.vin:
-      case BoutResult.vca:
-      case BoutResult.vfo:
-      case BoutResult.dsq:
-      case BoutResult.vsu:
-      case BoutResult.vsu1:
-        return 4;
-      case BoutResult.vpo:
-      case BoutResult.vpo1:
-        return diff >= 8 ? 3 : (diff >= 3 ? 2 : 1);
-      case BoutResult.dsq2:
-      default:
-        return 0;
-    }
-  }
-
-  static int getClassificationPointsLooserTeamMatch(BoutResult result) {
-    switch (result) {
-      case BoutResult.vfa:
-      case BoutResult.vin:
-      case BoutResult.vca:
-      case BoutResult.vfo:
-      case BoutResult.dsq:
-      case BoutResult.vsu:
-      case BoutResult.vsu1:
-      case BoutResult.vpo:
-      case BoutResult.vpo1:
-      case BoutResult.dsq2:
-      default:
-        return 0;
-    }
-  }
 
   @override
   Bout copyWithId(int? id) {

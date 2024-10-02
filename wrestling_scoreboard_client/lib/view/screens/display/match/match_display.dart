@@ -60,7 +60,7 @@ class MatchDisplay extends ConsumerWidget {
                 teamMatchBoutActions: teamMatchBoutActions,
                 buildContext: context,
                 teamMatch: match,
-                boutConfig: match.league?.division.boutConfig ?? const BoutConfig(),
+                boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
               ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
             }

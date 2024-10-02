@@ -1415,7 +1415,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.0.1-beta.14
+0.2.0-pre.1
 \.
 
 

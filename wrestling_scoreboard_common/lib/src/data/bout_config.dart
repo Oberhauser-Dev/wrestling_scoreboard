@@ -64,4 +64,35 @@ class BoutConfig with _$BoutConfig implements DataObject {
   BoutConfig copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static BoutResultRule resultRule({
+    required BoutResult result,
+    required WrestlingStyle style,
+    required int technicalPointsWinner,
+    required int technicalPointsLoser,
+    required List<BoutResultRule> rules,
+  }) {
+    final diff = technicalPointsWinner - technicalPointsLoser;
+    final applyingRules = rules.where((rule) {
+      final matchResult = rule.boutResult == result;
+      final matchStyle = rule.style == null || rule.style == style;
+      final matchDiff = rule.technicalPointsDifference == null ? true : diff >= rule.technicalPointsDifference!;
+      final matchPointsLoser = technicalPointsLoser >= (rule.loserTechnicalPoints ?? 0);
+      final matchPointsWinner = technicalPointsWinner >= (rule.winnerTechnicalPoints ?? 0);
+      return matchResult && matchStyle && matchDiff && matchPointsLoser && matchPointsWinner;
+    }).toList();
+    if (applyingRules.isEmpty) {
+      throw Exception('No bout result rule found for $result');
+    }
+    applyingRules.sort((a, b) {
+      var pDiff = (a.technicalPointsDifference ?? 0) - (b.technicalPointsDifference ?? 0);
+      if (pDiff != 0) return pDiff;
+      pDiff = (a.loserTechnicalPoints ?? 0) - (b.loserTechnicalPoints ?? 0);
+      if (pDiff != 0) return pDiff;
+      pDiff = (a.winnerTechnicalPoints ?? 0) - (b.winnerTechnicalPoints ?? 0);
+      if (pDiff != 0) return pDiff;
+      throw Exception('Two rules with the same attributes $a and $b');
+    });
+    return applyingRules.last;
+  }
 }

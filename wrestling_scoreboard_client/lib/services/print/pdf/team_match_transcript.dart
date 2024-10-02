@@ -92,7 +92,7 @@ class TeamMatchTranscript extends PdfSheet {
           height: 25,
           alignment: Alignment.centerLeft,
           child: Text(
-            localizations.transcriptTeamMatches.toUpperCase(),
+            localizations.teamMatchTranscript.toUpperCase(),
             style: TextStyle(
               color: baseColor,
               fontWeight: FontWeight.bold,
@@ -160,15 +160,17 @@ class TeamMatchTranscript extends PdfSheet {
     List<Widget> buildTeamHeader(Team team, BoutRole role) {
       final textColor = role.textPdfColor;
       return [
-        buildTextCell(
-          '${role == BoutRole.red ? localizations.home : localizations.guest}: ${team.name}',
-          color: role.pdfColor,
-          height: titleCellHeight,
-          textColor: textColor,
-          fontSize: headerFontSize,
-          borderColor: role.pdfColor,
-          alignment: Alignment.center,
-        ),
+        TableCell(
+            columnSpan: 4,
+            child: buildTextCell(
+              '${role == BoutRole.red ? localizations.home : localizations.guest}: ${team.name}',
+              color: role.pdfColor,
+              height: titleCellHeight,
+              textColor: textColor,
+              fontSize: headerFontSize,
+              borderColor: role.pdfColor,
+              alignment: Alignment.center,
+            )),
       ];
     }
 
@@ -246,10 +248,7 @@ class TeamMatchTranscript extends PdfSheet {
         const FlexColumnWidth(1.5), // Comment
       ].asMap(),
       children: [
-        TableRow(columnSpans: const {
-          3: 4,
-          13: 4
-        }, children: [
+        TableRow(children: [
           Container(height: titleCellHeight),
           Container(height: titleCellHeight),
           Container(height: titleCellHeight),
@@ -341,10 +340,11 @@ class TeamMatchTranscript extends PdfSheet {
             buildTextCell('', height: cellHeight, fontSize: cellFontSize),
           ]);
         }),
-        TableRow(columnSpans: const {
-          0: 3
-        }, children: [
-          buildTextCell(localizations.total, height: titleCellHeight, fontSize: headerFontSize),
+        TableRow(children: [
+          TableCell(
+            columnSpan: 3,
+            child: buildTextCell(localizations.total, height: titleCellHeight, fontSize: headerFontSize),
+          ),
           ...buildTeamFooter(BoutRole.red),
           Container(color: BoutRole.red.pdfColor, height: titleCellHeight),
           buildTextCell(TeamMatch.getHomePoints(bouts).toString(),

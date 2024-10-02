@@ -31,12 +31,8 @@ extension GerBoutResultAbbreviation on BoutResult {
         return 'DV';
       case BoutResult.vsu:
         return 'TÜ';
-      case BoutResult.vsu1:
-        return 'TÜ1';
       case BoutResult.vpo:
         return 'PS';
-      case BoutResult.vpo1:
-        return 'PS1';
       case BoutResult.vfo:
         return 'DN';
       case BoutResult.dsq:
