@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -225,6 +226,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                     navigator,
                                     (await ref.read(dataManagerNotifierProvider)),
                                     league: match.league!,
+                                    ref: ref,
                                   )),
                           ContentItem(
                               title: guestLineup.team.name,
@@ -235,6 +237,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                     navigator,
                                     (await ref.read(dataManagerNotifierProvider)),
                                     league: match.league!,
+                                    ref: ref,
                                   )),
                         ],
                       ),
@@ -292,11 +295,28 @@ class TeamMatchOverview extends ConsumerWidget {
   }
 
   handleSelectedLineup(Lineup lineup, TeamMatch match, NavigatorState navigator, DataManager dataManager,
-      {required League league}) async {
+      {required League league, required WidgetRef ref}) async {
     final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
     final weightClasses = (await dataManager.readMany<DivisionWeightClass, Division>(filterObject: league.division))
         .where((element) => element.seasonPartition == match.seasonPartition)
         .toList();
+    Lineup? proposedLineup;
+    List<Participation>? proposedParticipations;
+    if (participations.isEmpty) {
+      // Load lineup from previous fight as proposal
+      var matches = await ref.read(manyDataStreamProvider<TeamMatch, League>(
+        ManyProviderData<TeamMatch, League>(filterObject: league),
+      ).future);
+      matches =
+          matches.where((match) => match.date.isBefore(DateTime.now().subtract(const Duration(hours: 24)))).toList();
+      matches.sort((a, b) => a.date.compareTo(b.date));
+      final resolvedMatch =
+          matches.lastWhereOrNull((match) => match.home.team == lineup.team || match.guest.team == lineup.team);
+      if (resolvedMatch != null) {
+        proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
+        proposedParticipations = await dataManager.readMany<Participation, Lineup>(filterObject: proposedLineup);
+      }
+    }
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
@@ -304,6 +324,9 @@ class TeamMatchOverview extends ConsumerWidget {
             weightClasses: weightClasses.map((e) => e.weightClass).toList(),
             participations: participations,
             lineup: lineup,
+            initialCoach: proposedLineup?.coach,
+            initialLeader: proposedLineup?.leader,
+            initialParticipations: proposedParticipations,
             onSubmitGenerate: () {
               dataManager.generateBouts<TeamMatch>(match, false);
             },
