@@ -85,7 +85,7 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
         title: SearchableDropdown<Organization>(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _parent,
-          label: localizations.organization,
+          label: localizations.umbrellaOrganization,
           context: context,
           onSaved: (Organization? value) => setState(() {
             _parent = value;

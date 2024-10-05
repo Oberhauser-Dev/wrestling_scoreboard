@@ -52,6 +52,11 @@ class OrganizationOverview extends ConsumerWidget {
               icon: Icons.short_text,
             ),
             ContentItem(
+              title: data.parent?.name ?? '-',
+              subtitle: localizations.umbrellaOrganization,
+              icon: Icons.corporate_fare,
+            ),
+            ContentItem(
               title: data.apiProvider?.name ?? '-',
               subtitle: localizations.apiProvider,
               icon: Icons.api,
