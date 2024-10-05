@@ -1415,7 +1415,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.1
+0.2.0-pre.2
 \.
 
 
@@ -2003,13 +2003,6 @@ ALTER TABLE ONLY public.wrestling_event
 --
 
 CREATE UNIQUE INDEX bout_config_id_uindex ON public.bout_config USING btree (id);
-
-
---
--- Name: club_no_uindex; Type: INDEX; Schema: public; Owner: wrestling
---
-
-CREATE UNIQUE INDEX club_no_uindex ON public.club USING btree (no);
 
 
 --
