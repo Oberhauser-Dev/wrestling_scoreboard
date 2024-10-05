@@ -127,7 +127,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                     winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
                     result: val,
                   );
-                  bout = bout.updateClassificationPoints(actions);
+                  bout = bout.updateClassificationPoints(actions, rules: widget.boutState.boutRules);
                   dataManager.createOrUpdateSingle(bout);
                   if (bout.r != null) dataManager.createOrUpdateSingle(bout.r!);
                   if (bout.b != null) dataManager.createOrUpdateSingle(bout.b!);

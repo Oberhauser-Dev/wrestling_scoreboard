@@ -43,7 +43,9 @@ class TeamMatchBoutOverview extends BoutOverview {
                 boutActions: actions,
                 buildContext: context,
                 wrestlingEvent: teamMatchBout.teamMatch,
-                boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? const BoutConfig(),
+                boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                // TODO: get from DB
+                boutRules: TeamMatch.defaultBoutResultRules,
               ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }

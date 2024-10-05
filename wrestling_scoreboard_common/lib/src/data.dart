@@ -1,6 +1,7 @@
 export 'data/bout.dart';
 export 'data/bout_action.dart';
 export 'data/bout_config.dart';
+export 'data/bout_result_rule.dart';
 export 'data/club.dart';
 export 'data/competition/competition.dart';
 export 'data/competition/competition_bout.dart';

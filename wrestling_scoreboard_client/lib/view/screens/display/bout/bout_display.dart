@@ -75,7 +75,9 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                     builder: (context, bout) {
                       return BoutScreen(
                         wrestlingEvent: match,
-                        boutConfig: match.league?.division.boutConfig ?? const BoutConfig(),
+                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                        // TODO: get from DB:
+                        boutRules: TeamMatch.defaultBoutResultRules,
                         bouts: teamMatchBouts.map((e) => e.bout).toList(),
                         boutIndex: teamMatchBoutIndex,
                         bout: bout,
@@ -106,6 +108,7 @@ class BoutScreen extends ConsumerStatefulWidget {
 
   // TODO: may overwrite in settings to be more flexible
   final BoutConfig boutConfig;
+  final List<BoutResultRule> boutRules;
   final Team home;
   final Team guest;
   final int boutIndex;
@@ -121,6 +124,7 @@ class BoutScreen extends ConsumerStatefulWidget {
     required this.onPressBoutInfo,
     required this.navigateToBoutByIndex,
     required this.boutConfig,
+    required this.boutRules,
     required this.wrestlingEvent,
     super.key,
   });
@@ -138,6 +142,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   late ParticipantStateModel _r;
   late ParticipantStateModel _b;
   late BoutConfig boutConfig;
+  late List<BoutResultRule> boutRules;
 
   late Bout bout;
   int period = 1;
@@ -146,6 +151,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   initState() {
     super.initState();
     boutConfig = widget.boutConfig;
+    boutRules = widget.boutRules;
     bout = widget.bout;
     // Set the current period based on the duration:
     period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
@@ -429,6 +435,7 @@ class BoutState extends ConsumerState<BoutScreen> {
             boutActions: actions,
             wrestlingEvent: widget.wrestlingEvent,
             boutConfig: boutConfig,
+            boutRules: boutRules,
           ).buildPdf();
           Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
         }

@@ -5,7 +5,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 buildCheckBox({
   bool isChecked = false,
-  PdfColor pencilColor = PdfColors.blue800,
+  PdfColor pencilColor = PdfSheet.pencilColor,
   PdfColor? checkBoxColor,
 }) =>
     Container(
@@ -58,7 +58,8 @@ Widget buildFormCell({
   double? width,
   PdfColor borderColor = PdfColors.grey,
   PdfColor? color,
-  PdfColor pencilColor = PdfColors.blue800,
+  PdfColor pencilColor = PdfSheet.pencilColor,
+  AlignmentGeometry? contentAlignment = Alignment.center,
 }) {
   return buildFormCellWidget(
     title: title,
@@ -68,6 +69,7 @@ Widget buildFormCell({
     borderColor: borderColor,
     color: color,
     pencilColor: pencilColor,
+    contentAlignment: contentAlignment,
   );
 }
 
@@ -78,7 +80,9 @@ Widget buildFormCellWidget({
   double? width,
   PdfColor borderColor = PdfColors.grey,
   PdfColor? color,
-  PdfColor pencilColor = PdfColors.blue800,
+  PdfColor pencilColor = PdfSheet.pencilColor,
+  AlignmentGeometry? contentAlignment = Alignment.center,
+  EdgeInsets? contentPadding = const EdgeInsets.all(2),
 }) {
   return Container(
     height: height,
@@ -96,12 +100,13 @@ Widget buildFormCellWidget({
           Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.all(2),
-            child: Text(title.toUpperCase(), style: TextStyle(fontSize: 6, fontWeight: FontWeight.bold)),
+            child: Text(title.toUpperCase(), style: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold)),
           ),
         if (content != null)
           Expanded(
               child: Container(
-            alignment: Alignment.center,
+            padding: contentPadding,
+            alignment: contentAlignment,
             child: content,
           )),
       ],
@@ -110,11 +115,11 @@ Widget buildFormCellWidget({
 }
 
 extension BoutRolePdfColor on BoutRole {
-  PdfColor? get pdfColor {
+  PdfColor get pdfColor {
     return this == BoutRole.red ? PdfSheet.homeColor : PdfSheet.guestColor;
   }
 
-  PdfColor? get textPdfColor {
+  PdfColor get textPdfColor {
     return PdfColors.white;
   }
 }

@@ -381,10 +381,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             try {
               return switch (result) {
                 'PS' => BoutResult.vpo, // Punktesieg
-                'PS1' => BoutResult.vpo1, // Punktesieg
                 'SS' => BoutResult.vfa, // Schultersieg
                 'TÜ' => BoutResult.vsu, // Technische Überlegenheit
-                'TÜ1' => BoutResult.vsu1,
                 'ÜG' => BoutResult.dsq, // Übergewicht, TODO: wrongly mapped
                 'AS' => BoutResult.vin, // Aufgabesieg
                 'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit

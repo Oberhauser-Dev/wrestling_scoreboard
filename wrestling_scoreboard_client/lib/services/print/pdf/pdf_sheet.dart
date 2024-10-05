@@ -18,7 +18,7 @@ abstract class PdfSheet {
   static const horizontalGap = 8.0;
   static const verticalGap = 8.0;
 
-  static const pencilColor = PdfColors.blue900;
+  static const pencilColor = PdfColors.brown600;
   static const homeColor = PdfColors.red;
   static const guestColor = PdfColors.blue;
 
@@ -80,28 +80,21 @@ abstract class PdfSheet {
     }, children: [
       TableRow(
         children: [
-          buildFormCell(
-              title: 'Event-${localizations.name}',
-              // ?? localizations.location,
-              content: wrestlingEvent is TeamMatch
-                  ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
-                  : (wrestlingEvent as Competition).name,
-              color: PdfColors.grey100,
-              pencilColor: PdfSheet.pencilColor,
-              height: 40),
-          if (wrestlingEvent is TeamMatch)
-            buildFormCell(
-                title: localizations.league,
-                // ?? localizations.location,
-                content: wrestlingEvent.league?.fullname,
+          TableCell(
+            columnSpan: wrestlingEvent is TeamMatch ? 1 : 2,
+            child: buildFormCell(
+                title: '${localizations.event}-${localizations.name}',
+                content: wrestlingEvent is TeamMatch
+                    ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
+                    : (wrestlingEvent as Competition).name,
                 color: PdfColors.grey100,
                 pencilColor: PdfSheet.pencilColor,
                 height: 40),
-          if (wrestlingEvent is! TeamMatch)
+          ),
+          if (wrestlingEvent is TeamMatch)
             buildFormCell(
-                title: 'Competition',
-                // ?? localizations.location,
-                content: 'Competition',
+                title: localizations.league,
+                content: wrestlingEvent.league?.fullname,
                 color: PdfColors.grey100,
                 pencilColor: PdfSheet.pencilColor,
                 height: 40),
@@ -112,7 +105,7 @@ abstract class PdfSheet {
               pencilColor: PdfSheet.pencilColor,
               height: 40),
           buildFormCell(
-              title: 'Ort',
+              title: localizations.place,
               // ?? localizations.location,
               content: wrestlingEvent.location,
               color: PdfColors.grey100,

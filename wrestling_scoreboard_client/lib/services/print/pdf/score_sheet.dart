@@ -1,10 +1,14 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
+import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -15,6 +19,7 @@ class ScoreSheet extends PdfSheet {
     required this.boutActions,
     required this.wrestlingEvent,
     required this.boutConfig,
+    required this.boutRules,
     super.baseColor,
     super.accentColor,
     required super.buildContext,
@@ -23,6 +28,7 @@ class ScoreSheet extends PdfSheet {
   final Bout bout;
   final List<BoutAction> boutActions;
   final BoutConfig boutConfig;
+  final List<BoutResultRule> boutRules;
   final WrestlingEvent wrestlingEvent;
 
   WrestlingEvent get event => wrestlingEvent;
@@ -52,12 +58,23 @@ class ScoreSheet extends PdfSheet {
           Container(height: PdfSheet.verticalGap),
           _buildPointsBody(context, actions),
           Container(height: PdfSheet.verticalGap),
-          Column(
-            children: [
-              ...buildReferees(context, event, width: 120.0),
-              ...buildStaff(context, event, width: 120.0),
-            ],
-          ),
+          Row(mainAxisSize: MainAxisSize.max, children: [
+            Expanded(
+                child:
+                    buildFormCell(title: localizations.winner, content: bout.winnerRole?.localize(buildContext) ?? '')),
+            buildFormCell(title: localizations.duration, content: durationToString(bout.duration), width: 100),
+          ]),
+          Container(height: PdfSheet.verticalGap),
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(child: _buildClassificationPointsTable(context)),
+            Expanded(
+                child: Column(
+              children: [
+                ...buildReferees(context, event, width: 120.0),
+                ...buildStaff(context, event, width: 120.0),
+              ],
+            )),
+          ]),
         ],
       ),
     );
@@ -82,7 +99,10 @@ class ScoreSheet extends PdfSheet {
           height: 25,
           alignment: Alignment.centerLeft,
           child: Text(
-            localizations.scoreSheetSingleCompetitions.toUpperCase(),
+            (wrestlingEvent is TeamMatch
+                    ? localizations.teamMatchScoreSheet
+                    : localizations.singleCompetitionScoreSheet)
+                .toUpperCase(),
             style: TextStyle(
               color: baseColor,
               fontWeight: FontWeight.bold,
@@ -127,7 +147,7 @@ class ScoreSheet extends PdfSheet {
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
             buildFormCell(
-                title: localizations.boutNo, // TODO: change to boutNo
+                title: localizations.boutNo,
                 content: bout.id?.toString() ?? '',
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
@@ -226,131 +246,265 @@ class ScoreSheet extends PdfSheet {
     ]);
   }
 
+  Widget _buildClassificationPointsTable(Context context) {
+    BoutResultRule? resultRule;
+    if (bout.winnerRole != null && bout.result != null) {
+      resultRule = BoutConfig.resultRule(
+        result: bout.result!,
+        style: bout.weightClass?.style ?? WrestlingStyle.free,
+        technicalPointsWinner: ParticipantState.getTechnicalPoints(boutActions, bout.winnerRole!),
+        technicalPointsLoser: ParticipantState.getTechnicalPoints(
+            boutActions, bout.winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
+        rules: boutRules,
+      );
+    }
+
+    const cellHeight = 20.0;
+    final boutResultRuleGroups = boutRules.groupListsBy((element) {
+      return (element.boutResult, element.winnerClassificationPoints, element.loserClassificationPoints);
+    });
+    return Table(
+        columnWidths: {
+          0: const FixedColumnWidth(35),
+          1: const FixedColumnWidth(30),
+          2: const FlexColumnWidth(1),
+        },
+        children: boutResultRuleGroups.entries.map((entry) {
+          final (res, winnerClassificationPoints, loserClassificationPoints) = entry.key;
+          final rules = entry.value;
+          var description = res.description(buildContext);
+          final isResultRuleApplied = rules.contains(resultRule);
+          for (final rule in rules) {
+            if (rule.style != null ||
+                rule.winnerTechnicalPoints != null ||
+                rule.loserTechnicalPoints != null ||
+                rule.technicalPointsDifference != null) {
+              description += ' ';
+              if (rule.style != null) {
+                description += '${rule.style!.localize(buildContext).toUpperCase()}';
+              }
+              if (rule.winnerTechnicalPoints != null) {
+                description += '• Winner has ${rule.winnerTechnicalPoints} technical point(s)';
+              }
+              if (rule.loserTechnicalPoints != null) {
+                description += '• Loser has ${rule.loserTechnicalPoints} technical point(s)';
+              }
+              if (rule.technicalPointsDifference != null) {
+                description += '• A difference of at least ${rule.technicalPointsDifference} point(s)';
+              }
+              description += '\n';
+            }
+          }
+
+          return TableRow(children: [
+            buildTextCell(
+              res.name.toUpperCase(),
+              width: 40,
+              height: cellHeight,
+              alignment: Alignment.center,
+              borderColor: isResultRuleApplied ? PdfSheet.pencilColor : null,
+              borderWidth: isResultRuleApplied ? 2 : null,
+            ),
+            buildTextCell(
+              '$winnerClassificationPoints:$loserClassificationPoints',
+              width: 40,
+              height: cellHeight,
+              alignment: Alignment.center,
+              borderColor: isResultRuleApplied ? PdfSheet.pencilColor : null,
+              borderWidth: isResultRuleApplied ? 2 : null,
+            ),
+            buildTextCell(description, fontSize: 7, height: cellHeight),
+          ]);
+        }).toList());
+  }
+
   Widget _buildPointsBody(Context context, List<BoutAction> actions) {
     const headerCellHeight = 40.0;
     const roundCellHeight = 35.0;
     const breakCellHeight = 15.0;
+    const athleteWidth = 30.0;
 
     final rounds = boutConfig.periodCount;
 
-    Widget buildColorCell({required String colorStr, required PdfColor borderColor}) => Transform.rotateBox(
-        angle: pi * 0.5,
-        unconstrained: true,
-        child: buildTextCell(
-          colorStr,
-          height: 40,
-          width:
-              headerCellHeight + PdfSheet.verticalGap + (rounds * roundCellHeight) + ((rounds - 1) * breakCellHeight),
-          borderColor: borderColor,
-          textColor: borderColor,
-          alignment: Alignment.center,
-        ));
+    Widget buildColorCell({required String colorStr, required PdfColor borderColor}) {
+      return Transform.rotateBox(
+          angle: pi * 0.5,
+          unconstrained: true,
+          child: buildTextCell(
+            colorStr,
+            height: athleteWidth,
+            width: headerCellHeight + PdfSheet.verticalGap + rounds * roundCellHeight + (rounds - 1) * breakCellHeight,
+            borderColor: borderColor,
+            textColor: borderColor,
+            alignment: Alignment.center,
+          ));
+    }
 
     Widget buildTotalCell(PdfColor borderColor) => buildTextCell(localizations.total.toUpperCase(),
         height: headerCellHeight, borderColor: borderColor, alignment: Alignment.center);
     Widget buildTechnicalPointsHeaderCell(PdfColor borderColor) =>
         buildTextCell(localizations.technicalPoints.toUpperCase(),
             height: headerCellHeight, borderColor: borderColor, alignment: Alignment.center);
+
     TableRow buildRound({required int round}) {
       final periodDurMin = boutConfig.periodDuration * round;
-      final periodDurMax = periodDurMin + boutConfig.periodDuration;
+      var periodDurMax = periodDurMin + boutConfig.periodDuration;
+      if (round == rounds - 1) {
+        // Also consider points after the regular time.
+        periodDurMax += const Duration(seconds: 1);
+      }
       final periodActions = actions.where(
-          (element) => element.duration.compareTo(periodDurMax) <= 0 && element.duration.compareTo(periodDurMin) > 0);
-      final periodActionsRed = periodActions.where((element) => element.role == BoutRole.red);
-      final periodActionsBlue = periodActions.where((element) => element.role == BoutRole.blue);
+          (element) => element.duration.compareTo(periodDurMax) < 0 && element.duration.compareTo(periodDurMin) >= 0);
+
+      Widget buildPeriodTechnicalPoints(Iterable<BoutAction> actions, BoutRole role) {
+        actions = actions.where((e) => e.role == role);
+        return buildFormCellWidget(
+            content: RichText(
+                text: TextSpan(
+                    style: const TextStyle(color: PdfSheet.pencilColor),
+                    children: actions
+                        .map(
+                          (e) => TextSpan(
+                              text: actions.last == e ? e.actionValue : '${e.actionValue}, ',
+                              style: periodActions.lastWhereOrNull((e) => e.actionType == BoutActionType.points) == e
+                                  ? const TextStyle(decoration: TextDecoration.underline)
+                                  : null),
+                        )
+                        .toList())),
+            borderColor: role.pdfColor,
+            height: roundCellHeight,
+            contentAlignment: Alignment.centerLeft);
+      }
+
       return TableRow(children: [
         buildFormCell(
-            content: periodActionsRed
-                .where((element) => element.actionType == BoutActionType.points)
-                .map((e) => e.pointCount ?? 0)
-                .fold<int>(0, (cur, next) => (cur + next))
-                .toString(),
+            content: ParticipantState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
             borderColor: PdfSheet.homeColor,
             height: roundCellHeight),
-        buildFormCell(
-            content: periodActionsRed.map((e) => e.toString()).join(', '),
-            borderColor: PdfSheet.homeColor,
-            height: roundCellHeight),
+        buildPeriodTechnicalPoints(periodActions, BoutRole.red),
         buildTextCell('${localizations.round.toUpperCase()}\n${round + 1}',
             height: roundCellHeight,
             margin: const EdgeInsets.symmetric(horizontal: PdfSheet.horizontalGap),
             fontSize: 8,
             alignment: Alignment.center),
+        buildPeriodTechnicalPoints(periodActions, BoutRole.blue),
         buildFormCell(
-            content: periodActionsBlue.map((e) => e.toString()).join(', '),
-            borderColor: PdfSheet.guestColor,
-            height: roundCellHeight),
-        buildFormCell(
-            content: periodActionsBlue
-                .where((element) => element.actionType == BoutActionType.points)
-                .map((e) => e.pointCount ?? 0)
-                .fold<int>(0, (cur, next) => (cur + next))
-                .toString(),
+            content: ParticipantState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
             borderColor: PdfSheet.guestColor,
             height: roundCellHeight),
       ]);
     }
 
-    Widget buildTechnicalPoints() {
-      final List<TableRow> roundRows = [];
-      for (int round = 0; round < rounds; round++) {
-        roundRows.add(buildRound(round: round));
-        if (round < (rounds - 1)) {
-          final breakDurationStr =
-              '${localizations.breakDuration}: ${boutConfig.breakDuration.formatMinutesAndSeconds()}';
-          roundRows.add(TableRow(children: [
-            Container(color: PdfSheet.homeColor, height: breakCellHeight),
-            buildTextCell(
-              breakDurationStr,
-              fontSize: 8,
-              alignment: Alignment.center,
-              borderColor: PdfSheet.homeColor,
-              color: PdfSheet.homeColor,
-              textColor: PdfColors.white,
-              height: breakCellHeight,
-            ),
-            Container(),
-            buildTextCell(
-              breakDurationStr,
-              fontSize: 8,
-              alignment: Alignment.center,
-              borderColor: PdfSheet.guestColor,
-              color: PdfSheet.guestColor,
-              textColor: PdfColors.white,
-              height: breakCellHeight,
-            ),
-            Container(color: PdfSheet.guestColor, height: breakCellHeight),
-          ]));
-        }
+    final List<TableRow> roundRows = [];
+    for (int round = 0; round < rounds; round++) {
+      roundRows.add(buildRound(round: round));
+      if (round < (rounds - 1)) {
+        final breakDurationStr =
+            '${localizations.breakDuration}: ${boutConfig.breakDuration.formatMinutesAndSeconds()}';
+        roundRows.add(TableRow(children: [
+          Container(color: PdfSheet.homeColor, height: breakCellHeight),
+          buildTextCell(
+            breakDurationStr,
+            fontSize: 8,
+            alignment: Alignment.center,
+            borderColor: PdfSheet.homeColor,
+            color: PdfSheet.homeColor,
+            textColor: PdfColors.white,
+            height: breakCellHeight,
+          ),
+          Container(),
+          buildTextCell(
+            breakDurationStr,
+            fontSize: 8,
+            alignment: Alignment.center,
+            borderColor: PdfSheet.guestColor,
+            color: PdfSheet.guestColor,
+            textColor: PdfColors.white,
+            height: breakCellHeight,
+          ),
+          Container(color: PdfSheet.guestColor, height: breakCellHeight),
+        ]));
       }
+    }
+    Widget buildClassificationPoints(int? points, PdfColor color) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Text(localizations.classificationPoints.toUpperCase(), style: const TextStyle(fontSize: 8)),
+        Container(
+          width: roundCellHeight * 2,
+          height: roundCellHeight * 2,
+          foregroundDecoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: color,
+              width: 2,
+            ),
+          ),
+          child: Center(child: Text(points?.toString() ?? '', style: const TextStyle(color: PdfSheet.pencilColor))),
+        ),
+      ]);
+    }
 
-      return Expanded(
-          child: Table(
-        columnWidths: {
-          0: const FlexColumnWidth(1),
-          1: const FlexColumnWidth(4),
-          2: const FixedColumnWidth(52),
-          3: const FlexColumnWidth(4),
-          4: const FlexColumnWidth(1),
-        },
-        children: [
-          TableRow(children: [
+    return Table(
+      columnWidths: {
+        0: const FixedColumnWidth(athleteWidth),
+        1: const FlexColumnWidth(1),
+        2: const FlexColumnWidth(4),
+        3: const FixedColumnWidth(52),
+        4: const FlexColumnWidth(4),
+        5: const FlexColumnWidth(1),
+        6: const FixedColumnWidth(athleteWidth),
+      },
+      children: [
+        TableRow(
+          children: [
+            TableCell(
+              rowSpan: 2 * rounds + 1,
+              child: buildColorCell(
+                colorStr: localizations.red.toUpperCase(),
+                borderColor: PdfSheet.homeColor,
+              ),
+            ),
             buildTotalCell(PdfSheet.homeColor),
             buildTechnicalPointsHeaderCell(PdfSheet.homeColor),
             Container(),
             buildTechnicalPointsHeaderCell(PdfSheet.guestColor),
             buildTotalCell(PdfSheet.guestColor),
-          ]),
-          TableRow(children: [Container(height: PdfSheet.verticalGap)]),
-          ...roundRows,
-        ],
-      ));
-    }
-
-    return Row(children: [
-      buildColorCell(colorStr: localizations.red.toUpperCase(), borderColor: PdfSheet.homeColor),
-      buildTechnicalPoints(),
-      buildColorCell(colorStr: localizations.blue.toUpperCase(), borderColor: PdfSheet.guestColor),
-    ]);
+            TableCell(
+              rowSpan: 2 * rounds + 1,
+              child: buildColorCell(
+                colorStr: localizations.blue.toUpperCase(),
+                borderColor: PdfSheet.guestColor,
+              ),
+            ),
+          ],
+          verticalAlignment: TableCellVerticalAlignment.full,
+        ),
+        TableRow(children: [Container(height: PdfSheet.verticalGap)]),
+        ...roundRows,
+        TableRow(children: [Container(height: PdfSheet.verticalGap)]),
+        TableRow(
+          children: [
+            Container(),
+            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.red).toString(),
+                height: headerCellHeight,
+                borderWidth: 2,
+                borderColor: PdfSheet.homeColor,
+                alignment: Alignment.center,
+                textColor: PdfSheet.pencilColor),
+            buildClassificationPoints(bout.r?.classificationPoints, PdfSheet.homeColor),
+            Container(),
+            buildClassificationPoints(bout.b?.classificationPoints, PdfSheet.guestColor),
+            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.blue).toString(),
+                height: headerCellHeight,
+                borderWidth: 2,
+                borderColor: PdfSheet.guestColor,
+                alignment: Alignment.center,
+                textColor: PdfSheet.pencilColor),
+            Container(),
+          ],
+          verticalAlignment: TableCellVerticalAlignment.full,
+        ),
+      ],
+    );
   }
 }

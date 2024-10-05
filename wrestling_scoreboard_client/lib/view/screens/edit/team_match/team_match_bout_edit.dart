@@ -16,7 +16,7 @@ class TeamMatchBoutEdit extends BoutEdit {
           bout: teamMatchBout?.bout,
           lineupRed: initialTeamMatch.home,
           lineupBlue: initialTeamMatch.guest,
-          boutConfig: initialTeamMatch.league?.division.boutConfig ?? const BoutConfig(),
+          boutConfig: initialTeamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
         );
 
   @override

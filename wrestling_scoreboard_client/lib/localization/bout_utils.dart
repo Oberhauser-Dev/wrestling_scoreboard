@@ -7,6 +7,11 @@ extension BoutRoleLocalization on BoutRole {
   MaterialColor color() {
     return this == BoutRole.red ? Colors.red : Colors.blue;
   }
+
+  String localize(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return this == BoutRole.red ? localizations.red : localizations.blue;
+  }
 }
 
 extension BoutLocalization on Bout {

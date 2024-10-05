@@ -12,21 +12,13 @@ enum BoutResult {
   /// Sieger durch 3 Verwarnungen / Regelwidrigkeit des Gegners (DV)
   vca,
 
-  /// Technical superiority - loser without technical points
-  /// Technische Überlegenheit - Verlierer ohne Technische Punkte (TÜ)
+  /// Technical superiority
+  /// Technische Überlegenheit (TÜ)
   vsu,
 
-  /// Technical superiority - loser with technical points
-  /// Technische Überlegenheit - Verlierer hat Technische Punkte (TÜ1)
-  vsu1,
-
-  /// Victory by points - the loser without any technical points
-  /// Punktsieg - Verlierer ohne Technische Punkte (PS)
+  /// Victory by points
+  /// Punktsieg (PS)
   vpo,
-
-  /// Victory by points - the loser with technical points
-  /// Punktsieg - Verlierer hat Technische Punkte (PS1)
-  vpo1,
 
   /// Victory by forfeit - no show up on the mat
   /// Sieger durch Ausschluss des Gegners vom Wettkampf wegen Nichtantritt (DN)
