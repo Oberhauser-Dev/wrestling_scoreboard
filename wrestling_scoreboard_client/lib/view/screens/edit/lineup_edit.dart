@@ -23,6 +23,9 @@ class LineupEdit extends ConsumerStatefulWidget {
   final Lineup lineup;
   final List<WeightClass> weightClasses;
   final List<Participation> participations;
+  final Membership? initialLeader;
+  final Membership? initialCoach;
+  final List<Participation>? initialParticipations;
 
   final Function()? onSubmitGenerate;
 
@@ -32,6 +35,9 @@ class LineupEdit extends ConsumerStatefulWidget {
     required this.weightClasses,
     required this.participations,
     this.onSubmitGenerate,
+    this.initialLeader,
+    this.initialCoach,
+    this.initialParticipations,
   });
 
   @override
@@ -55,10 +61,24 @@ class LineupEditState extends ConsumerState<LineupEdit> {
     _leader = widget.lineup.leader;
     _coach = widget.lineup.coach;
 
-    _participations = Map.fromEntries(widget.weightClasses.map((e) {
-      final participation = widget.participations.singleWhereOrNull((participation) => participation.weightClass == e);
-      return MapEntry(e, participation);
-    }));
+    if (widget.participations.isNotEmpty) {
+      _participations = Map.fromEntries(widget.weightClasses.map((e) {
+        final participation =
+            widget.participations.singleWhereOrNull((participation) => participation.weightClass == e);
+        return MapEntry(e, participation);
+      }));
+    } else {
+      // Copy participations from an old match.
+      _participations = Map.fromEntries(widget.weightClasses.map((e) {
+        var participation =
+            widget.initialParticipations?.singleWhereOrNull((participation) => participation.weightClass == e);
+        if (participation != null) {
+          participation = participation.copyWith(id: null, lineup: widget.lineup);
+          _createOrUpdateParticipations.add(participation);
+        }
+        return MapEntry(e, participation);
+      }));
+    }
   }
 
   Future<void> handleSubmit(NavigatorState navigator, {void Function()? onSubmitGenerate}) async {
@@ -143,6 +163,8 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         buildActions: _buildActions,
         items: [
           ListTile(title: HeadingText(widget.lineup.team.name)),
+          if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
+            IconCard(icon: const Icon(Icons.warning), text: localizations.warningPrefilledLineup),
           ListTile(
             title: _MembershipDropdown(
               label: localizations.leader,
