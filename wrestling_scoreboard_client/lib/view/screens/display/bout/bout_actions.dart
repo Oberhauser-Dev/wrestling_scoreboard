@@ -70,7 +70,7 @@ class ActionsWidget extends ConsumerWidget {
                         color: color,
                         child: ScaledText(
                           action.actionValue,
-                          fontSize: 22,
+                          fontSize: 28,
                           softWrap: false,
                         ),
                       ),
