@@ -43,6 +43,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         <T extends Organizational>(String orgSyncId) => getSingleOfOrg<T>(orgSyncId, orgId: organization.id!);
   }
 
+  final totalRegionWildcard = 'Bayern';
+
   @override
   Future<Iterable<Division>> importDivisions({DateTime? minDate, DateTime? maxDate}) async {
     maxDate ??= MockableDateTime.now();
@@ -261,7 +263,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             String leagueName = entry.key.trim();
             if (leagueName.isEmpty) {
               // If division has only one league it is the league for whole Bavarian.
-              leagueName = 'Bayern';
+              leagueName = totalRegionWildcard;
             }
             return League(
               name: leagueName,
@@ -665,7 +667,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           'op': 'listCompetition',
           'sid': seasonId,
           'ligaId': ligaId,
-          'rid': regionId,
+          // Replace total region name with empty
+          'rid': regionId == totalRegionWildcard ? '' : regionId,
         });
 
         String body;
