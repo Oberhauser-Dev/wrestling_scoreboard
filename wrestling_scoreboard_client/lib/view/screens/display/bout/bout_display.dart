@@ -271,17 +271,19 @@ class BoutState extends ConsumerState<BoutScreen> {
                 child: ScaledText(
                   pStatus?.fullName(context) ?? localizations.participantVacant,
                   color: pStatus == null ? Colors.white30 : Colors.white,
-                  fontSize: 28,
+                  fontSize: 40,
                   minFontSize: 20,
                 ),
               )),
           SizedBox(
               child: Center(
                   child: ScaledText(
-                      (pStatus?.participation.weight != null
-                          ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
-                          : AppLocalizations.of(context)!.participantUnknownWeight),
-                      color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white))),
+            (pStatus?.participation.weight != null
+                ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
+                : AppLocalizations.of(context)!.participantUnknownWeight),
+            color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white,
+            fontSize: 22,
+          ))),
         ],
       ),
     );
@@ -299,7 +301,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 child: Center(
                   child: ScaledText(
                     pStatus!.classificationPoints.toString(),
-                    fontSize: 46,
+                    fontSize: 54,
                     minFontSize: 30,
                   ),
                 ),
@@ -486,6 +488,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                                     child: Center(
                                         child: ScaledText(
                                   '${AppLocalizations.of(context)!.bout} ${widget.boutIndex + 1}',
+                                  fontSize: 22,
                                   minFontSize: 10,
                                 ))),
                               ]),
@@ -493,12 +496,14 @@ class BoutState extends ConsumerState<BoutScreen> {
                                 Center(
                                     child: ScaledText(
                                   '${bout.weightClass!.style.localize(context)}',
+                                  fontSize: 22,
                                   minFontSize: 10,
                                 )),
                               if (bout.weightClass != null)
                                 Center(
                                     child: ScaledText(
                                   bout.weightClass!.name,
+                                  fontSize: 26,
                                   minFontSize: 10,
                                 )),
                             ])),
@@ -518,7 +523,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                               child: TimeDisplay(
                                 stopwatch,
                                 stopwatchColor,
-                                fontSize: 100,
+                                fontSize: 128,
                                 maxDuration: boutConfig.totalPeriodDuration,
                               ),
                             ),

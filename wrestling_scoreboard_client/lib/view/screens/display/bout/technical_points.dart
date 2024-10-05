@@ -15,6 +15,7 @@ class TechnicalPoints extends StatelessWidget {
   final ParticipantStateModel pStatusModel;
   final Bout bout;
   final BoutConfig boutConfig;
+  final timerFontSize = 32.0;
 
   const TechnicalPoints({
     required this.role,
@@ -32,6 +33,7 @@ class TechnicalPoints extends StatelessWidget {
       color: role.color(),
       height: cellHeight,
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
             flex: 70,
@@ -41,33 +43,34 @@ class TechnicalPoints extends StatelessWidget {
                 return FittedText(
                   (ParticipantState.getTechnicalPoints(actions, role)).toString(),
                   softWrap: false,
+                  style: const TextStyle(height: 1.2),
                 );
               },
             ),
           ),
           if (pStatusModel.activityStopwatch != null)
             Expanded(
-                flex: 40,
+                flex: 30,
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  ScaledText(AppLocalizations.of(context)!.activityTimeAbbr, fontSize: 18),
+                  ScaledText(AppLocalizations.of(context)!.activityTimeAbbr, fontSize: timerFontSize),
                   TimeDisplay(
                     pStatusModel.activityStopwatch!,
                     white,
-                    fontSize: 18,
+                    fontSize: timerFontSize,
                     maxDuration: boutConfig.activityDuration,
                   )
                 ])),
           if (pStatusModel.isInjury)
             Expanded(
-              flex: 40,
+              flex: 30,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ScaledText(AppLocalizations.of(context)!.injuryTimeShort, fontSize: 18),
+                  ScaledText(AppLocalizations.of(context)!.injuryTimeShort, fontSize: timerFontSize),
                   TimeDisplay(
                     pStatusModel.injuryStopwatch,
                     white,
-                    fontSize: 18,
+                    fontSize: timerFontSize,
                     maxDuration: boutConfig.injuryDuration,
                   )
                 ],

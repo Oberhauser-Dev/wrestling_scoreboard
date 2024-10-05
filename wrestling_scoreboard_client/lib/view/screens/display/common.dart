@@ -30,7 +30,7 @@ class ClassificationPointsDisplay extends ConsumerWidget {
             builder: (context, participationStates) {
               return ScaledText(
                 TeamMatch.getClassificationPoints(participationStates).toString(),
-                fontSize: 28,
+                fontSize: 36,
                 minFontSize: 16,
                 softWrap: false,
               );
