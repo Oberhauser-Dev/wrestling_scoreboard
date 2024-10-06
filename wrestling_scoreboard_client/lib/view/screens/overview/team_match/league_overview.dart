@@ -66,7 +66,7 @@ class LeagueOverview extends ConsumerWidget {
         return OverviewScaffold<League>(
           dataObject: data,
           label: localizations.league,
-          details: data.name,
+          details: '${data.fullname}, ${data.startDate.year}',
           actions: [
             OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.league)
           ],
@@ -80,6 +80,7 @@ class LeagueOverview extends ConsumerWidget {
             ManyConsumer<LeagueTeamParticipation, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueTeamParticipation> teamParticipations) {
+                teamParticipations.sort((a, b) => a.team.name.compareTo(b.team.name));
                 return GroupedList(
                   header: HeadingItem(
                     trailing: RestrictedAddButton(
