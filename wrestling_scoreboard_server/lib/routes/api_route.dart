@@ -124,6 +124,8 @@ class ApiRoute {
     router.restrictedPost('/membership', membershipController.postSingle);
     router.restrictedGet('/memberships', membershipController.requestMany);
     router.restrictedGetOne('/membership/<id|[0-9]+>', membershipController.requestSingle);
+    router.restrictedGetOne('/membership/<id|[0-9]+>/participations', membershipController.requestParticipations);
+    router.restrictedGetOne('/membership/<id|[0-9]+>/team_match_bouts', membershipController.requestTeamMatchBouts);
 
     final participantStateController = ParticipantStateController();
     router.restrictedPost('/participant_state', participantStateController.postSingle);
