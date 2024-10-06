@@ -283,14 +283,14 @@ class _EntityGrid extends StatelessWidget {
             Icons.inventory,
             ids.map((id, value) => MapEntry(id, value as Division?)),
             DivisionOverview.route,
-            (d) => d.name,
+            (d) => '${d.fullname}, ${d.startDate.year}',
             context: context,
           ),
         'league' => _buildGroup<League>(
             Icons.emoji_events,
             ids.map((id, value) => MapEntry(id, value as League?)),
             LeagueOverview.route,
-            (d) => d.fullname,
+            (d) => '${d.fullname}, ${d.startDate.year}',
             context: context,
           ),
         'division_weight_class' => _buildGroup<DivisionWeightClass>(

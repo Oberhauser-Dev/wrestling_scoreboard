@@ -78,7 +78,7 @@ class DivisionOverview extends ConsumerWidget {
         return OverviewScaffold<Division>(
           dataObject: data,
           label: localizations.division,
-          details: data.name,
+          details: '${data.name}, ${data.startDate.year}',
           tabs: [
             Tab(child: HeadingText(localizations.info)),
             Tab(child: HeadingText(localizations.divisions)),

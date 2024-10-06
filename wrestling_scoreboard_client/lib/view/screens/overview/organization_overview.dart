@@ -115,7 +115,12 @@ class OrganizationOverview extends ConsumerWidget {
             ),
             ManyConsumer<Division, Organization>(
               filterObject: data,
-              builder: (BuildContext context, List<Division> organizations) {
+              builder: (BuildContext context, List<Division> divisions) {
+                divisions.sort((a, b) {
+                  final comparison = b.startDate.compareTo(a.startDate);
+                  if (comparison != 0) return comparison;
+                  return a.name.compareTo(b.name);
+                });
                 return GroupedList(
                   header: HeadingItem(
                     trailing: RestrictedAddButton(
@@ -129,7 +134,7 @@ class OrganizationOverview extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  items: organizations.map(
+                  items: divisions.map(
                     (e) => SingleConsumer<Division>(
                         id: e.id,
                         initialData: e,
@@ -147,6 +152,7 @@ class OrganizationOverview extends ConsumerWidget {
             ManyConsumer<Club, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Club> clubs) {
+                clubs.sort((a, b) => a.name.compareTo(b.name));
                 return GroupedList(
                   header: HeadingItem(
                     trailing: RestrictedAddButton(
