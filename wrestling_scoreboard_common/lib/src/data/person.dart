@@ -72,7 +72,7 @@ class Person with _$Person implements DataObject, Organizational {
       final monthDiff = today.month - birthDate!.month;
       final dayDiff = today.day - birthDate!.day;
 
-      return monthDiff >= 0 && dayDiff >= 0 ? yearDiff : yearDiff - 1;
+      return monthDiff > 0 || (monthDiff == 0 && dayDiff >= 0) ? yearDiff : yearDiff - 1;
     }
     return null;
   }
