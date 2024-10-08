@@ -68,7 +68,8 @@ class LeagueOverview extends ConsumerWidget {
           label: localizations.league,
           details: '${data.fullname}, ${data.startDate.year}',
           actions: [
-            OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.league)
+            ConditionalOrganizationImportAction(
+                id: id, organization: data.organization!, importType: OrganizationImportType.league)
           ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),

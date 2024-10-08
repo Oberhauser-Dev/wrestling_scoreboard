@@ -464,6 +464,21 @@ class MockDataManager extends DataManager {
   }
 
   @override
+  Future<DateTime?> organizationLastImportUtcDateTime(int id) => throw UnimplementedError();
+
+  @override
+  Future<DateTime?> organizationLeagueLastImportUtcDateTime(int id) => throw UnimplementedError();
+
+  @override
+  Future<DateTime?> organizationTeamMatchLastImportUtcDateTime(int id) => throw UnimplementedError();
+
+  @override
+  Future<DateTime?> organizationCompetitionLastImportUtcDateTime(int id) => throw UnimplementedError();
+
+  @override
+  Future<DateTime?> organizationTeamLastImportUtcDateTime(int id) => throw UnimplementedError();
+
+  @override
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,
     Type? type,

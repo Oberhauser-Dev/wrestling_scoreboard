@@ -11,7 +11,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-class LeagueController extends OrganizationalController<League> {
+class LeagueController extends OrganizationalController<League> with ImportController {
   static final LeagueController _singleton = LeagueController._internal();
 
   factory LeagueController() {
@@ -48,14 +48,15 @@ class LeagueController extends OrganizationalController<League> {
     );
   }
 
-  Future<Response> import(Request request, User? user, String leagueId) async {
+  @override
+  Future<Response> import(Request request, User? user, String entityId) async {
     try {
       final bool obfuscate = user?.obfuscate ?? true;
-      final league = await LeagueController().getSingle(int.parse(leagueId), obfuscate: false);
+      final league = await LeagueController().getSingle(int.parse(entityId), obfuscate: false);
 
       final organizationId = league.organization?.id;
       if (organizationId == null) {
-        throw Exception('No organization found for league $leagueId.');
+        throw Exception('No organization found for league $entityId.');
       }
 
       final apiProvider = await OrganizationController().initApiProvider(request, organizationId);
@@ -99,6 +100,7 @@ class LeagueController extends OrganizationalController<League> {
         }
       });
 
+      updateLastImportUtcDateTime(entityId);
       return Response.ok('{"status": "success"}');
     } catch (err, stackTrace) {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');

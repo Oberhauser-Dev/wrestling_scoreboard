@@ -52,7 +52,8 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             label: localizations.team,
             details: data.name,
             actions: [
-              OrganizationImportAction(id: id, orgId: data.organization!.id!, importType: OrganizationImportType.team)
+              ConditionalOrganizationImportAction(
+                  id: id, organization: data.organization!, importType: OrganizationImportType.team)
             ],
             tabs: [
               Tab(child: HeadingText(localizations.info)),

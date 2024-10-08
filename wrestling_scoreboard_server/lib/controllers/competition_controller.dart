@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_controller.dart';
 import 'entity_controller.dart';
 
-class CompetitionController extends ShelfController<Competition> {
+class CompetitionController extends ShelfController<Competition> with ImportController {
   static final CompetitionController _singleton = CompetitionController._internal();
 
   factory CompetitionController() {
@@ -28,7 +28,9 @@ class CompetitionController extends ShelfController<Competition> {
     );
   }
 
-  Future<Response> import(Request request, User? user, String teamId) async {
+  @override
+  Future<Response> import(Request request, User? user, String entityId) async {
+    updateLastImportUtcDateTime(entityId);
     return Response.notFound('This operation is not supported yet!');
   }
 

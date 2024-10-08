@@ -55,6 +55,20 @@ Map<Type, psql.Type> typeDartToCodeMap = {
   // '_jsonb': psql.Type.jsonbArray,
 };
 
+mixin ImportController {
+  Map<int, DateTime> lastImportUtcDateTime = {};
+
+  Future<Response> requestLastImportUtcDateTime(Request request, User? user, String entityId) async {
+    return Response.ok(lastImportUtcDateTime[int.parse(entityId)]?.toIso8601String());
+  }
+
+  void updateLastImportUtcDateTime(String id) {
+    lastImportUtcDateTime[int.parse(id)] = DateTime.now().toUtc();
+  }
+
+  Future<Response> import(Request request, User? user, String entityId);
+}
+
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
   ShelfController({required super.tableName, super.primaryKeyName});
 

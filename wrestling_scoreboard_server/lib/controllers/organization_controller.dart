@@ -16,7 +16,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_config_controller.dart';
 import 'league_controller.dart';
 
-class OrganizationController extends ShelfController<Organization> {
+class OrganizationController extends ShelfController<Organization> with ImportController {
   static final OrganizationController _singleton = OrganizationController._internal();
 
   factory OrganizationController() {
@@ -79,12 +79,13 @@ class OrganizationController extends ShelfController<Organization> {
         authService: authService);
   }
 
-  Future<Response> import(Request request, User? user, String organizationId) async {
+  @override
+  Future<Response> import(Request request, User? user, String entityId) async {
     try {
       final bool obfuscate = user?.obfuscate ?? true;
-      final apiProvider = await initApiProvider(request, int.parse(organizationId));
+      final apiProvider = await initApiProvider(request, int.parse(entityId));
       if (apiProvider == null) {
-        throw Exception('No API provider selected for the organization $organizationId.');
+        throw Exception('No API provider selected for the organization $entityId.');
       }
       // apiProvider.isMock = true;
 
@@ -117,6 +118,7 @@ class OrganizationController extends ShelfController<Organization> {
         leagues = await LeagueController().getOrCreateManyOfOrg(leagues.toList(), obfuscate: obfuscate);
       });
 
+      updateLastImportUtcDateTime(entityId);
       return Response.ok('{"status": "success"}');
     } catch (err, stackTrace) {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');

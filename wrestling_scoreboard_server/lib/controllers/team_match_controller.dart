@@ -20,7 +20,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'bout_controller.dart';
 import 'entity_controller.dart';
 
-class TeamMatchController extends OrganizationalController<TeamMatch> {
+class TeamMatchController extends OrganizationalController<TeamMatch> with ImportController {
   static final TeamMatchController _singleton = TeamMatchController._internal();
 
   factory TeamMatchController() {
@@ -143,14 +143,15 @@ class TeamMatchController extends OrganizationalController<TeamMatch> {
     return {'comment': psql.Type.text};
   }
 
-  Future<Response> import(Request request, User? user, String teamMatchId) async {
+  @override
+  Future<Response> import(Request request, User? user, String entityId) async {
     try {
       final bool obfuscate = user?.obfuscate ?? true;
-      final teamMatch = await TeamMatchController().getSingle(int.parse(teamMatchId), obfuscate: false);
+      final teamMatch = await TeamMatchController().getSingle(int.parse(entityId), obfuscate: false);
 
       final organizationId = teamMatch.organization?.id;
       if (organizationId == null) {
-        throw Exception('No organization found for league $teamMatchId.');
+        throw Exception('No organization found for league $entityId.');
       }
 
       final apiProvider = await OrganizationController().initApiProvider(request, organizationId);
@@ -192,6 +193,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> {
         });
         index++;
       }
+      updateLastImportUtcDateTime(entityId);
       return Response.ok('{"status": "success"}');
     } catch (err, stackTrace) {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
