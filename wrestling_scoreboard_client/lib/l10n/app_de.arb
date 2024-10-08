@@ -24,6 +24,20 @@
   "apiProvider": "API-Anbieter",
   "importFromApiProvider": "Synchronisiere mit API-Anbieter",
   "warningImportFromApiProvider": "Diese Aktion importiert Objekte dieser Organisation und versucht diese zu integrieren. Bist du sicher, dass du fortfahren möchtest?",
+  "recommendFirstImportFromApiProvider": "Der letzte Import konnte nicht bestimmt werden. Möchtest du die Daten importieren?",
+  "recommendImportFromApiProvider": "Der letzte Import war am {date} um {time} Uhr. Möchtest du die Daten aktualisieren?",
+  "@recommendImportFromApiProvider": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMd"
+      },
+      "time": {
+        "type": "DateTime",
+        "format": "Hm"
+      }
+    }
+  },
   "reportProvider": "Report-Anbieter",
   "database": "Datenbank",
   "exportDatabase": "Datenbank exportieren",

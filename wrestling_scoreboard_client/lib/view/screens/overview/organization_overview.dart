@@ -72,7 +72,10 @@ class OrganizationOverview extends ConsumerWidget {
           dataObject: data,
           label: localizations.organization,
           details: data.name,
-          actions: [OrganizationImportAction(id: id, orgId: id, importType: OrganizationImportType.organization)],
+          actions: [
+            ConditionalOrganizationImportAction(
+                id: id, organization: data, importType: OrganizationImportType.organization),
+          ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),
             Tab(child: HeadingText(localizations.organizations)),

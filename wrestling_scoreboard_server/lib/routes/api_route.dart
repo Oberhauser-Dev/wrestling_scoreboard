@@ -75,6 +75,8 @@ class ApiRoute {
 
     final organizationController = OrganizationController();
     router.restrictedPostOne('/organization/<id|[0-9]+>/api/import', organizationController.import);
+    router.restrictedGetOne(
+        '/organization/<id|[0-9]+>/api/last_import', organizationController.requestLastImportUtcDateTime);
     router.restrictedPost('/organization', organizationController.postSingle);
     router.restrictedGet('/organizations', organizationController.requestMany);
     router.restrictedGetOne('/organization/<id|[0-9]+>', organizationController.requestSingle);
@@ -96,6 +98,7 @@ class ApiRoute {
 
     final leagueController = LeagueController();
     router.restrictedPostOne('/league/<id|[0-9]+>/api/import', leagueController.import);
+    router.restrictedGetOne('/league/<id|[0-9]+>/api/last_import', leagueController.requestLastImportUtcDateTime);
     router.restrictedPost('/league', leagueController.postSingle);
     router.restrictedGet('/leagues', leagueController.requestMany);
     router.restrictedGetOne('/league/<id|[0-9]+>', leagueController.requestSingle);
@@ -145,6 +148,7 @@ class ApiRoute {
 
     final teamController = TeamController();
     router.restrictedPostOne('/team/<id|[0-9]+>/api/import', teamController.import);
+    router.restrictedGetOne('/team/<id|[0-9]+>/api/last_import', teamController.requestLastImportUtcDateTime);
     router.restrictedPost('/team', teamController.postSingle);
     router.restrictedGet('/teams', teamController.requestMany);
     router.restrictedGetOne('/team/<id|[0-9]+>', teamController.requestSingle);
@@ -152,6 +156,7 @@ class ApiRoute {
 
     final matchController = TeamMatchController();
     router.restrictedPostOne('/team_match/<id|[0-9]+>/api/import', matchController.import);
+    router.restrictedGetOne('/team_match/<id|[0-9]+>/api/last_import', matchController.requestLastImportUtcDateTime);
     router.restrictedPost('/team_match', matchController.postSingle);
     router.restrictedGet('/team_matchs', matchController.requestMany);
     router.restrictedGet('/team_matches', matchController.requestMany);
@@ -167,6 +172,8 @@ class ApiRoute {
 
     final competitionController = CompetitionController();
     router.restrictedPostOne('/competition/<id|[0-9]+>/api/import', competitionController.import);
+    router.restrictedGetOne(
+        '/competition/<id|[0-9]+>/api/last_import', competitionController.requestLastImportUtcDateTime);
     router.restrictedPost('/competition', competitionController.postSingle);
     router.restrictedGet('/competitions', competitionController.requestMany);
     router.restrictedGetOne('/competition/<id|[0-9]+>', competitionController.requestSingle);

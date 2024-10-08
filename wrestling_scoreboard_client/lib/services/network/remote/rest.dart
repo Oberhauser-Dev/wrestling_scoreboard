@@ -47,7 +47,7 @@ class RestDataManager extends DataManager {
         Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri, headers: _headers);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode < 400) {
       return jsonDecode(response.body);
     } else {
       throw RestException('Failed to READ single ${T.toString()}', response: response);
@@ -67,7 +67,7 @@ class RestDataManager extends DataManager {
         Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri, headers: _headers);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode < 400) {
       final List<dynamic> json = jsonDecode(response.body);
       return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
     } else {
@@ -112,7 +112,7 @@ class RestDataManager extends DataManager {
   Future<String> exportDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/export');
     final response = await http.get(uri, headers: _headers);
-    if (response.statusCode == 200) {
+    if (response.statusCode < 400) {
       return response.body;
     } else {
       throw RestException('Failed to export the database', response: response);
@@ -123,7 +123,7 @@ class RestDataManager extends DataManager {
   Future<void> resetDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/reset');
     final response = await http.post(uri, headers: _headers);
-    if (response.statusCode != 200) {
+    if (response.statusCode >= 400) {
       throw RestException('Failed to reset the database', response: response);
     }
   }
@@ -132,7 +132,7 @@ class RestDataManager extends DataManager {
   Future<void> restoreDefaultDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/restore_default');
     final response = await http.post(uri, headers: _headers);
-    if (response.statusCode != 200) {
+    if (response.statusCode >= 400) {
       throw RestException('Failed to restore the default database', response: response);
     }
   }
@@ -141,7 +141,7 @@ class RestDataManager extends DataManager {
   Future<void> restoreDatabase(String sqlDump) async {
     final uri = Uri.parse('$_apiUrl/database/restore');
     final response = await http.post(uri, headers: _headers, body: sqlDump);
-    if (response.statusCode != 200) {
+    if (response.statusCode >= 400) {
       throw RestException('Failed to restore the database', response: response);
     }
   }
@@ -151,80 +151,65 @@ class RestDataManager extends DataManager {
     _webSocketManager = manager;
   }
 
-  @override
-  Future<void> organizationImport(int id, {AuthService? authService}) async {
+  Future<void> _import(int id, String table, {AuthService? authService}) async {
     String? body;
     if (authService != null) {
       if (authService is BasicAuthService) {
         body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
       }
     }
-    final uri = Uri.parse('$_apiUrl/organization/$id/api/import');
+    final uri = Uri.parse('$_apiUrl/$table/$id/api/import');
     final response = await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode != 200) {
-      throw RestException('Failed to import from organization $id', response: response);
+    if (response.statusCode >= 400) {
+      throw RestException('Failed to import from $table $id', response: response);
     }
   }
 
   @override
-  Future<void> organizationLeagueImport(int id, {AuthService? authService}) async {
-    String? body;
-    if (authService != null) {
-      if (authService is BasicAuthService) {
-        body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
-      }
-    }
-    final uri = Uri.parse('$_apiUrl/league/$id/api/import');
-    final response = await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode != 200) {
-      throw RestException('Failed to import from league $id', response: response);
+  Future<void> organizationImport(int id, {AuthService? authService}) =>
+      _import(id, 'organization', authService: authService);
+
+  @override
+  Future<void> organizationLeagueImport(int id, {AuthService? authService}) =>
+      _import(id, 'league', authService: authService);
+
+  @override
+  Future<void> organizationTeamMatchImport(int id, {AuthService? authService}) =>
+      _import(id, 'team_match', authService: authService);
+
+  @override
+  Future<void> organizationCompetitionImport(int id, {AuthService? authService}) =>
+      _import(id, 'competition', authService: authService);
+
+  @override
+  Future<void> organizationTeamImport(int id, {AuthService? authService}) =>
+      _import(id, 'team', authService: authService);
+
+  Future<DateTime?> _lastImportUtcDateTime(int id, String table) async {
+    final uri = Uri.parse('$_apiUrl/$table/$id/api/last_import');
+    final response = await http.get(uri, headers: _headers);
+
+    if (response.statusCode < 400) {
+      return DateTime.tryParse(response.body);
+    } else {
+      throw RestException('Failed to get the last import date time for $table $id', response: response);
     }
   }
 
   @override
-  Future<void> organizationTeamMatchImport(int id, {AuthService? authService}) async {
-    String? body;
-    if (authService != null) {
-      if (authService is BasicAuthService) {
-        body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
-      }
-    }
-    final uri = Uri.parse('$_apiUrl/team_match/$id/api/import');
-    final response = await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode != 200) {
-      throw RestException('Failed to import from team_match $id', response: response);
-    }
-  }
+  Future<DateTime?> organizationLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'organization');
 
   @override
-  Future<void> organizationCompetitionImport(int id, {AuthService? authService}) async {
-    String? body;
-    if (authService != null) {
-      if (authService is BasicAuthService) {
-        body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
-      }
-    }
-    final uri = Uri.parse('$_apiUrl/competition/$id/api/import');
-    final response = await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode != 200) {
-      throw RestException('Failed to import from competition $id', response: response);
-    }
-  }
+  Future<DateTime?> organizationLeagueLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'league');
 
   @override
-  Future<void> organizationTeamImport(int id, {AuthService? authService}) async {
-    String? body;
-    if (authService != null) {
-      if (authService is BasicAuthService) {
-        body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
-      }
-    }
-    final uri = Uri.parse('$_apiUrl/team/$id/api/import');
-    final response = await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode != 200) {
-      throw RestException('Failed to import from team $id', response: response);
-    }
-  }
+  Future<DateTime?> organizationTeamMatchLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'team_match');
+
+  @override
+  Future<DateTime?> organizationCompetitionLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'competition');
+
+  @override
+  Future<DateTime?> organizationTeamLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'team');
 
   @override
   Future<Map<String, List<DataObject>>> search({

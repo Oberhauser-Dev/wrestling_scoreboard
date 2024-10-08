@@ -1,11 +1,12 @@
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-class TeamController extends OrganizationalController<Team> {
+class TeamController extends OrganizationalController<Team> with ImportController {
   static final TeamController _singleton = TeamController._internal();
 
   factory TeamController() {
@@ -27,7 +28,9 @@ class TeamController extends OrganizationalController<Team> {
         isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
   }
 
-  Future<Response> import(Request request, User? user, String teamId) async {
+  @override
+  Future<Response> import(Request request, User? user, String entityId) async {
+    updateLastImportUtcDateTime(entityId);
     return Response.notFound('This operation is not supported yet!');
   }
 }
