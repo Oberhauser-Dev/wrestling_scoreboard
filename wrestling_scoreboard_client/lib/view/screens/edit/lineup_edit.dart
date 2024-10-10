@@ -27,7 +27,7 @@ class LineupEdit extends ConsumerStatefulWidget {
   final Membership? initialCoach;
   final List<Participation>? initialParticipations;
 
-  final Function()? onSubmitGenerate;
+  final Future<void> Function()? onSubmitGenerate;
 
   const LineupEdit({
     super.key,
@@ -81,7 +81,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
     }
   }
 
-  Future<void> handleSubmit(NavigatorState navigator, {void Function()? onSubmitGenerate}) async {
+  Future<void> handleSubmit(NavigatorState navigator, {Future<void> Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(
@@ -115,7 +115,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         }
         await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<Participation>(participation);
       });
-      if (onSubmitGenerate != null) onSubmitGenerate();
+      if (onSubmitGenerate != null) await onSubmitGenerate();
       navigator.pop();
     }
   }
@@ -138,8 +138,8 @@ class LineupEditState extends ConsumerState<LineupEdit> {
             getResult: () => true,
             child: Text(localizations.warningBoutGenerate),
           );
-          if (hasConfirmed == true) {
-            await handleSubmit(navigator, onSubmitGenerate: widget.onSubmitGenerate);
+          if (hasConfirmed == true && context.mounted) {
+            await catchAsync(context, () => handleSubmit(navigator, onSubmitGenerate: widget.onSubmitGenerate));
           }
         },
       ),
