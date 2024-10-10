@@ -327,8 +327,8 @@ class TeamMatchOverview extends ConsumerWidget {
             initialCoach: proposedLineup?.coach,
             initialLeader: proposedLineup?.leader,
             initialParticipations: proposedParticipations,
-            onSubmitGenerate: () {
-              dataManager.generateBouts<TeamMatch>(match, false);
+            onSubmitGenerate: () async {
+              await dataManager.generateBouts<TeamMatch>(match, false);
             },
           );
         },

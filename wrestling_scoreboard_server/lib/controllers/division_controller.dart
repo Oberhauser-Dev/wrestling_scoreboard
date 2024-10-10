@@ -29,7 +29,7 @@ class DivisionController extends OrganizationalController<Division> {
         SELECT wc.* 
         FROM weight_class as wc
         JOIN division_weight_class AS dwc ON dwc.weight_class_id = wc.id
-        WHERE dwc.league_id = @id ${filterBySeasonPartition ? 'AND dwc.season_partition = @season_partition' : ''}
+        WHERE dwc.division_id = @id ${filterBySeasonPartition ? 'AND dwc.season_partition = @season_partition' : ''}
         ORDER BY dwc.pos;''';
 
   Future<Response> requestWeightClasses(Request request, User? user, String id) async {
