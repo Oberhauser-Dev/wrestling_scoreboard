@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart';
 
 part 'authorization.freezed.dart';
 
@@ -61,5 +62,17 @@ class BearerAuthService with _$BearerAuthService implements AuthService {
     }
 
     return BearerAuthService(token: parts[1]);
+  }
+}
+
+class HttpException implements Exception {
+  String message;
+  Response? response;
+
+  HttpException(this.message, {this.response});
+
+  @override
+  String toString() {
+    return '$message\n${response?.reasonPhrase ?? response?.statusCode ?? ''}';
   }
 }

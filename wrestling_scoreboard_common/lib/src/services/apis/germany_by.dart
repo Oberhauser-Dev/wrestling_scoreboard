@@ -383,8 +383,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             try {
               return switch (result) {
                 'PS' => BoutResult.vpo, // Punktesieg
+                'PS1' => BoutResult.vpo, // Punktesieg, Verlierer hat Punkte
                 'SS' => BoutResult.vfa, // Schultersieg
                 'TÜ' => BoutResult.vsu, // Technische Überlegenheit
+                'TÜ1' => BoutResult.vsu, // Technische Überlegenheit, Verlierer hat Punkte
                 'ÜG' => BoutResult.dsq, // Übergewicht, TODO: wrongly mapped
                 'AS' => BoutResult.vin, // Aufgabesieg
                 'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit
@@ -398,8 +400,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               };
             } catch (e, st) {
               log.severe('Could not parse bout result $result', e, st);
+              rethrow;
             }
-            return null;
           }
 
           final classificationPointsHome = int.tryParse(boutJson['homeWrestlerPoints']);
@@ -498,7 +500,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               return parseActionStr(str);
             } catch (e, st) {
               log.severe('Could not parse action str $str', e, st);
-              return null;
+              rethrow;
             }
           }).nonNulls;
 
@@ -511,7 +513,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         return Map.fromEntries(boutActionMapEntries);
       } on Exception catch (e, st) {
         log.severe('Could not import bouts from bout list: $boutListJson', e, st);
-        return {};
+        rethrow;
       }
     }
     throw UnimplementedError();
@@ -559,9 +561,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (!isMock) {
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
-          if (response.statusCode != 200) {
-            throw Exception(
-                'Failed to get the saison list: ${response.reasonPhrase ?? response.statusCode.toString()}');
+          if (response.statusCode >= 400) {
+            throw HttpException('Failed to get the saison list', response: response);
           }
           body = response.body;
         } else {
@@ -594,9 +595,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (!isMock) {
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
-          if (response.statusCode != 200) {
-            throw Exception(
-                'Failed to get the saison list: ${response.reasonPhrase ?? response.statusCode.toString()}');
+          if (response.statusCode >= 400) {
+            throw HttpException('Failed to get the saison list', response: response);
           }
           body = response.body;
         } else {
@@ -631,9 +631,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (!isMock) {
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
-          if (response.statusCode != 200) {
-            throw Exception(
-                'Failed to get the liga list (seasonId: $seasonId): ${response.reasonPhrase ?? response.statusCode.toString()}');
+          if (response.statusCode >= 400) {
+            throw HttpException('Failed to get the liga list (seasonId: $seasonId)', response: response);
           }
           body = response.body;
         } else {
@@ -675,9 +674,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (!isMock) {
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
-          if (response.statusCode != 200) {
-            throw Exception(
-                'Failed to get the competition list (seasonId: $seasonId, ligaId: $ligaId, rid: $regionId): ${response.reasonPhrase ?? response.statusCode.toString()}');
+          if (response.statusCode >= 400) {
+            throw HttpException(
+                'Failed to get the competition list (seasonId: $seasonId, ligaId: $ligaId, rid: $regionId)',
+                response: response);
           }
           body = response.body;
         } else {
@@ -716,9 +716,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (!isMock) {
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
-          if (response.statusCode != 200) {
-            throw Exception(
-                'Failed to get the competition (seasonId: $seasonId, competitionId: $competitionId): ${response.reasonPhrase ?? response.statusCode.toString()}');
+          if (response.statusCode >= 400) {
+            throw HttpException('Failed to get the competition (seasonId: $seasonId, competitionId: $competitionId)',
+                response: response);
           }
           body = response.body;
         } else {
@@ -758,14 +758,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String? body;
         if (!isMock) {
-          if (authService == null) {
-            throw Exception('Failed to get the wrestler (passcode: $passCode): No credentials given.');
-          }
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
-          if (response.statusCode != 200) {
-            throw Exception(
-                'Failed to get the wrestler (passcode: $passCode): ${response.reasonPhrase ?? response.statusCode.toString()}');
+          if (response.statusCode >= 400) {
+            throw HttpException('Failed to get the wrestler (passcode: $passCode)', response: response);
           }
           body = response.body;
         } else {
