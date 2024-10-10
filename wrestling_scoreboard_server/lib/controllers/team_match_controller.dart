@@ -195,6 +195,8 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       }
       updateLastImportUtcDateTime(entityId);
       return Response.ok('{"status": "success"}');
+    } on HttpException catch (err, stackTrace) {
+      return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     } catch (err, stackTrace) {
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     }
