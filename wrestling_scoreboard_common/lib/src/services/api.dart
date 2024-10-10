@@ -1,4 +1,5 @@
 import '../../common.dart';
+import '../data/team_club_affiliation.dart';
 import 'apis/germany_by.dart';
 
 typedef GetSingleOfOrg = Future<T> Function<T extends Organizational>(String orgSyncId, {required int orgId});
@@ -52,11 +53,9 @@ abstract class WrestlingApi {
 
   Future<Iterable<DivisionWeightClass>> importDivisionWeightClasses({required Division division});
 
-  Future<Iterable<Club>> importClubs();
+  Future<Iterable<TeamClubAffiliation>> importTeamClubAffiliations();
 
   Future<Iterable<Membership>> importMemberships({required Club club});
-
-  Future<Iterable<Team>> importTeams({required Club club});
 
   Future<Iterable<League>> importLeagues({required Division division});
 

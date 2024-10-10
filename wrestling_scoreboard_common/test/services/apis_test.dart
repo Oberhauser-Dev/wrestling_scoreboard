@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:country/country.dart';
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -73,22 +72,28 @@ void main() {
     ),
   );
 
+  final testTeamUntergriesbach =
+      Team(name: 'SV Untergriesbach', organization: organizationNRW, orgSyncId: 'SV Untergriesbach');
+
   final testLineupUntergriesbach = Lineup(
-    team: Team(
-        name: 'SV Untergriesbach',
-        club: testClubUntergriesbach,
-        organization: organizationNRW,
-        orgSyncId: 'SV Untergriesbach'),
+    team: testTeamUntergriesbach,
   );
 
+  final testTeamClubAffiliationUntergriesbach =
+      TeamClubAffiliation(team: testTeamUntergriesbach, club: testClubUntergriesbach);
+
+  final testTeamBerchtesgaden = Team(
+    orgSyncId: 'TSV Berchtesgaden',
+    organization: organizationNRW,
+    name: 'TSV Berchtesgaden',
+    description: null,
+  );
+
+  final testTeamClubAffiliationBerchtesgaden =
+      TeamClubAffiliation(team: testTeamBerchtesgaden, club: testClubBerchtesgaden);
+
   final testLineupBerchtesgaden = Lineup(
-    team: Team(
-      orgSyncId: 'TSV Berchtesgaden',
-      organization: organizationNRW,
-      name: 'TSV Berchtesgaden',
-      club: testClubBerchtesgaden,
-      description: null,
-    ),
+    team: testTeamBerchtesgaden,
     leader: null,
     coach: null,
   );
@@ -120,17 +125,11 @@ void main() {
       getSingleOfOrg: <T extends Organizational>(String orgSyncId, {required int orgId}) async {
         switch (T) {
           case const (Club):
-            return (await wrestlingApi.importClubs()).singleWhere((club) => club.orgSyncId == orgSyncId) as T;
+            return (await wrestlingApi.importTeamClubAffiliations())
+                .singleWhere((tca) => tca.club.orgSyncId == orgSyncId) as T;
           case const (Team):
-            final clubs = await wrestlingApi.importClubs();
-            for (final club in clubs) {
-              final teams = await wrestlingApi.importTeams(club: club);
-              final team = teams.singleWhereOrNull((t) => t.orgSyncId == orgSyncId);
-              if (team != null) {
-                return team as T;
-              }
-            }
-            throw 'Type $T with orgSyncId $orgSyncId not found';
+            return (await wrestlingApi.importTeamClubAffiliations())
+                .singleWhere((tca) => tca.team.orgSyncId == orgSyncId) as T;
           case const (DivisionWeightClass):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
             final weightClasses = (await Future.wait(
@@ -402,8 +401,25 @@ void main() {
         ]);
       });
 
-      test('Clubs', () async {
-        final clubs = await wrestlingApi.importClubs();
+      test('Team Club Affiliations', () async {
+        final clubs = await wrestlingApi.importTeamClubAffiliations();
+        // TODO remove all clubs except the ones that are used
+        final teams = [          Team(
+            name: 'TV Geiselhöring',
+            club: testClubGeiselhoering,
+            orgSyncId: 'TV Geiselhöring',
+            organization: organizationNRW),
+          Team(
+              name: 'S - TV Geiselhöring',
+              club: testClubGeiselhoering,
+              orgSyncId: 'S - TV Geiselhöring',
+              organization: organizationNRW),
+          Team(
+              name: 'TV Geiselhöring II',
+              club: testClubGeiselhoering,
+              orgSyncId: 'TV Geiselhöring II',
+              organization: organizationNRW),
+        ];
         expect(clubs, [
           Club(name: 'RG Willmering', organization: organizationNRW, orgSyncId: '30525', no: '30525'),
           Club(name: 'ASV Cham', organization: organizationNRW, orgSyncId: '30074', no: '30074'),
@@ -479,27 +495,6 @@ void main() {
         expect(memberships, {testMembership});
       });
 
-      test('Teams', () async {
-        final teams = await wrestlingApi.importTeams(club: testClubGeiselhoering);
-        expect(teams, [
-          Team(
-              name: 'TV Geiselhöring',
-              club: testClubGeiselhoering,
-              orgSyncId: 'TV Geiselhöring',
-              organization: organizationNRW),
-          Team(
-              name: 'S - TV Geiselhöring',
-              club: testClubGeiselhoering,
-              orgSyncId: 'S - TV Geiselhöring',
-              organization: organizationNRW),
-          Team(
-              name: 'TV Geiselhöring II',
-              club: testClubGeiselhoering,
-              orgSyncId: 'TV Geiselhöring II',
-              organization: organizationNRW),
-        ]);
-      });
-
       test('TeamMatches', () async {
         final teamMatches = await wrestlingApi.importTeamMatches(league: testBayerligaSuedLeague);
         expect(teamMatches, [
@@ -514,7 +509,6 @@ void main() {
                       orgSyncId: 'TSC Mering',
                       organization: organizationNRW,
                       name: 'TSC Mering',
-                      club: Club(orgSyncId: '70434', organization: organizationNRW, name: 'TSC Mering', no: '70434'),
                       description: null),
                   leader: null,
                   coach: null),

@@ -144,36 +144,59 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }
 
   @override
-  Future<Iterable<Club>> importClubs() async {
+  Future<Iterable<TeamClubAffiliation>> importTeamClubAffiliations() async {
     final clubListJson = await _getClubList();
-    if (clubListJson.isEmpty) return <Club>{};
+    if (clubListJson.isEmpty) return <TeamClubAffiliation>{};
 
-    final clubs = clubListJson.map((json) {
-      String? clubName = json['clubName'];
-      String? clubId = json['clubId'];
-      if (clubName == null || clubId == null) return null;
+    final teamClubAffiliations = <TeamClubAffiliation>[];
+    for (var clubJson in clubListJson) {
+      String? clubName = clubJson['clubName'];
+      String? clubId = clubJson['clubId'];
+      if (clubName == null || clubId == null) continue;
       if (clubName != clubName.trim()) {
         clubName = clubName.trim();
         log.warning('Club with club name "$clubName" was trimmed');
       }
-      return Club(
+
+      final club = Club(
         name: clubName,
         no: clubId,
         orgSyncId: clubId,
         organization: organization,
       );
-    });
-    return clubs.nonNulls.toSet();
+
+      final teamListJson = (clubJson['teamList'] as Map<String, dynamic>?)?.values;
+      if (teamListJson == null || teamListJson.isEmpty) continue;
+
+      for (final teamJson in teamListJson) {
+        String? teamName = teamJson['teamName'];
+        String? teamId = teamJson['teamId'];
+        if (teamName == null || teamId == null) continue;
+        if (teamName != teamName.trim()) {
+          teamName = teamName.trim();
+          log.warning('Team with team name "$teamName" was trimmed');
+        }
+        final team = Team(
+          name: teamName,
+          orgSyncId: teamName,
+          organization: organization,
+        );
+        teamClubAffiliations.add(TeamClubAffiliation(team: team, club: club));
+      }
+    }
+    return teamClubAffiliations.nonNulls.toSet();
   }
 
   @override
   Future<Iterable<Membership>> importMemberships({required Club club}) async {
     final divisions = await importDivisions(minDate: DateTime.utc(MockableDateTime.now().year - 1));
     final leagues = (await Future.wait(divisions.map((e) => importLeagues(division: e)))).expand((element) => element);
+    final teamClubAffiliations = await importTeamClubAffiliations();
     final teamMatches = (await Future.wait(leagues.map((e) => importTeamMatches(league: e))))
         .expand((element) => element)
         .where((teamMatch) {
-      return teamMatch.home.team.club == club || teamMatch.guest.team.club == club;
+      return teamClubAffiliations
+          .any((tca) => tca.team.orgSyncId == teamMatch.home.team.orgSyncId && tca.club.orgSyncId == club.orgSyncId);
     });
     final memberships = (await Future.wait(
       teamMatches.map((teamMatch) async {
@@ -218,35 +241,6 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             .singleWhereOrNull((element) => element.unofficialNames.contains(wrestlerJson['nationality'])),
       )),
     );
-  }
-
-  @override
-  Future<Iterable<Team>> importTeams({required Club club}) async {
-    final clubListJson = await _getClubList();
-    if (clubListJson.isEmpty) return <Team>{};
-
-    final clubJson = clubListJson.singleWhereOrNull((clubJson) => clubJson['clubId'] == club.orgSyncId);
-    if (clubJson == null) return <Team>{};
-
-    final teamListJson = (clubJson['teamList'] as Map<String, dynamic>?)?.values;
-    if (teamListJson == null) return <Team>{};
-
-    final teams = teamListJson.map((json) {
-      String? teamName = json['teamName'];
-      String? teamId = json['teamId'];
-      if (teamName == null || teamId == null) return null;
-      if (teamName != teamName.trim()) {
-        teamName = teamName.trim();
-        log.warning('Team with team name "$teamName" was trimmed');
-      }
-      return Team(
-        name: teamName,
-        orgSyncId: teamName,
-        organization: organization,
-        club: club,
-      );
-    });
-    return teams.nonNulls.toSet();
   }
 
   @override
