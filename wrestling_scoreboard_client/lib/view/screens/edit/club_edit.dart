@@ -9,8 +9,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class ClubEdit extends ConsumerStatefulWidget {
   final Club? club;
   final Organization? initialOrganization;
+  final Future<void> Function(Club club)? onCreated;
 
-  const ClubEdit({this.club, this.initialOrganization, super.key});
+  const ClubEdit({this.club, this.initialOrganization, this.onCreated, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => ClubEditState();
@@ -98,13 +99,17 @@ class ClubEditState extends ConsumerState<ClubEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Club(
+      Club club = Club(
         id: widget.club?.id,
         orgSyncId: widget.club?.orgSyncId,
         name: _name!,
         no: _no,
         organization: _organization!,
-      ));
+      );
+      club = club.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(club));
+      if (widget.onCreated != null) {
+        await widget.onCreated!(club);
+      }
       navigator.pop();
     }
   }

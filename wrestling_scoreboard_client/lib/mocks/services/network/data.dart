@@ -50,24 +50,25 @@ final _leagueNational = League(
 Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers', organization: _organization);
 Club _guestClub = const Club(id: 2, name: 'Quahog Hunters', organization: _organization);
 
-Team _homeTeam = Team(
+Team _homeTeam = const Team(
   id: 1,
   name: 'Springfield Wrestlers',
-  club: _homeClub,
   description: '1. Team Men',
 );
-Team _homeTeamJuniors = Team(
+Team _homeTeamJuniors = const Team(
   id: 2,
   name: 'Springfield Wrestlers Jn',
-  club: _homeClub,
   description: 'Juniors',
 );
-Team _guestTeam = Team(
+Team _guestTeam = const Team(
   id: 3,
   name: 'Quahog Hunters II',
-  club: _guestClub,
   description: '2. Team Men',
 );
+
+TeamClubAffiliation _homeTeamAffiliation = TeamClubAffiliation(team: _homeTeam, club: _homeClub);
+TeamClubAffiliation _homeTeamJuniorsAffiliation = TeamClubAffiliation(team: _homeTeamJuniors, club: _homeClub);
+TeamClubAffiliation _guestTeamAffiliation = TeamClubAffiliation(team: _guestTeam, club: _guestClub);
 
 // Teams per League
 LeagueTeamParticipation _htMenRPW = LeagueTeamParticipation(id: 1, league: _leagueMenRPW, team: _homeTeam);
@@ -121,6 +122,11 @@ final List<Participation> _participations = [];
 final List<ParticipantState> _participantStates = []; // TODO fill
 final List<Person> _persons = []; // TODO fill
 final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
+final List<TeamClubAffiliation> _teamClubAffiliations = [
+  _homeTeamAffiliation,
+  _homeTeamJuniorsAffiliation,
+  _guestTeamAffiliation
+];
 final List<TeamMatch> _teamMatches = [initMenRPWMatch(), initJnRPWMatch()];
 final List<TeamMatchBout> _teamMatchBouts = [];
 final List<CompetitionBout> _competitionBouts = [];
@@ -231,8 +237,10 @@ List<Person> getPersons() => _persons;
 
 List<Team> getTeams() => _teams;
 
+List<TeamClubAffiliation> getTeamClubAffiliations() => _teamClubAffiliations;
+
 List<Team> getTeamsOfClub(Club club) {
-  return getTeams().where((element) => element.club == club).toList();
+  return getTeamClubAffiliations().where((element) => element.club == club).map((tca) => tca.team).toList();
 }
 
 List<Team> getTeamsOfLeague(League league) {

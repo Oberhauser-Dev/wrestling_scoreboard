@@ -261,11 +261,12 @@ class MockDataManager extends DataManager {
     } else if (single is ParticipantState) {
     } else if (single is Person) {
     } else if (single is Team) {
-      getManyStreamController<Team>(filterType: Club)?.add(ManyDataObject(
-        data: getTeamsOfClub(single.club),
-        filterType: Club,
-        filterId: single.club.id,
-      ));
+    } else if (single is TeamClubAffiliation) {
+      // getManyStreamController<Team>(filterType: Club)?.add(ManyDataObject(
+      //   data: getTeamsOfClub(single.club),
+      //   filterType: Club,
+      //   filterId: single.club.id,
+      // ));
       // if (single.league != null) {
       //   getManyStreamController<Team>(filterType: League)?.add(ManyDataObject(
       //     data: getTeamsOfLeague(single.league!),

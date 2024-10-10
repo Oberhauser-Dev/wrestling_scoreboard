@@ -96,12 +96,6 @@ class LineupEditState extends ConsumerState<LineupEdit> {
       await Future.forEach(_createOrUpdateParticipations, (Participation participation) async {
         // Create missing membership and person, if not present in database yet. This means, that the data was fetched from an API provider.
         if (participation.membership.id == null) {
-          if (participation.membership.club.id == null) {
-            // TODO: Add club of current lineup team, if club does not exist. This should not occur as soon all clubs can be imported via API.
-            participation =
-                participation.copyWith(membership: participation.membership.copyWith(club: widget.lineup.team.club));
-          }
-
           if (participation.membership.person.id == null) {
             final personId = await (await ref.read(dataManagerNotifierProvider))
                 .createOrUpdateSingle<Person>(participation.membership.person);
@@ -146,9 +140,18 @@ class LineupEditState extends ConsumerState<LineupEdit> {
     ];
   }
 
-  Future<Iterable<Membership>> _getOrCreateMemberships() async {
-    _memberships ??= await ref.watch(
-        manyDataStreamProvider<Membership, Club>(ManyProviderData(filterObject: widget.lineup.team.club)).future);
+  Future<Iterable<Membership>> _getMemberships() async {
+    final clubs = await ref.read(manyDataStreamProvider<Club, Team>(
+      ManyProviderData<Club, Team>(filterObject: widget.lineup.team),
+    ).future);
+
+    final clubMemeberships = await Future.wait(clubs.map((club) async {
+      return await ref.read(manyDataStreamProvider<Membership, Club>(
+        ManyProviderData<Membership, Club>(filterObject: club),
+      ).future);
+    }));
+
+    _memberships ??= clubMemeberships.expand((membership) => membership);
     return _memberships!;
   }
 
@@ -168,7 +171,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
           ListTile(
             title: _MembershipDropdown(
               label: localizations.leader,
-              getOrSetMemberships: _getOrCreateMemberships,
+              getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
               selectedItem: _leader,
               onSave: (Membership? value) => setState(() {
@@ -179,7 +182,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
           ListTile(
             title: _MembershipDropdown(
               label: localizations.coach,
-              getOrSetMemberships: _getOrCreateMemberships,
+              getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
               selectedItem: _coach,
               onSave: (Membership? value) => setState(() {
@@ -189,7 +192,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
           ),
           ..._participations.entries.map((mapEntry) {
             return ParticipationEditTile(
-              getOrSetMemberships: _getOrCreateMemberships,
+              getOrSetMemberships: _getMemberships,
               lineup: widget.lineup,
               participation: mapEntry.value,
               weightClass: mapEntry.key,

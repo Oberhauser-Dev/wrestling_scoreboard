@@ -52,11 +52,9 @@ abstract class WrestlingApi {
 
   Future<Iterable<DivisionWeightClass>> importDivisionWeightClasses({required Division division});
 
-  Future<Iterable<Club>> importClubs();
+  Future<Iterable<TeamClubAffiliation>> importTeamClubAffiliations();
 
   Future<Iterable<Membership>> importMemberships({required Club club});
-
-  Future<Iterable<Team>> importTeams({required Club club});
 
   Future<Iterable<League>> importLeagues({required Division division});
 

@@ -1,6 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
@@ -26,6 +27,19 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
     final bool obfuscate = user?.obfuscate ?? true;
     return TeamMatchController().handleRequestManyFromQuery(
         isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
+  }
+
+  static const clubsQuery = '''
+        SELECT c.*
+        FROM club AS c
+        JOIN team_club_affiliation AS tca ON c.id = tca.club_id
+        WHERE tca.team_id = @id
+        ORDER BY c.name;''';
+
+  Future<Response> requestClubs(Request request, User? user, String id) async {
+    final bool obfuscate = user?.obfuscate ?? true;
+    return ClubController().handleRequestManyFromQuery(
+        isRaw: request.isRaw, sqlQuery: clubsQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
   }
 
   @override

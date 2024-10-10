@@ -1,9 +1,9 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
 
+import '../controllers/auth_controller.dart';
 import '../controllers/bout_action_controller.dart';
 import '../controllers/bout_config_controller.dart';
 import '../controllers/bout_controller.dart';
@@ -22,6 +22,7 @@ import '../controllers/participant_state_controller.dart';
 import '../controllers/participation_controller.dart';
 import '../controllers/person_controller.dart';
 import '../controllers/search_controller.dart';
+import '../controllers/team_club_affiliation_controller.dart';
 import '../controllers/team_controller.dart';
 import '../controllers/team_match_bout_controller.dart';
 import '../controllers/team_match_controller.dart';
@@ -153,6 +154,12 @@ class ApiRoute {
     router.restrictedGet('/teams', teamController.requestMany);
     router.restrictedGetOne('/team/<id|[0-9]+>', teamController.requestSingle);
     router.restrictedGetOne('/team/<id|[0-9]+>/team_matchs', teamController.requestTeamMatches);
+    router.restrictedGetOne('/team/<id|[0-9]+>/clubs', teamController.requestClubs);
+
+    final teamClubAffiliationController = TeamClubAffiliationController();
+    router.restrictedPost('/team_club_affiliation', teamClubAffiliationController.postSingle);
+    router.restrictedGet('/team_club_affiliations', teamClubAffiliationController.requestMany);
+    router.restrictedGetOne('/team_club_affiliation/<id|[0-9]+>', teamClubAffiliationController.requestSingle);
 
     final matchController = TeamMatchController();
     router.restrictedPostOne('/team_match/<id|[0-9]+>/api/import', matchController.import);
