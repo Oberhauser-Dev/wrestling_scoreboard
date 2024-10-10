@@ -15,6 +15,7 @@ export 'data/participant_state.dart';
 export 'data/participation.dart';
 export 'data/person.dart';
 export 'data/team.dart';
+export 'data/team_club_affiliation.dart';
 export 'data/team_match/division.dart';
 export 'data/team_match/division_weight_class.dart';
 export 'data/team_match/league.dart';

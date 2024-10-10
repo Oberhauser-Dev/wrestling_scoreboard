@@ -56,6 +56,8 @@ abstract class DataObject {
         return SecuredUser.fromJson(json) as T;
       case const (Team):
         return Team.fromJson(json) as T;
+      case const (TeamClubAffiliation):
+        return TeamClubAffiliation.fromJson(json) as T;
       case const (TeamMatch):
         return TeamMatch.fromJson(json) as T;
       case const (TeamMatchBout):
@@ -109,6 +111,8 @@ abstract class DataObject {
         return (await SecuredUser.fromRaw(raw, getSingle)) as T;
       case const (Team):
         return (await Team.fromRaw(raw, getSingle)) as T;
+      case const (TeamClubAffiliation):
+        return (await TeamClubAffiliation.fromRaw(raw, getSingle)) as T;
       case const (TeamMatch):
         return (await TeamMatch.fromRaw(raw, getSingle)) as T;
       case const (TeamMatchBout):

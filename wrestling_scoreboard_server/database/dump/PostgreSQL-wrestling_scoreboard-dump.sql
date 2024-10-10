@@ -866,13 +866,47 @@ CREATE TABLE public.team (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
     description character varying(255),
-    club_id integer NOT NULL,
     org_sync_id character varying(127),
     organization_id integer
 );
 
 
 ALTER TABLE public.team OWNER TO wrestling;
+
+--
+-- Name: team_club_affiliation; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.team_club_affiliation (
+    id integer NOT NULL,
+    team_id integer NOT NULL,
+    club_id integer NOT NULL
+);
+
+
+ALTER TABLE public.team_club_affiliation OWNER TO wrestling;
+
+--
+-- Name: team_club_affiliation_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.team_club_affiliation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.team_club_affiliation_id_seq OWNER TO wrestling;
+
+--
+-- Name: team_club_affiliation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.team_club_affiliation_id_seq OWNED BY public.team_club_affiliation.id;
+
 
 --
 -- Name: team_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
@@ -1196,6 +1230,13 @@ ALTER TABLE ONLY public.team ALTER COLUMN id SET DEFAULT nextval('public.team_id
 
 
 --
+-- Name: team_club_affiliation id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_club_affiliation ALTER COLUMN id SET DEFAULT nextval('public.team_club_affiliation_id_seq'::regclass);
+
+
+--
 -- Name: team_match id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1415,7 +1456,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.2
+0.2.0-pre.3
 \.
 
 
@@ -1543,10 +1584,21 @@ COPY public.secured_user (id, username, password_hash, email, person_id, salt, c
 -- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team (id, name, description, club_id, org_sync_id, organization_id) FROM stdin;
-3	Quahog Hunters II	2. Team Men	1	\N	1
-2	Springfield Wrestlers Jn	Juniors	2	\N	1
-1	Springfield Wrestlers	1. Team Men	2	\N	1
+COPY public.team (id, name, description, org_sync_id, organization_id) FROM stdin;
+3	Quahog Hunters II	2. Team Men	\N	1
+2	Springfield Wrestlers Jn	Juniors	\N	1
+1	Springfield Wrestlers	1. Team Men	\N	1
+\.
+
+
+--
+-- Data for Name: team_club_affiliation; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.team_club_affiliation (id, team_id, club_id) FROM stdin;
+1	3	1
+2	2	2
+3	1	2
 \.
 
 
@@ -1749,6 +1801,13 @@ SELECT pg_catalog.setval('public.person_id_seq', 23, true);
 
 
 --
+-- Name: team_club_affiliation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.team_club_affiliation_id_seq', 3, true);
+
+
+--
 -- Name: team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -1940,6 +1999,22 @@ ALTER TABLE ONLY public.participation
 
 ALTER TABLE ONLY public.person
     ADD CONSTRAINT person_pk PRIMARY KEY (id);
+
+
+--
+-- Name: team_club_affiliation team_club_affiliation_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_club_affiliation
+    ADD CONSTRAINT team_club_affiliation_pk PRIMARY KEY (id);
+
+
+--
+-- Name: team_club_affiliation team_club_affiliation_pk_2; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_club_affiliation
+    ADD CONSTRAINT team_club_affiliation_pk_2 UNIQUE (team_id, club_id);
 
 
 --
@@ -2290,11 +2365,19 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: team team_club_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_club_affiliation team_club_affiliation_club_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.team
-    ADD CONSTRAINT team_club_id_fk FOREIGN KEY (club_id) REFERENCES public.club(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.team_club_affiliation
+    ADD CONSTRAINT team_club_affiliation_club_id_fk FOREIGN KEY (club_id) REFERENCES public.club(id);
+
+
+--
+-- Name: team_club_affiliation team_club_affiliation_team_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_club_affiliation
+    ADD CONSTRAINT team_club_affiliation_team_id_fk FOREIGN KEY (team_id) REFERENCES public.team(id);
 
 
 --

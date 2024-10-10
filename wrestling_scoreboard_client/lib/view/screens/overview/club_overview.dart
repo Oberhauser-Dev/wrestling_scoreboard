@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_club_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
@@ -32,47 +33,75 @@ class ClubOverview extends ConsumerWidget {
     return SingleConsumer<Club>(
       id: id,
       initialData: club,
-      builder: (context, data) {
+      builder: (context, club) {
         final description = InfoWidget(
-          obj: data,
+          obj: club,
           editPage: ClubEdit(
-            club: data,
+            club: club,
           ),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Club>(data),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Club>(club),
           classLocale: localizations.club,
           children: [
             ContentItem(
-              title: data.no ?? '-',
+              title: club.no ?? '-',
               subtitle: localizations.clubNumber,
               icon: Icons.tag,
             )
           ],
         );
         return OverviewScaffold<Club>(
-          dataObject: data,
+          dataObject: club,
           label: localizations.club,
-          details: data.name,
+          details: club.name,
           tabs: [
             Tab(child: HeadingText(localizations.info)),
             Tab(child: HeadingText(localizations.teams)),
             Tab(child: HeadingText(localizations.memberships)),
           ],
-          // TODO
           body: TabGroup(items: [
             description,
             ManyConsumer<Team, Club>(
-              filterObject: data,
+              filterObject: club,
               builder: (BuildContext context, List<Team> teams) {
                 return GroupedList(
                   header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TeamEdit(
-                            initialClub: data,
+                    trailing: MenuAnchor(
+                      menuChildren: [
+                        MenuItemButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TeamEdit(
+                                initialOrganization: club.organization,
+                                onCreated: (team) async {
+                                  await (await ref.read(dataManagerNotifierProvider))
+                                      .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                                },
+                              ),
+                            ),
                           ),
+                          child: Text(localizations.create),
                         ),
+                        MenuItemButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TeamClubAffiliationEdit(
+                                initialClub: club,
+                              ),
+                            ),
+                          ),
+                          child: Text(localizations.addExisting),
+                        ),
+                      ],
+                      builder: (context, controller, child) => RestrictedAddButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
                       ),
                     ),
                   ),
@@ -87,7 +116,7 @@ class ClubOverview extends ConsumerWidget {
               },
             ),
             ManyConsumer<Membership, Club>(
-              filterObject: data,
+              filterObject: club,
               builder: (BuildContext context, List<Membership> memberships) {
                 return GroupedList(
                   header: HeadingItem(
@@ -96,7 +125,7 @@ class ClubOverview extends ConsumerWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => MembershipEdit(
-                            initialClub: data,
+                            initialClub: club,
                           ),
                         ),
                       ),

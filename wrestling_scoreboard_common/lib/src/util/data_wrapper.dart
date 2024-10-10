@@ -252,6 +252,7 @@ String getTableNameFromType(Type t) {
     const (Person) => 'person',
     const (SecuredUser) => 'secured_user',
     const (Team) => 'team',
+    const (TeamClubAffiliation) => 'team_club_affiliation',
     const (TeamMatch) => 'team_match',
     const (TeamMatchBout) => 'team_match_bout',
     const (User) => 'user',
@@ -279,6 +280,7 @@ Type getTypeFromTableName(String tableName) {
     'participant_state' => ParticipantState,
     'person' => Person,
     'team' => Team,
+    'team_club_affiliation' => TeamClubAffiliation,
     'team_match' => TeamMatch,
     'team_match_bout' => TeamMatchBout,
     'user' => User,
@@ -287,27 +289,28 @@ Type getTypeFromTableName(String tableName) {
   };
 }
 
-/// Hierarchically ordered data types (least to most dependent).
+/// Hierarchically ordered data types (most to least dependent on others).
 /// DO NOT CHANGE THE ORDER unless you know what you do!
 final dataTypes = [
   BoutAction,
-  ParticipantState,
   TeamMatchBout,
   Bout,
+  ParticipantState,
   Participation,
   TeamMatch,
   Competition,
   Lineup,
   LeagueTeamParticipation,
   League,
-  BoutConfig,
   Membership,
   Person,
+  TeamClubAffiliation,
   Team,
   Club,
   DivisionWeightClass,
   Division,
   WeightClass,
+  BoutConfig,
   Organization,
   SecuredUser,
   User,

@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_server/controllers/division_controller.dart
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -89,12 +90,17 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       }
       // apiProvider.isMock = true;
 
-      final clubs = await apiProvider.importClubs();
-      await Future.forEach(clubs, (club) async {
-        club = await ClubController().getOrCreateSingleOfOrg(club, obfuscate: obfuscate);
+      final teamClubAffiliations = await apiProvider.importTeamClubAffiliations();
+      await Future.forEach(teamClubAffiliations, (teamClubAffiliation) async {
+        final club = await ClubController().getOrCreateSingleOfOrg(teamClubAffiliation.club, obfuscate: obfuscate);
+        final team = await TeamController().getOrCreateSingleOfOrg(teamClubAffiliation.team, obfuscate: obfuscate);
+        teamClubAffiliation = teamClubAffiliation.copyWith(club: club, team: team);
 
-        final teams = await apiProvider.importTeams(club: club);
-        await TeamController().getOrCreateManyOfOrg(teams.toList(), obfuscate: obfuscate);
+        try {
+          await TeamClubAffiliationController().createSingle(TeamClubAffiliation(team: team, club: club));
+        } on InvalidParameterException catch (_) {
+          // Do not add team club affiliations multiple times.
+        }
       });
 
       final divisions = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));

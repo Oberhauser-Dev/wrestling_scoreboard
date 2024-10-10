@@ -24,8 +24,8 @@ void main() {
   );
   final clubA = Club(name: 'Club A', organization: organizationNRW);
   final clubB = Club(name: 'Club B', organization: organizationDRB);
-  final lineupA = Lineup(team: Team(name: 'Team A', club: clubA));
-  final lineupB = Lineup(team: Team(name: 'Team B', club: clubB));
+  final lineupA = Lineup(team: Team(name: 'Team A'));
+  final lineupB = Lineup(team: Team(name: 'Team B'));
   final teamMatch = TeamMatch(
     league: league,
     home: lineupA,

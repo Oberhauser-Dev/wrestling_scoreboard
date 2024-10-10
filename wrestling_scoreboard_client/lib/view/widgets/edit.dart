@@ -64,7 +64,7 @@ class CustomizableEditWidget extends StatelessWidget {
         ),
         title: Row(
           children: [
-            Text('${id == null ? localizations.add : localizations.edit} $typeLocalization'),
+            Text('${id == null ? localizations.create : localizations.edit} $typeLocalization'),
             if (id != null)
               Text(
                 ' #$id',

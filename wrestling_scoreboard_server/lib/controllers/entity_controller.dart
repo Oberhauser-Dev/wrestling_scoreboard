@@ -20,6 +20,7 @@ import 'package:wrestling_scoreboard_server/controllers/organization_controller.
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
@@ -213,6 +214,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return SecuredUserController();
       case const (Team):
         return TeamController();
+      case const (TeamClubAffiliation):
+        return TeamClubAffiliationController();
       case const (TeamMatch):
         return TeamMatchController();
       case const (TeamMatchBout):

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamEdit extends ConsumerStatefulWidget {
   final Team? team;
-  final Club? initialClub;
+  final Organization? initialOrganization;
+  final Future<void> Function(Team team)? onCreated;
 
-  const TeamEdit({this.team, this.initialClub, super.key});
+  const TeamEdit({this.team, this.initialOrganization, this.onCreated, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TeamEditState();
@@ -19,15 +19,12 @@ class TeamEdit extends ConsumerStatefulWidget {
 class TeamEditState extends ConsumerState<TeamEdit> {
   final _formKey = GlobalKey<FormState>();
 
-  Iterable<Club>? _availableClubs;
   String? _name;
   String? _description;
-  Club? _club;
 
   @override
   void initState() {
     super.initState();
-    _club = widget.team?.club ?? widget.initialClub;
   }
 
   @override
@@ -64,22 +61,6 @@ class TeamEditState extends ConsumerState<TeamEdit> {
           onSaved: (newValue) => _description = newValue,
         ),
       ),
-      ListTile(
-        title: SearchableDropdown<Club>(
-          icon: const Icon(Icons.foundation),
-          selectedItem: _club,
-          label: localizations.club,
-          context: context,
-          onSaved: (Club? value) => setState(() {
-            _club = value;
-          }),
-          itemAsString: (u) => u.name,
-          asyncItems: (String filter) async {
-            _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
-            return _availableClubs!.toList();
-          },
-        ),
-      ),
     ];
 
     return Form(
@@ -96,14 +77,17 @@ class TeamEditState extends ConsumerState<TeamEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Team(
+      Team team = Team(
         id: widget.team?.id,
         orgSyncId: widget.team?.orgSyncId,
-        organization: widget.team?.organization ?? widget.initialClub?.organization,
+        organization: widget.team?.organization ?? widget.initialOrganization,
         name: _name!,
         description: _description,
-        club: _club!,
-      ));
+      );
+      team = team.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(team));
+      if (widget.onCreated != null) {
+        await widget.onCreated!(team);
+      }
       navigator.pop();
     }
   }

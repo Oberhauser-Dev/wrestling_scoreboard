@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:country/country.dart';
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -50,6 +49,7 @@ void main() {
     orgSyncId: '2023_Bayernliga_Süd',
   );
 
+  final testClubMering = Club(name: 'TSC Mering', organization: organizationNRW, orgSyncId: '70434', no: '70434');
   final testClubGeiselhoering =
       Club(name: 'TV Geiselhöring', organization: organizationNRW, orgSyncId: '20178', no: '20178');
   final testClubUntergriesbach =
@@ -73,22 +73,30 @@ void main() {
     ),
   );
 
+  final testTeamMering = Team(orgSyncId: 'TSC Mering', organization: organizationNRW, name: 'TSC Mering');
+
+  final testTeamUntergriesbach =
+      Team(name: 'SV Untergriesbach', organization: organizationNRW, orgSyncId: 'SV Untergriesbach');
+
   final testLineupUntergriesbach = Lineup(
-    team: Team(
-        name: 'SV Untergriesbach',
-        club: testClubUntergriesbach,
-        organization: organizationNRW,
-        orgSyncId: 'SV Untergriesbach'),
+    team: testTeamUntergriesbach,
   );
 
+  final testTeamClubAffiliationUntergriesbach =
+      TeamClubAffiliation(team: testTeamUntergriesbach, club: testClubUntergriesbach);
+
+  final testTeamBerchtesgaden = Team(
+    orgSyncId: 'TSV Berchtesgaden',
+    organization: organizationNRW,
+    name: 'TSV Berchtesgaden',
+    description: null,
+  );
+
+  final testTeamClubAffiliationBerchtesgaden =
+      TeamClubAffiliation(team: testTeamBerchtesgaden, club: testClubBerchtesgaden);
+
   final testLineupBerchtesgaden = Lineup(
-    team: Team(
-      orgSyncId: 'TSV Berchtesgaden',
-      organization: organizationNRW,
-      name: 'TSV Berchtesgaden',
-      club: testClubBerchtesgaden,
-      description: null,
-    ),
+    team: testTeamBerchtesgaden,
     leader: null,
     coach: null,
   );
@@ -120,17 +128,13 @@ void main() {
       getSingleOfOrg: <T extends Organizational>(String orgSyncId, {required int orgId}) async {
         switch (T) {
           case const (Club):
-            return (await wrestlingApi.importClubs()).singleWhere((club) => club.orgSyncId == orgSyncId) as T;
+            return (await wrestlingApi.importTeamClubAffiliations())
+                .firstWhere((tca) => tca.club.orgSyncId == orgSyncId)
+                .club as T;
           case const (Team):
-            final clubs = await wrestlingApi.importClubs();
-            for (final club in clubs) {
-              final teams = await wrestlingApi.importTeams(club: club);
-              final team = teams.singleWhereOrNull((t) => t.orgSyncId == orgSyncId);
-              if (team != null) {
-                return team as T;
-              }
-            }
-            throw 'Type $T with orgSyncId $orgSyncId not found';
+            return (await wrestlingApi.importTeamClubAffiliations())
+                .firstWhere((tca) => tca.team.orgSyncId == orgSyncId)
+                .team as T;
           case const (DivisionWeightClass):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
             final weightClasses = (await Future.wait(
@@ -402,102 +406,67 @@ void main() {
         ]);
       });
 
-      test('Clubs', () async {
-        final clubs = await wrestlingApi.importClubs();
+      test('Team Club Affiliations', () async {
+        final clubs = await wrestlingApi.importTeamClubAffiliations();
+        final clubWillmering =
+            Club(name: 'RG Willmering', organization: organizationNRW, orgSyncId: '30525', no: '30525');
+        final clubCham = Club(name: 'ASV Cham', organization: organizationNRW, orgSyncId: '30074', no: '30074');
+        final teamWillmeringCham =
+            Team(name: 'WKG Willmering/Cham', orgSyncId: 'WKG Willmering/Cham', organization: organizationNRW);
+        final teamWillmeringChamS =
+            Team(name: 'S - WKG Willmering/Cham', orgSyncId: 'S - WKG Willmering/Cham', organization: organizationNRW);
+        final teamWillmeringCham2 =
+            Team(name: 'WKG Willmering/Cham II', orgSyncId: 'WKG Willmering/Cham II', organization: organizationNRW);
         expect(clubs, [
-          Club(name: 'RG Willmering', organization: organizationNRW, orgSyncId: '30525', no: '30525'),
-          Club(name: 'ASV Cham', organization: organizationNRW, orgSyncId: '30074', no: '30074'),
-          Club(name: 'TV Geiselhöring', organization: organizationNRW, orgSyncId: '20178', no: '20178'),
-          Club(name: 'TSV Westendorf', organization: organizationNRW, orgSyncId: '70824', no: '70824'),
-          Club(name: 'ASV Au-Hallertau', organization: organizationNRW, orgSyncId: '12173', no: '12173'),
-          Club(name: 'RSC Rehau', organization: organizationNRW, orgSyncId: '40666', no: '40666'),
-          Club(name: 'TV 1862 Unterdürrbach', organization: organizationNRW, orgSyncId: '60915', no: '60915'),
-          Club(name: 'ASV Hof', organization: organizationNRW, orgSyncId: '40352', no: '40352'),
-          Club(name: 'TSV 1860 Weißenburg', organization: organizationNRW, orgSyncId: '50680', no: '50680'),
-          Club(name: 'TSV Zirndorf', organization: organizationNRW, orgSyncId: '50020', no: '50020'),
-          Club(name: 'AC Lichtenfels', organization: organizationNRW, orgSyncId: '40467', no: '40467'),
-          Club(name: 'ASC Bindlach', organization: organizationNRW, orgSyncId: '41515', no: '41515'),
-          Club(name: 'SpVgg Freising', organization: organizationNRW, orgSyncId: '10339', no: '10339'),
-          Club(name: 'SC Oberölsbach', organization: organizationNRW, orgSyncId: '30505', no: '30505'),
-          Club(name: 'TV Erlangen', organization: organizationNRW, orgSyncId: '50132', no: '50132'),
-          Club(name: 'ASV Neumarkt/Opf.', organization: organizationNRW, orgSyncId: '30285', no: '30285'),
-          Club(name: 'TSC Mering', organization: organizationNRW, orgSyncId: '70434', no: '70434'),
-          Club(name: 'TV Traunstein', organization: organizationNRW, orgSyncId: '11564', no: '11564'),
-          Club(name: 'AC Bad Reichenhall', organization: organizationNRW, orgSyncId: '10095', no: '10095'),
-          Club(name: 'TSV Trostberg', organization: organizationNRW, orgSyncId: '11567', no: '11567'),
-          Club(name: 'SC Isaria Unterföhring', organization: organizationNRW, orgSyncId: '11592', no: '11592'),
-          Club(name: 'AC Penzberg', organization: organizationNRW, orgSyncId: '11270', no: '11270'),
-          Club(name: 'RSV Schonungen', organization: organizationNRW, orgSyncId: '61941', no: '61941'),
-          Club(name: 'SV Wacker Burghausen', organization: organizationNRW, orgSyncId: '10191', no: '10191'),
-          Club(name: 'SV Johannis Nürnberg', organization: organizationNRW, orgSyncId: '50495', no: '50495'),
-          Club(name: 'SV Siegfried Hallbergmoos', organization: organizationNRW, orgSyncId: '10862', no: '10862'),
-          Club(name: 'SV Mietraching', organization: organizationNRW, orgSyncId: '20371', no: '20371'),
-          Club(name: 'SC 04 Nürnberg', organization: organizationNRW, orgSyncId: '50359', no: '50359'),
-          Club(name: 'SC Anger', organization: organizationNRW, orgSyncId: '10047', no: '10047'),
-          Club(name: 'TSV Berchtesgaden', organization: organizationNRW, orgSyncId: '10142', no: '10142'),
-          Club(name: 'TSV Aichach', organization: organizationNRW, orgSyncId: '70008', no: '70008'),
-          Club(name: 'ESV München-Ost', organization: organizationNRW, orgSyncId: '10797', no: '10797'),
-          Club(name: 'AC Regensburg', organization: organizationNRW, orgSyncId: '30377', no: '30377'),
-          Club(name: 'TSV Burgebrach', organization: organizationNRW, orgSyncId: '40138', no: '40138'),
-          Club(name: 'WKG Marktleugast/Bamberg', organization: organizationNRW, orgSyncId: '40200', no: '40200'),
-          Club(name: 'ATSV Kelheim', organization: organizationNRW, orgSyncId: '20283', no: '20283'),
-          Club(name: 'TSV Sankt Wolfgang', organization: organizationNRW, orgSyncId: '11472', no: '11472'),
-          Club(name: 'RSC Marktleugast', organization: organizationNRW, orgSyncId: '40495', no: '40495'),
-          Club(name: 'TV Miesbach', organization: organizationNRW, orgSyncId: '10858', no: '10858'),
-          Club(name: 'TSV Kottern', organization: organizationNRW, orgSyncId: '70690', no: '70690'),
-          Club(name: 'TSG Augsburg', organization: organizationNRW, orgSyncId: '70043', no: '70043'),
-          Club(name: 'SV 29 Kempten', organization: organizationNRW, orgSyncId: '70415', no: '70415'),
-          Club(name: 'TSV Diedorf', organization: organizationNRW, orgSyncId: '70195', no: '70195'),
-          Club(name: 'TV Feldkirchen', organization: organizationNRW, orgSyncId: '10312', no: '10312'),
-          Club(name: 'SG Moosburg', organization: organizationNRW, orgSyncId: '10888', no: '10888'),
-          Club(name: 'RC Bergsteig Amberg', organization: organizationNRW, orgSyncId: '30016', no: '30016'),
-          Club(name: 'SV Untergriesbach', organization: organizationNRW, orgSyncId: '20696', no: '20696'),
-          Club(name: 'TBVfL Neustadt / Wildenheid', organization: organizationNRW, orgSyncId: '40584', no: '40584'),
-          Club(name: 'RCA Bayreuth', organization: organizationNRW, orgSyncId: '41716', no: '41716'),
-          Club(name: 'ASC Röthenbach', organization: organizationNRW, orgSyncId: '50539', no: '50539'),
-          Club(name: 'KSV Bamberg', organization: organizationNRW, orgSyncId: '40061', no: '40061'),
-          Club(name: 'TSV Feucht', organization: organizationNRW, orgSyncId: '50168', no: '50168'),
-          Club(name: 'TSV Cadolzburg', organization: organizationNRW, orgSyncId: '50082', no: '50082'),
-          Club(name: 'DJK Pfersee', organization: organizationNRW, orgSyncId: '71264', no: '71264'),
-          Club(name: 'TSV 1860 München', organization: organizationNRW, orgSyncId: '11016', no: '11016'),
-          Club(name: 'AC Wals', organization: organizationNRW, orgSyncId: 'e1', no: 'e1'),
-          Club(name: 'Olympic Salzburg', organization: organizationNRW, orgSyncId: 'e2', no: 'e2'),
-          Club(name: 'KG Vigaun/Abtenau', organization: organizationNRW, orgSyncId: 'e3', no: 'e3'),
-          Club(name: 'TSV Sulzberg e.V.', organization: organizationNRW, orgSyncId: '70748', no: '70748'),
-          Club(name: 'AVJC Zella-Mehlis', organization: organizationNRW, orgSyncId: '4', no: '4'),
-          Club(name: 'SVJk 03 Albrechts', organization: organizationNRW, orgSyncId: '5', no: '5'),
-          Club(name: 'AC Forchheim', organization: organizationNRW, orgSyncId: '40133', no: '40133'),
-          Club(name: 'KG Südthüringen', organization: organizationNRW, orgSyncId: 'e4', no: 'e4'),
-          Club(name: 'RC Bergsteig Amberg', organization: organizationNRW, orgSyncId: '31437', no: '31437'),
-          Club(name: 'KSV Hof', organization: organizationNRW, orgSyncId: '41901', no: '41901'),
-          Club(name: 'TSV Weilheim', organization: organizationNRW, orgSyncId: '11663', no: '11663'),
+          TeamClubAffiliation(team: teamWillmeringCham, club: clubWillmering),
+          TeamClubAffiliation(team: teamWillmeringCham2, club: clubWillmering),
+          TeamClubAffiliation(team: teamWillmeringChamS, club: clubWillmering),
+          TeamClubAffiliation(team: teamWillmeringCham, club: clubCham),
+          TeamClubAffiliation(team: teamWillmeringCham2, club: clubCham),
+          TeamClubAffiliation(team: teamWillmeringChamS, club: clubCham),
+          TeamClubAffiliation(
+              team: Team(name: 'TV Geiselhöring', orgSyncId: 'TV Geiselhöring', organization: organizationNRW),
+              club: testClubGeiselhoering),
+          TeamClubAffiliation(
+              team: Team(name: 'S - TV Geiselhöring', orgSyncId: 'S - TV Geiselhöring', organization: organizationNRW),
+              club: testClubGeiselhoering),
+          TeamClubAffiliation(
+              team: Team(name: 'TV Geiselhöring II', orgSyncId: 'TV Geiselhöring II', organization: organizationNRW),
+              club: testClubGeiselhoering),
+          TeamClubAffiliation(team: testTeamMering, club: testClubMering),
+          TeamClubAffiliation(
+              team: Team(name: 'S - TSC Mering', orgSyncId: 'S - TSC Mering', organization: organizationNRW),
+              club: testClubMering),
+          TeamClubAffiliation(
+              team: Team(name: 'TSC Mering II', orgSyncId: 'TSC Mering II', organization: organizationNRW),
+              club: testClubMering),
+          TeamClubAffiliation(
+              team: Team(name: 'S - TSC Mering II', orgSyncId: 'S - TSC Mering II', organization: organizationNRW),
+              club: testClubMering),
+          testTeamClubAffiliationBerchtesgaden,
+          TeamClubAffiliation(
+              team: Team(
+                  name: 'S - TSV Berchtesgaden', orgSyncId: 'S - TSV Berchtesgaden', organization: organizationNRW),
+              club: testClubBerchtesgaden),
+          TeamClubAffiliation(
+              team:
+                  Team(name: 'TSV Berchtesgaden II', orgSyncId: 'TSV Berchtesgaden II', organization: organizationNRW),
+              club: testClubBerchtesgaden),
+          TeamClubAffiliation(
+              team:
+                  Team(name: 'SV Untergriesbach II', orgSyncId: 'SV Untergriesbach II', organization: organizationNRW),
+              club: testClubUntergriesbach),
+          TeamClubAffiliation(
+              team: Team(
+                  name: 'S - SV Untergriesbach', orgSyncId: 'S - SV Untergriesbach', organization: organizationNRW),
+              club: testClubUntergriesbach),
+          testTeamClubAffiliationUntergriesbach,
         ]);
       });
 
       test('Memberships', () async {
         final memberships = await wrestlingApi.importMemberships(club: testClubUntergriesbach);
         expect(memberships, {testMembership});
-      });
-
-      test('Teams', () async {
-        final teams = await wrestlingApi.importTeams(club: testClubGeiselhoering);
-        expect(teams, [
-          Team(
-              name: 'TV Geiselhöring',
-              club: testClubGeiselhoering,
-              orgSyncId: 'TV Geiselhöring',
-              organization: organizationNRW),
-          Team(
-              name: 'S - TV Geiselhöring',
-              club: testClubGeiselhoering,
-              orgSyncId: 'S - TV Geiselhöring',
-              organization: organizationNRW),
-          Team(
-              name: 'TV Geiselhöring II',
-              club: testClubGeiselhoering,
-              orgSyncId: 'TV Geiselhöring II',
-              organization: organizationNRW),
-        ]);
       });
 
       test('TeamMatches', () async {
@@ -509,15 +478,7 @@ void main() {
               no: '029013c',
               organization: organizationNRW,
               home: testLineupBerchtesgaden,
-              guest: Lineup(
-                  team: Team(
-                      orgSyncId: 'TSC Mering',
-                      organization: organizationNRW,
-                      name: 'TSC Mering',
-                      club: Club(orgSyncId: '70434', organization: organizationNRW, name: 'TSC Mering', no: '70434'),
-                      description: null),
-                  leader: null,
-                  coach: null),
+              guest: Lineup(team: testTeamMering, leader: null, coach: null),
               league: testBayerligaSuedLeague,
               seasonPartition: 0,
               matChairman: null,

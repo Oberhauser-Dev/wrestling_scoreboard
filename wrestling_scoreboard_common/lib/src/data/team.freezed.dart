@@ -24,7 +24,6 @@ mixin _$Team {
   String? get orgSyncId => throw _privateConstructorUsedError;
   Organization? get organization => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  Club get club => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
 
   /// Serializes this Team to a JSON map.
@@ -40,10 +39,9 @@ mixin _$Team {
 abstract class $TeamCopyWith<$Res> {
   factory $TeamCopyWith(Team value, $Res Function(Team) then) = _$TeamCopyWithImpl<$Res, Team>;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, Club club, String? description});
+  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
 
   $OrganizationCopyWith<$Res>? get organization;
-  $ClubCopyWith<$Res> get club;
 }
 
 /// @nodoc
@@ -64,7 +62,6 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
     Object? orgSyncId = freezed,
     Object? organization = freezed,
     Object? name = null,
-    Object? club = null,
     Object? description = freezed,
   }) {
     return _then(_value.copyWith(
@@ -84,10 +81,6 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      club: null == club
-          ? _value.club
-          : club // ignore: cast_nullable_to_non_nullable
-              as Club,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -108,16 +101,6 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
       return _then(_value.copyWith(organization: value) as $Val);
     });
   }
-
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ClubCopyWith<$Res> get club {
-    return $ClubCopyWith<$Res>(_value.club, (value) {
-      return _then(_value.copyWith(club: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -125,12 +108,10 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
   factory _$$TeamImplCopyWith(_$TeamImpl value, $Res Function(_$TeamImpl) then) = __$$TeamImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, Club club, String? description});
+  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
-  @override
-  $ClubCopyWith<$Res> get club;
 }
 
 /// @nodoc
@@ -146,7 +127,6 @@ class __$$TeamImplCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res, _$TeamImpl
     Object? orgSyncId = freezed,
     Object? organization = freezed,
     Object? name = null,
-    Object? club = null,
     Object? description = freezed,
   }) {
     return _then(_$TeamImpl(
@@ -166,10 +146,6 @@ class __$$TeamImplCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res, _$TeamImpl
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      club: null == club
-          ? _value.club
-          : club // ignore: cast_nullable_to_non_nullable
-              as Club,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -181,9 +157,7 @@ class __$$TeamImplCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res, _$TeamImpl
 /// @nodoc
 @JsonSerializable()
 class _$TeamImpl extends _Team {
-  const _$TeamImpl(
-      {this.id, this.orgSyncId, this.organization, required this.name, required this.club, this.description})
-      : super._();
+  const _$TeamImpl({this.id, this.orgSyncId, this.organization, required this.name, this.description}) : super._();
 
   factory _$TeamImpl.fromJson(Map<String, dynamic> json) => _$$TeamImplFromJson(json);
 
@@ -196,13 +170,11 @@ class _$TeamImpl extends _Team {
   @override
   final String name;
   @override
-  final Club club;
-  @override
   final String? description;
 
   @override
   String toString() {
-    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, club: $club, description: $description)';
+    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
   }
 
   @override
@@ -214,13 +186,12 @@ class _$TeamImpl extends _Team {
             (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.club, club) || other.club == club) &&
             (identical(other.description, description) || other.description == description));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, club, description);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
 
   /// Create a copy of Team
   /// with the given fields replaced by the non-null parameter values.
@@ -243,7 +214,6 @@ abstract class _Team extends Team {
       final String? orgSyncId,
       final Organization? organization,
       required final String name,
-      required final Club club,
       final String? description}) = _$TeamImpl;
   const _Team._() : super._();
 
@@ -257,8 +227,6 @@ abstract class _Team extends Team {
   Organization? get organization;
   @override
   String get name;
-  @override
-  Club get club;
   @override
   String? get description;
 
