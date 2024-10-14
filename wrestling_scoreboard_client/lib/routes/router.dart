@@ -10,11 +10,12 @@ import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/privacy_policy.dart';
-import 'package:wrestling_scoreboard_client/view/screens/more/profile/profile.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/change_password.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/profile.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_up.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
@@ -62,6 +63,11 @@ getRouter() {
               GoRoute(
                 path: '${DivisionOverview.route}/:division_id',
                 builder: (context, state) => DivisionOverview(id: int.parse(state.pathParameters['division_id']!)),
+              ),
+              GoRoute(
+                path: '${BoutResultRuleOverview.route}/:bout_result_rule_id',
+                builder: (context, state) =>
+                    BoutResultRuleOverview(id: int.parse(state.pathParameters['bout_result_rule_id']!)),
               ),
               GoRoute(
                 path: '${LeagueOverview.route}/:league_id',

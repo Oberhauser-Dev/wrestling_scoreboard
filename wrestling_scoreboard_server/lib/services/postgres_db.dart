@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -12,6 +13,7 @@ const _isReleaseMode = bool.fromEnvironment("dart.vm.product");
 const defaultDatabasePath = './database/dump/PostgreSQL-wrestling_scoreboard-dump.sql';
 
 class PostgresDb {
+  final log = Logger('PostgresDb');
   final String postgresHost = env.databaseHost ?? 'localhost';
   final int postgresPort = env.databasePort ?? 5432;
   final String dbUser = env.databaseUser ?? 'postgres';
@@ -96,6 +98,7 @@ extension DatabaseExt on PostgresDb {
     if (migrationRange.isNotEmpty) {
       for (var migration in migrationRange) {
         await executeSqlFile(migration.value.path);
+        log.info('Migrated DB to ${migration.key}');
       }
       await connection.execute("UPDATE migration SET semver = '${migrationRange.last.key.toString()}';");
     }

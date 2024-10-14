@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
@@ -186,6 +187,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return BoutActionController();
       case const (BoutConfig):
         return BoutConfigController();
+      case const (BoutResultRule):
+        return BoutResultRuleController();
       case const (Club):
         return ClubController();
       case const (Competition):

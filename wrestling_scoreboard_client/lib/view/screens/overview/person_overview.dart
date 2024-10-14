@@ -25,6 +25,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
     BuildContext context,
     WidgetRef ref, {
     required String classLocale,
+    String? details,
     required Widget editPage,
     required VoidCallback onDelete,
     List<Widget>? tiles,
@@ -81,7 +82,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
         return OverviewScaffold<Person>(
           dataObject: person,
           label: classLocale,
-          details: person.fullName,
+          details: details ?? person.fullName,
           tabs: [
             Tab(child: HeadingText(localizations.info)),
             ...relations.keys,

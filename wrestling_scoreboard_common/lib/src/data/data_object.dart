@@ -22,6 +22,8 @@ abstract class DataObject {
         return BoutAction.fromJson(json) as T;
       case const (BoutConfig):
         return BoutConfig.fromJson(json) as T;
+      case const (BoutResultRule):
+        return BoutResultRule.fromJson(json) as T;
       case const (Club):
         return Club.fromJson(json) as T;
       case const (Competition):
@@ -79,6 +81,8 @@ abstract class DataObject {
         return (await BoutAction.fromRaw(raw, getSingle)) as T;
       case const (BoutConfig):
         return (await BoutConfig.fromRaw(raw)) as T;
+      case const (BoutResultRule):
+        return (await BoutResultRule.fromRaw(raw, getSingle)) as T;
       case const (Club):
         return (await Club.fromRaw(raw, getSingle)) as T;
       case const (Competition):

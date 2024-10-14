@@ -7,6 +7,7 @@ import '../controllers/auth_controller.dart';
 import '../controllers/bout_action_controller.dart';
 import '../controllers/bout_config_controller.dart';
 import '../controllers/bout_controller.dart';
+import '../controllers/bout_result_rule_controller.dart';
 import '../controllers/club_controller.dart';
 import '../controllers/competition_bout_controller.dart';
 import '../controllers/competition_controller.dart';
@@ -54,6 +55,12 @@ class ApiRoute {
     router.restrictedPost('/bout_config', boutConfigController.postSingle);
     router.restrictedGet('/bout_configs', boutConfigController.requestMany);
     router.restrictedGetOne('/bout_config/<id|[0-9]+>', boutConfigController.requestSingle);
+    router.restrictedGetOne('/bout_config/<id|[0-9]+>/bout_result_rules', boutConfigController.requestBoutResultRules);
+
+    final boutResultRuleController = BoutResultRuleController();
+    router.restrictedPost('/bout_result_rule', boutResultRuleController.postSingle);
+    router.restrictedGet('/bout_result_rules', boutResultRuleController.requestMany);
+    router.restrictedGetOne('/bout_result_rule/<id|[0-9]+>', boutResultRuleController.requestSingle);
 
     final clubController = ClubController();
     router.restrictedPost('/club', clubController.postSingle);

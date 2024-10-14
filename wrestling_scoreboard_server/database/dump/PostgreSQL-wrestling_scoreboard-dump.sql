@@ -290,6 +290,46 @@ ALTER SEQUENCE public.bout_id_seq OWNED BY public.bout.id;
 
 
 --
+-- Name: bout_result_rule; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.bout_result_rule (
+    id integer NOT NULL,
+    bout_config_id integer NOT NULL,
+    bout_result public.bout_result NOT NULL,
+    winner_technical_points smallint,
+    loser_technical_points smallint,
+    technical_points_difference smallint,
+    winner_classification_points smallint NOT NULL,
+    loser_classification_points smallint NOT NULL
+);
+
+
+ALTER TABLE public.bout_result_rule OWNER TO wrestling;
+
+--
+-- Name: bout_result_rule_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.bout_result_rule_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.bout_result_rule_id_seq OWNER TO wrestling;
+
+--
+-- Name: bout_result_rule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.bout_result_rule_id_seq OWNED BY public.bout_result_rule.id;
+
+
+--
 -- Name: club; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -1118,6 +1158,13 @@ ALTER TABLE ONLY public.bout_config ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: bout_result_rule id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout_result_rule ALTER COLUMN id SET DEFAULT nextval('public.bout_result_rule_id_seq'::regclass);
+
+
+--
 -- Name: club id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1304,6 +1351,14 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 
 
 --
+-- Data for Name: bout_result_rule; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
+\.
+
+
+--
 -- Data for Name: club; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1456,7 +1511,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.3
+0.2.0-pre.4
 \.
 
 
@@ -1703,6 +1758,13 @@ SELECT pg_catalog.setval('public.bout_id_seq', 51, true);
 
 
 --
+-- Name: bout_result_rule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 1, false);
+
+
+--
 -- Name: club_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -1871,6 +1933,14 @@ ALTER TABLE ONLY public.bout_config
 
 ALTER TABLE ONLY public.bout
     ADD CONSTRAINT bout_pk PRIMARY KEY (id);
+
+
+--
+-- Name: bout_result_rule bout_result_rule_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout_result_rule
+    ADD CONSTRAINT bout_result_rule_pk PRIMARY KEY (id);
 
 
 --
@@ -2138,6 +2208,14 @@ ALTER TABLE ONLY public.bout
 
 ALTER TABLE ONLY public.bout
     ADD CONSTRAINT bout_participant_state_id_fk_2 FOREIGN KEY (blue_id) REFERENCES public.participant_state(id) ON DELETE CASCADE;
+
+
+--
+-- Name: bout_result_rule bout_result_rule_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout_result_rule
+    ADD CONSTRAINT bout_result_rule_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id);
 
 
 --

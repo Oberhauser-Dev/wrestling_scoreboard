@@ -4,23 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/division_weight_class.dart';
-import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class DivisionOverview extends ConsumerWidget {
+class DivisionOverview extends BoutConfigOverview {
   static const route = 'division';
 
   final int id;
@@ -35,59 +32,46 @@ class DivisionOverview extends ConsumerWidget {
       id: id,
       initialData: division,
       builder: (context, data) {
-        final description = InfoWidget(
-          obj: data,
+        return buildOverview(
+          context,
+          ref,
+          classLocale: localizations.division,
+          details: '${data.name}, ${data.startDate.year}',
           editPage: DivisionEdit(
             division: data,
           ),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Division>(data),
-          classLocale: localizations.division,
-          children: [
+          tiles: [
             ContentItem(
               title: data.startDate.toDateString(context),
-              subtitle: localizations.date, // Start date
+              subtitle: localizations.startDate, // Start date
               icon: Icons.event,
             ),
             ContentItem(
-              title: '${data.boutConfig.periodDuration.formatMinutesAndSeconds()} ✕ ${data.boutConfig.periodCount}',
-              subtitle: localizations.periodDuration,
-              icon: Icons.timelapse,
-            ),
-            ContentItem(
-              title: data.boutConfig.breakDuration.formatMinutesAndSeconds(),
-              subtitle: localizations.breakDuration,
-              icon: Icons.timelapse,
-            ),
-            ContentItem(
-              title: data.boutConfig.activityDuration.formatMinutesAndSeconds(),
-              subtitle: localizations.activityDuration,
-              icon: Icons.timelapse,
-            ),
-            ContentItem(
-              title: data.boutConfig.injuryDuration.formatMinutesAndSeconds(),
-              subtitle: localizations.injuryDuration,
-              icon: Icons.timelapse,
+              title: data.endDate.toDateString(context),
+              subtitle: localizations.endDate, // End date
+              icon: Icons.event,
             ),
             ContentItem(
               title: data.seasonPartitions.toString(),
               subtitle: localizations.seasonPartitions,
               icon: Icons.sunny_snowing,
             ),
+            ContentItem(
+              title: data.organization.fullname,
+              subtitle: localizations.organization,
+              icon: Icons.corporate_fare,
+            ),
+            ContentItem(
+              title: data.parent?.fullname ?? '-',
+              subtitle: localizations.division,
+              icon: Icons.inventory,
+            ),
           ],
-        );
-        return OverviewScaffold<Division>(
-          dataObject: data,
-          label: localizations.division,
-          details: '${data.name}, ${data.startDate.year}',
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.divisions)),
-            Tab(child: HeadingText(localizations.leagues)),
-            Tab(child: HeadingText(localizations.weightClasses)),
-          ],
-          body: TabGroup(items: [
-            description,
-            ManyConsumer<Division, Division>(
+          dataId: data.boutConfig.id!,
+          initialData: data.boutConfig,
+          buildRelations: (boutConfig) => {
+            Tab(child: HeadingText(localizations.divisions)): ManyConsumer<Division, Division>(
               filterObject: data,
               builder: (BuildContext context, List<Division> childDivisions) {
                 return GroupedList(
@@ -118,7 +102,7 @@ class DivisionOverview extends ConsumerWidget {
                 );
               },
             ),
-            ManyConsumer<League, Division>(
+            Tab(child: HeadingText(localizations.leagues)): ManyConsumer<League, Division>(
               filterObject: data,
               builder: (BuildContext context, List<League> leagues) {
                 return GroupedList(
@@ -149,7 +133,7 @@ class DivisionOverview extends ConsumerWidget {
                 );
               },
             ),
-            ManyConsumer<DivisionWeightClass, Division>(
+            Tab(child: HeadingText(localizations.weightClasses)): ManyConsumer<DivisionWeightClass, Division>(
               filterObject: data,
               builder: (BuildContext context, List<DivisionWeightClass> divisionWeightClasses) {
                 return GroupedList(
@@ -178,7 +162,7 @@ class DivisionOverview extends ConsumerWidget {
                 );
               },
             ),
-          ]),
+          },
         );
       },
     );
