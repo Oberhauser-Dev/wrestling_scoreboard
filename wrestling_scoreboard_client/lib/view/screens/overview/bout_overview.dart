@@ -23,12 +23,14 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
     BuildContext context,
     WidgetRef ref, {
     required String classLocale,
+    String? details,
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
     List<Widget> actions = const [],
     required int dataId,
     Bout? initialData,
+    Map<Tab, Widget> Function(Bout data)? buildRelations,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Bout>(
@@ -86,7 +88,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
         return OverviewScaffold<Bout>(
           dataObject: data,
           label: classLocale,
-          details: data.title(context),
+          details: details ?? data.title(context),
           tabs: [
             Tab(child: HeadingText(localizations.info)),
           ],

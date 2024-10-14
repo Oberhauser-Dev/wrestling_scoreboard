@@ -18,10 +18,10 @@ class DivisionEdit extends BoutConfigEdit {
       : super(boutConfig: division?.boutConfig);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => DevisionEditState();
+  ConsumerState<ConsumerStatefulWidget> createState() => DivisionEditState();
 }
 
-class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
+class DivisionEditState extends BoutConfigEditState<DivisionEdit> {
   Iterable<Organization>? _availableOrganizations;
   Iterable<Division>? _availableDivisions;
 
@@ -65,7 +65,7 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.date_range),
+        leading: const Icon(Icons.event),
         title: TextFormField(
           key: ValueKey(_startDate),
           readOnly: true,
@@ -88,7 +88,7 @@ class DevisionEditState extends BoutConfigEditState<DivisionEdit> {
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.date_range),
+        leading: const Icon(Icons.event),
         title: TextFormField(
           key: ValueKey(_endDate),
           readOnly: true,

@@ -5,6 +5,7 @@ import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
@@ -50,8 +51,19 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Organization,
         filterId: single.organization.id)));
-  } else if (single is BoutConfig) {
   } else if (single is Bout) {
+  } else if (single is BoutConfig) {
+  } else if (single is BoutResultRule) {
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await BoutResultRuleController().getMany(
+            conditions: ['bout_config_id = @id'],
+            substitutionValues: {'id': single.boutConfig.id},
+            obfuscate: obfuscate),
+        BoutResultRule,
+        CRUD.update,
+        isRaw: false,
+        filterType: BoutConfig,
+        filterId: single.boutConfig.id)));
   } else if (single is BoutAction) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await BoutActionController()
@@ -209,8 +221,19 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: Organization,
         filterId: single['organization_id'])));
-  } else if (T == BoutConfig) {
   } else if (T == Bout) {
+  } else if (T == BoutConfig) {
+  } else if (T == BoutResultRule) {
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await BoutResultRuleController().getManyRaw(
+            conditions: ['bout_config_id = @id'],
+            substitutionValues: {'id': single['bout_config_id']},
+            obfuscate: obfuscate),
+        BoutResultRule,
+        CRUD.update,
+        isRaw: true,
+        filterType: BoutConfig,
+        filterId: single['bout_config_id'])));
   } else if (T == BoutAction) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await BoutActionController().getManyRaw(

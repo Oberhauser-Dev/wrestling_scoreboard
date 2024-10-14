@@ -24,7 +24,7 @@ class BoutResultRule with _$BoutResultRule implements DataObject {
   }) = _BoutResultRule;
 
   @override
-  DataObject copyWithId(int? id) {
+  BoutResultRule copyWithId(int? id) {
     return copyWith(id: id);
   }
 

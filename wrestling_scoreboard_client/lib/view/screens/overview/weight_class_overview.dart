@@ -21,12 +21,14 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
     BuildContext context,
     WidgetRef ref, {
     required String classLocale,
+    String? details,
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
     List<Widget> actions = const [],
     required int dataId,
     WeightClass? initialData,
+    Map<Tab, Widget> Function(WeightClass data)? buildRelations,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<WeightClass>(
@@ -68,7 +70,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
         return OverviewScaffold<WeightClass>(
           dataObject: data,
           label: classLocale,
-          details: data.name,
+          details: details ?? data.name,
           tabs: [
             Tab(child: HeadingText(localizations.info)),
           ],

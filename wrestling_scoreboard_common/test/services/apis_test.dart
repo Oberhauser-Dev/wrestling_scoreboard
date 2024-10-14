@@ -9,11 +9,14 @@ void main() {
   MockableDateTime.isMocked = true;
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
 
+  BoutConfig getAdultBoutConfig() => BoutConfig();
+  BoutConfig getYouthBoutConfig() => BoutConfig(periodDuration: Duration(minutes: 2));
+
   final testDivisionJunior = Division(
     name: '(S) Bezirksliga',
     startDate: DateTime.utc(2023),
     endDate: DateTime.utc(2024),
-    boutConfig: BoutConfig(),
+    boutConfig: getYouthBoutConfig(),
     seasonPartitions: 2,
     organization: organizationNRW,
     orgSyncId: '2023_(S) Bezirksliga',
@@ -23,7 +26,7 @@ void main() {
     name: 'Bayernliga',
     startDate: DateTime.utc(2023),
     endDate: DateTime.utc(2024),
-    boutConfig: BoutConfig(),
+    boutConfig: getAdultBoutConfig(),
     seasonPartitions: 2,
     organization: organizationNRW,
     orgSyncId: '2023_Bayernliga',
@@ -138,7 +141,7 @@ void main() {
           case const (DivisionWeightClass):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
             final weightClasses = (await Future.wait(
-                    divisions.map((division) => wrestlingApi.importDivisionWeightClasses(division: division))))
+                    divisions.keys.map((division) => wrestlingApi.importDivisionWeightClasses(division: division))))
                 .expand((w) => w);
             return weightClasses.singleWhere((w) => w.orgSyncId == orgSyncId) as T;
           default:
@@ -151,48 +154,117 @@ void main() {
 
   group('APIs', () {
     group('Germany, NRW', () {
+      Iterable<BoutResultRule> boutResultRules(BoutConfig config) => [
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vfa,
+              winnerClassificationPoints: 4,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vin,
+              winnerClassificationPoints: 4,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vca,
+              winnerClassificationPoints: 4,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vsu,
+              technicalPointsDifference: 15,
+              winnerClassificationPoints: 4,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vpo,
+              technicalPointsDifference: 8,
+              winnerClassificationPoints: 3,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vpo,
+              technicalPointsDifference: 3,
+              winnerClassificationPoints: 2,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vpo,
+              technicalPointsDifference: 1,
+              winnerClassificationPoints: 1,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.vfo,
+              winnerClassificationPoints: 4,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.dsq,
+              winnerClassificationPoints: 4,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.dsq2,
+              winnerClassificationPoints: 0,
+              loserClassificationPoints: 0,
+            ),
+          ];
+
       test('Divisions', () async {
-        final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
-        expect(divisions, [
-          testDivisionJunior,
+        final divisionBoutConfigRulesMap = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
+        final youthBoutConfig = getYouthBoutConfig();
+        final adultBoutConfig = getAdultBoutConfig();
+        expect(divisionBoutConfigRulesMap, {
+          testDivisionJunior: boutResultRules(testDivisionJunior.boutConfig),
           Division(
             name: '(S) Finalrunde',
             startDate: DateTime.utc(2023),
             endDate: DateTime.utc(2024),
-            boutConfig: BoutConfig(),
+            boutConfig: youthBoutConfig,
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_(S) Finalrunde',
-          ),
-          testDivisionBayernliga,
+          ): boutResultRules(youthBoutConfig),
+          testDivisionBayernliga: boutResultRules(testDivisionBayernliga.boutConfig),
           Division(
             name: 'Gruppenoberliga',
             startDate: DateTime.utc(2023),
             endDate: DateTime.utc(2024),
-            boutConfig: BoutConfig(),
+            boutConfig: adultBoutConfig,
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_Gruppenoberliga',
-          ),
+          ): boutResultRules(adultBoutConfig),
           Division(
             name: 'Landesliga',
             startDate: DateTime.utc(2023),
             endDate: DateTime.utc(2024),
-            boutConfig: BoutConfig(),
+            boutConfig: adultBoutConfig,
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_Landesliga',
-          ),
+          ): boutResultRules(adultBoutConfig),
           Division(
             name: 'Oberliga',
             startDate: DateTime.utc(2023),
             endDate: DateTime.utc(2024),
-            boutConfig: BoutConfig(),
+            boutConfig: adultBoutConfig,
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_Oberliga',
-          ),
-        ]);
+          ): boutResultRules(adultBoutConfig),
+        });
       });
 
       test('DivisionWeightClasses', () async {

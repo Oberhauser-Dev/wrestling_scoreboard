@@ -11,12 +11,14 @@ abstract class AbstractOverview<T extends DataObject> {
     BuildContext context,
     WidgetRef ref, {
     required String classLocale,
+    String? details,
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
     List<Widget> actions = const [],
     required int dataId,
     T? initialData,
+    Map<Tab, Widget> Function(T data)? buildRelations,
   });
 }
 

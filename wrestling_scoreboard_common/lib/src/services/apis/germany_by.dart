@@ -45,36 +45,141 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
   final totalRegionWildcard = 'Bayern';
 
+  Iterable<BoutResultRule> _teamMatchBoutResultRules(BoutConfig config) => [
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vfa,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vin,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vca,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vsu,
+          technicalPointsDifference: 15,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vpo,
+          technicalPointsDifference: 8,
+          winnerClassificationPoints: 3,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vpo,
+          technicalPointsDifference: 3,
+          winnerClassificationPoints: 2,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vpo,
+          technicalPointsDifference: 1,
+          winnerClassificationPoints: 1,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vfo,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.dsq,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.dsq2,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+      ];
+
   @override
-  Future<Iterable<Division>> importDivisions({DateTime? minDate, DateTime? maxDate}) async {
+  Future<Map<Division, Iterable<BoutResultRule>>> importDivisions({DateTime? minDate, DateTime? maxDate}) async {
     maxDate ??= MockableDateTime.now();
     minDate ??= DateTime.utc(maxDate.year - 1);
     final years = List<int>.generate(maxDate.year - minDate.year + 1, (index) => minDate!.year + index);
     final divisions = await Future.wait(years.map((year) async {
       final json = await _getLeagueList(seasonId: year.toString());
-      if (json.isEmpty) return <Division>{};
+      if (json.isEmpty) return <Division, Iterable<BoutResultRule>>{};
       if (year != int.tryParse(json['year'])) throw "Years don't match: $year & ${json['year']}";
       final divisionList = json['ligaList'];
-      Iterable<Division> divisions;
+      Map<Division, Iterable<BoutResultRule>> divisionBoutResultRulesMap;
       if (divisionList is Map<String, dynamic>) {
-        divisions = await Future.wait(divisionList.entries.map(
-          (entry) async => Division(
-            organization: organization,
-            name: entry.key,
-            startDate: DateTime.utc(year),
-            endDate: DateTime.utc(year + 1),
-            boutConfig: BoutConfig(),
-            // TODO: get from "boutSchemeId" inside league list
-            seasonPartitions: 2,
-            orgSyncId: '${year}_${entry.key}',
-          ),
+        final divisionBoutRulesEntries = await Future.wait(divisionList.entries.map(
+          (divisionEntry) async {
+            // Get division bout scheme from first league
+            final leagueMap = divisionEntry.value as Map<String, dynamic>;
+            final firstLeague = leagueMap.entries.first.value;
+            final ageGroup = firstLeague['systemId'];
+            for (final leagueEntry in leagueMap.entries) {
+              if (leagueEntry.value['systemId'] != ageGroup) {
+                throw Exception('systemId/ageGroup differs within the division $divisionEntry');
+              }
+            }
+
+            final isAdult = ageGroup == 'M' || ageGroup == 'F';
+            final isYouth = ageGroup == 'S';
+            BoutConfig boutConfig;
+            Iterable<BoutResultRule> boutResultRules;
+            if (isAdult) {
+              boutConfig = BoutConfig(
+                periodDuration: Duration(minutes: 3),
+                breakDuration: Duration(seconds: 30),
+                activityDuration: Duration(seconds: 30),
+                injuryDuration: Duration(minutes: 2),
+                periodCount: 2,
+              );
+              boutResultRules = _teamMatchBoutResultRules(boutConfig);
+            } else if (isYouth) {
+              boutConfig = BoutConfig(
+                periodDuration: Duration(minutes: 2),
+                breakDuration: Duration(seconds: 30),
+                activityDuration: Duration(seconds: 30),
+                injuryDuration: Duration(minutes: 2),
+                periodCount: 2,
+              );
+              boutResultRules = _teamMatchBoutResultRules(boutConfig);
+            } else {
+              throw Exception('Cannot determine systemId/ageGroup: ${firstLeague['systemId']}');
+            }
+            final division = Division(
+              organization: organization,
+              name: divisionEntry.key,
+              startDate: DateTime.utc(year),
+              endDate: DateTime.utc(year + 1),
+              boutConfig: boutConfig,
+              seasonPartitions: 2,
+              orgSyncId: '${year}_${divisionEntry.key}',
+            );
+            return MapEntry(division, boutResultRules);
+          },
         ));
+        divisionBoutResultRulesMap = Map.fromEntries(divisionBoutRulesEntries);
       } else {
-        divisions = <Division>[];
+        divisionBoutResultRulesMap = {};
       }
-      return divisions;
+      return divisionBoutResultRulesMap;
     }));
-    return divisions.expand((element) => element);
+    return divisions.reduce((a, b) => a..addAll(b));
   }
 
   @override
@@ -82,12 +187,18 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     final json = await _getLeagueList(seasonId: division.startDate.year.toString());
     if (json.isEmpty) return <DivisionWeightClass>{};
 
-    final leagueList = json['ligaList'][division.name];
+    final leagueMap = json['ligaList'][division.name];
     Iterable<DivisionWeightClass> divisionWeightClasses;
-    if (leagueList is Map<String, dynamic> && leagueList.isNotEmpty) {
+    if (leagueMap is Map<String, dynamic> && leagueMap.isNotEmpty) {
       // Get division bout scheme from first league
-      final firstLeague = leagueList.entries.first.value;
+      final firstLeague = leagueMap.entries.first.value;
       final List<dynamic> boutSchemeMap = firstLeague['boutScheme'];
+      for (final leagueEntry in leagueMap.entries) {
+        if (!DeepCollectionEquality().equals(leagueEntry.value['boutScheme'], boutSchemeMap)) {
+          // TODO: make weight class mapping for leagues only (#82).
+          log.severe('boutScheme/weightClasses differ within the division $division');
+        }
+      }
 
       final weightClassCount = boutSchemeMap.length;
       divisionWeightClasses = boutSchemeMap.map((item) {
@@ -190,7 +301,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   @override
   Future<Iterable<Membership>> importMemberships({required Club club}) async {
     final divisions = await importDivisions(minDate: DateTime.utc(MockableDateTime.now().year - 1));
-    final leagues = (await Future.wait(divisions.map((e) => importLeagues(division: e)))).expand((element) => element);
+    final leagues =
+        (await Future.wait(divisions.keys.map((e) => importLeagues(division: e)))).expand((element) => element);
     final teamClubAffiliations = await importTeamClubAffiliations();
     final teamMatches = (await Future.wait(leagues.map((e) => importTeamMatches(league: e))))
         .expand((element) => element)

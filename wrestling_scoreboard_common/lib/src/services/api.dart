@@ -48,7 +48,7 @@ abstract class WrestlingApi {
 
   AuthService? get authService;
 
-  Future<Iterable<Division>> importDivisions({DateTime? minDate, DateTime? maxDate});
+  Future<Map<Division, Iterable<BoutResultRule>>> importDivisions({DateTime? minDate, DateTime? maxDate});
 
   Future<Iterable<DivisionWeightClass>> importDivisionWeightClasses({required Division division});
 

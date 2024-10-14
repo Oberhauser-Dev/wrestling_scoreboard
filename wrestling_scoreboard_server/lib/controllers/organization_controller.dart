@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
@@ -103,11 +104,17 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         }
       });
 
-      final divisions = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
-      await Future.forEach(divisions, (division) async {
+      final divisionBoutResultRuleMap = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
+      await Future.forEach(divisionBoutResultRuleMap.entries, (divisionBoutResultEntry) async {
+        Division division = divisionBoutResultEntry.key;
+        final boutResultRules = divisionBoutResultEntry.value;
         division =
             await DivisionController().getOrCreateSingleOfOrg(division, obfuscate: obfuscate, onCreate: () async {
           final boutConfig = await BoutConfigController().createSingleReturn(division.boutConfig);
+          await Future.forEach(boutResultRules, (rule) async {
+            rule = rule.copyWith(boutConfig: boutConfig);
+            rule = await BoutResultRuleController().createSingleReturn(rule);
+          });
           return division.copyWith(boutConfig: boutConfig);
         });
 
