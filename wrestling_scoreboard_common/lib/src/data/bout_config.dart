@@ -12,6 +12,7 @@ class BoutConfig with _$BoutConfig implements DataObject {
   static const defaultBreakDuration = Duration(seconds: 30);
   static const defaultActivityDuration = Duration(seconds: 30);
   static const defaultInjuryDuration = Duration(minutes: 2);
+  static const defaultBleedingInjuryDuration = Duration(minutes: 4);
   static const defaultPeriodCount = 2;
 
   const BoutConfig._();
@@ -20,8 +21,9 @@ class BoutConfig with _$BoutConfig implements DataObject {
     int? id,
     @Default(BoutConfig.defaultPeriodDuration) Duration periodDuration,
     @Default(BoutConfig.defaultBreakDuration) Duration breakDuration,
-    @Default(BoutConfig.defaultActivityDuration) Duration activityDuration,
-    @Default(BoutConfig.defaultInjuryDuration) Duration injuryDuration,
+    Duration? activityDuration,
+    Duration? injuryDuration,
+    Duration? bleedingInjuryDuration,
     @Default(BoutConfig.defaultPeriodCount) int periodCount,
   }) = _BoutConfig;
 
@@ -32,13 +34,15 @@ class BoutConfig with _$BoutConfig implements DataObject {
     final breakSeconds = e['break_duration_secs'] as int?;
     final activitySeconds = e['activity_duration_secs'] as int?;
     final injurySeconds = e['injury_duration_secs'] as int?;
+    final bleedingInjurySeconds = e['bleeding_injury_duration_secs'] as int?;
 
     return BoutConfig(
       id: e['id'] as int?,
       periodDuration: periodSeconds != null ? Duration(seconds: periodSeconds) : defaultPeriodDuration,
       breakDuration: breakSeconds != null ? Duration(seconds: breakSeconds) : defaultBreakDuration,
-      activityDuration: activitySeconds != null ? Duration(seconds: activitySeconds) : defaultActivityDuration,
-      injuryDuration: injurySeconds != null ? Duration(seconds: injurySeconds) : defaultInjuryDuration,
+      activityDuration: activitySeconds != null ? Duration(seconds: activitySeconds) : null,
+      injuryDuration: injurySeconds != null ? Duration(seconds: injurySeconds) : null,
+      bleedingInjuryDuration: bleedingInjurySeconds != null ? Duration(seconds: bleedingInjurySeconds) : null,
       periodCount: (e['period_count'] as int?) ?? defaultPeriodCount,
     );
   }
@@ -49,8 +53,9 @@ class BoutConfig with _$BoutConfig implements DataObject {
       if (id != null) 'id': id,
       'period_duration_secs': periodDuration.inSeconds,
       'break_duration_secs': breakDuration.inSeconds,
-      'activity_duration_secs': activityDuration.inSeconds,
-      'injury_duration_secs': injuryDuration.inSeconds,
+      'activity_duration_secs': activityDuration?.inSeconds,
+      'injury_duration_secs': injuryDuration?.inSeconds,
+      'bleeding_injury_duration_secs': bleedingInjuryDuration?.inSeconds,
       'period_count': periodCount,
     };
   }

@@ -37,6 +37,12 @@ class TeamMatchBoutOverview extends BoutOverview {
           icon: const Icon(Icons.print),
           onPressed: () async {
             final actions = await getActions();
+            final boutRules = teamMatchBout.teamMatch.league == null
+                ? TeamMatch.defaultBoutResultRules
+                : await ref.read(manyDataStreamProvider<BoutResultRule, BoutConfig>(
+                        ManyProviderData<BoutResultRule, BoutConfig>(
+                            filterObject: teamMatchBout.teamMatch.league!.division.boutConfig))
+                    .future);
             if (context.mounted) {
               final bytes = await ScoreSheet(
                 bout: bout,
@@ -44,8 +50,7 @@ class TeamMatchBoutOverview extends BoutOverview {
                 buildContext: context,
                 wrestlingEvent: teamMatchBout.teamMatch,
                 boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                // TODO: get from DB
-                boutRules: TeamMatch.defaultBoutResultRules,
+                boutRules: boutRules,
               ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }

@@ -14,12 +14,13 @@ _$BoutConfigImpl _$$BoutConfigImplFromJson(Map<String, dynamic> json) => _$BoutC
       breakDuration: json['breakDuration'] == null
           ? BoutConfig.defaultBreakDuration
           : Duration(microseconds: (json['breakDuration'] as num).toInt()),
-      activityDuration: json['activityDuration'] == null
-          ? BoutConfig.defaultActivityDuration
-          : Duration(microseconds: (json['activityDuration'] as num).toInt()),
-      injuryDuration: json['injuryDuration'] == null
-          ? BoutConfig.defaultInjuryDuration
-          : Duration(microseconds: (json['injuryDuration'] as num).toInt()),
+      activityDuration:
+          json['activityDuration'] == null ? null : Duration(microseconds: (json['activityDuration'] as num).toInt()),
+      injuryDuration:
+          json['injuryDuration'] == null ? null : Duration(microseconds: (json['injuryDuration'] as num).toInt()),
+      bleedingInjuryDuration: json['bleedingInjuryDuration'] == null
+          ? null
+          : Duration(microseconds: (json['bleedingInjuryDuration'] as num).toInt()),
       periodCount: (json['periodCount'] as num?)?.toInt() ?? BoutConfig.defaultPeriodCount,
     );
 
@@ -27,7 +28,8 @@ Map<String, dynamic> _$$BoutConfigImplToJson(_$BoutConfigImpl instance) => <Stri
       'id': instance.id,
       'periodDuration': instance.periodDuration.inMicroseconds,
       'breakDuration': instance.breakDuration.inMicroseconds,
-      'activityDuration': instance.activityDuration.inMicroseconds,
-      'injuryDuration': instance.injuryDuration.inMicroseconds,
+      'activityDuration': instance.activityDuration?.inMicroseconds,
+      'injuryDuration': instance.injuryDuration?.inMicroseconds,
+      'bleedingInjuryDuration': instance.bleedingInjuryDuration?.inMicroseconds,
       'periodCount': instance.periodCount,
     };

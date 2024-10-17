@@ -61,13 +61,18 @@ abstract class BoutConfigOverview extends ConsumerWidget implements AbstractOver
               icon: Icons.timelapse,
             ),
             ContentItem(
-              title: data.activityDuration.formatMinutesAndSeconds(),
+              title: data.activityDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.activityDuration,
               icon: Icons.timelapse,
             ),
             ContentItem(
-              title: data.injuryDuration.formatMinutesAndSeconds(),
+              title: data.injuryDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.injuryDuration,
+              icon: Icons.timelapse,
+            ),
+            ContentItem(
+              title: data.bleedingInjuryDuration?.formatMinutesAndSeconds() ?? '-',
+              subtitle: localizations.bleedingInjuryDuration,
               icon: Icons.timelapse,
             ),
           ],

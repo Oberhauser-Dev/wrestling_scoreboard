@@ -23,6 +23,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
   Duration? _breakDuration;
   Duration? _activityDuration;
   Duration? _injuryDuration;
+  Duration? _bleedingInjuryDuration;
   int? _periodCount;
 
   @override
@@ -63,7 +64,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         leading: const Icon(Icons.timelapse),
         subtitle: Text(localizations.activityDuration),
         title: DurationFormField(
-          initialValue: widget.boutConfig?.activityDuration ?? BoutConfig.defaultActivityDuration,
+          initialValue: widget.boutConfig?.activityDuration,
           maxValue: const Duration(hours: 1),
           onSaved: (Duration? value) {
             _activityDuration = value;
@@ -74,10 +75,21 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         leading: const Icon(Icons.timelapse),
         subtitle: Text(localizations.injuryDuration),
         title: DurationFormField(
-          initialValue: widget.boutConfig?.injuryDuration ?? BoutConfig.defaultInjuryDuration,
+          initialValue: widget.boutConfig?.injuryDuration,
           maxValue: const Duration(hours: 1),
           onSaved: (Duration? value) {
             _injuryDuration = value;
+          },
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.timelapse),
+        subtitle: Text(localizations.bleedingInjuryDuration),
+        title: DurationFormField(
+          initialValue: widget.boutConfig?.bleedingInjuryDuration,
+          maxValue: const Duration(hours: 1),
+          onSaved: (Duration? value) {
+            _bleedingInjuryDuration = value;
           },
         ),
       ),
@@ -112,12 +124,13 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      var boutConfig = BoutConfig(
+      BoutConfig boutConfig = BoutConfig(
         id: widget.boutConfig?.id,
         periodDuration: _periodDuration!,
         breakDuration: _breakDuration!,
-        activityDuration: _activityDuration!,
-        injuryDuration: _injuryDuration!,
+        activityDuration: _activityDuration,
+        injuryDuration: _injuryDuration,
+        bleedingInjuryDuration: _bleedingInjuryDuration,
         periodCount: _periodCount!,
       );
       boutConfig =
