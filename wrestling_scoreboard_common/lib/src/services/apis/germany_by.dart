@@ -141,20 +141,22 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             BoutConfig boutConfig;
             Iterable<BoutResultRule> boutResultRules;
             if (isAdult) {
-              boutConfig = BoutConfig(
+              boutConfig = const BoutConfig(
                 periodDuration: Duration(minutes: 3),
                 breakDuration: Duration(seconds: 30),
                 activityDuration: Duration(seconds: 30),
                 injuryDuration: Duration(minutes: 2),
+                bleedingInjuryDuration: Duration(minutes: 4),
                 periodCount: 2,
               );
               boutResultRules = _teamMatchBoutResultRules(boutConfig);
             } else if (isYouth) {
-              boutConfig = BoutConfig(
+              boutConfig = const BoutConfig(
                 periodDuration: Duration(minutes: 2),
                 breakDuration: Duration(seconds: 30),
                 activityDuration: Duration(seconds: 30),
                 injuryDuration: Duration(minutes: 2),
+                bleedingInjuryDuration: Duration(minutes: 4),
                 periodCount: 2,
               );
               boutResultRules = _teamMatchBoutResultRules(boutConfig);

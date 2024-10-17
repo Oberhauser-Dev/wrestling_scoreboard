@@ -9,8 +9,22 @@ void main() {
   MockableDateTime.isMocked = true;
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
 
-  BoutConfig getAdultBoutConfig() => BoutConfig();
-  BoutConfig getYouthBoutConfig() => BoutConfig(periodDuration: Duration(minutes: 2));
+  BoutConfig getAdultBoutConfig() => const BoutConfig(
+        periodDuration: Duration(minutes: 3),
+        periodCount: 2,
+        breakDuration: Duration(seconds: 30),
+        activityDuration: Duration(seconds: 30),
+        injuryDuration: Duration(minutes: 2),
+        bleedingInjuryDuration: Duration(minutes: 4),
+      );
+  BoutConfig getYouthBoutConfig() => const BoutConfig(
+        periodDuration: Duration(minutes: 2),
+        periodCount: 2,
+        breakDuration: Duration(seconds: 30),
+        activityDuration: Duration(seconds: 30),
+        injuryDuration: Duration(minutes: 2),
+        bleedingInjuryDuration: Duration(minutes: 4),
+      );
 
   final testDivisionJunior = Division(
     name: '(S) Bezirksliga',
