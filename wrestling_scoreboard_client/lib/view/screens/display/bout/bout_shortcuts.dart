@@ -29,6 +29,7 @@ enum BoutScreenActions {
   redDismissal,
   redActivityTime,
   redInjuryTime,
+  redBleedingInjuryTime,
   redUndo,
   blueOne,
   blueTwo,
@@ -40,6 +41,7 @@ enum BoutScreenActions {
   blueDismissal,
   blueActivityTime,
   blueInjuryTime,
+  blueBleedingInjuryTime,
   blueUndo,
 }
 
@@ -84,6 +86,8 @@ class BoutScreenActionIntent extends Intent {
 
   const BoutScreenActionIntent.redInjuryTime() : type = BoutScreenActions.redInjuryTime;
 
+  const BoutScreenActionIntent.redBleedingInjuryTime() : type = BoutScreenActions.redBleedingInjuryTime;
+
   const BoutScreenActionIntent.redUndo() : type = BoutScreenActions.redUndo;
 
   const BoutScreenActionIntent.blueOne() : type = BoutScreenActions.blueOne;
@@ -105,6 +109,8 @@ class BoutScreenActionIntent extends Intent {
   const BoutScreenActionIntent.blueActivityTime() : type = BoutScreenActions.blueActivityTime;
 
   const BoutScreenActionIntent.blueInjuryTime() : type = BoutScreenActions.blueInjuryTime;
+
+  const BoutScreenActionIntent.blueBleedingInjuryTime() : type = BoutScreenActions.blueBleedingInjuryTime;
 
   const BoutScreenActionIntent.blueUndo() : type = BoutScreenActions.blueUndo;
   final BoutScreenActions type;
@@ -225,6 +231,9 @@ class BoutScreenActionIntent extends Intent {
       case BoutScreenActions.redInjuryTime:
         doAction(BoutScreenActions.redInjuryTime);
         break;
+      case BoutScreenActions.redBleedingInjuryTime:
+        doAction(BoutScreenActions.redBleedingInjuryTime);
+        break;
       case BoutScreenActions.redUndo:
         if (bout.r != null) {
           final actions = await getActions();
@@ -310,6 +319,9 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.blueInjuryTime:
         doAction(BoutScreenActions.blueInjuryTime);
+        break;
+      case BoutScreenActions.blueBleedingInjuryTime:
+        doAction(BoutScreenActions.blueBleedingInjuryTime);
         break;
       case BoutScreenActions.undo:
         final actions = await getActions();

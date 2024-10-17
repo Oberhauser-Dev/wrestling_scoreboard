@@ -23,8 +23,9 @@ mixin _$BoutConfig {
   int? get id => throw _privateConstructorUsedError;
   Duration get periodDuration => throw _privateConstructorUsedError;
   Duration get breakDuration => throw _privateConstructorUsedError;
-  Duration get activityDuration => throw _privateConstructorUsedError;
-  Duration get injuryDuration => throw _privateConstructorUsedError;
+  Duration? get activityDuration => throw _privateConstructorUsedError;
+  Duration? get injuryDuration => throw _privateConstructorUsedError;
+  Duration? get bleedingInjuryDuration => throw _privateConstructorUsedError;
   int get periodCount => throw _privateConstructorUsedError;
 
   /// Serializes this BoutConfig to a JSON map.
@@ -45,8 +46,9 @@ abstract class $BoutConfigCopyWith<$Res> {
       {int? id,
       Duration periodDuration,
       Duration breakDuration,
-      Duration activityDuration,
-      Duration injuryDuration,
+      Duration? activityDuration,
+      Duration? injuryDuration,
+      Duration? bleedingInjuryDuration,
       int periodCount});
 }
 
@@ -67,8 +69,9 @@ class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig> implements $BoutCo
     Object? id = freezed,
     Object? periodDuration = null,
     Object? breakDuration = null,
-    Object? activityDuration = null,
-    Object? injuryDuration = null,
+    Object? activityDuration = freezed,
+    Object? injuryDuration = freezed,
+    Object? bleedingInjuryDuration = freezed,
     Object? periodCount = null,
   }) {
     return _then(_value.copyWith(
@@ -84,14 +87,18 @@ class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig> implements $BoutCo
           ? _value.breakDuration
           : breakDuration // ignore: cast_nullable_to_non_nullable
               as Duration,
-      activityDuration: null == activityDuration
+      activityDuration: freezed == activityDuration
           ? _value.activityDuration
           : activityDuration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      injuryDuration: null == injuryDuration
+              as Duration?,
+      injuryDuration: freezed == injuryDuration
           ? _value.injuryDuration
           : injuryDuration // ignore: cast_nullable_to_non_nullable
-              as Duration,
+              as Duration?,
+      bleedingInjuryDuration: freezed == bleedingInjuryDuration
+          ? _value.bleedingInjuryDuration
+          : bleedingInjuryDuration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       periodCount: null == periodCount
           ? _value.periodCount
           : periodCount // ignore: cast_nullable_to_non_nullable
@@ -110,8 +117,9 @@ abstract class _$$BoutConfigImplCopyWith<$Res> implements $BoutConfigCopyWith<$R
       {int? id,
       Duration periodDuration,
       Duration breakDuration,
-      Duration activityDuration,
-      Duration injuryDuration,
+      Duration? activityDuration,
+      Duration? injuryDuration,
+      Duration? bleedingInjuryDuration,
       int periodCount});
 }
 
@@ -128,8 +136,9 @@ class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res
     Object? id = freezed,
     Object? periodDuration = null,
     Object? breakDuration = null,
-    Object? activityDuration = null,
-    Object? injuryDuration = null,
+    Object? activityDuration = freezed,
+    Object? injuryDuration = freezed,
+    Object? bleedingInjuryDuration = freezed,
     Object? periodCount = null,
   }) {
     return _then(_$BoutConfigImpl(
@@ -145,14 +154,18 @@ class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res
           ? _value.breakDuration
           : breakDuration // ignore: cast_nullable_to_non_nullable
               as Duration,
-      activityDuration: null == activityDuration
+      activityDuration: freezed == activityDuration
           ? _value.activityDuration
           : activityDuration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      injuryDuration: null == injuryDuration
+              as Duration?,
+      injuryDuration: freezed == injuryDuration
           ? _value.injuryDuration
           : injuryDuration // ignore: cast_nullable_to_non_nullable
-              as Duration,
+              as Duration?,
+      bleedingInjuryDuration: freezed == bleedingInjuryDuration
+          ? _value.bleedingInjuryDuration
+          : bleedingInjuryDuration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       periodCount: null == periodCount
           ? _value.periodCount
           : periodCount // ignore: cast_nullable_to_non_nullable
@@ -168,8 +181,9 @@ class _$BoutConfigImpl extends _BoutConfig {
       {this.id,
       this.periodDuration = BoutConfig.defaultPeriodDuration,
       this.breakDuration = BoutConfig.defaultBreakDuration,
-      this.activityDuration = BoutConfig.defaultActivityDuration,
-      this.injuryDuration = BoutConfig.defaultInjuryDuration,
+      this.activityDuration,
+      this.injuryDuration,
+      this.bleedingInjuryDuration,
       this.periodCount = BoutConfig.defaultPeriodCount})
       : super._();
 
@@ -184,18 +198,18 @@ class _$BoutConfigImpl extends _BoutConfig {
   @JsonKey()
   final Duration breakDuration;
   @override
-  @JsonKey()
-  final Duration activityDuration;
+  final Duration? activityDuration;
   @override
-  @JsonKey()
-  final Duration injuryDuration;
+  final Duration? injuryDuration;
+  @override
+  final Duration? bleedingInjuryDuration;
   @override
   @JsonKey()
   final int periodCount;
 
   @override
   String toString() {
-    return 'BoutConfig(id: $id, periodDuration: $periodDuration, breakDuration: $breakDuration, activityDuration: $activityDuration, injuryDuration: $injuryDuration, periodCount: $periodCount)';
+    return 'BoutConfig(id: $id, periodDuration: $periodDuration, breakDuration: $breakDuration, activityDuration: $activityDuration, injuryDuration: $injuryDuration, bleedingInjuryDuration: $bleedingInjuryDuration, periodCount: $periodCount)';
   }
 
   @override
@@ -208,13 +222,15 @@ class _$BoutConfigImpl extends _BoutConfig {
             (identical(other.breakDuration, breakDuration) || other.breakDuration == breakDuration) &&
             (identical(other.activityDuration, activityDuration) || other.activityDuration == activityDuration) &&
             (identical(other.injuryDuration, injuryDuration) || other.injuryDuration == injuryDuration) &&
+            (identical(other.bleedingInjuryDuration, bleedingInjuryDuration) ||
+                other.bleedingInjuryDuration == bleedingInjuryDuration) &&
             (identical(other.periodCount, periodCount) || other.periodCount == periodCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration, periodCount);
+  int get hashCode => Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration,
+      bleedingInjuryDuration, periodCount);
 
   /// Create a copy of BoutConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -237,8 +253,9 @@ abstract class _BoutConfig extends BoutConfig {
       {final int? id,
       final Duration periodDuration,
       final Duration breakDuration,
-      final Duration activityDuration,
-      final Duration injuryDuration,
+      final Duration? activityDuration,
+      final Duration? injuryDuration,
+      final Duration? bleedingInjuryDuration,
       final int periodCount}) = _$BoutConfigImpl;
   const _BoutConfig._() : super._();
 
@@ -251,9 +268,11 @@ abstract class _BoutConfig extends BoutConfig {
   @override
   Duration get breakDuration;
   @override
-  Duration get activityDuration;
+  Duration? get activityDuration;
   @override
-  Duration get injuryDuration;
+  Duration? get injuryDuration;
+  @override
+  Duration? get bleedingInjuryDuration;
   @override
   int get periodCount;
 
