@@ -6,9 +6,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class BoutActionControls extends StatelessWidget {
   final BoutRole role;
+  final BoutConfig boutConfig;
   final Function(BoutScreenActionIntent)? callback;
 
-  const BoutActionControls(this.role, this.callback, {super.key});
+  const BoutActionControls(this.role, this.boutConfig, this.callback, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,17 +55,26 @@ class BoutActionControls extends StatelessWidget {
         prepareCallback(const BoutScreenActionIntent.redDismissal(), const BoutScreenActionIntent.blueDismissal()),
         color,
       ),
-      displayActionControl(
-        AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
-        prepareCallback(
-            const BoutScreenActionIntent.redActivityTime(), const BoutScreenActionIntent.blueActivityTime()),
-        color,
-      ),
-      displayActionControl(
-        AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
-        prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
-        color,
-      ),
+      if (boutConfig.activityDuration != null)
+        displayActionControl(
+          AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
+          prepareCallback(
+              const BoutScreenActionIntent.redActivityTime(), const BoutScreenActionIntent.blueActivityTime()),
+          color,
+        ),
+      if (boutConfig.injuryDuration != null)
+        displayActionControl(
+          AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
+          prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
+          color,
+        ),
+      if (boutConfig.bleedingInjuryDuration != null)
+        displayActionControl(
+          AppLocalizations.of(context)!.bleedingInjuryTimeShort, // BZ Bleeding Injury Time, Verletzungszeit Blut
+          prepareCallback(const BoutScreenActionIntent.redBleedingInjuryTime(),
+              const BoutScreenActionIntent.blueBleedingInjuryTime()),
+          color,
+        ),
       displayActionControl(
         '⎌',
         prepareCallback(const BoutScreenActionIntent.redUndo(), const BoutScreenActionIntent.blueUndo()),

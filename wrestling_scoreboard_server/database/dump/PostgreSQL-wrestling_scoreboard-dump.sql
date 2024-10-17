@@ -239,7 +239,8 @@ CREATE TABLE public.bout_config (
     break_duration_secs integer,
     activity_duration_secs integer,
     injury_duration_secs integer,
-    period_count smallint
+    period_count smallint,
+    bleeding_injury_duration_secs integer
 );
 
 
@@ -1345,8 +1346,8 @@ COPY public.bout_action (id, duration_millis, point_count, action_type, bout_rol
 -- Data for Name: bout_config; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity_duration_secs, injury_duration_secs, period_count) FROM stdin;
-1	180	30	30	30	2
+COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity_duration_secs, injury_duration_secs, period_count, bleeding_injury_duration_secs) FROM stdin;
+1	180	30	30	30	2	\N
 \.
 
 
@@ -1511,7 +1512,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.4
+0.2.0-pre.5
 \.
 
 

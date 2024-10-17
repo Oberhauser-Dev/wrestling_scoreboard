@@ -73,26 +73,29 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                     id: teamMatchBout.bout.id,
                     initialData: teamMatchBout.bout,
                     builder: (context, bout) {
-                      return BoutScreen(
-                        wrestlingEvent: match,
-                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                        // TODO: get from DB:
-                        boutRules: TeamMatch.defaultBoutResultRules,
-                        bouts: teamMatchBouts.map((e) => e.bout).toList(),
-                        boutIndex: teamMatchBoutIndex,
-                        bout: bout,
-                        onPressBoutInfo: (BuildContext context) {
-                          // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                          context.go(
-                              '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
-                        },
-                        navigateToBoutByIndex: (context, index) {
-                          context.pop();
-                          navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
-                        },
-                        home: match.home.team,
-                        guest: match.guest.team,
-                      );
+                      return ManyConsumer<BoutResultRule, BoutConfig>(
+                          filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
+                          builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
+                            return BoutScreen(
+                              wrestlingEvent: match,
+                              boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                              boutRules: boutResultRules,
+                              bouts: teamMatchBouts.map((e) => e.bout).toList(),
+                              boutIndex: teamMatchBoutIndex,
+                              bout: bout,
+                              onPressBoutInfo: (BuildContext context) {
+                                // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+                                context.go(
+                                    '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
+                              },
+                              navigateToBoutByIndex: (context, index) {
+                                context.pop();
+                                navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
+                              },
+                              home: match.home.team,
+                              guest: match.guest.team,
+                            );
+                          });
                     });
               });
         });
@@ -157,6 +160,8 @@ class BoutState extends ConsumerState<BoutScreen> {
     period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
     _r = ParticipantStateModel(bout.r);
     _b = ParticipantStateModel(bout.b);
+
+    // Regular injury
     _r.injuryStopwatch.limit = boutConfig.injuryDuration;
     _r.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
@@ -168,6 +173,22 @@ class BoutState extends ConsumerState<BoutScreen> {
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
+      });
+      handleAction(const BoutScreenActionIntent.horn());
+    });
+
+    // Bleeding injury
+    _r.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
+    _r.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
+      setState(() {
+        _r.isBleedingInjury = false;
+      });
+      handleAction(const BoutScreenActionIntent.horn());
+    });
+    _b.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
+    _b.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
+      setState(() {
+        _b.isBleedingInjury = false;
       });
       handleAction(const BoutScreenActionIntent.horn());
     });
@@ -374,6 +395,17 @@ class BoutState extends ConsumerState<BoutScreen> {
           psm.injuryStopwatch.stop();
         }
         break;
+      case BoutScreenActions.redBleedingInjuryTime:
+        ParticipantStateModel psm = _r;
+        setState(() {
+          psm.isBleedingInjury = !psm.isBleedingInjury;
+        });
+        if (psm.isBleedingInjury) {
+          psm.bleedingInjuryStopwatch.start();
+        } else {
+          psm.bleedingInjuryStopwatch.stop();
+        }
+        break;
       case BoutScreenActions.blueActivityTime:
         ParticipantStateModel psm = _b;
         psm.activityStopwatch?.dispose();
@@ -399,6 +431,17 @@ class BoutState extends ConsumerState<BoutScreen> {
           psm.injuryStopwatch.start();
         } else {
           psm.injuryStopwatch.stop();
+        }
+        break;
+      case BoutScreenActions.blueBleedingInjuryTime:
+        ParticipantStateModel psm = _b;
+        setState(() {
+          psm.isBleedingInjury = !psm.isBleedingInjury;
+        });
+        if (psm.isBleedingInjury) {
+          psm.bleedingInjuryStopwatch.start();
+        } else {
+          psm.bleedingInjuryStopwatch.stop();
         }
         break;
       case BoutScreenActions.horn:
@@ -516,7 +559,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                         padding: bottomPadding,
                         children: [
                           displayTechnicalPoints(_r, BoutRole.red),
-                          BoutActionControls(BoutRole.red, bout.r == null ? null : handleAction),
+                          BoutActionControls(BoutRole.red, boutConfig, bout.r == null ? null : handleAction),
                           Expanded(
                             flex: 50,
                             child: Center(
@@ -528,7 +571,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                               ),
                             ),
                           ),
-                          BoutActionControls(BoutRole.blue, bout.b == null ? null : handleAction),
+                          BoutActionControls(BoutRole.blue, boutConfig, bout.b == null ? null : handleAction),
                           displayTechnicalPoints(_b, BoutRole.blue),
                         ],
                       ),
