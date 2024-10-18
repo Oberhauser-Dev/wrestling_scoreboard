@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_club_affiliat
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -51,9 +50,10 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             dataObject: team,
             label: localizations.team,
             details: team.name,
-            actions: [
-              ConditionalOrganizationImportAction(
-                  id: id, organization: team.organization!, importType: OrganizationImportType.team)
+            actions: const [
+              // TODO: Enable, when endpoint is ready
+              // ConditionalOrganizationImportAction(
+              //     id: id, organization: team.organization!, importType: OrganizationImportType.team)
             ],
             tabs: [
               Tab(child: HeadingText(localizations.info)),
