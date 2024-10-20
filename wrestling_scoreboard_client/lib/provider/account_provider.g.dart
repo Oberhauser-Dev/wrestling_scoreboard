@@ -63,11 +63,10 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
       $NotifierProviderElement(this, container);
 }
 
-String _$userNotifierHash() => r'5cfac4dea161f15a98b2aecf867e76d5d41812ce';
+String _$userNotifierHash() => r'36bea4cc9b89f18b89d1fd78203395da8209b59d';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();
-
   @$internal
   @override
   Raw<Future<User?>> runBuild() => build();

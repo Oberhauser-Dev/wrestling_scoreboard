@@ -45,39 +45,7 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
   @override
   void initState() {
     super.initState();
-    ref.read(dataManagerNotifierProvider).then((dataManager) async {
-      DateTime? lastUpdated;
-      switch (widget.importType) {
-        case OrganizationImportType.organization:
-          lastUpdated = await dataManager.organizationLastImportUtcDateTime(widget.id);
-        case OrganizationImportType.team:
-          lastUpdated = await dataManager.organizationTeamLastImportUtcDateTime(widget.id);
-        case OrganizationImportType.league:
-          lastUpdated = await dataManager.organizationLeagueLastImportUtcDateTime(widget.id);
-        case OrganizationImportType.competition:
-          lastUpdated = await dataManager.organizationCompetitionLastImportUtcDateTime(widget.id);
-        case OrganizationImportType.teamMatch:
-          lastUpdated = await dataManager.organizationTeamMatchLastImportUtcDateTime(widget.id);
-      }
-      lastUpdated = lastUpdated?.toLocal();
-      // TODO: make it configurable via Duration picker in settings
-      if (lastUpdated == null || lastUpdated.compareTo(DateTime.now().subtract(const Duration(hours: 48))) < 0) {
-        final context = this.context;
-        if (context.mounted) {
-          final localizations = AppLocalizations.of(context)!;
-          final result = await showOkCancelDialog(
-            context: context,
-            child: Text(lastUpdated == null
-                ? localizations.recommendFirstImportFromApiProvider
-                : localizations.recommendImportFromApiProvider(lastUpdated, lastUpdated)),
-            getResult: () => true,
-          );
-          if (result == true && context.mounted) {
-            await _import(localizations);
-          }
-        }
-      }
-    });
+    checkProposeImport(context, ref, orgId: widget.orgId, id: widget.id, importType: widget.importType);
   }
 
   @override
@@ -92,41 +60,91 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
           getResult: () => true,
         );
         if (result == true && context.mounted) {
-          await _import(localizations);
+          await _processImport(context, ref, orgId: widget.orgId, id: widget.id, importType: widget.importType);
         }
       },
       icon: const Icon(Icons.import_export),
     );
   }
+}
 
-  Future<void> _import(AppLocalizations localizations) async {
-    await catchAsync(
-      context,
-      () => showLoadingDialog(
-        label: AppLocalizations.of(context)!.importFromApiProvider,
+Future<void> checkProposeImport(
+  BuildContext context,
+  WidgetRef ref, {
+  required int orgId,
+  required int id,
+  required OrganizationImportType importType,
+}) async {
+  final dataManager = await ref.read(dataManagerNotifierProvider);
+  DateTime? lastUpdated;
+  switch (importType) {
+    case OrganizationImportType.organization:
+      lastUpdated = await dataManager.organizationLastImportUtcDateTime(id);
+    case OrganizationImportType.team:
+      lastUpdated = await dataManager.organizationTeamLastImportUtcDateTime(id);
+    case OrganizationImportType.league:
+      lastUpdated = await dataManager.organizationLeagueLastImportUtcDateTime(id);
+    case OrganizationImportType.competition:
+      lastUpdated = await dataManager.organizationCompetitionLastImportUtcDateTime(id);
+    case OrganizationImportType.teamMatch:
+      lastUpdated = await dataManager.organizationTeamMatchLastImportUtcDateTime(id);
+  }
+  lastUpdated = lastUpdated?.toLocal();
+
+  final proposeApiImportDuration = await ref.read(proposeApiImportDurationNotifierProvider);
+  if (lastUpdated == null || lastUpdated.compareTo(DateTime.now().subtract(proposeApiImportDuration)) < 0) {
+    if (context.mounted) {
+      final localizations = AppLocalizations.of(context)!;
+      final result = await showOkCancelDialog(
+        context: context,
+        child: Text(lastUpdated == null
+            ? localizations.proposeFirstImportFromApiProvider
+            : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated)),
+        getResult: () => true,
+      );
+      if (result == true && context.mounted) {
+        await _processImport(context, ref, orgId: orgId, id: id, importType: importType);
+      }
+    }
+  }
+}
+
+Future<void> _processImport(
+  BuildContext context,
+  WidgetRef ref, {
+  required int orgId,
+  required int id,
+  required OrganizationImportType importType,
+}) async {
+  await catchAsync(
+    context,
+    () {
+      final localizations = AppLocalizations.of(context)!;
+      return showLoadingDialog(
+        label: localizations.importFromApiProvider,
         runAsync: (BuildContext context) async {
           final dataManager = await ref.read(dataManagerNotifierProvider);
-          final authService = (await ref.read(orgAuthNotifierProvider))[widget.orgId];
-          switch (widget.importType) {
+          final authService = (await ref.read(orgAuthNotifierProvider))[orgId];
+          switch (importType) {
             case OrganizationImportType.organization:
-              await dataManager.organizationImport(widget.id, authService: authService);
+              await dataManager.organizationImport(id, authService: authService);
             case OrganizationImportType.team:
-              await dataManager.organizationTeamImport(widget.id, authService: authService);
+              await dataManager.organizationTeamImport(id, authService: authService);
             case OrganizationImportType.league:
-              await dataManager.organizationLeagueImport(widget.id, authService: authService);
+              await dataManager.organizationLeagueImport(id, authService: authService);
             case OrganizationImportType.competition:
-              await dataManager.organizationCompetitionImport(widget.id, authService: authService);
+              await dataManager.organizationCompetitionImport(id, authService: authService);
             case OrganizationImportType.teamMatch:
-              await dataManager.organizationTeamMatchImport(widget.id, authService: authService);
+              await dataManager.organizationTeamMatchImport(id, authService: authService);
           }
           if (context.mounted) {
             await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
           }
         },
         context: context,
-      ),
-    );
-  }
+      );
+    },
+  );
 }
 
 enum OrganizationImportType {

@@ -9,7 +9,6 @@ import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
@@ -221,23 +220,23 @@ class TeamMatchOverview extends ConsumerWidget {
                               title: homeLineup.team.name,
                               icon: Icons.view_list,
                               onTap: () async => handleSelectedLineup(
+                                    context,
+                                    ref,
                                     homeLineup,
                                     match,
                                     navigator,
-                                    (await ref.read(dataManagerNotifierProvider)),
                                     league: match.league!,
-                                    ref: ref,
                                   )),
                           ContentItem(
                               title: guestLineup.team.name,
                               icon: Icons.view_list,
                               onTap: () async => handleSelectedLineup(
+                                    context,
+                                    ref,
                                     guestLineup,
                                     match,
                                     navigator,
-                                    (await ref.read(dataManagerNotifierProvider)),
                                     league: match.league!,
-                                    ref: ref,
                                   )),
                         ],
                       ),
@@ -294,8 +293,15 @@ class TeamMatchOverview extends ConsumerWidget {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 
-  handleSelectedLineup(Lineup lineup, TeamMatch match, NavigatorState navigator, DataManager dataManager,
-      {required League league, required WidgetRef ref}) async {
+  handleSelectedLineup(
+    BuildContext context,
+    WidgetRef ref,
+    Lineup lineup,
+    TeamMatch match,
+    NavigatorState navigator, {
+    required League league,
+  }) async {
+    final dataManager = await ref.read(dataManagerNotifierProvider);
     final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
     final weightClasses = (await dataManager.readMany<DivisionWeightClass, Division>(filterObject: league.division))
         .where((element) => element.seasonPartition == match.seasonPartition)
@@ -312,7 +318,14 @@ class TeamMatchOverview extends ConsumerWidget {
       matches.sort((a, b) => a.date.compareTo(b.date));
       final resolvedMatch =
           matches.lastWhereOrNull((match) => match.home.team == lineup.team || match.guest.team == lineup.team);
-      if (resolvedMatch != null) {
+      if (resolvedMatch != null && resolvedMatch.organization != null && context.mounted) {
+        await checkProposeImport(
+          context,
+          ref,
+          orgId: resolvedMatch.organization!.id!,
+          id: resolvedMatch.id!,
+          importType: OrganizationImportType.teamMatch,
+        );
         proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
         proposedParticipations = await dataManager.readMany<Participation, Lineup>(filterObject: proposedLineup);
       }

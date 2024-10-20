@@ -220,6 +220,22 @@ class OrgAuthNotifier extends _$OrgAuthNotifier {
 }
 
 @Riverpod(keepAlive: true)
+class ProposeApiImportDurationNotifier extends _$ProposeApiImportDurationNotifier {
+  @override
+  Raw<Future<Duration>> build() async {
+    var proposeApiImportDurationSecs = await Preferences.getInt(Preferences.keyProposeApiImportDuration);
+    return proposeApiImportDurationSecs != null
+        ? Duration(seconds: proposeApiImportDurationSecs)
+        : const Duration(days: 2);
+  }
+
+  Future<void> setState(Duration? val) async {
+    Preferences.setInt(Preferences.keyProposeApiImportDuration, val?.inSeconds);
+    state = Future.value(val);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class JwtNotifier extends _$JwtNotifier {
   @override
   Raw<Future<String?>> build() async {

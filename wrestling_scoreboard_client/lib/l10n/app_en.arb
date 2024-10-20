@@ -27,9 +27,9 @@
   "apiProvider": "API Provider",
   "importFromApiProvider": "Sync with API provider",
   "warningImportFromApiProvider": "This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?",
-  "recommendFirstImportFromApiProvider": "Cannot determine the last import. Would you like import the data?",
-  "recommendImportFromApiProvider": "The last import was on {date} at {time}. Would you like to update the data?",
-  "@recommendImportFromApiProvider": {
+  "proposeFirstImportFromApiProvider": "Cannot determine the last import. Would you like import the data?",
+  "proposeImportFromApiProvider": "The last import was on {date} at {time}. Would you like to update the data?",
+  "@proposeImportFromApiProvider": {
     "placeholders": {
       "date": {
         "type": "DateTime",
@@ -41,6 +41,7 @@
       }
     }
   },
+  "proposeApiImportDuration": "Duration for proposing an API import",
   "reportProvider": "Report Provider",
   "database": "Database",
   "exportDatabase": "Export database",
@@ -235,6 +236,7 @@
   "injuryDuration": "Injury duration",
   "bleedingInjuryDuration": "Bleeding injury duration",
   "periodCount": "Number of periods",
+  "days": "Days",
 
   "referee": "Referee",
   "refereeAbbr": "REF",

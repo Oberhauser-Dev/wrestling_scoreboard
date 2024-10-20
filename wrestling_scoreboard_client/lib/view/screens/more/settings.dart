@@ -209,6 +209,47 @@ class CustomSettingsScreen extends ConsumerWidget {
               );
             },
           ),
+          Restricted(
+            privilege: UserPrivilege.write,
+            child: LoadingBuilder<Duration>(
+                future: ref.watch(proposeApiImportDurationNotifierProvider),
+                builder: (context, proposeApiImportDuration) {
+                  return SettingsSection(
+                    title: localizations.services,
+                    action: TextButton(
+                      onPressed: () async {
+                        proposeApiImportDuration = const Duration(days: 2);
+                        await ref
+                            .read(proposeApiImportDurationNotifierProvider.notifier)
+                            .setState(proposeApiImportDuration);
+                      },
+                      child: Text(localizations.reset),
+                    ),
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.timelapse),
+                        title: Text(localizations.proposeApiImportDuration),
+                        subtitle: Text(proposeApiImportDuration.formatDaysHoursMinutes(context)),
+                        onTap: () async {
+                          final val = await showDialog<Duration?>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // TODO: Allow days in duration picker
+                              return DurationDialog(
+                                initialValue: proposeApiImportDuration,
+                                maxValue: const Duration(days: 365),
+                              );
+                            },
+                          );
+                          if (val != null) {
+                            await ref.read(proposeApiImportDurationNotifierProvider.notifier).setState(val);
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                }),
+          ),
           LoadingBuilder<Duration>(
             future: ref.watch(networkTimeoutNotifierProvider),
             builder: (context, networkTimeout) {
@@ -293,14 +334,6 @@ class CustomSettingsScreen extends ConsumerWidget {
               );
             },
           ),
-          // SettingsSection(
-          //   title: localizations.services,
-          //   action: TextButton(
-          //     onPressed: () {},
-          //     child: Text(localizations.reset),
-          //   ),
-          //   children: [],
-          // ),
           Restricted(
             privilege: UserPrivilege.admin,
             child: SettingsSection(
