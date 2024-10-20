@@ -10,4 +10,16 @@ class LeagueTeamParticipationController extends ShelfController<LeagueTeamPartic
   }
 
   LeagueTeamParticipationController._internal() : super(tableName: 'league_team_participation');
+
+  Future<LeagueTeamParticipation?> getByLeagueAndTeamId({
+    required int teamId,
+    required int leagueId,
+    required obfuscate,
+  }) async {
+    final many = await getMany(
+        conditions: ['team_id = @teamId', 'league_id = @leagueId'],
+        substitutionValues: {'teamId': teamId, 'leagueId': leagueId},
+        obfuscate: obfuscate);
+    return many.singleOrNull;
+  }
 }

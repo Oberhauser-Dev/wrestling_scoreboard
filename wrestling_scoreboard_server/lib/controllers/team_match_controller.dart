@@ -144,79 +144,76 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
   }
 
   @override
-  Future<Response> import(Request request, User? user, String entityId) async {
-    try {
-      final bool obfuscate = user?.obfuscate ?? true;
-      final teamMatch = await TeamMatchController().getSingle(int.parse(entityId), obfuscate: false);
+  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+    final teamMatch = await TeamMatchController().getSingle(entityId, obfuscate: obfuscate);
 
-      final organizationId = teamMatch.organization?.id;
-      if (organizationId == null) {
-        throw Exception('No organization found for league $entityId.');
-      }
+    final organizationId = teamMatch.organization?.id;
+    if (organizationId == null) {
+      throw Exception('No organization found for league $entityId.');
+    }
 
-      final apiProvider = await OrganizationController().initApiProvider(request, organizationId);
-      if (apiProvider == null) {
-        throw Exception('No API provider selected for the organization $organizationId.');
-      }
-      // apiProvider.isMock = true;
+    final apiProvider = await OrganizationController().initApiProvider(message, organizationId);
+    if (apiProvider == null) {
+      throw Exception('No API provider selected for the organization $organizationId.');
+    }
+    apiProvider.isMock = useMock;
 
-      final boutMap = await apiProvider.importBouts(event: teamMatch);
+    final boutMap = await apiProvider.importBouts(event: teamMatch);
 
-      // Handle bouts one after one, (NO Future.wait) as it may conflicts creating the same membership as once.
-      var index = 0;
-      for (final boutEntry in boutMap.entries) {
-        var bout = boutEntry.key;
+    // Handle bouts one after one, (NO Future.wait) as it may conflicts creating the same membership as once.
+    var index = 0;
+    for (final boutEntry in boutMap.entries) {
+      var bout = boutEntry.key;
 
-        final teamMatchBout = TeamMatchBout(
-          pos: index,
-          teamMatch: teamMatch,
-          bout: bout,
-          organization: teamMatch.organization,
-          orgSyncId: bout.orgSyncId,
-        );
-        await TeamMatchBoutController().getOrCreateSingleOfOrg(teamMatchBout, obfuscate: obfuscate, onCreate: () async {
-          bout = await BoutController().getOrCreateSingleOfOrg(
-            bout,
-            obfuscate: obfuscate,
-            onCreate: () async {
-              return bout.copyWith(
-                r: await _saveDeepParticipantState(bout.r, obfuscate: obfuscate),
-                b: await _saveDeepParticipantState(bout.b, obfuscate: obfuscate),
-              );
-            },
+      final teamMatchBout = TeamMatchBout(
+        pos: index,
+        teamMatch: teamMatch,
+        bout: bout,
+        organization: teamMatch.organization,
+        orgSyncId: bout.orgSyncId,
+      );
+      bout = await BoutController().updateOrCreateSingleOfOrg(
+        bout,
+        obfuscate: obfuscate,
+        onUpdateOrCreate: (previousBout) async {
+          return bout.copyWith(
+            r: await _saveDeepParticipantState(bout.r,
+                previousParticipationState: previousBout?.r, obfuscate: obfuscate),
+            b: await _saveDeepParticipantState(bout.b,
+                previousParticipationState: previousBout?.b, obfuscate: obfuscate),
           );
-
-          // Add missing id to bout of boutActions
-          final Iterable<BoutAction> boutActions = boutEntry.value.map((action) => action.copyWith(bout: bout));
-          await BoutActionController().createMany(boutActions.toList());
-          return teamMatchBout.copyWith(bout: bout);
-        });
-        index++;
-      }
-      updateLastImportUtcDateTime(entityId);
-      return Response.ok('{"status": "success"}');
-    } on HttpException catch (err, stackTrace) {
-      return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
-    } catch (err, stackTrace) {
-      return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
+        },
+      );
+      await TeamMatchBoutController().updateOrCreateSingleOfOrg(teamMatchBout, obfuscate: obfuscate,
+          onUpdateOrCreate: (_) async {
+        // Add missing id to bout of boutActions
+        final Iterable<BoutAction> boutActions = boutEntry.value.map((action) => action.copyWith(bout: bout));
+        final prevBoutActions = await BoutActionController()
+            .getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': bout.id}, obfuscate: obfuscate);
+        await BoutActionController().updateOnDiffMany(boutActions.toList(), previous: prevBoutActions);
+        return teamMatchBout.copyWith(bout: bout);
+      });
+      index++;
     }
   }
 
   Future<ParticipantState?> _saveDeepParticipantState(ParticipantState? participantState,
-      {required bool obfuscate}) async {
+      {ParticipantState? previousParticipationState, required bool obfuscate}) async {
     if (participantState != null) {
       final person = await PersonController()
-          .getOrCreateSingleOfOrg(participantState.participation.membership.person, obfuscate: obfuscate);
+          .updateOrCreateSingleOfOrg(participantState.participation.membership.person, obfuscate: obfuscate);
 
-      final membership = await MembershipController().getOrCreateSingleOfOrg(
+      final membership = await MembershipController().updateOrCreateSingleOfOrg(
           participantState.participation.membership.copyWith(person: person),
           obfuscate: obfuscate);
 
-      final participation = await ParticipationController()
-          .createSingleReturn(participantState.participation.copyWith(membership: membership));
+      final participation = await ParticipationController().updateOnDiffSingle(
+          participantState.participation.copyWith(membership: membership),
+          previous: previousParticipationState?.participation);
 
-      return await ParticipantStateController()
-          .createSingleReturn(participantState.copyWith(participation: participation));
+      return await ParticipantStateController().updateOnDiffSingle(
+          participantState.copyWith(participation: participation),
+          previous: previousParticipationState);
     }
     return null;
   }

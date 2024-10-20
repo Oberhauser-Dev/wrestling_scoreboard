@@ -63,10 +63,9 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     );
   }
 
-  Future<WrestlingApi?> initApiProvider(Request request, int organizationId) async {
+  Future<WrestlingApi?> initApiProvider(String? message, int organizationId) async {
     AuthService? authService;
-    final message = await request.readAsString();
-    if (message.isNotEmpty) {
+    if (message != null && message.isNotEmpty) {
       final jsonDecodedMessage = jsonDecode(message);
       final authType = getTypeFromTableName(jsonDecodedMessage['tableName']);
       if (authType == BasicAuthService) {
@@ -82,62 +81,61 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
   }
 
   @override
-  Future<Response> import(Request request, User? user, String entityId) async {
-    try {
-      final bool obfuscate = user?.obfuscate ?? true;
-      final apiProvider = await initApiProvider(request, int.parse(entityId));
-      if (apiProvider == null) {
-        throw Exception('No API provider selected for the organization $entityId.');
-      }
-      // apiProvider.isMock = true;
-
-      final teamClubAffiliations = await apiProvider.importTeamClubAffiliations();
-      await Future.forEach(teamClubAffiliations, (teamClubAffiliation) async {
-        final club = await ClubController().getOrCreateSingleOfOrg(teamClubAffiliation.club, obfuscate: obfuscate);
-        final team = await TeamController().getOrCreateSingleOfOrg(teamClubAffiliation.team, obfuscate: obfuscate);
-        teamClubAffiliation = teamClubAffiliation.copyWith(club: club, team: team);
-
-        try {
-          await TeamClubAffiliationController().createSingle(TeamClubAffiliation(team: team, club: club));
-        } on InvalidParameterException catch (_) {
-          // Do not add team club affiliations multiple times.
-        }
-      });
-
-      final divisionBoutResultRuleMap = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
-      await Future.forEach(divisionBoutResultRuleMap.entries, (divisionBoutResultEntry) async {
-        Division division = divisionBoutResultEntry.key;
-        final boutResultRules = divisionBoutResultEntry.value;
-        division =
-            await DivisionController().getOrCreateSingleOfOrg(division, obfuscate: obfuscate, onCreate: () async {
-          final boutConfig = await BoutConfigController().createSingleReturn(division.boutConfig);
-          await Future.forEach(boutResultRules, (rule) async {
-            rule = rule.copyWith(boutConfig: boutConfig);
-            rule = await BoutResultRuleController().createSingleReturn(rule);
-          });
-          return division.copyWith(boutConfig: boutConfig);
-        });
-
-        final divisionWeightClasses = await apiProvider.importDivisionWeightClasses(division: division);
-        await Future.forEach(divisionWeightClasses, (divisionWeightClass) async {
-          await DivisionWeightClassController().getOrCreateSingleOfOrg(divisionWeightClass, obfuscate: obfuscate,
-              onCreate: () async {
-            final weightClass = await WeightClassController().createSingleReturn(divisionWeightClass.weightClass);
-            return divisionWeightClass.copyWith(weightClass: weightClass);
-          });
-        });
-
-        var leagues = await apiProvider.importLeagues(division: division);
-        leagues = await LeagueController().getOrCreateManyOfOrg(leagues.toList(), obfuscate: obfuscate);
-      });
-
-      updateLastImportUtcDateTime(entityId);
-      return Response.ok('{"status": "success"}');
-    } on HttpException catch (err, stackTrace) {
-      return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
-    } catch (err, stackTrace) {
-      return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
+  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+    final apiProvider = await initApiProvider(message, entityId);
+    if (apiProvider == null) {
+      throw Exception('No API provider selected for the organization $entityId.');
     }
+    apiProvider.isMock = useMock;
+
+    final teamClubAffiliations = await apiProvider.importTeamClubAffiliations();
+    await Future.forEach(teamClubAffiliations, (teamClubAffiliation) async {
+      final club = await ClubController().updateOrCreateSingleOfOrg(teamClubAffiliation.club, obfuscate: obfuscate);
+      final team = await TeamController().updateOrCreateSingleOfOrg(teamClubAffiliation.team, obfuscate: obfuscate);
+      teamClubAffiliation = teamClubAffiliation.copyWith(club: club, team: team);
+
+      // Do not add team club affiliations multiple times.
+      final previousTeamClubAffiliation = await TeamClubAffiliationController()
+          .getByTeamAndClubId(teamId: team.id!, clubId: club.id!, obfuscate: obfuscate);
+      if (previousTeamClubAffiliation == null) {
+        await TeamClubAffiliationController().createSingle(TeamClubAffiliation(team: team, club: club));
+      }
+    });
+
+    final divisionBoutResultRuleMap = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
+    await Future.forEach(divisionBoutResultRuleMap.entries, (divisionBoutResultEntry) async {
+      Division division = divisionBoutResultEntry.key;
+      var boutResultRules = divisionBoutResultEntry.value;
+      division = await DivisionController().updateOrCreateSingleOfOrg(
+        division,
+        obfuscate: obfuscate,
+        onUpdateOrCreate: (previousDivision) async {
+          final boutConfig = await BoutConfigController()
+              .updateOnDiffSingle(division.boutConfig, previous: previousDivision?.boutConfig);
+          boutResultRules = boutResultRules.map((rule) => rule.copyWith(boutConfig: boutConfig));
+          final prevRules = await BoutResultRuleController().getMany(
+              conditions: ['bout_config_id = @id'], substitutionValues: {'id': boutConfig.id}, obfuscate: obfuscate);
+          await BoutResultRuleController().updateOnDiffMany(boutResultRules.toList(), previous: prevRules);
+          return division.copyWith(boutConfig: boutConfig);
+        },
+      );
+
+      final divisionWeightClasses = await apiProvider.importDivisionWeightClasses(division: division);
+      await Future.forEach(divisionWeightClasses, (divisionWeightClass) async {
+        await DivisionWeightClassController().updateOrCreateSingleOfOrg(
+          divisionWeightClass,
+          obfuscate: obfuscate,
+          onUpdateOrCreate: (previousWeightClass) async {
+            final weightClass = await WeightClassController()
+                .updateOnDiffSingle(divisionWeightClass.weightClass, previous: previousWeightClass?.weightClass);
+            return divisionWeightClass.copyWith(weightClass: weightClass);
+          },
+        );
+      });
+
+      var leagues = await apiProvider.importLeagues(division: division);
+      leagues = await LeagueController().updateOrCreateManyOfOrg(leagues.toList(), obfuscate: obfuscate);
+    });
   }
 
   Future<List<DataObject>> search(
@@ -146,7 +144,8 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     required String searchStr,
     required Type searchType,
   }) async {
-    final apiProvider = await initApiProvider(request, id);
+    final message = await request.readAsString();
+    final apiProvider = await initApiProvider(message, id);
     if (apiProvider == null) {
       throw Exception('No API provider selected for the organization $id.');
     }

@@ -49,63 +49,62 @@ class LeagueController extends OrganizationalController<League> with ImportContr
   }
 
   @override
-  Future<Response> import(Request request, User? user, String entityId) async {
-    try {
-      final bool obfuscate = user?.obfuscate ?? true;
-      final league = await LeagueController().getSingle(int.parse(entityId), obfuscate: false);
+  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+    final league = await LeagueController().getSingle(entityId, obfuscate: obfuscate);
 
-      final organizationId = league.organization?.id;
-      if (organizationId == null) {
-        throw Exception('No organization found for league $entityId.');
-      }
+    final organizationId = league.organization?.id;
+    if (organizationId == null) {
+      throw Exception('No organization found for league $entityId.');
+    }
 
-      final apiProvider = await OrganizationController().initApiProvider(request, organizationId);
-      if (apiProvider == null) {
-        throw Exception('No API provider selected for the organization $organizationId.');
-      }
-      // apiProvider.isMock = true;
+    final apiProvider = await OrganizationController().initApiProvider(message, organizationId);
+    if (apiProvider == null) {
+      throw Exception('No API provider selected for the organization $organizationId.');
+    }
+    apiProvider.isMock = useMock;
 
-      final teamMatchs = await apiProvider.importTeamMatches(league: league);
+    final teamMatchs = await apiProvider.importTeamMatches(league: league);
 
-      await Future.forEach(teamMatchs, (teamMatch) async {
-        await TeamMatchController().getOrCreateSingleOfOrg(teamMatch, obfuscate: obfuscate, onCreate: () async {
+    await Future.forEach(teamMatchs, (teamMatch) async {
+      await TeamMatchController().updateOrCreateSingleOfOrg(
+        teamMatch,
+        obfuscate: obfuscate,
+        onUpdateOrCreate: (prevTeamMatch) async {
           return teamMatch.copyWith(
-            home: await LineupController().createSingleReturn(teamMatch.home),
-            guest: await LineupController().createSingleReturn(teamMatch.guest),
+            home: await LineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
+            guest: await LineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
             referee: teamMatch.referee == null
                 ? null
-                : await PersonController().getOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
+                : await PersonController().updateOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
             judge: teamMatch.judge == null
                 ? null
-                : await PersonController().getOrCreateSingleOfOrg(teamMatch.judge!, obfuscate: obfuscate),
+                : await PersonController().updateOrCreateSingleOfOrg(teamMatch.judge!, obfuscate: obfuscate),
             matChairman: teamMatch.matChairman == null
                 ? null
-                : await PersonController().getOrCreateSingleOfOrg(teamMatch.matChairman!, obfuscate: obfuscate),
+                : await PersonController().updateOrCreateSingleOfOrg(teamMatch.matChairman!, obfuscate: obfuscate),
             transcriptWriter: teamMatch.transcriptWriter == null
                 ? null
-                : await PersonController().getOrCreateSingleOfOrg(teamMatch.transcriptWriter!, obfuscate: obfuscate),
+                : await PersonController().updateOrCreateSingleOfOrg(teamMatch.transcriptWriter!, obfuscate: obfuscate),
             timeKeeper: teamMatch.timeKeeper == null
                 ? null
-                : await PersonController().getOrCreateSingleOfOrg(teamMatch.timeKeeper!, obfuscate: obfuscate),
+                : await PersonController().updateOrCreateSingleOfOrg(teamMatch.timeKeeper!, obfuscate: obfuscate),
           );
-        });
+        },
+      );
 
-        try {
-          await LeagueTeamParticipationController()
-              .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.home.team));
-          await LeagueTeamParticipationController()
-              .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.guest.team));
-        } on InvalidParameterException catch (_) {
-          // Do not add teams multiple times.
-        }
-      });
-
-      updateLastImportUtcDateTime(entityId);
-      return Response.ok('{"status": "success"}');
-    } on HttpException catch (err, stackTrace) {
-      return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
-    } catch (err, stackTrace) {
-      return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
-    }
+      // Do not add teams to a league multiple times.
+      final previousHomeTeamParticipation = await LeagueTeamParticipationController()
+          .getByLeagueAndTeamId(teamId: teamMatch.home.team.id!, leagueId: league.id!, obfuscate: obfuscate);
+      if (previousHomeTeamParticipation == null) {
+        await LeagueTeamParticipationController()
+            .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.home.team));
+      }
+      final previousGuestTeamParticipation = await LeagueTeamParticipationController()
+          .getByLeagueAndTeamId(teamId: teamMatch.guest.team.id!, leagueId: league.id!, obfuscate: obfuscate);
+      if (previousGuestTeamParticipation == null) {
+        await LeagueTeamParticipationController()
+            .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.guest.team));
+      }
+    });
   }
 }

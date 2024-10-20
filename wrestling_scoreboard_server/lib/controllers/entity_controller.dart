@@ -64,11 +64,26 @@ mixin ImportController {
     return Response.ok(lastImportUtcDateTime[int.parse(entityId)]?.toIso8601String());
   }
 
-  void updateLastImportUtcDateTime(String id) {
-    lastImportUtcDateTime[int.parse(id)] = DateTime.now().toUtc();
+  void updateLastImportUtcDateTime(int id) {
+    lastImportUtcDateTime[id] = DateTime.now().toUtc();
   }
 
-  Future<Response> import(Request request, User? user, String entityId);
+  Future<Response> postImport(Request request, User? user, String entityIdStr) async {
+    final bool obfuscate = user?.obfuscate ?? true;
+    final entityId = int.parse(entityIdStr);
+    try {
+      final message = await request.readAsString();
+      await import(entityId, message: message, obfuscate: obfuscate);
+      updateLastImportUtcDateTime(entityId);
+      return Response.ok('{"status": "success"}');
+    } on HttpException catch (err, stackTrace) {
+      return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
+    } catch (err, stackTrace) {
+      return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
+    }
+  }
+
+  Future<void> import(int entityId, {String? message, bool obfuscate, bool useMock});
 }
 
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
@@ -339,6 +354,28 @@ abstract class EntityController<T extends DataObject> {
       throw InvalidParameterException(
           'The data object of table $tableName could not be updated. Check the attributes: $data'
           '\nPgException: {"message": ${e.message}');
+    }
+  }
+
+  Future<T> updateOnDiffSingle(T dataObject, {required T? previous}) async {
+    if (previous == null) {
+      return await createSingleReturn(dataObject);
+    }
+    dataObject = dataObject.copyWithId(previous.id) as T;
+    if (dataObject != previous) {
+      await updateSingle(dataObject);
+    }
+    return dataObject;
+  }
+
+  Future<List<T>> updateOnDiffMany(List<T> dataObjects, {required List<T> previous}) async {
+    if (dataObjects.length != previous.length) {
+      await Future.wait(previous.map((prev) => deleteSingle(prev.id!)));
+      return await createManyReturn(dataObjects);
+    } else {
+      return await Future.wait(Map.fromIterables(dataObjects, previous)
+          .entries
+          .map((element) => updateOnDiffSingle(element.key, previous: element.value)));
     }
   }
 
