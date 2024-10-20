@@ -12,6 +12,8 @@ class Preferences {
   /// Network timeout in milliseconds.
   static const keyNetworkTimeout = 'network-timeout';
 
+  static const keyProposeApiImportDuration = 'propose-api-import-duration';
+
   static const keyBellSound = 'bell-sound';
   static const keyFontFamily = 'font-family';
   static const keyFavorites = 'favorites';

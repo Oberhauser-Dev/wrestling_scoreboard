@@ -63,11 +63,10 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
       $NotifierProviderElement(this, container);
 }
 
-String _$dataManagerNotifierHash() => r'ca415c0257cc0041067af426ad3887c4353f72e2';
+String _$dataManagerNotifierHash() => r'503f87972a6b26b65ba10e6df7580c973fc8a08f';
 
 abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
-
   @$internal
   @override
   Raw<Future<DataManager>> runBuild() => build();
@@ -137,7 +136,6 @@ String _$webSocketManagerNotifierHash() => r'265576c4812245258bd39d047948d2def4d
 
 abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
-
   @$internal
   @override
   Raw<Future<WebSocketManager>> runBuild() => build();
