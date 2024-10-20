@@ -605,6 +605,75 @@ abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthServi
   Raw<Future<Map<int, AuthService>>> runBuild() => build();
 }
 
+@ProviderFor(ProposeApiImportDurationNotifier)
+const proposeApiImportDurationNotifierProvider = ProposeApiImportDurationNotifierProvider._();
+
+final class ProposeApiImportDurationNotifierProvider
+    extends $NotifierProvider<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> {
+  const ProposeApiImportDurationNotifierProvider._(
+      {super.runNotifierBuildOverride, ProposeApiImportDurationNotifier Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'proposeApiImportDurationNotifierProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final ProposeApiImportDurationNotifier Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$proposeApiImportDurationNotifierHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<Duration>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<Duration>>>(value),
+    );
+  }
+
+  @$internal
+  @override
+  ProposeApiImportDurationNotifier create() => _createCb?.call() ?? ProposeApiImportDurationNotifier();
+
+  @$internal
+  @override
+  ProposeApiImportDurationNotifierProvider $copyWithCreate(
+    ProposeApiImportDurationNotifier Function() create,
+  ) {
+    return ProposeApiImportDurationNotifierProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  ProposeApiImportDurationNotifierProvider $copyWithBuild(
+    Raw<Future<Duration>> Function(
+      Ref<Raw<Future<Duration>>>,
+      ProposeApiImportDurationNotifier,
+    ) build,
+  ) {
+    return ProposeApiImportDurationNotifierProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> $createElement(
+          ProviderContainer container) =>
+      $NotifierProviderElement(this, container);
+}
+
+String _$proposeApiImportDurationNotifierHash() => r'eeddaf8abe731269562eac53d8bd127bc34484ff';
+
+abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<Duration>>> {
+  Raw<Future<Duration>> build();
+  @$internal
+  @override
+  Raw<Future<Duration>> runBuild() => build();
+}
+
 @ProviderFor(JwtNotifier)
 const jwtNotifierProvider = JwtNotifierProvider._();
 
