@@ -36,7 +36,12 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
     return many.first;
   }
 
-  Future<T> getOrCreateSingleOfOrg(T dataObject, {required bool obfuscate, Future<T> Function()? onCreate}) async {
+  /// [onUpdateOrCreate] takes a [T] as previous input value.
+  Future<T> updateOrCreateSingleOfOrg(
+    T dataObject, {
+    required bool obfuscate,
+    Future<T> Function(T? previous)? onUpdateOrCreate,
+  }) async {
     if (dataObject.id != null) {
       throw Exception('Data object already has an id: $dataObject');
     }
@@ -45,19 +50,22 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
       throw Exception('Organization id and sync id must not be null: $dataObject');
     }
     try {
-      final single = await getSingleOfOrg(organizational.orgSyncId!,
+      final previous = await getSingleOfOrg(organizational.orgSyncId!,
           orgId: organizational.organization!.id!, obfuscate: obfuscate);
-      return single;
+      if (onUpdateOrCreate != null) {
+        dataObject = await onUpdateOrCreate(previous);
+      }
+      return updateOnDiffSingle(dataObject, previous: previous);
     } on InvalidParameterException catch (_) {
-      if (onCreate != null) {
-        dataObject = await onCreate();
+      if (onUpdateOrCreate != null) {
+        dataObject = await onUpdateOrCreate(null);
       }
       return createSingleReturn(dataObject);
     }
   }
 
-  Future<List<T>> getOrCreateManyOfOrg(List<T> dataObjects, {required bool obfuscate}) async {
-    return await Future.wait(dataObjects.map((element) => getOrCreateSingleOfOrg(element, obfuscate: obfuscate)));
+  Future<List<T>> updateOrCreateManyOfOrg(List<T> dataObjects, {required bool obfuscate}) async {
+    return await Future.wait(dataObjects.map((element) => updateOrCreateSingleOfOrg(element, obfuscate: obfuscate)));
   }
 
   static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(String orgSyncId,

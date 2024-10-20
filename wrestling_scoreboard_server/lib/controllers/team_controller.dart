@@ -43,8 +43,7 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
   }
 
   @override
-  Future<Response> import(Request request, User? user, String entityId) async {
-    updateLastImportUtcDateTime(entityId);
-    return Response.notFound('This operation is not supported yet!');
+  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+    throw UnimplementedError('This operation is not supported yet!');
   }
 }
