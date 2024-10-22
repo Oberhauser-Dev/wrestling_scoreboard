@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
@@ -148,7 +149,8 @@ extension DatabaseExt on PostgresDb {
       postgresPort.toString(),
       postgresDatabaseName,
     ];
-    final processResult = await Process.run('psql', args, environment: {'PGPASSWORD': dbPW});
+    final processResult =
+        await Process.run('psql', args, environment: {'PGPASSWORD': dbPW}, stdoutEncoding: utf8, stderrEncoding: utf8);
 
     if (processResult.exitCode != 0) {
       throw processResult.stderr;
@@ -179,7 +181,8 @@ extension DatabaseExt on PostgresDb {
       '--schema',
       'public',
     ];
-    final process = await Process.run('pg_dump', args, environment: {'PGPASSWORD': dbPW});
+    final process = await Process.run('pg_dump', args,
+        environment: {'PGPASSWORD': dbPW}, stdoutEncoding: utf8, stderrEncoding: utf8);
 
     if (process.exitCode == 0) {
       return process.stdout;
