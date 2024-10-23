@@ -60,7 +60,7 @@ class TechnicalPoints extends StatelessWidget {
                     maxDuration: boutConfig.activityDuration!,
                   )
                 ])),
-          if (pStatusModel.isInjury && boutConfig.injuryDuration != null)
+          if (pStatusModel.isInjuryDisplayed && boutConfig.injuryDuration != null)
             Expanded(
               flex: 30,
               child: Row(
@@ -76,7 +76,7 @@ class TechnicalPoints extends StatelessWidget {
                 ],
               ),
             ),
-          if (pStatusModel.isBleedingInjury && boutConfig.bleedingInjuryDuration != null)
+          if (pStatusModel.isBleedingInjuryDisplayed && boutConfig.bleedingInjuryDuration != null)
             Expanded(
               flex: 30,
               child: Row(
