@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
@@ -58,12 +59,14 @@ class TeamMatchOverview extends ConsumerWidget {
                 // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
                 return MapEntry(teamMatchBout, boutActions);
               })));
+              final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
               if (context.mounted) {
                 final bytes = await TeamMatchTranscript(
                   teamMatchBoutActions: teamMatchBoutActions,
                   buildContext: context,
                   teamMatch: match,
                   boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                  isTimeCountDown: isTimeCountDown,
                 ).buildPdf();
                 Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
               }

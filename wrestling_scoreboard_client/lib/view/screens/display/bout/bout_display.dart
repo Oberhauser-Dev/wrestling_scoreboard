@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/audio_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
@@ -491,6 +492,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       icon: const Icon(Icons.print),
       onPressed: () async {
         final actions = await getActions();
+        final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
         if (context.mounted) {
           final bytes = await ScoreSheet(
             bout: bout,
@@ -499,6 +501,7 @@ class BoutState extends ConsumerState<BoutScreen> {
             wrestlingEvent: widget.wrestlingEvent,
             boutConfig: boutConfig,
             boutRules: boutRules,
+            isTimeCountDown: isTimeCountDown,
           ).buildPdf();
           Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
         }

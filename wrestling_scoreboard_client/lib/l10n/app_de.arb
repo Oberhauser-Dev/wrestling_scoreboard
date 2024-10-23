@@ -46,6 +46,7 @@
   "restoreDefaultDatabase": "Standard-Datenbank wiederherstellen",
   "resetDatabase": "Datenbank zurücksetzen",
   "bellSound": "Glocken-Sound",
+  "timeCountDown": "Zähle die Zeit herunter",
 
   "profile": "Profil",
   "username": "Nutzername",

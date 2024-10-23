@@ -11,6 +11,7 @@ import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
+import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ScoreSheet extends PdfSheet {
@@ -20,6 +21,7 @@ class ScoreSheet extends PdfSheet {
     required this.wrestlingEvent,
     required this.boutConfig,
     required this.boutRules,
+    required this.isTimeCountDown,
     super.baseColor,
     super.accentColor,
     required super.buildContext,
@@ -30,6 +32,7 @@ class ScoreSheet extends PdfSheet {
   final BoutConfig boutConfig;
   final List<BoutResultRule> boutRules;
   final WrestlingEvent wrestlingEvent;
+  final bool isTimeCountDown;
 
   WrestlingEvent get event => wrestlingEvent;
 
@@ -62,7 +65,12 @@ class ScoreSheet extends PdfSheet {
             Expanded(
                 child:
                     buildFormCell(title: localizations.winner, content: bout.winnerRole?.localize(buildContext) ?? '')),
-            buildFormCell(title: localizations.duration, content: durationToString(bout.duration), width: 100),
+            buildFormCell(
+                title: localizations.duration,
+                content: bout.duration
+                    .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                    .formatMinutesAndSeconds(),
+                width: 100),
           ]),
           Container(height: PdfSheet.verticalGap),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [

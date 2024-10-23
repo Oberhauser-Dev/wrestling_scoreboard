@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
@@ -19,7 +20,8 @@ class TeamMatchBoutOverview extends BoutOverview {
   final int id;
   final TeamMatchBout? teamMatchBout;
 
-  const TeamMatchBoutOverview({super.key, required this.id, this.teamMatchBout});
+  TeamMatchBoutOverview({super.key, required this.id, this.teamMatchBout})
+      : super(boutConfig: teamMatchBout?.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,6 +45,7 @@ class TeamMatchBoutOverview extends BoutOverview {
                         ManyProviderData<BoutResultRule, BoutConfig>(
                             filterObject: teamMatchBout.teamMatch.league!.division.boutConfig))
                     .future);
+            final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
             if (context.mounted) {
               final bytes = await ScoreSheet(
                 bout: bout,
@@ -51,6 +54,7 @@ class TeamMatchBoutOverview extends BoutOverview {
                 wrestlingEvent: teamMatchBout.teamMatch,
                 boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                 boutRules: boutRules,
+                isTimeCountDown: isTimeCountDown,
               ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }

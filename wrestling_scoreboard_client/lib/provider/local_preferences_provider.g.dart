@@ -471,6 +471,72 @@ abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> runBuild() => build();
 }
 
+@ProviderFor(TimeCountDownNotifier)
+const timeCountDownNotifierProvider = TimeCountDownNotifierProvider._();
+
+final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDownNotifier, Raw<Future<bool>>> {
+  const TimeCountDownNotifierProvider._({super.runNotifierBuildOverride, TimeCountDownNotifier Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'timeCountDownNotifierProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final TimeCountDownNotifier Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$timeCountDownNotifierHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<bool>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<bool>>>(value),
+    );
+  }
+
+  @$internal
+  @override
+  TimeCountDownNotifier create() => _createCb?.call() ?? TimeCountDownNotifier();
+
+  @$internal
+  @override
+  TimeCountDownNotifierProvider $copyWithCreate(
+    TimeCountDownNotifier Function() create,
+  ) {
+    return TimeCountDownNotifierProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  TimeCountDownNotifierProvider $copyWithBuild(
+    Raw<Future<bool>> Function(
+      Ref<Raw<Future<bool>>>,
+      TimeCountDownNotifier,
+    ) build,
+  ) {
+    return TimeCountDownNotifierProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<TimeCountDownNotifier, Raw<Future<bool>>> $createElement(ProviderContainer container) =>
+      $NotifierProviderElement(this, container);
+}
+
+String _$timeCountDownNotifierHash() => r'2ad9751aa977e4c757f46b66218f47618a882fbd';
+
+abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
+  Raw<Future<bool>> build();
+  @$internal
+  @override
+  Raw<Future<bool>> runBuild() => build();
+}
+
 @ProviderFor(FavoritesNotifier)
 const favoritesNotifierProvider = FavoritesNotifierProvider._();
 

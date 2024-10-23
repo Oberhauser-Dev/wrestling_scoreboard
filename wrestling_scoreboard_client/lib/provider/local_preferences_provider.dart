@@ -126,6 +126,21 @@ class BellSoundNotifier extends _$BellSoundNotifier {
 }
 
 @Riverpod(keepAlive: true)
+class TimeCountDownNotifier extends _$TimeCountDownNotifier {
+  @override
+  Raw<Future<bool>> build() async {
+    var timeCountDown = await Preferences.getBool(Preferences.keyTimeCountDown);
+    timeCountDown ??= Env.timeCountDown.fromBool();
+    return timeCountDown;
+  }
+
+  Future<void> setState(bool? val) async {
+    await Preferences.setBool(Preferences.keyTimeCountDown, val);
+    state = Future.value(val);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class FavoritesNotifier extends _$FavoritesNotifier {
   @override
   Raw<Future<Map<String, Set<int>>>> build() async {

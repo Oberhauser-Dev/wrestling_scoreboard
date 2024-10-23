@@ -3,11 +3,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutEdit extends ConsumerStatefulWidget {
@@ -133,13 +136,17 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
       ListTile(
         leading: const Icon(Icons.timer),
         subtitle: Text(localizations.duration),
-        title: DurationFormField(
-          initialValue: _boutDuration,
-          maxValue: widget.boutConfig.totalPeriodDuration,
-          onSaved: (Duration? value) {
-            _boutDuration = value;
-          },
-        ),
+        title: LoadingBuilder<bool>(
+            future: ref.watch(timeCountDownNotifierProvider),
+            builder: (context, isTimeCountDown) {
+              return DurationFormField(
+                initialValue: _boutDuration?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration),
+                maxValue: widget.boutConfig.totalPeriodDuration,
+                onSaved: (Duration? value) {
+                  _boutDuration = value?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration);
+                },
+              );
+            }),
       ),
     ];
 
