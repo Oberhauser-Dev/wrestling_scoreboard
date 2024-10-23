@@ -59,12 +59,14 @@ class ObservableStopwatch extends Stopwatch {
       onChangeSecond.add(this.elapsed);
       if (elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute.add(this.elapsed);
     }
-    if (limit != null && elapsed >= limit!) {
+    if (hasEnded) {
       stop();
       onEnd.add(this.elapsed);
     }
     _prevDuration = elapsed;
   }
+
+  bool get hasEnded => limit != null && elapsed >= limit!;
 
   @override
   void stop() {

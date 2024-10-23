@@ -166,6 +166,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     _r.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _r.isInjury = false;
+        _r.isInjuryDisplayed = false;
       });
       handleAction(const BoutScreenActionIntent.horn());
     });
@@ -173,6 +174,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     _b.injuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isInjury = false;
+        _b.isInjuryDisplayed = false;
       });
       handleAction(const BoutScreenActionIntent.horn());
     });
@@ -182,6 +184,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     _r.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _r.isBleedingInjury = false;
+        _r.isBleedingInjuryDisplayed = false;
       });
       handleAction(const BoutScreenActionIntent.horn());
     });
@@ -189,6 +192,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     _b.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
       setState(() {
         _b.isBleedingInjury = false;
+        _b.isBleedingInjuryDisplayed = false;
       });
       handleAction(const BoutScreenActionIntent.horn());
     });
@@ -387,7 +391,12 @@ class BoutState extends ConsumerState<BoutScreen> {
       case BoutScreenActions.redInjuryTime:
         ParticipantStateModel psm = _r;
         setState(() {
-          psm.isInjury = !psm.isInjury;
+          if (!_r.injuryStopwatch.hasEnded) {
+            // If time is set manually after timer has ended, the timer and display flags differ.
+            // So we use the displayed flag as the reset option.
+            psm.isInjury = !psm.isInjuryDisplayed;
+          }
+          psm.isInjuryDisplayed = !psm.isInjuryDisplayed;
         });
         if (psm.isInjury) {
           psm.injuryStopwatch.start();
@@ -398,7 +407,10 @@ class BoutState extends ConsumerState<BoutScreen> {
       case BoutScreenActions.redBleedingInjuryTime:
         ParticipantStateModel psm = _r;
         setState(() {
-          psm.isBleedingInjury = !psm.isBleedingInjury;
+          if (!_r.bleedingInjuryStopwatch.hasEnded) {
+            psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
+          }
+          psm.isBleedingInjuryDisplayed = !psm.isBleedingInjuryDisplayed;
         });
         if (psm.isBleedingInjury) {
           psm.bleedingInjuryStopwatch.start();
@@ -425,7 +437,10 @@ class BoutState extends ConsumerState<BoutScreen> {
       case BoutScreenActions.blueInjuryTime:
         ParticipantStateModel psm = _b;
         setState(() {
-          psm.isInjury = !psm.isInjury;
+          if (!_b.injuryStopwatch.hasEnded) {
+            psm.isInjury = !psm.isInjuryDisplayed;
+          }
+          psm.isInjuryDisplayed = !psm.isInjuryDisplayed;
         });
         if (psm.isInjury) {
           psm.injuryStopwatch.start();
@@ -436,7 +451,10 @@ class BoutState extends ConsumerState<BoutScreen> {
       case BoutScreenActions.blueBleedingInjuryTime:
         ParticipantStateModel psm = _b;
         setState(() {
-          psm.isBleedingInjury = !psm.isBleedingInjury;
+          if (!_b.bleedingInjuryStopwatch.hasEnded) {
+            psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
+          }
+          psm.isBleedingInjuryDisplayed = !psm.isBleedingInjuryDisplayed;
         });
         if (psm.isBleedingInjury) {
           psm.bleedingInjuryStopwatch.start();

@@ -6,7 +6,9 @@ class ParticipantStateModel {
   ObservableStopwatch bleedingInjuryStopwatch = ObservableStopwatch();
   ObservableStopwatch? activityStopwatch;
   bool isInjury = false;
+  bool isInjuryDisplayed = false;
   bool isBleedingInjury = false;
+  bool isBleedingInjuryDisplayed = false;
 
   ParticipantStateModel(this.pStatus);
 }
