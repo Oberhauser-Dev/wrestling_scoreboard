@@ -85,7 +85,7 @@ void main() {
       prename: 'Max',
       surname: 'Muster',
       gender: Gender.male,
-      birthDate: DateTime(2000, 1, 31),
+      birthDate: DateTime.utc(2000, 1, 31),
       nationality: Countries.deu,
     ),
   );
@@ -628,7 +628,7 @@ void main() {
                   prename: 'Tobias',
                   surname: 'Müller',
                   gender: Gender.male,
-                  birthDate: DateTime(2000, 3, 02),
+                  birthDate: DateTime.utc(2000, 3, 02),
                   nationality: Countries.deu,
                 ),
               ),

@@ -350,7 +350,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         gender: wrestlerJson['gender'] == 'm'
             ? Gender.male
             : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
-        birthDate: DateTime.parse(wrestlerJson['birthday']),
+        birthDate: DateTime.parse(wrestlerJson['birthday']).copyWith(isUtc: true),
         nationality: Countries.values
             .singleWhereOrNull((element) => element.unofficialNames.contains(wrestlerJson['nationality'])),
       )),
