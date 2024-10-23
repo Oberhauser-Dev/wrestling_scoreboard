@@ -1717,8 +1717,8 @@ COPY public.participation (id, membership_id, lineup_id, weight_class_id, weight
 COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id) FROM stdin;
 24	Mustafa	Durak	\N	\N	\N	Mustafa_Durak_null	2
 25	Fröhlich	Peter	\N	\N	\N	Fröhlich_Peter_null	2
-26	Max	Muster	2000-01-30	male	DEU	Max_Muster_2000-01-31	2
-27	Tobias	Müller	2000-03-01	male	DEU	Tobias_Müller_2000-03-02	2
+26	Max	Muster	2000-01-31	male	DEU	Max_Muster_2000-01-31	2
+27	Tobias	Müller	2000-03-02	male	DEU	Tobias_Müller_2000-03-02	2
 \.
 
 
@@ -1727,7 +1727,7 @@ COPY public.person (id, prename, surname, birth_date, gender, nationality, org_s
 --
 
 COPY public.secured_user (id, username, password_hash, email, person_id, salt, created_at, privilege) FROM stdin;
-2	admin	\\xc215302a5e928facc2e5d1d7e77e62f53b874f1f661a19f473906195cdb9792c	\N	\N	3OJFGA==	2024-10-22	admin
+2	admin	\\x9b452a2e6bc24ddb4117dfb727f78f5da9ed569201a094a9f3e9d8a1671f891a	\N	\N	36jSKg==	2024-10-23	admin
 \.
 
 
