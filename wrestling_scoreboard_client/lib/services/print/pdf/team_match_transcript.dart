@@ -4,9 +4,11 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
+import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
+import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchTranscript extends PdfSheet {
@@ -14,6 +16,7 @@ class TeamMatchTranscript extends PdfSheet {
     required this.teamMatchBoutActions,
     required this.teamMatch,
     required this.boutConfig,
+    required this.isTimeCountDown,
     super.baseColor,
     super.accentColor,
     required super.buildContext,
@@ -22,6 +25,7 @@ class TeamMatchTranscript extends PdfSheet {
   final Map<TeamMatchBout, List<BoutAction>> teamMatchBoutActions;
   final BoutConfig boutConfig;
   final TeamMatch teamMatch;
+  final bool isTimeCountDown;
 
   Iterable<Bout> get bouts => teamMatchBoutActions.keys.map((tmb) => tmb.bout);
 
@@ -329,8 +333,13 @@ class TeamMatchTranscript extends PdfSheet {
                 color: winnerColor,
                 textColor: winnerTextColor,
                 fontSize: cellFontSize),
-            buildTextCell(durationToString(bout.bout.duration),
-                height: cellHeight, alignment: Alignment.center, fontSize: cellFontSize),
+            buildTextCell(
+                bout.bout.duration
+                    .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                    .formatMinutesAndSeconds(),
+                height: cellHeight,
+                alignment: Alignment.center,
+                fontSize: cellFontSize),
             buildTextCell(bout.bout.b?.classificationPoints?.toString() ?? '',
                 height: cellHeight, borderColor: BoutRole.blue.pdfColor, fontSize: cellFontSize),
             buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.blue).toString(),

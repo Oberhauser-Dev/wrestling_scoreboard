@@ -4,19 +4,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
+import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<Bout> {
   static const route = 'bout';
+  final BoutConfig boutConfig;
 
-  const BoutOverview({super.key});
+  const BoutOverview({super.key, required this.boutConfig});
 
   @override
   Widget buildOverview(
@@ -78,11 +82,17 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
                 ),
               ),
             ),
-            ContentItem(
-              title: data.duration.formatMinutesAndSeconds(),
-              subtitle: localizations.duration,
-              icon: Icons.timer,
-            ),
+            LoadingBuilder<bool>(
+                future: ref.watch(timeCountDownNotifierProvider),
+                builder: (context, isTimeCountDown) {
+                  return ContentItem(
+                    title: data.duration
+                        .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                        .formatMinutesAndSeconds(),
+                    subtitle: localizations.duration,
+                    icon: Icons.timer,
+                  );
+                }),
           ],
         );
         return OverviewScaffold<Bout>(

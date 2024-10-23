@@ -49,6 +49,7 @@
   "restoreDefaultDatabase": "Restore default database",
   "resetDatabase": "Reset database",
   "bellSound": "Bell sound",
+  "timeCountDown": "Count down the time",
 
   "profile": "Profile",
   "username": "Username",

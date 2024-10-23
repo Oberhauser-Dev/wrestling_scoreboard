@@ -15,6 +15,8 @@ class Preferences {
   static const keyProposeApiImportDuration = 'propose-api-import-duration';
 
   static const keyBellSound = 'bell-sound';
+  static const keyTimeCountDown = 'time-count-down';
+
   static const keyFontFamily = 'font-family';
   static const keyFavorites = 'favorites';
   static const keyOrganizationAuth = 'org-auth';
@@ -29,6 +31,15 @@ class Preferences {
     final prefs = await SharedPreferences.getInstance();
     if (value != null) {
       await prefs.setString(key, value);
+    } else {
+      await prefs.remove(key);
+    }
+  }
+
+  static Future<void> setBool(String key, bool? value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value != null) {
+      await prefs.setBool(key, value);
     } else {
       await prefs.remove(key);
     }
@@ -53,6 +64,8 @@ class Preferences {
   }
 
   static Future<String?> getString(String key) => SharedPreferences.getInstance().then((value) => value.getString(key));
+
+  static Future<bool?> getBool(String key) => SharedPreferences.getInstance().then((value) => value.getBool(key));
 
   static Future<int?> getInt(String key) => SharedPreferences.getInstance().then((value) => value.getInt(key));
 

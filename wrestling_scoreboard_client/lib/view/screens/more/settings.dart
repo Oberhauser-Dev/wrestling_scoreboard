@@ -159,54 +159,69 @@ class CustomSettingsScreen extends ConsumerWidget {
           LoadingBuilder<String>(
             future: ref.watch(bellSoundNotifierProvider),
             builder: (context, bellSoundPath) {
-              return SettingsSection(
-                title: localizations.scoreboard,
-                action: TextButton(
-                  onPressed: () async {
-                    bellSoundPath = Env.bellSoundPath.fromString();
-                    await ref.read(bellSoundNotifierProvider.notifier).setState(bellSoundPath);
-                  },
-                  child: Text(localizations.reset),
-                ),
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.audiotrack),
-                    title: Text(localizations.bellSound),
-                    subtitle: Text(getBellNameOfPath(bellSoundPath)),
-                    onTap: () async {
-                      final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
-                      // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
-                      final List<MapEntry<String, String>> bellSoundValues = bellSoundPaths
-                          .asMap()
-                          .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
-                          .entries
-                          .toList();
-                      if (context.mounted) {
-                        final val = await showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return RadioDialog<String>(
-                              values: bellSoundValues,
-                              initialValue: bellSoundPath,
-                              onChanged: (value) async {
-                                if (value != null) {
-                                  final ap = AudioPlayer();
-                                  await ap.play(AssetSource(value));
-                                }
-                              },
-                            );
-                          },
-                        );
-                        if (val != null) {
+              return LoadingBuilder<bool>(
+                  future: ref.watch(timeCountDownNotifierProvider),
+                  builder: (context, isTimeCountDown) {
+                    return SettingsSection(
+                      title: localizations.scoreboard,
+                      action: TextButton(
+                        onPressed: () async {
+                          bellSoundPath = Env.bellSoundPath.fromString();
                           await ref.read(bellSoundNotifierProvider.notifier).setState(bellSoundPath);
-                        }
-                      }
-                    },
-                  ),
-                  // TODO option to overwrite boutConfigs
-                  // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
-                ],
-              );
+
+                          isTimeCountDown = Env.timeCountDown.fromBool();
+                          await ref.read(timeCountDownNotifierProvider.notifier).setState(isTimeCountDown);
+                        },
+                        child: Text(localizations.reset),
+                      ),
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.audiotrack),
+                          title: Text(localizations.bellSound),
+                          subtitle: Text(getBellNameOfPath(bellSoundPath)),
+                          onTap: () async {
+                            final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
+                            // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
+                            final List<MapEntry<String, String>> bellSoundValues = bellSoundPaths
+                                .asMap()
+                                .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
+                                .entries
+                                .toList();
+                            if (context.mounted) {
+                              final val = await showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return RadioDialog<String>(
+                                    values: bellSoundValues,
+                                    initialValue: bellSoundPath,
+                                    onChanged: (value) async {
+                                      if (value != null) {
+                                        final ap = AudioPlayer();
+                                        await ap.play(AssetSource(value));
+                                      }
+                                    },
+                                  );
+                                },
+                              );
+                              if (val != null) {
+                                await ref.read(bellSoundNotifierProvider.notifier).setState(val);
+                              }
+                            }
+                          },
+                        ),
+                        SwitchListTile(
+                          title: Text(localizations.timeCountDown),
+                          secondary: const Icon(Icons.timer),
+                          value: isTimeCountDown,
+                          onChanged: (val) async {
+                            await ref.read(timeCountDownNotifierProvider.notifier).setState(val);
+                          },
+                        ),
+                        // TODO option to overwrite boutConfigs
+                        // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
+                      ],
+                    );
+                  });
             },
           ),
           Restricted(
