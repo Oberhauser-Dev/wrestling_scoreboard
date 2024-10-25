@@ -53,15 +53,11 @@ class ActionsWidget extends ConsumerWidget {
                                 PopupMenuItem<String>(
                                   child: Text(localizations.edit),
                                   onTap: () async {
-                                    final val = await showDialog<Duration?>(
+                                    final val = await showDurationDialog(
                                       context: context,
-                                      builder: (BuildContext context) {
-                                        return DurationDialog(
-                                          initialValue: action.duration
-                                              .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration),
-                                          maxValue: boutConfig.totalPeriodDuration,
-                                        );
-                                      },
+                                      initialDuration: action.duration
+                                          .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration),
+                                      maxValue: boutConfig.totalPeriodDuration,
                                     );
                                     if (val != null) {
                                       (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutAction>(

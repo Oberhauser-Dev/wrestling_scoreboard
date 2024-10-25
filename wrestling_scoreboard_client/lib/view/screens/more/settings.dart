@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
@@ -246,15 +247,12 @@ class CustomSettingsScreen extends ConsumerWidget {
                         title: Text(localizations.proposeApiImportDuration),
                         subtitle: Text(proposeApiImportDuration.formatDaysHoursMinutes(context)),
                         onTap: () async {
-                          final val = await showDialog<Duration?>(
+                          final val = await showDurationDialog(
                             context: context,
-                            builder: (BuildContext context) {
-                              // TODO: Allow days in duration picker
-                              return DurationDialog(
-                                initialValue: proposeApiImportDuration,
-                                maxValue: const Duration(days: 365),
-                              );
-                            },
+                            initialDuration: proposeApiImportDuration,
+                            // TODO: Allow days in duration picker
+                            mode: DurationPickerMode.hm,
+                            maxValue: const Duration(days: 365),
                           );
                           if (val != null) {
                             await ref.read(proposeApiImportDurationNotifierProvider.notifier).setState(val);
@@ -327,14 +325,10 @@ class CustomSettingsScreen extends ConsumerWidget {
                             title: Text(localizations.networkTimeout),
                             subtitle: Text(networkTimeout.formatSecondsAndMilliseconds()),
                             onTap: () async {
-                              final val = await showDialog<Duration?>(
+                              final val = await showDurationDialog(
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return DurationDialog(
-                                    initialValue: networkTimeout,
-                                    maxValue: const Duration(hours: 1),
-                                  );
-                                },
+                                initialDuration: networkTimeout,
+                                maxValue: const Duration(hours: 1),
                               );
                               if (val != null) {
                                 await ref.read(networkTimeoutNotifierProvider.notifier).setState(val);
