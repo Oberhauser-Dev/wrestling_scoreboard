@@ -51,9 +51,10 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
           Duration adjustedTime() => _currentTime.invertIf(isTimeCountDown, max: widget.maxDuration);
           return GestureDetector(
             onTap: () async {
-              final val = await showDialog<Duration>(
-                builder: (context) => DurationDialog(initialValue: adjustedTime(), maxValue: widget.maxDuration),
+              final val = await showDurationDialog(
                 context: context,
+                initialDuration: adjustedTime(),
+                maxValue: widget.maxDuration,
               );
               if (val != null) {
                 widget.stopwatch.elapsed = val.invertIf(isTimeCountDown, max: widget.maxDuration);

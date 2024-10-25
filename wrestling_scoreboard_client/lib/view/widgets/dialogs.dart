@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
@@ -44,6 +43,26 @@ class OkDialog extends StatelessWidget {
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(localizations.ok),
+        ),
+      ],
+      child: child,
+    );
+  }
+}
+
+class CancelDialog extends StatelessWidget {
+  final Widget child;
+
+  const CancelDialog({required this.child, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return SizedDialog(
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(localizations.cancel),
         ),
       ],
       child: child,
@@ -146,12 +165,12 @@ Future<void> showLoadingDialog({
     context: context,
     barrierDismissible: false,
     builder: (context) => ResponsiveContainer(
-      child: Dialog(
+      child: CancelDialog(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(label),
-            const Center(child: CircularProgressIndicator()),
+            const Padding(padding: EdgeInsets.all(8), child: Center(child: CircularProgressIndicator())),
           ],
         ),
       ),
@@ -199,36 +218,21 @@ class TextInputDialog extends StatelessWidget {
   }
 }
 
-class DurationDialog extends StatelessWidget {
-  final Duration initialValue;
-  final Duration minValue;
-  final Duration maxValue;
-
-  const DurationDialog({
-    this.initialValue = Duration.zero,
-    super.key,
-    this.minValue = Duration.zero,
-    required this.maxValue,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    Duration? result;
-    return OkCancelDialog<Duration?>(
-        child: isMobile
-            ? CupertinoTimerPicker(
-                mode: CupertinoTimerPickerMode.ms,
-                initialTimerDuration: initialValue,
-                onTimerDurationChanged: (value) => result = value,
-              )
-            : DurationPicker(
-                minValue: minValue,
-                maxValue: maxValue,
-                initialValue: initialValue,
-                onChange: (value) => result = value,
-              ),
-        getResult: () => result);
-  }
+Future<Duration?> showDurationDialog({
+  required BuildContext context,
+  Duration initialDuration = Duration.zero,
+  DurationPickerMode mode = DurationPickerMode.ms,
+  Duration minValue = Duration.zero,
+  required Duration maxValue,
+}) async {
+  final res = await showDurationPicker(
+    context: context,
+    initialDuration: initialDuration,
+    initialEntryMode: isMobile ? DurationPickerEntryMode.dial : DurationPickerEntryMode.input,
+    durationPickerMode: mode,
+  );
+  if (res == null) return res;
+  return (res < minValue) ? minValue : ((res > maxValue) ? maxValue : res);
 }
 
 class RadioDialog<T> extends StatefulWidget {

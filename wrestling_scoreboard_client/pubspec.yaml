@@ -41,6 +41,7 @@ dependencies:
   file_selector: ^1.0.3
   csv: ^6.0.0
   web: ^1.0.0
+  material_duration_picker: ^0.0.2
 
 dev_dependencies:
   flutter_test:

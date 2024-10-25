@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -103,6 +104,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
+                    DefaultDurationPickerMaterialLocalizations.delegate,
                   ],
                   supportedLocales: Preferences.supportedLanguages,
                   builder: (context, child) => GlobalWidget(child: child ?? const CircularProgressIndicator()),
