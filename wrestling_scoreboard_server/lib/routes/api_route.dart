@@ -1,6 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
 
 import '../controllers/auth_controller.dart';
@@ -46,6 +47,12 @@ class ApiRoute {
     router.post('/auth/sign_in', authController.signIn);
     router.post('/auth/sign_up', authController.signUp);
     router.restrictedPost('/auth/user', authController.updateSingle);
+
+    final userController = SecuredUserController();
+    router.restrictedPost('/user', userController.postSingleUser, UserPrivilege.admin); // Create
+    router.restrictedPost('/secured_user', userController.postSingle, UserPrivilege.admin); // Update
+    router.restrictedGet('/secured_users', userController.requestMany, UserPrivilege.admin);
+    router.restrictedGetOne('/secured_users/<id|[0-9]+>', userController.requestSingle, UserPrivilege.admin);
 
     final searchController = SearchController();
     router.restrictedGet('/search', searchController.search);

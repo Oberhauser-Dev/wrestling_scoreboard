@@ -68,7 +68,7 @@ class OrganizationOverview extends ConsumerWidget {
             ),
           ],
         );
-        return OverviewScaffold<Organization>(
+        return FavoriteScaffold<Organization>(
           dataObject: data,
           label: localizations.organization,
           details: data.name,

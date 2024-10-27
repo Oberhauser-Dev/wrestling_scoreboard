@@ -79,7 +79,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
           ],
         );
         final relations = buildRelations != null ? buildRelations(person) : {};
-        return OverviewScaffold<Person>(
+        return FavoriteScaffold<Person>(
           dataObject: person,
           label: classLocale,
           details: details ?? person.fullName,

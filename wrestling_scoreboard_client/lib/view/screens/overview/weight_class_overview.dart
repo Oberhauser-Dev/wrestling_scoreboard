@@ -67,7 +67,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
             ),
           ],
         );
-        return OverviewScaffold<WeightClass>(
+        return FavoriteScaffold<WeightClass>(
           dataObject: data,
           label: classLocale,
           details: details ?? data.name,

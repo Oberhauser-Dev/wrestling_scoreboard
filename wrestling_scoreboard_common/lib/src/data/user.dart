@@ -16,6 +16,10 @@ abstract class AbstractUser implements DataObject {
   String get username;
 
   Person? get person;
+
+  DateTime get createdAt;
+
+  UserPrivilege get privilege;
 }
 
 @freezed
@@ -31,6 +35,8 @@ class User with _$User implements AbstractUser {
     required DateTime createdAt,
     @Default(UserPrivilege.none) UserPrivilege privilege,
   }) = _User;
+
+  static bool isValidUsername(String username) => RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(username);
 
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
 

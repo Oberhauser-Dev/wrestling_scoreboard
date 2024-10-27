@@ -73,7 +73,7 @@ class TeamMatchOverview extends ConsumerWidget {
             },
           );
 
-          return OverviewScaffold<TeamMatch>(
+          return FavoriteScaffold<TeamMatch>(
             dataObject: match,
             label: localizations.match,
             details: '${match.home.team.name} - ${match.guest.team.name}',

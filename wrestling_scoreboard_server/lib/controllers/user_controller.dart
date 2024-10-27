@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:postgres/postgres.dart' as psql;
+import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
@@ -12,6 +15,24 @@ class SecuredUserController extends ShelfController<SecuredUser> {
 
   SecuredUserController._internal() : super(tableName: 'secured_user');
 
+  Future<Response> postSingleUser(Request request, User? user) async {
+    try {
+      final message = await request.readAsString();
+      final user = parseSingleJson<User>(jsonDecode(message));
+      final id = await createSingleUser(user);
+      return Response.ok(jsonEncode(id));
+    } on InvalidParameterException catch (e) {
+      return Response.notFound(e.message);
+    }
+  }
+
+  Future<int> createSingleUser(User user) async {
+    user = user.copyWith(
+      createdAt: DateTime.now(),
+    );
+    return await SecuredUserController().createSingle(user.toSecuredUser());
+  }
+
   Future<SecuredUser?> getSingleByUsername(String username) async {
     final many = await getMany(
       conditions: ['username = @username'],
@@ -24,6 +45,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {
+      // 'privilege': null,
       'password_hash': psql.Type.byteArray,
     };
   }

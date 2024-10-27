@@ -286,6 +286,7 @@ Type getTypeFromTableName(String tableName) {
     'participation' => Participation,
     'participant_state' => ParticipantState,
     'person' => Person,
+    'secured_user' => SecuredUser,
     'team' => Team,
     'team_club_affiliation' => TeamClubAffiliation,
     'team_match' => TeamMatch,

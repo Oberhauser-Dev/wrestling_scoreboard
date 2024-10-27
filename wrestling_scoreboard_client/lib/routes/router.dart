@@ -8,6 +8,8 @@ import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/admin/admin_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/admin/user_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/imprint.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/privacy_policy.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/change_password.dart';
@@ -162,6 +164,16 @@ getRouter() {
               GoRoute(
                 path: ChangePasswordScreen.route,
                 builder: (context, state) => const ChangePasswordScreen(),
+              ),
+              GoRoute(
+                path: AdminOverview.route,
+                builder: (context, state) => const AdminOverview(),
+                routes: [
+                  GoRoute(
+                    path: '${UserOverview.route}/:user_id',
+                    builder: (context, state) => UserOverview(id: int.parse(state.pathParameters['user_id']!)),
+                  ),
+                ],
               ),
             ],
           ),

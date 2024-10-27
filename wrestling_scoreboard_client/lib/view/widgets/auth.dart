@@ -18,7 +18,7 @@ class Restricted extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LoadingBuilder(
-      future: ref.read(userNotifierProvider),
+      future: ref.watch(userNotifierProvider),
       // Center widget has no size, so use CircularProgressIndicator directly.
       onLoad: (context) => const CircularProgressIndicator(),
       onException: (context, exception, {stackTrace}) => IconButton(

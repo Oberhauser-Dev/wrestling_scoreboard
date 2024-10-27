@@ -53,8 +53,15 @@
 
   "profile": "Profile",
   "username": "Username",
+  "usernameRequirementsWarning": "A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).",
   "password": "Password",
   "email": "Email",
+
+  "administration": "Administration",
+  "users": "Users",
+  "user": "User",
+  "joinedOn": "Joined on",
+  "privilege": "Privilege",
 
   "auth_signIn": "Sign in",
   "auth_signInPrompt_phrase": "Already have an account? Sign In",

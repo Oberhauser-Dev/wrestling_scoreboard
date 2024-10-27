@@ -43,9 +43,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 onSaved: (String? value) => _username = value,
                 label: localizations.username,
                 isMandatory: true,
-                validator: (v) => (v != null && RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(v))
-                    ? null
-                    : 'Username can only contain alphanumeric characters or dot (.), hyphen (-) or underscore (_).',
+                validator: (v) =>
+                    (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
               ),
               // EmailInput(
               //   onSave: (String? value) => _email = value,
