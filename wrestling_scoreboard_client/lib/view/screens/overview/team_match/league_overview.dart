@@ -63,7 +63,7 @@ class LeagueOverview extends ConsumerWidget {
             ),
           ],
         );
-        return OverviewScaffold<League>(
+        return FavoriteScaffold<League>(
           dataObject: data,
           label: localizations.league,
           details: '${data.fullname}, ${data.startDate.year}',

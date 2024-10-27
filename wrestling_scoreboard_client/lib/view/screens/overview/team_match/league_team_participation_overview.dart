@@ -46,7 +46,7 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
                 icon: Icons.emoji_events,
               ),
             ]);
-        return OverviewScaffold<LeagueTeamParticipation>(
+        return FavoriteScaffold<LeagueTeamParticipation>(
           dataObject: data,
           label: localizations.participatingTeam,
           details: data.team.name,

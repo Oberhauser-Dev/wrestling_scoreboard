@@ -78,7 +78,7 @@ abstract class BoutConfigOverview extends ConsumerWidget implements AbstractOver
           ],
         );
         final relations = buildRelations != null ? buildRelations(data) : {};
-        return OverviewScaffold<BoutConfig>(
+        return FavoriteScaffold<BoutConfig>(
           dataObject: data,
           label: classLocale,
           details: details ?? '',

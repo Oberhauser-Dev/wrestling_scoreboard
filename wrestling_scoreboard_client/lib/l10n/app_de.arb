@@ -50,8 +50,15 @@
 
   "profile": "Profil",
   "username": "Nutzername",
+  "usernameRequirementsWarning": "Ein Benutzername darf nur alphanumerische Zeichen, Punkt (.), Bindestrich (-) oder Unterstrich (_) enthalten.",
   "password": "Passwort",
   "email": "E-Mail",
+
+  "administration": "Administration",
+  "users": "Nutzer",
+  "user": "Nutzer",
+  "joinedOn": "Beigetreten am",
+  "privilege": "Berechtigung",
 
   "auth_signIn": "Anmelden",
   "auth_signInPrompt_phrase": "Haben Sie bereits ein Konto? Hier anmelden",

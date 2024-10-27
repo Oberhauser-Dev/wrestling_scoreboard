@@ -68,7 +68,7 @@ class BoutResultRuleOverview extends ConsumerWidget {
             ),
           ],
         );
-        return OverviewScaffold<BoutResultRule>(
+        return FavoriteScaffold<BoutResultRule>(
           dataObject: boutResultRule,
           label: localizations.boutResultRule,
           details: boutResultRule.localize(context),

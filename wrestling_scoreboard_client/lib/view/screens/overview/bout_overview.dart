@@ -95,7 +95,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
                 }),
           ],
         );
-        return OverviewScaffold<Bout>(
+        return FavoriteScaffold<Bout>(
           dataObject: data,
           label: classLocale,
           details: details ?? data.title(context),

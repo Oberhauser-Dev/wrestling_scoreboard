@@ -140,6 +140,12 @@ void broadcastSingle<T extends DataObject>(T single) async {
   } else if (single is ParticipantState) {
   } else if (single is Person) {
     // No filtered list needs to be handled.
+  } else if (single is SecuredUser) {
+    // SpecialCase: the full User list has to be updated with no filter, shouldn't occur often
+    // TODO: Don't broadcast to people with no admin access
+    /*broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await SecuredUserController().getManyRaw(obfuscate: obfuscate), Organization, CRUD.update,
+        isRaw: true)));*/
   } else if (single is Team) {
   } else if (single is TeamClubAffiliation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
@@ -310,6 +316,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == ParticipantState) {
   } else if (T == Person) {
     // No filtered list needs to be handled.
+  } else if (T == SecuredUser) {
   } else if (T == Team) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await TeamController().getManyRaw(

@@ -49,7 +49,7 @@ class ClubOverview extends ConsumerWidget {
             )
           ],
         );
-        return OverviewScaffold<Club>(
+        return FavoriteScaffold<Club>(
           dataObject: club,
           label: localizations.club,
           details: club.name,

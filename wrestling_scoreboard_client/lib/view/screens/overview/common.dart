@@ -42,28 +42,75 @@ class AppBarTitle extends StatelessWidget {
   }
 }
 
-class OverviewScaffold<T extends DataObject> extends ConsumerWidget {
-  const OverviewScaffold({
+class FavoriteScaffold<T extends DataObject> extends ConsumerWidget {
+  const FavoriteScaffold({
     super.key,
+    required this.dataObject,
     required this.body,
     required this.label,
     required this.details,
-    this.actions,
-    required this.dataObject,
     required this.tabs,
+    this.actions,
   });
 
   final Widget body;
   final String label;
   final String details;
+  final List<Tab> tabs;
   final List<Widget>? actions;
   final T dataObject;
-  final List<Tab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     final tableName = getTableNameFromType(T);
+    return OverviewScaffold(
+      body: this.body,
+      details: this.details,
+      label: this.label,
+      tabs: this.tabs,
+      actions: [
+        ...?this.actions,
+        LoadingBuilder(
+            future: ref.watch(favoritesNotifierProvider),
+            builder: (BuildContext context, favorites) {
+              final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
+              return IconButton(
+                onPressed: () {
+                  final notifier = ref.read(favoritesNotifierProvider.notifier);
+                  if (isFavorite) {
+                    notifier.removeFavorite(tableName, dataObject.id!);
+                  } else {
+                    notifier.addFavorite(tableName, dataObject.id!);
+                  }
+                },
+                icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
+                tooltip: localizations.favorite,
+              );
+            })
+      ],
+    );
+  }
+}
+
+class OverviewScaffold extends ConsumerWidget {
+  const OverviewScaffold({
+    super.key,
+    required this.body,
+    required this.label,
+    required this.details,
+    required this.tabs,
+    this.actions,
+  });
+
+  final Widget body;
+  final String label;
+  final String details;
+  final List<Tab> tabs;
+  final List<Widget>? actions;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: tabs.length,
       child: WindowStateScaffold(
@@ -71,23 +118,6 @@ class OverviewScaffold<T extends DataObject> extends ConsumerWidget {
         appBarBottom: TabBar(tabs: tabs, tabAlignment: TabAlignment.center, isScrollable: true),
         actions: [
           ...?actions,
-          LoadingBuilder(
-              future: ref.watch(favoritesNotifierProvider),
-              builder: (BuildContext context, favorites) {
-                final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
-                return IconButton(
-                  onPressed: () {
-                    final notifier = ref.read(favoritesNotifierProvider.notifier);
-                    if (isFavorite) {
-                      notifier.removeFavorite(tableName, dataObject.id!);
-                    } else {
-                      notifier.addFavorite(tableName, dataObject.id!);
-                    }
-                  },
-                  icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
-                  tooltip: localizations.favorite,
-                );
-              }),
         ],
         body: body,
       ),

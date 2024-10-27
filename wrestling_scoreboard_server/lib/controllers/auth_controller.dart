@@ -20,11 +20,10 @@ class AuthController {
   Future<Response> signUp(Request request) async {
     final message = await request.readAsString();
     final user = parseSingleJson<User>(jsonDecode(message)).copyWith(
-      createdAt: DateTime.now(),
       // Do not allow raising privileges for oneself.
       privilege: UserPrivilege.none,
     );
-    await SecuredUserController().createSingle(user.toSecuredUser());
+    await SecuredUserController().createSingleUser(user);
     return Response.ok('{"status": "success"}');
   }
 

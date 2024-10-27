@@ -46,7 +46,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                   icon: Icons.subject,
                 ),
               ]);
-          return OverviewScaffold<Team>(
+          return FavoriteScaffold<Team>(
             dataObject: team,
             label: localizations.team,
             details: team.name,

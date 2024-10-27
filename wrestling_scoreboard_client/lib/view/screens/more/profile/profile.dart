@@ -29,6 +29,7 @@ class ProfileScreen extends ConsumerWidget {
               if (user != null) {
                 return Column(
                   children: [
+                    // Keep in sync with [UserOverview]
                     ListTile(
                       leading: const Icon(Icons.person),
                       title: Text(user.username),
@@ -42,7 +43,12 @@ class ProfileScreen extends ConsumerWidget {
                     ListTile(
                       leading: const Icon(Icons.calendar_today),
                       title: Text(user.createdAt.toDateTimeString(context)),
-                      subtitle: const Text('Member since'),
+                      subtitle: Text(localizations.joinedOn),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.key),
+                      title: Text(user.privilege.name),
+                      subtitle: Text(localizations.privilege),
                     ),
                     const SizedBox(height: 16),
                     Padding(
