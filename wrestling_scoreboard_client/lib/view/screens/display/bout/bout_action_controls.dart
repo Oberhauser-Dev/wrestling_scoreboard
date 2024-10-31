@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class BoutActionControls extends StatelessWidget {
@@ -13,6 +14,7 @@ class BoutActionControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     bool isRed = role == BoutRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
     void Function()? prepareCallback(BoutScreenActionIntent intentRed, BoutScreenActionIntent intentBlue) {
@@ -24,36 +26,45 @@ class BoutActionControls extends StatelessWidget {
         '1',
         prepareCallback(const BoutScreenActionIntent.redOne(), const BoutScreenActionIntent.blueOne()),
         color,
+        tooltipMessage: '1 ${localizations.point} (${isRed ? '1 | F' : 'Numpad1 | J | ⇧ + 1'})',
       ),
       displayActionControl(
         '2',
         prepareCallback(const BoutScreenActionIntent.redTwo(), const BoutScreenActionIntent.blueTwo()),
         color,
+        tooltipMessage: '2 ${localizations.points} (${isRed ? '2 | D' : 'Numpad2 | K | ⇧ + 2'})',
       ),
       displayActionControl(
         '4',
         prepareCallback(const BoutScreenActionIntent.redFour(), const BoutScreenActionIntent.blueFour()),
         color,
+        tooltipMessage: '4 ${localizations.points} (${isRed ? '4 | S' : 'Numpad4 | L | ⇧ + 4'})',
       ),
+      // TODO: Get character mapping from LogicalKeyboardKey before pressing it.
+      // https://github.com/flutter/flutter/issues/25841
       displayActionControl(
         '5',
         prepareCallback(const BoutScreenActionIntent.redFive(), const BoutScreenActionIntent.blueFive()),
         color,
+        tooltipMessage: '5 ${localizations.points} (${isRed ? '5 | A' : 'Numpad5 | ;/Ö | ⇧ + 5'})',
       ),
       displayActionControl(
-        'P',
+        localizations.passivityAbbr,
         prepareCallback(const BoutScreenActionIntent.redPassivity(), const BoutScreenActionIntent.bluePassivity()),
         color,
+        tooltipMessage: localizations.passivity,
       ),
       displayActionControl(
-        'O',
+        localizations.cautionAbbr,
         prepareCallback(const BoutScreenActionIntent.redCaution(), const BoutScreenActionIntent.blueCaution()),
         color,
+        tooltipMessage: localizations.caution,
       ),
       displayActionControl(
-        'D',
+        localizations.dismissalAbbr,
         prepareCallback(const BoutScreenActionIntent.redDismissal(), const BoutScreenActionIntent.blueDismissal()),
         color,
+        tooltipMessage: localizations.dismissal,
       ),
       if (boutConfig.activityDuration != null)
         displayActionControl(
@@ -61,12 +72,14 @@ class BoutActionControls extends StatelessWidget {
           prepareCallback(
               const BoutScreenActionIntent.redActivityTime(), const BoutScreenActionIntent.blueActivityTime()),
           color,
+          tooltipMessage: localizations.activityDuration,
         ),
       if (boutConfig.injuryDuration != null)
         displayActionControl(
           AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
           prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
           color,
+          tooltipMessage: localizations.injuryDuration,
         ),
       if (boutConfig.bleedingInjuryDuration != null)
         displayActionControl(
@@ -74,11 +87,13 @@ class BoutActionControls extends StatelessWidget {
           prepareCallback(const BoutScreenActionIntent.redBleedingInjuryTime(),
               const BoutScreenActionIntent.blueBleedingInjuryTime()),
           color,
+          tooltipMessage: localizations.bleedingInjuryDuration,
         ),
       displayActionControl(
         '⎌',
         prepareCallback(const BoutScreenActionIntent.redUndo(), const BoutScreenActionIntent.blueUndo()),
         color,
+        tooltipMessage: '${localizations.deleteLatestAction} (⌫)',
       ),
     ];
     return IntrinsicWidth(
@@ -89,19 +104,22 @@ class BoutActionControls extends StatelessWidget {
     );
   }
 
-  displayActionControl(String text, void Function()? callback, MaterialColor color) {
+  displayActionControl(String text, void Function()? callback, MaterialColor color, {String? tooltipMessage}) {
     return Expanded(
-        child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              minimumSize: Size.zero,
-              visualDensity: VisualDensity.compact,
-              foregroundColor: Colors.white,
-              backgroundColor: color,
-              side: BorderSide(color: color.shade900, width: 1),
-              padding: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-            ),
-            onPressed: callback,
-            child: ScaledText(text, fontSize: 10, minFontSize: 8, softWrap: false)));
+        child: DelayedTooltip(
+      message: tooltipMessage,
+      child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            minimumSize: Size.zero,
+            visualDensity: VisualDensity.compact,
+            foregroundColor: Colors.white,
+            backgroundColor: color,
+            side: BorderSide(color: color.shade900, width: 1),
+            padding: EdgeInsets.zero,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
+          ),
+          onPressed: callback,
+          child: ScaledText(text, fontSize: 10, minFontSize: 8, softWrap: false)),
+    ));
   }
 }

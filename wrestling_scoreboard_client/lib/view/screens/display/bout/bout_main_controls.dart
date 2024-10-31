@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
@@ -8,6 +9,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_short
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class BoutMainControls extends ConsumerStatefulWidget {
@@ -21,14 +23,15 @@ class BoutMainControls extends ConsumerStatefulWidget {
 }
 
 class BoutMainControlsState extends ConsumerState<BoutMainControls> {
-  IconData _pausePlayButton = Icons.play_arrow;
+  bool _isRunning = false;
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     widget.boutState.stopwatch.onStartStop.stream.listen((isRunning) {
       if (mounted) {
         setState(() {
-          _pausePlayButton = isRunning ? Icons.pause : Icons.play_arrow;
+          _isRunning = isRunning;
         });
       }
     });
@@ -49,17 +52,23 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                               widget.callback(const BoutScreenActionIntent.quit());
                             },
                           )
-                        : IconButton(
-                            color: Theme.of(context).disabledColor,
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              widget.callback(const BoutScreenActionIntent.previousBout());
-                            },
+                        : DelayedTooltip(
+                            message: '${localizations.previous} (←)',
+                            child: IconButton(
+                              color: Theme.of(context).disabledColor,
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () {
+                                widget.callback(const BoutScreenActionIntent.previousBout());
+                              },
+                            ),
                           )),
                 Expanded(
-                    child: IconButton(
-                        onPressed: () => widget.callback(const BoutScreenActionIntent.startStop()),
-                        icon: Icon(_pausePlayButton))),
+                    child: DelayedTooltip(
+                  message: '${_isRunning ? localizations.pause : localizations.start} (Space)',
+                  child: IconButton(
+                      onPressed: () => widget.callback(const BoutScreenActionIntent.startStop()),
+                      icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow)),
+                )),
                 Expanded(
                     child: IconButton(
                         onPressed: () => widget.callback(const BoutScreenActionIntent.horn()),
@@ -73,12 +82,15 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                               widget.callback(const BoutScreenActionIntent.quit());
                             },
                           )
-                        : IconButton(
-                            color: Theme.of(context).disabledColor,
-                            icon: const Icon(Icons.arrow_forward),
-                            onPressed: () {
-                              widget.callback(const BoutScreenActionIntent.nextBout());
-                            },
+                        : DelayedTooltip(
+                            message: '${localizations.next} (→)',
+                            child: IconButton(
+                              color: Theme.of(context).disabledColor,
+                              icon: const Icon(Icons.arrow_forward),
+                              onPressed: () {
+                                widget.callback(const BoutScreenActionIntent.nextBout());
+                              },
+                            ),
                           )),
               ],
             )),

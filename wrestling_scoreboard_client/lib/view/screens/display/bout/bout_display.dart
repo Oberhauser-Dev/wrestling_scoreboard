@@ -26,6 +26,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) {
@@ -306,7 +307,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                   child: ScaledText(
             (pStatus?.participation.weight != null
                 ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
-                : AppLocalizations.of(context)!.participantUnknownWeight),
+                : localizations.participantUnknownWeight),
             color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white,
             fontSize: 22,
           ))),
@@ -482,6 +483,7 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);
@@ -551,7 +553,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                                 Expanded(
                                     child: Center(
                                         child: ScaledText(
-                                  '${AppLocalizations.of(context)!.bout} ${widget.boutIndex + 1}',
+                                  '${localizations.bout} ${widget.boutIndex + 1}',
                                   fontSize: 22,
                                   minFontSize: 10,
                                 ))),
@@ -584,11 +586,14 @@ class BoutState extends ConsumerState<BoutScreen> {
                           Expanded(
                             flex: 50,
                             child: Center(
-                              child: TimeDisplay(
-                                stopwatch,
-                                stopwatchColor,
-                                fontSize: 128,
-                                maxDuration: boutConfig.totalPeriodDuration,
+                              child: DelayedTooltip(
+                                message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
+                                child: TimeDisplay(
+                                  stopwatch,
+                                  stopwatchColor,
+                                  fontSize: 128,
+                                  maxDuration: boutConfig.totalPeriodDuration,
+                                ),
                               ),
                             ),
                           ),
