@@ -22,6 +22,7 @@
   "wsUrl": "Websocket-Url",
   "services": "Dienste",
   "apiProvider": "API-Anbieter",
+  "warningOverrideDatabase": "Diese Aktion überschreibt die existierende Datenbank. Bist du sicher, dass du fortfahren möchtest?",
   "importFromApiProvider": "Synchronisiere mit API-Anbieter",
   "warningImportFromApiProvider": "Diese Aktion importiert Objekte dieser Organisation und versucht diese zu integrieren. Bist du sicher, dass du fortfahren möchtest?",
   "proposeFirstImportFromApiProvider": "Der letzte Import konnte nicht bestimmt werden. Möchtest du die Daten importieren?",

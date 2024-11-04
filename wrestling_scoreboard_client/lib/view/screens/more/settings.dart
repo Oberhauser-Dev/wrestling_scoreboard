@@ -364,10 +364,17 @@ class CustomSettingsScreen extends ConsumerWidget {
                   leading: const Icon(Icons.settings_backup_restore),
                   title: Text(localizations.resetDatabase),
                   onTap: () => catchAsync(context, () async {
-                    final dataManager = await ref.read(dataManagerNotifierProvider);
-                    await dataManager.resetDatabase();
-                    if (context.mounted) {
-                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                    final result = await showOkCancelDialog(
+                      context: context,
+                      child: Text(localizations.warningOverrideDatabase),
+                      getResult: () => true,
+                    );
+                    if (result == true && context.mounted) {
+                      final dataManager = await ref.read(dataManagerNotifierProvider);
+                      await dataManager.resetDatabase();
+                      if (context.mounted) {
+                        await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                      }
                     }
                   }),
                 ),
@@ -375,10 +382,17 @@ class CustomSettingsScreen extends ConsumerWidget {
                   leading: const Icon(Icons.history),
                   title: Text(localizations.restoreDefaultDatabase),
                   onTap: () => catchAsync(context, () async {
-                    final dataManager = await ref.read(dataManagerNotifierProvider);
-                    await dataManager.restoreDefaultDatabase();
-                    if (context.mounted) {
-                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                    final result = await showOkCancelDialog(
+                      context: context,
+                      child: Text(localizations.warningOverrideDatabase),
+                      getResult: () => true,
+                    );
+                    if (result == true && context.mounted) {
+                      final dataManager = await ref.read(dataManagerNotifierProvider);
+                      await dataManager.restoreDefaultDatabase();
+                      if (context.mounted) {
+                        await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                      }
                     }
                   }),
                 ),

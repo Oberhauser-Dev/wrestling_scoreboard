@@ -25,6 +25,7 @@
   "wsUrl": "Websocket-Url",
   "services": "Services",
   "apiProvider": "API Provider",
+  "warningOverrideDatabase": "This action overrides the existing database. Are you sure, you want to continue?",
   "importFromApiProvider": "Sync with API provider",
   "warningImportFromApiProvider": "This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?",
   "proposeFirstImportFromApiProvider": "Cannot determine the last import. Would you like import the data?",
