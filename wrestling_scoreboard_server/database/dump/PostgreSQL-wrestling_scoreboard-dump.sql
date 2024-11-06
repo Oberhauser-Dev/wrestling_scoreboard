@@ -1356,6 +1356,16 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 --
 
 COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
+1	1	vfa	\N	\N	\N	4	0
+2	1	vin	\N	\N	\N	4	0
+3	1	vca	\N	\N	\N	4	0
+4	1	vsu	\N	\N	15	4	0
+5	1	vpo	\N	\N	8	3	0
+6	1	vpo	\N	\N	3	2	0
+7	1	vpo	\N	\N	1	1	0
+8	1	vfo	\N	\N	\N	4	0
+9	1	dsq	\N	\N	\N	4	0
+10	1	dsq2	\N	\N	\N	0	0
 \.
 
 
@@ -1521,7 +1531,7 @@ COPY public.migration (semver) FROM stdin;
 --
 
 COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
-1	United World Wrestling	UWW	\N	deByRingenApi	deNwRdb274
+1	United World Wrestling	UWW	\N	\N	\N
 \.
 
 
@@ -1762,7 +1772,7 @@ SELECT pg_catalog.setval('public.bout_id_seq', 51, true);
 -- Name: bout_result_rule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 1, false);
+SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 10, true);
 
 
 --
