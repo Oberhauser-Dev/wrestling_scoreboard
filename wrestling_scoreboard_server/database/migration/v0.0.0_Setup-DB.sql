@@ -1357,7 +1357,7 @@ COPY public.migration (semver) FROM stdin;
 --
 
 COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
-1	United World Wrestling	UWW	\N	deByRingenApi	deNwRdb274
+1	United World Wrestling	UWW	\N	\N	\N
 \.
 
 
