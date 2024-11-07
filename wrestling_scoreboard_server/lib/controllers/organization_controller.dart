@@ -81,7 +81,13 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
   }
 
   @override
-  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+  Future<void> import(
+    int entityId, {
+    String? message,
+    bool obfuscate = true,
+    bool includeSubjacent = false,
+    bool useMock = false,
+  }) async {
     final apiProvider = await initApiProvider(message, entityId);
     if (apiProvider == null) {
       throw Exception('No API provider selected for the organization $entityId.');
@@ -103,7 +109,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     });
 
     final divisionBoutResultRuleMap = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
-    await Future.forEach(divisionBoutResultRuleMap.entries, (divisionBoutResultEntry) async {
+    final leagues = (await forEachFuture(divisionBoutResultRuleMap.entries, (divisionBoutResultEntry) async {
       Division division = divisionBoutResultEntry.key;
       var boutResultRules = divisionBoutResultEntry.value;
       division = await DivisionController().updateOrCreateSingleOfOrg(
@@ -135,7 +141,22 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
 
       var leagues = await apiProvider.importLeagues(division: division);
       leagues = await LeagueController().updateOrCreateManyOfOrg(leagues.toList(), obfuscate: obfuscate);
-    });
+      return leagues;
+    }))
+        .expand((league) => league);
+
+    updateLastImportUtcDateTime(entityId);
+    if (includeSubjacent) {
+      for (final league in leagues) {
+        await LeagueController().import(
+          league.id!,
+          message: message,
+          obfuscate: obfuscate,
+          useMock: useMock,
+          includeSubjacent: includeSubjacent,
+        );
+      }
+    }
   }
 
   Future<List<DataObject>> search(

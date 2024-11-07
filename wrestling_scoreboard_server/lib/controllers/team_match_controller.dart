@@ -144,7 +144,13 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
   }
 
   @override
-  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+  Future<void> import(
+    int entityId, {
+    String? message,
+    bool obfuscate = true,
+    bool includeSubjacent = false,
+    bool useMock = false,
+  }) async {
     final teamMatch = await TeamMatchController().getSingle(entityId, obfuscate: obfuscate);
 
     final organizationId = teamMatch.organization?.id;
@@ -194,6 +200,11 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
         return teamMatchBout.copyWith(bout: bout);
       });
       index++;
+    }
+
+    updateLastImportUtcDateTime(entityId);
+    if (includeSubjacent) {
+      // Nothing to do
     }
   }
 

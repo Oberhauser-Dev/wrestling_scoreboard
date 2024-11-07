@@ -54,13 +54,19 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
     return IconButton(
       tooltip: localizations.importFromApiProvider,
       onPressed: () async {
-        final result = await showOkCancelDialog(
+        final result = await showDialog<bool>(
           context: context,
-          child: Text(localizations.warningImportFromApiProvider),
-          getResult: () => true,
+          builder: (context) => _IncludeSubjacentDialog(child: Text(localizations.warningImportFromApiProvider)),
         );
-        if (result == true && context.mounted) {
-          await _processImport(context, ref, orgId: widget.orgId, id: widget.id, importType: widget.importType);
+        if (result != null && context.mounted) {
+          await _processImport(
+            context,
+            ref,
+            orgId: widget.orgId,
+            id: widget.id,
+            importType: widget.importType,
+            includeSubjacent: result,
+          );
         }
       },
       icon: const Icon(Icons.import_export),
@@ -95,15 +101,15 @@ Future<void> checkProposeImport(
   if (lastUpdated == null || lastUpdated.compareTo(DateTime.now().subtract(proposeApiImportDuration)) < 0) {
     if (context.mounted) {
       final localizations = AppLocalizations.of(context)!;
-      final result = await showOkCancelDialog(
+      final result = await showDialog<bool>(
         context: context,
-        child: Text(lastUpdated == null
-            ? localizations.proposeFirstImportFromApiProvider
-            : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated)),
-        getResult: () => true,
+        builder: (context) => _IncludeSubjacentDialog(
+            child: Text(lastUpdated == null
+                ? localizations.proposeFirstImportFromApiProvider
+                : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated))),
       );
-      if (result == true && context.mounted) {
-        await _processImport(context, ref, orgId: orgId, id: id, importType: importType);
+      if (result != null && context.mounted) {
+        await _processImport(context, ref, orgId: orgId, id: id, importType: importType, includeSubjacent: result);
       }
     }
   }
@@ -115,6 +121,7 @@ Future<void> _processImport(
   required int orgId,
   required int id,
   required OrganizationImportType importType,
+  required bool includeSubjacent,
 }) async {
   await catchAsync(
     context,
@@ -127,15 +134,19 @@ Future<void> _processImport(
           final authService = (await ref.read(orgAuthNotifierProvider))[orgId];
           switch (importType) {
             case OrganizationImportType.organization:
-              await dataManager.organizationImport(id, authService: authService);
+              await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);
             case OrganizationImportType.team:
-              await dataManager.organizationTeamImport(id, authService: authService);
+              await dataManager.organizationTeamImport(id,
+                  includeSubjacent: includeSubjacent, authService: authService);
             case OrganizationImportType.league:
-              await dataManager.organizationLeagueImport(id, authService: authService);
+              await dataManager.organizationLeagueImport(id,
+                  includeSubjacent: includeSubjacent, authService: authService);
             case OrganizationImportType.competition:
-              await dataManager.organizationCompetitionImport(id, authService: authService);
+              await dataManager.organizationCompetitionImport(id,
+                  includeSubjacent: includeSubjacent, authService: authService);
             case OrganizationImportType.teamMatch:
-              await dataManager.organizationTeamMatchImport(id, authService: authService);
+              await dataManager.organizationTeamMatchImport(id,
+                  includeSubjacent: includeSubjacent, authService: authService);
           }
           if (context.mounted) {
             await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
@@ -145,6 +156,39 @@ Future<void> _processImport(
       );
     },
   );
+}
+
+class _IncludeSubjacentDialog extends StatefulWidget {
+  final Widget child;
+
+  const _IncludeSubjacentDialog({required this.child});
+
+  @override
+  State<_IncludeSubjacentDialog> createState() => _IncludeSubjacentDialogState();
+}
+
+class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
+  bool _includeSubjacent = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return OkCancelDialog<bool>(
+      getResult: () => _includeSubjacent,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          widget.child,
+          CheckboxListTile(
+              title: Text(localizations.importIncludeSubjacent),
+              value: _includeSubjacent,
+              onChanged: (v) => setState(() {
+                    _includeSubjacent = v ?? false;
+                  })),
+        ],
+      ),
+    );
+  }
 }
 
 enum OrganizationImportType {

@@ -49,7 +49,13 @@ class LeagueController extends OrganizationalController<League> with ImportContr
   }
 
   @override
-  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+  Future<void> import(
+    int entityId, {
+    String? message,
+    bool obfuscate = true,
+    bool includeSubjacent = false,
+    bool useMock = false,
+  }) async {
     final league = await LeagueController().getSingle(entityId, obfuscate: obfuscate);
 
     final organizationId = league.organization?.id;
@@ -63,10 +69,10 @@ class LeagueController extends OrganizationalController<League> with ImportContr
     }
     apiProvider.isMock = useMock;
 
-    final teamMatchs = await apiProvider.importTeamMatches(league: league);
+    var teamMatchs = await apiProvider.importTeamMatches(league: league);
 
-    await Future.forEach(teamMatchs, (teamMatch) async {
-      await TeamMatchController().updateOrCreateSingleOfOrg(
+    teamMatchs = await forEachFuture(teamMatchs, (teamMatch) async {
+      teamMatch = await TeamMatchController().updateOrCreateSingleOfOrg(
         teamMatch,
         obfuscate: obfuscate,
         onUpdateOrCreate: (prevTeamMatch) async {
@@ -105,6 +111,20 @@ class LeagueController extends OrganizationalController<League> with ImportContr
         await LeagueTeamParticipationController()
             .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.guest.team));
       }
+      return teamMatch;
     });
+
+    updateLastImportUtcDateTime(entityId);
+    if (includeSubjacent) {
+      for (final teamMatch in teamMatchs) {
+        await TeamMatchController().import(
+          teamMatch.id!,
+          message: message,
+          obfuscate: obfuscate,
+          useMock: useMock,
+          includeSubjacent: includeSubjacent,
+        );
+      }
+    }
   }
 }

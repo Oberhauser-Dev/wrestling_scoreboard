@@ -29,7 +29,17 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
   }
 
   @override
-  Future<void> import(int entityId, {String? message, bool obfuscate = true, bool useMock = false}) async {
+  Future<void> import(
+    int entityId, {
+    String? message,
+    bool obfuscate = true,
+    bool includeSubjacent = false,
+    bool useMock = false,
+  }) async {
+    updateLastImportUtcDateTime(entityId);
+    if (includeSubjacent) {
+      // Nothing to do
+    }
     throw UnimplementedError('This operation is not supported yet!');
   }
 

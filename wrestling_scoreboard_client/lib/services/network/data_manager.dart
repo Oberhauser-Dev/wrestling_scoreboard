@@ -84,15 +84,15 @@ abstract class DataManager implements AuthManager {
 
   Future<void> resetDatabase();
 
-  Future<void> organizationImport(int id, {AuthService? authService});
+  Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService});
 
-  Future<void> organizationTeamImport(int id, {AuthService? authService});
+  Future<void> organizationTeamImport(int id, {bool includeSubjacent = false, AuthService? authService});
 
-  Future<void> organizationLeagueImport(int id, {AuthService? authService});
+  Future<void> organizationLeagueImport(int id, {bool includeSubjacent = false, AuthService? authService});
 
-  Future<void> organizationCompetitionImport(int id, {AuthService? authService});
+  Future<void> organizationCompetitionImport(int id, {bool includeSubjacent = false, AuthService? authService});
 
-  Future<void> organizationTeamMatchImport(int id, {AuthService? authService});
+  Future<void> organizationTeamMatchImport(int id, {bool includeSubjacent = false, AuthService? authService});
 
   Future<DateTime?> organizationLastImportUtcDateTime(int id);
 
