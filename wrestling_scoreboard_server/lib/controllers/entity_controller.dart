@@ -71,10 +71,12 @@ mixin ImportController {
   Future<Response> postImport(Request request, User? user, String entityIdStr) async {
     final bool obfuscate = user?.obfuscate ?? true;
     final entityId = int.parse(entityIdStr);
+    final queryParams = request.requestedUri.queryParameters;
     try {
       final message = await request.readAsString();
-      await import(entityId, message: message, obfuscate: obfuscate);
-      updateLastImportUtcDateTime(entityId);
+
+      final includeSubjacent = bool.parse(queryParams['subjacent'] ?? 'false');
+      await import(entityId, message: message, obfuscate: obfuscate, includeSubjacent: includeSubjacent);
       return Response.ok('{"status": "success"}');
     } on HttpException catch (err, stackTrace) {
       return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
@@ -83,7 +85,7 @@ mixin ImportController {
     }
   }
 
-  Future<void> import(int entityId, {String? message, bool obfuscate, bool useMock});
+  Future<void> import(int entityId, {String? message, bool obfuscate, bool includeSubjacent, bool useMock});
 }
 
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {

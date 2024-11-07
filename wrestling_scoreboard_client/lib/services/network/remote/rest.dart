@@ -151,14 +151,16 @@ class RestDataManager extends DataManager {
     _webSocketManager = manager;
   }
 
-  Future<void> _import(int id, String table, {AuthService? authService}) async {
+  Future<void> _import(int id, String table, {bool includeSubjacent = false, AuthService? authService}) async {
     String? body;
     if (authService != null) {
       if (authService is BasicAuthService) {
         body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
       }
     }
-    final uri = Uri.parse('$_apiUrl/$table/$id/api/import');
+    final uri = Uri.parse('$_apiUrl/$table/$id/api/import').replace(queryParameters: {
+      'subjacent': includeSubjacent.toString(),
+    });
     final response = await http.post(uri, body: body, headers: _headers);
     if (response.statusCode >= 400) {
       throw RestException('Failed to import from $table $id', response: response);
@@ -166,24 +168,24 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> organizationImport(int id, {AuthService? authService}) =>
-      _import(id, 'organization', authService: authService);
+  Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
+      _import(id, 'organization', includeSubjacent: includeSubjacent, authService: authService);
 
   @override
-  Future<void> organizationLeagueImport(int id, {AuthService? authService}) =>
-      _import(id, 'league', authService: authService);
+  Future<void> organizationLeagueImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
+      _import(id, 'league', includeSubjacent: includeSubjacent, authService: authService);
 
   @override
-  Future<void> organizationTeamMatchImport(int id, {AuthService? authService}) =>
-      _import(id, 'team_match', authService: authService);
+  Future<void> organizationTeamMatchImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
+      _import(id, 'team_match', includeSubjacent: includeSubjacent, authService: authService);
 
   @override
-  Future<void> organizationCompetitionImport(int id, {AuthService? authService}) =>
-      _import(id, 'competition', authService: authService);
+  Future<void> organizationCompetitionImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
+      _import(id, 'competition', includeSubjacent: includeSubjacent, authService: authService);
 
   @override
-  Future<void> organizationTeamImport(int id, {AuthService? authService}) =>
-      _import(id, 'team', authService: authService);
+  Future<void> organizationTeamImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
+      _import(id, 'team', includeSubjacent: includeSubjacent, authService: authService);
 
   Future<DateTime?> _lastImportUtcDateTime(int id, String table) async {
     final uri = Uri.parse('$_apiUrl/$table/$id/api/last_import');
