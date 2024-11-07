@@ -112,7 +112,7 @@ void main() {
       );
       expect(
         report,
-        'rdbi;2.0.0;MK;matchNo;Test League;1.1.2000;Team A;Team B;4;0;5;Referee;Mr.;Match comment: Semicolon OpeningParenthesis&#40;ClosingParenthesis&#41;LessThan&lt;GreaterThan&gt;AndSign&amp;00000000000000000000000000000000000000000000000000000000000000000000000000000000000000...\n'
+        'rdbi;2.0.0;MK;matchNo;Test Division Test League;1.1.2000;Team A;Team B;4;0;5;Referee;Mr.;Match comment: Semicolon,OpeningParenthesis&#40;ClosingParenthesis&#41;LessThan&lt;GreaterThan&gt;AndSign&amp;000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n'
         '10;LL;LizNoA;SurnameA;PrenameA;JN;LizNoB;SurnameB;PrenameB;JEU;4;0;SS;4:2(points AB30,4R60,2B120)(duration 120)',
       );
     });

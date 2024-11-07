@@ -55,7 +55,9 @@ class League with _$League implements DataObject, Organizational {
   @override
   String get tableName => 'league';
 
-  String get fullname => '${division.fullname}, $name';
+  String get transitiveName => '${division.fullname}, $name';
+
+  String get fullname => '${division.name} $name';
 
   @override
   League copyWithId(int? id) {
