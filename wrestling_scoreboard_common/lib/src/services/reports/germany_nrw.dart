@@ -34,7 +34,7 @@ extension GerBoutResultAbbreviation on BoutResult {
       case BoutResult.vpo:
         return 'PS';
       case BoutResult.vfo:
-        return 'DN';
+        return 'KL'; // Also known as 'DN'
       case BoutResult.dsq:
         return 'DQ';
       case BoutResult.dsq2:
@@ -53,24 +53,27 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
 
   NrwGermanyWrestlingReporter(this.organization);
 
-  /// Comments must be HTML escaped and must be longer than 200 characters.
   String _handleComment(String comment) {
-    bool isSubstring = false;
-    String escapedComment = _htmlEscape.convert(comment);
-    while (escapedComment.length >= 197) {
-      isSubstring = true;
-      comment = comment.substring(0, comment.length - 1);
-      escapedComment = _htmlEscape.convert(_sanitizeString(comment)).replaceAll('(', '&#40;').replaceAll(')', '&#41;');
-    }
-    if (isSubstring) {
+    String escapedComment =
+        _htmlEscape.convert(_sanitizeString(comment)).replaceAll('(', '&#40;').replaceAll(')', '&#41;');
+
+    // Allow more than 200 characters for now.
+    /*if (escapedComment.length >= 200) {
+      /// Comments must be HTML escaped and must be no longer than 200 characters due to specification.
+      while (escapedComment.length >= 197) {
+        // Remove one char by one, until the escaped comment fits the field
+        comment = comment.substring(0, comment.length - 1);
+        escapedComment =
+            _htmlEscape.convert(_sanitizeString(comment)).replaceAll('(', '&#40;').replaceAll(')', '&#41;');
+      }
       escapedComment += '...';
-    }
+    }*/
     return escapedComment;
   }
 
   /// Remove all semicolons to not mess with the format.
   String _sanitizeString(String str) {
-    return str.replaceAll(';', ' ');
+    return str.replaceAll(';', ',');
   }
 
   @override
@@ -81,7 +84,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       '2.0.0',
       'MK',
       teamMatch.no ?? '', // 3:competitionId
-      _sanitizeString(teamMatch.league?.name ?? ''), // 4:Tabelle
+      _sanitizeString(teamMatch.league?.fullname ?? ''), // 4:Tabelle
       '${teamMatch.date.day}.${teamMatch.date.month}.${teamMatch.date.year}', // 5:Datum
       _sanitizeString(teamMatch.home.team.name), // 6:Heim
       _sanitizeString(teamMatch.guest.team.name), // 7:Gast
