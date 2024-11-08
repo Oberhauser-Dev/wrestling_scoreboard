@@ -467,12 +467,13 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 seasonPartition: event.seasonPartition ?? 0));
             weightClass = divisionWeightClass.weightClass;
           } catch (e, st) {
-            throw Exception(
-              'The division weight class $weightClass cannot be found. '
+            log.severe(
+              'The weight class ${weightClass.name} of division ${event.league!.division.fullname} cannot be found. '
               'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n'
               '$e\n'
               '$st',
             );
+            return null;
           }
 
           final homeSyncId = int.tryParse(boutJson['homeWrestlerId'] ?? '');
@@ -496,11 +497,15 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 'TÜ' => BoutResult.vsu, // Technische Überlegenheit
                 'TÜ1' => BoutResult.vsu, // Technische Überlegenheit, Verlierer hat Punkte
                 'ÜG' => BoutResult.dsq, // Übergewicht, TODO: wrongly mapped
+                'UG' => BoutResult.dsq, // Untergewicht(?) TODO: wrongly mapped
                 'AS' => BoutResult.vin, // Aufgabesieg
                 'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit
                 'KL' => BoutResult.vfo, // Kampfloser Sieger, TODO: wrongly mapped
-                'DN' => BoutResult.vfo,
+                'DN' => BoutResult.vfo, // Disqualifikation wegen Nichtantritt
                 'DQ' => BoutResult.dsq,
+                'DS' => BoutResult.dsq, // Disqualifikation aufgrund von Passivität
+                '1M.' => BoutResult.dsq, // Doppelstart
+                'o.W.' => BoutResult.dsq2, // ohne Wertung
                 'DQ2' => BoutResult.dsq2,
                 '' => null,
                 null => null,
@@ -558,13 +563,13 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                   ),
           );
 
-          BoutAction parseActionStr(String str) {
-            final match = RegExp(r'(\d+|[A-Z])([BRbr])(\d*)').firstMatch(str);
+          BoutAction? parseActionStr(String str) {
+            final match = RegExp(r'(\d+|[A-Za-z])([BRbr])(\d*)').firstMatch(str);
             if (match == null) throw Exception('Could not parse action "$str" in bout $boutJson.');
             final actionStr = match.group(1)!; // Group 0 is the whole matched string
             int? pointCount;
             BoutActionType actionType;
-            switch (actionStr) {
+            switch (actionStr.toUpperCase()) {
               case 'A':
                 if (weightClass.style == WrestlingStyle.greco) {
                   throw Exception('Activity Time "A" should be only available in free style: $boutJson');
@@ -584,11 +589,18 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 actionType = BoutActionType.caution;
               case 'D':
                 actionType = BoutActionType.dismissal;
+              case 'L':
+              // TODO: unknown bout action
+              // https://www.brv-ringen.de/index.php?option=com_rdb&view=rdb&Itemid=512&tk=cs&sid=2023&yid=M&menu=1&op=lc&lid=Bayernliga&cntl=Ergebnisse&from=ll&cid=008049b
+              case 'C':
+              // TODO: unknown bout action
+              // https://www.brv-ringen.de/Api/dev/cs/?op=getCompetition&sid=2023&cid=006108b
               default:
                 actionType = BoutActionType.points;
                 pointCount = int.tryParse(actionStr);
                 if (pointCount == null) {
-                  throw Exception('Action type "$actionStr" could not be parsed: $boutJson');
+                  log.warning('Action type "$actionStr" could not be parsed: $boutJson. The action is ignored.');
+                  return null;
                 }
             }
 
@@ -607,7 +619,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             try {
               return parseActionStr(str);
             } catch (e, st) {
-              log.severe('Could not parse action str $str', e, st);
+              log.severe('Invalid action string format: $str\n$boutJson', e, st);
               rethrow;
             }
           }).nonNulls;
@@ -618,7 +630,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           }
           return MapEntry(bout, boutActions);
         }));
-        return Map.fromEntries(boutActionMapEntries);
+        return Map.fromEntries(boutActionMapEntries.nonNulls);
       } on Exception catch (e, st) {
         log.severe('Could not import bouts from bout list: $boutListJson', e, st);
         rethrow;
@@ -670,7 +682,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           log.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri));
           if (response.statusCode >= 400) {
-            throw HttpException('Failed to get the saison list', response: response);
+            throw HttpException('Failed to get the season list', response: response);
           }
           body = response.body;
         } else {
