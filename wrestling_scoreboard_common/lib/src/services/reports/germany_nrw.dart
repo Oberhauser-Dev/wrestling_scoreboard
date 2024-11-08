@@ -38,7 +38,7 @@ extension GerBoutResultAbbreviation on BoutResult {
       case BoutResult.dsq:
         return 'DQ';
       case BoutResult.dsq2:
-        return 'DQ2';
+        return 'o.W.';
     }
   }
 }
