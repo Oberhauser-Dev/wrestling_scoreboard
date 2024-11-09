@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
@@ -407,9 +406,9 @@ class CustomSettingsScreen extends ConsumerWidget {
                     file_selector.XFile? fileSelectorResult =
                         await file_selector.openFile(acceptedTypeGroups: [typeGroup]);
                     if (fileSelectorResult != null) {
-                      File file = File(fileSelectorResult.path);
                       final dataManager = await ref.read(dataManagerNotifierProvider);
-                      await dataManager.restoreDatabase(await file.readAsString(encoding: const Utf8Codec()));
+                      await dataManager
+                          .restoreDatabase(await fileSelectorResult.readAsString(encoding: const Utf8Codec()));
                       if (context.mounted) {
                         await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                       }
