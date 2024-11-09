@@ -18,6 +18,9 @@ class League with _$League implements DataObject, Organizational {
     required DateTime startDate,
     required DateTime endDate,
     required Division division,
+
+    /// The bout days are not necessarily the total days a league has, but ideally they should.
+    /// More binding is the seasonPartition of each single Match.
     required int boutDays,
   }) = _League;
 
