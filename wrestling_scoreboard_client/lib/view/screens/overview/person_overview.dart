@@ -110,50 +110,55 @@ class PersonOverview extends AbstractPersonOverview {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
-    return buildOverview(
-      context,
-      ref,
-      dataId: id,
-      initialData: person,
-      classLocale: localizations.person,
-      editPage: PersonEdit(
-        person: person,
-        initialOrganization: person?.organization ?? initialOrganization,
-      ),
-      onDelete: () async {},
-      buildRelations: (Person person) => {
-        Tab(child: HeadingText(localizations.memberships)): ManyConsumer<Membership, Person>(
-          filterObject: person,
-          builder: (BuildContext context, List<Membership> memberships) {
-            return GroupedList(
-              header: HeadingItem(
-                trailing: RestrictedAddButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MembershipEdit(
-                        initialPerson: person,
+    return SingleConsumer<Person>(
+        id: id,
+        initialData: person,
+        builder: (context, person) {
+          return buildOverview(
+            context,
+            ref,
+            dataId: id,
+            initialData: person,
+            classLocale: localizations.person,
+            editPage: PersonEdit(
+              person: person,
+              initialOrganization: person.organization ?? initialOrganization,
+            ),
+            onDelete: () async {},
+            buildRelations: (Person person) => {
+              Tab(child: HeadingText(localizations.memberships)): ManyConsumer<Membership, Person>(
+                filterObject: person,
+                builder: (BuildContext context, List<Membership> memberships) {
+                  return GroupedList(
+                    header: HeadingItem(
+                      trailing: RestrictedAddButton(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MembershipEdit(
+                              initialPerson: person,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                    items: memberships.map(
+                      (membership) => SingleConsumer<Membership>(
+                        id: membership.id,
+                        initialData: membership,
+                        builder: (context, team) => ContentItem(
+                          title: '${membership.info},\t${membership.person.gender?.localize(context)}',
+                          icon: Icons.person,
+                          onTap: () => handleSelectedMembership(membership, context),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-              items: memberships.map(
-                (membership) => SingleConsumer<Membership>(
-                  id: membership.id,
-                  initialData: membership,
-                  builder: (context, team) => ContentItem(
-                    title: '${membership.info},\t${membership.person.gender?.localize(context)}',
-                    icon: Icons.person,
-                    onTap: () => handleSelectedMembership(membership, context),
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      },
-    );
+            },
+          );
+        });
   }
 
   handleSelectedMembership(Membership membership, BuildContext context) {
