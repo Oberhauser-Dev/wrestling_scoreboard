@@ -248,7 +248,7 @@ class HomeState extends ConsumerState<Home> {
   }
 }
 
-class _EntityGrid extends StatelessWidget {
+class _EntityGrid extends ConsumerWidget {
   final Map<String, Map<int, DataObject?>> entities;
   final Future<void> Function<T extends DataObject>({
     required int id,
@@ -260,7 +260,7 @@ class _EntityGrid extends StatelessWidget {
   const _EntityGrid({required this.entities, required this.onHandleException});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final children = entities.entries.map((entry) {
       final tableName = entry.key;
       final ids = entry.value;
@@ -363,8 +363,11 @@ class _EntityGrid extends StatelessWidget {
             (d) => d.name,
             context: context,
           ),
-        _ =>
-          throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.'),
+        _ => (() {
+            final notifier = ref.read(favoritesNotifierProvider.notifier);
+            ids.forEach((id, value) => notifier.removeFavorite(tableName, id));
+            throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.');
+          })(),
       };
     });
     return Column(children: children.toList());

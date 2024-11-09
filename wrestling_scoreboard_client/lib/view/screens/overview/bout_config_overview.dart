@@ -6,8 +6,8 @@ import 'package:wrestling_scoreboard_client/localization/bout_result_rule.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_result_rule_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -16,7 +16,8 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class BoutConfigOverview extends ConsumerWidget implements AbstractOverview<BoutConfig> {
+abstract class BoutConfigOverview<T extends DataObject> extends ConsumerWidget
+    implements AbstractOverview<BoutConfig, T> {
   static const route = 'bout_config';
 
   const BoutConfigOverview({super.key});
@@ -34,52 +35,53 @@ abstract class BoutConfigOverview extends ConsumerWidget implements AbstractOver
     required int dataId,
     BoutConfig? initialData,
     String? details,
+    required T subClassData,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<BoutConfig>(
       id: dataId,
       initialData: initialData,
-      builder: (context, data) {
+      builder: (context, boutConfig) {
         final description = InfoWidget(
-          obj: data,
+          obj: boutConfig,
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutConfig>(data);
+            (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutConfig>(boutConfig);
           },
           classLocale: classLocale,
           children: [
             ...tiles,
             ContentItem(
-              title: '${data.periodDuration.formatMinutesAndSeconds()} ✕ ${data.periodCount}',
+              title: '${boutConfig.periodDuration.formatMinutesAndSeconds()} ✕ ${boutConfig.periodCount}',
               subtitle: localizations.periodDuration,
               icon: Icons.timelapse,
             ),
             ContentItem(
-              title: data.breakDuration.formatMinutesAndSeconds(),
+              title: boutConfig.breakDuration.formatMinutesAndSeconds(),
               subtitle: localizations.breakDuration,
               icon: Icons.timelapse,
             ),
             ContentItem(
-              title: data.activityDuration?.formatMinutesAndSeconds() ?? '-',
+              title: boutConfig.activityDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.activityDuration,
               icon: Icons.timelapse,
             ),
             ContentItem(
-              title: data.injuryDuration?.formatMinutesAndSeconds() ?? '-',
+              title: boutConfig.injuryDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.injuryDuration,
               icon: Icons.timelapse,
             ),
             ContentItem(
-              title: data.bleedingInjuryDuration?.formatMinutesAndSeconds() ?? '-',
+              title: boutConfig.bleedingInjuryDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.bleedingInjuryDuration,
               icon: Icons.timelapse,
             ),
           ],
         );
-        final relations = buildRelations != null ? buildRelations(data) : {};
-        return FavoriteScaffold<BoutConfig>(
-          dataObject: data,
+        final relations = buildRelations != null ? buildRelations(boutConfig) : {};
+        return FavoriteScaffold<T>(
+          dataObject: subClassData,
           label: classLocale,
           details: details ?? '',
           tabs: [
@@ -92,7 +94,7 @@ abstract class BoutConfigOverview extends ConsumerWidget implements AbstractOver
             description,
             ...relations.values,
             ManyConsumer<BoutResultRule, BoutConfig>(
-              filterObject: data,
+              filterObject: boutConfig,
               builder: (BuildContext context, List<BoutResultRule> boutResultRule) {
                 return GroupedList(
                   header: HeadingItem(
@@ -100,7 +102,7 @@ abstract class BoutConfigOverview extends ConsumerWidget implements AbstractOver
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BoutResultRuleEdit(initialBoutConfig: data),
+                          builder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
                         ),
                       ),
                     ),

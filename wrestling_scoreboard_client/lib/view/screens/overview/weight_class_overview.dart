@@ -11,7 +11,8 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class WeightClassOverview extends ConsumerWidget implements AbstractOverview<WeightClass> {
+abstract class WeightClassOverview<T extends DataObject> extends ConsumerWidget
+    implements AbstractOverview<WeightClass, T> {
   static const route = 'weight_class';
 
   const WeightClassOverview({super.key});
@@ -29,6 +30,7 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
     required int dataId,
     WeightClass? initialData,
     Map<Tab, Widget> Function(WeightClass data)? buildRelations,
+    required T subClassData,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<WeightClass>(
@@ -67,8 +69,8 @@ abstract class WeightClassOverview extends ConsumerWidget implements AbstractOve
             ),
           ],
         );
-        return FavoriteScaffold<WeightClass>(
-          dataObject: data,
+        return FavoriteScaffold<T>(
+          dataObject: subClassData,
           label: classLocale,
           details: details ?? data.name,
           tabs: [

@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class DivisionWeightClassOverview extends WeightClassOverview {
+class DivisionWeightClassOverview extends WeightClassOverview<DivisionWeightClass> {
   static const route = 'division_weight_class';
 
   final int id;
@@ -42,6 +42,7 @@ class DivisionWeightClassOverview extends WeightClassOverview {
           ],
           dataId: data.weightClass.id!,
           initialData: data.weightClass,
+          subClassData: data,
         );
       },
     );

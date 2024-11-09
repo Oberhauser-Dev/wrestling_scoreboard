@@ -16,7 +16,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<Bout> {
+abstract class BoutOverview<T extends DataObject> extends ConsumerWidget implements AbstractOverview<Bout, T> {
   static const route = 'bout';
   final BoutConfig boutConfig;
 
@@ -35,6 +35,7 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
     required int dataId,
     Bout? initialData,
     Map<Tab, Widget> Function(Bout data)? buildRelations,
+    required T subClassData,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Bout>(
@@ -95,8 +96,8 @@ abstract class BoutOverview extends ConsumerWidget implements AbstractOverview<B
                 }),
           ],
         );
-        return FavoriteScaffold<Bout>(
-          dataObject: data,
+        return FavoriteScaffold<T>(
+          dataObject: subClassData,
           label: classLocale,
           details: details ?? data.title(context),
           tabs: [

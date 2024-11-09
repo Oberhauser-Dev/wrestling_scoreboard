@@ -14,7 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class TeamMatchBoutOverview extends BoutOverview {
+class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
   static const route = 'team_match_bout';
 
   final int id;
@@ -85,6 +85,7 @@ class TeamMatchBoutOverview extends BoutOverview {
           ],
           dataId: teamMatchBout.bout.id!,
           initialData: teamMatchBout.bout,
+          subClassData: teamMatchBout,
         );
       },
     );
