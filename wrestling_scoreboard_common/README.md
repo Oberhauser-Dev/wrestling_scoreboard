@@ -30,6 +30,6 @@ Update following files accordingly:
 - `package:wrestling_scoreboard_server/lib/controllers/websocket_handler.dart`
 - `package:wrestling_scoreboard_server/lib/controllers/entity_controller.dart@getControllerFromDataType`
 - `package:wrestling_scoreboard_server/public/index.html`
-- Adapt and export database
+- Migrate and export database
 - `package:wrestling_scoreboard_client/lib/mocks/mock_data_provider.dart`
 - `package:wrestling_scoreboard_client/lib/mocks/mocks.dart`

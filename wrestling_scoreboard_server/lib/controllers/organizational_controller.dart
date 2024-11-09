@@ -64,8 +64,37 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
     }
   }
 
-  Future<List<T>> updateOrCreateManyOfOrg(List<T> dataObjects, {required bool obfuscate}) async {
-    return await Future.wait(dataObjects.map((element) => updateOrCreateSingleOfOrg(element, obfuscate: obfuscate)));
+  Future<List<T>> updateOrCreateManyOfOrg(
+    List<T> dataObjects, {
+    required bool obfuscate,
+    required List<String> conditions,
+    Conjunction conjunction = Conjunction.and,
+    required Map<String, dynamic> substitutionValues,
+    Future<T> Function(T? previous, T current)? onUpdateOrCreate,
+    Future<void> Function(T previous)? onDelete,
+  }) async {
+    final previous = await getMany(
+      conditions: conditions,
+      substitutionValues: substitutionValues,
+      obfuscate: obfuscate,
+    );
+    final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
+    // Delete not included entities
+    await Future.wait(previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId)).map((prev) async {
+      if (await deleteSingle(prev.id!) && onDelete != null) {
+        await onDelete(prev);
+      }
+    }));
+
+    // Execute one after one (synchronously) as it may fails when creating the same source twice in the onUpdateOrCreate method.
+    return await forEachFuture(
+      dataObjects,
+      (element) => updateOrCreateSingleOfOrg(
+        element,
+        obfuscate: obfuscate,
+        onUpdateOrCreate: onUpdateOrCreate != null ? (previous) => onUpdateOrCreate(previous, element) : null,
+      ),
+    );
   }
 
   static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(String orgSyncId,

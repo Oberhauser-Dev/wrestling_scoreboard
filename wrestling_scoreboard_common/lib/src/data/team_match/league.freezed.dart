@@ -27,6 +27,9 @@ mixin _$League {
   DateTime get startDate => throw _privateConstructorUsedError;
   DateTime get endDate => throw _privateConstructorUsedError;
   Division get division => throw _privateConstructorUsedError;
+
+  /// The bout days are not necessarily the total days a league has, but ideally they should.
+  /// More binding is the seasonPartition of each single Match.
   int get boutDays => throw _privateConstructorUsedError;
 
   /// Serializes this League to a JSON map.
@@ -248,6 +251,9 @@ class _$LeagueImpl extends _League {
   final DateTime endDate;
   @override
   final Division division;
+
+  /// The bout days are not necessarily the total days a league has, but ideally they should.
+  /// More binding is the seasonPartition of each single Match.
   @override
   final int boutDays;
 
@@ -319,6 +325,9 @@ abstract class _League extends League {
   DateTime get endDate;
   @override
   Division get division;
+
+  /// The bout days are not necessarily the total days a league has, but ideally they should.
+  /// More binding is the seasonPartition of each single Match.
   @override
   int get boutDays;
 

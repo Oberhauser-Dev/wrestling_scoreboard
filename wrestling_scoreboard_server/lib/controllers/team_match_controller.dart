@@ -150,42 +150,62 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     bool includeSubjacent = false,
   }) async {
     final boutMap = await apiProvider.importBouts(event: entity);
-
-    // Handle bouts one after one, (NO Future.wait) as it may conflicts creating the same membership as once.
-    var index = 0;
-    for (final boutEntry in boutMap.entries) {
-      var bout = boutEntry.key;
-
-      final teamMatchBout = TeamMatchBout(
+    final teamMatchBouts = boutMap.keys.indexed.map((indexed) {
+      final (index, bout) = indexed;
+      return TeamMatchBout(
         pos: index,
         teamMatch: entity,
         bout: bout,
         organization: entity.organization,
         orgSyncId: bout.orgSyncId,
       );
-      bout = await BoutController().updateOrCreateSingleOfOrg(
-        bout,
-        obfuscate: obfuscate,
-        onUpdateOrCreate: (previousBout) async {
-          return bout.copyWith(
-            r: await _saveDeepParticipantState(bout.r,
-                previousParticipationState: previousBout?.r, obfuscate: obfuscate),
-            b: await _saveDeepParticipantState(bout.b,
-                previousParticipationState: previousBout?.b, obfuscate: obfuscate),
-          );
-        },
-      );
-      await TeamMatchBoutController().updateOrCreateSingleOfOrg(teamMatchBout, obfuscate: obfuscate,
-          onUpdateOrCreate: (_) async {
+    }).toList();
+
+    await TeamMatchBoutController().updateOrCreateManyOfOrg(
+      teamMatchBouts,
+      obfuscate: obfuscate,
+      conditions: ['team_match_id = @id'],
+      substitutionValues: {'id': entity.id},
+      onUpdateOrCreate: (previous, current) async {
+        var bout = current.bout;
+        final actions = boutMap[bout]!;
+
+        bout = await BoutController().updateOrCreateSingleOfOrg(
+          bout,
+          obfuscate: obfuscate,
+          onUpdateOrCreate: (previousBout) async {
+            return bout.copyWith(
+              r: await _saveDeepParticipantState(bout.r,
+                  previousParticipationState: previousBout?.r, obfuscate: obfuscate),
+              b: await _saveDeepParticipantState(bout.b,
+                  previousParticipationState: previousBout?.b, obfuscate: obfuscate),
+            );
+          },
+        );
+
         // Add missing id to bout of boutActions
-        final Iterable<BoutAction> boutActions = boutEntry.value.map((action) => action.copyWith(bout: bout));
+        final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
         final prevBoutActions = await BoutActionController()
             .getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': bout.id}, obfuscate: obfuscate);
         await BoutActionController().updateOnDiffMany(boutActions.toList(), previous: prevBoutActions);
-        return teamMatchBout.copyWith(bout: bout);
-      });
-      index++;
-    }
+        return current.copyWith(bout: bout);
+      },
+      onDelete: (previous) async {
+        await BoutActionController()
+            .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': previous.bout.id});
+
+        if (previous.bout.r != null) {
+          await ParticipantStateController().deleteSingle(previous.bout.r!.id!);
+          await ParticipationController().deleteSingle(previous.bout.r!.participation.id!);
+        }
+        if (previous.bout.b != null) {
+          await ParticipantStateController().deleteSingle(previous.bout.b!.id!);
+          await ParticipationController().deleteSingle(previous.bout.b!.participation.id!);
+        }
+
+        await BoutController().deleteSingle(previous.bout.id!);
+      },
+    );
 
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {

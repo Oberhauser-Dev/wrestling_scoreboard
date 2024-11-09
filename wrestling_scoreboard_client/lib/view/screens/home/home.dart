@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/division_weight_class.dart';
+import 'package:wrestling_scoreboard_client/localization/league_weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/localization/type.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
@@ -21,6 +22,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/div
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
@@ -314,6 +316,13 @@ class _EntityGrid extends ConsumerWidget {
             ids.map((id, value) => MapEntry(id, value as LeagueTeamParticipation?)),
             LeagueTeamParticipationOverview.route,
             (d) => d.team.name,
+            context: context,
+          ),
+        'league_weight_class' => _buildGroup<LeagueWeightClass>(
+            Icons.fitness_center,
+            ids.map((id, value) => MapEntry(id, value as LeagueWeightClass?)),
+            LeagueWeightClassOverview.route,
+            (d) => d.localize(context),
             context: context,
           ),
         // 'lineup' => buildGroup<Lineup>(localizations.lineups, Icons.view_list, ids, LineupOverview.route, (d) => d.team.name),

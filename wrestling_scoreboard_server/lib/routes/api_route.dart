@@ -1,6 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
 
@@ -121,6 +122,8 @@ class ApiRoute {
     router.restrictedGetOne(
         '/league/<id|[0-9]+>/league_team_participations', leagueController.requestLeagueTeamParticipations);
     router.restrictedGetOne('/league/<id|[0-9]+>/team_matchs', leagueController.requestTeamMatchs);
+    router.restrictedGetOne('/league/<id|[0-9]+>/weight_classs', leagueController.requestWeightClasses);
+    router.restrictedGetOne('/league/<id|[0-9]+>/league_weight_classs', leagueController.requestLeagueWeightClasses);
 
     final divisionWeightClassController = DivisionWeightClassController();
     router.restrictedPost('/division_weight_class', divisionWeightClassController.postSingle);
@@ -131,6 +134,11 @@ class ApiRoute {
     router.restrictedPost('/league_team_participation', leagueTeamParticipationController.postSingle);
     router.restrictedGet('/league_team_participations', leagueTeamParticipationController.requestMany);
     router.restrictedGetOne('/league_team_participation/<id|[0-9]+>', leagueTeamParticipationController.requestSingle);
+
+    final leagueWeightClassController = LeagueWeightClassController();
+    router.restrictedPost('/league_weight_class', leagueWeightClassController.postSingle);
+    router.restrictedGet('/league_weight_classs', leagueWeightClassController.requestMany);
+    router.restrictedGetOne('/league_weight_class/<id|[0-9]+>', leagueWeightClassController.requestSingle);
 
     final lineupController = LineupController();
     router.restrictedPost('/lineup', lineupController.postSingle);

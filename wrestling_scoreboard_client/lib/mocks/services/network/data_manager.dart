@@ -378,10 +378,12 @@ class MockDataManager extends DataManager {
       return getSingleStreamController<Organization>() as StreamController<T>;
     } else if (obj is Division) {
       return getSingleStreamController<Division>() as StreamController<T>;
-    } else if (obj is League) {
-      return getSingleStreamController<League>() as StreamController<T>;
     } else if (obj is DivisionWeightClass) {
       return getSingleStreamController<DivisionWeightClass>() as StreamController<T>;
+    } else if (obj is League) {
+      return getSingleStreamController<League>() as StreamController<T>;
+    } else if (obj is LeagueWeightClass) {
+      return getSingleStreamController<LeagueWeightClass>() as StreamController<T>;
     } else if (obj is Lineup) {
       return getSingleStreamController<Lineup>() as StreamController<T>;
     } else if (obj is Membership) {

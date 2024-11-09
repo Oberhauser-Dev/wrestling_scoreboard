@@ -121,6 +121,7 @@
   "invalidParameterException": "Die Änderung war nicht erfolgreich, bitte überprüfe deine Eingabeparameter.",
   "warningBoutGenerate": "Diese Aktion überschreibt alle existierenden Kämpfe dieser Begegnung. Um einzelne Kämpfe zu bearbeiten, nutze die Seite zur Kampf-Bearbeitung. Bist du sicher, dass du fortfahren möchtest?",
   "warningPrefilledLineup": "Die Aufstellung wurde mit Werten einer vorherigen Begegnung vorausgefüllt!",
+  "infoUseDivisionWeightClass": "Definiere Gewichtsklassen pro Liga nur, wenn sie sich von denen der zugehörigen Spielklasse unterscheiden!",
   "retry": "Erneut versuchen",
   "networkTimeout": "Netzwerk-Timeout",
 
