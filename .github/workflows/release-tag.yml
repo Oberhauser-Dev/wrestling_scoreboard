@@ -16,9 +16,10 @@ jobs:
         with:
           fetch-depth: 0
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v3
+      - uses: bluefireteam/melos-action@version-private
         with:
           tag: true
+          include-private: true
       - run: |
           melos exec -c 1 --scope "wrestling_scoreboard_client*" --order-dependents -- gh workflow run release-client.yml --ref \$MELOS_PACKAGE_NAME-v\$MELOS_PACKAGE_VERSION
           melos exec -c 1 --scope "wrestling_scoreboard_server*" --order-dependents -- gh workflow run release-server.yml --ref \$MELOS_PACKAGE_NAME-v\$MELOS_PACKAGE_VERSION

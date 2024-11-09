@@ -24,5 +24,5 @@ jobs:
         with:
           run-versioning: ${{ inputs.prerelease == false }}
           run-versioning-prerelease: ${{ inputs.prerelease == true }}
-          version-all: true
+          include-private: true
           create-pr: true
