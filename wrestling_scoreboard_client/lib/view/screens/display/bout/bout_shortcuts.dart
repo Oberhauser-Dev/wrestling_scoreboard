@@ -24,6 +24,7 @@ enum BoutScreenActions {
   redThree,
   redFour,
   redFive,
+  redVerbal,
   redPassivity,
   redCaution,
   redDismissal,
@@ -36,6 +37,7 @@ enum BoutScreenActions {
   blueThree,
   blueFour,
   blueFive,
+  blueVerbal,
   bluePassivity,
   blueCaution,
   blueDismissal,
@@ -76,6 +78,8 @@ class BoutScreenActionIntent extends Intent {
 
   const BoutScreenActionIntent.redFive() : type = BoutScreenActions.redFive;
 
+  const BoutScreenActionIntent.redVerbal() : type = BoutScreenActions.redVerbal;
+
   const BoutScreenActionIntent.redPassivity() : type = BoutScreenActions.redPassivity;
 
   const BoutScreenActionIntent.redCaution() : type = BoutScreenActions.redCaution;
@@ -99,6 +103,8 @@ class BoutScreenActionIntent extends Intent {
   const BoutScreenActionIntent.blueFour() : type = BoutScreenActions.blueFour;
 
   const BoutScreenActionIntent.blueFive() : type = BoutScreenActions.blueFive;
+
+  const BoutScreenActionIntent.blueVerbal() : type = BoutScreenActions.blueVerbal;
 
   const BoutScreenActionIntent.bluePassivity() : type = BoutScreenActions.bluePassivity;
 
@@ -210,6 +216,11 @@ class BoutScreenActionIntent extends Intent {
         );
         await dataManager.createOrUpdateSingle(action);
         break;
+      case BoutScreenActions.redVerbal:
+        var action =
+            BoutAction(bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.verbal);
+        await dataManager.createOrUpdateSingle(action);
+        break;
       case BoutScreenActions.redPassivity:
         var action = BoutAction(
             bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.passivity);
@@ -287,6 +298,11 @@ class BoutScreenActionIntent extends Intent {
             duration: stopwatch.elapsed,
             actionType: BoutActionType.points,
             pointCount: 5);
+        await dataManager.createOrUpdateSingle(action);
+        break;
+      case BoutScreenActions.blueVerbal:
+        var action =
+            BoutAction(bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.verbal);
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
