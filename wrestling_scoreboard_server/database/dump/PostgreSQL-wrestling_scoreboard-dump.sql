@@ -647,6 +647,45 @@ ALTER SEQUENCE public.league_team_participation_id_seq OWNED BY public.league_te
 
 
 --
+-- Name: league_weight_class; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.league_weight_class (
+    id integer NOT NULL,
+    league_id integer NOT NULL,
+    weight_class_id integer NOT NULL,
+    pos integer DEFAULT 0 NOT NULL,
+    season_partition integer,
+    org_sync_id character varying(127),
+    organization_id integer
+);
+
+
+ALTER TABLE public.league_weight_class OWNER TO wrestling;
+
+--
+-- Name: league_weight_class_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.league_weight_class_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.league_weight_class_id_seq OWNER TO wrestling;
+
+--
+-- Name: league_weight_class_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.league_weight_class_id_seq OWNED BY public.league_weight_class.id;
+
+
+--
 -- Name: lineup; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -1222,6 +1261,13 @@ ALTER TABLE ONLY public.league_team_participation ALTER COLUMN id SET DEFAULT ne
 
 
 --
+-- Name: league_weight_class id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class ALTER COLUMN id SET DEFAULT nextval('public.league_weight_class_id_seq'::regclass);
+
+
+--
 -- Name: lineup id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1476,6 +1522,14 @@ COPY public.league_team_participation (id, league_id, team_id) FROM stdin;
 
 
 --
+-- Data for Name: league_weight_class; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.league_weight_class (id, league_id, weight_class_id, pos, season_partition, org_sync_id, organization_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1522,7 +1576,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.6
+0.2.0-pre.7
 \.
 
 
@@ -1832,6 +1886,13 @@ SELECT pg_catalog.setval('public.league_team_participation_id_seq', 5, true);
 
 
 --
+-- Name: league_weight_class_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.league_weight_class_id_seq', 1, false);
+
+
+--
 -- Name: lineup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -2027,6 +2088,14 @@ ALTER TABLE ONLY public.league_team_participation
 
 
 --
+-- Name: league_weight_class league_weight_class_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_pk PRIMARY KEY (id);
+
+
+--
 -- Name: lineup lineup_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2180,6 +2249,13 @@ CREATE UNIQUE INDEX event_person_id_uindex ON public.competition_person USING bt
 --
 
 CREATE UNIQUE INDEX league_team_participation_id_uindex ON public.league_team_participation USING btree (id);
+
+
+--
+-- Name: league_weight_class_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
+--
+
+CREATE UNIQUE INDEX league_weight_class_id_uindex ON public.league_weight_class USING btree (id);
 
 
 --
@@ -2363,6 +2439,30 @@ ALTER TABLE ONLY public.league_team_participation
 
 ALTER TABLE ONLY public.league_team_participation
     ADD CONSTRAINT league_team_participation_team_id_fk FOREIGN KEY (team_id) REFERENCES public.team(id) ON DELETE CASCADE;
+
+
+--
+-- Name: league_weight_class league_weight_class_league_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_league_id_fk FOREIGN KEY (league_id) REFERENCES public.league(id) ON DELETE CASCADE;
+
+
+--
+-- Name: league_weight_class league_weight_class_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: league_weight_class league_weight_class_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
 
 
 --

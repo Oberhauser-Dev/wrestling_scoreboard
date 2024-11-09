@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 extension BoolParsing on String {
   bool parseBool() {
     return toLowerCase() == 'true' || this == '1';
@@ -56,5 +58,20 @@ extension IndexOfLetter on String {
     // Big letters 'A', start with 01000001
     // Small letters 'a', start with 01100001
     return codeUnitAt(0) & 0x1f;
+  }
+}
+
+extension GroupListByIterable<T> on Iterable<T> {
+  Map<Iterable<K>, List<T>> groupListsByIterable<K>(Iterable<K> Function(T element) keyOf) {
+    var result = <Iterable<K>, List<T>>{};
+    for (var element in this) {
+      final keyValue = keyOf(element);
+      final key = result.keys.firstWhere(
+        (tmpKey) => DeepCollectionEquality().equals(tmpKey, keyValue),
+        orElse: () => keyValue,
+      );
+      (result[key] ??= []).add(element);
+    }
+    return result;
   }
 }

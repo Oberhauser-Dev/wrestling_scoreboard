@@ -15,6 +15,7 @@ import 'package:wrestling_scoreboard_server/controllers/division_controller.dart
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
@@ -236,12 +237,14 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return OrganizationController();
       case const (Division):
         return DivisionController();
-      case const (League):
-        return LeagueController();
       case const (DivisionWeightClass):
         return DivisionWeightClassController();
+      case const (League):
+        return LeagueController();
       case const (LeagueTeamParticipation):
         return LeagueTeamParticipationController();
+      case const (LeagueWeightClass):
+        return LeagueWeightClassController();
       case const (Lineup):
         return LineupController();
       case const (Membership):

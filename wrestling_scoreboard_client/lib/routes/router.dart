@@ -26,6 +26,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/div
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
@@ -113,6 +114,11 @@ getRouter() {
                 path: '${DivisionWeightClassOverview.route}/:division_weight_class_id',
                 builder: (context, state) =>
                     DivisionWeightClassOverview(id: int.parse(state.pathParameters['division_weight_class_id']!)),
+              ),
+              GoRoute(
+                path: '${LeagueWeightClassOverview.route}/:league_weight_class_id',
+                builder: (context, state) =>
+                    LeagueWeightClassOverview(id: int.parse(state.pathParameters['league_weight_class_id']!)),
               ),
               GoRoute(
                 path: '${TeamMatchBoutOverview.route}/:team_match_bout_id',

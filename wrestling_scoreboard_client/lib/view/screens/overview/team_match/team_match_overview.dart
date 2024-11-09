@@ -306,9 +306,17 @@ class TeamMatchOverview extends ConsumerWidget {
   }) async {
     final dataManager = await ref.read(dataManagerNotifierProvider);
     final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
-    final weightClasses = (await dataManager.readMany<DivisionWeightClass, Division>(filterObject: league.division))
+    final leagueWeightClasses = (await dataManager.readMany<LeagueWeightClass, League>(filterObject: league))
         .where((element) => element.seasonPartition == match.seasonPartition)
         .toList();
+    var weightClasses = leagueWeightClasses.map((e) => e.weightClass).toList();
+    if (weightClasses.isEmpty) {
+      final divisionWeightClasses =
+          (await dataManager.readMany<DivisionWeightClass, Division>(filterObject: league.division))
+              .where((element) => element.seasonPartition == match.seasonPartition)
+              .toList();
+      weightClasses = divisionWeightClasses.map((e) => e.weightClass).toList();
+    }
     Lineup? proposedLineup;
     List<Participation>? proposedParticipations;
     if (participations.isEmpty) {
@@ -337,7 +345,7 @@ class TeamMatchOverview extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) {
           return LineupEdit(
-            weightClasses: weightClasses.map((e) => e.weightClass).toList(),
+            weightClasses: weightClasses,
             participations: participations,
             lineup: lineup,
             initialCoach: proposedLineup?.coach,

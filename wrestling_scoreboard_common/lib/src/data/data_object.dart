@@ -42,6 +42,8 @@ abstract class DataObject {
         return League.fromJson(json) as T;
       case const (LeagueTeamParticipation):
         return LeagueTeamParticipation.fromJson(json) as T;
+      case const (LeagueWeightClass):
+        return LeagueWeightClass.fromJson(json) as T;
       case const (Lineup):
         return Lineup.fromJson(json) as T;
       case const (Membership):
@@ -99,6 +101,8 @@ abstract class DataObject {
         return (await League.fromRaw(raw, getSingle)) as T;
       case const (LeagueTeamParticipation):
         return (await LeagueTeamParticipation.fromRaw(raw, getSingle)) as T;
+      case const (LeagueWeightClass):
+        return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
       case const (Lineup):
         return (await Lineup.fromRaw(raw, getSingle)) as T;
       case const (Organization):

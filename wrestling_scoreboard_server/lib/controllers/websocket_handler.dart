@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_control
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
@@ -89,7 +90,6 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Organization,
         filterId: single.organization.id)));
-  } else if (single is League) {
   } else if (single is DivisionWeightClass) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await DivisionWeightClassController().getMany(
@@ -99,6 +99,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Division,
         filterId: single.division.id)));
+  } else if (single is League) {
   } else if (single is LeagueTeamParticipation) {
     final leagueTeamParticipationController = LeagueTeamParticipationController();
     broadcast((obfuscate) async => jsonEncode(manyToJson(
@@ -117,6 +118,15 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Team,
         filterId: single.team.id)));
+  } else if (single is LeagueWeightClass) {
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await LeagueWeightClassController().getMany(
+            conditions: ['league_id = @id'], substitutionValues: {'id': single.league.id}, obfuscate: obfuscate),
+        LeagueWeightClass,
+        CRUD.update,
+        isRaw: false,
+        filterType: League,
+        filterId: single.league.id)));
   } else if (single is Lineup) {
     // No filtered list needs to be handled.
   } else if (single is Membership) {
@@ -265,7 +275,6 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: Organization,
         filterId: single['organization_id'])));
-  } else if (T == League) {
   } else if (T == DivisionWeightClass) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await DivisionWeightClassController().getManyRaw(
@@ -275,6 +284,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: Division,
         filterId: single['division_id'])));
+  } else if (T == League) {
   } else if (T == LeagueTeamParticipation) {
     final leagueTeamParticipationController = LeagueTeamParticipationController();
     broadcast((obfuscate) async => jsonEncode(manyToJson(
@@ -293,6 +303,15 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: Team,
         filterId: single['team_id'])));
+  } else if (T == LeagueWeightClass) {
+    broadcast((obfuscate) async => jsonEncode(manyToJson(
+        await LeagueWeightClassController().getManyRaw(
+            conditions: ['league_id = @id'], substitutionValues: {'id': single['league_id']}, obfuscate: obfuscate),
+        LeagueWeightClass,
+        CRUD.update,
+        isRaw: true,
+        filterType: League,
+        filterId: single['league_id'])));
   } else if (T == Lineup) {
     // No filtered list needs to be handled.
   } else if (T == Membership) {

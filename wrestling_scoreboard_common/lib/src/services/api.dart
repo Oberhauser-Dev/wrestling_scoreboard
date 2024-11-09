@@ -50,7 +50,9 @@ abstract class WrestlingApi {
 
   Future<Map<Division, Iterable<BoutResultRule>>> importDivisions({DateTime? minDate, DateTime? maxDate});
 
-  Future<Iterable<DivisionWeightClass>> importDivisionWeightClasses({required Division division});
+  Future<(Iterable<DivisionWeightClass>, Iterable<LeagueWeightClass>)> importDivisionAndLeagueWeightClasses({
+    required Division division,
+  });
 
   Future<Iterable<TeamClubAffiliation>> importTeamClubAffiliations();
 

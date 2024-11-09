@@ -154,9 +154,21 @@ void main() {
                 .team as T;
           case const (DivisionWeightClass):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
-            final weightClasses = (await Future.wait(
-                    divisions.keys.map((division) => wrestlingApi.importDivisionWeightClasses(division: division))))
-                .expand((w) => w);
+            final weightClasses = (await Future.wait(divisions.keys
+                    .map((division) => wrestlingApi.importDivisionAndLeagueWeightClasses(division: division))))
+                .expand((w) => w.$1);
+            return weightClasses.singleWhere((w) => w.orgSyncId == orgSyncId) as T;
+          case const (League):
+            final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
+            final leagues =
+                (await Future.wait(divisions.keys.map((division) => wrestlingApi.importLeagues(division: division))))
+                    .expand((l) => l);
+            return leagues.singleWhere((l) => l.orgSyncId == orgSyncId) as T;
+          case const (LeagueWeightClass):
+            final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
+            final weightClasses = (await Future.wait(divisions.keys
+                    .map((division) => wrestlingApi.importDivisionAndLeagueWeightClasses(division: division))))
+                .expand((w) => w.$2);
             return weightClasses.singleWhere((w) => w.orgSyncId == orgSyncId) as T;
           default:
             throw UnimplementedError('Type $T with orgSyncId $orgSyncId not found');
@@ -282,7 +294,9 @@ void main() {
       });
 
       test('DivisionWeightClasses', () async {
-        final divisionWeightClasses = await wrestlingApi.importDivisionWeightClasses(division: testDivisionBayernliga);
+        final (divisionWeightClasses, leagueWeightClasses) =
+            await wrestlingApi.importDivisionAndLeagueWeightClasses(division: testDivisionBayernliga);
+        expect(leagueWeightClasses, []);
         expect(divisionWeightClasses, [
           // Season partition 1
           DivisionWeightClass(

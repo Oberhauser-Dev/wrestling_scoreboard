@@ -3,13 +3,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/league_weight_class.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -75,6 +78,7 @@ class LeagueOverview extends ConsumerWidget {
             Tab(child: HeadingText(localizations.info)),
             Tab(child: HeadingText(localizations.participatingTeams)),
             Tab(child: HeadingText(localizations.matches)),
+            Tab(child: HeadingText(localizations.weightClasses)),
           ],
           body: TabGroup(items: [
             description,
@@ -111,6 +115,35 @@ class LeagueOverview extends ConsumerWidget {
               },
             ),
             MatchesWidget<League>(filterObject: data),
+            ManyConsumer<LeagueWeightClass, League>(
+              filterObject: data,
+              builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClasses) {
+                return GroupedList(
+                  header: HeadingItem(
+                    trailing: RestrictedAddButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LeagueWeightClassEdit(initialLeague: data),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: leagueWeightClasses.map((e) {
+                    return SingleConsumer<LeagueWeightClass>(
+                      id: e.id,
+                      initialData: e,
+                      builder: (context, data) {
+                        return ContentItem(
+                            title: data.localize(context),
+                            icon: Icons.fitness_center,
+                            onTap: () => handleSelectedWeightClass(data, context));
+                      },
+                    );
+                  }),
+                );
+              },
+            )
           ]),
         );
       },
@@ -119,5 +152,9 @@ class LeagueOverview extends ConsumerWidget {
 
   handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
     context.push('/${LeagueTeamParticipationOverview.route}/${teamParticipation.id}');
+  }
+
+  handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
+    context.push('/${LeagueWeightClassOverview.route}/${leagueWeightClass.id}');
   }
 }

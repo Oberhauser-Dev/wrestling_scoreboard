@@ -184,59 +184,86 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     return divisions.reduce((a, b) => a..addAll(b));
   }
 
+  Iterable<LeagueWeightClass> _parseJsonLeagueWeightClass(
+      Map<String, dynamic> item, int weightClassCount, League league) {
+    final originalPos = int.parse(item['order']) - 1;
+    final suffix = (item['suffix'] ?? '').trim();
+    final weightClassPartition1 = WeightClass(
+      style: item['styleA'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
+      weight: int.parse(item['weight']),
+      suffix: suffix.isEmpty ? null : suffix,
+      unit: WeightUnit.kilogram,
+    );
+    final leagueWeightClassPartition1 = LeagueWeightClass(
+      pos: originalPos < (weightClassCount / 2) ? originalPos * 2 : (weightClassCount - originalPos - 1) * 2 + 1,
+      organization: organization,
+      orgSyncId: _getWeightClassOrgSyncId(
+          parentOrgSyncId: league.orgSyncId!, weightClass: weightClassPartition1, seasonPartition: 0),
+      league: league,
+      weightClass: weightClassPartition1,
+      seasonPartition: 0,
+    );
+    final weightClassP2 = weightClassPartition1.copyWith(
+      style: item['styleB'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
+    );
+    final leagueWeightClassPartition2 = leagueWeightClassPartition1.copyWith(
+      seasonPartition: 1,
+      weightClass: weightClassP2,
+      orgSyncId:
+          _getWeightClassOrgSyncId(parentOrgSyncId: league.orgSyncId!, weightClass: weightClassP2, seasonPartition: 1),
+    );
+    return [leagueWeightClassPartition1, leagueWeightClassPartition2];
+  }
+
   @override
-  Future<Iterable<DivisionWeightClass>> importDivisionWeightClasses({required Division division}) async {
+  Future<(Iterable<DivisionWeightClass>, Iterable<LeagueWeightClass>)> importDivisionAndLeagueWeightClasses({
+    required Division division,
+  }) async {
     final json = await _getLeagueList(seasonId: division.startDate.year.toString());
-    if (json.isEmpty) return <DivisionWeightClass>{};
+    if (json.isEmpty) return (<DivisionWeightClass>{}, <LeagueWeightClass>{});
 
-    final leagueMap = json['ligaList'][division.name];
-    Iterable<DivisionWeightClass> divisionWeightClasses;
-    if (leagueMap is Map<String, dynamic> && leagueMap.isNotEmpty) {
-      // Get division bout scheme from first league
-      final firstLeague = leagueMap.entries.first.value;
-      final List<dynamic> boutSchemeMap = firstLeague['boutScheme'];
-      for (final leagueEntry in leagueMap.entries) {
-        if (!DeepCollectionEquality().equals(leagueEntry.value['boutScheme'], boutSchemeMap)) {
-          // TODO: make weight class mapping for leagues only (#82).
-          log.severe('boutScheme/weightClasses differ within the division $division');
-        }
-      }
-
-      final weightClassCount = boutSchemeMap.length;
-      divisionWeightClasses = boutSchemeMap.map((item) {
-        final originalPos = int.parse(item['order']) - 1;
-        final suffix = (item['suffix'] ?? '').trim();
-        final weightClassP1 = WeightClass(
-          style: item['styleA'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
-          weight: int.parse(item['weight']),
-          suffix: suffix.isEmpty ? null : suffix,
-          unit: WeightUnit.kilogram,
-        );
-        final divisionWeightClassPartition1 = DivisionWeightClass(
-          // Alter order of weightclasses
-          pos: originalPos < (weightClassCount / 2) ? originalPos * 2 : (weightClassCount - originalPos - 1) * 2 + 1,
-          seasonPartition: 0,
-          division: division,
-          weightClass: weightClassP1,
-          organization: organization,
-          orgSyncId:
-              _getDivisionWeightClassOrgSyncId(division: division, weightClass: weightClassP1, seasonPartition: 0),
-        );
-        final weightClassP2 = weightClassP1.copyWith(
-          style: item['styleB'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
-        );
-        final divisionWeightClassPartition2 = divisionWeightClassPartition1.copyWith(
-          seasonPartition: 1,
-          weightClass: weightClassP2,
-          orgSyncId:
-              _getDivisionWeightClassOrgSyncId(division: division, weightClass: weightClassP2, seasonPartition: 1),
-        );
-        return [divisionWeightClassPartition1, divisionWeightClassPartition2];
-      }).expand((element) => element);
-    } else {
-      divisionWeightClasses = [];
+    final divisionMap = json['ligaList'][division.name];
+    if (divisionMap is! Map<String, dynamic> || divisionMap.isEmpty) {
+      return (<DivisionWeightClass>{}, <LeagueWeightClass>{});
     }
-    return divisionWeightClasses.sorted((a, b) {
+
+    final Iterable<Iterable<LeagueWeightClass>> weightClassedPerLeague =
+        await Future.wait(divisionMap.entries.map((leagueJsonEntries) async {
+      final Map<String, dynamic> leagueJson = leagueJsonEntries.value;
+      final List<dynamic> boutSchemeList = leagueJson['boutScheme'];
+      final league = await _getSingleBySyncId<League>(_getLeagueOrgSyncId(
+        division: division,
+        leagueName: leagueJsonEntries.key,
+      ));
+      return boutSchemeList
+          .map((item) => _parseJsonLeagueWeightClass(item, boutSchemeList.length, league))
+          .expand((element) => element);
+    }));
+
+    final groupedByWeightClassList = weightClassedPerLeague.groupListsByIterable((leagueWeightClassList) {
+      return leagueWeightClassList.map((lwcl) => lwcl.weightClass).toSet();
+    });
+
+    // This is the weight class, which is the most common, so use it as default in division level.
+    final sortedWeightClassEntries = groupedByWeightClassList.entries.toList()
+      ..sort((a, b) => a.value.length.compareTo(b.value.length));
+    final mostCommonWeightClasses = sortedWeightClassEntries.last.key;
+
+    var divisionWeightClasses =
+        groupedByWeightClassList[mostCommonWeightClasses]!.first.map((lwc) => DivisionWeightClass(
+              pos: lwc.pos,
+              division: division,
+              weightClass: lwc.weightClass,
+              organization: organization,
+              orgSyncId: _getWeightClassOrgSyncId(
+                parentOrgSyncId: division.orgSyncId!,
+                weightClass: lwc.weightClass,
+                seasonPartition: lwc.seasonPartition!,
+              ),
+              seasonPartition: lwc.seasonPartition,
+            ));
+    // TODO: May not be sorted
+    divisionWeightClasses = divisionWeightClasses.sorted((a, b) {
       if (a.seasonPartition == null || b.seasonPartition == null) {
         return a.pos.compareTo(b.pos);
       }
@@ -246,14 +273,30 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       }
       return comparison;
     });
+
+    // Handle remaining leagueWeightClasses
+    groupedByWeightClassList.remove(mostCommonWeightClasses);
+    final leagueWeightClasses = groupedByWeightClassList.values
+        .expand((listOfLeagueWeightClassCategories) => listOfLeagueWeightClassCategories)
+        .expand((listOfLeagueWeightClasses) => listOfLeagueWeightClasses);
+    return (divisionWeightClasses, leagueWeightClasses);
   }
 
-  String _getDivisionWeightClassOrgSyncId({
-    required Division division,
+  String _getWeightClassOrgSyncId({
+    required String parentOrgSyncId,
     required WeightClass weightClass,
     required int seasonPartition,
   }) {
-    return '${division.orgSyncId}_${weightClass.name}_${weightClass.style.name}_$seasonPartition'.replaceAll(' ', '_');
+    return '${parentOrgSyncId}_${weightClass.name}_${weightClass.style.name}_$seasonPartition'.replaceAll(' ', '_');
+  }
+
+  String _getLeagueOrgSyncId({required Division division, required String leagueName}) {
+    leagueName = leagueName.trim();
+    if (leagueName.isEmpty) {
+      // If division has only one league it is the league for whole Bavarian.
+      leagueName = totalRegionWildcard;
+    }
+    return '${division.orgSyncId}_$leagueName';
   }
 
   @override
@@ -379,7 +422,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               endDate: division.endDate,
               division: division,
               boutDays: int.parse(entry.value['noOfBoutDays']),
-              orgSyncId: '${division.orgSyncId}_$leagueName',
+              orgSyncId: _getLeagueOrgSyncId(division: division, leagueName: leagueName),
               organization: organization,
             );
           },
@@ -465,8 +508,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             unit: WeightUnit.kilogram,
           );
           try {
-            final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(_getDivisionWeightClassOrgSyncId(
-                division: event.league!.division,
+            // TODO also search for league weight class first
+            final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(_getWeightClassOrgSyncId(
+                parentOrgSyncId: event.league!.division.orgSyncId!,
                 weightClass: weightClass,
                 seasonPartition: event.seasonPartition ?? 0));
             weightClass = divisionWeightClass.weightClass;

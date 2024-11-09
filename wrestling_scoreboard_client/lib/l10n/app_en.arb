@@ -124,6 +124,7 @@
   "invalidParameterException": "The change was not successful, please check your input parameters.",
   "warningBoutGenerate": "This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?",
   "warningPrefilledLineup": "The lineup was prefilled with values from a previous match!",
+  "infoUseDivisionWeightClass": "Only define weight classes per league, if they differ from those of its division!",
   "retry": "Retry",
   "networkTimeout": "Network timeout",
 

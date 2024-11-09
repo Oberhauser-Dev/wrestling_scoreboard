@@ -647,6 +647,45 @@ ALTER SEQUENCE public.league_team_participation_id_seq OWNED BY public.league_te
 
 
 --
+-- Name: league_weight_class; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.league_weight_class (
+    id integer NOT NULL,
+    league_id integer NOT NULL,
+    weight_class_id integer NOT NULL,
+    pos integer DEFAULT 0 NOT NULL,
+    season_partition integer,
+    org_sync_id character varying(127),
+    organization_id integer
+);
+
+
+ALTER TABLE public.league_weight_class OWNER TO wrestling;
+
+--
+-- Name: league_weight_class_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.league_weight_class_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.league_weight_class_id_seq OWNER TO wrestling;
+
+--
+-- Name: league_weight_class_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.league_weight_class_id_seq OWNED BY public.league_weight_class.id;
+
+
+--
 -- Name: lineup; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -1222,6 +1261,13 @@ ALTER TABLE ONLY public.league_team_participation ALTER COLUMN id SET DEFAULT ne
 
 
 --
+-- Name: league_weight_class id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class ALTER COLUMN id SET DEFAULT nextval('public.league_weight_class_id_seq'::regclass);
+
+
+--
 -- Name: lineup id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1480,25 +1526,7 @@ COPY public.division (id, name, start_date, end_date, bout_config_id, season_par
 
 COPY public.division_weight_class (id, division_id, weight_class_id, pos, season_partition, org_sync_id, organization_id) FROM stdin;
 30	3	33	0	0	2023_(S)_Bezirksliga_29_kg_free_0	2
-31	3	34	1	0	2023_(S)_Bezirksliga_85_kg_greco_0	2
-32	3	35	2	0	2023_(S)_Bezirksliga_32_kg_greco_0	2
-33	3	36	3	0	2023_(S)_Bezirksliga_67_kg_free_0	2
-34	3	37	4	0	2023_(S)_Bezirksliga_35_kg_free_0	2
-35	3	38	5	0	2023_(S)_Bezirksliga_57_kg_greco_0	2
-36	3	39	6	0	2023_(S)_Bezirksliga_38_kg_greco_0	2
-37	3	40	7	0	2023_(S)_Bezirksliga_51_kg_free_0	2
-38	3	41	8	0	2023_(S)_Bezirksliga_42_kg_free_0	2
-39	3	42	9	0	2023_(S)_Bezirksliga_46_kg_greco_0	2
 40	3	43	0	1	2023_(S)_Bezirksliga_29_kg_greco_1	2
-41	3	44	1	1	2023_(S)_Bezirksliga_85_kg_free_1	2
-42	3	45	2	1	2023_(S)_Bezirksliga_32_kg_free_1	2
-43	3	46	3	1	2023_(S)_Bezirksliga_67_kg_greco_1	2
-44	3	47	4	1	2023_(S)_Bezirksliga_35_kg_greco_1	2
-45	3	48	5	1	2023_(S)_Bezirksliga_57_kg_free_1	2
-46	3	49	6	1	2023_(S)_Bezirksliga_38_kg_free_1	2
-47	3	50	7	1	2023_(S)_Bezirksliga_51_kg_greco_1	2
-48	3	51	8	1	2023_(S)_Bezirksliga_42_kg_greco_1	2
-49	3	52	9	1	2023_(S)_Bezirksliga_46_kg_free_1	2
 50	4	53	0	0	2023_(S)_Finalrunde_29_kg_free_0	2
 51	4	54	1	0	2023_(S)_Finalrunde_80_kg_greco_0	2
 52	4	55	2	0	2023_(S)_Finalrunde_33_kg_greco_0	2
@@ -1569,6 +1597,10 @@ COPY public.division_weight_class (id, division_id, weight_class_id, pos, season
 117	6	120	13	1	2023_Gruppenoberliga_57_kg_free_1	2
 118	7	121	0	0	2023_Landesliga_57_kg_free_0	2
 119	7	122	1	0	2023_Landesliga_130_kg_greco_0	2
+37	3	40	5	0	2023_(S)_Bezirksliga_51_kg_free_0	2
+39	3	42	7	0	2023_(S)_Bezirksliga_46_kg_greco_0	2
+47	3	50	5	1	2023_(S)_Bezirksliga_51_kg_greco_1	2
+49	3	52	7	1	2023_(S)_Bezirksliga_46_kg_free_1	2
 120	7	123	2	0	2023_Landesliga_61_kg_greco_0	2
 121	7	124	3	0	2023_Landesliga_98_kg_free_0	2
 122	7	125	4	0	2023_Landesliga_66_kg_free_0	2
@@ -1615,6 +1647,32 @@ COPY public.division_weight_class (id, division_id, weight_class_id, pos, season
 163	8	166	7	1	2023_Oberliga_80_kg_greco_1	2
 164	8	167	8	1	2023_Oberliga_75_kg_A_greco_1	2
 165	8	168	9	1	2023_Oberliga_75_kg_B_free_1	2
+166	3	169	1	0	2023_(S)_Bezirksliga_80_kg_free_0	2
+167	3	170	2	0	2023_(S)_Bezirksliga_33_kg_greco_0	2
+168	3	171	3	0	2023_(S)_Bezirksliga_62_kg_greco_0	2
+169	3	172	4	0	2023_(S)_Bezirksliga_37_kg_free_0	2
+170	3	173	6	0	2023_(S)_Bezirksliga_41_kg_greco_0	2
+171	3	174	8	0	2023_(S)_Bezirksliga_46_kg_free_0	2
+172	3	175	9	0	2023_(S)_Bezirksliga_41_kg_free_0	2
+173	3	176	10	0	2023_(S)_Bezirksliga_51_kg_greco_0	2
+174	3	177	11	0	2023_(S)_Bezirksliga_37_kg_greco_0	2
+175	3	178	12	0	2023_(S)_Bezirksliga_62_kg_free_0	2
+176	3	179	13	0	2023_(S)_Bezirksliga_33_kg_free_0	2
+177	3	180	14	0	2023_(S)_Bezirksliga_80_kg_greco_0	2
+178	3	181	15	0	2023_(S)_Bezirksliga_29_kg_greco_0	2
+179	3	182	1	1	2023_(S)_Bezirksliga_80_kg_greco_1	2
+180	3	183	2	1	2023_(S)_Bezirksliga_33_kg_free_1	2
+181	3	184	3	1	2023_(S)_Bezirksliga_62_kg_free_1	2
+182	3	185	4	1	2023_(S)_Bezirksliga_37_kg_greco_1	2
+183	3	186	6	1	2023_(S)_Bezirksliga_41_kg_free_1	2
+184	3	187	8	1	2023_(S)_Bezirksliga_46_kg_greco_1	2
+185	3	188	9	1	2023_(S)_Bezirksliga_41_kg_greco_1	2
+186	3	189	10	1	2023_(S)_Bezirksliga_51_kg_free_1	2
+187	3	190	11	1	2023_(S)_Bezirksliga_37_kg_free_1	2
+188	3	191	12	1	2023_(S)_Bezirksliga_62_kg_greco_1	2
+189	3	192	13	1	2023_(S)_Bezirksliga_33_kg_greco_1	2
+190	3	193	14	1	2023_(S)_Bezirksliga_80_kg_free_1	2
+191	3	194	15	1	2023_(S)_Bezirksliga_29_kg_free_1	2
 \.
 
 
@@ -1651,6 +1709,86 @@ COPY public.league_team_participation (id, league_id, team_id) FROM stdin;
 
 
 --
+-- Data for Name: league_weight_class; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.league_weight_class (id, league_id, weight_class_id, pos, season_partition, org_sync_id, organization_id) FROM stdin;
+1	4	195	0	0	2023_(S)_Bezirksliga_Grenzlandliga_29_kg_free_0	2
+2	4	196	0	1	2023_(S)_Bezirksliga_Grenzlandliga_29_kg_greco_1	2
+3	4	197	2	0	2023_(S)_Bezirksliga_Grenzlandliga_32_kg_greco_0	2
+4	4	198	2	1	2023_(S)_Bezirksliga_Grenzlandliga_32_kg_free_1	2
+5	4	199	4	0	2023_(S)_Bezirksliga_Grenzlandliga_35_kg_free_0	2
+6	4	200	4	1	2023_(S)_Bezirksliga_Grenzlandliga_35_kg_greco_1	2
+7	4	201	6	0	2023_(S)_Bezirksliga_Grenzlandliga_38_kg_greco_0	2
+8	4	202	6	1	2023_(S)_Bezirksliga_Grenzlandliga_38_kg_free_1	2
+9	4	203	8	0	2023_(S)_Bezirksliga_Grenzlandliga_42_kg_free_0	2
+10	4	204	8	1	2023_(S)_Bezirksliga_Grenzlandliga_42_kg_greco_1	2
+11	4	205	9	0	2023_(S)_Bezirksliga_Grenzlandliga_46_kg_greco_0	2
+12	4	206	9	1	2023_(S)_Bezirksliga_Grenzlandliga_46_kg_free_1	2
+13	4	207	7	0	2023_(S)_Bezirksliga_Grenzlandliga_51_kg_free_0	2
+14	4	208	7	1	2023_(S)_Bezirksliga_Grenzlandliga_51_kg_greco_1	2
+15	4	209	5	0	2023_(S)_Bezirksliga_Grenzlandliga_57_kg_greco_0	2
+16	4	210	5	1	2023_(S)_Bezirksliga_Grenzlandliga_57_kg_free_1	2
+17	4	211	3	0	2023_(S)_Bezirksliga_Grenzlandliga_67_kg_free_0	2
+18	4	212	3	1	2023_(S)_Bezirksliga_Grenzlandliga_67_kg_greco_1	2
+19	4	213	1	0	2023_(S)_Bezirksliga_Grenzlandliga_85_kg_greco_0	2
+20	4	214	1	1	2023_(S)_Bezirksliga_Grenzlandliga_85_kg_free_1	2
+21	5	215	0	0	2023_(S)_Bezirksliga_Mittelfranken_29_kg_free_0	2
+22	5	216	0	1	2023_(S)_Bezirksliga_Mittelfranken_29_kg_greco_1	2
+23	5	217	2	0	2023_(S)_Bezirksliga_Mittelfranken_33_kg_greco_0	2
+24	5	218	2	1	2023_(S)_Bezirksliga_Mittelfranken_33_kg_free_1	2
+25	5	219	4	0	2023_(S)_Bezirksliga_Mittelfranken_36_kg_free_0	2
+26	5	220	4	1	2023_(S)_Bezirksliga_Mittelfranken_36_kg_greco_1	2
+27	5	221	6	0	2023_(S)_Bezirksliga_Mittelfranken_41_kg_greco_0	2
+28	5	222	6	1	2023_(S)_Bezirksliga_Mittelfranken_41_kg_free_1	2
+29	5	223	8	0	2023_(S)_Bezirksliga_Mittelfranken_46_kg_free_0	2
+30	5	224	8	1	2023_(S)_Bezirksliga_Mittelfranken_46_kg_greco_1	2
+31	5	225	10	0	2023_(S)_Bezirksliga_Mittelfranken_50_kg_greco_0	2
+32	5	226	10	1	2023_(S)_Bezirksliga_Mittelfranken_50_kg_free_1	2
+33	5	227	12	0	2023_(S)_Bezirksliga_Mittelfranken_60_kg_free_0	2
+34	5	228	12	1	2023_(S)_Bezirksliga_Mittelfranken_60_kg_greco_1	2
+35	5	229	14	0	2023_(S)_Bezirksliga_Mittelfranken_76_kg_greco_0	2
+36	5	230	14	1	2023_(S)_Bezirksliga_Mittelfranken_76_kg_free_1	2
+37	5	231	15	0	2023_(S)_Bezirksliga_Mittelfranken_29_kg_greco_0	2
+38	5	232	15	1	2023_(S)_Bezirksliga_Mittelfranken_29_kg_free_1	2
+39	5	233	13	0	2023_(S)_Bezirksliga_Mittelfranken_33_kg_free_0	2
+40	5	234	13	1	2023_(S)_Bezirksliga_Mittelfranken_33_kg_greco_1	2
+41	5	235	11	0	2023_(S)_Bezirksliga_Mittelfranken_36_kg_greco_0	2
+42	5	236	11	1	2023_(S)_Bezirksliga_Mittelfranken_36_kg_free_1	2
+43	5	237	9	0	2023_(S)_Bezirksliga_Mittelfranken_41_kg_free_0	2
+44	5	238	9	1	2023_(S)_Bezirksliga_Mittelfranken_41_kg_greco_1	2
+45	5	239	7	0	2023_(S)_Bezirksliga_Mittelfranken_46_kg_greco_0	2
+46	5	240	7	1	2023_(S)_Bezirksliga_Mittelfranken_46_kg_free_1	2
+47	5	241	5	0	2023_(S)_Bezirksliga_Mittelfranken_50_kg_free_0	2
+48	5	242	5	1	2023_(S)_Bezirksliga_Mittelfranken_50_kg_greco_1	2
+49	5	243	3	0	2023_(S)_Bezirksliga_Mittelfranken_60_kg_greco_0	2
+50	5	244	3	1	2023_(S)_Bezirksliga_Mittelfranken_60_kg_free_1	2
+51	5	245	1	0	2023_(S)_Bezirksliga_Mittelfranken_76_kg_free_0	2
+52	5	246	1	1	2023_(S)_Bezirksliga_Mittelfranken_76_kg_greco_1	2
+53	6	247	0	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_29_kg_free_0	2
+54	6	248	0	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_29_kg_greco_1	2
+55	6	249	2	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_31_kg_free_0	2
+56	6	250	2	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_31_kg_greco_1	2
+57	6	251	4	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_34_kg_free_0	2
+58	6	252	4	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_34_kg_greco_1	2
+59	6	253	6	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_38_kg_free_0	2
+60	6	254	6	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_38_kg_greco_1	2
+61	6	255	8	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_42_kg_free_0	2
+62	6	256	8	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_42_kg_greco_1	2
+63	6	257	9	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_46_kg_free_0	2
+64	6	258	9	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_46_kg_greco_1	2
+65	6	259	7	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_50_kg_free_0	2
+66	6	260	7	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_50_kg_greco_1	2
+67	6	261	5	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_55_kg_free_0	2
+68	6	262	5	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_55_kg_greco_1	2
+69	6	263	3	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_60_kg_free_0	2
+70	6	264	3	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_60_kg_greco_1	2
+71	6	265	1	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_76_kg_free_0	2
+72	6	266	1	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_76_kg_greco_1	2
+\.
+
+
+--
 -- Data for Name: lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1677,7 +1815,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.5
+0.2.0-pre.7
 \.
 
 
@@ -1807,24 +1945,10 @@ COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organ
 
 COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 33	\N	29	free	kilogram
-34	\N	85	greco	kilogram
-35	\N	32	greco	kilogram
-36	\N	67	free	kilogram
-37	\N	35	free	kilogram
-38	\N	57	greco	kilogram
-39	\N	38	greco	kilogram
 40	\N	51	free	kilogram
-41	\N	42	free	kilogram
 42	\N	46	greco	kilogram
 43	\N	29	greco	kilogram
-44	\N	85	free	kilogram
-45	\N	32	free	kilogram
-46	\N	67	greco	kilogram
-47	\N	35	greco	kilogram
-48	\N	57	free	kilogram
-49	\N	38	free	kilogram
 50	\N	51	greco	kilogram
-51	\N	42	greco	kilogram
 52	\N	46	free	kilogram
 53	\N	29	free	kilogram
 54	\N	80	greco	kilogram
@@ -1942,6 +2066,104 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 166	\N	80	greco	kilogram
 167	A	75	greco	kilogram
 168	B	75	free	kilogram
+169	\N	80	free	kilogram
+170	\N	33	greco	kilogram
+171	\N	62	greco	kilogram
+172	\N	37	free	kilogram
+173	\N	41	greco	kilogram
+174	\N	46	free	kilogram
+175	\N	41	free	kilogram
+176	\N	51	greco	kilogram
+177	\N	37	greco	kilogram
+178	\N	62	free	kilogram
+179	\N	33	free	kilogram
+180	\N	80	greco	kilogram
+181	\N	29	greco	kilogram
+182	\N	80	greco	kilogram
+183	\N	33	free	kilogram
+184	\N	62	free	kilogram
+185	\N	37	greco	kilogram
+186	\N	41	free	kilogram
+187	\N	46	greco	kilogram
+188	\N	41	greco	kilogram
+189	\N	51	free	kilogram
+190	\N	37	free	kilogram
+191	\N	62	greco	kilogram
+192	\N	33	greco	kilogram
+193	\N	80	free	kilogram
+194	\N	29	free	kilogram
+195	\N	29	free	kilogram
+196	\N	29	greco	kilogram
+197	\N	32	greco	kilogram
+198	\N	32	free	kilogram
+199	\N	35	free	kilogram
+200	\N	35	greco	kilogram
+201	\N	38	greco	kilogram
+202	\N	38	free	kilogram
+203	\N	42	free	kilogram
+204	\N	42	greco	kilogram
+205	\N	46	greco	kilogram
+206	\N	46	free	kilogram
+207	\N	51	free	kilogram
+208	\N	51	greco	kilogram
+209	\N	57	greco	kilogram
+210	\N	57	free	kilogram
+211	\N	67	free	kilogram
+212	\N	67	greco	kilogram
+213	\N	85	greco	kilogram
+214	\N	85	free	kilogram
+215	\N	29	free	kilogram
+216	\N	29	greco	kilogram
+217	\N	33	greco	kilogram
+218	\N	33	free	kilogram
+219	\N	36	free	kilogram
+220	\N	36	greco	kilogram
+221	\N	41	greco	kilogram
+222	\N	41	free	kilogram
+223	\N	46	free	kilogram
+224	\N	46	greco	kilogram
+225	\N	50	greco	kilogram
+226	\N	50	free	kilogram
+227	\N	60	free	kilogram
+228	\N	60	greco	kilogram
+229	\N	76	greco	kilogram
+230	\N	76	free	kilogram
+231	\N	29	greco	kilogram
+232	\N	29	free	kilogram
+233	\N	33	free	kilogram
+234	\N	33	greco	kilogram
+235	\N	36	greco	kilogram
+236	\N	36	free	kilogram
+237	\N	41	free	kilogram
+238	\N	41	greco	kilogram
+239	\N	46	greco	kilogram
+240	\N	46	free	kilogram
+241	\N	50	free	kilogram
+242	\N	50	greco	kilogram
+243	\N	60	greco	kilogram
+244	\N	60	free	kilogram
+245	\N	76	free	kilogram
+246	\N	76	greco	kilogram
+247	\N	29	free	kilogram
+248	\N	29	greco	kilogram
+249	\N	31	free	kilogram
+250	\N	31	greco	kilogram
+251	\N	34	free	kilogram
+252	\N	34	greco	kilogram
+253	\N	38	free	kilogram
+254	\N	38	greco	kilogram
+255	\N	42	free	kilogram
+256	\N	42	greco	kilogram
+257	\N	46	free	kilogram
+258	\N	46	greco	kilogram
+259	\N	50	free	kilogram
+260	\N	50	greco	kilogram
+261	\N	55	free	kilogram
+262	\N	55	greco	kilogram
+263	\N	60	free	kilogram
+264	\N	60	greco	kilogram
+265	\N	76	free	kilogram
+266	\N	76	greco	kilogram
 \.
 
 
@@ -2013,7 +2235,7 @@ SELECT pg_catalog.setval('public.division_id_seq', 8, true);
 -- Name: division_weight_class_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.division_weight_class_id_seq', 165, true);
+SELECT pg_catalog.setval('public.division_weight_class_id_seq', 191, true);
 
 
 --
@@ -2035,6 +2257,13 @@ SELECT pg_catalog.setval('public.league_id_seq', 16, true);
 --
 
 SELECT pg_catalog.setval('public.league_team_participation_id_seq', 8, true);
+
+
+--
+-- Name: league_weight_class_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.league_weight_class_id_seq', 72, true);
 
 
 --
@@ -2118,7 +2347,7 @@ SELECT pg_catalog.setval('public.user_id_seq', 2, true);
 -- Name: weight_class_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.weight_class_id_seq', 168, true);
+SELECT pg_catalog.setval('public.weight_class_id_seq', 266, true);
 
 
 --
@@ -2230,6 +2459,14 @@ ALTER TABLE ONLY public.league_team_participation
 
 ALTER TABLE ONLY public.league_team_participation
     ADD CONSTRAINT league_team_participation_pk2 UNIQUE (league_id, team_id);
+
+
+--
+-- Name: league_weight_class league_weight_class_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_pk PRIMARY KEY (id);
 
 
 --
@@ -2386,6 +2623,13 @@ CREATE UNIQUE INDEX event_person_id_uindex ON public.competition_person USING bt
 --
 
 CREATE UNIQUE INDEX league_team_participation_id_uindex ON public.league_team_participation USING btree (id);
+
+
+--
+-- Name: league_weight_class_id_uindex; Type: INDEX; Schema: public; Owner: wrestling
+--
+
+CREATE UNIQUE INDEX league_weight_class_id_uindex ON public.league_weight_class USING btree (id);
 
 
 --
@@ -2572,6 +2816,30 @@ ALTER TABLE ONLY public.league_team_participation
 
 
 --
+-- Name: league_weight_class league_weight_class_league_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_league_id_fk FOREIGN KEY (league_id) REFERENCES public.league(id) ON DELETE CASCADE;
+
+
+--
+-- Name: league_weight_class league_weight_class_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: league_weight_class league_weight_class_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
+
+
+--
 -- Name: lineup lineup_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2585,6 +2853,14 @@ ALTER TABLE ONLY public.lineup
 
 ALTER TABLE ONLY public.lineup
     ADD CONSTRAINT lineup_person_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: lineup lineup_team_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.lineup
+    ADD CONSTRAINT lineup_team_id_fk FOREIGN KEY (team_id) REFERENCES public.team(id);
 
 
 --
