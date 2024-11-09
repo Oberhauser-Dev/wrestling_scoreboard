@@ -9,12 +9,21 @@ Tags: scoreboard, wrestling, scoring, bracket, mat, team, fight, competition, to
 
 <table>
   <tr>
-    <td width="73%"><img src="docs/images/screen_fight_01.png"></td>
-    <td><img src="docs/images/screen_settings_01.png"></td>
+    <td colspan="2"><img src="docs/images/display_bout_dark.png"></td>
+    <td><img src="docs/images/screen_settings_dark.png"></td>
   </tr>
   <tr>
-    <td width="73%"><img src="docs/images/screen_team_match_01.png"></td>
-    <td><img src="docs/images/screen_home_01.png"></td>
+    <td colspan="2"><img src="docs/images/display_teammatch_dark.png"></td>
+    <td><img src="docs/images/screen_division_info_dark.png"></td>
+  </tr>
+  <tr>
+    <td width="33.3%"><img src="docs/images/screen_home_search_light.png"></td>
+    <td width="33.3%"><img src="docs/images/screen_teammatch_bouts_light.png"></td>
+    <td><img src="docs/images/screen_lineup_edit_light.png"></td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="docs/images/pdf_transcript_teammatch.png"></td>
+    <td><img src="docs/images/pdf_scoresheet_teammatch.png"></td>
   </tr>
 </table>
 
