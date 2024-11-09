@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 
+import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -30,6 +30,8 @@ import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
+
+final logger = Logger('api_route');
 
 Map<Type, psql.Type> typeDartToCodeMap = {
   String: psql.Type.varChar,
@@ -196,7 +198,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     } on FormatException catch (e) {
       final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
           '\nFormatException: ${e.message}';
-      log(errMessage.toString());
+      logger.warning(errMessage.toString());
       return Response.notFound(errMessage);
     }
   }

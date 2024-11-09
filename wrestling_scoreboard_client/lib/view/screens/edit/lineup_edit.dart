@@ -74,7 +74,6 @@ class LineupEditState extends ConsumerState<LineupEdit> {
             widget.initialParticipations?.singleWhereOrNull((participation) => participation.weightClass == e);
         if (participation != null) {
           participation = participation.copyWith(id: null, lineup: widget.lineup);
-          _createOrUpdateParticipations.add(participation);
         }
         return MapEntry(e, participation);
       }));
@@ -240,7 +239,10 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
   }
 
   void onSave() {
-    if (widget.participation?.membership == _curMembership && widget.participation?.weight == _curWeight) return;
+    // Preloaded new participations (without id) should also be saved.
+    if (widget.participation?.id != null &&
+        widget.participation?.membership == _curMembership &&
+        widget.participation?.weight == _curWeight) return;
 
     // Delete old participation, if membership is null
     if (_curMembership == null) {

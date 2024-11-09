@@ -1522,7 +1522,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver) FROM stdin;
-0.2.0-pre.5
+0.2.0-pre.6
 \.
 
 
@@ -2379,6 +2379,14 @@ ALTER TABLE ONLY public.lineup
 
 ALTER TABLE ONLY public.lineup
     ADD CONSTRAINT lineup_person_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.person(id) ON DELETE CASCADE;
+
+
+--
+-- Name: lineup lineup_team_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.lineup
+    ADD CONSTRAINT lineup_team_id_fk FOREIGN KEY (team_id) REFERENCES public.team(id);
 
 
 --
