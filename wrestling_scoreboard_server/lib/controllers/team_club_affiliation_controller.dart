@@ -17,7 +17,7 @@ class TeamClubAffiliationController extends ShelfController<TeamClubAffiliation>
         conditions: ['team_id = @teamId', 'club_id = @clubId'],
         substitutionValues: {'teamId': teamId, 'clubId': clubId},
         obfuscate: obfuscate);
-    return many.singleOrNull;
+    return many.zeroOrOne;
   }
 
   TeamClubAffiliationController._internal() : super(tableName: 'team_club_affiliation');

@@ -39,7 +39,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
       substitutionValues: {'username': username},
       obfuscate: false,
     );
-    return many.singleOrNull;
+    return many.zeroOrOne;
   }
 
   @override

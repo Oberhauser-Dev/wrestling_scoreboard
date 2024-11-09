@@ -38,6 +38,16 @@ mixin EnumIndexOrdering<T extends Enum> on Enum implements Comparable<T> {
   }
 }
 
+extension ZeroOrOne<T> on Iterable<T> {
+  T? get zeroOrOne {
+    Iterator<T> it = iterator;
+    if (!it.moveNext()) return null;
+    T result = it.current;
+    if (it.moveNext()) throw StateError('More than one element');
+    return result;
+  }
+}
+
 extension IndexOfLetter on String {
   int? toIndex() {
     if (isEmpty) return null;

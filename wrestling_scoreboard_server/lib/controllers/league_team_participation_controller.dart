@@ -20,6 +20,6 @@ class LeagueTeamParticipationController extends ShelfController<LeagueTeamPartic
         conditions: ['team_id = @teamId', 'league_id = @leagueId'],
         substitutionValues: {'teamId': teamId, 'leagueId': leagueId},
         obfuscate: obfuscate);
-    return many.singleOrNull;
+    return many.zeroOrOne;
   }
 }

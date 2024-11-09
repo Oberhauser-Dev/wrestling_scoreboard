@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -63,15 +62,14 @@ class LineupEditState extends ConsumerState<LineupEdit> {
 
     if (widget.participations.isNotEmpty) {
       _participations = Map.fromEntries(widget.weightClasses.map((e) {
-        final participation =
-            widget.participations.singleWhereOrNull((participation) => participation.weightClass == e);
+        final participation = widget.participations.where((participation) => participation.weightClass == e).zeroOrOne;
         return MapEntry(e, participation);
       }));
     } else {
       // Copy participations from an old match.
       _participations = Map.fromEntries(widget.weightClasses.map((e) {
         var participation =
-            widget.initialParticipations?.singleWhereOrNull((participation) => participation.weightClass == e);
+            widget.initialParticipations?.where((participation) => participation.weightClass == e).zeroOrOne;
         if (participation != null) {
           participation = participation.copyWith(id: null, lineup: widget.lineup);
         }

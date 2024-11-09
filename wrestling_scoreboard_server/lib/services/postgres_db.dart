@@ -72,7 +72,7 @@ extension DatabaseExt on PostgresDb {
     String semver;
     try {
       final res = await connection.execute('SELECT semver FROM migration LIMIT 1;');
-      final row = res.singleOrNull;
+      final row = res.zeroOrOne;
       semver = row?.toColumnMap()['semver'] ?? '0.0.0';
     } catch (_) {
       // DB has not yet been initialized
