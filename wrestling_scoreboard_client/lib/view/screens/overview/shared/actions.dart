@@ -179,12 +179,18 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           widget.child,
-          CheckboxListTile(
+          Restricted(
+            privilege: UserPrivilege.admin,
+            child: CheckboxListTile(
               title: Text(localizations.importIncludeSubjacent),
               value: _includeSubjacent,
-              onChanged: (v) => setState(() {
-                    _includeSubjacent = v ?? false;
-                  })),
+              onChanged: (v) => setState(
+                () {
+                  _includeSubjacent = v ?? false;
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

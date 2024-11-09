@@ -77,7 +77,9 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     try {
       final message = await request.readAsString();
 
-      final includeSubjacent = bool.parse(queryParams['subjacent'] ?? 'false');
+      // Only admins can call a subjacent import, to prevent overwriting critical entities.
+      final includeSubjacent = bool.parse(queryParams['subjacent'] ?? 'false') &&
+          (user?.privilege ?? UserPrivilege.none) >= UserPrivilege.admin;
       final entity = await getSingle(entityId, obfuscate: obfuscate);
 
       final organization = getOrganization(entity);
