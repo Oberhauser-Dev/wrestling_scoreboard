@@ -15,6 +15,96 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`wrestling_scoreboard_client` - `v0.1.2`](#wrestling_scoreboard_client---v012)
+ - [`wrestling_scoreboard_common` - `v0.1.2`](#wrestling_scoreboard_common---v012)
+ - [`wrestling_scoreboard_server` - `v0.1.2`](#wrestling_scoreboard_server---v012)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.1.2`
+
+ - **FIX**: Allow subclasses in home. ([e8ef7506](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e8ef7506cbcef4e0ba28e891c1bdc11739899f7a))
+ - **FIX**: Allow adjacent import only for admins. ([dbab8896](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dbab889601f01649780505bbe558cbb6e350356f))
+ - **FIX**: PersonEdit showing in edit mode. ([7a15086a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7a15086ac2c8ca982aa8ab7134d3882d01700509))
+ - **FIX**: Ability to edit the injury timers after they ended. ([c8e7c543](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8e7c543359fdacfbc3980095eed6d9280c4c184))
+ - **FIX**: Generate bouts ([#74](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/74)). ([ae10e354](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ae10e354bba81a4b54fce7083514dd6dc96ee30c))
+ - **FIX**: Calculation of persons age. ([9b4e59cb](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9b4e59cb0e8a4ce9c5803a874561ac8a23306685))
+ - **FIX**: Use common searchable data types. ([896e3bee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/896e3bee9f1a4e3367392a331908c767eb99328e))
+ - **FEAT**: Add verbal warning to bout display. ([122b3cca](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/122b3ccab6c0e9c3172354677c0f9b8dd1b18509))
+ - **FEAT**: Hide filter options. ([707b93f7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/707b93f74260cff198a0136c17db28f9cd70c891))
+ - **FEAT**: Import subjacent data (closes [#96](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/96)). ([b109f8d0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b109f8d0766650825473ea845b6353e343ba755c))
+ - **FEAT**: Warning for overriding database. ([ee4cbacc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee4cbacc9ece615262a14425c97020c162115df3))
+ - **FEAT**: Tooltips for keyboard shortcuts (closes [#21](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/21)). ([3a9db165](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3a9db1651683502a030ef0fdba60f33544f9fe27))
+ - **FEAT**: User administration. ([9ef4776c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9ef4776c5ea8ab2d56f6924f240170b405ddceb4))
+ - **FEAT**: Material duration picker (closes [#86](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/86)). ([7c1cd5f6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7c1cd5f689c23fe31a02912f3cb34bbea30b9887))
+ - **FEAT**: Support count down (international) time (closes [#48](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/48)). ([f0c7b967](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f0c7b96753e3aa4b6a4d38ed74840c2b18419883))
+ - **FEAT**: Propose import on Lineup edit. ([4e10a6d8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4e10a6d89b3b1d28d9d253146fa0b240c6eb869d))
+ - **FEAT**: Disable team import until ready. ([ddaa3e01](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ddaa3e016c6a42484c957be1259a27775ed46507))
+ - **FEAT**: Bleeding Injury Duration (closes [#58](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/58)). ([34a462dd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34a462dd1a48f7b82915fce3e272ea10dbade343))
+ - **FEAT**: Edit & Save BoutResultRule. ([6abdbdb1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6abdbdb1c0f76dde56c566430f2fcc12aca8ab52))
+ - **FEAT**: TeamClubAffiliation (closes [#59](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/59)). ([d88bf4ce](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d88bf4ceaf9f6c36c1ea899904edb374d94fc3bc))
+ - **FEAT**: Suggest to import from API ([#74](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/74)). ([689923a1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/689923a16f79a8bc7d21aab8c0844e5fdf135230))
+ - **FEAT**: TeamMatchBouts of membership. ([34228e5f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34228e5f5bba04b0f30a06b9f7f3e41b1dc315d3))
+ - **FEAT**(client): Sort lists, display year for league & division. ([7c53d376](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7c53d376935708f85d16386f46a33ee57931f859))
+ - **FEAT**(client): Fill lineup with previous match lineup. ([495583d3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/495583d30468915e128851c19b88589f17e3d07b))
+ - **FEAT**(client): Umbrella organization of organization. ([c9be1366](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c9be1366aa1f774c8a9001768dde917aa641ee5c))
+ - **FEAT**: Adapt bout display layout. ([3f4b5bf6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3f4b5bf6909f794aec732d28974b8659ff6ae43d))
+ - **FEAT**: Replace vsu1 and vpo1 in database, dynamic bout result calculation, update single bout pdf ([#76](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/76)). ([06bfb4d7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/06bfb4d7f14ecbdf03516b2f863ac72173a419fd))
+ - **DOCS**: Link to the olympic wrestling rules. ([e0c1e319](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e0c1e319305c9f1cc9a6e86d124e9bb5ab09332a))
+
+#### `wrestling_scoreboard_common` - `v0.1.2`
+
+ - **FIX**: By API import fixes. ([52da79fe](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/52da79fe4470fca5e14e8c89f7dda68245d51f77))
+ - **FIX**: RDB Report. ([9af9f2c4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9af9f2c4abd86ad549e3d69c50721046a56665a2))
+ - **FIX**: Ability to edit the injury timers after they ended. ([c8e7c543](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8e7c543359fdacfbc3980095eed6d9280c4c184))
+ - **FIX**: Import dates as Utc. ([d619fd00](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d619fd00773232370bbffb4004d54f522c104e21))
+ - **FIX**: Calculation of persons age. ([9b4e59cb](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9b4e59cb0e8a4ce9c5803a874561ac8a23306685))
+ - **FIX**: Import of Bayern region in ByGermanyWrestlingApi. ([bca31173](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bca31173fea1f829aa0ec453fab24d3d70e965db))
+ - **FIX**: Use common searchable data types. ([896e3bee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/896e3bee9f1a4e3367392a331908c767eb99328e))
+ - **FEAT**: Import subjacent data (closes [#96](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/96)). ([b109f8d0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b109f8d0766650825473ea845b6353e343ba755c))
+ - **FEAT**: User administration. ([9ef4776c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9ef4776c5ea8ab2d56f6924f240170b405ddceb4))
+ - **FEAT**: Support count down (international) time (closes [#48](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/48)). ([f0c7b967](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f0c7b96753e3aa4b6a4d38ed74840c2b18419883))
+ - **FEAT**: Bleeding Injury Duration (closes [#58](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/58)). ([34a462dd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34a462dd1a48f7b82915fce3e272ea10dbade343))
+ - **FEAT**: Edit & Save BoutResultRule. ([6abdbdb1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6abdbdb1c0f76dde56c566430f2fcc12aca8ab52))
+ - **FEAT**: TeamClubAffiliation (closes [#59](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/59)). ([d88bf4ce](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d88bf4ceaf9f6c36c1ea899904edb374d94fc3bc))
+ - **FEAT**: Propagate errors on import failure. ([9d073f4b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9d073f4bdbcc4c901baf45c33ea33aa797bd61e7))
+ - **FEAT**: Replace vsu1 and vpo1 in database, dynamic bout result calculation, update single bout pdf ([#76](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/76)). ([06bfb4d7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/06bfb4d7f14ecbdf03516b2f863ac72173a419fd))
+
+#### `wrestling_scoreboard_server` - `v0.1.2`
+
+ - **FIX**: Allow adjacent import only for admins. ([dbab8896](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dbab889601f01649780505bbe558cbb6e350356f))
+ - **FIX**: Add new bout result rules in migration. ([73602c94](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/73602c94a1c39b07333ba3c707f3f3ad90410525))
+ - **FIX**: Import dates as Utc. ([d619fd00](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d619fd00773232370bbffb4004d54f522c104e21))
+ - **FIX**: UTF8 export on Windows. ([50ccdcd2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/50ccdcd29b872f1210c6e25eb819cf703cad3355))
+ - **FIX**: Generate bouts ([#74](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/74)). ([ae10e354](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ae10e354bba81a4b54fce7083514dd6dc96ee30c))
+ - **FIX**(server): Drop club no index. ([7dd173f8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7dd173f8a1cbbe416e7e5c1097080b2c67cf7557))
+ - **FIX**: Use common searchable data types. ([896e3bee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/896e3bee9f1a4e3367392a331908c767eb99328e))
+ - **FEAT**: Cache subjacent import data. ([339de0a2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/339de0a26415669d5f22669c30440a245b03fe7d))
+ - **FEAT**: Import subjacent data (closes [#96](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/96)). ([b109f8d0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b109f8d0766650825473ea845b6353e343ba755c))
+ - **FEAT**: User administration. ([9ef4776c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9ef4776c5ea8ab2d56f6924f240170b405ddceb4))
+ - **FEAT**: updateOrCreate on API import ([#71](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/71)). ([f194dd7e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f194dd7e95fdf4da80296946031089de844f2465))
+ - **FEAT**: Bleeding Injury Duration (closes [#58](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/58)). ([34a462dd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34a462dd1a48f7b82915fce3e272ea10dbade343))
+ - **FEAT**: Edit & Save BoutResultRule. ([6abdbdb1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6abdbdb1c0f76dde56c566430f2fcc12aca8ab52))
+ - **FEAT**: TeamClubAffiliation (closes [#59](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/59)). ([d88bf4ce](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d88bf4ceaf9f6c36c1ea899904edb374d94fc3bc))
+ - **FEAT**: Propagate errors on import failure. ([9d073f4b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9d073f4bdbcc4c901baf45c33ea33aa797bd61e7))
+ - **FEAT**: Suggest to import from API ([#74](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/74)). ([689923a1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/689923a16f79a8bc7d21aab8c0844e5fdf135230))
+ - **FEAT**: TeamMatchBouts of membership. ([34228e5f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34228e5f5bba04b0f30a06b9f7f3e41b1dc315d3))
+ - **FEAT**: Replace vsu1 and vpo1 in database, dynamic bout result calculation, update single bout pdf ([#76](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/76)). ([06bfb4d7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/06bfb4d7f14ecbdf03516b2f863ac72173a419fd))
+ - **FEAT**: Database migration improvements and tests ([#71](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/71)). ([9e8b58be](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9e8b58bed5586edd7a3038041bb2b52fb6f9685c))
+
+
+## 2024-11-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`wrestling_scoreboard_client` - `v0.1.1`](#wrestling_scoreboard_client---v011)
  - [`wrestling_scoreboard_common` - `v0.1.1`](#wrestling_scoreboard_common---v011)
  - [`wrestling_scoreboard_server` - `v0.1.1`](#wrestling_scoreboard_server---v011)
