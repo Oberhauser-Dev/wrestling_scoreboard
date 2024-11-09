@@ -18,7 +18,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_config_controller.dart';
 import 'league_controller.dart';
 
-class OrganizationController extends ShelfController<Organization> with ImportController {
+class OrganizationController extends ShelfController<Organization> with ImportController<Organization> {
   static final OrganizationController _singleton = OrganizationController._internal();
 
   factory OrganizationController() {
@@ -63,7 +63,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     );
   }
 
-  Future<WrestlingApi?> initApiProvider(String? message, int organizationId) async {
+  Future<WrestlingApi?> initApiProvider({String? message, required Organization organization}) async {
     AuthService? authService;
     if (message != null && message.isNotEmpty) {
       final jsonDecodedMessage = jsonDecode(message);
@@ -73,7 +73,6 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       }
     }
 
-    final organization = await getSingle(organizationId, obfuscate: false);
     return organization.getApi(
         <T extends Organizational>(orgSyncId, {required int orgId}) =>
             OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
@@ -81,19 +80,12 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
   }
 
   @override
-  Future<void> import(
-    int entityId, {
-    String? message,
+  Future<void> import({
+    required WrestlingApi apiProvider,
+    required Organization entity,
     bool obfuscate = true,
     bool includeSubjacent = false,
-    bool useMock = false,
   }) async {
-    final apiProvider = await initApiProvider(message, entityId);
-    if (apiProvider == null) {
-      throw Exception('No API provider selected for the organization $entityId.');
-    }
-    apiProvider.isMock = useMock;
-
     final teamClubAffiliations = await apiProvider.importTeamClubAffiliations();
     await Future.forEach(teamClubAffiliations, (teamClubAffiliation) async {
       final club = await ClubController().updateOrCreateSingleOfOrg(teamClubAffiliation.club, obfuscate: obfuscate);
@@ -145,15 +137,14 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     }))
         .expand((league) => league);
 
-    updateLastImportUtcDateTime(entityId);
+    updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       for (final league in leagues) {
         await LeagueController().import(
-          league.id!,
-          message: message,
+          entity: league,
           obfuscate: obfuscate,
-          useMock: useMock,
           includeSubjacent: includeSubjacent,
+          apiProvider: apiProvider,
         );
       }
     }
@@ -166,10 +157,16 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     required Type searchType,
   }) async {
     final message = await request.readAsString();
-    final apiProvider = await initApiProvider(message, id);
+    final organization = await getSingle(id, obfuscate: false);
+    final apiProvider = await initApiProvider(message: message, organization: organization);
     if (apiProvider == null) {
       throw Exception('No API provider selected for the organization $id.');
     }
     return await apiProvider.search(searchStr: searchStr, searchType: searchType);
+  }
+
+  @override
+  Organization? getOrganization(Organization entity) {
+    return entity;
   }
 }

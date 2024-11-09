@@ -4,14 +4,13 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-class LeagueController extends OrganizationalController<League> with ImportController {
+class LeagueController extends OrganizationalController<League> with ImportController<League> {
   static final LeagueController _singleton = LeagueController._internal();
 
   factory LeagueController() {
@@ -49,27 +48,13 @@ class LeagueController extends OrganizationalController<League> with ImportContr
   }
 
   @override
-  Future<void> import(
-    int entityId, {
-    String? message,
+  Future<void> import({
+    required WrestlingApi apiProvider,
+    required League entity,
     bool obfuscate = true,
     bool includeSubjacent = false,
-    bool useMock = false,
   }) async {
-    final league = await LeagueController().getSingle(entityId, obfuscate: obfuscate);
-
-    final organizationId = league.organization?.id;
-    if (organizationId == null) {
-      throw Exception('No organization found for league $entityId.');
-    }
-
-    final apiProvider = await OrganizationController().initApiProvider(message, organizationId);
-    if (apiProvider == null) {
-      throw Exception('No API provider selected for the organization $organizationId.');
-    }
-    apiProvider.isMock = useMock;
-
-    var teamMatchs = await apiProvider.importTeamMatches(league: league);
+    var teamMatchs = await apiProvider.importTeamMatches(league: entity);
 
     teamMatchs = await forEachFuture(teamMatchs, (teamMatch) async {
       teamMatch = await TeamMatchController().updateOrCreateSingleOfOrg(
@@ -100,31 +85,35 @@ class LeagueController extends OrganizationalController<League> with ImportContr
 
       // Do not add teams to a league multiple times.
       final previousHomeTeamParticipation = await LeagueTeamParticipationController()
-          .getByLeagueAndTeamId(teamId: teamMatch.home.team.id!, leagueId: league.id!, obfuscate: obfuscate);
+          .getByLeagueAndTeamId(teamId: teamMatch.home.team.id!, leagueId: entity.id!, obfuscate: obfuscate);
       if (previousHomeTeamParticipation == null) {
         await LeagueTeamParticipationController()
-            .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.home.team));
+            .createSingle(LeagueTeamParticipation(league: entity, team: teamMatch.home.team));
       }
       final previousGuestTeamParticipation = await LeagueTeamParticipationController()
-          .getByLeagueAndTeamId(teamId: teamMatch.guest.team.id!, leagueId: league.id!, obfuscate: obfuscate);
+          .getByLeagueAndTeamId(teamId: teamMatch.guest.team.id!, leagueId: entity.id!, obfuscate: obfuscate);
       if (previousGuestTeamParticipation == null) {
         await LeagueTeamParticipationController()
-            .createSingle(LeagueTeamParticipation(league: league, team: teamMatch.guest.team));
+            .createSingle(LeagueTeamParticipation(league: entity, team: teamMatch.guest.team));
       }
       return teamMatch;
     });
 
-    updateLastImportUtcDateTime(entityId);
+    updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       for (final teamMatch in teamMatchs) {
         await TeamMatchController().import(
-          teamMatch.id!,
-          message: message,
+          entity: teamMatch,
+          apiProvider: apiProvider,
           obfuscate: obfuscate,
-          useMock: useMock,
           includeSubjacent: includeSubjacent,
         );
       }
     }
+  }
+
+  @override
+  Organization? getOrganization(League entity) {
+    return entity.organization;
   }
 }

@@ -46,13 +46,19 @@ void main() {
   });
 
   Future<String> executeMockedImport(PostgresDb db, Organization org) async {
-    await OrganizationController().import(org.id!, obfuscate: false, useMock: true);
+    final apiProvider = await OrganizationController().initApiProvider(organization: org);
+    if (apiProvider == null) {
+      throw Exception('ApiProvider for organization $org not found!');
+    }
+    apiProvider.isMock = true;
+
+    await OrganizationController().import(entity: org, obfuscate: false, apiProvider: apiProvider);
 
     final league = await LeagueController().getSingleOfOrg('2023_Bayernliga_Süd', orgId: org.id!, obfuscate: false);
-    await LeagueController().import(league.id!, obfuscate: false, useMock: true);
+    await LeagueController().import(entity: league, obfuscate: false, apiProvider: apiProvider);
 
     final teamMatch = await TeamMatchController().getSingleOfOrg('005029c', orgId: org.id!, obfuscate: false);
-    await TeamMatchController().import(teamMatch.id!, obfuscate: false, useMock: true);
+    await TeamMatchController().import(entity: teamMatch, obfuscate: false, apiProvider: apiProvider);
 
     return await db.export();
   }
