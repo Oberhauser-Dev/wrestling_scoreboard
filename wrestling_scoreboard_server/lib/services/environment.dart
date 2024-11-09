@@ -1,5 +1,6 @@
 import 'package:dotenv/dotenv.dart' show DotEnv;
 import 'package:logging/logging.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 final env = Environment();
 
@@ -21,7 +22,7 @@ class Environment {
   Environment() {
     final dotEnv = DotEnv();
     dotEnv.load(); // Load dotenv variables
-    logLevel = Level.LEVELS.where((level) => level.name == dotEnv['LOG_LEVEL']?.toUpperCase()).singleOrNull;
+    logLevel = Level.LEVELS.where((level) => level.name == dotEnv['LOG_LEVEL']?.toUpperCase()).zeroOrOne;
     host = dotEnv['HOST'];
     port = int.tryParse(dotEnv['PORT'] ?? '');
     jwtSecret = dotEnv['JWT_SECRET'];
