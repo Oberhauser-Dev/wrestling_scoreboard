@@ -44,24 +44,25 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class HomeState extends ConsumerState<Home> {
-  Map<String, List<DataObject>>? searchResults;
-  Type? searchType;
-  Organization? searchOrganization;
+  Map<String, List<DataObject>>? _searchResults;
+  Type? _searchType;
+  Organization? _searchOrganization;
+  bool _showFilterOptions = false;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
     final Widget gridEntries;
-    if (searchResults != null) {
-      if (searchResults!.isEmpty) {
+    if (_searchResults != null) {
+      if (_searchResults!.isEmpty) {
         gridEntries = Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(localizations.noItems),
         );
       } else {
         gridEntries = _EntityGrid(
-          entities: searchResults!.map(
+          entities: _searchResults!.map(
               (key, resultsOfType) => MapEntry(key, Map.fromEntries(resultsOfType.map((r) => MapEntry(r.id!, r))))),
           onHandleException: <T extends DataObject>({
             required BuildContext context,
@@ -149,24 +150,31 @@ class HomeState extends ConsumerState<Home> {
               child: SearchBar(
                 padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
                 leading: const Icon(Icons.search),
+                trailing: [
+                  IconButton(
+                      onPressed: () => setState(() {
+                            _showFilterOptions = !_showFilterOptions;
+                          }),
+                      icon: Icon(_showFilterOptions ? Icons.tune_outlined : Icons.tune))
+                ],
                 elevation: WidgetStateProperty.all(0),
                 side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
                 backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
                 onChanged: (searchTerm) async {
                   if (searchTerm.length < 3 && (double.tryParse(searchTerm) == null)) {
                     setState(() {
-                      searchResults = null;
+                      _searchResults = null;
                     });
                   } else {
                     try {
-                      final authService = (await ref.read(orgAuthNotifierProvider))[searchOrganization?.id];
+                      final authService = (await ref.read(orgAuthNotifierProvider))[_searchOrganization?.id];
                       final results = await (await ref.read(dataManagerNotifierProvider)).search(
                           searchTerm: searchTerm,
-                          type: searchType,
-                          organizationId: searchOrganization?.id,
+                          type: _searchType,
+                          organizationId: _searchOrganization?.id,
                           authService: authService);
                       setState(() {
-                        searchResults = results;
+                        _searchResults = results;
                       });
                     } catch (e, st) {
                       if (context.mounted) {
@@ -177,57 +185,58 @@ class HomeState extends ConsumerState<Home> {
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: SimpleDropdown<Type?>(
-                    options: [null, ...searchableDataTypes.keys].map((type) => MapEntry(
-                          type,
-                          Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
-                        )),
-                    selected: searchType,
-                    onChange: (value) {
-                      setState(() {
-                        searchType = value;
-                      });
-                    },
-                    isExpanded: false,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: ManyConsumer<Organization, Null>(
-                    builder: (BuildContext context, List<Organization> organizations) {
-                      return SimpleDropdown<Organization?>(
-                        options: [null, ...organizations].map((organization) => MapEntry(
-                              organization,
-                              Text(organization != null
-                                  ? organization.name
-                                  : '${localizations.optionSelect} ${localizations.organization}'),
-                            )),
-                        selected: searchOrganization,
-                        onChange: (value) {
-                          setState(() {
-                            searchOrganization = value;
-                          });
-                        },
-                        isExpanded: false,
-                      );
-                    },
-                    onException: (context, exception, {stackTrace}) => SizedBox(
-                      width: 250,
-                      child: ExceptionInfo(AppLocalizations.of(context)!.notFoundException, stackTrace: stackTrace),
+            if (_showFilterOptions)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: SimpleDropdown<Type?>(
+                      options: [null, ...searchableDataTypes.keys].map((type) => MapEntry(
+                            type,
+                            Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
+                          )),
+                      selected: _searchType,
+                      onChange: (value) {
+                        setState(() {
+                          _searchType = value;
+                        });
+                      },
+                      isExpanded: false,
                     ),
                   ),
-                ),
-              ],
-            ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ManyConsumer<Organization, Null>(
+                      builder: (BuildContext context, List<Organization> organizations) {
+                        return SimpleDropdown<Organization?>(
+                          options: [null, ...organizations].map((organization) => MapEntry(
+                                organization,
+                                Text(organization != null
+                                    ? organization.name
+                                    : '${localizations.optionSelect} ${localizations.organization}'),
+                              )),
+                          selected: _searchOrganization,
+                          onChange: (value) {
+                            setState(() {
+                              _searchOrganization = value;
+                            });
+                          },
+                          isExpanded: false,
+                        );
+                      },
+                      onException: (context, exception, {stackTrace}) => SizedBox(
+                        width: 250,
+                        child: ExceptionInfo(AppLocalizations.of(context)!.notFoundException, stackTrace: stackTrace),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
-                searchResults == null ? localizations.favorites : 'Search results',
+                _searchResults == null ? localizations.favorites : 'Search results',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
