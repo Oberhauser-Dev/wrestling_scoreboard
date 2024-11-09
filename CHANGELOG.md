@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`wrestling_scoreboard_client` - `v0.1.2`](#wrestling_scoreboard_client---v012)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.1.2`
+
+ - **FEAT**: Add verbal warning to bout display. ([122b3cca](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/122b3ccab6c0e9c3172354677c0f9b8dd1b18509))
+
+
+## 2024-11-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`wrestling_scoreboard_client` - `v0.1.1`](#wrestling_scoreboard_client---v011)
  - [`wrestling_scoreboard_common` - `v0.1.1`](#wrestling_scoreboard_common---v011)
  - [`wrestling_scoreboard_server` - `v0.1.1`](#wrestling_scoreboard_server---v011)

@@ -1,3 +1,7 @@
+## 0.1.2
+
+ - **FEAT**: Add verbal warning to bout display. ([122b3cca](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/122b3ccab6c0e9c3172354677c0f9b8dd1b18509))
+
 ## 0.1.1
 
  - **FIX**: Allow subclasses in home. ([e8ef7506](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e8ef7506cbcef4e0ba28e891c1bdc11739899f7a))
