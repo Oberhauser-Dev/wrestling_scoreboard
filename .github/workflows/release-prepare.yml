@@ -20,8 +20,9 @@ jobs:
         with:
           fetch-depth: 0
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v3
+      - uses: bluefireteam/melos-action@version-private
         with:
           run-versioning: ${{ inputs.prerelease == false }}
           run-versioning-prerelease: ${{ inputs.prerelease == true }}
+          version-all: true
           create-pr: true
