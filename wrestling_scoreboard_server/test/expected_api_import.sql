@@ -1630,12 +1630,12 @@ COPY public.league (id, name, start_date, end_date, division_id, org_sync_id, or
 8	Oberbayern/Schwaben Gr. B	2023-01-01	2024-01-01	3	2023_(S) Bezirksliga_Oberbayern/Schwaben Gr. B	2	14
 9	Bayern	2023-01-01	2024-01-01	4	2023_(S) Finalrunde_Bayern	2	4
 10	Nord	2023-01-01	2024-01-01	5	2023_Bayernliga_Nord	2	18
-11	Süd	2023-01-01	2024-01-01	5	2023_Bayernliga_Süd	2	14
 12	Nord	2023-01-01	2024-01-01	6	2023_Gruppenoberliga_Nord	2	14
 13	Süd	2023-01-01	2024-01-01	6	2023_Gruppenoberliga_Süd	2	18
 14	Nord	2023-01-01	2024-01-01	7	2023_Landesliga_Nord	2	14
 15	Süd	2023-01-01	2024-01-01	7	2023_Landesliga_Süd	2	14
 16	Bayern	2023-01-01	2024-01-01	8	2023_Oberliga_Bayern	2	18
+11	Süd	2023-01-01	2024-01-01	5	2023_Bayernliga_Süd	2	18
 \.
 
 

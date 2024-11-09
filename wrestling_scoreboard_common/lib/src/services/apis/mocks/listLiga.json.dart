@@ -804,7 +804,7 @@ final listLigaJson = r'''
         "extId": "764,3",
         "boutSchemeId": "1053",
         "wrestlerMissed": "2",
-        "noOfBoutDays": "14",
+        "noOfBoutDays": "18",
         "sumOfLigaBoutDays": "0",
         "lastUpdate": "2023-12-10 18:40:51",
         "moveUpRank": "1",

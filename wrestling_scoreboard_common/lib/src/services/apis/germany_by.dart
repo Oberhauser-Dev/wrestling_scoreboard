@@ -416,6 +416,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         final competitionJson = (await _getCompetition(
             seasonId: league.startDate.year.toString(), competitionId: entry.key))['competition'];
         if (competitionJson == null) return null;
+        final schemeIndex = (values['scheme'] as String?)?.toIndex();
+        final seasonPartition = schemeIndex != null
+            ? (schemeIndex - 1)
+            : (double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1);
         return TeamMatch(
           home: Lineup(
             team: await _getSingleBySyncId<Team>(
@@ -432,7 +436,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           comment: values['editorComment'],
           league: league,
           no: entry.key,
-          seasonPartition: double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1,
+          seasonPartition: seasonPartition,
           organization: organization,
           orgSyncId: entry.key,
         );
