@@ -1,3 +1,33 @@
+## 0.1.1
+
+ - **FIX**: Allow subclasses in home. ([e8ef7506](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e8ef7506cbcef4e0ba28e891c1bdc11739899f7a))
+ - **FIX**: Allow adjacent import only for admins. ([dbab8896](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dbab889601f01649780505bbe558cbb6e350356f))
+ - **FIX**: PersonEdit showing in edit mode. ([7a15086a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7a15086ac2c8ca982aa8ab7134d3882d01700509))
+ - **FIX**: Ability to edit the injury timers after they ended. ([c8e7c543](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8e7c543359fdacfbc3980095eed6d9280c4c184))
+ - **FIX**: Generate bouts ([#74](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/74)). ([ae10e354](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ae10e354bba81a4b54fce7083514dd6dc96ee30c))
+ - **FIX**: Calculation of persons age. ([9b4e59cb](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9b4e59cb0e8a4ce9c5803a874561ac8a23306685))
+ - **FIX**: Use common searchable data types. ([896e3bee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/896e3bee9f1a4e3367392a331908c767eb99328e))
+ - **FEAT**: Hide filter options. ([707b93f7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/707b93f74260cff198a0136c17db28f9cd70c891))
+ - **FEAT**: Import subjacent data (closes [#96](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/96)). ([b109f8d0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b109f8d0766650825473ea845b6353e343ba755c))
+ - **FEAT**: Warning for overriding database. ([ee4cbacc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee4cbacc9ece615262a14425c97020c162115df3))
+ - **FEAT**: Tooltips for keyboard shortcuts (closes [#21](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/21)). ([3a9db165](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3a9db1651683502a030ef0fdba60f33544f9fe27))
+ - **FEAT**: User administration. ([9ef4776c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9ef4776c5ea8ab2d56f6924f240170b405ddceb4))
+ - **FEAT**: Material duration picker (closes [#86](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/86)). ([7c1cd5f6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7c1cd5f689c23fe31a02912f3cb34bbea30b9887))
+ - **FEAT**: Support count down (international) time (closes [#48](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/48)). ([f0c7b967](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f0c7b96753e3aa4b6a4d38ed74840c2b18419883))
+ - **FEAT**: Propose import on Lineup edit. ([4e10a6d8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4e10a6d89b3b1d28d9d253146fa0b240c6eb869d))
+ - **FEAT**: Disable team import until ready. ([ddaa3e01](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ddaa3e016c6a42484c957be1259a27775ed46507))
+ - **FEAT**: Bleeding Injury Duration (closes [#58](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/58)). ([34a462dd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34a462dd1a48f7b82915fce3e272ea10dbade343))
+ - **FEAT**: Edit & Save BoutResultRule. ([6abdbdb1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6abdbdb1c0f76dde56c566430f2fcc12aca8ab52))
+ - **FEAT**: TeamClubAffiliation (closes [#59](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/59)). ([d88bf4ce](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d88bf4ceaf9f6c36c1ea899904edb374d94fc3bc))
+ - **FEAT**: Suggest to import from API ([#74](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/74)). ([689923a1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/689923a16f79a8bc7d21aab8c0844e5fdf135230))
+ - **FEAT**: TeamMatchBouts of membership. ([34228e5f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34228e5f5bba04b0f30a06b9f7f3e41b1dc315d3))
+ - **FEAT**(client): Sort lists, display year for league & division. ([7c53d376](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7c53d376935708f85d16386f46a33ee57931f859))
+ - **FEAT**(client): Fill lineup with previous match lineup. ([495583d3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/495583d30468915e128851c19b88589f17e3d07b))
+ - **FEAT**(client): Umbrella organization of organization. ([c9be1366](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c9be1366aa1f774c8a9001768dde917aa641ee5c))
+ - **FEAT**: Adapt bout display layout. ([3f4b5bf6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3f4b5bf6909f794aec732d28974b8659ff6ae43d))
+ - **FEAT**: Replace vsu1 and vpo1 in database, dynamic bout result calculation, update single bout pdf ([#76](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/76)). ([06bfb4d7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/06bfb4d7f14ecbdf03516b2f863ac72173a419fd))
+ - **DOCS**: Link to the olympic wrestling rules. ([e0c1e319](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e0c1e319305c9f1cc9a6e86d124e9bb5ab09332a))
+
 ## 0.1.0
 
  - **REFACTOR**: Parallelize LoadingBuilders in Settings. ([48f5cc2b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/48f5cc2b6515bbad0eb87838c6e9712062ad1604))
