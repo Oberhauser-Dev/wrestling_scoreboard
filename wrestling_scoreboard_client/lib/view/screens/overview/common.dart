@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class AbstractOverview<T extends DataObject> {
+abstract class AbstractOverview<T extends DataObject, E extends DataObject> {
   Widget buildOverview(
     BuildContext context,
     WidgetRef ref, {
@@ -19,6 +19,7 @@ abstract class AbstractOverview<T extends DataObject> {
     required int dataId,
     T? initialData,
     Map<Tab, Widget> Function(T data)? buildRelations,
+    required E subClassData,
   });
 }
 

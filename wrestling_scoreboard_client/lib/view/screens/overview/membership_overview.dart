@@ -15,7 +15,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MembershipOverview extends AbstractPersonOverview {
+class MembershipOverview extends AbstractPersonOverview<Membership> {
   static const route = 'membership';
 
   final int id;
@@ -33,6 +33,7 @@ class MembershipOverview extends AbstractPersonOverview {
         return buildOverview(context, ref,
             dataId: membership.person.id!,
             initialData: membership.person,
+            subClassData: membership,
             classLocale: localizations.membership,
             editPage: MembershipEdit(
               membership: membership,

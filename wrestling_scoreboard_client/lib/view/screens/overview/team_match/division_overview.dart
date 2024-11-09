@@ -17,7 +17,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class DivisionOverview extends BoutConfigOverview {
+class DivisionOverview extends BoutConfigOverview<Division> {
   static const route = 'division';
 
   final int id;
@@ -70,6 +70,7 @@ class DivisionOverview extends BoutConfigOverview {
           ],
           dataId: data.boutConfig.id!,
           initialData: data.boutConfig,
+          subClassData: data,
           buildRelations: (boutConfig) => {
             Tab(child: HeadingText(localizations.divisions)): ManyConsumer<Division, Division>(
               filterObject: data,

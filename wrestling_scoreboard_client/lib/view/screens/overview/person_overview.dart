@@ -17,7 +17,8 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class AbstractPersonOverview extends ConsumerWidget implements AbstractOverview<Person> {
+abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidget
+    implements AbstractOverview<Person, T> {
   const AbstractPersonOverview({super.key});
 
   @override
@@ -33,6 +34,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
     Map<Tab, Widget> Function(Person data)? buildRelations,
     required int dataId,
     Person? initialData,
+    required T subClassData,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return SingleConsumer<Person>(
@@ -79,8 +81,8 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
           ],
         );
         final relations = buildRelations != null ? buildRelations(person) : {};
-        return FavoriteScaffold<Person>(
-          dataObject: person,
+        return FavoriteScaffold<T>(
+          dataObject: subClassData,
           label: classLocale,
           details: details ?? person.fullName,
           tabs: [
@@ -98,7 +100,7 @@ abstract class AbstractPersonOverview extends ConsumerWidget implements Abstract
   }
 }
 
-class PersonOverview extends AbstractPersonOverview {
+class PersonOverview extends AbstractPersonOverview<Person> {
   static const route = 'person';
 
   final int id;
@@ -119,6 +121,7 @@ class PersonOverview extends AbstractPersonOverview {
             ref,
             dataId: id,
             initialData: person,
+            subClassData: person,
             classLocale: localizations.person,
             editPage: PersonEdit(
               person: person,
