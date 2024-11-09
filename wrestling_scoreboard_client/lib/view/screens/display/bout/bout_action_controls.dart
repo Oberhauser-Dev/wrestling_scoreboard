@@ -49,6 +49,12 @@ class BoutActionControls extends StatelessWidget {
         tooltipMessage: '5 ${localizations.points} (${isRed ? '5 | A' : 'Numpad5 | ;/Ö | ⇧ + 5'})',
       ),
       displayActionControl(
+        localizations.verbalWarningAbbr,
+        prepareCallback(const BoutScreenActionIntent.redVerbal(), const BoutScreenActionIntent.blueVerbal()),
+        color,
+        tooltipMessage: localizations.verbalWarning,
+      ),
+      displayActionControl(
         localizations.passivityAbbr,
         prepareCallback(const BoutScreenActionIntent.redPassivity(), const BoutScreenActionIntent.bluePassivity()),
         color,

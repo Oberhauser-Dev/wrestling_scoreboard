@@ -232,6 +232,8 @@
   "freeStyleAbbr": "F",
   "grecoRoman": "Gr.-Römisch",
   "grecoRomanAbbr": "G",
+  "verbalWarning": "Verbale Ermahnung",
+  "verbalWarningAbbr": "V",
   "passivity": "Passivität",
   "passivityAbbr": "P",
   "caution": "Verwarnung",

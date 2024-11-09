@@ -235,6 +235,8 @@
   "freeStyleAbbr": "F",
   "grecoRoman": "Greco-Roman",
   "grecoRomanAbbr": "G",
+  "verbalWarning": "Verbal Warning",
+  "verbalWarningAbbr": "V",
   "passivity": "Passivity",
   "passivityAbbr": "P",
   "caution": "Caution",
