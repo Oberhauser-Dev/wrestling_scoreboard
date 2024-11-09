@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@version-private
+      - uses: bluefireteam/melos-action@v3
         with:
           tag: true
           include-private: true
