@@ -7,7 +7,6 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
@@ -20,7 +19,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'bout_controller.dart';
 import 'entity_controller.dart';
 
-class TeamMatchController extends OrganizationalController<TeamMatch> with ImportController {
+class TeamMatchController extends OrganizationalController<TeamMatch> with ImportController<TeamMatch> {
   static final TeamMatchController _singleton = TeamMatchController._internal();
 
   factory TeamMatchController() {
@@ -144,27 +143,13 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
   }
 
   @override
-  Future<void> import(
-    int entityId, {
-    String? message,
+  Future<void> import({
+    required WrestlingApi apiProvider,
+    required TeamMatch entity,
     bool obfuscate = true,
     bool includeSubjacent = false,
-    bool useMock = false,
   }) async {
-    final teamMatch = await TeamMatchController().getSingle(entityId, obfuscate: obfuscate);
-
-    final organizationId = teamMatch.organization?.id;
-    if (organizationId == null) {
-      throw Exception('No organization found for league $entityId.');
-    }
-
-    final apiProvider = await OrganizationController().initApiProvider(message, organizationId);
-    if (apiProvider == null) {
-      throw Exception('No API provider selected for the organization $organizationId.');
-    }
-    apiProvider.isMock = useMock;
-
-    final boutMap = await apiProvider.importBouts(event: teamMatch);
+    final boutMap = await apiProvider.importBouts(event: entity);
 
     // Handle bouts one after one, (NO Future.wait) as it may conflicts creating the same membership as once.
     var index = 0;
@@ -173,9 +158,9 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
       final teamMatchBout = TeamMatchBout(
         pos: index,
-        teamMatch: teamMatch,
+        teamMatch: entity,
         bout: bout,
-        organization: teamMatch.organization,
+        organization: entity.organization,
         orgSyncId: bout.orgSyncId,
       );
       bout = await BoutController().updateOrCreateSingleOfOrg(
@@ -202,7 +187,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       index++;
     }
 
-    updateLastImportUtcDateTime(entityId);
+    updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       // Nothing to do
     }
@@ -227,5 +212,10 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
           previous: previousParticipationState);
     }
     return null;
+  }
+
+  @override
+  Organization? getOrganization(TeamMatch entity) {
+    return entity.organization;
   }
 }

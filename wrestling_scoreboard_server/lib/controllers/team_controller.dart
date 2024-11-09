@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/organizational_controlle
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-class TeamController extends OrganizationalController<Team> with ImportController {
+class TeamController extends OrganizationalController<Team> with ImportController<Team> {
   static final TeamController _singleton = TeamController._internal();
 
   factory TeamController() {
@@ -43,17 +43,21 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
   }
 
   @override
-  Future<void> import(
-    int entityId, {
-    String? message,
+  Future<void> import({
+    required WrestlingApi apiProvider,
+    required Team entity,
     bool obfuscate = true,
     bool includeSubjacent = false,
-    bool useMock = false,
   }) async {
-    updateLastImportUtcDateTime(entityId);
+    updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       // Nothing to do
     }
     throw UnimplementedError('This operation is not supported yet!');
+  }
+
+  @override
+  Organization? getOrganization(Team entity) {
+    return entity.organization;
   }
 }

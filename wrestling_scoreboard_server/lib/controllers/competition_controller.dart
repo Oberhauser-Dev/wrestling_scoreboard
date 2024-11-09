@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/request.dart';
 import 'bout_controller.dart';
 import 'entity_controller.dart';
 
-class CompetitionController extends ShelfController<Competition> with ImportController {
+class CompetitionController extends ShelfController<Competition> with ImportController<Competition> {
   static final CompetitionController _singleton = CompetitionController._internal();
 
   factory CompetitionController() {
@@ -29,14 +29,13 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
   }
 
   @override
-  Future<void> import(
-    int entityId, {
-    String? message,
+  Future<void> import({
+    required WrestlingApi apiProvider,
+    required Competition entity,
     bool obfuscate = true,
     bool includeSubjacent = false,
-    bool useMock = false,
   }) async {
-    updateLastImportUtcDateTime(entityId);
+    updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       // Nothing to do
     }
@@ -46,5 +45,10 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {'comment': psql.Type.text};
+  }
+
+  @override
+  Organization? getOrganization(Competition entity) {
+    return entity.organization;
   }
 }

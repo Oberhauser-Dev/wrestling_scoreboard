@@ -57,7 +57,7 @@ Map<Type, psql.Type> typeDartToCodeMap = {
   // '_jsonb': psql.Type.jsonbArray,
 };
 
-mixin ImportController {
+mixin ImportController<T extends DataObject> implements ShelfController<T> {
   Map<int, DateTime> lastImportUtcDateTime = {};
 
   Future<Response> requestLastImportUtcDateTime(Request request, User? user, String entityId) async {
@@ -68,6 +68,8 @@ mixin ImportController {
     lastImportUtcDateTime[id] = DateTime.now().toUtc();
   }
 
+  Organization? getOrganization(T entity);
+
   Future<Response> postImport(Request request, User? user, String entityIdStr) async {
     final bool obfuscate = user?.obfuscate ?? true;
     final entityId = int.parse(entityIdStr);
@@ -76,7 +78,18 @@ mixin ImportController {
       final message = await request.readAsString();
 
       final includeSubjacent = bool.parse(queryParams['subjacent'] ?? 'false');
-      await import(entityId, message: message, obfuscate: obfuscate, includeSubjacent: includeSubjacent);
+      final entity = await getSingle(entityId, obfuscate: obfuscate);
+
+      final organization = getOrganization(entity);
+      if (organization == null) {
+        throw Exception('No organization found for $T $entityId.');
+      }
+
+      final apiProvider = await OrganizationController().initApiProvider(message: message, organization: organization);
+      if (apiProvider == null) {
+        throw Exception('No API provider selected for the organization $organization.');
+      }
+      await import(entity: entity, apiProvider: apiProvider, obfuscate: obfuscate, includeSubjacent: includeSubjacent);
       return Response.ok('{"status": "success"}');
     } on HttpException catch (err, stackTrace) {
       return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
@@ -85,7 +98,12 @@ mixin ImportController {
     }
   }
 
-  Future<void> import(int entityId, {String? message, bool obfuscate, bool includeSubjacent, bool useMock});
+  Future<void> import({
+    required WrestlingApi apiProvider,
+    required T entity,
+    bool obfuscate = true,
+    bool includeSubjacent = false,
+  });
 }
 
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
