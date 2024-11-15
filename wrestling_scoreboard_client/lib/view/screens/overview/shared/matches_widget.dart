@@ -19,6 +19,8 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
     return ManyConsumer<TeamMatch, T>(
       filterObject: filterObject,
       builder: (BuildContext context, List<TeamMatch> matches) {
+        final today = DateTime.now().copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
+        final firstFutureMatchIndex = matches.indexWhere((match) => match.date.compareTo(today) >= 0);
         return GroupedList(
           header: HeadingItem(
             trailing: RestrictedAddButton(
@@ -34,6 +36,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
               ),
             ),
           ),
+          initialItemIndex: firstFutureMatchIndex >= 0 ? firstFutureMatchIndex : (matches.length - 1),
           items: matches.map(
             (e) => SingleConsumer<TeamMatch>(
               id: e.id!,
@@ -41,6 +44,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
               builder: (context, match) {
                 return ListTile(
                   title: Text.rich(
+                    style: match.date.compareTo(today) < 0 ? TextStyle(color: Theme.of(context).disabledColor) : null,
                     TextSpan(
                       text: '${match.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
                       children: [

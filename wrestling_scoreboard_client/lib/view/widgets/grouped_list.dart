@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 
 /// A ListItem that contains data to display a heading.
@@ -41,13 +42,13 @@ class ContentItem extends StatelessWidget {
 class GroupedList extends StatelessWidget {
   final Widget header;
   final Iterable<Widget> items;
+  final int initialItemIndex;
 
-  const GroupedList({required this.header, this.items = const [], super.key});
+  const GroupedList({required this.header, this.items = const [], super.key, this.initialItemIndex = 0});
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> tiles = [];
-    tiles.add(header);
     if (items.isNotEmpty) {
       tiles.addAll(items);
     } else {
@@ -59,6 +60,16 @@ class GroupedList extends StatelessWidget {
         )),
       ));
     }
-    return ListView(children: tiles);
+    return Column(
+      children: [
+        header,
+        Expanded(
+            child: ScrollablePositionedList.builder(
+          itemCount: tiles.length,
+          initialScrollIndex: initialItemIndex,
+          itemBuilder: (context, index) => tiles[index],
+        )),
+      ],
+    );
   }
 }

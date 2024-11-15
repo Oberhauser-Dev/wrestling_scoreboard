@@ -76,12 +76,13 @@ class LeagueOverview extends ConsumerWidget {
           ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.participatingTeams)),
             Tab(child: HeadingText(localizations.matches)),
+            Tab(child: HeadingText(localizations.participatingTeams)),
             Tab(child: HeadingText(localizations.weightClasses)),
           ],
           body: TabGroup(items: [
             description,
+            MatchesWidget<League>(filterObject: data),
             ManyConsumer<LeagueTeamParticipation, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueTeamParticipation> teamParticipations) {
@@ -114,7 +115,6 @@ class LeagueOverview extends ConsumerWidget {
                 );
               },
             ),
-            MatchesWidget<League>(filterObject: data),
             ManyConsumer<LeagueWeightClass, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClasses) {
