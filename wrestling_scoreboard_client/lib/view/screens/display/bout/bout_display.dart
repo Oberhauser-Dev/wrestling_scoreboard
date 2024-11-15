@@ -589,10 +589,14 @@ class BoutState extends ConsumerState<BoutScreen> {
                               child: DelayedTooltip(
                                 message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
                                 child: TimeDisplay(
+                                  // Need to replace the time display on changing the stop watch
+                                  key: ValueKey(stopwatch),
                                   stopwatch,
                                   stopwatchColor,
                                   fontSize: 128,
-                                  maxDuration: boutConfig.totalPeriodDuration,
+                                  maxDuration: stopwatch == _breakStopwatch
+                                      ? boutConfig.breakDuration
+                                      : boutConfig.totalPeriodDuration,
                                 ),
                               ),
                             ),
