@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
@@ -36,7 +38,7 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
               ),
             ),
           ),
-          initialItemIndex: firstFutureMatchIndex >= 0 ? firstFutureMatchIndex : (matches.length - 1),
+          initialItemIndex: firstFutureMatchIndex >= 0 ? firstFutureMatchIndex : (math.max(matches.length - 1, 0)),
           items: matches.map(
             (e) => SingleConsumer<TeamMatch>(
               id: e.id!,
