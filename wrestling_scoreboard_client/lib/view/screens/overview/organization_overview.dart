@@ -78,44 +78,13 @@ class OrganizationOverview extends ConsumerWidget {
           ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.organizations)),
             Tab(child: HeadingText(localizations.divisions)),
             Tab(child: HeadingText(localizations.clubs)),
-            Tab(child: HeadingText(localizations.competitions))
+            Tab(child: HeadingText(localizations.competitions)),
+            Tab(child: HeadingText('${localizations.sub}-${localizations.organizations}')),
           ],
           body: TabGroup(items: [
             description,
-            ManyConsumer<Organization, Organization>(
-              filterObject: data,
-              builder: (BuildContext context, List<Organization> childOrganizations) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrganizationEdit(
-                            initialParent: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: childOrganizations.map(
-                    (e) => SingleConsumer<Organization>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.fullname,
-                            icon: Icons.inventory,
-                            onTap: () => handleSelectedChildOrganization(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
-            ),
             ManyConsumer<Division, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Division> divisions) {
@@ -212,6 +181,37 @@ class OrganizationOverview extends ConsumerWidget {
                       },
                     );
                   }),
+                );
+              },
+            ),
+            ManyConsumer<Organization, Organization>(
+              filterObject: data,
+              builder: (BuildContext context, List<Organization> childOrganizations) {
+                return GroupedList(
+                  header: HeadingItem(
+                    trailing: RestrictedAddButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrganizationEdit(
+                            initialParent: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: childOrganizations.map(
+                    (e) => SingleConsumer<Organization>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                            title: data.fullname,
+                            icon: Icons.inventory,
+                            onTap: () => handleSelectedChildOrganization(data, context),
+                          );
+                        }),
+                  ),
                 );
               },
             ),

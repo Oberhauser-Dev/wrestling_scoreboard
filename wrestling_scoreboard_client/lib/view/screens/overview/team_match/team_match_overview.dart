@@ -116,9 +116,9 @@ class TeamMatchOverview extends ConsumerWidget {
             ],
             tabs: [
               Tab(child: HeadingText(localizations.info)),
-              Tab(child: HeadingText(localizations.persons)),
               if (match.league != null) Tab(child: HeadingText(localizations.lineups)),
               Tab(child: HeadingText(localizations.bouts)),
+              Tab(child: HeadingText(localizations.persons)),
             ],
             body: SingleConsumer<Lineup>(
               id: match.home.id!,
@@ -180,41 +180,6 @@ class TeamMatchOverview extends ConsumerWidget {
                             icon: Icons.sunny_snowing,
                           ),
                         ]),
-                    GroupedList(
-                      header: const HeadingItem(),
-                      items: [
-                        ContentItem(
-                          title: match.referee?.fullName ?? '-',
-                          subtitle: localizations.referee,
-                          icon: Icons.sports,
-                        ),
-                        ContentItem(
-                          title: match.matChairman?.fullName ?? '-',
-                          subtitle: localizations.matChairman,
-                          icon: Icons.manage_accounts,
-                        ),
-                        ContentItem(
-                          title: match.judge?.fullName ?? '-',
-                          subtitle: localizations.judge,
-                          icon: Icons.manage_accounts,
-                        ),
-                        ContentItem(
-                          title: match.timeKeeper?.fullName ?? '-',
-                          subtitle: localizations.timeKeeper,
-                          icon: Icons.pending_actions,
-                        ),
-                        ContentItem(
-                          title: match.transcriptWriter?.fullName ?? '-',
-                          subtitle: localizations.transcriptionWriter,
-                          icon: Icons.history_edu,
-                        ),
-                        ContentItem(
-                          title: '-', // TODO: Multiple stewards
-                          subtitle: localizations.steward,
-                          icon: Icons.security,
-                        ),
-                      ],
-                    ),
                     if (match.league != null)
                       GroupedList(
                         header: const HeadingItem(),
@@ -272,6 +237,41 @@ class TeamMatchOverview extends ConsumerWidget {
                           ),
                         );
                       },
+                    ),
+                    GroupedList(
+                      header: const HeadingItem(),
+                      items: [
+                        ContentItem(
+                          title: match.referee?.fullName ?? '-',
+                          subtitle: localizations.referee,
+                          icon: Icons.sports,
+                        ),
+                        ContentItem(
+                          title: match.matChairman?.fullName ?? '-',
+                          subtitle: localizations.matChairman,
+                          icon: Icons.manage_accounts,
+                        ),
+                        ContentItem(
+                          title: match.judge?.fullName ?? '-',
+                          subtitle: localizations.judge,
+                          icon: Icons.manage_accounts,
+                        ),
+                        ContentItem(
+                          title: match.timeKeeper?.fullName ?? '-',
+                          subtitle: localizations.timeKeeper,
+                          icon: Icons.pending_actions,
+                        ),
+                        ContentItem(
+                          title: match.transcriptWriter?.fullName ?? '-',
+                          subtitle: localizations.transcriptionWriter,
+                          icon: Icons.history_edu,
+                        ),
+                        ContentItem(
+                          title: '-', // TODO: Multiple stewards
+                          subtitle: localizations.steward,
+                          icon: Icons.security,
+                        ),
+                      ],
                     ),
                   ];
                   return TabGroup(items: items);

@@ -72,37 +72,6 @@ class DivisionOverview extends BoutConfigOverview<Division> {
           initialData: data.boutConfig,
           subClassData: data,
           buildRelations: (boutConfig) => {
-            Tab(child: HeadingText(localizations.divisions)): ManyConsumer<Division, Division>(
-              filterObject: data,
-              builder: (BuildContext context, List<Division> childDivisions) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DivisionEdit(
-                            initialParent: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: childDivisions.map(
-                    (e) => SingleConsumer<Division>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.fullname,
-                            icon: Icons.inventory,
-                            onTap: () => handleSelectedChildDivision(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
-            ),
             Tab(child: HeadingText(localizations.leagues)): ManyConsumer<League, Division>(
               filterObject: data,
               builder: (BuildContext context, List<League> leagues) {
@@ -160,6 +129,38 @@ class DivisionOverview extends BoutConfigOverview<Division> {
                       },
                     );
                   }),
+                );
+              },
+            ),
+            Tab(child: HeadingText('${localizations.sub}-${localizations.divisions}')):
+                ManyConsumer<Division, Division>(
+              filterObject: data,
+              builder: (BuildContext context, List<Division> childDivisions) {
+                return GroupedList(
+                  header: HeadingItem(
+                    trailing: RestrictedAddButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DivisionEdit(
+                            initialParent: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: childDivisions.map(
+                    (e) => SingleConsumer<Division>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                            title: data.fullname,
+                            icon: Icons.inventory,
+                            onTap: () => handleSelectedChildDivision(data, context),
+                          );
+                        }),
+                  ),
                 );
               },
             ),
