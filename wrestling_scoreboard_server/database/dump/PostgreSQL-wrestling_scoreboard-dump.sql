@@ -764,7 +764,8 @@ ALTER SEQUENCE public.membership_id_seq OWNED BY public.membership.id;
 --
 
 CREATE TABLE public.migration (
-    semver character varying(127) DEFAULT '0.0.0'::character varying NOT NULL
+    semver character varying(127) DEFAULT '0.0.0'::character varying NOT NULL,
+    min_client_version character varying(127) DEFAULT '0.0.0'::character varying NOT NULL
 );
 
 
@@ -1575,8 +1576,8 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 -- Data for Name: migration; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.migration (semver) FROM stdin;
-0.2.0-pre.7
+COPY public.migration (semver, min_client_version) FROM stdin;
+0.2.0-pre.8	0.0.0
 \.
 
 

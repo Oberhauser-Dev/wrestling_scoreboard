@@ -76,6 +76,8 @@ abstract class DataManager implements AuthManager {
   /// If [isReset] is true, then delete all previous Bouts and TeamMatchBouts, else reuse the states.
   Future<void> generateBouts<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);
 
+  Future<Migration> getMigration();
+
   Future<String> exportDatabase();
 
   Future<void> restoreDatabase(String sqlDump);

@@ -5,11 +5,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
@@ -188,6 +190,39 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
         onRetry: onRetry,
       );
     });
+
+    ref.listenManual(
+      dataManagerNotifierProvider,
+      (previous, next) async {
+        final dataManager = await next;
+        final migration = await dataManager.getMigration();
+        // TODO: Also check, if the server version is too old.
+        final minClientVersion = Version.parse(migration.minClientVersion);
+        final packageVersion = Version.parse(packageInfo.version);
+        final serverVersion = Version.parse(migration.semver);
+        final clientTooOld = packageVersion < minClientVersion;
+        final minSupportedServerVersion = Version(0, 1, 1);
+        final serverTooOld = serverVersion < minSupportedServerVersion;
+        if (clientTooOld || serverTooOld) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              var compatibilityWarning =
+                  'This client with version "${packageInfo.version}" is not compatible with the server version "${migration.semver}". ';
+              if (clientTooOld) {
+                compatibilityWarning += 'The minimum supported client version is "${migration.minClientVersion}".\n';
+              } else {
+                compatibilityWarning +=
+                    'The server probably should be updated to the minimum compatible server version "${minSupportedServerVersion.canonicalizedVersion}".\n';
+              }
+              compatibilityWarning +=
+                  'Please download a compatible client from "https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases" or change the server in the settings.';
+              showOkDialog(context: context, child: SelectableText(compatibilityWarning));
+            }
+          });
+        }
+      },
+      fireImmediately: true,
+    );
   }
 
   @override

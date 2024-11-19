@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:shelf/shelf.dart';
@@ -40,6 +41,16 @@ class DatabaseController {
     try {
       await PostgresDb().restoreDefault();
       return Response.ok('{"status": "success"}');
+    } catch (err) {
+      return Response.internalServerError(body: '{"err": "$err"}');
+    }
+  }
+
+  /// Get information about the server requirements
+  Future<Response> getMigration(Request request) async {
+    try {
+      final migration = await PostgresDb().getMigration();
+      return Response.ok(jsonEncode(migration));
     } catch (err) {
       return Response.internalServerError(body: '{"err": "$err"}');
     }
