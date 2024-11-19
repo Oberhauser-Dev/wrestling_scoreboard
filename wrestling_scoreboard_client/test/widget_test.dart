@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wrestling_scoreboard_client/mocks/main.dart';
+import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 
-void main() {
+void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
+  PackageInfo.setMockInitialValues(
+    appName: 'Wrestling Scoreboard Client',
+    packageName: 'wrestling_scoreboard_client',
+    version: '0.2.1',
+    buildNumber: '0',
+    buildSignature: '',
+  );
+  await initializePackageInfo();
   SharedPreferences.setMockInitialValues({});
 
   testWidgets('App launched', (WidgetTester tester) async {

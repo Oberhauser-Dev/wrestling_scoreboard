@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/mocks/services/network/data.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
@@ -410,6 +411,14 @@ class MockDataManager extends DataManager {
   @override
   set webSocketManager(WebSocketManager manager) {
     // TODO: implement webSocketManager
+  }
+
+  @override
+  Future<Migration> getMigration() async {
+    return Migration(
+      semver: Version(0, 2, 1).canonicalizedVersion,
+      minClientVersion: Version(0, 0, 0).canonicalizedVersion,
+    );
   }
 
   @override

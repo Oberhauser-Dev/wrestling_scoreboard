@@ -4,14 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/mocks/main.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
+import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
-
-late PackageInfo packageInfo;
 
 const defaultProviderScope = ProviderScope(child: WrestlingScoreboardApp());
 
@@ -28,7 +26,7 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   WidgetsFlutterBinding.ensureInitialized();
-  packageInfo = await PackageInfo.fromPlatform();
+  await initializePackageInfo();
 
   if (isDesktop) {
     // Support fullscreen on Desktop

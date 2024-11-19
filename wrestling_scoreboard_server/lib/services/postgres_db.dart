@@ -68,12 +68,22 @@ extension DatabaseExt on PostgresDb {
     await close();
   }*/
 
+  Future<Migration> getMigration() async {
+    final res = await connection.execute('SELECT * FROM migration LIMIT 1;');
+    final row = res.zeroOrOne;
+    // TODO: Workaround for migrating the migration table, can be removed after the next stable release.
+    final columnMap = row!.toColumnMap();
+    if (columnMap['min_client_version'] == null) {
+      columnMap['min_client_version'] = '0.0.0';
+    }
+    return await Migration.fromRaw(columnMap);
+  }
+
   Future<void> migrate() async {
     String semver;
     try {
-      final res = await connection.execute('SELECT semver FROM migration LIMIT 1;');
-      final row = res.zeroOrOne;
-      semver = row?.toColumnMap()['semver'] ?? '0.0.0';
+      final migration = await getMigration();
+      semver = migration.semver;
     } catch (_) {
       // DB has not yet been initialized
       await restoreDefault();

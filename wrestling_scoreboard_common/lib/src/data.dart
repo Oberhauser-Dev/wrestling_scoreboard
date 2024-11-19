@@ -10,6 +10,7 @@ export 'data/competition/competition_team_participation.dart';
 export 'data/data_object.dart';
 export 'data/lineup.dart';
 export 'data/membership.dart';
+export 'data/migration.dart';
 export 'data/organization.dart';
 export 'data/participant_state.dart';
 export 'data/participation.dart';

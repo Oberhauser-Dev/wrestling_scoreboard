@@ -109,6 +109,17 @@ class RestDataManager extends DataManager {
   }
 
   @override
+  Future<Migration> getMigration() async {
+    final uri = Uri.parse('$_apiUrl/database/migration');
+    final response = await http.get(uri, headers: _headers);
+    if (response.statusCode < 400) {
+      return Migration.fromJson(jsonDecode(response.body));
+    } else {
+      throw RestException('Failed to get the migration versions', response: response);
+    }
+  }
+
+  @override
   Future<String> exportDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/export');
     final response = await http.get(uri, headers: _headers);
