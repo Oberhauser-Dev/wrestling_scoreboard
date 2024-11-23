@@ -60,7 +60,7 @@ jobs:
           dry-run: false
           main-path: 'bin/server.dart'
           app-name: 'wrestling_scoreboard_server'
-          app-version: 0.0.0-nightly.${GITHUB_SHA::7}
+          build-metadata: nightly.${GITHUB_SHA::7}
           tag: ${{ github.ref }}
           token: ${{ github.token }}
           # build-args: |-
