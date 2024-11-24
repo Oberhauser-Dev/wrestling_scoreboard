@@ -130,21 +130,25 @@ jobs:
         # Install libunwind-dev, see https://github.com/actions/runner-images/issues/6399#issuecomment-1285011525
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
           sudo apt-get install -y libunwind-dev
           sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - name: Build
-        working-directory: ./wrestling_scoreboard_client
-        run: |
-          flutter build ${{ matrix.build-type }} \
-            ${{ matrix.platform == 'android' && '--debug' || '--release' }} \
-            ${{ matrix.platform == 'ios' && '--no-codesign' || '' }} \
-            ${{ matrix.platform == 'web' && '--wasm' || '' }} \
-            ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href "/wrestling_scoreboard/"' || '' }} \
-            --build-number=nightly.${GITHUB_SHA::7} \
-            --dart-define=API_URL=https://dev.server.wrestling-scoreboard.oberhauser.dev/api \
+        uses: oberhauser-dev/flutter-release-action@v0
+        with:
+          working-directory: wrestling_scoreboard_client
+          dry-run: true
+          app-name: 'wrestling_scoreboard_client'
+          build-metadata: nightly.${GITHUB_SHA::7}
+          tag: ${{ github.ref }}
+          build-type: ${{ matrix.build-type }}
+          token: ${{ github.token }}
+          # Android is not configured to create `--release` builds without signing.
+          build-args: |-
+            ${{ matrix.platform == 'web' && '--wasm' || '' }}
+            ${{ matrix.platform == 'android' && '--debug' || '--release' }}
+            ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href "/wrestling_scoreboard/"' || '' }}
+            --dart-define=API_URL=https://dev.server.wrestling-scoreboard.oberhauser.dev/api
             --dart-define=WEB_SOCKET_URL=wss://dev.server.wrestling-scoreboard.oberhauser.dev/ws
-        shell: bash
       - name: Upload pages artifact
         if: inputs.upload_pages_artifact && matrix.platform == 'web'
         uses: actions/upload-pages-artifact@v3
