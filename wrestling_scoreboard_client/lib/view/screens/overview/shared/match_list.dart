@@ -11,10 +11,10 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MatchesWidget<T extends DataObject?> extends StatelessWidget {
+class MatchList<T extends DataObject?> extends StatelessWidget {
   final T? filterObject;
 
-  const MatchesWidget({super.key, required this.filterObject});
+  const MatchList({super.key, required this.filterObject});
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +52,16 @@ class MatchesWidget<T extends DataObject?> extends StatelessWidget {
                       children: [
                         TextSpan(
                             text: match.home.team.name,
-                            style: match.home.team == filterObject
-                                ? const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
+                            style: filterObject is! Team || match.home.team == filterObject
+                                ? TextStyle(
+                                    color: Colors.red, fontWeight: filterObject is! Team ? null : FontWeight.bold)
                                 : null),
                         const TextSpan(text: ' - '),
                         TextSpan(
                             text: match.guest.team.name,
-                            style: match.guest.team == filterObject
-                                ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                            style: filterObject is! Team || match.guest.team == filterObject
+                                ? TextStyle(
+                                    color: Colors.blue, fontWeight: filterObject is! Team ? null : FontWeight.bold)
                                 : null),
                       ],
                     ),

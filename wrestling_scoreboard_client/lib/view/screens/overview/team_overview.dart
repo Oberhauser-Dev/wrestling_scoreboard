@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_club_affiliat
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -62,7 +62,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             ],
             body: TabGroup(items: [
               description,
-              MatchesWidget<Team>(filterObject: team),
+              MatchList<Team>(filterObject: team),
               ManyConsumer<Club, Team>(
                 filterObject: team,
                 builder: (BuildContext context, List<Club> clubs) {

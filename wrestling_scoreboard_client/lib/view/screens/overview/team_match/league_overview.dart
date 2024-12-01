@@ -10,7 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/matches_widget.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
@@ -82,7 +82,7 @@ class LeagueOverview extends ConsumerWidget {
           ],
           body: TabGroup(items: [
             description,
-            MatchesWidget<League>(filterObject: data),
+            MatchList<League>(filterObject: data),
             ManyConsumer<LeagueTeamParticipation, League>(
               filterObject: data,
               builder: (BuildContext context, List<LeagueTeamParticipation> teamParticipations) {

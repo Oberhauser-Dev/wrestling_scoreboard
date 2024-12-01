@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
-import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -14,12 +13,10 @@ import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transc
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -208,36 +205,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                   )),
                         ],
                       ),
-                    ManyConsumer<TeamMatchBout, TeamMatch>(
-                      filterObject: match,
-                      builder: (BuildContext context, List<TeamMatchBout> teamMatchBouts) {
-                        return GroupedList(
-                          header: HeadingItem(
-                            trailing: RestrictedAddButton(
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TeamMatchBoutEdit(
-                                    initialTeamMatch: match,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          items: teamMatchBouts.map(
-                            (bout) => SingleConsumer<TeamMatchBout>(
-                              id: bout.id,
-                              initialData: bout,
-                              builder: (context, teamMatchBout) => ContentItem(
-                                title: teamMatchBout.bout.title(context),
-                                icon: Icons.sports_kabaddi,
-                                onTap: () => handleSelectedTeamMatchBout(match, teamMatchBout, context),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    BoutList(filterObject: match),
                     GroupedList(
                       header: const HeadingItem(),
                       items: [
@@ -287,10 +255,6 @@ class TeamMatchOverview extends ConsumerWidget {
 
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) =>
       ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
-
-  handleSelectedTeamMatchBout(TeamMatch match, TeamMatchBout bout, BuildContext context) {
-    context.push('/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${bout.id}');
-  }
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
