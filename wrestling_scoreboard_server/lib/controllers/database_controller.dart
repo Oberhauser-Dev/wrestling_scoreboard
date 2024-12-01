@@ -30,6 +30,7 @@ class DatabaseController {
           File('${Directory.systemTemp.path}/${message.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0')}.sql');
       await file.writeAsString(message);
       await PostgresDb().restore(file.path);
+      await PostgresDb().migrate();
       return Response.ok('{"status": "success"}');
     } catch (err) {
       return Response.internalServerError(body: '{"err": "$err"}');
