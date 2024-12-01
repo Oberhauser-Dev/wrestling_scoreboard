@@ -5,6 +5,6 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 extension DivisionWeightClassLocalization on DivisionWeightClass {
   localize(BuildContext context) {
-    return '$pos. ${weightClass.name} ${weightClass.style.localize(context)} ${seasonPartition == null ? '' : '(${seasonPartition!.asSeasonPartition(context, division.seasonPartitions)})'}';
+    return '${pos + 1}. ${weightClass.name} ${weightClass.style.localize(context)} ${seasonPartition == null ? '' : '(${seasonPartition!.asSeasonPartition(context, division.seasonPartitions)})'}';
   }
 }

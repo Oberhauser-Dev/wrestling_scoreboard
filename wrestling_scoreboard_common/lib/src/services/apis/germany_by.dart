@@ -184,8 +184,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     return divisions.reduce((a, b) => a..addAll(b));
   }
 
-  Iterable<LeagueWeightClass> _parseJsonLeagueWeightClass(
-      Map<String, dynamic> item, int weightClassCount, League league) {
+  Iterable<LeagueWeightClass> _parseJsonLeagueWeightClass(Map<String, dynamic> item, League league) {
     final originalPos = int.parse(item['order']) - 1;
     final suffix = (item['suffix'] ?? '').trim();
     final weightClassPartition1 = WeightClass(
@@ -195,7 +194,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       unit: WeightUnit.kilogram,
     );
     final leagueWeightClassPartition1 = LeagueWeightClass(
-      pos: originalPos < (weightClassCount / 2) ? originalPos * 2 : (weightClassCount - originalPos - 1) * 2 + 1,
+      pos: originalPos,
       organization: organization,
       orgSyncId: _getWeightClassOrgSyncId(
           parentOrgSyncId: league.orgSyncId!, weightClass: weightClassPartition1, seasonPartition: 0),
@@ -235,9 +234,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         division: division,
         leagueName: leagueJsonEntries.key,
       ));
-      return boutSchemeList
-          .map((item) => _parseJsonLeagueWeightClass(item, boutSchemeList.length, league))
-          .expand((element) => element);
+      return boutSchemeList.map((item) => _parseJsonLeagueWeightClass(item, league)).expand((element) => element);
     }));
 
     final groupedByWeightClassList = weightClassedPerLeague.groupListsByIterable((leagueWeightClassList) {

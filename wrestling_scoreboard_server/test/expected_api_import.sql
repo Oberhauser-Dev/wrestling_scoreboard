@@ -764,7 +764,8 @@ ALTER SEQUENCE public.membership_id_seq OWNED BY public.membership.id;
 --
 
 CREATE TABLE public.migration (
-    semver character varying(127) DEFAULT '0.0.0'::character varying NOT NULL
+    semver character varying(127) DEFAULT '0.0.0'::character varying NOT NULL,
+    min_client_version character varying(127) DEFAULT '0.0.0'::character varying NOT NULL
 );
 
 
@@ -1528,151 +1529,151 @@ COPY public.division_weight_class (id, division_id, weight_class_id, pos, season
 30	3	33	0	0	2023_(S)_Bezirksliga_29_kg_free_0	2
 40	3	43	0	1	2023_(S)_Bezirksliga_29_kg_greco_1	2
 50	4	53	0	0	2023_(S)_Finalrunde_29_kg_free_0	2
-51	4	54	1	0	2023_(S)_Finalrunde_80_kg_greco_0	2
-52	4	55	2	0	2023_(S)_Finalrunde_33_kg_greco_0	2
-53	4	56	3	0	2023_(S)_Finalrunde_67_kg_free_0	2
-54	4	57	4	0	2023_(S)_Finalrunde_37_kg_free_0	2
-55	4	58	5	0	2023_(S)_Finalrunde_62_kg_greco_0	2
-56	4	59	6	0	2023_(S)_Finalrunde_41_kg_greco_0	2
-57	4	60	7	0	2023_(S)_Finalrunde_58_kg_free_0	2
-58	4	61	8	0	2023_(S)_Finalrunde_46_kg_free_0	2
-59	4	62	9	0	2023_(S)_Finalrunde_51_kg_greco_0	2
 60	4	63	0	1	2023_(S)_Finalrunde_29_kg_greco_1	2
-61	4	64	1	1	2023_(S)_Finalrunde_80_kg_free_1	2
-62	4	65	2	1	2023_(S)_Finalrunde_33_kg_free_1	2
-63	4	66	3	1	2023_(S)_Finalrunde_67_kg_greco_1	2
-64	4	67	4	1	2023_(S)_Finalrunde_37_kg_greco_1	2
-65	4	68	5	1	2023_(S)_Finalrunde_62_kg_free_1	2
-66	4	69	6	1	2023_(S)_Finalrunde_41_kg_free_1	2
-67	4	70	7	1	2023_(S)_Finalrunde_58_kg_greco_1	2
-68	4	71	8	1	2023_(S)_Finalrunde_46_kg_greco_1	2
-69	4	72	9	1	2023_(S)_Finalrunde_51_kg_free_1	2
 70	5	73	0	0	2023_Bayernliga_57_kg_free_0	2
-71	5	74	1	0	2023_Bayernliga_130_kg_greco_0	2
-72	5	75	2	0	2023_Bayernliga_61_kg_greco_0	2
-73	5	76	3	0	2023_Bayernliga_98_kg_free_0	2
-74	5	77	4	0	2023_Bayernliga_66_kg_free_0	2
-75	5	78	5	0	2023_Bayernliga_86_kg_greco_0	2
-76	5	79	6	0	2023_Bayernliga_71_kg_greco_0	2
-77	5	80	7	0	2023_Bayernliga_80_kg_free_0	2
-78	5	81	8	0	2023_Bayernliga_75_kg_A_free_0	2
-79	5	82	9	0	2023_Bayernliga_75_kg_B_greco_0	2
 80	5	83	0	1	2023_Bayernliga_57_kg_greco_1	2
-81	5	84	1	1	2023_Bayernliga_130_kg_free_1	2
-82	5	85	2	1	2023_Bayernliga_61_kg_free_1	2
-83	5	86	3	1	2023_Bayernliga_98_kg_greco_1	2
-84	5	87	4	1	2023_Bayernliga_66_kg_greco_1	2
-85	5	88	5	1	2023_Bayernliga_86_kg_free_1	2
-86	5	89	6	1	2023_Bayernliga_71_kg_free_1	2
-87	5	90	7	1	2023_Bayernliga_80_kg_greco_1	2
-88	5	91	8	1	2023_Bayernliga_75_kg_A_greco_1	2
-89	5	92	9	1	2023_Bayernliga_75_kg_B_free_1	2
 90	6	93	0	0	2023_Gruppenoberliga_57_kg_free_0	2
-91	6	94	1	0	2023_Gruppenoberliga_130_kg_greco_0	2
-92	6	95	2	0	2023_Gruppenoberliga_61_kg_greco_0	2
-93	6	96	3	0	2023_Gruppenoberliga_98_kg_free_0	2
-94	6	97	4	0	2023_Gruppenoberliga_66_kg_free_0	2
-95	6	98	5	0	2023_Gruppenoberliga_86_kg_greco_0	2
-96	6	99	6	0	2023_Gruppenoberliga_75_kg_greco_0	2
-97	6	100	7	0	2023_Gruppenoberliga_75_kg_free_0	2
-98	6	101	8	0	2023_Gruppenoberliga_86_kg_free_0	2
 99	6	102	9	0	2023_Gruppenoberliga_66_kg_greco_0	2
-100	6	103	10	0	2023_Gruppenoberliga_98_kg_greco_0	2
-101	6	104	11	0	2023_Gruppenoberliga_61_kg_free_0	2
-102	6	105	12	0	2023_Gruppenoberliga_130_kg_free_0	2
-103	6	106	13	0	2023_Gruppenoberliga_57_kg_greco_0	2
 104	6	107	0	1	2023_Gruppenoberliga_57_kg_greco_1	2
-105	6	108	1	1	2023_Gruppenoberliga_130_kg_free_1	2
-106	6	109	2	1	2023_Gruppenoberliga_61_kg_free_1	2
-107	6	110	3	1	2023_Gruppenoberliga_98_kg_greco_1	2
-108	6	111	4	1	2023_Gruppenoberliga_66_kg_greco_1	2
-109	6	112	5	1	2023_Gruppenoberliga_86_kg_free_1	2
-110	6	113	6	1	2023_Gruppenoberliga_75_kg_free_1	2
-111	6	114	7	1	2023_Gruppenoberliga_75_kg_greco_1	2
-112	6	115	8	1	2023_Gruppenoberliga_86_kg_greco_1	2
 113	6	116	9	1	2023_Gruppenoberliga_66_kg_free_1	2
-114	6	117	10	1	2023_Gruppenoberliga_98_kg_free_1	2
-115	6	118	11	1	2023_Gruppenoberliga_61_kg_greco_1	2
-116	6	119	12	1	2023_Gruppenoberliga_130_kg_greco_1	2
-117	6	120	13	1	2023_Gruppenoberliga_57_kg_free_1	2
 118	7	121	0	0	2023_Landesliga_57_kg_free_0	2
-119	7	122	1	0	2023_Landesliga_130_kg_greco_0	2
-37	3	40	5	0	2023_(S)_Bezirksliga_51_kg_free_0	2
-39	3	42	7	0	2023_(S)_Bezirksliga_46_kg_greco_0	2
-47	3	50	5	1	2023_(S)_Bezirksliga_51_kg_greco_1	2
-49	3	52	7	1	2023_(S)_Bezirksliga_46_kg_free_1	2
-120	7	123	2	0	2023_Landesliga_61_kg_greco_0	2
-121	7	124	3	0	2023_Landesliga_98_kg_free_0	2
-122	7	125	4	0	2023_Landesliga_66_kg_free_0	2
-123	7	126	5	0	2023_Landesliga_86_kg_greco_0	2
-124	7	127	6	0	2023_Landesliga_75_kg_greco_0	2
-125	7	128	7	0	2023_Landesliga_75_kg_free_0	2
-126	7	129	8	0	2023_Landesliga_86_kg_free_0	2
+39	3	42	12	0	2023_(S)_Bezirksliga_46_kg_greco_0	2
+37	3	40	13	0	2023_(S)_Bezirksliga_51_kg_free_0	2
+49	3	52	12	1	2023_(S)_Bezirksliga_46_kg_free_1	2
+47	3	50	13	1	2023_(S)_Bezirksliga_51_kg_greco_1	2
+52	4	55	1	0	2023_(S)_Finalrunde_33_kg_greco_0	2
+54	4	57	2	0	2023_(S)_Finalrunde_37_kg_free_0	2
+56	4	59	3	0	2023_(S)_Finalrunde_41_kg_greco_0	2
+58	4	61	4	0	2023_(S)_Finalrunde_46_kg_free_0	2
+59	4	62	5	0	2023_(S)_Finalrunde_51_kg_greco_0	2
+57	4	60	6	0	2023_(S)_Finalrunde_58_kg_free_0	2
+55	4	58	7	0	2023_(S)_Finalrunde_62_kg_greco_0	2
+53	4	56	8	0	2023_(S)_Finalrunde_67_kg_free_0	2
+51	4	54	9	0	2023_(S)_Finalrunde_80_kg_greco_0	2
+62	4	65	1	1	2023_(S)_Finalrunde_33_kg_free_1	2
+64	4	67	2	1	2023_(S)_Finalrunde_37_kg_greco_1	2
+66	4	69	3	1	2023_(S)_Finalrunde_41_kg_free_1	2
+68	4	71	4	1	2023_(S)_Finalrunde_46_kg_greco_1	2
+69	4	72	5	1	2023_(S)_Finalrunde_51_kg_free_1	2
+67	4	70	6	1	2023_(S)_Finalrunde_58_kg_greco_1	2
+65	4	68	7	1	2023_(S)_Finalrunde_62_kg_free_1	2
+63	4	66	8	1	2023_(S)_Finalrunde_67_kg_greco_1	2
+61	4	64	9	1	2023_(S)_Finalrunde_80_kg_free_1	2
+72	5	75	1	0	2023_Bayernliga_61_kg_greco_0	2
+74	5	77	2	0	2023_Bayernliga_66_kg_free_0	2
+76	5	79	3	0	2023_Bayernliga_71_kg_greco_0	2
+78	5	81	4	0	2023_Bayernliga_75_kg_A_free_0	2
+79	5	82	5	0	2023_Bayernliga_75_kg_B_greco_0	2
+77	5	80	6	0	2023_Bayernliga_80_kg_free_0	2
+75	5	78	7	0	2023_Bayernliga_86_kg_greco_0	2
+73	5	76	8	0	2023_Bayernliga_98_kg_free_0	2
+71	5	74	9	0	2023_Bayernliga_130_kg_greco_0	2
+82	5	85	1	1	2023_Bayernliga_61_kg_free_1	2
+84	5	87	2	1	2023_Bayernliga_66_kg_greco_1	2
+86	5	89	3	1	2023_Bayernliga_71_kg_free_1	2
+88	5	91	4	1	2023_Bayernliga_75_kg_A_greco_1	2
+89	5	92	5	1	2023_Bayernliga_75_kg_B_free_1	2
+87	5	90	6	1	2023_Bayernliga_80_kg_greco_1	2
+85	5	88	7	1	2023_Bayernliga_86_kg_free_1	2
+83	5	86	8	1	2023_Bayernliga_98_kg_greco_1	2
+81	5	84	9	1	2023_Bayernliga_130_kg_free_1	2
+92	6	95	1	0	2023_Gruppenoberliga_61_kg_greco_0	2
+94	6	97	2	0	2023_Gruppenoberliga_66_kg_free_0	2
+96	6	99	3	0	2023_Gruppenoberliga_75_kg_greco_0	2
+98	6	101	4	0	2023_Gruppenoberliga_86_kg_free_0	2
+100	6	103	5	0	2023_Gruppenoberliga_98_kg_greco_0	2
+102	6	105	6	0	2023_Gruppenoberliga_130_kg_free_0	2
+103	6	106	7	0	2023_Gruppenoberliga_57_kg_greco_0	2
+101	6	104	8	0	2023_Gruppenoberliga_61_kg_free_0	2
+97	6	100	10	0	2023_Gruppenoberliga_75_kg_free_0	2
+95	6	98	11	0	2023_Gruppenoberliga_86_kg_greco_0	2
+93	6	96	12	0	2023_Gruppenoberliga_98_kg_free_0	2
+91	6	94	13	0	2023_Gruppenoberliga_130_kg_greco_0	2
+106	6	109	1	1	2023_Gruppenoberliga_61_kg_free_1	2
+108	6	111	2	1	2023_Gruppenoberliga_66_kg_greco_1	2
+110	6	113	3	1	2023_Gruppenoberliga_75_kg_free_1	2
+112	6	115	4	1	2023_Gruppenoberliga_86_kg_greco_1	2
+114	6	117	5	1	2023_Gruppenoberliga_98_kg_free_1	2
+116	6	119	6	1	2023_Gruppenoberliga_130_kg_greco_1	2
+117	6	120	7	1	2023_Gruppenoberliga_57_kg_free_1	2
+115	6	118	8	1	2023_Gruppenoberliga_61_kg_greco_1	2
+111	6	114	10	1	2023_Gruppenoberliga_75_kg_greco_1	2
+109	6	112	11	1	2023_Gruppenoberliga_86_kg_free_1	2
+107	6	110	12	1	2023_Gruppenoberliga_98_kg_greco_1	2
+105	6	108	13	1	2023_Gruppenoberliga_130_kg_free_1	2
+119	7	122	13	0	2023_Landesliga_130_kg_greco_0	2
 127	7	130	9	0	2023_Landesliga_66_kg_greco_0	2
-128	7	131	10	0	2023_Landesliga_98_kg_greco_0	2
-129	7	132	11	0	2023_Landesliga_61_kg_free_0	2
-130	7	133	12	0	2023_Landesliga_130_kg_free_0	2
-131	7	134	13	0	2023_Landesliga_57_kg_greco_0	2
 132	7	135	0	1	2023_Landesliga_57_kg_greco_1	2
-133	7	136	1	1	2023_Landesliga_130_kg_free_1	2
-134	7	137	2	1	2023_Landesliga_61_kg_free_1	2
-135	7	138	3	1	2023_Landesliga_98_kg_greco_1	2
-136	7	139	4	1	2023_Landesliga_66_kg_greco_1	2
-137	7	140	5	1	2023_Landesliga_86_kg_free_1	2
-138	7	141	6	1	2023_Landesliga_75_kg_free_1	2
-139	7	142	7	1	2023_Landesliga_75_kg_greco_1	2
-140	7	143	8	1	2023_Landesliga_86_kg_greco_1	2
 141	7	144	9	1	2023_Landesliga_66_kg_free_1	2
-142	7	145	10	1	2023_Landesliga_98_kg_free_1	2
-143	7	146	11	1	2023_Landesliga_61_kg_greco_1	2
-144	7	147	12	1	2023_Landesliga_130_kg_greco_1	2
-145	7	148	13	1	2023_Landesliga_57_kg_free_1	2
 146	8	149	0	0	2023_Oberliga_57_kg_free_0	2
-147	8	150	1	0	2023_Oberliga_130_kg_greco_0	2
-148	8	151	2	0	2023_Oberliga_61_kg_greco_0	2
-149	8	152	3	0	2023_Oberliga_98_kg_free_0	2
-150	8	153	4	0	2023_Oberliga_66_kg_free_0	2
-151	8	154	5	0	2023_Oberliga_86_kg_greco_0	2
-152	8	155	6	0	2023_Oberliga_71_kg_greco_0	2
-153	8	156	7	0	2023_Oberliga_80_kg_free_0	2
-154	8	157	8	0	2023_Oberliga_75_kg_A_free_0	2
-155	8	158	9	0	2023_Oberliga_75_kg_B_greco_0	2
 156	8	159	0	1	2023_Oberliga_57_kg_greco_1	2
-157	8	160	1	1	2023_Oberliga_130_kg_free_1	2
-158	8	161	2	1	2023_Oberliga_61_kg_free_1	2
-159	8	162	3	1	2023_Oberliga_98_kg_greco_1	2
-160	8	163	4	1	2023_Oberliga_66_kg_greco_1	2
-161	8	164	5	1	2023_Oberliga_86_kg_free_1	2
-162	8	165	6	1	2023_Oberliga_71_kg_free_1	2
-163	8	166	7	1	2023_Oberliga_80_kg_greco_1	2
-164	8	167	8	1	2023_Oberliga_75_kg_A_greco_1	2
-165	8	168	9	1	2023_Oberliga_75_kg_B_free_1	2
-166	3	169	1	0	2023_(S)_Bezirksliga_80_kg_free_0	2
-167	3	170	2	0	2023_(S)_Bezirksliga_33_kg_greco_0	2
-168	3	171	3	0	2023_(S)_Bezirksliga_62_kg_greco_0	2
-169	3	172	4	0	2023_(S)_Bezirksliga_37_kg_free_0	2
-170	3	173	6	0	2023_(S)_Bezirksliga_41_kg_greco_0	2
-171	3	174	8	0	2023_(S)_Bezirksliga_46_kg_free_0	2
-172	3	175	9	0	2023_(S)_Bezirksliga_41_kg_free_0	2
-173	3	176	10	0	2023_(S)_Bezirksliga_51_kg_greco_0	2
-174	3	177	11	0	2023_(S)_Bezirksliga_37_kg_greco_0	2
-175	3	178	12	0	2023_(S)_Bezirksliga_62_kg_free_0	2
-176	3	179	13	0	2023_(S)_Bezirksliga_33_kg_free_0	2
-177	3	180	14	0	2023_(S)_Bezirksliga_80_kg_greco_0	2
-178	3	181	15	0	2023_(S)_Bezirksliga_29_kg_greco_0	2
-179	3	182	1	1	2023_(S)_Bezirksliga_80_kg_greco_1	2
-180	3	183	2	1	2023_(S)_Bezirksliga_33_kg_free_1	2
-181	3	184	3	1	2023_(S)_Bezirksliga_62_kg_free_1	2
-182	3	185	4	1	2023_(S)_Bezirksliga_37_kg_greco_1	2
-183	3	186	6	1	2023_(S)_Bezirksliga_41_kg_free_1	2
-184	3	187	8	1	2023_(S)_Bezirksliga_46_kg_greco_1	2
-185	3	188	9	1	2023_(S)_Bezirksliga_41_kg_greco_1	2
-186	3	189	10	1	2023_(S)_Bezirksliga_51_kg_free_1	2
-187	3	190	11	1	2023_(S)_Bezirksliga_37_kg_free_1	2
-188	3	191	12	1	2023_(S)_Bezirksliga_62_kg_greco_1	2
-189	3	192	13	1	2023_(S)_Bezirksliga_33_kg_greco_1	2
-190	3	193	14	1	2023_(S)_Bezirksliga_80_kg_free_1	2
-191	3	194	15	1	2023_(S)_Bezirksliga_29_kg_free_1	2
+166	3	169	1	0	2023_(S)_Bezirksliga_33_kg_greco_0	2
+167	3	170	2	0	2023_(S)_Bezirksliga_37_kg_free_0	2
+168	3	171	3	0	2023_(S)_Bezirksliga_41_kg_greco_0	2
+169	3	172	4	0	2023_(S)_Bezirksliga_46_kg_free_0	2
+170	3	173	5	0	2023_(S)_Bezirksliga_51_kg_greco_0	2
+171	3	174	6	0	2023_(S)_Bezirksliga_62_kg_free_0	2
+172	3	175	7	0	2023_(S)_Bezirksliga_80_kg_greco_0	2
+173	3	176	8	0	2023_(S)_Bezirksliga_29_kg_greco_0	2
+174	3	177	9	0	2023_(S)_Bezirksliga_33_kg_free_0	2
+175	3	178	10	0	2023_(S)_Bezirksliga_37_kg_greco_0	2
+176	3	179	11	0	2023_(S)_Bezirksliga_41_kg_free_0	2
+177	3	180	14	0	2023_(S)_Bezirksliga_62_kg_greco_0	2
+178	3	181	15	0	2023_(S)_Bezirksliga_80_kg_free_0	2
+179	3	182	1	1	2023_(S)_Bezirksliga_33_kg_free_1	2
+180	3	183	2	1	2023_(S)_Bezirksliga_37_kg_greco_1	2
+181	3	184	3	1	2023_(S)_Bezirksliga_41_kg_free_1	2
+182	3	185	4	1	2023_(S)_Bezirksliga_46_kg_greco_1	2
+183	3	186	5	1	2023_(S)_Bezirksliga_51_kg_free_1	2
+184	3	187	6	1	2023_(S)_Bezirksliga_62_kg_greco_1	2
+185	3	188	7	1	2023_(S)_Bezirksliga_80_kg_free_1	2
+186	3	189	8	1	2023_(S)_Bezirksliga_29_kg_free_1	2
+187	3	190	9	1	2023_(S)_Bezirksliga_33_kg_greco_1	2
+188	3	191	10	1	2023_(S)_Bezirksliga_37_kg_free_1	2
+189	3	192	11	1	2023_(S)_Bezirksliga_41_kg_greco_1	2
+190	3	193	14	1	2023_(S)_Bezirksliga_62_kg_free_1	2
+191	3	194	15	1	2023_(S)_Bezirksliga_80_kg_greco_1	2
+120	7	123	1	0	2023_Landesliga_61_kg_greco_0	2
+122	7	125	2	0	2023_Landesliga_66_kg_free_0	2
+124	7	127	3	0	2023_Landesliga_75_kg_greco_0	2
+126	7	129	4	0	2023_Landesliga_86_kg_free_0	2
+128	7	131	5	0	2023_Landesliga_98_kg_greco_0	2
+130	7	133	6	0	2023_Landesliga_130_kg_free_0	2
+131	7	134	7	0	2023_Landesliga_57_kg_greco_0	2
+129	7	132	8	0	2023_Landesliga_61_kg_free_0	2
+125	7	128	10	0	2023_Landesliga_75_kg_free_0	2
+123	7	126	11	0	2023_Landesliga_86_kg_greco_0	2
+121	7	124	12	0	2023_Landesliga_98_kg_free_0	2
+134	7	137	1	1	2023_Landesliga_61_kg_free_1	2
+136	7	139	2	1	2023_Landesliga_66_kg_greco_1	2
+138	7	141	3	1	2023_Landesliga_75_kg_free_1	2
+140	7	143	4	1	2023_Landesliga_86_kg_greco_1	2
+142	7	145	5	1	2023_Landesliga_98_kg_free_1	2
+144	7	147	6	1	2023_Landesliga_130_kg_greco_1	2
+145	7	148	7	1	2023_Landesliga_57_kg_free_1	2
+143	7	146	8	1	2023_Landesliga_61_kg_greco_1	2
+139	7	142	10	1	2023_Landesliga_75_kg_greco_1	2
+137	7	140	11	1	2023_Landesliga_86_kg_free_1	2
+135	7	138	12	1	2023_Landesliga_98_kg_greco_1	2
+133	7	136	13	1	2023_Landesliga_130_kg_free_1	2
+148	8	151	1	0	2023_Oberliga_61_kg_greco_0	2
+150	8	153	2	0	2023_Oberliga_66_kg_free_0	2
+152	8	155	3	0	2023_Oberliga_71_kg_greco_0	2
+154	8	157	4	0	2023_Oberliga_75_kg_A_free_0	2
+155	8	158	5	0	2023_Oberliga_75_kg_B_greco_0	2
+153	8	156	6	0	2023_Oberliga_80_kg_free_0	2
+151	8	154	7	0	2023_Oberliga_86_kg_greco_0	2
+149	8	152	8	0	2023_Oberliga_98_kg_free_0	2
+147	8	150	9	0	2023_Oberliga_130_kg_greco_0	2
+158	8	161	1	1	2023_Oberliga_61_kg_free_1	2
+160	8	163	2	1	2023_Oberliga_66_kg_greco_1	2
+162	8	165	3	1	2023_Oberliga_71_kg_free_1	2
+164	8	167	4	1	2023_Oberliga_75_kg_A_greco_1	2
+165	8	168	5	1	2023_Oberliga_75_kg_B_free_1	2
+163	8	166	6	1	2023_Oberliga_80_kg_greco_1	2
+161	8	164	7	1	2023_Oberliga_86_kg_free_1	2
+159	8	162	8	1	2023_Oberliga_98_kg_greco_1	2
+157	8	160	9	1	2023_Oberliga_130_kg_free_1	2
 \.
 
 
@@ -1715,76 +1716,76 @@ COPY public.league_team_participation (id, league_id, team_id) FROM stdin;
 COPY public.league_weight_class (id, league_id, weight_class_id, pos, season_partition, org_sync_id, organization_id) FROM stdin;
 1	4	195	0	0	2023_(S)_Bezirksliga_Grenzlandliga_29_kg_free_0	2
 2	4	196	0	1	2023_(S)_Bezirksliga_Grenzlandliga_29_kg_greco_1	2
-3	4	197	2	0	2023_(S)_Bezirksliga_Grenzlandliga_32_kg_greco_0	2
-4	4	198	2	1	2023_(S)_Bezirksliga_Grenzlandliga_32_kg_free_1	2
-5	4	199	4	0	2023_(S)_Bezirksliga_Grenzlandliga_35_kg_free_0	2
-6	4	200	4	1	2023_(S)_Bezirksliga_Grenzlandliga_35_kg_greco_1	2
-7	4	201	6	0	2023_(S)_Bezirksliga_Grenzlandliga_38_kg_greco_0	2
-8	4	202	6	1	2023_(S)_Bezirksliga_Grenzlandliga_38_kg_free_1	2
-9	4	203	8	0	2023_(S)_Bezirksliga_Grenzlandliga_42_kg_free_0	2
-10	4	204	8	1	2023_(S)_Bezirksliga_Grenzlandliga_42_kg_greco_1	2
-11	4	205	9	0	2023_(S)_Bezirksliga_Grenzlandliga_46_kg_greco_0	2
-12	4	206	9	1	2023_(S)_Bezirksliga_Grenzlandliga_46_kg_free_1	2
-13	4	207	7	0	2023_(S)_Bezirksliga_Grenzlandliga_51_kg_free_0	2
-14	4	208	7	1	2023_(S)_Bezirksliga_Grenzlandliga_51_kg_greco_1	2
-15	4	209	5	0	2023_(S)_Bezirksliga_Grenzlandliga_57_kg_greco_0	2
-16	4	210	5	1	2023_(S)_Bezirksliga_Grenzlandliga_57_kg_free_1	2
-17	4	211	3	0	2023_(S)_Bezirksliga_Grenzlandliga_67_kg_free_0	2
-18	4	212	3	1	2023_(S)_Bezirksliga_Grenzlandliga_67_kg_greco_1	2
-19	4	213	1	0	2023_(S)_Bezirksliga_Grenzlandliga_85_kg_greco_0	2
-20	4	214	1	1	2023_(S)_Bezirksliga_Grenzlandliga_85_kg_free_1	2
+3	4	197	1	0	2023_(S)_Bezirksliga_Grenzlandliga_32_kg_greco_0	2
+4	4	198	1	1	2023_(S)_Bezirksliga_Grenzlandliga_32_kg_free_1	2
+5	4	199	2	0	2023_(S)_Bezirksliga_Grenzlandliga_35_kg_free_0	2
+6	4	200	2	1	2023_(S)_Bezirksliga_Grenzlandliga_35_kg_greco_1	2
+7	4	201	3	0	2023_(S)_Bezirksliga_Grenzlandliga_38_kg_greco_0	2
+8	4	202	3	1	2023_(S)_Bezirksliga_Grenzlandliga_38_kg_free_1	2
+9	4	203	4	0	2023_(S)_Bezirksliga_Grenzlandliga_42_kg_free_0	2
+10	4	204	4	1	2023_(S)_Bezirksliga_Grenzlandliga_42_kg_greco_1	2
+11	4	205	5	0	2023_(S)_Bezirksliga_Grenzlandliga_46_kg_greco_0	2
+12	4	206	5	1	2023_(S)_Bezirksliga_Grenzlandliga_46_kg_free_1	2
+13	4	207	6	0	2023_(S)_Bezirksliga_Grenzlandliga_51_kg_free_0	2
+14	4	208	6	1	2023_(S)_Bezirksliga_Grenzlandliga_51_kg_greco_1	2
+15	4	209	7	0	2023_(S)_Bezirksliga_Grenzlandliga_57_kg_greco_0	2
+16	4	210	7	1	2023_(S)_Bezirksliga_Grenzlandliga_57_kg_free_1	2
+17	4	211	8	0	2023_(S)_Bezirksliga_Grenzlandliga_67_kg_free_0	2
+18	4	212	8	1	2023_(S)_Bezirksliga_Grenzlandliga_67_kg_greco_1	2
+19	4	213	9	0	2023_(S)_Bezirksliga_Grenzlandliga_85_kg_greco_0	2
+20	4	214	9	1	2023_(S)_Bezirksliga_Grenzlandliga_85_kg_free_1	2
 21	5	215	0	0	2023_(S)_Bezirksliga_Mittelfranken_29_kg_free_0	2
 22	5	216	0	1	2023_(S)_Bezirksliga_Mittelfranken_29_kg_greco_1	2
-23	5	217	2	0	2023_(S)_Bezirksliga_Mittelfranken_33_kg_greco_0	2
-24	5	218	2	1	2023_(S)_Bezirksliga_Mittelfranken_33_kg_free_1	2
-25	5	219	4	0	2023_(S)_Bezirksliga_Mittelfranken_36_kg_free_0	2
-26	5	220	4	1	2023_(S)_Bezirksliga_Mittelfranken_36_kg_greco_1	2
-27	5	221	6	0	2023_(S)_Bezirksliga_Mittelfranken_41_kg_greco_0	2
-28	5	222	6	1	2023_(S)_Bezirksliga_Mittelfranken_41_kg_free_1	2
-29	5	223	8	0	2023_(S)_Bezirksliga_Mittelfranken_46_kg_free_0	2
-30	5	224	8	1	2023_(S)_Bezirksliga_Mittelfranken_46_kg_greco_1	2
-31	5	225	10	0	2023_(S)_Bezirksliga_Mittelfranken_50_kg_greco_0	2
-32	5	226	10	1	2023_(S)_Bezirksliga_Mittelfranken_50_kg_free_1	2
-33	5	227	12	0	2023_(S)_Bezirksliga_Mittelfranken_60_kg_free_0	2
-34	5	228	12	1	2023_(S)_Bezirksliga_Mittelfranken_60_kg_greco_1	2
-35	5	229	14	0	2023_(S)_Bezirksliga_Mittelfranken_76_kg_greco_0	2
-36	5	230	14	1	2023_(S)_Bezirksliga_Mittelfranken_76_kg_free_1	2
-37	5	231	15	0	2023_(S)_Bezirksliga_Mittelfranken_29_kg_greco_0	2
-38	5	232	15	1	2023_(S)_Bezirksliga_Mittelfranken_29_kg_free_1	2
-39	5	233	13	0	2023_(S)_Bezirksliga_Mittelfranken_33_kg_free_0	2
-40	5	234	13	1	2023_(S)_Bezirksliga_Mittelfranken_33_kg_greco_1	2
-41	5	235	11	0	2023_(S)_Bezirksliga_Mittelfranken_36_kg_greco_0	2
-42	5	236	11	1	2023_(S)_Bezirksliga_Mittelfranken_36_kg_free_1	2
-43	5	237	9	0	2023_(S)_Bezirksliga_Mittelfranken_41_kg_free_0	2
-44	5	238	9	1	2023_(S)_Bezirksliga_Mittelfranken_41_kg_greco_1	2
-45	5	239	7	0	2023_(S)_Bezirksliga_Mittelfranken_46_kg_greco_0	2
-46	5	240	7	1	2023_(S)_Bezirksliga_Mittelfranken_46_kg_free_1	2
-47	5	241	5	0	2023_(S)_Bezirksliga_Mittelfranken_50_kg_free_0	2
-48	5	242	5	1	2023_(S)_Bezirksliga_Mittelfranken_50_kg_greco_1	2
-49	5	243	3	0	2023_(S)_Bezirksliga_Mittelfranken_60_kg_greco_0	2
-50	5	244	3	1	2023_(S)_Bezirksliga_Mittelfranken_60_kg_free_1	2
-51	5	245	1	0	2023_(S)_Bezirksliga_Mittelfranken_76_kg_free_0	2
-52	5	246	1	1	2023_(S)_Bezirksliga_Mittelfranken_76_kg_greco_1	2
+23	5	217	1	0	2023_(S)_Bezirksliga_Mittelfranken_33_kg_greco_0	2
+24	5	218	1	1	2023_(S)_Bezirksliga_Mittelfranken_33_kg_free_1	2
+25	5	219	2	0	2023_(S)_Bezirksliga_Mittelfranken_36_kg_free_0	2
+26	5	220	2	1	2023_(S)_Bezirksliga_Mittelfranken_36_kg_greco_1	2
+27	5	221	3	0	2023_(S)_Bezirksliga_Mittelfranken_41_kg_greco_0	2
+28	5	222	3	1	2023_(S)_Bezirksliga_Mittelfranken_41_kg_free_1	2
+29	5	223	4	0	2023_(S)_Bezirksliga_Mittelfranken_46_kg_free_0	2
+30	5	224	4	1	2023_(S)_Bezirksliga_Mittelfranken_46_kg_greco_1	2
+31	5	225	5	0	2023_(S)_Bezirksliga_Mittelfranken_50_kg_greco_0	2
+32	5	226	5	1	2023_(S)_Bezirksliga_Mittelfranken_50_kg_free_1	2
+33	5	227	6	0	2023_(S)_Bezirksliga_Mittelfranken_60_kg_free_0	2
+34	5	228	6	1	2023_(S)_Bezirksliga_Mittelfranken_60_kg_greco_1	2
+35	5	229	7	0	2023_(S)_Bezirksliga_Mittelfranken_76_kg_greco_0	2
+36	5	230	7	1	2023_(S)_Bezirksliga_Mittelfranken_76_kg_free_1	2
+37	5	231	8	0	2023_(S)_Bezirksliga_Mittelfranken_29_kg_greco_0	2
+38	5	232	8	1	2023_(S)_Bezirksliga_Mittelfranken_29_kg_free_1	2
+39	5	233	9	0	2023_(S)_Bezirksliga_Mittelfranken_33_kg_free_0	2
+40	5	234	9	1	2023_(S)_Bezirksliga_Mittelfranken_33_kg_greco_1	2
+41	5	235	10	0	2023_(S)_Bezirksliga_Mittelfranken_36_kg_greco_0	2
+42	5	236	10	1	2023_(S)_Bezirksliga_Mittelfranken_36_kg_free_1	2
+43	5	237	11	0	2023_(S)_Bezirksliga_Mittelfranken_41_kg_free_0	2
+44	5	238	11	1	2023_(S)_Bezirksliga_Mittelfranken_41_kg_greco_1	2
+45	5	239	12	0	2023_(S)_Bezirksliga_Mittelfranken_46_kg_greco_0	2
+46	5	240	12	1	2023_(S)_Bezirksliga_Mittelfranken_46_kg_free_1	2
+47	5	241	13	0	2023_(S)_Bezirksliga_Mittelfranken_50_kg_free_0	2
+48	5	242	13	1	2023_(S)_Bezirksliga_Mittelfranken_50_kg_greco_1	2
+49	5	243	14	0	2023_(S)_Bezirksliga_Mittelfranken_60_kg_greco_0	2
+50	5	244	14	1	2023_(S)_Bezirksliga_Mittelfranken_60_kg_free_1	2
+51	5	245	15	0	2023_(S)_Bezirksliga_Mittelfranken_76_kg_free_0	2
+52	5	246	15	1	2023_(S)_Bezirksliga_Mittelfranken_76_kg_greco_1	2
 53	6	247	0	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_29_kg_free_0	2
 54	6	248	0	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_29_kg_greco_1	2
-55	6	249	2	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_31_kg_free_0	2
-56	6	250	2	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_31_kg_greco_1	2
-57	6	251	4	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_34_kg_free_0	2
-58	6	252	4	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_34_kg_greco_1	2
-59	6	253	6	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_38_kg_free_0	2
-60	6	254	6	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_38_kg_greco_1	2
-61	6	255	8	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_42_kg_free_0	2
-62	6	256	8	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_42_kg_greco_1	2
-63	6	257	9	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_46_kg_free_0	2
-64	6	258	9	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_46_kg_greco_1	2
-65	6	259	7	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_50_kg_free_0	2
-66	6	260	7	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_50_kg_greco_1	2
-67	6	261	5	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_55_kg_free_0	2
-68	6	262	5	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_55_kg_greco_1	2
-69	6	263	3	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_60_kg_free_0	2
-70	6	264	3	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_60_kg_greco_1	2
-71	6	265	1	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_76_kg_free_0	2
-72	6	266	1	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_76_kg_greco_1	2
+55	6	249	1	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_31_kg_free_0	2
+56	6	250	1	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_31_kg_greco_1	2
+57	6	251	2	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_34_kg_free_0	2
+58	6	252	2	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_34_kg_greco_1	2
+59	6	253	3	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_38_kg_free_0	2
+60	6	254	3	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_38_kg_greco_1	2
+61	6	255	4	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_42_kg_free_0	2
+62	6	256	4	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_42_kg_greco_1	2
+63	6	257	5	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_46_kg_free_0	2
+64	6	258	5	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_46_kg_greco_1	2
+65	6	259	6	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_50_kg_free_0	2
+66	6	260	6	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_50_kg_greco_1	2
+67	6	261	7	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_55_kg_free_0	2
+68	6	262	7	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_55_kg_greco_1	2
+69	6	263	8	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_60_kg_free_0	2
+70	6	264	8	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_60_kg_greco_1	2
+71	6	265	9	0	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_76_kg_free_0	2
+72	6	266	9	1	2023_(S)_Bezirksliga_Niederbayern/Oberpfalz_76_kg_greco_1	2
 \.
 
 
@@ -1814,8 +1815,8 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 -- Data for Name: migration; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.migration (semver) FROM stdin;
-0.2.0-pre.7
+COPY public.migration (semver, min_client_version) FROM stdin;
+0.2.0-pre.8	0.0.0
 \.
 
 
@@ -2066,32 +2067,32 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 166	\N	80	greco	kilogram
 167	A	75	greco	kilogram
 168	B	75	free	kilogram
-169	\N	80	free	kilogram
-170	\N	33	greco	kilogram
-171	\N	62	greco	kilogram
-172	\N	37	free	kilogram
-173	\N	41	greco	kilogram
-174	\N	46	free	kilogram
-175	\N	41	free	kilogram
-176	\N	51	greco	kilogram
-177	\N	37	greco	kilogram
-178	\N	62	free	kilogram
-179	\N	33	free	kilogram
-180	\N	80	greco	kilogram
-181	\N	29	greco	kilogram
-182	\N	80	greco	kilogram
-183	\N	33	free	kilogram
-184	\N	62	free	kilogram
-185	\N	37	greco	kilogram
-186	\N	41	free	kilogram
-187	\N	46	greco	kilogram
-188	\N	41	greco	kilogram
-189	\N	51	free	kilogram
-190	\N	37	free	kilogram
-191	\N	62	greco	kilogram
-192	\N	33	greco	kilogram
-193	\N	80	free	kilogram
-194	\N	29	free	kilogram
+169	\N	33	greco	kilogram
+170	\N	37	free	kilogram
+171	\N	41	greco	kilogram
+172	\N	46	free	kilogram
+173	\N	51	greco	kilogram
+174	\N	62	free	kilogram
+175	\N	80	greco	kilogram
+176	\N	29	greco	kilogram
+177	\N	33	free	kilogram
+178	\N	37	greco	kilogram
+179	\N	41	free	kilogram
+180	\N	62	greco	kilogram
+181	\N	80	free	kilogram
+182	\N	33	free	kilogram
+183	\N	37	greco	kilogram
+184	\N	41	free	kilogram
+185	\N	46	greco	kilogram
+186	\N	51	free	kilogram
+187	\N	62	greco	kilogram
+188	\N	80	free	kilogram
+189	\N	29	free	kilogram
+190	\N	33	greco	kilogram
+191	\N	37	free	kilogram
+192	\N	41	greco	kilogram
+193	\N	62	free	kilogram
+194	\N	80	greco	kilogram
 195	\N	29	free	kilogram
 196	\N	29	greco	kilogram
 197	\N	32	greco	kilogram

@@ -84,6 +84,19 @@ class LeagueController extends OrganizationalController<League> with ImportContr
     );
   }
 
+  Future<List<LeagueWeightClass>> getLeagueWeightClasses(
+    String id, {
+    int? seasonPartition,
+    required bool obfuscate,
+  }) {
+    return LeagueWeightClassController().getMany(
+      conditions: ['league_id = @id', if (seasonPartition != null) 'season_partition = @season_partition'],
+      substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
+      orderBy: ['season_partition', 'pos'],
+      obfuscate: obfuscate,
+    );
+  }
+
   @override
   Future<void> import({
     required WrestlingApi apiProvider,

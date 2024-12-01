@@ -41,15 +41,6 @@ class DivisionController extends OrganizationalController<Division> {
     );
   }
 
-  Future<List<WeightClass>> getWeightClasses(String id, {int? seasonPartition, required bool obfuscate}) {
-    return WeightClassController().getManyFromQuery(_weightClassesQuery(seasonPartition != null),
-        substitutionValues: {
-          'id': id,
-          if (seasonPartition != null) 'season_partition': seasonPartition,
-        },
-        obfuscate: obfuscate);
-  }
-
   Future<Response> requestDivisionWeightClasses(Request request, User? user, String id) async {
     return DivisionWeightClassController().handleRequestMany(
       isRaw: request.isRaw,
@@ -57,6 +48,19 @@ class DivisionController extends OrganizationalController<Division> {
       substitutionValues: {'id': id},
       orderBy: ['season_partition', 'pos'],
       obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<List<DivisionWeightClass>> getDivisionWeightClasses(
+    String id, {
+    int? seasonPartition,
+    required bool obfuscate,
+  }) {
+    return DivisionWeightClassController().getMany(
+      conditions: ['division_id = @id', if (seasonPartition != null) 'season_partition = @season_partition'],
+      substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
+      orderBy: ['season_partition', 'pos'],
+      obfuscate: obfuscate,
     );
   }
 
