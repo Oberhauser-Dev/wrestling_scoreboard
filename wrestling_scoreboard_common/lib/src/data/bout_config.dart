@@ -70,7 +70,7 @@ class BoutConfig with _$BoutConfig implements DataObject {
     return copyWith(id: id);
   }
 
-  static BoutResultRule resultRule({
+  static BoutResultRule? resultRule({
     required BoutResult result,
     required WrestlingStyle style,
     required int technicalPointsWinner,
@@ -87,7 +87,7 @@ class BoutConfig with _$BoutConfig implements DataObject {
       return matchResult && matchStyle && matchDiff && matchPointsLoser && matchPointsWinner;
     }).toList();
     if (applyingRules.isEmpty) {
-      throw Exception('No bout result rule found for $result');
+      return null;
     }
     applyingRules.sort((a, b) {
       var pDiff = (a.technicalPointsDifference ?? 0) - (b.technicalPointsDifference ?? 0);

@@ -75,6 +75,10 @@ class Bout with _$Bout implements DataObject, Organizational {
         rules: rules,
       );
 
+      if (resultRule == null) {
+        throw Exception('No bout result rule found for $result');
+      }
+
       return copyWith(
         r: r?.copyWith(
           classificationPoints:
