@@ -102,24 +102,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   displayDropDown(BoutRole role) {
     ParticipantState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
     ParticipantState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
-    // Empty List, if pStatus is empty
-    final List<MapEntry<BoutResult, Widget>> boutResultOptions = [];
-    if (pStatus != null) {
-      final boutResultValues = List.of(BoutResult.values);
-      if (pStatusOpponent == null) {
-        // Cannot select this option, as there is no opponent
-        boutResultValues.remove(BoutResult.dsq2);
-      }
-      boutResultOptions.addAll(boutResultValues.map(
-        (BoutResult boutResult) => MapEntry(
-          boutResult,
-          Tooltip(
-            message: boutResult.description(context),
-            child: Text(boutResult.abbreviation(context)),
-          ),
-        ),
-      ));
-    }
+
     return ThemedContainer(
       color: role == widget.boutState.bout.winnerRole ? role.color() : null,
       child: ButtonTheme(
@@ -127,7 +110,40 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
           child: ManyConsumer<BoutAction, Bout>(
             filterObject: widget.boutState.bout,
             builder: (context, actions) {
-              return SimpleDropdown<BoutResult>(
+              // Empty List, if pStatus is empty
+              final List<DropdownMenuItem<BoutResult>> boutResultOptions = [];
+              if (pStatus != null) {
+                final boutResultValues = List.of(BoutResult.values);
+                if (pStatusOpponent == null) {
+                  // Cannot select this option, as there is no opponent
+                  boutResultValues.remove(BoutResult.dsq2);
+                }
+                boutResultOptions.addAll(boutResultValues.map(
+                  (BoutResult boutResult) {
+                    final resultRule = BoutConfig.resultRule(
+                      result: boutResult,
+                      style: widget.boutState.bout.weightClass?.style ?? WrestlingStyle.free,
+                      technicalPointsWinner: ParticipantState.getTechnicalPoints(actions, role),
+                      technicalPointsLoser: ParticipantState.getTechnicalPoints(
+                          actions, role == BoutRole.red ? BoutRole.blue : BoutRole.red),
+                      rules: widget.boutState.boutRules,
+                    );
+                    final isEnabled = resultRule != null;
+                    return DropdownMenuItem(
+                      // Only allow to select option, if current state and resultRules allow it.
+                      enabled: isEnabled,
+                      value: boutResult,
+                      child: Tooltip(
+                        message: boutResult.description(context),
+                        child: Text(boutResult.abbreviation(context),
+                            style: isEnabled ? null : TextStyle(color: Theme.of(context).disabledColor)),
+                      ),
+                    );
+                  },
+                ));
+              }
+
+              return CustomDropdown<BoutResult>(
                 isNullable: true,
                 selected: role == widget.boutState.bout.winnerRole || widget.boutState.bout.result == BoutResult.dsq2
                     ? widget.boutState.bout.result

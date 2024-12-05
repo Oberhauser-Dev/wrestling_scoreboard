@@ -15,8 +15,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 5);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 5);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VIN', () {
         final resultRule = BoutConfig.resultRule(
@@ -26,8 +26,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 5);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 5);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VCA', () {
         final resultRule = BoutConfig.resultRule(
@@ -37,8 +37,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 5);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 5);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VSU', () {
         final resultRule = BoutConfig.resultRule(
@@ -48,8 +48,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VSU, loser with technical points', () {
         final resultRule = BoutConfig.resultRule(
@@ -59,8 +59,8 @@ void main() {
           technicalPointsLoser: 1,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 1);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 1);
       });
       test('VPO', () {
         final resultRule = BoutConfig.resultRule(
@@ -70,8 +70,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 3);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 3);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VPO, loser with technical points', () {
         final resultRule = BoutConfig.resultRule(
@@ -81,8 +81,8 @@ void main() {
           technicalPointsLoser: 1,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 3);
-        expect(resultRule.loserClassificationPoints, 1);
+        expect(resultRule?.winnerClassificationPoints, 3);
+        expect(resultRule?.loserClassificationPoints, 1);
       });
       test('VFO', () {
         final resultRule = BoutConfig.resultRule(
@@ -92,8 +92,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 5);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 5);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('DSQ', () {
         final resultRule = BoutConfig.resultRule(
@@ -103,8 +103,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 5);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 5);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('DSQ2', () {
         final resultRule = BoutConfig.resultRule(
@@ -114,8 +114,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 0);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 0);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
     });
 
@@ -129,8 +129,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VSU, loser with technical points', () {
         final resultRule = BoutConfig.resultRule(
@@ -140,8 +140,8 @@ void main() {
           technicalPointsLoser: 1,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 1);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 1);
       });
     });
   });
@@ -159,8 +159,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VIN', () {
         final resultRule = BoutConfig.resultRule(
@@ -170,8 +170,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VCA', () {
         final resultRule = BoutConfig.resultRule(
@@ -181,8 +181,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VSU', () {
         final resultRule = BoutConfig.resultRule(
@@ -192,8 +192,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VSU, loser with technical points', () {
         final resultRule = BoutConfig.resultRule(
@@ -203,8 +203,8 @@ void main() {
           technicalPointsLoser: 1,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VPO, 8 points diff', () {
         final resultRule = BoutConfig.resultRule(
@@ -214,8 +214,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 3);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 3);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VPO, 3 points diff', () {
         final resultRule = BoutConfig.resultRule(
@@ -225,8 +225,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 2);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 2);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VPO, 1 point diff', () {
         final resultRule = BoutConfig.resultRule(
@@ -236,8 +236,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 1);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 1);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('VFO', () {
         final resultRule = BoutConfig.resultRule(
@@ -247,8 +247,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('DSQ', () {
         final resultRule = BoutConfig.resultRule(
@@ -258,8 +258,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 4);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 4);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
       test('DSQ2', () {
         final resultRule = BoutConfig.resultRule(
@@ -269,8 +269,8 @@ void main() {
           technicalPointsLoser: 0,
           rules: boutResultRules,
         );
-        expect(resultRule.winnerClassificationPoints, 0);
-        expect(resultRule.loserClassificationPoints, 0);
+        expect(resultRule?.winnerClassificationPoints, 0);
+        expect(resultRule?.loserClassificationPoints, 0);
       });
     });
   });

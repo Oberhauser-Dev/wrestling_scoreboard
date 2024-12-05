@@ -78,14 +78,46 @@ class SimpleDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = options
-        .map<DropdownMenuItem<T>>(
-          (entry) => DropdownMenuItem<T>(
-            value: entry.key,
-            child: entry.value,
-          ),
-        )
-        .toList();
+    return CustomDropdown<T>(
+      hint: hint,
+      isExpanded: isExpanded,
+      selected: selected,
+      onChange: onChange,
+      options: options.map<DropdownMenuItem<T>>(
+        (entry) => DropdownMenuItem<T>(
+          value: entry.key,
+          child: entry.value,
+        ),
+      ),
+      alignment: alignment,
+      isNullable: isNullable,
+    );
+  }
+}
+
+class CustomDropdown<T> extends StatelessWidget {
+  final Iterable<DropdownMenuItem<T>> options;
+  final T? selected;
+  final void Function(T? value) onChange;
+  final bool isExpanded;
+  final bool isNullable;
+  final String? hint;
+  final AlignmentGeometry alignment;
+
+  const CustomDropdown({
+    required this.options,
+    required this.selected,
+    required this.onChange,
+    this.isNullable = false,
+    this.isExpanded = true,
+    super.key,
+    this.hint,
+    this.alignment = AlignmentDirectional.centerStart,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final items = options.toList();
     if (isNullable) {
       items.add(DropdownMenuItem<T>(
         value: null,
