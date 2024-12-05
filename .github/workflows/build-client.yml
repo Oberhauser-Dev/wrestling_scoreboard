@@ -146,7 +146,7 @@ jobs:
           build-args: |-
             ${{ matrix.platform == 'web' && '--wasm' || '' }}
             ${{ matrix.platform == 'android' && '--debug' || '--release' }}
-            ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href "/wrestling_scoreboard/"' || '' }}
+            ${{ matrix.platform == 'web' && inputs.upload_pages_artifact && '--base-href=/wrestling_scoreboard/' || '' }}
             --dart-define=API_URL=https://dev.server.wrestling-scoreboard.oberhauser.dev/api
             --dart-define=WEB_SOCKET_URL=wss://dev.server.wrestling-scoreboard.oberhauser.dev/ws
       - name: Upload pages artifact
