@@ -33,12 +33,14 @@ Map<String, dynamic> _$$BoutResultRuleImplToJson(_$BoutResultRuleImpl instance) 
 const _$BoutResultEnumMap = {
   BoutResult.vfa: 'vfa',
   BoutResult.vin: 'vin',
+  BoutResult.bothVin: 'bothVin',
   BoutResult.vca: 'vca',
   BoutResult.vsu: 'vsu',
   BoutResult.vpo: 'vpo',
   BoutResult.vfo: 'vfo',
+  BoutResult.bothVfo: 'bothVfo',
   BoutResult.dsq: 'dsq',
-  BoutResult.dsq2: 'dsq2',
+  BoutResult.bothDsq: 'bothDsq',
 };
 
 const _$WrestlingStyleEnumMap = {

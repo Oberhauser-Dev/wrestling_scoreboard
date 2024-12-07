@@ -106,9 +106,31 @@ void main() {
         expect(resultRule?.winnerClassificationPoints, 5);
         expect(resultRule?.loserClassificationPoints, 0);
       });
-      test('DSQ2', () {
+      test('2DSQ', () {
         final resultRule = BoutConfig.resultRule(
-          result: BoutResult.dsq2,
+          result: BoutResult.bothDsq,
+          style: wrestlingStyle,
+          technicalPointsWinner: 0,
+          technicalPointsLoser: 0,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 0);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
+      test('2VIN', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.bothVin,
+          style: wrestlingStyle,
+          technicalPointsWinner: 0,
+          technicalPointsLoser: 0,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 0);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
+      test('2VFO', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.bothVfo,
           style: wrestlingStyle,
           technicalPointsWinner: 0,
           technicalPointsLoser: 0,
@@ -261,9 +283,31 @@ void main() {
         expect(resultRule?.winnerClassificationPoints, 4);
         expect(resultRule?.loserClassificationPoints, 0);
       });
-      test('DSQ2', () {
+      test('2DSQ', () {
         final resultRule = BoutConfig.resultRule(
-          result: BoutResult.dsq2,
+          result: BoutResult.bothDsq,
+          style: wrestlingStyle,
+          technicalPointsWinner: 0,
+          technicalPointsLoser: 0,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 0);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
+      test('2VIN', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.bothVin,
+          style: wrestlingStyle,
+          technicalPointsWinner: 0,
+          technicalPointsLoser: 0,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 0);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
+      test('2VFO', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.bothVfo,
           style: wrestlingStyle,
           technicalPointsWinner: 0,
           technicalPointsLoser: 0,

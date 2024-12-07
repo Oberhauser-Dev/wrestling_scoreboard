@@ -24,8 +24,12 @@ extension BoutResultLocalization on BoutResult {
         return loc.boutResultVfoAbbr;
       case BoutResult.dsq:
         return loc.boutResultDsqAbbr;
-      case BoutResult.dsq2:
-        return loc.boutResultDsq2Abbr;
+      case BoutResult.bothDsq:
+        return loc.boutResultBothDsqAbbr;
+      case BoutResult.bothVfo:
+        return loc.boutResultBothVfoAbbr;
+      case BoutResult.bothVin:
+        return loc.boutResultBothVinAbbr;
     }
   }
 
@@ -46,8 +50,12 @@ extension BoutResultLocalization on BoutResult {
         return loc.boutResultVfo;
       case BoutResult.dsq:
         return loc.boutResultDsq;
-      case BoutResult.dsq2:
-        return loc.boutResultDsq2;
+      case BoutResult.bothDsq:
+        return loc.boutResultBothDsq;
+      case BoutResult.bothVfo:
+        return loc.boutResultBothVfo;
+      case BoutResult.bothVin:
+        return loc.boutResultBothVin;
     }
   }
 }

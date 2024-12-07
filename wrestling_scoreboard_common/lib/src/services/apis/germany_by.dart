@@ -106,7 +106,19 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         ),
         BoutResultRule(
           boutConfig: config,
-          boutResult: BoutResult.dsq2,
+          boutResult: BoutResult.bothDsq,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.bothVfo,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.bothVin,
           winnerClassificationPoints: 0,
           loserClassificationPoints: 0,
         ),
@@ -540,17 +552,18 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 'SS' => BoutResult.vfa, // Schultersieg
                 'TÜ' => BoutResult.vsu, // Technische Überlegenheit
                 'TÜ1' => BoutResult.vsu, // Technische Überlegenheit, Verlierer hat Punkte
-                'ÜG' => BoutResult.dsq, // Übergewicht, TODO: wrongly mapped
-                'UG' => BoutResult.dsq, // Untergewicht(?) TODO: wrongly mapped
+                'ÜG' => BoutResult.vfo, // Übergewicht
+                'UG' => BoutResult.vfo, // Untergewicht
                 'AS' => BoutResult.vin, // Aufgabesieg
+                'AS2' => BoutResult.bothVin, // Beide verletzt
                 'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit
-                'KL' => BoutResult.vfo, // Kampfloser Sieger, TODO: wrongly mapped
+                'KL' => BoutResult.vfo, // Kampfloser Sieger
                 'DN' => BoutResult.vfo, // Disqualifikation wegen Nichtantritt
                 'DQ' => BoutResult.dsq,
                 'DS' => BoutResult.dsq, // Disqualifikation aufgrund von Passivität
                 '1M.' => BoutResult.dsq, // Doppelstart
-                'o.W.' => BoutResult.dsq2, // ohne Wertung
-                'DQ2' => BoutResult.dsq2,
+                'o.W.' => BoutResult.bothVfo, // ohne Wertung
+                'DQ2' => BoutResult.bothDsq,
                 '' => null,
                 null => null,
                 _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),

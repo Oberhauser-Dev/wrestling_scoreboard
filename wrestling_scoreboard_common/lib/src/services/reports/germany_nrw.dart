@@ -34,11 +34,14 @@ extension GerBoutResultAbbreviation on BoutResult {
       case BoutResult.vpo:
         return 'PS';
       case BoutResult.vfo:
-        return 'KL'; // Also known as 'DN'
+        return 'KL'; // Also known as 'DN' or 'ÜG'
       case BoutResult.dsq:
         return 'DQ';
-      case BoutResult.dsq2:
+      case BoutResult.bothVfo:
+      case BoutResult.bothVin:
         return 'o.W.';
+      case BoutResult.bothDsq:
+        return 'DQ2';
     }
   }
 }
