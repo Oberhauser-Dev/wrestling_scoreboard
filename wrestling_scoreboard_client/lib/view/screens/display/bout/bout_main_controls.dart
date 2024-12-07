@@ -116,7 +116,10 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                 final boutResultValues = List.of(BoutResult.values);
                 if (pStatusOpponent == null) {
                   // Cannot select this option, as there is no opponent
-                  boutResultValues.remove(BoutResult.dsq2);
+                  boutResultValues.remove(BoutResult.bothDsq);
+                  boutResultValues.remove(BoutResult.bothVin);
+                  // Theoretically the other one does not show up or fails in weigh in, so don't remove the option:
+                  // boutResultValues.remove(BoutResult.bothVfo);
                 }
                 boutResultOptions.addAll(boutResultValues.map(
                   (BoutResult boutResult) {
@@ -145,14 +148,15 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
 
               return CustomDropdown<BoutResult>(
                 isNullable: true,
-                selected: role == widget.boutState.bout.winnerRole || widget.boutState.bout.result == BoutResult.dsq2
-                    ? widget.boutState.bout.result
-                    : null,
+                selected:
+                    role == widget.boutState.bout.winnerRole || (widget.boutState.bout.result?.affectsBoth() ?? false)
+                        ? widget.boutState.bout.result
+                        : null,
                 options: boutResultOptions,
                 onChange: (BoutResult? val) async {
                   final dataManager = await ref.read(dataManagerNotifierProvider);
                   var bout = widget.boutState.bout.copyWith(
-                    winnerRole: val != null && val != BoutResult.dsq2 ? role : null,
+                    winnerRole: val != null && !val.affectsBoth() ? role : null,
                     result: val,
                   );
                   bout = bout.updateClassificationPoints(actions, rules: widget.boutState.boutRules);

@@ -155,7 +155,19 @@ class Competition extends WrestlingEvent with _$Competition {
     ),
     BoutResultRule(
       boutConfig: defaultBoutConfig,
-      boutResult: BoutResult.dsq2,
+      boutResult: BoutResult.bothDsq,
+      winnerClassificationPoints: 0,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.bothVfo,
+      winnerClassificationPoints: 0,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.bothVin,
       winnerClassificationPoints: 0,
       loserClassificationPoints: 0,
     ),

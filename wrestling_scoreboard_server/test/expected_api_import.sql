@@ -73,7 +73,10 @@ CREATE TYPE public.bout_result AS ENUM (
     'vpo1',
     'vfo',
     'dsq',
-    'dsq2'
+    'dsq2',
+    'bothDsq',
+    'bothVfo',
+    'bothVin'
 );
 
 
@@ -1411,7 +1414,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 7	2	vpo	\N	\N	1	1	0
 8	2	vfo	\N	\N	\N	4	0
 9	2	dsq	\N	\N	\N	4	0
-10	2	dsq2	\N	\N	\N	0	0
 11	3	vfa	\N	\N	\N	4	0
 12	3	vin	\N	\N	\N	4	0
 13	3	vca	\N	\N	\N	4	0
@@ -1421,7 +1423,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 17	3	vpo	\N	\N	1	1	0
 18	3	vfo	\N	\N	\N	4	0
 19	3	dsq	\N	\N	\N	4	0
-20	3	dsq2	\N	\N	\N	0	0
 21	4	vfa	\N	\N	\N	4	0
 22	4	vin	\N	\N	\N	4	0
 23	4	vca	\N	\N	\N	4	0
@@ -1431,7 +1432,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 27	4	vpo	\N	\N	1	1	0
 28	4	vfo	\N	\N	\N	4	0
 29	4	dsq	\N	\N	\N	4	0
-30	4	dsq2	\N	\N	\N	0	0
 31	5	vfa	\N	\N	\N	4	0
 32	5	vin	\N	\N	\N	4	0
 33	5	vca	\N	\N	\N	4	0
@@ -1441,7 +1441,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 37	5	vpo	\N	\N	1	1	0
 38	5	vfo	\N	\N	\N	4	0
 39	5	dsq	\N	\N	\N	4	0
-40	5	dsq2	\N	\N	\N	0	0
 41	6	vfa	\N	\N	\N	4	0
 42	6	vin	\N	\N	\N	4	0
 43	6	vca	\N	\N	\N	4	0
@@ -1451,7 +1450,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 47	6	vpo	\N	\N	1	1	0
 48	6	vfo	\N	\N	\N	4	0
 49	6	dsq	\N	\N	\N	4	0
-50	6	dsq2	\N	\N	\N	0	0
 51	7	vfa	\N	\N	\N	4	0
 52	7	vin	\N	\N	\N	4	0
 53	7	vca	\N	\N	\N	4	0
@@ -1461,7 +1459,24 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 57	7	vpo	\N	\N	1	1	0
 58	7	vfo	\N	\N	\N	4	0
 59	7	dsq	\N	\N	\N	4	0
-60	7	dsq2	\N	\N	\N	0	0
+10	2	bothDsq	\N	\N	\N	0	0
+20	3	bothDsq	\N	\N	\N	0	0
+30	4	bothDsq	\N	\N	\N	0	0
+40	5	bothDsq	\N	\N	\N	0	0
+50	6	bothDsq	\N	\N	\N	0	0
+60	7	bothDsq	\N	\N	\N	0	0
+61	2	bothVfo	\N	\N	\N	0	0
+62	3	bothVfo	\N	\N	\N	0	0
+63	4	bothVfo	\N	\N	\N	0	0
+64	5	bothVfo	\N	\N	\N	0	0
+65	6	bothVfo	\N	\N	\N	0	0
+66	7	bothVfo	\N	\N	\N	0	0
+67	2	bothVin	\N	\N	\N	0	0
+68	3	bothVin	\N	\N	\N	0	0
+69	4	bothVin	\N	\N	\N	0	0
+70	5	bothVin	\N	\N	\N	0	0
+71	6	bothVin	\N	\N	\N	0	0
+72	7	bothVin	\N	\N	\N	0	0
 1	2	vfa	\N	\N	\N	4	0
 2	2	vin	\N	\N	\N	4	0
 3	2	vca	\N	\N	\N	4	0
@@ -1816,7 +1831,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.2.0-pre.8	0.0.0
+0.2.0-pre.9	0.0.0
 \.
 
 
@@ -2201,7 +2216,7 @@ SELECT pg_catalog.setval('public.bout_id_seq', 52, true);
 -- Name: bout_result_rule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 60, true);
+SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 72, true);
 
 
 --

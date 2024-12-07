@@ -241,7 +241,19 @@ void main() {
             ),
             BoutResultRule(
               boutConfig: config,
-              boutResult: BoutResult.dsq2,
+              boutResult: BoutResult.bothDsq,
+              winnerClassificationPoints: 0,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.bothVfo,
+              winnerClassificationPoints: 0,
+              loserClassificationPoints: 0,
+            ),
+            BoutResultRule(
+              boutConfig: config,
+              boutResult: BoutResult.bothVin,
               winnerClassificationPoints: 0,
               loserClassificationPoints: 0,
             ),
