@@ -399,8 +399,11 @@ class _MembershipDropdown extends ConsumerWidget {
           authService: authService,
           includeApiProviderResults: true,
         );
-        final providerMemberships =
+        Iterable<Membership> providerMemberships =
             providerResults[getTableNameFromType(Membership)]?.map((membership) => membership as Membership) ?? [];
+        // Remove all memberships, which are already in the list.
+        providerMemberships =
+            providerMemberships.where((m) => filteredMemberships.where((fm) => fm.no == m.no).isEmpty);
         filteredMemberships.addAll(providerMemberships);
       }
     }

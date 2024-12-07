@@ -368,16 +368,15 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     return memberships.toSet();
   }
 
-  Future<Membership?> _getMembership({
+  Future<Membership> _getMembership({
     required int passCode,
     required Future<Club?> Function(String clubId) getClub,
   }) async {
     final json = await _getSaisonWrestler(passCode: passCode);
-    if (json == null) return null;
     final wrestlerJson = json['wrestler'];
     final club = await getClub(wrestlerJson['clubId']);
     if (wrestlerJson == null || club == null) {
-      return null;
+      throw Exception('No field "wrestler" and/or "clubId" found for json:\n$json');
     }
     return Membership(
       club: club,
@@ -694,15 +693,16 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   Future<List<DataObject>> search({required String searchStr, required Type searchType}) async {
     switch (searchType) {
       case const (Membership):
-        final membership = await _getMembership(
-            passCode: int.parse(searchStr),
-            getClub: (clubId) async {
-              return await _getSingleBySyncId<Club>(clubId);
-            });
-        if (membership == null) {
-          throw Exception('Membership with search string "$searchStr" and type "$searchType" was not found.');
+        try {
+          final membership = await _getMembership(
+              passCode: int.parse(searchStr),
+              getClub: (clubId) async {
+                return await _getSingleBySyncId<Club>(clubId);
+              });
+          return [membership];
+        } catch (_) {
+          return [];
         }
-        return [membership];
       default:
         throw Exception('API provider search for type $searchType is not supported yet.');
     }
@@ -907,7 +907,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
   final Map<String, Map<String, dynamic>> cachedWrestlers = {};
 
-  Future<Map<String, dynamic>?> _getSaisonWrestler({
+  Future<Map<String, dynamic>> _getSaisonWrestler({
     required int passCode,
   }) async {
     final cacheId = 'p:$passCode';
@@ -932,7 +932,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         } else {
           body = getWrestlerJson(passCode);
         }
-        if (body == null) return null;
+        if (body == null) {
+          throw Exception('Response for the wrestler (passcode: $passCode) was null.');
+        }
         cachedWrestlers[cacheId] = jsonDecode(body);
         return cachedWrestlers[cacheId]!;
       },
