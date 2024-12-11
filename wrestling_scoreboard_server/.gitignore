@@ -10,3 +10,5 @@
 build/
 bin/server
 bin/wrestling-scoreboard-server*
+
+database/pitr

@@ -76,3 +76,11 @@ Export database, execute in directory `server`:
 ```shell
 pg_dump --dbname=wrestling_scoreboard --file=./database/dump/PostgreSQL-wrestling_scoreboard-dump.sql --schema=public --username=wrestling --host=localhost --port=5432
 ```
+
+### WAL / PITR
+
+Setup:
+`./database/scripts/setup-pitr.sh`
+
+Restore:
+`./database/scripts/restore-pitr.sh`
