@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
+import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -22,6 +23,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -178,33 +180,43 @@ class TeamMatchOverview extends ConsumerWidget {
                           ),
                         ]),
                     if (match.league != null)
-                      GroupedList(
-                        header: const HeadingItem(),
-                        items: [
-                          ContentItem(
-                              title: homeLineup.team.name,
-                              icon: Icons.view_list,
-                              onTap: () async => handleSelectedLineup(
-                                    context,
-                                    ref,
-                                    homeLineup,
-                                    match,
-                                    navigator,
-                                    league: match.league!,
-                                  )),
-                          ContentItem(
-                              title: guestLineup.team.name,
-                              icon: Icons.view_list,
-                              onTap: () async => handleSelectedLineup(
-                                    context,
-                                    ref,
-                                    guestLineup,
-                                    match,
-                                    navigator,
-                                    league: match.league!,
-                                  )),
-                        ],
-                      ),
+                      LoadingBuilder<User?>(
+                          future: ref.watch(userNotifierProvider),
+                          builder: (context, user) {
+                            return GroupedList(
+                              header: const HeadingItem(),
+                              items: [
+                                ContentItem(
+                                  title: homeLineup.team.name,
+                                  icon: Icons.view_list,
+                                  onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                      ? null
+                                      : () async => handleSelectedLineup(
+                                            context,
+                                            ref,
+                                            homeLineup,
+                                            match,
+                                            navigator,
+                                            league: match.league!,
+                                          ),
+                                ),
+                                ContentItem(
+                                  title: guestLineup.team.name,
+                                  icon: Icons.view_list,
+                                  onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                      ? null
+                                      : () async => handleSelectedLineup(
+                                            context,
+                                            ref,
+                                            guestLineup,
+                                            match,
+                                            navigator,
+                                            league: match.league!,
+                                          ),
+                                ),
+                              ],
+                            );
+                          }),
                     BoutList(filterObject: match),
                     GroupedList(
                       header: const HeadingItem(),
