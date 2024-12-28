@@ -113,20 +113,20 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
   }
 }
 
-Future<T?> showOkCancelDialog<T>({
+Future<bool> showOkCancelDialog({
   required BuildContext context,
   required Widget child,
-  required T Function() getResult,
   String? okText,
 }) async {
-  return await showDialog<T>(
-    context: context,
-    builder: (context) => OkCancelDialog<T>(
-      getResult: getResult,
-      okText: okText,
-      child: child,
-    ),
-  );
+  return (await showDialog<bool>(
+        context: context,
+        builder: (context) => OkCancelDialog<bool>(
+          getResult: () => true,
+          okText: okText,
+          child: child,
+        ),
+      )) ??
+      false;
 }
 
 Future<void> showExceptionDialog({
@@ -144,13 +144,15 @@ Future<void> showExceptionDialog({
       ),
     );
   }
-  await showOkCancelDialog(
+  await showDialog(
     context: context,
-    getResult: onRetry,
-    okText: AppLocalizations.of(context)!.retry,
-    child: ExceptionInfo(
-      exception,
-      stackTrace: stackTrace,
+    builder: (context) => OkCancelDialog<bool>(
+      getResult: () => onRetry(),
+      okText: AppLocalizations.of(context)!.retry,
+      child: ExceptionInfo(
+        exception,
+        stackTrace: stackTrace,
+      ),
     ),
   );
 }

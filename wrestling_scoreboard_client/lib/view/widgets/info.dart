@@ -11,6 +11,7 @@ class InfoWidget extends StatelessWidget {
   final List<Widget> children;
   final String classLocale;
   final VoidCallback onDelete;
+  final List<Widget> actions;
 
   const InfoWidget({
     required this.obj,
@@ -18,6 +19,7 @@ class InfoWidget extends StatelessWidget {
     required this.children,
     required this.classLocale,
     required this.onDelete,
+    this.actions = const [],
     super.key,
   });
 
@@ -30,6 +32,7 @@ class InfoWidget extends StatelessWidget {
           privilege: UserPrivilege.write,
           child: Wrap(
             children: [
+              ...actions,
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
@@ -44,12 +47,11 @@ class InfoWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () async {
-                  final confirmDelete = await showOkCancelDialog<bool>(
+                  final confirmDelete = await showOkCancelDialog(
                     context: context,
                     child: Text('${localizations.remove} $classLocale?'),
-                    getResult: () => true,
                   );
-                  if (confirmDelete == true && context.mounted) {
+                  if (confirmDelete && context.mounted) {
                     Navigator.of(context).pop();
                     onDelete();
                   }

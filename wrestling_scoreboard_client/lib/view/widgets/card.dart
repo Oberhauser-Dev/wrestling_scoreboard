@@ -28,12 +28,12 @@ class PaddedCard extends StatelessWidget {
 
 class IconCard extends StatelessWidget {
   final Widget icon;
-  final String text;
+  final Widget child;
 
-  const IconCard({required this.icon, required this.text, super.key});
+  const IconCard({required this.icon, required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PaddedCard(child: ListTile(leading: icon, title: Text(text)));
+    return PaddedCard(child: ListTile(leading: icon, title: child));
   }
 }

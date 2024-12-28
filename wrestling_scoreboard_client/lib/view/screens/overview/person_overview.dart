@@ -11,6 +11,8 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
@@ -49,6 +51,13 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
             (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person);
           },
           classLocale: classLocale,
+          actions: [
+            Restricted(
+              privilege: UserPrivilege.admin,
+              child: IconButton(
+                  onPressed: () => mergePersonDialog(context, ref, person: person), icon: const Icon(Icons.merge)),
+            ),
+          ],
           children: [
             ...?tiles,
             ContentItem(
@@ -127,7 +136,7 @@ class PersonOverview extends AbstractPersonOverview<Person> {
               person: person,
               initialOrganization: person.organization ?? initialOrganization,
             ),
-            onDelete: () async {},
+            onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person),
             buildRelations: (Person person) => {
               Tab(child: HeadingText(localizations.memberships)): ManyConsumer<Membership, Person>(
                 filterObject: person,
@@ -166,5 +175,76 @@ class PersonOverview extends AbstractPersonOverview<Person> {
 
   handleSelectedMembership(Membership membership, BuildContext context) {
     context.push('/${MembershipOverview.route}/${membership.id}');
+  }
+}
+
+Future<void> mergePersonDialog(BuildContext context, WidgetRef ref, {required Person person}) async {
+  await catchAsync(context, () async {
+    final personToMergeWith = await showDialog(
+      context: context,
+      builder: (context) => _MergePersonDialog(organization: person.organization!, pivotPerson: person),
+    );
+    if (personToMergeWith != null && context.mounted) {
+      final dataManager = await ref.read(dataManagerNotifierProvider);
+      // Use current person as first item, so it will be kept, as the current route needs to stay consistent
+      await dataManager.mergeObjects<Person>([person, personToMergeWith]);
+    }
+  });
+}
+
+class _MergePersonDialog extends ConsumerStatefulWidget {
+  final Organization organization;
+  final Person pivotPerson;
+
+  const _MergePersonDialog({required this.organization, required this.pivotPerson});
+
+  @override
+  ConsumerState<_MergePersonDialog> createState() => _MergePersonDialogState();
+}
+
+class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
+  late Future<List<Person>> _availablePersonsFuture;
+  Person? _mergePerson;
+
+  @override
+  void initState() {
+    _availablePersonsFuture = (() async {
+      final availablePersons = await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Organization>(
+        filterObject: widget.organization,
+      );
+      availablePersons.remove(widget.pivotPerson);
+      setState(() {
+        _mergePerson ??= availablePersons.where((ap) => ap.fullName == widget.pivotPerson.fullName).firstOrNull;
+      });
+      return availablePersons;
+    })();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return OkCancelDialog<Person?>(
+      getResult: () => _mergePerson,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(localizations.mergeObjectData),
+          SearchableDropdown<Person>(
+            icon: const Icon(Icons.person),
+            selectedItem: _mergePerson,
+            label: localizations.person,
+            context: context,
+            onChanged: (Person? value) => setState(() {
+              _mergePerson = value;
+            }),
+            itemAsString: (u) => '${u.fullName}, ${u.birthDate?.toDateString(context)}',
+            asyncItems: (String filter) async {
+              return await _availablePersonsFuture;
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

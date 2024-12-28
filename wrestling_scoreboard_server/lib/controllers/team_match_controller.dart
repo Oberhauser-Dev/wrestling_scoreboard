@@ -180,6 +180,46 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     return Response.ok('{"status": "success"}');
   }
 
+  Future<List<TeamMatch>> getByReferee(User? user, int id) async {
+    return await getMany(
+      conditions: ['referee_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<List<TeamMatch>> getByTranscriptWriter(User? user, int id) async {
+    return await getMany(
+      conditions: ['transcript_writer_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<List<TeamMatch>> getByTimeKeeper(User? user, int id) async {
+    return await getMany(
+      conditions: ['time_keeper_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<List<TeamMatch>> getByMatChairman(User? user, int id) async {
+    return await getMany(
+      conditions: ['mat_chairman_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<List<TeamMatch>> getByJudge(User? user, int id) async {
+    return await getMany(
+      conditions: ['judge_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {'comment': psql.Type.text};
