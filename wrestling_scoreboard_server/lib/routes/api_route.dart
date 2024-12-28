@@ -101,6 +101,7 @@ class ApiRoute {
         '/organization/<id|[0-9]+>/organizations', organizationController.requestChildOrganizations);
     router.restrictedGetOne('/organization/<id|[0-9]+>/divisions', organizationController.requestDivisions);
     router.restrictedGetOne('/organization/<id|[0-9]+>/clubs', organizationController.requestClubs);
+    router.restrictedGetOne('/organization/<id|[0-9]+>/persons', organizationController.requestPersons);
     router.restrictedGetOne('/organization/<id|[0-9]+>/competitions', organizationController.requestCompetitions);
 
     final divisionController = DivisionController();
