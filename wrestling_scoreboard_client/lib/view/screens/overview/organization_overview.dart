@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
@@ -81,6 +83,7 @@ class OrganizationOverview extends ConsumerWidget {
             Tab(child: HeadingText(localizations.divisions)),
             Tab(child: HeadingText(localizations.clubs)),
             Tab(child: HeadingText(localizations.competitions)),
+            Tab(child: HeadingText(localizations.persons)),
             Tab(child: HeadingText('${localizations.sub}-${localizations.organizations}')),
           ],
           body: TabGroup(items: [
@@ -184,6 +187,38 @@ class OrganizationOverview extends ConsumerWidget {
                 );
               },
             ),
+            ManyConsumer<Person, Organization>(
+              filterObject: data,
+              builder: (BuildContext context, List<Person> persons) {
+                persons.sort((a, b) => a.fullName.compareTo(b.fullName));
+                return GroupedList(
+                  header: HeadingItem(
+                    trailing: RestrictedAddButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PersonEdit(
+                            initialOrganization: data,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  items: persons.map(
+                    (e) => SingleConsumer<Person>(
+                        id: e.id,
+                        initialData: e,
+                        builder: (context, data) {
+                          return ContentItem(
+                            title: data.fullName,
+                            icon: Icons.person,
+                            onTap: () => handleSelectedPerson(data, context),
+                          );
+                        }),
+                  ),
+                );
+              },
+            ),
             ManyConsumer<Organization, Organization>(
               filterObject: data,
               builder: (BuildContext context, List<Organization> childOrganizations) {
@@ -231,6 +266,10 @@ class OrganizationOverview extends ConsumerWidget {
 
   handleSelectedClub(Club club, BuildContext context) {
     context.push('/${ClubOverview.route}/${club.id}');
+  }
+
+  handleSelectedPerson(Person person, BuildContext context) {
+    context.push('/${PersonOverview.route}/${person.id}');
   }
 
   handleSelectedCompetition(Competition competition, BuildContext context) {

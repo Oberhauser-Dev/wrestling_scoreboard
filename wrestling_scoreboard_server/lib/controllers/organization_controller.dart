@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_server/controllers/division_weight_class_co
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
@@ -40,6 +41,15 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
 
   Future<Response> requestClubs(Request request, User? user, String id) async {
     return ClubController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['organization_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<Response> requestPersons(Request request, User? user, String id) async {
+    return PersonController().handleRequestMany(
       isRaw: request.isRaw,
       conditions: ['organization_id = @id'],
       substitutionValues: {'id': id},
