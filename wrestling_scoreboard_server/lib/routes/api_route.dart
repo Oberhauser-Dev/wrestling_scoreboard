@@ -168,6 +168,7 @@ class ApiRoute {
     final personController = PersonController();
     router.restrictedPost('/person', personController.postSingle);
     router.restrictedGet('/persons', personController.requestMany);
+    router.restrictedPost('/persons/merge', personController.postMerge);
     router.restrictedGetOne('/person/<id|[0-9]+>', personController.requestSingle);
     router.restrictedGetOne('/person/<id|[0-9]+>/memberships', personController.requestMemberships);
 

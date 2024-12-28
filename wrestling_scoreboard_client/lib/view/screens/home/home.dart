@@ -121,7 +121,6 @@ class HomeState extends ConsumerState<Home> {
                 final localizations = AppLocalizations.of(context)!;
                 final removeItem = await showOkCancelDialog(
                   okText: localizations.remove,
-                  getResult: () => true,
                   context: context,
                   child: Column(
                     children: [
@@ -133,7 +132,7 @@ class HomeState extends ConsumerState<Home> {
                     ],
                   ),
                 );
-                if (removeItem == true) {
+                if (removeItem) {
                   final notifier = ref.read(favoritesNotifierProvider.notifier);
                   notifier.removeFavorite(getTableNameFromType(T), id);
                 }

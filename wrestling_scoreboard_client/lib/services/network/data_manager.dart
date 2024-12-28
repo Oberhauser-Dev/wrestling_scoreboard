@@ -72,6 +72,8 @@ abstract class DataManager implements AuthManager {
   /// DELETE: delete a single object
   Future<void> deleteSingle<T extends DataObject>(T single);
 
+  Future<void> mergeObjects<T extends DataObject>(List<T> objects);
+
   /// CREATE: generate bouts of a wrestling event
   /// If [isReset] is true, then delete all previous Bouts and TeamMatchBouts, else reuse the states.
   Future<void> generateBouts<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);

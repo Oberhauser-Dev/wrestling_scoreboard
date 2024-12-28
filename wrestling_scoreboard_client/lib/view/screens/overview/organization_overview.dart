@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/person_overvie
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -191,6 +193,11 @@ class OrganizationOverview extends ConsumerWidget {
               filterObject: data,
               builder: (BuildContext context, List<Person> persons) {
                 persons.sort((a, b) => a.fullName.compareTo(b.fullName));
+                final duplicatePersons = persons
+                    .groupListsBy((element) => element.fullName)
+                    .entries
+                    .where((entry) => entry.value.length > 1);
+
                 return GroupedList(
                   header: HeadingItem(
                     trailing: RestrictedAddButton(
@@ -204,18 +211,36 @@ class OrganizationOverview extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  items: persons.map(
-                    (e) => SingleConsumer<Person>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.fullName,
-                            icon: Icons.person,
-                            onTap: () => handleSelectedPerson(data, context),
-                          );
-                        }),
-                  ),
+                  items: [
+                    if (duplicatePersons.isNotEmpty)
+                      Restricted(
+                          child: IconCard(
+                        icon: const Icon(Icons.warning),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text('Following persons have the same name, are they duplicates?'),
+                            ...duplicatePersons.map((e) => ListTile(
+                                  title: Text('${e.key} (${e.value.length})'),
+                                  // Use most up to date entry (last) as base merge object
+                                  onTap: () => handleSelectedPerson(e.value.last, context),
+                                )),
+                          ],
+                        ),
+                      )),
+                    ...persons.map(
+                      (e) => SingleConsumer<Person>(
+                          id: e.id,
+                          initialData: e,
+                          builder: (context, data) {
+                            return ContentItem(
+                              title: data.fullName,
+                              icon: Icons.person,
+                              onTap: () => handleSelectedPerson(data, context),
+                            );
+                          }),
+                    )
+                  ],
                 );
               },
             ),

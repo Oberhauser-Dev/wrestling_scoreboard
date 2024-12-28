@@ -126,10 +126,9 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         onSubmit: () async {
           final hasConfirmed = await showOkCancelDialog(
             context: context,
-            getResult: () => true,
             child: Text(localizations.warningBoutGenerate),
           );
-          if (hasConfirmed == true && context.mounted) {
+          if (hasConfirmed && context.mounted) {
             await catchAsync(context, () => handleSubmit(navigator, onSubmitGenerate: widget.onSubmitGenerate));
           }
         },
@@ -164,7 +163,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
         items: [
           ListTile(title: HeadingText(widget.lineup.team.name)),
           if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
-            IconCard(icon: const Icon(Icons.warning), text: localizations.warningPrefilledLineup),
+            IconCard(icon: const Icon(Icons.warning), child: Text(localizations.warningPrefilledLineup)),
           ListTile(
             title: _MembershipDropdown(
               label: localizations.leader,

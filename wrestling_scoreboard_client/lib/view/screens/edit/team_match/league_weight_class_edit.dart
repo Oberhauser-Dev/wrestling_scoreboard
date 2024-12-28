@@ -35,7 +35,7 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return buildEdit(context, id: widget.leagueWeightClass?.id, classLocale: localizations.weightClass, fields: [
-      IconCard(icon: const Icon(Icons.info), text: localizations.infoUseDivisionWeightClass),
+      IconCard(icon: const Icon(Icons.info), child: Text(localizations.infoUseDivisionWeightClass)),
       ListTile(
         leading: const Icon(Icons.format_list_numbered),
         title: TextFormField(

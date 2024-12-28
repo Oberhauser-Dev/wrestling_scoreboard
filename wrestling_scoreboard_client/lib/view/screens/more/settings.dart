@@ -366,9 +366,8 @@ class CustomSettingsScreen extends ConsumerWidget {
                     final result = await showOkCancelDialog(
                       context: context,
                       child: Text(localizations.warningOverrideDatabase),
-                      getResult: () => true,
                     );
-                    if (result == true && context.mounted) {
+                    if (result && context.mounted) {
                       final dataManager = await ref.read(dataManagerNotifierProvider);
                       await dataManager.resetDatabase();
                       if (context.mounted) {
@@ -384,9 +383,8 @@ class CustomSettingsScreen extends ConsumerWidget {
                     final result = await showOkCancelDialog(
                       context: context,
                       child: Text(localizations.warningOverrideDatabase),
-                      getResult: () => true,
                     );
-                    if (result == true && context.mounted) {
+                    if (result && context.mounted) {
                       final dataManager = await ref.read(dataManagerNotifierProvider);
                       await dataManager.restoreDefaultDatabase();
                       if (context.mounted) {

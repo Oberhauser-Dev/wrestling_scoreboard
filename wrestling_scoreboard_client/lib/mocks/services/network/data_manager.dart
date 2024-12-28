@@ -529,6 +529,12 @@ class MockDataManager extends DataManager {
     // TODO: implement changePassword
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> mergeObjects<T extends DataObject>(List<T> objects) {
+    // TODO: implement mergeObjects
+    throw UnimplementedError();
+  }
 }
 
 class MockWebSocketManager implements WebSocketManager {

@@ -97,6 +97,7 @@
   "saveAndGenerate": "Save & Generate",
   "add": "Add",
   "addExisting": "Add existing",
+  "mergeObjectData": "Merge Object Data",
   "remove": "Remove",
   "previous": "Previous",
   "next": "Next",

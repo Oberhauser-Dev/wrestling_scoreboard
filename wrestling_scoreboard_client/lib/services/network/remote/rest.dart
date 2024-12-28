@@ -109,6 +109,19 @@ class RestDataManager extends DataManager {
   }
 
   @override
+  Future<void> mergeObjects<T extends DataObject>(List<T> objects) async {
+    final body = jsonEncode(manyToJson(objects, T, CRUD.update, isRaw: false));
+    final uri = Uri.parse('$_apiUrl/${getTableNameFromType(T)}s/merge');
+    final response = await http.post(uri, headers: _headers, body: body);
+
+    if (response.statusCode < 400) {
+      return jsonDecode(response.body);
+    } else {
+      throw RestException('Failed to merge objects ${getTableNameFromType(T)}', response: response);
+    }
+  }
+
+  @override
   Future<Migration> getMigration() async {
     final uri = Uri.parse('$_apiUrl/database/migration');
     final response = await http.get(uri, headers: _headers);
