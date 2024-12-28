@@ -21,10 +21,12 @@ class ObservableStopwatch extends Stopwatch {
   Duration _prevDuration = Duration();
   Duration? limit;
   final Duration tick;
+  final bool roundToUnit;
 
   ObservableStopwatch({
     this.limit,
     this.tick = const Duration(milliseconds: 30),
+    this.roundToUnit = true,
   });
 
   @override
@@ -55,13 +57,17 @@ class ObservableStopwatch extends Stopwatch {
   void _handleTick() {
     final elapsed = this.elapsed;
     onChange.add(elapsed);
-    if (elapsed.inSeconds != _prevDuration.inSeconds) {
-      onChangeSecond.add(this.elapsed);
-      if (elapsed.inMinutes != _prevDuration.inMinutes) onChangeMinute.add(this.elapsed);
+    final inSeconds = elapsed.inSeconds;
+    if (inSeconds != _prevDuration.inSeconds) {
+      onChangeSecond.add(roundToUnit ? Duration(seconds: inSeconds) : elapsed);
+      final inMinutes = elapsed.inMinutes;
+      if (inMinutes != _prevDuration.inMinutes) {
+        onChangeMinute.add(roundToUnit ? Duration(minutes: inMinutes) : elapsed);
+      }
     }
     if (hasEnded) {
       stop();
-      onEnd.add(this.elapsed);
+      onEnd.add(elapsed);
     }
     _prevDuration = elapsed;
   }
