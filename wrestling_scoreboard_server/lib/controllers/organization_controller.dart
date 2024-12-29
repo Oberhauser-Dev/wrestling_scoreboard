@@ -57,6 +57,14 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     );
   }
 
+  Future<List<Person>> getPersons(User? user, int id) async {
+    return await PersonController().getMany(
+      conditions: ['organization_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
   Future<Response> requestCompetitions(Request request, User? user, String id) async {
     return CompetitionController().handleRequestMany(
       isRaw: request.isRaw,
