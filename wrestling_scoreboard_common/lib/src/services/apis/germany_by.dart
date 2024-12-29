@@ -737,7 +737,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           log.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri));
+          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the season list', response: response);
           }
@@ -771,7 +771,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           log.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri));
+          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the saison list', response: response);
           }
@@ -807,7 +807,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           log.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri));
+          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the liga list (seasonId: $seasonId)', response: response);
           }
@@ -850,7 +850,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           log.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri));
+          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException(
                 'Failed to get the competition list (seasonId: $seasonId, ligaId: $ligaId, rid: $regionId)',
@@ -892,7 +892,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           log.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri));
+          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the competition (seasonId: $seasonId, competitionId: $competitionId)',
                 response: response);
