@@ -214,20 +214,33 @@ class OrganizationOverview extends ConsumerWidget {
                   items: [
                     if (duplicatePersons.isNotEmpty)
                       Restricted(
-                          child: IconCard(
-                        icon: const Icon(Icons.warning),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text('Following persons have the same name, are they duplicates?'),
-                            ...duplicatePersons.map((e) => ListTile(
-                                  title: Text('${e.key} (${e.value.length})'),
-                                  // Use most up to date entry (last) as base merge object
-                                  onTap: () => handleSelectedPerson(e.value.last, context),
-                                )),
-                          ],
-                        ),
-                      )),
+                          privilege: UserPrivilege.admin,
+                          child: PaddedCard(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.warning),
+                                const Text('Following persons have the same name, are they duplicates?'),
+                                ...duplicatePersons.map((similarPersons) => ListTile(
+                                      title: Text('${similarPersons.key} (${similarPersons.value.length})'),
+                                      trailing: IconButton(
+                                        tooltip: localizations.mergeObjectData,
+                                        onPressed: () =>
+                                            mergePersonsDialog(context, ref, persons: similarPersons.value),
+                                        icon: const Icon(Icons.merge),
+                                      ),
+                                      // Use most up to date entry (last) as base merge object
+                                      onTap: () => handleSelectedPerson(similarPersons.value.last, context),
+                                    )),
+                                TextButton.icon(
+                                  onPressed: () => mergeAllPersonsDialog(context, ref,
+                                      allPersons: duplicatePersons.map((e) => e.value)),
+                                  icon: const Icon(Icons.merge),
+                                  label: const Text('Merge ALL'),
+                                ),
+                              ],
+                            ),
+                          )),
                     ...persons.map(
                       (e) => SingleConsumer<Person>(
                           id: e.id,

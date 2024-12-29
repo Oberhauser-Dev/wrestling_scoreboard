@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -55,7 +56,10 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
             Restricted(
               privilege: UserPrivilege.admin,
               child: IconButton(
-                  onPressed: () => mergePersonDialog(context, ref, person: person), icon: const Icon(Icons.merge)),
+                tooltip: localizations.mergeObjectData,
+                onPressed: () => mergePersonDialog(context, ref, person: person),
+                icon: const Icon(Icons.merge),
+              ),
             ),
           ],
           children: [
@@ -192,6 +196,42 @@ Future<void> mergePersonDialog(BuildContext context, WidgetRef ref, {required Pe
   });
 }
 
+Future<void> mergePersonsDialog(BuildContext context, WidgetRef ref, {required List<Person> persons}) async {
+  await catchAsync(context, () async {
+    final confirmed = await showOkCancelDialog(
+      context: context,
+      child: Text('Are you sure to merge instances of "${persons.first.fullName}"?\n'
+          'This action changes all dependent dependent data, such as Memberships.'),
+    );
+    if (confirmed && context.mounted) {
+      final dataManager = await ref.read(dataManagerNotifierProvider);
+      await dataManager.mergeObjects<Person>(persons);
+    }
+  });
+}
+
+Future<void> mergeAllPersonsDialog(
+  BuildContext context,
+  WidgetRef ref, {
+  required Iterable<List<Person>> allPersons,
+}) async {
+  final confirmed = await showOkCancelDialog(
+    context: context,
+    child: const Text('Are you sure to merge instances of ALL persons?\n'
+        'This action changes all dependent dependent data, such as Memberships.'),
+  );
+  if (confirmed) {
+    final dataManager = await ref.read(dataManagerNotifierProvider);
+    for (final persons in allPersons) {
+      if (context.mounted) {
+        await catchAsync(context, () async {
+          await dataManager.mergeObjects<Person>(persons);
+        });
+      }
+    }
+  }
+}
+
 class _MergePersonDialog extends ConsumerStatefulWidget {
   final Organization organization;
   final Person pivotPerson;
@@ -226,25 +266,29 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
     final localizations = AppLocalizations.of(context)!;
     return OkCancelDialog<Person?>(
       getResult: () => _mergePerson,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(localizations.mergeObjectData),
-          SearchableDropdown<Person>(
-            icon: const Icon(Icons.person),
-            selectedItem: _mergePerson,
-            label: localizations.person,
-            context: context,
-            onChanged: (Person? value) => setState(() {
-              _mergePerson = value;
-            }),
-            itemAsString: (u) => '${u.fullName}, ${u.birthDate?.toDateString(context)}',
-            asyncItems: (String filter) async {
-              return await _availablePersonsFuture;
-            },
-          ),
-        ],
-      ),
+      child: LoadingBuilder(
+          future: _availablePersonsFuture,
+          builder: (context, data) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(localizations.mergeObjectData),
+                SearchableDropdown<Person>(
+                  icon: const Icon(Icons.person),
+                  selectedItem: _mergePerson,
+                  label: localizations.person,
+                  context: context,
+                  onChanged: (Person? value) => setState(() {
+                    _mergePerson = value;
+                  }),
+                  itemAsString: (u) => '${u.fullName}, ${u.birthDate?.toDateString(context)}',
+                  asyncItems: (String filter) async {
+                    return data;
+                  },
+                ),
+              ],
+            );
+          }),
     );
   }
 }

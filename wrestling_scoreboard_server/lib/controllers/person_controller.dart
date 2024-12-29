@@ -7,9 +7,11 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
 final _logger = Logger('PersonController');
@@ -42,31 +44,39 @@ class PersonController extends OrganizationalController<Person> {
       var keepPerson = many.first;
       final deletePersons = many.sublist(1);
 
-      final keptMemberships = await getMemberships(user, keepPerson.id!);
+      final keepMemberships = await getMemberships(user, keepPerson.id!);
 
       for (final deletePerson in deletePersons) {
-        final memberships = await getMemberships(user, deletePerson.id!);
-        for (final membership in memberships) {
-          final keptMembership = keptMemberships.where(
-              (m) => m.club == membership.club && m.no == membership.no && m.organization == membership.organization);
-          if (keptMembership.isNotEmpty) {
+        final deleteMemberships = await getMemberships(user, deletePerson.id!);
+        for (final deleteMembership in deleteMemberships) {
+          final replacingMembership = keepMemberships
+              .where((m) => m.club == deleteMembership.club && m.organization == deleteMembership.organization)
+              .firstOrNull;
+          if (replacingMembership != null) {
+            if (replacingMembership.no != null &&
+                deleteMembership.no != null &&
+                replacingMembership.no != deleteMembership.no) {
+              _logger.warning(
+                  'Replacing Membership ${deleteMembership.id} (${deleteMembership.no}) with ${replacingMembership.id} (${replacingMembership.no}) lead to a different club number.');
+            }
+
             // Update deleted memberships
             final lnc = LineupController();
-            final lineupsByLeader = await lnc.getByLeader(user, membership.id!);
-            await Future.wait(lineupsByLeader.map((e) => lnc.updateSingle(e.copyWith(leader: keptMembership.first))));
+            final lineupsByLeader = await lnc.getByLeader(user, deleteMembership.id!);
+            await Future.wait(lineupsByLeader.map((e) => lnc.updateSingle(e.copyWith(leader: replacingMembership))));
 
-            final lineupsByCoach = await lnc.getByCoach(user, membership.id!);
-            await Future.wait(lineupsByCoach.map((e) => lnc.updateSingle(e.copyWith(coach: keptMembership.first))));
+            final lineupsByCoach = await lnc.getByCoach(user, deleteMembership.id!);
+            await Future.wait(lineupsByCoach.map((e) => lnc.updateSingle(e.copyWith(coach: replacingMembership))));
 
-            final participations = await ParticipationController().getByMembership(user, membership.id!);
+            final participations = await ParticipationController().getByMembership(user, deleteMembership.id!);
             await Future.wait(participations
-                .map((e) => ParticipationController().updateSingle(e.copyWith(membership: keptMembership.first))));
+                .map((e) => ParticipationController().updateSingle(e.copyWith(membership: replacingMembership))));
 
-            final wasDeleted = await deleteSingle(membership.id!);
-            if (!wasDeleted) return Response.badRequest(body: 'Membership ${membership.id} could not be deleted');
+            final wasDeleted = await MembershipController().deleteSingle(deleteMembership.id!);
+            if (!wasDeleted) return Response.badRequest(body: 'Membership ${deleteMembership.id} could not be deleted');
           } else {
             // Keep if membership doesn't exist yet
-            await MembershipController().updateSingle(membership.copyWith(person: keepPerson));
+            await MembershipController().updateSingle(deleteMembership.copyWith(person: keepPerson));
           }
         }
         // TODO: Referenced by CompetitionPerson
@@ -102,6 +112,11 @@ class PersonController extends OrganizationalController<Person> {
       }
 
       await updateSingle(keepPerson);
+
+      // Update list of persons for its organization
+      broadcast((obfuscate) async => jsonEncode(manyToJson(
+          await OrganizationController().getPersons(user, keepPerson.organization!.id!), Person, CRUD.update,
+          isRaw: false, filterType: Organization, filterId: keepPerson.organization!.id)));
 
       return Response.ok('{"status": "success"}');
     } on FormatException catch (e) {

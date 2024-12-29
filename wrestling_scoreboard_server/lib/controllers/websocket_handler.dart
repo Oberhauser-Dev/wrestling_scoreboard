@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
@@ -149,7 +150,18 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterId: single.lineup.id)));
   } else if (single is ParticipantState) {
   } else if (single is Person) {
-    // No filtered list needs to be handled.
+    if (single.organization != null) {
+      broadcast((obfuscate) async => jsonEncode(manyToJson(
+          await PersonController().getMany(
+              conditions: ['organization_id = @id'],
+              substitutionValues: {'id': single.organization!.id},
+              obfuscate: obfuscate),
+          Person,
+          CRUD.update,
+          isRaw: false,
+          filterType: Organization,
+          filterId: single.organization!.id)));
+    }
   } else if (single is SecuredUser) {
     // SpecialCase: the full User list has to be updated with no filter, shouldn't occur often
     // TODO: Don't broadcast to people with no admin access
@@ -334,7 +346,18 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterId: single['lineup_id'])));
   } else if (T == ParticipantState) {
   } else if (T == Person) {
-    // No filtered list needs to be handled.
+    if (single['organization_id'] != null) {
+      broadcast((obfuscate) async => jsonEncode(manyToJson(
+          await PersonController().getManyRaw(
+              conditions: ['organization_id = @id'],
+              substitutionValues: {'id': single['organization_id']},
+              obfuscate: obfuscate),
+          Person,
+          CRUD.update,
+          isRaw: true,
+          filterType: Organization,
+          filterId: single['organization_id'])));
+    }
   } else if (T == SecuredUser) {
   } else if (T == Team) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
