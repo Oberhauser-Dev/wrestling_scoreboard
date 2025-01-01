@@ -48,6 +48,7 @@ class MembershipController extends OrganizationalController<Membership> {
   @override
   Map<String, dynamic> obfuscate(Map<String, dynamic> raw) {
     raw['no'] = null;
+    raw['org_sync_id'] = null;
     return raw;
   }
 }
