@@ -6,6 +6,7 @@ String localizeType(BuildContext context, Type type) {
   final localizations = AppLocalizations.of(context)!;
   return switch (type) {
     const (Bout) => localizations.bouts,
+    const (CompetitionBout) => '${localizations.bouts} (${localizations.competition})',
     const (Club) => localizations.clubs,
     const (Organization) => localizations.organizations,
     const (Division) => localizations.divisions,
@@ -17,7 +18,7 @@ String localizeType(BuildContext context, Type type) {
     const (Person) => localizations.persons,
     const (Team) => localizations.teams,
     const (TeamMatch) => localizations.matches,
-    const (TeamMatchBout) => localizations.bouts,
+    const (TeamMatchBout) => '${localizations.bouts} (${localizations.league})',
     const (WeightClass) => localizations.weightClasses,
     const (BoutAction) => localizations.actions,
     const (Participation) => localizations.participations,

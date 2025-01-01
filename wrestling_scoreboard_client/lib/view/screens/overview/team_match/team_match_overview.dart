@@ -126,6 +126,38 @@ class TeamMatchOverview extends ConsumerWidget {
                 id: match.guest.id!,
                 initialData: match.guest,
                 builder: (context, guestLineup) {
+                  final contentItems = [
+                    ContentItem(
+                      title: match.referee?.fullName ?? '-',
+                      subtitle: localizations.referee,
+                      icon: Icons.sports,
+                    ),
+                    ContentItem(
+                      title: match.matChairman?.fullName ?? '-',
+                      subtitle: localizations.matChairman,
+                      icon: Icons.manage_accounts,
+                    ),
+                    ContentItem(
+                      title: match.judge?.fullName ?? '-',
+                      subtitle: localizations.judge,
+                      icon: Icons.manage_accounts,
+                    ),
+                    ContentItem(
+                      title: match.timeKeeper?.fullName ?? '-',
+                      subtitle: localizations.timeKeeper,
+                      icon: Icons.pending_actions,
+                    ),
+                    ContentItem(
+                      title: match.transcriptWriter?.fullName ?? '-',
+                      subtitle: localizations.transcriptionWriter,
+                      icon: Icons.history_edu,
+                    ),
+                    ContentItem(
+                      title: '-', // TODO: Multiple stewards
+                      subtitle: localizations.steward,
+                      icon: Icons.security,
+                    ),
+                  ];
                   final items = [
                     InfoWidget(
                         obj: match,
@@ -183,75 +215,47 @@ class TeamMatchOverview extends ConsumerWidget {
                       LoadingBuilder<User?>(
                           future: ref.watch(userNotifierProvider),
                           builder: (context, user) {
+                            final items = [
+                              ContentItem(
+                                title: homeLineup.team.name,
+                                icon: Icons.view_list,
+                                onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                    ? null
+                                    : () async => handleSelectedLineup(
+                                          context,
+                                          ref,
+                                          homeLineup,
+                                          match,
+                                          navigator,
+                                          league: match.league!,
+                                        ),
+                              ),
+                              ContentItem(
+                                title: guestLineup.team.name,
+                                icon: Icons.view_list,
+                                onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                    ? null
+                                    : () async => handleSelectedLineup(
+                                          context,
+                                          ref,
+                                          guestLineup,
+                                          match,
+                                          navigator,
+                                          league: match.league!,
+                                        ),
+                              ),
+                            ];
                             return GroupedList(
                               header: const HeadingItem(),
-                              items: [
-                                ContentItem(
-                                  title: homeLineup.team.name,
-                                  icon: Icons.view_list,
-                                  onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                      ? null
-                                      : () async => handleSelectedLineup(
-                                            context,
-                                            ref,
-                                            homeLineup,
-                                            match,
-                                            navigator,
-                                            league: match.league!,
-                                          ),
-                                ),
-                                ContentItem(
-                                  title: guestLineup.team.name,
-                                  icon: Icons.view_list,
-                                  onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                      ? null
-                                      : () async => handleSelectedLineup(
-                                            context,
-                                            ref,
-                                            guestLineup,
-                                            match,
-                                            navigator,
-                                            league: match.league!,
-                                          ),
-                                ),
-                              ],
+                              itemCount: items.length,
+                              itemBuilder: (context, index) => items[index],
                             );
                           }),
                     BoutList(filterObject: match),
                     GroupedList(
                       header: const HeadingItem(),
-                      items: [
-                        ContentItem(
-                          title: match.referee?.fullName ?? '-',
-                          subtitle: localizations.referee,
-                          icon: Icons.sports,
-                        ),
-                        ContentItem(
-                          title: match.matChairman?.fullName ?? '-',
-                          subtitle: localizations.matChairman,
-                          icon: Icons.manage_accounts,
-                        ),
-                        ContentItem(
-                          title: match.judge?.fullName ?? '-',
-                          subtitle: localizations.judge,
-                          icon: Icons.manage_accounts,
-                        ),
-                        ContentItem(
-                          title: match.timeKeeper?.fullName ?? '-',
-                          subtitle: localizations.timeKeeper,
-                          icon: Icons.pending_actions,
-                        ),
-                        ContentItem(
-                          title: match.transcriptWriter?.fullName ?? '-',
-                          subtitle: localizations.transcriptionWriter,
-                          icon: Icons.history_edu,
-                        ),
-                        ContentItem(
-                          title: '-', // TODO: Multiple stewards
-                          subtitle: localizations.steward,
-                          icon: Icons.security,
-                        ),
-                      ],
+                      itemCount: contentItems.length,
+                      itemBuilder: (context, index) => contentItems[index],
                     ),
                   ];
                   return TabGroup(items: items);

@@ -39,42 +39,40 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
             ),
           ),
           initialItemIndex: firstFutureMatchIndex >= 0 ? firstFutureMatchIndex : (math.max(matches.length - 1, 0)),
-          items: matches.map(
-            (e) => SingleConsumer<TeamMatch>(
-              id: e.id!,
-              initialData: e,
-              builder: (context, match) {
-                return ListTile(
-                  title: Text.rich(
-                    style: match.date.compareTo(today) < 0 ? TextStyle(color: Theme.of(context).disabledColor) : null,
-                    TextSpan(
-                      text: '${match.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
-                      children: [
-                        TextSpan(
-                            text: match.home.team.name,
-                            style: filterObject is! Team || match.home.team == filterObject
-                                ? TextStyle(
-                                    color: Colors.red, fontWeight: filterObject is! Team ? null : FontWeight.bold)
-                                : null),
-                        const TextSpan(text: ' - '),
-                        TextSpan(
-                            text: match.guest.team.name,
-                            style: filterObject is! Team || match.guest.team == filterObject
-                                ? TextStyle(
-                                    color: Colors.blue, fontWeight: filterObject is! Team ? null : FontWeight.bold)
-                                : null),
-                      ],
-                    ),
+          itemCount: matches.length,
+          itemBuilder: (context, index) => SingleConsumer<TeamMatch>(
+            id: matches[index].id!,
+            initialData: matches[index],
+            builder: (context, match) {
+              return ListTile(
+                title: Text.rich(
+                  style: match.date.compareTo(today) < 0 ? TextStyle(color: Theme.of(context).disabledColor) : null,
+                  TextSpan(
+                    text: '${match.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
+                    children: [
+                      TextSpan(
+                          text: match.home.team.name,
+                          style: filterObject is! Team || match.home.team == filterObject
+                              ? TextStyle(color: Colors.red, fontWeight: filterObject is! Team ? null : FontWeight.bold)
+                              : null),
+                      const TextSpan(text: ' - '),
+                      TextSpan(
+                          text: match.guest.team.name,
+                          style: filterObject is! Team || match.guest.team == filterObject
+                              ? TextStyle(
+                                  color: Colors.blue, fontWeight: filterObject is! Team ? null : FontWeight.bold)
+                              : null),
+                    ],
                   ),
-                  leading: const Icon(Icons.event),
-                  onTap: () => handleSelectedMatch(match, context),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.tv),
-                    onPressed: () => handleSelectedMatchSequence(match, context),
-                  ),
-                );
-              },
-            ),
+                ),
+                leading: const Icon(Icons.event),
+                onTap: () => handleSelectedMatch(match, context),
+                trailing: IconButton(
+                  icon: const Icon(Icons.tv),
+                  onPressed: () => handleSelectedMatchSequence(match, context),
+                ),
+              );
+            },
           ),
         );
       },

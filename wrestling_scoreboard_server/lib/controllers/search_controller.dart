@@ -27,30 +27,41 @@ class SearchController {
               'Searching the API provider without specifying a type, the organization and a search string is not supported!');
     }
 
-    final Map<Type, Set<String>> searchTypeMap;
+    final Set<Type> searchTypes;
     if (!searchAllTypes) {
       final querySearchType = getTypeFromTableName(querySearchTypeStr);
       final searchableAttr = searchableDataTypes[querySearchType];
-      searchTypeMap = {if (searchableAttr != null) querySearchType: searchableAttr};
+      searchTypes = {if (searchableAttr != null) querySearchType};
     } else {
-      // All searchable types
-      searchTypeMap = searchableDataTypes;
+      // All searchable types, but avoid expensive searches
+      searchTypes = searchableDataTypes.keys.toSet()
+        ..remove(Bout)
+        ..remove(CompetitionBout)
+        ..remove(Membership)
+        ..remove(TeamMatch)
+        ..remove(TeamMatchBout);
+
+      if (searchOrganizationId != null) {
+        // Remove non-organizational classes, but to do it dynamically we have to know, which Type does not not inherit (Organizational).
+        // So we do it manually
+        searchTypes
+          ..remove(Organization)
+          ..remove(WeightClass);
+      }
     }
 
     try {
       final raw = request.isRaw;
       List<Map<String, dynamic>> manyJsonList = [];
-      for (final searchTypeEntry in searchTypeMap.entries) {
-        final searchType = searchTypeEntry.key;
+      for (final searchType in searchTypes) {
         final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
         if (isValidLikeSearch) {
-          final searchableAttributes = searchTypeEntry.value;
           manyJson = await entityController?.getManyJsonLike(
             raw,
             likeParam,
             organizationId: searchOrganizationId,
-            searchableAttributes: searchableAttributes,
+            searchType: searchType,
             obfuscate: obfuscate,
           );
           if (!searchAllTypes && useProvider && searchOrganizationId != null) {

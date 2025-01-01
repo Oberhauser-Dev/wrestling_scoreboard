@@ -54,4 +54,10 @@ class TeamMatchBout with _$TeamMatchBout implements DataObject, Organizational {
   TeamMatchBout copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {};
+
+  static Map<String, Type> searchableForeignAttributeMapping = {
+    'bout_id': Bout,
+  };
 }

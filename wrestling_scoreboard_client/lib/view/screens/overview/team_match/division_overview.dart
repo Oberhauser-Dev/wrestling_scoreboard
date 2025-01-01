@@ -11,7 +11,6 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -72,97 +71,36 @@ class DivisionOverview extends BoutConfigOverview<Division> {
           initialData: data.boutConfig,
           subClassData: data,
           buildRelations: (boutConfig) => {
-            Tab(child: HeadingText(localizations.leagues)): ManyConsumer<League, Division>(
+            Tab(child: HeadingText(localizations.leagues)): FilterableManyConsumer<League, Division>.edit(
+              context: context,
+              editPageBuilder: (context) => LeagueEdit(initialDivision: data),
               filterObject: data,
-              builder: (BuildContext context, List<League> leagues) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LeagueEdit(
-                            initialDivision: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: leagues.map(
-                    (e) => SingleConsumer<League>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: '${data.fullname}, ${data.startDate.year}',
-                            icon: Icons.emoji_events,
-                            onTap: () => handleSelectedLeague(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
+              itemBuilder: (context, item) => ContentItem(
+                title: '${item.fullname}, ${item.startDate.year}',
+                icon: Icons.emoji_events,
+                onTap: () => handleSelectedLeague(item, context),
+              ),
             ),
-            Tab(child: HeadingText(localizations.weightClasses)): ManyConsumer<DivisionWeightClass, Division>(
+            Tab(child: HeadingText(localizations.weightClasses)):
+                FilterableManyConsumer<DivisionWeightClass, Division>.edit(
+              context: context,
+              editPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: data),
               filterObject: data,
-              builder: (BuildContext context, List<DivisionWeightClass> divisionWeightClasses) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DivisionWeightClassEdit(initialDivision: data),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: divisionWeightClasses.map((e) {
-                    return SingleConsumer<DivisionWeightClass>(
-                      id: e.id,
-                      initialData: e,
-                      builder: (context, data) {
-                        return ContentItem(
-                            title: data.localize(context),
-                            icon: Icons.fitness_center,
-                            onTap: () => handleSelectedWeightClass(data, context));
-                      },
-                    );
-                  }),
-                );
-              },
+              itemBuilder: (context, item) => ContentItem(
+                  title: item.localize(context),
+                  icon: Icons.fitness_center,
+                  onTap: () => handleSelectedWeightClass(item, context)),
             ),
             Tab(child: HeadingText('${localizations.sub}-${localizations.divisions}')):
-                ManyConsumer<Division, Division>(
+                FilterableManyConsumer<Division, Division>.edit(
+              context: context,
+              editPageBuilder: (context) => DivisionEdit(initialParent: data),
               filterObject: data,
-              builder: (BuildContext context, List<Division> childDivisions) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DivisionEdit(
-                            initialParent: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: childDivisions.map(
-                    (e) => SingleConsumer<Division>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.fullname,
-                            icon: Icons.inventory,
-                            onTap: () => handleSelectedChildDivision(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
+              itemBuilder: (context, item) => ContentItem(
+                title: data.fullname,
+                icon: Icons.inventory,
+                onTap: () => handleSelectedChildDivision(data, context),
+              ),
             ),
           },
         );

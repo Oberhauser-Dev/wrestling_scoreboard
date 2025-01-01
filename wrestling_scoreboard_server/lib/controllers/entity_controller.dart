@@ -454,40 +454,66 @@ abstract class EntityController<T extends DataObject> {
     String searchStr, {
     int? organizationId,
     required bool obfuscate,
-    required Set<String> searchableAttributes,
+    required Type searchType,
   }) async {
-    final postgresTypes = getPostgresDataTypes();
     bool needsPreciseSearch = false;
-    final orConditions = searchableAttributes
-        .map((attr) {
-          // TODO: get postgres types generated from attributes via macros.
-          final postgresType = postgresTypes.containsKey(attr) ? postgresTypes[attr] : psql.Type.varChar;
-          if (((postgresType == psql.Type.integer || postgresType == psql.Type.smallInteger) &&
-                  int.tryParse(searchStr) != null) ||
-              (postgresType == psql.Type.double && double.tryParse(searchStr) != null)) {
-            needsPreciseSearch = true;
-            return '$attr = @preciseSearch';
-          } else if (postgresType == psql.Type.varChar) {
-            return '$attr ILIKE @search';
-          }
-          return null;
-        })
-        .nonNulls
-        .toList();
+
+    String? mapToCondition(attr, Type type, String searchTableName) {
+      // TODO: get postgres types generated from attributes via macros.
+      final postgresTypes = ShelfController.getControllerFromDataType(type)!.getPostgresDataTypes();
+      final postgresType = postgresTypes.containsKey(attr) ? postgresTypes[attr] : psql.Type.varChar;
+      final tableAttr = '$searchTableName.$attr';
+      if (((postgresType == psql.Type.integer || postgresType == psql.Type.smallInteger) &&
+              int.tryParse(searchStr) != null) ||
+          (postgresType == psql.Type.double && double.tryParse(searchStr) != null)) {
+        needsPreciseSearch = true;
+        return '$tableAttr = @preciseSearch';
+      } else if (postgresType == psql.Type.varChar) {
+        return '$tableAttr ILIKE @search';
+      }
+      return null;
+    }
+
+    final joins = <String, String>{};
+
+    // Add attributes of foreign key
+    Set<String> getSearchableAttrTypeMapping(Type searchType, [String? searchTableName]) {
+      searchTableName ??= getTableNameFromType(searchType);
+      final orConditions = searchableDataTypes[searchType]
+              ?.map((attr) => mapToCondition(attr, searchType, searchTableName!))
+              .nonNulls
+              .toSet() ??
+          {};
+      Map<String, Type> attrTypeMapping = searchableForeignAttributeMapping[searchType] ?? const {};
+
+      // Recursively add foreign table attributes with the table name prefix (because they can have the same name as the current table).
+      attrTypeMapping.forEach((foreignAttrName, foreignType) {
+        final foreignTableName = getTableNameFromType(foreignType);
+        final tableAlias =
+            '${searchTableName}_${foreignAttrName.replaceRange(foreignAttrName.length - 3, foreignAttrName.length, '')}';
+        joins['$foreignTableName AS $tableAlias'] = '$tableAlias.id = $searchTableName.$foreignAttrName';
+        orConditions.addAll(getSearchableAttrTypeMapping(foreignType, tableAlias));
+      });
+
+      return orConditions;
+    }
+
+    final orConditions = getSearchableAttrTypeMapping(searchType);
 
     final List<String> conditions = [];
     if (orConditions.isNotEmpty) {
-      conditions.add(orConditions.join(' OR '));
+      conditions.add('(${orConditions.join(' OR ')})');
       // TODO: remove hacky OR composition by allowing nested query conditions.
     }
     if (organizationId != null) {
       // TODO: Check, which entities support queries with organization_id
-      conditions.add('organization_id = @org');
+      conditions.add('$tableName.organization_id = @org');
     }
 
     return await getManyJson(
       isRaw: isRaw,
       conditions: conditions,
+      joins: joins,
       substitutionValues: {
         'search': '%$searchStr%',
         if (needsPreciseSearch) 'preciseSearch': searchStr,
@@ -500,6 +526,7 @@ abstract class EntityController<T extends DataObject> {
 
   Future<List<T>> getMany({
     List<String>? conditions,
+    Map<String, String> joins = const {},
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
@@ -507,6 +534,7 @@ abstract class EntityController<T extends DataObject> {
   }) async {
     return Future.wait((await getManyRaw(
       conditions: conditions,
+      joins: joins,
       conjunction: conjunction,
       substitutionValues: substitutionValues,
       orderBy: orderBy,
@@ -528,10 +556,13 @@ abstract class EntityController<T extends DataObject> {
         .toList());
   }
 
+  /// The [joins] contains a map of the join statement and its condition,
+  /// e.g. { "person AS membership_person": "membership_person.id = person_id"}.
   Future<List<Map<String, dynamic>>> getManyRaw({
     List<String>? conditions,
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
+    Map<String, String> joins = const {},
     List<String> orderBy = const [],
     required bool obfuscate,
   }) async {
@@ -540,7 +571,10 @@ abstract class EntityController<T extends DataObject> {
       // in contrast to the conditions are null, that means everything fulfills the requirement.
       return [];
     }
-    final query = 'SELECT * FROM $tableName '
+    final query = 'SELECT $tableName.* FROM $tableName '
+        '${joins.entries.map((join) {
+      return 'JOIN ${join.key} ON ${join.value} ';
+    }).join('\n')} '
         '${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} '
         '${orderBy.isEmpty ? '' : 'ORDER BY ${orderBy.join(',')}'};';
     final many = await getManyRawFromQuery(query, substitutionValues: substitutionValues);
@@ -557,6 +591,7 @@ abstract class EntityController<T extends DataObject> {
   Future<Map<String, dynamic>?> getManyJson({
     bool isRaw = false,
     List<String>? conditions,
+    Map<String, String> joins = const {},
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
     List<String> orderBy = const [],
@@ -565,6 +600,7 @@ abstract class EntityController<T extends DataObject> {
     if (isRaw) {
       final many = await getManyRaw(
         conditions: conditions,
+        joins: joins,
         conjunction: conjunction,
         substitutionValues: substitutionValues,
         orderBy: orderBy,
@@ -577,6 +613,7 @@ abstract class EntityController<T extends DataObject> {
     } else {
       final many = await getMany(
         conditions: conditions,
+        joins: joins,
         conjunction: conjunction,
         substitutionValues: substitutionValues,
         orderBy: orderBy,

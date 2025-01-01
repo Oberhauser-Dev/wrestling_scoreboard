@@ -13,7 +13,6 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -83,66 +82,25 @@ class LeagueOverview extends ConsumerWidget {
           body: TabGroup(items: [
             description,
             MatchList<League>(filterObject: data),
-            ManyConsumer<LeagueTeamParticipation, League>(
+            FilterableManyConsumer<LeagueTeamParticipation, League>.edit(
+              context: context,
+              editPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
               filterObject: data,
-              builder: (BuildContext context, List<LeagueTeamParticipation> teamParticipations) {
-                teamParticipations.sort((a, b) => a.team.name.compareTo(b.team.name));
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LeagueTeamParticipationEdit(
-                            initialLeague: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: teamParticipations.map(
-                    (e) => SingleConsumer<LeagueTeamParticipation>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.team.name,
-                            icon: Icons.group,
-                            onTap: () => handleSelectedTeam(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
+              mapData: (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
+              itemBuilder: (context, item) => ContentItem(
+                title: item.team.name,
+                icon: Icons.group,
+                onTap: () => handleSelectedTeam(item, context),
+              ),
             ),
-            ManyConsumer<LeagueWeightClass, League>(
+            FilterableManyConsumer<LeagueWeightClass, League>.edit(
+              context: context,
+              editPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
               filterObject: data,
-              builder: (BuildContext context, List<LeagueWeightClass> leagueWeightClasses) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LeagueWeightClassEdit(initialLeague: data),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: leagueWeightClasses.map((e) {
-                    return SingleConsumer<LeagueWeightClass>(
-                      id: e.id,
-                      initialData: e,
-                      builder: (context, data) {
-                        return ContentItem(
-                            title: data.localize(context),
-                            icon: Icons.fitness_center,
-                            onTap: () => handleSelectedWeightClass(data, context));
-                      },
-                    );
-                  }),
-                );
-              },
+              itemBuilder: (context, item) => ContentItem(
+                  title: item.localize(context),
+                  icon: Icons.fitness_center,
+                  onTap: () => handleSelectedWeightClass(item, context)),
             )
           ]),
         );

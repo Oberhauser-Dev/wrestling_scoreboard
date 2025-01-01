@@ -60,90 +60,59 @@ class ClubOverview extends ConsumerWidget {
           ],
           body: TabGroup(items: [
             description,
-            ManyConsumer<Team, Club>(
+            FilterableManyConsumer<Team, Club>(
               filterObject: club,
-              builder: (BuildContext context, List<Team> teams) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: MenuAnchor(
-                      menuChildren: [
-                        MenuItemButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TeamEdit(
-                                initialOrganization: club.organization,
-                                onCreated: (team) async {
-                                  await (await ref.read(dataManagerNotifierProvider))
-                                      .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                                },
-                              ),
-                            ),
-                          ),
-                          child: Text(localizations.create),
+              trailing: MenuAnchor(
+                menuChildren: [
+                  MenuItemButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TeamEdit(
+                          initialOrganization: club.organization,
+                          onCreated: (team) async {
+                            await (await ref.read(dataManagerNotifierProvider))
+                                .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                          },
                         ),
-                        MenuItemButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TeamClubAffiliationEdit(
-                                initialClub: club,
-                              ),
-                            ),
-                          ),
-                          child: Text(localizations.addExisting),
-                        ),
-                      ],
-                      builder: (context, controller, child) => RestrictedAddButton(
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                        },
                       ),
                     ),
+                    child: Text(localizations.create),
                   ),
-                  items: teams.map((team) => SingleConsumer<Team>(
-                      id: team.id,
-                      initialData: team,
-                      builder: (context, team) {
-                        return ContentItem(
-                            title: team.name, icon: Icons.group, onTap: () => handleSelectedTeam(team, context));
-                      })),
-                );
-              },
+                  MenuItemButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TeamClubAffiliationEdit(
+                          initialClub: club,
+                        ),
+                      ),
+                    ),
+                    child: Text(localizations.addExisting),
+                  ),
+                ],
+                builder: (context, controller, child) => RestrictedAddButton(
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                ),
+              ),
+              itemBuilder: (context, item) =>
+                  ContentItem(title: item.name, icon: Icons.group, onTap: () => handleSelectedTeam(item, context)),
             ),
-            ManyConsumer<Membership, Club>(
+            FilterableManyConsumer<Membership, Club>.edit(
+              context: context,
               filterObject: club,
-              builder: (BuildContext context, List<Membership> memberships) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MembershipEdit(
-                            initialClub: club,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: memberships.map(
-                    (membership) => SingleConsumer<Membership>(
-                      id: membership.id,
-                      initialData: membership,
-                      builder: (context, team) => ContentItem(
-                        title: '${membership.info},\t${membership.person.gender?.localize(context)}',
-                        icon: Icons.person,
-                        onTap: () => handleSelectedMembership(membership, context),
-                      ),
-                    ),
-                  ),
-                );
-              },
+              editPageBuilder: (context) => MembershipEdit(initialClub: club),
+              itemBuilder: (context, item) => ContentItem(
+                title: '${item.info},\t${item.person.gender?.localize(context)}',
+                icon: Icons.person,
+                onTap: () => handleSelectedMembership(item, context),
+              ),
             ),
           ]),
         );

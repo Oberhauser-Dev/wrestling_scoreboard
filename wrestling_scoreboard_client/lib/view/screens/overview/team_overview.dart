@@ -63,60 +63,49 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             body: TabGroup(items: [
               description,
               MatchList<Team>(filterObject: team),
-              ManyConsumer<Club, Team>(
+              FilterableManyConsumer<Club, Team>(
                 filterObject: team,
-                builder: (BuildContext context, List<Club> clubs) {
-                  return GroupedList(
-                    header: HeadingItem(
-                      trailing: MenuAnchor(
-                        menuChildren: [
-                          MenuItemButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ClubEdit(
-                                  initialOrganization: team.organization,
-                                  onCreated: (club) async {
-                                    await (await ref.read(dataManagerNotifierProvider))
-                                        .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                                  },
-                                ),
-                              ),
-                            ),
-                            child: Text(localizations.create),
+                trailing: MenuAnchor(
+                  menuChildren: [
+                    MenuItemButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ClubEdit(
+                            initialOrganization: team.organization,
+                            onCreated: (club) async {
+                              await (await ref.read(dataManagerNotifierProvider))
+                                  .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                            },
                           ),
-                          MenuItemButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TeamClubAffiliationEdit(
-                                  initialTeam: team,
-                                ),
-                              ),
-                            ),
-                            child: Text(localizations.addExisting),
-                          ),
-                        ],
-                        builder: (context, controller, child) => RestrictedAddButton(
-                          onPressed: () {
-                            if (controller.isOpen) {
-                              controller.close();
-                            } else {
-                              controller.open();
-                            }
-                          },
                         ),
                       ),
+                      child: Text(localizations.create),
                     ),
-                    items: clubs.map((club) => SingleConsumer<Club>(
-                        id: club.id,
-                        initialData: club,
-                        builder: (context, club) {
-                          return ContentItem(
-                              title: club.name, icon: Icons.foundation, onTap: () => handleSelectedClub(club, context));
-                        })),
-                  );
-                },
+                    MenuItemButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TeamClubAffiliationEdit(
+                            initialTeam: team,
+                          ),
+                        ),
+                      ),
+                      child: Text(localizations.addExisting),
+                    ),
+                  ],
+                  builder: (context, controller, child) => RestrictedAddButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                  ),
+                ),
+                itemBuilder: (context, club) => ContentItem(
+                    title: club.name, icon: Icons.foundation, onTap: () => handleSelectedClub(club, context)),
               ),
             ]),
           );

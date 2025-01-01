@@ -55,4 +55,8 @@ class ParticipantState with _$ParticipantState implements DataObject {
   ParticipantState copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Map<String, Type> searchableForeignAttributeMapping = {
+    'participation_id': Participation,
+  };
 }
