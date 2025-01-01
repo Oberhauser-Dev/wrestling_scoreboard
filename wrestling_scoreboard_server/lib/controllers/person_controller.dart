@@ -33,6 +33,7 @@ class PersonController extends OrganizationalController<Person> {
     raw['birth_date'] = null;
     raw['nationality'] = null;
     raw['gender'] = null;
+    raw['org_sync_id'] = null;
     return raw;
   }
 
