@@ -112,6 +112,18 @@ class HomeState extends ConsumerState<Home> {
             }
             return _EntityGrid(
               entities: favorites.map((k, ids) => MapEntry(k, Map.fromEntries(ids.map((id) => MapEntry(id, null))))),
+              actionItemBuilder: <T extends DataObject>(context, id) {
+                final localizations = AppLocalizations.of(context)!;
+                return [
+                  PopupMenuItem(
+                    child: Text(localizations.remove),
+                    onTap: () {
+                      final notifier = ref.read(favoritesNotifierProvider.notifier);
+                      notifier.removeFavorite(getTableNameFromType(T), id);
+                    },
+                  ),
+                ];
+              },
               onHandleException: <T extends DataObject>({
                 required BuildContext context,
                 required int id,
@@ -257,8 +269,9 @@ class _EntityGrid extends ConsumerWidget {
     Object? exception,
     StackTrace? stackTrace,
   }) onHandleException;
+  final List<PopupMenuItem<T>> Function<T extends DataObject>(BuildContext context, int id)? actionItemBuilder;
 
-  const _EntityGrid({required this.entities, required this.onHandleException});
+  const _EntityGrid({required this.entities, required this.onHandleException, this.actionItemBuilder});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -403,8 +416,13 @@ class _EntityGrid extends ConsumerWidget {
     );
   }
 
-  Widget _createItem<T extends DataObject>(int id, T? initialData, String route, String Function(T dataObject) getTitle,
-      {required BuildContext context}) {
+  Widget _createItem<T extends DataObject>(
+    int id,
+    T? initialData,
+    String route,
+    String Function(T dataObject) getTitle, {
+    required BuildContext context,
+  }) {
     return SingleConsumer<T>(
         onException: (context, exception, {stackTrace}) => Card(
               child: Center(
@@ -426,22 +444,31 @@ class _EntityGrid extends ConsumerWidget {
                 child: Container(
                   decoration: const BoxDecoration(
                       image: DecorationImage(image: AssetImage('assets/images/icons/launcher.png'))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Stack(
                     children: [
-                      ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                          child: Container(
-                              color: Colors.black.withOpacity(0.5),
-                              child: Center(
-                                  child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
-                              ))),
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                              child: Container(
+                                  color: Colors.black.withOpacity(0.5),
+                                  child: Center(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
+                                  ))),
+                            ),
+                          ),
+                        ],
                       ),
+                      if (actionItemBuilder != null)
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: PopupMenuButton<T>(itemBuilder: (context) => actionItemBuilder!(context, id)),
+                        ),
                     ],
                   ),
                 )),
