@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/localization/type.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/search.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
@@ -161,6 +162,7 @@ class HomeState extends ConsumerState<Home> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: SearchBar(
+                autoFocus: true,
                 padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
                 leading: const Icon(Icons.search),
                 trailing: [
@@ -174,7 +176,7 @@ class HomeState extends ConsumerState<Home> {
                 side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
                 backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
                 onChanged: (searchTerm) async {
-                  if (searchTerm.length < 3 && (double.tryParse(searchTerm) == null)) {
+                  if (!isValidSearchTerm(searchTerm)) {
                     setState(() {
                       _searchResults = null;
                     });

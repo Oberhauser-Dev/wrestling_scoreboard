@@ -6,7 +6,6 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/admin/user_edit.da
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/admin/user_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
@@ -27,34 +26,14 @@ class AdminOverview extends ConsumerWidget {
         Tab(child: HeadingText(localizations.users)),
       ],
       body: TabGroup(items: [
-        ManyConsumer<SecuredUser, Null>(
-          builder: (BuildContext context, List<SecuredUser> users) {
-            return GroupedList(
-              header: HeadingItem(
-                trailing: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserEdit(),
-                    ),
-                  ),
-                ),
-              ),
-              items: users.map(
-                (e) => SingleConsumer<SecuredUser>(
-                    id: e.id,
-                    initialData: e,
-                    builder: (context, data) {
-                      return ContentItem(
-                        title: data.username,
-                        icon: Icons.account_circle,
-                        onTap: () => handleSelectedUser(data, context),
-                      );
-                    }),
-              ),
-            );
-          },
+        FilterableManyConsumer<SecuredUser, Null>.edit(
+          context: context,
+          editPageBuilder: (context) => const UserEdit(),
+          itemBuilder: (context, item) => ContentItem(
+            title: item.username,
+            icon: Icons.account_circle,
+            onTap: () => handleSelectedUser(item, context),
+          ),
         ),
       ]),
     );

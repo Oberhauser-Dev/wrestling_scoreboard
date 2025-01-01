@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_result_rule_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -93,34 +92,14 @@ abstract class BoutConfigOverview<T extends DataObject> extends ConsumerWidget
           body: TabGroup(items: [
             description,
             ...relations.values,
-            ManyConsumer<BoutResultRule, BoutConfig>(
+            FilterableManyConsumer<BoutResultRule, BoutConfig>.edit(
+              context: context,
+              editPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
               filterObject: boutConfig,
-              builder: (BuildContext context, List<BoutResultRule> boutResultRule) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: boutResultRule.map((e) {
-                    return SingleConsumer<BoutResultRule>(
-                      id: e.id,
-                      initialData: e,
-                      builder: (context, data) {
-                        return ContentItem(
-                            title: data.localize(context),
-                            icon: Icons.rule,
-                            onTap: () => handleSelectedBoutResultRule(data, context));
-                      },
-                    );
-                  }),
-                );
-              },
+              itemBuilder: (context, item) => ContentItem(
+                  title: item.localize(context),
+                  icon: Icons.rule,
+                  onTap: () => handleSelectedBoutResultRule(item, context)),
             ),
           ]),
         );

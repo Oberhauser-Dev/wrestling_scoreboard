@@ -90,203 +90,95 @@ class OrganizationOverview extends ConsumerWidget {
           ],
           body: TabGroup(items: [
             description,
-            ManyConsumer<Division, Organization>(
+            FilterableManyConsumer<Division, Organization>.edit(
+              context: context,
               filterObject: data,
-              builder: (BuildContext context, List<Division> divisions) {
-                divisions.sort((a, b) {
+              editPageBuilder: (context) => DivisionEdit(initialOrganization: data),
+              mapData: (divisions) => divisions
+                ..sort((a, b) {
                   final comparison = b.startDate.compareTo(a.startDate);
                   if (comparison != 0) return comparison;
                   return a.name.compareTo(b.name);
-                });
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DivisionEdit(
-                            initialOrganization: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: divisions.map(
-                    (e) => SingleConsumer<Division>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: '${data.fullname}, ${data.startDate.year}',
-                            icon: Icons.inventory,
-                            onTap: () => handleSelectedDivision(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
+                }),
+              itemBuilder: (context, item) => ContentItem(
+                title: '${item.fullname}, ${item.startDate.year}',
+                icon: Icons.inventory,
+                onTap: () => handleSelectedDivision(item, context),
+              ),
             ),
-            ManyConsumer<Club, Organization>(
+            FilterableManyConsumer<Club, Organization>.edit(
+              context: context,
               filterObject: data,
-              builder: (BuildContext context, List<Club> clubs) {
-                clubs.sort((a, b) => a.name.compareTo(b.name));
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ClubEdit(
-                            initialOrganization: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: clubs.map(
-                    (e) => SingleConsumer<Club>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.name,
-                            icon: Icons.foundation,
-                            onTap: () => handleSelectedClub(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
+              mapData: (List<Club> clubs) => clubs..sort((a, b) => a.name.compareTo(b.name)),
+              editPageBuilder: (context) => ClubEdit(initialOrganization: data),
+              itemBuilder: (context, item) => ContentItem(
+                title: item.name,
+                icon: Icons.foundation,
+                onTap: () => handleSelectedClub(item, context),
+              ),
             ),
-            ManyConsumer<Competition, Organization>(
+            FilterableManyConsumer<Competition, Organization>.edit(
+              context: context,
               filterObject: data,
-              builder: (BuildContext context, List<Competition> competitions) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => CompetitionEdit(initialOrganization: data),
-                        //   ),
-                        // );
-                      },
-                    ),
-                  ),
-                  items: competitions.map((e) {
-                    return SingleConsumer<Competition>(
-                      id: e.id,
-                      initialData: e,
-                      builder: (context, data) {
-                        return ContentItem(
-                            title: e.name,
-                            icon: Icons.leaderboard,
-                            onTap: () => handleSelectedCompetition(data, context));
-                      },
-                    );
-                  }),
-                );
-              },
+              editPageBuilder: (context) => /*CompetitionEdit(initialOrganization: data)*/ const SizedBox(),
+              itemBuilder: (context, item) => ContentItem(
+                  title: item.name, icon: Icons.leaderboard, onTap: () => handleSelectedCompetition(item, context)),
             ),
-            ManyConsumer<Person, Organization>(
+            FilterableManyConsumer<Person, Organization>.edit(
+              context: context,
               filterObject: data,
-              builder: (BuildContext context, List<Person> persons) {
-                persons.sort((a, b) => a.fullName.compareTo(b.fullName));
+              editPageBuilder: (context) => PersonEdit(initialOrganization: data),
+              mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
+              prependBuilder: (context, persons) {
                 final duplicatePersons = persons
                     .groupListsBy((element) => element.fullName)
                     .entries
                     .where((entry) => entry.value.length > 1);
-
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PersonEdit(
-                            initialOrganization: data,
+                return duplicatePersons.isEmpty
+                    ? null
+                    : Restricted(
+                        privilege: UserPrivilege.admin,
+                        child: PaddedCard(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.warning),
+                              const Text('Following persons have the same name, are they duplicates?'),
+                              ...duplicatePersons.map((similarPersons) => ListTile(
+                                    title: Text('${similarPersons.key} (${similarPersons.value.length})'),
+                                    trailing: IconButton(
+                                      tooltip: localizations.mergeObjectData,
+                                      onPressed: () => mergePersonsDialog(context, ref, persons: similarPersons.value),
+                                      icon: const Icon(Icons.merge),
+                                    ),
+                                    // Use most up to date entry (last) as base merge object
+                                    onTap: () => handleSelectedPerson(similarPersons.value.last, context),
+                                  )),
+                              TextButton.icon(
+                                onPressed: () => mergeAllPersonsDialog(context, ref,
+                                    allPersons: duplicatePersons.map((e) => e.value)),
+                                icon: const Icon(Icons.merge),
+                                label: const Text('Merge ALL'),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: [
-                    if (duplicatePersons.isNotEmpty)
-                      Restricted(
-                          privilege: UserPrivilege.admin,
-                          child: PaddedCard(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.warning),
-                                const Text('Following persons have the same name, are they duplicates?'),
-                                ...duplicatePersons.map((similarPersons) => ListTile(
-                                      title: Text('${similarPersons.key} (${similarPersons.value.length})'),
-                                      trailing: IconButton(
-                                        tooltip: localizations.mergeObjectData,
-                                        onPressed: () =>
-                                            mergePersonsDialog(context, ref, persons: similarPersons.value),
-                                        icon: const Icon(Icons.merge),
-                                      ),
-                                      // Use most up to date entry (last) as base merge object
-                                      onTap: () => handleSelectedPerson(similarPersons.value.last, context),
-                                    )),
-                                TextButton.icon(
-                                  onPressed: () => mergeAllPersonsDialog(context, ref,
-                                      allPersons: duplicatePersons.map((e) => e.value)),
-                                  icon: const Icon(Icons.merge),
-                                  label: const Text('Merge ALL'),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ...persons.map(
-                      (e) => SingleConsumer<Person>(
-                          id: e.id,
-                          initialData: e,
-                          builder: (context, data) {
-                            return ContentItem(
-                              title: data.fullName,
-                              icon: Icons.person,
-                              onTap: () => handleSelectedPerson(data, context),
-                            );
-                          }),
-                    )
-                  ],
-                );
+                        ));
               },
+              itemBuilder: (context, item) => ContentItem(
+                title: item.fullName,
+                icon: Icons.person,
+                onTap: () => handleSelectedPerson(item, context),
+              ),
             ),
-            ManyConsumer<Organization, Organization>(
+            FilterableManyConsumer<Organization, Organization>.edit(
+              context: context,
+              editPageBuilder: (context) => OrganizationEdit(initialParent: data),
               filterObject: data,
-              builder: (BuildContext context, List<Organization> childOrganizations) {
-                return GroupedList(
-                  header: HeadingItem(
-                    trailing: RestrictedAddButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrganizationEdit(
-                            initialParent: data,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  items: childOrganizations.map(
-                    (e) => SingleConsumer<Organization>(
-                        id: e.id,
-                        initialData: e,
-                        builder: (context, data) {
-                          return ContentItem(
-                            title: data.fullname,
-                            icon: Icons.inventory,
-                            onTap: () => handleSelectedChildOrganization(data, context),
-                          );
-                        }),
-                  ),
-                );
-              },
+              itemBuilder: (context, item) => ContentItem(
+                title: item.fullname,
+                icon: Icons.inventory,
+                onTap: () => handleSelectedChildOrganization(item, context),
+              ),
             ),
           ]),
         );

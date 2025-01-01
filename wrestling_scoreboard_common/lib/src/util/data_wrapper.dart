@@ -336,8 +336,7 @@ final dataTypes = [
 /// Returns a map of data types with searchable attributes.
 /// TODO: with macros, apply it to the property @Searchable.
 final Map<Type, Set<String>> searchableDataTypes = {
-  Person: Person.searchableAttributes,
-  Membership: Membership.searchableAttributes,
+  Bout: Bout.searchableAttributes,
   Club: Club.searchableAttributes,
   Organization: Organization.searchableAttributes,
   WeightClass: WeightClass.searchableAttributes,
@@ -347,5 +346,16 @@ final Map<Type, Set<String>> searchableDataTypes = {
   TeamMatch: WrestlingEvent.searchableAttributes,
   Division: Division.searchableAttributes,
   League: League.searchableAttributes,
+  Membership: Membership.searchableAttributes,
+  Person: Person.searchableAttributes,
   Team: Team.searchableAttributes,
+  TeamMatchBout: TeamMatchBout.searchableAttributes,
+};
+
+final Map<Type, Map<String, Type>> searchableForeignAttributeMapping = {
+  Bout: Bout.searchableForeignAttributeMapping,
+  Membership: Membership.searchableForeignAttributeMapping,
+  ParticipantState: ParticipantState.searchableForeignAttributeMapping,
+  Participation: Participation.searchableForeignAttributeMapping,
+  TeamMatchBout: TeamMatchBout.searchableForeignAttributeMapping,
 };

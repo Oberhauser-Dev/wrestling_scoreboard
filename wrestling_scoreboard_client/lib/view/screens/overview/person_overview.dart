@@ -142,35 +142,15 @@ class PersonOverview extends AbstractPersonOverview<Person> {
             ),
             onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person),
             buildRelations: (Person person) => {
-              Tab(child: HeadingText(localizations.memberships)): ManyConsumer<Membership, Person>(
+              Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.edit(
+                context: context,
+                editPageBuilder: (context) => MembershipEdit(initialPerson: person),
                 filterObject: person,
-                builder: (BuildContext context, List<Membership> memberships) {
-                  return GroupedList(
-                    header: HeadingItem(
-                      trailing: RestrictedAddButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MembershipEdit(
-                              initialPerson: person,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    items: memberships.map(
-                      (membership) => SingleConsumer<Membership>(
-                        id: membership.id,
-                        initialData: membership,
-                        builder: (context, team) => ContentItem(
-                          title: '${membership.info},\t${membership.person.gender?.localize(context)}',
-                          icon: Icons.person,
-                          onTap: () => handleSelectedMembership(membership, context),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                itemBuilder: (context, membership) => ContentItem(
+                  title: '${membership.info},\t${membership.person.gender?.localize(context)}',
+                  icon: Icons.person,
+                  onTap: () => handleSelectedMembership(membership, context),
+                ),
               ),
             },
           );

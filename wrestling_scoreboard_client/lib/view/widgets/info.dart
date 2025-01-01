@@ -61,7 +61,8 @@ class InfoWidget extends StatelessWidget {
           ),
         ),
       ),
-      items: children,
+      itemCount: children.length,
+      itemBuilder: (context, index) => children[index],
     );
   }
 }

@@ -112,4 +112,11 @@ class Bout with _$Bout implements DataObject, Organizational {
   Bout copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {};
+
+  static Map<String, Type> searchableForeignAttributeMapping = {
+    'red_id': ParticipantState,
+    'blue_id': ParticipantState,
+  };
 }
