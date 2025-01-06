@@ -480,7 +480,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             team: await _getSingleBySyncId<Team>(
                 (competitionJson['opponentTeamName'] as String).trim()), // teamId is not unique across all IDs
           ),
-          date: DateTime.parse(values['boutDate'] + ' ' + values['scaleTime']),
+          date: DateTime.parse('${values['boutDate']} ${values['scaleTime']}'),
           visitorsCount: int.tryParse(values['audience']),
           location: values['location'],
           referee: referee,
