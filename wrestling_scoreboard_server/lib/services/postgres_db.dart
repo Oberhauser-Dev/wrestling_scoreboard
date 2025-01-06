@@ -203,6 +203,8 @@ extension DatabaseExt on PostgresDb {
 
   static sanitizeSql(String sqlString) {
     sqlString = sqlString.replaceAll('\r\n', '\n');
-    return sqlString.split('\n').where((line) => !line.startsWith('-- Dumped')).join('\n');
+    return sqlString.split('\n').where((line) {
+      return !(line.startsWith('-- Dumped') || line.startsWith('SET transaction_timeout'));
+    }).join('\n');
   }
 }

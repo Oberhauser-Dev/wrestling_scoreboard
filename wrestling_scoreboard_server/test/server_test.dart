@@ -9,6 +9,9 @@ import 'package:wrestling_scoreboard_server/server.dart' as server;
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 void main() {
+  MockableDateTime.isMocked = true;
+  MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
+
   test('DB import and export match', () async {
     final db = PostgresDb();
     await db.open();
