@@ -40,20 +40,21 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
   static MaterialColor _createMaterialColor(Color color) {
     final strengths = <double>[.05];
     Map<int, Color> swatch = {};
-    final int r = color.red, g = color.green, b = color.blue;
+    final double r = color.r, g = color.g, b = color.b;
 
     for (int i = 1; i < 10; i++) {
       strengths.add(0.1 * i);
     }
     for (final strength in strengths) {
       final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.fromRGBO(
-        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-        1,
+      swatch[(strength * 1000).round()] = Color.from(
+        red: r + ((ds < 0 ? r : (1 - r)) * ds),
+        green: g + ((ds < 0 ? g : (1 - g)) * ds),
+        blue: b + ((ds < 0 ? b : (1 - b)) * ds),
+        alpha: 1,
       );
     }
+    // ignore: deprecated_member_use
     return MaterialColor(color.value, swatch);
   }
 

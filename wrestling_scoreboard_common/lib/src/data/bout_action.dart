@@ -57,8 +57,6 @@ class BoutAction with _$BoutAction implements DataObject {
         return 'O';
       case BoutActionType.dismissal:
         return 'D';
-      default:
-        return '';
     }
   }
 

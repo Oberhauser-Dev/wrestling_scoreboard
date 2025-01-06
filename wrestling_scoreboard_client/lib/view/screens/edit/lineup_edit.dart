@@ -239,7 +239,9 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
     // Preloaded new participations (without id) should also be saved.
     if (widget.participation?.id != null &&
         widget.participation?.membership == _curMembership &&
-        widget.participation?.weight == _curWeight) return;
+        widget.participation?.weight == _curWeight) {
+      return;
+    }
 
     // Delete old participation, if membership is null
     if (_curMembership == null) {
