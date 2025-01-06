@@ -122,7 +122,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       }
     });
 
-    final divisionBoutResultRuleMap = await apiProvider.importDivisions(minDate: DateTime(DateTime.now().year - 1));
+    final divisionBoutResultRuleMap = await apiProvider.importDivisions();
     final divisions = await DivisionController().updateOrCreateManyOfOrg(
       divisionBoutResultRuleMap.keys.toList(),
       obfuscate: obfuscate,
