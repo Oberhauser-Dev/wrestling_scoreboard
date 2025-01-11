@@ -350,7 +350,7 @@ class _MembershipDropdown extends ConsumerWidget {
           asyncItems: (String filter) async {
             return _filterMemberships(ref, filter, organization, await getOrSetMemberships());
           },
-          isFilterOnline: true,
+          disableFilter: true,
           containerBuilder: (context, popupWidget) {
             return Column(
               children: [

@@ -13,8 +13,8 @@ class SearchableDropdown<T> extends StatelessWidget {
   final bool allowEmpty;
   final BuildContext context;
   final Widget? icon;
-  final bool isFilterOnline;
-  final PopupBuilder? containerBuilder;
+  final bool disableFilter;
+  final PopupBuilder<String>? containerBuilder;
 
   const SearchableDropdown({
     required this.selectedItem,
@@ -27,7 +27,7 @@ class SearchableDropdown<T> extends StatelessWidget {
     this.allowEmpty = true,
     required this.context,
     this.icon,
-    this.isFilterOnline = false,
+    this.disableFilter = false,
     super.key,
     this.containerBuilder,
   });
@@ -35,17 +35,20 @@ class SearchableDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(labelText: label, icon: icon),
+      decoratorProps: DropDownDecoratorProps(
+        decoration: InputDecoration(labelText: label, icon: icon),
       ),
       popupProps: PopupProps.menu(
         searchFieldProps: const TextFieldProps(decoration: InputDecoration(prefixIcon: Icon(Icons.search))),
         showSearchBox: true,
-        isFilterOnline: isFilterOnline,
+        disableFilter: disableFilter,
         containerBuilder: containerBuilder,
       ),
-      clearButtonProps: const ClearButtonProps(isVisible: true),
-      asyncItems: asyncItems,
+      suffixProps: DropdownSuffixProps(
+        clearButtonProps: const ClearButtonProps(isVisible: true),
+      ),
+      compareFn: (item1, item2) => itemAsString(item1).compareTo(itemAsString(item2)) >= 0,
+      items: (filter, _) => asyncItems(filter),
       filterFn: onFilter,
       itemAsString: (T? u) => u != null ? itemAsString(u) : 'empty value',
       selectedItem: selectedItem,
