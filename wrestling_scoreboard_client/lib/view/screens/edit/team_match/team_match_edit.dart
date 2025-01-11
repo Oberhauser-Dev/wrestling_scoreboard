@@ -133,7 +133,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            // TODO: filter by teams of same league, but may add an option to search all teams, needs isFilterOnline option
+            // TODO: filter by teams of same league, but may add an option to search all teams, needs disableFilter option
             _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
             return _availableTeams!.toList();
           },
