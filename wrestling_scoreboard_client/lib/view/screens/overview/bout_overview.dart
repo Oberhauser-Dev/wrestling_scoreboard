@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
@@ -37,7 +37,7 @@ abstract class BoutOverview<T extends DataObject> extends ConsumerWidget impleme
     Map<Tab, Widget> Function(Bout data)? buildRelations,
     required T subClassData,
   }) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SingleConsumer<Bout>(
       id: dataId,
       initialData: initialData,

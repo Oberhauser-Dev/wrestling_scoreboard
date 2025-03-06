@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
@@ -14,7 +14,7 @@ class BoutActionControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     bool isRed = role == BoutRole.red;
     MaterialColor color = isRed ? Colors.red : Colors.blue;
     void Function()? prepareCallback(BoutScreenActionIntent intentRed, BoutScreenActionIntent intentBlue) {
@@ -74,7 +74,7 @@ class BoutActionControls extends StatelessWidget {
       ),
       if (boutConfig.activityDuration != null)
         displayActionControl(
-          AppLocalizations.of(context)!.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
+          context.l10n.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           prepareCallback(
               const BoutScreenActionIntent.redActivityTime(), const BoutScreenActionIntent.blueActivityTime()),
           color,
@@ -82,14 +82,14 @@ class BoutActionControls extends StatelessWidget {
         ),
       if (boutConfig.injuryDuration != null)
         displayActionControl(
-          AppLocalizations.of(context)!.injuryTimeShort, // VZ Injury Time, Verletzungszeit
+          context.l10n.injuryTimeShort, // VZ Injury Time, Verletzungszeit
           prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
           color,
           tooltipMessage: localizations.injuryDuration,
         ),
       if (boutConfig.bleedingInjuryDuration != null)
         displayActionControl(
-          AppLocalizations.of(context)!.bleedingInjuryTimeShort, // BZ Bleeding Injury Time, Verletzungszeit Blut
+          context.l10n.bleedingInjuryTimeShort, // BZ Bleeding Injury Time, Verletzungszeit Blut
           prepareCallback(const BoutScreenActionIntent.redBleedingInjuryTime(),
               const BoutScreenActionIntent.blueBleedingInjuryTime()),
           color,

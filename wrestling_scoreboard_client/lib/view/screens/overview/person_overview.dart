@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
@@ -39,7 +39,7 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
     Person? initialData,
     required T subClassData,
   }) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SingleConsumer<Person>(
       id: dataId,
       initialData: initialData,
@@ -124,7 +124,7 @@ class PersonOverview extends AbstractPersonOverview<Person> {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SingleConsumer<Person>(
         id: id,
         initialData: person,
@@ -243,7 +243,7 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return OkCancelDialog<Person?>(
       getResult: () => _mergePerson,
       child: LoadingBuilder(

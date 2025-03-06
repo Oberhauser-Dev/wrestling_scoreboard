@@ -7,7 +7,7 @@ part 'competition_person.g.dart';
 
 /// An action and its value that is fulfilled by the participant during a bout, e.g. points or caution
 @freezed
-class CompetitionPerson with _$CompetitionPerson implements DataObject {
+abstract class CompetitionPerson with _$CompetitionPerson implements DataObject {
   const CompetitionPerson._();
 
   const factory CompetitionPerson({

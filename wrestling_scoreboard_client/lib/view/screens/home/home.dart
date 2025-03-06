@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
@@ -54,7 +54,7 @@ class HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
 
     final Widget gridEntries;
     if (_searchResults != null) {
@@ -73,7 +73,7 @@ class HomeState extends ConsumerState<Home> {
             Object? exception,
             StackTrace? stackTrace,
           }) async {
-            final localizations = AppLocalizations.of(context)!;
+            final localizations = context.l10n;
             await showOkDialog(
               context: context,
               child: Column(
@@ -114,7 +114,7 @@ class HomeState extends ConsumerState<Home> {
             return _EntityGrid(
               entities: favorites.map((k, ids) => MapEntry(k, Map.fromEntries(ids.map((id) => MapEntry(id, null))))),
               actionItemBuilder: <T extends DataObject>(context, id) {
-                final localizations = AppLocalizations.of(context)!;
+                final localizations = context.l10n;
                 return [
                   PopupMenuItem(
                     child: Text(localizations.remove),
@@ -131,7 +131,7 @@ class HomeState extends ConsumerState<Home> {
                 Object? exception,
                 StackTrace? stackTrace,
               }) async {
-                final localizations = AppLocalizations.of(context)!;
+                final localizations = context.l10n;
                 final removeItem = await showOkCancelDialog(
                   okText: localizations.remove,
                   context: context,
@@ -242,7 +242,7 @@ class HomeState extends ConsumerState<Home> {
                       },
                       onException: (context, exception, {stackTrace}) => SizedBox(
                         width: 250,
-                        child: ExceptionInfo(AppLocalizations.of(context)!.notFoundException, stackTrace: stackTrace),
+                        child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
                       ),
                     ),
                   ),

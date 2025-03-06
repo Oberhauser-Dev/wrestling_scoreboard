@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 
@@ -23,7 +23,7 @@ class ExceptionCard extends StatelessWidget {
           children: [
             ExceptionInfo(exception, stackTrace: stackTrace),
             if (onRetry != null) const SizedBox(height: 16),
-            if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry))
+            if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(context.l10n.retry))
           ],
         ),
       ),
@@ -39,7 +39,7 @@ class ExceptionInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
 
     String title;
     if (exception is RestException) {

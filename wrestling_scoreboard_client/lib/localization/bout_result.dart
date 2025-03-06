@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension BoutResultLocalization on BoutResult {
@@ -8,7 +8,7 @@ extension BoutResultLocalization on BoutResult {
   }
 
   String abbreviation(BuildContext context) {
-    AppLocalizations loc = AppLocalizations.of(context)!;
+    final loc = context.l10n;
     switch (this) {
       case BoutResult.vfa:
         return loc.boutResultVfaAbbr;
@@ -34,7 +34,7 @@ extension BoutResultLocalization on BoutResult {
   }
 
   String description(BuildContext context) {
-    AppLocalizations loc = AppLocalizations.of(context)!;
+    final loc = context.l10n;
     switch (this) {
       case BoutResult.vfa:
         return loc.boutResultVfa;

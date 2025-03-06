@@ -7,7 +7,7 @@ part 'lineup.g.dart';
 
 /// The lineup for a team match or competition.
 @freezed
-class Lineup with _$Lineup implements DataObject {
+abstract class Lineup with _$Lineup implements DataObject {
   const Lineup._();
 
   const factory Lineup({

@@ -15,6 +15,7 @@ final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNot
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'windowStateNotifierProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -50,7 +51,7 @@ final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNot
   @override
   WindowStateNotifierProvider $copyWithBuild(
     Raw<Future<WindowState>> Function(
-      Ref<Raw<Future<WindowState>>>,
+      Ref,
       WindowStateNotifier,
     ) build,
   ) {
@@ -59,8 +60,8 @@ final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNot
 
   @$internal
   @override
-  $NotifierProviderElement<WindowStateNotifier, Raw<Future<WindowState>>> $createElement(ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+  $NotifierProviderElement<WindowStateNotifier, Raw<Future<WindowState>>> $createElement($ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$windowStateNotifierHash() => r'c450d92ac1e13d9404d9adb1e68f47177fb150f0';
@@ -69,8 +70,14 @@ abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>>
   Raw<Future<WindowState>> build();
   @$internal
   @override
-  Raw<Future<WindowState>> runBuild() => build();
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<WindowState>>>;
+    final element = ref.element
+        as $ClassProviderElement<NotifierBase<Raw<Future<WindowState>>>, Raw<Future<WindowState>>, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

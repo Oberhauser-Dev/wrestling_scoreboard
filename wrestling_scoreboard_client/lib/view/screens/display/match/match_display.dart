@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
@@ -34,7 +34,7 @@ class MatchDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 140;
     return SingleConsumer<TeamMatch>(
@@ -84,8 +84,8 @@ class MatchDisplay extends ConsumerWidget {
                 if (match.referee != null) '${localizations.refereeAbbr}: ${match.referee?.fullName}',
                 // Not enough space to display all three referees
                 // if (match.matChairman != null)
-                //   '${AppLocalizations.of(context)!.refereeAbbr}: ${match.matChairman?.fullName}',
-                // if (match.judge != null) '${AppLocalizations.of(context)!.refereeAbbr}: ${match.judge?.fullName}',
+                //   '${context.l10n.refereeAbbr}: ${match.matChairman?.fullName}',
+                // if (match.judge != null) '${context.l10n.refereeAbbr}: ${match.judge?.fullName}',
               ];
 
               final headerItems = <Widget>[
@@ -165,9 +165,7 @@ class BoutListItem extends ConsumerWidget {
       color: role.color(),
       child: Center(
         child: ScaledText(
-          pStatus == null
-              ? AppLocalizations.of(context)!.participantVacant
-              : pStatus.participation.membership.person.fullName,
+          pStatus == null ? context.l10n.participantVacant : pStatus.participation.membership.person.fullName,
           color: pStatus == null ? Colors.white.disabled() : Colors.white,
           fontSize: 17,
           minFontSize: 14,

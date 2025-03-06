@@ -6,12 +6,12 @@ part of 'migration.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MigrationImpl _$$MigrationImplFromJson(Map<String, dynamic> json) => _$MigrationImpl(
+_Migration _$MigrationFromJson(Map<String, dynamic> json) => _Migration(
       semver: json['semver'] as String,
       minClientVersion: json['minClientVersion'] as String,
     );
 
-Map<String, dynamic> _$$MigrationImplToJson(_$MigrationImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$MigrationToJson(_Migration instance) => <String, dynamic>{
       'semver': instance.semver,
       'minClientVersion': instance.minClientVersion,
     };

@@ -7,7 +7,7 @@ part 'competition_team_participation.g.dart';
 
 /// Team participates in a competition.
 @freezed
-class CompetitionTeamParticipation with _$CompetitionTeamParticipation implements DataObject {
+abstract class CompetitionTeamParticipation with _$CompetitionTeamParticipation implements DataObject {
   const CompetitionTeamParticipation._();
 
   const factory CompetitionTeamParticipation({

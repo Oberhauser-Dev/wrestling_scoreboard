@@ -7,7 +7,7 @@ part 'team_club_affiliation.g.dart';
 
 /// The affiliation of a team and a club.
 @freezed
-class TeamClubAffiliation with _$TeamClubAffiliation implements DataObject {
+abstract class TeamClubAffiliation with _$TeamClubAffiliation implements DataObject {
   const TeamClubAffiliation._();
 
   const factory TeamClubAffiliation({

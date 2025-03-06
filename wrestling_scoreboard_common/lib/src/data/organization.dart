@@ -7,7 +7,7 @@ part 'organization.g.dart';
 
 /// The league in which the team is bouting.
 @freezed
-class Organization with _$Organization implements DataObject {
+abstract class Organization with _$Organization implements DataObject {
   const Organization._();
 
   const factory Organization({

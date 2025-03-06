@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,41 +10,63 @@ part of 'competition.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Competition _$CompetitionFromJson(Map<String, dynamic> json) {
-  return _Competition.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Competition {
-  int? get id => throw _privateConstructorUsedError;
-  String? get orgSyncId => throw _privateConstructorUsedError;
-  Organization? get organization => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  BoutConfig get boutConfig => throw _privateConstructorUsedError;
-  String? get location => throw _privateConstructorUsedError;
-  DateTime get date => throw _privateConstructorUsedError;
-  String? get no => throw _privateConstructorUsedError;
-  int? get visitorsCount => throw _privateConstructorUsedError;
-  String? get comment => throw _privateConstructorUsedError;
-
-  /// Serializes this Competition to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  String? get orgSyncId;
+  Organization? get organization;
+  String get name;
+  BoutConfig get boutConfig;
+  String? get location;
+  DateTime get date;
+  String? get no;
+  int? get visitorsCount;
+  String? get comment;
 
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CompetitionCopyWith<Competition> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $CompetitionCopyWith<Competition> get copyWith =>
+      _$CompetitionCopyWithImpl<Competition>(this as Competition, _$identity);
+
+  /// Serializes this Competition to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Competition &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
+            (identical(other.location, location) || other.location == location) &&
+            (identical(other.date, date) || other.date == date) &&
+            (identical(other.no, no) || other.no == no) &&
+            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
+            (identical(other.comment, comment) || other.comment == comment));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
+
+  @override
+  String toString() {
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
+  }
 }
 
 /// @nodoc
-abstract class $CompetitionCopyWith<$Res> {
-  factory $CompetitionCopyWith(Competition value, $Res Function(Competition) then) =
-      _$CompetitionCopyWithImpl<$Res, Competition>;
+abstract mixin class $CompetitionCopyWith<$Res> {
+  factory $CompetitionCopyWith(Competition value, $Res Function(Competition) _then) = _$CompetitionCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -62,13 +85,11 @@ abstract class $CompetitionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $CompetitionCopyWith<$Res> {
-  _$CompetitionCopyWithImpl(this._value, this._then);
+class _$CompetitionCopyWithImpl<$Res> implements $CompetitionCopyWith<$Res> {
+  _$CompetitionCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Competition _self;
+  final $Res Function(Competition) _then;
 
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
@@ -86,48 +107,48 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
     Object? visitorsCount = freezed,
     Object? comment = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
+          ? _self.orgSyncId
           : orgSyncId // ignore: cast_nullable_to_non_nullable
               as String?,
       organization: freezed == organization
-          ? _value.organization
+          ? _self.organization
           : organization // ignore: cast_nullable_to_non_nullable
               as Organization?,
       name: null == name
-          ? _value.name
+          ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       boutConfig: null == boutConfig
-          ? _value.boutConfig
+          ? _self.boutConfig
           : boutConfig // ignore: cast_nullable_to_non_nullable
               as BoutConfig,
       location: freezed == location
-          ? _value.location
+          ? _self.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
       date: null == date
-          ? _value.date
+          ? _self.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
       no: freezed == no
-          ? _value.no
+          ? _self.no
           : no // ignore: cast_nullable_to_non_nullable
               as String?,
       visitorsCount: freezed == visitorsCount
-          ? _value.visitorsCount
+          ? _self.visitorsCount
           : visitorsCount // ignore: cast_nullable_to_non_nullable
               as int?,
       comment: freezed == comment
-          ? _value.comment
+          ? _self.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Competition
@@ -135,12 +156,12 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
-    if (_value.organization == null) {
+    if (_self.organization == null) {
       return null;
     }
 
-    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
-      return _then(_value.copyWith(organization: value) as $Val);
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
     });
   }
 
@@ -149,107 +170,16 @@ class _$CompetitionCopyWithImpl<$Res, $Val extends Competition> implements $Comp
   @override
   @pragma('vm:prefer-inline')
   $BoutConfigCopyWith<$Res> get boutConfig {
-    return $BoutConfigCopyWith<$Res>(_value.boutConfig, (value) {
-      return _then(_value.copyWith(boutConfig: value) as $Val);
+    return $BoutConfigCopyWith<$Res>(_self.boutConfig, (value) {
+      return _then(_self.copyWith(boutConfig: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$CompetitionImplCopyWith<$Res> implements $CompetitionCopyWith<$Res> {
-  factory _$$CompetitionImplCopyWith(_$CompetitionImpl value, $Res Function(_$CompetitionImpl) then) =
-      __$$CompetitionImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int? id,
-      String? orgSyncId,
-      Organization? organization,
-      String name,
-      BoutConfig boutConfig,
-      String? location,
-      DateTime date,
-      String? no,
-      int? visitorsCount,
-      String? comment});
-
-  @override
-  $OrganizationCopyWith<$Res>? get organization;
-  @override
-  $BoutConfigCopyWith<$Res> get boutConfig;
-}
-
-/// @nodoc
-class __$$CompetitionImplCopyWithImpl<$Res> extends _$CompetitionCopyWithImpl<$Res, _$CompetitionImpl>
-    implements _$$CompetitionImplCopyWith<$Res> {
-  __$$CompetitionImplCopyWithImpl(_$CompetitionImpl _value, $Res Function(_$CompetitionImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Competition
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
-    Object? name = null,
-    Object? boutConfig = null,
-    Object? location = freezed,
-    Object? date = null,
-    Object? no = freezed,
-    Object? visitorsCount = freezed,
-    Object? comment = freezed,
-  }) {
-    return _then(_$CompetitionImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _value.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      boutConfig: null == boutConfig
-          ? _value.boutConfig
-          : boutConfig // ignore: cast_nullable_to_non_nullable
-              as BoutConfig,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      no: freezed == no
-          ? _value.no
-          : no // ignore: cast_nullable_to_non_nullable
-              as String?,
-      visitorsCount: freezed == visitorsCount
-          ? _value.visitorsCount
-          : visitorsCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      comment: freezed == comment
-          ? _value.comment
-          : comment // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$CompetitionImpl extends _Competition {
-  const _$CompetitionImpl(
+class _Competition extends Competition {
+  const _Competition(
       {this.id,
       this.orgSyncId,
       this.organization,
@@ -261,8 +191,7 @@ class _$CompetitionImpl extends _Competition {
       this.visitorsCount,
       this.comment})
       : super._();
-
-  factory _$CompetitionImpl.fromJson(Map<String, dynamic> json) => _$$CompetitionImplFromJson(json);
+  factory _Competition.fromJson(Map<String, dynamic> json) => _$CompetitionFromJson(json);
 
   @override
   final int? id;
@@ -285,16 +214,25 @@ class _$CompetitionImpl extends _Competition {
   @override
   final String? comment;
 
+  /// Create a copy of Competition
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$CompetitionCopyWith<_Competition> get copyWith => __$CompetitionCopyWithImpl<_Competition>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$CompetitionToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CompetitionImpl &&
+            other is _Competition &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.organization, organization) || other.organization == organization) &&
@@ -312,62 +250,125 @@ class _$CompetitionImpl extends _Competition {
   int get hashCode => Object.hash(
       runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
 
-  /// Create a copy of Competition
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$CompetitionImplCopyWith<_$CompetitionImpl> get copyWith =>
-      __$$CompetitionImplCopyWithImpl<_$CompetitionImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CompetitionImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
   }
 }
 
-abstract class _Competition extends Competition {
-  const factory _Competition(
-      {final int? id,
-      final String? orgSyncId,
-      final Organization? organization,
-      required final String name,
-      required final BoutConfig boutConfig,
-      final String? location,
-      required final DateTime date,
-      final String? no,
-      final int? visitorsCount,
-      final String? comment}) = _$CompetitionImpl;
-  const _Competition._() : super._();
+/// @nodoc
+abstract mixin class _$CompetitionCopyWith<$Res> implements $CompetitionCopyWith<$Res> {
+  factory _$CompetitionCopyWith(_Competition value, $Res Function(_Competition) _then) = __$CompetitionCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      BoutConfig boutConfig,
+      String? location,
+      DateTime date,
+      String? no,
+      int? visitorsCount,
+      String? comment});
 
-  factory _Competition.fromJson(Map<String, dynamic> json) = _$CompetitionImpl.fromJson;
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
+  @override
+  $BoutConfigCopyWith<$Res> get boutConfig;
+}
 
-  @override
-  int? get id;
-  @override
-  String? get orgSyncId;
-  @override
-  Organization? get organization;
-  @override
-  String get name;
-  @override
-  BoutConfig get boutConfig;
-  @override
-  String? get location;
-  @override
-  DateTime get date;
-  @override
-  String? get no;
-  @override
-  int? get visitorsCount;
-  @override
-  String? get comment;
+/// @nodoc
+class __$CompetitionCopyWithImpl<$Res> implements _$CompetitionCopyWith<$Res> {
+  __$CompetitionCopyWithImpl(this._self, this._then);
+
+  final _Competition _self;
+  final $Res Function(_Competition) _then;
 
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CompetitionImplCopyWith<_$CompetitionImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
+    Object? name = null,
+    Object? boutConfig = null,
+    Object? location = freezed,
+    Object? date = null,
+    Object? no = freezed,
+    Object? visitorsCount = freezed,
+    Object? comment = freezed,
+  }) {
+    return _then(_Competition(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _self.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _self.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      boutConfig: null == boutConfig
+          ? _self.boutConfig
+          : boutConfig // ignore: cast_nullable_to_non_nullable
+              as BoutConfig,
+      location: freezed == location
+          ? _self.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String?,
+      date: null == date
+          ? _self.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      no: freezed == no
+          ? _self.no
+          : no // ignore: cast_nullable_to_non_nullable
+              as String?,
+      visitorsCount: freezed == visitorsCount
+          ? _self.visitorsCount
+          : visitorsCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      comment: freezed == comment
+          ? _self.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+
+  /// Create a copy of Competition
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_self.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
+    });
+  }
+
+  /// Create a copy of Competition
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BoutConfigCopyWith<$Res> get boutConfig {
+    return $BoutConfigCopyWith<$Res>(_self.boutConfig, (value) {
+      return _then(_self.copyWith(boutConfig: value));
+    });
+  }
 }
+
+// dart format on

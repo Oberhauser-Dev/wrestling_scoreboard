@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,40 +10,62 @@ part of 'bout.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Bout _$BoutFromJson(Map<String, dynamic> json) {
-  return _Bout.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Bout {
-  int? get id => throw _privateConstructorUsedError;
-  String? get orgSyncId => throw _privateConstructorUsedError;
-  Organization? get organization => throw _privateConstructorUsedError;
-  ParticipantState? get r => throw _privateConstructorUsedError; // red
-  ParticipantState? get b => throw _privateConstructorUsedError; // blue
-  WeightClass? get weightClass => throw _privateConstructorUsedError;
-  int? get pool => throw _privateConstructorUsedError;
-  BoutRole? get winnerRole => throw _privateConstructorUsedError;
-  BoutResult? get result => throw _privateConstructorUsedError;
-  Duration get duration => throw _privateConstructorUsedError;
-
-  /// Serializes this Bout to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  String? get orgSyncId;
+  Organization? get organization;
+  ParticipantState? get r; // red
+  ParticipantState? get b; // blue
+  WeightClass? get weightClass;
+  int? get pool;
+  BoutRole? get winnerRole;
+  BoutResult? get result;
+  Duration get duration;
 
   /// Create a copy of Bout
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BoutCopyWith<Bout> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $BoutCopyWith<Bout> get copyWith => _$BoutCopyWithImpl<Bout>(this as Bout, _$identity);
+
+  /// Serializes this Bout to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Bout &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.r, r) || other.r == r) &&
+            (identical(other.b, b) || other.b == b) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
+            (identical(other.pool, pool) || other.pool == pool) &&
+            (identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole) &&
+            (identical(other.result, result) || other.result == result) &&
+            (identical(other.duration, duration) || other.duration == duration));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, r, b, weightClass, pool, winnerRole, result, duration);
+
+  @override
+  String toString() {
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+  }
 }
 
 /// @nodoc
-abstract class $BoutCopyWith<$Res> {
-  factory $BoutCopyWith(Bout value, $Res Function(Bout) then) = _$BoutCopyWithImpl<$Res, Bout>;
+abstract mixin class $BoutCopyWith<$Res> {
+  factory $BoutCopyWith(Bout value, $Res Function(Bout) _then) = _$BoutCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -63,13 +86,11 @@ abstract class $BoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res> {
-  _$BoutCopyWithImpl(this._value, this._then);
+class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
+  _$BoutCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Bout _self;
+  final $Res Function(Bout) _then;
 
   /// Create a copy of Bout
   /// with the given fields replaced by the non-null parameter values.
@@ -87,48 +108,48 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
     Object? result = freezed,
     Object? duration = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
+          ? _self.orgSyncId
           : orgSyncId // ignore: cast_nullable_to_non_nullable
               as String?,
       organization: freezed == organization
-          ? _value.organization
+          ? _self.organization
           : organization // ignore: cast_nullable_to_non_nullable
               as Organization?,
       r: freezed == r
-          ? _value.r
+          ? _self.r
           : r // ignore: cast_nullable_to_non_nullable
               as ParticipantState?,
       b: freezed == b
-          ? _value.b
+          ? _self.b
           : b // ignore: cast_nullable_to_non_nullable
               as ParticipantState?,
       weightClass: freezed == weightClass
-          ? _value.weightClass
+          ? _self.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
               as WeightClass?,
       pool: freezed == pool
-          ? _value.pool
+          ? _self.pool
           : pool // ignore: cast_nullable_to_non_nullable
               as int?,
       winnerRole: freezed == winnerRole
-          ? _value.winnerRole
+          ? _self.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable
               as BoutRole?,
       result: freezed == result
-          ? _value.result
+          ? _self.result
           : result // ignore: cast_nullable_to_non_nullable
               as BoutResult?,
       duration: null == duration
-          ? _value.duration
+          ? _self.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as Duration,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Bout
@@ -136,12 +157,12 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
-    if (_value.organization == null) {
+    if (_self.organization == null) {
       return null;
     }
 
-    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
-      return _then(_value.copyWith(organization: value) as $Val);
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
     });
   }
 
@@ -150,12 +171,12 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
   @override
   @pragma('vm:prefer-inline')
   $ParticipantStateCopyWith<$Res>? get r {
-    if (_value.r == null) {
+    if (_self.r == null) {
       return null;
     }
 
-    return $ParticipantStateCopyWith<$Res>(_value.r!, (value) {
-      return _then(_value.copyWith(r: value) as $Val);
+    return $ParticipantStateCopyWith<$Res>(_self.r!, (value) {
+      return _then(_self.copyWith(r: value));
     });
   }
 
@@ -164,12 +185,12 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
   @override
   @pragma('vm:prefer-inline')
   $ParticipantStateCopyWith<$Res>? get b {
-    if (_value.b == null) {
+    if (_self.b == null) {
       return null;
     }
 
-    return $ParticipantStateCopyWith<$Res>(_value.b!, (value) {
-      return _then(_value.copyWith(b: value) as $Val);
+    return $ParticipantStateCopyWith<$Res>(_self.b!, (value) {
+      return _then(_self.copyWith(b: value));
     });
   }
 
@@ -178,112 +199,20 @@ class _$BoutCopyWithImpl<$Res, $Val extends Bout> implements $BoutCopyWith<$Res>
   @override
   @pragma('vm:prefer-inline')
   $WeightClassCopyWith<$Res>? get weightClass {
-    if (_value.weightClass == null) {
+    if (_self.weightClass == null) {
       return null;
     }
 
-    return $WeightClassCopyWith<$Res>(_value.weightClass!, (value) {
-      return _then(_value.copyWith(weightClass: value) as $Val);
+    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
+      return _then(_self.copyWith(weightClass: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$BoutImplCopyWith<$Res> implements $BoutCopyWith<$Res> {
-  factory _$$BoutImplCopyWith(_$BoutImpl value, $Res Function(_$BoutImpl) then) = __$$BoutImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int? id,
-      String? orgSyncId,
-      Organization? organization,
-      ParticipantState? r,
-      ParticipantState? b,
-      WeightClass? weightClass,
-      int? pool,
-      BoutRole? winnerRole,
-      BoutResult? result,
-      Duration duration});
-
-  @override
-  $OrganizationCopyWith<$Res>? get organization;
-  @override
-  $ParticipantStateCopyWith<$Res>? get r;
-  @override
-  $ParticipantStateCopyWith<$Res>? get b;
-  @override
-  $WeightClassCopyWith<$Res>? get weightClass;
-}
-
-/// @nodoc
-class __$$BoutImplCopyWithImpl<$Res> extends _$BoutCopyWithImpl<$Res, _$BoutImpl> implements _$$BoutImplCopyWith<$Res> {
-  __$$BoutImplCopyWithImpl(_$BoutImpl _value, $Res Function(_$BoutImpl) _then) : super(_value, _then);
-
-  /// Create a copy of Bout
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
-    Object? r = freezed,
-    Object? b = freezed,
-    Object? weightClass = freezed,
-    Object? pool = freezed,
-    Object? winnerRole = freezed,
-    Object? result = freezed,
-    Object? duration = null,
-  }) {
-    return _then(_$BoutImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _value.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      r: freezed == r
-          ? _value.r
-          : r // ignore: cast_nullable_to_non_nullable
-              as ParticipantState?,
-      b: freezed == b
-          ? _value.b
-          : b // ignore: cast_nullable_to_non_nullable
-              as ParticipantState?,
-      weightClass: freezed == weightClass
-          ? _value.weightClass
-          : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass?,
-      pool: freezed == pool
-          ? _value.pool
-          : pool // ignore: cast_nullable_to_non_nullable
-              as int?,
-      winnerRole: freezed == winnerRole
-          ? _value.winnerRole
-          : winnerRole // ignore: cast_nullable_to_non_nullable
-              as BoutRole?,
-      result: freezed == result
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
-              as BoutResult?,
-      duration: null == duration
-          ? _value.duration
-          : duration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$BoutImpl extends _Bout {
-  const _$BoutImpl(
+class _Bout extends Bout {
+  const _Bout(
       {this.id,
       this.orgSyncId,
       this.organization,
@@ -295,8 +224,7 @@ class _$BoutImpl extends _Bout {
       this.result,
       this.duration = Duration.zero})
       : super._();
-
-  factory _$BoutImpl.fromJson(Map<String, dynamic> json) => _$$BoutImplFromJson(json);
+  factory _Bout.fromJson(Map<String, dynamic> json) => _$BoutFromJson(json);
 
   @override
   final int? id;
@@ -322,16 +250,25 @@ class _$BoutImpl extends _Bout {
   @JsonKey()
   final Duration duration;
 
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$BoutCopyWith<_Bout> get copyWith => __$BoutCopyWithImpl<_Bout>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$BoutToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BoutImpl &&
+            other is _Bout &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.organization, organization) || other.organization == organization) &&
@@ -349,61 +286,161 @@ class _$BoutImpl extends _Bout {
   int get hashCode =>
       Object.hash(runtimeType, id, orgSyncId, organization, r, b, weightClass, pool, winnerRole, result, duration);
 
-  /// Create a copy of Bout
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$BoutImplCopyWith<_$BoutImpl> get copyWith => __$$BoutImplCopyWithImpl<_$BoutImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BoutImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 }
 
-abstract class _Bout extends Bout {
-  const factory _Bout(
-      {final int? id,
-      final String? orgSyncId,
-      final Organization? organization,
-      final ParticipantState? r,
-      final ParticipantState? b,
-      final WeightClass? weightClass,
-      final int? pool,
-      final BoutRole? winnerRole,
-      final BoutResult? result,
-      final Duration duration}) = _$BoutImpl;
-  const _Bout._() : super._();
+/// @nodoc
+abstract mixin class _$BoutCopyWith<$Res> implements $BoutCopyWith<$Res> {
+  factory _$BoutCopyWith(_Bout value, $Res Function(_Bout) _then) = __$BoutCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      ParticipantState? r,
+      ParticipantState? b,
+      WeightClass? weightClass,
+      int? pool,
+      BoutRole? winnerRole,
+      BoutResult? result,
+      Duration duration});
 
-  factory _Bout.fromJson(Map<String, dynamic> json) = _$BoutImpl.fromJson;
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
+  @override
+  $ParticipantStateCopyWith<$Res>? get r;
+  @override
+  $ParticipantStateCopyWith<$Res>? get b;
+  @override
+  $WeightClassCopyWith<$Res>? get weightClass;
+}
 
-  @override
-  int? get id;
-  @override
-  String? get orgSyncId;
-  @override
-  Organization? get organization;
-  @override
-  ParticipantState? get r; // red
-  @override
-  ParticipantState? get b; // blue
-  @override
-  WeightClass? get weightClass;
-  @override
-  int? get pool;
-  @override
-  BoutRole? get winnerRole;
-  @override
-  BoutResult? get result;
-  @override
-  Duration get duration;
+/// @nodoc
+class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
+  __$BoutCopyWithImpl(this._self, this._then);
+
+  final _Bout _self;
+  final $Res Function(_Bout) _then;
 
   /// Create a copy of Bout
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BoutImplCopyWith<_$BoutImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
+    Object? r = freezed,
+    Object? b = freezed,
+    Object? weightClass = freezed,
+    Object? pool = freezed,
+    Object? winnerRole = freezed,
+    Object? result = freezed,
+    Object? duration = null,
+  }) {
+    return _then(_Bout(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _self.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _self.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
+      r: freezed == r
+          ? _self.r
+          : r // ignore: cast_nullable_to_non_nullable
+              as ParticipantState?,
+      b: freezed == b
+          ? _self.b
+          : b // ignore: cast_nullable_to_non_nullable
+              as ParticipantState?,
+      weightClass: freezed == weightClass
+          ? _self.weightClass
+          : weightClass // ignore: cast_nullable_to_non_nullable
+              as WeightClass?,
+      pool: freezed == pool
+          ? _self.pool
+          : pool // ignore: cast_nullable_to_non_nullable
+              as int?,
+      winnerRole: freezed == winnerRole
+          ? _self.winnerRole
+          : winnerRole // ignore: cast_nullable_to_non_nullable
+              as BoutRole?,
+      result: freezed == result
+          ? _self.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as BoutResult?,
+      duration: null == duration
+          ? _self.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as Duration,
+    ));
+  }
+
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_self.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
+    });
+  }
+
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ParticipantStateCopyWith<$Res>? get r {
+    if (_self.r == null) {
+      return null;
+    }
+
+    return $ParticipantStateCopyWith<$Res>(_self.r!, (value) {
+      return _then(_self.copyWith(r: value));
+    });
+  }
+
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ParticipantStateCopyWith<$Res>? get b {
+    if (_self.b == null) {
+      return null;
+    }
+
+    return $ParticipantStateCopyWith<$Res>(_self.b!, (value) {
+      return _then(_self.copyWith(b: value));
+    });
+  }
+
+  /// Create a copy of Bout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WeightClassCopyWith<$Res>? get weightClass {
+    if (_self.weightClass == null) {
+      return null;
+    }
+
+    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
+      return _then(_self.copyWith(weightClass: value));
+    });
+  }
 }
+
+// dart format on

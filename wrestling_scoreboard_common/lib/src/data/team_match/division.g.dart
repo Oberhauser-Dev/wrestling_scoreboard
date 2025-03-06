@@ -6,7 +6,7 @@ part of 'division.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DivisionImpl _$$DivisionImplFromJson(Map<String, dynamic> json) => _$DivisionImpl(
+_Division _$DivisionFromJson(Map<String, dynamic> json) => _Division(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
@@ -18,7 +18,7 @@ _$DivisionImpl _$$DivisionImplFromJson(Map<String, dynamic> json) => _$DivisionI
       parent: json['parent'] == null ? null : Division.fromJson(json['parent'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$DivisionImplToJson(_$DivisionImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$DivisionToJson(_Division instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization.toJson(),

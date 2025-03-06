@@ -1,6 +1,6 @@
 import 'package:country/country.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
@@ -42,7 +42,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
     required int? id,
     required List<Widget> fields,
   }) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     final navigator = Navigator.of(context);
 
     final items = [
@@ -190,7 +190,7 @@ class PersonEdit extends AbstractPersonEdit {
 class PersonEditState extends AbstractPersonEditState<PersonEdit> {
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return buildEdit(context, id: widget.person?.id, classLocale: localizations.person, fields: []);
   }
 

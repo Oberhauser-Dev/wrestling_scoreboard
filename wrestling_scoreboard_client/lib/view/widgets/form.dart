@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 
 class CustomTextInput extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
@@ -23,7 +23,7 @@ class CustomTextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return ListTile(
       leading: iconData != null ? Icon(iconData) : const SizedBox(),
       title: TextFormField(
@@ -62,7 +62,7 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return ListTile(
       leading: const Icon(Icons.email),
       title: TextFormField(
@@ -102,7 +102,7 @@ class PasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return ListTile(
       leading: const Icon(Icons.password),
       title: TextFormField(

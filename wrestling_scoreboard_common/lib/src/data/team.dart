@@ -7,7 +7,7 @@ part 'team.g.dart';
 
 /// A team (can have multiple clubs in a players community).
 @freezed
-class Team with _$Team implements DataObject, Organizational {
+abstract class Team with _$Team implements DataObject, Organizational {
   const Team._();
 
   const factory Team({

@@ -7,7 +7,7 @@ part 'competition.g.dart';
 
 /// For team matches only.
 @freezed
-class Competition extends WrestlingEvent with _$Competition {
+abstract class Competition extends WrestlingEvent with _$Competition {
   const Competition._();
 
   const factory Competition({

@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -112,7 +112,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
   }
 
   List<Widget> _buildActions(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     final navigator = Navigator.of(context);
     return [
       EditAction(
@@ -153,7 +153,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return Form(
       key: _formKey,
       child: CustomizableEditWidget(
@@ -272,7 +272,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return ListTile(
       title: Row(
         children: [

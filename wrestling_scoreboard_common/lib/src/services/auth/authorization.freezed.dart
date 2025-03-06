@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,125 +10,29 @@ part of 'authorization.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-BasicAuthService _$BasicAuthServiceFromJson(Map<String, dynamic> json) {
-  return _BasicAuthService.fromJson(json);
-}
 
 /// @nodoc
 mixin _$BasicAuthService {
-  String get username => throw _privateConstructorUsedError;
-  String get password => throw _privateConstructorUsedError;
-
-  /// Serializes this BasicAuthService to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get username;
+  String get password;
 
   /// Create a copy of BasicAuthService
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BasicAuthServiceCopyWith<BasicAuthService> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BasicAuthServiceCopyWith<$Res> {
-  factory $BasicAuthServiceCopyWith(BasicAuthService value, $Res Function(BasicAuthService) then) =
-      _$BasicAuthServiceCopyWithImpl<$Res, BasicAuthService>;
-  @useResult
-  $Res call({String username, String password});
-}
-
-/// @nodoc
-class _$BasicAuthServiceCopyWithImpl<$Res, $Val extends BasicAuthService> implements $BasicAuthServiceCopyWith<$Res> {
-  _$BasicAuthServiceCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of BasicAuthService
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? username = null,
-    Object? password = null,
-  }) {
-    return _then(_value.copyWith(
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
+  $BasicAuthServiceCopyWith<BasicAuthService> get copyWith =>
+      _$BasicAuthServiceCopyWithImpl<BasicAuthService>(this as BasicAuthService, _$identity);
 
-/// @nodoc
-abstract class _$$BasicAuthServiceImplCopyWith<$Res> implements $BasicAuthServiceCopyWith<$Res> {
-  factory _$$BasicAuthServiceImplCopyWith(_$BasicAuthServiceImpl value, $Res Function(_$BasicAuthServiceImpl) then) =
-      __$$BasicAuthServiceImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String username, String password});
-}
-
-/// @nodoc
-class __$$BasicAuthServiceImplCopyWithImpl<$Res> extends _$BasicAuthServiceCopyWithImpl<$Res, _$BasicAuthServiceImpl>
-    implements _$$BasicAuthServiceImplCopyWith<$Res> {
-  __$$BasicAuthServiceImplCopyWithImpl(_$BasicAuthServiceImpl _value, $Res Function(_$BasicAuthServiceImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of BasicAuthService
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? username = null,
-    Object? password = null,
-  }) {
-    return _then(_$BasicAuthServiceImpl(
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$BasicAuthServiceImpl extends _BasicAuthService {
-  const _$BasicAuthServiceImpl({required this.username, required this.password}) : super._();
-
-  factory _$BasicAuthServiceImpl.fromJson(Map<String, dynamic> json) => _$$BasicAuthServiceImplFromJson(json);
-
-  @override
-  final String username;
-  @override
-  final String password;
-
-  @override
-  String toString() {
-    return 'BasicAuthService(username: $username, password: $password)';
-  }
+  /// Serializes this BasicAuthService to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BasicAuthServiceImpl &&
+            other is BasicAuthService &&
             (identical(other.username, username) || other.username == username) &&
             (identical(other.password, password) || other.password == password));
   }
@@ -136,106 +41,176 @@ class _$BasicAuthServiceImpl extends _BasicAuthService {
   @override
   int get hashCode => Object.hash(runtimeType, username, password);
 
-  /// Create a copy of BasicAuthService
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$BasicAuthServiceImplCopyWith<_$BasicAuthServiceImpl> get copyWith =>
-      __$$BasicAuthServiceImplCopyWithImpl<_$BasicAuthServiceImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BasicAuthServiceImplToJson(
-      this,
-    );
+  String toString() {
+    return 'BasicAuthService(username: $username, password: $password)';
   }
 }
 
-abstract class _BasicAuthService extends BasicAuthService {
-  const factory _BasicAuthService({required final String username, required final String password}) =
-      _$BasicAuthServiceImpl;
-  const _BasicAuthService._() : super._();
+/// @nodoc
+abstract mixin class $BasicAuthServiceCopyWith<$Res> {
+  factory $BasicAuthServiceCopyWith(BasicAuthService value, $Res Function(BasicAuthService) _then) =
+      _$BasicAuthServiceCopyWithImpl;
+  @useResult
+  $Res call({String username, String password});
+}
 
-  factory _BasicAuthService.fromJson(Map<String, dynamic> json) = _$BasicAuthServiceImpl.fromJson;
+/// @nodoc
+class _$BasicAuthServiceCopyWithImpl<$Res> implements $BasicAuthServiceCopyWith<$Res> {
+  _$BasicAuthServiceCopyWithImpl(this._self, this._then);
+
+  final BasicAuthService _self;
+  final $Res Function(BasicAuthService) _then;
+
+  /// Create a copy of BasicAuthService
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? username = null,
+    Object? password = null,
+  }) {
+    return _then(_self.copyWith(
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: null == password
+          ? _self.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _BasicAuthService extends BasicAuthService {
+  const _BasicAuthService({required this.username, required this.password}) : super._();
+  factory _BasicAuthService.fromJson(Map<String, dynamic> json) => _$BasicAuthServiceFromJson(json);
 
   @override
-  String get username;
+  final String username;
   @override
-  String get password;
+  final String password;
 
   /// Create a copy of BasicAuthService
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BasicAuthServiceImplCopyWith<_$BasicAuthServiceImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$BasicAuthServiceCopyWith<_BasicAuthService> get copyWith =>
+      __$BasicAuthServiceCopyWithImpl<_BasicAuthService>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$BasicAuthServiceToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BasicAuthService &&
+            (identical(other.username, username) || other.username == username) &&
+            (identical(other.password, password) || other.password == password));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, username, password);
+
+  @override
+  String toString() {
+    return 'BasicAuthService(username: $username, password: $password)';
+  }
 }
 
-BearerAuthService _$BearerAuthServiceFromJson(Map<String, dynamic> json) {
-  return _BearerAuthService.fromJson(json);
+/// @nodoc
+abstract mixin class _$BasicAuthServiceCopyWith<$Res> implements $BasicAuthServiceCopyWith<$Res> {
+  factory _$BasicAuthServiceCopyWith(_BasicAuthService value, $Res Function(_BasicAuthService) _then) =
+      __$BasicAuthServiceCopyWithImpl;
+  @override
+  @useResult
+  $Res call({String username, String password});
+}
+
+/// @nodoc
+class __$BasicAuthServiceCopyWithImpl<$Res> implements _$BasicAuthServiceCopyWith<$Res> {
+  __$BasicAuthServiceCopyWithImpl(this._self, this._then);
+
+  final _BasicAuthService _self;
+  final $Res Function(_BasicAuthService) _then;
+
+  /// Create a copy of BasicAuthService
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? username = null,
+    Object? password = null,
+  }) {
+    return _then(_BasicAuthService(
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: null == password
+          ? _self.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 mixin _$BearerAuthService {
-  String get token => throw _privateConstructorUsedError;
-
-  /// Serializes this BearerAuthService to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get token;
 
   /// Create a copy of BearerAuthService
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BearerAuthServiceCopyWith<BearerAuthService> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BearerAuthServiceCopyWith<$Res> {
-  factory $BearerAuthServiceCopyWith(BearerAuthService value, $Res Function(BearerAuthService) then) =
-      _$BearerAuthServiceCopyWithImpl<$Res, BearerAuthService>;
-  @useResult
-  $Res call({String token});
-}
-
-/// @nodoc
-class _$BearerAuthServiceCopyWithImpl<$Res, $Val extends BearerAuthService>
-    implements $BearerAuthServiceCopyWith<$Res> {
-  _$BearerAuthServiceCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of BearerAuthService
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $BearerAuthServiceCopyWith<BearerAuthService> get copyWith =>
+      _$BearerAuthServiceCopyWithImpl<BearerAuthService>(this as BearerAuthService, _$identity);
+
+  /// Serializes this BearerAuthService to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? token = null,
-  }) {
-    return _then(_value.copyWith(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is BearerAuthService &&
+            (identical(other.token, token) || other.token == token));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, token);
+
+  @override
+  String toString() {
+    return 'BearerAuthService(token: $token)';
   }
 }
 
 /// @nodoc
-abstract class _$$BearerAuthServiceImplCopyWith<$Res> implements $BearerAuthServiceCopyWith<$Res> {
-  factory _$$BearerAuthServiceImplCopyWith(_$BearerAuthServiceImpl value, $Res Function(_$BearerAuthServiceImpl) then) =
-      __$$BearerAuthServiceImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $BearerAuthServiceCopyWith<$Res> {
+  factory $BearerAuthServiceCopyWith(BearerAuthService value, $Res Function(BearerAuthService) _then) =
+      _$BearerAuthServiceCopyWithImpl;
   @useResult
   $Res call({String token});
 }
 
 /// @nodoc
-class __$$BearerAuthServiceImplCopyWithImpl<$Res> extends _$BearerAuthServiceCopyWithImpl<$Res, _$BearerAuthServiceImpl>
-    implements _$$BearerAuthServiceImplCopyWith<$Res> {
-  __$$BearerAuthServiceImplCopyWithImpl(_$BearerAuthServiceImpl _value, $Res Function(_$BearerAuthServiceImpl) _then)
-      : super(_value, _then);
+class _$BearerAuthServiceCopyWithImpl<$Res> implements $BearerAuthServiceCopyWith<$Res> {
+  _$BearerAuthServiceCopyWithImpl(this._self, this._then);
+
+  final BearerAuthService _self;
+  final $Res Function(BearerAuthService) _then;
 
   /// Create a copy of BearerAuthService
   /// with the given fields replaced by the non-null parameter values.
@@ -244,9 +219,9 @@ class __$$BearerAuthServiceImplCopyWithImpl<$Res> extends _$BearerAuthServiceCop
   $Res call({
     Object? token = null,
   }) {
-    return _then(_$BearerAuthServiceImpl(
+    return _then(_self.copyWith(
       token: null == token
-          ? _value.token
+          ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
     ));
@@ -255,24 +230,33 @@ class __$$BearerAuthServiceImplCopyWithImpl<$Res> extends _$BearerAuthServiceCop
 
 /// @nodoc
 @JsonSerializable()
-class _$BearerAuthServiceImpl extends _BearerAuthService {
-  const _$BearerAuthServiceImpl({required this.token}) : super._();
-
-  factory _$BearerAuthServiceImpl.fromJson(Map<String, dynamic> json) => _$$BearerAuthServiceImplFromJson(json);
+class _BearerAuthService extends BearerAuthService {
+  const _BearerAuthService({required this.token}) : super._();
+  factory _BearerAuthService.fromJson(Map<String, dynamic> json) => _$BearerAuthServiceFromJson(json);
 
   @override
   final String token;
 
+  /// Create a copy of BearerAuthService
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'BearerAuthService(token: $token)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$BearerAuthServiceCopyWith<_BearerAuthService> get copyWith =>
+      __$BearerAuthServiceCopyWithImpl<_BearerAuthService>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$BearerAuthServiceToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BearerAuthServiceImpl &&
+            other is _BearerAuthService &&
             (identical(other.token, token) || other.token == token));
   }
 
@@ -280,34 +264,42 @@ class _$BearerAuthServiceImpl extends _BearerAuthService {
   @override
   int get hashCode => Object.hash(runtimeType, token);
 
-  /// Create a copy of BearerAuthService
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$BearerAuthServiceImplCopyWith<_$BearerAuthServiceImpl> get copyWith =>
-      __$$BearerAuthServiceImplCopyWithImpl<_$BearerAuthServiceImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BearerAuthServiceImplToJson(
-      this,
-    );
+  String toString() {
+    return 'BearerAuthService(token: $token)';
   }
 }
 
-abstract class _BearerAuthService extends BearerAuthService {
-  const factory _BearerAuthService({required final String token}) = _$BearerAuthServiceImpl;
-  const _BearerAuthService._() : super._();
-
-  factory _BearerAuthService.fromJson(Map<String, dynamic> json) = _$BearerAuthServiceImpl.fromJson;
-
+/// @nodoc
+abstract mixin class _$BearerAuthServiceCopyWith<$Res> implements $BearerAuthServiceCopyWith<$Res> {
+  factory _$BearerAuthServiceCopyWith(_BearerAuthService value, $Res Function(_BearerAuthService) _then) =
+      __$BearerAuthServiceCopyWithImpl;
   @override
-  String get token;
+  @useResult
+  $Res call({String token});
+}
+
+/// @nodoc
+class __$BearerAuthServiceCopyWithImpl<$Res> implements _$BearerAuthServiceCopyWith<$Res> {
+  __$BearerAuthServiceCopyWithImpl(this._self, this._then);
+
+  final _BearerAuthService _self;
+  final $Res Function(_BearerAuthService) _then;
 
   /// Create a copy of BearerAuthService
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BearerAuthServiceImplCopyWith<_$BearerAuthServiceImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? token = null,
+  }) {
+    return _then(_BearerAuthService(
+      token: null == token
+          ? _self.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
+
+// dart format on

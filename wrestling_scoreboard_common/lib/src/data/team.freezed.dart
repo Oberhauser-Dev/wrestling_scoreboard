@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,35 +10,51 @@ part of 'team.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Team _$TeamFromJson(Map<String, dynamic> json) {
-  return _Team.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Team {
-  int? get id => throw _privateConstructorUsedError;
-  String? get orgSyncId => throw _privateConstructorUsedError;
-  Organization? get organization => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
-
-  /// Serializes this Team to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  String? get orgSyncId;
+  Organization? get organization;
+  String get name;
+  String? get description;
 
   /// Create a copy of Team
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TeamCopyWith<Team> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $TeamCopyWith<Team> get copyWith => _$TeamCopyWithImpl<Team>(this as Team, _$identity);
+
+  /// Serializes this Team to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Team &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.description, description) || other.description == description));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
+
+  @override
+  String toString() {
+    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
+  }
 }
 
 /// @nodoc
-abstract class $TeamCopyWith<$Res> {
-  factory $TeamCopyWith(Team value, $Res Function(Team) then) = _$TeamCopyWithImpl<$Res, Team>;
+abstract mixin class $TeamCopyWith<$Res> {
+  factory $TeamCopyWith(Team value, $Res Function(Team) _then) = _$TeamCopyWithImpl;
   @useResult
   $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
 
@@ -45,13 +62,11 @@ abstract class $TeamCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res> {
-  _$TeamCopyWithImpl(this._value, this._then);
+class _$TeamCopyWithImpl<$Res> implements $TeamCopyWith<$Res> {
+  _$TeamCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Team _self;
+  final $Res Function(Team) _then;
 
   /// Create a copy of Team
   /// with the given fields replaced by the non-null parameter values.
@@ -64,28 +79,28 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
     Object? name = null,
     Object? description = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
+          ? _self.orgSyncId
           : orgSyncId // ignore: cast_nullable_to_non_nullable
               as String?,
       organization: freezed == organization
-          ? _value.organization
+          ? _self.organization
           : organization // ignore: cast_nullable_to_non_nullable
               as Organization?,
       name: null == name
-          ? _value.name
+          ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       description: freezed == description
-          ? _value.description
+          ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Team
@@ -93,73 +108,21 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team> implements $TeamCopyWith<$Res>
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
-    if (_value.organization == null) {
+    if (_self.organization == null) {
       return null;
     }
 
-    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
-      return _then(_value.copyWith(organization: value) as $Val);
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
-  factory _$$TeamImplCopyWith(_$TeamImpl value, $Res Function(_$TeamImpl) then) = __$$TeamImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
-
-  @override
-  $OrganizationCopyWith<$Res>? get organization;
-}
-
-/// @nodoc
-class __$$TeamImplCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res, _$TeamImpl> implements _$$TeamImplCopyWith<$Res> {
-  __$$TeamImplCopyWithImpl(_$TeamImpl _value, $Res Function(_$TeamImpl) _then) : super(_value, _then);
-
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
-    Object? name = null,
-    Object? description = freezed,
-  }) {
-    return _then(_$TeamImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _value.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$TeamImpl extends _Team {
-  const _$TeamImpl({this.id, this.orgSyncId, this.organization, required this.name, this.description}) : super._();
-
-  factory _$TeamImpl.fromJson(Map<String, dynamic> json) => _$$TeamImplFromJson(json);
+class _Team extends Team {
+  const _Team({this.id, this.orgSyncId, this.organization, required this.name, this.description}) : super._();
+  factory _Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
   @override
   final int? id;
@@ -172,16 +135,25 @@ class _$TeamImpl extends _Team {
   @override
   final String? description;
 
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$TeamCopyWith<_Team> get copyWith => __$TeamCopyWithImpl<_Team>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$TeamToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TeamImpl &&
+            other is _Team &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.organization, organization) || other.organization == organization) &&
@@ -193,46 +165,78 @@ class _$TeamImpl extends _Team {
   @override
   int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
 
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$TeamImplCopyWith<_$TeamImpl> get copyWith => __$$TeamImplCopyWithImpl<_$TeamImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$TeamImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
   }
 }
 
-abstract class _Team extends Team {
-  const factory _Team(
-      {final int? id,
-      final String? orgSyncId,
-      final Organization? organization,
-      required final String name,
-      final String? description}) = _$TeamImpl;
-  const _Team._() : super._();
-
-  factory _Team.fromJson(Map<String, dynamic> json) = _$TeamImpl.fromJson;
+/// @nodoc
+abstract mixin class _$TeamCopyWith<$Res> implements $TeamCopyWith<$Res> {
+  factory _$TeamCopyWith(_Team value, $Res Function(_Team) _then) = __$TeamCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
 
   @override
-  int? get id;
-  @override
-  String? get orgSyncId;
-  @override
-  Organization? get organization;
-  @override
-  String get name;
-  @override
-  String? get description;
+  $OrganizationCopyWith<$Res>? get organization;
+}
+
+/// @nodoc
+class __$TeamCopyWithImpl<$Res> implements _$TeamCopyWith<$Res> {
+  __$TeamCopyWithImpl(this._self, this._then);
+
+  final _Team _self;
+  final $Res Function(_Team) _then;
 
   /// Create a copy of Team
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TeamImplCopyWith<_$TeamImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
+    Object? name = null,
+    Object? description = freezed,
+  }) {
+    return _then(_Team(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _self.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _self.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+
+  /// Create a copy of Team
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_self.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
+    });
+  }
 }
+
+// dart format on

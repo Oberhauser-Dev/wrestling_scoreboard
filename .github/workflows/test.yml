@@ -31,7 +31,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.27.1'
+        default: '3.29.0'
         type: string
       flutter_channel:
         required: false
@@ -54,6 +54,9 @@ jobs:
           flutter-version: ${{ inputs.flutter_version }}
           channel: ${{ inputs.flutter_channel }}
       - uses: bluefireteam/melos-action@v3
+      # FIXME: https://github.com/flutter/flutter/issues/102983#issuecomment-2707419112
+      - run: dart format . -l 120
+        working-directory: wrestling_scoreboard_client/lib/l10n
       - run: melos run format-check
       - run: melos run analyze -- ${{ inputs.fatal_warnings && '--fatal-infos' || '--no-fatal-warnings --no-fatal-infos' }}
       - name: Prepare server

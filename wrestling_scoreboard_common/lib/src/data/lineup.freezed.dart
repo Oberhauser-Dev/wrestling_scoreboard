@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,34 +10,49 @@ part of 'lineup.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Lineup _$LineupFromJson(Map<String, dynamic> json) {
-  return _Lineup.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Lineup {
-  int? get id => throw _privateConstructorUsedError;
-  Team get team => throw _privateConstructorUsedError;
-  Membership? get leader => throw _privateConstructorUsedError; // Mannschaftsführer
-  Membership? get coach => throw _privateConstructorUsedError;
-
-  /// Serializes this Lineup to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  Team get team;
+  Membership? get leader; // Mannschaftsführer
+  Membership? get coach;
 
   /// Create a copy of Lineup
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $LineupCopyWith<Lineup> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $LineupCopyWith<Lineup> get copyWith => _$LineupCopyWithImpl<Lineup>(this as Lineup, _$identity);
+
+  /// Serializes this Lineup to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Lineup &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.team, team) || other.team == team) &&
+            (identical(other.leader, leader) || other.leader == leader) &&
+            (identical(other.coach, coach) || other.coach == coach));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, team, leader, coach);
+
+  @override
+  String toString() {
+    return 'Lineup(id: $id, team: $team, leader: $leader, coach: $coach)';
+  }
 }
 
 /// @nodoc
-abstract class $LineupCopyWith<$Res> {
-  factory $LineupCopyWith(Lineup value, $Res Function(Lineup) then) = _$LineupCopyWithImpl<$Res, Lineup>;
+abstract mixin class $LineupCopyWith<$Res> {
+  factory $LineupCopyWith(Lineup value, $Res Function(Lineup) _then) = _$LineupCopyWithImpl;
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
@@ -46,13 +62,11 @@ abstract class $LineupCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith<$Res> {
-  _$LineupCopyWithImpl(this._value, this._then);
+class _$LineupCopyWithImpl<$Res> implements $LineupCopyWith<$Res> {
+  _$LineupCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Lineup _self;
+  final $Res Function(Lineup) _then;
 
   /// Create a copy of Lineup
   /// with the given fields replaced by the non-null parameter values.
@@ -64,24 +78,24 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
     Object? leader = freezed,
     Object? coach = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       team: null == team
-          ? _value.team
+          ? _self.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
       leader: freezed == leader
-          ? _value.leader
+          ? _self.leader
           : leader // ignore: cast_nullable_to_non_nullable
               as Membership?,
       coach: freezed == coach
-          ? _value.coach
+          ? _self.coach
           : coach // ignore: cast_nullable_to_non_nullable
               as Membership?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Lineup
@@ -89,8 +103,8 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
   @override
   @pragma('vm:prefer-inline')
   $TeamCopyWith<$Res> get team {
-    return $TeamCopyWith<$Res>(_value.team, (value) {
-      return _then(_value.copyWith(team: value) as $Val);
+    return $TeamCopyWith<$Res>(_self.team, (value) {
+      return _then(_self.copyWith(team: value));
     });
   }
 
@@ -99,12 +113,12 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
   @override
   @pragma('vm:prefer-inline')
   $MembershipCopyWith<$Res>? get leader {
-    if (_value.leader == null) {
+    if (_self.leader == null) {
       return null;
     }
 
-    return $MembershipCopyWith<$Res>(_value.leader!, (value) {
-      return _then(_value.copyWith(leader: value) as $Val);
+    return $MembershipCopyWith<$Res>(_self.leader!, (value) {
+      return _then(_self.copyWith(leader: value));
     });
   }
 
@@ -113,74 +127,21 @@ class _$LineupCopyWithImpl<$Res, $Val extends Lineup> implements $LineupCopyWith
   @override
   @pragma('vm:prefer-inline')
   $MembershipCopyWith<$Res>? get coach {
-    if (_value.coach == null) {
+    if (_self.coach == null) {
       return null;
     }
 
-    return $MembershipCopyWith<$Res>(_value.coach!, (value) {
-      return _then(_value.copyWith(coach: value) as $Val);
+    return $MembershipCopyWith<$Res>(_self.coach!, (value) {
+      return _then(_self.copyWith(coach: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$LineupImplCopyWith<$Res> implements $LineupCopyWith<$Res> {
-  factory _$$LineupImplCopyWith(_$LineupImpl value, $Res Function(_$LineupImpl) then) =
-      __$$LineupImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int? id, Team team, Membership? leader, Membership? coach});
-
-  @override
-  $TeamCopyWith<$Res> get team;
-  @override
-  $MembershipCopyWith<$Res>? get leader;
-  @override
-  $MembershipCopyWith<$Res>? get coach;
-}
-
-/// @nodoc
-class __$$LineupImplCopyWithImpl<$Res> extends _$LineupCopyWithImpl<$Res, _$LineupImpl>
-    implements _$$LineupImplCopyWith<$Res> {
-  __$$LineupImplCopyWithImpl(_$LineupImpl _value, $Res Function(_$LineupImpl) _then) : super(_value, _then);
-
-  /// Create a copy of Lineup
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? team = null,
-    Object? leader = freezed,
-    Object? coach = freezed,
-  }) {
-    return _then(_$LineupImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      team: null == team
-          ? _value.team
-          : team // ignore: cast_nullable_to_non_nullable
-              as Team,
-      leader: freezed == leader
-          ? _value.leader
-          : leader // ignore: cast_nullable_to_non_nullable
-              as Membership?,
-      coach: freezed == coach
-          ? _value.coach
-          : coach // ignore: cast_nullable_to_non_nullable
-              as Membership?,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$LineupImpl extends _Lineup {
-  const _$LineupImpl({this.id, required this.team, this.leader, this.coach}) : super._();
-
-  factory _$LineupImpl.fromJson(Map<String, dynamic> json) => _$$LineupImplFromJson(json);
+class _Lineup extends Lineup {
+  const _Lineup({this.id, required this.team, this.leader, this.coach}) : super._();
+  factory _Lineup.fromJson(Map<String, dynamic> json) => _$LineupFromJson(json);
 
   @override
   final int? id;
@@ -192,16 +153,25 @@ class _$LineupImpl extends _Lineup {
   @override
   final Membership? coach;
 
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Lineup(id: $id, team: $team, leader: $leader, coach: $coach)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$LineupCopyWith<_Lineup> get copyWith => __$LineupCopyWithImpl<_Lineup>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$LineupToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LineupImpl &&
+            other is _Lineup &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.team, team) || other.team == team) &&
             (identical(other.leader, leader) || other.leader == leader) &&
@@ -212,40 +182,101 @@ class _$LineupImpl extends _Lineup {
   @override
   int get hashCode => Object.hash(runtimeType, id, team, leader, coach);
 
-  /// Create a copy of Lineup
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$LineupImplCopyWith<_$LineupImpl> get copyWith => __$$LineupImplCopyWithImpl<_$LineupImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$LineupImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Lineup(id: $id, team: $team, leader: $leader, coach: $coach)';
   }
 }
 
-abstract class _Lineup extends Lineup {
-  const factory _Lineup({final int? id, required final Team team, final Membership? leader, final Membership? coach}) =
-      _$LineupImpl;
-  const _Lineup._() : super._();
+/// @nodoc
+abstract mixin class _$LineupCopyWith<$Res> implements $LineupCopyWith<$Res> {
+  factory _$LineupCopyWith(_Lineup value, $Res Function(_Lineup) _then) = __$LineupCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
-  factory _Lineup.fromJson(Map<String, dynamic> json) = _$LineupImpl.fromJson;
+  @override
+  $TeamCopyWith<$Res> get team;
+  @override
+  $MembershipCopyWith<$Res>? get leader;
+  @override
+  $MembershipCopyWith<$Res>? get coach;
+}
 
-  @override
-  int? get id;
-  @override
-  Team get team;
-  @override
-  Membership? get leader; // Mannschaftsführer
-  @override
-  Membership? get coach;
+/// @nodoc
+class __$LineupCopyWithImpl<$Res> implements _$LineupCopyWith<$Res> {
+  __$LineupCopyWithImpl(this._self, this._then);
+
+  final _Lineup _self;
+  final $Res Function(_Lineup) _then;
 
   /// Create a copy of Lineup
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LineupImplCopyWith<_$LineupImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? team = null,
+    Object? leader = freezed,
+    Object? coach = freezed,
+  }) {
+    return _then(_Lineup(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      team: null == team
+          ? _self.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
+      leader: freezed == leader
+          ? _self.leader
+          : leader // ignore: cast_nullable_to_non_nullable
+              as Membership?,
+      coach: freezed == coach
+          ? _self.coach
+          : coach // ignore: cast_nullable_to_non_nullable
+              as Membership?,
+    ));
+  }
+
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamCopyWith<$Res> get team {
+    return $TeamCopyWith<$Res>(_self.team, (value) {
+      return _then(_self.copyWith(team: value));
+    });
+  }
+
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MembershipCopyWith<$Res>? get leader {
+    if (_self.leader == null) {
+      return null;
+    }
+
+    return $MembershipCopyWith<$Res>(_self.leader!, (value) {
+      return _then(_self.copyWith(leader: value));
+    });
+  }
+
+  /// Create a copy of Lineup
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MembershipCopyWith<$Res>? get coach {
+    if (_self.coach == null) {
+      return null;
+    }
+
+    return $MembershipCopyWith<$Res>(_self.coach!, (value) {
+      return _then(_self.copyWith(coach: value));
+    });
+  }
 }
+
+// dart format on

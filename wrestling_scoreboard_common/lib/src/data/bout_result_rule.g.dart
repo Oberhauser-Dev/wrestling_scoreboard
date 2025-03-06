@@ -6,7 +6,7 @@ part of 'bout_result_rule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$BoutResultRuleImpl _$$BoutResultRuleImplFromJson(Map<String, dynamic> json) => _$BoutResultRuleImpl(
+_BoutResultRule _$BoutResultRuleFromJson(Map<String, dynamic> json) => _BoutResultRule(
       id: (json['id'] as num?)?.toInt(),
       boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
       boutResult: $enumDecode(_$BoutResultEnumMap, json['boutResult']),
@@ -18,7 +18,7 @@ _$BoutResultRuleImpl _$$BoutResultRuleImplFromJson(Map<String, dynamic> json) =>
       loserClassificationPoints: (json['loserClassificationPoints'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$BoutResultRuleImplToJson(_$BoutResultRuleImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$BoutResultRuleToJson(_BoutResultRule instance) => <String, dynamic>{
       'id': instance.id,
       'boutConfig': instance.boutConfig.toJson(),
       'boutResult': _$BoutResultEnumMap[instance.boutResult]!,

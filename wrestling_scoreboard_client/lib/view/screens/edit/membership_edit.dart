@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
@@ -35,7 +35,7 @@ class MembershipEditState extends AbstractPersonEditState<MembershipEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return buildEdit(context, id: widget.membership?.id, classLocale: localizations.membership, fields: [
       ListTile(
         leading: const Icon(Icons.tag),

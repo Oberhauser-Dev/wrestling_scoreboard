@@ -7,7 +7,7 @@ part 'bout_config.g.dart';
 
 /// The general configuration for a bout, e.g. in a team match or competition.
 @freezed
-class BoutConfig with _$BoutConfig implements DataObject {
+abstract class BoutConfig with _$BoutConfig implements DataObject {
   static const defaultPeriodDuration = Duration(minutes: 3);
   static const defaultBreakDuration = Duration(seconds: 30);
   static const defaultActivityDuration = Duration(seconds: 30);

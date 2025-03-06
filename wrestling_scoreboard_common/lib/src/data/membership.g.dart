@@ -6,7 +6,7 @@ part of 'membership.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MembershipImpl _$$MembershipImplFromJson(Map<String, dynamic> json) => _$MembershipImpl(
+_Membership _$MembershipFromJson(Map<String, dynamic> json) => _Membership(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
@@ -16,7 +16,7 @@ _$MembershipImpl _$$MembershipImplFromJson(Map<String, dynamic> json) => _$Membe
       person: Person.fromJson(json['person'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$MembershipImplToJson(_$MembershipImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$MembershipToJson(_Membership instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

@@ -534,7 +534,7 @@ Future<void> handleManyRaw<T extends DataObject>({
 }
 
 final websocketHandler = webSocketHandler(
-  (WebSocketChannel webSocket) {
+  (WebSocketChannel webSocket, String? subProtocol) {
     UserPrivilege privilege = UserPrivilege.none;
     webSocketPool[webSocket] = privilege;
     webSocket.stream.listen((message) async {

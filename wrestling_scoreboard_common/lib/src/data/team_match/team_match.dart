@@ -7,7 +7,7 @@ part 'team_match.g.dart';
 
 /// For team matches only.
 @freezed
-class TeamMatch extends WrestlingEvent with _$TeamMatch {
+abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   // TODO add missing stewards to extra table
   const TeamMatch._();
 

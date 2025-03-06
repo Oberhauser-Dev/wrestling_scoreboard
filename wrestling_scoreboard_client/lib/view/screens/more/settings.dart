@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
@@ -31,7 +31,7 @@ class CustomSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
 
     bool isDisplayInternational() {
       if (Localizations.localeOf(context).languageCode == 'en') return false;
@@ -430,7 +430,7 @@ class _FontSelectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
 
     final List<String?> fontFamilies = [null];
     fontFamilies.addAll(GoogleFonts.asMap().keys.toList());

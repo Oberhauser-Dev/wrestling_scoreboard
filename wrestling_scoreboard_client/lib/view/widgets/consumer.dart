@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -60,14 +60,12 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (id == null && initialData == null) {
-      return onException?.call(context, null) ??
-          ExceptionCard(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
+      return onException?.call(context, null) ?? ExceptionCard(context.l10n.notFoundException, stackTrace: null);
     }
     return NullableSingleConsumer(
       builder: (BuildContext context, T? data) {
         if (data == null) {
-          return onException?.call(context, null) ??
-              ExceptionCard(AppLocalizations.of(context)!.notFoundException, stackTrace: null);
+          return onException?.call(context, null) ?? ExceptionCard(context.l10n.notFoundException, stackTrace: null);
         }
         return builder(context, data);
       },

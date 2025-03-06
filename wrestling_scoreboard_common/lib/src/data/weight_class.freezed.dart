@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,99 +10,46 @@ part of 'weight_class.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-WeightClass _$WeightClassFromJson(Map<String, dynamic> json) {
-  return _WeightClass.fromJson(json);
-}
 
 /// @nodoc
 mixin _$WeightClass {
-  int? get id => throw _privateConstructorUsedError;
-  int get weight => throw _privateConstructorUsedError;
-  WrestlingStyle get style => throw _privateConstructorUsedError;
-  String? get suffix => throw _privateConstructorUsedError;
-  WeightUnit get unit => throw _privateConstructorUsedError;
-
-  /// Serializes this WeightClass to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  int get weight;
+  WrestlingStyle get style;
+  String? get suffix;
+  WeightUnit get unit;
 
   /// Create a copy of WeightClass
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $WeightClassCopyWith<WeightClass> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $WeightClassCopyWith<$Res> {
-  factory $WeightClassCopyWith(WeightClass value, $Res Function(WeightClass) then) =
-      _$WeightClassCopyWithImpl<$Res, WeightClass>;
-  @useResult
-  $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
-}
-
-/// @nodoc
-class _$WeightClassCopyWithImpl<$Res, $Val extends WeightClass> implements $WeightClassCopyWith<$Res> {
-  _$WeightClassCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of WeightClass
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $WeightClassCopyWith<WeightClass> get copyWith =>
+      _$WeightClassCopyWithImpl<WeightClass>(this as WeightClass, _$identity);
+
+  /// Serializes this WeightClass to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? id = freezed,
-    Object? weight = null,
-    Object? style = null,
-    Object? suffix = freezed,
-    Object? unit = null,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      weight: null == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as int,
-      style: null == style
-          ? _value.style
-          : style // ignore: cast_nullable_to_non_nullable
-              as WrestlingStyle,
-      suffix: freezed == suffix
-          ? _value.suffix
-          : suffix // ignore: cast_nullable_to_non_nullable
-              as String?,
-      unit: null == unit
-          ? _value.unit
-          : unit // ignore: cast_nullable_to_non_nullable
-              as WeightUnit,
-    ) as $Val);
+  String toString() {
+    return 'WeightClass(id: $id, weight: $weight, style: $style, suffix: $suffix, unit: $unit)';
   }
 }
 
 /// @nodoc
-abstract class _$$WeightClassImplCopyWith<$Res> implements $WeightClassCopyWith<$Res> {
-  factory _$$WeightClassImplCopyWith(_$WeightClassImpl value, $Res Function(_$WeightClassImpl) then) =
-      __$$WeightClassImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $WeightClassCopyWith<$Res> {
+  factory $WeightClassCopyWith(WeightClass value, $Res Function(WeightClass) _then) = _$WeightClassCopyWithImpl;
   @useResult
   $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
 }
 
 /// @nodoc
-class __$$WeightClassImplCopyWithImpl<$Res> extends _$WeightClassCopyWithImpl<$Res, _$WeightClassImpl>
-    implements _$$WeightClassImplCopyWith<$Res> {
-  __$$WeightClassImplCopyWithImpl(_$WeightClassImpl _value, $Res Function(_$WeightClassImpl) _then)
-      : super(_value, _then);
+class _$WeightClassCopyWithImpl<$Res> implements $WeightClassCopyWith<$Res> {
+  _$WeightClassCopyWithImpl(this._self, this._then);
+
+  final WeightClass _self;
+  final $Res Function(WeightClass) _then;
 
   /// Create a copy of WeightClass
   /// with the given fields replaced by the non-null parameter values.
@@ -114,25 +62,25 @@ class __$$WeightClassImplCopyWithImpl<$Res> extends _$WeightClassCopyWithImpl<$R
     Object? suffix = freezed,
     Object? unit = null,
   }) {
-    return _then(_$WeightClassImpl(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       weight: null == weight
-          ? _value.weight
+          ? _self.weight
           : weight // ignore: cast_nullable_to_non_nullable
               as int,
       style: null == style
-          ? _value.style
+          ? _self.style
           : style // ignore: cast_nullable_to_non_nullable
               as WrestlingStyle,
       suffix: freezed == suffix
-          ? _value.suffix
+          ? _self.suffix
           : suffix // ignore: cast_nullable_to_non_nullable
               as String?,
       unit: null == unit
-          ? _value.unit
+          ? _self.unit
           : unit // ignore: cast_nullable_to_non_nullable
               as WeightUnit,
     ));
@@ -141,12 +89,10 @@ class __$$WeightClassImplCopyWithImpl<$Res> extends _$WeightClassCopyWithImpl<$R
 
 /// @nodoc
 @JsonSerializable()
-class _$WeightClassImpl extends _WeightClass {
-  const _$WeightClassImpl(
-      {this.id, required this.weight, required this.style, this.suffix, this.unit = WeightUnit.kilogram})
+class _WeightClass extends WeightClass {
+  const _WeightClass({this.id, required this.weight, required this.style, this.suffix, this.unit = WeightUnit.kilogram})
       : super._();
-
-  factory _$WeightClassImpl.fromJson(Map<String, dynamic> json) => _$$WeightClassImplFromJson(json);
+  factory _WeightClass.fromJson(Map<String, dynamic> json) => _$WeightClassFromJson(json);
 
   @override
   final int? id;
@@ -160,52 +106,75 @@ class _$WeightClassImpl extends _WeightClass {
   @JsonKey()
   final WeightUnit unit;
 
+  /// Create a copy of WeightClass
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$WeightClassCopyWith<_WeightClass> get copyWith => __$WeightClassCopyWithImpl<_WeightClass>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$WeightClassToJson(
+      this,
+    );
+  }
+
   @override
   String toString() {
     return 'WeightClass(id: $id, weight: $weight, style: $style, suffix: $suffix, unit: $unit)';
   }
+}
+
+/// @nodoc
+abstract mixin class _$WeightClassCopyWith<$Res> implements $WeightClassCopyWith<$Res> {
+  factory _$WeightClassCopyWith(_WeightClass value, $Res Function(_WeightClass) _then) = __$WeightClassCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
+}
+
+/// @nodoc
+class __$WeightClassCopyWithImpl<$Res> implements _$WeightClassCopyWith<$Res> {
+  __$WeightClassCopyWithImpl(this._self, this._then);
+
+  final _WeightClass _self;
+  final $Res Function(_WeightClass) _then;
 
   /// Create a copy of WeightClass
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$WeightClassImplCopyWith<_$WeightClassImpl> get copyWith =>
-      __$$WeightClassImplCopyWithImpl<_$WeightClassImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$WeightClassImplToJson(
-      this,
-    );
+  $Res call({
+    Object? id = freezed,
+    Object? weight = null,
+    Object? style = null,
+    Object? suffix = freezed,
+    Object? unit = null,
+  }) {
+    return _then(_WeightClass(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      weight: null == weight
+          ? _self.weight
+          : weight // ignore: cast_nullable_to_non_nullable
+              as int,
+      style: null == style
+          ? _self.style
+          : style // ignore: cast_nullable_to_non_nullable
+              as WrestlingStyle,
+      suffix: freezed == suffix
+          ? _self.suffix
+          : suffix // ignore: cast_nullable_to_non_nullable
+              as String?,
+      unit: null == unit
+          ? _self.unit
+          : unit // ignore: cast_nullable_to_non_nullable
+              as WeightUnit,
+    ));
   }
 }
 
-abstract class _WeightClass extends WeightClass {
-  const factory _WeightClass(
-      {final int? id,
-      required final int weight,
-      required final WrestlingStyle style,
-      final String? suffix,
-      final WeightUnit unit}) = _$WeightClassImpl;
-  const _WeightClass._() : super._();
-
-  factory _WeightClass.fromJson(Map<String, dynamic> json) = _$WeightClassImpl.fromJson;
-
-  @override
-  int? get id;
-  @override
-  int get weight;
-  @override
-  WrestlingStyle get style;
-  @override
-  String? get suffix;
-  @override
-  WeightUnit get unit;
-
-  /// Create a copy of WeightClass
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$WeightClassImplCopyWith<_$WeightClassImpl> get copyWith => throw _privateConstructorUsedError;
-}
+// dart format on

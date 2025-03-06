@@ -6,7 +6,7 @@ part 'weight_class.freezed.dart';
 part 'weight_class.g.dart';
 
 @freezed
-class WeightClass with _$WeightClass implements DataObject {
+abstract class WeightClass with _$WeightClass implements DataObject {
   const WeightClass._();
 
   const factory WeightClass({

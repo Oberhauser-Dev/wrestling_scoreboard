@@ -1,6 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 
 class SearchableDropdown<T> extends StatelessWidget {
   final T? selectedItem;
@@ -124,8 +124,7 @@ class CustomDropdown<T> extends StatelessWidget {
     if (isNullable) {
       items.add(DropdownMenuItem<T>(
         value: null,
-        child:
-            Text(AppLocalizations.of(context)!.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
+        child: Text(context.l10n.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
       ));
     }
     return DropdownButton<T>(

@@ -15,6 +15,7 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'bellPlayerNotifierProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -50,7 +51,7 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
   @override
   BellPlayerNotifierProvider $copyWithBuild(
     Raw<Future<AudioPlayer>> Function(
-      Ref<Raw<Future<AudioPlayer>>>,
+      Ref,
       BellPlayerNotifier,
     ) build,
   ) {
@@ -59,8 +60,8 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
 
   @$internal
   @override
-  $NotifierProviderElement<BellPlayerNotifier, Raw<Future<AudioPlayer>>> $createElement(ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+  $NotifierProviderElement<BellPlayerNotifier, Raw<Future<AudioPlayer>>> $createElement($ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$bellPlayerNotifierHash() => r'629ce6a4cd9db09a0250a179cd31607a10216d97';
@@ -69,8 +70,14 @@ abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> 
   Raw<Future<AudioPlayer>> build();
   @$internal
   @override
-  Raw<Future<AudioPlayer>> runBuild() => build();
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<AudioPlayer>>>;
+    final element = ref.element
+        as $ClassProviderElement<NotifierBase<Raw<Future<AudioPlayer>>>, Raw<Future<AudioPlayer>>, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

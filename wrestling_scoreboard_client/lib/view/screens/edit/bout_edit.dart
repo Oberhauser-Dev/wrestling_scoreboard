@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -58,7 +58,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     required int? id,
     required List<Widget> fields,
   }) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     final navigator = Navigator.of(context);
 
     final items = [
@@ -81,7 +81,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         title: SearchableDropdown<WeightClass>(
           icon: const Icon(Icons.fitness_center),
           selectedItem: _weightClass,
-          label: AppLocalizations.of(context)!.weightClass,
+          label: context.l10n.weightClass,
           context: context,
           onSaved: (WeightClass? value) => setState(() {
             _weightClass = value;

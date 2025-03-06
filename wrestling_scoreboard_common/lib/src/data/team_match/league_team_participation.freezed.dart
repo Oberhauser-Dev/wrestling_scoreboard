@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,171 +10,30 @@ part of 'league_team_participation.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-LeagueTeamParticipation _$LeagueTeamParticipationFromJson(Map<String, dynamic> json) {
-  return _LeagueTeamParticipation.fromJson(json);
-}
 
 /// @nodoc
 mixin _$LeagueTeamParticipation {
-  int? get id => throw _privateConstructorUsedError;
-  League get league => throw _privateConstructorUsedError;
-  Team get team => throw _privateConstructorUsedError;
-
-  /// Serializes this LeagueTeamParticipation to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  League get league;
+  Team get team;
 
   /// Create a copy of LeagueTeamParticipation
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $LeagueTeamParticipationCopyWith<LeagueTeamParticipation> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LeagueTeamParticipationCopyWith<$Res> {
-  factory $LeagueTeamParticipationCopyWith(LeagueTeamParticipation value, $Res Function(LeagueTeamParticipation) then) =
-      _$LeagueTeamParticipationCopyWithImpl<$Res, LeagueTeamParticipation>;
-  @useResult
-  $Res call({int? id, League league, Team team});
-
-  $LeagueCopyWith<$Res> get league;
-  $TeamCopyWith<$Res> get team;
-}
-
-/// @nodoc
-class _$LeagueTeamParticipationCopyWithImpl<$Res, $Val extends LeagueTeamParticipation>
-    implements $LeagueTeamParticipationCopyWith<$Res> {
-  _$LeagueTeamParticipationCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of LeagueTeamParticipation
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? league = null,
-    Object? team = null,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      league: null == league
-          ? _value.league
-          : league // ignore: cast_nullable_to_non_nullable
-              as League,
-      team: null == team
-          ? _value.team
-          : team // ignore: cast_nullable_to_non_nullable
-              as Team,
-    ) as $Val);
-  }
+  $LeagueTeamParticipationCopyWith<LeagueTeamParticipation> get copyWith =>
+      _$LeagueTeamParticipationCopyWithImpl<LeagueTeamParticipation>(this as LeagueTeamParticipation, _$identity);
 
-  /// Create a copy of LeagueTeamParticipation
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $LeagueCopyWith<$Res> get league {
-    return $LeagueCopyWith<$Res>(_value.league, (value) {
-      return _then(_value.copyWith(league: value) as $Val);
-    });
-  }
-
-  /// Create a copy of LeagueTeamParticipation
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TeamCopyWith<$Res> get team {
-    return $TeamCopyWith<$Res>(_value.team, (value) {
-      return _then(_value.copyWith(team: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$LeagueTeamParticipationImplCopyWith<$Res> implements $LeagueTeamParticipationCopyWith<$Res> {
-  factory _$$LeagueTeamParticipationImplCopyWith(
-          _$LeagueTeamParticipationImpl value, $Res Function(_$LeagueTeamParticipationImpl) then) =
-      __$$LeagueTeamParticipationImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int? id, League league, Team team});
-
-  @override
-  $LeagueCopyWith<$Res> get league;
-  @override
-  $TeamCopyWith<$Res> get team;
-}
-
-/// @nodoc
-class __$$LeagueTeamParticipationImplCopyWithImpl<$Res>
-    extends _$LeagueTeamParticipationCopyWithImpl<$Res, _$LeagueTeamParticipationImpl>
-    implements _$$LeagueTeamParticipationImplCopyWith<$Res> {
-  __$$LeagueTeamParticipationImplCopyWithImpl(
-      _$LeagueTeamParticipationImpl _value, $Res Function(_$LeagueTeamParticipationImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LeagueTeamParticipation
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? league = null,
-    Object? team = null,
-  }) {
-    return _then(_$LeagueTeamParticipationImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      league: null == league
-          ? _value.league
-          : league // ignore: cast_nullable_to_non_nullable
-              as League,
-      team: null == team
-          ? _value.team
-          : team // ignore: cast_nullable_to_non_nullable
-              as Team,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$LeagueTeamParticipationImpl extends _LeagueTeamParticipation {
-  const _$LeagueTeamParticipationImpl({this.id, required this.league, required this.team}) : super._();
-
-  factory _$LeagueTeamParticipationImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LeagueTeamParticipationImplFromJson(json);
-
-  @override
-  final int? id;
-  @override
-  final League league;
-  @override
-  final Team team;
-
-  @override
-  String toString() {
-    return 'LeagueTeamParticipation(id: $id, league: $league, team: $team)';
-  }
+  /// Serializes this LeagueTeamParticipation to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LeagueTeamParticipationImpl &&
+            other is LeagueTeamParticipation &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.league, league) || other.league == league) &&
             (identical(other.team, team) || other.team == team));
@@ -183,40 +43,191 @@ class _$LeagueTeamParticipationImpl extends _LeagueTeamParticipation {
   @override
   int get hashCode => Object.hash(runtimeType, id, league, team);
 
-  /// Create a copy of LeagueTeamParticipation
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl> get copyWith =>
-      __$$LeagueTeamParticipationImplCopyWithImpl<_$LeagueTeamParticipationImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$LeagueTeamParticipationImplToJson(
-      this,
-    );
+  String toString() {
+    return 'LeagueTeamParticipation(id: $id, league: $league, team: $team)';
   }
 }
 
-abstract class _LeagueTeamParticipation extends LeagueTeamParticipation {
-  const factory _LeagueTeamParticipation({final int? id, required final League league, required final Team team}) =
-      _$LeagueTeamParticipationImpl;
-  const _LeagueTeamParticipation._() : super._();
+/// @nodoc
+abstract mixin class $LeagueTeamParticipationCopyWith<$Res> {
+  factory $LeagueTeamParticipationCopyWith(
+          LeagueTeamParticipation value, $Res Function(LeagueTeamParticipation) _then) =
+      _$LeagueTeamParticipationCopyWithImpl;
+  @useResult
+  $Res call({int? id, League league, Team team});
 
-  factory _LeagueTeamParticipation.fromJson(Map<String, dynamic> json) = _$LeagueTeamParticipationImpl.fromJson;
+  $LeagueCopyWith<$Res> get league;
+  $TeamCopyWith<$Res> get team;
+}
+
+/// @nodoc
+class _$LeagueTeamParticipationCopyWithImpl<$Res> implements $LeagueTeamParticipationCopyWith<$Res> {
+  _$LeagueTeamParticipationCopyWithImpl(this._self, this._then);
+
+  final LeagueTeamParticipation _self;
+  final $Res Function(LeagueTeamParticipation) _then;
+
+  /// Create a copy of LeagueTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? league = null,
+    Object? team = null,
+  }) {
+    return _then(_self.copyWith(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      league: null == league
+          ? _self.league
+          : league // ignore: cast_nullable_to_non_nullable
+              as League,
+      team: null == team
+          ? _self.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
+    ));
+  }
+
+  /// Create a copy of LeagueTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LeagueCopyWith<$Res> get league {
+    return $LeagueCopyWith<$Res>(_self.league, (value) {
+      return _then(_self.copyWith(league: value));
+    });
+  }
+
+  /// Create a copy of LeagueTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamCopyWith<$Res> get team {
+    return $TeamCopyWith<$Res>(_self.team, (value) {
+      return _then(_self.copyWith(team: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _LeagueTeamParticipation extends LeagueTeamParticipation {
+  const _LeagueTeamParticipation({this.id, required this.league, required this.team}) : super._();
+  factory _LeagueTeamParticipation.fromJson(Map<String, dynamic> json) => _$LeagueTeamParticipationFromJson(json);
 
   @override
-  int? get id;
+  final int? id;
   @override
-  League get league;
+  final League league;
   @override
-  Team get team;
+  final Team team;
 
   /// Create a copy of LeagueTeamParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LeagueTeamParticipationImplCopyWith<_$LeagueTeamParticipationImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$LeagueTeamParticipationCopyWith<_LeagueTeamParticipation> get copyWith =>
+      __$LeagueTeamParticipationCopyWithImpl<_LeagueTeamParticipation>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$LeagueTeamParticipationToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _LeagueTeamParticipation &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.league, league) || other.league == league) &&
+            (identical(other.team, team) || other.team == team));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, league, team);
+
+  @override
+  String toString() {
+    return 'LeagueTeamParticipation(id: $id, league: $league, team: $team)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$LeagueTeamParticipationCopyWith<$Res> implements $LeagueTeamParticipationCopyWith<$Res> {
+  factory _$LeagueTeamParticipationCopyWith(
+          _LeagueTeamParticipation value, $Res Function(_LeagueTeamParticipation) _then) =
+      __$LeagueTeamParticipationCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, League league, Team team});
+
+  @override
+  $LeagueCopyWith<$Res> get league;
+  @override
+  $TeamCopyWith<$Res> get team;
+}
+
+/// @nodoc
+class __$LeagueTeamParticipationCopyWithImpl<$Res> implements _$LeagueTeamParticipationCopyWith<$Res> {
+  __$LeagueTeamParticipationCopyWithImpl(this._self, this._then);
+
+  final _LeagueTeamParticipation _self;
+  final $Res Function(_LeagueTeamParticipation) _then;
+
+  /// Create a copy of LeagueTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? league = null,
+    Object? team = null,
+  }) {
+    return _then(_LeagueTeamParticipation(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      league: null == league
+          ? _self.league
+          : league // ignore: cast_nullable_to_non_nullable
+              as League,
+      team: null == team
+          ? _self.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
+    ));
+  }
+
+  /// Create a copy of LeagueTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LeagueCopyWith<$Res> get league {
+    return $LeagueCopyWith<$Res>(_self.league, (value) {
+      return _then(_self.copyWith(league: value));
+    });
+  }
+
+  /// Create a copy of LeagueTeamParticipation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamCopyWith<$Res> get team {
+    return $TeamCopyWith<$Res>(_self.team, (value) {
+      return _then(_self.copyWith(team: value));
+    });
+  }
+}
+
+// dart format on

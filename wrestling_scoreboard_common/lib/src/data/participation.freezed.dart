@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,36 +10,52 @@ part of 'participation.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Participation _$ParticipationFromJson(Map<String, dynamic> json) {
-  return _Participation.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Participation {
-  int? get id => throw _privateConstructorUsedError;
-  Membership get membership => throw _privateConstructorUsedError;
-  Lineup get lineup => throw _privateConstructorUsedError;
-  WeightClass? get weightClass => throw _privateConstructorUsedError;
-  double? get weight => throw _privateConstructorUsedError;
-
-  /// Serializes this Participation to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  Membership get membership;
+  Lineup get lineup;
+  WeightClass? get weightClass;
+  double? get weight;
 
   /// Create a copy of Participation
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ParticipationCopyWith<Participation> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $ParticipationCopyWith<Participation> get copyWith =>
+      _$ParticipationCopyWithImpl<Participation>(this as Participation, _$identity);
+
+  /// Serializes this Participation to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Participation &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.membership, membership) || other.membership == membership) &&
+            (identical(other.lineup, lineup) || other.lineup == lineup) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
+            (identical(other.weight, weight) || other.weight == weight));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
+
+  @override
+  String toString() {
+    return 'Participation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
+  }
 }
 
 /// @nodoc
-abstract class $ParticipationCopyWith<$Res> {
-  factory $ParticipationCopyWith(Participation value, $Res Function(Participation) then) =
-      _$ParticipationCopyWithImpl<$Res, Participation>;
+abstract mixin class $ParticipationCopyWith<$Res> {
+  factory $ParticipationCopyWith(Participation value, $Res Function(Participation) _then) = _$ParticipationCopyWithImpl;
   @useResult
   $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
 
@@ -48,13 +65,11 @@ abstract class $ParticipationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $ParticipationCopyWith<$Res> {
-  _$ParticipationCopyWithImpl(this._value, this._then);
+class _$ParticipationCopyWithImpl<$Res> implements $ParticipationCopyWith<$Res> {
+  _$ParticipationCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Participation _self;
+  final $Res Function(Participation) _then;
 
   /// Create a copy of Participation
   /// with the given fields replaced by the non-null parameter values.
@@ -67,28 +82,28 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
     Object? weightClass = freezed,
     Object? weight = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       membership: null == membership
-          ? _value.membership
+          ? _self.membership
           : membership // ignore: cast_nullable_to_non_nullable
               as Membership,
       lineup: null == lineup
-          ? _value.lineup
+          ? _self.lineup
           : lineup // ignore: cast_nullable_to_non_nullable
               as Lineup,
       weightClass: freezed == weightClass
-          ? _value.weightClass
+          ? _self.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
               as WeightClass?,
       weight: freezed == weight
-          ? _value.weight
+          ? _self.weight
           : weight // ignore: cast_nullable_to_non_nullable
               as double?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Participation
@@ -96,8 +111,8 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
   @override
   @pragma('vm:prefer-inline')
   $MembershipCopyWith<$Res> get membership {
-    return $MembershipCopyWith<$Res>(_value.membership, (value) {
-      return _then(_value.copyWith(membership: value) as $Val);
+    return $MembershipCopyWith<$Res>(_self.membership, (value) {
+      return _then(_self.copyWith(membership: value));
     });
   }
 
@@ -106,8 +121,8 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
   @override
   @pragma('vm:prefer-inline')
   $LineupCopyWith<$Res> get lineup {
-    return $LineupCopyWith<$Res>(_value.lineup, (value) {
-      return _then(_value.copyWith(lineup: value) as $Val);
+    return $LineupCopyWith<$Res>(_self.lineup, (value) {
+      return _then(_self.copyWith(lineup: value));
     });
   }
 
@@ -116,81 +131,22 @@ class _$ParticipationCopyWithImpl<$Res, $Val extends Participation> implements $
   @override
   @pragma('vm:prefer-inline')
   $WeightClassCopyWith<$Res>? get weightClass {
-    if (_value.weightClass == null) {
+    if (_self.weightClass == null) {
       return null;
     }
 
-    return $WeightClassCopyWith<$Res>(_value.weightClass!, (value) {
-      return _then(_value.copyWith(weightClass: value) as $Val);
+    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
+      return _then(_self.copyWith(weightClass: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$ParticipationImplCopyWith<$Res> implements $ParticipationCopyWith<$Res> {
-  factory _$$ParticipationImplCopyWith(_$ParticipationImpl value, $Res Function(_$ParticipationImpl) then) =
-      __$$ParticipationImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
-
-  @override
-  $MembershipCopyWith<$Res> get membership;
-  @override
-  $LineupCopyWith<$Res> get lineup;
-  @override
-  $WeightClassCopyWith<$Res>? get weightClass;
-}
-
-/// @nodoc
-class __$$ParticipationImplCopyWithImpl<$Res> extends _$ParticipationCopyWithImpl<$Res, _$ParticipationImpl>
-    implements _$$ParticipationImplCopyWith<$Res> {
-  __$$ParticipationImplCopyWithImpl(_$ParticipationImpl _value, $Res Function(_$ParticipationImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Participation
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? membership = null,
-    Object? lineup = null,
-    Object? weightClass = freezed,
-    Object? weight = freezed,
-  }) {
-    return _then(_$ParticipationImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      membership: null == membership
-          ? _value.membership
-          : membership // ignore: cast_nullable_to_non_nullable
-              as Membership,
-      lineup: null == lineup
-          ? _value.lineup
-          : lineup // ignore: cast_nullable_to_non_nullable
-              as Lineup,
-      weightClass: freezed == weightClass
-          ? _value.weightClass
-          : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass?,
-      weight: freezed == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$ParticipationImpl extends _Participation {
-  const _$ParticipationImpl({this.id, required this.membership, required this.lineup, this.weightClass, this.weight})
+class _Participation extends Participation {
+  const _Participation({this.id, required this.membership, required this.lineup, this.weightClass, this.weight})
       : super._();
-
-  factory _$ParticipationImpl.fromJson(Map<String, dynamic> json) => _$$ParticipationImplFromJson(json);
+  factory _Participation.fromJson(Map<String, dynamic> json) => _$ParticipationFromJson(json);
 
   @override
   final int? id;
@@ -203,16 +159,26 @@ class _$ParticipationImpl extends _Participation {
   @override
   final double? weight;
 
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Participation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$ParticipationCopyWith<_Participation> get copyWith =>
+      __$ParticipationCopyWithImpl<_Participation>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ParticipationToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ParticipationImpl &&
+            other is _Participation &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.membership, membership) || other.membership == membership) &&
             (identical(other.lineup, lineup) || other.lineup == lineup) &&
@@ -224,47 +190,103 @@ class _$ParticipationImpl extends _Participation {
   @override
   int get hashCode => Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
 
-  /// Create a copy of Participation
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ParticipationImplCopyWith<_$ParticipationImpl> get copyWith =>
-      __$$ParticipationImplCopyWithImpl<_$ParticipationImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ParticipationImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Participation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
   }
 }
 
-abstract class _Participation extends Participation {
-  const factory _Participation(
-      {final int? id,
-      required final Membership membership,
-      required final Lineup lineup,
-      final WeightClass? weightClass,
-      final double? weight}) = _$ParticipationImpl;
-  const _Participation._() : super._();
-
-  factory _Participation.fromJson(Map<String, dynamic> json) = _$ParticipationImpl.fromJson;
+/// @nodoc
+abstract mixin class _$ParticipationCopyWith<$Res> implements $ParticipationCopyWith<$Res> {
+  factory _$ParticipationCopyWith(_Participation value, $Res Function(_Participation) _then) =
+      __$ParticipationCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, Membership membership, Lineup lineup, WeightClass? weightClass, double? weight});
 
   @override
-  int? get id;
+  $MembershipCopyWith<$Res> get membership;
   @override
-  Membership get membership;
+  $LineupCopyWith<$Res> get lineup;
   @override
-  Lineup get lineup;
-  @override
-  WeightClass? get weightClass;
-  @override
-  double? get weight;
+  $WeightClassCopyWith<$Res>? get weightClass;
+}
+
+/// @nodoc
+class __$ParticipationCopyWithImpl<$Res> implements _$ParticipationCopyWith<$Res> {
+  __$ParticipationCopyWithImpl(this._self, this._then);
+
+  final _Participation _self;
+  final $Res Function(_Participation) _then;
 
   /// Create a copy of Participation
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ParticipationImplCopyWith<_$ParticipationImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? membership = null,
+    Object? lineup = null,
+    Object? weightClass = freezed,
+    Object? weight = freezed,
+  }) {
+    return _then(_Participation(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      membership: null == membership
+          ? _self.membership
+          : membership // ignore: cast_nullable_to_non_nullable
+              as Membership,
+      lineup: null == lineup
+          ? _self.lineup
+          : lineup // ignore: cast_nullable_to_non_nullable
+              as Lineup,
+      weightClass: freezed == weightClass
+          ? _self.weightClass
+          : weightClass // ignore: cast_nullable_to_non_nullable
+              as WeightClass?,
+      weight: freezed == weight
+          ? _self.weight
+          : weight // ignore: cast_nullable_to_non_nullable
+              as double?,
+    ));
+  }
+
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MembershipCopyWith<$Res> get membership {
+    return $MembershipCopyWith<$Res>(_self.membership, (value) {
+      return _then(_self.copyWith(membership: value));
+    });
+  }
+
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LineupCopyWith<$Res> get lineup {
+    return $LineupCopyWith<$Res>(_self.lineup, (value) {
+      return _then(_self.copyWith(lineup: value));
+    });
+  }
+
+  /// Create a copy of Participation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WeightClassCopyWith<$Res>? get weightClass {
+    if (_self.weightClass == null) {
+      return null;
+    }
+
+    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
+      return _then(_self.copyWith(weightClass: value));
+    });
+  }
 }
+
+// dart format on

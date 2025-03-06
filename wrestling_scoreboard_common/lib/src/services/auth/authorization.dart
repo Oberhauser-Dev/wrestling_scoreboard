@@ -12,7 +12,7 @@ abstract class AuthService {
 }
 
 @freezed
-class BasicAuthService with _$BasicAuthService implements AuthService {
+abstract class BasicAuthService with _$BasicAuthService implements AuthService {
   const BasicAuthService._();
 
   const factory BasicAuthService({
@@ -40,7 +40,7 @@ class BasicAuthService with _$BasicAuthService implements AuthService {
 }
 
 @freezed
-class BearerAuthService with _$BearerAuthService implements AuthService {
+abstract class BearerAuthService with _$BearerAuthService implements AuthService {
   const BearerAuthService._();
 
   const factory BearerAuthService({

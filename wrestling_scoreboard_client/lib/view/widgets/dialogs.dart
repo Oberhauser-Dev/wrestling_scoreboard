@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
@@ -37,7 +37,7 @@ class OkDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SizedDialog(
       actions: [
         TextButton(
@@ -57,7 +57,7 @@ class CancelDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SizedDialog(
       actions: [
         TextButton(
@@ -95,7 +95,7 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SizedDialog(
       isScrollable: isScrollable,
       actions: <Widget>[
@@ -148,7 +148,7 @@ Future<void> showExceptionDialog({
     context: context,
     builder: (context) => OkCancelDialog<bool>(
       getResult: () => onRetry(),
-      okText: AppLocalizations.of(context)!.retry,
+      okText: context.l10n.retry,
       child: ExceptionInfo(
         exception,
         stackTrace: stackTrace,

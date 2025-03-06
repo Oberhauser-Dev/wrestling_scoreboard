@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,153 +10,30 @@ part of 'participant_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-ParticipantState _$ParticipantStateFromJson(Map<String, dynamic> json) {
-  return _ParticipantState.fromJson(json);
-}
 
 /// @nodoc
 mixin _$ParticipantState {
-  int? get id => throw _privateConstructorUsedError;
-  Participation get participation => throw _privateConstructorUsedError;
-  int? get classificationPoints => throw _privateConstructorUsedError;
-
-  /// Serializes this ParticipantState to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  Participation get participation;
+  int? get classificationPoints;
 
   /// Create a copy of ParticipantState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ParticipantStateCopyWith<ParticipantState> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ParticipantStateCopyWith<$Res> {
-  factory $ParticipantStateCopyWith(ParticipantState value, $Res Function(ParticipantState) then) =
-      _$ParticipantStateCopyWithImpl<$Res, ParticipantState>;
-  @useResult
-  $Res call({int? id, Participation participation, int? classificationPoints});
-
-  $ParticipationCopyWith<$Res> get participation;
-}
-
-/// @nodoc
-class _$ParticipantStateCopyWithImpl<$Res, $Val extends ParticipantState> implements $ParticipantStateCopyWith<$Res> {
-  _$ParticipantStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ParticipantState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? participation = null,
-    Object? classificationPoints = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      participation: null == participation
-          ? _value.participation
-          : participation // ignore: cast_nullable_to_non_nullable
-              as Participation,
-      classificationPoints: freezed == classificationPoints
-          ? _value.classificationPoints
-          : classificationPoints // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
-  }
+  $ParticipantStateCopyWith<ParticipantState> get copyWith =>
+      _$ParticipantStateCopyWithImpl<ParticipantState>(this as ParticipantState, _$identity);
 
-  /// Create a copy of ParticipantState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ParticipationCopyWith<$Res> get participation {
-    return $ParticipationCopyWith<$Res>(_value.participation, (value) {
-      return _then(_value.copyWith(participation: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$ParticipantStateImplCopyWith<$Res> implements $ParticipantStateCopyWith<$Res> {
-  factory _$$ParticipantStateImplCopyWith(_$ParticipantStateImpl value, $Res Function(_$ParticipantStateImpl) then) =
-      __$$ParticipantStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int? id, Participation participation, int? classificationPoints});
-
-  @override
-  $ParticipationCopyWith<$Res> get participation;
-}
-
-/// @nodoc
-class __$$ParticipantStateImplCopyWithImpl<$Res> extends _$ParticipantStateCopyWithImpl<$Res, _$ParticipantStateImpl>
-    implements _$$ParticipantStateImplCopyWith<$Res> {
-  __$$ParticipantStateImplCopyWithImpl(_$ParticipantStateImpl _value, $Res Function(_$ParticipantStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ParticipantState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? participation = null,
-    Object? classificationPoints = freezed,
-  }) {
-    return _then(_$ParticipantStateImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      participation: null == participation
-          ? _value.participation
-          : participation // ignore: cast_nullable_to_non_nullable
-              as Participation,
-      classificationPoints: freezed == classificationPoints
-          ? _value.classificationPoints
-          : classificationPoints // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ParticipantStateImpl extends _ParticipantState {
-  const _$ParticipantStateImpl({this.id, required this.participation, this.classificationPoints}) : super._();
-
-  factory _$ParticipantStateImpl.fromJson(Map<String, dynamic> json) => _$$ParticipantStateImplFromJson(json);
-
-  @override
-  final int? id;
-  @override
-  final Participation participation;
-  @override
-  final int? classificationPoints;
-
-  @override
-  String toString() {
-    return 'ParticipantState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
-  }
+  /// Serializes this ParticipantState to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ParticipantStateImpl &&
+            other is ParticipantState &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.participation, participation) || other.participation == participation) &&
             (identical(other.classificationPoints, classificationPoints) ||
@@ -166,41 +44,167 @@ class _$ParticipantStateImpl extends _ParticipantState {
   @override
   int get hashCode => Object.hash(runtimeType, id, participation, classificationPoints);
 
-  /// Create a copy of ParticipantState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith =>
-      __$$ParticipantStateImplCopyWithImpl<_$ParticipantStateImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ParticipantStateImplToJson(
-      this,
-    );
+  String toString() {
+    return 'ParticipantState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
   }
 }
 
-abstract class _ParticipantState extends ParticipantState {
-  const factory _ParticipantState(
-      {final int? id,
-      required final Participation participation,
-      final int? classificationPoints}) = _$ParticipantStateImpl;
-  const _ParticipantState._() : super._();
+/// @nodoc
+abstract mixin class $ParticipantStateCopyWith<$Res> {
+  factory $ParticipantStateCopyWith(ParticipantState value, $Res Function(ParticipantState) _then) =
+      _$ParticipantStateCopyWithImpl;
+  @useResult
+  $Res call({int? id, Participation participation, int? classificationPoints});
 
-  factory _ParticipantState.fromJson(Map<String, dynamic> json) = _$ParticipantStateImpl.fromJson;
+  $ParticipationCopyWith<$Res> get participation;
+}
+
+/// @nodoc
+class _$ParticipantStateCopyWithImpl<$Res> implements $ParticipantStateCopyWith<$Res> {
+  _$ParticipantStateCopyWithImpl(this._self, this._then);
+
+  final ParticipantState _self;
+  final $Res Function(ParticipantState) _then;
+
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? participation = null,
+    Object? classificationPoints = freezed,
+  }) {
+    return _then(_self.copyWith(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      participation: null == participation
+          ? _self.participation
+          : participation // ignore: cast_nullable_to_non_nullable
+              as Participation,
+      classificationPoints: freezed == classificationPoints
+          ? _self.classificationPoints
+          : classificationPoints // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ParticipationCopyWith<$Res> get participation {
+    return $ParticipationCopyWith<$Res>(_self.participation, (value) {
+      return _then(_self.copyWith(participation: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _ParticipantState extends ParticipantState {
+  const _ParticipantState({this.id, required this.participation, this.classificationPoints}) : super._();
+  factory _ParticipantState.fromJson(Map<String, dynamic> json) => _$ParticipantStateFromJson(json);
 
   @override
-  int? get id;
+  final int? id;
   @override
-  Participation get participation;
+  final Participation participation;
   @override
-  int? get classificationPoints;
+  final int? classificationPoints;
 
   /// Create a copy of ParticipantState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ParticipantStateImplCopyWith<_$ParticipantStateImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$ParticipantStateCopyWith<_ParticipantState> get copyWith =>
+      __$ParticipantStateCopyWithImpl<_ParticipantState>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ParticipantStateToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _ParticipantState &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.participation, participation) || other.participation == participation) &&
+            (identical(other.classificationPoints, classificationPoints) ||
+                other.classificationPoints == classificationPoints));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, participation, classificationPoints);
+
+  @override
+  String toString() {
+    return 'ParticipantState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$ParticipantStateCopyWith<$Res> implements $ParticipantStateCopyWith<$Res> {
+  factory _$ParticipantStateCopyWith(_ParticipantState value, $Res Function(_ParticipantState) _then) =
+      __$ParticipantStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, Participation participation, int? classificationPoints});
+
+  @override
+  $ParticipationCopyWith<$Res> get participation;
+}
+
+/// @nodoc
+class __$ParticipantStateCopyWithImpl<$Res> implements _$ParticipantStateCopyWith<$Res> {
+  __$ParticipantStateCopyWithImpl(this._self, this._then);
+
+  final _ParticipantState _self;
+  final $Res Function(_ParticipantState) _then;
+
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? participation = null,
+    Object? classificationPoints = freezed,
+  }) {
+    return _then(_ParticipantState(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      participation: null == participation
+          ? _self.participation
+          : participation // ignore: cast_nullable_to_non_nullable
+              as Participation,
+      classificationPoints: freezed == classificationPoints
+          ? _self.classificationPoints
+          : classificationPoints // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+
+  /// Create a copy of ParticipantState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ParticipationCopyWith<$Res> get participation {
+    return $ParticipationCopyWith<$Res>(_self.participation, (value) {
+      return _then(_self.copyWith(participation: value));
+    });
+  }
+}
+
+// dart format on
