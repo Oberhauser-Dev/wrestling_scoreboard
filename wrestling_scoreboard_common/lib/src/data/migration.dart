@@ -4,7 +4,7 @@ part 'migration.freezed.dart';
 part 'migration.g.dart';
 
 @freezed
-class Migration with _$Migration {
+abstract class Migration with _$Migration {
   const Migration._();
 
   const factory Migration({

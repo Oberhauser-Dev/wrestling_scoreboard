@@ -6,7 +6,7 @@ part of 'user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
+_User _$UserFromJson(Map<String, dynamic> json) => _User(
       id: (json['id'] as num?)?.toInt(),
       email: json['email'] as String?,
       username: json['username'] as String,
@@ -16,7 +16,7 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       privilege: $enumDecodeNullable(_$UserPrivilegeEnumMap, json['privilege']) ?? UserPrivilege.none,
     );
 
-Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
       'username': instance.username,
@@ -33,7 +33,7 @@ const _$UserPrivilegeEnumMap = {
   UserPrivilege.admin: 'admin',
 };
 
-_$SecuredUserImpl _$$SecuredUserImplFromJson(Map<String, dynamic> json) => _$SecuredUserImpl(
+_SecuredUser _$SecuredUserFromJson(Map<String, dynamic> json) => _SecuredUser(
       id: (json['id'] as num?)?.toInt(),
       email: json['email'] as String?,
       username: json['username'] as String,
@@ -44,7 +44,7 @@ _$SecuredUserImpl _$$SecuredUserImplFromJson(Map<String, dynamic> json) => _$Sec
       privilege: $enumDecodeNullable(_$UserPrivilegeEnumMap, json['privilege']) ?? UserPrivilege.none,
     );
 
-Map<String, dynamic> _$$SecuredUserImplToJson(_$SecuredUserImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$SecuredUserToJson(_SecuredUser instance) => <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
       'username': instance.username,

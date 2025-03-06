@@ -15,6 +15,7 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'dataManagerNotifierProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -50,7 +51,7 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
   @override
   DataManagerNotifierProvider $copyWithBuild(
     Raw<Future<DataManager>> Function(
-      Ref<Raw<Future<DataManager>>>,
+      Ref,
       DataManagerNotifier,
     ) build,
   ) {
@@ -59,8 +60,8 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
 
   @$internal
   @override
-  $NotifierProviderElement<DataManagerNotifier, Raw<Future<DataManager>>> $createElement(ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+  $NotifierProviderElement<DataManagerNotifier, Raw<Future<DataManager>>> $createElement($ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$dataManagerNotifierHash() => r'503f87972a6b26b65ba10e6df7580c973fc8a08f';
@@ -69,7 +70,13 @@ abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>>
   Raw<Future<DataManager>> build();
   @$internal
   @override
-  Raw<Future<DataManager>> runBuild() => build();
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<DataManager>>>;
+    final element = ref.element
+        as $ClassProviderElement<NotifierBase<Raw<Future<DataManager>>>, Raw<Future<DataManager>>, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
 @ProviderFor(WebSocketManagerNotifier)
@@ -83,6 +90,7 @@ final class WebSocketManagerNotifierProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'webSocketManagerNotifierProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -118,7 +126,7 @@ final class WebSocketManagerNotifierProvider
   @override
   WebSocketManagerNotifierProvider $copyWithBuild(
     Raw<Future<WebSocketManager>> Function(
-      Ref<Raw<Future<WebSocketManager>>>,
+      Ref,
       WebSocketManagerNotifier,
     ) build,
   ) {
@@ -128,8 +136,8 @@ final class WebSocketManagerNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$webSocketManagerNotifierHash() => r'265576c4812245258bd39d047948d2def4d4c4a9';
@@ -138,25 +146,30 @@ abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocket
   Raw<Future<WebSocketManager>> build();
   @$internal
   @override
-  Raw<Future<WebSocketManager>> runBuild() => build();
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>>;
+    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<WebSocketManager>>>,
+        Raw<Future<WebSocketManager>>, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
 }
-
-typedef WebSocketStateStreamRef = Ref<AsyncValue<WebSocketConnectionState>>;
 
 @ProviderFor(webSocketStateStream)
 const webSocketStateStreamProvider = WebSocketStateStreamProvider._();
 
-final class WebSocketStateStreamProvider extends $FunctionalProvider<AsyncValue<WebSocketConnectionState>,
-        Stream<WebSocketConnectionState>, WebSocketStateStreamRef>
-    with $FutureModifier<WebSocketConnectionState>, $StreamProvider<WebSocketConnectionState, WebSocketStateStreamRef> {
+final class WebSocketStateStreamProvider
+    extends $FunctionalProvider<AsyncValue<WebSocketConnectionState>, Stream<WebSocketConnectionState>>
+    with $FutureModifier<WebSocketConnectionState>, $StreamProvider<WebSocketConnectionState> {
   const WebSocketStateStreamProvider._(
       {Stream<WebSocketConnectionState> Function(
-        WebSocketStateStreamRef ref,
+        Ref ref,
       )? create})
       : _createCb = create,
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'webSocketStateStreamProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -164,7 +177,7 @@ final class WebSocketStateStreamProvider extends $FunctionalProvider<AsyncValue<
         );
 
   final Stream<WebSocketConnectionState> Function(
-    WebSocketStateStreamRef ref,
+    Ref ref,
   )? _createCb;
 
   @override
@@ -172,20 +185,20 @@ final class WebSocketStateStreamProvider extends $FunctionalProvider<AsyncValue<
 
   @$internal
   @override
-  $StreamProviderElement<WebSocketConnectionState> $createElement(ProviderContainer container) =>
-      $StreamProviderElement(this, container);
+  $StreamProviderElement<WebSocketConnectionState> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(this, pointer);
 
   @override
   WebSocketStateStreamProvider $copyWithCreate(
     Stream<WebSocketConnectionState> Function(
-      WebSocketStateStreamRef ref,
+      Ref ref,
     ) create,
   ) {
     return WebSocketStateStreamProvider._(create: create);
   }
 
   @override
-  Stream<WebSocketConnectionState> create(WebSocketStateStreamRef ref) {
+  Stream<WebSocketConnectionState> create(Ref ref) {
     final _$cb = _createCb ?? webSocketStateStream;
     return _$cb(ref);
   }
@@ -194,4 +207,4 @@ final class WebSocketStateStreamProvider extends $FunctionalProvider<AsyncValue<
 String _$webSocketStateStreamHash() => r'046cdb4052ca78dcc18a13b84248602709b861fb';
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

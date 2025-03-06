@@ -6,7 +6,7 @@ part of 'person.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
+_Person _$PersonFromJson(Map<String, dynamic> json) => _Person(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
@@ -18,7 +18,7 @@ _$PersonImpl _$$PersonImplFromJson(Map<String, dynamic> json) => _$PersonImpl(
       nationality: _$JsonConverterFromJson<String, Country>(json['nationality'], const CountryJsonConverter().fromJson),
     );
 
-Map<String, dynamic> _$$PersonImplToJson(_$PersonImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$PersonToJson(_Person instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

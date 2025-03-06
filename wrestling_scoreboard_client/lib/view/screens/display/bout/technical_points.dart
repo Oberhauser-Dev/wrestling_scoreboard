@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
@@ -52,7 +52,7 @@ class TechnicalPoints extends StatelessWidget {
             Expanded(
                 flex: 30,
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  ScaledText(AppLocalizations.of(context)!.activityTimeAbbr, fontSize: timerFontSize),
+                  ScaledText(context.l10n.activityTimeAbbr, fontSize: timerFontSize),
                   TimeDisplay(
                     pStatusModel.activityStopwatch!,
                     white,
@@ -66,7 +66,7 @@ class TechnicalPoints extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ScaledText(AppLocalizations.of(context)!.injuryTimeShort, fontSize: timerFontSize),
+                  ScaledText(context.l10n.injuryTimeShort, fontSize: timerFontSize),
                   TimeDisplay(
                     pStatusModel.injuryStopwatch,
                     white,
@@ -82,7 +82,7 @@ class TechnicalPoints extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ScaledText(AppLocalizations.of(context)!.bleedingInjuryTimeShort, fontSize: timerFontSize),
+                  ScaledText(context.l10n.bleedingInjuryTimeShort, fontSize: timerFontSize),
                   TimeDisplay(
                     pStatusModel.bleedingInjuryStopwatch,
                     white,

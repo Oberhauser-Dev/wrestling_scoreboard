@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -50,7 +50,7 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return IconButton(
       tooltip: localizations.importFromApiProvider,
       onPressed: () async {
@@ -100,7 +100,7 @@ Future<void> checkProposeImport(
   final proposeApiImportDuration = await ref.read(proposeApiImportDurationNotifierProvider);
   if (lastUpdated == null || lastUpdated.compareTo(DateTime.now().subtract(proposeApiImportDuration)) < 0) {
     if (context.mounted) {
-      final localizations = AppLocalizations.of(context)!;
+      final localizations = context.l10n;
       final result = await showDialog<bool>(
         context: context,
         builder: (context) => _IncludeSubjacentDialog(
@@ -126,7 +126,7 @@ Future<void> _processImport(
   await catchAsync(
     context,
     () {
-      final localizations = AppLocalizations.of(context)!;
+      final localizations = context.l10n;
       return showLoadingDialog(
         label: localizations.importFromApiProvider,
         runAsync: (BuildContext context) async {
@@ -172,7 +172,7 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return OkCancelDialog<bool>(
       getResult: () => _includeSubjacent,
       child: Column(

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 
 extension DurationLocalization on Duration {
   String formatDaysHoursMinutes(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return '$inDays ${localizations.days}, ${inHours.remainder(24).toString().padLeft(2, '0')}:${inMinutes.remainder(60).toString().padLeft(2, '0')}';
   }
 

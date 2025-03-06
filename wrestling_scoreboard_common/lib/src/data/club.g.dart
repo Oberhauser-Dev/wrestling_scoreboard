@@ -6,7 +6,7 @@ part of 'club.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ClubImpl _$$ClubImplFromJson(Map<String, dynamic> json) => _$ClubImpl(
+_Club _$ClubFromJson(Map<String, dynamic> json) => _Club(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
@@ -14,7 +14,7 @@ _$ClubImpl _$$ClubImplFromJson(Map<String, dynamic> json) => _$ClubImpl(
       no: json['no'] as String?,
     );
 
-Map<String, dynamic> _$$ClubImplToJson(_$ClubImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$ClubToJson(_Club instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization.toJson(),

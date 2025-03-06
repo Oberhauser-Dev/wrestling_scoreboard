@@ -7,7 +7,7 @@ part 'participant_state.g.dart';
 
 /// The state of one participant during a bout.
 @freezed
-class ParticipantState with _$ParticipantState implements DataObject {
+abstract class ParticipantState with _$ParticipantState implements DataObject {
   const ParticipantState._();
 
   const factory ParticipantState({

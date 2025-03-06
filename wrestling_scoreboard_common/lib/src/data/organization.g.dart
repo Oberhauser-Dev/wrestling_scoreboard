@@ -6,7 +6,7 @@ part of 'organization.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$OrganizationImpl _$$OrganizationImplFromJson(Map<String, dynamic> json) => _$OrganizationImpl(
+_Organization _$OrganizationFromJson(Map<String, dynamic> json) => _Organization(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
       abbreviation: json['abbreviation'] as String?,
@@ -15,7 +15,7 @@ _$OrganizationImpl _$$OrganizationImplFromJson(Map<String, dynamic> json) => _$O
       reportProvider: $enumDecodeNullable(_$WrestlingReportProviderEnumMap, json['reportProvider']),
     );
 
-Map<String, dynamic> _$$OrganizationImplToJson(_$OrganizationImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$OrganizationToJson(_Organization instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'abbreviation': instance.abbreviation,

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,109 +10,57 @@ part of 'bout_config.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-BoutConfig _$BoutConfigFromJson(Map<String, dynamic> json) {
-  return _BoutConfig.fromJson(json);
-}
 
 /// @nodoc
 mixin _$BoutConfig {
-  int? get id => throw _privateConstructorUsedError;
-  Duration get periodDuration => throw _privateConstructorUsedError;
-  Duration get breakDuration => throw _privateConstructorUsedError;
-  Duration? get activityDuration => throw _privateConstructorUsedError;
-  Duration? get injuryDuration => throw _privateConstructorUsedError;
-  Duration? get bleedingInjuryDuration => throw _privateConstructorUsedError;
-  int get periodCount => throw _privateConstructorUsedError;
-
-  /// Serializes this BoutConfig to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  Duration get periodDuration;
+  Duration get breakDuration;
+  Duration? get activityDuration;
+  Duration? get injuryDuration;
+  Duration? get bleedingInjuryDuration;
+  int get periodCount;
 
   /// Create a copy of BoutConfig
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BoutConfigCopyWith<BoutConfig> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BoutConfigCopyWith<$Res> {
-  factory $BoutConfigCopyWith(BoutConfig value, $Res Function(BoutConfig) then) =
-      _$BoutConfigCopyWithImpl<$Res, BoutConfig>;
-  @useResult
-  $Res call(
-      {int? id,
-      Duration periodDuration,
-      Duration breakDuration,
-      Duration? activityDuration,
-      Duration? injuryDuration,
-      Duration? bleedingInjuryDuration,
-      int periodCount});
-}
-
-/// @nodoc
-class _$BoutConfigCopyWithImpl<$Res, $Val extends BoutConfig> implements $BoutConfigCopyWith<$Res> {
-  _$BoutConfigCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of BoutConfig
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $BoutConfigCopyWith<BoutConfig> get copyWith => _$BoutConfigCopyWithImpl<BoutConfig>(this as BoutConfig, _$identity);
+
+  /// Serializes this BoutConfig to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? id = freezed,
-    Object? periodDuration = null,
-    Object? breakDuration = null,
-    Object? activityDuration = freezed,
-    Object? injuryDuration = freezed,
-    Object? bleedingInjuryDuration = freezed,
-    Object? periodCount = null,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      periodDuration: null == periodDuration
-          ? _value.periodDuration
-          : periodDuration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      breakDuration: null == breakDuration
-          ? _value.breakDuration
-          : breakDuration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      activityDuration: freezed == activityDuration
-          ? _value.activityDuration
-          : activityDuration // ignore: cast_nullable_to_non_nullable
-              as Duration?,
-      injuryDuration: freezed == injuryDuration
-          ? _value.injuryDuration
-          : injuryDuration // ignore: cast_nullable_to_non_nullable
-              as Duration?,
-      bleedingInjuryDuration: freezed == bleedingInjuryDuration
-          ? _value.bleedingInjuryDuration
-          : bleedingInjuryDuration // ignore: cast_nullable_to_non_nullable
-              as Duration?,
-      periodCount: null == periodCount
-          ? _value.periodCount
-          : periodCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is BoutConfig &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.periodDuration, periodDuration) || other.periodDuration == periodDuration) &&
+            (identical(other.breakDuration, breakDuration) || other.breakDuration == breakDuration) &&
+            (identical(other.activityDuration, activityDuration) || other.activityDuration == activityDuration) &&
+            (identical(other.injuryDuration, injuryDuration) || other.injuryDuration == injuryDuration) &&
+            (identical(other.bleedingInjuryDuration, bleedingInjuryDuration) ||
+                other.bleedingInjuryDuration == bleedingInjuryDuration) &&
+            (identical(other.periodCount, periodCount) || other.periodCount == periodCount));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration,
+      bleedingInjuryDuration, periodCount);
+
+  @override
+  String toString() {
+    return 'BoutConfig(id: $id, periodDuration: $periodDuration, breakDuration: $breakDuration, activityDuration: $activityDuration, injuryDuration: $injuryDuration, bleedingInjuryDuration: $bleedingInjuryDuration, periodCount: $periodCount)';
   }
 }
 
 /// @nodoc
-abstract class _$$BoutConfigImplCopyWith<$Res> implements $BoutConfigCopyWith<$Res> {
-  factory _$$BoutConfigImplCopyWith(_$BoutConfigImpl value, $Res Function(_$BoutConfigImpl) then) =
-      __$$BoutConfigImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $BoutConfigCopyWith<$Res> {
+  factory $BoutConfigCopyWith(BoutConfig value, $Res Function(BoutConfig) _then) = _$BoutConfigCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -124,9 +73,11 @@ abstract class _$$BoutConfigImplCopyWith<$Res> implements $BoutConfigCopyWith<$R
 }
 
 /// @nodoc
-class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res, _$BoutConfigImpl>
-    implements _$$BoutConfigImplCopyWith<$Res> {
-  __$$BoutConfigImplCopyWithImpl(_$BoutConfigImpl _value, $Res Function(_$BoutConfigImpl) _then) : super(_value, _then);
+class _$BoutConfigCopyWithImpl<$Res> implements $BoutConfigCopyWith<$Res> {
+  _$BoutConfigCopyWithImpl(this._self, this._then);
+
+  final BoutConfig _self;
+  final $Res Function(BoutConfig) _then;
 
   /// Create a copy of BoutConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -141,33 +92,33 @@ class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res
     Object? bleedingInjuryDuration = freezed,
     Object? periodCount = null,
   }) {
-    return _then(_$BoutConfigImpl(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       periodDuration: null == periodDuration
-          ? _value.periodDuration
+          ? _self.periodDuration
           : periodDuration // ignore: cast_nullable_to_non_nullable
               as Duration,
       breakDuration: null == breakDuration
-          ? _value.breakDuration
+          ? _self.breakDuration
           : breakDuration // ignore: cast_nullable_to_non_nullable
               as Duration,
       activityDuration: freezed == activityDuration
-          ? _value.activityDuration
+          ? _self.activityDuration
           : activityDuration // ignore: cast_nullable_to_non_nullable
               as Duration?,
       injuryDuration: freezed == injuryDuration
-          ? _value.injuryDuration
+          ? _self.injuryDuration
           : injuryDuration // ignore: cast_nullable_to_non_nullable
               as Duration?,
       bleedingInjuryDuration: freezed == bleedingInjuryDuration
-          ? _value.bleedingInjuryDuration
+          ? _self.bleedingInjuryDuration
           : bleedingInjuryDuration // ignore: cast_nullable_to_non_nullable
               as Duration?,
       periodCount: null == periodCount
-          ? _value.periodCount
+          ? _self.periodCount
           : periodCount // ignore: cast_nullable_to_non_nullable
               as int,
     ));
@@ -176,8 +127,8 @@ class __$$BoutConfigImplCopyWithImpl<$Res> extends _$BoutConfigCopyWithImpl<$Res
 
 /// @nodoc
 @JsonSerializable()
-class _$BoutConfigImpl extends _BoutConfig {
-  const _$BoutConfigImpl(
+class _BoutConfig extends BoutConfig {
+  const _BoutConfig(
       {this.id,
       this.periodDuration = BoutConfig.defaultPeriodDuration,
       this.breakDuration = BoutConfig.defaultBreakDuration,
@@ -186,8 +137,7 @@ class _$BoutConfigImpl extends _BoutConfig {
       this.bleedingInjuryDuration,
       this.periodCount = BoutConfig.defaultPeriodCount})
       : super._();
-
-  factory _$BoutConfigImpl.fromJson(Map<String, dynamic> json) => _$$BoutConfigImplFromJson(json);
+  factory _BoutConfig.fromJson(Map<String, dynamic> json) => _$BoutConfigFromJson(json);
 
   @override
   final int? id;
@@ -207,16 +157,25 @@ class _$BoutConfigImpl extends _BoutConfig {
   @JsonKey()
   final int periodCount;
 
+  /// Create a copy of BoutConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'BoutConfig(id: $id, periodDuration: $periodDuration, breakDuration: $breakDuration, activityDuration: $activityDuration, injuryDuration: $injuryDuration, bleedingInjuryDuration: $bleedingInjuryDuration, periodCount: $periodCount)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$BoutConfigCopyWith<_BoutConfig> get copyWith => __$BoutConfigCopyWithImpl<_BoutConfig>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$BoutConfigToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BoutConfigImpl &&
+            other is _BoutConfig &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.periodDuration, periodDuration) || other.periodDuration == periodDuration) &&
             (identical(other.breakDuration, breakDuration) || other.breakDuration == breakDuration) &&
@@ -232,53 +191,78 @@ class _$BoutConfigImpl extends _BoutConfig {
   int get hashCode => Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration,
       bleedingInjuryDuration, periodCount);
 
-  /// Create a copy of BoutConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$BoutConfigImplCopyWith<_$BoutConfigImpl> get copyWith =>
-      __$$BoutConfigImplCopyWithImpl<_$BoutConfigImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BoutConfigImplToJson(
-      this,
-    );
+  String toString() {
+    return 'BoutConfig(id: $id, periodDuration: $periodDuration, breakDuration: $breakDuration, activityDuration: $activityDuration, injuryDuration: $injuryDuration, bleedingInjuryDuration: $bleedingInjuryDuration, periodCount: $periodCount)';
   }
 }
 
-abstract class _BoutConfig extends BoutConfig {
-  const factory _BoutConfig(
-      {final int? id,
-      final Duration periodDuration,
-      final Duration breakDuration,
-      final Duration? activityDuration,
-      final Duration? injuryDuration,
-      final Duration? bleedingInjuryDuration,
-      final int periodCount}) = _$BoutConfigImpl;
-  const _BoutConfig._() : super._();
+/// @nodoc
+abstract mixin class _$BoutConfigCopyWith<$Res> implements $BoutConfigCopyWith<$Res> {
+  factory _$BoutConfigCopyWith(_BoutConfig value, $Res Function(_BoutConfig) _then) = __$BoutConfigCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      Duration periodDuration,
+      Duration breakDuration,
+      Duration? activityDuration,
+      Duration? injuryDuration,
+      Duration? bleedingInjuryDuration,
+      int periodCount});
+}
 
-  factory _BoutConfig.fromJson(Map<String, dynamic> json) = _$BoutConfigImpl.fromJson;
+/// @nodoc
+class __$BoutConfigCopyWithImpl<$Res> implements _$BoutConfigCopyWith<$Res> {
+  __$BoutConfigCopyWithImpl(this._self, this._then);
 
-  @override
-  int? get id;
-  @override
-  Duration get periodDuration;
-  @override
-  Duration get breakDuration;
-  @override
-  Duration? get activityDuration;
-  @override
-  Duration? get injuryDuration;
-  @override
-  Duration? get bleedingInjuryDuration;
-  @override
-  int get periodCount;
+  final _BoutConfig _self;
+  final $Res Function(_BoutConfig) _then;
 
   /// Create a copy of BoutConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BoutConfigImplCopyWith<_$BoutConfigImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? periodDuration = null,
+    Object? breakDuration = null,
+    Object? activityDuration = freezed,
+    Object? injuryDuration = freezed,
+    Object? bleedingInjuryDuration = freezed,
+    Object? periodCount = null,
+  }) {
+    return _then(_BoutConfig(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      periodDuration: null == periodDuration
+          ? _self.periodDuration
+          : periodDuration // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      breakDuration: null == breakDuration
+          ? _self.breakDuration
+          : breakDuration // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      activityDuration: freezed == activityDuration
+          ? _self.activityDuration
+          : activityDuration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      injuryDuration: freezed == injuryDuration
+          ? _self.injuryDuration
+          : injuryDuration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      bleedingInjuryDuration: freezed == bleedingInjuryDuration
+          ? _self.bleedingInjuryDuration
+          : bleedingInjuryDuration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      periodCount: null == periodCount
+          ? _self.periodCount
+          : periodCount // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
 }
+
+// dart format on

@@ -7,7 +7,7 @@ part 'league_team_participation.g.dart';
 
 /// Team participates in a league.
 @freezed
-class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObject {
+abstract class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObject {
   const LeagueTeamParticipation._();
 
   const factory LeagueTeamParticipation({

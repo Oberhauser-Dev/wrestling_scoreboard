@@ -6,7 +6,7 @@ part of 'league.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LeagueImpl _$$LeagueImplFromJson(Map<String, dynamic> json) => _$LeagueImpl(
+_League _$LeagueFromJson(Map<String, dynamic> json) => _League(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
@@ -18,7 +18,7 @@ _$LeagueImpl _$$LeagueImplFromJson(Map<String, dynamic> json) => _$LeagueImpl(
       boutDays: (json['boutDays'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$LeagueImplToJson(_$LeagueImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$LeagueToJson(_League instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

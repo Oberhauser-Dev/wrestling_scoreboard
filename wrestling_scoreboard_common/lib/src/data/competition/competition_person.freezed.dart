@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,181 +10,31 @@ part of 'competition_person.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-CompetitionPerson _$CompetitionPersonFromJson(Map<String, dynamic> json) {
-  return _CompetitionPerson.fromJson(json);
-}
 
 /// @nodoc
 mixin _$CompetitionPerson {
-  int? get id => throw _privateConstructorUsedError;
-  Competition get competition => throw _privateConstructorUsedError;
-  Person get person => throw _privateConstructorUsedError;
-  PersonRole get role => throw _privateConstructorUsedError;
-
-  /// Serializes this CompetitionPerson to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  Competition get competition;
+  Person get person;
+  PersonRole get role;
 
   /// Create a copy of CompetitionPerson
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CompetitionPersonCopyWith<CompetitionPerson> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CompetitionPersonCopyWith<$Res> {
-  factory $CompetitionPersonCopyWith(CompetitionPerson value, $Res Function(CompetitionPerson) then) =
-      _$CompetitionPersonCopyWithImpl<$Res, CompetitionPerson>;
-  @useResult
-  $Res call({int? id, Competition competition, Person person, PersonRole role});
-
-  $CompetitionCopyWith<$Res> get competition;
-  $PersonCopyWith<$Res> get person;
-}
-
-/// @nodoc
-class _$CompetitionPersonCopyWithImpl<$Res, $Val extends CompetitionPerson>
-    implements $CompetitionPersonCopyWith<$Res> {
-  _$CompetitionPersonCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CompetitionPerson
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? competition = null,
-    Object? person = null,
-    Object? role = null,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      competition: null == competition
-          ? _value.competition
-          : competition // ignore: cast_nullable_to_non_nullable
-              as Competition,
-      person: null == person
-          ? _value.person
-          : person // ignore: cast_nullable_to_non_nullable
-              as Person,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as PersonRole,
-    ) as $Val);
-  }
+  $CompetitionPersonCopyWith<CompetitionPerson> get copyWith =>
+      _$CompetitionPersonCopyWithImpl<CompetitionPerson>(this as CompetitionPerson, _$identity);
 
-  /// Create a copy of CompetitionPerson
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CompetitionCopyWith<$Res> get competition {
-    return $CompetitionCopyWith<$Res>(_value.competition, (value) {
-      return _then(_value.copyWith(competition: value) as $Val);
-    });
-  }
-
-  /// Create a copy of CompetitionPerson
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $PersonCopyWith<$Res> get person {
-    return $PersonCopyWith<$Res>(_value.person, (value) {
-      return _then(_value.copyWith(person: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$CompetitionPersonImplCopyWith<$Res> implements $CompetitionPersonCopyWith<$Res> {
-  factory _$$CompetitionPersonImplCopyWith(_$CompetitionPersonImpl value, $Res Function(_$CompetitionPersonImpl) then) =
-      __$$CompetitionPersonImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int? id, Competition competition, Person person, PersonRole role});
-
-  @override
-  $CompetitionCopyWith<$Res> get competition;
-  @override
-  $PersonCopyWith<$Res> get person;
-}
-
-/// @nodoc
-class __$$CompetitionPersonImplCopyWithImpl<$Res> extends _$CompetitionPersonCopyWithImpl<$Res, _$CompetitionPersonImpl>
-    implements _$$CompetitionPersonImplCopyWith<$Res> {
-  __$$CompetitionPersonImplCopyWithImpl(_$CompetitionPersonImpl _value, $Res Function(_$CompetitionPersonImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of CompetitionPerson
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? competition = null,
-    Object? person = null,
-    Object? role = null,
-  }) {
-    return _then(_$CompetitionPersonImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      competition: null == competition
-          ? _value.competition
-          : competition // ignore: cast_nullable_to_non_nullable
-              as Competition,
-      person: null == person
-          ? _value.person
-          : person // ignore: cast_nullable_to_non_nullable
-              as Person,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as PersonRole,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$CompetitionPersonImpl extends _CompetitionPerson {
-  const _$CompetitionPersonImpl({this.id, required this.competition, required this.person, required this.role})
-      : super._();
-
-  factory _$CompetitionPersonImpl.fromJson(Map<String, dynamic> json) => _$$CompetitionPersonImplFromJson(json);
-
-  @override
-  final int? id;
-  @override
-  final Competition competition;
-  @override
-  final Person person;
-  @override
-  final PersonRole role;
-
-  @override
-  String toString() {
-    return 'CompetitionPerson(id: $id, competition: $competition, person: $person, role: $role)';
-  }
+  /// Serializes this CompetitionPerson to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CompetitionPersonImpl &&
+            other is CompetitionPerson &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.competition, competition) || other.competition == competition) &&
             (identical(other.person, person) || other.person == person) &&
@@ -194,44 +45,202 @@ class _$CompetitionPersonImpl extends _CompetitionPerson {
   @override
   int get hashCode => Object.hash(runtimeType, id, competition, person, role);
 
-  /// Create a copy of CompetitionPerson
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith =>
-      __$$CompetitionPersonImplCopyWithImpl<_$CompetitionPersonImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CompetitionPersonImplToJson(
-      this,
-    );
+  String toString() {
+    return 'CompetitionPerson(id: $id, competition: $competition, person: $person, role: $role)';
   }
 }
 
-abstract class _CompetitionPerson extends CompetitionPerson {
-  const factory _CompetitionPerson(
-      {final int? id,
-      required final Competition competition,
-      required final Person person,
-      required final PersonRole role}) = _$CompetitionPersonImpl;
-  const _CompetitionPerson._() : super._();
+/// @nodoc
+abstract mixin class $CompetitionPersonCopyWith<$Res> {
+  factory $CompetitionPersonCopyWith(CompetitionPerson value, $Res Function(CompetitionPerson) _then) =
+      _$CompetitionPersonCopyWithImpl;
+  @useResult
+  $Res call({int? id, Competition competition, Person person, PersonRole role});
 
-  factory _CompetitionPerson.fromJson(Map<String, dynamic> json) = _$CompetitionPersonImpl.fromJson;
+  $CompetitionCopyWith<$Res> get competition;
+  $PersonCopyWith<$Res> get person;
+}
+
+/// @nodoc
+class _$CompetitionPersonCopyWithImpl<$Res> implements $CompetitionPersonCopyWith<$Res> {
+  _$CompetitionPersonCopyWithImpl(this._self, this._then);
+
+  final CompetitionPerson _self;
+  final $Res Function(CompetitionPerson) _then;
+
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? competition = null,
+    Object? person = null,
+    Object? role = null,
+  }) {
+    return _then(_self.copyWith(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      competition: null == competition
+          ? _self.competition
+          : competition // ignore: cast_nullable_to_non_nullable
+              as Competition,
+      person: null == person
+          ? _self.person
+          : person // ignore: cast_nullable_to_non_nullable
+              as Person,
+      role: null == role
+          ? _self.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as PersonRole,
+    ));
+  }
+
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CompetitionCopyWith<$Res> get competition {
+    return $CompetitionCopyWith<$Res>(_self.competition, (value) {
+      return _then(_self.copyWith(competition: value));
+    });
+  }
+
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PersonCopyWith<$Res> get person {
+    return $PersonCopyWith<$Res>(_self.person, (value) {
+      return _then(_self.copyWith(person: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _CompetitionPerson extends CompetitionPerson {
+  const _CompetitionPerson({this.id, required this.competition, required this.person, required this.role}) : super._();
+  factory _CompetitionPerson.fromJson(Map<String, dynamic> json) => _$CompetitionPersonFromJson(json);
 
   @override
-  int? get id;
+  final int? id;
   @override
-  Competition get competition;
+  final Competition competition;
   @override
-  Person get person;
+  final Person person;
   @override
-  PersonRole get role;
+  final PersonRole role;
 
   /// Create a copy of CompetitionPerson
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CompetitionPersonImplCopyWith<_$CompetitionPersonImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$CompetitionPersonCopyWith<_CompetitionPerson> get copyWith =>
+      __$CompetitionPersonCopyWithImpl<_CompetitionPerson>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$CompetitionPersonToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _CompetitionPerson &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.person, person) || other.person == person) &&
+            (identical(other.role, role) || other.role == role));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, competition, person, role);
+
+  @override
+  String toString() {
+    return 'CompetitionPerson(id: $id, competition: $competition, person: $person, role: $role)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$CompetitionPersonCopyWith<$Res> implements $CompetitionPersonCopyWith<$Res> {
+  factory _$CompetitionPersonCopyWith(_CompetitionPerson value, $Res Function(_CompetitionPerson) _then) =
+      __$CompetitionPersonCopyWithImpl;
+  @override
+  @useResult
+  $Res call({int? id, Competition competition, Person person, PersonRole role});
+
+  @override
+  $CompetitionCopyWith<$Res> get competition;
+  @override
+  $PersonCopyWith<$Res> get person;
+}
+
+/// @nodoc
+class __$CompetitionPersonCopyWithImpl<$Res> implements _$CompetitionPersonCopyWith<$Res> {
+  __$CompetitionPersonCopyWithImpl(this._self, this._then);
+
+  final _CompetitionPerson _self;
+  final $Res Function(_CompetitionPerson) _then;
+
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? competition = null,
+    Object? person = null,
+    Object? role = null,
+  }) {
+    return _then(_CompetitionPerson(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      competition: null == competition
+          ? _self.competition
+          : competition // ignore: cast_nullable_to_non_nullable
+              as Competition,
+      person: null == person
+          ? _self.person
+          : person // ignore: cast_nullable_to_non_nullable
+              as Person,
+      role: null == role
+          ? _self.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as PersonRole,
+    ));
+  }
+
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CompetitionCopyWith<$Res> get competition {
+    return $CompetitionCopyWith<$Res>(_self.competition, (value) {
+      return _then(_self.copyWith(competition: value));
+    });
+  }
+
+  /// Create a copy of CompetitionPerson
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PersonCopyWith<$Res> get person {
+    return $PersonCopyWith<$Res>(_self.person, (value) {
+      return _then(_self.copyWith(person: value));
+    });
+  }
+}
+
+// dart format on

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
@@ -52,7 +52,7 @@ class TeamMatchBoutDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return SingleConsumer<TeamMatch>(
         id: matchId,
         initialData: initialMatch,
@@ -287,7 +287,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   displayName(ParticipantState? pStatus, double padding) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -483,7 +483,7 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     double width = MediaQuery.of(context).size.width;
     double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);

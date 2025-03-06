@@ -6,7 +6,7 @@ part of 'team_match.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) => _$TeamMatchImpl(
+_TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => _TeamMatch(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
@@ -28,7 +28,7 @@ _$TeamMatchImpl _$$TeamMatchImplFromJson(Map<String, dynamic> json) => _$TeamMat
       comment: json['comment'] as String?,
     );
 
-Map<String, dynamic> _$$TeamMatchImplToJson(_$TeamMatchImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$TeamMatchToJson(_TeamMatch instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

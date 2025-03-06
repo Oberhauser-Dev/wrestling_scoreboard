@@ -7,7 +7,7 @@ part 'bout.g.dart';
 
 /// The bout between two persons, which are represented by a ParticipantStatus.
 @freezed
-class Bout with _$Bout implements DataObject, Organizational {
+abstract class Bout with _$Bout implements DataObject, Organizational {
   const Bout._();
 
   const factory Bout({

@@ -6,7 +6,7 @@ part 'bout_result_rule.freezed.dart';
 part 'bout_result_rule.g.dart';
 
 @freezed
-class BoutResultRule with _$BoutResultRule implements DataObject {
+abstract class BoutResultRule with _$BoutResultRule implements DataObject {
   const BoutResultRule._();
 
   const factory BoutResultRule({

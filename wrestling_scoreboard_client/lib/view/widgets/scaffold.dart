@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
@@ -37,7 +37,7 @@ class WindowStateScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     final alwaysShowAppBar = !hideAppBarOnFullscreen || isMobile;
     return LoadingBuilder<WindowState>(
         future: ref.watch(windowStateNotifierProvider),

@@ -1,11 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -182,7 +183,7 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
           final connectionState = await next;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-              final localizations = AppLocalizations.of(context)!;
+              final localizations = context.l10n;
               showExceptionDialog(
                   context: context, exception: localizations.noWebSocketConnection, stackTrace: null, onRetry: onRetry);
             }

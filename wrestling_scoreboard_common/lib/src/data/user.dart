@@ -23,7 +23,7 @@ abstract class AbstractUser implements DataObject {
 }
 
 @freezed
-class User with _$User implements AbstractUser {
+abstract class User with _$User implements AbstractUser {
   const User._();
 
   const factory User({
@@ -103,7 +103,7 @@ class User with _$User implements AbstractUser {
 
 /// User object to use e.g. on a server
 @freezed
-class SecuredUser with _$SecuredUser implements AbstractUser {
+abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   const SecuredUser._();
 
   @Assert('(passwordHash != null && salt != null) || (passwordHash == null && salt == null)')

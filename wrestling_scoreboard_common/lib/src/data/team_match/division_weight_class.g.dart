@@ -6,7 +6,7 @@ part of 'division_weight_class.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DivisionWeightClassImpl _$$DivisionWeightClassImplFromJson(Map<String, dynamic> json) => _$DivisionWeightClassImpl(
+_DivisionWeightClass _$DivisionWeightClassFromJson(Map<String, dynamic> json) => _DivisionWeightClass(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
@@ -17,7 +17,7 @@ _$DivisionWeightClassImpl _$$DivisionWeightClassImplFromJson(Map<String, dynamic
       seasonPartition: (json['seasonPartition'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$$DivisionWeightClassImplToJson(_$DivisionWeightClassImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$DivisionWeightClassToJson(_DivisionWeightClass instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

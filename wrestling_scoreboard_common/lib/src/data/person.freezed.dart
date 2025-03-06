@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,39 +10,59 @@ part of 'person.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Person _$PersonFromJson(Map<String, dynamic> json) {
-  return _Person.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Person {
-  int? get id => throw _privateConstructorUsedError;
-  String? get orgSyncId => throw _privateConstructorUsedError;
-  Organization? get organization => throw _privateConstructorUsedError;
-  String get prename => throw _privateConstructorUsedError;
-  String get surname => throw _privateConstructorUsedError;
-  Gender? get gender => throw _privateConstructorUsedError;
-  DateTime? get birthDate => throw _privateConstructorUsedError;
+  int? get id;
+  String? get orgSyncId;
+  Organization? get organization;
+  String get prename;
+  String get surname;
+  Gender? get gender;
+  DateTime? get birthDate;
   @CountryJsonConverter()
-  Country? get nationality => throw _privateConstructorUsedError;
-
-  /// Serializes this Person to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Country? get nationality;
 
   /// Create a copy of Person
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $PersonCopyWith<Person> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $PersonCopyWith<Person> get copyWith => _$PersonCopyWithImpl<Person>(this as Person, _$identity);
+
+  /// Serializes this Person to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Person &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.prename, prename) || other.prename == prename) &&
+            (identical(other.surname, surname) || other.surname == surname) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.birthDate, birthDate) || other.birthDate == birthDate) &&
+            (identical(other.nationality, nationality) || other.nationality == nationality));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, prename, surname, gender, birthDate, nationality);
+
+  @override
+  String toString() {
+    return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
+  }
 }
 
 /// @nodoc
-abstract class $PersonCopyWith<$Res> {
-  factory $PersonCopyWith(Person value, $Res Function(Person) then) = _$PersonCopyWithImpl<$Res, Person>;
+abstract mixin class $PersonCopyWith<$Res> {
+  factory $PersonCopyWith(Person value, $Res Function(Person) _then) = _$PersonCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -57,13 +78,11 @@ abstract class $PersonCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith<$Res> {
-  _$PersonCopyWithImpl(this._value, this._then);
+class _$PersonCopyWithImpl<$Res> implements $PersonCopyWith<$Res> {
+  _$PersonCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Person _self;
+  final $Res Function(Person) _then;
 
   /// Create a copy of Person
   /// with the given fields replaced by the non-null parameter values.
@@ -79,40 +98,40 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
     Object? birthDate = freezed,
     Object? nationality = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
+          ? _self.orgSyncId
           : orgSyncId // ignore: cast_nullable_to_non_nullable
               as String?,
       organization: freezed == organization
-          ? _value.organization
+          ? _self.organization
           : organization // ignore: cast_nullable_to_non_nullable
               as Organization?,
       prename: null == prename
-          ? _value.prename
+          ? _self.prename
           : prename // ignore: cast_nullable_to_non_nullable
               as String,
       surname: null == surname
-          ? _value.surname
+          ? _self.surname
           : surname // ignore: cast_nullable_to_non_nullable
               as String,
       gender: freezed == gender
-          ? _value.gender
+          ? _self.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as Gender?,
       birthDate: freezed == birthDate
-          ? _value.birthDate
+          ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       nationality: freezed == nationality
-          ? _value.nationality
+          ? _self.nationality
           : nationality // ignore: cast_nullable_to_non_nullable
               as Country?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Person
@@ -120,96 +139,20 @@ class _$PersonCopyWithImpl<$Res, $Val extends Person> implements $PersonCopyWith
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get organization {
-    if (_value.organization == null) {
+    if (_self.organization == null) {
       return null;
     }
 
-    return $OrganizationCopyWith<$Res>(_value.organization!, (value) {
-      return _then(_value.copyWith(organization: value) as $Val);
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$PersonImplCopyWith<$Res> implements $PersonCopyWith<$Res> {
-  factory _$$PersonImplCopyWith(_$PersonImpl value, $Res Function(_$PersonImpl) then) =
-      __$$PersonImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int? id,
-      String? orgSyncId,
-      Organization? organization,
-      String prename,
-      String surname,
-      Gender? gender,
-      DateTime? birthDate,
-      @CountryJsonConverter() Country? nationality});
-
-  @override
-  $OrganizationCopyWith<$Res>? get organization;
-}
-
-/// @nodoc
-class __$$PersonImplCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res, _$PersonImpl>
-    implements _$$PersonImplCopyWith<$Res> {
-  __$$PersonImplCopyWithImpl(_$PersonImpl _value, $Res Function(_$PersonImpl) _then) : super(_value, _then);
-
-  /// Create a copy of Person
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
-    Object? prename = null,
-    Object? surname = null,
-    Object? gender = freezed,
-    Object? birthDate = freezed,
-    Object? nationality = freezed,
-  }) {
-    return _then(_$PersonImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _value.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _value.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      prename: null == prename
-          ? _value.prename
-          : prename // ignore: cast_nullable_to_non_nullable
-              as String,
-      surname: null == surname
-          ? _value.surname
-          : surname // ignore: cast_nullable_to_non_nullable
-              as String,
-      gender: freezed == gender
-          ? _value.gender
-          : gender // ignore: cast_nullable_to_non_nullable
-              as Gender?,
-      birthDate: freezed == birthDate
-          ? _value.birthDate
-          : birthDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      nationality: freezed == nationality
-          ? _value.nationality
-          : nationality // ignore: cast_nullable_to_non_nullable
-              as Country?,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$PersonImpl extends _Person {
-  const _$PersonImpl(
+class _Person extends Person {
+  const _Person(
       {this.id,
       this.orgSyncId,
       this.organization,
@@ -219,8 +162,7 @@ class _$PersonImpl extends _Person {
       this.birthDate,
       @CountryJsonConverter() this.nationality})
       : super._();
-
-  factory _$PersonImpl.fromJson(Map<String, dynamic> json) => _$$PersonImplFromJson(json);
+  factory _Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 
   @override
   final int? id;
@@ -240,16 +182,25 @@ class _$PersonImpl extends _Person {
   @CountryJsonConverter()
   final Country? nationality;
 
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$PersonCopyWith<_Person> get copyWith => __$PersonCopyWithImpl<_Person>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$PersonToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PersonImpl &&
+            other is _Person &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
             (identical(other.organization, organization) || other.organization == organization) &&
@@ -265,56 +216,101 @@ class _$PersonImpl extends _Person {
   int get hashCode =>
       Object.hash(runtimeType, id, orgSyncId, organization, prename, surname, gender, birthDate, nationality);
 
-  /// Create a copy of Person
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$PersonImplCopyWith<_$PersonImpl> get copyWith => __$$PersonImplCopyWithImpl<_$PersonImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$PersonImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
   }
 }
 
-abstract class _Person extends Person {
-  const factory _Person(
-      {final int? id,
-      final String? orgSyncId,
-      final Organization? organization,
-      required final String prename,
-      required final String surname,
-      final Gender? gender,
-      final DateTime? birthDate,
-      @CountryJsonConverter() final Country? nationality}) = _$PersonImpl;
-  const _Person._() : super._();
+/// @nodoc
+abstract mixin class _$PersonCopyWith<$Res> implements $PersonCopyWith<$Res> {
+  factory _$PersonCopyWith(_Person value, $Res Function(_Person) _then) = __$PersonCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String prename,
+      String surname,
+      Gender? gender,
+      DateTime? birthDate,
+      @CountryJsonConverter() Country? nationality});
 
-  factory _Person.fromJson(Map<String, dynamic> json) = _$PersonImpl.fromJson;
+  @override
+  $OrganizationCopyWith<$Res>? get organization;
+}
 
-  @override
-  int? get id;
-  @override
-  String? get orgSyncId;
-  @override
-  Organization? get organization;
-  @override
-  String get prename;
-  @override
-  String get surname;
-  @override
-  Gender? get gender;
-  @override
-  DateTime? get birthDate;
-  @override
-  @CountryJsonConverter()
-  Country? get nationality;
+/// @nodoc
+class __$PersonCopyWithImpl<$Res> implements _$PersonCopyWith<$Res> {
+  __$PersonCopyWithImpl(this._self, this._then);
+
+  final _Person _self;
+  final $Res Function(_Person) _then;
 
   /// Create a copy of Person
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PersonImplCopyWith<_$PersonImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? orgSyncId = freezed,
+    Object? organization = freezed,
+    Object? prename = null,
+    Object? surname = null,
+    Object? gender = freezed,
+    Object? birthDate = freezed,
+    Object? nationality = freezed,
+  }) {
+    return _then(_Person(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      orgSyncId: freezed == orgSyncId
+          ? _self.orgSyncId
+          : orgSyncId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organization: freezed == organization
+          ? _self.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as Organization?,
+      prename: null == prename
+          ? _self.prename
+          : prename // ignore: cast_nullable_to_non_nullable
+              as String,
+      surname: null == surname
+          ? _self.surname
+          : surname // ignore: cast_nullable_to_non_nullable
+              as String,
+      gender: freezed == gender
+          ? _self.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as Gender?,
+      birthDate: freezed == birthDate
+          ? _self.birthDate
+          : birthDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      nationality: freezed == nationality
+          ? _self.nationality
+          : nationality // ignore: cast_nullable_to_non_nullable
+              as Country?,
+    ));
+  }
+
+  /// Create a copy of Person
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get organization {
+    if (_self.organization == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+      return _then(_self.copyWith(organization: value));
+    });
+  }
 }
+
+// dart format on

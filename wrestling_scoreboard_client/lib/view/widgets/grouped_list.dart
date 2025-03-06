@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -222,7 +222,7 @@ class GroupedList extends StatelessWidget {
           ListTile(
             title: Center(
                 child: Text(
-              AppLocalizations.of(context)!.noItems,
+              context.l10n.noItems,
               style: Theme.of(context).textTheme.bodySmall,
             )),
           )

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,37 +10,54 @@ part of 'organization.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Organization _$OrganizationFromJson(Map<String, dynamic> json) {
-  return _Organization.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Organization {
-  int? get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String? get abbreviation => throw _privateConstructorUsedError;
-  Organization? get parent => throw _privateConstructorUsedError;
-  WrestlingApiProvider? get apiProvider => throw _privateConstructorUsedError;
-  WrestlingReportProvider? get reportProvider => throw _privateConstructorUsedError;
-
-  /// Serializes this Organization to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  int? get id;
+  String get name;
+  String? get abbreviation;
+  Organization? get parent;
+  WrestlingApiProvider? get apiProvider;
+  WrestlingReportProvider? get reportProvider;
 
   /// Create a copy of Organization
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $OrganizationCopyWith<Organization> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<Organization> get copyWith =>
+      _$OrganizationCopyWithImpl<Organization>(this as Organization, _$identity);
+
+  /// Serializes this Organization to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Organization &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation) &&
+            (identical(other.parent, parent) || other.parent == parent) &&
+            (identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider) &&
+            (identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
+
+  @override
+  String toString() {
+    return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider)';
+  }
 }
 
 /// @nodoc
-abstract class $OrganizationCopyWith<$Res> {
-  factory $OrganizationCopyWith(Organization value, $Res Function(Organization) then) =
-      _$OrganizationCopyWithImpl<$Res, Organization>;
+abstract mixin class $OrganizationCopyWith<$Res> {
+  factory $OrganizationCopyWith(Organization value, $Res Function(Organization) _then) = _$OrganizationCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -53,13 +71,11 @@ abstract class $OrganizationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $OrganizationCopyWith<$Res> {
-  _$OrganizationCopyWithImpl(this._value, this._then);
+class _$OrganizationCopyWithImpl<$Res> implements $OrganizationCopyWith<$Res> {
+  _$OrganizationCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Organization _self;
+  final $Res Function(Organization) _then;
 
   /// Create a copy of Organization
   /// with the given fields replaced by the non-null parameter values.
@@ -73,32 +89,32 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
     Object? apiProvider = freezed,
     Object? reportProvider = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: freezed == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
       name: null == name
-          ? _value.name
+          ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       abbreviation: freezed == abbreviation
-          ? _value.abbreviation
+          ? _self.abbreviation
           : abbreviation // ignore: cast_nullable_to_non_nullable
               as String?,
       parent: freezed == parent
-          ? _value.parent
+          ? _self.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as Organization?,
       apiProvider: freezed == apiProvider
-          ? _value.apiProvider
+          ? _self.apiProvider
           : apiProvider // ignore: cast_nullable_to_non_nullable
               as WrestlingApiProvider?,
       reportProvider: freezed == reportProvider
-          ? _value.reportProvider
+          ? _self.reportProvider
           : reportProvider // ignore: cast_nullable_to_non_nullable
               as WrestlingReportProvider?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of Organization
@@ -106,89 +122,23 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization> implements $Or
   @override
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<$Res>? get parent {
-    if (_value.parent == null) {
+    if (_self.parent == null) {
       return null;
     }
 
-    return $OrganizationCopyWith<$Res>(_value.parent!, (value) {
-      return _then(_value.copyWith(parent: value) as $Val);
+    return $OrganizationCopyWith<$Res>(_self.parent!, (value) {
+      return _then(_self.copyWith(parent: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$OrganizationImplCopyWith<$Res> implements $OrganizationCopyWith<$Res> {
-  factory _$$OrganizationImplCopyWith(_$OrganizationImpl value, $Res Function(_$OrganizationImpl) then) =
-      __$$OrganizationImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int? id,
-      String name,
-      String? abbreviation,
-      Organization? parent,
-      WrestlingApiProvider? apiProvider,
-      WrestlingReportProvider? reportProvider});
-
-  @override
-  $OrganizationCopyWith<$Res>? get parent;
-}
-
-/// @nodoc
-class __$$OrganizationImplCopyWithImpl<$Res> extends _$OrganizationCopyWithImpl<$Res, _$OrganizationImpl>
-    implements _$$OrganizationImplCopyWith<$Res> {
-  __$$OrganizationImplCopyWithImpl(_$OrganizationImpl _value, $Res Function(_$OrganizationImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Organization
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? name = null,
-    Object? abbreviation = freezed,
-    Object? parent = freezed,
-    Object? apiProvider = freezed,
-    Object? reportProvider = freezed,
-  }) {
-    return _then(_$OrganizationImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      abbreviation: freezed == abbreviation
-          ? _value.abbreviation
-          : abbreviation // ignore: cast_nullable_to_non_nullable
-              as String?,
-      parent: freezed == parent
-          ? _value.parent
-          : parent // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      apiProvider: freezed == apiProvider
-          ? _value.apiProvider
-          : apiProvider // ignore: cast_nullable_to_non_nullable
-              as WrestlingApiProvider?,
-      reportProvider: freezed == reportProvider
-          ? _value.reportProvider
-          : reportProvider // ignore: cast_nullable_to_non_nullable
-              as WrestlingReportProvider?,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$OrganizationImpl extends _Organization {
-  const _$OrganizationImpl(
+class _Organization extends Organization {
+  const _Organization(
       {this.id, required this.name, this.abbreviation, this.parent, this.apiProvider, this.reportProvider})
       : super._();
-
-  factory _$OrganizationImpl.fromJson(Map<String, dynamic> json) => _$$OrganizationImplFromJson(json);
+  factory _Organization.fromJson(Map<String, dynamic> json) => _$OrganizationFromJson(json);
 
   @override
   final int? id;
@@ -203,16 +153,25 @@ class _$OrganizationImpl extends _Organization {
   @override
   final WrestlingReportProvider? reportProvider;
 
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$OrganizationCopyWith<_Organization> get copyWith => __$OrganizationCopyWithImpl<_Organization>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$OrganizationToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$OrganizationImpl &&
+            other is _Organization &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation) &&
@@ -225,50 +184,89 @@ class _$OrganizationImpl extends _Organization {
   @override
   int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
 
-  /// Create a copy of Organization
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith =>
-      __$$OrganizationImplCopyWithImpl<_$OrganizationImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$OrganizationImplToJson(
-      this,
-    );
+  String toString() {
+    return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider)';
   }
 }
 
-abstract class _Organization extends Organization {
-  const factory _Organization(
-      {final int? id,
-      required final String name,
-      final String? abbreviation,
-      final Organization? parent,
-      final WrestlingApiProvider? apiProvider,
-      final WrestlingReportProvider? reportProvider}) = _$OrganizationImpl;
-  const _Organization._() : super._();
+/// @nodoc
+abstract mixin class _$OrganizationCopyWith<$Res> implements $OrganizationCopyWith<$Res> {
+  factory _$OrganizationCopyWith(_Organization value, $Res Function(_Organization) _then) = __$OrganizationCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      String name,
+      String? abbreviation,
+      Organization? parent,
+      WrestlingApiProvider? apiProvider,
+      WrestlingReportProvider? reportProvider});
 
-  factory _Organization.fromJson(Map<String, dynamic> json) = _$OrganizationImpl.fromJson;
+  @override
+  $OrganizationCopyWith<$Res>? get parent;
+}
 
-  @override
-  int? get id;
-  @override
-  String get name;
-  @override
-  String? get abbreviation;
-  @override
-  Organization? get parent;
-  @override
-  WrestlingApiProvider? get apiProvider;
-  @override
-  WrestlingReportProvider? get reportProvider;
+/// @nodoc
+class __$OrganizationCopyWithImpl<$Res> implements _$OrganizationCopyWith<$Res> {
+  __$OrganizationCopyWithImpl(this._self, this._then);
+
+  final _Organization _self;
+  final $Res Function(_Organization) _then;
 
   /// Create a copy of Organization
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? name = null,
+    Object? abbreviation = freezed,
+    Object? parent = freezed,
+    Object? apiProvider = freezed,
+    Object? reportProvider = freezed,
+  }) {
+    return _then(_Organization(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      abbreviation: freezed == abbreviation
+          ? _self.abbreviation
+          : abbreviation // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parent: freezed == parent
+          ? _self.parent
+          : parent // ignore: cast_nullable_to_non_nullable
+              as Organization?,
+      apiProvider: freezed == apiProvider
+          ? _self.apiProvider
+          : apiProvider // ignore: cast_nullable_to_non_nullable
+              as WrestlingApiProvider?,
+      reportProvider: freezed == reportProvider
+          ? _self.reportProvider
+          : reportProvider // ignore: cast_nullable_to_non_nullable
+              as WrestlingReportProvider?,
+    ));
+  }
+
+  /// Create a copy of Organization
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OrganizationCopyWith<$Res>? get parent {
+    if (_self.parent == null) {
+      return null;
+    }
+
+    return $OrganizationCopyWith<$Res>(_self.parent!, (value) {
+      return _then(_self.copyWith(parent: value));
+    });
+  }
 }
+
+// dart format on

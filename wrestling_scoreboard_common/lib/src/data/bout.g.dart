@@ -6,7 +6,7 @@ part of 'bout.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$BoutImpl _$$BoutImplFromJson(Map<String, dynamic> json) => _$BoutImpl(
+_Bout _$BoutFromJson(Map<String, dynamic> json) => _Bout(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
       organization:
@@ -21,7 +21,7 @@ _$BoutImpl _$$BoutImplFromJson(Map<String, dynamic> json) => _$BoutImpl(
       duration: json['duration'] == null ? Duration.zero : Duration(microseconds: (json['duration'] as num).toInt()),
     );
 
-Map<String, dynamic> _$$BoutImplToJson(_$BoutImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$BoutToJson(_Bout instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

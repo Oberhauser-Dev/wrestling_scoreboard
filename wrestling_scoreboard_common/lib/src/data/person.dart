@@ -18,7 +18,7 @@ class CountryJsonConverter extends JsonConverter<Country, String> {
 
 /// The persons information.
 @freezed
-class Person with _$Person implements DataObject, Organizational {
+abstract class Person with _$Person implements DataObject, Organizational {
   const Person._();
 
   const factory Person({

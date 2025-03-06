@@ -6,7 +6,7 @@ part 'division_weight_class.freezed.dart';
 part 'division_weight_class.g.dart';
 
 @freezed
-class DivisionWeightClass with _$DivisionWeightClass implements DataObject, Organizational {
+abstract class DivisionWeightClass with _$DivisionWeightClass implements DataObject, Organizational {
   const DivisionWeightClass._();
 
   /// The [seasonPartition] is started counting at 0.

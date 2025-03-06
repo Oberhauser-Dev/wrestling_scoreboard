@@ -6,7 +6,7 @@ part of 'bout_action.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$BoutActionImpl _$$BoutActionImplFromJson(Map<String, dynamic> json) => _$BoutActionImpl(
+_BoutAction _$BoutActionFromJson(Map<String, dynamic> json) => _BoutAction(
       id: (json['id'] as num?)?.toInt(),
       actionType: $enumDecode(_$BoutActionTypeEnumMap, json['actionType']),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
@@ -15,7 +15,7 @@ _$BoutActionImpl _$$BoutActionImplFromJson(Map<String, dynamic> json) => _$BoutA
       pointCount: (json['pointCount'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$$BoutActionImplToJson(_$BoutActionImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$BoutActionToJson(_BoutAction instance) => <String, dynamic>{
       'id': instance.id,
       'actionType': _$BoutActionTypeEnumMap[instance.actionType]!,
       'bout': instance.bout.toJson(),

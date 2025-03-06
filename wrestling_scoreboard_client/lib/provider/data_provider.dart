@@ -24,7 +24,7 @@ class SingleProviderData<T extends DataObject> {
 
 @riverpod
 Stream<T> singleDataStream<T extends DataObject>(
-  SingleDataStreamRef ref,
+  Ref ref,
   SingleProviderData<T> pData,
 ) async* {
   // Reload, whenever the stream is connected
@@ -61,7 +61,7 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
 
 @riverpod
 Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
-  ManyDataStreamRef ref,
+  Ref ref,
   ManyProviderData<T, S> pData,
 ) async* {
   // Reload, whenever the stream is connected

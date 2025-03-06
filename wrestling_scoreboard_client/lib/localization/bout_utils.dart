@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -9,14 +9,14 @@ extension BoutRoleLocalization on BoutRole {
   }
 
   String localize(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     return this == BoutRole.red ? localizations.red : localizations.blue;
   }
 }
 
 extension BoutLocalization on Bout {
   String title(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = context.l10n;
     final weightClass = this.weightClass;
     return '${weightClass == null ? '' : '${weightClass.name}, ${weightClass.style.abbreviation(context)} | '}'
         '${r?.fullName(context) ?? localizations.participantVacant} vs. ${b?.fullName(context) ?? localizations.participantVacant}';

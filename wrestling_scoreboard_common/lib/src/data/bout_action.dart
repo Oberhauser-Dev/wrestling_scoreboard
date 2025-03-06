@@ -7,7 +7,7 @@ part 'bout_action.g.dart';
 
 /// An action and its value that is fulfilled by the participant during a bout, e.g. points or caution
 @freezed
-class BoutAction with _$BoutAction implements DataObject {
+abstract class BoutAction with _$BoutAction implements DataObject {
   const BoutAction._();
 
   const factory BoutAction({

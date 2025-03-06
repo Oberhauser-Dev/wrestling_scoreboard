@@ -32,7 +32,7 @@ class WebSocketManagerNotifier extends _$WebSocketManagerNotifier {
 }
 
 @Riverpod(keepAlive: true)
-Stream<WebSocketConnectionState> webSocketStateStream(WebSocketStateStreamRef ref) async* {
+Stream<WebSocketConnectionState> webSocketStateStream(Ref ref) async* {
   final webSocketManager = await ref.watch(webSocketManagerNotifierProvider);
   final webSocketConnectionStream = webSocketManager.onWebSocketConnection.stream
       .distinct()
