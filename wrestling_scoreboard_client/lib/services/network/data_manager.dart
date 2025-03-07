@@ -20,25 +20,22 @@ abstract class DataManager implements AuthManager {
   Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject});
 
   /// READ: get a single object
-  Stream<T> streamSingle<T extends DataObject>(int id, {bool init = false}) {
+  Stream<T> streamSingle<T extends DataObject>(
+    int id, {
+    bool init = false,
+  }) async* {
     final controller = getOrCreateSingleStreamController<T>();
     if (init) {
-      // Use try / catch instead of Future.catchError, because Dart Debugger can't recognize this as uncaught.
-      (() async {
-        try {
-          final single = await readSingle<T>(id);
-          controller.sink.add(single);
-        } catch (e) {
-          controller.sink.addError(e);
-        }
-      })();
+      yield await readSingle<T>(id);
     }
-    return controller.stream.where((event) => event.id == id);
+    yield* controller.stream.where((event) => event.id == id);
   }
 
   /// READ: get many objects
-  Stream<ManyDataObject<T>> streamMany<T extends DataObject, S extends DataObject?>(
-      {S? filterObject, bool init = true}) {
+  Stream<ManyDataObject<T>> streamMany<T extends DataObject, S extends DataObject?>({
+    S? filterObject,
+    bool init = true,
+  }) async* {
     final controller = getOrCreateManyStreamController<T>(filterType: S);
     var stream = controller.stream;
 
@@ -46,17 +43,10 @@ abstract class DataManager implements AuthManager {
       stream = stream.where((e) => e.filterId == filterObject.id!);
     }
     if (init) {
-      // Use try / catch instead of Future.catchError, because Dart Debugger can't recognize this as uncaught.
-      (() async {
-        try {
-          final many = await readMany<T, S>(filterObject: filterObject);
-          controller.sink.add(ManyDataObject<T>(data: many, filterType: S, filterId: filterObject?.id));
-        } catch (e) {
-          controller.sink.addError(e);
-        }
-      })();
+      final many = await readMany<T, S>(filterObject: filterObject);
+      yield ManyDataObject<T>(data: many, filterType: S, filterId: filterObject?.id);
     }
-    return stream;
+    yield* stream;
   }
 
   /// READ: get a single json object
