@@ -6,7 +6,7 @@ export 'data/club.dart';
 export 'data/competition/competition.dart';
 export 'data/competition/competition_bout.dart';
 export 'data/competition/competition_person.dart';
-export 'data/competition/competition_team_participation.dart';
+export 'data/competition/competition_lineup.dart';
 export 'data/data_object.dart';
 export 'data/lineup.dart';
 export 'data/membership.dart';
