@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
@@ -137,12 +138,12 @@ class LineupEditState extends ConsumerState<LineupEdit> {
   }
 
   Future<Iterable<Membership>> _getMemberships() async {
-    final clubs = await ref.read(manyDataStreamProvider<Club, Team>(
+    final clubs = await ref.readAsync(manyDataStreamProvider<Club, Team>(
       ManyProviderData<Club, Team>(filterObject: widget.lineup.team),
     ).future);
 
     final clubMemeberships = await Future.wait(clubs.map((club) async {
-      return await ref.read(manyDataStreamProvider<Membership, Club>(
+      return await ref.readAsync(manyDataStreamProvider<Membership, Club>(
         ManyProviderData<Membership, Club>(filterObject: club),
       ).future);
     }));
