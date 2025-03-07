@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/audio_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_action_controls.dart';
@@ -283,8 +284,8 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
   }
 
-  Future<List<BoutAction>> getActions() =>
-      ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
+  Future<List<BoutAction>> getActions() => ref.readAsync(
+      manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   displayName(ParticipantState? pStatus, double padding) {
     final localizations = context.l10n;

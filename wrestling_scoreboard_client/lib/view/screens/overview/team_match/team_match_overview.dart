@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
@@ -47,12 +48,12 @@ class TeamMatchOverview extends ConsumerWidget {
           final pdfAction = IconButton(
             icon: const Icon(Icons.print),
             onPressed: () async {
-              final teamMatchBouts = await ref.read(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+              final teamMatchBouts = await ref.readAsync(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
                 ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
               ).future);
 
               final teamMatchBoutActions = Map.fromEntries(await Future.wait(teamMatchBouts.map((teamMatchBout) async {
-                final boutActions = await ref.read(manyDataStreamProvider<BoutAction, Bout>(
+                final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
                   ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
                 ).future);
                 // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
@@ -266,11 +267,11 @@ class TeamMatchOverview extends ConsumerWidget {
         });
   }
 
-  Future<List<Bout>> _getBouts(WidgetRef ref, {required TeamMatch match}) =>
-      ref.read(manyDataStreamProvider<Bout, TeamMatch>(ManyProviderData<Bout, TeamMatch>(filterObject: match)).future);
+  Future<List<Bout>> _getBouts(WidgetRef ref, {required TeamMatch match}) => ref.readAsync(
+      manyDataStreamProvider<Bout, TeamMatch>(ManyProviderData<Bout, TeamMatch>(filterObject: match)).future);
 
-  Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) =>
-      ref.read(manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
+  Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
+      manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
@@ -301,7 +302,7 @@ class TeamMatchOverview extends ConsumerWidget {
     List<Participation>? proposedParticipations;
     if (participations.isEmpty) {
       // Load lineup from previous fight as proposal
-      var matches = await ref.read(manyDataStreamProvider<TeamMatch, League>(
+      var matches = await ref.readAsync(manyDataStreamProvider<TeamMatch, League>(
         ManyProviderData<TeamMatch, League>(filterObject: league),
       ).future);
       matches =

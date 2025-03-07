@@ -11,6 +11,7 @@ import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
@@ -48,12 +49,12 @@ class MatchDisplay extends ConsumerWidget {
         final pdfAction = IconButton(
           icon: const Icon(Icons.print),
           onPressed: () async {
-            final teamMatchBouts = await ref.read(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+            final teamMatchBouts = await ref.readAsync(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
               ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
             ).future);
 
             final teamMatchBoutActions = Map.fromEntries(await Future.wait(teamMatchBouts.map((teamMatchBout) async {
-              final boutActions = await ref.read(manyDataStreamProvider<BoutAction, Bout>(
+              final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
                 ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
               ).future);
               // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
