@@ -73,16 +73,20 @@ class ScoreSheet extends PdfSheet {
                 width: 100),
           ]),
           Container(height: PdfSheet.verticalGap),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Expanded(child: _buildClassificationPointsTable(context)),
-            Expanded(
-                child: Column(
+          _buildClassificationPointsTable(context),
+          Container(height: PdfSheet.verticalGap),
+          // Alternatively create a table with row which are spread equally.
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...buildReferees(context, event, width: 120.0),
-                ...buildStaff(context, event, width: 120.0),
-              ],
-            )),
-          ]),
+                ...buildReferees(context, event),
+                ...buildStaff(context, event),
+              ]
+                  .map(
+                    (e) => Expanded(child: e),
+                  )
+                  .toList(),
+              mainAxisSize: MainAxisSize.max),
         ],
       ),
     );
@@ -267,10 +271,27 @@ class ScoreSheet extends PdfSheet {
       );
     }
 
-    const cellHeight = 20.0;
-    final boutResultRuleGroups = boutRules.groupListsBy((element) {
+    const numColumns = 2;
+    final boutResultRuleGroupsList = boutRules.groupListsBy((element) {
       return (element.boutResult, element.winnerClassificationPoints, element.loserClassificationPoints);
-    });
+    }).entries;
+
+    return Row(
+      children: boutResultRuleGroupsList
+          .slices((boutResultRuleGroupsList.length / numColumns).ceil())
+          .map<Widget>((boutResultRuleGroupSection) => Expanded(
+              child: _buildClassificationPointsTableSection(
+                  context, Map.fromEntries(boutResultRuleGroupSection), resultRule)))
+          .intersperse(
+            Container(width: PdfSheet.horizontalGap),
+          )
+          .toList(),
+    );
+  }
+
+  Widget _buildClassificationPointsTableSection(Context context,
+      Map<(BoutResult, int, int), List<BoutResultRule>> boutResultRuleGroups, BoutResultRule? resultRule) {
+    const cellHeight = 20.0;
     return Table(
         columnWidths: {
           0: const FixedColumnWidth(35),
@@ -306,7 +327,7 @@ class ScoreSheet extends PdfSheet {
 
           return TableRow(children: [
             buildTextCell(
-              res.name.toUpperCase(),
+              res.abbreviation(buildContext),
               width: 40,
               height: cellHeight,
               alignment: Alignment.center,
@@ -447,7 +468,8 @@ class ScoreSheet extends PdfSheet {
               width: 2,
             ),
           ),
-          child: Center(child: Text(points?.toString() ?? '', style: const TextStyle(color: PdfSheet.pencilColor))),
+          child: Center(
+              child: Text(points?.toString() ?? '', style: const TextStyle(color: PdfSheet.pencilColor, fontSize: 20))),
         ),
       ]);
     }

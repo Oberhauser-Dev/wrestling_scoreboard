@@ -75,3 +75,15 @@ extension GroupListByIterable<T> on Iterable<T> {
     return result;
   }
 }
+
+extension X<T> on Iterable<T> {
+  Iterable<T> intersperse(T separator, {bool beforeFirst = false, bool afterLast = false}) sync* {
+    bool empty = true;
+    for (var e in this) {
+      if (!empty || beforeFirst) yield separator;
+      empty = false;
+      yield e;
+    }
+    if (!empty && afterLast) yield separator;
+  }
+}
