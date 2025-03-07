@@ -4,6 +4,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'data_provider.g.dart';
@@ -27,6 +28,7 @@ Stream<T> singleDataStream<T extends DataObject>(
   Ref ref,
   SingleProviderData<T> pData,
 ) async* {
+  ref.cache();
   // Reload, whenever the stream is connected
   final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);
   if (wsConnectionState == WebSocketConnectionState.connected) {
@@ -64,6 +66,7 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   Ref ref,
   ManyProviderData<T, S> pData,
 ) async* {
+  ref.cache();
   // Reload, whenever the stream is connected
   final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);
   if (wsConnectionState == WebSocketConnectionState.connected) {
