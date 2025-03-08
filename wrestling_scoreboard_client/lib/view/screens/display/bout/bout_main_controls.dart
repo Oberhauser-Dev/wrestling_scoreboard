@@ -100,8 +100,8 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   }
 
   displayDropDown(BoutRole role) {
-    ParticipantState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
-    ParticipantState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
+    AthleteBoutState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
+    AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
 
     return ThemedContainer(
       color: role == widget.boutState.bout.winnerRole ? role.color() : null,
@@ -126,8 +126,8 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                     final resultRule = BoutConfig.resultRule(
                       result: boutResult,
                       style: widget.boutState.bout.weightClass?.style ?? WrestlingStyle.free,
-                      technicalPointsWinner: ParticipantState.getTechnicalPoints(actions, role),
-                      technicalPointsLoser: ParticipantState.getTechnicalPoints(
+                      technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, role),
+                      technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
                           actions, role == BoutRole.red ? BoutRole.blue : BoutRole.red),
                       rules: widget.boutState.boutRules,
                     );

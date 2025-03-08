@@ -128,7 +128,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: League,
         filterId: single.league.id)));
-  } else if (single is Lineup) {
+  } else if (single is TeamLineup) {
     // No filtered list needs to be handled.
   } else if (single is Membership) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
@@ -139,16 +139,16 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Club,
         filterId: single.club.id)));
-  } else if (single is Participation) {
+  } else if (single is TeamMatchParticipation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await ParticipationController().getMany(
             conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}, obfuscate: obfuscate),
-        Participation,
+        TeamMatchParticipation,
         CRUD.update,
         isRaw: false,
-        filterType: Lineup,
+        filterType: TeamLineup,
         filterId: single.lineup.id)));
-  } else if (single is ParticipantState) {
+  } else if (single is AthleteBoutState) {
   } else if (single is Person) {
     if (single.organization != null) {
       broadcast((obfuscate) async => jsonEncode(manyToJson(
@@ -324,7 +324,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: League,
         filterId: single['league_id'])));
-  } else if (T == Lineup) {
+  } else if (T == TeamLineup) {
     // No filtered list needs to be handled.
   } else if (T == Membership) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
@@ -335,16 +335,16 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: Club,
         filterId: single['club_id'])));
-  } else if (T == Participation) {
+  } else if (T == TeamMatchParticipation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await ParticipationController().getManyRaw(
             conditions: ['lineup_id = @id'], substitutionValues: {'id': single['lineup_id']}, obfuscate: obfuscate),
-        Participation,
+        TeamMatchParticipation,
         CRUD.update,
         isRaw: true,
-        filterType: Lineup,
+        filterType: TeamLineup,
         filterId: single['lineup_id'])));
-  } else if (T == ParticipantState) {
+  } else if (T == AthleteBoutState) {
   } else if (T == Person) {
     if (single['organization_id'] != null) {
       broadcast((obfuscate) async => jsonEncode(manyToJson(

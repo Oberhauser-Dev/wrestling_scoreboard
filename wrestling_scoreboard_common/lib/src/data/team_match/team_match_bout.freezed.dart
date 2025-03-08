@@ -27,7 +27,8 @@ mixin _$TeamMatchBout {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $TeamMatchBoutCopyWith<TeamMatchBout> get copyWith =>
-      _$TeamMatchBoutCopyWithImpl<TeamMatchBout>(this as TeamMatchBout, _$identity);
+      _$TeamMatchBoutCopyWithImpl<TeamMatchBout>(
+          this as TeamMatchBout, _$identity);
 
   /// Serializes this TeamMatchBout to a JSON map.
   Map<String, dynamic> toJson();
@@ -38,16 +39,20 @@ mixin _$TeamMatchBout {
         (other.runtimeType == runtimeType &&
             other is TeamMatchBout &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
-            (identical(other.teamMatch, teamMatch) || other.teamMatch == teamMatch) &&
+            (identical(other.teamMatch, teamMatch) ||
+                other.teamMatch == teamMatch) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
 
   @override
   String toString() {
@@ -57,9 +62,17 @@ mixin _$TeamMatchBout {
 
 /// @nodoc
 abstract mixin class $TeamMatchBoutCopyWith<$Res> {
-  factory $TeamMatchBoutCopyWith(TeamMatchBout value, $Res Function(TeamMatchBout) _then) = _$TeamMatchBoutCopyWithImpl;
+  factory $TeamMatchBoutCopyWith(
+          TeamMatchBout value, $Res Function(TeamMatchBout) _then) =
+      _$TeamMatchBoutCopyWithImpl;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, int pos, TeamMatch teamMatch, Bout bout});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      int pos,
+      TeamMatch teamMatch,
+      Bout bout});
 
   $OrganizationCopyWith<$Res>? get organization;
   $TeamMatchCopyWith<$Res> get teamMatch;
@@ -67,7 +80,8 @@ abstract mixin class $TeamMatchBoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamMatchBoutCopyWithImpl<$Res> implements $TeamMatchBoutCopyWith<$Res> {
+class _$TeamMatchBoutCopyWithImpl<$Res>
+    implements $TeamMatchBoutCopyWith<$Res> {
   _$TeamMatchBoutCopyWithImpl(this._self, this._then);
 
   final TeamMatchBout _self;
@@ -152,9 +166,15 @@ class _$TeamMatchBoutCopyWithImpl<$Res> implements $TeamMatchBoutCopyWith<$Res> 
 @JsonSerializable()
 class _TeamMatchBout extends TeamMatchBout {
   const _TeamMatchBout(
-      {this.id, this.orgSyncId, this.organization, required this.pos, required this.teamMatch, required this.bout})
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      required this.pos,
+      required this.teamMatch,
+      required this.bout})
       : super._();
-  factory _TeamMatchBout.fromJson(Map<String, dynamic> json) => _$TeamMatchBoutFromJson(json);
+  factory _TeamMatchBout.fromJson(Map<String, dynamic> json) =>
+      _$TeamMatchBoutFromJson(json);
 
   @override
   final int? id;
@@ -190,16 +210,20 @@ class _TeamMatchBout extends TeamMatchBout {
         (other.runtimeType == runtimeType &&
             other is _TeamMatchBout &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
-            (identical(other.teamMatch, teamMatch) || other.teamMatch == teamMatch) &&
+            (identical(other.teamMatch, teamMatch) ||
+                other.teamMatch == teamMatch) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
 
   @override
   String toString() {
@@ -208,12 +232,20 @@ class _TeamMatchBout extends TeamMatchBout {
 }
 
 /// @nodoc
-abstract mixin class _$TeamMatchBoutCopyWith<$Res> implements $TeamMatchBoutCopyWith<$Res> {
-  factory _$TeamMatchBoutCopyWith(_TeamMatchBout value, $Res Function(_TeamMatchBout) _then) =
+abstract mixin class _$TeamMatchBoutCopyWith<$Res>
+    implements $TeamMatchBoutCopyWith<$Res> {
+  factory _$TeamMatchBoutCopyWith(
+          _TeamMatchBout value, $Res Function(_TeamMatchBout) _then) =
       __$TeamMatchBoutCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, int pos, TeamMatch teamMatch, Bout bout});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      int pos,
+      TeamMatch teamMatch,
+      Bout bout});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
@@ -224,7 +256,8 @@ abstract mixin class _$TeamMatchBoutCopyWith<$Res> implements $TeamMatchBoutCopy
 }
 
 /// @nodoc
-class __$TeamMatchBoutCopyWithImpl<$Res> implements _$TeamMatchBoutCopyWith<$Res> {
+class __$TeamMatchBoutCopyWithImpl<$Res>
+    implements _$TeamMatchBoutCopyWith<$Res> {
   __$TeamMatchBoutCopyWithImpl(this._self, this._then);
 
   final _TeamMatchBout _self;

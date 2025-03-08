@@ -25,7 +25,8 @@ mixin _$Club {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ClubCopyWith<Club> get copyWith => _$ClubCopyWithImpl<Club>(this as Club, _$identity);
+  $ClubCopyWith<Club> get copyWith =>
+      _$ClubCopyWithImpl<Club>(this as Club, _$identity);
 
   /// Serializes this Club to a JSON map.
   Map<String, dynamic> toJson();
@@ -36,15 +37,18 @@ mixin _$Club {
         (other.runtimeType == runtimeType &&
             other is Club &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.no, no) || other.no == no));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, no);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, no);
 
   @override
   String toString() {
@@ -54,9 +58,15 @@ mixin _$Club {
 
 /// @nodoc
 abstract mixin class $ClubCopyWith<$Res> {
-  factory $ClubCopyWith(Club value, $Res Function(Club) _then) = _$ClubCopyWithImpl;
+  factory $ClubCopyWith(Club value, $Res Function(Club) _then) =
+      _$ClubCopyWithImpl;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization organization,
+      String name,
+      String? no});
 
   $OrganizationCopyWith<$Res> get organization;
 }
@@ -117,7 +127,13 @@ class _$ClubCopyWithImpl<$Res> implements $ClubCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _Club extends Club {
-  const _Club({this.id, this.orgSyncId, required this.organization, required this.name, this.no}) : super._();
+  const _Club(
+      {this.id,
+      this.orgSyncId,
+      required this.organization,
+      required this.name,
+      this.no})
+      : super._();
   factory _Club.fromJson(Map<String, dynamic> json) => _$ClubFromJson(json);
 
   @override
@@ -136,7 +152,8 @@ class _Club extends Club {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ClubCopyWith<_Club> get copyWith => __$ClubCopyWithImpl<_Club>(this, _$identity);
+  _$ClubCopyWith<_Club> get copyWith =>
+      __$ClubCopyWithImpl<_Club>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -151,15 +168,18 @@ class _Club extends Club {
         (other.runtimeType == runtimeType &&
             other is _Club &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.no, no) || other.no == no));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, no);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, no);
 
   @override
   String toString() {
@@ -169,10 +189,16 @@ class _Club extends Club {
 
 /// @nodoc
 abstract mixin class _$ClubCopyWith<$Res> implements $ClubCopyWith<$Res> {
-  factory _$ClubCopyWith(_Club value, $Res Function(_Club) _then) = __$ClubCopyWithImpl;
+  factory _$ClubCopyWith(_Club value, $Res Function(_Club) _then) =
+      __$ClubCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization organization, String name, String? no});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization organization,
+      String name,
+      String? no});
 
   @override
   $OrganizationCopyWith<$Res> get organization;

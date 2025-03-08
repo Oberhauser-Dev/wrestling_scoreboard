@@ -24,7 +24,8 @@ mixin _$CompetitionBout {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $CompetitionBoutCopyWith<CompetitionBout> get copyWith =>
-      _$CompetitionBoutCopyWithImpl<CompetitionBout>(this as CompetitionBout, _$identity);
+      _$CompetitionBoutCopyWithImpl<CompetitionBout>(
+          this as CompetitionBout, _$identity);
 
   /// Serializes this CompetitionBout to a JSON map.
   Map<String, dynamic> toJson();
@@ -35,7 +36,8 @@ mixin _$CompetitionBout {
         (other.runtimeType == runtimeType &&
             other is CompetitionBout &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
@@ -51,7 +53,8 @@ mixin _$CompetitionBout {
 
 /// @nodoc
 abstract mixin class $CompetitionBoutCopyWith<$Res> {
-  factory $CompetitionBoutCopyWith(CompetitionBout value, $Res Function(CompetitionBout) _then) =
+  factory $CompetitionBoutCopyWith(
+          CompetitionBout value, $Res Function(CompetitionBout) _then) =
       _$CompetitionBoutCopyWithImpl;
   @useResult
   $Res call({int? id, Competition competition, Bout bout});
@@ -61,7 +64,8 @@ abstract mixin class $CompetitionBoutCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionBoutCopyWithImpl<$Res> implements $CompetitionBoutCopyWith<$Res> {
+class _$CompetitionBoutCopyWithImpl<$Res>
+    implements $CompetitionBoutCopyWith<$Res> {
   _$CompetitionBoutCopyWithImpl(this._self, this._then);
 
   final CompetitionBout _self;
@@ -116,8 +120,11 @@ class _$CompetitionBoutCopyWithImpl<$Res> implements $CompetitionBoutCopyWith<$R
 /// @nodoc
 @JsonSerializable()
 class _CompetitionBout extends CompetitionBout {
-  const _CompetitionBout({this.id, required this.competition, required this.bout}) : super._();
-  factory _CompetitionBout.fromJson(Map<String, dynamic> json) => _$CompetitionBoutFromJson(json);
+  const _CompetitionBout(
+      {this.id, required this.competition, required this.bout})
+      : super._();
+  factory _CompetitionBout.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionBoutFromJson(json);
 
   @override
   final int? id;
@@ -147,7 +154,8 @@ class _CompetitionBout extends CompetitionBout {
         (other.runtimeType == runtimeType &&
             other is _CompetitionBout &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.bout, bout) || other.bout == bout));
   }
 
@@ -162,8 +170,10 @@ class _CompetitionBout extends CompetitionBout {
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionBoutCopyWith<$Res> implements $CompetitionBoutCopyWith<$Res> {
-  factory _$CompetitionBoutCopyWith(_CompetitionBout value, $Res Function(_CompetitionBout) _then) =
+abstract mixin class _$CompetitionBoutCopyWith<$Res>
+    implements $CompetitionBoutCopyWith<$Res> {
+  factory _$CompetitionBoutCopyWith(
+          _CompetitionBout value, $Res Function(_CompetitionBout) _then) =
       __$CompetitionBoutCopyWithImpl;
   @override
   @useResult
@@ -176,7 +186,8 @@ abstract mixin class _$CompetitionBoutCopyWith<$Res> implements $CompetitionBout
 }
 
 /// @nodoc
-class __$CompetitionBoutCopyWithImpl<$Res> implements _$CompetitionBoutCopyWith<$Res> {
+class __$CompetitionBoutCopyWithImpl<$Res>
+    implements _$CompetitionBoutCopyWith<$Res> {
   __$CompetitionBoutCopyWithImpl(this._self, this._then);
 
   final _CompetitionBout _self;

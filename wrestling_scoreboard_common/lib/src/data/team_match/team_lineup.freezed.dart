@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'lineup.dart';
+part of 'team_lineup.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,26 +14,27 @@ part of 'lineup.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Lineup {
+mixin _$TeamLineup {
   int? get id;
   Team get team;
   Membership? get leader; // Mannschaftsführer
   Membership? get coach;
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<Lineup> get copyWith => _$LineupCopyWithImpl<Lineup>(this as Lineup, _$identity);
+  $TeamLineupCopyWith<TeamLineup> get copyWith =>
+      _$TeamLineupCopyWithImpl<TeamLineup>(this as TeamLineup, _$identity);
 
-  /// Serializes this Lineup to a JSON map.
+  /// Serializes this TeamLineup to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is Lineup &&
+            other is TeamLineup &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.team, team) || other.team == team) &&
             (identical(other.leader, leader) || other.leader == leader) &&
@@ -46,13 +47,15 @@ mixin _$Lineup {
 
   @override
   String toString() {
-    return 'Lineup(id: $id, team: $team, leader: $leader, coach: $coach)';
+    return 'TeamLineup(id: $id, team: $team, leader: $leader, coach: $coach)';
   }
 }
 
 /// @nodoc
-abstract mixin class $LineupCopyWith<$Res> {
-  factory $LineupCopyWith(Lineup value, $Res Function(Lineup) _then) = _$LineupCopyWithImpl;
+abstract mixin class $TeamLineupCopyWith<$Res> {
+  factory $TeamLineupCopyWith(
+          TeamLineup value, $Res Function(TeamLineup) _then) =
+      _$TeamLineupCopyWithImpl;
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
@@ -62,13 +65,13 @@ abstract mixin class $LineupCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LineupCopyWithImpl<$Res> implements $LineupCopyWith<$Res> {
-  _$LineupCopyWithImpl(this._self, this._then);
+class _$TeamLineupCopyWithImpl<$Res> implements $TeamLineupCopyWith<$Res> {
+  _$TeamLineupCopyWithImpl(this._self, this._then);
 
-  final Lineup _self;
-  final $Res Function(Lineup) _then;
+  final TeamLineup _self;
+  final $Res Function(TeamLineup) _then;
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -98,7 +101,7 @@ class _$LineupCopyWithImpl<$Res> implements $LineupCopyWith<$Res> {
     ));
   }
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -108,7 +111,7 @@ class _$LineupCopyWithImpl<$Res> implements $LineupCopyWith<$Res> {
     });
   }
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -122,7 +125,7 @@ class _$LineupCopyWithImpl<$Res> implements $LineupCopyWith<$Res> {
     });
   }
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -139,9 +142,11 @@ class _$LineupCopyWithImpl<$Res> implements $LineupCopyWith<$Res> {
 
 /// @nodoc
 @JsonSerializable()
-class _Lineup extends Lineup {
-  const _Lineup({this.id, required this.team, this.leader, this.coach}) : super._();
-  factory _Lineup.fromJson(Map<String, dynamic> json) => _$LineupFromJson(json);
+class _TeamLineup extends TeamLineup {
+  const _TeamLineup({this.id, required this.team, this.leader, this.coach})
+      : super._();
+  factory _TeamLineup.fromJson(Map<String, dynamic> json) =>
+      _$TeamLineupFromJson(json);
 
   @override
   final int? id;
@@ -153,16 +158,17 @@ class _Lineup extends Lineup {
   @override
   final Membership? coach;
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$LineupCopyWith<_Lineup> get copyWith => __$LineupCopyWithImpl<_Lineup>(this, _$identity);
+  _$TeamLineupCopyWith<_TeamLineup> get copyWith =>
+      __$TeamLineupCopyWithImpl<_TeamLineup>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$LineupToJson(
+    return _$TeamLineupToJson(
       this,
     );
   }
@@ -171,7 +177,7 @@ class _Lineup extends Lineup {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Lineup &&
+            other is _TeamLineup &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.team, team) || other.team == team) &&
             (identical(other.leader, leader) || other.leader == leader) &&
@@ -184,13 +190,16 @@ class _Lineup extends Lineup {
 
   @override
   String toString() {
-    return 'Lineup(id: $id, team: $team, leader: $leader, coach: $coach)';
+    return 'TeamLineup(id: $id, team: $team, leader: $leader, coach: $coach)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$LineupCopyWith<$Res> implements $LineupCopyWith<$Res> {
-  factory _$LineupCopyWith(_Lineup value, $Res Function(_Lineup) _then) = __$LineupCopyWithImpl;
+abstract mixin class _$TeamLineupCopyWith<$Res>
+    implements $TeamLineupCopyWith<$Res> {
+  factory _$TeamLineupCopyWith(
+          _TeamLineup value, $Res Function(_TeamLineup) _then) =
+      __$TeamLineupCopyWithImpl;
   @override
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
@@ -204,13 +213,13 @@ abstract mixin class _$LineupCopyWith<$Res> implements $LineupCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$LineupCopyWithImpl<$Res> implements _$LineupCopyWith<$Res> {
-  __$LineupCopyWithImpl(this._self, this._then);
+class __$TeamLineupCopyWithImpl<$Res> implements _$TeamLineupCopyWith<$Res> {
+  __$TeamLineupCopyWithImpl(this._self, this._then);
 
-  final _Lineup _self;
-  final $Res Function(_Lineup) _then;
+  final _TeamLineup _self;
+  final $Res Function(_TeamLineup) _then;
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -220,7 +229,7 @@ class __$LineupCopyWithImpl<$Res> implements _$LineupCopyWith<$Res> {
     Object? leader = freezed,
     Object? coach = freezed,
   }) {
-    return _then(_Lineup(
+    return _then(_TeamLineup(
       id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -240,7 +249,7 @@ class __$LineupCopyWithImpl<$Res> implements _$LineupCopyWith<$Res> {
     ));
   }
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -250,7 +259,7 @@ class __$LineupCopyWithImpl<$Res> implements _$LineupCopyWith<$Res> {
     });
   }
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -264,7 +273,7 @@ class __$LineupCopyWithImpl<$Res> implements _$LineupCopyWith<$Res> {
     });
   }
 
-  /// Create a copy of Lineup
+  /// Create a copy of TeamLineup
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')

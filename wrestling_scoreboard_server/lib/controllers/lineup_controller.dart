@@ -8,7 +8,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'entity_controller.dart';
 import 'participation_controller.dart';
 
-class LineupController extends ShelfController<Lineup> {
+class LineupController extends ShelfController<TeamLineup> {
   static final LineupController _singleton = LineupController._internal();
 
   factory LineupController() {
@@ -20,7 +20,7 @@ class LineupController extends ShelfController<Lineup> {
 
   LineupController._internal() : super(tableName: 'lineup');
 
-  Future<List<Lineup>> getByLeader(User? user, int id) async {
+  Future<List<TeamLineup>> getByLeader(User? user, int id) async {
     return await getMany(
       conditions: ['leader_id = @id'],
       substitutionValues: {'id': id},
@@ -28,7 +28,7 @@ class LineupController extends ShelfController<Lineup> {
     );
   }
 
-  Future<List<Lineup>> getByCoach(User? user, int id) async {
+  Future<List<TeamLineup>> getByCoach(User? user, int id) async {
     return await getMany(
       conditions: ['coach_id = @id'],
       substitutionValues: {'id': id},

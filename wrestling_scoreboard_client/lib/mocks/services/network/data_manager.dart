@@ -46,8 +46,8 @@ class MockDataManager extends DataManager {
         case const (Membership):
           if (filterObject is Club) return getMembershipsOfClub(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (Participation):
-          if (filterObject is Lineup) return getParticipationsOfLineup(filterObject).cast<T>();
+        case const (TeamMatchParticipation):
+          if (filterObject is TeamLineup) return getParticipationsOfLineup(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Team):
           if (filterObject is Club) return getTeamsOfClub(filterObject).cast<T>();
@@ -105,11 +105,11 @@ class MockDataManager extends DataManager {
       }
     }
 
-    List<List<Participation>> teamParticipations;
+    List<List<TeamMatchParticipation>> teamParticipations;
     List<WeightClass> weightClasses;
     if (wrestlingEvent is TeamMatch) {
-      final homeParticipations = await readMany<Participation, Lineup>(filterObject: wrestlingEvent.home);
-      final guestParticipations = await readMany<Participation, Lineup>(filterObject: wrestlingEvent.guest);
+      final homeParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.home);
+      final guestParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
       weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
     } else if (wrestlingEvent is Competition) {
@@ -204,7 +204,7 @@ class MockDataManager extends DataManager {
     final objList = _getListOfObject(single, CRUD.update);
     objList.remove(single);
     objList.add(single);
-    if (single is Lineup) {
+    if (single is TeamLineup) {
       final participations = getParticipations();
       final participationsWithLineup = participations.where((element) => element.lineup.id == single.id);
       for (final participationWithLineup in participationsWithLineup) {
@@ -245,7 +245,7 @@ class MockDataManager extends DataManager {
         filterType: League,
         filterId: single.division.id,
       ));
-    } else if (single is Lineup) {
+    } else if (single is TeamLineup) {
       // No filtered list needs to be handled.
     } else if (single is Membership) {
       getManyStreamController<Membership>(filterType: Club)?.add(ManyDataObject(
@@ -253,13 +253,13 @@ class MockDataManager extends DataManager {
         filterType: Club,
         filterId: single.club.id,
       ));
-    } else if (single is Participation) {
-      getManyStreamController<Participation>(filterType: Lineup)?.add(ManyDataObject(
+    } else if (single is TeamMatchParticipation) {
+      getManyStreamController<TeamMatchParticipation>(filterType: TeamLineup)?.add(ManyDataObject(
         data: getParticipationsOfLineup(single.lineup),
-        filterType: Lineup,
+        filterType: TeamLineup,
         filterId: single.lineup.id,
       ));
-    } else if (single is ParticipantState) {
+    } else if (single is AthleteBoutState) {
     } else if (single is Person) {
     } else if (single is Team) {
     } else if (single is TeamClubAffiliation) {
@@ -306,13 +306,13 @@ class MockDataManager extends DataManager {
       return getLeagues().cast<T>();
     } else if (obj is DivisionWeightClass) {
       return getDivisionWeightClasses().cast<T>();
-    } else if (obj is Lineup) {
+    } else if (obj is TeamLineup) {
       return getLineups().cast<T>();
     } else if (obj is Membership) {
       return getMemberships().cast<T>();
-    } else if (obj is Participation) {
+    } else if (obj is TeamMatchParticipation) {
       return getParticipations().cast<T>();
-    } else if (obj is ParticipantState) {
+    } else if (obj is AthleteBoutState) {
       return getParticipantStates().cast<T>();
     } else if (obj is Person) {
       return getPersons().cast<T>();
@@ -345,13 +345,13 @@ class MockDataManager extends DataManager {
         return getLeagues().cast<T>();
       case const (DivisionWeightClass):
         return getDivisionWeightClasses().cast<T>();
-      case const (Lineup):
+      case const (TeamLineup):
         return getLineups().cast<T>();
       case const (Membership):
         return getMemberships().cast<T>();
-      case const (Participation):
+      case const (TeamMatchParticipation):
         return getParticipations().cast<T>();
-      case const (ParticipantState):
+      case const (AthleteBoutState):
         return getParticipantStates().cast<T>();
       case const (Person):
         return getPersons().cast<T>();
@@ -385,14 +385,14 @@ class MockDataManager extends DataManager {
       return getSingleStreamController<League>() as StreamController<T>;
     } else if (obj is LeagueWeightClass) {
       return getSingleStreamController<LeagueWeightClass>() as StreamController<T>;
-    } else if (obj is Lineup) {
-      return getSingleStreamController<Lineup>() as StreamController<T>;
+    } else if (obj is TeamLineup) {
+      return getSingleStreamController<TeamLineup>() as StreamController<T>;
     } else if (obj is Membership) {
       return getSingleStreamController<Membership>() as StreamController<T>;
-    } else if (obj is Participation) {
-      return getSingleStreamController<Participation>() as StreamController<T>;
-    } else if (obj is ParticipantState) {
-      return getSingleStreamController<ParticipantState>() as StreamController<T>;
+    } else if (obj is TeamMatchParticipation) {
+      return getSingleStreamController<TeamMatchParticipation>() as StreamController<T>;
+    } else if (obj is AthleteBoutState) {
+      return getSingleStreamController<AthleteBoutState>() as StreamController<T>;
     } else if (obj is Person) {
       return getSingleStreamController<Person>() as StreamController<T>;
     } else if (obj is Team) {

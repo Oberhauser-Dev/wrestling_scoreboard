@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../common.dart';
+import '../../../common.dart';
 
 part 'participation.freezed.dart';
 part 'participation.g.dart';
@@ -8,22 +8,22 @@ part 'participation.g.dart';
 /// The participation of a person (member) on a team match or competition through the teams lineup.
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
 @freezed
-abstract class Participation with _$Participation implements DataObject {
-  const Participation._();
+abstract class TeamMatchParticipation with _$TeamMatchParticipation implements DataObject {
+  const TeamMatchParticipation._();
 
-  const factory Participation({
+  const factory TeamMatchParticipation({
     int? id,
     required Membership membership,
-    required Lineup lineup,
+    required TeamLineup lineup,
     WeightClass? weightClass,
     double? weight,
-  }) = _Participation;
+  }) = _TeamMatchParticipation;
 
-  factory Participation.fromJson(Map<String, Object?> json) => _$ParticipationFromJson(json);
+  factory TeamMatchParticipation.fromJson(Map<String, Object?> json) => _$TeamMatchParticipationFromJson(json);
 
-  static Future<Participation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+  static Future<TeamMatchParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final weightClassId = e['weight_class_id'] as int?;
-    final lineup = await getSingle<Lineup>(e['lineup_id'] as int);
+    final lineup = await getSingle<TeamLineup>(e['lineup_id'] as int);
     final membership = await getSingle<Membership>(e['membership_id'] as int);
     final weightEncoded = e['weight'];
     double? weight;
@@ -31,7 +31,7 @@ abstract class Participation with _$Participation implements DataObject {
       weight = double.parse(weightEncoded);
     }
 
-    return Participation(
+    return TeamMatchParticipation(
       id: e['id'] as int?,
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
       lineup: lineup,
@@ -55,7 +55,7 @@ abstract class Participation with _$Participation implements DataObject {
   String get tableName => 'participation';
 
   @override
-  Participation copyWithId(int? id) {
+  TeamMatchParticipation copyWithId(int? id) {
     return copyWith(id: id);
   }
 

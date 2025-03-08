@@ -287,7 +287,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   Future<List<BoutAction>> getActions() => ref.readAsync(
       manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
-  displayName(ParticipantState? pStatus, double padding) {
+  displayName(AthleteBoutState? pStatus, double padding) {
     final localizations = context.l10n;
     return Expanded(
       child: Column(
@@ -317,7 +317,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  displayClassificationPoints(ParticipantState? pStatus, MaterialColor color, double padding) {
+  displayClassificationPoints(AthleteBoutState? pStatus, MaterialColor color, double padding) {
     return Consumer(
       builder: (context, ref, child) {
         ref.watch(manyDataStreamProvider<BoutAction, Bout>(
@@ -351,13 +351,13 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  displayParticipant(ParticipantState? pStatus, BoutRole role, double padding) {
+  displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding) {
     var color = role.color();
 
     return ThemedContainer(
       color: color,
       child: IntrinsicHeight(
-        child: NullableSingleConsumer<ParticipantState>(
+        child: NullableSingleConsumer<AthleteBoutState>(
           id: pStatus?.id,
           initialData: pStatus,
           builder: (context, pStatus) {

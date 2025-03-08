@@ -24,8 +24,8 @@ void main() {
   );
   final clubA = Club(name: 'Club A', organization: organizationNRW);
   final clubB = Club(name: 'Club B', organization: organizationDRB);
-  final lineupA = Lineup(team: Team(name: 'Team A'));
-  final lineupB = Lineup(team: Team(name: 'Team B'));
+  final lineupA = TeamLineup(team: Team(name: 'Team A'));
+  final lineupB = TeamLineup(team: Team(name: 'Team B'));
   final teamMatch = TeamMatch(
     league: league,
     home: lineupA,
@@ -39,9 +39,9 @@ void main() {
   );
   final bout = Bout(
     duration: Duration(minutes: 2),
-    r: ParticipantState(
+    r: AthleteBoutState(
       classificationPoints: 4,
-      participation: Participation(
+      membership: TeamMatchParticipation(
         lineup: lineupA,
         weight: 9,
         membership: Membership(
@@ -57,9 +57,9 @@ void main() {
         ),
       ),
     ),
-    b: ParticipantState(
+    b: AthleteBoutState(
       classificationPoints: 0,
-      participation: Participation(
+      membership: TeamMatchParticipation(
         lineup: lineupB,
         weight: 8,
         membership: Membership(

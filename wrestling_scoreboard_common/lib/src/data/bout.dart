@@ -14,8 +14,9 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     int? id,
     String? orgSyncId,
     Organization? organization,
-    ParticipantState? r, // red
-    ParticipantState? b, // blue
+    AthleteBoutState? r, // red
+    AthleteBoutState? b, // blue
+    // TODO use WeightCategory (?)
     WeightClass? weightClass,
     int? pool,
     BoutRole? winnerRole,
@@ -52,8 +53,8 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       id: e['id'] as int?,
       orgSyncId: e['org_sync_id'] as String?,
       organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
-      r: redId == null ? null : await getSingle<ParticipantState>(redId),
-      b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
+      r: redId == null ? null : await getSingle<AthleteBoutState>(redId),
+      b: blueId == null ? null : await getSingle<AthleteBoutState>(blueId),
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
       winnerRole: winner == null ? null : BoutRole.values.byName(winner),
       result: boutResult == null ? null : BoutResult.values.byName(boutResult),
@@ -69,9 +70,9 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       final resultRule = BoutConfig.resultRule(
         result: result!,
         style: weightClass?.style ?? WrestlingStyle.free,
-        technicalPointsWinner: ParticipantState.getTechnicalPoints(actions, winnerRole!),
+        technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, winnerRole!),
         technicalPointsLoser:
-            ParticipantState.getTechnicalPoints(actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
+            AthleteBoutState.getTechnicalPoints(actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
         rules: rules,
       );
 
@@ -116,7 +117,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
   static Set<String> searchableAttributes = {};
 
   static Map<String, Type> searchableForeignAttributeMapping = {
-    'red_id': ParticipantState,
-    'blue_id': ParticipantState,
+    'red_id': AthleteBoutState,
+    'blue_id': AthleteBoutState,
   };
 }

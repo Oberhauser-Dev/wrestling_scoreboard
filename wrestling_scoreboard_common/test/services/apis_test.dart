@@ -95,7 +95,7 @@ void main() {
   final testTeamUntergriesbach =
       Team(name: 'SV Untergriesbach', organization: organizationNRW, orgSyncId: 'SV Untergriesbach');
 
-  final testLineupUntergriesbach = Lineup(
+  final testLineupUntergriesbach = TeamLineup(
     team: testTeamUntergriesbach,
   );
 
@@ -112,7 +112,7 @@ void main() {
   final testTeamClubAffiliationBerchtesgaden =
       TeamClubAffiliation(team: testTeamBerchtesgaden, club: testClubBerchtesgaden);
 
-  final testLineupBerchtesgaden = Lineup(
+  final testLineupBerchtesgaden = TeamLineup(
     team: testTeamBerchtesgaden,
     leader: null,
     coach: null,
@@ -591,7 +591,7 @@ void main() {
               no: '029013c',
               organization: organizationNRW,
               home: testLineupBerchtesgaden,
-              guest: Lineup(team: testTeamMering, leader: null, coach: null),
+              guest: TeamLineup(team: testTeamMering, leader: null, coach: null),
               league: testBayerligaSuedLeague,
               seasonPartition: 0,
               matChairman: null,
@@ -632,18 +632,18 @@ void main() {
           winnerRole: BoutRole.blue,
           pool: null,
           organization: organizationNRW,
-          r: ParticipantState(
+          r: AthleteBoutState(
             classificationPoints: 0,
-            participation: Participation(
+            membership: TeamMatchParticipation(
               membership: testMembership,
               lineup: testLineupUntergriesbach,
               weight: null,
               weightClass: weightClass,
             ),
           ),
-          b: ParticipantState(
+          b: AthleteBoutState(
             classificationPoints: 1,
-            participation: Participation(
+            membership: TeamMatchParticipation(
               membership: Membership(
                 no: '4321',
                 orgSyncId: '10142-4321',

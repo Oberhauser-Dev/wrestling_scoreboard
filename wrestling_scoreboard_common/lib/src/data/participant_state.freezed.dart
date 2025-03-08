@@ -14,60 +14,68 @@ part of 'participant_state.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ParticipantState {
+mixin _$AthleteBoutState {
   int? get id;
-  Participation get participation;
+  TeamMatchParticipation get participation;
   int? get classificationPoints;
 
-  /// Create a copy of ParticipantState
+  /// Create a copy of AthleteBoutState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ParticipantStateCopyWith<ParticipantState> get copyWith =>
-      _$ParticipantStateCopyWithImpl<ParticipantState>(this as ParticipantState, _$identity);
+  $AthleteBoutStateCopyWith<AthleteBoutState> get copyWith =>
+      _$AthleteBoutStateCopyWithImpl<AthleteBoutState>(
+          this as AthleteBoutState, _$identity);
 
-  /// Serializes this ParticipantState to a JSON map.
+  /// Serializes this AthleteBoutState to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ParticipantState &&
+            other is AthleteBoutState &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.participation, participation) || other.participation == participation) &&
+            (identical(other.participation, participation) ||
+                other.participation == participation) &&
             (identical(other.classificationPoints, classificationPoints) ||
                 other.classificationPoints == classificationPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, participation, classificationPoints);
+  int get hashCode =>
+      Object.hash(runtimeType, id, participation, classificationPoints);
 
   @override
   String toString() {
-    return 'ParticipantState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
+    return 'AthleteBoutState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ParticipantStateCopyWith<$Res> {
-  factory $ParticipantStateCopyWith(ParticipantState value, $Res Function(ParticipantState) _then) =
-      _$ParticipantStateCopyWithImpl;
+abstract mixin class $AthleteBoutStateCopyWith<$Res> {
+  factory $AthleteBoutStateCopyWith(
+          AthleteBoutState value, $Res Function(AthleteBoutState) _then) =
+      _$AthleteBoutStateCopyWithImpl;
   @useResult
-  $Res call({int? id, Participation participation, int? classificationPoints});
+  $Res call(
+      {int? id,
+      TeamMatchParticipation participation,
+      int? classificationPoints});
 
-  $ParticipationCopyWith<$Res> get participation;
+  $TeamMatchParticipationCopyWith<$Res> get participation;
 }
 
 /// @nodoc
-class _$ParticipantStateCopyWithImpl<$Res> implements $ParticipantStateCopyWith<$Res> {
-  _$ParticipantStateCopyWithImpl(this._self, this._then);
+class _$AthleteBoutStateCopyWithImpl<$Res>
+    implements $AthleteBoutStateCopyWith<$Res> {
+  _$AthleteBoutStateCopyWithImpl(this._self, this._then);
 
-  final ParticipantState _self;
-  final $Res Function(ParticipantState) _then;
+  final AthleteBoutState _self;
+  final $Res Function(AthleteBoutState) _then;
 
-  /// Create a copy of ParticipantState
+  /// Create a copy of AthleteBoutState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -84,7 +92,7 @@ class _$ParticipantStateCopyWithImpl<$Res> implements $ParticipantStateCopyWith<
       participation: null == participation
           ? _self.participation
           : participation // ignore: cast_nullable_to_non_nullable
-              as Participation,
+              as TeamMatchParticipation,
       classificationPoints: freezed == classificationPoints
           ? _self.classificationPoints
           : classificationPoints // ignore: cast_nullable_to_non_nullable
@@ -92,12 +100,12 @@ class _$ParticipantStateCopyWithImpl<$Res> implements $ParticipantStateCopyWith<
     ));
   }
 
-  /// Create a copy of ParticipantState
+  /// Create a copy of AthleteBoutState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ParticipationCopyWith<$Res> get participation {
-    return $ParticipationCopyWith<$Res>(_self.participation, (value) {
+  $TeamMatchParticipationCopyWith<$Res> get participation {
+    return $TeamMatchParticipationCopyWith<$Res>(_self.participation, (value) {
       return _then(_self.copyWith(participation: value));
     });
   }
@@ -105,28 +113,31 @@ class _$ParticipantStateCopyWithImpl<$Res> implements $ParticipantStateCopyWith<
 
 /// @nodoc
 @JsonSerializable()
-class _ParticipantState extends ParticipantState {
-  const _ParticipantState({this.id, required this.participation, this.classificationPoints}) : super._();
-  factory _ParticipantState.fromJson(Map<String, dynamic> json) => _$ParticipantStateFromJson(json);
+class _AthleteBoutState extends AthleteBoutState {
+  const _AthleteBoutState(
+      {this.id, required this.participation, this.classificationPoints})
+      : super._();
+  factory _AthleteBoutState.fromJson(Map<String, dynamic> json) =>
+      _$AthleteBoutStateFromJson(json);
 
   @override
   final int? id;
   @override
-  final Participation participation;
+  final TeamMatchParticipation participation;
   @override
   final int? classificationPoints;
 
-  /// Create a copy of ParticipantState
+  /// Create a copy of AthleteBoutState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ParticipantStateCopyWith<_ParticipantState> get copyWith =>
-      __$ParticipantStateCopyWithImpl<_ParticipantState>(this, _$identity);
+  _$AthleteBoutStateCopyWith<_AthleteBoutState> get copyWith =>
+      __$AthleteBoutStateCopyWithImpl<_AthleteBoutState>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ParticipantStateToJson(
+    return _$AthleteBoutStateToJson(
       this,
     );
   }
@@ -135,43 +146,51 @@ class _ParticipantState extends ParticipantState {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ParticipantState &&
+            other is _AthleteBoutState &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.participation, participation) || other.participation == participation) &&
+            (identical(other.participation, participation) ||
+                other.participation == participation) &&
             (identical(other.classificationPoints, classificationPoints) ||
                 other.classificationPoints == classificationPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, participation, classificationPoints);
+  int get hashCode =>
+      Object.hash(runtimeType, id, participation, classificationPoints);
 
   @override
   String toString() {
-    return 'ParticipantState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
+    return 'AthleteBoutState(id: $id, participation: $participation, classificationPoints: $classificationPoints)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ParticipantStateCopyWith<$Res> implements $ParticipantStateCopyWith<$Res> {
-  factory _$ParticipantStateCopyWith(_ParticipantState value, $Res Function(_ParticipantState) _then) =
-      __$ParticipantStateCopyWithImpl;
+abstract mixin class _$AthleteBoutStateCopyWith<$Res>
+    implements $AthleteBoutStateCopyWith<$Res> {
+  factory _$AthleteBoutStateCopyWith(
+          _AthleteBoutState value, $Res Function(_AthleteBoutState) _then) =
+      __$AthleteBoutStateCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, Participation participation, int? classificationPoints});
+  $Res call(
+      {int? id,
+      TeamMatchParticipation participation,
+      int? classificationPoints});
 
   @override
-  $ParticipationCopyWith<$Res> get participation;
+  $TeamMatchParticipationCopyWith<$Res> get participation;
 }
 
 /// @nodoc
-class __$ParticipantStateCopyWithImpl<$Res> implements _$ParticipantStateCopyWith<$Res> {
-  __$ParticipantStateCopyWithImpl(this._self, this._then);
+class __$AthleteBoutStateCopyWithImpl<$Res>
+    implements _$AthleteBoutStateCopyWith<$Res> {
+  __$AthleteBoutStateCopyWithImpl(this._self, this._then);
 
-  final _ParticipantState _self;
-  final $Res Function(_ParticipantState) _then;
+  final _AthleteBoutState _self;
+  final $Res Function(_AthleteBoutState) _then;
 
-  /// Create a copy of ParticipantState
+  /// Create a copy of AthleteBoutState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -180,7 +199,7 @@ class __$ParticipantStateCopyWithImpl<$Res> implements _$ParticipantStateCopyWit
     Object? participation = null,
     Object? classificationPoints = freezed,
   }) {
-    return _then(_ParticipantState(
+    return _then(_AthleteBoutState(
       id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -188,7 +207,7 @@ class __$ParticipantStateCopyWithImpl<$Res> implements _$ParticipantStateCopyWit
       participation: null == participation
           ? _self.participation
           : participation // ignore: cast_nullable_to_non_nullable
-              as Participation,
+              as TeamMatchParticipation,
       classificationPoints: freezed == classificationPoints
           ? _self.classificationPoints
           : classificationPoints // ignore: cast_nullable_to_non_nullable
@@ -196,12 +215,12 @@ class __$ParticipantStateCopyWithImpl<$Res> implements _$ParticipantStateCopyWit
     ));
   }
 
-  /// Create a copy of ParticipantState
+  /// Create a copy of AthleteBoutState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ParticipationCopyWith<$Res> get participation {
-    return $ParticipationCopyWith<$Res>(_self.participation, (value) {
+  $TeamMatchParticipationCopyWith<$Res> get participation {
+    return $TeamMatchParticipationCopyWith<$Res>(_self.participation, (value) {
       return _then(_self.copyWith(participation: value));
     });
   }

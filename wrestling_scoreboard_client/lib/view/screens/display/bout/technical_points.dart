@@ -41,7 +41,7 @@ class TechnicalPoints extends StatelessWidget {
               filterObject: bout,
               builder: (context, actions) {
                 return FittedText(
-                  (ParticipantState.getTechnicalPoints(actions, role)).toString(),
+                  (AthleteBoutState.getTechnicalPoints(actions, role)).toString(),
                   softWrap: false,
                   style: const TextStyle(height: 1.2),
                 );

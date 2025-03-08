@@ -6,22 +6,29 @@ part of 'organization.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_Organization _$OrganizationFromJson(Map<String, dynamic> json) => _Organization(
+_Organization _$OrganizationFromJson(Map<String, dynamic> json) =>
+    _Organization(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
       abbreviation: json['abbreviation'] as String?,
-      parent: json['parent'] == null ? null : Organization.fromJson(json['parent'] as Map<String, dynamic>),
-      apiProvider: $enumDecodeNullable(_$WrestlingApiProviderEnumMap, json['apiProvider']),
-      reportProvider: $enumDecodeNullable(_$WrestlingReportProviderEnumMap, json['reportProvider']),
+      parent: json['parent'] == null
+          ? null
+          : Organization.fromJson(json['parent'] as Map<String, dynamic>),
+      apiProvider: $enumDecodeNullable(
+          _$WrestlingApiProviderEnumMap, json['apiProvider']),
+      reportProvider: $enumDecodeNullable(
+          _$WrestlingReportProviderEnumMap, json['reportProvider']),
     );
 
-Map<String, dynamic> _$OrganizationToJson(_Organization instance) => <String, dynamic>{
+Map<String, dynamic> _$OrganizationToJson(_Organization instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'abbreviation': instance.abbreviation,
       'parent': instance.parent?.toJson(),
       'apiProvider': _$WrestlingApiProviderEnumMap[instance.apiProvider],
-      'reportProvider': _$WrestlingReportProviderEnumMap[instance.reportProvider],
+      'reportProvider':
+          _$WrestlingReportProviderEnumMap[instance.reportProvider],
     };
 
 const _$WrestlingApiProviderEnumMap = {

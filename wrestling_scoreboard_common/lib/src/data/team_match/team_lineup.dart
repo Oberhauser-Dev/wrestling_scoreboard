@@ -1,28 +1,28 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../common.dart';
+import '../../../common.dart';
 
-part 'lineup.freezed.dart';
-part 'lineup.g.dart';
+part 'team_lineup.freezed.dart';
+part 'team_lineup.g.dart';
 
 /// The lineup for a team match or competition.
 @freezed
-abstract class Lineup with _$Lineup implements DataObject {
-  const Lineup._();
+abstract class TeamLineup with _$TeamLineup implements DataObject {
+  const TeamLineup._();
 
-  const factory Lineup({
+  const factory TeamLineup({
     int? id,
     required Team team,
     Membership? leader, // Mannschaftsführer
     Membership? coach, // Trainer
-  }) = _Lineup;
+  }) = _TeamLineup;
 
-  factory Lineup.fromJson(Map<String, Object?> json) => _$LineupFromJson(json);
+  factory TeamLineup.fromJson(Map<String, Object?> json) => _$TeamLineupFromJson(json);
 
-  static Future<Lineup> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+  static Future<TeamLineup> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final leaderId = e['leader_id'] as int?;
     final coachId = e['coach_id'] as int?;
-    return Lineup(
+    return TeamLineup(
       id: e['id'] as int?,
       team: await getSingle<Team>(e['team_id'] as int),
       leader: leaderId == null ? null : await getSingle<Membership>(leaderId),
@@ -44,7 +44,7 @@ abstract class Lineup with _$Lineup implements DataObject {
   String get tableName => 'lineup';
 
   @override
-  Lineup copyWithId(int? id) {
+  TeamLineup copyWithId(int? id) {
     return copyWith(id: id);
   }
 }

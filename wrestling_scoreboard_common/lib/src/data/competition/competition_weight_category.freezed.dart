@@ -27,7 +27,8 @@ mixin _$CompetitionWeightCategory {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $CompetitionWeightCategoryCopyWith<CompetitionWeightCategory> get copyWith =>
-      _$CompetitionWeightCategoryCopyWithImpl<CompetitionWeightCategory>(this as CompetitionWeightCategory, _$identity);
+      _$CompetitionWeightCategoryCopyWithImpl<CompetitionWeightCategory>(
+          this as CompetitionWeightCategory, _$identity);
 
   /// Serializes this CompetitionWeightCategory to a JSON map.
   Map<String, dynamic> toJson();
@@ -38,16 +39,22 @@ mixin _$CompetitionWeightCategory {
         (other.runtimeType == runtimeType &&
             other is CompetitionWeightCategory &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.ageCategory, ageCategory) || other.ageCategory == ageCategory) &&
-            (identical(other.competition, competition) || other.competition == competition));
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
+            (identical(other.weightClass, weightClass) ||
+                other.weightClass == weightClass) &&
+            (identical(other.ageCategory, ageCategory) ||
+                other.ageCategory == ageCategory) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, weightClass, ageCategory, competition);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      weightClass, ageCategory, competition);
 
   @override
   String toString() {
@@ -57,8 +64,8 @@ mixin _$CompetitionWeightCategory {
 
 /// @nodoc
 abstract mixin class $CompetitionWeightCategoryCopyWith<$Res> {
-  factory $CompetitionWeightCategoryCopyWith(
-          CompetitionWeightCategory value, $Res Function(CompetitionWeightCategory) _then) =
+  factory $CompetitionWeightCategoryCopyWith(CompetitionWeightCategory value,
+          $Res Function(CompetitionWeightCategory) _then) =
       _$CompetitionWeightCategoryCopyWithImpl;
   @useResult
   $Res call(
@@ -76,7 +83,8 @@ abstract mixin class $CompetitionWeightCategoryCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionWeightCategoryCopyWithImpl<$Res> implements $CompetitionWeightCategoryCopyWith<$Res> {
+class _$CompetitionWeightCategoryCopyWithImpl<$Res>
+    implements $CompetitionWeightCategoryCopyWith<$Res> {
   _$CompetitionWeightCategoryCopyWithImpl(this._self, this._then);
 
   final CompetitionWeightCategory _self;
@@ -178,7 +186,8 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
       required this.ageCategory,
       required this.competition})
       : super._();
-  factory _CompetitionWeightCategory.fromJson(Map<String, dynamic> json) => _$CompetitionWeightCategoryFromJson(json);
+  factory _CompetitionWeightCategory.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionWeightCategoryFromJson(json);
 
   @override
   final int? id;
@@ -198,8 +207,10 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CompetitionWeightCategoryCopyWith<_CompetitionWeightCategory> get copyWith =>
-      __$CompetitionWeightCategoryCopyWithImpl<_CompetitionWeightCategory>(this, _$identity);
+  _$CompetitionWeightCategoryCopyWith<_CompetitionWeightCategory>
+      get copyWith =>
+          __$CompetitionWeightCategoryCopyWithImpl<_CompetitionWeightCategory>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -214,16 +225,22 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
         (other.runtimeType == runtimeType &&
             other is _CompetitionWeightCategory &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.ageCategory, ageCategory) || other.ageCategory == ageCategory) &&
-            (identical(other.competition, competition) || other.competition == competition));
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
+            (identical(other.weightClass, weightClass) ||
+                other.weightClass == weightClass) &&
+            (identical(other.ageCategory, ageCategory) ||
+                other.ageCategory == ageCategory) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, weightClass, ageCategory, competition);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      weightClass, ageCategory, competition);
 
   @override
   String toString() {
@@ -232,9 +249,10 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionWeightCategoryCopyWith<$Res> implements $CompetitionWeightCategoryCopyWith<$Res> {
-  factory _$CompetitionWeightCategoryCopyWith(
-          _CompetitionWeightCategory value, $Res Function(_CompetitionWeightCategory) _then) =
+abstract mixin class _$CompetitionWeightCategoryCopyWith<$Res>
+    implements $CompetitionWeightCategoryCopyWith<$Res> {
+  factory _$CompetitionWeightCategoryCopyWith(_CompetitionWeightCategory value,
+          $Res Function(_CompetitionWeightCategory) _then) =
       __$CompetitionWeightCategoryCopyWithImpl;
   @override
   @useResult
@@ -257,7 +275,8 @@ abstract mixin class _$CompetitionWeightCategoryCopyWith<$Res> implements $Compe
 }
 
 /// @nodoc
-class __$CompetitionWeightCategoryCopyWithImpl<$Res> implements _$CompetitionWeightCategoryCopyWith<$Res> {
+class __$CompetitionWeightCategoryCopyWithImpl<$Res>
+    implements _$CompetitionWeightCategoryCopyWith<$Res> {
   __$CompetitionWeightCategoryCopyWithImpl(this._self, this._then);
 
   final _CompetitionWeightCategory _self;

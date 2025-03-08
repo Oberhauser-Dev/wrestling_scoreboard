@@ -296,8 +296,8 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     }
   }
 
-  Future<ParticipantState?> _saveDeepParticipantState(ParticipantState? participantState,
-      {ParticipantState? previousParticipationState, required bool obfuscate}) async {
+  Future<AthleteBoutState?> _saveDeepParticipantState(AthleteBoutState? participantState,
+      {AthleteBoutState? previousParticipationState, required bool obfuscate}) async {
     if (participantState != null) {
       final person = await PersonController()
           .updateOrCreateSingleOfOrg(participantState.participation.membership.person, obfuscate: obfuscate);

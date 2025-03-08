@@ -44,16 +44,16 @@ abstract class DataObject {
         return LeagueTeamParticipation.fromJson(json) as T;
       case const (LeagueWeightClass):
         return LeagueWeightClass.fromJson(json) as T;
-      case const (Lineup):
-        return Lineup.fromJson(json) as T;
+      case const (TeamLineup):
+        return TeamLineup.fromJson(json) as T;
       case const (Membership):
         return Membership.fromJson(json) as T;
       case const (Organization):
         return Organization.fromJson(json) as T;
-      case const (Participation):
-        return Participation.fromJson(json) as T;
-      case const (ParticipantState):
-        return ParticipantState.fromJson(json) as T;
+      case const (TeamMatchParticipation):
+        return TeamMatchParticipation.fromJson(json) as T;
+      case const (AthleteBoutState):
+        return AthleteBoutState.fromJson(json) as T;
       case const (Person):
         return Person.fromJson(json) as T;
       case const (SecuredUser):
@@ -103,16 +103,16 @@ abstract class DataObject {
         return (await LeagueTeamParticipation.fromRaw(raw, getSingle)) as T;
       case const (LeagueWeightClass):
         return (await LeagueWeightClass.fromRaw(raw, getSingle)) as T;
-      case const (Lineup):
-        return (await Lineup.fromRaw(raw, getSingle)) as T;
+      case const (TeamLineup):
+        return (await TeamLineup.fromRaw(raw, getSingle)) as T;
       case const (Organization):
         return (await Organization.fromRaw(raw, getSingle)) as T;
       case const (Membership):
         return (await Membership.fromRaw(raw, getSingle)) as T;
-      case const (Participation):
-        return (await Participation.fromRaw(raw, getSingle)) as T;
-      case const (ParticipantState):
-        return (await ParticipantState.fromRaw(raw, getSingle)) as T;
+      case const (TeamMatchParticipation):
+        return (await TeamMatchParticipation.fromRaw(raw, getSingle)) as T;
+      case const (AthleteBoutState):
+        return (await AthleteBoutState.fromRaw(raw, getSingle)) as T;
       case const (Person):
         return (await Person.fromRaw(raw, getSingle)) as T;
       case const (SecuredUser):

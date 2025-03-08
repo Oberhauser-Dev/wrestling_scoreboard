@@ -26,7 +26,8 @@ mixin _$Membership {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $MembershipCopyWith<Membership> get copyWith => _$MembershipCopyWithImpl<Membership>(this as Membership, _$identity);
+  $MembershipCopyWith<Membership> get copyWith =>
+      _$MembershipCopyWithImpl<Membership>(this as Membership, _$identity);
 
   /// Serializes this Membership to a JSON map.
   Map<String, dynamic> toJson();
@@ -37,8 +38,10 @@ mixin _$Membership {
         (other.runtimeType == runtimeType &&
             other is Membership &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.no, no) || other.no == no) &&
             (identical(other.club, club) || other.club == club) &&
             (identical(other.person, person) || other.person == person));
@@ -46,7 +49,8 @@ mixin _$Membership {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, no, club, person);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, no, club, person);
 
   @override
   String toString() {
@@ -56,9 +60,17 @@ mixin _$Membership {
 
 /// @nodoc
 abstract mixin class $MembershipCopyWith<$Res> {
-  factory $MembershipCopyWith(Membership value, $Res Function(Membership) _then) = _$MembershipCopyWithImpl;
+  factory $MembershipCopyWith(
+          Membership value, $Res Function(Membership) _then) =
+      _$MembershipCopyWithImpl;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String? no,
+      Club club,
+      Person person});
 
   $OrganizationCopyWith<$Res>? get organization;
   $ClubCopyWith<$Res> get club;
@@ -150,9 +162,16 @@ class _$MembershipCopyWithImpl<$Res> implements $MembershipCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _Membership extends Membership {
-  const _Membership({this.id, this.orgSyncId, this.organization, this.no, required this.club, required this.person})
+  const _Membership(
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      this.no,
+      required this.club,
+      required this.person})
       : super._();
-  factory _Membership.fromJson(Map<String, dynamic> json) => _$MembershipFromJson(json);
+  factory _Membership.fromJson(Map<String, dynamic> json) =>
+      _$MembershipFromJson(json);
 
   @override
   final int? id;
@@ -173,7 +192,8 @@ class _Membership extends Membership {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$MembershipCopyWith<_Membership> get copyWith => __$MembershipCopyWithImpl<_Membership>(this, _$identity);
+  _$MembershipCopyWith<_Membership> get copyWith =>
+      __$MembershipCopyWithImpl<_Membership>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -188,8 +208,10 @@ class _Membership extends Membership {
         (other.runtimeType == runtimeType &&
             other is _Membership &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.no, no) || other.no == no) &&
             (identical(other.club, club) || other.club == club) &&
             (identical(other.person, person) || other.person == person));
@@ -197,7 +219,8 @@ class _Membership extends Membership {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, no, club, person);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, no, club, person);
 
   @override
   String toString() {
@@ -206,11 +229,20 @@ class _Membership extends Membership {
 }
 
 /// @nodoc
-abstract mixin class _$MembershipCopyWith<$Res> implements $MembershipCopyWith<$Res> {
-  factory _$MembershipCopyWith(_Membership value, $Res Function(_Membership) _then) = __$MembershipCopyWithImpl;
+abstract mixin class _$MembershipCopyWith<$Res>
+    implements $MembershipCopyWith<$Res> {
+  factory _$MembershipCopyWith(
+          _Membership value, $Res Function(_Membership) _then) =
+      __$MembershipCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String? no, Club club, Person person});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String? no,
+      Club club,
+      Person person});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;

@@ -116,10 +116,10 @@ final List<Division> _divisions = [_juniorDivision, _adultDivision];
 final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
 final List<DivisionWeightClass> _divisionWeightClasses = []; // TODO fill
 final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
-final List<Lineup> _lineups = [];
+final List<TeamLineup> _lineups = [];
 final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
-final List<Participation> _participations = [];
-final List<ParticipantState> _participantStates = []; // TODO fill
+final List<TeamMatchParticipation> _participations = [];
+final List<AthleteBoutState> _participantStates = []; // TODO fill
 final List<Person> _persons = []; // TODO fill
 final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
 final List<TeamClubAffiliation> _teamClubAffiliations = [
@@ -133,18 +133,18 @@ final List<CompetitionBout> _competitionBouts = [];
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 
 TeamMatch initMenRPWMatch() {
-  Lineup home = Lineup(id: 1, team: _homeTeam);
-  Lineup guest = Lineup(id: 2, team: _guestTeam);
+  TeamLineup home = TeamLineup(id: 1, team: _homeTeam);
+  TeamLineup guest = TeamLineup(id: 2, team: _guestTeam);
   _lineups.add(home);
   _lineups.add(guest);
-  _participations.add(Participation(id: 1, membership: r1, lineup: home, weightClass: wc57, weight: 55.8));
-  _participations.add(Participation(id: 2, membership: r2, lineup: home, weightClass: wc61, weight: 60.15));
-  _participations.add(Participation(id: 3, membership: r3, lineup: home, weightClass: wc75A, weight: 73.3));
-  _participations.add(Participation(id: 4, membership: r4, lineup: home, weightClass: wc130, weight: 133.5));
-  _participations.add(Participation(id: 5, membership: b1, lineup: guest, weightClass: wc57, weight: 57.0));
-  _participations.add(Participation(id: 6, membership: b2, lineup: guest, weightClass: wc66));
-  _participations.add(Participation(id: 7, membership: b3, lineup: guest, weightClass: wc75A, weight: 72.4));
-  _participations.add(Participation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
+  _participations.add(TeamMatchParticipation(id: 1, membership: r1, lineup: home, weightClass: wc57, weight: 55.8));
+  _participations.add(TeamMatchParticipation(id: 2, membership: r2, lineup: home, weightClass: wc61, weight: 60.15));
+  _participations.add(TeamMatchParticipation(id: 3, membership: r3, lineup: home, weightClass: wc75A, weight: 73.3));
+  _participations.add(TeamMatchParticipation(id: 4, membership: r4, lineup: home, weightClass: wc130, weight: 133.5));
+  _participations.add(TeamMatchParticipation(id: 5, membership: b1, lineup: guest, weightClass: wc57, weight: 57.0));
+  _participations.add(TeamMatchParticipation(id: 6, membership: b2, lineup: guest, weightClass: wc66));
+  _participations.add(TeamMatchParticipation(id: 7, membership: b3, lineup: guest, weightClass: wc75A, weight: 72.4));
+  _participations.add(TeamMatchParticipation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
 
   Person referee = const Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
   Person judge = const Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
@@ -168,8 +168,8 @@ TeamMatch initMenRPWMatch() {
 }
 
 TeamMatch initJnRPWMatch() {
-  Lineup home = Lineup(id: 3, team: _homeTeamJuniors);
-  Lineup guest = Lineup(id: 4, team: _guestTeam);
+  TeamLineup home = TeamLineup(id: 3, team: _homeTeamJuniors);
+  TeamLineup guest = TeamLineup(id: 4, team: _guestTeam);
   _lineups.add(home);
   _lineups.add(guest);
 
@@ -217,7 +217,7 @@ List<LeagueTeamParticipation> getLeagueTeamParticipationsOfTeam(Team team) {
   return getLeagueTeamParticipations().where((element) => element.team == team).toList();
 }
 
-List<Lineup> getLineups() => _lineups;
+List<TeamLineup> getLineups() => _lineups;
 
 List<Membership> getMemberships() => _memberships;
 
@@ -225,13 +225,13 @@ List<Membership> getMembershipsOfClub(Club club) {
   return getMemberships().where((element) => element.club == club).toList();
 }
 
-List<Participation> getParticipations() => _participations;
+List<TeamMatchParticipation> getParticipations() => _participations;
 
-List<Participation> getParticipationsOfLineup(Lineup lineup) {
+List<TeamMatchParticipation> getParticipationsOfLineup(TeamLineup lineup) {
   return getParticipations().where((element) => element.lineup == lineup).toList();
 }
 
-List<ParticipantState> getParticipantStates() => _participantStates;
+List<AthleteBoutState> getParticipantStates() => _participantStates;
 
 List<Person> getPersons() => _persons;
 

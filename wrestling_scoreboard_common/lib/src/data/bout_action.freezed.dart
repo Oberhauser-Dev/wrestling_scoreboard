@@ -26,7 +26,8 @@ mixin _$BoutAction {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $BoutActionCopyWith<BoutAction> get copyWith => _$BoutActionCopyWithImpl<BoutAction>(this as BoutAction, _$identity);
+  $BoutActionCopyWith<BoutAction> get copyWith =>
+      _$BoutActionCopyWithImpl<BoutAction>(this as BoutAction, _$identity);
 
   /// Serializes this BoutAction to a JSON map.
   Map<String, dynamic> toJson();
@@ -37,16 +38,20 @@ mixin _$BoutAction {
         (other.runtimeType == runtimeType &&
             other is BoutAction &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.actionType, actionType) || other.actionType == actionType) &&
+            (identical(other.actionType, actionType) ||
+                other.actionType == actionType) &&
             (identical(other.bout, bout) || other.bout == bout) &&
-            (identical(other.duration, duration) || other.duration == duration) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration) &&
             (identical(other.role, role) || other.role == role) &&
-            (identical(other.pointCount, pointCount) || other.pointCount == pointCount));
+            (identical(other.pointCount, pointCount) ||
+                other.pointCount == pointCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, actionType, bout, duration, role, pointCount);
+  int get hashCode => Object.hash(
+      runtimeType, id, actionType, bout, duration, role, pointCount);
 
   @override
   String toString() {
@@ -56,9 +61,17 @@ mixin _$BoutAction {
 
 /// @nodoc
 abstract mixin class $BoutActionCopyWith<$Res> {
-  factory $BoutActionCopyWith(BoutAction value, $Res Function(BoutAction) _then) = _$BoutActionCopyWithImpl;
+  factory $BoutActionCopyWith(
+          BoutAction value, $Res Function(BoutAction) _then) =
+      _$BoutActionCopyWithImpl;
   @useResult
-  $Res call({int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount});
+  $Res call(
+      {int? id,
+      BoutActionType actionType,
+      Bout bout,
+      Duration duration,
+      BoutRole role,
+      int? pointCount});
 
   $BoutCopyWith<$Res> get bout;
 }
@@ -132,7 +145,8 @@ class _BoutAction extends BoutAction {
       required this.role,
       this.pointCount})
       : super._();
-  factory _BoutAction.fromJson(Map<String, dynamic> json) => _$BoutActionFromJson(json);
+  factory _BoutAction.fromJson(Map<String, dynamic> json) =>
+      _$BoutActionFromJson(json);
 
   @override
   final int? id;
@@ -152,7 +166,8 @@ class _BoutAction extends BoutAction {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$BoutActionCopyWith<_BoutAction> get copyWith => __$BoutActionCopyWithImpl<_BoutAction>(this, _$identity);
+  _$BoutActionCopyWith<_BoutAction> get copyWith =>
+      __$BoutActionCopyWithImpl<_BoutAction>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -167,16 +182,20 @@ class _BoutAction extends BoutAction {
         (other.runtimeType == runtimeType &&
             other is _BoutAction &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.actionType, actionType) || other.actionType == actionType) &&
+            (identical(other.actionType, actionType) ||
+                other.actionType == actionType) &&
             (identical(other.bout, bout) || other.bout == bout) &&
-            (identical(other.duration, duration) || other.duration == duration) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration) &&
             (identical(other.role, role) || other.role == role) &&
-            (identical(other.pointCount, pointCount) || other.pointCount == pointCount));
+            (identical(other.pointCount, pointCount) ||
+                other.pointCount == pointCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, actionType, bout, duration, role, pointCount);
+  int get hashCode => Object.hash(
+      runtimeType, id, actionType, bout, duration, role, pointCount);
 
   @override
   String toString() {
@@ -185,11 +204,20 @@ class _BoutAction extends BoutAction {
 }
 
 /// @nodoc
-abstract mixin class _$BoutActionCopyWith<$Res> implements $BoutActionCopyWith<$Res> {
-  factory _$BoutActionCopyWith(_BoutAction value, $Res Function(_BoutAction) _then) = __$BoutActionCopyWithImpl;
+abstract mixin class _$BoutActionCopyWith<$Res>
+    implements $BoutActionCopyWith<$Res> {
+  factory _$BoutActionCopyWith(
+          _BoutAction value, $Res Function(_BoutAction) _then) =
+      __$BoutActionCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount});
+  $Res call(
+      {int? id,
+      BoutActionType actionType,
+      Bout bout,
+      Duration duration,
+      BoutRole role,
+      int? pointCount});
 
   @override
   $BoutCopyWith<$Res> get bout;

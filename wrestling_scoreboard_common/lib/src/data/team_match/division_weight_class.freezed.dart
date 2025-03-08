@@ -28,7 +28,8 @@ mixin _$DivisionWeightClass {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DivisionWeightClassCopyWith<DivisionWeightClass> get copyWith =>
-      _$DivisionWeightClassCopyWithImpl<DivisionWeightClass>(this as DivisionWeightClass, _$identity);
+      _$DivisionWeightClassCopyWithImpl<DivisionWeightClass>(
+          this as DivisionWeightClass, _$identity);
 
   /// Serializes this DivisionWeightClass to a JSON map.
   Map<String, dynamic> toJson();
@@ -39,18 +40,23 @@ mixin _$DivisionWeightClass {
         (other.runtimeType == runtimeType &&
             other is DivisionWeightClass &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
-            (identical(other.division, division) || other.division == division) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition));
+            (identical(other.division, division) ||
+                other.division == division) &&
+            (identical(other.weightClass, weightClass) ||
+                other.weightClass == weightClass) &&
+            (identical(other.seasonPartition, seasonPartition) ||
+                other.seasonPartition == seasonPartition));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, orgSyncId, organization, pos, division, weightClass, seasonPartition);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos,
+      division, weightClass, seasonPartition);
 
   @override
   String toString() {
@@ -60,7 +66,8 @@ mixin _$DivisionWeightClass {
 
 /// @nodoc
 abstract mixin class $DivisionWeightClassCopyWith<$Res> {
-  factory $DivisionWeightClassCopyWith(DivisionWeightClass value, $Res Function(DivisionWeightClass) _then) =
+  factory $DivisionWeightClassCopyWith(
+          DivisionWeightClass value, $Res Function(DivisionWeightClass) _then) =
       _$DivisionWeightClassCopyWithImpl;
   @useResult
   $Res call(
@@ -78,7 +85,8 @@ abstract mixin class $DivisionWeightClassCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$DivisionWeightClassCopyWithImpl<$Res> implements $DivisionWeightClassCopyWith<$Res> {
+class _$DivisionWeightClassCopyWithImpl<$Res>
+    implements $DivisionWeightClassCopyWith<$Res> {
   _$DivisionWeightClassCopyWithImpl(this._self, this._then);
 
   final DivisionWeightClass _self;
@@ -176,7 +184,8 @@ class _DivisionWeightClass extends DivisionWeightClass {
       required this.weightClass,
       this.seasonPartition})
       : super._();
-  factory _DivisionWeightClass.fromJson(Map<String, dynamic> json) => _$DivisionWeightClassFromJson(json);
+  factory _DivisionWeightClass.fromJson(Map<String, dynamic> json) =>
+      _$DivisionWeightClassFromJson(json);
 
   @override
   final int? id;
@@ -199,7 +208,8 @@ class _DivisionWeightClass extends DivisionWeightClass {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   _$DivisionWeightClassCopyWith<_DivisionWeightClass> get copyWith =>
-      __$DivisionWeightClassCopyWithImpl<_DivisionWeightClass>(this, _$identity);
+      __$DivisionWeightClassCopyWithImpl<_DivisionWeightClass>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -214,18 +224,23 @@ class _DivisionWeightClass extends DivisionWeightClass {
         (other.runtimeType == runtimeType &&
             other is _DivisionWeightClass &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
-            (identical(other.division, division) || other.division == division) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition));
+            (identical(other.division, division) ||
+                other.division == division) &&
+            (identical(other.weightClass, weightClass) ||
+                other.weightClass == weightClass) &&
+            (identical(other.seasonPartition, seasonPartition) ||
+                other.seasonPartition == seasonPartition));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, orgSyncId, organization, pos, division, weightClass, seasonPartition);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos,
+      division, weightClass, seasonPartition);
 
   @override
   String toString() {
@@ -234,8 +249,10 @@ class _DivisionWeightClass extends DivisionWeightClass {
 }
 
 /// @nodoc
-abstract mixin class _$DivisionWeightClassCopyWith<$Res> implements $DivisionWeightClassCopyWith<$Res> {
-  factory _$DivisionWeightClassCopyWith(_DivisionWeightClass value, $Res Function(_DivisionWeightClass) _then) =
+abstract mixin class _$DivisionWeightClassCopyWith<$Res>
+    implements $DivisionWeightClassCopyWith<$Res> {
+  factory _$DivisionWeightClassCopyWith(_DivisionWeightClass value,
+          $Res Function(_DivisionWeightClass) _then) =
       __$DivisionWeightClassCopyWithImpl;
   @override
   @useResult
@@ -257,7 +274,8 @@ abstract mixin class _$DivisionWeightClassCopyWith<$Res> implements $DivisionWei
 }
 
 /// @nodoc
-class __$DivisionWeightClassCopyWithImpl<$Res> implements _$DivisionWeightClassCopyWith<$Res> {
+class __$DivisionWeightClassCopyWithImpl<$Res>
+    implements _$DivisionWeightClassCopyWith<$Res> {
   __$DivisionWeightClassCopyWithImpl(this._self, this._then);
 
   final _DivisionWeightClass _self;

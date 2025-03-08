@@ -16,8 +16,8 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class BoutEdit extends ConsumerStatefulWidget {
   final Bout? bout;
   final BoutConfig boutConfig;
-  final Lineup lineupRed;
-  final Lineup lineupBlue;
+  final TeamLineup lineupRed;
+  final TeamLineup lineupBlue;
 
   const BoutEdit({
     super.key,
@@ -34,8 +34,8 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
   BoutRole? _winnerRole;
   BoutResult? _boutResult;
   WeightClass? _weightClass;
-  Participation? _redParticipation;
-  Participation? _blueParticipation;
+  TeamMatchParticipation? _redParticipation;
+  TeamMatchParticipation? _blueParticipation;
   Duration? _boutDuration;
 
   Future<List<WeightClass>> get availableWeightClasses;
@@ -160,16 +160,16 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      Future<ParticipantState?> updateParticipantState(
-          Participation? newParticipation, ParticipantState? oldParticipantState) async {
+      Future<AthleteBoutState?> updateParticipantState(
+          TeamMatchParticipation? newParticipation, AthleteBoutState? oldParticipantState) async {
         if (newParticipation != oldParticipantState?.participation) {
           if (oldParticipantState != null) {
-            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<ParticipantState>(oldParticipantState);
+            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<AthleteBoutState>(oldParticipantState);
           }
           if (newParticipation != null) {
-            final newParticipantState = ParticipantState(participation: newParticipation);
+            final newParticipantState = AthleteBoutState(membership: newParticipation);
             return newParticipantState.copyWithId(await (await ref.read(dataManagerNotifierProvider))
-                .createOrUpdateSingle<ParticipantState>(newParticipantState));
+                .createOrUpdateSingle<AthleteBoutState>(newParticipantState));
           } else {
             return null;
           }
@@ -198,10 +198,10 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
 
 class ParticipantSelectTile extends ConsumerWidget {
   final String label;
-  final Participation? participation;
-  final Lineup lineup;
-  final void Function(Participation participation) deleteParticipantState;
-  final void Function(Participation participation) createOrUpdateParticipantState;
+  final TeamMatchParticipation? participation;
+  final TeamLineup lineup;
+  final void Function(TeamMatchParticipation participation) deleteParticipantState;
+  final void Function(TeamMatchParticipation participation) createOrUpdateParticipantState;
 
   const ParticipantSelectTile({
     super.key,
@@ -212,10 +212,10 @@ class ParticipantSelectTile extends ConsumerWidget {
     required this.createOrUpdateParticipantState,
   });
 
-  Future<List<Participation>> _filterParticipants(
+  Future<List<TeamMatchParticipation>> _filterParticipants(
     WidgetRef ref,
     String? filter,
-    Lineup lineup,
+    TeamLineup lineup,
   ) async {
     final participations = await _getParticipations(ref, lineup: lineup);
     return (filter == null
@@ -224,8 +224,8 @@ class ParticipantSelectTile extends ConsumerWidget {
         .toList();
   }
 
-  Future<List<Participation>> _getParticipations(WidgetRef ref, {required Lineup lineup}) async {
-    return ref.watch(manyDataStreamProvider<Participation, Lineup>(ManyProviderData(filterObject: lineup)).future);
+  Future<List<TeamMatchParticipation>> _getParticipations(WidgetRef ref, {required TeamLineup lineup}) async {
+    return ref.watch(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(ManyProviderData(filterObject: lineup)).future);
   }
 
   @override
@@ -238,11 +238,11 @@ class ParticipantSelectTile extends ConsumerWidget {
             flex: 80,
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: SearchableDropdown<Participation>(
+              child: SearchableDropdown<TeamMatchParticipation>(
                 selectedItem: participation,
                 label: label,
                 context: context,
-                onSaved: (Participation? newParticipation) {
+                onSaved: (TeamMatchParticipation? newParticipation) {
                   if (participation == newParticipation) return;
 
                   // Delete old participation, if not null

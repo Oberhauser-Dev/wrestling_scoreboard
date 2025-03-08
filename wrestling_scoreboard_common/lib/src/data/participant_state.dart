@@ -7,22 +7,23 @@ part 'participant_state.g.dart';
 
 /// The state of one participant during a bout.
 @freezed
-abstract class ParticipantState with _$ParticipantState implements DataObject {
-  const ParticipantState._();
+abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
+  const AthleteBoutState._();
 
-  const factory ParticipantState({
+  const factory AthleteBoutState({
     int? id,
-    required Participation participation,
+    required Membership membership,
     int? classificationPoints,
-  }) = _ParticipantState;
+  }) = _AthleteBoutState;
 
-  factory ParticipantState.fromJson(Map<String, Object?> json) => _$ParticipantStateFromJson(json);
+  factory AthleteBoutState.fromJson(Map<String, Object?> json) => _$AthleteBoutStateFromJson(json);
 
-  static Future<ParticipantState> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    final participation = await getSingle<Participation>(e['participation_id'] as int);
-    return ParticipantState(
+  static Future<AthleteBoutState> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    // TODO renamed participant to membership
+    final membership = await getSingle<Membership>(e['membership_id'] as int);
+    return AthleteBoutState(
       id: e['id'] as int?,
-      participation: participation,
+      membership: membership,
       classificationPoints: e['classification_points'] as int?,
     );
   }
@@ -31,7 +32,7 @@ abstract class ParticipantState with _$ParticipantState implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'participation_id': participation.id!,
+      'membership_id': membership.id!,
       'classification_points': classificationPoints,
     };
   }
@@ -49,14 +50,14 @@ abstract class ParticipantState with _$ParticipantState implements DataObject {
     return res;
   }
 
-  bool equalDuringBout(o) => o is ParticipantState && o.runtimeType == runtimeType && participation == o.participation;
+  bool equalDuringBout(o) => o is AthleteBoutState && o.runtimeType == runtimeType && participation == o.participation;
 
   @override
-  ParticipantState copyWithId(int? id) {
+  AthleteBoutState copyWithId(int? id) {
     return copyWith(id: id);
   }
 
   static Map<String, Type> searchableForeignAttributeMapping = {
-    'participation_id': Participation,
+    'membership_id': Membership,
   };
 }
