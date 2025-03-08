@@ -472,11 +472,11 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             ? (schemeIndex - 1)
             : (double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1);
         return TeamMatch(
-          home: Lineup(
+          home: TeamLineup(
             team: await _getSingleBySyncId<Team>(
                 (competitionJson['homeTeamName'] as String).trim()), // teamId is not unique across all IDs
           ),
-          guest: Lineup(
+          guest: TeamLineup(
             team: await _getSingleBySyncId<Team>(
                 (competitionJson['opponentTeamName'] as String).trim()), // teamId is not unique across all IDs
           ),
@@ -596,9 +596,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             winnerRole: winnerRole,
             r: homeMembership == null
                 ? null
-                : ParticipantState(
+                : AthleteBoutState(
                     classificationPoints: classificationPointsHome,
-                    participation: Participation(
+                    membership: TeamMatchParticipation(
                       // TODO: Participation is shared
                       lineup: event.home,
                       membership: homeMembership,
@@ -608,9 +608,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                   ),
             b: opponentMembership == null
                 ? null
-                : ParticipantState(
+                : AthleteBoutState(
                     classificationPoints: classificationPointsOpponent,
-                    participation: Participation(
+                    membership: TeamMatchParticipation(
                       // TODO: Participation is shared
                       lineup: event.guest,
                       membership: opponentMembership,

@@ -27,7 +27,8 @@ mixin _$BoutConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $BoutConfigCopyWith<BoutConfig> get copyWith => _$BoutConfigCopyWithImpl<BoutConfig>(this as BoutConfig, _$identity);
+  $BoutConfigCopyWith<BoutConfig> get copyWith =>
+      _$BoutConfigCopyWithImpl<BoutConfig>(this as BoutConfig, _$identity);
 
   /// Serializes this BoutConfig to a JSON map.
   Map<String, dynamic> toJson();
@@ -38,19 +39,31 @@ mixin _$BoutConfig {
         (other.runtimeType == runtimeType &&
             other is BoutConfig &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.periodDuration, periodDuration) || other.periodDuration == periodDuration) &&
-            (identical(other.breakDuration, breakDuration) || other.breakDuration == breakDuration) &&
-            (identical(other.activityDuration, activityDuration) || other.activityDuration == activityDuration) &&
-            (identical(other.injuryDuration, injuryDuration) || other.injuryDuration == injuryDuration) &&
+            (identical(other.periodDuration, periodDuration) ||
+                other.periodDuration == periodDuration) &&
+            (identical(other.breakDuration, breakDuration) ||
+                other.breakDuration == breakDuration) &&
+            (identical(other.activityDuration, activityDuration) ||
+                other.activityDuration == activityDuration) &&
+            (identical(other.injuryDuration, injuryDuration) ||
+                other.injuryDuration == injuryDuration) &&
             (identical(other.bleedingInjuryDuration, bleedingInjuryDuration) ||
                 other.bleedingInjuryDuration == bleedingInjuryDuration) &&
-            (identical(other.periodCount, periodCount) || other.periodCount == periodCount));
+            (identical(other.periodCount, periodCount) ||
+                other.periodCount == periodCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration,
-      bleedingInjuryDuration, periodCount);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      periodDuration,
+      breakDuration,
+      activityDuration,
+      injuryDuration,
+      bleedingInjuryDuration,
+      periodCount);
 
   @override
   String toString() {
@@ -60,7 +73,9 @@ mixin _$BoutConfig {
 
 /// @nodoc
 abstract mixin class $BoutConfigCopyWith<$Res> {
-  factory $BoutConfigCopyWith(BoutConfig value, $Res Function(BoutConfig) _then) = _$BoutConfigCopyWithImpl;
+  factory $BoutConfigCopyWith(
+          BoutConfig value, $Res Function(BoutConfig) _then) =
+      _$BoutConfigCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -137,7 +152,8 @@ class _BoutConfig extends BoutConfig {
       this.bleedingInjuryDuration,
       this.periodCount = BoutConfig.defaultPeriodCount})
       : super._();
-  factory _BoutConfig.fromJson(Map<String, dynamic> json) => _$BoutConfigFromJson(json);
+  factory _BoutConfig.fromJson(Map<String, dynamic> json) =>
+      _$BoutConfigFromJson(json);
 
   @override
   final int? id;
@@ -162,7 +178,8 @@ class _BoutConfig extends BoutConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$BoutConfigCopyWith<_BoutConfig> get copyWith => __$BoutConfigCopyWithImpl<_BoutConfig>(this, _$identity);
+  _$BoutConfigCopyWith<_BoutConfig> get copyWith =>
+      __$BoutConfigCopyWithImpl<_BoutConfig>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -177,19 +194,31 @@ class _BoutConfig extends BoutConfig {
         (other.runtimeType == runtimeType &&
             other is _BoutConfig &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.periodDuration, periodDuration) || other.periodDuration == periodDuration) &&
-            (identical(other.breakDuration, breakDuration) || other.breakDuration == breakDuration) &&
-            (identical(other.activityDuration, activityDuration) || other.activityDuration == activityDuration) &&
-            (identical(other.injuryDuration, injuryDuration) || other.injuryDuration == injuryDuration) &&
+            (identical(other.periodDuration, periodDuration) ||
+                other.periodDuration == periodDuration) &&
+            (identical(other.breakDuration, breakDuration) ||
+                other.breakDuration == breakDuration) &&
+            (identical(other.activityDuration, activityDuration) ||
+                other.activityDuration == activityDuration) &&
+            (identical(other.injuryDuration, injuryDuration) ||
+                other.injuryDuration == injuryDuration) &&
             (identical(other.bleedingInjuryDuration, bleedingInjuryDuration) ||
                 other.bleedingInjuryDuration == bleedingInjuryDuration) &&
-            (identical(other.periodCount, periodCount) || other.periodCount == periodCount));
+            (identical(other.periodCount, periodCount) ||
+                other.periodCount == periodCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, periodDuration, breakDuration, activityDuration, injuryDuration,
-      bleedingInjuryDuration, periodCount);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      periodDuration,
+      breakDuration,
+      activityDuration,
+      injuryDuration,
+      bleedingInjuryDuration,
+      periodCount);
 
   @override
   String toString() {
@@ -198,8 +227,11 @@ class _BoutConfig extends BoutConfig {
 }
 
 /// @nodoc
-abstract mixin class _$BoutConfigCopyWith<$Res> implements $BoutConfigCopyWith<$Res> {
-  factory _$BoutConfigCopyWith(_BoutConfig value, $Res Function(_BoutConfig) _then) = __$BoutConfigCopyWithImpl;
+abstract mixin class _$BoutConfigCopyWith<$Res>
+    implements $BoutConfigCopyWith<$Res> {
+  factory _$BoutConfigCopyWith(
+          _BoutConfig value, $Res Function(_BoutConfig) _then) =
+      __$BoutConfigCopyWithImpl;
   @override
   @useResult
   $Res call(

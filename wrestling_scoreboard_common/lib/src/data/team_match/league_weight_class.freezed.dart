@@ -28,7 +28,8 @@ mixin _$LeagueWeightClass {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $LeagueWeightClassCopyWith<LeagueWeightClass> get copyWith =>
-      _$LeagueWeightClassCopyWithImpl<LeagueWeightClass>(this as LeagueWeightClass, _$identity);
+      _$LeagueWeightClassCopyWithImpl<LeagueWeightClass>(
+          this as LeagueWeightClass, _$identity);
 
   /// Serializes this LeagueWeightClass to a JSON map.
   Map<String, dynamic> toJson();
@@ -39,17 +40,22 @@ mixin _$LeagueWeightClass {
         (other.runtimeType == runtimeType &&
             other is LeagueWeightClass &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition));
+            (identical(other.weightClass, weightClass) ||
+                other.weightClass == weightClass) &&
+            (identical(other.seasonPartition, seasonPartition) ||
+                other.seasonPartition == seasonPartition));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, league, weightClass, seasonPartition);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos,
+      league, weightClass, seasonPartition);
 
   @override
   String toString() {
@@ -59,7 +65,8 @@ mixin _$LeagueWeightClass {
 
 /// @nodoc
 abstract mixin class $LeagueWeightClassCopyWith<$Res> {
-  factory $LeagueWeightClassCopyWith(LeagueWeightClass value, $Res Function(LeagueWeightClass) _then) =
+  factory $LeagueWeightClassCopyWith(
+          LeagueWeightClass value, $Res Function(LeagueWeightClass) _then) =
       _$LeagueWeightClassCopyWithImpl;
   @useResult
   $Res call(
@@ -77,7 +84,8 @@ abstract mixin class $LeagueWeightClassCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LeagueWeightClassCopyWithImpl<$Res> implements $LeagueWeightClassCopyWith<$Res> {
+class _$LeagueWeightClassCopyWithImpl<$Res>
+    implements $LeagueWeightClassCopyWith<$Res> {
   _$LeagueWeightClassCopyWithImpl(this._self, this._then);
 
   final LeagueWeightClass _self;
@@ -175,7 +183,8 @@ class _LeagueWeightClass extends LeagueWeightClass {
       required this.weightClass,
       this.seasonPartition})
       : super._();
-  factory _LeagueWeightClass.fromJson(Map<String, dynamic> json) => _$LeagueWeightClassFromJson(json);
+  factory _LeagueWeightClass.fromJson(Map<String, dynamic> json) =>
+      _$LeagueWeightClassFromJson(json);
 
   @override
   final int? id;
@@ -213,17 +222,22 @@ class _LeagueWeightClass extends LeagueWeightClass {
         (other.runtimeType == runtimeType &&
             other is _LeagueWeightClass &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition));
+            (identical(other.weightClass, weightClass) ||
+                other.weightClass == weightClass) &&
+            (identical(other.seasonPartition, seasonPartition) ||
+                other.seasonPartition == seasonPartition));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, league, weightClass, seasonPartition);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos,
+      league, weightClass, seasonPartition);
 
   @override
   String toString() {
@@ -232,8 +246,10 @@ class _LeagueWeightClass extends LeagueWeightClass {
 }
 
 /// @nodoc
-abstract mixin class _$LeagueWeightClassCopyWith<$Res> implements $LeagueWeightClassCopyWith<$Res> {
-  factory _$LeagueWeightClassCopyWith(_LeagueWeightClass value, $Res Function(_LeagueWeightClass) _then) =
+abstract mixin class _$LeagueWeightClassCopyWith<$Res>
+    implements $LeagueWeightClassCopyWith<$Res> {
+  factory _$LeagueWeightClassCopyWith(
+          _LeagueWeightClass value, $Res Function(_LeagueWeightClass) _then) =
       __$LeagueWeightClassCopyWithImpl;
   @override
   @useResult
@@ -255,7 +271,8 @@ abstract mixin class _$LeagueWeightClassCopyWith<$Res> implements $LeagueWeightC
 }
 
 /// @nodoc
-class __$LeagueWeightClassCopyWithImpl<$Res> implements _$LeagueWeightClassCopyWith<$Res> {
+class __$LeagueWeightClassCopyWithImpl<$Res>
+    implements _$LeagueWeightClassCopyWith<$Res> {
   __$LeagueWeightClassCopyWithImpl(this._self, this._then);
 
   final _LeagueWeightClass _self;

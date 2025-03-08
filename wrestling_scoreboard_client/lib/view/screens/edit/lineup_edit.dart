@@ -20,12 +20,12 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
 class LineupEdit extends ConsumerStatefulWidget {
-  final Lineup lineup;
+  final TeamLineup lineup;
   final List<WeightClass> weightClasses;
-  final List<Participation> participations;
+  final List<TeamMatchParticipation> participations;
   final Membership? initialLeader;
   final Membership? initialCoach;
-  final List<Participation>? initialParticipations;
+  final List<TeamMatchParticipation>? initialParticipations;
 
   final Future<void> Function()? onSubmitGenerate;
 
@@ -51,9 +51,9 @@ class LineupEditState extends ConsumerState<LineupEdit> {
 
   Membership? _leader;
   Membership? _coach;
-  late Map<WeightClass, Participation?> _participations;
-  final HashSet<Participation> _deleteParticipations = HashSet();
-  final HashSet<Participation> _createOrUpdateParticipations = HashSet();
+  late Map<WeightClass, TeamMatchParticipation?> _participations;
+  final HashSet<TeamMatchParticipation> _deleteParticipations = HashSet();
+  final HashSet<TeamMatchParticipation> _createOrUpdateParticipations = HashSet();
 
   @override
   void initState() {
@@ -82,16 +82,16 @@ class LineupEditState extends ConsumerState<LineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator, {Future<void> Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(
         id: widget.lineup.id,
         team: widget.lineup.team,
         leader: _leader,
         coach: _coach,
       ));
-      await Future.forEach(_deleteParticipations, (Participation element) async {
-        await (await ref.read(dataManagerNotifierProvider)).deleteSingle<Participation>(element);
+      await Future.forEach(_deleteParticipations, (TeamMatchParticipation element) async {
+        await (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchParticipation>(element);
       });
-      await Future.forEach(_createOrUpdateParticipations, (Participation participation) async {
+      await Future.forEach(_createOrUpdateParticipations, (TeamMatchParticipation participation) async {
         // Create missing membership and person, if not present in database yet. This means, that the data was fetched from an API provider.
         if (participation.membership.id == null) {
           if (participation.membership.person.id == null) {
@@ -105,7 +105,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
               .createOrUpdateSingle<Membership>(participation.membership);
           participation = participation.copyWith(membership: participation.membership.copyWithId(membershipId));
         }
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<Participation>(participation);
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<TeamMatchParticipation>(participation);
       });
       if (onSubmitGenerate != null) await onSubmitGenerate();
       navigator.pop();
@@ -204,11 +204,11 @@ class LineupEditState extends ConsumerState<LineupEdit> {
 }
 
 class ParticipationEditTile extends ConsumerStatefulWidget {
-  final Participation? participation;
+  final TeamMatchParticipation? participation;
   final WeightClass weightClass;
-  final Lineup lineup;
-  final void Function(Participation participation) deleteParticipation;
-  final void Function(Participation participation) createOrUpdateParticipation;
+  final TeamLineup lineup;
+  final void Function(TeamMatchParticipation participation) deleteParticipation;
+  final void Function(TeamMatchParticipation participation) createOrUpdateParticipation;
   final Future<Iterable<Membership>> Function() getOrSetMemberships;
 
   const ParticipationEditTile({
@@ -250,7 +250,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
         widget.deleteParticipation(widget.participation!);
       }
     } else {
-      Participation curParticipation;
+      TeamMatchParticipation curParticipation;
       if (widget.participation?.id != null) {
         // Reuse old participation if present
         curParticipation = widget.participation!.copyWith(
@@ -260,7 +260,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
           weight: _curWeight,
         );
       } else {
-        curParticipation = Participation(
+        curParticipation = TeamMatchParticipation(
           membership: _curMembership!,
           lineup: widget.lineup,
           weightClass: widget.weightClass,

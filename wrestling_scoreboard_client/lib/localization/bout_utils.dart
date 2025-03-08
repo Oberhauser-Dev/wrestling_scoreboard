@@ -23,7 +23,7 @@ extension BoutLocalization on Bout {
   }
 }
 
-extension ParticipantStateLocalization on ParticipantState {
+extension ParticipantStateLocalization on AthleteBoutState {
   String fullName(BuildContext context) {
     return participation.membership.person.fullName;
   }

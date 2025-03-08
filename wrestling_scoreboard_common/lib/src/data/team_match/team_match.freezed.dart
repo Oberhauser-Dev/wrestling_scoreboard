@@ -18,8 +18,8 @@ mixin _$TeamMatch {
   int? get id;
   String? get orgSyncId;
   Organization? get organization;
-  Lineup get home;
-  Lineup get guest;
+  TeamLineup get home;
+  TeamLineup get guest;
   League? get league;
   int? get seasonPartition;
   Person? get matChairman;
@@ -37,7 +37,8 @@ mixin _$TeamMatch {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TeamMatchCopyWith<TeamMatch> get copyWith => _$TeamMatchCopyWithImpl<TeamMatch>(this as TeamMatch, _$identity);
+  $TeamMatchCopyWith<TeamMatch> get copyWith =>
+      _$TeamMatchCopyWithImpl<TeamMatch>(this as TeamMatch, _$identity);
 
   /// Serializes this TeamMatch to a JSON map.
   Map<String, dynamic> toJson();
@@ -48,28 +49,53 @@ mixin _$TeamMatch {
         (other.runtimeType == runtimeType &&
             other is TeamMatch &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.home, home) || other.home == home) &&
             (identical(other.guest, guest) || other.guest == guest) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition) &&
-            (identical(other.matChairman, matChairman) || other.matChairman == matChairman) &&
+            (identical(other.seasonPartition, seasonPartition) ||
+                other.seasonPartition == seasonPartition) &&
+            (identical(other.matChairman, matChairman) ||
+                other.matChairman == matChairman) &&
             (identical(other.referee, referee) || other.referee == referee) &&
             (identical(other.judge, judge) || other.judge == judge) &&
-            (identical(other.timeKeeper, timeKeeper) || other.timeKeeper == timeKeeper) &&
-            (identical(other.transcriptWriter, transcriptWriter) || other.transcriptWriter == transcriptWriter) &&
+            (identical(other.timeKeeper, timeKeeper) ||
+                other.timeKeeper == timeKeeper) &&
+            (identical(other.transcriptWriter, transcriptWriter) ||
+                other.transcriptWriter == transcriptWriter) &&
             (identical(other.no, no) || other.no == no) &&
-            (identical(other.location, location) || other.location == location) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
+            (identical(other.visitorsCount, visitorsCount) ||
+                other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, home, guest, league, seasonPartition,
-      matChairman, referee, judge, timeKeeper, transcriptWriter, no, location, date, visitorsCount, comment);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      orgSyncId,
+      organization,
+      home,
+      guest,
+      league,
+      seasonPartition,
+      matChairman,
+      referee,
+      judge,
+      timeKeeper,
+      transcriptWriter,
+      no,
+      location,
+      date,
+      visitorsCount,
+      comment);
 
   @override
   String toString() {
@@ -79,14 +105,15 @@ mixin _$TeamMatch {
 
 /// @nodoc
 abstract mixin class $TeamMatchCopyWith<$Res> {
-  factory $TeamMatchCopyWith(TeamMatch value, $Res Function(TeamMatch) _then) = _$TeamMatchCopyWithImpl;
+  factory $TeamMatchCopyWith(TeamMatch value, $Res Function(TeamMatch) _then) =
+      _$TeamMatchCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
       String? orgSyncId,
       Organization? organization,
-      Lineup home,
-      Lineup guest,
+      TeamLineup home,
+      TeamLineup guest,
       League? league,
       int? seasonPartition,
       Person? matChairman,
@@ -101,8 +128,8 @@ abstract mixin class $TeamMatchCopyWith<$Res> {
       String? comment});
 
   $OrganizationCopyWith<$Res>? get organization;
-  $LineupCopyWith<$Res> get home;
-  $LineupCopyWith<$Res> get guest;
+  $TeamLineupCopyWith<$Res> get home;
+  $TeamLineupCopyWith<$Res> get guest;
   $LeagueCopyWith<$Res>? get league;
   $PersonCopyWith<$Res>? get matChairman;
   $PersonCopyWith<$Res>? get referee;
@@ -157,11 +184,11 @@ class _$TeamMatchCopyWithImpl<$Res> implements $TeamMatchCopyWith<$Res> {
       home: null == home
           ? _self.home
           : home // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       guest: null == guest
           ? _self.guest
           : guest // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       league: freezed == league
           ? _self.league
           : league // ignore: cast_nullable_to_non_nullable
@@ -231,8 +258,8 @@ class _$TeamMatchCopyWithImpl<$Res> implements $TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get home {
-    return $LineupCopyWith<$Res>(_self.home, (value) {
+  $TeamLineupCopyWith<$Res> get home {
+    return $TeamLineupCopyWith<$Res>(_self.home, (value) {
       return _then(_self.copyWith(home: value));
     });
   }
@@ -241,8 +268,8 @@ class _$TeamMatchCopyWithImpl<$Res> implements $TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get guest {
-    return $LineupCopyWith<$Res>(_self.guest, (value) {
+  $TeamLineupCopyWith<$Res> get guest {
+    return $TeamLineupCopyWith<$Res>(_self.guest, (value) {
       return _then(_self.copyWith(guest: value));
     });
   }
@@ -354,7 +381,8 @@ class _TeamMatch extends TeamMatch {
       this.visitorsCount,
       this.comment})
       : super._();
-  factory _TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
+  factory _TeamMatch.fromJson(Map<String, dynamic> json) =>
+      _$TeamMatchFromJson(json);
 
   @override
   final int? id;
@@ -363,9 +391,9 @@ class _TeamMatch extends TeamMatch {
   @override
   final Organization? organization;
   @override
-  final Lineup home;
+  final TeamLineup home;
   @override
-  final Lineup guest;
+  final TeamLineup guest;
   @override
   final League? league;
   @override
@@ -396,7 +424,8 @@ class _TeamMatch extends TeamMatch {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TeamMatchCopyWith<_TeamMatch> get copyWith => __$TeamMatchCopyWithImpl<_TeamMatch>(this, _$identity);
+  _$TeamMatchCopyWith<_TeamMatch> get copyWith =>
+      __$TeamMatchCopyWithImpl<_TeamMatch>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -411,28 +440,53 @@ class _TeamMatch extends TeamMatch {
         (other.runtimeType == runtimeType &&
             other is _TeamMatch &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.home, home) || other.home == home) &&
             (identical(other.guest, guest) || other.guest == guest) &&
             (identical(other.league, league) || other.league == league) &&
-            (identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition) &&
-            (identical(other.matChairman, matChairman) || other.matChairman == matChairman) &&
+            (identical(other.seasonPartition, seasonPartition) ||
+                other.seasonPartition == seasonPartition) &&
+            (identical(other.matChairman, matChairman) ||
+                other.matChairman == matChairman) &&
             (identical(other.referee, referee) || other.referee == referee) &&
             (identical(other.judge, judge) || other.judge == judge) &&
-            (identical(other.timeKeeper, timeKeeper) || other.timeKeeper == timeKeeper) &&
-            (identical(other.transcriptWriter, transcriptWriter) || other.transcriptWriter == transcriptWriter) &&
+            (identical(other.timeKeeper, timeKeeper) ||
+                other.timeKeeper == timeKeeper) &&
+            (identical(other.transcriptWriter, transcriptWriter) ||
+                other.transcriptWriter == transcriptWriter) &&
             (identical(other.no, no) || other.no == no) &&
-            (identical(other.location, location) || other.location == location) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
+            (identical(other.visitorsCount, visitorsCount) ||
+                other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, home, guest, league, seasonPartition,
-      matChairman, referee, judge, timeKeeper, transcriptWriter, no, location, date, visitorsCount, comment);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      orgSyncId,
+      organization,
+      home,
+      guest,
+      league,
+      seasonPartition,
+      matChairman,
+      referee,
+      judge,
+      timeKeeper,
+      transcriptWriter,
+      no,
+      location,
+      date,
+      visitorsCount,
+      comment);
 
   @override
   String toString() {
@@ -441,16 +495,19 @@ class _TeamMatch extends TeamMatch {
 }
 
 /// @nodoc
-abstract mixin class _$TeamMatchCopyWith<$Res> implements $TeamMatchCopyWith<$Res> {
-  factory _$TeamMatchCopyWith(_TeamMatch value, $Res Function(_TeamMatch) _then) = __$TeamMatchCopyWithImpl;
+abstract mixin class _$TeamMatchCopyWith<$Res>
+    implements $TeamMatchCopyWith<$Res> {
+  factory _$TeamMatchCopyWith(
+          _TeamMatch value, $Res Function(_TeamMatch) _then) =
+      __$TeamMatchCopyWithImpl;
   @override
   @useResult
   $Res call(
       {int? id,
       String? orgSyncId,
       Organization? organization,
-      Lineup home,
-      Lineup guest,
+      TeamLineup home,
+      TeamLineup guest,
       League? league,
       int? seasonPartition,
       Person? matChairman,
@@ -467,9 +524,9 @@ abstract mixin class _$TeamMatchCopyWith<$Res> implements $TeamMatchCopyWith<$Re
   @override
   $OrganizationCopyWith<$Res>? get organization;
   @override
-  $LineupCopyWith<$Res> get home;
+  $TeamLineupCopyWith<$Res> get home;
   @override
-  $LineupCopyWith<$Res> get guest;
+  $TeamLineupCopyWith<$Res> get guest;
   @override
   $LeagueCopyWith<$Res>? get league;
   @override
@@ -530,11 +587,11 @@ class __$TeamMatchCopyWithImpl<$Res> implements _$TeamMatchCopyWith<$Res> {
       home: null == home
           ? _self.home
           : home // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       guest: null == guest
           ? _self.guest
           : guest // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       league: freezed == league
           ? _self.league
           : league // ignore: cast_nullable_to_non_nullable
@@ -604,8 +661,8 @@ class __$TeamMatchCopyWithImpl<$Res> implements _$TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get home {
-    return $LineupCopyWith<$Res>(_self.home, (value) {
+  $TeamLineupCopyWith<$Res> get home {
+    return $TeamLineupCopyWith<$Res>(_self.home, (value) {
       return _then(_self.copyWith(home: value));
     });
   }
@@ -614,8 +671,8 @@ class __$TeamMatchCopyWithImpl<$Res> implements _$TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get guest {
-    return $LineupCopyWith<$Res>(_self.guest, (value) {
+  $TeamLineupCopyWith<$Res> get guest {
+    return $TeamLineupCopyWith<$Res>(_self.guest, (value) {
       return _then(_self.copyWith(guest: value));
     });
   }

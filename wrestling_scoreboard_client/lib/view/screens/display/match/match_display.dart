@@ -161,7 +161,7 @@ class BoutListItem extends ConsumerWidget {
 
   const BoutListItem({super.key, required this.match, required this.bout, required this.actions});
 
-  displayName({ParticipantState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
+  displayName({AthleteBoutState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
     return ThemedContainer(
       color: role.color(),
       child: Center(
@@ -175,13 +175,13 @@ class BoutListItem extends ConsumerWidget {
     );
   }
 
-  Widget displayParticipantState({ParticipantState? pState, required Bout bout, required BoutRole role}) {
+  Widget displayParticipantState({AthleteBoutState? pState, required Bout bout, required BoutRole role}) {
     final color = (role == bout.winnerRole) ? role.color().shade800 : null;
-    return NullableSingleConsumer<ParticipantState>(
+    return NullableSingleConsumer<AthleteBoutState>(
       id: pState?.id,
       initialData: pState,
       builder: (context, pState) {
-        final technicalPoints = ParticipantState.getTechnicalPoints(actions, role);
+        final technicalPoints = AthleteBoutState.getTechnicalPoints(actions, role);
         return Column(
           children: [
             Expanded(

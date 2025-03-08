@@ -4,7 +4,7 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 
 import 'entity_controller.dart';
 
-class ParticipationController extends ShelfController<Participation> {
+class ParticipationController extends ShelfController<TeamMatchParticipation> {
   static final ParticipationController _singleton = ParticipationController._internal();
 
   factory ParticipationController() {
@@ -13,7 +13,7 @@ class ParticipationController extends ShelfController<Participation> {
 
   ParticipationController._internal() : super(tableName: 'participation');
 
-  Future<List<Participation>> getByMembership(User? user, int id) async {
+  Future<List<TeamMatchParticipation>> getByMembership(User? user, int id) async {
     return await getMany(
       conditions: ['membership_id = @id'],
       substitutionValues: {'id': id},

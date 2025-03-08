@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
+import 'team_lineup.dart';
 
 part 'team_match.freezed.dart';
 part 'team_match.g.dart';
@@ -16,8 +17,8 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     int? id,
     String? orgSyncId,
     Organization? organization,
-    required Lineup home,
-    required Lineup guest,
+    required TeamLineup home,
+    required TeamLineup guest,
     League? league,
     int? seasonPartition,
     Person? matChairman,
@@ -35,8 +36,8 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   factory TeamMatch.fromJson(Map<String, Object?> json) => _$TeamMatchFromJson(json);
 
   static Future<TeamMatch> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    final home = await getSingle<Lineup>(e['home_id'] as int);
-    final guest = await getSingle<Lineup>(e['guest_id'] as int);
+    final home = await getSingle<TeamLineup>(e['home_id'] as int);
+    final guest = await getSingle<TeamLineup>(e['guest_id'] as int);
     final int? refereeId = e['referee_id'];
     final int? matChairmanId = e['mat_chairman_id'];
     final int? judgeId = e['judge_id'];
@@ -95,7 +96,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     return getClassificationPoints(bouts.map((bout) => bout.b));
   }
 
-  static int getClassificationPoints(Iterable<ParticipantState?> participationStates) {
+  static int getClassificationPoints(Iterable<AthleteBoutState?> participationStates) {
     var res = 0;
     for (final state in participationStates) {
       res += state?.classificationPoints ?? 0;
@@ -105,7 +106,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
 
   @override
   Future<List<Bout>> generateBouts(
-      List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) async {
+      List<List<TeamMatchParticipation>> teamParticipations, List<WeightClass> weightClasses) async {
     final bouts = <Bout>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {
@@ -123,8 +124,8 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
       var bout = Bout(
-        r: red == null ? null : ParticipantState(participation: red),
-        b: blue == null ? null : ParticipantState(participation: blue),
+        r: red == null ? null : AthleteBoutState(membership: red),
+        b: blue == null ? null : AthleteBoutState(membership: blue),
         weightClass: weightClass,
       );
       bouts.add(bout);

@@ -222,7 +222,7 @@ class TeamMatchTranscript extends PdfSheet {
       ];
     }
 
-    List<Widget> buildParticipantState(ParticipantState? state, BoutRole role) {
+    List<Widget> buildParticipantState(AthleteBoutState? state, BoutRole role) {
       final borderColor = role.pdfColor;
       return [
         buildTextCell(state?.participation.weight?.toString() ?? '',
@@ -323,7 +323,7 @@ class TeamMatchTranscript extends PdfSheet {
             buildTextCell(bout.bout.weightClass?.style.abbreviation(buildContext) ?? '-',
                 height: cellHeight, fontSize: cellFontSize),
             ...buildParticipantState(bout.bout.r, BoutRole.red),
-            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.red).toString(),
+            buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
                 height: cellHeight, borderColor: BoutRole.red.pdfColor, fontSize: cellFontSize),
             buildTextCell(bout.bout.r?.classificationPoints?.toString() ?? '',
                 height: cellHeight, borderColor: BoutRole.red.pdfColor, fontSize: cellFontSize),
@@ -342,7 +342,7 @@ class TeamMatchTranscript extends PdfSheet {
                 fontSize: cellFontSize),
             buildTextCell(bout.bout.b?.classificationPoints?.toString() ?? '',
                 height: cellHeight, borderColor: BoutRole.blue.pdfColor, fontSize: cellFontSize),
-            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.blue).toString(),
+            buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
                 height: cellHeight, borderColor: BoutRole.blue.pdfColor, fontSize: cellFontSize),
             ...buildParticipantState(bout.bout.b, BoutRole.blue),
             // TODO: bout comment

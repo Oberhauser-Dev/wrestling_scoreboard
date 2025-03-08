@@ -142,7 +142,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
         bout.r?.classificationPoints ?? 0, // 10:HeimPunkte
         bout.b?.classificationPoints ?? 0, // 11:GastPunkte
         bout.result?.toGerman ?? '', // 12:Ergebnis
-        '${ParticipantState.getTechnicalPoints(entry.value, BoutRole.red)}:${ParticipantState.getTechnicalPoints(entry.value, BoutRole.blue)}$points$comment$duration',
+        '${AthleteBoutState.getTechnicalPoints(entry.value, BoutRole.red)}:${AthleteBoutState.getTechnicalPoints(entry.value, BoutRole.blue)}$points$comment$duration',
       ].join(';');
     });
     return [teamMatchInfos, ...boutInfos].join('\n');

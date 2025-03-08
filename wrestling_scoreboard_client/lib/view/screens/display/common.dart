@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClassificationPointsDisplay extends ConsumerWidget {
-  final Iterable<ParticipantState?> participationStates;
+  final Iterable<AthleteBoutState?> participationStates;
   final Color color;
 
   const ClassificationPointsDisplay({required this.participationStates, required this.color, super.key});
@@ -17,14 +17,14 @@ class ClassificationPointsDisplay extends ConsumerWidget {
     final participationStatesFuture = Future.wait(participationStates.map((participationState) async {
       return participationState == null
           ? null
-          : ref.watch(singleDataStreamProvider<ParticipantState>(
-              SingleProviderData<ParticipantState>(initialData: participationState, id: participationState.id!),
+          : ref.watch(singleDataStreamProvider<AthleteBoutState>(
+              SingleProviderData<AthleteBoutState>(initialData: participationState, id: participationState.id!),
             ).future);
     }));
     return ThemedContainer(
       color: color,
       child: Center(
-        child: LoadingBuilder<List<ParticipantState?>>(
+        child: LoadingBuilder<List<AthleteBoutState?>>(
             future: participationStatesFuture,
             initialData: null, // Handle initial data via the stream
             builder: (context, participationStates) {

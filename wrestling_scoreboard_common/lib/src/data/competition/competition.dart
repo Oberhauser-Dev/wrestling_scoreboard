@@ -52,7 +52,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
   }
 
   @override
-  Future<List<Bout>> generateBouts(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) {
+  Future<List<Bout>> generateBouts(List<List<TeamMatchParticipation>> teamParticipations, List<WeightClass> weightClasses) {
     // TODO: implement generateBouts
     throw UnimplementedError();
   }

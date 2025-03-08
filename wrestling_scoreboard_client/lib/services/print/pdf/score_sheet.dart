@@ -264,8 +264,8 @@ class ScoreSheet extends PdfSheet {
       resultRule = BoutConfig.resultRule(
         result: bout.result!,
         style: bout.weightClass?.style ?? WrestlingStyle.free,
-        technicalPointsWinner: ParticipantState.getTechnicalPoints(boutActions, bout.winnerRole!),
-        technicalPointsLoser: ParticipantState.getTechnicalPoints(
+        technicalPointsWinner: AthleteBoutState.getTechnicalPoints(boutActions, bout.winnerRole!),
+        technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
             boutActions, bout.winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
         rules: boutRules,
       );
@@ -407,7 +407,7 @@ class ScoreSheet extends PdfSheet {
 
       return TableRow(children: [
         buildFormCell(
-            content: ParticipantState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
+            content: AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
             borderColor: PdfSheet.homeColor,
             height: roundCellHeight),
         buildPeriodTechnicalPoints(periodActions, BoutRole.red),
@@ -418,7 +418,7 @@ class ScoreSheet extends PdfSheet {
             alignment: Alignment.center),
         buildPeriodTechnicalPoints(periodActions, BoutRole.blue),
         buildFormCell(
-            content: ParticipantState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
+            content: AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
             borderColor: PdfSheet.guestColor,
             height: roundCellHeight),
       ]);
@@ -515,7 +515,7 @@ class ScoreSheet extends PdfSheet {
         TableRow(
           children: [
             Container(),
-            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.red).toString(),
+            buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
                 height: headerCellHeight,
                 borderWidth: 2,
                 borderColor: PdfSheet.homeColor,
@@ -524,7 +524,7 @@ class ScoreSheet extends PdfSheet {
             buildClassificationPoints(bout.r?.classificationPoints, PdfSheet.homeColor),
             Container(),
             buildClassificationPoints(bout.b?.classificationPoints, PdfSheet.guestColor),
-            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.blue).toString(),
+            buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
                 height: headerCellHeight,
                 borderWidth: 2,
                 borderColor: PdfSheet.guestColor,
