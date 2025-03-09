@@ -299,7 +299,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         home = TeamLineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
+        await (await ref.read(dataManagerNotifierProvider))
+            .createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
       }
 
       var guest = widget.teamMatch?.guest;

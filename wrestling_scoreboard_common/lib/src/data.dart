@@ -7,6 +7,7 @@ export 'data/competition/competition.dart';
 export 'data/competition/competition_bout.dart';
 export 'data/competition/competition_lineup.dart';
 export 'data/competition/competition_person.dart';
+export 'data/competition/competition_weight_category.dart';
 export 'data/data_object.dart';
 export 'data/membership.dart';
 export 'data/migration.dart';

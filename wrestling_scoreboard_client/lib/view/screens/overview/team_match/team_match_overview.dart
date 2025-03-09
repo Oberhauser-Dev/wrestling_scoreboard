@@ -319,7 +319,8 @@ class TeamMatchOverview extends ConsumerWidget {
           importType: OrganizationImportType.teamMatch,
         );
         proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
-        proposedParticipations = await dataManager.readMany<TeamMatchParticipation, TeamLineup>(filterObject: proposedLineup);
+        proposedParticipations =
+            await dataManager.readMany<TeamMatchParticipation, TeamLineup>(filterObject: proposedLineup);
       }
     }
     navigator.push(

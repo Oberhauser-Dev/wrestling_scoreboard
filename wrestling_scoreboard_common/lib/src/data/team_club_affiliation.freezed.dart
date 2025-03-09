@@ -24,8 +24,7 @@ mixin _$TeamClubAffiliation {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $TeamClubAffiliationCopyWith<TeamClubAffiliation> get copyWith =>
-      _$TeamClubAffiliationCopyWithImpl<TeamClubAffiliation>(
-          this as TeamClubAffiliation, _$identity);
+      _$TeamClubAffiliationCopyWithImpl<TeamClubAffiliation>(this as TeamClubAffiliation, _$identity);
 
   /// Serializes this TeamClubAffiliation to a JSON map.
   Map<String, dynamic> toJson();
@@ -52,8 +51,7 @@ mixin _$TeamClubAffiliation {
 
 /// @nodoc
 abstract mixin class $TeamClubAffiliationCopyWith<$Res> {
-  factory $TeamClubAffiliationCopyWith(
-          TeamClubAffiliation value, $Res Function(TeamClubAffiliation) _then) =
+  factory $TeamClubAffiliationCopyWith(TeamClubAffiliation value, $Res Function(TeamClubAffiliation) _then) =
       _$TeamClubAffiliationCopyWithImpl;
   @useResult
   $Res call({int? id, Team team, Club club});
@@ -63,8 +61,7 @@ abstract mixin class $TeamClubAffiliationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamClubAffiliationCopyWithImpl<$Res>
-    implements $TeamClubAffiliationCopyWith<$Res> {
+class _$TeamClubAffiliationCopyWithImpl<$Res> implements $TeamClubAffiliationCopyWith<$Res> {
   _$TeamClubAffiliationCopyWithImpl(this._self, this._then);
 
   final TeamClubAffiliation _self;
@@ -119,10 +116,8 @@ class _$TeamClubAffiliationCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _TeamClubAffiliation extends TeamClubAffiliation {
-  const _TeamClubAffiliation({this.id, required this.team, required this.club})
-      : super._();
-  factory _TeamClubAffiliation.fromJson(Map<String, dynamic> json) =>
-      _$TeamClubAffiliationFromJson(json);
+  const _TeamClubAffiliation({this.id, required this.team, required this.club}) : super._();
+  factory _TeamClubAffiliation.fromJson(Map<String, dynamic> json) => _$TeamClubAffiliationFromJson(json);
 
   @override
   final int? id;
@@ -137,8 +132,7 @@ class _TeamClubAffiliation extends TeamClubAffiliation {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   _$TeamClubAffiliationCopyWith<_TeamClubAffiliation> get copyWith =>
-      __$TeamClubAffiliationCopyWithImpl<_TeamClubAffiliation>(
-          this, _$identity);
+      __$TeamClubAffiliationCopyWithImpl<_TeamClubAffiliation>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -168,10 +162,8 @@ class _TeamClubAffiliation extends TeamClubAffiliation {
 }
 
 /// @nodoc
-abstract mixin class _$TeamClubAffiliationCopyWith<$Res>
-    implements $TeamClubAffiliationCopyWith<$Res> {
-  factory _$TeamClubAffiliationCopyWith(_TeamClubAffiliation value,
-          $Res Function(_TeamClubAffiliation) _then) =
+abstract mixin class _$TeamClubAffiliationCopyWith<$Res> implements $TeamClubAffiliationCopyWith<$Res> {
+  factory _$TeamClubAffiliationCopyWith(_TeamClubAffiliation value, $Res Function(_TeamClubAffiliation) _then) =
       __$TeamClubAffiliationCopyWithImpl;
   @override
   @useResult
@@ -184,8 +176,7 @@ abstract mixin class _$TeamClubAffiliationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$TeamClubAffiliationCopyWithImpl<$Res>
-    implements _$TeamClubAffiliationCopyWith<$Res> {
+class __$TeamClubAffiliationCopyWithImpl<$Res> implements _$TeamClubAffiliationCopyWith<$Res> {
   __$TeamClubAffiliationCopyWithImpl(this._self, this._then);
 
   final _TeamClubAffiliation _self;

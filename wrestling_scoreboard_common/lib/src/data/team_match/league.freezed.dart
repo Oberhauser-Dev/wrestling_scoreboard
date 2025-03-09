@@ -31,8 +31,7 @@ mixin _$League {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $LeagueCopyWith<League> get copyWith =>
-      _$LeagueCopyWithImpl<League>(this as League, _$identity);
+  $LeagueCopyWith<League> get copyWith => _$LeagueCopyWithImpl<League>(this as League, _$identity);
 
   /// Serializes this League to a JSON map.
   Map<String, dynamic> toJson();
@@ -43,24 +42,19 @@ mixin _$League {
         (other.runtimeType == runtimeType &&
             other is League &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) ||
-                other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) ||
-                other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.startDate, startDate) ||
-                other.startDate == startDate) &&
+            (identical(other.startDate, startDate) || other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
-            (identical(other.division, division) ||
-                other.division == division) &&
-            (identical(other.boutDays, boutDays) ||
-                other.boutDays == boutDays));
+            (identical(other.division, division) || other.division == division) &&
+            (identical(other.boutDays, boutDays) || other.boutDays == boutDays));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
-      name, startDate, endDate, division, boutDays);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, startDate, endDate, division, boutDays);
 
   @override
   String toString() {
@@ -70,8 +64,7 @@ mixin _$League {
 
 /// @nodoc
 abstract mixin class $LeagueCopyWith<$Res> {
-  factory $LeagueCopyWith(League value, $Res Function(League) _then) =
-      _$LeagueCopyWithImpl;
+  factory $LeagueCopyWith(League value, $Res Function(League) _then) = _$LeagueCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -209,8 +202,7 @@ class _League extends League {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$LeagueCopyWith<_League> get copyWith =>
-      __$LeagueCopyWithImpl<_League>(this, _$identity);
+  _$LeagueCopyWith<_League> get copyWith => __$LeagueCopyWithImpl<_League>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -225,24 +217,19 @@ class _League extends League {
         (other.runtimeType == runtimeType &&
             other is _League &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) ||
-                other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) ||
-                other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.startDate, startDate) ||
-                other.startDate == startDate) &&
+            (identical(other.startDate, startDate) || other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
-            (identical(other.division, division) ||
-                other.division == division) &&
-            (identical(other.boutDays, boutDays) ||
-                other.boutDays == boutDays));
+            (identical(other.division, division) || other.division == division) &&
+            (identical(other.boutDays, boutDays) || other.boutDays == boutDays));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
-      name, startDate, endDate, division, boutDays);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, startDate, endDate, division, boutDays);
 
   @override
   String toString() {
@@ -252,8 +239,7 @@ class _League extends League {
 
 /// @nodoc
 abstract mixin class _$LeagueCopyWith<$Res> implements $LeagueCopyWith<$Res> {
-  factory _$LeagueCopyWith(_League value, $Res Function(_League) _then) =
-      __$LeagueCopyWithImpl;
+  factory _$LeagueCopyWith(_League value, $Res Function(_League) _then) = __$LeagueCopyWithImpl;
   @override
   @useResult
   $Res call(

@@ -18,10 +18,8 @@ mixin _$BoutResultRule {
   int? get id;
   BoutConfig get boutConfig;
   BoutResult get boutResult;
-  WrestlingStyle?
-      get style; // Minimum points, the winner must have to fulfill this rule
-  int?
-      get winnerTechnicalPoints; // Minimum points, the loser must have to fulfill this rule
+  WrestlingStyle? get style; // Minimum points, the winner must have to fulfill this rule
+  int? get winnerTechnicalPoints; // Minimum points, the loser must have to fulfill this rule
   int? get loserTechnicalPoints;
   int? get technicalPointsDifference;
   int get winnerClassificationPoints;
@@ -32,8 +30,7 @@ mixin _$BoutResultRule {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $BoutResultRuleCopyWith<BoutResultRule> get copyWith =>
-      _$BoutResultRuleCopyWithImpl<BoutResultRule>(
-          this as BoutResultRule, _$identity);
+      _$BoutResultRuleCopyWithImpl<BoutResultRule>(this as BoutResultRule, _$identity);
 
   /// Serializes this BoutResultRule to a JSON map.
   Map<String, dynamic> toJson();
@@ -44,40 +41,25 @@ mixin _$BoutResultRule {
         (other.runtimeType == runtimeType &&
             other is BoutResultRule &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.boutConfig, boutConfig) ||
-                other.boutConfig == boutConfig) &&
-            (identical(other.boutResult, boutResult) ||
-                other.boutResult == boutResult) &&
+            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
+            (identical(other.boutResult, boutResult) || other.boutResult == boutResult) &&
             (identical(other.style, style) || other.style == style) &&
             (identical(other.winnerTechnicalPoints, winnerTechnicalPoints) ||
                 other.winnerTechnicalPoints == winnerTechnicalPoints) &&
             (identical(other.loserTechnicalPoints, loserTechnicalPoints) ||
                 other.loserTechnicalPoints == loserTechnicalPoints) &&
-            (identical(other.technicalPointsDifference,
-                    technicalPointsDifference) ||
+            (identical(other.technicalPointsDifference, technicalPointsDifference) ||
                 other.technicalPointsDifference == technicalPointsDifference) &&
-            (identical(other.winnerClassificationPoints,
-                    winnerClassificationPoints) ||
-                other.winnerClassificationPoints ==
-                    winnerClassificationPoints) &&
-            (identical(other.loserClassificationPoints,
-                    loserClassificationPoints) ||
+            (identical(other.winnerClassificationPoints, winnerClassificationPoints) ||
+                other.winnerClassificationPoints == winnerClassificationPoints) &&
+            (identical(other.loserClassificationPoints, loserClassificationPoints) ||
                 other.loserClassificationPoints == loserClassificationPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      boutConfig,
-      boutResult,
-      style,
-      winnerTechnicalPoints,
-      loserTechnicalPoints,
-      technicalPointsDifference,
-      winnerClassificationPoints,
-      loserClassificationPoints);
+  int get hashCode => Object.hash(runtimeType, id, boutConfig, boutResult, style, winnerTechnicalPoints,
+      loserTechnicalPoints, technicalPointsDifference, winnerClassificationPoints, loserClassificationPoints);
 
   @override
   String toString() {
@@ -87,8 +69,7 @@ mixin _$BoutResultRule {
 
 /// @nodoc
 abstract mixin class $BoutResultRuleCopyWith<$Res> {
-  factory $BoutResultRuleCopyWith(
-          BoutResultRule value, $Res Function(BoutResultRule) _then) =
+  factory $BoutResultRuleCopyWith(BoutResultRule value, $Res Function(BoutResultRule) _then) =
       _$BoutResultRuleCopyWithImpl;
   @useResult
   $Res call(
@@ -106,8 +87,7 @@ abstract mixin class $BoutResultRuleCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoutResultRuleCopyWithImpl<$Res>
-    implements $BoutResultRuleCopyWith<$Res> {
+class _$BoutResultRuleCopyWithImpl<$Res> implements $BoutResultRuleCopyWith<$Res> {
   _$BoutResultRuleCopyWithImpl(this._self, this._then);
 
   final BoutResultRule _self;
@@ -193,8 +173,7 @@ class _BoutResultRule extends BoutResultRule {
       required this.winnerClassificationPoints,
       required this.loserClassificationPoints})
       : super._();
-  factory _BoutResultRule.fromJson(Map<String, dynamic> json) =>
-      _$BoutResultRuleFromJson(json);
+  factory _BoutResultRule.fromJson(Map<String, dynamic> json) => _$BoutResultRuleFromJson(json);
 
   @override
   final int? id;
@@ -238,40 +217,25 @@ class _BoutResultRule extends BoutResultRule {
         (other.runtimeType == runtimeType &&
             other is _BoutResultRule &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.boutConfig, boutConfig) ||
-                other.boutConfig == boutConfig) &&
-            (identical(other.boutResult, boutResult) ||
-                other.boutResult == boutResult) &&
+            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
+            (identical(other.boutResult, boutResult) || other.boutResult == boutResult) &&
             (identical(other.style, style) || other.style == style) &&
             (identical(other.winnerTechnicalPoints, winnerTechnicalPoints) ||
                 other.winnerTechnicalPoints == winnerTechnicalPoints) &&
             (identical(other.loserTechnicalPoints, loserTechnicalPoints) ||
                 other.loserTechnicalPoints == loserTechnicalPoints) &&
-            (identical(other.technicalPointsDifference,
-                    technicalPointsDifference) ||
+            (identical(other.technicalPointsDifference, technicalPointsDifference) ||
                 other.technicalPointsDifference == technicalPointsDifference) &&
-            (identical(other.winnerClassificationPoints,
-                    winnerClassificationPoints) ||
-                other.winnerClassificationPoints ==
-                    winnerClassificationPoints) &&
-            (identical(other.loserClassificationPoints,
-                    loserClassificationPoints) ||
+            (identical(other.winnerClassificationPoints, winnerClassificationPoints) ||
+                other.winnerClassificationPoints == winnerClassificationPoints) &&
+            (identical(other.loserClassificationPoints, loserClassificationPoints) ||
                 other.loserClassificationPoints == loserClassificationPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      boutConfig,
-      boutResult,
-      style,
-      winnerTechnicalPoints,
-      loserTechnicalPoints,
-      technicalPointsDifference,
-      winnerClassificationPoints,
-      loserClassificationPoints);
+  int get hashCode => Object.hash(runtimeType, id, boutConfig, boutResult, style, winnerTechnicalPoints,
+      loserTechnicalPoints, technicalPointsDifference, winnerClassificationPoints, loserClassificationPoints);
 
   @override
   String toString() {
@@ -280,10 +244,8 @@ class _BoutResultRule extends BoutResultRule {
 }
 
 /// @nodoc
-abstract mixin class _$BoutResultRuleCopyWith<$Res>
-    implements $BoutResultRuleCopyWith<$Res> {
-  factory _$BoutResultRuleCopyWith(
-          _BoutResultRule value, $Res Function(_BoutResultRule) _then) =
+abstract mixin class _$BoutResultRuleCopyWith<$Res> implements $BoutResultRuleCopyWith<$Res> {
+  factory _$BoutResultRuleCopyWith(_BoutResultRule value, $Res Function(_BoutResultRule) _then) =
       __$BoutResultRuleCopyWithImpl;
   @override
   @useResult
@@ -303,8 +265,7 @@ abstract mixin class _$BoutResultRuleCopyWith<$Res>
 }
 
 /// @nodoc
-class __$BoutResultRuleCopyWithImpl<$Res>
-    implements _$BoutResultRuleCopyWith<$Res> {
+class __$BoutResultRuleCopyWithImpl<$Res> implements _$BoutResultRuleCopyWith<$Res> {
   __$BoutResultRuleCopyWithImpl(this._self, this._then);
 
   final _BoutResultRule _self;

@@ -90,12 +90,12 @@ class MockDataManager extends DataManager {
       if (wrestlingEvent is TeamMatch) {
         final teamMatchBoutsAll = getTeamMatchBouts();
         for (var element in oldBouts) {
-          teamMatchBoutsAll.removeWhere((tmf) => tmf.bout.equalDuringBout(element));
+          teamMatchBoutsAll.removeWhere((tmf) => tmf.equalDuringBout(element));
         }
       } else if (wrestlingEvent is Competition) {
         final competitionBoutsAll = getCompetitionBouts();
         for (var element in oldBouts) {
-          competitionBoutsAll.removeWhere((tof) => tof.bout.equalDuringBout(element));
+          competitionBoutsAll.removeWhere((tof) => tof.equalDuringBout(element));
         }
       }
 
@@ -109,7 +109,8 @@ class MockDataManager extends DataManager {
     List<WeightClass> weightClasses;
     if (wrestlingEvent is TeamMatch) {
       final homeParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.home);
-      final guestParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
+      final guestParticipations =
+          await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
       weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
     } else if (wrestlingEvent is Competition) {
@@ -142,8 +143,8 @@ class MockDataManager extends DataManager {
     if (wrestlingEvent is TeamMatch) {
       final teamMatchBoutsAll = getTeamMatchBouts();
       newBoutsWithId.asMap().forEach((key, element) {
-        if (teamMatchBoutsAll.where((tmf) => tmf.bout.equalDuringBout(element)).isEmpty) {
-          teamMatchBoutsAll.removeWhere((tmf) => tmf.bout.weightClass == element.weightClass);
+        if (teamMatchBoutsAll.where((tmf) => tmf.equalDuringBout(element)).isEmpty) {
+          teamMatchBoutsAll.removeWhere((tmf) => tmf.weightClass == element.weightClass);
           int generatedId;
           do {
             // Generate new id as long it is not taken yet
@@ -155,7 +156,7 @@ class MockDataManager extends DataManager {
     } else if (wrestlingEvent is Competition) {
       final competitionBoutsAll = getCompetitionBouts();
       for (final element in newBoutsWithId) {
-        if (competitionBoutsAll.where((tof) => tof.bout.equalDuringBout(element)).isEmpty) {
+        if (competitionBoutsAll.where((tof) => tof.equalDuringBout(element)).isEmpty) {
           int generatedId;
           do {
             // Generate new id as long it is not taken yet

@@ -24,8 +24,7 @@ mixin _$TeamLineup {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TeamLineupCopyWith<TeamLineup> get copyWith =>
-      _$TeamLineupCopyWithImpl<TeamLineup>(this as TeamLineup, _$identity);
+  $TeamLineupCopyWith<TeamLineup> get copyWith => _$TeamLineupCopyWithImpl<TeamLineup>(this as TeamLineup, _$identity);
 
   /// Serializes this TeamLineup to a JSON map.
   Map<String, dynamic> toJson();
@@ -53,9 +52,7 @@ mixin _$TeamLineup {
 
 /// @nodoc
 abstract mixin class $TeamLineupCopyWith<$Res> {
-  factory $TeamLineupCopyWith(
-          TeamLineup value, $Res Function(TeamLineup) _then) =
-      _$TeamLineupCopyWithImpl;
+  factory $TeamLineupCopyWith(TeamLineup value, $Res Function(TeamLineup) _then) = _$TeamLineupCopyWithImpl;
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});
 
@@ -143,10 +140,8 @@ class _$TeamLineupCopyWithImpl<$Res> implements $TeamLineupCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _TeamLineup extends TeamLineup {
-  const _TeamLineup({this.id, required this.team, this.leader, this.coach})
-      : super._();
-  factory _TeamLineup.fromJson(Map<String, dynamic> json) =>
-      _$TeamLineupFromJson(json);
+  const _TeamLineup({this.id, required this.team, this.leader, this.coach}) : super._();
+  factory _TeamLineup.fromJson(Map<String, dynamic> json) => _$TeamLineupFromJson(json);
 
   @override
   final int? id;
@@ -163,8 +158,7 @@ class _TeamLineup extends TeamLineup {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TeamLineupCopyWith<_TeamLineup> get copyWith =>
-      __$TeamLineupCopyWithImpl<_TeamLineup>(this, _$identity);
+  _$TeamLineupCopyWith<_TeamLineup> get copyWith => __$TeamLineupCopyWithImpl<_TeamLineup>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -195,11 +189,8 @@ class _TeamLineup extends TeamLineup {
 }
 
 /// @nodoc
-abstract mixin class _$TeamLineupCopyWith<$Res>
-    implements $TeamLineupCopyWith<$Res> {
-  factory _$TeamLineupCopyWith(
-          _TeamLineup value, $Res Function(_TeamLineup) _then) =
-      __$TeamLineupCopyWithImpl;
+abstract mixin class _$TeamLineupCopyWith<$Res> implements $TeamLineupCopyWith<$Res> {
+  factory _$TeamLineupCopyWith(_TeamLineup value, $Res Function(_TeamLineup) _then) = __$TeamLineupCopyWithImpl;
   @override
   @useResult
   $Res call({int? id, Team team, Membership? leader, Membership? coach});

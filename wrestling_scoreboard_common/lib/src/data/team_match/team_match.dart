@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
-import 'team_lineup.dart';
 
 part 'team_match.freezed.dart';
 part 'team_match.g.dart';

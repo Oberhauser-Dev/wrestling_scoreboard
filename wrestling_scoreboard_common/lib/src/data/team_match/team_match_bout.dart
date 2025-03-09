@@ -16,6 +16,7 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
     required int pos,
     required TeamMatch teamMatch,
     required Bout bout,
+    WeightClass? weightClass,
   }) = _TeamMatchBout;
 
   factory TeamMatchBout.fromJson(Map<String, Object?> json) => _$TeamMatchBoutFromJson(json);
@@ -24,6 +25,7 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
     final teamMatch = await getSingle<TeamMatch>(e['team_match_id'] as int);
     final bout = await getSingle<Bout>(e['bout_id'] as int);
     final organizationId = e['organization_id'] as int?;
+    final weightClassId = e['weight_class_id'] as int?;
 
     return TeamMatchBout(
       id: e['id'] as int?,
@@ -31,9 +33,12 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
       organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       teamMatch: teamMatch,
       bout: bout,
+      weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
       pos: e['pos'],
     );
   }
+
+  bool equalDuringBout(o) => bout.equalDuringBout(o.bout) && weightClass == o.weightClass;
 
   @override
   Map<String, dynamic> toRaw() {
@@ -44,6 +49,7 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
       'pos': pos,
       'team_match_id': teamMatch.id!,
       'bout_id': bout.id!,
+      'weight_class_id': weightClass?.id!,
     };
   }
 
