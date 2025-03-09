@@ -27,8 +27,7 @@ mixin _$Organization {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $OrganizationCopyWith<Organization> get copyWith =>
-      _$OrganizationCopyWithImpl<Organization>(
-          this as Organization, _$identity);
+      _$OrganizationCopyWithImpl<Organization>(this as Organization, _$identity);
 
   /// Serializes this Organization to a JSON map.
   Map<String, dynamic> toJson();
@@ -40,19 +39,15 @@ mixin _$Organization {
             other is Organization &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.abbreviation, abbreviation) ||
-                other.abbreviation == abbreviation) &&
+            (identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation) &&
             (identical(other.parent, parent) || other.parent == parent) &&
-            (identical(other.apiProvider, apiProvider) ||
-                other.apiProvider == apiProvider) &&
-            (identical(other.reportProvider, reportProvider) ||
-                other.reportProvider == reportProvider));
+            (identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider) &&
+            (identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
+  int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
 
   @override
   String toString() {
@@ -62,9 +57,7 @@ mixin _$Organization {
 
 /// @nodoc
 abstract mixin class $OrganizationCopyWith<$Res> {
-  factory $OrganizationCopyWith(
-          Organization value, $Res Function(Organization) _then) =
-      _$OrganizationCopyWithImpl;
+  factory $OrganizationCopyWith(Organization value, $Res Function(Organization) _then) = _$OrganizationCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -143,15 +136,9 @@ class _$OrganizationCopyWithImpl<$Res> implements $OrganizationCopyWith<$Res> {
 @JsonSerializable()
 class _Organization extends Organization {
   const _Organization(
-      {this.id,
-      required this.name,
-      this.abbreviation,
-      this.parent,
-      this.apiProvider,
-      this.reportProvider})
+      {this.id, required this.name, this.abbreviation, this.parent, this.apiProvider, this.reportProvider})
       : super._();
-  factory _Organization.fromJson(Map<String, dynamic> json) =>
-      _$OrganizationFromJson(json);
+  factory _Organization.fromJson(Map<String, dynamic> json) => _$OrganizationFromJson(json);
 
   @override
   final int? id;
@@ -171,8 +158,7 @@ class _Organization extends Organization {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$OrganizationCopyWith<_Organization> get copyWith =>
-      __$OrganizationCopyWithImpl<_Organization>(this, _$identity);
+  _$OrganizationCopyWith<_Organization> get copyWith => __$OrganizationCopyWithImpl<_Organization>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -188,19 +174,15 @@ class _Organization extends Organization {
             other is _Organization &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.abbreviation, abbreviation) ||
-                other.abbreviation == abbreviation) &&
+            (identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation) &&
             (identical(other.parent, parent) || other.parent == parent) &&
-            (identical(other.apiProvider, apiProvider) ||
-                other.apiProvider == apiProvider) &&
-            (identical(other.reportProvider, reportProvider) ||
-                other.reportProvider == reportProvider));
+            (identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider) &&
+            (identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
+  int get hashCode => Object.hash(runtimeType, id, name, abbreviation, parent, apiProvider, reportProvider);
 
   @override
   String toString() {
@@ -209,11 +191,8 @@ class _Organization extends Organization {
 }
 
 /// @nodoc
-abstract mixin class _$OrganizationCopyWith<$Res>
-    implements $OrganizationCopyWith<$Res> {
-  factory _$OrganizationCopyWith(
-          _Organization value, $Res Function(_Organization) _then) =
-      __$OrganizationCopyWithImpl;
+abstract mixin class _$OrganizationCopyWith<$Res> implements $OrganizationCopyWith<$Res> {
+  factory _$OrganizationCopyWith(_Organization value, $Res Function(_Organization) _then) = __$OrganizationCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -229,8 +208,7 @@ abstract mixin class _$OrganizationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$OrganizationCopyWithImpl<$Res>
-    implements _$OrganizationCopyWith<$Res> {
+class __$OrganizationCopyWithImpl<$Res> implements _$OrganizationCopyWith<$Res> {
   __$OrganizationCopyWithImpl(this._self, this._then);
 
   final _Organization _self;

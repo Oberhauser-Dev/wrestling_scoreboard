@@ -18,14 +18,14 @@ mixin _$CompetitionBout {
   int? get id;
   Competition get competition;
   Bout get bout;
+  CompetitionWeightCategory get weightCategory;
 
   /// Create a copy of CompetitionBout
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $CompetitionBoutCopyWith<CompetitionBout> get copyWith =>
-      _$CompetitionBoutCopyWithImpl<CompetitionBout>(
-          this as CompetitionBout, _$identity);
+      _$CompetitionBoutCopyWithImpl<CompetitionBout>(this as CompetitionBout, _$identity);
 
   /// Serializes this CompetitionBout to a JSON map.
   Map<String, dynamic> toJson();
@@ -36,36 +36,35 @@ mixin _$CompetitionBout {
         (other.runtimeType == runtimeType &&
             other is CompetitionBout &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
-            (identical(other.bout, bout) || other.bout == bout));
+            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.bout, bout) || other.bout == bout) &&
+            (identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, competition, bout);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, weightCategory: $weightCategory)';
   }
 }
 
 /// @nodoc
 abstract mixin class $CompetitionBoutCopyWith<$Res> {
-  factory $CompetitionBoutCopyWith(
-          CompetitionBout value, $Res Function(CompetitionBout) _then) =
+  factory $CompetitionBoutCopyWith(CompetitionBout value, $Res Function(CompetitionBout) _then) =
       _$CompetitionBoutCopyWithImpl;
   @useResult
-  $Res call({int? id, Competition competition, Bout bout});
+  $Res call({int? id, Competition competition, Bout bout, CompetitionWeightCategory weightCategory});
 
   $CompetitionCopyWith<$Res> get competition;
   $BoutCopyWith<$Res> get bout;
+  $CompetitionWeightCategoryCopyWith<$Res> get weightCategory;
 }
 
 /// @nodoc
-class _$CompetitionBoutCopyWithImpl<$Res>
-    implements $CompetitionBoutCopyWith<$Res> {
+class _$CompetitionBoutCopyWithImpl<$Res> implements $CompetitionBoutCopyWith<$Res> {
   _$CompetitionBoutCopyWithImpl(this._self, this._then);
 
   final CompetitionBout _self;
@@ -79,6 +78,7 @@ class _$CompetitionBoutCopyWithImpl<$Res>
     Object? id = freezed,
     Object? competition = null,
     Object? bout = null,
+    Object? weightCategory = null,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -93,6 +93,10 @@ class _$CompetitionBoutCopyWithImpl<$Res>
           ? _self.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
+      weightCategory: null == weightCategory
+          ? _self.weightCategory
+          : weightCategory // ignore: cast_nullable_to_non_nullable
+              as CompetitionWeightCategory,
     ));
   }
 
@@ -115,16 +119,24 @@ class _$CompetitionBoutCopyWithImpl<$Res>
       return _then(_self.copyWith(bout: value));
     });
   }
+
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CompetitionWeightCategoryCopyWith<$Res> get weightCategory {
+    return $CompetitionWeightCategoryCopyWith<$Res>(_self.weightCategory, (value) {
+      return _then(_self.copyWith(weightCategory: value));
+    });
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _CompetitionBout extends CompetitionBout {
-  const _CompetitionBout(
-      {this.id, required this.competition, required this.bout})
+  const _CompetitionBout({this.id, required this.competition, required this.bout, required this.weightCategory})
       : super._();
-  factory _CompetitionBout.fromJson(Map<String, dynamic> json) =>
-      _$CompetitionBoutFromJson(json);
+  factory _CompetitionBout.fromJson(Map<String, dynamic> json) => _$CompetitionBoutFromJson(json);
 
   @override
   final int? id;
@@ -132,6 +144,8 @@ class _CompetitionBout extends CompetitionBout {
   final Competition competition;
   @override
   final Bout bout;
+  @override
+  final CompetitionWeightCategory weightCategory;
 
   /// Create a copy of CompetitionBout
   /// with the given fields replaced by the non-null parameter values.
@@ -154,40 +168,39 @@ class _CompetitionBout extends CompetitionBout {
         (other.runtimeType == runtimeType &&
             other is _CompetitionBout &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
-            (identical(other.bout, bout) || other.bout == bout));
+            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.bout, bout) || other.bout == bout) &&
+            (identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, competition, bout);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, weightCategory: $weightCategory)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionBoutCopyWith<$Res>
-    implements $CompetitionBoutCopyWith<$Res> {
-  factory _$CompetitionBoutCopyWith(
-          _CompetitionBout value, $Res Function(_CompetitionBout) _then) =
+abstract mixin class _$CompetitionBoutCopyWith<$Res> implements $CompetitionBoutCopyWith<$Res> {
+  factory _$CompetitionBoutCopyWith(_CompetitionBout value, $Res Function(_CompetitionBout) _then) =
       __$CompetitionBoutCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, Competition competition, Bout bout});
+  $Res call({int? id, Competition competition, Bout bout, CompetitionWeightCategory weightCategory});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
   @override
   $BoutCopyWith<$Res> get bout;
+  @override
+  $CompetitionWeightCategoryCopyWith<$Res> get weightCategory;
 }
 
 /// @nodoc
-class __$CompetitionBoutCopyWithImpl<$Res>
-    implements _$CompetitionBoutCopyWith<$Res> {
+class __$CompetitionBoutCopyWithImpl<$Res> implements _$CompetitionBoutCopyWith<$Res> {
   __$CompetitionBoutCopyWithImpl(this._self, this._then);
 
   final _CompetitionBout _self;
@@ -201,6 +214,7 @@ class __$CompetitionBoutCopyWithImpl<$Res>
     Object? id = freezed,
     Object? competition = null,
     Object? bout = null,
+    Object? weightCategory = null,
   }) {
     return _then(_CompetitionBout(
       id: freezed == id
@@ -215,6 +229,10 @@ class __$CompetitionBoutCopyWithImpl<$Res>
           ? _self.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
+      weightCategory: null == weightCategory
+          ? _self.weightCategory
+          : weightCategory // ignore: cast_nullable_to_non_nullable
+              as CompetitionWeightCategory,
     ));
   }
 
@@ -235,6 +253,16 @@ class __$CompetitionBoutCopyWithImpl<$Res>
   $BoutCopyWith<$Res> get bout {
     return $BoutCopyWith<$Res>(_self.bout, (value) {
       return _then(_self.copyWith(bout: value));
+    });
+  }
+
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CompetitionWeightCategoryCopyWith<$Res> get weightCategory {
+    return $CompetitionWeightCategoryCopyWith<$Res>(_self.weightCategory, (value) {
+      return _then(_self.copyWith(weightCategory: value));
     });
   }
 }

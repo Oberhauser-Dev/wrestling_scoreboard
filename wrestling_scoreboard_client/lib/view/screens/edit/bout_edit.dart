@@ -225,7 +225,8 @@ class ParticipantSelectTile extends ConsumerWidget {
   }
 
   Future<List<TeamMatchParticipation>> _getParticipations(WidgetRef ref, {required TeamLineup lineup}) async {
-    return ref.watch(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(ManyProviderData(filterObject: lineup)).future);
+    return ref.watch(
+        manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(ManyProviderData(filterObject: lineup)).future);
   }
 
   @override

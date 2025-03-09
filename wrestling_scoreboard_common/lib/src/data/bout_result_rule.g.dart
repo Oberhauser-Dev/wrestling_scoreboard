@@ -6,25 +6,19 @@ part of 'bout_result_rule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_BoutResultRule _$BoutResultRuleFromJson(Map<String, dynamic> json) =>
-    _BoutResultRule(
+_BoutResultRule _$BoutResultRuleFromJson(Map<String, dynamic> json) => _BoutResultRule(
       id: (json['id'] as num?)?.toInt(),
-      boutConfig:
-          BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
+      boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
       boutResult: $enumDecode(_$BoutResultEnumMap, json['boutResult']),
       style: $enumDecodeNullable(_$WrestlingStyleEnumMap, json['style']),
       winnerTechnicalPoints: (json['winnerTechnicalPoints'] as num?)?.toInt(),
       loserTechnicalPoints: (json['loserTechnicalPoints'] as num?)?.toInt(),
-      technicalPointsDifference:
-          (json['technicalPointsDifference'] as num?)?.toInt(),
-      winnerClassificationPoints:
-          (json['winnerClassificationPoints'] as num).toInt(),
-      loserClassificationPoints:
-          (json['loserClassificationPoints'] as num).toInt(),
+      technicalPointsDifference: (json['technicalPointsDifference'] as num?)?.toInt(),
+      winnerClassificationPoints: (json['winnerClassificationPoints'] as num).toInt(),
+      loserClassificationPoints: (json['loserClassificationPoints'] as num).toInt(),
     );
 
-Map<String, dynamic> _$BoutResultRuleToJson(_BoutResultRule instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$BoutResultRuleToJson(_BoutResultRule instance) => <String, dynamic>{
       'id': instance.id,
       'boutConfig': instance.boutConfig.toJson(),
       'boutResult': _$BoutResultEnumMap[instance.boutResult]!,

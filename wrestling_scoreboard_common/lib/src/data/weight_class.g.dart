@@ -11,12 +11,10 @@ _WeightClass _$WeightClassFromJson(Map<String, dynamic> json) => _WeightClass(
       weight: (json['weight'] as num).toInt(),
       style: $enumDecode(_$WrestlingStyleEnumMap, json['style']),
       suffix: json['suffix'] as String?,
-      unit: $enumDecodeNullable(_$WeightUnitEnumMap, json['unit']) ??
-          WeightUnit.kilogram,
+      unit: $enumDecodeNullable(_$WeightUnitEnumMap, json['unit']) ?? WeightUnit.kilogram,
     );
 
-Map<String, dynamic> _$WeightClassToJson(_WeightClass instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$WeightClassToJson(_WeightClass instance) => <String, dynamic>{
       'id': instance.id,
       'weight': instance.weight,
       'style': _$WrestlingStyleEnumMap[instance.style]!,

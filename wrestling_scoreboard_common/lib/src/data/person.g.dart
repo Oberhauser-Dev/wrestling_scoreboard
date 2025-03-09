@@ -9,17 +9,13 @@ part of 'person.dart';
 _Person _$PersonFromJson(Map<String, dynamic> json) => _Person(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
-      organization: json['organization'] == null
-          ? null
-          : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       prename: json['prename'] as String,
       surname: json['surname'] as String,
       gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),
-      birthDate: json['birthDate'] == null
-          ? null
-          : DateTime.parse(json['birthDate'] as String),
-      nationality: _$JsonConverterFromJson<String, Country>(
-          json['nationality'], const CountryJsonConverter().fromJson),
+      birthDate: json['birthDate'] == null ? null : DateTime.parse(json['birthDate'] as String),
+      nationality: _$JsonConverterFromJson<String, Country>(json['nationality'], const CountryJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$PersonToJson(_Person instance) => <String, dynamic>{
@@ -30,8 +26,7 @@ Map<String, dynamic> _$PersonToJson(_Person instance) => <String, dynamic>{
       'surname': instance.surname,
       'gender': _$GenderEnumMap[instance.gender],
       'birthDate': instance.birthDate?.toIso8601String(),
-      'nationality': _$JsonConverterToJson<String, Country>(
-          instance.nationality, const CountryJsonConverter().toJson),
+      'nationality': _$JsonConverterToJson<String, Country>(instance.nationality, const CountryJsonConverter().toJson),
     };
 
 const _$GenderEnumMap = {

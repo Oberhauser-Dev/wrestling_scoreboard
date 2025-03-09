@@ -27,8 +27,7 @@ mixin _$User {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $UserCopyWith<User> get copyWith =>
-      _$UserCopyWithImpl<User>(this as User, _$identity);
+  $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$identity);
 
   /// Serializes this User to a JSON map.
   Map<String, dynamic> toJson();
@@ -40,21 +39,16 @@ mixin _$User {
             other is User &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.password, password) ||
-                other.password == password) &&
+            (identical(other.username, username) || other.username == username) &&
+            (identical(other.password, password) || other.password == password) &&
             (identical(other.person, person) || other.person == person) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.privilege, privilege) ||
-                other.privilege == privilege));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.privilege, privilege) || other.privilege == privilege));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, email, username, password, person, createdAt, privilege);
+  int get hashCode => Object.hash(runtimeType, id, email, username, password, person, createdAt, privilege);
 
   @override
   String toString() {
@@ -64,8 +58,7 @@ mixin _$User {
 
 /// @nodoc
 abstract mixin class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) _then) =
-      _$UserCopyWithImpl;
+  factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -181,8 +174,7 @@ class _User extends User {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$UserCopyWith<_User> get copyWith =>
-      __$UserCopyWithImpl<_User>(this, _$identity);
+  _$UserCopyWith<_User> get copyWith => __$UserCopyWithImpl<_User>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -198,21 +190,16 @@ class _User extends User {
             other is _User &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.password, password) ||
-                other.password == password) &&
+            (identical(other.username, username) || other.username == username) &&
+            (identical(other.password, password) || other.password == password) &&
             (identical(other.person, person) || other.person == person) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.privilege, privilege) ||
-                other.privilege == privilege));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.privilege, privilege) || other.privilege == privilege));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, email, username, password, person, createdAt, privilege);
+  int get hashCode => Object.hash(runtimeType, id, email, username, password, person, createdAt, privilege);
 
   @override
   String toString() {
@@ -222,8 +209,7 @@ class _User extends User {
 
 /// @nodoc
 abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$UserCopyWith(_User value, $Res Function(_User) _then) =
-      __$UserCopyWithImpl;
+  factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -334,30 +320,18 @@ mixin _$SecuredUser {
             other is SecuredUser &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            const DeepCollectionEquality()
-                .equals(other.passwordHash, passwordHash) &&
+            (identical(other.username, username) || other.username == username) &&
+            const DeepCollectionEquality().equals(other.passwordHash, passwordHash) &&
             (identical(other.salt, salt) || other.salt == salt) &&
             (identical(other.person, person) || other.person == person) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.privilege, privilege) ||
-                other.privilege == privilege));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.privilege, privilege) || other.privilege == privilege));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      email,
-      username,
-      const DeepCollectionEquality().hash(passwordHash),
-      salt,
-      person,
-      createdAt,
-      privilege);
+  int get hashCode => Object.hash(runtimeType, id, email, username, const DeepCollectionEquality().hash(passwordHash),
+      salt, person, createdAt, privilege);
 
   @override
   String toString() {
@@ -367,9 +341,7 @@ mixin _$SecuredUser {
 
 /// @nodoc
 abstract mixin class $SecuredUserCopyWith<$Res> {
-  factory $SecuredUserCopyWith(
-          SecuredUser value, $Res Function(SecuredUser) _then) =
-      _$SecuredUserCopyWithImpl;
+  factory $SecuredUserCopyWith(SecuredUser value, $Res Function(SecuredUser) _then) = _$SecuredUserCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -468,12 +440,10 @@ class _SecuredUser extends SecuredUser {
       this.person,
       required this.createdAt,
       this.privilege = UserPrivilege.none})
-      : assert((passwordHash != null && salt != null) ||
-            (passwordHash == null && salt == null)),
+      : assert((passwordHash != null && salt != null) || (passwordHash == null && salt == null)),
         _passwordHash = passwordHash,
         super._();
-  factory _SecuredUser.fromJson(Map<String, dynamic> json) =>
-      _$SecuredUserFromJson(json);
+  factory _SecuredUser.fromJson(Map<String, dynamic> json) => _$SecuredUserFromJson(json);
 
   @override
   final int? id;
@@ -506,8 +476,7 @@ class _SecuredUser extends SecuredUser {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SecuredUserCopyWith<_SecuredUser> get copyWith =>
-      __$SecuredUserCopyWithImpl<_SecuredUser>(this, _$identity);
+  _$SecuredUserCopyWith<_SecuredUser> get copyWith => __$SecuredUserCopyWithImpl<_SecuredUser>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -523,30 +492,18 @@ class _SecuredUser extends SecuredUser {
             other is _SecuredUser &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            const DeepCollectionEquality()
-                .equals(other._passwordHash, _passwordHash) &&
+            (identical(other.username, username) || other.username == username) &&
+            const DeepCollectionEquality().equals(other._passwordHash, _passwordHash) &&
             (identical(other.salt, salt) || other.salt == salt) &&
             (identical(other.person, person) || other.person == person) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.privilege, privilege) ||
-                other.privilege == privilege));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.privilege, privilege) || other.privilege == privilege));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      email,
-      username,
-      const DeepCollectionEquality().hash(_passwordHash),
-      salt,
-      person,
-      createdAt,
-      privilege);
+  int get hashCode => Object.hash(runtimeType, id, email, username, const DeepCollectionEquality().hash(_passwordHash),
+      salt, person, createdAt, privilege);
 
   @override
   String toString() {
@@ -555,11 +512,8 @@ class _SecuredUser extends SecuredUser {
 }
 
 /// @nodoc
-abstract mixin class _$SecuredUserCopyWith<$Res>
-    implements $SecuredUserCopyWith<$Res> {
-  factory _$SecuredUserCopyWith(
-          _SecuredUser value, $Res Function(_SecuredUser) _then) =
-      __$SecuredUserCopyWithImpl;
+abstract mixin class _$SecuredUserCopyWith<$Res> implements $SecuredUserCopyWith<$Res> {
+  factory _$SecuredUserCopyWith(_SecuredUser value, $Res Function(_SecuredUser) _then) = __$SecuredUserCopyWithImpl;
   @override
   @useResult
   $Res call(
