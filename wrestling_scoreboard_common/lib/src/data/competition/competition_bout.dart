@@ -31,6 +31,8 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     );
   }
 
+  bool equalDuringBout(CompetitionBout o) => bout.equalDuringBout(o.bout) && weightCategory == o.weightCategory;
+
   @override
   Map<String, dynamic> toRaw() {
     return {

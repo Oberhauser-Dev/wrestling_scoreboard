@@ -16,6 +16,8 @@ abstract class DataObject {
 
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
     switch (T) {
+      case const (AgeCategory):
+        return AgeCategory.fromJson(json) as T;
       case const (Bout):
         return Bout.fromJson(json) as T;
       case const (BoutAction):
@@ -30,10 +32,14 @@ abstract class DataObject {
         return Competition.fromJson(json) as T;
       case const (CompetitionBout):
         return CompetitionBout.fromJson(json) as T;
+      case const (CompetitionLineup):
+        return CompetitionLineup.fromJson(json) as T;
+      case const (CompetitionParticipation):
+        return CompetitionParticipation.fromJson(json) as T;
       case const (CompetitionPerson):
         return CompetitionPerson.fromJson(json) as T;
-      case const (CompetitionTeamParticipation):
-        return CompetitionTeamParticipation.fromJson(json) as T;
+      case const (CompetitionWeightCategory):
+        return CompetitionWeightCategory.fromJson(json) as T;
       case const (Division):
         return Division.fromJson(json) as T;
       case const (DivisionWeightClass):
@@ -77,6 +83,8 @@ abstract class DataObject {
 
   static Future<T> fromRaw<T extends DataObject>(Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
     switch (T) {
+      case const (AgeCategory):
+        return (await AgeCategory.fromRaw(raw, getSingle)) as T;
       case const (Bout):
         return (await Bout.fromRaw(raw, getSingle)) as T;
       case const (BoutAction):
@@ -89,10 +97,16 @@ abstract class DataObject {
         return (await Club.fromRaw(raw, getSingle)) as T;
       case const (Competition):
         return (await Competition.fromRaw(raw, getSingle)) as T;
+      case const (CompetitionBout):
+        return (await CompetitionBout.fromRaw(raw, getSingle)) as T;
       case const (CompetitionPerson):
         return (await CompetitionPerson.fromRaw(raw, getSingle)) as T;
-      case const (CompetitionTeamParticipation):
-        return (await CompetitionTeamParticipation.fromRaw(raw, getSingle)) as T;
+      case const (CompetitionLineup):
+        return (await CompetitionLineup.fromRaw(raw, getSingle)) as T;
+      case const (CompetitionParticipation):
+        return (await CompetitionParticipation.fromRaw(raw, getSingle)) as T;
+      case const (CompetitionWeightCategory):
+        return (await CompetitionWeightCategory.fromRaw(raw, getSingle)) as T;
       case const (Division):
         return (await Division.fromRaw(raw, getSingle)) as T;
       case const (DivisionWeightClass):

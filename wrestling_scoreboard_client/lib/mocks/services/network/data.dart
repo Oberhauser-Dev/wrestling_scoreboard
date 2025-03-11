@@ -109,7 +109,6 @@ Membership b3 = Membership(id: 7, person: p7, club: _guestClub);
 Membership b4 = Membership(id: 8, person: p8, club: _guestClub);
 
 final List<Club> _clubs = [_homeClub, _guestClub];
-final List<Bout> _bouts = [];
 final List<BoutAction> _boutActions = []; // TODO fill
 final List<Organization> _organizations = [_organization];
 final List<Division> _divisions = [_juniorDivision, _adultDivision];
@@ -180,8 +179,6 @@ TeamMatch initJnRPWMatch() {
 }
 
 List<Club> getClubs() => _clubs;
-
-List<Bout> getBouts() => _bouts;
 
 List<Bout> getBoutsOfCompetition(Competition competition) {
   return getCompetitionBouts().where((element) => element.competition == competition).map((e) => e.bout).toList();

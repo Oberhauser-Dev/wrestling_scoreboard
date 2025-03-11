@@ -103,10 +103,9 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     return res;
   }
 
-  @override
-  Future<List<Bout>> generateBouts(
+  Future<List<TeamMatchBout>> generateBouts(
       List<List<TeamMatchParticipation>> teamParticipations, List<WeightClass> weightClasses) async {
-    final bouts = <Bout>[];
+    final bouts = <TeamMatchBout>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {
       final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
@@ -122,9 +121,14 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
-      var bout = Bout(
-        r: red == null ? null : AthleteBoutState(membership: red),
-        b: blue == null ? null : AthleteBoutState(membership: blue),
+      var bout = TeamMatchBout(
+        organization: organization,
+        teamMatch: this,
+        pos: bouts.length,
+        bout: Bout(
+          r: red == null ? null : AthleteBoutState(membership: red.membership),
+          b: blue == null ? null : AthleteBoutState(membership: blue.membership),
+        ),
         weightClass: weightClass,
       );
       bouts.add(bout);
