@@ -257,6 +257,7 @@ class ManyDataObject<T> {
 }
 
 // TODO: deprecate in favor of Type.tableName
+// TODO: May think about using an enum instead of a Type. Then all can use switch cases and no classes are forgotten anymore.
 String getTableNameFromType(Type t) {
   return switch (t) {
     const (Bout) => 'bout',
