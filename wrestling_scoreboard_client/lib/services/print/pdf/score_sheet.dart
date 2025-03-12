@@ -21,6 +21,7 @@ class ScoreSheet extends PdfSheet {
     required this.wrestlingEvent,
     required this.boutConfig,
     required this.boutRules,
+    required this.weightClass,
     required this.isTimeCountDown,
     super.baseColor,
     super.accentColor,
@@ -28,6 +29,7 @@ class ScoreSheet extends PdfSheet {
   });
 
   final Bout bout;
+  final WeightClass? weightClass;
   final List<BoutAction> boutActions;
   final BoutConfig boutConfig;
   final List<BoutResultRule> boutRules;
@@ -127,7 +129,7 @@ class ScoreSheet extends PdfSheet {
   }
 
   Widget _buildInfoHeader2(Context context) {
-    final isFreeStyle = bout.weightClass?.style == WrestlingStyle.free;
+    final isFreeStyle = weightClass?.style == WrestlingStyle.free;
     return Table(
       columnWidths: {
         0: const FlexColumnWidth(2),
@@ -154,8 +156,8 @@ class ScoreSheet extends PdfSheet {
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
             buildFormCell(
-                title: '${localizations.weightClass} (${bout.weightClass?.unit.toAbbr()})',
-                content: bout.weightClass?.weight.toString(),
+                title: '${localizations.weightClass} (${weightClass?.unit.toAbbr()})',
+                content: weightClass?.weight.toString(),
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
             buildFormCell(
@@ -251,10 +253,10 @@ class ScoreSheet extends PdfSheet {
 
     return Row(children: [
       buildParticipantColumn(
-          isLeft: true, membership: bout.r?.participation.membership, borderColor: PdfSheet.homeColor),
+          isLeft: true, membership: bout.r?.membership, borderColor: PdfSheet.homeColor),
       Container(width: PdfSheet.horizontalGap),
       buildParticipantColumn(
-          isLeft: false, membership: bout.b?.participation.membership, borderColor: PdfSheet.guestColor),
+          isLeft: false, membership: bout.b?.membership, borderColor: PdfSheet.guestColor),
     ]);
   }
 
@@ -263,7 +265,7 @@ class ScoreSheet extends PdfSheet {
     if (bout.winnerRole != null && bout.result != null) {
       resultRule = BoutConfig.resultRule(
         result: bout.result!,
-        style: bout.weightClass?.style ?? WrestlingStyle.free,
+        style: weightClass?.style ?? WrestlingStyle.free,
         technicalPointsWinner: AthleteBoutState.getTechnicalPoints(boutActions, bout.winnerRole!),
         technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
             boutActions, bout.winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),

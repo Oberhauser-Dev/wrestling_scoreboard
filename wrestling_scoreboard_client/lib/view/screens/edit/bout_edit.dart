@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -33,9 +33,8 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
 
   BoutRole? _winnerRole;
   BoutResult? _boutResult;
-  WeightClass? _weightClass;
-  TeamMatchParticipation? _redParticipation;
-  TeamMatchParticipation? _blueParticipation;
+  Membership? _redMembership;
+  Membership? _blueMembership;
   Duration? _boutDuration;
 
   Future<List<WeightClass>> get availableWeightClasses;
@@ -46,9 +45,8 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     _boutDuration = widget.bout?.duration;
     _winnerRole = widget.bout?.winnerRole;
     _boutResult = widget.bout?.result;
-    _weightClass = widget.bout?.weightClass;
-    _redParticipation = widget.bout?.r?.participation;
-    _blueParticipation = widget.bout?.b?.participation;
+    _redMembership = widget.bout?.r?.membership;
+    _blueMembership = widget.bout?.b?.membership;
   }
 
   @override
@@ -67,15 +65,15 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         label: localizations.red,
         lineup: widget.lineupRed,
         participation: widget.bout?.r?.participation,
-        createOrUpdateParticipantState: (participation) => _redParticipation = participation,
-        deleteParticipantState: (participation) => _redParticipation = null,
+        createOrUpdateParticipantState: (participation) => _redMembership = participation,
+        deleteParticipantState: (participation) => _redMembership = null,
       ),
       ParticipantSelectTile(
         label: localizations.blue,
         lineup: widget.lineupBlue,
         participation: widget.bout?.b?.participation,
-        createOrUpdateParticipantState: (participation) => _blueParticipation = participation,
-        deleteParticipantState: (participation) => _blueParticipation = null,
+        createOrUpdateParticipantState: (participation) => _blueMembership = participation,
+        deleteParticipantState: (participation) => _blueMembership = null,
       ),
       ListTile(
         title: SearchableDropdown<WeightClass>(
@@ -161,7 +159,9 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
       _formKey.currentState!.save();
 
       Future<AthleteBoutState?> updateParticipantState(
-          TeamMatchParticipation? newParticipation, AthleteBoutState? oldParticipantState) async {
+        TeamMatchParticipation? newParticipation,
+        AthleteBoutState? oldParticipantState,
+      ) async {
         if (newParticipation != oldParticipantState?.participation) {
           if (oldParticipantState != null) {
             await (await ref.read(dataManagerNotifierProvider)).deleteSingle<AthleteBoutState>(oldParticipantState);
@@ -180,11 +180,10 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
 
       var bout = Bout(
         id: widget.bout?.id,
-        weightClass: _weightClass,
         result: _boutResult,
         winnerRole: _winnerRole,
-        r: await updateParticipantState(_redParticipation, widget.bout?.r),
-        b: await updateParticipantState(_blueParticipation, widget.bout?.b),
+        r: await updateParticipantState(_redMembership, widget.bout?.r),
+        b: await updateParticipantState(_blueMembership, widget.bout?.b),
         duration: _boutDuration ?? Duration.zero,
         pool: widget.bout?.pool,
       );

@@ -25,6 +25,13 @@ class TeamMatchBoutEdit extends BoutEdit {
 
 class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
   int _pos = 0;
+  WeightClass? _weightClass;
+
+  @override
+  void initState() {
+    super.initState();
+    _weightClass = widget.weightClass;
+  }
 
   @override
   Widget build(BuildContext context) {

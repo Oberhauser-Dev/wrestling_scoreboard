@@ -180,12 +180,12 @@ TeamMatch initJnRPWMatch() {
 
 List<Club> getClubs() => _clubs;
 
-List<Bout> getBoutsOfCompetition(Competition competition) {
-  return getCompetitionBouts().where((element) => element.competition == competition).map((e) => e.bout).toList();
+List<CompetitionBout> getBoutsOfCompetition(Competition competition) {
+  return getCompetitionBouts().where((element) => element.competition == competition).toList();
 }
 
-List<Bout> getBoutsOfTeamMatch(TeamMatch match) {
-  return getTeamMatchBouts().where((element) => element.teamMatch == match).map((e) => e.bout).toList();
+List<TeamMatchBout> getBoutsOfTeamMatch(TeamMatch match) {
+  return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
 }
 
 List<BoutAction> getBoutActions() => _boutActions;
@@ -251,6 +251,11 @@ List<TeamMatch> getTeamMatchesOfTeam(Team team) {
 }
 
 List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
+
+List<Bout> getBouts() => [
+      ..._teamMatchBouts.map((e) => e.bout),
+      ..._competitionBouts.map((e) => e.bout),
+    ];
 
 List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
   return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();

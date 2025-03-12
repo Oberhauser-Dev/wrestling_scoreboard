@@ -15,6 +15,8 @@ class TeamMatchTranscript extends PdfSheet {
   TeamMatchTranscript({
     required this.teamMatchBoutActions,
     required this.teamMatch,
+    required this.homeParticipations,
+    required this.guestParticipations,
     required this.boutConfig,
     required this.isTimeCountDown,
     super.baseColor,
@@ -23,6 +25,8 @@ class TeamMatchTranscript extends PdfSheet {
   });
 
   final Map<TeamMatchBout, List<BoutAction>> teamMatchBoutActions;
+  final List<TeamMatchParticipation> homeParticipations;
+  final List<TeamMatchParticipation> guestParticipations;
   final BoutConfig boutConfig;
   final TeamMatch teamMatch;
   final bool isTimeCountDown;
@@ -222,16 +226,23 @@ class TeamMatchTranscript extends PdfSheet {
       ];
     }
 
-    List<Widget> buildParticipantState(AthleteBoutState? state, BoutRole role) {
+    List<Widget> buildParticipantState(AthleteBoutState? state, BoutRole role, WeightClass? weightClass,
+        Iterable<TeamMatchParticipation> participations) {
       final borderColor = role.pdfColor;
       return [
-        buildTextCell(state?.participation.weight?.toString() ?? '',
+        buildTextCell(
+            TeamMatchParticipation.fromParticipationsAndMembershipAndWeightClass(
+                        participations: participations, membership: state?.membership, weightClass: weightClass)
+                    ?.weight
+                    ?.toString() ??
+                '',
+            height: cellHeight,
+            borderColor: borderColor,
+            fontSize: cellFontSize),
+        buildTextCell(state?.membership.person.fullName ?? '-',
             height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
-        buildTextCell(state?.participation.membership.person.fullName ?? '-',
-            height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
-        buildTextCell(state?.participation.membership.no ?? '',
-            height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
-        buildTextCell(state?.participation.membership.person.toStatus() ?? '',
+        buildTextCell(state?.membership.no ?? '', height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
+        buildTextCell(state?.membership.person.toStatus() ?? '',
             height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
       ];
     }
@@ -319,10 +330,10 @@ class TeamMatchTranscript extends PdfSheet {
           PdfColor? winnerTextColor = bout.bout.winnerRole?.textPdfColor;
           return TableRow(children: [
             buildTextCell(bout.pos.toString(), height: cellHeight, fontSize: cellFontSize),
-            buildTextCell(bout.bout.weightClass?.name ?? '-', height: cellHeight, fontSize: cellFontSize),
-            buildTextCell(bout.bout.weightClass?.style.abbreviation(buildContext) ?? '-',
+            buildTextCell(bout.weightClass?.name ?? '-', height: cellHeight, fontSize: cellFontSize),
+            buildTextCell(bout.weightClass?.style.abbreviation(buildContext) ?? '-',
                 height: cellHeight, fontSize: cellFontSize),
-            ...buildParticipantState(bout.bout.r, BoutRole.red),
+            ...buildParticipantState(bout.bout.r, BoutRole.red, bout.weightClass, homeParticipations),
             buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
                 height: cellHeight, borderColor: BoutRole.red.pdfColor, fontSize: cellFontSize),
             buildTextCell(bout.bout.r?.classificationPoints?.toString() ?? '',
@@ -344,7 +355,7 @@ class TeamMatchTranscript extends PdfSheet {
                 height: cellHeight, borderColor: BoutRole.blue.pdfColor, fontSize: cellFontSize),
             buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
                 height: cellHeight, borderColor: BoutRole.blue.pdfColor, fontSize: cellFontSize),
-            ...buildParticipantState(bout.bout.b, BoutRole.blue),
+            ...buildParticipantState(bout.bout.b, BoutRole.blue, bout.weightClass, guestParticipations),
             // TODO: bout comment
             buildTextCell('', height: cellHeight, fontSize: cellFontSize),
           ]);

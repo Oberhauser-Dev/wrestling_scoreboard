@@ -36,7 +36,10 @@ class MatchDisplay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     double padding = width / 140;
     return SingleConsumer<TeamMatch>(
       id: id,
@@ -61,6 +64,15 @@ class MatchDisplay extends ConsumerWidget {
               return MapEntry(teamMatchBout, boutActions);
             })));
             final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+
+            final homeParticipations = await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
+              ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.home),
+            ).future);
+
+            final guestParticipations = await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
+              ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.guest),
+            ).future);
+
             if (context.mounted) {
               final bytes = await TeamMatchTranscript(
                 teamMatchBoutActions: teamMatchBoutActions,
@@ -68,6 +80,8 @@ class MatchDisplay extends ConsumerWidget {
                 teamMatch: match,
                 boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                 isTimeCountDown: isTimeCountDown,
+                homeParticipations: homeParticipations,
+                guestParticipations: guestParticipations,
               ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
             }
@@ -94,11 +108,11 @@ class MatchDisplay extends ConsumerWidget {
                     padding: EdgeInsets.all(padding),
                     child: Center(
                         child: ScaledText(
-                      matchInfos.join('\n'),
-                      softWrap: false,
-                      fontSize: 12,
-                      minFontSize: 10,
-                    ))),
+                          matchInfos.join('\n'),
+                          softWrap: false,
+                          fontSize: 12,
+                          minFontSize: 10,
+                        ))),
                 ...CommonElements.getTeamHeader(
                     match.home.team, match.guest.team, teamMatchBouts.map((e) => e.bout).toList(), context),
               ];
@@ -124,11 +138,13 @@ class MatchDisplay extends ConsumerWidget {
                               child: IntrinsicHeight(
                                 child: ManyConsumer<BoutAction, Bout>(
                                   filterObject: teamMatchBouts[index].bout,
-                                  builder: (context, actions) => BoutListItem(
-                                    match: match,
-                                    bout: teamMatchBouts[index].bout,
-                                    actions: actions,
-                                  ),
+                                  builder: (context, actions) =>
+                                      BoutListItem(
+                                        match: match,
+                                        bout: teamMatchBouts[index].bout,
+                                        actions: actions,
+                                        weightClass: teamMatchBouts[index].weightClass,
+                                      ),
                                 ),
                               ),
                             ),
@@ -157,16 +173,18 @@ class MatchDisplay extends ConsumerWidget {
 class BoutListItem extends ConsumerWidget {
   final TeamMatch match;
   final Bout bout;
+  final WeightClass? weightClass;
   final List<BoutAction> actions;
 
-  const BoutListItem({super.key, required this.match, required this.bout, required this.actions});
+  const BoutListItem(
+      {super.key, required this.match, required this.bout, required this.weightClass, required this.actions});
 
   displayName({AthleteBoutState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
     return ThemedContainer(
       color: role.color(),
       child: Center(
         child: ScaledText(
-          pStatus == null ? context.l10n.participantVacant : pStatus.participation.membership.person.fullName,
+          pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.fullName,
           color: pStatus == null ? Colors.white.disabled() : Colors.white,
           fontSize: 17,
           minFontSize: 14,
@@ -176,7 +194,9 @@ class BoutListItem extends ConsumerWidget {
   }
 
   Widget displayParticipantState({AthleteBoutState? pState, required Bout bout, required BoutRole role}) {
-    final color = (role == bout.winnerRole) ? role.color().shade800 : null;
+    final color = (role == bout.winnerRole) ? role
+        .color()
+        .shade800 : null;
     return NullableSingleConsumer<AthleteBoutState>(
       id: pState?.id,
       initialData: pState,
@@ -191,9 +211,9 @@ class BoutListItem extends ConsumerWidget {
                   child: Center(
                     child: bout.result != null
                         ? ScaledText(
-                            pState?.classificationPoints?.toString() ?? '0',
-                            fontSize: 15,
-                          )
+                      pState?.classificationPoints?.toString() ?? '0',
+                      fontSize: 15,
+                    )
                         : null,
                   ),
                 )),
@@ -203,13 +223,13 @@ class BoutListItem extends ConsumerWidget {
                 color: color,
                 child: Center(
                   child: bout.result != null ||
-                          technicalPoints > 0 ||
-                          bout.duration > Duration.zero ||
-                          pState?.classificationPoints != null
+                      technicalPoints > 0 ||
+                      bout.duration > Duration.zero ||
+                      pState?.classificationPoints != null
                       ? ScaledText(
-                          technicalPoints.toString(),
-                          fontSize: 8,
-                        )
+                    technicalPoints.toString(),
+                    fontSize: 8,
+                  )
                       : null,
                 ),
               ),
@@ -222,7 +242,10 @@ class BoutListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
     final padding = width / 100;
     final edgeInsets = EdgeInsets.all(padding);
     return LoadingBuilder<bool>(
@@ -241,25 +264,25 @@ class BoutListItem extends ConsumerWidget {
                           flex: 2,
                           child: Container(
                             padding: edgeInsets,
-                            child: bout.weightClass == null
+                            child: weightClass == null
                                 ? null
                                 : Center(
-                                    child: ScaledText(
-                                      '${bout.weightClass!.weight} $weightUnit',
-                                      softWrap: false,
-                                      minFontSize: 10,
-                                    ),
-                                  ),
+                              child: ScaledText(
+                                '${weightClass!.weight} $weightUnit',
+                                softWrap: false,
+                                minFontSize: 10,
+                              ),
+                            ),
                           ),
                         ),
                         Expanded(
                           child: Center(
-                            child: bout.weightClass == null
+                            child: weightClass == null
                                 ? null
                                 : ScaledText(
-                                    bout.weightClass!.style.abbreviation(context),
-                                    minFontSize: 12,
-                                  ),
+                              weightClass!.style.abbreviation(context),
+                              minFontSize: 12,
+                            ),
                           ),
                         ),
                       ],
@@ -278,7 +301,9 @@ class BoutListItem extends ConsumerWidget {
                               Expanded(
                                   flex: 70,
                                   child: ThemedContainer(
-                                    color: winnerRole?.color().shade800,
+                                    color: winnerRole
+                                        ?.color()
+                                        .shade800,
                                     child: Center(
                                       child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12),
                                     ),
@@ -288,13 +313,13 @@ class BoutListItem extends ConsumerWidget {
                                 child: Center(
                                   child: bout.result != null || bout.duration > Duration.zero
                                       ? ScaledText(
-                                          bout.duration
-                                              .invertIf(isTimeCountDown,
-                                                  max:
-                                                      (match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig)
-                                                          .totalPeriodDuration)
-                                              .formatMinutesAndSeconds(),
-                                          fontSize: 8)
+                                      bout.duration
+                                          .invertIf(isTimeCountDown,
+                                          max:
+                                          (match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig)
+                                              .totalPeriodDuration)
+                                          .formatMinutesAndSeconds(),
+                                      fontSize: 8)
                                       : null,
                                 ),
                               ),

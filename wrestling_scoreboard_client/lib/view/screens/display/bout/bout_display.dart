@@ -76,28 +76,49 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                     id: teamMatchBout.bout.id,
                     initialData: teamMatchBout.bout,
                     builder: (context, bout) {
-                      return ManyConsumer<BoutResultRule, BoutConfig>(
-                          filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
-                          builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
-                            return BoutScreen(
-                              wrestlingEvent: match,
-                              boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                              boutRules: boutResultRules,
-                              bouts: teamMatchBouts.map((e) => e.bout).toList(),
-                              boutIndex: teamMatchBoutIndex,
-                              bout: bout,
-                              onPressBoutInfo: (BuildContext context) {
-                                // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                                context.go(
-                                    '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
-                              },
-                              navigateToBoutByIndex: (context, index) {
-                                context.pop();
-                                navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
-                              },
-                              home: match.home.team,
-                              guest: match.guest.team,
-                            );
+                      return ManyConsumer<TeamMatchParticipation, TeamLineup>(
+                          filterObject: match.home,
+                          builder: (context, homeParticipations) {
+                            final homeParticipation =
+                                TeamMatchParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                    participations: homeParticipations,
+                                    membership: bout.r?.membership,
+                                    weightClass: teamMatchBout.weightClass);
+                            return ManyConsumer<TeamMatchParticipation, TeamLineup>(
+                                filterObject: match.guest,
+                                builder: (context, guestParticipations) {
+                                  final guestParticipation =
+                                      TeamMatchParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                          participations: guestParticipations,
+                                          membership: bout.r?.membership,
+                                          weightClass: teamMatchBout.weightClass);
+                                  return ManyConsumer<BoutResultRule, BoutConfig>(
+                                      filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
+                                      builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
+                                        return BoutScreen(
+                                          wrestlingEvent: match,
+                                          boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                                          boutRules: boutResultRules,
+                                          bouts: teamMatchBouts.map((e) => e.bout).toList(),
+                                          boutIndex: teamMatchBoutIndex,
+                                          bout: bout,
+                                          onPressBoutInfo: (BuildContext context) {
+                                            // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+                                            context.go(
+                                                '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
+                                          },
+                                          navigateToBoutByIndex: (context, index) {
+                                            context.pop();
+                                            navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
+                                          },
+                                          home: match.home.team,
+                                          guest: match.guest.team,
+                                          weightClass: teamMatchBout.weightClass,
+                                          weightR: homeParticipation?.weight,
+                                          weightB: guestParticipation?.weight,
+                                        );
+                                      });
+                                });
                           });
                     });
               });
@@ -105,12 +126,16 @@ class TeamMatchBoutDisplay extends StatelessWidget {
   }
 }
 
+// TODO: check if comment is still valid.
 /// Initialize with default values, but do not synchronize with live data, as during a bout the connection could be interrupted. So the client always sends data, but never should receive any.
 /// If closing and reopening screen, data should be updated though.
 class BoutScreen extends ConsumerStatefulWidget {
   final WrestlingEvent wrestlingEvent;
   final List<Bout> bouts;
   final Bout bout;
+  final double? weightR;
+  final double? weightB;
+  final WeightClass? weightClass;
 
   // TODO: may overwrite in settings to be more flexible
   final BoutConfig boutConfig;
@@ -132,6 +157,9 @@ class BoutScreen extends ConsumerStatefulWidget {
     required this.boutConfig,
     required this.boutRules,
     required this.wrestlingEvent,
+    required this.weightClass,
+    required this.weightR,
+    required this.weightB,
     super.key,
   });
 
@@ -149,6 +177,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   late ParticipantStateModel _b;
   late BoutConfig boutConfig;
   late List<BoutResultRule> boutRules;
+  late WeightClass? weightClass;
 
   late Bout bout;
   int period = 1;
@@ -159,10 +188,11 @@ class BoutState extends ConsumerState<BoutScreen> {
     boutConfig = widget.boutConfig;
     boutRules = widget.boutRules;
     bout = widget.bout;
+    weightClass = widget.weightClass;
     // Set the current period based on the duration:
     period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
-    _r = ParticipantStateModel(bout.r);
-    _b = ParticipantStateModel(bout.b);
+    _r = ParticipantStateModel(bout.r, widget.weightR);
+    _b = ParticipantStateModel(bout.b, widget.weightB);
 
     // Regular injury
     _r.injuryStopwatch.limit = boutConfig.injuryDuration;
@@ -287,7 +317,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   Future<List<BoutAction>> getActions() => ref.readAsync(
       manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
-  displayName(AthleteBoutState? pStatus, double padding) {
+  displayName(AthleteBoutState? pStatus, double padding, double? weight) {
     final localizations = context.l10n;
     return Expanded(
       child: Column(
@@ -306,10 +336,8 @@ class BoutState extends ConsumerState<BoutScreen> {
           SizedBox(
               child: Center(
                   child: ScaledText(
-            (pStatus?.participation.weight != null
-                ? '${pStatus?.participation.weight!.toStringAsFixed(1)} $weightUnit'
-                : localizations.participantUnknownWeight),
-            color: pStatus?.participation.weight == null ? Colors.white30 : Colors.white,
+            (weight != null ? '${weight.toStringAsFixed(1)} $weightUnit' : localizations.participantUnknownWeight),
+            color: weight == null ? Colors.white30 : Colors.white,
             fontSize: 22,
           ))),
         ],
@@ -351,7 +379,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding) {
+  displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding, double? weight) {
     var color = role.color();
 
     return ThemedContainer(
@@ -362,7 +390,7 @@ class BoutState extends ConsumerState<BoutScreen> {
           initialData: pStatus,
           builder: (context, pStatus) {
             List<Widget> items = [
-              displayName(pStatus, padding),
+              displayName(pStatus, padding, weight),
               displayClassificationPoints(pStatus, color, padding),
             ];
             if (role == BoutRole.blue) items = List.from(items.reversed);
@@ -505,6 +533,7 @@ class BoutState extends ConsumerState<BoutScreen> {
             boutConfig: boutConfig,
             boutRules: boutRules,
             isTimeCountDown: isTimeCountDown,
+            weightClass: weightClass,
           ).buildPdf();
           Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
         }
@@ -545,7 +574,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                       row(padding: bottomPadding, children: [
                         Expanded(
                           flex: 50,
-                          child: displayParticipant(bout.r, BoutRole.red, padding),
+                          child: displayParticipant(_r.pStatus, BoutRole.red, padding, _r.weight),
                         ),
                         Expanded(
                             flex: 20,
@@ -559,24 +588,24 @@ class BoutState extends ConsumerState<BoutScreen> {
                                   minFontSize: 10,
                                 ))),
                               ]),
-                              if (bout.weightClass != null)
+                              if (weightClass != null)
                                 Center(
                                     child: ScaledText(
-                                  '${bout.weightClass!.style.localize(context)}',
+                                  '${weightClass!.style.localize(context)}',
                                   fontSize: 22,
                                   minFontSize: 10,
                                 )),
-                              if (bout.weightClass != null)
+                              if (weightClass != null)
                                 Center(
                                     child: ScaledText(
-                                  bout.weightClass!.name,
+                                  weightClass!.name,
                                   fontSize: 26,
                                   minFontSize: 10,
                                 )),
                             ])),
                         Expanded(
                           flex: 50,
-                          child: displayParticipant(bout.b, BoutRole.blue, padding),
+                          child: displayParticipant(_b.pStatus, BoutRole.blue, padding, _b.weight),
                         ),
                       ]),
                       row(

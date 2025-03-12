@@ -21,6 +21,16 @@ abstract class TeamMatchParticipation with _$TeamMatchParticipation implements D
 
   factory TeamMatchParticipation.fromJson(Map<String, Object?> json) => _$TeamMatchParticipationFromJson(json);
 
+  static TeamMatchParticipation? fromParticipationsAndMembershipAndWeightClass({
+    required Iterable<TeamMatchParticipation> participations,
+    required Membership? membership,
+    required WeightClass? weightClass,
+  }) {
+    return participations
+        .where((element) => element.membership == membership && element.weightClass == weightClass)
+        .zeroOrOne;
+  }
+
   static Future<TeamMatchParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final weightClassId = e['weight_class_id'] as int?;
     final lineup = await getSingle<TeamLineup>(e['lineup_id'] as int);

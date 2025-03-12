@@ -80,60 +80,44 @@ class MockDataManager extends DataManager {
   @override
   Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
     if (wrestlingEvent is TeamMatch) {
-     // TODO really needs old bouts or just use the exising ones from teammatch
-    final oldBouts = getTeamMatchBouts(wrestlingEvent);
-    final boutsAll = getTeamMatchBouts();
-    if (isReset) {
-        final teamMatchBoutsAll = getTeamMatchBouts();
-        for (var element in oldBouts) {
+      final teamMatchBoutsAll = getTeamMatchBouts();
+      if (isReset) {
+        for (var element in teamMatchBoutsAll) {
           teamMatchBoutsAll.removeWhere((tmf) => tmf.equalDuringBout(element));
         }
-
-      // Remove if exists
-      for (var element in oldBouts) {
-        boutsAll.remove(element);
       }
-    }
 
-    List<List<TeamMatchParticipation>> teamParticipations;
-    List<WeightClass> weightClasses;
+      List<List<TeamMatchParticipation>> teamParticipations;
+      List<WeightClass> weightClasses;
       final homeParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.home);
       final guestParticipations =
-          await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
+      await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
       weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
 
 
-    // Generate new bouts
-    final newBouts = await wrestlingEvent.generateBouts(teamParticipations, weightClasses);
-    final newBoutsWithId = <TeamMatchBout>[];
+      // Generate new bouts
+      final newBouts = await wrestlingEvent.generateBouts(teamParticipations, weightClasses);
+      final newBoutsWithId = <TeamMatchBout>[];
 
-    // Add if not exists
-    final random = Random();
-    for (var element in newBouts) {
-      if (boutsAll.where((TeamMatchBout f) => f.equalDuringBout(element)).isEmpty) {
-        do {
-          // Generate new id as long it is not taken yet
-          element = element.copyWithId(random.nextInt(0x7fffffff));
-        } while (boutsAll.where((f) => f.id == element.id).isNotEmpty);
-        boutsAll.add(element);
-      }
-      newBoutsWithId.add(element);
-    }
-      final teamMatchBoutsAll = getTeamMatchBouts();
-      newBoutsWithId.asMap().forEach((key, element) {
-        if (teamMatchBoutsAll.where((tmf) => tmf.equalDuringBout(element)).isEmpty) {
-          teamMatchBoutsAll.removeWhere((tmf) => tmf.weightClass == element.weightClass);
-          int generatedId;
+      // Add if not exists
+      final random = Random();
+      for (var element in newBouts) {
+        if (teamMatchBoutsAll
+            .where((TeamMatchBout f) => f.equalDuringBout(element))
+            .isEmpty) {
           do {
             // Generate new id as long it is not taken yet
-            generatedId = random.nextInt(0x7fffffff);
-          } while (teamMatchBoutsAll.where((t) => t.id == element.id).isNotEmpty);
-          teamMatchBoutsAll.add(TeamMatchBout(id: generatedId, teamMatch: wrestlingEvent, bout: element, pos: key));
+            element = element.copyWithId(random.nextInt(0x7fffffff));
+          } while (teamMatchBoutsAll
+              .where((f) => f.id == element.id)
+              .isNotEmpty);
+          teamMatchBoutsAll.add(element);
         }
-      });
-    getBouts().addAll(newBoutsWithId);
-    _updateMany(Bout, filterObject: wrestlingEvent);
+        newBoutsWithId.add(element);
+      }
+      _updateMany(TeamMatchBout, filterObject: wrestlingEvent);
+    }
   }
 
   @override
@@ -146,14 +130,14 @@ class MockDataManager extends DataManager {
 
   Future<void> _updateMany(Type t, {DataObject? filterObject}) async {
     switch (t) {
-      case const (Bout):
+      case const (TeamMatchBout):
         if (filterObject is TeamMatch) {
           final manyFilter = ManyDataObject(
             data: getBoutsOfTeamMatch(filterObject),
             filterType: TeamMatch,
             filterId: filterObject.id,
           );
-          return getManyStreamController<Bout>(filterType: TeamMatch)?.add(manyFilter);
+          return getManyStreamController<TeamMatchBout>(filterType: TeamMatch)?.add(manyFilter);
         }
         throw DataUnimplementedError(CRUD.update, t, filterObject);
       default:
