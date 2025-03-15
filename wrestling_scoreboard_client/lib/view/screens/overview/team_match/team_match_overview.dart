@@ -18,7 +18,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/bout_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -60,6 +60,15 @@ class TeamMatchOverview extends ConsumerWidget {
                 return MapEntry(teamMatchBout, boutActions);
               })));
               final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+
+              final homeParticipations = await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
+                ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.home),
+              ).future);
+
+              final guestParticipations = await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
+                ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.guest),
+              ).future);
+
               if (context.mounted) {
                 final bytes = await TeamMatchTranscript(
                   teamMatchBoutActions: teamMatchBoutActions,
@@ -67,6 +76,8 @@ class TeamMatchOverview extends ConsumerWidget {
                   teamMatch: match,
                   boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                   isTimeCountDown: isTimeCountDown,
+                  guestParticipations: guestParticipations,
+                  homeParticipations: homeParticipations,
                 ).buildPdf();
                 Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
               }
@@ -252,7 +263,7 @@ class TeamMatchOverview extends ConsumerWidget {
                               itemBuilder: (context, index) => items[index],
                             );
                           }),
-                    BoutList(filterObject: match),
+                    TeamMatchBoutList(filterObject: match),
                     GroupedList(
                       header: const HeadingItem(),
                       itemCount: contentItems.length,

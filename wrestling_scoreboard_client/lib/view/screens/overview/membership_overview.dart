@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/bout_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -49,7 +49,7 @@ class MembershipOverview extends AbstractPersonOverview<Membership> {
             ],
             buildRelations: (Person person) => {
                   Tab(child: HeadingText('${localizations.bouts} (${localizations.league})')):
-                      BoutList(filterObject: membership),
+                      TeamMatchBoutList(filterObject: membership),
                   // TODO: Add competition bouts
                 });
       },

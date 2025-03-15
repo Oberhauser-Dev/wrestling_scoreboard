@@ -11,10 +11,10 @@ import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class BoutList<T extends DataObject?> extends StatelessWidget {
+class TeamMatchBoutList<T extends DataObject?> extends StatelessWidget {
   final T? filterObject;
 
-  const BoutList({super.key, required this.filterObject});
+  const TeamMatchBoutList({super.key, required this.filterObject});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class BoutList<T extends DataObject?> extends StatelessWidget {
           : null,
       itemBuilder: (context, teamMatchBout) {
         final bout = teamMatchBout.bout;
-        final weightClass = bout.weightClass;
+        final weightClass = teamMatchBout.weightClass;
         final weightClassStr =
             weightClass == null ? '' : '${weightClass.name}, ${weightClass.style.abbreviation(context)} | ';
         return ListTile(
@@ -46,7 +46,7 @@ class BoutList<T extends DataObject?> extends StatelessWidget {
               children: [
                 TextSpan(
                     text: bout.r?.fullName(context) ?? localizations.participantVacant,
-                    style: filterObject is! Membership || bout.r?.participation.membership == filterObject
+                    style: filterObject is! Membership || bout.r?.membership == filterObject
                         ? TextStyle(
                             color: bout.r == null ? Theme.of(context).disabledColor : Colors.red,
                             fontWeight: filterObject is! Membership ? null : FontWeight.bold)
@@ -54,7 +54,7 @@ class BoutList<T extends DataObject?> extends StatelessWidget {
                 const TextSpan(text: ' - '),
                 TextSpan(
                     text: bout.b?.fullName(context) ?? localizations.participantVacant,
-                    style: filterObject is! Membership || bout.b?.participation.membership == filterObject
+                    style: filterObject is! Membership || bout.b?.membership == filterObject
                         ? TextStyle(
                             color: bout.b == null ? Theme.of(context).disabledColor : Colors.blue,
                             fontWeight: filterObject is! Membership ? null : FontWeight.bold)

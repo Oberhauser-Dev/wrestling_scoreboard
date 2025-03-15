@@ -56,6 +56,7 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
                 boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                 boutRules: boutRules,
                 isTimeCountDown: isTimeCountDown,
+                weightClass: teamMatchBout.weightClass,
               ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }
@@ -103,9 +104,9 @@ extension BoutFileExt on Bout {
     final fileNameBuilder = [
       event.date.toIso8601String().substring(0, 10),
       id?.toString(),
-      r?.participation.membership.person.surname,
+      r?.membership.person.surname,
       '–',
-      b?.participation.membership.person.surname,
+      b?.membership.person.surname,
     ];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
     return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');

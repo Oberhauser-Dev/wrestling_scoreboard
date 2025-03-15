@@ -63,11 +63,6 @@ abstract class BoutOverview<T extends DataObject> extends ConsumerWidget impleme
               icon: Icons.person,
             ),
             ContentItem(
-              title: data.weightClass?.name ?? '-',
-              subtitle: localizations.weight,
-              icon: Icons.fitness_center,
-            ),
-            ContentItem(
               title: data.winnerRole?.name ?? '-',
               subtitle: localizations.winner,
               icon: Icons.emoji_events,

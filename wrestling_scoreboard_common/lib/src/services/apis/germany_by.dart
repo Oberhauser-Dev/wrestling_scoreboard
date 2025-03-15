@@ -368,11 +368,11 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       teamMatches.map((teamMatch) async {
         final bouts = await importBouts(event: teamMatch);
         final homeMemberships = bouts.keys
-            .where((bout) => bout.r?.participation.membership.club == club)
-            .map((bout) => bout.r!.participation.membership);
+            .where((bout) => bout.r?.membership.club == club)
+            .map((bout) => bout.r!.membership);
         final opponentMemberships = bouts.keys
-            .where((bout) => bout.b?.participation.membership.club == club)
-            .map((bout) => bout.b!.participation.membership);
+            .where((bout) => bout.b?.membership.club == club)
+            .map((bout) => bout.b!.membership);
         return [...homeMemberships, ...opponentMemberships].nonNulls;
       }),
     ))

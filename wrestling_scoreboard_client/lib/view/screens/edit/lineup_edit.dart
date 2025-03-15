@@ -2,20 +2,18 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
@@ -142,13 +140,13 @@ class LineupEditState extends ConsumerState<LineupEdit> {
       ManyProviderData<Club, Team>(filterObject: widget.lineup.team),
     ).future);
 
-    final clubMemeberships = await Future.wait(clubs.map((club) async {
+    final clubMemberships = await Future.wait(clubs.map((club) async {
       return await ref.readAsync(manyDataStreamProvider<Membership, Club>(
         ManyProviderData<Membership, Club>(filterObject: club),
       ).future);
     }));
 
-    _memberships ??= clubMemeberships.expand((membership) => membership);
+    _memberships ??= clubMemberships.expand((membership) => membership);
     return _memberships!;
   }
 
@@ -166,7 +164,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
           if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
             IconCard(icon: const Icon(Icons.warning), child: Text(localizations.warningPrefilledLineup)),
           ListTile(
-            title: _MembershipDropdown(
+            title: MembershipDropdown(
               label: localizations.leader,
               getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
@@ -177,7 +175,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
             ),
           ),
           ListTile(
-            title: _MembershipDropdown(
+            title: MembershipDropdown(
               label: localizations.coach,
               getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
@@ -281,7 +279,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
             flex: 80,
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: _MembershipDropdown(
+              child: MembershipDropdown(
                 label:
                     '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
                 getOrSetMemberships: widget.getOrSetMemberships,
@@ -316,100 +314,5 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
         ],
       ),
     );
-  }
-}
-
-class _MembershipDropdown extends ConsumerWidget {
-  final Future<Iterable<Membership>> Function() getOrSetMemberships;
-  final void Function(Membership? membership)? onChange;
-  final void Function(Membership? membership)? onSave;
-  final Membership? selectedItem;
-  final String label;
-  final Organization? organization;
-
-  const _MembershipDropdown({
-    required this.getOrSetMemberships,
-    this.selectedItem,
-    required this.label,
-    this.organization,
-    this.onChange,
-    required this.onSave,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return LoadingBuilder<Map<int, AuthService>>(
-      future: ref.watch(orgAuthNotifierProvider),
-      builder: (context, authServiceMap) {
-        return SearchableDropdown<Membership>(
-          selectedItem: selectedItem,
-          label: label,
-          context: context,
-          onChanged: onChange,
-          onSaved: onSave,
-          itemAsString: (u) => u.info + (u.id == null ? ' (API)' : ''),
-          asyncItems: (String filter) async {
-            return _filterMemberships(ref, filter, organization, await getOrSetMemberships());
-          },
-          disableFilter: true,
-          containerBuilder: (context, popupWidget) {
-            return Column(
-              children: [
-                if (authServiceMap[organization?.id] == null)
-                  const PaddedCard(
-                    child: Text(
-                        "⚠ You have not specified any credentials for this organization, therefore you can't search for sensitive data."),
-                  ),
-                Expanded(child: popupWidget),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<List<Membership>> _filterMemberships(
-    WidgetRef ref,
-    String filter,
-    Organization? organization,
-    Iterable<Membership> memberships,
-  ) async {
-    filter = filter.trim().toLowerCase();
-    if (filter.isEmpty) {
-      return memberships.toList();
-    }
-    final number = int.tryParse(filter);
-    if (number == null) {
-      return memberships.where((item) => item.person.fullName.toLowerCase().contains(filter)).toList();
-    }
-
-    // If filter string is a number, search for membership no or at API provider, if present.
-    filter = number.toString();
-    final filteredMemberships = memberships
-        .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
-        .toList();
-
-    const enableApiProviderSearch = true;
-    if (enableApiProviderSearch) {
-      final authService = (await ref.read(orgAuthNotifierProvider))[organization?.id];
-      if (authService != null) {
-        final providerResults = await (await ref.read(dataManagerNotifierProvider)).search(
-          searchTerm: filter,
-          type: Membership,
-          organizationId: organization?.id,
-          authService: authService,
-          includeApiProviderResults: true,
-        );
-        Iterable<Membership> providerMemberships =
-            providerResults[getTableNameFromType(Membership)]?.map((membership) => membership as Membership) ?? [];
-        // Remove all memberships, which are already in the list.
-        providerMemberships =
-            providerMemberships.where((m) => filteredMemberships.where((fm) => fm.no == m.no).isEmpty);
-        filteredMemberships.addAll(providerMemberships);
-      }
-    }
-
-    return filteredMemberships;
   }
 }
