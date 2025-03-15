@@ -232,17 +232,8 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
-    final boutMap = await apiProvider.importBouts(event: entity);
-    final teamMatchBouts = boutMap.keys.indexed.map((indexed) {
-      final (index, bout) = indexed;
-      return TeamMatchBout(
-        pos: index,
-        teamMatch: entity,
-        bout: bout,
-        organization: entity.organization,
-        orgSyncId: bout.orgSyncId,
-      );
-    }).toList();
+    final boutMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
+    final teamMatchBouts = boutMap.keys.toList();
 
     await TeamMatchBoutController().updateOrCreateManyOfOrg(
       teamMatchBouts,

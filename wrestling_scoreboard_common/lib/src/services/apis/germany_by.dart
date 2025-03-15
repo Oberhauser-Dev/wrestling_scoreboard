@@ -366,13 +366,11 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     });
     final memberships = (await Future.wait(
       teamMatches.map((teamMatch) async {
-        final bouts = await importBouts(event: teamMatch);
-        final homeMemberships = bouts.keys
-            .where((bout) => bout.r?.membership.club == club)
-            .map((bout) => bout.r!.membership);
-        final opponentMemberships = bouts.keys
-            .where((bout) => bout.b?.membership.club == club)
-            .map((bout) => bout.b!.membership);
+        final bouts = await importTeamMatchBouts(teamMatch: teamMatch);
+        final homeMemberships =
+            bouts.keys.where((tmb) => tmb.bout.r?.membership.club == club).map((tmb) => tmb.bout.r!.membership);
+        final opponentMemberships =
+            bouts.keys.where((tmb) => tmb.bout.b?.membership.club == club).map((tmb) => tmb.bout.b!.membership);
         return [...homeMemberships, ...opponentMemberships].nonNulls;
       }),
     ))
@@ -498,199 +496,190 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }
 
   @override
-  Future<Map<Bout, Iterable<BoutAction>>> importBouts({required WrestlingEvent event}) async {
-    if (event is TeamMatch) {
-      final competitionJson = (await _getCompetition(
-          seasonId: event.league!.startDate.year.toString(), competitionId: event.orgSyncId!))['competition'];
-      if (competitionJson == null) return {};
-      final List<dynamic> boutListJson = competitionJson['_boutList'];
-      if (boutListJson.isEmpty) return {};
-      try {
-        final boutActionMapEntries = await Future.wait(boutListJson.map((boutJson) async {
-          final weightClassMatch = RegExp(r'(\d+)(\D*)').firstMatch(boutJson['weightClass'])!;
-          final suffix = weightClassMatch.group(2)?.trim() ?? '';
-          var weightClass = WeightClass(
-            weight: int.parse(weightClassMatch.group(1)!), // Group 0 is the whole matched string
-            suffix: suffix.isEmpty ? null : suffix,
-            style: boutJson['style'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
-            unit: WeightUnit.kilogram,
+  Future<Map<TeamMatchBout, Iterable<BoutAction>>> importTeamMatchBouts({required TeamMatch teamMatch}) async {
+    final competitionJson = (await _getCompetition(
+        seasonId: teamMatch.league!.startDate.year.toString(), competitionId: teamMatch.orgSyncId!))['competition'];
+    if (competitionJson == null) return {};
+    final List<dynamic> boutListJson = competitionJson['_boutList'];
+    if (boutListJson.isEmpty) return {};
+    try {
+      final boutActionMapEntries = await Future.wait(boutListJson.indexed.map((indexedEntry) async {
+        final (index, boutJson) = indexedEntry;
+        final weightClassMatch = RegExp(r'(\d+)(\D*)').firstMatch(boutJson['weightClass'])!;
+        final suffix = weightClassMatch.group(2)?.trim() ?? '';
+        var weightClass = WeightClass(
+          weight: int.parse(weightClassMatch.group(1)!), // Group 0 is the whole matched string
+          suffix: suffix.isEmpty ? null : suffix,
+          style: boutJson['style'] == 'GR' ? WrestlingStyle.greco : WrestlingStyle.free,
+          unit: WeightUnit.kilogram,
+        );
+        try {
+          // TODO also search for league weight class first
+          final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(_getWeightClassOrgSyncId(
+              parentOrgSyncId: teamMatch.league!.division.orgSyncId!,
+              weightClass: weightClass,
+              seasonPartition: teamMatch.seasonPartition ?? 0));
+          weightClass = divisionWeightClass.weightClass;
+        } catch (e, st) {
+          log.severe(
+            'The weight class ${weightClass.name} of division ${teamMatch.league!.division.fullname} cannot be found. '
+            'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n'
+            '$e\n'
+            '$st',
           );
+          return null;
+        }
+
+        final homeSyncId = int.tryParse(boutJson['homeWrestlerId'] ?? '');
+        final homeMembership = homeSyncId == null
+            ? null
+            : await _getMembership(
+                passCode: homeSyncId, getClub: (clubId) async => await _getSingleBySyncId<Club>(clubId));
+
+        final opponentSyncId = int.tryParse(boutJson['opponentWrestlerId'] ?? '');
+        final opponentMembership = opponentSyncId == null
+            ? null
+            : await _getMembership(
+                passCode: opponentSyncId, getClub: (clubId) async => await _getSingleBySyncId<Club>(clubId));
+
+        BoutResult? getBoutResult(String? result) {
           try {
-            // TODO also search for league weight class first
-            final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(_getWeightClassOrgSyncId(
-                parentOrgSyncId: event.league!.division.orgSyncId!,
-                weightClass: weightClass,
-                seasonPartition: event.seasonPartition ?? 0));
-            weightClass = divisionWeightClass.weightClass;
+            return switch (result) {
+              'PS' => BoutResult.vpo, // Punktesieg
+              'PS1' => BoutResult.vpo, // Punktesieg, Verlierer hat Punkte
+              'SS' => BoutResult.vfa, // Schultersieg
+              'TÜ' => BoutResult.vsu, // Technische Überlegenheit
+              'TÜ1' => BoutResult.vsu, // Technische Überlegenheit, Verlierer hat Punkte
+              'ÜG' => BoutResult.vfo, // Übergewicht
+              'UG' => BoutResult.vfo, // Untergewicht
+              'AS' => BoutResult.vin, // Aufgabesieg
+              'AS2' => BoutResult.bothVin, // Beide verletzt
+              'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit
+              'KL' => BoutResult.vfo, // Kampfloser Sieger
+              'DN' => BoutResult.vfo, // Disqualifikation wegen Nichtantritt
+              'DQ' => BoutResult.dsq,
+              'DS' => BoutResult.dsq, // Disqualifikation aufgrund von Passivität
+              '1M.' => BoutResult.dsq, // Doppelstart
+              'o.W.' => BoutResult.bothVfo, // ohne Wertung
+              'DQ2' => BoutResult.bothDsq,
+              '' => null,
+              null => null,
+              _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),
+            };
           } catch (e, st) {
-            log.severe(
-              'The weight class ${weightClass.name} of division ${event.league!.division.fullname} cannot be found. '
-              'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n'
-              '$e\n'
-              '$st',
-            );
-            return null;
+            log.severe('Could not parse bout result $result', e, st);
+            rethrow;
           }
+        }
 
-          final homeSyncId = int.tryParse(boutJson['homeWrestlerId'] ?? '');
-          final homeMembership = homeSyncId == null
+        final classificationPointsHome = int.tryParse(boutJson['homeWrestlerPoints']);
+        final classificationPointsOpponent = int.tryParse(boutJson['opponentWrestlerPoints']);
+        BoutRole? winnerRole;
+        if ((classificationPointsHome ?? 0) > (classificationPointsOpponent ?? 0)) {
+          winnerRole = BoutRole.red;
+        } else if ((classificationPointsHome ?? 0) < (classificationPointsOpponent ?? 0)) {
+          winnerRole = BoutRole.blue;
+        }
+
+        final String boutDurationJson = boutJson['annotation']?['1']?['duration']?['value'] ?? '';
+        final boutDurationSeconds = int.tryParse(boutDurationJson);
+        final boutDuration = boutDurationSeconds == null ? Duration.zero : Duration(seconds: boutDurationSeconds);
+
+        var bout = Bout(
+          orgSyncId: '${teamMatch.orgSyncId}_${weightClass.name}_${weightClass.style.name}'.replaceAll(' ', '_'),
+          organization: organization,
+          duration: boutDuration,
+          result: getBoutResult(boutJson['result']),
+          winnerRole: winnerRole,
+          r: homeMembership == null
               ? null
-              : await _getMembership(
-                  passCode: homeSyncId, getClub: (clubId) async => await _getSingleBySyncId<Club>(clubId));
-
-          final opponentSyncId = int.tryParse(boutJson['opponentWrestlerId'] ?? '');
-          final opponentMembership = opponentSyncId == null
+              : AthleteBoutState(classificationPoints: classificationPointsHome, membership: homeMembership),
+          b: opponentMembership == null
               ? null
-              : await _getMembership(
-                  passCode: opponentSyncId, getClub: (clubId) async => await _getSingleBySyncId<Club>(clubId));
+              : AthleteBoutState(
+                  classificationPoints: classificationPointsOpponent,
+                  membership: opponentMembership,
+                ),
+        );
 
-          BoutResult? getBoutResult(String? result) {
-            try {
-              return switch (result) {
-                'PS' => BoutResult.vpo, // Punktesieg
-                'PS1' => BoutResult.vpo, // Punktesieg, Verlierer hat Punkte
-                'SS' => BoutResult.vfa, // Schultersieg
-                'TÜ' => BoutResult.vsu, // Technische Überlegenheit
-                'TÜ1' => BoutResult.vsu, // Technische Überlegenheit, Verlierer hat Punkte
-                'ÜG' => BoutResult.vfo, // Übergewicht
-                'UG' => BoutResult.vfo, // Untergewicht
-                'AS' => BoutResult.vin, // Aufgabesieg
-                'AS2' => BoutResult.bothVin, // Beide verletzt
-                'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit
-                'KL' => BoutResult.vfo, // Kampfloser Sieger
-                'DN' => BoutResult.vfo, // Disqualifikation wegen Nichtantritt
-                'DQ' => BoutResult.dsq,
-                'DS' => BoutResult.dsq, // Disqualifikation aufgrund von Passivität
-                '1M.' => BoutResult.dsq, // Doppelstart
-                'o.W.' => BoutResult.bothVfo, // ohne Wertung
-                'DQ2' => BoutResult.bothDsq,
-                '' => null,
-                null => null,
-                _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),
-              };
-            } catch (e, st) {
-              log.severe('Could not parse bout result $result', e, st);
-              rethrow;
-            }
-          }
-
-          final classificationPointsHome = int.tryParse(boutJson['homeWrestlerPoints']);
-          final classificationPointsOpponent = int.tryParse(boutJson['opponentWrestlerPoints']);
-          BoutRole? winnerRole;
-          if ((classificationPointsHome ?? 0) > (classificationPointsOpponent ?? 0)) {
-            winnerRole = BoutRole.red;
-          } else if ((classificationPointsHome ?? 0) < (classificationPointsOpponent ?? 0)) {
-            winnerRole = BoutRole.blue;
-          }
-
-          final String boutDurationJson = boutJson['annotation']?['1']?['duration']?['value'] ?? '';
-          final boutDurationSeconds = int.tryParse(boutDurationJson);
-          final boutDuration = boutDurationSeconds == null ? Duration.zero : Duration(seconds: boutDurationSeconds);
-
-          var bout = Bout(
-            orgSyncId: '${event.orgSyncId}_${weightClass.name}_${weightClass.style.name}'.replaceAll(' ', '_'),
-            organization: organization,
-            duration: boutDuration,
-            weightClass: weightClass,
-            result: getBoutResult(boutJson['result']),
-            winnerRole: winnerRole,
-            r: homeMembership == null
-                ? null
-                : AthleteBoutState(
-                    classificationPoints: classificationPointsHome,
-                    membership: TeamMatchParticipation(
-                      // TODO: Participation is shared
-                      lineup: event.home,
-                      membership: homeMembership,
-                      weight: null, // TODO: Weight not available
-                      weightClass: weightClass,
-                    ),
-                  ),
-            b: opponentMembership == null
-                ? null
-                : AthleteBoutState(
-                    classificationPoints: classificationPointsOpponent,
-                    membership: TeamMatchParticipation(
-                      // TODO: Participation is shared
-                      lineup: event.guest,
-                      membership: opponentMembership,
-                      weight: null, // TODO: Weight not available
-                      weightClass: weightClass,
-                    ),
-                  ),
-          );
-
-          BoutAction? parseActionStr(String str) {
-            final match = RegExp(r'(\d+|[A-Za-z])([BRbr])(\d*)').firstMatch(str);
-            if (match == null) throw Exception('Could not parse action "$str" in bout $boutJson.');
-            final actionStr = match.group(1)!; // Group 0 is the whole matched string
-            int? pointCount;
-            BoutActionType actionType;
-            switch (actionStr.toUpperCase()) {
-              case 'A':
-                if (weightClass.style == WrestlingStyle.greco) {
-                  throw Exception('Activity Time "A" should be only available in free style: $boutJson');
-                }
-                // Germany handles passivity as activity period 'A' in free style.
+        BoutAction? parseActionStr(String str) {
+          final match = RegExp(r'(\d+|[A-Za-z])([BRbr])(\d*)').firstMatch(str);
+          if (match == null) throw Exception('Could not parse action "$str" in bout $boutJson.');
+          final actionStr = match.group(1)!; // Group 0 is the whole matched string
+          int? pointCount;
+          BoutActionType actionType;
+          switch (actionStr.toUpperCase()) {
+            case 'A':
+              if (weightClass.style == WrestlingStyle.greco) {
+                throw Exception('Activity Time "A" should be only available in free style: $boutJson');
+              }
+              // Germany handles passivity as activity period 'A' in free style.
+              actionType = BoutActionType.passivity;
+            case 'P':
+              if (weightClass.style == WrestlingStyle.greco) {
                 actionType = BoutActionType.passivity;
-              case 'P':
-                if (weightClass.style == WrestlingStyle.greco) {
-                  actionType = BoutActionType.passivity;
-                } else {
-                  // Germany handles the first a verbal admonition before an activity period as passivity 'P' in free style.
-                  actionType = BoutActionType.verbal;
-                }
-              case 'V':
+              } else {
+                // Germany handles the first a verbal admonition before an activity period as passivity 'P' in free style.
                 actionType = BoutActionType.verbal;
-              case 'O':
-                actionType = BoutActionType.caution;
-              case 'D':
-                actionType = BoutActionType.dismissal;
-              case 'L': // Leg Foul
-                actionType = BoutActionType.caution;
-              case 'C':
-              // TODO: unknown bout action
-              // https://www.brv-ringen.de/Api/dev/cs/?op=getCompetition&sid=2023&cid=006108b
-              default:
-                actionType = BoutActionType.points;
-                pointCount = int.tryParse(actionStr);
-                if (pointCount == null) {
-                  log.warning('Action type "$actionStr" could not be parsed: $boutJson. The action is ignored.');
-                  return null;
-                }
-            }
-
-            return BoutAction(
-              pointCount: pointCount,
-              // Group 0 is the whole matched string
-              actionType: actionType,
-              bout: bout,
-              role: match.group(2)! == 'R' ? BoutRole.red : BoutRole.blue,
-              duration: Duration(seconds: int.parse(match.group(3)!)),
-            );
+              }
+            case 'V':
+              actionType = BoutActionType.verbal;
+            case 'O':
+              actionType = BoutActionType.caution;
+            case 'D':
+              actionType = BoutActionType.dismissal;
+            case 'L': // Leg Foul
+              actionType = BoutActionType.caution;
+            case 'C':
+            // TODO: unknown bout action
+            // https://www.brv-ringen.de/Api/dev/cs/?op=getCompetition&sid=2023&cid=006108b
+            default:
+              actionType = BoutActionType.points;
+              pointCount = int.tryParse(actionStr);
+              if (pointCount == null) {
+                log.warning('Action type "$actionStr" could not be parsed: $boutJson. The action is ignored.');
+                return null;
+              }
           }
 
-          final String boutActionsJson = boutJson['annotation']?['1']?['points']?['value'] ?? '';
-          final Iterable<BoutAction> boutActions = boutActionsJson.split(',').where((str) => str.isNotEmpty).map((str) {
-            try {
-              return parseActionStr(str);
-            } catch (e, st) {
-              log.severe('Invalid action string format: $str\n$boutJson', e, st);
-              rethrow;
-            }
-          }).nonNulls;
+          return BoutAction(
+            pointCount: pointCount,
+            // Group 0 is the whole matched string
+            actionType: actionType,
+            bout: bout,
+            role: match.group(2)! == 'R' ? BoutRole.red : BoutRole.blue,
+            duration: Duration(seconds: int.parse(match.group(3)!)),
+          );
+        }
 
-          // Duration is not available in the new RDB spec, so use the last action as duration.
-          if (bout.duration == Duration.zero && boutActions.isNotEmpty) {
-            bout = bout.copyWith(duration: boutActions.last.duration);
+        final String boutActionsJson = boutJson['annotation']?['1']?['points']?['value'] ?? '';
+        final Iterable<BoutAction> boutActions = boutActionsJson.split(',').where((str) => str.isNotEmpty).map((str) {
+          try {
+            return parseActionStr(str);
+          } catch (e, st) {
+            log.severe('Invalid action string format: $str\n$boutJson', e, st);
+            rethrow;
           }
-          return MapEntry(bout, boutActions);
-        }));
-        return Map.fromEntries(boutActionMapEntries.nonNulls);
-      } on Exception catch (e, st) {
-        log.severe('Could not import bouts from bout list: $boutListJson', e, st);
-        rethrow;
-      }
+        }).nonNulls;
+
+        // Duration is not available in the new RDB spec, so use the last action as duration.
+        if (bout.duration == Duration.zero && boutActions.isNotEmpty) {
+          bout = bout.copyWith(duration: boutActions.last.duration);
+        }
+        final teamMatchBout = TeamMatchBout(
+          bout: bout,
+          weightClass: weightClass,
+          teamMatch: teamMatch,
+          organization: organization,
+          pos: index,
+          orgSyncId: bout.orgSyncId,
+        );
+        return MapEntry(teamMatchBout, boutActions);
+      }));
+      return Map.fromEntries(boutActionMapEntries.nonNulls);
+    } on Exception catch (e, st) {
+      log.severe('Could not import bouts from bout list: $boutListJson', e, st);
+      rethrow;
     }
     throw UnimplementedError();
   }

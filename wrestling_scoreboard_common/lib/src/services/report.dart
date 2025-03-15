@@ -19,11 +19,11 @@ enum WrestlingReportProvider {
 abstract class WrestlingReporter {
   Organization get organization;
 
-  String exportTeamMatchReport(TeamMatch teamMatch, Map<Bout, List<BoutAction>> boutMap);
+  String exportTeamMatchReport(TeamMatch teamMatch, Map<TeamMatchBout, List<BoutAction>> boutMap);
 
-  (TeamMatch teamMatch, Map<Bout, List<BoutAction>> boutMap) importTeamMatchReport(String report);
+  (TeamMatch teamMatch, Map<TeamMatchBout, List<BoutAction>> boutMap) importTeamMatchReport(String report);
 
-  String exportCompetitionReport(Competition competition, Map<Bout, List<BoutAction>> boutMap);
+  String exportCompetitionReport(Competition competition, Map<CompetitionBout, List<BoutAction>> boutMap);
 
-  (Competition competition, Map<Bout, List<BoutAction>> boutMap) importCompetitionReport(String report);
+  (Competition competition, Map<CompetitionBout, List<BoutAction>> boutMap) importCompetitionReport(String report);
 }

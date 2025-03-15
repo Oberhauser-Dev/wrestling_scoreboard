@@ -80,7 +80,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
   }
 
   @override
-  String exportTeamMatchReport(TeamMatch teamMatch, Map<Bout, List<BoutAction>> boutMap) {
+  String exportTeamMatchReport(TeamMatch teamMatch, Map<TeamMatchBout, List<BoutAction>> boutMap) {
     final bouts = boutMap.keys;
     final teamMatchInfos = <Object>[
       'rdbi',
@@ -99,12 +99,13 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       _handleComment(teamMatch.comment ?? ''),
     ].join(';');
     final boutInfos = boutMap.entries.map((entry) {
-      final bout = entry.key;
+      final teamMatchBout = entry.key;
+      final bout = teamMatchBout.bout;
       var points = entry.value.asMap().entries.map((boutActionEntry) {
         final boutActionIndex = boutActionEntry.key;
         final action = boutActionEntry.value;
         String actionValue = action.actionValue;
-        if (bout.weightClass?.style == WrestlingStyle.free) {
+        if (teamMatchBout.weightClass?.style == WrestlingStyle.free) {
           // In germany: 'P' is handled as 'A' activity period, whereas a verbal admonition 'V' before a passivity ('P' / 'A' in Germany) is written as first 'P'.
           if (action.actionType == BoutActionType.passivity) {
             actionValue = 'A';
@@ -129,16 +130,16 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
         duration = '(duration ${bout.duration.inSeconds})';
       }
       return <Object>[
-        bout.weightClass?.weight ?? '', // 0:weightClass
-        bout.weightClass?.style == WrestlingStyle.greco ? 'GR' : 'LL', // 1:stil
-        bout.r?.participation.membership.no ?? '', // 2:HeimLiz
-        _sanitizeString(bout.r?.participation.membership.person.surname ?? ''),
-        _sanitizeString(bout.r?.participation.membership.person.prename ?? ''),
-        bout.r?.participation.membership.person.toStatus() ?? '',
-        bout.b?.participation.membership.no ?? '', // 6:GastLiz
-        _sanitizeString(bout.b?.participation.membership.person.surname ?? ''),
-        _sanitizeString(bout.b?.participation.membership.person.prename ?? ''),
-        bout.b?.participation.membership.person.toStatus() ?? '',
+        teamMatchBout.weightClass?.weight ?? '', // 0:weightClass
+        teamMatchBout.weightClass?.style == WrestlingStyle.greco ? 'GR' : 'LL', // 1:stil
+        bout.r?.membership.no ?? '', // 2:HeimLiz
+        _sanitizeString(bout.r?.membership.person.surname ?? ''),
+        _sanitizeString(bout.r?.membership.person.prename ?? ''),
+        bout.r?.membership.person.toStatus() ?? '',
+        bout.b?.membership.no ?? '', // 6:GastLiz
+        _sanitizeString(bout.b?.membership.person.surname ?? ''),
+        _sanitizeString(bout.b?.membership.person.prename ?? ''),
+        bout.b?.membership.person.toStatus() ?? '',
         bout.r?.classificationPoints ?? 0, // 10:HeimPunkte
         bout.b?.classificationPoints ?? 0, // 11:GastPunkte
         bout.result?.toGerman ?? '', // 12:Ergebnis
@@ -149,20 +150,20 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
   }
 
   @override
-  String exportCompetitionReport(Competition competition, Map<Bout, List<BoutAction>> boutMap) {
+  String exportCompetitionReport(Competition competition, Map<CompetitionBout, List<BoutAction>> boutMap) {
     // TODO: implement reportCompetition
     // https://de.wikipedia.org/wiki/ISO_8859
     throw UnimplementedError();
   }
 
   @override
-  (Competition, Map<Bout, List<BoutAction>>) importCompetitionReport(String report) {
+  (Competition, Map<CompetitionBout, List<BoutAction>>) importCompetitionReport(String report) {
     // TODO: implement importCompetitionReport
     throw UnimplementedError();
   }
 
   @override
-  (TeamMatch, Map<Bout, List<BoutAction>>) importTeamMatchReport(String report) {
+  (TeamMatch, Map<TeamMatchBout, List<BoutAction>>) importTeamMatchReport(String report) {
     // TODO: implement importTeamMatchReport
     throw UnimplementedError();
   }

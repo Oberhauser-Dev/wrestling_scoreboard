@@ -615,7 +615,7 @@ void main() {
       });
 
       test('TeamMatch Bouts', () async {
-        final bouts = await wrestlingApi.importBouts(event: testTeamMatch);
+        final teamMatchBouts = await wrestlingApi.importTeamMatchBouts(teamMatch: testTeamMatch);
         final weightClass = WeightClass(
           weight: 61,
           style: WrestlingStyle.free,
@@ -624,116 +624,113 @@ void main() {
         );
         // TODO: Evaluate this bout: https://www.brv-ringen.de/index.php?option=com_rdb&view=rdb&Itemid=512&tk=cs&sid=2023&yid=M&menu=1&op=lc&lid=Bayernliga&cntl=Ergebnisse&from=ll&cid=005029c
         // Why activity and passivity at different times, or points at different times?
-        final expectedBout = Bout(
+        final bout = Bout(
           orgSyncId: '005029c_61_kg_free',
           duration: Duration(minutes: 6),
           result: BoutResult.vpo,
-          weightClass: weightClass,
           winnerRole: BoutRole.blue,
           pool: null,
           organization: organizationNRW,
           r: AthleteBoutState(
             classificationPoints: 0,
-            membership: TeamMatchParticipation(
-              membership: testMembership,
-              lineup: testLineupUntergriesbach,
-              weight: null,
-              weightClass: weightClass,
-            ),
+            membership: testMembership,
           ),
           b: AthleteBoutState(
             classificationPoints: 1,
-            membership: TeamMatchParticipation(
-              membership: Membership(
-                no: '4321',
-                orgSyncId: '10142-4321',
+            membership: Membership(
+              no: '4321',
+              orgSyncId: '10142-4321',
+              organization: organizationNRW,
+              club: testClubBerchtesgaden,
+              person: Person(
+                orgSyncId: 'Tobias_Müller_2000-03-02',
                 organization: organizationNRW,
-                club: testClubBerchtesgaden,
-                person: Person(
-                  orgSyncId: 'Tobias_Müller_2000-03-02',
-                  organization: organizationNRW,
-                  prename: 'Tobias',
-                  surname: 'Müller',
-                  gender: Gender.male,
-                  birthDate: DateTime.utc(2000, 3, 02),
-                  nationality: Countries.deu,
-                ),
+                prename: 'Tobias',
+                surname: 'Müller',
+                gender: Gender.male,
+                birthDate: DateTime.utc(2000, 3, 02),
+                nationality: Countries.deu,
               ),
-              lineup: testLineupBerchtesgaden,
-              weight: null,
-              weightClass: weightClass,
             ),
           ),
         );
+        final expectedBout = TeamMatchBout(
+          weightClass: weightClass,
+          bout: bout,
+          pos: 0,
+          teamMatch: testTeamMatch,
+          organization: organizationNRW,
+          orgSyncId: '005029c_61_kg_free',
+        );
         // "2R26,2B37,PB98,AB124,1R156,PR252,AR292,1B326,1R337,AB360,2B360"
-        expect(bouts, <Bout, Iterable<BoutAction>>{
+        expect(teamMatchBouts, <TeamMatchBout, Iterable<BoutAction>>{
           expectedBout: <BoutAction>[
             BoutAction(
                 role: BoutRole.red,
                 actionType: BoutActionType.points,
                 duration: Duration(seconds: 26),
                 pointCount: 2,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.blue,
                 actionType: BoutActionType.points,
                 duration: Duration(seconds: 37),
                 pointCount: 2,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.blue,
                 actionType: BoutActionType.verbal,
                 duration: Duration(seconds: 98),
                 pointCount: null,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.blue,
                 actionType: BoutActionType.passivity,
                 duration: Duration(seconds: 124),
                 pointCount: null,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.red,
                 actionType: BoutActionType.points,
                 duration: Duration(seconds: 156),
                 pointCount: 1,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.red,
                 actionType: BoutActionType.verbal,
                 duration: Duration(seconds: 252),
                 pointCount: null,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.red,
                 actionType: BoutActionType.passivity,
                 duration: Duration(seconds: 292),
                 pointCount: null,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.blue,
                 actionType: BoutActionType.points,
                 duration: Duration(seconds: 326),
                 pointCount: 1,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.red,
                 actionType: BoutActionType.points,
                 duration: Duration(seconds: 337),
                 pointCount: 1,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.blue,
                 actionType: BoutActionType.passivity,
                 duration: Duration(seconds: 360),
                 pointCount: null,
-                bout: expectedBout),
+                bout: bout),
             BoutAction(
                 role: BoutRole.blue,
                 actionType: BoutActionType.points,
                 duration: Duration(seconds: 360),
                 pointCount: 2,
-                bout: expectedBout),
+                bout: bout),
           ],
         });
       });

@@ -65,7 +65,8 @@ class TeamMatchOverview extends ConsumerWidget {
                 ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.home),
               ).future);
 
-              final guestParticipations = await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
+              final guestParticipations =
+                  await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
                 ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.guest),
               ).future);
 
@@ -96,9 +97,9 @@ class TeamMatchOverview extends ConsumerWidget {
                   onPressed: () async {
                     final reporter = match.organization?.getReporter();
                     if (reporter != null) {
-                      final bouts = await _getBouts(ref, match: match);
+                      final tmbouts = await _getBouts(ref, match: match);
                       final boutMap = Map.fromEntries(await Future.wait(
-                          bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
+                          tmbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout)))));
                       final reportStr = reporter.exportTeamMatchReport(match, boutMap);
 
                       await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
@@ -278,8 +279,9 @@ class TeamMatchOverview extends ConsumerWidget {
         });
   }
 
-  Future<List<Bout>> _getBouts(WidgetRef ref, {required TeamMatch match}) => ref.readAsync(
-      manyDataStreamProvider<Bout, TeamMatch>(ManyProviderData<Bout, TeamMatch>(filterObject: match)).future);
+  Future<List<TeamMatchBout>> _getBouts(WidgetRef ref, {required TeamMatch match}) => ref.readAsync(
+      manyDataStreamProvider<TeamMatchBout, TeamMatch>(ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match))
+          .future);
 
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
       manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);

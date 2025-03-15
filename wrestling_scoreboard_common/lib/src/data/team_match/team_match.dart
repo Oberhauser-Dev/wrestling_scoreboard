@@ -87,12 +87,12 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       });
   }
 
-  static int getHomePoints(Iterable<Bout> bouts) {
-    return getClassificationPoints(bouts.map((bout) => bout.r));
+  static int getHomePoints(Iterable<TeamMatchBout> bouts) {
+    return getClassificationPoints(bouts.map((tmb) => tmb.bout.r));
   }
 
-  static int getGuestPoints(Iterable<Bout> bouts) {
-    return getClassificationPoints(bouts.map((bout) => bout.b));
+  static int getGuestPoints(Iterable<TeamMatchBout> bouts) {
+    return getClassificationPoints(bouts.map((tmb) => tmb.bout.b));
   }
 
   static int getClassificationPoints(Iterable<AthleteBoutState?> participationStates) {

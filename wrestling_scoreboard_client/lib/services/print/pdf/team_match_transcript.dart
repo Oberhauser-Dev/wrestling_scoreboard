@@ -41,8 +41,8 @@ class TeamMatchTranscript extends PdfSheet {
     final doc = Document();
 
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
-    final homePoints = TeamMatch.getHomePoints(bouts);
-    final guestPoints = TeamMatch.getGuestPoints(bouts);
+    final homePoints = TeamMatch.getHomePoints(teamMatchBoutActions.keys);
+    final guestPoints = TeamMatch.getGuestPoints(teamMatchBoutActions.keys);
     final winner = homePoints > guestPoints
         ? teamMatch.home.team.name
         : homePoints < guestPoints
@@ -367,11 +367,11 @@ class TeamMatchTranscript extends PdfSheet {
           ),
           ...buildTeamFooter(BoutRole.red),
           Container(color: BoutRole.red.pdfColor, height: titleCellHeight),
-          buildTextCell(TeamMatch.getHomePoints(bouts).toString(),
+          buildTextCell(TeamMatch.getHomePoints(teamMatchBoutActions.keys).toString(),
               borderColor: BoutRole.red.pdfColor, height: titleCellHeight, fontSize: headerFontSize, borderWidth: 2.0),
           Container(height: titleCellHeight),
           Container(height: titleCellHeight),
-          buildTextCell(TeamMatch.getGuestPoints(bouts).toString(),
+          buildTextCell(TeamMatch.getGuestPoints(teamMatchBoutActions.keys).toString(),
               borderColor: BoutRole.blue.pdfColor, height: titleCellHeight, fontSize: headerFontSize, borderWidth: 2.0),
           Container(color: BoutRole.blue.pdfColor, height: titleCellHeight),
           ...buildTeamFooter(BoutRole.blue),
