@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
@@ -24,7 +26,11 @@ class LoadingBuilder<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<T>(
-      future: ref.read(networkTimeoutNotifierProvider).then((timeout) => future.timeout(timeout)),
+      future: ref.read(networkTimeoutNotifierProvider).then((timeout) => future.timeout(
+            timeout,
+            onTimeout: () =>
+                throw TimeoutException('LoadingBuilder could not load $T and initialData $initialData', timeout),
+          )),
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
           return onException?.call(context, snapshot.error!, stackTrace: snapshot.stackTrace) ??

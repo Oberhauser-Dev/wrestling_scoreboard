@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:pub_semver/pub_semver.dart';
@@ -91,10 +92,9 @@ class MockDataManager extends DataManager {
       List<WeightClass> weightClasses;
       final homeParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.home);
       final guestParticipations =
-      await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
+          await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
       teamParticipations = [homeParticipations, guestParticipations];
       weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
-
 
       // Generate new bouts
       final newBouts = await wrestlingEvent.generateBouts(teamParticipations, weightClasses);
@@ -103,15 +103,11 @@ class MockDataManager extends DataManager {
       // Add if not exists
       final random = Random();
       for (var element in newBouts) {
-        if (teamMatchBoutsAll
-            .where((TeamMatchBout f) => f.equalDuringBout(element))
-            .isEmpty) {
+        if (teamMatchBoutsAll.where((TeamMatchBout f) => f.equalDuringBout(element)).isEmpty) {
           do {
             // Generate new id as long it is not taken yet
             element = element.copyWithId(random.nextInt(0x7fffffff));
-          } while (teamMatchBoutsAll
-              .where((f) => f.id == element.id)
-              .isNotEmpty);
+          } while (teamMatchBoutsAll.where((f) => f.id == element.id).isNotEmpty);
           teamMatchBoutsAll.add(element);
         }
         newBoutsWithId.add(element);
@@ -490,7 +486,12 @@ class MockDataManager extends DataManager {
 
 class MockWebSocketManager implements WebSocketManager {
   MockWebSocketManager(this.dataManager, {String? url}) {
-    // TODO: implement
+    onWebSocketConnection.stream.listen((connectionState) async {
+      if (connectionState == WebSocketConnectionState.connecting) {
+        onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
+      }
+    });
+    onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
   }
 
   @override
@@ -498,8 +499,7 @@ class MockWebSocketManager implements WebSocketManager {
 
   @override
   addToSink(String val) {
-    // TODO: implement addToSink
-    throw UnimplementedError();
+    developer.log('addToSink: $val');
   }
 
   @override
