@@ -29,13 +29,22 @@ Map<String, dynamic> manyToJson(
   };
 }
 
-typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({required CRUD operation, required T single});
-typedef HandleSingleRawCallback = Future<int> Function<T extends DataObject>(
-    {required CRUD operation, required Map<String, dynamic> single});
-typedef HandleManyCallback = Future<void> Function<T extends DataObject>(
-    {required CRUD operation, required ManyDataObject<T> many});
-typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>(
-    {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many});
+typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({
+  required CRUD operation,
+  required T single,
+});
+typedef HandleSingleRawCallback = Future<int> Function<T extends DataObject>({
+  required CRUD operation,
+  required Map<String, dynamic> single,
+});
+typedef HandleManyCallback = Future<void> Function<T extends DataObject>({
+  required CRUD operation,
+  required ManyDataObject<T> many,
+});
+typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>({
+  required CRUD operation,
+  required ManyDataObject<Map<String, dynamic>> many,
+});
 
 Map<String, dynamic> parseSingleRawJson(Map<String, dynamic> json) {
   return json['data'];
