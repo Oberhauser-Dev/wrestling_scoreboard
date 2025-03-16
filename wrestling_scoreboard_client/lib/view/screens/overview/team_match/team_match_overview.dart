@@ -90,8 +90,9 @@ class TeamMatchOverview extends ConsumerWidget {
             label: localizations.match,
             details: '${match.home.team.name} - ${match.guest.team.name}',
             actions: [
-              ConditionalOrganizationImportAction(
-                  id: id, organization: match.organization!, importType: OrganizationImportType.teamMatch),
+              if (match.organization != null)
+                ConditionalOrganizationImportAction(
+                    id: id, organization: match.organization!, importType: OrganizationImportType.teamMatch),
               // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
               IconButton(
                   onPressed: () async {

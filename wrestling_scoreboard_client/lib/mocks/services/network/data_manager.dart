@@ -44,6 +44,9 @@ class MockDataManager extends DataManager {
           if (filterObject is Competition) return getBoutsOfCompetition(filterObject).cast<T>();
           if (filterObject is TeamMatch) return getBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (BoutAction):
+          if (filterObject is Bout) return getBoutActionsOfBout(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (BoutResultRule):
           if (filterObject is BoutConfig) return getBoutResultRulesOfBoutConfig(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
@@ -67,6 +70,9 @@ class MockDataManager extends DataManager {
           if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
           if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (LeagueWeightClass):
+          if (filterObject is League) return getLeagueWeightClassesOfLeague(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Membership):
           if (filterObject is Club) return getMembershipsOfClub(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
@@ -81,6 +87,7 @@ class MockDataManager extends DataManager {
           if (filterObject is League) return getTeamsOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (TeamMatch):
+          if (filterObject is League) return getTeamMatchesOfLeague(filterObject).cast<T>();
           if (filterObject is Team) return getTeamMatchesOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (TeamMatchBout):

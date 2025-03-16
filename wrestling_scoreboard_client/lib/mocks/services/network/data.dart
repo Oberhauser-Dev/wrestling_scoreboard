@@ -118,32 +118,6 @@ Membership b2 = Membership(id: 6, person: p6, club: _guestClub);
 Membership b3 = Membership(id: 7, person: p7, club: _guestClub);
 Membership b4 = Membership(id: 8, person: p8, club: _guestClub);
 
-final List<Club> _clubs = [_homeClub, _guestClub];
-final List<BoutAction> _boutActions = []; // TODO fill
-final List<Organization> _organizations = [_organization, _organization2];
-final List<Division> _divisions = [_juniorDivision, _adultDivision];
-final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
-final List<DivisionWeightClass> _divisionWeightClasses = []; // TODO fill
-final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
-final List<TeamLineup> _lineups = [];
-final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
-final List<TeamMatchParticipation> _participations = [];
-final List<AthleteBoutState> _participantStates = []; // TODO fill
-final List<Person> _persons = [p1, p2, p3, p4, p5, p6, p7, p8];
-final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
-final List<TeamClubAffiliation> _teamClubAffiliations = [
-  _homeTeamAffiliation,
-  _homeTeamJuniorsAffiliation,
-  _guestTeamAffiliation
-];
-final List<TeamMatch> _teamMatches = [initMenRPWMatch(), initJnRPWMatch()];
-final List<TeamMatchBout> _teamMatchBouts = [];
-final List<Competition> _competitions = [];
-final List<CompetitionBout> _competitionBouts = [];
-final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
-final List<BoutConfig> _boutConfigs = [_boutConfig];
-final List<BoutResultRule> _boutResultRules = []; // TODO fill
-
 TeamMatch initMenRPWMatch() {
   TeamLineup home = TeamLineup(id: 1, team: _homeTeam);
   TeamLineup guest = TeamLineup(id: 2, team: _guestTeam);
@@ -164,20 +138,24 @@ TeamMatch initMenRPWMatch() {
   Person timeKeeper = const Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
   Person transcriptWriter = const Person(id: 12, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
   return TeamMatch(
-      id: 1,
-      no: '123456',
-      home: home,
-      guest: guest,
-      referee: referee,
-      judge: judge,
-      matChairman: matChairman,
-      timeKeeper: timeKeeper,
-      transcriptWriter: transcriptWriter,
-      date: DateTime.now(),
-      comment: 'Some commment',
-      visitorsCount: 123,
-      location: 'Springfield');
+    id: 1,
+    no: '123456',
+    home: home,
+    guest: guest,
+    referee: referee,
+    judge: judge,
+    matChairman: matChairman,
+    timeKeeper: timeKeeper,
+    transcriptWriter: transcriptWriter,
+    date: DateTime.now(),
+    comment: 'Some commment',
+    visitorsCount: 123,
+    location: 'Springfield',
+    league: _leagueMenRPW,
+  );
 }
+
+final _menRPWMatch = initMenRPWMatch();
 
 TeamMatch initJnRPWMatch() {
   TeamLineup home = TeamLineup(id: 3, team: _homeTeamJuniors);
@@ -188,8 +166,73 @@ TeamMatch initJnRPWMatch() {
   // Miss participants
 
   Person referee = const Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
-  return TeamMatch(id: 2, home: home, guest: guest, referee: referee, location: 'Springfield', date: DateTime.now());
+  return TeamMatch(
+    id: 2,
+    home: home,
+    guest: guest,
+    referee: referee,
+    location: 'Springfield',
+    date: DateTime.now(),
+    league: _leagueJnRPW,
+  );
 }
+
+final _jnRPWMatch = initJnRPWMatch();
+
+final tmb1 = TeamMatchBout(
+  id: 1,
+  teamMatch: _menRPWMatch,
+  pos: 0,
+  organization: _organization,
+  weightClass: wc57,
+  bout: Bout(
+    id: 1,
+    r: AthleteBoutState(id: 1, membership: r1),
+    b: AthleteBoutState(id: 2, membership: b1),
+    organization: _organization,
+  ),
+);
+
+final tmb2 = TeamMatchBout(
+  id: 2,
+  teamMatch: _menRPWMatch,
+  pos: 1,
+  organization: _organization,
+  weightClass: wc61,
+  bout: Bout(
+    id: 2,
+    r: AthleteBoutState(id: 3, membership: r2),
+    b: AthleteBoutState(id: 4, membership: b2),
+    organization: _organization,
+  ),
+);
+
+final List<Club> _clubs = [_homeClub, _guestClub];
+final List<BoutAction> _boutActions = []; // TODO fill
+final List<Organization> _organizations = [_organization, _organization2];
+final List<Division> _divisions = [_juniorDivision, _adultDivision];
+final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
+final List<DivisionWeightClass> _divisionWeightClasses = []; // TODO fill
+final List<LeagueWeightClass> _leagueWeightClasses = []; // TODO fill
+final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
+final List<TeamLineup> _lineups = [];
+final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
+final List<TeamMatchParticipation> _participations = [];
+final List<AthleteBoutState> _participantStates = []; // TODO fill
+final List<Person> _persons = [p1, p2, p3, p4, p5, p6, p7, p8];
+final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
+final List<TeamClubAffiliation> _teamClubAffiliations = [
+  _homeTeamAffiliation,
+  _homeTeamJuniorsAffiliation,
+  _guestTeamAffiliation
+];
+final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
+final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
+final List<Competition> _competitions = [];
+final List<CompetitionBout> _competitionBouts = [];
+final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
+final List<BoutConfig> _boutConfigs = [_boutConfig];
+final List<BoutResultRule> _boutResultRules = []; // TODO fill
 
 List<Club> getClubs() => _clubs;
 
@@ -229,6 +272,12 @@ List<League> getLeagues() => _leagues;
 
 List<League> getLeaguesOfDivision(Division division) {
   return getLeagues().where((element) => element.division == division).toList();
+}
+
+List<LeagueWeightClass> getLeagueWeightClasses() => _leagueWeightClasses;
+
+List<LeagueWeightClass> getLeagueWeightClassesOfLeague(League league) {
+  return getLeagueWeightClasses().where((e) => e.league == league).toList();
 }
 
 List<DivisionWeightClass> getDivisionWeightClasses() => _divisionWeightClasses;
@@ -285,6 +334,10 @@ List<TeamMatch> getTeamMatches() => _teamMatches;
 
 List<TeamMatch> getTeamMatchesOfTeam(Team team) {
   return getTeamMatches().where((element) => element.home.team == team || element.guest.team == team).toList();
+}
+
+List<TeamMatch> getTeamMatchesOfLeague(League league) {
+  return getTeamMatches().where((e) => e.league == league).toList();
 }
 
 List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
