@@ -252,11 +252,9 @@ class ScoreSheet extends PdfSheet {
     }
 
     return Row(children: [
-      buildParticipantColumn(
-          isLeft: true, membership: bout.r?.membership, borderColor: PdfSheet.homeColor),
+      buildParticipantColumn(isLeft: true, membership: bout.r?.membership, borderColor: PdfSheet.homeColor),
       Container(width: PdfSheet.horizontalGap),
-      buildParticipantColumn(
-          isLeft: false, membership: bout.b?.membership, borderColor: PdfSheet.guestColor),
+      buildParticipantColumn(isLeft: false, membership: bout.b?.membership, borderColor: PdfSheet.guestColor),
     ]);
   }
 

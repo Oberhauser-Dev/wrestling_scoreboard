@@ -1,6 +1,6 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 
-const _organization = Organization(name: 'Deutscher Ringer Bund (DRB)');
+const _organization = Organization(id: 0, name: 'Deutscher Ringer Bund (DRB)');
 
 final _adultDivision = Division(
   id: 1,
