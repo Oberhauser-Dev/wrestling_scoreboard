@@ -1,13 +1,17 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 
-const _organization = Organization(id: 0, name: 'Deutscher Ringer Bund (DRB)');
+const _organization = Organization(id: 0, name: 'Deutscher Ringer Bund', abbreviation: 'DRB');
+const _organization2 =
+    Organization(id: 1, name: 'Bayerischer Ringer Verband', abbreviation: 'BRV', parent: _organization);
+
+const _boutConfig = BoutConfig(id: 1);
 
 final _adultDivision = Division(
   id: 1,
   name: 'Adult',
   startDate: DateTime(2021),
   endDate: DateTime(2022),
-  boutConfig: const BoutConfig(id: 1),
+  boutConfig: _boutConfig,
   seasonPartitions: 2,
   organization: _organization,
 );
@@ -17,7 +21,7 @@ final _juniorDivision = Division(
   name: 'Junior',
   startDate: DateTime(2021),
   endDate: DateTime(2022),
-  boutConfig: const BoutConfig(id: 1),
+  boutConfig: _boutConfig,
   seasonPartitions: 2,
   organization: _organization,
 );
@@ -29,6 +33,7 @@ final _leagueMenRPW = League(
   endDate: DateTime(2022),
   division: _adultDivision,
   boutDays: 14,
+  organization: _organization,
 );
 final _leagueJnRPW = League(
   id: 2,
@@ -37,6 +42,7 @@ final _leagueJnRPW = League(
   endDate: DateTime(2022),
   division: _juniorDivision,
   boutDays: 14,
+  organization: _organization,
 );
 final _leagueNational = League(
   id: 3,
@@ -45,6 +51,7 @@ final _leagueNational = League(
   endDate: DateTime(2022),
   division: _adultDivision,
   boutDays: 14,
+  organization: _organization,
 );
 
 Club _homeClub = const Club(id: 1, name: 'Springfield Wrestlers', organization: _organization);
@@ -89,20 +96,23 @@ WeightClass wc75A = const WeightClass(id: 9, weight: 75, style: WrestlingStyle.f
 WeightClass wc75B = const WeightClass(id: 10, weight: 75, style: WrestlingStyle.greco, suffix: 'B');
 
 // TEAM 1
-Person p1 = const Person(id: 1, prename: 'Lisa', surname: 'Simpson', gender: Gender.female);
-Person p2 = const Person(id: 2, prename: 'Bart', surname: 'Simpson', gender: Gender.male);
-Person p3 = const Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female);
-Person p4 = const Person(id: 4, prename: 'Homer', surname: 'Simpson', gender: Gender.male);
+Person p1 =
+    const Person(id: 1, prename: 'Lisa', surname: 'Simpson', gender: Gender.female, organization: _organization);
+Person p2 = const Person(id: 2, prename: 'Bart', surname: 'Simpson', gender: Gender.male, organization: _organization);
+Person p3 =
+    const Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female, organization: _organization);
+Person p4 = const Person(id: 4, prename: 'Homer', surname: 'Simpson', gender: Gender.male, organization: _organization);
 Membership r1 = Membership(id: 1, person: p1, club: _homeClub);
 Membership r2 = Membership(id: 2, person: p2, club: _homeClub);
 Membership r3 = Membership(id: 3, person: p3, club: _homeClub);
 Membership r4 = Membership(id: 4, person: p4, club: _homeClub);
 
 // TEAM 2
-Person p5 = const Person(id: 5, prename: 'Meg', surname: 'Griffin', gender: Gender.female);
-Person p6 = const Person(id: 6, prename: 'Chris', surname: 'Griffin', gender: Gender.male);
-Person p7 = const Person(id: 7, prename: 'Lois', surname: 'Griffin', gender: Gender.female);
-Person p8 = const Person(id: 8, prename: 'Peter', surname: 'Griffin', gender: Gender.male);
+Person p5 = const Person(id: 5, prename: 'Meg', surname: 'Griffin', gender: Gender.female, organization: _organization);
+Person p6 = const Person(id: 6, prename: 'Chris', surname: 'Griffin', gender: Gender.male, organization: _organization);
+Person p7 =
+    const Person(id: 7, prename: 'Lois', surname: 'Griffin', gender: Gender.female, organization: _organization);
+Person p8 = const Person(id: 8, prename: 'Peter', surname: 'Griffin', gender: Gender.male, organization: _organization);
 Membership b1 = Membership(id: 5, person: p5, club: _guestClub);
 Membership b2 = Membership(id: 6, person: p6, club: _guestClub);
 Membership b3 = Membership(id: 7, person: p7, club: _guestClub);
@@ -110,7 +120,7 @@ Membership b4 = Membership(id: 8, person: p8, club: _guestClub);
 
 final List<Club> _clubs = [_homeClub, _guestClub];
 final List<BoutAction> _boutActions = []; // TODO fill
-final List<Organization> _organizations = [_organization];
+final List<Organization> _organizations = [_organization, _organization2];
 final List<Division> _divisions = [_juniorDivision, _adultDivision];
 final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
 final List<DivisionWeightClass> _divisionWeightClasses = []; // TODO fill
@@ -119,7 +129,7 @@ final List<TeamLineup> _lineups = [];
 final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
 final List<TeamMatchParticipation> _participations = [];
 final List<AthleteBoutState> _participantStates = []; // TODO fill
-final List<Person> _persons = []; // TODO fill
+final List<Person> _persons = [p1, p2, p3, p4, p5, p6, p7, p8];
 final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
 final List<TeamClubAffiliation> _teamClubAffiliations = [
   _homeTeamAffiliation,
@@ -128,8 +138,11 @@ final List<TeamClubAffiliation> _teamClubAffiliations = [
 ];
 final List<TeamMatch> _teamMatches = [initMenRPWMatch(), initJnRPWMatch()];
 final List<TeamMatchBout> _teamMatchBouts = [];
+final List<Competition> _competitions = [];
 final List<CompetitionBout> _competitionBouts = [];
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
+final List<BoutConfig> _boutConfigs = [_boutConfig];
+final List<BoutResultRule> _boutResultRules = []; // TODO fill
 
 TeamMatch initMenRPWMatch() {
   TeamLineup home = TeamLineup(id: 1, team: _homeTeam);
@@ -180,6 +193,10 @@ TeamMatch initJnRPWMatch() {
 
 List<Club> getClubs() => _clubs;
 
+List<Club> getClubsOfOrganization(Organization organization) {
+  return getClubs().where((element) => element.organization == organization).toList();
+}
+
 List<CompetitionBout> getBoutsOfCompetition(Competition competition) {
   return getCompetitionBouts().where((element) => element.competition == competition).toList();
 }
@@ -194,9 +211,25 @@ List<BoutAction> getBoutActionsOfBout(Bout bout) => getBoutActions().where((elem
 
 List<Organization> getOrganizations() => _organizations;
 
+List<Organization> getOrganizationsOfOrganization(Organization organization) {
+  return getOrganizations().where((element) => element.parent == organization).toList();
+}
+
 List<Division> getDivisions() => _divisions;
 
+List<Division> getDivisionsOfDivision(Division division) {
+  return getDivisions().where((element) => element.parent == division).toList();
+}
+
+List<Division> getDivisionsOfOrganization(Organization organization) {
+  return getDivisions().where((element) => element.organization == organization).toList();
+}
+
 List<League> getLeagues() => _leagues;
+
+List<League> getLeaguesOfDivision(Division division) {
+  return getLeagues().where((element) => element.division == division).toList();
+}
 
 List<DivisionWeightClass> getDivisionWeightClasses() => _divisionWeightClasses;
 
@@ -232,6 +265,10 @@ List<AthleteBoutState> getParticipantStates() => _participantStates;
 
 List<Person> getPersons() => _persons;
 
+List<Person> getPersonsOfOrganization(Organization organization) {
+  return getPersons().where((element) => element.organization == organization).toList();
+}
+
 List<Team> getTeams() => _teams;
 
 List<TeamClubAffiliation> getTeamClubAffiliations() => _teamClubAffiliations;
@@ -259,6 +296,20 @@ List<Bout> getBouts() => [
 
 List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
   return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
+}
+
+List<BoutConfig> getBoutConfigs() => _boutConfigs;
+
+List<BoutResultRule> getBoutResultRules() => _boutResultRules;
+
+List<BoutResultRule> getBoutResultRulesOfBoutConfig(BoutConfig boutConfig) {
+  return getBoutResultRules().where((element) => element.boutConfig == boutConfig).toList();
+}
+
+List<Competition> getCompetitions() => _competitions;
+
+List<Competition> getCompetitionsOfOrganization(Organization organization) {
+  return getCompetitions().where((element) => element.organization == organization).toList();
 }
 
 List<CompetitionBout> getCompetitionBouts() => _competitionBouts;

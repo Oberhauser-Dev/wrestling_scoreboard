@@ -36,3 +36,4 @@ Update following files accordingly:
 - `package:wrestling_scoreboard_client`
   - `lib/mocks/mock_data_provider.dart`
   - `lib/mocks/mocks.dart`
+  - `lib/mocks/services/network/data_manager.dart`

@@ -44,11 +44,37 @@ class MockDataManager extends DataManager {
           if (filterObject is Competition) return getBoutsOfCompetition(filterObject).cast<T>();
           if (filterObject is TeamMatch) return getBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (BoutResultRule):
+          if (filterObject is BoutConfig) return getBoutResultRulesOfBoutConfig(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (Club):
+          if (filterObject is Organization) return getClubsOfOrganization(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (Competition):
+          if (filterObject is Organization) return getCompetitionsOfOrganization(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (Division):
+          if (filterObject is Organization) return getDivisionsOfOrganization(filterObject).cast<T>();
+          if (filterObject is Division) return getDivisionsOfDivision(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (DivisionWeightClass):
+          if (filterObject is Division) return getDivisionWeightClassesOfDivision(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (League):
+          if (filterObject is Division) return getLeaguesOfDivision(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (LeagueTeamParticipation):
+          if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
+          if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Membership):
           if (filterObject is Club) return getMembershipsOfClub(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (TeamMatchParticipation):
-          if (filterObject is TeamLineup) return getParticipationsOfLineup(filterObject).cast<T>();
+        case const (Organization):
+          if (filterObject is Organization) return getOrganizationsOfOrganization(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (Person):
+          if (filterObject is Organization) return getPersonsOfOrganization(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Team):
           if (filterObject is Club) return getTeamsOfClub(filterObject).cast<T>();
@@ -57,19 +83,15 @@ class MockDataManager extends DataManager {
         case const (TeamMatch):
           if (filterObject is Team) return getTeamMatchesOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (TeamMatchBout):
+          if (filterObject is TeamMatch) return getTeamMatchBoutsOfTeamMatch(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (TeamMatchParticipation):
+          if (filterObject is TeamLineup) return getParticipationsOfLineup(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (WeightClass):
           // TODO may remove in favor of getDivisionWeightClassesOfLeague
           if (filterObject is Division) return getWeightClassesOfDivision(filterObject).cast<T>();
-          throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (DivisionWeightClass):
-          if (filterObject is Division) return getDivisionWeightClassesOfDivision(filterObject).cast<T>();
-          throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (LeagueTeamParticipation):
-          if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
-          if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
-          throw DataUnimplementedError(CRUD.read, T, filterObject);
-        case const (TeamMatchBout):
-          if (filterObject is TeamMatch) return getTeamMatchBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         default:
           throw DataUnimplementedError(CRUD.read, T, filterObject);
