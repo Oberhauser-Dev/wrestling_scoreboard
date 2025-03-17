@@ -532,6 +532,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get matches => 'Begegnungen';
 
   @override
+  String get competitionNumber => 'Turnier-ID';
+
+  @override
   String get matchNumber => 'Begegnungs-ID / Kampf-ID';
 
   @override

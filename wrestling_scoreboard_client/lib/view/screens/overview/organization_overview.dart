@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
@@ -203,6 +204,6 @@ class OrganizationOverview extends ConsumerWidget {
   }
 
   handleSelectedCompetition(Competition competition, BuildContext context) {
-    // context.push('/${CompetitionOverview.route}/${competition.id}');
+    context.push('/${CompetitionOverview.route}/${competition.id}');
   }
 }

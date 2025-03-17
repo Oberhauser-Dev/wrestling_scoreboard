@@ -532,6 +532,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get matches => 'Matches';
 
   @override
+  String get competitionNumber => 'Competition-ID';
+
+  @override
   String get matchNumber => 'Match-ID';
 
   @override

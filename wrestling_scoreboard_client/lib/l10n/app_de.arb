@@ -191,6 +191,7 @@
   "boutDays": "Kampftage",
   "match": "Begegnung",
   "matches": "Begegnungen",
+  "competitionNumber": "Turnier-ID",
   "matchNumber": "Begegnungs-ID / Kampf-ID",
   "lineup": "Aufstellung",
   "lineups": "Aufstellungen",

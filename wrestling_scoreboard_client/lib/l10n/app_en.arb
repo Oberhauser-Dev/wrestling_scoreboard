@@ -194,6 +194,7 @@
   "boutDays": "Bout Days",
   "match": "Match",
   "matches": "Matches",
+  "competitionNumber": "Competition-ID",
   "matchNumber": "Match-ID",
   "lineup": "Lineup",
   "lineups": "Lineups",

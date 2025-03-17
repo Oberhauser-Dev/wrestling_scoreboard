@@ -1127,6 +1127,12 @@ abstract class AppLocalizations {
   /// **'Matches'**
   String get matches;
 
+  /// No description provided for @competitionNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Competition-ID'**
+  String get competitionNumber;
+
   /// No description provided for @matchNumber.
   ///
   /// In en, this message translates to:

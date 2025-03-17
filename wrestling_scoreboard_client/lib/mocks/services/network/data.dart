@@ -207,6 +207,21 @@ final tmb2 = TeamMatchBout(
   ),
 );
 
+final _competition = Competition(
+  id: 1,
+  no: 'abc',
+  name: 'Wittelsbacher-Land-Turnier',
+  boutConfig: Competition.defaultBoutConfig,
+  date: DateTime(2025, 03, 29),
+  organization: _organization,
+  comment: 'This is a comment',
+  location: 'Aichach',
+  visitorsCount: 500,
+);
+
+final _competitionLineup1 = CompetitionLineup(competition: _competition, club: _homeClub);
+final _competitionLineup2 = CompetitionLineup(competition: _competition, club: _guestClub);
+
 final List<Club> _clubs = [_homeClub, _guestClub];
 final List<BoutAction> _boutActions = []; // TODO fill
 final List<Organization> _organizations = [_organization, _organization2];
@@ -228,8 +243,9 @@ final List<TeamClubAffiliation> _teamClubAffiliations = [
 ];
 final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
 final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
-final List<Competition> _competitions = [];
-final List<CompetitionBout> _competitionBouts = [];
+final List<Competition> _competitions = [_competition];
+final List<CompetitionBout> _competitionBouts = []; // TODO fill
+final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 final List<BoutConfig> _boutConfigs = [_boutConfig];
 final List<BoutResultRule> _boutResultRules = []; // TODO fill
@@ -366,6 +382,12 @@ List<Competition> getCompetitionsOfOrganization(Organization organization) {
 }
 
 List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
+
+List<CompetitionLineup> getCompetitionLineups() => _competitionLineups;
+
+List<CompetitionLineup> getCompetitionLineupsOfCompetition(Competition competition) {
+  return getCompetitionLineups().where((element) => element.competition == competition).toList();
+}
 
 List<WeightClass> getWeightClasses() => _weightClasses;
 
