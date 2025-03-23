@@ -224,6 +224,22 @@ final _competitionLineup2 = CompetitionLineup(competition: _competition, club: _
 final _competitionWeightCategory = CompetitionWeightCategory(
     competition: _competition, weightClass: wc61, ageCategory: AgeCategory(name: 'Juniors', minAge: 16, maxAge: 18));
 
+final _competitionParticipation1 = CompetitionParticipation(
+  id: 1,
+  membership: r1,
+  lineup: _competitionLineup1,
+  weightCategory: _competitionWeightCategory,
+  weight: 66,
+);
+
+final _competitionParticipation2 = CompetitionParticipation(
+  id: 2,
+  membership: b1,
+  lineup: _competitionLineup2,
+  weightCategory: _competitionWeightCategory,
+  weight: 77.3,
+);
+
 final _competitionBout = CompetitionBout(
   id: 1,
   competition: _competition,
@@ -247,7 +263,7 @@ final List<LeagueWeightClass> _leagueWeightClasses = []; // TODO fill
 final List<LeagueTeamParticipation> _leagueTeamParticipations = [_htMenRPW, _gtMenRPW, _htjJnRPW, _htNat, _gtNat];
 final List<TeamLineup> _lineups = [];
 final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
-final List<TeamMatchParticipation> _participations = [];
+final List<TeamMatchParticipation> _participations = []; // TODO fill
 final List<AthleteBoutState> _participantStates = []; // TODO fill
 final List<Person> _persons = [p1, p2, p3, p4, p5, p6, p7, p8];
 final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
@@ -256,14 +272,21 @@ final List<TeamClubAffiliation> _teamClubAffiliations = [
   _homeTeamJuniorsAffiliation,
   _guestTeamAffiliation
 ];
-final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
-final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
-final List<Competition> _competitions = [_competition];
-final List<CompetitionBout> _competitionBouts = [_competitionBout];
-final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
+
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 final List<BoutConfig> _boutConfigs = [_boutConfig];
 final List<BoutResultRule> _boutResultRules = []; // TODO fill
+
+final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
+final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
+
+final List<Competition> _competitions = [_competition];
+final List<CompetitionBout> _competitionBouts = [_competitionBout];
+final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
+final List<CompetitionParticipation> _competitionParticipations = [
+  _competitionParticipation1,
+  _competitionParticipation2
+];
 
 List<Club> getClubs() => _clubs;
 
@@ -406,6 +429,12 @@ List<CompetitionLineup> getCompetitionLineups() => _competitionLineups;
 
 List<CompetitionLineup> getCompetitionLineupsOfCompetition(Competition competition) {
   return getCompetitionLineups().where((element) => element.competition == competition).toList();
+}
+
+List<CompetitionParticipation> getCompetitionParticipations() => _competitionParticipations;
+
+List<CompetitionParticipation> getCompetitionParticipationsOfWeightCategory(CompetitionWeightCategory weightCategory) {
+  return getCompetitionParticipations().where((element) => element.weightCategory == weightCategory).toList();
 }
 
 List<WeightClass> getWeightClasses() => _weightClasses;

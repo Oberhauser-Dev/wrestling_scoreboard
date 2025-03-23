@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/view/app_navigation.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/team_match_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
@@ -19,6 +21,7 @@ import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_up.da
 import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
@@ -138,6 +141,33 @@ getRouter() {
                 path: '${CompetitionOverview.route}/:competition_id',
                 builder: (context, state) =>
                     CompetitionOverview(id: int.parse(state.pathParameters['competition_id']!)),
+                routes: [
+                  GoRoute(
+                    path: CompetitionDisplay.route,
+                    parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                    builder: (context, state) =>
+                        CompetitionDisplay(id: int.parse(state.pathParameters['competition_id']!)),
+                  ),
+                  GoRoute(
+                      path: '${CompetitionBoutOverview.route}/:competition_bout_id',
+                      parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                      builder: (context, state) {
+                        final competitionBoutId = int.parse(state.pathParameters['competition_bout_id']!);
+                        return CompetitionBoutOverview(id: competitionBoutId);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: CompetitionBoutDisplay.route,
+                          parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                          builder: (context, state) {
+                            final competitionId = int.parse(state.pathParameters['competition_id']!);
+                            final competitionBoutId = int.parse(state.pathParameters['competition_bout_id']!);
+                            return CompetitionBoutDisplay(
+                                competitionId: competitionId, competitionBoutId: competitionBoutId);
+                          },
+                        ),
+                      ]),
+                ],
               ),
             ],
           ),

@@ -62,6 +62,11 @@ class MockDataManager extends DataManager {
         case const (CompetitionLineup):
           if (filterObject is Competition) return getCompetitionLineupsOfCompetition(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (CompetitionParticipation):
+          if (filterObject is CompetitionWeightCategory) {
+            return getCompetitionParticipationsOfWeightCategory(filterObject).cast<T>();
+          }
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Division):
           if (filterObject is Organization) return getDivisionsOfOrganization(filterObject).cast<T>();
           if (filterObject is Division) return getDivisionsOfDivision(filterObject).cast<T>();

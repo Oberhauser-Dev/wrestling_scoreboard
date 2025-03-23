@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
-import 'competition_weight_category.dart';
 
 part 'competition_participation.freezed.dart';
 part 'competition_participation.g.dart';
@@ -21,6 +20,16 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
   }) = _CompetitionParticipation;
 
   factory CompetitionParticipation.fromJson(Map<String, Object?> json) => _$CompetitionParticipationFromJson(json);
+
+  static CompetitionParticipation? fromParticipationsAndMembershipAndWeightCategory({
+    required Iterable<CompetitionParticipation> participations,
+    required Membership? membership,
+    required CompetitionWeightCategory? weightCategory,
+  }) {
+    return participations
+        .where((element) => element.membership == membership && element.weightCategory == weightCategory)
+        .zeroOrOne;
+  }
 
   static Future<CompetitionParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final weightCategoryId = e['competition_weight_category_id'] as int?;
