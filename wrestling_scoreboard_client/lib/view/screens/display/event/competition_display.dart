@@ -87,30 +87,45 @@ class CompetitionDisplay extends ConsumerWidget {
                 //   '${context.l10n.refereeAbbr}: ${competition.matChairman?.fullName}',
                 // if (competition.judge != null) '${context.l10n.refereeAbbr}: ${competition.judge?.fullName}',
               ];
-
-              final headerItems = <Widget>[
-                Padding(
-                    padding: EdgeInsets.all(padding),
-                    child: Center(
-                        child: ScaledText(
-                      competitionInfos.join('\n'),
-                      softWrap: false,
-                      fontSize: 12,
-                      minFontSize: 10,
-                    ))),
-                // ...CommonElements.getTeamHeader(
-                //     competition.home.team, competition.guest.team, competitionBouts.map((e) => e.bout).toList(), context),
-              ];
               final column = Column(
                 children: [
+                  Padding(
+                      padding: EdgeInsets.all(padding),
+                      child: Center(
+                          child: ScaledText(
+                        competitionInfos.join(' '),
+                        softWrap: false,
+                        fontSize: 12,
+                        minFontSize: 10,
+                      ))),
                   IntrinsicHeight(
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: headerItems
-                            .asMap()
-                            .entries
-                            .map((entry) => Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value))
-                            .toList()),
+                        spacing: 12,
+                        children: Iterable.generate(
+                            competition.matCount,
+                            (index) => Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ScaledText('AgeCategory + WeightClass', fontSize: 12, minFontSize: 10),
+                                    Container(
+                                        color: Colors.red,
+                                        child: ScaledText(
+                                          'Home Wrestler',
+                                          fontSize: 12,
+                                          minFontSize: 10,
+                                        )),
+                                    Container(
+                                        color: Colors.blue,
+                                        child: ScaledText(
+                                          'Guest Wrestler',
+                                          fontSize: 12,
+                                          minFontSize: 10,
+                                        )),
+                                  ],
+                                ))).toList()),
                   ),
                   Expanded(
                     child: ListView.builder(
