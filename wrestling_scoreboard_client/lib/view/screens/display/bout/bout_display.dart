@@ -18,7 +18,6 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_main_
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/technical_points.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -38,6 +37,7 @@ class BoutScreen extends ConsumerStatefulWidget {
   final double? weightR;
   final double? weightB;
   final WeightClass? weightClass;
+  final AgeCategory? ageCategory;
 
   // TODO: may overwrite in settings to be more flexible
   final BoutConfig boutConfig;
@@ -58,6 +58,7 @@ class BoutScreen extends ConsumerStatefulWidget {
     required this.boutRules,
     required this.wrestlingEvent,
     required this.weightClass,
+    this.ageCategory,
     required this.weightR,
     required this.weightB,
     super.key,
@@ -484,10 +485,17 @@ class BoutState extends ConsumerState<BoutScreen> {
                                     child: Center(
                                         child: ScaledText(
                                   '${localizations.bout} ${widget.boutIndex + 1}',
-                                  fontSize: 22,
+                                  fontSize: 14,
                                   minFontSize: 10,
                                 ))),
                               ]),
+                              if (widget.ageCategory != null)
+                                Center(
+                                    child: ScaledText(
+                                      widget.ageCategory!.name,
+                                      fontSize: 22,
+                                      minFontSize: 10,
+                                    )),
                               if (weightClass != null)
                                 Center(
                                     child: ScaledText(

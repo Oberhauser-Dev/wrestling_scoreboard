@@ -320,6 +320,8 @@ class MockDataManager extends DataManager {
     switch (T) {
       case const (Club):
         return getClubs().cast<T>();
+      case const (Competition):
+        return getCompetitions().cast<T>();
       case const (Bout):
         return getBouts().cast<T>();
       case const (BoutAction):

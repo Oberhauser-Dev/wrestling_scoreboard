@@ -129,6 +129,7 @@ class CompetitionDisplay extends ConsumerWidget {
                                     bout: competitionBouts[index].bout,
                                     actions: actions,
                                     weightClass: competitionBouts[index].weightCategory?.weightClass,
+                                    ageCategory: competitionBouts[index].weightCategory?.ageCategory,
                                   ),
                                 ),
                               ),

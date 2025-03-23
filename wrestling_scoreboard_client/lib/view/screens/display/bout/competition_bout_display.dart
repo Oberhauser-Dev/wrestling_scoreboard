@@ -89,6 +89,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                                     },
                                     headerItems: [], // TODO
                                     weightClass: competitionBout.weightCategory?.weightClass,
+                                    ageCategory: competitionBout.weightCategory?.ageCategory,
                                     weightR: homeParticipation?.weight,
                                     weightB: guestParticipation?.weight,
                                   );
