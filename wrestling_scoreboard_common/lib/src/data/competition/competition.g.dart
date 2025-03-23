@@ -20,6 +20,7 @@ _Competition _$CompetitionFromJson(Map<String, dynamic> json) => _Competition(
       no: json['no'] as String?,
       visitorsCount: (json['visitorsCount'] as num?)?.toInt(),
       comment: json['comment'] as String?,
+      matCount: (json['matCount'] as num).toInt(),
     );
 
 Map<String, dynamic> _$CompetitionToJson(_Competition instance) =>
@@ -34,4 +35,5 @@ Map<String, dynamic> _$CompetitionToJson(_Competition instance) =>
       'no': instance.no,
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
+      'matCount': instance.matCount,
     };

@@ -146,6 +146,7 @@
   "pool": "Pool",
   "round": "Round",
   "mat": "Mat",
+  "mats": "Mats",
   "status": "Status",
   "visitors": "Visitors",
   "numberAbbreviation": "No.",

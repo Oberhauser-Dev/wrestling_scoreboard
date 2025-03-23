@@ -21,6 +21,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
     String? no,
     int? visitorsCount,
     String? comment,
+    required int matCount,
   }) = _Competition;
 
   factory Competition.fromJson(Map<String, Object?> json) => _$CompetitionFromJson(json);
@@ -37,6 +38,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       location: e['location'] as String?,
       date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
+      matCount: e['mat_count'] as int,
       comment: e['comment'] as String?,
       boutConfig: boutConfig,
     );
@@ -48,6 +50,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       ..addAll({
         'name': name,
         'bout_config_id': boutConfig.id!,
+        'mat_count': matCount,
       });
   }
 

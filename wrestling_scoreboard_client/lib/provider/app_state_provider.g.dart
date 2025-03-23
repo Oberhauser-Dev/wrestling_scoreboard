@@ -9,8 +9,10 @@ part of 'app_state_provider.dart';
 @ProviderFor(WindowStateNotifier)
 const windowStateNotifierProvider = WindowStateNotifierProvider._();
 
-final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNotifier, Raw<Future<WindowState>>> {
-  const WindowStateNotifierProvider._({super.runNotifierBuildOverride, WindowStateNotifier Function()? create})
+final class WindowStateNotifierProvider
+    extends $NotifierProvider<WindowStateNotifier, Raw<Future<WindowState>>> {
+  const WindowStateNotifierProvider._(
+      {super.runNotifierBuildOverride, WindowStateNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -60,21 +62,27 @@ final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNot
 
   @$internal
   @override
-  $NotifierProviderElement<WindowStateNotifier, Raw<Future<WindowState>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<WindowStateNotifier, Raw<Future<WindowState>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$windowStateNotifierHash() => r'c450d92ac1e13d9404d9adb1e68f47177fb150f0';
+String _$windowStateNotifierHash() =>
+    r'c450d92ac1e13d9404d9adb1e68f47177fb150f0';
 
-abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>> {
+abstract class _$WindowStateNotifier
+    extends $Notifier<Raw<Future<WindowState>>> {
   Raw<Future<WindowState>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<WindowState>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<WindowState>>>, Raw<Future<WindowState>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<WindowState>>>,
+        Raw<Future<WindowState>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }

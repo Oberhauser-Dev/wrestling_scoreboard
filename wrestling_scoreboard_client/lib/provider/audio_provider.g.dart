@@ -9,8 +9,10 @@ part of 'audio_provider.dart';
 @ProviderFor(BellPlayerNotifier)
 const bellPlayerNotifierProvider = BellPlayerNotifierProvider._();
 
-final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotifier, Raw<Future<AudioPlayer>>> {
-  const BellPlayerNotifierProvider._({super.runNotifierBuildOverride, BellPlayerNotifier Function()? create})
+final class BellPlayerNotifierProvider
+    extends $NotifierProvider<BellPlayerNotifier, Raw<Future<AudioPlayer>>> {
+  const BellPlayerNotifierProvider._(
+      {super.runNotifierBuildOverride, BellPlayerNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -60,21 +62,27 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
 
   @$internal
   @override
-  $NotifierProviderElement<BellPlayerNotifier, Raw<Future<AudioPlayer>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<BellPlayerNotifier, Raw<Future<AudioPlayer>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$bellPlayerNotifierHash() => r'629ce6a4cd9db09a0250a179cd31607a10216d97';
+String _$bellPlayerNotifierHash() =>
+    r'629ce6a4cd9db09a0250a179cd31607a10216d97';
 
-abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> {
+abstract class _$BellPlayerNotifier
+    extends $Notifier<Raw<Future<AudioPlayer>>> {
   Raw<Future<AudioPlayer>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<AudioPlayer>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<AudioPlayer>>>, Raw<Future<AudioPlayer>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<AudioPlayer>>>,
+        Raw<Future<AudioPlayer>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }

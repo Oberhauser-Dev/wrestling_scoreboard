@@ -391,6 +391,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mat => 'Matte';
 
   @override
+  String get mats => 'Matten';
+
+  @override
   String get status => 'Status';
 
   @override

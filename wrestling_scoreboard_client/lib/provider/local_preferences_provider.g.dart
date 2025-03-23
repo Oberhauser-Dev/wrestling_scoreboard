@@ -11,9 +11,11 @@ part of 'local_preferences_provider.dart';
 const localeNotifierProvider = LocaleNotifierProvider._();
 
 /// Null value represents the system locale `Platform.localeName`.
-final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw<Future<Locale?>>> {
+final class LocaleNotifierProvider
+    extends $NotifierProvider<LocaleNotifier, Raw<Future<Locale?>>> {
   /// Null value represents the system locale `Platform.localeName`.
-  const LocaleNotifierProvider._({super.runNotifierBuildOverride, LocaleNotifier Function()? create})
+  const LocaleNotifierProvider._(
+      {super.runNotifierBuildOverride, LocaleNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -63,7 +65,8 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
 
   @$internal
   @override
-  $NotifierProviderElement<LocaleNotifier, Raw<Future<Locale?>>> $createElement($ProviderPointer pointer) =>
+  $NotifierProviderElement<LocaleNotifier, Raw<Future<Locale?>>> $createElement(
+          $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
@@ -76,8 +79,11 @@ abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Locale?>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<Locale?>>>, Raw<Future<Locale?>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<Locale?>>>,
+        Raw<Future<Locale?>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -85,8 +91,10 @@ abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
 @ProviderFor(ThemeModeNotifier)
 const themeModeNotifierProvider = ThemeModeNotifierProvider._();
 
-final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifier, Raw<Future<ThemeMode>>> {
-  const ThemeModeNotifierProvider._({super.runNotifierBuildOverride, ThemeModeNotifier Function()? create})
+final class ThemeModeNotifierProvider
+    extends $NotifierProvider<ThemeModeNotifier, Raw<Future<ThemeMode>>> {
+  const ThemeModeNotifierProvider._(
+      {super.runNotifierBuildOverride, ThemeModeNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -136,8 +144,9 @@ final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifie
 
   @$internal
   @override
-  $NotifierProviderElement<ThemeModeNotifier, Raw<Future<ThemeMode>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<ThemeModeNotifier, Raw<Future<ThemeMode>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
 String _$themeModeNotifierHash() => r'87a0d4c71b037664266350d35d9e4c54be1d1dd8';
@@ -149,8 +158,11 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<ThemeMode>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<ThemeMode>>>, Raw<Future<ThemeMode>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<ThemeMode>>>,
+        Raw<Future<ThemeMode>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -158,8 +170,10 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
 @ProviderFor(FontFamilyNotifier)
 const fontFamilyNotifierProvider = FontFamilyNotifierProvider._();
 
-final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotifier, Raw<Future<String?>>> {
-  const FontFamilyNotifierProvider._({super.runNotifierBuildOverride, FontFamilyNotifier Function()? create})
+final class FontFamilyNotifierProvider
+    extends $NotifierProvider<FontFamilyNotifier, Raw<Future<String?>>> {
+  const FontFamilyNotifierProvider._(
+      {super.runNotifierBuildOverride, FontFamilyNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -209,11 +223,13 @@ final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotif
 
   @$internal
   @override
-  $NotifierProviderElement<FontFamilyNotifier, Raw<Future<String?>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<FontFamilyNotifier, Raw<Future<String?>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$fontFamilyNotifierHash() => r'58f6c3cdeafa1c63986ffa5ad4de5ca9b8865b64';
+String _$fontFamilyNotifierHash() =>
+    r'58f6c3cdeafa1c63986ffa5ad4de5ca9b8865b64';
 
 abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
@@ -222,8 +238,11 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String?>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<String?>>>, Raw<Future<String?>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<String?>>>,
+        Raw<Future<String?>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -231,8 +250,10 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
 @ProviderFor(WebSocketUrlNotifier)
 const webSocketUrlNotifierProvider = WebSocketUrlNotifierProvider._();
 
-final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlNotifier, Raw<Future<String>>> {
-  const WebSocketUrlNotifierProvider._({super.runNotifierBuildOverride, WebSocketUrlNotifier Function()? create})
+final class WebSocketUrlNotifierProvider
+    extends $NotifierProvider<WebSocketUrlNotifier, Raw<Future<String>>> {
+  const WebSocketUrlNotifierProvider._(
+      {super.runNotifierBuildOverride, WebSocketUrlNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -282,11 +303,13 @@ final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlN
 
   @$internal
   @override
-  $NotifierProviderElement<WebSocketUrlNotifier, Raw<Future<String>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<WebSocketUrlNotifier, Raw<Future<String>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$webSocketUrlNotifierHash() => r'4ea4f9c1880f05b6b6d0d718e043c04145e2a589';
+String _$webSocketUrlNotifierHash() =>
+    r'4ea4f9c1880f05b6b6d0d718e043c04145e2a589';
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
@@ -295,8 +318,11 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String>>>;
-    final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<String>>>, Raw<Future<String>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<String>>>,
+        Raw<Future<String>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -304,8 +330,11 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
 @ProviderFor(NetworkTimeoutNotifier)
 const networkTimeoutNotifierProvider = NetworkTimeoutNotifierProvider._();
 
-final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTimeoutNotifier, Raw<Future<Duration>>> {
-  const NetworkTimeoutNotifierProvider._({super.runNotifierBuildOverride, NetworkTimeoutNotifier Function()? create})
+final class NetworkTimeoutNotifierProvider
+    extends $NotifierProvider<NetworkTimeoutNotifier, Raw<Future<Duration>>> {
+  const NetworkTimeoutNotifierProvider._(
+      {super.runNotifierBuildOverride,
+      NetworkTimeoutNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -332,7 +361,8 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
 
   @$internal
   @override
-  NetworkTimeoutNotifier create() => _createCb?.call() ?? NetworkTimeoutNotifier();
+  NetworkTimeoutNotifier create() =>
+      _createCb?.call() ?? NetworkTimeoutNotifier();
 
   @$internal
   @override
@@ -355,21 +385,27 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
 
   @$internal
   @override
-  $NotifierProviderElement<NetworkTimeoutNotifier, Raw<Future<Duration>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<NetworkTimeoutNotifier, Raw<Future<Duration>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$networkTimeoutNotifierHash() => r'686b1e7acba03732bd54aa332f2e5805cf5f526c';
+String _$networkTimeoutNotifierHash() =>
+    r'686b1e7acba03732bd54aa332f2e5805cf5f526c';
 
-abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
+abstract class _$NetworkTimeoutNotifier
+    extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Duration>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<Duration>>>, Raw<Future<Duration>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<Duration>>>,
+        Raw<Future<Duration>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -377,8 +413,10 @@ abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>>
 @ProviderFor(ApiUrlNotifier)
 const apiUrlNotifierProvider = ApiUrlNotifierProvider._();
 
-final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw<Future<String>>> {
-  const ApiUrlNotifierProvider._({super.runNotifierBuildOverride, ApiUrlNotifier Function()? create})
+final class ApiUrlNotifierProvider
+    extends $NotifierProvider<ApiUrlNotifier, Raw<Future<String>>> {
+  const ApiUrlNotifierProvider._(
+      {super.runNotifierBuildOverride, ApiUrlNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -428,7 +466,8 @@ final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw
 
   @$internal
   @override
-  $NotifierProviderElement<ApiUrlNotifier, Raw<Future<String>>> $createElement($ProviderPointer pointer) =>
+  $NotifierProviderElement<ApiUrlNotifier, Raw<Future<String>>> $createElement(
+          $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
@@ -441,8 +480,11 @@ abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String>>>;
-    final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<String>>>, Raw<Future<String>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<String>>>,
+        Raw<Future<String>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -450,8 +492,10 @@ abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
 @ProviderFor(BellSoundNotifier)
 const bellSoundNotifierProvider = BellSoundNotifierProvider._();
 
-final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifier, Raw<Future<String>>> {
-  const BellSoundNotifierProvider._({super.runNotifierBuildOverride, BellSoundNotifier Function()? create})
+final class BellSoundNotifierProvider
+    extends $NotifierProvider<BellSoundNotifier, Raw<Future<String>>> {
+  const BellSoundNotifierProvider._(
+      {super.runNotifierBuildOverride, BellSoundNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -501,8 +545,9 @@ final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifie
 
   @$internal
   @override
-  $NotifierProviderElement<BellSoundNotifier, Raw<Future<String>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<BellSoundNotifier, Raw<Future<String>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
 String _$bellSoundNotifierHash() => r'44cc9ac294b4cf03b9ddeeb822cb5985d3c8cfe3';
@@ -514,8 +559,11 @@ abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String>>>;
-    final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<String>>>, Raw<Future<String>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<String>>>,
+        Raw<Future<String>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -523,8 +571,11 @@ abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
 @ProviderFor(TimeCountDownNotifier)
 const timeCountDownNotifierProvider = TimeCountDownNotifierProvider._();
 
-final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDownNotifier, Raw<Future<bool>>> {
-  const TimeCountDownNotifierProvider._({super.runNotifierBuildOverride, TimeCountDownNotifier Function()? create})
+final class TimeCountDownNotifierProvider
+    extends $NotifierProvider<TimeCountDownNotifier, Raw<Future<bool>>> {
+  const TimeCountDownNotifierProvider._(
+      {super.runNotifierBuildOverride,
+      TimeCountDownNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -551,7 +602,8 @@ final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDow
 
   @$internal
   @override
-  TimeCountDownNotifier create() => _createCb?.call() ?? TimeCountDownNotifier();
+  TimeCountDownNotifier create() =>
+      _createCb?.call() ?? TimeCountDownNotifier();
 
   @$internal
   @override
@@ -574,11 +626,13 @@ final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDow
 
   @$internal
   @override
-  $NotifierProviderElement<TimeCountDownNotifier, Raw<Future<bool>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<TimeCountDownNotifier, Raw<Future<bool>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$timeCountDownNotifierHash() => r'2ad9751aa977e4c757f46b66218f47618a882fbd';
+String _$timeCountDownNotifierHash() =>
+    r'2ad9751aa977e4c757f46b66218f47618a882fbd';
 
 abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
   Raw<Future<bool>> build();
@@ -587,8 +641,8 @@ abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<bool>>>;
-    final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<bool>>>, Raw<Future<bool>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<bool>>>, Raw<Future<bool>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -596,8 +650,10 @@ abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
 @ProviderFor(FavoritesNotifier)
 const favoritesNotifierProvider = FavoritesNotifierProvider._();
 
-final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> {
-  const FavoritesNotifierProvider._({super.runNotifierBuildOverride, FavoritesNotifier Function()? create})
+final class FavoritesNotifierProvider extends $NotifierProvider<
+    FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> {
+  const FavoritesNotifierProvider._(
+      {super.runNotifierBuildOverride, FavoritesNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -618,7 +674,8 @@ final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifie
   Override overrideWithValue(Raw<Future<Map<String, Set<int>>>> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Map<String, Set<int>>>>>(value),
+      providerOverride:
+          $ValueProvider<Raw<Future<Map<String, Set<int>>>>>(value),
     );
   }
 
@@ -647,22 +704,27 @@ final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifie
 
   @$internal
   @override
-  $NotifierProviderElement<FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> $createElement(
+  $NotifierProviderElement<FavoritesNotifier,
+      Raw<Future<Map<String, Set<int>>>>> $createElement(
           $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
 String _$favoritesNotifierHash() => r'97f2d02bbc78a039c8a97863a8900b91e623730f';
 
-abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<int>>>>> {
+abstract class _$FavoritesNotifier
+    extends $Notifier<Raw<Future<Map<String, Set<int>>>>> {
   Raw<Future<Map<String, Set<int>>>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Map<String, Set<int>>>>>;
-    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<Map<String, Set<int>>>>>,
-        Raw<Future<Map<String, Set<int>>>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<Map<String, Set<int>>>>>,
+        Raw<Future<Map<String, Set<int>>>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -670,8 +732,10 @@ abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<
 @ProviderFor(OrgAuthNotifier)
 const orgAuthNotifierProvider = OrgAuthNotifierProvider._();
 
-final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> {
-  const OrgAuthNotifierProvider._({super.runNotifierBuildOverride, OrgAuthNotifier Function()? create})
+final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier,
+    Raw<Future<Map<int, AuthService>>>> {
+  const OrgAuthNotifierProvider._(
+      {super.runNotifierBuildOverride, OrgAuthNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -692,7 +756,8 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
   Override overrideWithValue(Raw<Future<Map<int, AuthService>>> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Map<int, AuthService>>>>(value),
+      providerOverride:
+          $ValueProvider<Raw<Future<Map<int, AuthService>>>>(value),
     );
   }
 
@@ -721,33 +786,39 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
 
   @$internal
   @override
-  $NotifierProviderElement<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
 String _$orgAuthNotifierHash() => r'0c4640e47bee1b05ac64d6f5ec26a85eaad2e13f';
 
-abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthService>>>> {
+abstract class _$OrgAuthNotifier
+    extends $Notifier<Raw<Future<Map<int, AuthService>>>> {
   Raw<Future<Map<int, AuthService>>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Map<int, AuthService>>>>;
-    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<Map<int, AuthService>>>>,
-        Raw<Future<Map<int, AuthService>>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<Map<int, AuthService>>>>,
+        Raw<Future<Map<int, AuthService>>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
 
 @ProviderFor(ProposeApiImportDurationNotifier)
-const proposeApiImportDurationNotifierProvider = ProposeApiImportDurationNotifierProvider._();
+const proposeApiImportDurationNotifierProvider =
+    ProposeApiImportDurationNotifierProvider._();
 
-final class ProposeApiImportDurationNotifierProvider
-    extends $NotifierProvider<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> {
+final class ProposeApiImportDurationNotifierProvider extends $NotifierProvider<
+    ProposeApiImportDurationNotifier, Raw<Future<Duration>>> {
   const ProposeApiImportDurationNotifierProvider._(
-      {super.runNotifierBuildOverride, ProposeApiImportDurationNotifier Function()? create})
+      {super.runNotifierBuildOverride,
+      ProposeApiImportDurationNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -774,7 +845,8 @@ final class ProposeApiImportDurationNotifierProvider
 
   @$internal
   @override
-  ProposeApiImportDurationNotifier create() => _createCb?.call() ?? ProposeApiImportDurationNotifier();
+  ProposeApiImportDurationNotifier create() =>
+      _createCb?.call() ?? ProposeApiImportDurationNotifier();
 
   @$internal
   @override
@@ -792,27 +864,34 @@ final class ProposeApiImportDurationNotifierProvider
       ProposeApiImportDurationNotifier,
     ) build,
   ) {
-    return ProposeApiImportDurationNotifierProvider._(runNotifierBuildOverride: build);
+    return ProposeApiImportDurationNotifierProvider._(
+        runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
-  $NotifierProviderElement<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> $createElement(
+  $NotifierProviderElement<ProposeApiImportDurationNotifier,
+      Raw<Future<Duration>>> $createElement(
           $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
-String _$proposeApiImportDurationNotifierHash() => r'eeddaf8abe731269562eac53d8bd127bc34484ff';
+String _$proposeApiImportDurationNotifierHash() =>
+    r'eeddaf8abe731269562eac53d8bd127bc34484ff';
 
-abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<Duration>>> {
+abstract class _$ProposeApiImportDurationNotifier
+    extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Duration>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<Duration>>>, Raw<Future<Duration>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<Duration>>>,
+        Raw<Future<Duration>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -820,8 +899,10 @@ abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<D
 @ProviderFor(JwtNotifier)
 const jwtNotifierProvider = JwtNotifierProvider._();
 
-final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Future<String?>>> {
-  const JwtNotifierProvider._({super.runNotifierBuildOverride, JwtNotifier Function()? create})
+final class JwtNotifierProvider
+    extends $NotifierProvider<JwtNotifier, Raw<Future<String?>>> {
+  const JwtNotifierProvider._(
+      {super.runNotifierBuildOverride, JwtNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -871,7 +952,8 @@ final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Futur
 
   @$internal
   @override
-  $NotifierProviderElement<JwtNotifier, Raw<Future<String?>>> $createElement($ProviderPointer pointer) =>
+  $NotifierProviderElement<JwtNotifier, Raw<Future<String?>>> $createElement(
+          $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
@@ -884,8 +966,11 @@ abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String?>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<String?>>>, Raw<Future<String?>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<String?>>>,
+        Raw<Future<String?>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }

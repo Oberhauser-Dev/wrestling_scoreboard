@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_config_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionEdit extends BoutConfigEdit {
@@ -23,6 +25,8 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
   late DateTime _date;
   String? _comment;
   String? _name;
+  int? _visitorsCount;
+  int? _matCount;
 
   @override
   void initState() {
@@ -34,7 +38,6 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    final navigator = Navigator.of(context);
 
     return buildEdit(context, id: widget.competition?.id, classLocale: localizations.competition, fields: [
       CustomTextInput(
@@ -49,7 +52,7 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
         title: TextFormField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
-            labelText: localizations.matchNumber,
+            labelText: localizations.competitionNumber,
           ),
           initialValue: widget.competition?.no,
           onSaved: (newValue) => _no = newValue,
@@ -86,6 +89,36 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.adjust), // Replace with square_dot
+        title: TextFormField(
+          initialValue: widget.competition?.matCount.toString(),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.mats,
+          ),
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
+          onSaved: (String? value) {
+            _matCount = int.tryParse(value ?? '') ?? 1;
+          },
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.confirmation_number),
+        title: TextFormField(
+          initialValue: widget.competition?.visitorsCount.toString(),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.visitors,
+          ),
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 9223372036854775808)],
+          onSaved: (String? value) {
+            _visitorsCount = int.tryParse(value ?? '');
+          },
+        ),
+      ),
+      ListTile(
         leading: const Icon(Icons.comment),
         title: TextFormField(
           decoration: InputDecoration(
@@ -112,6 +145,8 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
         comment: _comment,
         name: _name!,
         boutConfig: boutConfig,
+        visitorsCount: _visitorsCount,
+        matCount: _matCount!,
       ),
     );
   }

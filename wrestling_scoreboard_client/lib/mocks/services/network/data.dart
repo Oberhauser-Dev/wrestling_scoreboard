@@ -217,6 +217,7 @@ final _competition = Competition(
   comment: 'This is a comment',
   location: 'Aichach',
   visitorsCount: 500,
+  matCount: 6,
 );
 
 final _competitionLineup1 = CompetitionLineup(competition: _competition, club: _homeClub);

@@ -845,6 +845,12 @@ abstract class AppLocalizations {
   /// **'Mat'**
   String get mat;
 
+  /// No description provided for @mats.
+  ///
+  /// In en, this message translates to:
+  /// **'Mats'**
+  String get mats;
+
   /// No description provided for @status.
   ///
   /// In en, this message translates to:

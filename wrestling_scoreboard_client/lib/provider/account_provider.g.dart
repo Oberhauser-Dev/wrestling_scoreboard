@@ -9,8 +9,10 @@ part of 'account_provider.dart';
 @ProviderFor(UserNotifier)
 const userNotifierProvider = UserNotifierProvider._();
 
-final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
-  const UserNotifierProvider._({super.runNotifierBuildOverride, UserNotifier Function()? create})
+final class UserNotifierProvider
+    extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
+  const UserNotifierProvider._(
+      {super.runNotifierBuildOverride, UserNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -60,7 +62,8 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
 
   @$internal
   @override
-  $NotifierProviderElement<UserNotifier, Raw<Future<User?>>> $createElement($ProviderPointer pointer) =>
+  $NotifierProviderElement<UserNotifier, Raw<Future<User?>>> $createElement(
+          $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
@@ -73,8 +76,8 @@ abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<User?>>>;
-    final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<User?>>>, Raw<Future<User?>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<User?>>>, Raw<Future<User?>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

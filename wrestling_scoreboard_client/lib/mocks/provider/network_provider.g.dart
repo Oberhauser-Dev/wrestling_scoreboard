@@ -9,9 +9,11 @@ part of 'network_provider.dart';
 @ProviderFor(MockDataManagerNotifier)
 const mockDataManagerNotifierProvider = MockDataManagerNotifierProvider._();
 
-final class MockDataManagerNotifierProvider
-    extends $NotifierProvider<MockDataManagerNotifier, Raw<Future<DataManager>>> {
-  const MockDataManagerNotifierProvider._({super.runNotifierBuildOverride, MockDataManagerNotifier Function()? create})
+final class MockDataManagerNotifierProvider extends $NotifierProvider<
+    MockDataManagerNotifier, Raw<Future<DataManager>>> {
+  const MockDataManagerNotifierProvider._(
+      {super.runNotifierBuildOverride,
+      MockDataManagerNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -38,7 +40,8 @@ final class MockDataManagerNotifierProvider
 
   @$internal
   @override
-  MockDataManagerNotifier create() => _createCb?.call() ?? MockDataManagerNotifier();
+  MockDataManagerNotifier create() =>
+      _createCb?.call() ?? MockDataManagerNotifier();
 
   @$internal
   @override
@@ -61,33 +64,40 @@ final class MockDataManagerNotifierProvider
 
   @$internal
   @override
-  $NotifierProviderElement<MockDataManagerNotifier, Raw<Future<DataManager>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<MockDataManagerNotifier, Raw<Future<DataManager>>>
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 }
 
-String _$mockDataManagerNotifierHash() => r'9c3e0e3c990b61d515e8b2f23636bb3ca9201415';
+String _$mockDataManagerNotifierHash() =>
+    r'9c3e0e3c990b61d515e8b2f23636bb3ca9201415';
 
-abstract class _$MockDataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
+abstract class _$MockDataManagerNotifier
+    extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<DataManager>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<DataManager>>>, Raw<Future<DataManager>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<DataManager>>>,
+        Raw<Future<DataManager>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
 
 @ProviderFor(MockWebsocketManagerNotifier)
-const mockWebsocketManagerNotifierProvider = MockWebsocketManagerNotifierProvider._();
+const mockWebsocketManagerNotifierProvider =
+    MockWebsocketManagerNotifierProvider._();
 
-final class MockWebsocketManagerNotifierProvider
-    extends $NotifierProvider<MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
+final class MockWebsocketManagerNotifierProvider extends $NotifierProvider<
+    MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
   const MockWebsocketManagerNotifierProvider._(
-      {super.runNotifierBuildOverride, MockWebsocketManagerNotifier Function()? create})
+      {super.runNotifierBuildOverride,
+      MockWebsocketManagerNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -114,7 +124,8 @@ final class MockWebsocketManagerNotifierProvider
 
   @$internal
   @override
-  MockWebsocketManagerNotifier create() => _createCb?.call() ?? MockWebsocketManagerNotifier();
+  MockWebsocketManagerNotifier create() =>
+      _createCb?.call() ?? MockWebsocketManagerNotifier();
 
   @$internal
   @override
@@ -132,27 +143,34 @@ final class MockWebsocketManagerNotifierProvider
       MockWebsocketManagerNotifier,
     ) build,
   ) {
-    return MockWebsocketManagerNotifierProvider._(runNotifierBuildOverride: build);
+    return MockWebsocketManagerNotifierProvider._(
+        runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
-  $NotifierProviderElement<MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> $createElement(
+  $NotifierProviderElement<MockWebsocketManagerNotifier,
+      Raw<Future<WebSocketManager>>> $createElement(
           $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
-String _$mockWebsocketManagerNotifierHash() => r'709ed2a007d7a6ac50c4c2680f750b6c1e730e95';
+String _$mockWebsocketManagerNotifierHash() =>
+    r'709ed2a007d7a6ac50c4c2680f750b6c1e730e95';
 
-abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
+abstract class _$MockWebsocketManagerNotifier
+    extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>>;
-    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<WebSocketManager>>>,
-        Raw<Future<WebSocketManager>>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        NotifierBase<Raw<Future<WebSocketManager>>>,
+        Raw<Future<WebSocketManager>>,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
