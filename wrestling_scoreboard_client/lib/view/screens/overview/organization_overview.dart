@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
@@ -121,7 +122,7 @@ class OrganizationOverview extends ConsumerWidget {
             FilterableManyConsumer<Competition, Organization>.edit(
               context: context,
               filterObject: data,
-              editPageBuilder: (context) => /*CompetitionEdit(initialOrganization: data)*/ const SizedBox(),
+              editPageBuilder: (context) => CompetitionEdit(initialOrganization: data),
               itemBuilder: (context, item) => ContentItem(
                   title: item.name, icon: Icons.leaderboard, onTap: () => handleSelectedCompetition(item, context)),
             ),

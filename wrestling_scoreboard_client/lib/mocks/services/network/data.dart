@@ -221,6 +221,21 @@ final _competition = Competition(
 
 final _competitionLineup1 = CompetitionLineup(competition: _competition, club: _homeClub);
 final _competitionLineup2 = CompetitionLineup(competition: _competition, club: _guestClub);
+final _competitionWeightCategory = CompetitionWeightCategory(
+    competition: _competition, weightClass: wc61, ageCategory: AgeCategory(name: 'Juniors', minAge: 16, maxAge: 18));
+
+final _competitionBout = CompetitionBout(
+  id: 1,
+  competition: _competition,
+  pos: 0,
+  bout: Bout(
+    id: 1,
+    r: AthleteBoutState(id: 1, membership: r1),
+    b: AthleteBoutState(id: 2, membership: b1),
+    organization: _organization,
+  ),
+  weightCategory: _competitionWeightCategory,
+);
 
 final List<Club> _clubs = [_homeClub, _guestClub];
 final List<BoutAction> _boutActions = []; // TODO fill
@@ -244,7 +259,7 @@ final List<TeamClubAffiliation> _teamClubAffiliations = [
 final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
 final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
 final List<Competition> _competitions = [_competition];
-final List<CompetitionBout> _competitionBouts = []; // TODO fill
+final List<CompetitionBout> _competitionBouts = [_competitionBout];
 final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
 final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
 final List<BoutConfig> _boutConfigs = [_boutConfig];
@@ -382,6 +397,10 @@ List<Competition> getCompetitionsOfOrganization(Organization organization) {
 }
 
 List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
+
+List<CompetitionBout> getCompetitionBoutsOfCompetition(Competition competition) {
+  return getCompetitionBouts().where((element) => element.competition == competition).toList();
+}
 
 List<CompetitionLineup> getCompetitionLineups() => _competitionLineups;
 
