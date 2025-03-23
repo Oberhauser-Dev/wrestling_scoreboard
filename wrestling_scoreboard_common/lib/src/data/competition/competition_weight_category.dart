@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
-import 'age_category.dart';
 
 part 'competition_weight_category.freezed.dart';
 part 'competition_weight_category.g.dart';
@@ -50,6 +49,8 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
 
   @override
   String get tableName => 'competition_weight_category';
+
+  String get name => '${ageCategory.name} | ${weightClass.name}';
 
   @override
   CompetitionWeightCategory copyWithId(int? id) {

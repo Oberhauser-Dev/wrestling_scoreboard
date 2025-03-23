@@ -29,7 +29,8 @@ mixin _$Division {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $DivisionCopyWith<Division> get copyWith => _$DivisionCopyWithImpl<Division>(this as Division, _$identity);
+  $DivisionCopyWith<Division> get copyWith =>
+      _$DivisionCopyWithImpl<Division>(this as Division, _$identity);
 
   /// Serializes this Division to a JSON map.
   Map<String, dynamic> toJson();
@@ -40,20 +41,25 @@ mixin _$Division {
         (other.runtimeType == runtimeType &&
             other is Division &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.startDate, startDate) || other.startDate == startDate) &&
+            (identical(other.startDate, startDate) ||
+                other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
-            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
-            (identical(other.seasonPartitions, seasonPartitions) || other.seasonPartitions == seasonPartitions) &&
+            (identical(other.boutConfig, boutConfig) ||
+                other.boutConfig == boutConfig) &&
+            (identical(other.seasonPartitions, seasonPartitions) ||
+                other.seasonPartitions == seasonPartitions) &&
             (identical(other.parent, parent) || other.parent == parent));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orgSyncId, organization, name, startDate, endDate, boutConfig, seasonPartitions, parent);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      name, startDate, endDate, boutConfig, seasonPartitions, parent);
 
   @override
   String toString() {
@@ -63,7 +69,8 @@ mixin _$Division {
 
 /// @nodoc
 abstract mixin class $DivisionCopyWith<$Res> {
-  factory $DivisionCopyWith(Division value, $Res Function(Division) _then) = _$DivisionCopyWithImpl;
+  factory $DivisionCopyWith(Division value, $Res Function(Division) _then) =
+      _$DivisionCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -192,7 +199,8 @@ class _Division extends Division {
       required this.seasonPartitions,
       this.parent})
       : super._();
-  factory _Division.fromJson(Map<String, dynamic> json) => _$DivisionFromJson(json);
+  factory _Division.fromJson(Map<String, dynamic> json) =>
+      _$DivisionFromJson(json);
 
   @override
   final int? id;
@@ -218,7 +226,8 @@ class _Division extends Division {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$DivisionCopyWith<_Division> get copyWith => __$DivisionCopyWithImpl<_Division>(this, _$identity);
+  _$DivisionCopyWith<_Division> get copyWith =>
+      __$DivisionCopyWithImpl<_Division>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -233,20 +242,25 @@ class _Division extends Division {
         (other.runtimeType == runtimeType &&
             other is _Division &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.startDate, startDate) || other.startDate == startDate) &&
+            (identical(other.startDate, startDate) ||
+                other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
-            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
-            (identical(other.seasonPartitions, seasonPartitions) || other.seasonPartitions == seasonPartitions) &&
+            (identical(other.boutConfig, boutConfig) ||
+                other.boutConfig == boutConfig) &&
+            (identical(other.seasonPartitions, seasonPartitions) ||
+                other.seasonPartitions == seasonPartitions) &&
             (identical(other.parent, parent) || other.parent == parent));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orgSyncId, organization, name, startDate, endDate, boutConfig, seasonPartitions, parent);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      name, startDate, endDate, boutConfig, seasonPartitions, parent);
 
   @override
   String toString() {
@@ -255,8 +269,10 @@ class _Division extends Division {
 }
 
 /// @nodoc
-abstract mixin class _$DivisionCopyWith<$Res> implements $DivisionCopyWith<$Res> {
-  factory _$DivisionCopyWith(_Division value, $Res Function(_Division) _then) = __$DivisionCopyWithImpl;
+abstract mixin class _$DivisionCopyWith<$Res>
+    implements $DivisionCopyWith<$Res> {
+  factory _$DivisionCopyWith(_Division value, $Res Function(_Division) _then) =
+      __$DivisionCopyWithImpl;
   @override
   @useResult
   $Res call(

@@ -34,7 +34,7 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
       teamMatch: teamMatch,
       bout: bout,
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
-      pos: e['pos'],
+      pos: e['pos'] as int,
     );
   }
 

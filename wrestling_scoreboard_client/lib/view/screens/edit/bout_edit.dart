@@ -33,8 +33,6 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
   Membership? _blueMembership;
   Duration? _boutDuration;
 
-  Future<List<WeightClass>> get availableWeightClasses;
-
   @override
   void initState() {
     super.initState();
@@ -168,7 +166,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         r: await updateAthleteBoutState(_redMembership, widget.bout?.r),
         b: await updateAthleteBoutState(_blueMembership, widget.bout?.b),
         duration: _boutDuration ?? Duration.zero,
-        pool: widget.bout?.pool,
+        mat: widget.bout?.mat,
       );
 
       bout = bout.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout));

@@ -13,7 +13,8 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     int? id,
     required Competition competition,
     required Bout bout,
-    required CompetitionWeightCategory weightCategory,
+    required int pos,
+    CompetitionWeightCategory? weightCategory,
   }) = _CompetitionBout;
 
   factory CompetitionBout.fromJson(Map<String, Object?> json) => _$CompetitionBoutFromJson(json);
@@ -21,13 +22,14 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
   static Future<CompetitionBout> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final competition = await getSingle<Competition>(e['competition_id'] as int);
     final bout = await getSingle<Bout>(e['bout_id'] as int);
-    final weightCategory = await getSingle<CompetitionWeightCategory>(e['weight_category_id'] as int);
+    final weightCategoryId = e['weight_category_id'] as int?;
 
     return CompetitionBout(
       id: e['id'] as int?,
       competition: competition,
       bout: bout,
-      weightCategory: weightCategory,
+      weightCategory: weightCategoryId == null ? null : await getSingle<CompetitionWeightCategory>(weightCategoryId),
+      pos: e['pos'] as int,
     );
   }
 
@@ -37,9 +39,10 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
+      'pos': pos,
       'competition_id': competition.id!,
       'bout_id': bout.id!,
-      'weight_category_id': weightCategory.id!,
+      'weight_category_id': weightCategory?.id,
     };
   }
 

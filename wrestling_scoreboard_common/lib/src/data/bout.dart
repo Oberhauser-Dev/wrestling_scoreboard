@@ -16,7 +16,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     Organization? organization,
     AthleteBoutState? r, // red
     AthleteBoutState? b, // blue
-    int? pool,
+    int? mat,
     BoutRole? winnerRole,
     BoutResult? result,
     @Default(Duration.zero) Duration duration,
@@ -32,6 +32,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       if (organization != null) 'organization_id': organization?.id!,
       'red_id': r?.id!,
       'blue_id': b?.id!,
+      'mat': mat,
       'winner_role': winnerRole?.name,
       'bout_result': result?.name,
       'duration_millis': duration.inMilliseconds,
@@ -54,6 +55,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       winnerRole: winner == null ? null : BoutRole.values.byName(winner),
       result: boutResult == null ? null : BoutResult.values.byName(boutResult),
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
+      mat: e['mat'] as int?,
     );
   }
 

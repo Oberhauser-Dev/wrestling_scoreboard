@@ -42,21 +42,26 @@ mixin _$Competition {
         (other.runtimeType == runtimeType &&
             other is Competition &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
-            (identical(other.location, location) || other.location == location) &&
+            (identical(other.boutConfig, boutConfig) ||
+                other.boutConfig == boutConfig) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.no, no) || other.no == no) &&
-            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
+            (identical(other.visitorsCount, visitorsCount) ||
+                other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      name, boutConfig, location, date, no, visitorsCount, comment);
 
   @override
   String toString() {
@@ -66,7 +71,9 @@ mixin _$Competition {
 
 /// @nodoc
 abstract mixin class $CompetitionCopyWith<$Res> {
-  factory $CompetitionCopyWith(Competition value, $Res Function(Competition) _then) = _$CompetitionCopyWithImpl;
+  factory $CompetitionCopyWith(
+          Competition value, $Res Function(Competition) _then) =
+      _$CompetitionCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -191,7 +198,8 @@ class _Competition extends Competition {
       this.visitorsCount,
       this.comment})
       : super._();
-  factory _Competition.fromJson(Map<String, dynamic> json) => _$CompetitionFromJson(json);
+  factory _Competition.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionFromJson(json);
 
   @override
   final int? id;
@@ -219,7 +227,8 @@ class _Competition extends Competition {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CompetitionCopyWith<_Competition> get copyWith => __$CompetitionCopyWithImpl<_Competition>(this, _$identity);
+  _$CompetitionCopyWith<_Competition> get copyWith =>
+      __$CompetitionCopyWithImpl<_Competition>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -234,21 +243,26 @@ class _Competition extends Competition {
         (other.runtimeType == runtimeType &&
             other is _Competition &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig) &&
-            (identical(other.location, location) || other.location == location) &&
+            (identical(other.boutConfig, boutConfig) ||
+                other.boutConfig == boutConfig) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.no, no) || other.no == no) &&
-            (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
+            (identical(other.visitorsCount, visitorsCount) ||
+                other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      name, boutConfig, location, date, no, visitorsCount, comment);
 
   @override
   String toString() {
@@ -257,8 +271,11 @@ class _Competition extends Competition {
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionCopyWith<$Res> implements $CompetitionCopyWith<$Res> {
-  factory _$CompetitionCopyWith(_Competition value, $Res Function(_Competition) _then) = __$CompetitionCopyWithImpl;
+abstract mixin class _$CompetitionCopyWith<$Res>
+    implements $CompetitionCopyWith<$Res> {
+  factory _$CompetitionCopyWith(
+          _Competition value, $Res Function(_Competition) _then) =
+      __$CompetitionCopyWithImpl;
   @override
   @useResult
   $Res call(

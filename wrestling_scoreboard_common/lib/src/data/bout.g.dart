@@ -9,14 +9,21 @@ part of 'bout.dart';
 _Bout _$BoutFromJson(Map<String, dynamic> json) => _Bout(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
-      organization:
-          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
-      r: json['r'] == null ? null : AthleteBoutState.fromJson(json['r'] as Map<String, dynamic>),
-      b: json['b'] == null ? null : AthleteBoutState.fromJson(json['b'] as Map<String, dynamic>),
-      pool: (json['pool'] as num?)?.toInt(),
+      organization: json['organization'] == null
+          ? null
+          : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      r: json['r'] == null
+          ? null
+          : AthleteBoutState.fromJson(json['r'] as Map<String, dynamic>),
+      b: json['b'] == null
+          ? null
+          : AthleteBoutState.fromJson(json['b'] as Map<String, dynamic>),
+      mat: (json['mat'] as num?)?.toInt(),
       winnerRole: $enumDecodeNullable(_$BoutRoleEnumMap, json['winnerRole']),
       result: $enumDecodeNullable(_$BoutResultEnumMap, json['result']),
-      duration: json['duration'] == null ? Duration.zero : Duration(microseconds: (json['duration'] as num).toInt()),
+      duration: json['duration'] == null
+          ? Duration.zero
+          : Duration(microseconds: (json['duration'] as num).toInt()),
     );
 
 Map<String, dynamic> _$BoutToJson(_Bout instance) => <String, dynamic>{
@@ -25,7 +32,7 @@ Map<String, dynamic> _$BoutToJson(_Bout instance) => <String, dynamic>{
       'organization': instance.organization?.toJson(),
       'r': instance.r?.toJson(),
       'b': instance.b?.toJson(),
-      'pool': instance.pool,
+      'mat': instance.mat,
       'winnerRole': _$BoutRoleEnumMap[instance.winnerRole],
       'result': _$BoutResultEnumMap[instance.result],
       'duration': instance.duration.inMicroseconds,

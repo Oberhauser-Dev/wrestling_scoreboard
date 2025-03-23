@@ -26,7 +26,8 @@ mixin _$CompetitionLineup {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $CompetitionLineupCopyWith<CompetitionLineup> get copyWith =>
-      _$CompetitionLineupCopyWithImpl<CompetitionLineup>(this as CompetitionLineup, _$identity);
+      _$CompetitionLineupCopyWithImpl<CompetitionLineup>(
+          this as CompetitionLineup, _$identity);
 
   /// Serializes this CompetitionLineup to a JSON map.
   Map<String, dynamic> toJson();
@@ -37,7 +38,8 @@ mixin _$CompetitionLineup {
         (other.runtimeType == runtimeType &&
             other is CompetitionLineup &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.club, club) || other.club == club) &&
             (identical(other.leader, leader) || other.leader == leader) &&
             (identical(other.coach, coach) || other.coach == coach));
@@ -45,7 +47,8 @@ mixin _$CompetitionLineup {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, competition, club, leader, coach);
+  int get hashCode =>
+      Object.hash(runtimeType, id, competition, club, leader, coach);
 
   @override
   String toString() {
@@ -55,10 +58,16 @@ mixin _$CompetitionLineup {
 
 /// @nodoc
 abstract mixin class $CompetitionLineupCopyWith<$Res> {
-  factory $CompetitionLineupCopyWith(CompetitionLineup value, $Res Function(CompetitionLineup) _then) =
+  factory $CompetitionLineupCopyWith(
+          CompetitionLineup value, $Res Function(CompetitionLineup) _then) =
       _$CompetitionLineupCopyWithImpl;
   @useResult
-  $Res call({int? id, Competition competition, Club club, Membership? leader, Membership? coach});
+  $Res call(
+      {int? id,
+      Competition competition,
+      Club club,
+      Membership? leader,
+      Membership? coach});
 
   $CompetitionCopyWith<$Res> get competition;
   $ClubCopyWith<$Res> get club;
@@ -67,7 +76,8 @@ abstract mixin class $CompetitionLineupCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionLineupCopyWithImpl<$Res> implements $CompetitionLineupCopyWith<$Res> {
+class _$CompetitionLineupCopyWithImpl<$Res>
+    implements $CompetitionLineupCopyWith<$Res> {
   _$CompetitionLineupCopyWithImpl(this._self, this._then);
 
   final CompetitionLineup _self;
@@ -160,9 +170,15 @@ class _$CompetitionLineupCopyWithImpl<$Res> implements $CompetitionLineupCopyWit
 /// @nodoc
 @JsonSerializable()
 class _CompetitionLineup extends CompetitionLineup {
-  const _CompetitionLineup({this.id, required this.competition, required this.club, this.leader, this.coach})
+  const _CompetitionLineup(
+      {this.id,
+      required this.competition,
+      required this.club,
+      this.leader,
+      this.coach})
       : super._();
-  factory _CompetitionLineup.fromJson(Map<String, dynamic> json) => _$CompetitionLineupFromJson(json);
+  factory _CompetitionLineup.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionLineupFromJson(json);
 
   @override
   final int? id;
@@ -197,7 +213,8 @@ class _CompetitionLineup extends CompetitionLineup {
         (other.runtimeType == runtimeType &&
             other is _CompetitionLineup &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.club, club) || other.club == club) &&
             (identical(other.leader, leader) || other.leader == leader) &&
             (identical(other.coach, coach) || other.coach == coach));
@@ -205,7 +222,8 @@ class _CompetitionLineup extends CompetitionLineup {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, competition, club, leader, coach);
+  int get hashCode =>
+      Object.hash(runtimeType, id, competition, club, leader, coach);
 
   @override
   String toString() {
@@ -214,12 +232,19 @@ class _CompetitionLineup extends CompetitionLineup {
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionLineupCopyWith<$Res> implements $CompetitionLineupCopyWith<$Res> {
-  factory _$CompetitionLineupCopyWith(_CompetitionLineup value, $Res Function(_CompetitionLineup) _then) =
+abstract mixin class _$CompetitionLineupCopyWith<$Res>
+    implements $CompetitionLineupCopyWith<$Res> {
+  factory _$CompetitionLineupCopyWith(
+          _CompetitionLineup value, $Res Function(_CompetitionLineup) _then) =
       __$CompetitionLineupCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, Competition competition, Club club, Membership? leader, Membership? coach});
+  $Res call(
+      {int? id,
+      Competition competition,
+      Club club,
+      Membership? leader,
+      Membership? coach});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
@@ -232,7 +257,8 @@ abstract mixin class _$CompetitionLineupCopyWith<$Res> implements $CompetitionLi
 }
 
 /// @nodoc
-class __$CompetitionLineupCopyWithImpl<$Res> implements _$CompetitionLineupCopyWith<$Res> {
+class __$CompetitionLineupCopyWithImpl<$Res>
+    implements _$CompetitionLineupCopyWith<$Res> {
   __$CompetitionLineupCopyWithImpl(this._self, this._then);
 
   final _CompetitionLineup _self;

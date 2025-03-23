@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/competition/compet
 import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -173,7 +174,7 @@ class CompetitionOverview extends ConsumerWidget {
                         );
                       });
                 }),
-            // CompetitionBoutList(filterObject: competition),
+            CompetitionBoutList(filterObject: competition),
             // GroupedList(
             //   header: const HeadingItem(),
             //   itemCount: contentItems.length,
@@ -226,7 +227,7 @@ class CompetitionOverview extends ConsumerWidget {
             tabs: [
               Tab(child: HeadingText(localizations.info)),
               Tab(child: HeadingText(localizations.lineups)),
-              // Tab(child: HeadingText(localizations.bouts)),
+              Tab(child: HeadingText(localizations.bouts)),
               // Tab(child: HeadingText(localizations.persons)),
             ],
             body: TabGroup(items: items),

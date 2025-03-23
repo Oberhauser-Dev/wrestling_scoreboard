@@ -24,7 +24,8 @@ mixin _$AthleteBoutState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $AthleteBoutStateCopyWith<AthleteBoutState> get copyWith =>
-      _$AthleteBoutStateCopyWithImpl<AthleteBoutState>(this as AthleteBoutState, _$identity);
+      _$AthleteBoutStateCopyWithImpl<AthleteBoutState>(
+          this as AthleteBoutState, _$identity);
 
   /// Serializes this AthleteBoutState to a JSON map.
   Map<String, dynamic> toJson();
@@ -35,14 +36,16 @@ mixin _$AthleteBoutState {
         (other.runtimeType == runtimeType &&
             other is AthleteBoutState &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.membership, membership) || other.membership == membership) &&
+            (identical(other.membership, membership) ||
+                other.membership == membership) &&
             (identical(other.classificationPoints, classificationPoints) ||
                 other.classificationPoints == classificationPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, membership, classificationPoints);
+  int get hashCode =>
+      Object.hash(runtimeType, id, membership, classificationPoints);
 
   @override
   String toString() {
@@ -52,7 +55,8 @@ mixin _$AthleteBoutState {
 
 /// @nodoc
 abstract mixin class $AthleteBoutStateCopyWith<$Res> {
-  factory $AthleteBoutStateCopyWith(AthleteBoutState value, $Res Function(AthleteBoutState) _then) =
+  factory $AthleteBoutStateCopyWith(
+          AthleteBoutState value, $Res Function(AthleteBoutState) _then) =
       _$AthleteBoutStateCopyWithImpl;
   @useResult
   $Res call({int? id, Membership membership, int? classificationPoints});
@@ -61,7 +65,8 @@ abstract mixin class $AthleteBoutStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AthleteBoutStateCopyWithImpl<$Res> implements $AthleteBoutStateCopyWith<$Res> {
+class _$AthleteBoutStateCopyWithImpl<$Res>
+    implements $AthleteBoutStateCopyWith<$Res> {
   _$AthleteBoutStateCopyWithImpl(this._self, this._then);
 
   final AthleteBoutState _self;
@@ -106,8 +111,11 @@ class _$AthleteBoutStateCopyWithImpl<$Res> implements $AthleteBoutStateCopyWith<
 /// @nodoc
 @JsonSerializable()
 class _AthleteBoutState extends AthleteBoutState {
-  const _AthleteBoutState({this.id, required this.membership, this.classificationPoints}) : super._();
-  factory _AthleteBoutState.fromJson(Map<String, dynamic> json) => _$AthleteBoutStateFromJson(json);
+  const _AthleteBoutState(
+      {this.id, required this.membership, this.classificationPoints})
+      : super._();
+  factory _AthleteBoutState.fromJson(Map<String, dynamic> json) =>
+      _$AthleteBoutStateFromJson(json);
 
   @override
   final int? id;
@@ -137,14 +145,16 @@ class _AthleteBoutState extends AthleteBoutState {
         (other.runtimeType == runtimeType &&
             other is _AthleteBoutState &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.membership, membership) || other.membership == membership) &&
+            (identical(other.membership, membership) ||
+                other.membership == membership) &&
             (identical(other.classificationPoints, classificationPoints) ||
                 other.classificationPoints == classificationPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, membership, classificationPoints);
+  int get hashCode =>
+      Object.hash(runtimeType, id, membership, classificationPoints);
 
   @override
   String toString() {
@@ -153,8 +163,10 @@ class _AthleteBoutState extends AthleteBoutState {
 }
 
 /// @nodoc
-abstract mixin class _$AthleteBoutStateCopyWith<$Res> implements $AthleteBoutStateCopyWith<$Res> {
-  factory _$AthleteBoutStateCopyWith(_AthleteBoutState value, $Res Function(_AthleteBoutState) _then) =
+abstract mixin class _$AthleteBoutStateCopyWith<$Res>
+    implements $AthleteBoutStateCopyWith<$Res> {
+  factory _$AthleteBoutStateCopyWith(
+          _AthleteBoutState value, $Res Function(_AthleteBoutState) _then) =
       __$AthleteBoutStateCopyWithImpl;
   @override
   @useResult
@@ -165,7 +177,8 @@ abstract mixin class _$AthleteBoutStateCopyWith<$Res> implements $AthleteBoutSta
 }
 
 /// @nodoc
-class __$AthleteBoutStateCopyWithImpl<$Res> implements _$AthleteBoutStateCopyWith<$Res> {
+class __$AthleteBoutStateCopyWithImpl<$Res>
+    implements _$AthleteBoutStateCopyWith<$Res> {
   __$AthleteBoutStateCopyWithImpl(this._self, this._then);
 
   final _AthleteBoutState _self;

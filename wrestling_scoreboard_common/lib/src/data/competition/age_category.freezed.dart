@@ -38,8 +38,10 @@ mixin _$AgeCategory {
         (other.runtimeType == runtimeType &&
             other is AgeCategory &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.minAge, minAge) || other.minAge == minAge) &&
             (identical(other.maxAge, maxAge) || other.maxAge == maxAge));
@@ -47,7 +49,8 @@ mixin _$AgeCategory {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, minAge, maxAge);
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, name, minAge, maxAge);
 
   @override
   String toString() {
@@ -57,9 +60,17 @@ mixin _$AgeCategory {
 
 /// @nodoc
 abstract mixin class $AgeCategoryCopyWith<$Res> {
-  factory $AgeCategoryCopyWith(AgeCategory value, $Res Function(AgeCategory) _then) = _$AgeCategoryCopyWithImpl;
+  factory $AgeCategoryCopyWith(
+          AgeCategory value, $Res Function(AgeCategory) _then) =
+      _$AgeCategoryCopyWithImpl;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, int minAge, int maxAge});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      int minAge,
+      int maxAge});
 
   $OrganizationCopyWith<$Res>? get organization;
 }
@@ -130,9 +141,15 @@ class _$AgeCategoryCopyWithImpl<$Res> implements $AgeCategoryCopyWith<$Res> {
 @JsonSerializable()
 class _AgeCategory extends AgeCategory {
   const _AgeCategory(
-      {this.id, this.orgSyncId, this.organization, required this.name, required this.minAge, required this.maxAge})
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      required this.name,
+      required this.minAge,
+      required this.maxAge})
       : super._();
-  factory _AgeCategory.fromJson(Map<String, dynamic> json) => _$AgeCategoryFromJson(json);
+  factory _AgeCategory.fromJson(Map<String, dynamic> json) =>
+      _$AgeCategoryFromJson(json);
 
   @override
   final int? id;
@@ -152,7 +169,8 @@ class _AgeCategory extends AgeCategory {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$AgeCategoryCopyWith<_AgeCategory> get copyWith => __$AgeCategoryCopyWithImpl<_AgeCategory>(this, _$identity);
+  _$AgeCategoryCopyWith<_AgeCategory> get copyWith =>
+      __$AgeCategoryCopyWithImpl<_AgeCategory>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -167,8 +185,10 @@ class _AgeCategory extends AgeCategory {
         (other.runtimeType == runtimeType &&
             other is _AgeCategory &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.minAge, minAge) || other.minAge == minAge) &&
             (identical(other.maxAge, maxAge) || other.maxAge == maxAge));
@@ -176,7 +196,8 @@ class _AgeCategory extends AgeCategory {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, minAge, maxAge);
+  int get hashCode => Object.hash(
+      runtimeType, id, orgSyncId, organization, name, minAge, maxAge);
 
   @override
   String toString() {
@@ -185,11 +206,20 @@ class _AgeCategory extends AgeCategory {
 }
 
 /// @nodoc
-abstract mixin class _$AgeCategoryCopyWith<$Res> implements $AgeCategoryCopyWith<$Res> {
-  factory _$AgeCategoryCopyWith(_AgeCategory value, $Res Function(_AgeCategory) _then) = __$AgeCategoryCopyWithImpl;
+abstract mixin class _$AgeCategoryCopyWith<$Res>
+    implements $AgeCategoryCopyWith<$Res> {
+  factory _$AgeCategoryCopyWith(
+          _AgeCategory value, $Res Function(_AgeCategory) _then) =
+      __$AgeCategoryCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, int minAge, int maxAge});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      int minAge,
+      int maxAge});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;

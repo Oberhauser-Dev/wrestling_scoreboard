@@ -29,7 +29,8 @@ mixin _$Person {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $PersonCopyWith<Person> get copyWith => _$PersonCopyWithImpl<Person>(this as Person, _$identity);
+  $PersonCopyWith<Person> get copyWith =>
+      _$PersonCopyWithImpl<Person>(this as Person, _$identity);
 
   /// Serializes this Person to a JSON map.
   Map<String, dynamic> toJson();
@@ -40,19 +41,23 @@ mixin _$Person {
         (other.runtimeType == runtimeType &&
             other is Person &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.prename, prename) || other.prename == prename) &&
             (identical(other.surname, surname) || other.surname == surname) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.birthDate, birthDate) || other.birthDate == birthDate) &&
-            (identical(other.nationality, nationality) || other.nationality == nationality));
+            (identical(other.birthDate, birthDate) ||
+                other.birthDate == birthDate) &&
+            (identical(other.nationality, nationality) ||
+                other.nationality == nationality));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, orgSyncId, organization, prename, surname, gender, birthDate, nationality);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      prename, surname, gender, birthDate, nationality);
 
   @override
   String toString() {
@@ -62,7 +67,8 @@ mixin _$Person {
 
 /// @nodoc
 abstract mixin class $PersonCopyWith<$Res> {
-  factory $PersonCopyWith(Person value, $Res Function(Person) _then) = _$PersonCopyWithImpl;
+  factory $PersonCopyWith(Person value, $Res Function(Person) _then) =
+      _$PersonCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -187,7 +193,8 @@ class _Person extends Person {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$PersonCopyWith<_Person> get copyWith => __$PersonCopyWithImpl<_Person>(this, _$identity);
+  _$PersonCopyWith<_Person> get copyWith =>
+      __$PersonCopyWithImpl<_Person>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -202,19 +209,23 @@ class _Person extends Person {
         (other.runtimeType == runtimeType &&
             other is _Person &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.prename, prename) || other.prename == prename) &&
             (identical(other.surname, surname) || other.surname == surname) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.birthDate, birthDate) || other.birthDate == birthDate) &&
-            (identical(other.nationality, nationality) || other.nationality == nationality));
+            (identical(other.birthDate, birthDate) ||
+                other.birthDate == birthDate) &&
+            (identical(other.nationality, nationality) ||
+                other.nationality == nationality));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, orgSyncId, organization, prename, surname, gender, birthDate, nationality);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
+      prename, surname, gender, birthDate, nationality);
 
   @override
   String toString() {
@@ -224,7 +235,8 @@ class _Person extends Person {
 
 /// @nodoc
 abstract mixin class _$PersonCopyWith<$Res> implements $PersonCopyWith<$Res> {
-  factory _$PersonCopyWith(_Person value, $Res Function(_Person) _then) = __$PersonCopyWithImpl;
+  factory _$PersonCopyWith(_Person value, $Res Function(_Person) _then) =
+      __$PersonCopyWithImpl;
   @override
   @useResult
   $Res call(

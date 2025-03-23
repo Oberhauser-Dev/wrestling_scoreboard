@@ -115,7 +115,15 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
         .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(teamMatchBout));
   }
 
-  @override
-  Future<List<WeightClass>> get availableWeightClasses async => (await ref.read(dataManagerNotifierProvider))
-      .readMany<WeightClass, Division>(filterObject: widget.initialTeamMatch.league?.division);
+  Future<List<WeightClass>> get availableWeightClasses async {
+    // TODO: recheck if where the calculation is done for weightClasses: Server or Client
+    final List<WeightClass> weightClasses = [];
+    weightClasses.addAll(await (await ref.read(dataManagerNotifierProvider))
+        .readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league));
+    if (weightClasses.isEmpty) {
+      weightClasses.addAll(await (await ref.read(dataManagerNotifierProvider))
+          .readMany<WeightClass, Division>(filterObject: widget.initialTeamMatch.league?.division));
+    }
+    return weightClasses;
+  }
 }

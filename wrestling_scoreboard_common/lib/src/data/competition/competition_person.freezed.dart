@@ -25,7 +25,8 @@ mixin _$CompetitionPerson {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $CompetitionPersonCopyWith<CompetitionPerson> get copyWith =>
-      _$CompetitionPersonCopyWithImpl<CompetitionPerson>(this as CompetitionPerson, _$identity);
+      _$CompetitionPersonCopyWithImpl<CompetitionPerson>(
+          this as CompetitionPerson, _$identity);
 
   /// Serializes this CompetitionPerson to a JSON map.
   Map<String, dynamic> toJson();
@@ -36,7 +37,8 @@ mixin _$CompetitionPerson {
         (other.runtimeType == runtimeType &&
             other is CompetitionPerson &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.person, person) || other.person == person) &&
             (identical(other.role, role) || other.role == role));
   }
@@ -53,7 +55,8 @@ mixin _$CompetitionPerson {
 
 /// @nodoc
 abstract mixin class $CompetitionPersonCopyWith<$Res> {
-  factory $CompetitionPersonCopyWith(CompetitionPerson value, $Res Function(CompetitionPerson) _then) =
+  factory $CompetitionPersonCopyWith(
+          CompetitionPerson value, $Res Function(CompetitionPerson) _then) =
       _$CompetitionPersonCopyWithImpl;
   @useResult
   $Res call({int? id, Competition competition, Person person, PersonRole role});
@@ -63,7 +66,8 @@ abstract mixin class $CompetitionPersonCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CompetitionPersonCopyWithImpl<$Res> implements $CompetitionPersonCopyWith<$Res> {
+class _$CompetitionPersonCopyWithImpl<$Res>
+    implements $CompetitionPersonCopyWith<$Res> {
   _$CompetitionPersonCopyWithImpl(this._self, this._then);
 
   final CompetitionPerson _self;
@@ -123,8 +127,14 @@ class _$CompetitionPersonCopyWithImpl<$Res> implements $CompetitionPersonCopyWit
 /// @nodoc
 @JsonSerializable()
 class _CompetitionPerson extends CompetitionPerson {
-  const _CompetitionPerson({this.id, required this.competition, required this.person, required this.role}) : super._();
-  factory _CompetitionPerson.fromJson(Map<String, dynamic> json) => _$CompetitionPersonFromJson(json);
+  const _CompetitionPerson(
+      {this.id,
+      required this.competition,
+      required this.person,
+      required this.role})
+      : super._();
+  factory _CompetitionPerson.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionPersonFromJson(json);
 
   @override
   final int? id;
@@ -156,7 +166,8 @@ class _CompetitionPerson extends CompetitionPerson {
         (other.runtimeType == runtimeType &&
             other is _CompetitionPerson &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competition, competition) ||
+                other.competition == competition) &&
             (identical(other.person, person) || other.person == person) &&
             (identical(other.role, role) || other.role == role));
   }
@@ -172,8 +183,10 @@ class _CompetitionPerson extends CompetitionPerson {
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionPersonCopyWith<$Res> implements $CompetitionPersonCopyWith<$Res> {
-  factory _$CompetitionPersonCopyWith(_CompetitionPerson value, $Res Function(_CompetitionPerson) _then) =
+abstract mixin class _$CompetitionPersonCopyWith<$Res>
+    implements $CompetitionPersonCopyWith<$Res> {
+  factory _$CompetitionPersonCopyWith(
+          _CompetitionPerson value, $Res Function(_CompetitionPerson) _then) =
       __$CompetitionPersonCopyWithImpl;
   @override
   @useResult
@@ -186,7 +199,8 @@ abstract mixin class _$CompetitionPersonCopyWith<$Res> implements $CompetitionPe
 }
 
 /// @nodoc
-class __$CompetitionPersonCopyWithImpl<$Res> implements _$CompetitionPersonCopyWith<$Res> {
+class __$CompetitionPersonCopyWithImpl<$Res>
+    implements _$CompetitionPersonCopyWith<$Res> {
   __$CompetitionPersonCopyWithImpl(this._self, this._then);
 
   final _CompetitionPerson _self;

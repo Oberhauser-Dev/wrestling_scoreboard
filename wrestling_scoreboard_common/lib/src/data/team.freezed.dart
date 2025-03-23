@@ -25,7 +25,8 @@ mixin _$Team {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TeamCopyWith<Team> get copyWith => _$TeamCopyWithImpl<Team>(this as Team, _$identity);
+  $TeamCopyWith<Team> get copyWith =>
+      _$TeamCopyWithImpl<Team>(this as Team, _$identity);
 
   /// Serializes this Team to a JSON map.
   Map<String, dynamic> toJson();
@@ -36,15 +37,19 @@ mixin _$Team {
         (other.runtimeType == runtimeType &&
             other is Team &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) || other.description == description));
+            (identical(other.description, description) ||
+                other.description == description));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, description);
 
   @override
   String toString() {
@@ -54,9 +59,15 @@ mixin _$Team {
 
 /// @nodoc
 abstract mixin class $TeamCopyWith<$Res> {
-  factory $TeamCopyWith(Team value, $Res Function(Team) _then) = _$TeamCopyWithImpl;
+  factory $TeamCopyWith(Team value, $Res Function(Team) _then) =
+      _$TeamCopyWithImpl;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      String? description});
 
   $OrganizationCopyWith<$Res>? get organization;
 }
@@ -121,7 +132,13 @@ class _$TeamCopyWithImpl<$Res> implements $TeamCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _Team extends Team {
-  const _Team({this.id, this.orgSyncId, this.organization, required this.name, this.description}) : super._();
+  const _Team(
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      required this.name,
+      this.description})
+      : super._();
   factory _Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
   @override
@@ -140,7 +157,8 @@ class _Team extends Team {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TeamCopyWith<_Team> get copyWith => __$TeamCopyWithImpl<_Team>(this, _$identity);
+  _$TeamCopyWith<_Team> get copyWith =>
+      __$TeamCopyWithImpl<_Team>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -155,15 +173,19 @@ class _Team extends Team {
         (other.runtimeType == runtimeType &&
             other is _Team &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
+            (identical(other.orgSyncId, orgSyncId) ||
+                other.orgSyncId == orgSyncId) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) || other.description == description));
+            (identical(other.description, description) ||
+                other.description == description));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orgSyncId, organization, name, description);
 
   @override
   String toString() {
@@ -173,10 +195,16 @@ class _Team extends Team {
 
 /// @nodoc
 abstract mixin class _$TeamCopyWith<$Res> implements $TeamCopyWith<$Res> {
-  factory _$TeamCopyWith(_Team value, $Res Function(_Team) _then) = __$TeamCopyWithImpl;
+  factory _$TeamCopyWith(_Team value, $Res Function(_Team) _then) =
+      __$TeamCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      String name,
+      String? description});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;

@@ -165,11 +165,11 @@ class ScoreSheet extends PdfSheet {
                 content: bout.id?.toString() ?? '',
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
-            buildFormCell(
-                title: localizations.pool.toUpperCase(),
-                content: bout.pool?.toString() ?? '',
-                color: PdfColors.grey300,
-                pencilColor: PdfSheet.pencilColor),
+            // buildFormCell(
+            //     title: localizations.pool.toUpperCase(),
+            //     content: bout.pool?.toString() ?? '',
+            //     color: PdfColors.grey300,
+            //     pencilColor: PdfSheet.pencilColor),
             buildFormCell(
                 title: localizations.round.toUpperCase(),
                 content: '',

@@ -39,9 +39,16 @@ mixin _$WeightClass {
 
 /// @nodoc
 abstract mixin class $WeightClassCopyWith<$Res> {
-  factory $WeightClassCopyWith(WeightClass value, $Res Function(WeightClass) _then) = _$WeightClassCopyWithImpl;
+  factory $WeightClassCopyWith(
+          WeightClass value, $Res Function(WeightClass) _then) =
+      _$WeightClassCopyWithImpl;
   @useResult
-  $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
+  $Res call(
+      {int? id,
+      int weight,
+      WrestlingStyle style,
+      String? suffix,
+      WeightUnit unit});
 }
 
 /// @nodoc
@@ -90,9 +97,15 @@ class _$WeightClassCopyWithImpl<$Res> implements $WeightClassCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _WeightClass extends WeightClass {
-  const _WeightClass({this.id, required this.weight, required this.style, this.suffix, this.unit = WeightUnit.kilogram})
+  const _WeightClass(
+      {this.id,
+      required this.weight,
+      required this.style,
+      this.suffix,
+      this.unit = WeightUnit.kilogram})
       : super._();
-  factory _WeightClass.fromJson(Map<String, dynamic> json) => _$WeightClassFromJson(json);
+  factory _WeightClass.fromJson(Map<String, dynamic> json) =>
+      _$WeightClassFromJson(json);
 
   @override
   final int? id;
@@ -111,7 +124,8 @@ class _WeightClass extends WeightClass {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$WeightClassCopyWith<_WeightClass> get copyWith => __$WeightClassCopyWithImpl<_WeightClass>(this, _$identity);
+  _$WeightClassCopyWith<_WeightClass> get copyWith =>
+      __$WeightClassCopyWithImpl<_WeightClass>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -127,11 +141,19 @@ class _WeightClass extends WeightClass {
 }
 
 /// @nodoc
-abstract mixin class _$WeightClassCopyWith<$Res> implements $WeightClassCopyWith<$Res> {
-  factory _$WeightClassCopyWith(_WeightClass value, $Res Function(_WeightClass) _then) = __$WeightClassCopyWithImpl;
+abstract mixin class _$WeightClassCopyWith<$Res>
+    implements $WeightClassCopyWith<$Res> {
+  factory _$WeightClassCopyWith(
+          _WeightClass value, $Res Function(_WeightClass) _then) =
+      __$WeightClassCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, int weight, WrestlingStyle style, String? suffix, WeightUnit unit});
+  $Res call(
+      {int? id,
+      int weight,
+      WrestlingStyle style,
+      String? suffix,
+      WeightUnit unit});
 }
 
 /// @nodoc
