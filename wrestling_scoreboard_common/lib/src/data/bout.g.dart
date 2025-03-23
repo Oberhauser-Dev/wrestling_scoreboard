@@ -18,7 +18,6 @@ _Bout _$BoutFromJson(Map<String, dynamic> json) => _Bout(
       b: json['b'] == null
           ? null
           : AthleteBoutState.fromJson(json['b'] as Map<String, dynamic>),
-      mat: (json['mat'] as num?)?.toInt(),
       winnerRole: $enumDecodeNullable(_$BoutRoleEnumMap, json['winnerRole']),
       result: $enumDecodeNullable(_$BoutResultEnumMap, json['result']),
       duration: json['duration'] == null
@@ -32,7 +31,6 @@ Map<String, dynamic> _$BoutToJson(_Bout instance) => <String, dynamic>{
       'organization': instance.organization?.toJson(),
       'r': instance.r?.toJson(),
       'b': instance.b?.toJson(),
-      'mat': instance.mat,
       'winnerRole': _$BoutRoleEnumMap[instance.winnerRole],
       'result': _$BoutResultEnumMap[instance.result],
       'duration': instance.duration.inMicroseconds,

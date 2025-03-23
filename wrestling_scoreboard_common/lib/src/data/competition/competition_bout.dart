@@ -14,6 +14,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     required Competition competition,
     required Bout bout,
     required int pos,
+    int? mat,
     CompetitionWeightCategory? weightCategory,
   }) = _CompetitionBout;
 
@@ -30,6 +31,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
       bout: bout,
       weightCategory: weightCategoryId == null ? null : await getSingle<CompetitionWeightCategory>(weightCategoryId),
       pos: e['pos'] as int,
+      mat: e['mat'] as int?,
     );
   }
 
@@ -40,6 +42,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     return {
       if (id != null) 'id': id,
       'pos': pos,
+      'mat': mat,
       'competition_id': competition.id!,
       'bout_id': bout.id!,
       'weight_category_id': weightCategory?.id,

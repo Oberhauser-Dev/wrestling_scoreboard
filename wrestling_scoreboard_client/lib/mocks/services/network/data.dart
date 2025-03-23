@@ -179,18 +179,31 @@ TeamMatch initJnRPWMatch() {
 
 final _jnRPWMatch = initJnRPWMatch();
 
+final _bout1 = Bout(
+  id: 1,
+  r: AthleteBoutState(id: 1, membership: r1),
+  b: AthleteBoutState(id: 2, membership: b1),
+  organization: _organization,
+  result: BoutResult.vca,
+  winnerRole: BoutRole.red,
+  duration: Duration(seconds: 180),
+);
+
+final _bout2 = Bout(
+  id: 2,
+  r: AthleteBoutState(id: 3, membership: r2),
+  b: AthleteBoutState(id: 4, membership: b2),
+  organization: _organization,
+  duration: Duration(seconds: 180),
+);
+
 final tmb1 = TeamMatchBout(
   id: 1,
   teamMatch: _menRPWMatch,
   pos: 0,
   organization: _organization,
   weightClass: wc57,
-  bout: Bout(
-    id: 1,
-    r: AthleteBoutState(id: 1, membership: r1),
-    b: AthleteBoutState(id: 2, membership: b1),
-    organization: _organization,
-  ),
+  bout: _bout1,
 );
 
 final tmb2 = TeamMatchBout(
@@ -199,12 +212,7 @@ final tmb2 = TeamMatchBout(
   pos: 1,
   organization: _organization,
   weightClass: wc61,
-  bout: Bout(
-    id: 2,
-    r: AthleteBoutState(id: 3, membership: r2),
-    b: AthleteBoutState(id: 4, membership: b2),
-    organization: _organization,
-  ),
+  bout: _bout2,
 );
 
 final _competition = Competition(
@@ -223,7 +231,10 @@ final _competition = Competition(
 final _competitionLineup1 = CompetitionLineup(competition: _competition, club: _homeClub);
 final _competitionLineup2 = CompetitionLineup(competition: _competition, club: _guestClub);
 final _competitionWeightCategory = CompetitionWeightCategory(
-    competition: _competition, weightClass: wc61, ageCategory: AgeCategory(name: 'Juniors', minAge: 16, maxAge: 18));
+    competition: _competition, weightClass: wc61, ageCategory: AgeCategory(name: 'A-Juniors', minAge: 16, maxAge: 18));
+
+final _competitionWeightCategory2 = CompetitionWeightCategory(
+    competition: _competition, weightClass: wc57, ageCategory: AgeCategory(name: 'C-Juniors', minAge: 12, maxAge: 14));
 
 final _competitionParticipation1 = CompetitionParticipation(
   id: 1,
@@ -241,21 +252,34 @@ final _competitionParticipation2 = CompetitionParticipation(
   weight: 77.3,
 );
 
-final _competitionBout = CompetitionBout(
+final _competitionBout1 = CompetitionBout(
   id: 1,
   competition: _competition,
   pos: 0,
-  bout: Bout(
-    id: 1,
-    r: AthleteBoutState(id: 1, membership: r1),
-    b: AthleteBoutState(id: 2, membership: b1),
-    organization: _organization,
-  ),
+  mat: 0,
+  bout: _bout1,
   weightCategory: _competitionWeightCategory,
 );
 
+final _competitionBout2 = CompetitionBout(
+  id: 2,
+  competition: _competition,
+  pos: 1,
+  mat: 2,
+  bout: _bout2,
+  weightCategory: _competitionWeightCategory2,
+);
+
+final _boutAction1 =
+    BoutAction(actionType: BoutActionType.points, bout: _bout1, duration: Duration(seconds: 29), role: BoutRole.red, pointCount: 4);
+final _boutAction2 =
+    BoutAction(actionType: BoutActionType.caution, bout: _bout2, duration: Duration(seconds: 129), role: BoutRole.blue);
+final _boutAction3 =
+BoutAction(actionType: BoutActionType.points, bout: _bout2, duration: Duration(seconds: 100), role: BoutRole.red, pointCount: 2);
+
+
 final List<Club> _clubs = [_homeClub, _guestClub];
-final List<BoutAction> _boutActions = []; // TODO fill
+final List<BoutAction> _boutActions = [_boutAction1, _boutAction2, _boutAction3];
 final List<Organization> _organizations = [_organization, _organization2];
 final List<Division> _divisions = [_juniorDivision, _adultDivision];
 final List<League> _leagues = [_leagueMenRPW, _leagueJnRPW, _leagueNational];
@@ -282,7 +306,7 @@ final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
 final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
 
 final List<Competition> _competitions = [_competition];
-final List<CompetitionBout> _competitionBouts = [_competitionBout];
+final List<CompetitionBout> _competitionBouts = [_competitionBout1, _competitionBout2];
 final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
 final List<CompetitionParticipation> _competitionParticipations = [
   _competitionParticipation1,

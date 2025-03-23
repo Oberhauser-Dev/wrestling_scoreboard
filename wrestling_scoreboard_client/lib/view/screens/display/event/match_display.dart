@@ -124,14 +124,10 @@ class MatchDisplay extends ConsumerWidget {
                             InkWell(
                               onTap: () => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
                               child: IntrinsicHeight(
-                                child: ManyConsumer<BoutAction, Bout>(
-                                  filterObject: teamMatchBouts[index].bout,
-                                  builder: (context, actions) => BoutListItem(
-                                    boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                                    bout: teamMatchBouts[index].bout,
-                                    actions: actions,
-                                    weightClass: teamMatchBouts[index].weightClass,
-                                  ),
+                                child: BoutListItem(
+                                  boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                                  bout: teamMatchBouts[index].bout,
+                                  weightClass: teamMatchBouts[index].weightClass,
                                 ),
                               ),
                             ),

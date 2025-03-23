@@ -20,7 +20,6 @@ class BoutListItem extends ConsumerWidget {
   final Bout bout;
   final WeightClass? weightClass;
   final AgeCategory? ageCategory;
-  final List<BoutAction> actions;
   static const flexWidths = [17, 50, 30, 50];
 
   const BoutListItem({
@@ -29,7 +28,6 @@ class BoutListItem extends ConsumerWidget {
     required this.bout,
     required this.weightClass,
     this.ageCategory,
-    required this.actions,
   });
 
   displayName({AthleteBoutState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
@@ -46,7 +44,126 @@ class BoutListItem extends ConsumerWidget {
     );
   }
 
-  Widget displayParticipantState({AthleteBoutState? pState, required Bout bout, required BoutRole role}) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SingleConsumer<Bout>(
+        initialData: bout,
+        id: bout.id,
+        builder: (context, bout) {
+          return Row(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        if (ageCategory != null)
+                          Center(
+                            child: ScaledText(
+                              ageCategory!.name,
+                              minFontSize: 8,
+                            ),
+                          ),
+                        if (weightClass != null)
+                          Expanded(
+                            child: Center(
+                              child: ScaledText(
+                                '${weightClass!.weight} $weightUnit',
+                                softWrap: false,
+                                minFontSize: 10,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (weightClass != null)
+                    Expanded(
+                      child: Center(
+                        child: ScaledText(
+                          weightClass!.style.abbreviation(context),
+                          minFontSize: 12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              displayName(pStatus: bout.r, role: BoutRole.red, context: context),
+              SmallBoutStateDisplay(bout: bout, boutConfig: boutConfig),
+              displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
+            ].asMap().entries.map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value)).toList(),
+          );
+        });
+  }
+}
+
+class SmallBoutStateDisplay extends ConsumerWidget {
+  final Bout bout;
+  final BoutConfig boutConfig;
+
+  const SmallBoutStateDisplay({super.key, required this.bout, required this.boutConfig});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ManyConsumer<BoutAction, Bout>(
+        filterObject: bout,
+        builder: (context, actions) => Row(
+              children: [
+                Expanded(
+                  flex: 50,
+                  child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout, actions: actions),
+                ),
+                Expanded(
+                  flex: 100,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          flex: 70,
+                          child: ThemedContainer(
+                            color: bout.winnerRole?.color().shade800,
+                            child: Center(
+                              child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12),
+                            ),
+                          )),
+                      Expanded(
+                        flex: 50,
+                        child: Center(
+                          child: bout.result != null || bout.duration > Duration.zero
+                              ? LoadingBuilder<bool>(
+                                  future: ref.watch(timeCountDownNotifierProvider),
+                                  builder: (context, isTimeCountDown) {
+                                    return ScaledText(
+                                        bout.duration
+                                            .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                                            .formatMinutesAndSeconds(),
+                                        fontSize: 8);
+                                  })
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 50,
+                  child: displayParticipantState(
+                    pState: bout.b,
+                    role: BoutRole.blue,
+                    bout: bout,
+                    actions: actions,
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  Widget displayParticipantState({
+    AthleteBoutState? pState,
+    required Bout bout,
+    required BoutRole role,
+    required List<BoutAction> actions,
+  }) {
     final color = (role == bout.winnerRole) ? role.color().shade800 : null;
     return NullableSingleConsumer<AthleteBoutState>(
       id: pState?.id,
@@ -89,101 +206,5 @@ class BoutListItem extends ConsumerWidget {
         );
       },
     );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return LoadingBuilder<bool>(
-        future: ref.watch(timeCountDownNotifierProvider),
-        builder: (context, isTimeCountDown) {
-          return SingleConsumer<Bout>(
-              initialData: bout,
-              id: bout.id,
-              builder: (context, bout) {
-                final winnerRole = bout.winnerRole;
-                return Row(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            children: [
-                              if (ageCategory != null)
-                                Center(
-                                  child: ScaledText(
-                                    ageCategory!.name,
-                                    minFontSize: 8,
-                                  ),
-                                ),
-                              if (weightClass != null)
-                                Expanded(
-                                  child: Center(
-                                    child: ScaledText(
-                                      '${weightClass!.weight} $weightUnit',
-                                      softWrap: false,
-                                      minFontSize: 10,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        if (weightClass != null)
-                          Expanded(
-                            child: Center(
-                              child: ScaledText(
-                                weightClass!.style.abbreviation(context),
-                                minFontSize: 12,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    displayName(pStatus: bout.r, role: BoutRole.red, context: context),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 50,
-                          child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout),
-                        ),
-                        Expanded(
-                          flex: 100,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                  flex: 70,
-                                  child: ThemedContainer(
-                                    color: winnerRole?.color().shade800,
-                                    child: Center(
-                                      child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12),
-                                    ),
-                                  )),
-                              Expanded(
-                                flex: 50,
-                                child: Center(
-                                  child: bout.result != null || bout.duration > Duration.zero
-                                      ? ScaledText(
-                                          bout.duration
-                                              .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                                              .formatMinutesAndSeconds(),
-                                          fontSize: 8)
-                                      : null,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 50,
-                          child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout),
-                        ),
-                      ],
-                    ),
-                    displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
-                  ].asMap().entries.map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value)).toList(),
-                );
-              });
-        });
   }
 }

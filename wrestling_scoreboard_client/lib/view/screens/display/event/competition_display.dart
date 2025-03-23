@@ -1,7 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/bout_list_item.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
@@ -22,7 +25,6 @@ class CompetitionDisplay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
     double width = MediaQuery.of(context).size.width;
-    double padding = width / 140;
     return SingleConsumer<Competition>(
       id: id,
       initialData: competition,
@@ -69,6 +71,31 @@ class CompetitionDisplay extends ConsumerWidget {
         //     }
         //   },
         // );
+
+        Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
+          return Container(
+              color: role.color(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: ScaledText(
+                      state?.membership.person.fullName ?? localizations.participantVacant,
+                      fontSize: 18,
+                      minFontSize: 12,
+                    ),
+                  ),
+                  Center(
+                    child: ScaledText(
+                      state?.membership.club.name ?? '',
+                      fontSize: 12,
+                      minFontSize: 12,
+                    ),
+                  ),
+                ],
+              ));
+        }
+
         return WindowStateScaffold(
           hideAppBarOnFullscreen: true,
           actions: [
@@ -79,54 +106,82 @@ class CompetitionDisplay extends ConsumerWidget {
             filterObject: competition,
             builder: (context, competitionBouts) {
               final competitionInfos = [
-                competition.name,
                 '${localizations.competitionNumber}: ${competition.id ?? ''}',
-                // if (competition.referee != null) '${localizations.refereeAbbr}: ${competition.referee?.fullName}',
-                // Not enough space to display all three referees
-                // if (competition.matChairman != null)
-                //   '${context.l10n.refereeAbbr}: ${competition.matChairman?.fullName}',
-                // if (competition.judge != null) '${context.l10n.refereeAbbr}: ${competition.judge?.fullName}',
+                '${localizations.date}: ${competition.date.toDateString(context)}',
               ];
               final column = Column(
                 children: [
-                  Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: Center(
+                  Row(
+                    children: [
+                      Column(
+                        children: competitionInfos
+                            .map(
+                              (e) => Center(
+                                  child: ScaledText(
+                                e,
+                                softWrap: false,
+                                fontSize: 10,
+                                minFontSize: 8,
+                              )),
+                            )
+                            .toList(),
+                      ),
+                      Expanded(
+                        child: Center(
+                            child: ScaledText(
+                          competition.name,
+                          softWrap: false,
+                          fontSize: 16,
+                          minFontSize: 12,
+                        )),
+                      ),
+                      Center(
                           child: ScaledText(
-                        competitionInfos.join(' '),
+                        'Estimated end: TODO',
                         softWrap: false,
-                        fontSize: 12,
-                        minFontSize: 10,
-                      ))),
+                        fontSize: 10,
+                        minFontSize: 8,
+                      ))
+                    ],
+                  ),
+                  Divider(),
                   IntrinsicHeight(
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         spacing: 12,
-                        children: Iterable.generate(
-                            competition.matCount,
-                            (index) => Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ScaledText('AgeCategory + WeightClass', fontSize: 12, minFontSize: 10),
-                                    Container(
-                                        color: Colors.red,
-                                        child: ScaledText(
-                                          'Home Wrestler',
-                                          fontSize: 12,
-                                          minFontSize: 10,
-                                        )),
-                                    Container(
-                                        color: Colors.blue,
-                                        child: ScaledText(
-                                          'Guest Wrestler',
-                                          fontSize: 12,
-                                          minFontSize: 10,
-                                        )),
-                                  ],
-                                ))).toList()),
+                        children: Iterable.generate(competition.matCount, (index) {
+                          final matCompetitionBout = competitionBouts
+                              .where((element) => element.mat == index)
+                              .sorted((a, b) => a.pos.compareTo(b.pos))
+                              .firstOrNull;
+                          return Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
+                              if (matCompetitionBout == null)
+                                Center(child: ScaledText('No bout'))
+                              else ...[
+                                Center(
+                                  child: ScaledText(matCompetitionBout.weightCategory?.name ?? '---',
+                                      fontSize: 12, minFontSize: 10),
+                                ),
+                                displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
+                                SizedBox(
+                                  height: width / 30,
+                                  child: SmallBoutStateDisplay(
+                                    bout: matCompetitionBout.bout,
+                                    boutConfig: competition.boutConfig,
+                                  ),
+                                ),
+                                displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
+                              ]
+                            ],
+                          ));
+                        }).toList()),
                   ),
+                  Divider(),
                   Expanded(
                     child: ListView.builder(
                       itemCount: competitionBouts.length,
@@ -137,15 +192,11 @@ class CompetitionDisplay extends ConsumerWidget {
                               onTap: () =>
                                   navigateToCompetitionBoutScreen(context, competition, competitionBouts[index]),
                               child: IntrinsicHeight(
-                                child: ManyConsumer<BoutAction, Bout>(
-                                  filterObject: competitionBouts[index].bout,
-                                  builder: (context, actions) => BoutListItem(
-                                    boutConfig: competition.boutConfig,
-                                    bout: competitionBouts[index].bout,
-                                    actions: actions,
-                                    weightClass: competitionBouts[index].weightCategory?.weightClass,
-                                    ageCategory: competitionBouts[index].weightCategory?.ageCategory,
-                                  ),
+                                child: BoutListItem(
+                                  boutConfig: competition.boutConfig,
+                                  bout: competitionBouts[index].bout,
+                                  weightClass: competitionBouts[index].weightCategory?.weightClass,
+                                  ageCategory: competitionBouts[index].weightCategory?.ageCategory,
                                 ),
                               ),
                             ),

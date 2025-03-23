@@ -20,7 +20,6 @@ mixin _$Bout {
   Organization? get organization;
   AthleteBoutState? get r; // red
   AthleteBoutState? get b; // blue
-  int? get mat;
   BoutRole? get winnerRole;
   BoutResult? get result;
   Duration get duration;
@@ -47,7 +46,6 @@ mixin _$Bout {
                 other.organization == organization) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
-            (identical(other.mat, mat) || other.mat == mat) &&
             (identical(other.winnerRole, winnerRole) ||
                 other.winnerRole == winnerRole) &&
             (identical(other.result, result) || other.result == result) &&
@@ -58,11 +56,11 @@ mixin _$Bout {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, r,
-      b, mat, winnerRole, result, duration);
+      b, winnerRole, result, duration);
 
   @override
   String toString() {
-    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, mat: $mat, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 }
 
@@ -77,7 +75,6 @@ abstract mixin class $BoutCopyWith<$Res> {
       Organization? organization,
       AthleteBoutState? r,
       AthleteBoutState? b,
-      int? mat,
       BoutRole? winnerRole,
       BoutResult? result,
       Duration duration});
@@ -104,7 +101,6 @@ class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
     Object? organization = freezed,
     Object? r = freezed,
     Object? b = freezed,
-    Object? mat = freezed,
     Object? winnerRole = freezed,
     Object? result = freezed,
     Object? duration = null,
@@ -130,10 +126,6 @@ class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
           ? _self.b
           : b // ignore: cast_nullable_to_non_nullable
               as AthleteBoutState?,
-      mat: freezed == mat
-          ? _self.mat
-          : mat // ignore: cast_nullable_to_non_nullable
-              as int?,
       winnerRole: freezed == winnerRole
           ? _self.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable
@@ -201,7 +193,6 @@ class _Bout extends Bout {
       this.organization,
       this.r,
       this.b,
-      this.mat,
       this.winnerRole,
       this.result,
       this.duration = Duration.zero})
@@ -220,8 +211,6 @@ class _Bout extends Bout {
   @override
   final AthleteBoutState? b;
 // blue
-  @override
-  final int? mat;
   @override
   final BoutRole? winnerRole;
   @override
@@ -257,7 +246,6 @@ class _Bout extends Bout {
                 other.organization == organization) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
-            (identical(other.mat, mat) || other.mat == mat) &&
             (identical(other.winnerRole, winnerRole) ||
                 other.winnerRole == winnerRole) &&
             (identical(other.result, result) || other.result == result) &&
@@ -268,11 +256,11 @@ class _Bout extends Bout {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, r,
-      b, mat, winnerRole, result, duration);
+      b, winnerRole, result, duration);
 
   @override
   String toString() {
-    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, mat: $mat, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 }
 
@@ -288,7 +276,6 @@ abstract mixin class _$BoutCopyWith<$Res> implements $BoutCopyWith<$Res> {
       Organization? organization,
       AthleteBoutState? r,
       AthleteBoutState? b,
-      int? mat,
       BoutRole? winnerRole,
       BoutResult? result,
       Duration duration});
@@ -318,7 +305,6 @@ class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
     Object? organization = freezed,
     Object? r = freezed,
     Object? b = freezed,
-    Object? mat = freezed,
     Object? winnerRole = freezed,
     Object? result = freezed,
     Object? duration = null,
@@ -344,10 +330,6 @@ class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
           ? _self.b
           : b // ignore: cast_nullable_to_non_nullable
               as AthleteBoutState?,
-      mat: freezed == mat
-          ? _self.mat
-          : mat // ignore: cast_nullable_to_non_nullable
-              as int?,
       winnerRole: freezed == winnerRole
           ? _self.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable

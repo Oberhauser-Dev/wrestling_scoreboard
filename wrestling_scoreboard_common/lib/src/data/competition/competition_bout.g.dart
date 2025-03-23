@@ -13,6 +13,7 @@ _CompetitionBout _$CompetitionBoutFromJson(Map<String, dynamic> json) =>
           Competition.fromJson(json['competition'] as Map<String, dynamic>),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
       pos: (json['pos'] as num).toInt(),
+      mat: (json['mat'] as num?)?.toInt(),
       weightCategory: json['weightCategory'] == null
           ? null
           : CompetitionWeightCategory.fromJson(
@@ -25,5 +26,6 @@ Map<String, dynamic> _$CompetitionBoutToJson(_CompetitionBout instance) =>
       'competition': instance.competition.toJson(),
       'bout': instance.bout.toJson(),
       'pos': instance.pos,
+      'mat': instance.mat,
       'weightCategory': instance.weightCategory?.toJson(),
     };

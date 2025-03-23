@@ -19,6 +19,7 @@ mixin _$CompetitionBout {
   Competition get competition;
   Bout get bout;
   int get pos;
+  int? get mat;
   CompetitionWeightCategory? get weightCategory;
 
   /// Create a copy of CompetitionBout
@@ -42,6 +43,7 @@ mixin _$CompetitionBout {
                 other.competition == competition) &&
             (identical(other.bout, bout) || other.bout == bout) &&
             (identical(other.pos, pos) || other.pos == pos) &&
+            (identical(other.mat, mat) || other.mat == mat) &&
             (identical(other.weightCategory, weightCategory) ||
                 other.weightCategory == weightCategory));
   }
@@ -49,11 +51,11 @@ mixin _$CompetitionBout {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, competition, bout, pos, weightCategory);
+      Object.hash(runtimeType, id, competition, bout, pos, mat, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, weightCategory: $weightCategory)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, weightCategory: $weightCategory)';
   }
 }
 
@@ -68,6 +70,7 @@ abstract mixin class $CompetitionBoutCopyWith<$Res> {
       Competition competition,
       Bout bout,
       int pos,
+      int? mat,
       CompetitionWeightCategory? weightCategory});
 
   $CompetitionCopyWith<$Res> get competition;
@@ -92,6 +95,7 @@ class _$CompetitionBoutCopyWithImpl<$Res>
     Object? competition = null,
     Object? bout = null,
     Object? pos = null,
+    Object? mat = freezed,
     Object? weightCategory = freezed,
   }) {
     return _then(_self.copyWith(
@@ -111,6 +115,10 @@ class _$CompetitionBoutCopyWithImpl<$Res>
           ? _self.pos
           : pos // ignore: cast_nullable_to_non_nullable
               as int,
+      mat: freezed == mat
+          ? _self.mat
+          : mat // ignore: cast_nullable_to_non_nullable
+              as int?,
       weightCategory: freezed == weightCategory
           ? _self.weightCategory
           : weightCategory // ignore: cast_nullable_to_non_nullable
@@ -162,6 +170,7 @@ class _CompetitionBout extends CompetitionBout {
       required this.competition,
       required this.bout,
       required this.pos,
+      this.mat,
       this.weightCategory})
       : super._();
   factory _CompetitionBout.fromJson(Map<String, dynamic> json) =>
@@ -175,6 +184,8 @@ class _CompetitionBout extends CompetitionBout {
   final Bout bout;
   @override
   final int pos;
+  @override
+  final int? mat;
   @override
   final CompetitionWeightCategory? weightCategory;
 
@@ -203,6 +214,7 @@ class _CompetitionBout extends CompetitionBout {
                 other.competition == competition) &&
             (identical(other.bout, bout) || other.bout == bout) &&
             (identical(other.pos, pos) || other.pos == pos) &&
+            (identical(other.mat, mat) || other.mat == mat) &&
             (identical(other.weightCategory, weightCategory) ||
                 other.weightCategory == weightCategory));
   }
@@ -210,11 +222,11 @@ class _CompetitionBout extends CompetitionBout {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, competition, bout, pos, weightCategory);
+      Object.hash(runtimeType, id, competition, bout, pos, mat, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, weightCategory: $weightCategory)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, weightCategory: $weightCategory)';
   }
 }
 
@@ -231,6 +243,7 @@ abstract mixin class _$CompetitionBoutCopyWith<$Res>
       Competition competition,
       Bout bout,
       int pos,
+      int? mat,
       CompetitionWeightCategory? weightCategory});
 
   @override
@@ -258,6 +271,7 @@ class __$CompetitionBoutCopyWithImpl<$Res>
     Object? competition = null,
     Object? bout = null,
     Object? pos = null,
+    Object? mat = freezed,
     Object? weightCategory = freezed,
   }) {
     return _then(_CompetitionBout(
@@ -277,6 +291,10 @@ class __$CompetitionBoutCopyWithImpl<$Res>
           ? _self.pos
           : pos // ignore: cast_nullable_to_non_nullable
               as int,
+      mat: freezed == mat
+          ? _self.mat
+          : mat // ignore: cast_nullable_to_non_nullable
+              as int?,
       weightCategory: freezed == weightCategory
           ? _self.weightCategory
           : weightCategory // ignore: cast_nullable_to_non_nullable
