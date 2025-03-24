@@ -27,6 +27,16 @@ mixin _$Competition {
   String? get comment;
   int get matCount;
 
+  /// The maximum contestants which can be in one pool
+  int get maxPoolContestants;
+  int get maxPoolDefeats;
+
+  /// The maximum contestants for wrestle in nordic mode
+  int get maxNordicContestants;
+
+  /// The ranks which must be determined
+  dynamic get maxRanking;
+
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -58,17 +68,40 @@ mixin _$Competition {
                 other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             (identical(other.matCount, matCount) ||
-                other.matCount == matCount));
+                other.matCount == matCount) &&
+            (identical(other.maxPoolContestants, maxPoolContestants) ||
+                other.maxPoolContestants == maxPoolContestants) &&
+            (identical(other.maxPoolDefeats, maxPoolDefeats) ||
+                other.maxPoolDefeats == maxPoolDefeats) &&
+            (identical(other.maxNordicContestants, maxNordicContestants) ||
+                other.maxNordicContestants == maxNordicContestants) &&
+            const DeepCollectionEquality()
+                .equals(other.maxRanking, maxRanking));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
-      name, boutConfig, location, date, no, visitorsCount, comment, matCount);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      orgSyncId,
+      organization,
+      name,
+      boutConfig,
+      location,
+      date,
+      no,
+      visitorsCount,
+      comment,
+      matCount,
+      maxPoolContestants,
+      maxPoolDefeats,
+      maxNordicContestants,
+      const DeepCollectionEquality().hash(maxRanking));
 
   @override
   String toString() {
-    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount)';
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxPoolContestants: $maxPoolContestants, maxPoolDefeats: $maxPoolDefeats, maxNordicContestants: $maxNordicContestants, maxRanking: $maxRanking)';
   }
 }
 
@@ -89,7 +122,11 @@ abstract mixin class $CompetitionCopyWith<$Res> {
       String? no,
       int? visitorsCount,
       String? comment,
-      int matCount});
+      int matCount,
+      int maxPoolContestants,
+      int maxPoolDefeats,
+      int maxNordicContestants,
+      dynamic maxRanking});
 
   $OrganizationCopyWith<$Res>? get organization;
   $BoutConfigCopyWith<$Res> get boutConfig;
@@ -118,6 +155,10 @@ class _$CompetitionCopyWithImpl<$Res> implements $CompetitionCopyWith<$Res> {
     Object? visitorsCount = freezed,
     Object? comment = freezed,
     Object? matCount = null,
+    Object? maxPoolContestants = null,
+    Object? maxPoolDefeats = null,
+    Object? maxNordicContestants = null,
+    Object? maxRanking = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -164,6 +205,22 @@ class _$CompetitionCopyWithImpl<$Res> implements $CompetitionCopyWith<$Res> {
           ? _self.matCount
           : matCount // ignore: cast_nullable_to_non_nullable
               as int,
+      maxPoolContestants: null == maxPoolContestants
+          ? _self.maxPoolContestants
+          : maxPoolContestants // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxPoolDefeats: null == maxPoolDefeats
+          ? _self.maxPoolDefeats
+          : maxPoolDefeats // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxNordicContestants: null == maxNordicContestants
+          ? _self.maxNordicContestants
+          : maxNordicContestants // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxRanking: freezed == maxRanking
+          ? _self.maxRanking
+          : maxRanking // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 
@@ -206,7 +263,11 @@ class _Competition extends Competition {
       this.no,
       this.visitorsCount,
       this.comment,
-      required this.matCount})
+      required this.matCount,
+      this.maxPoolContestants = 100,
+      this.maxPoolDefeats = 2,
+      this.maxNordicContestants = 6,
+      this.maxRanking = 10})
       : super._();
   factory _Competition.fromJson(Map<String, dynamic> json) =>
       _$CompetitionFromJson(json);
@@ -233,6 +294,24 @@ class _Competition extends Competition {
   final String? comment;
   @override
   final int matCount;
+
+  /// The maximum contestants which can be in one pool
+  @override
+  @JsonKey()
+  final int maxPoolContestants;
+  @override
+  @JsonKey()
+  final int maxPoolDefeats;
+
+  /// The maximum contestants for wrestle in nordic mode
+  @override
+  @JsonKey()
+  final int maxNordicContestants;
+
+  /// The ranks which must be determined
+  @override
+  @JsonKey()
+  final dynamic maxRanking;
 
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
@@ -270,17 +349,40 @@ class _Competition extends Competition {
                 other.visitorsCount == visitorsCount) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             (identical(other.matCount, matCount) ||
-                other.matCount == matCount));
+                other.matCount == matCount) &&
+            (identical(other.maxPoolContestants, maxPoolContestants) ||
+                other.maxPoolContestants == maxPoolContestants) &&
+            (identical(other.maxPoolDefeats, maxPoolDefeats) ||
+                other.maxPoolDefeats == maxPoolDefeats) &&
+            (identical(other.maxNordicContestants, maxNordicContestants) ||
+                other.maxNordicContestants == maxNordicContestants) &&
+            const DeepCollectionEquality()
+                .equals(other.maxRanking, maxRanking));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
-      name, boutConfig, location, date, no, visitorsCount, comment, matCount);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      orgSyncId,
+      organization,
+      name,
+      boutConfig,
+      location,
+      date,
+      no,
+      visitorsCount,
+      comment,
+      matCount,
+      maxPoolContestants,
+      maxPoolDefeats,
+      maxNordicContestants,
+      const DeepCollectionEquality().hash(maxRanking));
 
   @override
   String toString() {
-    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount)';
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxPoolContestants: $maxPoolContestants, maxPoolDefeats: $maxPoolDefeats, maxNordicContestants: $maxNordicContestants, maxRanking: $maxRanking)';
   }
 }
 
@@ -303,7 +405,11 @@ abstract mixin class _$CompetitionCopyWith<$Res>
       String? no,
       int? visitorsCount,
       String? comment,
-      int matCount});
+      int matCount,
+      int maxPoolContestants,
+      int maxPoolDefeats,
+      int maxNordicContestants,
+      dynamic maxRanking});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
@@ -334,6 +440,10 @@ class __$CompetitionCopyWithImpl<$Res> implements _$CompetitionCopyWith<$Res> {
     Object? visitorsCount = freezed,
     Object? comment = freezed,
     Object? matCount = null,
+    Object? maxPoolContestants = null,
+    Object? maxPoolDefeats = null,
+    Object? maxNordicContestants = null,
+    Object? maxRanking = freezed,
   }) {
     return _then(_Competition(
       id: freezed == id
@@ -380,6 +490,19 @@ class __$CompetitionCopyWithImpl<$Res> implements _$CompetitionCopyWith<$Res> {
           ? _self.matCount
           : matCount // ignore: cast_nullable_to_non_nullable
               as int,
+      maxPoolContestants: null == maxPoolContestants
+          ? _self.maxPoolContestants
+          : maxPoolContestants // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxPoolDefeats: null == maxPoolDefeats
+          ? _self.maxPoolDefeats
+          : maxPoolDefeats // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxNordicContestants: null == maxNordicContestants
+          ? _self.maxNordicContestants
+          : maxNordicContestants // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxRanking: freezed == maxRanking ? _self.maxRanking! : maxRanking,
     ));
   }
 

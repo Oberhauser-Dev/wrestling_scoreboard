@@ -629,7 +629,6 @@ void main() {
           duration: Duration(minutes: 6),
           result: BoutResult.vpo,
           winnerRole: BoutRole.blue,
-          pool: null,
           organization: organizationNRW,
           r: AthleteBoutState(
             classificationPoints: 0,

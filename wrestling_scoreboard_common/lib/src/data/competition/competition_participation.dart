@@ -17,6 +17,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     required CompetitionLineup lineup,
     CompetitionWeightCategory? weightCategory,
     double? weight,
+    int? pool,
   }) = _CompetitionParticipation;
 
   factory CompetitionParticipation.fromJson(Map<String, Object?> json) => _$CompetitionParticipationFromJson(json);

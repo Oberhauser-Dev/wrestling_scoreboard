@@ -19,6 +19,7 @@ _CompetitionParticipation _$CompetitionParticipationFromJson(
           : CompetitionWeightCategory.fromJson(
               json['weightCategory'] as Map<String, dynamic>),
       weight: (json['weight'] as num?)?.toDouble(),
+      pool: (json['pool'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CompetitionParticipationToJson(
@@ -29,4 +30,5 @@ Map<String, dynamic> _$CompetitionParticipationToJson(
       'lineup': instance.lineup.toJson(),
       'weightCategory': instance.weightCategory?.toJson(),
       'weight': instance.weight,
+      'pool': instance.pool,
     };

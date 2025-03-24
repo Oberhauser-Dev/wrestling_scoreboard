@@ -15,6 +15,10 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     required Bout bout,
     required int pos,
     int? mat,
+    /// Rounds : 0-99
+    /// Cross: 100
+    /// Finals: 200
+    int? round,
     CompetitionWeightCategory? weightCategory,
   }) = _CompetitionBout;
 
