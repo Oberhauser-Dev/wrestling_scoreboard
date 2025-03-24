@@ -418,7 +418,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weightClasses => 'Weight Classes';
 
   @override
+  String get weightCategory => 'Weight Category';
+
+  @override
+  String get weightCategories => 'Weight Categories';
+
+  @override
   String get weightUnit => 'Weight Unit';
+
+  @override
+  String get ageCategory => 'Age Category';
+
+  @override
+  String get ageCategories => 'Age Categories';
 
   @override
   String get suffix => 'Category';

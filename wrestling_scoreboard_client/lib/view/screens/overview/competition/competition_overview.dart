@@ -167,6 +167,22 @@ class CompetitionOverview extends ConsumerWidget {
                         );
                       });
                 }),
+            ManyConsumer<CompetitionWeightCategory, Competition>(
+                filterObject: competition,
+                builder: (context, weightCategories) {
+                  return GroupedList(
+                    header: const HeadingItem(),
+                    itemCount: weightCategories.length,
+                    itemBuilder: (context, index) {
+                      final wCategory = weightCategories[index];
+                      return ContentItem(
+                        title: wCategory.name,
+                        icon: Icons.fitness_center,
+                        onTap: () async => _handleSelectedWeightCategory(context, wCategory),
+                      );
+                    },
+                  );
+                }),
             CompetitionBoutList(filterObject: competition),
             // GroupedList(
             //   header: const HeadingItem(),
@@ -220,6 +236,7 @@ class CompetitionOverview extends ConsumerWidget {
             tabs: [
               Tab(child: HeadingText(localizations.info)),
               Tab(child: HeadingText(localizations.lineups)),
+              Tab(child: HeadingText(localizations.weightCategories)),
               Tab(child: HeadingText(localizations.bouts)),
               // Tab(child: HeadingText(localizations.persons)),
             ],
@@ -238,6 +255,10 @@ class CompetitionOverview extends ConsumerWidget {
 
   _handleSelectedCompetitionDisplay(Competition competition, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${competition.id}/${CompetitionDisplay.route}');
+  }
+
+  _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
+    // context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }
 
   handleSelectedLineup(

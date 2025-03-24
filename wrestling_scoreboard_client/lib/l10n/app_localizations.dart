@@ -899,11 +899,35 @@ abstract class AppLocalizations {
   /// **'Weight Classes'**
   String get weightClasses;
 
+  /// No description provided for @weightCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Category'**
+  String get weightCategory;
+
+  /// No description provided for @weightCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Categories'**
+  String get weightCategories;
+
   /// No description provided for @weightUnit.
   ///
   /// In en, this message translates to:
   /// **'Weight Unit'**
   String get weightUnit;
+
+  /// No description provided for @ageCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Age Category'**
+  String get ageCategory;
+
+  /// No description provided for @ageCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Age Categories'**
+  String get ageCategories;
 
   /// No description provided for @suffix.
   ///
