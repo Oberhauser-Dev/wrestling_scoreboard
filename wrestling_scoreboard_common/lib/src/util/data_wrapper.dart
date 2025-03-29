@@ -269,6 +269,7 @@ class ManyDataObject<T> {
 // TODO: May think about using an enum instead of a Type. Then all can use switch cases and no classes are forgotten anymore.
 String getTableNameFromType(Type t) {
   return switch (t) {
+    const (AgeCategory) => 'age_category',
     const (BasicAuthService) => 'basic_auth_service', // Only used for type encoding
     const (Bout) => 'bout',
     const (BoutAction) => 'bout_action',

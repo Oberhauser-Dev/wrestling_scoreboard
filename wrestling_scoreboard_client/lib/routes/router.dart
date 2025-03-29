@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_client/view/screens/more/profile/profile.da
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_up.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
@@ -136,6 +137,11 @@ getRouter() {
               GoRoute(
                 path: '${PersonOverview.route}/:person_id',
                 builder: (context, state) => PersonOverview(id: int.parse(state.pathParameters['person_id']!)),
+              ),
+              GoRoute(
+                path: '${AgeCategoryOverview.route}/:age_category_id',
+                builder: (context, state) =>
+                    AgeCategoryOverview(id: int.parse(state.pathParameters['age_category_id']!)),
               ),
               GoRoute(
                 path: '${CompetitionOverview.route}/:competition_id',

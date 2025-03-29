@@ -134,7 +134,9 @@ class OrganizationOverview extends ConsumerWidget {
               filterObject: data,
               editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: data),
               itemBuilder: (context, item) => ContentItem(
-                  title: item.name, icon: Icons.school, onTap: () => handleSelectedAgeCategory(item, context)),
+                  title: '${item.name} (${item.minAge} - ${item.maxAge})',
+                  icon: Icons.school,
+                  onTap: () => handleSelectedAgeCategory(item, context)),
             ),
             FilterableManyConsumer<Person, Organization>.edit(
               context: context,

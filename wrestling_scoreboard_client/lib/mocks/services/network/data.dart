@@ -228,16 +228,16 @@ final _competition = Competition(
   matCount: 6,
 );
 
-final _ageCategoryAJuniors = AgeCategory(name: 'A-Juniors', minAge: 16, maxAge: 18, organization: _organization);
-final _ageCategoryCJuniors = AgeCategory(name: 'C-Juniors', minAge: 12, maxAge: 14, organization: _organization);
+final _ageCategoryAJuniors = AgeCategory(id: 0, name: 'A-Juniors', minAge: 16, maxAge: 18, organization: _organization);
+final _ageCategoryCJuniors = AgeCategory(id: 1, name: 'C-Juniors', minAge: 12, maxAge: 14, organization: _organization);
 
-final _competitionLineup1 = CompetitionLineup(competition: _competition, club: _homeClub);
-final _competitionLineup2 = CompetitionLineup(competition: _competition, club: _guestClub);
+final _competitionLineup1 = CompetitionLineup(id: 0, competition: _competition, club: _homeClub);
+final _competitionLineup2 = CompetitionLineup(id: 1, competition: _competition, club: _guestClub);
 final _competitionWeightCategory =
-    CompetitionWeightCategory(competition: _competition, weightClass: wc61, ageCategory: _ageCategoryAJuniors);
+    CompetitionWeightCategory(id: 1, competition: _competition, weightClass: wc61, ageCategory: _ageCategoryAJuniors);
 
 final _competitionWeightCategory2 =
-    CompetitionWeightCategory(competition: _competition, weightClass: wc57, ageCategory: _ageCategoryCJuniors);
+    CompetitionWeightCategory(id: 2, competition: _competition, weightClass: wc57, ageCategory: _ageCategoryCJuniors);
 
 final _competitionParticipation1 = CompetitionParticipation(
   id: 1,
