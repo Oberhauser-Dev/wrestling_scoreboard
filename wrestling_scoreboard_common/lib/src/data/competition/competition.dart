@@ -24,13 +24,6 @@ abstract class Competition extends WrestlingEvent with _$Competition {
     String? comment,
     required int matCount,
 
-    /// The maximum contestants which can be in one pool
-    @Default(100) int maxPoolContestants,
-    @Default(2) int maxPoolDefeats,
-
-    /// The maximum contestants for wrestle in nordic mode
-    @Default(6) int maxNordicContestants,
-
     /// The ranks which must be determined
     @Default(10) maxRanking,
   }) = _Competition;

@@ -21,10 +21,6 @@ _Competition _$CompetitionFromJson(Map<String, dynamic> json) => _Competition(
       visitorsCount: (json['visitorsCount'] as num?)?.toInt(),
       comment: json['comment'] as String?,
       matCount: (json['matCount'] as num).toInt(),
-      maxPoolContestants: (json['maxPoolContestants'] as num?)?.toInt() ?? 100,
-      maxPoolDefeats: (json['maxPoolDefeats'] as num?)?.toInt() ?? 2,
-      maxNordicContestants:
-          (json['maxNordicContestants'] as num?)?.toInt() ?? 6,
       maxRanking: json['maxRanking'] ?? 10,
     );
 
@@ -41,8 +37,5 @@ Map<String, dynamic> _$CompetitionToJson(_Competition instance) =>
       'visitorsCount': instance.visitorsCount,
       'comment': instance.comment,
       'matCount': instance.matCount,
-      'maxPoolContestants': instance.maxPoolContestants,
-      'maxPoolDefeats': instance.maxPoolDefeats,
-      'maxNordicContestants': instance.maxNordicContestants,
       'maxRanking': instance.maxRanking,
     };
