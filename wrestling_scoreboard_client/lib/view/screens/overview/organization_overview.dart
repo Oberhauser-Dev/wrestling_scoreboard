@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/age_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
@@ -87,6 +89,7 @@ class OrganizationOverview extends ConsumerWidget {
             Tab(child: HeadingText(localizations.divisions)),
             Tab(child: HeadingText(localizations.clubs)),
             Tab(child: HeadingText(localizations.competitions)),
+            Tab(child: HeadingText(localizations.ageCategories)),
             Tab(child: HeadingText(localizations.persons)),
             Tab(child: HeadingText('${localizations.sub}-${localizations.organizations}')),
           ],
@@ -125,6 +128,13 @@ class OrganizationOverview extends ConsumerWidget {
               editPageBuilder: (context) => CompetitionEdit(initialOrganization: data),
               itemBuilder: (context, item) => ContentItem(
                   title: item.name, icon: Icons.leaderboard, onTap: () => handleSelectedCompetition(item, context)),
+            ),
+            FilterableManyConsumer<AgeCategory, Organization>.edit(
+              context: context,
+              filterObject: data,
+              editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: data),
+              itemBuilder: (context, item) => ContentItem(
+                  title: item.name, icon: Icons.school, onTap: () => handleSelectedAgeCategory(item, context)),
             ),
             FilterableManyConsumer<Person, Organization>.edit(
               context: context,
@@ -206,5 +216,9 @@ class OrganizationOverview extends ConsumerWidget {
 
   handleSelectedCompetition(Competition competition, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${competition.id}');
+  }
+
+  handleSelectedAgeCategory(AgeCategory ageCategory, BuildContext context) {
+    context.push('/${AgeCategoryOverview.route}/${ageCategory.id}');
   }
 }

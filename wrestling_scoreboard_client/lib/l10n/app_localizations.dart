@@ -1589,6 +1589,18 @@ abstract class AppLocalizations {
   /// **'Days'**
   String get days;
 
+  /// No description provided for @minimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum'**
+  String get minimum;
+
+  /// No description provided for @maximum.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum'**
+  String get maximum;
+
   /// No description provided for @referee.
   ///
   /// In en, this message translates to:

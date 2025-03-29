@@ -272,6 +272,8 @@
   "bleedingInjuryDuration": "Bleeding injury duration",
   "periodCount": "Number of periods",
   "days": "Days",
+  "minimum": "Minimum",
+  "maximum": "Maximum",
 
   "referee": "Referee",
   "refereeAbbr": "REF",

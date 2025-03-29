@@ -269,6 +269,8 @@
   "bleedingInjuryDuration": "Dauer der Verletzungszeit mit Blut",
   "periodCount": "Anzahl der Kampfabschnitte",
   "days": "Days",
+  "minimum": "Minimum",
+  "maximum": "Maximum",
 
   "referee": "Kampfrichter",
   "refereeAbbr": "SR",

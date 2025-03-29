@@ -228,13 +228,16 @@ final _competition = Competition(
   matCount: 6,
 );
 
+final _ageCategoryAJuniors = AgeCategory(name: 'A-Juniors', minAge: 16, maxAge: 18, organization: _organization);
+final _ageCategoryCJuniors = AgeCategory(name: 'C-Juniors', minAge: 12, maxAge: 14, organization: _organization);
+
 final _competitionLineup1 = CompetitionLineup(competition: _competition, club: _homeClub);
 final _competitionLineup2 = CompetitionLineup(competition: _competition, club: _guestClub);
-final _competitionWeightCategory = CompetitionWeightCategory(
-    competition: _competition, weightClass: wc61, ageCategory: AgeCategory(name: 'A-Juniors', minAge: 16, maxAge: 18));
+final _competitionWeightCategory =
+    CompetitionWeightCategory(competition: _competition, weightClass: wc61, ageCategory: _ageCategoryAJuniors);
 
-final _competitionWeightCategory2 = CompetitionWeightCategory(
-    competition: _competition, weightClass: wc57, ageCategory: AgeCategory(name: 'C-Juniors', minAge: 12, maxAge: 14));
+final _competitionWeightCategory2 =
+    CompetitionWeightCategory(competition: _competition, weightClass: wc57, ageCategory: _ageCategoryCJuniors);
 
 final _competitionParticipation1 = CompetitionParticipation(
   id: 1,
@@ -270,13 +273,20 @@ final _competitionBout2 = CompetitionBout(
   weightCategory: _competitionWeightCategory2,
 );
 
-final _boutAction1 =
-    BoutAction(actionType: BoutActionType.points, bout: _bout1, duration: Duration(seconds: 29), role: BoutRole.red, pointCount: 4);
+final _boutAction1 = BoutAction(
+    actionType: BoutActionType.points,
+    bout: _bout1,
+    duration: Duration(seconds: 29),
+    role: BoutRole.red,
+    pointCount: 4);
 final _boutAction2 =
     BoutAction(actionType: BoutActionType.caution, bout: _bout2, duration: Duration(seconds: 129), role: BoutRole.blue);
-final _boutAction3 =
-BoutAction(actionType: BoutActionType.points, bout: _bout2, duration: Duration(seconds: 100), role: BoutRole.red, pointCount: 2);
-
+final _boutAction3 = BoutAction(
+    actionType: BoutActionType.points,
+    bout: _bout2,
+    duration: Duration(seconds: 100),
+    role: BoutRole.red,
+    pointCount: 2);
 
 final List<Club> _clubs = [_homeClub, _guestClub];
 final List<BoutAction> _boutActions = [_boutAction1, _boutAction2, _boutAction3];
@@ -305,6 +315,8 @@ final List<BoutResultRule> _boutResultRules = []; // TODO fill
 final List<TeamMatch> _teamMatches = [_menRPWMatch, _jnRPWMatch];
 final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
 
+final List<AgeCategory> _ageCategories = [_ageCategoryAJuniors, _ageCategoryCJuniors];
+
 final List<Competition> _competitions = [_competition];
 final List<CompetitionBout> _competitionBouts = [_competitionBout1, _competitionBout2];
 final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
@@ -312,6 +324,12 @@ final List<CompetitionParticipation> _competitionParticipations = [
   _competitionParticipation1,
   _competitionParticipation2
 ];
+
+List<AgeCategory> getAgeCategories() => _ageCategories;
+
+List<AgeCategory> getAgeCategoryOfOrganization(Organization organization) {
+  return getAgeCategories().where((element) => element.organization == organization).toList();
+}
 
 List<Club> getClubs() => _clubs;
 

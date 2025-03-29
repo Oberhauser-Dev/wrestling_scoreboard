@@ -763,6 +763,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get days => 'Days';
 
   @override
+  String get minimum => 'Minimum';
+
+  @override
+  String get maximum => 'Maximum';
+
+  @override
   String get referee => 'Referee';
 
   @override

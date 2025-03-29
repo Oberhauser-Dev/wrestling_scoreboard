@@ -40,6 +40,8 @@ class MockDataManager extends DataManager {
   List<T> getManyMocksFromClass<T extends DataObject>({DataObject? filterObject}) {
     if (filterObject != null) {
       switch (T) {
+        case const (AgeCategory):
+          if (filterObject is Organization) return getAgeCategoryOfOrganization(filterObject).cast<T>();
         case const (Bout):
           if (filterObject is Competition) return getBoutsOfCompetition(filterObject).cast<T>();
           if (filterObject is TeamMatch) return getBoutsOfTeamMatch(filterObject).cast<T>();
