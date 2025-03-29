@@ -237,6 +237,7 @@ class CompetitionOverview extends ConsumerWidget {
               Tab(child: HeadingText(localizations.info)),
               Tab(child: HeadingText(localizations.lineups)),
               Tab(child: HeadingText(localizations.weightCategories)),
+              Tab(child: HeadingText(localizations.competitionSystems)),
               Tab(child: HeadingText(localizations.bouts)),
               // Tab(child: HeadingText(localizations.persons)),
             ],

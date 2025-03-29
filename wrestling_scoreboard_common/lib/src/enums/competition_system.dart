@@ -1,4 +1,4 @@
-enum CompetitionMode {
+enum CompetitionSystem {
   nordic,
   twoPools;
 

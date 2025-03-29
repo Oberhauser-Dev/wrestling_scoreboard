@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'competition_mode_affiliation.dart';
+part of 'competition_system_affiliation.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,34 +14,34 @@ part of 'competition_mode_affiliation.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$CompetitionModeAffiliation {
+mixin _$CompetitionSystemAffiliation {
   int? get id;
   Competition get competition;
-  CompetitionMode get competitionMode;
+  CompetitionSystem get competitionSystem;
   int? get maxContestants;
 
-  /// Create a copy of CompetitionModeAffiliation
+  /// Create a copy of CompetitionSystemAffiliation
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $CompetitionModeAffiliationCopyWith<CompetitionModeAffiliation>
-      get copyWith =>
-          _$CompetitionModeAffiliationCopyWithImpl<CompetitionModeAffiliation>(
-              this as CompetitionModeAffiliation, _$identity);
+  $CompetitionSystemAffiliationCopyWith<CompetitionSystemAffiliation>
+      get copyWith => _$CompetitionSystemAffiliationCopyWithImpl<
+              CompetitionSystemAffiliation>(
+          this as CompetitionSystemAffiliation, _$identity);
 
-  /// Serializes this CompetitionModeAffiliation to a JSON map.
+  /// Serializes this CompetitionSystemAffiliation to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is CompetitionModeAffiliation &&
+            other is CompetitionSystemAffiliation &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.competition, competition) ||
                 other.competition == competition) &&
-            (identical(other.competitionMode, competitionMode) ||
-                other.competitionMode == competitionMode) &&
+            (identical(other.competitionSystem, competitionSystem) ||
+                other.competitionSystem == competitionSystem) &&
             (identical(other.maxContestants, maxContestants) ||
                 other.maxContestants == maxContestants));
   }
@@ -49,45 +49,46 @@ mixin _$CompetitionModeAffiliation {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, competition, competitionMode, maxContestants);
+      runtimeType, id, competition, competitionSystem, maxContestants);
 
   @override
   String toString() {
-    return 'CompetitionModeAffiliation(id: $id, competition: $competition, competitionMode: $competitionMode, maxContestants: $maxContestants)';
+    return 'CompetitionSystemAffiliation(id: $id, competition: $competition, competitionSystem: $competitionSystem, maxContestants: $maxContestants)';
   }
 }
 
 /// @nodoc
-abstract mixin class $CompetitionModeAffiliationCopyWith<$Res> {
-  factory $CompetitionModeAffiliationCopyWith(CompetitionModeAffiliation value,
-          $Res Function(CompetitionModeAffiliation) _then) =
-      _$CompetitionModeAffiliationCopyWithImpl;
+abstract mixin class $CompetitionSystemAffiliationCopyWith<$Res> {
+  factory $CompetitionSystemAffiliationCopyWith(
+          CompetitionSystemAffiliation value,
+          $Res Function(CompetitionSystemAffiliation) _then) =
+      _$CompetitionSystemAffiliationCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
       Competition competition,
-      CompetitionMode competitionMode,
+      CompetitionSystem competitionSystem,
       int? maxContestants});
 
   $CompetitionCopyWith<$Res> get competition;
 }
 
 /// @nodoc
-class _$CompetitionModeAffiliationCopyWithImpl<$Res>
-    implements $CompetitionModeAffiliationCopyWith<$Res> {
-  _$CompetitionModeAffiliationCopyWithImpl(this._self, this._then);
+class _$CompetitionSystemAffiliationCopyWithImpl<$Res>
+    implements $CompetitionSystemAffiliationCopyWith<$Res> {
+  _$CompetitionSystemAffiliationCopyWithImpl(this._self, this._then);
 
-  final CompetitionModeAffiliation _self;
-  final $Res Function(CompetitionModeAffiliation) _then;
+  final CompetitionSystemAffiliation _self;
+  final $Res Function(CompetitionSystemAffiliation) _then;
 
-  /// Create a copy of CompetitionModeAffiliation
+  /// Create a copy of CompetitionSystemAffiliation
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
     Object? competition = null,
-    Object? competitionMode = null,
+    Object? competitionSystem = null,
     Object? maxContestants = freezed,
   }) {
     return _then(_self.copyWith(
@@ -99,10 +100,10 @@ class _$CompetitionModeAffiliationCopyWithImpl<$Res>
           ? _self.competition
           : competition // ignore: cast_nullable_to_non_nullable
               as Competition,
-      competitionMode: null == competitionMode
-          ? _self.competitionMode
-          : competitionMode // ignore: cast_nullable_to_non_nullable
-              as CompetitionMode,
+      competitionSystem: null == competitionSystem
+          ? _self.competitionSystem
+          : competitionSystem // ignore: cast_nullable_to_non_nullable
+              as CompetitionSystem,
       maxContestants: freezed == maxContestants
           ? _self.maxContestants
           : maxContestants // ignore: cast_nullable_to_non_nullable
@@ -110,7 +111,7 @@ class _$CompetitionModeAffiliationCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of CompetitionModeAffiliation
+  /// Create a copy of CompetitionSystemAffiliation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -123,37 +124,37 @@ class _$CompetitionModeAffiliationCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _CompetitionModeAffiliation extends CompetitionModeAffiliation {
-  const _CompetitionModeAffiliation(
+class _CompetitionSystemAffiliation extends CompetitionSystemAffiliation {
+  const _CompetitionSystemAffiliation(
       {this.id,
       required this.competition,
-      required this.competitionMode,
+      required this.competitionSystem,
       this.maxContestants})
       : super._();
-  factory _CompetitionModeAffiliation.fromJson(Map<String, dynamic> json) =>
-      _$CompetitionModeAffiliationFromJson(json);
+  factory _CompetitionSystemAffiliation.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionSystemAffiliationFromJson(json);
 
   @override
   final int? id;
   @override
   final Competition competition;
   @override
-  final CompetitionMode competitionMode;
+  final CompetitionSystem competitionSystem;
   @override
   final int? maxContestants;
 
-  /// Create a copy of CompetitionModeAffiliation
+  /// Create a copy of CompetitionSystemAffiliation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CompetitionModeAffiliationCopyWith<_CompetitionModeAffiliation>
-      get copyWith => __$CompetitionModeAffiliationCopyWithImpl<
-          _CompetitionModeAffiliation>(this, _$identity);
+  _$CompetitionSystemAffiliationCopyWith<_CompetitionSystemAffiliation>
+      get copyWith => __$CompetitionSystemAffiliationCopyWithImpl<
+          _CompetitionSystemAffiliation>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$CompetitionModeAffiliationToJson(
+    return _$CompetitionSystemAffiliationToJson(
       this,
     );
   }
@@ -162,12 +163,12 @@ class _CompetitionModeAffiliation extends CompetitionModeAffiliation {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CompetitionModeAffiliation &&
+            other is _CompetitionSystemAffiliation &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.competition, competition) ||
                 other.competition == competition) &&
-            (identical(other.competitionMode, competitionMode) ||
-                other.competitionMode == competitionMode) &&
+            (identical(other.competitionSystem, competitionSystem) ||
+                other.competitionSystem == competitionSystem) &&
             (identical(other.maxContestants, maxContestants) ||
                 other.maxContestants == maxContestants));
   }
@@ -175,27 +176,27 @@ class _CompetitionModeAffiliation extends CompetitionModeAffiliation {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, competition, competitionMode, maxContestants);
+      runtimeType, id, competition, competitionSystem, maxContestants);
 
   @override
   String toString() {
-    return 'CompetitionModeAffiliation(id: $id, competition: $competition, competitionMode: $competitionMode, maxContestants: $maxContestants)';
+    return 'CompetitionSystemAffiliation(id: $id, competition: $competition, competitionSystem: $competitionSystem, maxContestants: $maxContestants)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$CompetitionModeAffiliationCopyWith<$Res>
-    implements $CompetitionModeAffiliationCopyWith<$Res> {
-  factory _$CompetitionModeAffiliationCopyWith(
-          _CompetitionModeAffiliation value,
-          $Res Function(_CompetitionModeAffiliation) _then) =
-      __$CompetitionModeAffiliationCopyWithImpl;
+abstract mixin class _$CompetitionSystemAffiliationCopyWith<$Res>
+    implements $CompetitionSystemAffiliationCopyWith<$Res> {
+  factory _$CompetitionSystemAffiliationCopyWith(
+          _CompetitionSystemAffiliation value,
+          $Res Function(_CompetitionSystemAffiliation) _then) =
+      __$CompetitionSystemAffiliationCopyWithImpl;
   @override
   @useResult
   $Res call(
       {int? id,
       Competition competition,
-      CompetitionMode competitionMode,
+      CompetitionSystem competitionSystem,
       int? maxContestants});
 
   @override
@@ -203,24 +204,24 @@ abstract mixin class _$CompetitionModeAffiliationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$CompetitionModeAffiliationCopyWithImpl<$Res>
-    implements _$CompetitionModeAffiliationCopyWith<$Res> {
-  __$CompetitionModeAffiliationCopyWithImpl(this._self, this._then);
+class __$CompetitionSystemAffiliationCopyWithImpl<$Res>
+    implements _$CompetitionSystemAffiliationCopyWith<$Res> {
+  __$CompetitionSystemAffiliationCopyWithImpl(this._self, this._then);
 
-  final _CompetitionModeAffiliation _self;
-  final $Res Function(_CompetitionModeAffiliation) _then;
+  final _CompetitionSystemAffiliation _self;
+  final $Res Function(_CompetitionSystemAffiliation) _then;
 
-  /// Create a copy of CompetitionModeAffiliation
+  /// Create a copy of CompetitionSystemAffiliation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = freezed,
     Object? competition = null,
-    Object? competitionMode = null,
+    Object? competitionSystem = null,
     Object? maxContestants = freezed,
   }) {
-    return _then(_CompetitionModeAffiliation(
+    return _then(_CompetitionSystemAffiliation(
       id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -229,10 +230,10 @@ class __$CompetitionModeAffiliationCopyWithImpl<$Res>
           ? _self.competition
           : competition // ignore: cast_nullable_to_non_nullable
               as Competition,
-      competitionMode: null == competitionMode
-          ? _self.competitionMode
-          : competitionMode // ignore: cast_nullable_to_non_nullable
-              as CompetitionMode,
+      competitionSystem: null == competitionSystem
+          ? _self.competitionSystem
+          : competitionSystem // ignore: cast_nullable_to_non_nullable
+              as CompetitionSystem,
       maxContestants: freezed == maxContestants
           ? _self.maxContestants
           : maxContestants // ignore: cast_nullable_to_non_nullable
@@ -240,7 +241,7 @@ class __$CompetitionModeAffiliationCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of CompetitionModeAffiliation
+  /// Create a copy of CompetitionSystemAffiliation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
