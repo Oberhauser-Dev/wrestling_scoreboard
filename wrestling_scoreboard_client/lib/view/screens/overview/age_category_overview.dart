@@ -12,7 +12,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class AgeCategoryOverview extends ConsumerWidget {
-  static const route = 'ageCategory';
+  static const route = 'age_category';
 
   final int id;
   final AgeCategory? ageCategory;

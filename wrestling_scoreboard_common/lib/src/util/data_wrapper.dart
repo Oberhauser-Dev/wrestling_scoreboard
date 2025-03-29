@@ -277,6 +277,7 @@ String getTableNameFromType(Type t) {
     const (BoutResultRule) => 'bout_result_rule',
     const (Club) => 'club',
     const (Competition) => 'competition',
+    const (CompetitionSystemAffiliation) => 'competition_system_affiliation',
     const (CompetitionBout) => 'competition_bout',
     const (Organization) => 'organization',
     const (Division) => 'division',

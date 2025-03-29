@@ -24,6 +24,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_ru
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
@@ -174,6 +175,11 @@ getRouter() {
                         ),
                       ]),
                 ],
+              ),
+              GoRoute(
+                path: '${CompetitionSystemAffiliationOverview.route}/:competition_system_affiliation_id',
+                builder: (context, state) => CompetitionSystemAffiliationOverview(
+                    id: int.parse(state.pathParameters['competition_system_affiliation_id']!)),
               ),
             ],
           ),

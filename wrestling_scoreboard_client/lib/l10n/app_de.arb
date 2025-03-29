@@ -192,6 +192,8 @@
   "seasonSecondHalf": "Rückrunde",
   "competition": "Turnier",
   "competitions": "Turniere",
+  "competitionSystem": "Wettkampfsystem",
+  "competitionSystems": "Wettkampfsysteme",
   "boutDay": "Kampftag",
   "boutDays": "Kampftage",
   "match": "Begegnung",

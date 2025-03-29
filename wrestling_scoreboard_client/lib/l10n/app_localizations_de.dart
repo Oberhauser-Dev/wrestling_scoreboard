@@ -535,6 +535,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get competitions => 'Turniere';
 
   @override
+  String get competitionSystem => 'Wettkampfsystem';
+
+  @override
+  String get competitionSystems => 'Wettkampfsysteme';
+
+  @override
   String get boutDay => 'Kampftag';
 
   @override

@@ -1133,6 +1133,18 @@ abstract class AppLocalizations {
   /// **'Competitions'**
   String get competitions;
 
+  /// No description provided for @competitionSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Competition System'**
+  String get competitionSystem;
+
+  /// No description provided for @competitionSystems.
+  ///
+  /// In en, this message translates to:
+  /// **'Competition Systems'**
+  String get competitionSystems;
+
   /// No description provided for @boutDay.
   ///
   /// In en, this message translates to:

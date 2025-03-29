@@ -228,6 +228,11 @@ final _competition = Competition(
   matCount: 6,
 );
 
+final _competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
+    id: 0, competitionSystem: CompetitionSystem.nordic, competition: _competition, maxContestants: 6);
+final _competitionSystemAffiliationTwoPools =
+    CompetitionSystemAffiliation(id: 1, competitionSystem: CompetitionSystem.twoPools, competition: _competition);
+
 final _ageCategoryAJuniors = AgeCategory(id: 0, name: 'A-Juniors', minAge: 16, maxAge: 18, organization: _organization);
 final _ageCategoryCJuniors = AgeCategory(id: 1, name: 'C-Juniors', minAge: 12, maxAge: 14, organization: _organization);
 
@@ -318,6 +323,10 @@ final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
 final List<AgeCategory> _ageCategories = [_ageCategoryAJuniors, _ageCategoryCJuniors];
 
 final List<Competition> _competitions = [_competition];
+final List<CompetitionSystemAffiliation> _competitionSystemAffiliations = [
+  _competitionSystemAffiliationNordic,
+  _competitionSystemAffiliationTwoPools,
+];
 final List<CompetitionBout> _competitionBouts = [_competitionBout1, _competitionBout2];
 final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
 final List<CompetitionParticipation> _competitionParticipations = [
@@ -460,6 +469,12 @@ List<Competition> getCompetitions() => _competitions;
 
 List<Competition> getCompetitionsOfOrganization(Organization organization) {
   return getCompetitions().where((element) => element.organization == organization).toList();
+}
+
+List<CompetitionSystemAffiliation> getCompetitionSystemAffiliations() => _competitionSystemAffiliations;
+
+List<CompetitionSystemAffiliation> getCompetitionSystemAffiliationsOfCompetition(Competition competition) {
+  return getCompetitionSystemAffiliations().where((element) => element.competition == competition).toList();
 }
 
 List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
