@@ -328,6 +328,10 @@ final List<CompetitionSystemAffiliation> _competitionSystemAffiliations = [
   _competitionSystemAffiliationTwoPools,
 ];
 final List<CompetitionBout> _competitionBouts = [_competitionBout1, _competitionBout2];
+final List<CompetitionWeightCategory> _competitionWeightCategories = [
+  _competitionWeightCategory,
+  _competitionWeightCategory2,
+];
 final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
 final List<CompetitionParticipation> _competitionParticipations = [
   _competitionParticipation1,
@@ -469,6 +473,12 @@ List<Competition> getCompetitions() => _competitions;
 
 List<Competition> getCompetitionsOfOrganization(Organization organization) {
   return getCompetitions().where((element) => element.organization == organization).toList();
+}
+
+List<CompetitionWeightCategory> getCompetitionWeightCategories() => _competitionWeightCategories;
+
+List<CompetitionWeightCategory> getCompetitionWeightCategoriesOfCompetition(Competition competition) {
+  return getCompetitionWeightCategories().where((element) => element.competition == competition).toList();
 }
 
 List<CompetitionSystemAffiliation> getCompetitionSystemAffiliations() => _competitionSystemAffiliations;

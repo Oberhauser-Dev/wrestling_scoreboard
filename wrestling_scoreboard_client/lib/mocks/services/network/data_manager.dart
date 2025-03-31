@@ -72,6 +72,9 @@ class MockDataManager extends DataManager {
             return getCompetitionParticipationsOfWeightCategory(filterObject).cast<T>();
           }
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (CompetitionWeightCategory):
+          if (filterObject is Competition) return getCompetitionWeightCategoriesOfCompetition(filterObject).cast<T>();
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Division):
           if (filterObject is Organization) return getDivisionsOfOrganization(filterObject).cast<T>();
           if (filterObject is Division) return getDivisionsOfDivision(filterObject).cast<T>();
@@ -284,36 +287,50 @@ class MockDataManager extends DataManager {
   }
 
   List<T> _getListOfObject<T extends DataObject>(T obj, CRUD crud) {
-    if (obj is Club) {
-      return getClubs().cast<T>();
+    if (obj is AthleteBoutState) {
+      return getParticipantStates().cast<T>();
     } else if (obj is Bout) {
       return getBouts().cast<T>();
     } else if (obj is BoutAction) {
       return getBoutActions().cast<T>();
-    } else if (obj is Organization) {
-      return getOrganizations().cast<T>();
+    } else if (obj is Club) {
+      return getClubs().cast<T>();
+    } else if (obj is Competition) {
+      return getCompetitions().cast<T>();
+    } else if (obj is CompetitionWeightCategory) {
+      return getCompetitionWeightCategories().cast<T>();
+    } else if (obj is CompetitionSystemAffiliation) {
+      return getCompetitionSystemAffiliations().cast<T>();
+    } else if (obj is CompetitionParticipation) {
+      return getCompetitionParticipations().cast<T>();
+    } else if (obj is CompetitionLineup) {
+      return getCompetitionLineups().cast<T>();
+    } else if (obj is CompetitionBout) {
+      return getCompetitionBouts().cast<T>();
+      /*} else if (obj is CompetitionPerson) {
+      return getCompetitionPersons().cast<T>();*/
     } else if (obj is Division) {
       return getDivisions().cast<T>();
-    } else if (obj is League) {
-      return getLeagues().cast<T>();
     } else if (obj is DivisionWeightClass) {
       return getDivisionWeightClasses().cast<T>();
-    } else if (obj is TeamLineup) {
-      return getLineups().cast<T>();
+    } else if (obj is League) {
+      return getLeagues().cast<T>();
     } else if (obj is Membership) {
       return getMemberships().cast<T>();
+    } else if (obj is Organization) {
+      return getOrganizations().cast<T>();
+    } else if (obj is TeamLineup) {
+      return getLineups().cast<T>();
     } else if (obj is TeamMatchParticipation) {
       return getParticipations().cast<T>();
-    } else if (obj is AthleteBoutState) {
-      return getParticipantStates().cast<T>();
-    } else if (obj is Person) {
-      return getPersons().cast<T>();
     } else if (obj is Team) {
       return getTeams().cast<T>();
     } else if (obj is TeamMatch) {
       return getTeamMatches().cast<T>();
     } else if (obj is TeamMatchBout) {
       return getTeamMatchBouts().cast<T>();
+    } else if (obj is Person) {
+      return getPersons().cast<T>();
     } else if (obj is WeightClass) {
       return getWeightClasses().cast<T>();
     } else {
@@ -329,6 +346,14 @@ class MockDataManager extends DataManager {
         return getCompetitions().cast<T>();
       case const (CompetitionSystemAffiliation):
         return getCompetitionSystemAffiliations().cast<T>();
+      case const (CompetitionBout):
+        return getCompetitionBouts().cast<T>();
+      case const (CompetitionLineup):
+        return getCompetitionLineups().cast<T>();
+      case const (CompetitionParticipation):
+        return getCompetitionParticipations().cast<T>();
+      case const (CompetitionWeightCategory):
+        return getCompetitionWeightCategories().cast<T>();
       case const (Bout):
         return getBouts().cast<T>();
       case const (BoutAction):

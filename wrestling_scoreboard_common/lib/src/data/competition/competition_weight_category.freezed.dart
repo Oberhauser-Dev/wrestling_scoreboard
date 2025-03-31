@@ -16,8 +16,6 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CompetitionWeightCategory {
   int? get id;
-  String? get orgSyncId;
-  Organization? get organization;
   WeightClass get weightClass;
   AgeCategory get ageCategory;
   Competition get competition;
@@ -39,10 +37,6 @@ mixin _$CompetitionWeightCategory {
         (other.runtimeType == runtimeType &&
             other is CompetitionWeightCategory &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) ||
-                other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) ||
-                other.organization == organization) &&
             (identical(other.weightClass, weightClass) ||
                 other.weightClass == weightClass) &&
             (identical(other.ageCategory, ageCategory) ||
@@ -53,12 +47,12 @@ mixin _$CompetitionWeightCategory {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
-      weightClass, ageCategory, competition);
+  int get hashCode =>
+      Object.hash(runtimeType, id, weightClass, ageCategory, competition);
 
   @override
   String toString() {
-    return 'CompetitionWeightCategory(id: $id, orgSyncId: $orgSyncId, organization: $organization, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition)';
+    return 'CompetitionWeightCategory(id: $id, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition)';
   }
 }
 
@@ -70,13 +64,10 @@ abstract mixin class $CompetitionWeightCategoryCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      String? orgSyncId,
-      Organization? organization,
       WeightClass weightClass,
       AgeCategory ageCategory,
       Competition competition});
 
-  $OrganizationCopyWith<$Res>? get organization;
   $WeightClassCopyWith<$Res> get weightClass;
   $AgeCategoryCopyWith<$Res> get ageCategory;
   $CompetitionCopyWith<$Res> get competition;
@@ -96,8 +87,6 @@ class _$CompetitionWeightCategoryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
     Object? weightClass = null,
     Object? ageCategory = null,
     Object? competition = null,
@@ -107,14 +96,6 @@ class _$CompetitionWeightCategoryCopyWithImpl<$Res>
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _self.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _self.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
       weightClass: null == weightClass
           ? _self.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
@@ -128,20 +109,6 @@ class _$CompetitionWeightCategoryCopyWithImpl<$Res>
           : competition // ignore: cast_nullable_to_non_nullable
               as Competition,
     ));
-  }
-
-  /// Create a copy of CompetitionWeightCategory
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $OrganizationCopyWith<$Res>? get organization {
-    if (_self.organization == null) {
-      return null;
-    }
-
-    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
-      return _then(_self.copyWith(organization: value));
-    });
   }
 
   /// Create a copy of CompetitionWeightCategory
@@ -180,8 +147,6 @@ class _$CompetitionWeightCategoryCopyWithImpl<$Res>
 class _CompetitionWeightCategory extends CompetitionWeightCategory {
   const _CompetitionWeightCategory(
       {this.id,
-      this.orgSyncId,
-      this.organization,
       required this.weightClass,
       required this.ageCategory,
       required this.competition})
@@ -191,10 +156,6 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
 
   @override
   final int? id;
-  @override
-  final String? orgSyncId;
-  @override
-  final Organization? organization;
   @override
   final WeightClass weightClass;
   @override
@@ -225,10 +186,6 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
         (other.runtimeType == runtimeType &&
             other is _CompetitionWeightCategory &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) ||
-                other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) ||
-                other.organization == organization) &&
             (identical(other.weightClass, weightClass) ||
                 other.weightClass == weightClass) &&
             (identical(other.ageCategory, ageCategory) ||
@@ -239,12 +196,12 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization,
-      weightClass, ageCategory, competition);
+  int get hashCode =>
+      Object.hash(runtimeType, id, weightClass, ageCategory, competition);
 
   @override
   String toString() {
-    return 'CompetitionWeightCategory(id: $id, orgSyncId: $orgSyncId, organization: $organization, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition)';
+    return 'CompetitionWeightCategory(id: $id, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition)';
   }
 }
 
@@ -258,14 +215,10 @@ abstract mixin class _$CompetitionWeightCategoryCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      String? orgSyncId,
-      Organization? organization,
       WeightClass weightClass,
       AgeCategory ageCategory,
       Competition competition});
 
-  @override
-  $OrganizationCopyWith<$Res>? get organization;
   @override
   $WeightClassCopyWith<$Res> get weightClass;
   @override
@@ -288,8 +241,6 @@ class __$CompetitionWeightCategoryCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
     Object? weightClass = null,
     Object? ageCategory = null,
     Object? competition = null,
@@ -299,14 +250,6 @@ class __$CompetitionWeightCategoryCopyWithImpl<$Res>
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _self.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _self.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
       weightClass: null == weightClass
           ? _self.weightClass
           : weightClass // ignore: cast_nullable_to_non_nullable
@@ -320,20 +263,6 @@ class __$CompetitionWeightCategoryCopyWithImpl<$Res>
           : competition // ignore: cast_nullable_to_non_nullable
               as Competition,
     ));
-  }
-
-  /// Create a copy of CompetitionWeightCategory
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $OrganizationCopyWith<$Res>? get organization {
-    if (_self.organization == null) {
-      return null;
-    }
-
-    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
-      return _then(_self.copyWith(organization: value));
-    });
   }
 
   /// Create a copy of CompetitionWeightCategory

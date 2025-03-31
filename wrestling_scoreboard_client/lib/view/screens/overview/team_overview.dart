@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_club_affiliation_edit.dart';

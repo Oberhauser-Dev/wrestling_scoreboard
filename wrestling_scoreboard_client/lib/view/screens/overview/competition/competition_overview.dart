@@ -9,8 +9,11 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -168,36 +171,27 @@ class CompetitionOverview extends ConsumerWidget {
                         );
                       });
                 }),
-            ManyConsumer<CompetitionWeightCategory, Competition>(
+            FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
+                context: context,
+                editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
                 filterObject: competition,
-                builder: (context, weightCategories) {
-                  return GroupedList(
-                    header: const HeadingItem(),
-                    itemCount: weightCategories.length,
-                    itemBuilder: (context, index) {
-                      final wCategory = weightCategories[index];
-                      return ContentItem(
-                        title: wCategory.name,
-                        icon: Icons.fitness_center,
-                        onTap: () async => _handleSelectedWeightCategory(context, wCategory),
-                      );
-                    },
+                itemBuilder: (context, weightCategory) {
+                  return ContentItem(
+                    title: weightCategory.name,
+                    icon: Icons.fitness_center,
+                    onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
                   );
                 }),
-            ManyConsumer<CompetitionSystemAffiliation, Competition>(
+            FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
+                context: context,
+                editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
                 filterObject: competition,
-                builder: (context, competitionSystemAffiliations) {
-                  return GroupedList(
-                    header: const HeadingItem(),
-                    itemCount: competitionSystemAffiliations.length,
-                    itemBuilder: (context, index) {
-                      final affiliation = competitionSystemAffiliations[index];
-                      return ContentItem(
-                        title: affiliation.competitionSystem.name,
-                        icon: Icons.account_tree,
-                        onTap: () async => _handleSelectedCompetitionSystemAffiliation(context, affiliation),
-                      );
-                    },
+                itemBuilder: (context, competitionSystemAffiliation) {
+                  return ContentItem(
+                    title: competitionSystemAffiliation.competitionSystem.name,
+                    icon: Icons.account_tree,
+                    onTap: () async =>
+                        _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
                   );
                 }),
             CompetitionBoutList(filterObject: competition),
@@ -276,13 +270,12 @@ class CompetitionOverview extends ConsumerWidget {
   }
 
   _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
-    // context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
+    context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }
 
   _handleSelectedCompetitionSystemAffiliation(BuildContext context, CompetitionSystemAffiliation affiliation) {
     context.push('/${CompetitionSystemAffiliationOverview.route}/${affiliation.id}');
   }
-
 
   handleSelectedLineup(
     BuildContext context,
