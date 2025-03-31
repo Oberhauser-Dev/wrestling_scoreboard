@@ -278,6 +278,7 @@ String getTableNameFromType(Type t) {
     const (Club) => 'club',
     const (Competition) => 'competition',
     const (CompetitionBout) => 'competition_bout',
+    const (CompetitionLineup) => 'competition_lineup',
     const (CompetitionWeightCategory) => 'competition_weight_category',
     const (CompetitionParticipation) => 'competition_participation',
     const (CompetitionPerson) => 'competition_person',

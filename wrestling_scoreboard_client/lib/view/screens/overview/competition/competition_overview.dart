@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -12,6 +11,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/competition/compet
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
@@ -19,7 +19,6 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -143,33 +142,16 @@ class CompetitionOverview extends ConsumerWidget {
                     icon: Icons.comment,
                   ),
                 ]),
-            LoadingBuilder<User?>(
-                future: ref.watch(userNotifierProvider),
-                builder: (context, user) {
-                  return ManyConsumer<CompetitionLineup, Competition>(
-                      filterObject: competition,
-                      builder: (context, lineups) {
-                        return GroupedList(
-                          header: const HeadingItem(),
-                          itemCount: lineups.length,
-                          itemBuilder: (context, index) {
-                            final lineup = lineups[index];
-                            return ContentItem(
-                              title: lineup.club.name,
-                              icon: Icons.view_list,
-                              onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                  ? null
-                                  : () async => handleSelectedLineup(
-                                        context,
-                                        ref,
-                                        lineup,
-                                        competition,
-                                        navigator,
-                                      ),
-                            );
-                          },
-                        );
-                      });
+            FilterableManyConsumer<CompetitionLineup, Competition>.edit(
+                context: context,
+                editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
+                filterObject: competition,
+                itemBuilder: (context, lineup) {
+                  return ContentItem(
+                    title: lineup.club.name,
+                    icon: Icons.view_list,
+                    onTap: () async => _handleSelectedCompetitionLineup(context, lineup),
+                  );
                 }),
             FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
                 context: context,
@@ -277,34 +259,8 @@ class CompetitionOverview extends ConsumerWidget {
     context.push('/${CompetitionSystemAffiliationOverview.route}/${affiliation.id}');
   }
 
-  handleSelectedLineup(
-    BuildContext context,
-    WidgetRef ref,
-    CompetitionLineup lineup,
-    Competition competition,
-    NavigatorState navigator,
-  ) async {
-    final dataManager = await ref.read(dataManagerNotifierProvider);
-    // final participations =
-    //     await dataManager.readMany<CompetitionParticipation, CompetitionLineup>(filterObject: lineup);
-    //
-    // navigator.push(
-    //   MaterialPageRoute(
-    //     builder: (context) {
-    //       return CompetitionLineupEdit(
-    //         weightClasses: weightClasses,
-    //         participations: participations,
-    //         lineup: lineup,
-    //         initialCoach: proposedLineup?.coach,
-    //         initialLeader: proposedLineup?.leader,
-    //         initialParticipations: proposedParticipations,
-    //         onSubmitGenerate: () async {
-    //           await dataManager.generateBouts<Competition>(competition, false);
-    //         },
-    //       );
-    //     },
-    //   ),
-    // );
+  _handleSelectedCompetitionLineup(BuildContext context, CompetitionLineup lineup) {
+    context.push('/${CompetitionLineupOverview.route}/${lineup.id}');
   }
 }
 

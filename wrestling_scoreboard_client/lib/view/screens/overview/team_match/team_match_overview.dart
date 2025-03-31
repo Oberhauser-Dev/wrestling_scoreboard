@@ -14,7 +14,7 @@ import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transc
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
@@ -340,7 +340,7 @@ class TeamMatchOverview extends ConsumerWidget {
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
-          return LineupEdit(
+          return TeamLineupEdit(
             weightClasses: weightClasses,
             participations: participations,
             lineup: lineup,

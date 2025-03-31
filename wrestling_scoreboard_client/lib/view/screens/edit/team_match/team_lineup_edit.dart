@@ -17,7 +17,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
-class LineupEdit extends ConsumerStatefulWidget {
+class TeamLineupEdit extends ConsumerStatefulWidget {
   final TeamLineup lineup;
   final List<WeightClass> weightClasses;
   final List<TeamMatchParticipation> participations;
@@ -27,7 +27,7 @@ class LineupEdit extends ConsumerStatefulWidget {
 
   final Future<void> Function()? onSubmitGenerate;
 
-  const LineupEdit({
+  const TeamLineupEdit({
     super.key,
     required this.lineup,
     required this.weightClasses,
@@ -42,7 +42,7 @@ class LineupEdit extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => LineupEditState();
 }
 
-class LineupEditState extends ConsumerState<LineupEdit> {
+class LineupEditState extends ConsumerState<TeamLineupEdit> {
   final _formKey = GlobalKey<FormState>();
 
   Iterable<Membership>? _memberships;
@@ -97,7 +97,7 @@ class LineupEditState extends ConsumerState<LineupEdit> {
                 .createOrUpdateSingle<Person>(participation.membership.person);
             participation = participation.copyWith(
                 membership:
-                    participation.membership.copyWith(person: participation.membership.person.copyWithId(personId)));
+                participation.membership.copyWith(person: participation.membership.person.copyWithId(personId)));
           }
           final membershipId = await (await ref.read(dataManagerNotifierProvider))
               .createOrUpdateSingle<Membership>(participation.membership);
@@ -281,7 +281,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
               child: MembershipDropdown(
                 label:
-                    '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
+                '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
                 getOrSetMemberships: widget.getOrSetMemberships,
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;
