@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
@@ -144,7 +145,7 @@ class CompetitionOverview extends ConsumerWidget {
                 ]),
             FilterableManyConsumer<CompetitionLineup, Competition>.edit(
                 context: context,
-                editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
+                editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, lineup) {
                   return ContentItem(
