@@ -8,6 +8,8 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/competition/compet
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
@@ -24,6 +26,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final navigator = Navigator.of(context);
     final localizations = context.l10n;
     return SingleConsumer<CompetitionWeightCategory>(
       id: id,
@@ -60,6 +63,21 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
           dataObject: competitionWeightCategory,
           label: localizations.weightCategory,
           details: competitionWeightCategory.name,
+          actions: [
+            EditAction(
+              icon: const Icon(Icons.autorenew),
+              label: Text(localizations.saveAndGenerate),
+              onSubmit: () async {
+                final hasConfirmed = await showOkCancelDialog(
+                  context: context,
+                  child: Text(localizations.warningBoutGenerate),
+                );
+                if (hasConfirmed && context.mounted) {
+                  await catchAsync(context, () => _handleSubmit(ref, navigator, competitionWeightCategory));
+                }
+              },
+            ),
+          ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),
             Tab(child: HeadingText(localizations.participations)),
@@ -86,5 +104,11 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
 
   _handleSelectedParticipation(CompetitionParticipation participation, BuildContext context) {
     context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
+  }
+
+  Future<void> _handleSubmit(WidgetRef ref, NavigatorState navigator, CompetitionWeightCategory weightCategory) async {
+    final dataManager = await ref.read(dataManagerNotifierProvider);
+    await dataManager.generateBouts<CompetitionWeightCategory>(weightCategory, false);
+    navigator.pop();
   }
 }

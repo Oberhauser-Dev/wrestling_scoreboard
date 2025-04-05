@@ -68,10 +68,10 @@ class MockDataManager extends DataManager {
           if (filterObject is Competition) return getCompetitionLineupsOfCompetition(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionParticipation):
-          if (filterObject is CompetitionWeightCategory)
+          if (filterObject is CompetitionWeightCategory) {
             return getCompetitionParticipationsOfWeightCategory(filterObject).cast<T>();
-          if (filterObject is CompetitionLineup)
-            return getCompetitionParticipationsOfLineup(filterObject).cast<T>();
+          }
+          if (filterObject is CompetitionLineup) return getCompetitionParticipationsOfLineup(filterObject).cast<T>();
 
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionWeightCategory):
@@ -129,8 +129,8 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
-    if (wrestlingEvent is TeamMatch) {
+  Future<void> generateBouts<T extends DataObject>(DataObject dataObject, [bool isReset = false]) async {
+    if (dataObject is TeamMatch) {
       final teamMatchBoutsAll = getTeamMatchBouts();
       if (isReset) {
         for (var element in teamMatchBoutsAll) {
@@ -140,14 +140,13 @@ class MockDataManager extends DataManager {
 
       List<List<TeamMatchParticipation>> teamParticipations;
       List<WeightClass> weightClasses;
-      final homeParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.home);
-      final guestParticipations =
-          await readMany<TeamMatchParticipation, TeamLineup>(filterObject: wrestlingEvent.guest);
+      final homeParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: dataObject.home);
+      final guestParticipations = await readMany<TeamMatchParticipation, TeamLineup>(filterObject: dataObject.guest);
       teamParticipations = [homeParticipations, guestParticipations];
-      weightClasses = await readMany<WeightClass, League>(filterObject: wrestlingEvent.league);
+      weightClasses = await readMany<WeightClass, League>(filterObject: dataObject.league);
 
       // Generate new bouts
-      final newBouts = await wrestlingEvent.generateBouts(teamParticipations, weightClasses);
+      final newBouts = await dataObject.generateBouts(teamParticipations, weightClasses);
       final newBoutsWithId = <TeamMatchBout>[];
 
       // Add if not exists
@@ -162,7 +161,7 @@ class MockDataManager extends DataManager {
         }
         newBoutsWithId.add(element);
       }
-      _updateMany(TeamMatchBout, filterObject: wrestlingEvent);
+      _updateMany(TeamMatchBout, filterObject: dataObject);
     }
   }
 

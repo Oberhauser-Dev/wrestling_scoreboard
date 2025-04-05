@@ -80,8 +80,8 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
-    final prepend = '${_getPathFromType(T)}/${wrestlingEvent.id}';
+  Future<void> generateBouts<T extends DataObject>(T dataObject, [bool isReset = false]) async {
+    final prepend = '${_getPathFromType(T)}/${dataObject.id}';
     final uri = Uri.parse('$_apiUrl$prepend/bouts/generate')
         .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: _headers);
