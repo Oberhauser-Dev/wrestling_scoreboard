@@ -51,6 +51,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     );
   }
 
+  String get name {
+    return '${membership.person.fullName} | ${lineup.club.name}';
+  }
+
   @override
   Map<String, dynamic> toRaw() {
     return {

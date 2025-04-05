@@ -505,6 +505,10 @@ List<CompetitionParticipation> getCompetitionParticipationsOfWeightCategory(Comp
   return getCompetitionParticipations().where((element) => element.weightCategory == weightCategory).toList();
 }
 
+List<CompetitionParticipation> getCompetitionParticipationsOfLineup(CompetitionLineup lineup) {
+  return getCompetitionParticipations().where((element) => element.lineup == lineup).toList();
+}
+
 List<WeightClass> getWeightClasses() => _weightClasses;
 
 List<WeightClass> getWeightClassesOfDivision(Division league) {

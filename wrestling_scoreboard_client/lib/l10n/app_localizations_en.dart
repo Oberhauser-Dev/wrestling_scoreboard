@@ -655,6 +655,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get difference => 'Difference';
 
   @override
+  String get participation => 'Participation';
+
+  @override
   String get participations => 'Participations';
 
   @override

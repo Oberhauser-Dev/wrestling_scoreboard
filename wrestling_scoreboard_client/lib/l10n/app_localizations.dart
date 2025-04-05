@@ -1373,6 +1373,12 @@ abstract class AppLocalizations {
   /// **'Difference'**
   String get difference;
 
+  /// No description provided for @participation.
+  ///
+  /// In en, this message translates to:
+  /// **'Participation'**
+  String get participation;
+
   /// No description provided for @participations.
   ///
   /// In en, this message translates to:
