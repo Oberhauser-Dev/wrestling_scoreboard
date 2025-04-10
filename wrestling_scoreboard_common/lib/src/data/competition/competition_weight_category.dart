@@ -14,6 +14,7 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     required WeightClass weightClass,
     required AgeCategory ageCategory,
     required Competition competition,
+    int? pairedRound,
   }) = _CompetitionWeightCategory;
 
   factory CompetitionWeightCategory.fromJson(Map<String, Object?> json) => _$CompetitionWeightCategoryFromJson(json);

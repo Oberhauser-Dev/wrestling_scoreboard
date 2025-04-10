@@ -38,7 +38,7 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
     );
   }
 
-  bool equalDuringBout(o) => bout.equalDuringBout(o.bout) && weightClass == o.weightClass;
+  bool equalDuringBout(o) => bout.equalDuringBout(o.participation) && weightClass == o.weightClass;
 
   @override
   Map<String, dynamic> toRaw() {

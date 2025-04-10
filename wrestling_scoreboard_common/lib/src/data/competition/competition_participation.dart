@@ -17,7 +17,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     required CompetitionLineup lineup,
     CompetitionWeightCategory? weightCategory,
     double? weight,
-    int? pool,
+    int? poolGroup,
+    int? poolDrawNumber,
+    @Default(false) bool eliminated,
+    @Default(false) bool disqualified,
   }) = _CompetitionParticipation;
 
   factory CompetitionParticipation.fromJson(Map<String, Object?> json) => _$CompetitionParticipationFromJson(json);
@@ -48,6 +51,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       lineup: lineup,
       membership: membership,
       weight: weight,
+      poolGroup: e['pool_group'] as int?,
+      poolDrawNumber: e['pool_draw_number'] as int?,
+      eliminated: e['eliminated'] as bool,
+      disqualified: e['disqualified'] as bool,
     );
   }
 
@@ -63,6 +70,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       'competition_lineup_id': lineup.id!,
       'membership_id': membership.id!,
       'weight': weight?.toString(),
+      'pool_group': poolGroup?.toString(),
+      'pool_draw_number': poolDrawNumber?.toString(),
+      'eliminated': eliminated.toString(),
+      'disqualified': disqualified.toString(),
     };
   }
 

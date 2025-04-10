@@ -20,7 +20,10 @@ mixin _$CompetitionParticipation {
   CompetitionLineup get lineup;
   CompetitionWeightCategory? get weightCategory;
   double? get weight;
-  int? get pool;
+  int? get poolGroup;
+  int? get poolDrawNumber;
+  bool get eliminated;
+  bool get disqualified;
 
   /// Create a copy of CompetitionParticipation
   /// with the given fields replaced by the non-null parameter values.
@@ -45,17 +48,33 @@ mixin _$CompetitionParticipation {
             (identical(other.weightCategory, weightCategory) ||
                 other.weightCategory == weightCategory) &&
             (identical(other.weight, weight) || other.weight == weight) &&
-            (identical(other.pool, pool) || other.pool == pool));
+            (identical(other.poolGroup, poolGroup) ||
+                other.poolGroup == poolGroup) &&
+            (identical(other.poolDrawNumber, poolDrawNumber) ||
+                other.poolDrawNumber == poolDrawNumber) &&
+            (identical(other.eliminated, eliminated) ||
+                other.eliminated == eliminated) &&
+            (identical(other.disqualified, disqualified) ||
+                other.disqualified == disqualified));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, membership, lineup, weightCategory, weight, pool);
+      runtimeType,
+      id,
+      membership,
+      lineup,
+      weightCategory,
+      weight,
+      poolGroup,
+      poolDrawNumber,
+      eliminated,
+      disqualified);
 
   @override
   String toString() {
-    return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, pool: $pool)';
+    return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, poolGroup: $poolGroup, poolDrawNumber: $poolDrawNumber, eliminated: $eliminated, disqualified: $disqualified)';
   }
 }
 
@@ -71,7 +90,10 @@ abstract mixin class $CompetitionParticipationCopyWith<$Res> {
       CompetitionLineup lineup,
       CompetitionWeightCategory? weightCategory,
       double? weight,
-      int? pool});
+      int? poolGroup,
+      int? poolDrawNumber,
+      bool eliminated,
+      bool disqualified});
 
   $MembershipCopyWith<$Res> get membership;
   $CompetitionLineupCopyWith<$Res> get lineup;
@@ -96,7 +118,10 @@ class _$CompetitionParticipationCopyWithImpl<$Res>
     Object? lineup = null,
     Object? weightCategory = freezed,
     Object? weight = freezed,
-    Object? pool = freezed,
+    Object? poolGroup = freezed,
+    Object? poolDrawNumber = freezed,
+    Object? eliminated = null,
+    Object? disqualified = null,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -119,10 +144,22 @@ class _$CompetitionParticipationCopyWithImpl<$Res>
           ? _self.weight
           : weight // ignore: cast_nullable_to_non_nullable
               as double?,
-      pool: freezed == pool
-          ? _self.pool
-          : pool // ignore: cast_nullable_to_non_nullable
+      poolGroup: freezed == poolGroup
+          ? _self.poolGroup
+          : poolGroup // ignore: cast_nullable_to_non_nullable
               as int?,
+      poolDrawNumber: freezed == poolDrawNumber
+          ? _self.poolDrawNumber
+          : poolDrawNumber // ignore: cast_nullable_to_non_nullable
+              as int?,
+      eliminated: null == eliminated
+          ? _self.eliminated
+          : eliminated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      disqualified: null == disqualified
+          ? _self.disqualified
+          : disqualified // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 
@@ -171,7 +208,10 @@ class _CompetitionParticipation extends CompetitionParticipation {
       required this.lineup,
       this.weightCategory,
       this.weight,
-      this.pool})
+      this.poolGroup,
+      this.poolDrawNumber,
+      this.eliminated = false,
+      this.disqualified = false})
       : super._();
   factory _CompetitionParticipation.fromJson(Map<String, dynamic> json) =>
       _$CompetitionParticipationFromJson(json);
@@ -187,7 +227,15 @@ class _CompetitionParticipation extends CompetitionParticipation {
   @override
   final double? weight;
   @override
-  final int? pool;
+  final int? poolGroup;
+  @override
+  final int? poolDrawNumber;
+  @override
+  @JsonKey()
+  final bool eliminated;
+  @override
+  @JsonKey()
+  final bool disqualified;
 
   /// Create a copy of CompetitionParticipation
   /// with the given fields replaced by the non-null parameter values.
@@ -217,17 +265,33 @@ class _CompetitionParticipation extends CompetitionParticipation {
             (identical(other.weightCategory, weightCategory) ||
                 other.weightCategory == weightCategory) &&
             (identical(other.weight, weight) || other.weight == weight) &&
-            (identical(other.pool, pool) || other.pool == pool));
+            (identical(other.poolGroup, poolGroup) ||
+                other.poolGroup == poolGroup) &&
+            (identical(other.poolDrawNumber, poolDrawNumber) ||
+                other.poolDrawNumber == poolDrawNumber) &&
+            (identical(other.eliminated, eliminated) ||
+                other.eliminated == eliminated) &&
+            (identical(other.disqualified, disqualified) ||
+                other.disqualified == disqualified));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, membership, lineup, weightCategory, weight, pool);
+      runtimeType,
+      id,
+      membership,
+      lineup,
+      weightCategory,
+      weight,
+      poolGroup,
+      poolDrawNumber,
+      eliminated,
+      disqualified);
 
   @override
   String toString() {
-    return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, pool: $pool)';
+    return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, poolGroup: $poolGroup, poolDrawNumber: $poolDrawNumber, eliminated: $eliminated, disqualified: $disqualified)';
   }
 }
 
@@ -245,7 +309,10 @@ abstract mixin class _$CompetitionParticipationCopyWith<$Res>
       CompetitionLineup lineup,
       CompetitionWeightCategory? weightCategory,
       double? weight,
-      int? pool});
+      int? poolGroup,
+      int? poolDrawNumber,
+      bool eliminated,
+      bool disqualified});
 
   @override
   $MembershipCopyWith<$Res> get membership;
@@ -273,7 +340,10 @@ class __$CompetitionParticipationCopyWithImpl<$Res>
     Object? lineup = null,
     Object? weightCategory = freezed,
     Object? weight = freezed,
-    Object? pool = freezed,
+    Object? poolGroup = freezed,
+    Object? poolDrawNumber = freezed,
+    Object? eliminated = null,
+    Object? disqualified = null,
   }) {
     return _then(_CompetitionParticipation(
       id: freezed == id
@@ -296,10 +366,22 @@ class __$CompetitionParticipationCopyWithImpl<$Res>
           ? _self.weight
           : weight // ignore: cast_nullable_to_non_nullable
               as double?,
-      pool: freezed == pool
-          ? _self.pool
-          : pool // ignore: cast_nullable_to_non_nullable
+      poolGroup: freezed == poolGroup
+          ? _self.poolGroup
+          : poolGroup // ignore: cast_nullable_to_non_nullable
               as int?,
+      poolDrawNumber: freezed == poolDrawNumber
+          ? _self.poolDrawNumber
+          : poolDrawNumber // ignore: cast_nullable_to_non_nullable
+              as int?,
+      eliminated: null == eliminated
+          ? _self.eliminated
+          : eliminated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      disqualified: null == disqualified
+          ? _self.disqualified
+          : disqualified // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 

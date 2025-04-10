@@ -28,6 +28,8 @@ Map<String, dynamic> _$CompetitionSystemAffiliationToJson(
     };
 
 const _$CompetitionSystemEnumMap = {
+  CompetitionSystem.singleElimination: 'singleElimination',
+  CompetitionSystem.doubleElimination: 'doubleElimination',
   CompetitionSystem.nordic: 'nordic',
   CompetitionSystem.twoPools: 'twoPools',
 };

@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/competition/weight_category_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -64,6 +66,14 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
           label: localizations.weightCategory,
           details: competitionWeightCategory.name,
           actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.tv),
+                onPressed: () => _handleSelectedWeightCategoryDisplay(competitionWeightCategory, context),
+                label: Text(localizations.display),
+              ),
+            ),
             EditAction(
               icon: const Icon(Icons.autorenew),
               label: Text(localizations.saveAndGenerate),
@@ -104,6 +114,11 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
 
   _handleSelectedParticipation(CompetitionParticipation participation, BuildContext context) {
     context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
+  }
+
+  _handleSelectedWeightCategoryDisplay(CompetitionWeightCategory category, BuildContext context) {
+    context.push(
+        '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/${CompetitionWeightCategoryDisplay.route}');
   }
 
   Future<void> _handleSubmit(WidgetRef ref, NavigatorState navigator, CompetitionWeightCategory weightCategory) async {

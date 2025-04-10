@@ -249,7 +249,7 @@ final _competitionParticipation1 = CompetitionParticipation(
   membership: r1,
   lineup: _competitionLineup1,
   weightCategory: _competitionWeightCategory,
-  weight: 66,
+  weight: 61,
 );
 
 final _competitionParticipation2 = CompetitionParticipation(
@@ -257,7 +257,15 @@ final _competitionParticipation2 = CompetitionParticipation(
   membership: b1,
   lineup: _competitionLineup2,
   weightCategory: _competitionWeightCategory,
-  weight: 77.3,
+  weight: 60.3,
+);
+
+final _competitionParticipation3 = CompetitionParticipation(
+  id: 3,
+  membership: r2,
+  lineup: _competitionLineup2,
+  weightCategory: _competitionWeightCategory,
+  weight: 59.2,
 );
 
 final _competitionBout1 = CompetitionBout(
@@ -335,7 +343,8 @@ final List<CompetitionWeightCategory> _competitionWeightCategories = [
 final List<CompetitionLineup> _competitionLineups = [_competitionLineup1, _competitionLineup2];
 final List<CompetitionParticipation> _competitionParticipations = [
   _competitionParticipation1,
-  _competitionParticipation2
+  _competitionParticipation2,
+  _competitionParticipation3,
 ];
 
 List<AgeCategory> getAgeCategories() => _ageCategories;

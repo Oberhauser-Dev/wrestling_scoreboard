@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/mocks/services/network/data.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
@@ -128,6 +129,16 @@ class MockDataManager extends DataManager {
     return _getListOfType<T>(CRUD.read);
   }
 
+  T _addToListWithUniqueId<T extends DataObject>(List<T> objects, T object) {
+    final random = Random();
+    do {
+      // Generate new id as long it is not taken yet
+      object = object.copyWithId(random.nextInt(0x7fffffff)) as T;
+    } while (objects.where((f) => f.id == object.id).isNotEmpty);
+    objects.add(object);
+    return object;
+  }
+
   @override
   Future<void> generateBouts<T extends DataObject>(DataObject dataObject, [bool isReset = false]) async {
     if (dataObject is TeamMatch) {
@@ -147,22 +158,108 @@ class MockDataManager extends DataManager {
 
       // Generate new bouts
       final newBouts = await dataObject.generateBouts(teamParticipations, weightClasses);
-      final newBoutsWithId = <TeamMatchBout>[];
 
       // Add if not exists
-      final random = Random();
       for (var element in newBouts) {
         if (teamMatchBoutsAll.where((TeamMatchBout f) => f.equalDuringBout(element)).isEmpty) {
-          do {
-            // Generate new id as long it is not taken yet
-            element = element.copyWithId(random.nextInt(0x7fffffff));
-          } while (teamMatchBoutsAll.where((f) => f.id == element.id).isNotEmpty);
-          teamMatchBoutsAll.add(element);
+          element = _addToListWithUniqueId(teamMatchBoutsAll, element);
         }
-        newBoutsWithId.add(element);
       }
       _updateMany(TeamMatchBout, filterObject: dataObject);
+    } else if (dataObject is CompetitionWeightCategory) {
+      final competitionBoutsAll = getCompetitionBouts();
+      final participations = getCompetitionParticipationsOfWeightCategory(dataObject);
+      final competitionSystemAffiliations = getCompetitionSystemAffiliationsOfCompetition(dataObject.competition);
+      // Sort DESC
+      competitionSystemAffiliations
+          .sort((a, b) => (b.maxContestants ?? double.infinity).compareTo(a.maxContestants ?? double.infinity));
+      CompetitionSystemAffiliation? competitionSystemAffiliation;
+      // Get the competition system affiliation, which matches the max contestants
+      for (final csa in competitionSystemAffiliations) {
+        if (participations.length > (csa.maxContestants ?? double.infinity)) break;
+        competitionSystemAffiliation = csa;
+      }
+      if (competitionSystemAffiliation == null) {
+        throw Exception('No matching competition system found for competition ${dataObject.competition}');
+      }
+      final List<CompetitionBout> createdBouts;
+      final List<CompetitionParticipation> updatedParticipations = [];
+      switch (competitionSystemAffiliation.competitionSystem) {
+        case CompetitionSystem.nordic:
+          // https://en.wikipedia.org/wiki/Round-robin_tournament
+          participations.shuffle();
+          for (final participationIndexed in participations.indexed) {
+            final drawNumber = participationIndexed.$1;
+            final participation = participationIndexed.$2;
+            final updatedParticipation = participation.copyWith(poolDrawNumber: drawNumber);
+            updatedParticipations.add(updatedParticipation);
+          }
+          createdBouts = _bergerTable(updatedParticipations, dataObject).expand((element) => element).toList();
+        // TODO alter participations
+        // TODO alter bouts
+        case CompetitionSystem.twoPools:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case CompetitionSystem.singleElimination:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case CompetitionSystem.doubleElimination:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+      }
+      for (var element in createdBouts) {
+        if (competitionBoutsAll.where((f) => f.equalDuringBout(element)).isEmpty) {
+          element = _addToListWithUniqueId(competitionBoutsAll, element);
+        }
+      }
+      // _updateMany(CompetitionBout, filterObject: dataObject);
     }
+  }
+
+  List<List<CompetitionBout>> _bergerTable(
+      List<CompetitionParticipation?> participations, CompetitionWeightCategory weightCategory) {
+    participations = [...participations]; // copy array to avoid side effects
+    if (participations.length.isOdd) participations.insert(0, null);
+    final useDummy = false;
+
+    final n = participations.length;
+    final numberOfRounds = n - 1;
+    final boutsPerRound = n ~/ 2;
+
+    List<CompetitionParticipation?> columnA = participations.slice(0, boutsPerRound);
+    List<CompetitionParticipation?> columnB = participations.slice(boutsPerRound);
+    final fixed = participations[0];
+
+    int posCount = 0;
+    final gen = Iterable.generate(numberOfRounds).map((roundIndex) {
+      final genBoutsPerRound = Iterable.generate(boutsPerRound);
+      final boutsArr = <CompetitionBout>[];
+      for (final k in genBoutsPerRound) {
+        if (useDummy || (columnA[k] != null && columnB[k] != null)) {
+          boutsArr.insert(
+              0,
+              CompetitionBout(
+                competition: weightCategory.competition,
+                pos: posCount,
+                weightCategory: weightCategory,
+                round: roundIndex,
+                bout: Bout(
+                  organization: weightCategory.competition.organization,
+                  r: columnA[k] == null ? null : AthleteBoutState(membership: columnA[k]!.membership),
+                  b: columnB[k] == null ? null : AthleteBoutState(membership: columnB[k]!.membership),
+                ),
+              ));
+          posCount++;
+        }
+      }
+
+      // rotate elements
+      final pop = columnA.removeLast();
+      columnA = [fixed, columnB.removeAt(0), ...columnA.slice(1)];
+      columnB.insert(0, pop);
+      return boutsArr;
+    }).toList();
+    return gen;
   }
 
   @override

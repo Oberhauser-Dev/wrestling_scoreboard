@@ -1,0 +1,170 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/competition/competition_participation_item.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+
+class CompetitionWeightCategoryDisplay extends ConsumerWidget {
+  static const route = 'display';
+
+  final int id;
+  final CompetitionWeightCategory? competitionWeightCategory;
+
+  const CompetitionWeightCategoryDisplay({required this.id, this.competitionWeightCategory, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = context.l10n;
+    double width = MediaQuery.of(context).size.width;
+    return SingleConsumer<CompetitionWeightCategory>(
+      id: id,
+      initialData: competitionWeightCategory,
+      builder: (context, competitionWeightCategory) {
+        final infoAction = IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () => handleSelectedWeightCategory(competitionWeightCategory, context),
+        );
+        // final pdfAction = IconButton(
+        //   icon: const Icon(Icons.print),
+        //   onPressed: () async {
+        //     final competitionBouts = await ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(
+        //       ManyProviderData<CompetitionBout, Competition>(filterObject: competition),
+        //     ).future);
+        //
+        //     final competitionBoutActions = Map.fromEntries(await Future.wait(competitionBouts.map((competitionBout) async {
+        //       final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
+        //         ManyProviderData<BoutAction, Bout>(filterObject: competitionBout.bout),
+        //       ).future);
+        //       // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: competitionBout.bout);
+        //       return MapEntry(competitionBout, boutActions);
+        //     })));
+        //     final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+        //
+        //     final homeParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
+        //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.home),
+        //     ).future);
+        //
+        //     final guestParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
+        //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.guest),
+        //     ).future);
+        //
+        //     if (context.mounted) {
+        //       final bytes = await CompetitionTranscript(
+        //         competitionBoutActions: competitionBoutActions,
+        //         buildContext: context,
+        //         competition: competition,
+        //         boutConfig: competition.boutConfig ?? Competition.defaultBoutConfig,
+        //         isTimeCountDown: isTimeCountDown,
+        //         homeParticipations: homeParticipations,
+        //         guestParticipations: guestParticipations,
+        //       ).buildPdf();
+        //       Printing.sharePdf(bytes: bytes, filename: '${competition.fileBaseName}.pdf');
+        //     }
+        //   },
+        // );
+
+        Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
+          return Container(
+              color: role.color(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: ScaledText(
+                      state?.membership.person.fullName ?? localizations.participantVacant,
+                      fontSize: 18,
+                      minFontSize: 12,
+                    ),
+                  ),
+                  Center(
+                    child: ScaledText(
+                      state?.membership.club.name ?? '',
+                      fontSize: 12,
+                      minFontSize: 12,
+                    ),
+                  ),
+                ],
+              ));
+        }
+
+        return WindowStateScaffold(
+          hideAppBarOnFullscreen: true,
+          actions: [
+            infoAction,
+            // pdfAction,
+          ],
+          body: ManyConsumer<CompetitionParticipation, CompetitionWeightCategory>(
+            filterObject: competitionWeightCategory,
+            builder: (context, competitionParticipations) {
+              final competitionInfos = [
+                '${localizations.name}: ${competitionWeightCategory.competition.name}',
+                '${localizations.date}: ${competitionWeightCategory.competition.date.toDateString(context)}',
+              ];
+              final column = Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Center(
+                            child: ScaledText(
+                          competitionWeightCategory.name,
+                          softWrap: false,
+                          fontSize: 16,
+                          minFontSize: 12,
+                        )),
+                      ),
+                      Column(
+                        children: competitionInfos
+                            .map(
+                              (e) => Center(
+                                  child: ScaledText(
+                                e,
+                                softWrap: false,
+                                fontSize: 10,
+                                minFontSize: 8,
+                              )),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: competitionParticipations.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            IntrinsicHeight(
+                              child: CompetitionParticipationItem(
+                                participation: competitionParticipations[index],
+                              ),
+                            ),
+                            const Divider(height: 1),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+              return column;
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  handleSelectedWeightCategory(CompetitionWeightCategory weightCategory, BuildContext context) {
+    // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+    context.go('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
+  }
+}

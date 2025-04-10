@@ -16,6 +16,7 @@ _CompetitionWeightCategory _$CompetitionWeightCategoryFromJson(
           AgeCategory.fromJson(json['ageCategory'] as Map<String, dynamic>),
       competition:
           Competition.fromJson(json['competition'] as Map<String, dynamic>),
+      pairedRound: (json['pairedRound'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CompetitionWeightCategoryToJson(
@@ -25,4 +26,5 @@ Map<String, dynamic> _$CompetitionWeightCategoryToJson(
       'weightClass': instance.weightClass.toJson(),
       'ageCategory': instance.ageCategory.toJson(),
       'competition': instance.competition.toJson(),
+      'pairedRound': instance.pairedRound,
     };

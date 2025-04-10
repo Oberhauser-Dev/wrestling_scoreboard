@@ -19,6 +19,7 @@ mixin _$CompetitionWeightCategory {
   WeightClass get weightClass;
   AgeCategory get ageCategory;
   Competition get competition;
+  int? get pairedRound;
 
   /// Create a copy of CompetitionWeightCategory
   /// with the given fields replaced by the non-null parameter values.
@@ -42,17 +43,19 @@ mixin _$CompetitionWeightCategory {
             (identical(other.ageCategory, ageCategory) ||
                 other.ageCategory == ageCategory) &&
             (identical(other.competition, competition) ||
-                other.competition == competition));
+                other.competition == competition) &&
+            (identical(other.pairedRound, pairedRound) ||
+                other.pairedRound == pairedRound));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, weightClass, ageCategory, competition);
+  int get hashCode => Object.hash(
+      runtimeType, id, weightClass, ageCategory, competition, pairedRound);
 
   @override
   String toString() {
-    return 'CompetitionWeightCategory(id: $id, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition)';
+    return 'CompetitionWeightCategory(id: $id, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition, pairedRound: $pairedRound)';
   }
 }
 
@@ -66,7 +69,8 @@ abstract mixin class $CompetitionWeightCategoryCopyWith<$Res> {
       {int? id,
       WeightClass weightClass,
       AgeCategory ageCategory,
-      Competition competition});
+      Competition competition,
+      int? pairedRound});
 
   $WeightClassCopyWith<$Res> get weightClass;
   $AgeCategoryCopyWith<$Res> get ageCategory;
@@ -90,6 +94,7 @@ class _$CompetitionWeightCategoryCopyWithImpl<$Res>
     Object? weightClass = null,
     Object? ageCategory = null,
     Object? competition = null,
+    Object? pairedRound = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -108,6 +113,10 @@ class _$CompetitionWeightCategoryCopyWithImpl<$Res>
           ? _self.competition
           : competition // ignore: cast_nullable_to_non_nullable
               as Competition,
+      pairedRound: freezed == pairedRound
+          ? _self.pairedRound
+          : pairedRound // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 
@@ -149,7 +158,8 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
       {this.id,
       required this.weightClass,
       required this.ageCategory,
-      required this.competition})
+      required this.competition,
+      this.pairedRound})
       : super._();
   factory _CompetitionWeightCategory.fromJson(Map<String, dynamic> json) =>
       _$CompetitionWeightCategoryFromJson(json);
@@ -162,6 +172,8 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
   final AgeCategory ageCategory;
   @override
   final Competition competition;
+  @override
+  final int? pairedRound;
 
   /// Create a copy of CompetitionWeightCategory
   /// with the given fields replaced by the non-null parameter values.
@@ -191,17 +203,19 @@ class _CompetitionWeightCategory extends CompetitionWeightCategory {
             (identical(other.ageCategory, ageCategory) ||
                 other.ageCategory == ageCategory) &&
             (identical(other.competition, competition) ||
-                other.competition == competition));
+                other.competition == competition) &&
+            (identical(other.pairedRound, pairedRound) ||
+                other.pairedRound == pairedRound));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, weightClass, ageCategory, competition);
+  int get hashCode => Object.hash(
+      runtimeType, id, weightClass, ageCategory, competition, pairedRound);
 
   @override
   String toString() {
-    return 'CompetitionWeightCategory(id: $id, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition)';
+    return 'CompetitionWeightCategory(id: $id, weightClass: $weightClass, ageCategory: $ageCategory, competition: $competition, pairedRound: $pairedRound)';
   }
 }
 
@@ -217,7 +231,8 @@ abstract mixin class _$CompetitionWeightCategoryCopyWith<$Res>
       {int? id,
       WeightClass weightClass,
       AgeCategory ageCategory,
-      Competition competition});
+      Competition competition,
+      int? pairedRound});
 
   @override
   $WeightClassCopyWith<$Res> get weightClass;
@@ -244,6 +259,7 @@ class __$CompetitionWeightCategoryCopyWithImpl<$Res>
     Object? weightClass = null,
     Object? ageCategory = null,
     Object? competition = null,
+    Object? pairedRound = freezed,
   }) {
     return _then(_CompetitionWeightCategory(
       id: freezed == id
@@ -262,6 +278,10 @@ class __$CompetitionWeightCategoryCopyWithImpl<$Res>
           ? _self.competition
           : competition // ignore: cast_nullable_to_non_nullable
               as Competition,
+      pairedRound: freezed == pairedRound
+          ? _self.pairedRound
+          : pairedRound // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 
