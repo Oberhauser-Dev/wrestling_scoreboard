@@ -268,6 +268,7 @@ class MockedData {
   late final _competitionParticipation1 = CompetitionParticipation(
     id: 1,
     poolDrawNumber: 1,
+    poolGroup: 0,
     membership: r1,
     lineup: _competitionLineup1,
     weightCategory: _competitionWeightCategory,
@@ -277,6 +278,7 @@ class MockedData {
   late final _competitionParticipation2 = CompetitionParticipation(
     id: 2,
     poolDrawNumber: 2,
+    poolGroup: 0,
     membership: b1,
     lineup: _competitionLineup2,
     weightCategory: _competitionWeightCategory,
@@ -286,6 +288,7 @@ class MockedData {
   late final _competitionParticipation3 = CompetitionParticipation(
     id: 3,
     poolDrawNumber: 3,
+    poolGroup: 0,
     membership: r2,
     lineup: _competitionLineup2,
     weightCategory: _competitionWeightCategory,
@@ -297,10 +300,41 @@ class MockedData {
   late final _competitionParticipation4 = CompetitionParticipation(
     id: 4,
     poolDrawNumber: 4,
+    poolGroup: 0,
     membership: b2,
     lineup: _competitionLineup2,
     weightCategory: _competitionWeightCategory,
     weight: 59.4,
+  );
+
+  late final _competitionParticipation5 = CompetitionParticipation(
+    id: 10,
+    poolDrawNumber: 0,
+    poolGroup: 1,
+    membership: r3,
+    lineup: _competitionLineup1,
+    weightCategory: _competitionWeightCategory,
+    weight: 58.1,
+  );
+
+  late final _competitionParticipation6 = CompetitionParticipation(
+    id: 11,
+    poolDrawNumber: 1,
+    poolGroup: 1,
+    membership: b3,
+    lineup: _competitionLineup2,
+    weightCategory: _competitionWeightCategory,
+    weight: 58.2,
+  );
+
+  late final _competitionParticipation7 = CompetitionParticipation(
+    id: 12,
+    poolDrawNumber: 2,
+    poolGroup: 1,
+    membership: r4,
+    lineup: _competitionLineup2,
+    weightCategory: _competitionWeightCategory,
+    weight: 58.3,
   );
 
   late final _competitionBout1 = CompetitionBout(
@@ -412,6 +446,9 @@ class MockedData {
     _competitionParticipation2,
     _competitionParticipation3,
     _competitionParticipation4,
+    _competitionParticipation5,
+    _competitionParticipation6,
+    _competitionParticipation7,
   ];
 
   List<AgeCategory> getAgeCategories() => _ageCategories;

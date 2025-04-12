@@ -84,10 +84,36 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                 '${localizations.name}: ${competitionWeightCategory.competition.name}',
                 '${localizations.date}: ${competitionWeightCategory.competition.date.toDateString(context)}',
               ];
+              final competitionParticipationsByPool =
+                  competitionParticipations.groupListsBy((element) => element.poolGroup);
               return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
                   filterObject: competitionWeightCategory,
                   builder: (context, competitionBouts) {
                     final competitionBoutsByRound = competitionBouts.groupSetsBy((element) => element.round);
+                    final participantWidgets = <Widget>[];
+                    for (final poolGroup in competitionParticipationsByPool.keys) {
+                      if (poolGroup != null && competitionParticipationsByPool.length > 1) {
+                        participantWidgets.add(Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                          child: Card(child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}'))),
+                        ));
+                      }
+                      final participationsOfPoolGroup = competitionParticipationsByPool[poolGroup]!;
+                      for (final participationOfPoolGroup in participationsOfPoolGroup) {
+                        participantWidgets.add(Column(
+                          children: [
+                            IntrinsicHeight(
+                              child: CompetitionParticipationItem(
+                                participation: participationOfPoolGroup,
+                                participations: participationsOfPoolGroup,
+                                competitionBoutsByRound: competitionBoutsByRound,
+                              ),
+                            ),
+                            const Divider(height: 1),
+                          ],
+                        ));
+                      }
+                    }
                     return Column(
                       children: [
                         Row(
@@ -153,21 +179,8 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                         Divider(),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: competitionParticipations.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  IntrinsicHeight(
-                                    child: CompetitionParticipationItem(
-                                      participation: competitionParticipations[index],
-                                      participations: competitionParticipations,
-                                      competitionBoutsByRound: competitionBoutsByRound,
-                                    ),
-                                  ),
-                                  const Divider(height: 1),
-                                ],
-                              );
-                            },
+                            itemCount: participantWidgets.length,
+                            itemBuilder: (context, index) => participantWidgets[index],
                           ),
                         ),
                       ],
