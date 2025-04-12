@@ -98,7 +98,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
               ScaledContainer(
                   width: CompetitionParticipationItem.clubRelativeWidth,
                   child: ScaledText(participation.lineup.club.name)),
-              VerticalDivider(width: 0),
+              VerticalDivider(width: 1),
               ...items,
             ],
           );

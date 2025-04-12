@@ -84,58 +84,74 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                 '${localizations.name}: ${competitionWeightCategory.competition.name}',
                 '${localizations.date}: ${competitionWeightCategory.competition.date.toDateString(context)}',
               ];
-              final column = Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Center(
-                            child: ScaledText(
-                          competitionWeightCategory.name,
-                          softWrap: false,
-                          fontSize: 16,
-                          minFontSize: 12,
-                        )),
-                      ),
-                      Column(
-                        children: competitionInfos
-                            .map(
-                              (e) => Center(
-                                  child: ScaledText(
-                                e,
-                                softWrap: false,
-                                fontSize: 10,
-                                minFontSize: 8,
-                              )),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                  Divider(),
-                  IntrinsicHeight( // Need to see the vertical divider
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+              return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
+                  filterObject: competitionWeightCategory,
+                  builder: (context, competitionBouts) {
+                    final competitionBoutsByRound = competitionBouts.groupSetsBy((element) => element.round);
+                    return Column(
                       children: [
-                        ScaledContainer(
-                            width: CompetitionParticipationItem.numberRelativeWidth,
-                            child: ScaledText(localizations.numberAbbreviation)),
-                        VerticalDivider(),
-                        ScaledContainer(
-                            width: CompetitionParticipationItem.nameRelativeWidth, child: ScaledText(localizations.name)),
-                        VerticalDivider(),
-                        ScaledContainer(
-                            width: CompetitionParticipationItem.clubRelativeWidth, child: ScaledText(localizations.club)),
-                        VerticalDivider(width: 0),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
-                      filterObject: competitionWeightCategory,
-                      builder: (context, competitionBouts) {
-                        final competitionBoutsByRound = competitionBouts.groupSetsBy((element) => element.round);
-                        return Expanded(
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                  child: ScaledText(
+                                competitionWeightCategory.name,
+                                softWrap: false,
+                                fontSize: 16,
+                                minFontSize: 12,
+                              )),
+                            ),
+                            Column(
+                              children: competitionInfos
+                                  .map(
+                                    (e) => Center(
+                                        child: ScaledText(
+                                      e,
+                                      softWrap: false,
+                                      fontSize: 10,
+                                      minFontSize: 8,
+                                    )),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        IntrinsicHeight(
+                          // Need to see the vertical divider
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.numberRelativeWidth,
+                                  child: ScaledText(localizations.numberAbbreviation)),
+                              VerticalDivider(),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.nameRelativeWidth,
+                                  child: ScaledText(localizations.name)),
+                              VerticalDivider(),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.clubRelativeWidth,
+                                  child: ScaledText(localizations.club)),
+                              VerticalDivider(width: 1),
+                              ...competitionBoutsByRound.keys.where((element) => element != null && element >= 0).map(
+                                    (e) => Row(
+                                      children: [
+                                        ScaledContainer(
+                                            width: CompetitionParticipationItem.roundRelativeWidth,
+                                            child: ScaledText(
+                                              '${localizations.round} ${e! + 1}',
+                                              fontSize: 10,
+                                            )),
+                                        VerticalDivider(width: 1),
+                                      ],
+                                    ),
+                                  ),
+                            ],
+                          ),
+                        ),
+                        Divider(),
+                        Expanded(
                           child: ListView.builder(
                             itemCount: competitionParticipations.length,
                             itemBuilder: (context, index) {
@@ -153,11 +169,10 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                               );
                             },
                           ),
-                        );
-                      }),
-                ],
-              );
-              return column;
+                        ),
+                      ],
+                    );
+                  });
             },
           ),
         );
