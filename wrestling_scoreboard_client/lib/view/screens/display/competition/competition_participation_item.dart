@@ -2,90 +2,105 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/duration.dart';
-import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/utils/duration.dart';
-import 'package:wrestling_scoreboard_client/utils/units.dart';
-import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionParticipationItem extends ConsumerWidget {
   final CompetitionParticipation participation;
+  final List<CompetitionParticipation> participations;
+  final Map<int?, Set<CompetitionBout>> competitionBoutsByRound;
+  static const numberRelativeWidth = 0.03;
+  static const nameRelativeWidth = 0.18;
+  static const clubRelativeWidth = 0.15;
+  static const roundRelativeWidth = 0.05;
 
   const CompetitionParticipationItem({
     super.key,
     required this.participation,
+    required this.participations,
+    required this.competitionBoutsByRound,
   });
-
-  displayName({AthleteBoutState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
-    return ThemedContainer(
-      color: role.color(),
-      child: Center(
-        child: ScaledText(
-          pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.fullName,
-          color: pStatus == null ? Colors.white.disabled() : Colors.white,
-          fontSize: 17,
-          minFontSize: 14,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final items = <Widget>[];
+    int i = 0;
+    while (competitionBoutsByRound[i] != null) {
+      final Widget item;
+      final cBout = competitionBoutsByRound[i]!
+          .where((element) =>
+              element.bout.r?.membership == participation.membership ||
+              element.bout.b?.membership == participation.membership)
+          .zeroOrOne;
+
+      if (cBout != null) {
+        final BoutRole role;
+        final CompetitionParticipation? opponentParticipation;
+        final AthleteBoutState? boutState;
+        if (cBout.bout.r?.membership == participation.membership) {
+          role = BoutRole.red;
+          boutState = cBout.bout.r;
+          opponentParticipation =
+              participations.where((element) => element.membership == cBout.bout.b?.membership).zeroOrOne;
+        } else {
+          role = BoutRole.blue;
+          boutState = cBout.bout.b;
+          opponentParticipation =
+              participations.where((element) => element.membership == cBout.bout.r?.membership).zeroOrOne;
+        }
+        item = Container(
+          decoration: BoxDecoration(border: Border.all(color: role.color())),
+          child: Row(
+            children: [
+              Expanded(child: Center(child: ScaledText(opponentParticipation?.poolDrawNumber?.toString() ?? '-'))),
+              Expanded(
+                child: Container(
+                  color: cBout.bout.winnerRole == role ? role.color() : null,
+                  child: Column(
+                    children: [
+                      ScaledText(cBout.bout.result?.abbreviation(context) ?? '-', fontSize: 8),
+                      ScaledText(boutState?.classificationPoints?.toString() ?? '-', fontSize: 8),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        item = SizedBox();
+      }
+      items.add(Row(
+        children: [
+          ScaledContainer(width: CompetitionParticipationItem.roundRelativeWidth, child: item),
+          VerticalDivider(width: 1),
+        ],
+      ));
+      i++;
+    }
     return SingleConsumer<CompetitionParticipation>(
         initialData: participation,
         id: participation.id,
         builder: (context, bout) {
           return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        if (ageCategory != null)
-                          Center(
-                            child: ScaledText(
-                              ageCategory!.name,
-                              minFontSize: 8,
-                            ),
-                          ),
-                        if (weightClass != null)
-                          Expanded(
-                            child: Center(
-                              child: ScaledText(
-                                '${weightClass!.weight} $weightUnit',
-                                softWrap: false,
-                                minFontSize: 10,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  if (weightClass != null)
-                    Expanded(
-                      child: Center(
-                        child: ScaledText(
-                          weightClass!.style.abbreviation(context),
-                          minFontSize: 12,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              displayName(pStatus: bout.r, role: BoutRole.red, context: context),
-              SmallBoutStateDisplay(bout: bout, boutConfig: boutConfig),
-              displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
-            ].asMap().entries.map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value)).toList(),
+              ScaledContainer(
+                  width: CompetitionParticipationItem.numberRelativeWidth,
+                  child: ScaledText(participation.poolDrawNumber?.toString() ?? '-')),
+              VerticalDivider(),
+              ScaledContainer(
+                  width: CompetitionParticipationItem.nameRelativeWidth,
+                  child: ScaledText(participation.membership.person.fullName)),
+              VerticalDivider(),
+              ScaledContainer(
+                  width: CompetitionParticipationItem.clubRelativeWidth,
+                  child: ScaledText(participation.lineup.club.name)),
+              VerticalDivider(width: 0),
+              ...items,
+            ],
           );
         });
   }

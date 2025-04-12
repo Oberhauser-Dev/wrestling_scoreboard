@@ -4,6 +4,7 @@ import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/view/app_navigation.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/team_match_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/competition/weight_category_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
@@ -175,6 +176,18 @@ getRouter() {
                             return CompetitionBoutDisplay(
                                 competitionId: competitionId, competitionBoutId: competitionBoutId);
                           },
+                        ),
+                      ]),
+                  GoRoute(
+                      path: '${CompetitionWeightCategoryOverview.route}/:competition_weight_category_id',
+                      builder: (context, state) => CompetitionWeightCategoryOverview(
+                          id: int.parse(state.pathParameters['competition_weight_category_id']!)),
+                      routes: [
+                        GoRoute(
+                          path: CompetitionWeightCategoryDisplay.route,
+                          parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                          builder: (context, state) => CompetitionWeightCategoryDisplay(
+                              id: int.parse(state.pathParameters['competition_weight_category_id']!)),
                         ),
                       ]),
                 ],

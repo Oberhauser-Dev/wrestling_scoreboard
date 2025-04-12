@@ -1,13 +1,14 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/competition/competition_participation_item.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -70,30 +71,6 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
         //   },
         // );
 
-        Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
-          return Container(
-              color: role.color(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: ScaledText(
-                      state?.membership.person.fullName ?? localizations.participantVacant,
-                      fontSize: 18,
-                      minFontSize: 12,
-                    ),
-                  ),
-                  Center(
-                    child: ScaledText(
-                      state?.membership.club.name ?? '',
-                      fontSize: 12,
-                      minFontSize: 12,
-                    ),
-                  ),
-                ],
-              ));
-        }
-
         return WindowStateScaffold(
           hideAppBarOnFullscreen: true,
           actions: [
@@ -136,23 +113,48 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                     ],
                   ),
                   Divider(),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: competitionParticipations.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            IntrinsicHeight(
-                              child: CompetitionParticipationItem(
-                                participation: competitionParticipations[index],
-                              ),
-                            ),
-                            const Divider(height: 1),
-                          ],
-                        );
-                      },
+                  IntrinsicHeight( // Need to see the vertical divider
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ScaledContainer(
+                            width: CompetitionParticipationItem.numberRelativeWidth,
+                            child: ScaledText(localizations.numberAbbreviation)),
+                        VerticalDivider(),
+                        ScaledContainer(
+                            width: CompetitionParticipationItem.nameRelativeWidth, child: ScaledText(localizations.name)),
+                        VerticalDivider(),
+                        ScaledContainer(
+                            width: CompetitionParticipationItem.clubRelativeWidth, child: ScaledText(localizations.club)),
+                        VerticalDivider(width: 0),
+                      ],
                     ),
                   ),
+                  Divider(),
+                  ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
+                      filterObject: competitionWeightCategory,
+                      builder: (context, competitionBouts) {
+                        final competitionBoutsByRound = competitionBouts.groupSetsBy((element) => element.round);
+                        return Expanded(
+                          child: ListView.builder(
+                            itemCount: competitionParticipations.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  IntrinsicHeight(
+                                    child: CompetitionParticipationItem(
+                                      participation: competitionParticipations[index],
+                                      participations: competitionParticipations,
+                                      competitionBoutsByRound: competitionBoutsByRound,
+                                    ),
+                                  ),
+                                  const Divider(height: 1),
+                                ],
+                              );
+                            },
+                          ),
+                        );
+                      }),
                 ],
               );
               return column;

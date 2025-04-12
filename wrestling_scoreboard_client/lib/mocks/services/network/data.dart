@@ -181,8 +181,8 @@ final _jnRPWMatch = initJnRPWMatch();
 
 final _bout1 = Bout(
   id: 1,
-  r: AthleteBoutState(id: 1, membership: r1),
-  b: AthleteBoutState(id: 2, membership: b1),
+  r: AthleteBoutState(id: 1, membership: r1, classificationPoints: 5),
+  b: AthleteBoutState(id: 2, membership: b1, classificationPoints: 0),
   organization: _organization,
   result: BoutResult.vca,
   winnerRole: BoutRole.red,
@@ -191,10 +191,26 @@ final _bout1 = Bout(
 
 final _bout2 = Bout(
   id: 2,
-  r: AthleteBoutState(id: 3, membership: r2),
-  b: AthleteBoutState(id: 4, membership: b2),
+  r: AthleteBoutState(id: 3, membership: r2, classificationPoints: 1),
+  b: AthleteBoutState(id: 4, membership: b2, classificationPoints: 3),
   organization: _organization,
+  result: BoutResult.vca,
+  winnerRole: BoutRole.blue,
   duration: Duration(seconds: 180),
+);
+
+final _bout3 = Bout(
+  id: 3,
+  r: AthleteBoutState(id: 5, membership: r1),
+  b: AthleteBoutState(id: 6, membership: b2),
+  organization: _organization,
+);
+
+final _bout4 = Bout(
+  id: 3,
+  r: AthleteBoutState(id: 7, membership: r2),
+  b: AthleteBoutState(id: 8, membership: b1),
+  organization: _organization,
 );
 
 final tmb1 = TeamMatchBout(
@@ -246,6 +262,7 @@ final _competitionWeightCategory2 =
 
 final _competitionParticipation1 = CompetitionParticipation(
   id: 1,
+  poolDrawNumber: 1,
   membership: r1,
   lineup: _competitionLineup1,
   weightCategory: _competitionWeightCategory,
@@ -254,6 +271,7 @@ final _competitionParticipation1 = CompetitionParticipation(
 
 final _competitionParticipation2 = CompetitionParticipation(
   id: 2,
+  poolDrawNumber: 2,
   membership: b1,
   lineup: _competitionLineup2,
   weightCategory: _competitionWeightCategory,
@@ -262,10 +280,20 @@ final _competitionParticipation2 = CompetitionParticipation(
 
 final _competitionParticipation3 = CompetitionParticipation(
   id: 3,
+  poolDrawNumber: 3,
   membership: r2,
   lineup: _competitionLineup2,
   weightCategory: _competitionWeightCategory,
   weight: 59.2,
+);
+
+final _competitionParticipation4 = CompetitionParticipation(
+  id: 4,
+  poolDrawNumber: 4,
+  membership: b2,
+  lineup: _competitionLineup2,
+  weightCategory: _competitionWeightCategory,
+  weight: 59.4,
 );
 
 final _competitionBout1 = CompetitionBout(
@@ -274,6 +302,7 @@ final _competitionBout1 = CompetitionBout(
   pos: 0,
   mat: 0,
   bout: _bout1,
+  round: 0,
   weightCategory: _competitionWeightCategory,
 );
 
@@ -283,7 +312,26 @@ final _competitionBout2 = CompetitionBout(
   pos: 1,
   mat: 2,
   bout: _bout2,
-  weightCategory: _competitionWeightCategory2,
+  round: 0,
+  weightCategory: _competitionWeightCategory,
+);
+
+final _competitionBout3 = CompetitionBout(
+  id: 3,
+  competition: _competition,
+  pos: 3,
+  bout: _bout3,
+  round: 1,
+  weightCategory: _competitionWeightCategory,
+);
+
+final _competitionBout4 = CompetitionBout(
+  id: 4,
+  competition: _competition,
+  pos: 4,
+  bout: _bout4,
+  round: 1,
+  weightCategory: _competitionWeightCategory,
 );
 
 final _boutAction1 = BoutAction(
@@ -335,7 +383,12 @@ final List<CompetitionSystemAffiliation> _competitionSystemAffiliations = [
   _competitionSystemAffiliationNordic,
   _competitionSystemAffiliationTwoPools,
 ];
-final List<CompetitionBout> _competitionBouts = [_competitionBout1, _competitionBout2];
+final List<CompetitionBout> _competitionBouts = [
+  _competitionBout1,
+  _competitionBout2,
+  _competitionBout3,
+  _competitionBout4,
+];
 final List<CompetitionWeightCategory> _competitionWeightCategories = [
   _competitionWeightCategory,
   _competitionWeightCategory2,
@@ -345,6 +398,7 @@ final List<CompetitionParticipation> _competitionParticipations = [
   _competitionParticipation1,
   _competitionParticipation2,
   _competitionParticipation3,
+  _competitionParticipation4,
 ];
 
 List<AgeCategory> getAgeCategories() => _ageCategories;
@@ -500,6 +554,10 @@ List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
 
 List<CompetitionBout> getCompetitionBoutsOfCompetition(Competition competition) {
   return getCompetitionBouts().where((element) => element.competition == competition).toList();
+}
+
+List<CompetitionBout> getCompetitionBoutsOfWeightCategory(CompetitionWeightCategory weightCategory) {
+  return getCompetitionBouts().where((element) => element.weightCategory == weightCategory).toList();
 }
 
 List<CompetitionLineup> getCompetitionLineups() => _competitionLineups;
