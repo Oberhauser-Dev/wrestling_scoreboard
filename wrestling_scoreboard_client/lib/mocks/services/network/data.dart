@@ -290,6 +290,8 @@ class MockedData {
     lineup: _competitionLineup2,
     weightCategory: _competitionWeightCategory,
     weight: 59.2,
+    disqualified: true,
+    eliminated: true,
   );
 
   late final _competitionParticipation4 = CompetitionParticipation(

@@ -8,6 +8,7 @@ class ScaledText extends StatelessWidget {
   final double? minFontSize;
   final double? scale;
   final bool? softWrap;
+  final TextDecoration? decoration;
 
   const ScaledText(
     this.data, {
@@ -16,6 +17,7 @@ class ScaledText extends StatelessWidget {
     this.color,
     this.scale,
     this.softWrap,
+    this.decoration,
     super.key,
   });
 
@@ -24,7 +26,7 @@ class ScaledText extends StatelessWidget {
     final curScale = scale ?? (MediaQuery.of(context).size.width / 1000);
     return Text(
       data,
-      style: TextStyle(fontSize: curScale * fontSize, color: color),
+      style: TextStyle(fontSize: curScale * fontSize, color: color, decoration: decoration),
       textScaler: AutoTextScaler(minFontSize: minFontSize ?? fontSize),
       softWrap: softWrap,
     );

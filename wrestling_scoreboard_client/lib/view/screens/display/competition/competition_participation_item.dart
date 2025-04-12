@@ -83,7 +83,8 @@ class CompetitionParticipationItem extends ConsumerWidget {
     return SingleConsumer<CompetitionParticipation>(
         initialData: participation,
         id: participation.id,
-        builder: (context, bout) {
+        builder: (context, participation) {
+          final isDisabled = participation.disqualified || participation.eliminated;
           final row = Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -93,16 +94,18 @@ class CompetitionParticipationItem extends ConsumerWidget {
               VerticalDivider(),
               ScaledContainer(
                   width: CompetitionParticipationItem.nameRelativeWidth,
-                  child: ScaledText(participation.membership.person.fullName)),
+                  child: ScaledText(participation.membership.person.fullName,
+                      decoration: isDisabled ? TextDecoration.lineThrough : null)),
               VerticalDivider(),
               ScaledContainer(
                   width: CompetitionParticipationItem.clubRelativeWidth,
-                  child: ScaledText(participation.lineup.club.name)),
+                  child: ScaledText(participation.lineup.club.name,
+                      decoration: isDisabled ? TextDecoration.lineThrough : null)),
               VerticalDivider(width: 1),
               ...items,
             ],
           );
-          if (participation.disqualified || participation.eliminated) {
+          if (isDisabled) {
             return DefaultTextStyle.merge(child: row, style: TextStyle(color: Theme.of(context).disabledColor));
           }
           return row;
