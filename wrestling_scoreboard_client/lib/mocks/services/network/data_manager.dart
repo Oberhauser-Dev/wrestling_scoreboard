@@ -11,6 +11,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class MockDataManager extends DataManager {
   final latency = const Duration(milliseconds: 100);
+  final mockedData = MockedData();
 
   @override
   Future<T> readSingle<T extends DataObject>(int id) async {
@@ -42,88 +43,91 @@ class MockDataManager extends DataManager {
     if (filterObject != null) {
       switch (T) {
         case const (AgeCategory):
-          if (filterObject is Organization) return getAgeCategoryOfOrganization(filterObject).cast<T>();
+          if (filterObject is Organization) return mockedData.getAgeCategoryOfOrganization(filterObject).cast<T>();
         case const (Bout):
-          if (filterObject is Competition) return getBoutsOfCompetition(filterObject).cast<T>();
-          if (filterObject is TeamMatch) return getBoutsOfTeamMatch(filterObject).cast<T>();
+          if (filterObject is Competition) return mockedData.getBoutsOfCompetition(filterObject).cast<T>();
+          if (filterObject is TeamMatch) return mockedData.getBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (BoutAction):
-          if (filterObject is Bout) return getBoutActionsOfBout(filterObject).cast<T>();
+          if (filterObject is Bout) return mockedData.getBoutActionsOfBout(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (BoutResultRule):
-          if (filterObject is BoutConfig) return getBoutResultRulesOfBoutConfig(filterObject).cast<T>();
+          if (filterObject is BoutConfig) return mockedData.getBoutResultRulesOfBoutConfig(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Club):
-          if (filterObject is Organization) return getClubsOfOrganization(filterObject).cast<T>();
+          if (filterObject is Organization) return mockedData.getClubsOfOrganization(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Competition):
-          if (filterObject is Organization) return getCompetitionsOfOrganization(filterObject).cast<T>();
+          if (filterObject is Organization) return mockedData.getCompetitionsOfOrganization(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionSystemAffiliation):
-          if (filterObject is Competition) return getCompetitionSystemAffiliationsOfCompetition(filterObject).cast<T>();
+          if (filterObject is Competition)
+            return mockedData.getCompetitionSystemAffiliationsOfCompetition(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionBout):
-          if (filterObject is Competition) return getCompetitionBoutsOfCompetition(filterObject).cast<T>();
+          if (filterObject is Competition) return mockedData.getCompetitionBoutsOfCompetition(filterObject).cast<T>();
           if (filterObject is CompetitionWeightCategory) {
-            return getCompetitionBoutsOfWeightCategory(filterObject).cast<T>();
+            return mockedData.getCompetitionBoutsOfWeightCategory(filterObject).cast<T>();
           }
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionLineup):
-          if (filterObject is Competition) return getCompetitionLineupsOfCompetition(filterObject).cast<T>();
+          if (filterObject is Competition) return mockedData.getCompetitionLineupsOfCompetition(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionParticipation):
           if (filterObject is CompetitionWeightCategory) {
-            return getCompetitionParticipationsOfWeightCategory(filterObject).cast<T>();
+            return mockedData.getCompetitionParticipationsOfWeightCategory(filterObject).cast<T>();
           }
-          if (filterObject is CompetitionLineup) return getCompetitionParticipationsOfLineup(filterObject).cast<T>();
+          if (filterObject is CompetitionLineup)
+            return mockedData.getCompetitionParticipationsOfLineup(filterObject).cast<T>();
 
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionWeightCategory):
-          if (filterObject is Competition) return getCompetitionWeightCategoriesOfCompetition(filterObject).cast<T>();
+          if (filterObject is Competition)
+            return mockedData.getCompetitionWeightCategoriesOfCompetition(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Division):
-          if (filterObject is Organization) return getDivisionsOfOrganization(filterObject).cast<T>();
-          if (filterObject is Division) return getDivisionsOfDivision(filterObject).cast<T>();
+          if (filterObject is Organization) return mockedData.getDivisionsOfOrganization(filterObject).cast<T>();
+          if (filterObject is Division) return mockedData.getDivisionsOfDivision(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (DivisionWeightClass):
-          if (filterObject is Division) return getDivisionWeightClassesOfDivision(filterObject).cast<T>();
+          if (filterObject is Division) return mockedData.getDivisionWeightClassesOfDivision(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (League):
-          if (filterObject is Division) return getLeaguesOfDivision(filterObject).cast<T>();
+          if (filterObject is Division) return mockedData.getLeaguesOfDivision(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (LeagueTeamParticipation):
-          if (filterObject is League) return getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
-          if (filterObject is Team) return getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
+          if (filterObject is League) return mockedData.getLeagueTeamParticipationsOfLeague(filterObject).cast<T>();
+          if (filterObject is Team) return mockedData.getLeagueTeamParticipationsOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (LeagueWeightClass):
-          if (filterObject is League) return getLeagueWeightClassesOfLeague(filterObject).cast<T>();
+          if (filterObject is League) return mockedData.getLeagueWeightClassesOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Membership):
-          if (filterObject is Club) return getMembershipsOfClub(filterObject).cast<T>();
+          if (filterObject is Club) return mockedData.getMembershipsOfClub(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Organization):
-          if (filterObject is Organization) return getOrganizationsOfOrganization(filterObject).cast<T>();
+          if (filterObject is Organization) return mockedData.getOrganizationsOfOrganization(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Person):
-          if (filterObject is Organization) return getPersonsOfOrganization(filterObject).cast<T>();
+          if (filterObject is Organization) return mockedData.getPersonsOfOrganization(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Team):
-          if (filterObject is Club) return getTeamsOfClub(filterObject).cast<T>();
-          if (filterObject is League) return getTeamsOfLeague(filterObject).cast<T>();
+          if (filterObject is Club) return mockedData.getTeamsOfClub(filterObject).cast<T>();
+          if (filterObject is League) return mockedData.getTeamsOfLeague(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (TeamMatch):
-          if (filterObject is League) return getTeamMatchesOfLeague(filterObject).cast<T>();
-          if (filterObject is Team) return getTeamMatchesOfTeam(filterObject).cast<T>();
+          if (filterObject is League) return mockedData.getTeamMatchesOfLeague(filterObject).cast<T>();
+          if (filterObject is Team) return mockedData.getTeamMatchesOfTeam(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (TeamMatchBout):
-          if (filterObject is TeamMatch) return getTeamMatchBoutsOfTeamMatch(filterObject).cast<T>();
+          if (filterObject is TeamMatch) return mockedData.getTeamMatchBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (TeamMatchParticipation):
-          if (filterObject is TeamLineup) return getParticipationsOfLineup(filterObject).cast<T>();
+          if (filterObject is TeamLineup) return mockedData.getParticipationsOfLineup(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (WeightClass):
           // TODO may remove in favor of getDivisionWeightClassesOfLeague
-          if (filterObject is Division) return getWeightClassesOfDivision(filterObject).cast<T>();
+          if (filterObject is Division) return mockedData.getWeightClassesOfDivision(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         default:
           throw DataUnimplementedError(CRUD.read, T, filterObject);
@@ -145,7 +149,7 @@ class MockDataManager extends DataManager {
   @override
   Future<void> generateBouts<T extends DataObject>(DataObject dataObject, [bool isReset = false]) async {
     if (dataObject is TeamMatch) {
-      final teamMatchBoutsAll = getTeamMatchBouts();
+      final teamMatchBoutsAll = mockedData.getTeamMatchBouts();
       if (isReset) {
         for (var element in teamMatchBoutsAll) {
           teamMatchBoutsAll.removeWhere((tmf) => tmf.equalDuringBout(element));
@@ -170,9 +174,10 @@ class MockDataManager extends DataManager {
       }
       _updateMany(TeamMatchBout, filterObject: dataObject);
     } else if (dataObject is CompetitionWeightCategory) {
-      final competitionBoutsAll = getCompetitionBouts();
-      final participations = getCompetitionParticipationsOfWeightCategory(dataObject);
-      final competitionSystemAffiliations = getCompetitionSystemAffiliationsOfCompetition(dataObject.competition);
+      final competitionBoutsAll = mockedData.getCompetitionBouts();
+      final participations = mockedData.getCompetitionParticipationsOfWeightCategory(dataObject);
+      final competitionSystemAffiliations =
+          mockedData.getCompetitionSystemAffiliationsOfCompetition(dataObject.competition);
       // Sort DESC
       competitionSystemAffiliations
           .sort((a, b) => (b.maxContestants ?? double.infinity).compareTo(a.maxContestants ?? double.infinity));
@@ -278,7 +283,7 @@ class MockDataManager extends DataManager {
       case const (TeamMatchBout):
         if (filterObject is TeamMatch) {
           final manyFilter = ManyDataObject(
-            data: getBoutsOfTeamMatch(filterObject),
+            data: mockedData.getBoutsOfTeamMatch(filterObject),
             filterType: TeamMatch,
             filterId: filterObject.id,
           );
@@ -301,7 +306,7 @@ class MockDataManager extends DataManager {
     objList.remove(single);
     objList.add(single);
     if (single is TeamLineup) {
-      final participations = getParticipations();
+      final participations = mockedData.getParticipations();
       final participationsWithLineup = participations.where((element) => element.lineup.id == single.id);
       for (final participationWithLineup in participationsWithLineup) {
         participations.remove(participationWithLineup);
@@ -325,19 +330,19 @@ class MockDataManager extends DataManager {
   void _broadcastSingle<T extends DataObject>(T single) async {
     if (single is Club) {
       // SpecialCase: the full Club list has to be updated, shouldn't occur often
-      getManyStreamController<Club>()?.add(ManyDataObject(data: getClubs()));
+      getManyStreamController<Club>()?.add(ManyDataObject(data: mockedData.getClubs()));
     } else if (single is Bout) {
     } else if (single is BoutAction) {
       getManyStreamController<BoutAction>(filterType: Bout)?.add(ManyDataObject(
-        data: getBoutActionsOfBout(single.bout),
+        data: mockedData.getBoutActionsOfBout(single.bout),
         filterType: Bout,
         filterId: single.bout.id,
       ));
     } else if (single is League) {
-      getManyStreamController<League>()?.add(ManyDataObject(data: getLeagues()));
+      getManyStreamController<League>()?.add(ManyDataObject(data: mockedData.getLeagues()));
     } else if (single is DivisionWeightClass) {
       getManyStreamController<DivisionWeightClass>(filterType: League)?.add(ManyDataObject(
-        data: getDivisionWeightClassesOfDivision(single.division),
+        data: mockedData.getDivisionWeightClassesOfDivision(single.division),
         filterType: League,
         filterId: single.division.id,
       ));
@@ -345,13 +350,13 @@ class MockDataManager extends DataManager {
       // No filtered list needs to be handled.
     } else if (single is Membership) {
       getManyStreamController<Membership>(filterType: Club)?.add(ManyDataObject(
-        data: getMembershipsOfClub(single.club),
+        data: mockedData.getMembershipsOfClub(single.club),
         filterType: Club,
         filterId: single.club.id,
       ));
     } else if (single is TeamMatchParticipation) {
       getManyStreamController<TeamMatchParticipation>(filterType: TeamLineup)?.add(ManyDataObject(
-        data: getParticipationsOfLineup(single.lineup),
+        data: mockedData.getParticipationsOfLineup(single.lineup),
         filterType: TeamLineup,
         filterId: single.lineup.id,
       ));
@@ -373,12 +378,12 @@ class MockDataManager extends DataManager {
       // }
     } else if (single is TeamMatch) {
       getManyStreamController<TeamMatch>(filterType: Team)?.add(ManyDataObject(
-        data: getTeamMatchesOfTeam(single.home.team),
+        data: mockedData.getTeamMatchesOfTeam(single.home.team),
         filterType: Team,
         filterId: single.home.id,
       ));
       getManyStreamController<TeamMatch>(filterType: Team)?.add(ManyDataObject(
-        data: getTeamMatchesOfTeam(single.guest.team),
+        data: mockedData.getTeamMatchesOfTeam(single.guest.team),
         filterType: Team,
         filterId: single.guest.id,
       ));
@@ -389,51 +394,51 @@ class MockDataManager extends DataManager {
 
   List<T> _getListOfObject<T extends DataObject>(T obj, CRUD crud) {
     if (obj is AthleteBoutState) {
-      return getParticipantStates().cast<T>();
+      return mockedData.getParticipantStates().cast<T>();
     } else if (obj is Bout) {
-      return getBouts().cast<T>();
+      return mockedData.getBouts().cast<T>();
     } else if (obj is BoutAction) {
-      return getBoutActions().cast<T>();
+      return mockedData.getBoutActions().cast<T>();
     } else if (obj is Club) {
-      return getClubs().cast<T>();
+      return mockedData.getClubs().cast<T>();
     } else if (obj is Competition) {
-      return getCompetitions().cast<T>();
+      return mockedData.getCompetitions().cast<T>();
     } else if (obj is CompetitionWeightCategory) {
-      return getCompetitionWeightCategories().cast<T>();
+      return mockedData.getCompetitionWeightCategories().cast<T>();
     } else if (obj is CompetitionSystemAffiliation) {
-      return getCompetitionSystemAffiliations().cast<T>();
+      return mockedData.getCompetitionSystemAffiliations().cast<T>();
     } else if (obj is CompetitionParticipation) {
-      return getCompetitionParticipations().cast<T>();
+      return mockedData.getCompetitionParticipations().cast<T>();
     } else if (obj is CompetitionLineup) {
-      return getCompetitionLineups().cast<T>();
+      return mockedData.getCompetitionLineups().cast<T>();
     } else if (obj is CompetitionBout) {
-      return getCompetitionBouts().cast<T>();
+      return mockedData.getCompetitionBouts().cast<T>();
       /*} else if (obj is CompetitionPerson) {
-      return getCompetitionPersons().cast<T>();*/
+      return mockedData.getCompetitionPersons().cast<T>();*/
     } else if (obj is Division) {
-      return getDivisions().cast<T>();
+      return mockedData.getDivisions().cast<T>();
     } else if (obj is DivisionWeightClass) {
-      return getDivisionWeightClasses().cast<T>();
+      return mockedData.getDivisionWeightClasses().cast<T>();
     } else if (obj is League) {
-      return getLeagues().cast<T>();
+      return mockedData.getLeagues().cast<T>();
     } else if (obj is Membership) {
-      return getMemberships().cast<T>();
+      return mockedData.getMemberships().cast<T>();
     } else if (obj is Organization) {
-      return getOrganizations().cast<T>();
+      return mockedData.getOrganizations().cast<T>();
     } else if (obj is TeamLineup) {
-      return getLineups().cast<T>();
+      return mockedData.getLineups().cast<T>();
     } else if (obj is TeamMatchParticipation) {
-      return getParticipations().cast<T>();
+      return mockedData.getParticipations().cast<T>();
     } else if (obj is Team) {
-      return getTeams().cast<T>();
+      return mockedData.getTeams().cast<T>();
     } else if (obj is TeamMatch) {
-      return getTeamMatches().cast<T>();
+      return mockedData.getTeamMatches().cast<T>();
     } else if (obj is TeamMatchBout) {
-      return getTeamMatchBouts().cast<T>();
+      return mockedData.getTeamMatchBouts().cast<T>();
     } else if (obj is Person) {
-      return getPersons().cast<T>();
+      return mockedData.getPersons().cast<T>();
     } else if (obj is WeightClass) {
-      return getWeightClasses().cast<T>();
+      return mockedData.getWeightClasses().cast<T>();
     } else {
       throw DataUnimplementedError(crud, obj.runtimeType);
     }
@@ -442,49 +447,49 @@ class MockDataManager extends DataManager {
   List<T> _getListOfType<T extends DataObject>(CRUD crud) {
     switch (T) {
       case const (Club):
-        return getClubs().cast<T>();
+        return mockedData.getClubs().cast<T>();
       case const (Competition):
-        return getCompetitions().cast<T>();
+        return mockedData.getCompetitions().cast<T>();
       case const (CompetitionSystemAffiliation):
-        return getCompetitionSystemAffiliations().cast<T>();
+        return mockedData.getCompetitionSystemAffiliations().cast<T>();
       case const (CompetitionBout):
-        return getCompetitionBouts().cast<T>();
+        return mockedData.getCompetitionBouts().cast<T>();
       case const (CompetitionLineup):
-        return getCompetitionLineups().cast<T>();
+        return mockedData.getCompetitionLineups().cast<T>();
       case const (CompetitionParticipation):
-        return getCompetitionParticipations().cast<T>();
+        return mockedData.getCompetitionParticipations().cast<T>();
       case const (CompetitionWeightCategory):
-        return getCompetitionWeightCategories().cast<T>();
+        return mockedData.getCompetitionWeightCategories().cast<T>();
       case const (Bout):
-        return getBouts().cast<T>();
+        return mockedData.getBouts().cast<T>();
       case const (BoutAction):
-        return getBoutActions().cast<T>();
+        return mockedData.getBoutActions().cast<T>();
       case const (Organization):
-        return getOrganizations().cast<T>();
+        return mockedData.getOrganizations().cast<T>();
       case const (Division):
-        return getDivisions().cast<T>();
+        return mockedData.getDivisions().cast<T>();
       case const (League):
-        return getLeagues().cast<T>();
+        return mockedData.getLeagues().cast<T>();
       case const (DivisionWeightClass):
-        return getDivisionWeightClasses().cast<T>();
+        return mockedData.getDivisionWeightClasses().cast<T>();
       case const (TeamLineup):
-        return getLineups().cast<T>();
+        return mockedData.getLineups().cast<T>();
       case const (Membership):
-        return getMemberships().cast<T>();
+        return mockedData.getMemberships().cast<T>();
       case const (TeamMatchParticipation):
-        return getParticipations().cast<T>();
+        return mockedData.getParticipations().cast<T>();
       case const (AthleteBoutState):
-        return getParticipantStates().cast<T>();
+        return mockedData.getParticipantStates().cast<T>();
       case const (Person):
-        return getPersons().cast<T>();
+        return mockedData.getPersons().cast<T>();
       case const (Team):
-        return getTeams().cast<T>();
+        return mockedData.getTeams().cast<T>();
       case const (TeamMatch):
-        return getTeamMatches().cast<T>();
+        return mockedData.getTeamMatches().cast<T>();
       case const (TeamMatchBout):
-        return getTeamMatchBouts().cast<T>();
+        return mockedData.getTeamMatchBouts().cast<T>();
       case const (WeightClass):
-        return getWeightClasses().cast<T>();
+        return mockedData.getWeightClasses().cast<T>();
       default:
         throw DataUnimplementedError(crud, T);
     }

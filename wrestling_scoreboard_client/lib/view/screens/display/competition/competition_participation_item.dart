@@ -84,7 +84,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
         initialData: participation,
         id: participation.id,
         builder: (context, bout) {
-          return Row(
+          final row = Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ScaledContainer(
@@ -102,6 +102,10 @@ class CompetitionParticipationItem extends ConsumerWidget {
               ...items,
             ],
           );
+          if (participation.disqualified || participation.eliminated) {
+            return DefaultTextStyle.merge(child: row, style: TextStyle(color: Theme.of(context).disabledColor));
+          }
+          return row;
         });
   }
 }
