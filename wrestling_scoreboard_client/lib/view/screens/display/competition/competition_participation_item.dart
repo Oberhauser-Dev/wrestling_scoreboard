@@ -54,7 +54,10 @@ class CompetitionParticipationItem extends ConsumerWidget {
           decoration: BoxDecoration(border: Border.all(color: role.color())),
           child: Row(
             children: [
-              Expanded(child: Center(child: ScaledText(opponentParticipation?.poolDrawNumber?.toString() ?? '-'))),
+              Expanded(
+                  child: Center(
+                      child: ScaledText(
+                          '${opponentParticipation?.poolGroup?.toLetter() ?? ''}${opponentParticipation?.poolDrawNumber ?? '-'}'))),
               Expanded(
                 child: Container(
                   color: cBout.bout.winnerRole == role ? role.color() : null,

@@ -107,7 +107,8 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                             IntrinsicHeight(
                               child: CompetitionParticipationItem(
                                 participation: participationOfPoolGroup,
-                                participations: participationsOfPoolGroup,
+                                // Need to pass all participations as it can pair with another pool in the finals.
+                                participations: competitionParticipations,
                                 competitionBoutsByRound: competitionBoutsByRound,
                               ),
                             ),
