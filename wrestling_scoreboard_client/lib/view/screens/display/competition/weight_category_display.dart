@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/round_type.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/competition/competition_participation_item.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -95,7 +96,8 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                       if (poolGroup != null && competitionParticipationsByPool.length > 1) {
                         participantWidgets.add(Padding(
                           padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-                          child: Card(child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}'))),
+                          child:
+                              Card(child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}'))),
                         ));
                       }
                       final participationsOfPoolGroup = competitionParticipationsByPool[poolGroup]!;
@@ -166,7 +168,7 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                                         ScaledContainer(
                                             width: CompetitionParticipationItem.roundRelativeWidth,
                                             child: ScaledText(
-                                              '${localizations.round} ${e! + 1}',
+                                              '${competitionBoutsByRound[e]?.first.roundType.localize(context)} ${e! + 1}',
                                               fontSize: 10,
                                             )),
                                         VerticalDivider(width: 1),

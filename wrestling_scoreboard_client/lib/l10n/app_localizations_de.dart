@@ -388,6 +388,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get round => 'Runde';
 
   @override
+  String get qualification => 'Qualifikation';
+
+  @override
+  String get elimination => 'Eliminierung';
+
+  @override
+  String get repechage => 'Hoffnung';
+
+  @override
+  String get finals => 'Finale';
+
+  @override
   String get mat => 'Matte';
 
   @override

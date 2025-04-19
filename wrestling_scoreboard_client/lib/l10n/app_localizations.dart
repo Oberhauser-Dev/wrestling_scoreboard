@@ -839,6 +839,30 @@ abstract class AppLocalizations {
   /// **'Round'**
   String get round;
 
+  /// No description provided for @qualification.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualification'**
+  String get qualification;
+
+  /// No description provided for @elimination.
+  ///
+  /// In en, this message translates to:
+  /// **'Elimination'**
+  String get elimination;
+
+  /// No description provided for @repechage.
+  ///
+  /// In en, this message translates to:
+  /// **'Repechage'**
+  String get repechage;
+
+  /// No description provided for @finals.
+  ///
+  /// In en, this message translates to:
+  /// **'Final'**
+  String get finals;
+
   /// No description provided for @mat.
   ///
   /// In en, this message translates to:

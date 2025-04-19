@@ -210,9 +210,16 @@ class MockedData {
   );
 
   late final _bout4 = Bout(
-    id: 3,
+    id: 4,
     r: AthleteBoutState(id: 7, membership: r2),
     b: AthleteBoutState(id: 8, membership: b1),
+    organization: _organization,
+  );
+
+  late final _bout5 = Bout(
+    id: 5,
+    r: AthleteBoutState(id: 20, membership: r1),
+    b: AthleteBoutState(id: 21, membership: r4),
     organization: _organization,
   );
 
@@ -375,6 +382,16 @@ class MockedData {
     weightCategory: _competitionWeightCategory,
   );
 
+  late final _competitionBoutFinal1 = CompetitionBout(
+    id: 10,
+    competition: _competition,
+    pos: 10,
+    bout: _bout5,
+    round: 2,
+    roundType: RoundType.finals,
+    weightCategory: _competitionWeightCategory,
+  );
+
   late final _boutAction1 = BoutAction(
       actionType: BoutActionType.points,
       bout: _bout1,
@@ -435,6 +452,7 @@ class MockedData {
     _competitionBout2,
     _competitionBout3,
     _competitionBout4,
+    _competitionBoutFinal1,
   ];
   late final List<CompetitionWeightCategory> _competitionWeightCategories = [
     _competitionWeightCategory,

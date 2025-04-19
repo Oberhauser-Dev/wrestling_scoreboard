@@ -20,11 +20,8 @@ mixin _$CompetitionBout {
   Bout get bout;
   int get pos;
   int? get mat;
-
-  /// Rounds : 0-99
-  /// Cross: 100
-  /// Finals: 200
   int? get round;
+  RoundType get roundType;
   CompetitionWeightCategory? get weightCategory;
 
   /// Create a copy of CompetitionBout
@@ -50,18 +47,20 @@ mixin _$CompetitionBout {
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.mat, mat) || other.mat == mat) &&
             (identical(other.round, round) || other.round == round) &&
+            (identical(other.roundType, roundType) ||
+                other.roundType == roundType) &&
             (identical(other.weightCategory, weightCategory) ||
                 other.weightCategory == weightCategory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, competition, bout, pos, mat, round, weightCategory);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout, pos, mat,
+      round, roundType, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, weightCategory: $weightCategory)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, roundType: $roundType, weightCategory: $weightCategory)';
   }
 }
 
@@ -78,6 +77,7 @@ abstract mixin class $CompetitionBoutCopyWith<$Res> {
       int pos,
       int? mat,
       int? round,
+      RoundType roundType,
       CompetitionWeightCategory? weightCategory});
 
   $CompetitionCopyWith<$Res> get competition;
@@ -104,6 +104,7 @@ class _$CompetitionBoutCopyWithImpl<$Res>
     Object? pos = null,
     Object? mat = freezed,
     Object? round = freezed,
+    Object? roundType = null,
     Object? weightCategory = freezed,
   }) {
     return _then(_self.copyWith(
@@ -131,6 +132,10 @@ class _$CompetitionBoutCopyWithImpl<$Res>
           ? _self.round
           : round // ignore: cast_nullable_to_non_nullable
               as int?,
+      roundType: null == roundType
+          ? _self.roundType
+          : roundType // ignore: cast_nullable_to_non_nullable
+              as RoundType,
       weightCategory: freezed == weightCategory
           ? _self.weightCategory
           : weightCategory // ignore: cast_nullable_to_non_nullable
@@ -184,6 +189,7 @@ class _CompetitionBout extends CompetitionBout {
       required this.pos,
       this.mat,
       this.round,
+      this.roundType = RoundType.qualification,
       this.weightCategory})
       : super._();
   factory _CompetitionBout.fromJson(Map<String, dynamic> json) =>
@@ -199,12 +205,11 @@ class _CompetitionBout extends CompetitionBout {
   final int pos;
   @override
   final int? mat;
-
-  /// Rounds : 0-99
-  /// Cross: 100
-  /// Finals: 200
   @override
   final int? round;
+  @override
+  @JsonKey()
+  final RoundType roundType;
   @override
   final CompetitionWeightCategory? weightCategory;
 
@@ -235,18 +240,20 @@ class _CompetitionBout extends CompetitionBout {
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.mat, mat) || other.mat == mat) &&
             (identical(other.round, round) || other.round == round) &&
+            (identical(other.roundType, roundType) ||
+                other.roundType == roundType) &&
             (identical(other.weightCategory, weightCategory) ||
                 other.weightCategory == weightCategory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, competition, bout, pos, mat, round, weightCategory);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout, pos, mat,
+      round, roundType, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, weightCategory: $weightCategory)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, roundType: $roundType, weightCategory: $weightCategory)';
   }
 }
 
@@ -265,6 +272,7 @@ abstract mixin class _$CompetitionBoutCopyWith<$Res>
       int pos,
       int? mat,
       int? round,
+      RoundType roundType,
       CompetitionWeightCategory? weightCategory});
 
   @override
@@ -294,6 +302,7 @@ class __$CompetitionBoutCopyWithImpl<$Res>
     Object? pos = null,
     Object? mat = freezed,
     Object? round = freezed,
+    Object? roundType = null,
     Object? weightCategory = freezed,
   }) {
     return _then(_CompetitionBout(
@@ -321,6 +330,10 @@ class __$CompetitionBoutCopyWithImpl<$Res>
           ? _self.round
           : round // ignore: cast_nullable_to_non_nullable
               as int?,
+      roundType: null == roundType
+          ? _self.roundType
+          : roundType // ignore: cast_nullable_to_non_nullable
+              as RoundType,
       weightCategory: freezed == weightCategory
           ? _self.weightCategory
           : weightCategory // ignore: cast_nullable_to_non_nullable
