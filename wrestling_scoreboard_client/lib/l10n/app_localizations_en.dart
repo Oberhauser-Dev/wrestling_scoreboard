@@ -385,6 +385,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pool => 'Pool';
 
   @override
+  String get rank => 'Rank';
+
+  @override
   String get round => 'Round';
 
   @override

@@ -833,6 +833,12 @@ abstract class AppLocalizations {
   /// **'Pool'**
   String get pool;
 
+  /// No description provided for @rank.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank'**
+  String get rank;
+
   /// No description provided for @round.
   ///
   /// In en, this message translates to:

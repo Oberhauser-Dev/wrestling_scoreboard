@@ -385,6 +385,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pool => 'Pool';
 
   @override
+  String get rank => 'Platz';
+
+  @override
   String get round => 'Runde';
 
   @override

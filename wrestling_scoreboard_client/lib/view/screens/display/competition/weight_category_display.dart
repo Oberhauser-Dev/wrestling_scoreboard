@@ -176,6 +176,26 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                                       ],
                                     ),
                                   ),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.pointsRelativeWidth,
+                                  child: ScaledText(localizations.winner, fontSize: 8)),
+                              VerticalDivider(width: 1),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.pointsRelativeWidth,
+                                  child: ScaledText(localizations.classificationPoints, fontSize: 8)),
+                              VerticalDivider(width: 1),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.pointsRelativeWidth,
+                                  child: ScaledText(localizations.technicalPoints, fontSize: 8)),
+                              VerticalDivider(width: 1),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.pointsRelativeWidth,
+                                  child: ScaledText('${localizations.rank} (${localizations.pool})', fontSize: 8)),
+                              VerticalDivider(width: 1),
+                              ScaledContainer(
+                                  width: CompetitionParticipationItem.pointsRelativeWidth,
+                                  child: ScaledText(localizations.rank, fontSize: 8)),
+                              VerticalDivider(width: 1),
                             ],
                           ),
                         ),
