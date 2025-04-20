@@ -863,6 +863,12 @@ abstract class AppLocalizations {
   /// **'Final'**
   String get finals;
 
+  /// No description provided for @semiFinals.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-Final'**
+  String get semiFinals;
+
   /// No description provided for @mat.
   ///
   /// In en, this message translates to:

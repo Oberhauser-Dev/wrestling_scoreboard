@@ -82,8 +82,8 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
             filterObject: competitionWeightCategory,
             builder: (context, competitionParticipations) {
               final competitionInfos = [
-                '${localizations.name}: ${competitionWeightCategory.competition.name}',
-                '${localizations.date}: ${competitionWeightCategory.competition.date.toDateString(context)}',
+                competitionWeightCategory.competition.name,
+                competitionWeightCategory.competition.date.toDateString(context),
               ];
               final competitionParticipationsByPool =
                   competitionParticipations.groupListsBy((element) => element.poolGroup);

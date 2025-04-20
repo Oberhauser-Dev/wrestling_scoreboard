@@ -9,6 +9,7 @@ extension RoundTypeLocalization on RoundType {
       RoundType.qualification => localizations.round,
       RoundType.elimination => localizations.elimination,
       RoundType.repechage => localizations.repechage,
+      RoundType.semiFinals => localizations.semiFinals,
       RoundType.finals => localizations.finals,
     };
   }

@@ -14,7 +14,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
   static const numberRelativeWidth = 0.03;
   static const nameRelativeWidth = 0.18;
   static const clubRelativeWidth = 0.15;
-  static const roundRelativeWidth = 0.05;
+  static const roundRelativeWidth = 0.06;
 
   const CompetitionParticipationItem({
     super.key,

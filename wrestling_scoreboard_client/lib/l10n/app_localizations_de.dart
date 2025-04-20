@@ -400,6 +400,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get finals => 'Finale';
 
   @override
+  String get semiFinals => 'Halbfinale';
+
+  @override
   String get mat => 'Matte';
 
   @override

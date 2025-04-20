@@ -400,6 +400,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finals => 'Final';
 
   @override
+  String get semiFinals => 'Semi-Final';
+
+  @override
   String get mat => 'Mat';
 
   @override
