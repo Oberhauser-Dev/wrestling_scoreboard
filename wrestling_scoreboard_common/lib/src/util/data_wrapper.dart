@@ -76,10 +76,10 @@ String getTableNameFromType(Type t) {
     const (Competition) => Competition.cTableName,
     const (CompetitionBout) => CompetitionBout.cTableName,
     const (CompetitionLineup) => CompetitionLineup.cTableName,
-    const (CompetitionWeightCategory) => CompetitionWeightCategory.cTableName,
     const (CompetitionParticipation) => CompetitionParticipation.cTableName,
     const (CompetitionPerson) => CompetitionPerson.cTableName,
     const (CompetitionSystemAffiliation) => CompetitionSystemAffiliation.cTableName,
+    const (CompetitionWeightCategory) => CompetitionWeightCategory.cTableName,
     const (Organization) => Organization.cTableName,
     const (Division) => Division.cTableName,
     const (DivisionWeightClass) => DivisionWeightClass.cTableName,
@@ -104,6 +104,7 @@ String getTableNameFromType(Type t) {
 
 Type getTypeFromTableName(String tableName) {
   return switch (tableName) {
+    AgeCategory.cTableName => AgeCategory,
     BasicAuthService.cTableName => BasicAuthService, // Only used for type decoding
     Bout.cTableName => Bout,
     BoutAction.cTableName => BoutAction,
@@ -111,6 +112,12 @@ Type getTypeFromTableName(String tableName) {
     BoutResultRule.cTableName => BoutResultRule,
     Club.cTableName => Club,
     Competition.cTableName => Competition,
+    CompetitionBout.cTableName => CompetitionBout,
+    CompetitionLineup.cTableName => CompetitionLineup,
+    CompetitionParticipation.cTableName => CompetitionParticipation,
+    CompetitionPerson.cTableName => CompetitionPerson,
+    CompetitionSystemAffiliation.cTableName => CompetitionSystemAffiliation,
+    CompetitionWeightCategory.cTableName => CompetitionWeightCategory,
     Division.cTableName => Division,
     DivisionWeightClass.cTableName => DivisionWeightClass,
     League.cTableName => League,
