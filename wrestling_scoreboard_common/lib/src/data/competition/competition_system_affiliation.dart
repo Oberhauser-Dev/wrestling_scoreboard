@@ -41,7 +41,10 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
   }
 
   @override
-  String get tableName => 'competition_system_affiliation';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'competition_system_affiliation';
 
   @override
   CompetitionSystemAffiliation copyWithId(int? id) {

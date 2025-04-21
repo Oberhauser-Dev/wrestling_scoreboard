@@ -40,7 +40,10 @@ abstract class Club with _$Club implements DataObject, Organizational {
       );
 
   @override
-  String get tableName => 'club';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'club';
 
   @override
   Club copyWithId(int? id) {

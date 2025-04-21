@@ -65,7 +65,10 @@ abstract class Competition extends WrestlingEvent with _$Competition {
   }
 
   @override
-  String get tableName => 'competition';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'competition';
 
   @override
   Competition copyWithId(int? id) {

@@ -137,7 +137,10 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   }
 
   @override
-  String get tableName => 'team_match';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'team_match';
 
   @override
   TeamMatch copyWithId(int? id) {

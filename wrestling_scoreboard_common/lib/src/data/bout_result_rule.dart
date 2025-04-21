@@ -29,7 +29,10 @@ abstract class BoutResultRule with _$BoutResultRule implements DataObject {
   }
 
   @override
-  String get tableName => 'bout_result_rule';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'bout_result_rule';
 
   factory BoutResultRule.fromJson(Map<String, Object?> json) => _$BoutResultRuleFromJson(json);
 

@@ -62,7 +62,10 @@ abstract class TeamMatchParticipation with _$TeamMatchParticipation implements D
   }
 
   @override
-  String get tableName => 'participation';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'participation';
 
   @override
   TeamMatchParticipation copyWithId(int? id) {

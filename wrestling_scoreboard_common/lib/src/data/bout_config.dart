@@ -61,7 +61,10 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
   }
 
   @override
-  String get tableName => 'bout_config';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'bout_config';
 
   Duration get totalPeriodDuration => periodDuration * periodCount;
 

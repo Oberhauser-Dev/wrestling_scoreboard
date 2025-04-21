@@ -42,7 +42,10 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
   }
 
   @override
-  String get tableName => 'competition_weight_category';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'competition_weight_category';
 
   String get name => '${ageCategory.name} | ${weightClass.name}';
 

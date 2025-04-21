@@ -41,7 +41,10 @@ abstract class WeightClass with _$WeightClass implements DataObject {
   }
 
   @override
-  String get tableName => 'weight_class';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'weight_class';
 
   // TODO: check if needed, with freezed serialization
   @override

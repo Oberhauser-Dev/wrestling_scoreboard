@@ -35,7 +35,10 @@ abstract class LeagueTeamParticipation with _$LeagueTeamParticipation implements
       );
 
   @override
-  String get tableName => 'league_team_participation';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'league_team_participation';
 
   @override
   LeagueTeamParticipation copyWithId(int? id) {

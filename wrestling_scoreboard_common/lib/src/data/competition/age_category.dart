@@ -43,7 +43,8 @@ abstract class AgeCategory with _$AgeCategory implements DataObject, Organizatio
   }
 
   @override
-  String get tableName => 'age_category';
+  String get tableName => cTableName;
+  static const cTableName = 'age_category';
 
   @override
   AgeCategory copyWithId(int? id) {

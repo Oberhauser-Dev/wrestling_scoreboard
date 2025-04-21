@@ -78,7 +78,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
   }
 
   @override
-  String get tableName => 'competition_participation';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'competition_participation';
 
   @override
   CompetitionParticipation copyWithId(int? id) {

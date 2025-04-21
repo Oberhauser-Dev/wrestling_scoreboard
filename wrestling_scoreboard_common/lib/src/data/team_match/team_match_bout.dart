@@ -54,7 +54,10 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
   }
 
   @override
-  String get tableName => 'team_match_bout';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'team_match_bout';
 
   @override
   TeamMatchBout copyWithId(int? id) {

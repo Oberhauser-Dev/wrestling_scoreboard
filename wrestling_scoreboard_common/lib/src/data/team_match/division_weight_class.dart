@@ -49,7 +49,10 @@ abstract class DivisionWeightClass with _$DivisionWeightClass implements DataObj
   }
 
   @override
-  String get tableName => 'division_weight_class';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'division_weight_class';
 
   @override
   DivisionWeightClass copyWithId(int? id) {

@@ -49,7 +49,10 @@ abstract class LeagueWeightClass with _$LeagueWeightClass implements DataObject,
   }
 
   @override
-  String get tableName => 'league_weight_class';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'league_weight_class';
 
   @override
   LeagueWeightClass copyWithId(int? id) {

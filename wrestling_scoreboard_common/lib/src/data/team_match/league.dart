@@ -56,7 +56,10 @@ abstract class League with _$League implements DataObject, Organizational {
   }
 
   @override
-  String get tableName => 'league';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'league';
 
   String get transitiveName => '${division.fullname}, $name';
 

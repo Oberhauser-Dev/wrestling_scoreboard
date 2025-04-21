@@ -38,7 +38,10 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
   }
 
   @override
-  String get tableName => 'participant_state';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'participant_state';
 
   static int getTechnicalPoints(Iterable<BoutAction> actions, BoutRole role) {
     var res = 0;

@@ -44,7 +44,10 @@ abstract class CompetitionLineup with _$CompetitionLineup implements DataObject 
   }
 
   @override
-  String get tableName => 'competition_lineup';
+
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'competition_lineup';
 
   @override
   CompetitionLineup copyWithId(int? id) {
