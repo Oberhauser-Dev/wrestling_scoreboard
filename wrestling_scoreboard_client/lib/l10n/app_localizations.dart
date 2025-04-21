@@ -1397,11 +1397,23 @@ abstract class AppLocalizations {
   /// **'Technical Points'**
   String get technicalPoints;
 
+  /// No description provided for @technicalPointsAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'TP'**
+  String get technicalPointsAbbr;
+
   /// No description provided for @classificationPoints.
   ///
   /// In en, this message translates to:
   /// **'Classification Points'**
   String get classificationPoints;
+
+  /// No description provided for @classificationPointsAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'CP'**
+  String get classificationPointsAbbr;
 
   /// No description provided for @difference.
   ///
@@ -1456,6 +1468,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Winner'**
   String get winner;
+
+  /// No description provided for @wins.
+  ///
+  /// In en, this message translates to:
+  /// **'Wins'**
+  String get wins;
 
   /// No description provided for @loser.
   ///

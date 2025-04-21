@@ -667,7 +667,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get technicalPoints => 'Technical Points';
 
   @override
+  String get technicalPointsAbbr => 'TP';
+
+  @override
   String get classificationPoints => 'Classification Points';
+
+  @override
+  String get classificationPointsAbbr => 'CP';
 
   @override
   String get difference => 'Difference';
@@ -695,6 +701,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get winner => 'Winner';
+
+  @override
+  String get wins => 'Wins';
 
   @override
   String get loser => 'Loser';

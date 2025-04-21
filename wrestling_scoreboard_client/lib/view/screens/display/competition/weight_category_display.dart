@@ -178,15 +178,15 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                                   ),
                               ScaledContainer(
                                   width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.winner, fontSize: 8)),
+                                  child: ScaledText(localizations.wins, fontSize: 8)),
                               VerticalDivider(width: 1),
                               ScaledContainer(
                                   width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.classificationPoints, fontSize: 8)),
+                                  child: ScaledText(localizations.classificationPointsAbbr)),
                               VerticalDivider(width: 1),
                               ScaledContainer(
                                   width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.technicalPoints, fontSize: 8)),
+                                  child: ScaledText(localizations.technicalPointsAbbr)),
                               VerticalDivider(width: 1),
                               ScaledContainer(
                                   width: CompetitionParticipationItem.pointsRelativeWidth,

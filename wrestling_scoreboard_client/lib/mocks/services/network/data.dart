@@ -155,6 +155,7 @@ class MockedData {
       visitorsCount: 123,
       location: 'Springfield',
       league: _leagueMenRPW,
+      organization: _organization,
     );
   }
 
@@ -177,6 +178,7 @@ class MockedData {
       location: 'Springfield',
       date: DateTime.now(),
       league: _leagueJnRPW,
+      organization: _organization,
     );
   }
 

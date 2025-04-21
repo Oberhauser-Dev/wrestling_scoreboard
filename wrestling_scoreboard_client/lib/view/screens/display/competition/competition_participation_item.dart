@@ -122,7 +122,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
             children: [
               ScaledContainer(
                   width: CompetitionParticipationItem.numberRelativeWidth,
-                  child: ScaledText(participation.poolDrawNumber?.toString() ?? '-')),
+                  child: ScaledText('${participation.poolGroup?.toLetter() ?? ''}${participation.poolDrawNumber ?? '-'}')),
               VerticalDivider(),
               ScaledContainer(
                   width: CompetitionParticipationItem.nameRelativeWidth,

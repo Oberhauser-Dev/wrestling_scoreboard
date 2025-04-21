@@ -667,7 +667,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get technicalPoints => 'Technische Punkte';
 
   @override
+  String get technicalPointsAbbr => 'TP';
+
+  @override
   String get classificationPoints => 'Kampfwertungspunkte';
+
+  @override
+  String get classificationPointsAbbr => 'KP';
 
   @override
   String get difference => 'Differenz';
@@ -695,6 +701,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get winner => 'Gewinner';
+
+  @override
+  String get wins => 'Siege';
 
   @override
   String get loser => 'Verlierer';
