@@ -37,6 +37,9 @@ abstract class BasicAuthService with _$BasicAuthService implements AuthService {
     final credentials = decoded.split(':');
     return BasicAuthService(username: credentials[0], password: credentials[1]);
   }
+
+  String get tableName => cTableName;
+  static const cTableName = 'basic_auth_service';
 }
 
 @freezed
