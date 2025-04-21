@@ -5,11 +5,12 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 void main() {
   test('Sync data object types', () {
-    print(dataTypes
-        .map((dataType) => getTableNameFromType(dataType))
-        .sorted((a, b) => a.compareTo(b))
-        .indexed
-        .map((e) => '${e.$1} ${e.$2}')
-        .join('\n'));
+    for (final dataType in dataTypes) {
+      expect(dataType, getTypeFromTableName(getTableNameFromType(dataType)));
+    }
+
+    final sortedTableNames =
+        dataTypes.map((dataType) => getTableNameFromType(dataType)).sorted((a, b) => a.compareTo(b));
+    print(sortedTableNames.indexed.map((e) => '${e.$1} ${e.$2}').join('\n'));
   });
 }
