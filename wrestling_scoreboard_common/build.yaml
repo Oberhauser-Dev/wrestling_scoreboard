@@ -4,3 +4,11 @@ targets:
       json_serializable:
         options:
           explicit_to_json: true
+
+builders:
+  genericDataObjectBuilder:
+    import: "package:wrestling_scoreboard_common/builder.dart"
+    builder_factories: ["genericDataObjectBuilder"]
+    build_extensions: {".dart": ["generic_data_objects.g.dart"]}
+    build_to: source
+    auto_apply: root_package

@@ -51,6 +51,7 @@ mixin _$BasicAuthService {
 abstract mixin class $BasicAuthServiceCopyWith<$Res> {
   factory $BasicAuthServiceCopyWith(BasicAuthService value, $Res Function(BasicAuthService) _then) =
       _$BasicAuthServiceCopyWithImpl;
+
   @useResult
   $Res call({String username, String password});
 }
@@ -87,6 +88,7 @@ class _$BasicAuthServiceCopyWithImpl<$Res> implements $BasicAuthServiceCopyWith<
 @JsonSerializable()
 class _BasicAuthService extends BasicAuthService {
   const _BasicAuthService({required this.username, required this.password}) : super._();
+
   factory _BasicAuthService.fromJson(Map<String, dynamic> json) => _$BasicAuthServiceFromJson(json);
 
   @override
@@ -132,6 +134,7 @@ class _BasicAuthService extends BasicAuthService {
 abstract mixin class _$BasicAuthServiceCopyWith<$Res> implements $BasicAuthServiceCopyWith<$Res> {
   factory _$BasicAuthServiceCopyWith(_BasicAuthService value, $Res Function(_BasicAuthService) _then) =
       __$BasicAuthServiceCopyWithImpl;
+
   @override
   @useResult
   $Res call({String username, String password});
@@ -201,6 +204,7 @@ mixin _$BearerAuthService {
 abstract mixin class $BearerAuthServiceCopyWith<$Res> {
   factory $BearerAuthServiceCopyWith(BearerAuthService value, $Res Function(BearerAuthService) _then) =
       _$BearerAuthServiceCopyWithImpl;
+
   @useResult
   $Res call({String token});
 }
@@ -232,6 +236,7 @@ class _$BearerAuthServiceCopyWithImpl<$Res> implements $BearerAuthServiceCopyWit
 @JsonSerializable()
 class _BearerAuthService extends BearerAuthService {
   const _BearerAuthService({required this.token}) : super._();
+
   factory _BearerAuthService.fromJson(Map<String, dynamic> json) => _$BearerAuthServiceFromJson(json);
 
   @override
@@ -274,6 +279,7 @@ class _BearerAuthService extends BearerAuthService {
 abstract mixin class _$BearerAuthServiceCopyWith<$Res> implements $BearerAuthServiceCopyWith<$Res> {
   factory _$BearerAuthServiceCopyWith(_BearerAuthService value, $Res Function(_BearerAuthService) _then) =
       __$BearerAuthServiceCopyWithImpl;
+
   @override
   @useResult
   $Res call({String token});

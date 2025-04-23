@@ -22,7 +22,8 @@ mixin _$Migration {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $MigrationCopyWith<Migration> get copyWith => _$MigrationCopyWithImpl<Migration>(this as Migration, _$identity);
+  $MigrationCopyWith<Migration> get copyWith =>
+      _$MigrationCopyWithImpl<Migration>(this as Migration, _$identity);
 
   /// Serializes this Migration to a JSON map.
   Map<String, dynamic> toJson();
@@ -33,7 +34,8 @@ mixin _$Migration {
         (other.runtimeType == runtimeType &&
             other is Migration &&
             (identical(other.semver, semver) || other.semver == semver) &&
-            (identical(other.minClientVersion, minClientVersion) || other.minClientVersion == minClientVersion));
+            (identical(other.minClientVersion, minClientVersion) ||
+                other.minClientVersion == minClientVersion));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +50,8 @@ mixin _$Migration {
 
 /// @nodoc
 abstract mixin class $MigrationCopyWith<$Res> {
-  factory $MigrationCopyWith(Migration value, $Res Function(Migration) _then) = _$MigrationCopyWithImpl;
+  factory $MigrationCopyWith(Migration value, $Res Function(Migration) _then) =
+      _$MigrationCopyWithImpl;
   @useResult
   $Res call({String semver, String minClientVersion});
 }
@@ -84,8 +87,10 @@ class _$MigrationCopyWithImpl<$Res> implements $MigrationCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _Migration extends Migration {
-  const _Migration({required this.semver, required this.minClientVersion}) : super._();
-  factory _Migration.fromJson(Map<String, dynamic> json) => _$MigrationFromJson(json);
+  const _Migration({required this.semver, required this.minClientVersion})
+      : super._();
+  factory _Migration.fromJson(Map<String, dynamic> json) =>
+      _$MigrationFromJson(json);
 
   @override
   final String semver;
@@ -97,7 +102,8 @@ class _Migration extends Migration {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$MigrationCopyWith<_Migration> get copyWith => __$MigrationCopyWithImpl<_Migration>(this, _$identity);
+  _$MigrationCopyWith<_Migration> get copyWith =>
+      __$MigrationCopyWithImpl<_Migration>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -112,7 +118,8 @@ class _Migration extends Migration {
         (other.runtimeType == runtimeType &&
             other is _Migration &&
             (identical(other.semver, semver) || other.semver == semver) &&
-            (identical(other.minClientVersion, minClientVersion) || other.minClientVersion == minClientVersion));
+            (identical(other.minClientVersion, minClientVersion) ||
+                other.minClientVersion == minClientVersion));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -126,8 +133,11 @@ class _Migration extends Migration {
 }
 
 /// @nodoc
-abstract mixin class _$MigrationCopyWith<$Res> implements $MigrationCopyWith<$Res> {
-  factory _$MigrationCopyWith(_Migration value, $Res Function(_Migration) _then) = __$MigrationCopyWithImpl;
+abstract mixin class _$MigrationCopyWith<$Res>
+    implements $MigrationCopyWith<$Res> {
+  factory _$MigrationCopyWith(
+          _Migration value, $Res Function(_Migration) _then) =
+      __$MigrationCopyWithImpl;
   @override
   @useResult
   $Res call({String semver, String minClientVersion});

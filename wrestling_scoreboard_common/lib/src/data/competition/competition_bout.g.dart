@@ -39,5 +39,6 @@ const _$RoundTypeEnumMap = {
   RoundType.qualification: 'qualification',
   RoundType.elimination: 'elimination',
   RoundType.repechage: 'repechage',
+  RoundType.semiFinals: 'semiFinals',
   RoundType.finals: 'finals',
 };

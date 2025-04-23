@@ -11,7 +11,8 @@ _Migration _$MigrationFromJson(Map<String, dynamic> json) => _Migration(
       minClientVersion: json['minClientVersion'] as String,
     );
 
-Map<String, dynamic> _$MigrationToJson(_Migration instance) => <String, dynamic>{
+Map<String, dynamic> _$MigrationToJson(_Migration instance) =>
+    <String, dynamic>{
       'semver': instance.semver,
       'minClientVersion': instance.minClientVersion,
     };

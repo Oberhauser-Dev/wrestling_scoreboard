@@ -16,6 +16,7 @@ dependencies:
   crypto: ^3.0.5
 
 dev_dependencies:
+  build: ^2.4.2
   build_runner: ^2.3.0
   freezed: ^3.0.3
   json_serializable: ^6.7.1
