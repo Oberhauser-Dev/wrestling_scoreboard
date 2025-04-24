@@ -1,3 +1,5 @@
+/// This file is generated, please do not change.
+
 import 'package:wrestling_scoreboard_common/common.dart';
 
 final dataTypes = [
@@ -13,8 +15,8 @@ final dataTypes = [
   CompetitionPerson,
   CompetitionSystemAffiliation,
   CompetitionWeightCategory,
-  Membership,
   Organization,
+  Membership,
   AthleteBoutState,
   Person,
   Team,
@@ -24,8 +26,8 @@ final dataTypes = [
   League,
   LeagueTeamParticipation,
   LeagueWeightClass,
-  TeamMatchParticipation,
   TeamLineup,
+  TeamMatchParticipation,
   TeamMatchBout,
   AbstractUser,
   User,
