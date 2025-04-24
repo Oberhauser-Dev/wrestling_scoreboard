@@ -78,7 +78,7 @@ Map<String, dynamic> parseSingleRawJson(Map<String, dynamic> json) {
 }
 
 T parseSingleJson<T extends DataObject>(Map<String, dynamic> json) {
-  return DataObject.fromJson<T>(json['data']);
+  return DataObjectParser.fromJson<T>(json['data']);
 }
 
 ManyDataObject<Map<String, dynamic>> parseManyRawJson(Map<String, dynamic> json) {
@@ -99,7 +99,7 @@ ManyDataObject<T> parseManyJson<T extends DataObject>(Map<String, dynamic> json)
   final int? filterId = json['filterId'];
   return ManyDataObject<T>(
       data: data.map((e) {
-        return DataObject.fromJson<T>(e as Map<String, dynamic>);
+        return DataObjectParser.fromJson<T>(e as Map<String, dynamic>);
       }).toList(),
       filterType: filterType,
       filterId: filterId);

@@ -101,6 +101,22 @@ Future<int?> handleGenericJson(
     _ => throw UnimplementedError('Cannot handle Json for type "\${type.toString()}".'),
   };
 }
+
+extension DataObjectParser on DataObject {
+  static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
+    return switch (T) {
+      ${sorted.map((c) => 'const (${c.name}) => ${c.name}.fromJson(json) as T,').join('\n      ')}
+      _ => throw UnimplementedError('Json conversation for "\$T" not found.'),
+    };
+  }
+
+  static Future<T> fromRaw<T extends DataObject>(Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
+    return switch (T) {
+      ${sorted.map((c) => 'const (${c.name}) => (await ${c.name}.fromRaw(raw, getSingle)) as T,').join('\n      ')}
+      _ => throw UnimplementedError('Raw conversation for "\$T" not found.'),
+    };
+  }
+}
 ''';
     await buildStep.writeAsString(_allFileOutput(buildStep), output);
   }

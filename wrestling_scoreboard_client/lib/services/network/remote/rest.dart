@@ -34,13 +34,13 @@ class RestDataManager extends DataManager {
   @override
   Future<T> readSingle<T extends DataObject>(int id) async {
     final json = await readSingleJson<T>(id, isRaw: false);
-    return DataObject.fromJson<T>(json);
+    return DataObjectParser.fromJson<T>(json);
   }
 
   @override
   Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject}) async {
     final json = await readManyJson<T, S>(filterObject: filterObject, isRaw: false);
-    return json.map((e) => DataObject.fromJson<T>(e)).toList();
+    return json.map((e) => DataObjectParser.fromJson<T>(e)).toList();
   }
 
   Future<void> _handleResponse(http.Response response, {required String errorMessage}) async {
