@@ -87,6 +87,20 @@ Type getTypeFromTableName(String tableName) {
     _ => throw UnimplementedError('Type for "\${tableName.toString()}" not found.'),
   };
 }
+
+Future<int?> handleGenericJson(
+  Map<String, dynamic> json, {
+  required HandleSingleCallback handleSingle,
+  required HandleManyCallback handleMany,
+  required HandleSingleRawCallback handleSingleRaw,
+  required HandleManyRawCallback handleManyRaw,
+}) {
+  final type = getTypeFromTableName(json['tableName'] as String);
+  return switch (type) {
+    ${sorted.map((c) => 'const (${c.name}) => handleJson<${c.name}>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),').join('\n    ')}
+    _ => throw UnimplementedError('Cannot handle Json for type "\${type.toString()}".'),
+  };
+}
 ''';
     await buildStep.writeAsString(_allFileOutput(buildStep), output);
   }

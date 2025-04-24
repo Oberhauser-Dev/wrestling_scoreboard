@@ -111,3 +111,47 @@ Type getTypeFromTableName(String tableName) {
     _ => throw UnimplementedError('Type for "${tableName.toString()}" not found.'),
   };
 }
+
+Future<int?> handleGenericJson(
+  Map<String, dynamic> json, {
+  required HandleSingleCallback handleSingle,
+  required HandleManyCallback handleMany,
+  required HandleSingleRawCallback handleSingleRaw,
+  required HandleManyRawCallback handleManyRaw,
+}) {
+  final type = getTypeFromTableName(json['tableName'] as String);
+  return switch (type) {
+    const (BoutConfig) => handleJson<BoutConfig>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (BoutResultRule) => handleJson<BoutResultRule>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Organization) => handleJson<Organization>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (AgeCategory) => handleJson<AgeCategory>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Club) => handleJson<Club>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Competition) => handleJson<Competition>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (CompetitionSystemAffiliation) => handleJson<CompetitionSystemAffiliation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Division) => handleJson<Division>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (League) => handleJson<League>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Person) => handleJson<Person>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (CompetitionPerson) => handleJson<CompetitionPerson>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Membership) => handleJson<Membership>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (AthleteBoutState) => handleJson<AthleteBoutState>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Bout) => handleJson<Bout>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (BoutAction) => handleJson<BoutAction>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (CompetitionLineup) => handleJson<CompetitionLineup>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (SecuredUser) => handleJson<SecuredUser>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (Team) => handleJson<Team>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (LeagueTeamParticipation) => handleJson<LeagueTeamParticipation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (TeamClubAffiliation) => handleJson<TeamClubAffiliation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (TeamLineup) => handleJson<TeamLineup>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (TeamMatch) => handleJson<TeamMatch>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (User) => handleJson<User>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (WeightClass) => handleJson<WeightClass>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (CompetitionWeightCategory) => handleJson<CompetitionWeightCategory>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (CompetitionBout) => handleJson<CompetitionBout>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (CompetitionParticipation) => handleJson<CompetitionParticipation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (DivisionWeightClass) => handleJson<DivisionWeightClass>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (LeagueWeightClass) => handleJson<LeagueWeightClass>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (TeamMatchBout) => handleJson<TeamMatchBout>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (TeamMatchParticipation) => handleJson<TeamMatchParticipation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    _ => throw UnimplementedError('Cannot handle Json for type "${type.toString()}".'),
+  };
+}
