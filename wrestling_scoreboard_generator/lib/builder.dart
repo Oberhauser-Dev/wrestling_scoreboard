@@ -2,6 +2,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:glob/glob.dart';
+import 'package:graphs/graphs.dart';
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 
@@ -10,10 +11,10 @@ Builder genericDataObjectBuilder(BuilderOptions options) =>
 
 extension on InterfaceType {
   bool get isDataObject {
-    return interfaces
+    return !getDisplayString(withNullability: false).startsWith('_') &&
+        allSupertypes
             .map((i) => i.getDisplayString(withNullability: false))
-            .any((name) => name == 'DataObject') ||
-        interfaces.any((i) => i.isDataObject);
+            .any((name) => name == 'DataObject');
   }
 }
 
@@ -22,13 +23,9 @@ extension on ClassElement {
     if (mixins.isEmpty) {
       return false;
     }
-    print(
-      '${thisType.getDisplayString(withNullability: false)}: compare to: ${cElement.thisType.getDisplayString(withNullability: false)}',
-    );
+    // Avoid cyclic dependencies for its own class:
+    if (thisType == cElement.thisType) return false;
     return mixins.first.getters.any((getter) {
-      print(
-        'Return Type: ${getter.returnType.getDisplayString(withNullability: false)}',
-      );
       return getter.returnType.getDisplayString(withNullability: false) ==
           cElement.thisType.getDisplayString(withNullability: false);
     });
@@ -57,14 +54,12 @@ class GenericDataObjectBuilder implements Builder {
       final classesInLibrary = LibraryReader(library).classes;
       classes.addAll(classesInLibrary.where((c) => c.thisType.isDataObject));
     }
-    classes.sort((a, b) {
-      final comp =
-          a.hasGettersOfClass(b) ? 1 : (b.hasGettersOfClass(a) ? -1 : 0);
-      print(
-        '########## ${a.displayName} ${comp > 0 ? '>' : (comp < 0 ? '<' : '==')} ${b.displayName}',
-      );
-      return comp;
-    });
+    final sorted = topologicalSort<ClassElement>(
+      classes,
+      // for each “dependency” node, list all the nodes that depend on it:
+      (node) => classes.where((c) => c.hasGettersOfClass(node)),
+      secondarySort: (a, b) => a.name.compareTo(b.name),
+    );
 
     final output = '''
 /// This file is generated, please do not change.
@@ -72,7 +67,7 @@ class GenericDataObjectBuilder implements Builder {
 import 'package:wrestling_scoreboard_common/common.dart';
 
 final dataTypes = [
-  ${classes.map((c) => c.name).join(',\n  ')}
+  ${sorted.map((c) => c.name).join(',\n  ')}
 ];
 ''';
     await buildStep.writeAsString(_allFileOutput(buildStep), output);
