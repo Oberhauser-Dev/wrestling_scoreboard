@@ -425,7 +425,10 @@ class __$CompetitionCopyWithImpl<$Res> implements _$CompetitionCopyWith<$Res> {
           ? _self.matCount
           : matCount // ignore: cast_nullable_to_non_nullable
               as int,
-      maxRanking: freezed == maxRanking ? _self.maxRanking! : maxRanking,
+      maxRanking: freezed == maxRanking
+          ? _self.maxRanking
+          : maxRanking // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 

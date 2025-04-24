@@ -1,14 +1,17 @@
 name: wrestling_scoreboard_generator
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+description: Generated files from wrestling_scoreboard_common
+publish_to: none
 
 environment:
   sdk: ^3.7.0
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  source_gen: ^2.0.0
+  build: ^2.4.2
+  build_runner: ^2.3.0
+  analyzer: ^7.4.4
+  glob: ^2.1.3
+  path: ^1.9.1
 
 dev_dependencies:
   lints: ^5.0.0

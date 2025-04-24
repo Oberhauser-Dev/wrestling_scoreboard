@@ -7,8 +7,11 @@ targets:
 
 builders:
   genericDataObjectBuilder:
-    import: "package:wrestling_scoreboard_common/builder.dart"
+    import: "package:wrestling_scoreboard_generator/builder.dart"
     builder_factories: ["genericDataObjectBuilder"]
-    build_extensions: {".dart": ["generic_data_objects.g.dart"]}
+    build_extensions: {".dart": ["generic_data_objects.dart"]}
     build_to: source
+    #    required_inputs: [".freezed.dart"]
     auto_apply: root_package
+#    applies_builders: ["source_gen|combining_builder"]
+

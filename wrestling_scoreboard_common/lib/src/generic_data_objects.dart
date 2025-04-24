@@ -1,4 +1,4 @@
-import '../common.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 final dataTypes = [
   Bout,
