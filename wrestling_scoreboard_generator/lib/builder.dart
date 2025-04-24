@@ -64,12 +64,12 @@ class GenericDataObjectBuilder implements Builder {
     );
 
     final output = '''
-/// This file is generated, please do not change.
-
 import 'package:wrestling_scoreboard_common/common.dart';
+/// This file is generated, DO NOT CHANGE BY HAND.
 
+/// Topo-Hierarchically ordered data types (most to least dependent on others).
 final dataTypes = [
-  ${sorted.map((c) => c.name).join(',\n  ')}
+  ${sorted.reversed.map((c) => c.name).join(',\n  ')}
 ];
 ''';
     await buildStep.writeAsString(_allFileOutput(buildStep), output);
