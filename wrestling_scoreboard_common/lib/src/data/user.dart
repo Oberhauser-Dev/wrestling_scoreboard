@@ -86,8 +86,6 @@ abstract class User with _$User implements AbstractUser {
   }
 
   @override
-
-  @override
   String get tableName => cTableName;
   static const cTableName = 'user';
 

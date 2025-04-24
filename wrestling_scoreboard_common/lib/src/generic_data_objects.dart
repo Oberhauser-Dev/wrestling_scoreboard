@@ -3,7 +3,6 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 
 final dataTypes = [
-  AbstractUser,
   BoutConfig,
   BoutResultRule,
   Organization,
@@ -34,6 +33,5 @@ final dataTypes = [
   DivisionWeightClass,
   LeagueWeightClass,
   TeamMatchBout,
-  TeamMatchParticipation,
-  WrestlingEvent
+  TeamMatchParticipation
 ];

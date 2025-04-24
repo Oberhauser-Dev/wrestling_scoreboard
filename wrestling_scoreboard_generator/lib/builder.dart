@@ -10,9 +10,8 @@ Builder genericDataObjectBuilder(BuilderOptions options) =>
 
 extension on ClassElement {
   bool get isDataObject {
-    return name != 'Organizational' &&
-        name != 'DataObject' &&
-        !name.startsWith('_') &&
+    return !name.startsWith('_') &&
+        mixins.isNotEmpty &&
         allSupertypes
             .map((i) => i.element3.name3)
             .any((name) => name == 'DataObject');
@@ -25,8 +24,7 @@ extension on ClassElement {
     // Avoid cyclic dependencies for its own class:
     if (thisType == cElement.thisType) return false;
     return mixins.first.getters.any((getter) {
-      return getter.returnType.getDisplayString(withNullability: false) ==
-          cElement.thisType.getDisplayString(withNullability: false);
+      return getter.returnType.element3?.name3 == cElement.name;
     });
   }
 }
@@ -56,7 +54,12 @@ class GenericDataObjectBuilder implements Builder {
     final sorted = topologicalSort<ClassElement>(
       classes,
       // for each “dependency” node, list all the nodes that depend on it:
-      (node) => classes.where((c) => c.hasGettersOfClass(node)),
+      (node) {
+        final cl = classes.where((c) => c.hasGettersOfClass(node));
+        // print('${node.name}: ${cl.map((c) => c.name).join(', ')}');
+        return cl;
+      },
+      equals: (p0, p1) => p0.name == p1.name,
       secondarySort: (a, b) => a.name.compareTo(b.name),
     );
 
