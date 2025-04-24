@@ -1,41 +1,5 @@
 import '../../common.dart';
 
-/// Hierarchically ordered data types (most to least dependent on others).
-/// DO NOT CHANGE THE ORDER unless you know what you do!
-// final dataTypes = [
-//   BoutAction,
-//   CompetitionBout,
-//   TeamMatchBout,
-//   Bout,
-//   AthleteBoutState,
-//   CompetitionParticipation,
-//   CompetitionWeightCategory,
-//   CompetitionLineup,
-//   CompetitionPerson,
-//   CompetitionSystemAffiliation,
-//   Competition,
-//   TeamMatchParticipation,
-//   TeamMatch,
-//   TeamLineup,
-//   LeagueTeamParticipation,
-//   LeagueWeightClass,
-//   League,
-//   Membership,
-//   Person,
-//   TeamClubAffiliation,
-//   Team,
-//   Club,
-//   DivisionWeightClass,
-//   Division,
-//   WeightClass,
-//   BoutResultRule,
-//   BoutConfig,
-//   AgeCategory,
-//   Organization,
-//   SecuredUser,
-//   User,
-// ];
-
 /// Returns a map of data types with searchable attributes.
 /// TODO: with macros, apply it to the property @Searchable.
 final Map<Type, Set<String>> searchableDataTypes = {
@@ -62,83 +26,6 @@ final Map<Type, Map<String, Type>> searchableForeignAttributeMapping = {
   TeamMatchParticipation: TeamMatchParticipation.searchableForeignAttributeMapping,
   TeamMatchBout: TeamMatchBout.searchableForeignAttributeMapping,
 };
-
-// TODO: May think about using an enum instead of a Type. Then all can use switch cases and no classes are forgotten anymore.
-String getTableNameFromType(Type t) {
-  return switch (t) {
-    const (AgeCategory) => AgeCategory.cTableName,
-    const (BasicAuthService) => BasicAuthService.cTableName, // Only used for type encoding
-    const (Bout) => Bout.cTableName,
-    const (BoutAction) => BoutAction.cTableName,
-    const (BoutConfig) => BoutConfig.cTableName,
-    const (BoutResultRule) => BoutResultRule.cTableName,
-    const (Club) => Club.cTableName,
-    const (Competition) => Competition.cTableName,
-    const (CompetitionBout) => CompetitionBout.cTableName,
-    const (CompetitionLineup) => CompetitionLineup.cTableName,
-    const (CompetitionParticipation) => CompetitionParticipation.cTableName,
-    const (CompetitionPerson) => CompetitionPerson.cTableName,
-    const (CompetitionSystemAffiliation) => CompetitionSystemAffiliation.cTableName,
-    const (CompetitionWeightCategory) => CompetitionWeightCategory.cTableName,
-    const (Organization) => Organization.cTableName,
-    const (Division) => Division.cTableName,
-    const (DivisionWeightClass) => DivisionWeightClass.cTableName,
-    const (League) => League.cTableName,
-    const (LeagueWeightClass) => LeagueWeightClass.cTableName,
-    const (LeagueTeamParticipation) => LeagueTeamParticipation.cTableName,
-    const (TeamLineup) => TeamLineup.cTableName,
-    const (Membership) => Membership.cTableName,
-    const (TeamMatchParticipation) => TeamMatchParticipation.cTableName,
-    const (AthleteBoutState) => AthleteBoutState.cTableName,
-    const (Person) => Person.cTableName,
-    const (SecuredUser) => SecuredUser.cTableName,
-    const (Team) => Team.cTableName,
-    const (TeamClubAffiliation) => TeamClubAffiliation.cTableName,
-    const (TeamMatch) => TeamMatch.cTableName,
-    const (TeamMatchBout) => TeamMatchBout.cTableName,
-    const (User) => User.cTableName,
-    const (WeightClass) => WeightClass.cTableName,
-    _ => throw UnimplementedError('ClassName for "${t.toString()}" not found.'),
-  };
-}
-
-Type getTypeFromTableName(String tableName) {
-  return switch (tableName) {
-    AgeCategory.cTableName => AgeCategory,
-    BasicAuthService.cTableName => BasicAuthService, // Only used for type decoding
-    Bout.cTableName => Bout,
-    BoutAction.cTableName => BoutAction,
-    BoutConfig.cTableName => BoutConfig,
-    BoutResultRule.cTableName => BoutResultRule,
-    Club.cTableName => Club,
-    Competition.cTableName => Competition,
-    CompetitionBout.cTableName => CompetitionBout,
-    CompetitionLineup.cTableName => CompetitionLineup,
-    CompetitionParticipation.cTableName => CompetitionParticipation,
-    CompetitionPerson.cTableName => CompetitionPerson,
-    CompetitionSystemAffiliation.cTableName => CompetitionSystemAffiliation,
-    CompetitionWeightCategory.cTableName => CompetitionWeightCategory,
-    Division.cTableName => Division,
-    DivisionWeightClass.cTableName => DivisionWeightClass,
-    League.cTableName => League,
-    LeagueTeamParticipation.cTableName => LeagueTeamParticipation,
-    LeagueWeightClass.cTableName => LeagueWeightClass,
-    TeamLineup.cTableName => TeamLineup,
-    Membership.cTableName => Membership,
-    Organization.cTableName => Organization,
-    TeamMatchParticipation.cTableName => TeamMatchParticipation,
-    AthleteBoutState.cTableName => AthleteBoutState,
-    Person.cTableName => Person,
-    SecuredUser.cTableName => SecuredUser,
-    Team.cTableName => Team,
-    TeamClubAffiliation.cTableName => TeamClubAffiliation,
-    TeamMatch.cTableName => TeamMatch,
-    TeamMatchBout.cTableName => TeamMatchBout,
-    User.cTableName => User,
-    WeightClass.cTableName => WeightClass,
-    _ => throw UnimplementedError('Type for "${tableName.toString()}" not found.'),
-  };
-}
 
 Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {
   return <String, dynamic>{

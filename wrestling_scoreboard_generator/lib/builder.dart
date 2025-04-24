@@ -71,6 +71,22 @@ import 'package:wrestling_scoreboard_common/common.dart';
 final dataTypes = [
   ${sorted.reversed.map((c) => c.name).join(',\n  ')}
 ];
+
+String getTableNameFromType(Type t) {
+  return switch (t) {
+    ${sorted.map((c) => 'const (${c.name}) => ${c.name}.cTableName,').join('\n    ')}
+    const (BasicAuthService) => BasicAuthService.cTableName, // Only used for type encoding
+    _ => throw UnimplementedError('ClassName for "\${t.toString()}" not found.'),
+  };
+}
+
+Type getTypeFromTableName(String tableName) {
+  return switch (tableName) {
+    ${sorted.map((c) => '${c.name}.cTableName => ${c.name},').join('\n    ')}
+    BasicAuthService.cTableName => BasicAuthService, // Only used for type decoding
+    _ => throw UnimplementedError('Type for "\${tableName.toString()}" not found.'),
+  };
+}
 ''';
     await buildStep.writeAsString(_allFileOutput(buildStep), output);
   }
