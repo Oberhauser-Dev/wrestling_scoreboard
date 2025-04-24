@@ -13,7 +13,6 @@ final dataTypes = [
   CompetitionSystemAffiliation,
   Division,
   League,
-  Organizational,
   Person,
   CompetitionPerson,
   Membership,

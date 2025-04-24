@@ -1,5 +1,4 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:glob/glob.dart';
 import 'package:graphs/graphs.dart';
@@ -9,16 +8,16 @@ import 'package:source_gen/source_gen.dart';
 Builder genericDataObjectBuilder(BuilderOptions options) =>
     GenericDataObjectBuilder();
 
-extension on InterfaceType {
+extension on ClassElement {
   bool get isDataObject {
-    return !getDisplayString(withNullability: false).startsWith('_') &&
+    return name != 'Organizational' &&
+        name != 'DataObject' &&
+        !name.startsWith('_') &&
         allSupertypes
-            .map((i) => i.getDisplayString(withNullability: false))
+            .map((i) => i.element3.name3)
             .any((name) => name == 'DataObject');
   }
-}
 
-extension on ClassElement {
   bool hasGettersOfClass(ClassElement cElement) {
     if (mixins.isEmpty) {
       return false;
@@ -52,7 +51,7 @@ class GenericDataObjectBuilder implements Builder {
       }
       final library = await buildStep.resolver.libraryFor(input);
       final classesInLibrary = LibraryReader(library).classes;
-      classes.addAll(classesInLibrary.where((c) => c.thisType.isDataObject));
+      classes.addAll(classesInLibrary.where((c) => c.isDataObject));
     }
     final sorted = topologicalSort<ClassElement>(
       classes,
