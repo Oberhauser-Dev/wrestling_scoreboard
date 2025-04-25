@@ -7,7 +7,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 abstract class OrganizationalController<T extends Organizational> extends ShelfController<T> {
   final _logger = Logger('OrganizationalController');
 
-  OrganizationalController({required super.tableName});
+  OrganizationalController();
 
   late psql.Statement getSingleOfOrgRawStmt;
 
@@ -21,7 +21,7 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
   /// Get a single data object via a foreign id (sync id), given by an organization.
   Future<T> getSingleOfOrg(String orgSyncId, {required int orgId, required bool obfuscate}) async {
     final single = await getSingleOfOrgRaw(orgSyncId, orgId: orgId);
-    return DataObject.fromRaw<T>(
+    return DataObjectParser.fromRaw<T>(
         single, <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: obfuscate));
   }
 

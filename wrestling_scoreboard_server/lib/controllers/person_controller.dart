@@ -23,7 +23,7 @@ class PersonController extends OrganizationalController<Person> {
     return _singleton;
   }
 
-  PersonController._internal() : super(tableName: 'person');
+  PersonController._internal() : super();
 
   @override
   Map<String, dynamic> obfuscate(Map<String, dynamic> raw) {

@@ -13,7 +13,7 @@ class BoutConfigController extends ShelfController<BoutConfig> {
     return _singleton;
   }
 
-  BoutConfigController._internal() : super(tableName: 'bout_config');
+  BoutConfigController._internal() : super();
 
   Future<Response> requestBoutResultRules(Request request, User? user, String id) async {
     return BoutResultRuleController().handleRequestMany(

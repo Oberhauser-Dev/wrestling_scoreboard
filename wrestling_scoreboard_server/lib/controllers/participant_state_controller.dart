@@ -10,7 +10,7 @@ class ParticipantStateController extends ShelfController<AthleteBoutState> {
     return _singleton;
   }
 
-  ParticipantStateController._internal() : super(tableName: 'participant_state');
+  ParticipantStateController._internal() : super();
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {

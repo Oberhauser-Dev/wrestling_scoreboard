@@ -14,7 +14,7 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
     return _singleton;
   }
 
-  CompetitionController._internal() : super(tableName: 'competition');
+  CompetitionController._internal() : super();
 
   Future<Response> requestBouts(Request request, User? user, String id) async {
     return BoutController().handleRequestManyFromQuery(

@@ -18,7 +18,7 @@ class LineupController extends ShelfController<TeamLineup> {
   static final teamIdStmt =
       PostgresDb().connection.prepare(psql.Sql.named('SELECT team_id FROM lineup WHERE id = @id'));
 
-  LineupController._internal() : super(tableName: 'lineup');
+  LineupController._internal() : super();
 
   Future<List<TeamLineup>> getByLeader(User? user, int id) async {
     return await getMany(

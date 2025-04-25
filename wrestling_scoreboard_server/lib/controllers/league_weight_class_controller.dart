@@ -9,5 +9,5 @@ class LeagueWeightClassController extends OrganizationalController<LeagueWeightC
     return _singleton;
   }
 
-  LeagueWeightClassController._internal() : super(tableName: 'league_weight_class');
+  LeagueWeightClassController._internal() : super();
 }

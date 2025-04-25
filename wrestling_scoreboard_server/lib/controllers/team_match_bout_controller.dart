@@ -8,5 +8,5 @@ class TeamMatchBoutController extends OrganizationalController<TeamMatchBout> {
     return _singleton;
   }
 
-  TeamMatchBoutController._internal() : super(tableName: 'team_match_bout');
+  TeamMatchBoutController._internal() : super();
 }

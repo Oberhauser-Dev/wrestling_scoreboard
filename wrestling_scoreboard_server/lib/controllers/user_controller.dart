@@ -13,7 +13,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     return _singleton;
   }
 
-  SecuredUserController._internal() : super(tableName: 'secured_user');
+  SecuredUserController._internal() : super();
 
   Future<Response> postSingleUser(Request request, User? user) async {
     try {

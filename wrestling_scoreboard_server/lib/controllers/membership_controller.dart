@@ -13,7 +13,7 @@ class MembershipController extends OrganizationalController<Membership> {
     return _singleton;
   }
 
-  MembershipController._internal() : super(tableName: 'membership');
+  MembershipController._internal() : super();
 
   static const _teamMatchBoutsQuery = '''
         SELECT tmb.* 

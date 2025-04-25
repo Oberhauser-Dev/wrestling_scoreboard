@@ -112,7 +112,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
 }
 
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
-  ShelfController({required super.tableName, super.primaryKeyName});
+  ShelfController({super.primaryKeyName});
 
   Future<Response> requestSingle(Request request, User? user, String id) async {
     return handleRequestSingle(
@@ -274,13 +274,15 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
 }
 
 abstract class EntityController<T extends DataObject> {
-  String tableName;
+  late final String tableName;
   String primaryKeyName;
 
   late psql.Statement getSingleRawStmt;
   late psql.Statement deleteSingleStmt;
 
-  EntityController({required this.tableName, this.primaryKeyName = 'id'});
+  EntityController({this.primaryKeyName = 'id'}) {
+    tableName = getTableNameFromType(T);
+  }
 
   static Future<void> initAll() async {
     // Reinit all prepared statements

@@ -13,7 +13,7 @@ class ClubController extends OrganizationalController<Club> {
     return _singleton;
   }
 
-  ClubController._internal() : super(tableName: 'club');
+  ClubController._internal() : super();
 
   static const teamsQuery = '''
         SELECT t.*

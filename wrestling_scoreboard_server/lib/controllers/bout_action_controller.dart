@@ -10,7 +10,7 @@ class BoutActionController extends ShelfController<BoutAction> {
     return _singleton;
   }
 
-  BoutActionController._internal() : super(tableName: 'bout_action');
+  BoutActionController._internal() : super();
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {

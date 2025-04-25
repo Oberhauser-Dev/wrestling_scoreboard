@@ -14,7 +14,7 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
     return _singleton;
   }
 
-  TeamController._internal() : super(tableName: 'team');
+  TeamController._internal() : super();
 
   static const teamMatchesQuery = '''
         SELECT tm.*

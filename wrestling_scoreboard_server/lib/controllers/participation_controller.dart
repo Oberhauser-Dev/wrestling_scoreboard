@@ -11,7 +11,7 @@ class ParticipationController extends ShelfController<TeamMatchParticipation> {
     return _singleton;
   }
 
-  ParticipationController._internal() : super(tableName: 'participation');
+  ParticipationController._internal() : super();
 
   Future<List<TeamMatchParticipation>> getByMembership(User? user, int id) async {
     return await getMany(

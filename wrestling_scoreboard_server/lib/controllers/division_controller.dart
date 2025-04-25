@@ -14,7 +14,7 @@ class DivisionController extends OrganizationalController<Division> {
     return _singleton;
   }
 
-  DivisionController._internal() : super(tableName: 'division');
+  DivisionController._internal() : super();
 
   Future<Response> requestLeagues(Request request, User? user, String id) async {
     return LeagueController().handleRequestMany(

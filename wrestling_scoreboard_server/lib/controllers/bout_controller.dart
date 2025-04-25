@@ -15,7 +15,7 @@ class BoutController extends OrganizationalController<Bout> {
     return _singleton;
   }
 
-  BoutController._internal() : super(tableName: 'bout');
+  BoutController._internal() : super();
 
   Future<Response> requestBoutActions(Request request, User? user, String id) async {
     return BoutActionController().handleRequestMany(

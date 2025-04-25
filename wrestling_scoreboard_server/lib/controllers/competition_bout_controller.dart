@@ -9,5 +9,5 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
     return _singleton;
   }
 
-  CompetitionBoutController._internal() : super(tableName: 'competition_bout');
+  CompetitionBoutController._internal() : super();
 }

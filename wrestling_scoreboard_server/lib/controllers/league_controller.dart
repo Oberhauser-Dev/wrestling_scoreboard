@@ -19,7 +19,7 @@ class LeagueController extends OrganizationalController<League> with ImportContr
     return _singleton;
   }
 
-  LeagueController._internal() : super(tableName: 'league');
+  LeagueController._internal() : super();
 
   Future<Response> requestTeams(Request request, User? user, String id) async {
     return TeamController().handleRequestMany(

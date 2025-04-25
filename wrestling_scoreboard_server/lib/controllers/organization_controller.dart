@@ -28,7 +28,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     return _singleton;
   }
 
-  OrganizationController._internal() : super(tableName: 'organization');
+  OrganizationController._internal() : super();
 
   Future<Response> requestDivisions(Request request, User? user, String id) async {
     return DivisionController().handleRequestMany(
