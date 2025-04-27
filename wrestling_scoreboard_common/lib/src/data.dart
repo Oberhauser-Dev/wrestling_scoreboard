@@ -24,7 +24,7 @@ export 'data/team_match/division_weight_class.dart';
 export 'data/team_match/league.dart';
 export 'data/team_match/league_team_participation.dart';
 export 'data/team_match/league_weight_class.dart';
-export 'data/team_match/participation.dart';
+export 'data/team_match/team_match_participation.dart';
 export 'data/team_match/team_lineup.dart';
 export 'data/team_match/team_match.dart';
 export 'data/team_match/team_match_bout.dart';
