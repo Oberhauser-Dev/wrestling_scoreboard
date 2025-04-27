@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'participation.dart';
+part of 'team_match_participation.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

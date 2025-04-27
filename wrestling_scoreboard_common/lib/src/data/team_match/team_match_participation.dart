@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
 
-part 'participation.freezed.dart';
-part 'participation.g.dart';
+part 'team_match_participation.freezed.dart';
+part 'team_match_participation.g.dart';
 
 /// The participation of a person (member) on a team match or competition through the teams lineup.
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
@@ -65,7 +65,7 @@ abstract class TeamMatchParticipation with _$TeamMatchParticipation implements D
 
   @override
   String get tableName => cTableName;
-  static const cTableName = 'participation';
+  static const cTableName = 'team_match_participation';
 
   @override
   TeamMatchParticipation copyWithId(int? id) {
