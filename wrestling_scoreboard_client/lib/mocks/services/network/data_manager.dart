@@ -61,8 +61,9 @@ class MockDataManager extends DataManager {
           if (filterObject is Organization) return mockedData.getCompetitionsOfOrganization(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionSystemAffiliation):
-          if (filterObject is Competition)
+          if (filterObject is Competition) {
             return mockedData.getCompetitionSystemAffiliationsOfCompetition(filterObject).cast<T>();
+          }
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionBout):
           if (filterObject is Competition) return mockedData.getCompetitionBoutsOfCompetition(filterObject).cast<T>();
@@ -77,13 +78,15 @@ class MockDataManager extends DataManager {
           if (filterObject is CompetitionWeightCategory) {
             return mockedData.getCompetitionParticipationsOfWeightCategory(filterObject).cast<T>();
           }
-          if (filterObject is CompetitionLineup)
+          if (filterObject is CompetitionLineup) {
             return mockedData.getCompetitionParticipationsOfLineup(filterObject).cast<T>();
+          }
 
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (CompetitionWeightCategory):
-          if (filterObject is Competition)
+          if (filterObject is Competition) {
             return mockedData.getCompetitionWeightCategoriesOfCompetition(filterObject).cast<T>();
+          }
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Division):
           if (filterObject is Organization) return mockedData.getDivisionsOfOrganization(filterObject).cast<T>();

@@ -5,6 +5,9 @@ import 'package:graphs/graphs.dart';
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 
+// TODO: remove when https://github.com/dart-lang/source_gen/issues/743 is resolved.
+// ignore_for_file: deprecated_member_use
+
 Builder genericDataObjectBuilder(BuilderOptions options) =>
     GenericDataObjectBuilder();
 

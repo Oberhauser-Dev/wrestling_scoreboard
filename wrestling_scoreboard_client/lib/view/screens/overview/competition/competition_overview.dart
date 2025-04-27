@@ -34,7 +34,6 @@ class CompetitionOverview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
-    final navigator = Navigator.of(context);
 
     return SingleConsumer<Competition>(
         id: id,

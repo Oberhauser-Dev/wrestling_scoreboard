@@ -24,7 +24,6 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
-    double width = MediaQuery.of(context).size.width;
     return SingleConsumer<CompetitionWeightCategory>(
       id: id,
       initialData: competitionWeightCategory,
