@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
@@ -95,5 +96,25 @@ void main() {
     final expectedSql = await db.export();
 
     expect(DatabaseExt.sanitizeSql(updatedImportSql), DatabaseExt.sanitizeSql(expectedSql));
+  });
+
+  group('API', () {
+    test('GET', () async {
+      final db = PostgresDb();
+      await db.open();
+      await db.clear();
+
+      final instance = await server.init();
+
+      for (final dataType in dataTypes) {
+        final tableName = getTableNameFromType(dataType);
+        final url = 'http://${instance.address.address}:${instance.port}/api/${tableName}s';
+        print('Test url: $url');
+        final res = await http.get(Uri.parse(url));
+        expect(res.statusCode, 200);
+      }
+
+      await instance.close();
+    });
   });
 }
