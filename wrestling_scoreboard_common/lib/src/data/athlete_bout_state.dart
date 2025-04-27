@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../common.dart';
 
-part 'participant_state.freezed.dart';
-part 'participant_state.g.dart';
+part 'athlete_bout_state.freezed.dart';
+part 'athlete_bout_state.g.dart';
 
 /// The state of one participant during a bout.
 @freezed
@@ -41,7 +41,7 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
 
   @override
   String get tableName => cTableName;
-  static const cTableName = 'participant_state';
+  static const cTableName = 'athlete_bout_state';
 
   static int getTechnicalPoints(Iterable<BoutAction> actions, BoutRole role) {
     var res = 0;

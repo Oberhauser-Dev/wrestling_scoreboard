@@ -1,3 +1,4 @@
+export 'data/athlete_bout_state.dart';
 export 'data/bout.dart';
 export 'data/bout_action.dart';
 export 'data/bout_config.dart';
@@ -14,7 +15,6 @@ export 'data/competition/competition_weight_category.dart';
 export 'data/membership.dart';
 export 'data/migration.dart';
 export 'data/organization.dart';
-export 'data/participant_state.dart';
 export 'data/person.dart';
 export 'data/team.dart';
 export 'data/team_club_affiliation.dart';

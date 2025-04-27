@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'participant_state.dart';
+part of 'athlete_bout_state.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
