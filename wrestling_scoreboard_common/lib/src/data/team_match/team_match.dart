@@ -105,7 +105,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   }
 
   Future<List<TeamMatchBout>> generateBouts(
-    List<List<TeamMatchParticipation>> teamParticipations,
+    List<List<TeamLineupParticipation>> teamParticipations,
     List<WeightClass> weightClasses,
   ) async {
     final bouts = <TeamMatchBout>[];

@@ -21,7 +21,7 @@ String localizeType(BuildContext context, Type type) {
     const (TeamMatchBout) => '${localizations.bouts} (${localizations.league})',
     const (WeightClass) => localizations.weightClasses,
     const (BoutAction) => localizations.actions,
-    const (TeamMatchParticipation) => localizations.participations,
+    const (TeamLineupParticipation) => localizations.participations,
     const (Competition) => localizations.competitions,
     const (TeamLineup) => localizations.lineups,
     const (BoutConfig) => localizations.boutConfig,

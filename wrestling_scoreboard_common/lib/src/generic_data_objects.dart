@@ -3,8 +3,8 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 /// Topo-Hierarchically ordered data types (most to least dependent on others).
 final dataTypes = [
-  TeamMatchParticipation,
   TeamMatchBout,
+  TeamLineupParticipation,
   LeagueWeightClass,
   DivisionWeightClass,
   CompetitionParticipation,
@@ -67,8 +67,8 @@ String getTableNameFromType(Type t) {
     const (CompetitionParticipation) => CompetitionParticipation.cTableName,
     const (DivisionWeightClass) => DivisionWeightClass.cTableName,
     const (LeagueWeightClass) => LeagueWeightClass.cTableName,
+    const (TeamLineupParticipation) => TeamLineupParticipation.cTableName,
     const (TeamMatchBout) => TeamMatchBout.cTableName,
-    const (TeamMatchParticipation) => TeamMatchParticipation.cTableName,
     const (BasicAuthService) => BasicAuthService.cTableName, // Only used for type encoding
     _ => throw UnimplementedError('ClassName for "${t.toString()}" not found.'),
   };
@@ -105,8 +105,8 @@ Type getTypeFromTableName(String tableName) {
     CompetitionParticipation.cTableName => CompetitionParticipation,
     DivisionWeightClass.cTableName => DivisionWeightClass,
     LeagueWeightClass.cTableName => LeagueWeightClass,
+    TeamLineupParticipation.cTableName => TeamLineupParticipation,
     TeamMatchBout.cTableName => TeamMatchBout,
-    TeamMatchParticipation.cTableName => TeamMatchParticipation,
     BasicAuthService.cTableName => BasicAuthService, // Only used for type decoding
     _ => throw UnimplementedError('Type for "${tableName.toString()}" not found.'),
   };
@@ -150,8 +150,8 @@ Future<int?> handleGenericJson(
     const (CompetitionParticipation) => handleJson<CompetitionParticipation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
     const (DivisionWeightClass) => handleJson<DivisionWeightClass>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
     const (LeagueWeightClass) => handleJson<LeagueWeightClass>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
+    const (TeamLineupParticipation) => handleJson<TeamLineupParticipation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
     const (TeamMatchBout) => handleJson<TeamMatchBout>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
-    const (TeamMatchParticipation) => handleJson<TeamMatchParticipation>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),
     _ => throw UnimplementedError('Cannot handle Json for type "${type.toString()}".'),
   };
 }
@@ -188,8 +188,8 @@ extension DataObjectParser on DataObject {
       const (CompetitionParticipation) => CompetitionParticipation.fromJson(json) as T,
       const (DivisionWeightClass) => DivisionWeightClass.fromJson(json) as T,
       const (LeagueWeightClass) => LeagueWeightClass.fromJson(json) as T,
+      const (TeamLineupParticipation) => TeamLineupParticipation.fromJson(json) as T,
       const (TeamMatchBout) => TeamMatchBout.fromJson(json) as T,
-      const (TeamMatchParticipation) => TeamMatchParticipation.fromJson(json) as T,
       _ => throw UnimplementedError('Json conversation for "$T" not found.'),
     };
   }
@@ -225,8 +225,8 @@ extension DataObjectParser on DataObject {
       const (CompetitionParticipation) => (await CompetitionParticipation.fromRaw(raw, getSingle)) as T,
       const (DivisionWeightClass) => (await DivisionWeightClass.fromRaw(raw, getSingle)) as T,
       const (LeagueWeightClass) => (await LeagueWeightClass.fromRaw(raw, getSingle)) as T,
+      const (TeamLineupParticipation) => (await TeamLineupParticipation.fromRaw(raw, getSingle)) as T,
       const (TeamMatchBout) => (await TeamMatchBout.fromRaw(raw, getSingle)) as T,
-      const (TeamMatchParticipation) => (await TeamMatchParticipation.fromRaw(raw, getSingle)) as T,
       _ => throw UnimplementedError('Raw conversation for "$T" not found.'),
     };
   }

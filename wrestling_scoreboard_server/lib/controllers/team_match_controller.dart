@@ -307,7 +307,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
               final weightClass = entry.key;
               final athleteBoutState = entry.value;
               if (athleteBoutState == null) return null;
-              return TeamMatchParticipation(
+              return TeamLineupParticipation(
                 lineup: lineup,
                 membership: athleteBoutState.membership,
                 weight: null, // TODO: Weight not available in import (yet)

@@ -25,8 +25,8 @@ class TeamMatchTranscript extends PdfSheet {
   });
 
   final Map<TeamMatchBout, List<BoutAction>> teamMatchBoutActions;
-  final List<TeamMatchParticipation> homeParticipations;
-  final List<TeamMatchParticipation> guestParticipations;
+  final List<TeamLineupParticipation> homeParticipations;
+  final List<TeamLineupParticipation> guestParticipations;
   final BoutConfig boutConfig;
   final TeamMatch teamMatch;
   final bool isTimeCountDown;
@@ -227,11 +227,11 @@ class TeamMatchTranscript extends PdfSheet {
     }
 
     List<Widget> buildParticipantState(AthleteBoutState? state, BoutRole role, WeightClass? weightClass,
-        Iterable<TeamMatchParticipation> participations) {
+        Iterable<TeamLineupParticipation> participations) {
       final borderColor = role.pdfColor;
       return [
         buildTextCell(
-            TeamMatchParticipation.fromParticipationsAndMembershipAndWeightClass(
+            TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
                         participations: participations, membership: state?.membership, weightClass: weightClass)
                     ?.weight
                     ?.toString() ??

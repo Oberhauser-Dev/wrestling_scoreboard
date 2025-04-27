@@ -139,11 +139,11 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Club,
         filterId: single.club.id)));
-  } else if (single is TeamMatchParticipation) {
+  } else if (single is TeamLineupParticipation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await ParticipationController().getMany(
             conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}, obfuscate: obfuscate),
-        TeamMatchParticipation,
+        TeamLineupParticipation,
         CRUD.update,
         isRaw: false,
         filterType: TeamLineup,
@@ -335,11 +335,11 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         isRaw: true,
         filterType: Club,
         filterId: single['club_id'])));
-  } else if (T == TeamMatchParticipation) {
+  } else if (T == TeamLineupParticipation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await ParticipationController().getManyRaw(
             conditions: ['lineup_id = @id'], substitutionValues: {'id': single['lineup_id']}, obfuscate: obfuscate),
-        TeamMatchParticipation,
+        TeamLineupParticipation,
         CRUD.update,
         isRaw: true,
         filterType: TeamLineup,

@@ -61,13 +61,13 @@ class TeamMatchOverview extends ConsumerWidget {
               })));
               final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
 
-              final homeParticipations = await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
-                ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.home),
+              final homeParticipations = await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
               ).future);
 
               final guestParticipations =
-                  await ref.readAsync(manyDataStreamProvider<TeamMatchParticipation, TeamLineup>(
-                ManyProviderData<TeamMatchParticipation, TeamLineup>(filterObject: match.guest),
+                  await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
               ).future);
 
               if (context.mounted) {
@@ -300,7 +300,7 @@ class TeamMatchOverview extends ConsumerWidget {
     required League league,
   }) async {
     final dataManager = await ref.read(dataManagerNotifierProvider);
-    final participations = await dataManager.readMany<TeamMatchParticipation, TeamLineup>(filterObject: lineup);
+    final participations = await dataManager.readMany<TeamLineupParticipation, TeamLineup>(filterObject: lineup);
     final leagueWeightClasses = (await dataManager.readMany<LeagueWeightClass, League>(filterObject: league))
         .where((element) => element.seasonPartition == match.seasonPartition)
         .toList();
@@ -313,7 +313,7 @@ class TeamMatchOverview extends ConsumerWidget {
       weightClasses = divisionWeightClasses.map((e) => e.weightClass).toList();
     }
     TeamLineup? proposedLineup;
-    List<TeamMatchParticipation>? proposedParticipations;
+    List<TeamLineupParticipation>? proposedParticipations;
     if (participations.isEmpty) {
       // Load lineup from previous fight as proposal
       var matches = await ref.readAsync(manyDataStreamProvider<TeamMatch, League>(
@@ -334,7 +334,7 @@ class TeamMatchOverview extends ConsumerWidget {
         );
         proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
         proposedParticipations =
-            await dataManager.readMany<TeamMatchParticipation, TeamLineup>(filterObject: proposedLineup);
+            await dataManager.readMany<TeamLineupParticipation, TeamLineup>(filterObject: proposedLineup);
       }
     }
     navigator.push(

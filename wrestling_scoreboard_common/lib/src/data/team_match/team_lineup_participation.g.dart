@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'team_match_participation.dart';
+part of 'team_lineup_participation.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TeamMatchParticipation _$TeamMatchParticipationFromJson(
+_TeamLineupParticipation _$TeamLineupParticipationFromJson(
         Map<String, dynamic> json) =>
-    _TeamMatchParticipation(
+    _TeamLineupParticipation(
       id: (json['id'] as num?)?.toInt(),
       membership:
           Membership.fromJson(json['membership'] as Map<String, dynamic>),
@@ -19,8 +19,8 @@ _TeamMatchParticipation _$TeamMatchParticipationFromJson(
       weight: (json['weight'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$TeamMatchParticipationToJson(
-        _TeamMatchParticipation instance) =>
+Map<String, dynamic> _$TeamLineupParticipationToJson(
+        _TeamLineupParticipation instance) =>
     <String, dynamic>{
       'id': instance.id,
       'membership': instance.membership.toJson(),

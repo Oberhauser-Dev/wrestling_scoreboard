@@ -54,19 +54,19 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                     id: teamMatchBout.bout.id,
                     initialData: teamMatchBout.bout,
                     builder: (context, bout) {
-                      return ManyConsumer<TeamMatchParticipation, TeamLineup>(
+                      return ManyConsumer<TeamLineupParticipation, TeamLineup>(
                           filterObject: match.home,
                           builder: (context, homeParticipations) {
                             final homeParticipation =
-                                TeamMatchParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
                                     participations: homeParticipations,
                                     membership: bout.r?.membership,
                                     weightClass: teamMatchBout.weightClass);
-                            return ManyConsumer<TeamMatchParticipation, TeamLineup>(
+                            return ManyConsumer<TeamLineupParticipation, TeamLineup>(
                                 filterObject: match.guest,
                                 builder: (context, guestParticipations) {
                                   final guestParticipation =
-                                      TeamMatchParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                      TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
                                           participations: guestParticipations,
                                           membership: bout.r?.membership,
                                           weightClass: teamMatchBout.weightClass);

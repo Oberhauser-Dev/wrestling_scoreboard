@@ -44,7 +44,7 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
 
   @override
   String get tableName => cTableName;
-  static const cTableName = 'lineup';
+  static const cTableName = 'team_lineup';
 
   @override
   TeamLineup copyWithId(int? id) {

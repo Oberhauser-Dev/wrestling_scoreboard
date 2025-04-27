@@ -125,15 +125,15 @@ class MockedData {
     TeamLineup guest = TeamLineup(id: 2, team: _guestTeam);
     _lineups.add(home);
     _lineups.add(guest);
-    _participations.add(TeamMatchParticipation(id: 1, membership: r1, lineup: home, weightClass: wc57, weight: 55.8));
-    _participations.add(TeamMatchParticipation(id: 2, membership: r2, lineup: home, weightClass: wc61, weight: 60.15));
-    _participations.add(TeamMatchParticipation(id: 3, membership: r3, lineup: home, weightClass: wc75A, weight: 73.3));
-    _participations.add(TeamMatchParticipation(id: 4, membership: r4, lineup: home, weightClass: wc130, weight: 133.5));
-    _participations.add(TeamMatchParticipation(id: 5, membership: b1, lineup: guest, weightClass: wc57, weight: 57.0));
-    _participations.add(TeamMatchParticipation(id: 6, membership: b2, lineup: guest, weightClass: wc66));
-    _participations.add(TeamMatchParticipation(id: 7, membership: b3, lineup: guest, weightClass: wc75A, weight: 72.4));
+    _participations.add(TeamLineupParticipation(id: 1, membership: r1, lineup: home, weightClass: wc57, weight: 55.8));
+    _participations.add(TeamLineupParticipation(id: 2, membership: r2, lineup: home, weightClass: wc61, weight: 60.15));
+    _participations.add(TeamLineupParticipation(id: 3, membership: r3, lineup: home, weightClass: wc75A, weight: 73.3));
+    _participations.add(TeamLineupParticipation(id: 4, membership: r4, lineup: home, weightClass: wc130, weight: 133.5));
+    _participations.add(TeamLineupParticipation(id: 5, membership: b1, lineup: guest, weightClass: wc57, weight: 57.0));
+    _participations.add(TeamLineupParticipation(id: 6, membership: b2, lineup: guest, weightClass: wc66));
+    _participations.add(TeamLineupParticipation(id: 7, membership: b3, lineup: guest, weightClass: wc75A, weight: 72.4));
     _participations
-        .add(TeamMatchParticipation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
+        .add(TeamLineupParticipation(id: 8, membership: b4, lineup: guest, weightClass: wc130, weight: 129.9));
 
     Person referee = const Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
     Person judge = const Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
@@ -425,7 +425,7 @@ class MockedData {
   ];
   late final List<TeamLineup> _lineups = [];
   late final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
-  late final List<TeamMatchParticipation> _participations = []; // TODO fill
+  late final List<TeamLineupParticipation> _participations = []; // TODO fill
   late final List<AthleteBoutState> _participantStates = []; // TODO fill
   late final List<Person> _persons = [p1, p2, p3, p4, p5, p6, p7, p8];
   late final List<Team> _teams = [_homeTeam, _homeTeamJuniors, _guestTeam];
@@ -548,9 +548,9 @@ class MockedData {
     return getMemberships().where((element) => element.club == club).toList();
   }
 
-  List<TeamMatchParticipation> getParticipations() => _participations;
+  List<TeamLineupParticipation> getParticipations() => _participations;
 
-  List<TeamMatchParticipation> getParticipationsOfLineup(TeamLineup lineup) {
+  List<TeamLineupParticipation> getParticipationsOfLineup(TeamLineup lineup) {
     return getParticipations().where((element) => element.lineup == lineup).toList();
   }
 

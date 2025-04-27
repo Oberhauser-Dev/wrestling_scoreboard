@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'team_match_participation.dart';
+part of 'team_lineup_participation.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,29 +14,29 @@ part of 'team_match_participation.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$TeamMatchParticipation {
+mixin _$TeamLineupParticipation {
   int? get id;
   Membership get membership;
   TeamLineup get lineup;
   WeightClass? get weightClass;
   double? get weight;
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TeamMatchParticipationCopyWith<TeamMatchParticipation> get copyWith =>
-      _$TeamMatchParticipationCopyWithImpl<TeamMatchParticipation>(
-          this as TeamMatchParticipation, _$identity);
+  $TeamLineupParticipationCopyWith<TeamLineupParticipation> get copyWith =>
+      _$TeamLineupParticipationCopyWithImpl<TeamLineupParticipation>(
+          this as TeamLineupParticipation, _$identity);
 
-  /// Serializes this TeamMatchParticipation to a JSON map.
+  /// Serializes this TeamLineupParticipation to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is TeamMatchParticipation &&
+            other is TeamLineupParticipation &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.membership, membership) ||
                 other.membership == membership) &&
@@ -53,15 +53,15 @@ mixin _$TeamMatchParticipation {
 
   @override
   String toString() {
-    return 'TeamMatchParticipation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
+    return 'TeamLineupParticipation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
   }
 }
 
 /// @nodoc
-abstract mixin class $TeamMatchParticipationCopyWith<$Res> {
-  factory $TeamMatchParticipationCopyWith(TeamMatchParticipation value,
-          $Res Function(TeamMatchParticipation) _then) =
-      _$TeamMatchParticipationCopyWithImpl;
+abstract mixin class $TeamLineupParticipationCopyWith<$Res> {
+  factory $TeamLineupParticipationCopyWith(TeamLineupParticipation value,
+          $Res Function(TeamLineupParticipation) _then) =
+      _$TeamLineupParticipationCopyWithImpl;
   @useResult
   $Res call(
       {int? id,
@@ -76,14 +76,14 @@ abstract mixin class $TeamMatchParticipationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamMatchParticipationCopyWithImpl<$Res>
-    implements $TeamMatchParticipationCopyWith<$Res> {
-  _$TeamMatchParticipationCopyWithImpl(this._self, this._then);
+class _$TeamLineupParticipationCopyWithImpl<$Res>
+    implements $TeamLineupParticipationCopyWith<$Res> {
+  _$TeamLineupParticipationCopyWithImpl(this._self, this._then);
 
-  final TeamMatchParticipation _self;
-  final $Res Function(TeamMatchParticipation) _then;
+  final TeamLineupParticipation _self;
+  final $Res Function(TeamLineupParticipation) _then;
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -118,7 +118,7 @@ class _$TeamMatchParticipationCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -128,7 +128,7 @@ class _$TeamMatchParticipationCopyWithImpl<$Res>
     });
   }
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -138,7 +138,7 @@ class _$TeamMatchParticipationCopyWithImpl<$Res>
     });
   }
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -155,16 +155,16 @@ class _$TeamMatchParticipationCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _TeamMatchParticipation extends TeamMatchParticipation {
-  const _TeamMatchParticipation(
+class _TeamLineupParticipation extends TeamLineupParticipation {
+  const _TeamLineupParticipation(
       {this.id,
       required this.membership,
       required this.lineup,
       this.weightClass,
       this.weight})
       : super._();
-  factory _TeamMatchParticipation.fromJson(Map<String, dynamic> json) =>
-      _$TeamMatchParticipationFromJson(json);
+  factory _TeamLineupParticipation.fromJson(Map<String, dynamic> json) =>
+      _$TeamLineupParticipationFromJson(json);
 
   @override
   final int? id;
@@ -177,18 +177,18 @@ class _TeamMatchParticipation extends TeamMatchParticipation {
   @override
   final double? weight;
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TeamMatchParticipationCopyWith<_TeamMatchParticipation> get copyWith =>
-      __$TeamMatchParticipationCopyWithImpl<_TeamMatchParticipation>(
+  _$TeamLineupParticipationCopyWith<_TeamLineupParticipation> get copyWith =>
+      __$TeamLineupParticipationCopyWithImpl<_TeamLineupParticipation>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$TeamMatchParticipationToJson(
+    return _$TeamLineupParticipationToJson(
       this,
     );
   }
@@ -197,7 +197,7 @@ class _TeamMatchParticipation extends TeamMatchParticipation {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _TeamMatchParticipation &&
+            other is _TeamLineupParticipation &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.membership, membership) ||
                 other.membership == membership) &&
@@ -214,16 +214,16 @@ class _TeamMatchParticipation extends TeamMatchParticipation {
 
   @override
   String toString() {
-    return 'TeamMatchParticipation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
+    return 'TeamLineupParticipation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$TeamMatchParticipationCopyWith<$Res>
-    implements $TeamMatchParticipationCopyWith<$Res> {
-  factory _$TeamMatchParticipationCopyWith(_TeamMatchParticipation value,
-          $Res Function(_TeamMatchParticipation) _then) =
-      __$TeamMatchParticipationCopyWithImpl;
+abstract mixin class _$TeamLineupParticipationCopyWith<$Res>
+    implements $TeamLineupParticipationCopyWith<$Res> {
+  factory _$TeamLineupParticipationCopyWith(_TeamLineupParticipation value,
+          $Res Function(_TeamLineupParticipation) _then) =
+      __$TeamLineupParticipationCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -242,14 +242,14 @@ abstract mixin class _$TeamMatchParticipationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$TeamMatchParticipationCopyWithImpl<$Res>
-    implements _$TeamMatchParticipationCopyWith<$Res> {
-  __$TeamMatchParticipationCopyWithImpl(this._self, this._then);
+class __$TeamLineupParticipationCopyWithImpl<$Res>
+    implements _$TeamLineupParticipationCopyWith<$Res> {
+  __$TeamLineupParticipationCopyWithImpl(this._self, this._then);
 
-  final _TeamMatchParticipation _self;
-  final $Res Function(_TeamMatchParticipation) _then;
+  final _TeamLineupParticipation _self;
+  final $Res Function(_TeamLineupParticipation) _then;
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -260,7 +260,7 @@ class __$TeamMatchParticipationCopyWithImpl<$Res>
     Object? weightClass = freezed,
     Object? weight = freezed,
   }) {
-    return _then(_TeamMatchParticipation(
+    return _then(_TeamLineupParticipation(
       id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -284,7 +284,7 @@ class __$TeamMatchParticipationCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -294,7 +294,7 @@ class __$TeamMatchParticipationCopyWithImpl<$Res>
     });
   }
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -304,7 +304,7 @@ class __$TeamMatchParticipationCopyWithImpl<$Res>
     });
   }
 
-  /// Create a copy of TeamMatchParticipation
+  /// Create a copy of TeamLineupParticipation
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')

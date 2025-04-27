@@ -23,7 +23,7 @@ final Map<Type, Map<String, Type>> searchableForeignAttributeMapping = {
   Bout: Bout.searchableForeignAttributeMapping,
   Membership: Membership.searchableForeignAttributeMapping,
   AthleteBoutState: AthleteBoutState.searchableForeignAttributeMapping,
-  TeamMatchParticipation: TeamMatchParticipation.searchableForeignAttributeMapping,
+  TeamLineupParticipation: TeamLineupParticipation.searchableForeignAttributeMapping,
   TeamMatchBout: TeamMatchBout.searchableForeignAttributeMapping,
 };
 
