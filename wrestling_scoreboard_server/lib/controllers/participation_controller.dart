@@ -21,6 +21,14 @@ class ParticipationController extends ShelfController<TeamMatchParticipation> {
     );
   }
 
+  Future<List<TeamMatchParticipation>> getByLineup(User? user, int id) async {
+    return await getMany(
+      conditions: ['lineup_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {'weight': psql.Type.numeric};

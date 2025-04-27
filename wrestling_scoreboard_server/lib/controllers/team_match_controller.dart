@@ -27,7 +27,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     return _singleton;
   }
 
-  TeamMatchController._internal() : super(tableName: 'team_match');
+  TeamMatchController._internal() : super();
 
   static const _boutsQuery = '''
         SELECT f.* 
@@ -57,16 +57,12 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     );
   }
 
-  Future<List<Bout>> getBouts(String id, {required bool obfuscate}) {
-    return BoutController().getManyFromQuery(_boutsQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
-  }
-
   /// isReset: delete all previous Bouts and TeamMatchBouts, else reuse the states
   Future<Response> generateBouts(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id), obfuscate: false));
-    final oldBouts = (await getBouts(id, obfuscate: obfuscate));
+    final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(user, teamMatch.id!));
     final leagueWeightClasses = teamMatch.league?.id == null
         ? <LeagueWeightClass>[]
         : (await LeagueController().getLeagueWeightClasses(teamMatch.league!.id.toString(),
@@ -119,25 +115,26 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.guest.id}, obfuscate: false);
 
     final newBouts = await teamMatch.generateBouts([homeParticipations, guestParticipations], sortedWeightClasses);
-    final bouts = List.of(newBouts);
-    await Future.forEach(newBouts.asMap().entries, (MapEntry<int, Bout> entry) async {
-      var bout = entry.value;
-      final hasRed = bout.r != null;
-      final hasBlue = bout.b != null;
+    final tmBouts = List.of(newBouts);
+    await Future.forEach(newBouts.asMap().entries, (MapEntry<int, TeamMatchBout> entry) async {
+      var tmb = entry.value;
+      final hasRed = tmb.bout.r != null;
+      final hasBlue = tmb.bout.b != null;
       // Get bout of teamMatch that has the same participants and the same weightClass
       final res = await BoutController().getManyRawFromQuery('''
-        SELECT f.*
-        FROM bout AS f
-        JOIN team_match_bout AS tmf ON f.id = tmf.bout_id
-        ${hasRed ? 'JOIN participant_state AS ps_red ON ps_red.id = f.red_id' : ''}
-        ${hasBlue ? 'JOIN participant_state AS ps_blue ON ps_blue.id = f.blue_id' : ''}
-        WHERE f.weight_class_id = ${bout.weightClass!.id}
+        SELECT tmf.*
+        FROM team_match_bout AS tmf
+        JOIN bout ON bout.id = tmf.bout_id
+        ${hasRed ? 'JOIN participant_state AS ps_red ON ps_red.id = bout.red_id' : ''}
+        ${hasBlue ? 'JOIN participant_state AS ps_blue ON ps_blue.id = bout.blue_id' : ''}
+        WHERE bout.weight_class_id = ${tmb.weightClass!.id}
         AND tmf.team_match_id = ${teamMatch.id}
-        AND ${hasRed ? 'ps_red.participation_id = ${bout.r!.participation.id}' : 'f.red_id IS NULL'}
-        AND ${hasBlue ? 'ps_blue.participation_id = ${bout.b!.participation.id}' : 'f.blue_id IS NULL'};
+        AND ${hasRed ? 'ps_red.membership_id = ${tmb.bout.r!.membership.id}' : 'bout.red_id IS NULL'}
+        AND ${hasBlue ? 'ps_blue.membership_id = ${tmb.bout.b!.membership.id}' : 'bout.blue_id IS NULL'};
         ''');
       if (res.isEmpty) {
         // Create ParticipantState to be stored in the team match bout
+        Bout bout = tmb.bout;
         if (bout.r != null) {
           bout = bout.copyWith(r: bout.r!.copyWithId(await ParticipantStateController().createSingle(bout.r!)));
         }
@@ -145,37 +142,37 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
           bout = bout.copyWith(b: bout.b!.copyWithId(await ParticipantStateController().createSingle(bout.b!)));
         }
         bout = bout.copyWithId(await BoutController().createSingle(bout));
-        await TeamMatchBoutController().createSingle(TeamMatchBout(teamMatch: teamMatch, bout: bout, pos: entry.key));
-        bouts[entry.key] = bout;
+        tmb = await TeamMatchBoutController().createSingleReturn(tmb.copyWith(bout: bout));
+        tmBouts[entry.key] = tmb;
       } else {
-        bout = bout.copyWithId(res.first['id']);
-        bouts[entry.key] = await Bout.fromRaw(
+        tmb = tmb.copyWithId(res.first['id']);
+        tmBouts[entry.key] = await TeamMatchBout.fromRaw(
             res.first, <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: false));
         final conn = PostgresDb().connection;
-        await conn.execute('UPDATE team_match_bout SET pos = ${entry.key} WHERE bout_id = ${bout.id};');
+        await conn.execute('UPDATE team_match_bout SET pos = ${tmb.pos} WHERE id = ${tmb.id};');
       }
     });
     if (isReset) {
-      await Future.forEach(oldBouts, (Bout bout) async {
-        if (bout.id != null) {
-          await TeamMatchBoutController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
-          await BoutController().deleteSingle(bout.id!);
+      await Future.forEach(oldTmBouts, (TeamMatchBout tmBout) async {
+        if (tmBout.id != null) {
+          await TeamMatchBoutController().deleteSingle(tmBout.id!);
+          await BoutController().deleteSingle(tmBout.bout.id!);
         }
       });
     } else {
       // Get old bouts, which aren't reused anymore and delete them.
-      final unusedBouts = oldBouts.where((oldBout) => bouts.every((newBout) => newBout.id != oldBout.id));
-      await Future.forEach(unusedBouts, (Bout bout) async {
-        if (bout.id != null) {
-          await TeamMatchBoutController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': bout.id});
-          await BoutController().deleteSingle(bout.id!);
+      final unusedBouts = oldTmBouts.where((oldBout) => tmBouts.every((newBout) => newBout.id != oldBout.id));
+      await Future.forEach(unusedBouts, (TeamMatchBout tmb) async {
+        if (tmb.id != null) {
+          await TeamMatchBoutController().deleteSingle(tmb.id!);
+          await BoutController().deleteSingle(tmb.bout.id!);
         }
       });
     }
 
     // TODO: handle obfuscate.
-    broadcast((obfuscate) async =>
-        jsonEncode(manyToJson(bouts, Bout, CRUD.update, isRaw: false, filterType: TeamMatch, filterId: teamMatch.id)));
+    broadcast((obfuscate) async => jsonEncode(
+        manyToJson(tmBouts, Bout, CRUD.update, isRaw: false, filterType: TeamMatch, filterId: teamMatch.id)));
 
     return Response.ok('{"status": "success"}');
   }
@@ -232,27 +229,37 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
-    final boutMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
-    final teamMatchBouts = boutMap.keys.toList();
+    final tmbMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
+    List<TeamMatchBout> teamMatchBouts = tmbMap.keys.toList();
 
-    await TeamMatchBoutController().updateOrCreateManyOfOrg(
+    teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
       teamMatchBouts,
       obfuscate: obfuscate,
       conditions: ['team_match_id = @id'],
       substitutionValues: {'id': entity.id},
       onUpdateOrCreate: (previous, current) async {
         var bout = current.bout;
-        final actions = boutMap[bout]!;
+        final actions = tmbMap[current]!;
 
         bout = await BoutController().updateOrCreateSingleOfOrg(
           bout,
           obfuscate: obfuscate,
           onUpdateOrCreate: (previousBout) async {
             return bout.copyWith(
-              r: await _saveDeepParticipantState(bout.r,
-                  previousParticipationState: previousBout?.r, obfuscate: obfuscate),
-              b: await _saveDeepParticipantState(bout.b,
-                  previousParticipationState: previousBout?.b, obfuscate: obfuscate),
+              r: await _saveDeepParticipantState(
+                bout.r,
+                previousAthleteBoutState: previousBout?.r,
+                lineup: entity.home,
+                weightClass: current.weightClass!,
+                obfuscate: obfuscate,
+              ),
+              b: await _saveDeepParticipantState(
+                bout.b,
+                previousAthleteBoutState: previousBout?.b,
+                lineup: entity.guest,
+                weightClass: current.weightClass!,
+                obfuscate: obfuscate,
+              ),
             );
           },
         );
@@ -270,16 +277,19 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
         if (previous.bout.r != null) {
           await ParticipantStateController().deleteSingle(previous.bout.r!.id!);
-          await ParticipationController().deleteSingle(previous.bout.r!.participation.id!);
         }
         if (previous.bout.b != null) {
           await ParticipantStateController().deleteSingle(previous.bout.b!.id!);
-          await ParticipationController().deleteSingle(previous.bout.b!.participation.id!);
         }
 
         await BoutController().deleteSingle(previous.bout.id!);
       },
     );
+
+    await _updateLineupParticipations(
+        entity.home, Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.r))));
+    await _updateLineupParticipations(
+        entity.guest, Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))));
 
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
@@ -287,23 +297,46 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     }
   }
 
-  Future<AthleteBoutState?> _saveDeepParticipantState(AthleteBoutState? participantState,
-      {AthleteBoutState? previousParticipationState, required bool obfuscate}) async {
-    if (participantState != null) {
-      final person = await PersonController()
-          .updateOrCreateSingleOfOrg(participantState.participation.membership.person, obfuscate: obfuscate);
+  Future<void> _updateLineupParticipations(
+      TeamLineup lineup, Map<WeightClass, AthleteBoutState?> participantsMap) async {
+    final prevParticipations = await ParticipationController().getByLineup(null, lineup.id!);
 
-      final membership = await MembershipController().updateOrCreateSingleOfOrg(
-          participantState.participation.membership.copyWith(person: person),
-          obfuscate: obfuscate);
+    await ParticipationController().updateOnDiffMany(
+        participantsMap.entries
+            .map((entry) {
+              final weightClass = entry.key;
+              final athleteBoutState = entry.value;
+              if (athleteBoutState == null) return null;
+              return TeamMatchParticipation(
+                lineup: lineup,
+                membership: athleteBoutState.membership,
+                weight: null, // TODO: Weight not available in import (yet)
+                weightClass: weightClass,
+              );
+            })
+            .nonNulls
+            .toList(),
+        previous: prevParticipations);
+  }
 
-      final participation = await ParticipationController().updateOnDiffSingle(
-          participantState.participation.copyWith(membership: membership),
-          previous: previousParticipationState?.participation);
+  Future<AthleteBoutState?> _saveDeepParticipantState(
+    AthleteBoutState? athleteBoutState, {
+    AthleteBoutState? previousAthleteBoutState,
+    required TeamLineup lineup,
+    required WeightClass weightClass,
+    required bool obfuscate,
+  }) async {
+    if (athleteBoutState != null) {
+      final person =
+          await PersonController().updateOrCreateSingleOfOrg(athleteBoutState.membership.person, obfuscate: obfuscate);
 
-      return await ParticipantStateController().updateOnDiffSingle(
-          participantState.copyWith(participation: participation),
-          previous: previousParticipationState);
+      final membership = await MembershipController()
+          .updateOrCreateSingleOfOrg(athleteBoutState.membership.copyWith(person: person), obfuscate: obfuscate);
+
+      athleteBoutState = await ParticipantStateController()
+          .updateOnDiffSingle(athleteBoutState.copyWith(membership: membership), previous: previousAthleteBoutState);
+
+      return athleteBoutState;
     }
     return null;
   }

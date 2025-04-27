@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'team_match.freezed.dart';
+
 part 'team_match.g.dart';
 
 /// For team matches only.
@@ -104,7 +105,9 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   }
 
   Future<List<TeamMatchBout>> generateBouts(
-      List<List<TeamMatchParticipation>> teamParticipations, List<WeightClass> weightClasses) async {
+    List<List<TeamMatchParticipation>> teamParticipations,
+    List<WeightClass> weightClasses,
+  ) async {
     final bouts = <TeamMatchBout>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {
@@ -137,7 +140,6 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'team_match';

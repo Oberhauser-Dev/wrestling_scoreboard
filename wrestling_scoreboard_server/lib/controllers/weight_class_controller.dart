@@ -10,7 +10,7 @@ class WeightClassController extends ShelfController<WeightClass> {
     return _singleton;
   }
 
-  WeightClassController._internal() : super(tableName: 'weight_class');
+  WeightClassController._internal() : super();
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {

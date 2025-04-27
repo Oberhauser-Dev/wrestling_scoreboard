@@ -681,7 +681,6 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       log.severe('Could not import bouts from bout list: $boutListJson', e, st);
       rethrow;
     }
-    throw UnimplementedError();
   }
 
   Person _copyPersonWithOrg(Person person) {
