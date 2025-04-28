@@ -182,8 +182,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.athlete_bout_state (
     id integer NOT NULL,
-    participation_id integer NOT NULL,
-    classification_points smallint
+    classification_points smallint,
+    membership_id integer NOT NULL
 );
 
 
@@ -1367,35 +1367,35 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 -- Data for Name: athlete_bout_state; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.athlete_bout_state (id, participation_id, classification_points) FROM stdin;
-26	6	\N
-31	13	\N
-32	24	\N
-33	14	\N
-34	23	\N
-35	15	\N
-36	26	\N
-40	10	\N
-41	28	\N
-44	9	\N
-45	25	\N
-46	12	\N
-47	30	\N
-50	11	\N
-51	31	\N
-52	1	\N
-53	5	\N
-56	4	\N
-57	8	\N
-62	16	\N
-65	20	\N
-66	27	\N
-69	22	\N
-70	29	\N
-73	3	\N
-74	7	\N
-75	21	\N
-76	6	\N
+COPY public.athlete_bout_state (id, classification_points, membership_id) FROM stdin;
+26	\N	9
+31	\N	21
+32	\N	13
+33	\N	4
+34	\N	8
+35	\N	1
+36	\N	10
+40	\N	19
+41	\N	12
+44	\N	2
+45	\N	15
+46	\N	22
+47	\N	5
+50	\N	20
+51	\N	9
+52	\N	1
+53	\N	13
+56	\N	4
+57	\N	8
+62	\N	18
+65	\N	19
+66	\N	12
+69	\N	2
+70	\N	7
+73	\N	3
+74	\N	5
+75	\N	17
+76	\N	9
 \.
 
 
@@ -1607,7 +1607,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.2	0.0.0
+0.3.0-pre.3	0.0.0
 \.
 
 
@@ -2281,6 +2281,14 @@ CREATE UNIQUE INDEX team_match_bout_id_uindex ON public.team_match_bout USING bt
 
 
 --
+-- Name: athlete_bout_state athlete_bout_state_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.athlete_bout_state
+    ADD CONSTRAINT athlete_bout_state_membership_id_fk FOREIGN KEY (membership_id) REFERENCES public.membership(id) ON DELETE CASCADE;
+
+
+--
 -- Name: bout_action bout_action_bout_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2502,14 +2510,6 @@ ALTER TABLE ONLY public.membership
 
 ALTER TABLE ONLY public.organization
     ADD CONSTRAINT organization_organization_id_fk FOREIGN KEY (parent_id) REFERENCES public.organization(id);
-
-
---
--- Name: athlete_bout_state participant_state_participation_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.athlete_bout_state
-    ADD CONSTRAINT participant_state_participation_id_fk FOREIGN KEY (participation_id) REFERENCES public.team_lineup_participation(id) ON DELETE CASCADE;
 
 
 --
