@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
+-- Dumped from database version 17.2
+-- Dumped by pg_dump version 17.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -196,7 +197,6 @@ CREATE TABLE public.bout (
     id integer NOT NULL,
     red_id integer,
     blue_id integer,
-    weight_class_id integer,
     winner_role public.bout_role,
     bout_result public.bout_result,
     duration_millis integer,
@@ -1049,7 +1049,8 @@ CREATE TABLE public.team_match_bout (
     bout_id integer NOT NULL,
     pos integer DEFAULT 0 NOT NULL,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    weight_class_id integer NOT NULL
 );
 
 
@@ -1402,21 +1403,21 @@ COPY public.athlete_bout_state (id, participation_id, classification_points) FRO
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
-28	33	34	20	\N	\N	0	\N	\N
-29	35	36	21	\N	\N	0	\N	\N
-32	40	41	22	\N	\N	0	\N	\N
-34	44	45	23	\N	\N	0	\N	\N
-35	46	47	24	\N	\N	0	\N	\N
-37	50	51	25	\N	\N	0	\N	\N
-38	52	53	26	\N	\N	0	\N	\N
-40	56	57	27	\N	\N	0	\N	\N
-43	62	\N	28	\N	\N	0	\N	\N
-45	65	66	29	\N	\N	0	\N	\N
-47	69	70	30	\N	\N	0	\N	\N
-49	73	74	31	\N	\N	0	\N	\N
-50	75	76	32	\N	\N	0	\N	\N
-27	31	32	19	\N	\N	0	\N	\N
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
+28	33	34	\N	\N	0	\N	\N
+29	35	36	\N	\N	0	\N	\N
+32	40	41	\N	\N	0	\N	\N
+34	44	45	\N	\N	0	\N	\N
+35	46	47	\N	\N	0	\N	\N
+37	50	51	\N	\N	0	\N	\N
+38	52	53	\N	\N	0	\N	\N
+40	56	57	\N	\N	0	\N	\N
+43	62	\N	\N	\N	0	\N	\N
+45	65	66	\N	\N	0	\N	\N
+47	69	70	\N	\N	0	\N	\N
+49	73	74	\N	\N	0	\N	\N
+50	75	76	\N	\N	0	\N	\N
+27	31	32	\N	\N	0	\N	\N
 \.
 
 
@@ -1606,7 +1607,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.1	0.0.0
+0.3.0-pre.2	0.0.0
 \.
 
 
@@ -1741,21 +1742,21 @@ COPY public.team_match (id, date, location, visitors_count, comment, no, organiz
 -- Data for Name: team_match_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organization_id) FROM stdin;
-25	1	27	0	\N	\N
-26	1	28	1	\N	\N
-27	1	29	2	\N	\N
-30	1	32	3	\N	\N
-32	1	34	4	\N	\N
-33	1	35	5	\N	\N
-35	1	37	6	\N	\N
-36	1	38	7	\N	\N
-38	1	40	8	\N	\N
-41	1	43	9	\N	\N
-43	1	45	10	\N	\N
-45	1	47	11	\N	\N
-47	1	49	12	\N	\N
-48	1	50	13	\N	\N
+COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organization_id, weight_class_id) FROM stdin;
+25	1	27	0	\N	\N	19
+26	1	28	1	\N	\N	20
+27	1	29	2	\N	\N	21
+30	1	32	3	\N	\N	22
+32	1	34	4	\N	\N	23
+33	1	35	5	\N	\N	24
+35	1	37	6	\N	\N	25
+36	1	38	7	\N	\N	26
+38	1	40	8	\N	\N	27
+41	1	43	9	\N	\N	28
+43	1	45	10	\N	\N	29
+45	1	47	11	\N	\N	30
+47	1	49	12	\N	\N	31
+48	1	50	13	\N	\N	32
 \.
 
 
@@ -2320,14 +2321,6 @@ ALTER TABLE ONLY public.bout_result_rule
 
 
 --
--- Name: bout bout_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.bout
-    ADD CONSTRAINT bout_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
-
-
---
 -- Name: club club_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2613,6 +2606,14 @@ ALTER TABLE ONLY public.team_match_bout
 
 ALTER TABLE ONLY public.team_match_bout
     ADD CONSTRAINT team_match_bout_team_match_id_fk FOREIGN KEY (team_match_id) REFERENCES public.team_match(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_match_bout team_match_bout_weight_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match_bout
+    ADD CONSTRAINT team_match_bout_weight_class_id_fkey FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
 
 
 --
