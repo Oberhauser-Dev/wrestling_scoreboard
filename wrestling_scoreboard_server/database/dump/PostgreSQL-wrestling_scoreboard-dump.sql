@@ -2609,11 +2609,11 @@ ALTER TABLE ONLY public.team_match_bout
 
 
 --
--- Name: team_match_bout team_match_bout_weight_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_match_bout team_match_bout_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.team_match_bout
-    ADD CONSTRAINT team_match_bout_weight_class_id_fkey FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
+    ADD CONSTRAINT team_match_bout_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
 
 
 --
