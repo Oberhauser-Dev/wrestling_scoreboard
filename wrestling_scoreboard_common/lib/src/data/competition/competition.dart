@@ -43,6 +43,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
       matCount: e['mat_count'] as int,
+      maxRanking: e['max_ranking'] as int,
       comment: e['comment'] as String?,
       boutConfig: boutConfig,
     );
@@ -55,6 +56,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
         'name': name,
         'bout_config_id': boutConfig.id!,
         'mat_count': matCount,
+        'max_ranking': maxRanking,
       });
   }
 

@@ -69,11 +69,11 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       'competition_weight_category_id': weightCategory?.id!,
       'competition_lineup_id': lineup.id!,
       'membership_id': membership.id!,
-      'weight': weight?.toString(),
-      'pool_group': poolGroup?.toString(),
-      'pool_draw_number': poolDrawNumber?.toString(),
-      'eliminated': eliminated.toString(),
-      'disqualified': disqualified.toString(),
+      'weight': weight,
+      'pool_group': poolGroup,
+      'pool_draw_number': poolDrawNumber,
+      'eliminated': eliminated,
+      'disqualified': disqualified,
     };
   }
 

@@ -34,6 +34,8 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
       weightCategory: weightCategoryId == null ? null : await getSingle<CompetitionWeightCategory>(weightCategoryId),
       pos: e['pos'] as int,
       mat: e['mat'] as int?,
+      round: e['round'] as int?,
+      roundType: RoundType.values.byName(e['round_type']),
     );
   }
 
@@ -45,6 +47,8 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
       if (id != null) 'id': id,
       'pos': pos,
       'mat': mat,
+      'round': round,
+      'round_type': roundType.name,
       'competition_id': competition.id!,
       'bout_id': bout.id!,
       'weight_category_id': weightCategory?.id,
