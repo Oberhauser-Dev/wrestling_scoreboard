@@ -1,10 +1,13 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
 
+import '../controllers/athlete_bout_state_controller.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/bout_action_controller.dart';
 import '../controllers/bout_config_controller.dart';
@@ -20,13 +23,12 @@ import '../controllers/league_controller.dart';
 import '../controllers/league_team_participation_controller.dart';
 import '../controllers/membership_controller.dart';
 import '../controllers/organization_controller.dart';
-import '../controllers/athlete_bout_state_controller.dart';
-import '../controllers/team_lineup_participation_controller.dart';
 import '../controllers/person_controller.dart';
 import '../controllers/search_controller.dart';
 import '../controllers/team_club_affiliation_controller.dart';
 import '../controllers/team_controller.dart';
 import '../controllers/team_lineup_controller.dart';
+import '../controllers/team_lineup_participation_controller.dart';
 import '../controllers/team_match_bout_controller.dart';
 import '../controllers/team_match_controller.dart';
 import '../controllers/weight_class_controller.dart';
@@ -232,6 +234,18 @@ class ApiRoute {
     router.restrictedPost('/${CompetitionBout.cTableName}', competitionBoutController.postSingle);
     router.restrictedGet('/${CompetitionBout.cTableName}s', competitionBoutController.requestMany);
     router.restrictedGetOne('/${CompetitionBout.cTableName}/<id|[0-9]+>', competitionBoutController.requestSingle);
+
+    final competitionParticipationController = CompetitionParticipationController();
+    router.restrictedPost('/${CompetitionParticipation.cTableName}', competitionParticipationController.postSingle);
+    router.restrictedGet('/${CompetitionParticipation.cTableName}s', competitionParticipationController.requestMany);
+    router.restrictedGetOne(
+        '/${CompetitionParticipation.cTableName}/<id|[0-9]+>', competitionParticipationController.requestSingle);
+
+    final competitionWeightCategoryController = CompetitionWeightCategoryController();
+    router.restrictedPost('/${CompetitionWeightCategory.cTableName}', competitionWeightCategoryController.postSingle);
+    router.restrictedGet('/${CompetitionWeightCategory.cTableName}s', competitionWeightCategoryController.requestMany);
+    router.restrictedGetOne(
+        '/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>', competitionWeightCategoryController.requestSingle);
 
     final weightClassController = WeightClassController();
     router.restrictedPost('/${WeightClass.cTableName}', weightClassController.postSingle);
