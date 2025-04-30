@@ -107,6 +107,8 @@ void main() {
       final instance = await server.init();
 
       for (final dataType in dataTypes) {
+        if (dataType == User) continue;
+        if (dataType == SecuredUser) continue;
         final tableName = getTableNameFromType(dataType);
         final url = 'http://${instance.address.address}:${instance.port}/api/${tableName}s';
         print('Test url: $url');

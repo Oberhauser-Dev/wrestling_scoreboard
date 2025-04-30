@@ -1,6 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
@@ -246,6 +247,11 @@ class ApiRoute {
     router.restrictedGet('/${CompetitionWeightCategory.cTableName}s', competitionWeightCategoryController.requestMany);
     router.restrictedGetOne(
         '/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>', competitionWeightCategoryController.requestSingle);
+
+    final competitionLineupController = CompetitionLineupController();
+    router.restrictedPost('/${CompetitionLineup.cTableName}', competitionLineupController.postSingle);
+    router.restrictedGet('/${CompetitionLineup.cTableName}s', competitionLineupController.requestMany);
+    router.restrictedGetOne('/${CompetitionLineup.cTableName}/<id|[0-9]+>', competitionLineupController.requestSingle);
 
     final weightClassController = WeightClassController();
     router.restrictedPost('/${WeightClass.cTableName}', weightClassController.postSingle);
