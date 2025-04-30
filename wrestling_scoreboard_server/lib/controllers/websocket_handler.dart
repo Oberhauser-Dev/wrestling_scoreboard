@@ -141,7 +141,7 @@ void broadcastSingle<T extends DataObject>(T single) async {
         filterId: single.club.id)));
   } else if (single is TeamLineupParticipation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
-        await ParticipationController().getMany(
+        await TeamLineupParticipationController().getMany(
             conditions: ['lineup_id = @id'], substitutionValues: {'id': single.lineup.id}, obfuscate: obfuscate),
         TeamLineupParticipation,
         CRUD.update,
@@ -337,7 +337,7 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         filterId: single['club_id'])));
   } else if (T == TeamLineupParticipation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
-        await ParticipationController().getManyRaw(
+        await TeamLineupParticipationController().getManyRaw(
             conditions: ['lineup_id = @id'], substitutionValues: {'id': single['lineup_id']}, obfuscate: obfuscate),
         TeamLineupParticipation,
         CRUD.update,

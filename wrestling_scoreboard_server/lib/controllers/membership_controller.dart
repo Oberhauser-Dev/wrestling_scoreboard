@@ -37,7 +37,7 @@ class MembershipController extends OrganizationalController<Membership> {
   }
 
   Future<Response> requestParticipations(Request request, User? user, String id) async {
-    return ParticipationController().handleRequestMany(
+    return TeamLineupParticipationController().handleRequestMany(
       isRaw: request.isRaw,
       conditions: ['membership_id = @id'],
       substitutionValues: {'id': id},

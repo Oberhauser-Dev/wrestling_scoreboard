@@ -250,7 +250,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
       case const (Membership):
         return MembershipController();
       case const (TeamLineupParticipation):
-        return ParticipationController();
+        return TeamLineupParticipationController();
       case const (AthleteBoutState):
         return AthleteBoutStateController();
       case const (Person):

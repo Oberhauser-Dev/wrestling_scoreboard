@@ -69,9 +69,9 @@ class PersonController extends OrganizationalController<Person> {
             final lineupsByCoach = await lnc.getByCoach(user, deleteMembership.id!);
             await Future.wait(lineupsByCoach.map((e) => lnc.updateSingle(e.copyWith(coach: replacingMembership))));
 
-            final participations = await ParticipationController().getByMembership(user, deleteMembership.id!);
+            final participations = await TeamLineupParticipationController().getByMembership(user, deleteMembership.id!);
             await Future.wait(participations
-                .map((e) => ParticipationController().updateSingle(e.copyWith(membership: replacingMembership))));
+                .map((e) => TeamLineupParticipationController().updateSingle(e.copyWith(membership: replacingMembership))));
 
             final wasDeleted = await MembershipController().deleteSingle(deleteMembership.id!);
             if (!wasDeleted) return Response.badRequest(body: 'Membership ${deleteMembership.id} could not be deleted');

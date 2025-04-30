@@ -172,7 +172,7 @@ class ApiRoute {
     router.restrictedGet('/${AthleteBoutState.cTableName}s', athleteBoutStateController.requestMany);
     router.restrictedGetOne('/${AthleteBoutState.cTableName}/<id|[0-9]+>', athleteBoutStateController.requestSingle);
 
-    final participationController = ParticipationController();
+    final participationController = TeamLineupParticipationController();
     router.restrictedPost('/${TeamLineupParticipation.cTableName}', participationController.postSingle);
     router.restrictedGet('/${TeamLineupParticipation.cTableName}s', participationController.requestMany);
     router.restrictedGetOne(

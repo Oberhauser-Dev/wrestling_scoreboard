@@ -37,7 +37,7 @@ class TeamLineupController extends ShelfController<TeamLineup> {
   }
 
   Future<Response> requestParticipations(Request request, User? user, String id) async {
-    return ParticipationController().handleRequestMany(
+    return TeamLineupParticipationController().handleRequestMany(
       isRaw: request.isRaw,
       conditions: ['lineup_id = @id'],
       substitutionValues: {'id': id},

@@ -109,9 +109,9 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       sectionPos += sectionLength;
     }
 
-    final homeParticipations = await ParticipationController()
+    final homeParticipations = await TeamLineupParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id}, obfuscate: false);
-    final guestParticipations = await ParticipationController()
+    final guestParticipations = await TeamLineupParticipationController()
         .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.guest.id}, obfuscate: false);
 
     final newBouts = await teamMatch.generateBouts([homeParticipations, guestParticipations], sortedWeightClasses);
@@ -299,9 +299,9 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
   Future<void> _updateLineupParticipations(
       TeamLineup lineup, Map<WeightClass, AthleteBoutState?> participantsMap) async {
-    final prevParticipations = await ParticipationController().getByLineup(null, lineup.id!);
+    final prevParticipations = await TeamLineupParticipationController().getByLineup(null, lineup.id!);
 
-    await ParticipationController().updateOnDiffMany(
+    await TeamLineupParticipationController().updateOnDiffMany(
         participantsMap.entries
             .map((entry) {
               final weightClass = entry.key;
