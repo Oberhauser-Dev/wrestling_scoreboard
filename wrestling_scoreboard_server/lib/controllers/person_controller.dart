@@ -5,7 +5,7 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
@@ -62,7 +62,7 @@ class PersonController extends OrganizationalController<Person> {
             }
 
             // Update deleted memberships
-            final lnc = LineupController();
+            final lnc = TeamLineupController();
             final lineupsByLeader = await lnc.getByLeader(user, deleteMembership.id!);
             await Future.wait(lineupsByLeader.map((e) => lnc.updateSingle(e.copyWith(leader: replacingMembership))));
 

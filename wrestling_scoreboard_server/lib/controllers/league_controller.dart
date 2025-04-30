@@ -4,7 +4,7 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
@@ -112,8 +112,8 @@ class LeagueController extends OrganizationalController<League> with ImportContr
       substitutionValues: {'id': entity.id},
       onUpdateOrCreate: (prevTeamMatch, teamMatch) async {
         return teamMatch.copyWith(
-          home: await LineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
-          guest: await LineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
+          home: await TeamLineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
+          guest: await TeamLineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
           referee: teamMatch.referee == null
               ? null
               : await PersonController().updateOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
@@ -132,8 +132,8 @@ class LeagueController extends OrganizationalController<League> with ImportContr
         );
       },
       onDelete: (previous) async {
-        await LineupController().deleteSingle(previous.home.id!);
-        await LineupController().deleteSingle(previous.guest.id!);
+        await TeamLineupController().deleteSingle(previous.home.id!);
+        await TeamLineupController().deleteSingle(previous.guest.id!);
         // Do not delete persons
       },
       obfuscate: obfuscate,

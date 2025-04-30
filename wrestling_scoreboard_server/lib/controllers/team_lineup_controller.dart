@@ -8,17 +8,17 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'entity_controller.dart';
 import 'participation_controller.dart';
 
-class LineupController extends ShelfController<TeamLineup> {
-  static final LineupController _singleton = LineupController._internal();
+class TeamLineupController extends ShelfController<TeamLineup> {
+  static final TeamLineupController _singleton = TeamLineupController._internal();
 
-  factory LineupController() {
+  factory TeamLineupController() {
     return _singleton;
   }
 
   static final teamIdStmt =
-      PostgresDb().connection.prepare(psql.Sql.named('SELECT team_id FROM lineup WHERE id = @id'));
+      PostgresDb().connection.prepare(psql.Sql.named('SELECT team_id FROM ${TeamLineup.cTableName} WHERE id = @id'));
 
-  LineupController._internal() : super();
+  TeamLineupController._internal() : super();
 
   Future<List<TeamLineup>> getByLeader(User? user, int id) async {
     return await getMany(

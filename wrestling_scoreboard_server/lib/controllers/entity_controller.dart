@@ -16,7 +16,6 @@ import 'package:wrestling_scoreboard_server/controllers/division_weight_class_co
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
@@ -24,6 +23,7 @@ import 'package:wrestling_scoreboard_server/controllers/participation_controller
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
@@ -246,7 +246,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
       case const (LeagueWeightClass):
         return LeagueWeightClassController();
       case const (TeamLineup):
-        return LineupController();
+        return TeamLineupController();
       case const (Membership):
         return MembershipController();
       case const (TeamLineupParticipation):

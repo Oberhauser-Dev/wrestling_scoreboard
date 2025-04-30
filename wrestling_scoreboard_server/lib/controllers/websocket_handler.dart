@@ -10,13 +10,13 @@ import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/services/auth.dart';
@@ -393,14 +393,14 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
   } else if (T == TeamMatch) {
     final teamMatchController = TeamMatchController();
 
-    final homeTeamId = (await EntityController.query(await LineupController.teamIdStmt,
+    final homeTeamId = (await EntityController.query(await TeamLineupController.teamIdStmt,
         substitutionValues: {'id': single['home_id']}))['team_id'];
     final homeMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': homeTeamId});
     broadcast((obfuscate) async => jsonEncode(
         manyToJson(homeMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: homeTeamId)));
 
-    final guestTeamId = (await EntityController.query(await LineupController.teamIdStmt,
+    final guestTeamId = (await EntityController.query(await TeamLineupController.teamIdStmt,
         substitutionValues: {'id': single['guest_id']}))['team_id'];
     final guestMatches = await teamMatchController
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': guestTeamId});
