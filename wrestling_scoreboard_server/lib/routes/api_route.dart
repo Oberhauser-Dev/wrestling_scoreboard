@@ -20,7 +20,7 @@ import '../controllers/league_controller.dart';
 import '../controllers/league_team_participation_controller.dart';
 import '../controllers/membership_controller.dart';
 import '../controllers/organization_controller.dart';
-import '../controllers/participant_state_controller.dart';
+import '../controllers/athlete_bout_state_controller.dart';
 import '../controllers/participation_controller.dart';
 import '../controllers/person_controller.dart';
 import '../controllers/search_controller.dart';
@@ -167,10 +167,10 @@ class ApiRoute {
     router.restrictedGetOne(
         '/${Membership.cTableName}/<id|[0-9]+>/team_match_bouts', membershipController.requestTeamMatchBouts);
 
-    final participantStateController = ParticipantStateController();
-    router.restrictedPost('/${AthleteBoutState.cTableName}', participantStateController.postSingle);
-    router.restrictedGet('/${AthleteBoutState.cTableName}s', participantStateController.requestMany);
-    router.restrictedGetOne('/${AthleteBoutState.cTableName}/<id|[0-9]+>', participantStateController.requestSingle);
+    final athleteBoutStateController = AthleteBoutStateController();
+    router.restrictedPost('/${AthleteBoutState.cTableName}', athleteBoutStateController.postSingle);
+    router.restrictedGet('/${AthleteBoutState.cTableName}s', athleteBoutStateController.requestMany);
+    router.restrictedGetOne('/${AthleteBoutState.cTableName}/<id|[0-9]+>', athleteBoutStateController.requestSingle);
 
     final participationController = ParticipationController();
     router.restrictedPost('/${TeamLineupParticipation.cTableName}', participationController.postSingle);

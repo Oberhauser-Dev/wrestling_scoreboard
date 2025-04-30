@@ -3,14 +3,14 @@ import 'package:postgres/postgres.dart' as psql;
 
 import 'entity_controller.dart';
 
-class ParticipantStateController extends ShelfController<AthleteBoutState> {
-  static final ParticipantStateController _singleton = ParticipantStateController._internal();
+class AthleteBoutStateController extends ShelfController<AthleteBoutState> {
+  static final AthleteBoutStateController _singleton = AthleteBoutStateController._internal();
 
-  factory ParticipantStateController() {
+  factory AthleteBoutStateController() {
     return _singleton;
   }
 
-  ParticipantStateController._internal() : super();
+  AthleteBoutStateController._internal() : super();
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {

@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
@@ -18,7 +19,6 @@ import 'package:wrestling_scoreboard_server/controllers/league_team_participatio
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
@@ -252,7 +252,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
       case const (TeamLineupParticipation):
         return ParticipationController();
       case const (AthleteBoutState):
-        return ParticipantStateController();
+        return AthleteBoutStateController();
       case const (Person):
         return PersonController();
       case const (SecuredUser):

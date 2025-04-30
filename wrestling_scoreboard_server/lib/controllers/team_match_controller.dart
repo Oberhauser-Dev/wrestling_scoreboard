@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_server/controllers/division_controller.dart
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
@@ -136,10 +136,10 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
         // Create ParticipantState to be stored in the team match bout
         Bout bout = tmb.bout;
         if (bout.r != null) {
-          bout = bout.copyWith(r: bout.r!.copyWithId(await ParticipantStateController().createSingle(bout.r!)));
+          bout = bout.copyWith(r: bout.r!.copyWithId(await AthleteBoutStateController().createSingle(bout.r!)));
         }
         if (bout.b != null) {
-          bout = bout.copyWith(b: bout.b!.copyWithId(await ParticipantStateController().createSingle(bout.b!)));
+          bout = bout.copyWith(b: bout.b!.copyWithId(await AthleteBoutStateController().createSingle(bout.b!)));
         }
         bout = bout.copyWithId(await BoutController().createSingle(bout));
         tmb = await TeamMatchBoutController().createSingleReturn(tmb.copyWith(bout: bout));
@@ -276,10 +276,10 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
             .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': previous.bout.id});
 
         if (previous.bout.r != null) {
-          await ParticipantStateController().deleteSingle(previous.bout.r!.id!);
+          await AthleteBoutStateController().deleteSingle(previous.bout.r!.id!);
         }
         if (previous.bout.b != null) {
-          await ParticipantStateController().deleteSingle(previous.bout.b!.id!);
+          await AthleteBoutStateController().deleteSingle(previous.bout.b!.id!);
         }
 
         await BoutController().deleteSingle(previous.bout.id!);
@@ -333,7 +333,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       final membership = await MembershipController()
           .updateOrCreateSingleOfOrg(athleteBoutState.membership.copyWith(person: person), obfuscate: obfuscate);
 
-      athleteBoutState = await ParticipantStateController()
+      athleteBoutState = await AthleteBoutStateController()
           .updateOnDiffSingle(athleteBoutState.copyWith(membership: membership), previous: previousAthleteBoutState);
 
       return athleteBoutState;
