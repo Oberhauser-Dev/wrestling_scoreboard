@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.d
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/request.dart';

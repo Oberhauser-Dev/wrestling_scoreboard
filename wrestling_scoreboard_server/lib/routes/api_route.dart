@@ -21,7 +21,7 @@ import '../controllers/league_team_participation_controller.dart';
 import '../controllers/membership_controller.dart';
 import '../controllers/organization_controller.dart';
 import '../controllers/athlete_bout_state_controller.dart';
-import '../controllers/participation_controller.dart';
+import '../controllers/team_lineup_participation_controller.dart';
 import '../controllers/person_controller.dart';
 import '../controllers/search_controller.dart';
 import '../controllers/team_club_affiliation_controller.dart';
