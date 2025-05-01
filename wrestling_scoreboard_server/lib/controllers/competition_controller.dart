@@ -2,9 +2,12 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-import 'bout_controller.dart';
+import 'competition_lineup_controller.dart';
 import 'entity_controller.dart';
 
 class CompetitionController extends ShelfController<Competition> with ImportController<Competition> {
@@ -16,14 +19,38 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
 
   CompetitionController._internal() : super();
 
-  Future<Response> requestBouts(Request request, User? user, String id) async {
-    return BoutController().handleRequestManyFromQuery(
+  Future<Response> requestCompetitionBouts(Request request, User? user, String id) async {
+    return CompetitionBoutController().handleRequestMany(
       isRaw: request.isRaw,
-      sqlQuery: '''
-        SELECT f.* 
-        FROM bout as f 
-        JOIN competition_bout AS tof ON tof.bout_id = f.id
-        WHERE tof.competition_id = $id;''',
+      conditions: ['competition_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<Response> requestLineups(Request request, User? user, String id) async {
+    return CompetitionLineupController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['competition_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<Response> requestWeightCategories(Request request, User? user, String id) async {
+    return CompetitionWeightCategoryController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['competition_id = @id'],
+      substitutionValues: {'id': id},
+      obfuscate: user?.obfuscate ?? true,
+    );
+  }
+
+  Future<Response> requestCompetitionSystemAffiliations(Request request, User? user, String id) async {
+    return CompetitionSystemAffiliationController().handleRequestMany(
+      isRaw: request.isRaw,
+      conditions: ['competition_id = @id'],
+      substitutionValues: {'id': id},
       obfuscate: user?.obfuscate ?? true,
     );
   }

@@ -122,6 +122,8 @@ class ApiRoute {
         '/${Organization.cTableName}/<id|[0-9]+>/${Person.cTableName}s', organizationController.requestPersons);
     router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>/${Competition.cTableName}s',
         organizationController.requestCompetitions);
+    router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>/${AgeCategory.cTableName}s',
+        organizationController.requestAgeCategories);
 
     final divisionController = DivisionController();
     router.restrictedPost('/${Division.cTableName}', divisionController.postSingle);
@@ -249,7 +251,13 @@ class ApiRoute {
     router.restrictedGet('/${Competition.cTableName}s', competitionController.requestMany);
     router.restrictedGetOne('/${Competition.cTableName}/<id|[0-9]+>', competitionController.requestSingle);
     router.restrictedGetOne(
-        '/${Competition.cTableName}/<id|[0-9]+>/${Bout.cTableName}s', competitionController.requestBouts);
+        '/${Competition.cTableName}/<id|[0-9]+>/${CompetitionBout.cTableName}s', competitionController.requestCompetitionBouts);
+    router.restrictedGetOne(
+        '/${Competition.cTableName}/<id|[0-9]+>/${CompetitionLineup.cTableName}s', competitionController.requestLineups);
+    router.restrictedGetOne(
+        '/${Competition.cTableName}/<id|[0-9]+>/${CompetitionWeightCategory.cTableName}s', competitionController.requestWeightCategories);
+    router.restrictedGetOne(
+        '/${Competition.cTableName}/<id|[0-9]+>/${CompetitionSystemAffiliation.cTableName}s', competitionController.requestCompetitionSystemAffiliations);
 
     final competitionBoutController = CompetitionBoutController();
     router.restrictedPost('/${CompetitionBout.cTableName}', competitionBoutController.postSingle);
