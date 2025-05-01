@@ -1,8 +1,11 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/age_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_person_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
@@ -63,6 +66,11 @@ class ApiRoute {
     final searchController = SearchController();
     router.restrictedGet('/search', searchController.search);
     router.restrictedPost('/search', searchController.search);
+
+    final ageCategoryController = AgeCategoryController();
+    router.restrictedPost('/${AgeCategory.cTableName}', ageCategoryController.postSingle);
+    router.restrictedGet('/${AgeCategory.cTableName}s', ageCategoryController.requestMany);
+    router.restrictedGetOne('/${AgeCategory.cTableName}/<id|[0-9]+>', ageCategoryController.requestSingle);
 
     final boutConfigController = BoutConfigController();
     router.restrictedPost('/${BoutConfig.cTableName}', boutConfigController.postSingle);
@@ -252,6 +260,19 @@ class ApiRoute {
     router.restrictedPost('/${CompetitionLineup.cTableName}', competitionLineupController.postSingle);
     router.restrictedGet('/${CompetitionLineup.cTableName}s', competitionLineupController.requestMany);
     router.restrictedGetOne('/${CompetitionLineup.cTableName}/<id|[0-9]+>', competitionLineupController.requestSingle);
+
+    final competitionPersonController = CompetitionPersonController();
+    router.restrictedPost('/${CompetitionPerson.cTableName}', competitionPersonController.postSingle);
+    router.restrictedGet('/${CompetitionPerson.cTableName}s', competitionPersonController.requestMany);
+    router.restrictedGetOne('/${CompetitionPerson.cTableName}/<id|[0-9]+>', competitionPersonController.requestSingle);
+
+    final competitionSystemAffiliationController = CompetitionSystemAffiliationController();
+    router.restrictedPost(
+        '/${CompetitionSystemAffiliation.cTableName}', competitionSystemAffiliationController.postSingle);
+    router.restrictedGet(
+        '/${CompetitionSystemAffiliation.cTableName}s', competitionSystemAffiliationController.requestMany);
+    router.restrictedGetOne('/${CompetitionSystemAffiliation.cTableName}/<id|[0-9]+>',
+        competitionSystemAffiliationController.requestSingle);
 
     final weightClassController = WeightClassController();
     router.restrictedPost('/${WeightClass.cTableName}', weightClassController.postSingle);
