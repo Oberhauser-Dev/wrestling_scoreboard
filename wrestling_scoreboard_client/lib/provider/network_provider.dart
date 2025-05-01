@@ -13,7 +13,12 @@ class DataManagerNotifier extends _$DataManagerNotifier {
   Raw<Future<DataManager>> build() async {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
     final jwtToken = await ref.watch(jwtNotifierProvider);
-    return RestDataManager(apiUrl: apiUrl, authService: jwtToken == null ? null : BearerAuthService(token: jwtToken));
+    return RestDataManager(
+        apiUrl: apiUrl,
+        authService: jwtToken == null ? null : BearerAuthService(token: jwtToken),
+        onResetAuth: () async {
+          if (ref.mounted) await ref.read(jwtNotifierProvider.notifier).setState(null);
+        });
   }
 }
 

@@ -17,7 +17,9 @@ class RestDataManager extends DataManager {
 
   late WebSocketManager _webSocketManager;
 
-  RestDataManager({required String? apiUrl, super.authService}) {
+  final Future<void> Function() onResetAuth;
+
+  RestDataManager({required String? apiUrl, super.authService, required this.onResetAuth}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
     _headers = {
       "Content-Type": "application/json",
@@ -41,17 +43,22 @@ class RestDataManager extends DataManager {
     return json.map((e) => DataObject.fromJson<T>(e)).toList();
   }
 
+  Future<void> _handleResponse(http.Response response, {required String errorMessage}) async {
+    if (response.statusCode >= 400) {
+      if (response.statusCode == 401) {
+        await onResetAuth();
+      }
+      throw RestException(errorMessage, response: response);
+    }
+  }
+
   @override
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id, {bool isRaw = true}) async {
     final uri =
         Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri, headers: _headers);
-
-    if (response.statusCode < 400) {
-      return jsonDecode(response.body);
-    } else {
-      throw RestException('Failed to READ single ${T.toString()}', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to READ single ${T.toString()}');
+    return jsonDecode(response.body);
   }
 
   @override
@@ -66,13 +73,10 @@ class RestDataManager extends DataManager {
     final uri =
         Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri, headers: _headers);
+    await _handleResponse(response, errorMessage: 'Failed to READ many ${T.toString()}');
 
-    if (response.statusCode < 400) {
-      final List<dynamic> json = jsonDecode(response.body);
-      return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
-    } else {
-      throw RestException('Failed to READ many ${T.toString()}', response: response);
-    }
+    final List<dynamic> json = jsonDecode(response.body);
+    return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
   }
 
   @override
@@ -81,10 +85,7 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl$prepend/bouts/generate')
         .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: _headers);
-
-    if (response.statusCode >= 400) {
-      throw RestException('Failed to CREATE generated bouts ${wrestlingEvent.toString()}', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to CREATE generated bouts for $T (${dataObject.toString()})');
   }
 
   @override
@@ -95,12 +96,9 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
     final response = await http.post(uri, headers: _headers, body: body);
 
-    if (response.statusCode < 400) {
-      return jsonDecode(response.body);
-    } else {
-      throw RestException('Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}',
-          response: response);
-    }
+    await _handleResponse(response,
+        errorMessage: 'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}');
+    return jsonDecode(response.body);
   }
 
   @override
@@ -113,61 +111,46 @@ class RestDataManager extends DataManager {
     final body = jsonEncode(manyToJson(objects, T, CRUD.update, isRaw: false));
     final uri = Uri.parse('$_apiUrl/${getTableNameFromType(T)}s/merge');
     final response = await http.post(uri, headers: _headers, body: body);
-
-    if (response.statusCode < 400) {
-      return jsonDecode(response.body);
-    } else {
-      throw RestException('Failed to merge objects ${getTableNameFromType(T)}', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to merge objects ${getTableNameFromType(T)}');
+    return jsonDecode(response.body);
   }
 
   @override
   Future<Migration> getMigration() async {
     final uri = Uri.parse('$_apiUrl/database/migration');
     final response = await http.get(uri, headers: _headers);
-    if (response.statusCode < 400) {
-      return Migration.fromJson(jsonDecode(response.body));
-    } else {
-      throw RestException('Failed to get the migration versions', response: response);
-    }
+
+    await _handleResponse(response, errorMessage: 'Failed to get the migration versions');
+    return Migration.fromJson(jsonDecode(response.body));
   }
 
   @override
   Future<String> exportDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/export');
     final response = await http.get(uri, headers: _headers);
-    if (response.statusCode < 400) {
-      return response.body;
-    } else {
-      throw RestException('Failed to export the database', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to export the database');
+    return response.body;
   }
 
   @override
   Future<void> resetDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/reset');
     final response = await http.post(uri, headers: _headers);
-    if (response.statusCode >= 400) {
-      throw RestException('Failed to reset the database', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to reset the database');
   }
 
   @override
   Future<void> restoreDefaultDatabase() async {
     final uri = Uri.parse('$_apiUrl/database/restore_default');
     final response = await http.post(uri, headers: _headers);
-    if (response.statusCode >= 400) {
-      throw RestException('Failed to restore the default database', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to restore the default database');
   }
 
   @override
   Future<void> restoreDatabase(String sqlDump) async {
     final uri = Uri.parse('$_apiUrl/database/restore');
     final response = await http.post(uri, headers: _headers, body: sqlDump);
-    if (response.statusCode >= 400) {
-      throw RestException('Failed to restore the database', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to restore the database');
   }
 
   @override
@@ -186,9 +169,7 @@ class RestDataManager extends DataManager {
       'subjacent': includeSubjacent.toString(),
     });
     final response = await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode >= 400) {
-      throw RestException('Failed to import from $table $id', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to import from $table $id');
   }
 
   @override
@@ -215,11 +196,8 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/$table/$id/api/last_import');
     final response = await http.get(uri, headers: _headers);
 
-    if (response.statusCode < 400) {
-      return DateTime.tryParse(response.body);
-    } else {
-      throw RestException('Failed to get the last import date time for $table $id', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to get the last import date time for $table $id');
+    return DateTime.tryParse(response.body);
   }
 
   @override
@@ -260,9 +238,8 @@ class RestDataManager extends DataManager {
     });
     final response =
         body == null ? await http.get(uri, headers: _headers) : await http.post(uri, body: body, headers: _headers);
-    if (response.statusCode != 200) {
-      throw RestException('Failed to search $type with term "$searchTerm"', response: response);
-    }
+
+    await _handleResponse(response, errorMessage: 'Failed to search $type with term "$searchTerm"');
 
     final json = jsonDecode(response.body);
     if (json is! List) {
@@ -275,8 +252,10 @@ class RestDataManager extends DataManager {
       throw RestException('There should not be returned single data on a search', response: response);
     }
 
-    Future<int> handleSingleRaw<T extends DataObject>(
-        {required CRUD operation, required Map<String, dynamic> single}) async {
+    Future<int> handleSingleRaw<T extends DataObject>({
+      required CRUD operation,
+      required Map<String, dynamic> single,
+    }) async {
       throw RestException('There should not be returned single raw data on a search', response: response);
     }
 
@@ -304,13 +283,9 @@ class RestDataManager extends DataManager {
     final body = jsonEncode(singleToJson(user, User, user.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/auth/sign_up');
     final response = await http.post(uri, headers: _headers, body: body);
-
-    if (response.statusCode < 400) {
-      return jsonDecode(response.body);
-    } else {
-      throw RestException('Failed to ${user.id != null ? 'UPDATE' : 'CREATE'} single ${user.tableName}',
-          response: response);
-    }
+    await _handleResponse(response,
+        errorMessage: 'Failed to ${user.id != null ? 'UPDATE' : 'CREATE'} single ${user.tableName}');
+    return jsonDecode(response.body);
   }
 
   @override
@@ -321,11 +296,8 @@ class RestDataManager extends DataManager {
       ..._headers,
     });
 
-    if (response.statusCode < 400) {
-      return response.body;
-    } else {
-      throw RestException('Failed to sign in with username ${authService.username}', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to sign in with username ${authService.username}');
+    return response.body;
   }
 
   @override
@@ -334,11 +306,8 @@ class RestDataManager extends DataManager {
     final uri = Uri.parse('$_apiUrl/auth/user');
     final response = await http.get(uri, headers: _headers);
 
-    if (response.statusCode < 400) {
-      return DataObject.fromJson<User>(jsonDecode(response.body));
-    } else {
-      throw RestException('Failed to sign in with token ${authService?.header}', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to sign in with token ${authService?.header}');
+    return DataObjectParser.fromJson<User>(jsonDecode(response.body));
   }
 
   @override
@@ -350,11 +319,7 @@ class RestDataManager extends DataManager {
       body: jsonEncode(user.toJson()),
     );
 
-    if (response.statusCode < 400) {
-      return;
-    } else {
-      throw RestException('Failed to change password', response: response);
-    }
+    await _handleResponse(response, errorMessage: 'Failed to change password');
   }
 }
 
