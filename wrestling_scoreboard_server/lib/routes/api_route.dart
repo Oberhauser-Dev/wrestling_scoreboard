@@ -76,8 +76,8 @@ class ApiRoute {
     router.restrictedPost('/${BoutConfig.cTableName}', boutConfigController.postSingle);
     router.restrictedGet('/${BoutConfig.cTableName}s', boutConfigController.requestMany);
     router.restrictedGetOne('/${BoutConfig.cTableName}/<id|[0-9]+>', boutConfigController.requestSingle);
-    router.restrictedGetOne(
-        '/${BoutConfig.cTableName}/<id|[0-9]+>/bout_result_rules', boutConfigController.requestBoutResultRules);
+    router.restrictedGetOne('/${BoutConfig.cTableName}/<id|[0-9]+>/${BoutResultRule.cTableName}s',
+        boutConfigController.requestBoutResultRules);
 
     final boutResultRuleController = BoutResultRuleController();
     router.restrictedPost('/${BoutResultRule.cTableName}', boutResultRuleController.postSingle);
@@ -88,15 +88,17 @@ class ApiRoute {
     router.restrictedPost('/${Club.cTableName}', clubController.postSingle);
     router.restrictedGet('/${Club.cTableName}s', clubController.requestMany);
     router.restrictedGetOne('/${Club.cTableName}/<id|[0-9]+>', clubController.requestSingle);
-    router.restrictedGetOne('/${Club.cTableName}/<id|[0-9]+>/teams', clubController.requestTeams);
-    router.restrictedGetOne('/${Club.cTableName}/<id|[0-9]+>/memberships', clubController.requestMemberships);
+    router.restrictedGetOne('/${Club.cTableName}/<id|[0-9]+>/${Team.cTableName}s', clubController.requestTeams);
+    router.restrictedGetOne(
+        '/${Club.cTableName}/<id|[0-9]+>/${Membership.cTableName}s', clubController.requestMemberships);
     // router.restrictedGet('/${Club.cTableName}/<no|[0-9]{5}>', clubRequest);
 
     final boutController = BoutController();
     router.restrictedPost('/${Bout.cTableName}', boutController.postSingle);
     router.restrictedGet('/${Bout.cTableName}s', boutController.requestMany);
     router.restrictedGetOne('/${Bout.cTableName}/<id|[0-9]+>', boutController.requestSingle);
-    router.restrictedGetOne('/${Bout.cTableName}/<id|[0-9]+>/bout_actions', boutController.requestBoutActions);
+    router.restrictedGetOne(
+        '/${Bout.cTableName}/<id|[0-9]+>/${BoutAction.cTableName}s', boutController.requestBoutActions);
 
     final boutActionController = BoutActionController();
     router.restrictedPost('/${BoutAction.cTableName}', boutActionController.postSingle);
@@ -110,25 +112,29 @@ class ApiRoute {
     router.restrictedPost('/${Organization.cTableName}', organizationController.postSingle);
     router.restrictedGet('/${Organization.cTableName}s', organizationController.requestMany);
     router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>', organizationController.requestSingle);
+    router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>/${Organization.cTableName}s',
+        organizationController.requestChildOrganizations);
     router.restrictedGetOne(
-        '/${Organization.cTableName}/<id|[0-9]+>/organizations', organizationController.requestChildOrganizations);
+        '/${Organization.cTableName}/<id|[0-9]+>/${Division.cTableName}s', organizationController.requestDivisions);
     router.restrictedGetOne(
-        '/${Organization.cTableName}/<id|[0-9]+>/divisions', organizationController.requestDivisions);
-    router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>/clubs', organizationController.requestClubs);
-    router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>/persons', organizationController.requestPersons);
+        '/${Organization.cTableName}/<id|[0-9]+>/${Club.cTableName}s', organizationController.requestClubs);
     router.restrictedGetOne(
-        '/${Organization.cTableName}/<id|[0-9]+>/competitions', organizationController.requestCompetitions);
+        '/${Organization.cTableName}/<id|[0-9]+>/${Person.cTableName}s', organizationController.requestPersons);
+    router.restrictedGetOne('/${Organization.cTableName}/<id|[0-9]+>/${Competition.cTableName}s',
+        organizationController.requestCompetitions);
 
     final divisionController = DivisionController();
     router.restrictedPost('/${Division.cTableName}', divisionController.postSingle);
     router.restrictedGet('/${Division.cTableName}s', divisionController.requestMany);
     router.restrictedGetOne('/${Division.cTableName}/<id|[0-9]+>', divisionController.requestSingle);
-    router.restrictedGetOne('/${Division.cTableName}/<id|[0-9]+>/leagues', divisionController.requestLeagues);
-    router.restrictedGetOne('/${Division.cTableName}/<id|[0-9]+>/divisions', divisionController.requestChildDivisions);
     router.restrictedGetOne(
-        '/${Division.cTableName}/<id|[0-9]+>/weight_classs', divisionController.requestWeightClasses);
+        '/${Division.cTableName}/<id|[0-9]+>/${League.cTableName}s', divisionController.requestLeagues);
     router.restrictedGetOne(
-        '/${Division.cTableName}/<id|[0-9]+>/division_weight_classs', divisionController.requestDivisionWeightClasses);
+        '/${Division.cTableName}/<id|[0-9]+>/${Division.cTableName}s', divisionController.requestChildDivisions);
+    router.restrictedGetOne(
+        '/${Division.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s', divisionController.requestWeightClasses);
+    router.restrictedGetOne('/${Division.cTableName}/<id|[0-9]+>/${DivisionWeightClass.cTableName}s',
+        divisionController.requestDivisionWeightClasses);
 
     final leagueController = LeagueController();
     router.restrictedPostOne('/${League.cTableName}/<id|[0-9]+>/api/import', leagueController.postImport);
@@ -137,13 +143,15 @@ class ApiRoute {
     router.restrictedPost('/${League.cTableName}', leagueController.postSingle);
     router.restrictedGet('/${League.cTableName}s', leagueController.requestMany);
     router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>', leagueController.requestSingle);
-    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/teams', leagueController.requestTeams);
-    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/league_team_participations',
+    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/${Team.cTableName}s', leagueController.requestTeams);
+    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/${LeagueTeamParticipation.cTableName}s',
         leagueController.requestLeagueTeamParticipations);
-    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/team_matchs', leagueController.requestTeamMatchs);
-    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/weight_classs', leagueController.requestWeightClasses);
     router.restrictedGetOne(
-        '/${League.cTableName}/<id|[0-9]+>/league_weight_classs', leagueController.requestLeagueWeightClasses);
+        '/${League.cTableName}/<id|[0-9]+>/${TeamMatch.cTableName}s', leagueController.requestTeamMatchs);
+    router.restrictedGetOne(
+        '/${League.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s', leagueController.requestWeightClasses);
+    router.restrictedGetOne('/${League.cTableName}/<id|[0-9]+>/${LeagueWeightClass.cTableName}s',
+        leagueController.requestLeagueWeightClasses);
 
     final divisionWeightClassController = DivisionWeightClassController();
     router.restrictedPost('/${DivisionWeightClass.cTableName}', divisionWeightClassController.postSingle);
@@ -158,25 +166,25 @@ class ApiRoute {
         '/${LeagueTeamParticipation.cTableName}/<id|[0-9]+>', leagueTeamParticipationController.requestSingle);
 
     final leagueWeightClassController = LeagueWeightClassController();
-    router.restrictedPost('/league_weight_class', leagueWeightClassController.postSingle);
-    router.restrictedGet('/league_weight_classs', leagueWeightClassController.requestMany);
-    router.restrictedGetOne('/league_weight_class/<id|[0-9]+>', leagueWeightClassController.requestSingle);
+    router.restrictedPost('/${LeagueWeightClass.cTableName}', leagueWeightClassController.postSingle);
+    router.restrictedGet('/${LeagueWeightClass.cTableName}s', leagueWeightClassController.requestMany);
+    router.restrictedGetOne('/${LeagueWeightClass.cTableName}/<id|[0-9]+>', leagueWeightClassController.requestSingle);
 
     final lineupController = TeamLineupController();
     router.restrictedPost('/${TeamLineup.cTableName}', lineupController.postSingle);
     router.restrictedGet('/${TeamLineup.cTableName}s', lineupController.requestMany);
     router.restrictedGetOne('/${TeamLineup.cTableName}/<id|[0-9]+>', lineupController.requestSingle);
-    router.restrictedGetOne(
-        '/${TeamLineup.cTableName}/<id|[0-9]+>/participations', lineupController.requestParticipations);
+    router.restrictedGetOne('/${TeamLineup.cTableName}/<id|[0-9]+>/${TeamLineupParticipation.cTableName}s',
+        lineupController.requestParticipations);
 
     final membershipController = MembershipController();
     router.restrictedPost('/${Membership.cTableName}', membershipController.postSingle);
     router.restrictedGet('/${Membership.cTableName}s', membershipController.requestMany);
     router.restrictedGetOne('/${Membership.cTableName}/<id|[0-9]+>', membershipController.requestSingle);
-    router.restrictedGetOne(
-        '/${Membership.cTableName}/<id|[0-9]+>/participations', membershipController.requestParticipations);
-    router.restrictedGetOne(
-        '/${Membership.cTableName}/<id|[0-9]+>/team_match_bouts', membershipController.requestTeamMatchBouts);
+    router.restrictedGetOne('/${Membership.cTableName}/<id|[0-9]+>/${TeamLineupParticipation.cTableName}s',
+        membershipController.requestParticipations);
+    router.restrictedGetOne('/${Membership.cTableName}/<id|[0-9]+>/${TeamMatchBout.cTableName}s',
+        membershipController.requestTeamMatchBouts);
 
     final athleteBoutStateController = AthleteBoutStateController();
     router.restrictedPost('/${AthleteBoutState.cTableName}', athleteBoutStateController.postSingle);
@@ -194,7 +202,8 @@ class ApiRoute {
     router.restrictedGet('/${Person.cTableName}s', personController.requestMany);
     router.restrictedPost('/${Person.cTableName}/merge', personController.postMerge);
     router.restrictedGetOne('/${Person.cTableName}/<id|[0-9]+>', personController.requestSingle);
-    router.restrictedGetOne('/${Person.cTableName}/<id|[0-9]+>/memberships', personController.requestMemberships);
+    router.restrictedGetOne(
+        '/${Person.cTableName}/<id|[0-9]+>/${Membership.cTableName}s', personController.requestMemberships);
 
     final teamController = TeamController();
     router.restrictedPostOne('/${Team.cTableName}/<id|[0-9]+>/api/import', teamController.postImport);
@@ -203,8 +212,9 @@ class ApiRoute {
     router.restrictedPost('/${Team.cTableName}', teamController.postSingle);
     router.restrictedGet('/${Team.cTableName}s', teamController.requestMany);
     router.restrictedGetOne('/${Team.cTableName}/<id|[0-9]+>', teamController.requestSingle);
-    router.restrictedGetOne('/${Team.cTableName}/<id|[0-9]+>/team_matchs', teamController.requestTeamMatches);
-    router.restrictedGetOne('/${Team.cTableName}/<id|[0-9]+>/clubs', teamController.requestClubs);
+    router.restrictedGetOne(
+        '/${Team.cTableName}/<id|[0-9]+>/${TeamMatch.cTableName}s', teamController.requestTeamMatches);
+    router.restrictedGetOne('/${Team.cTableName}/<id|[0-9]+>/${Club.cTableName}s', teamController.requestClubs);
 
     final teamClubAffiliationController = TeamClubAffiliationController();
     router.restrictedPost('/${TeamClubAffiliation.cTableName}', teamClubAffiliationController.postSingle);
@@ -220,10 +230,11 @@ class ApiRoute {
     router.restrictedGet('/${TeamMatch.cTableName}s', matchController.requestMany);
     router.restrictedGet('/${TeamMatch.cTableName}es', matchController.requestMany);
     router.restrictedGetOne('/${TeamMatch.cTableName}/<id|[0-9]+>', matchController.requestSingle);
-    router.restrictedPostOne('/${TeamMatch.cTableName}/<id|[0-9]+>/bouts/generate', matchController.generateBouts);
-    router.restrictedGetOne('/${TeamMatch.cTableName}/<id|[0-9]+>/bouts', matchController.requestBouts);
+    router.restrictedPostOne(
+        '/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate', matchController.generateBouts);
+    router.restrictedGetOne('/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s', matchController.requestBouts);
     router.restrictedGetOne(
-        '/${TeamMatch.cTableName}/<id|[0-9]+>/team_match_bouts', matchController.requestTeamMatchBouts);
+        '/${TeamMatch.cTableName}/<id|[0-9]+>/${TeamMatchBout.cTableName}s', matchController.requestTeamMatchBouts);
 
     final teamMatchBoutController = TeamMatchBoutController();
     router.restrictedPost('/${TeamMatchBout.cTableName}', teamMatchBoutController.postSingle);
@@ -237,7 +248,8 @@ class ApiRoute {
     router.restrictedPost('/${Competition.cTableName}', competitionController.postSingle);
     router.restrictedGet('/${Competition.cTableName}s', competitionController.requestMany);
     router.restrictedGetOne('/${Competition.cTableName}/<id|[0-9]+>', competitionController.requestSingle);
-    router.restrictedGetOne('/${Competition.cTableName}/<id|[0-9]+>/bouts', competitionController.requestBouts);
+    router.restrictedGetOne(
+        '/${Competition.cTableName}/<id|[0-9]+>/${Bout.cTableName}s', competitionController.requestBouts);
 
     final competitionBoutController = CompetitionBoutController();
     router.restrictedPost('/${CompetitionBout.cTableName}', competitionBoutController.postSingle);
