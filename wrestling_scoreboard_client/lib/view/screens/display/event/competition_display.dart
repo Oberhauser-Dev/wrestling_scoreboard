@@ -1,0 +1,223 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/bout_list_item.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+
+class CompetitionDisplay extends ConsumerWidget {
+  static const route = 'display';
+
+  final int id;
+  final Competition? competition;
+
+  const CompetitionDisplay({required this.id, this.competition, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = context.l10n;
+    double width = MediaQuery.of(context).size.width;
+    return SingleConsumer<Competition>(
+      id: id,
+      initialData: competition,
+      builder: (context, competition) {
+        final infoAction = IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () => handleSelectedCompetition(competition, context),
+        );
+        // final pdfAction = IconButton(
+        //   icon: const Icon(Icons.print),
+        //   onPressed: () async {
+        //     final competitionBouts = await ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(
+        //       ManyProviderData<CompetitionBout, Competition>(filterObject: competition),
+        //     ).future);
+        //
+        //     final competitionBoutActions = Map.fromEntries(await Future.wait(competitionBouts.map((competitionBout) async {
+        //       final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
+        //         ManyProviderData<BoutAction, Bout>(filterObject: competitionBout.bout),
+        //       ).future);
+        //       // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: competitionBout.bout);
+        //       return MapEntry(competitionBout, boutActions);
+        //     })));
+        //     final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+        //
+        //     final homeParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
+        //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.home),
+        //     ).future);
+        //
+        //     final guestParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
+        //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.guest),
+        //     ).future);
+        //
+        //     if (context.mounted) {
+        //       final bytes = await CompetitionTranscript(
+        //         competitionBoutActions: competitionBoutActions,
+        //         buildContext: context,
+        //         competition: competition,
+        //         boutConfig: competition.boutConfig ?? Competition.defaultBoutConfig,
+        //         isTimeCountDown: isTimeCountDown,
+        //         homeParticipations: homeParticipations,
+        //         guestParticipations: guestParticipations,
+        //       ).buildPdf();
+        //       Printing.sharePdf(bytes: bytes, filename: '${competition.fileBaseName}.pdf');
+        //     }
+        //   },
+        // );
+
+        Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
+          return Container(
+              color: role.color(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: ScaledText(
+                      state?.membership.person.fullName ?? localizations.participantVacant,
+                      fontSize: 18,
+                      minFontSize: 12,
+                    ),
+                  ),
+                  Center(
+                    child: ScaledText(
+                      state?.membership.club.name ?? '',
+                      fontSize: 12,
+                      minFontSize: 12,
+                    ),
+                  ),
+                ],
+              ));
+        }
+
+        return WindowStateScaffold(
+          hideAppBarOnFullscreen: true,
+          actions: [
+            infoAction,
+            // pdfAction,
+          ],
+          body: ManyConsumer<CompetitionBout, Competition>(
+            filterObject: competition,
+            builder: (context, competitionBouts) {
+              final competitionInfos = [
+                '${localizations.competitionNumber}: ${competition.id ?? ''}',
+                '${localizations.date}: ${competition.date.toDateString(context)}',
+              ];
+              final column = Column(
+                children: [
+                  Row(
+                    children: [
+                      Column(
+                        children: competitionInfos
+                            .map(
+                              (e) => Center(
+                                  child: ScaledText(
+                                e,
+                                softWrap: false,
+                                fontSize: 10,
+                                minFontSize: 8,
+                              )),
+                            )
+                            .toList(),
+                      ),
+                      Expanded(
+                        child: Center(
+                            child: ScaledText(
+                          competition.name,
+                          softWrap: false,
+                          fontSize: 16,
+                          minFontSize: 12,
+                        )),
+                      ),
+                      Center(
+                          child: ScaledText(
+                        'Estimated end: TODO',
+                        softWrap: false,
+                        fontSize: 10,
+                        minFontSize: 8,
+                      ))
+                    ],
+                  ),
+                  Divider(),
+                  IntrinsicHeight(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: 12,
+                        children: Iterable.generate(competition.matCount, (index) {
+                          final matCompetitionBout = competitionBouts
+                              .where((element) => element.mat == index)
+                              .sorted((a, b) => a.pos.compareTo(b.pos))
+                              .firstOrNull;
+                          return Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
+                              if (matCompetitionBout == null)
+                                Center(child: ScaledText('No bout'))
+                              else ...[
+                                Center(
+                                  child: ScaledText(matCompetitionBout.weightCategory?.name ?? '---',
+                                      fontSize: 12, minFontSize: 10),
+                                ),
+                                displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
+                                SizedBox(
+                                  height: width / 30,
+                                  child: SmallBoutStateDisplay(
+                                    bout: matCompetitionBout.bout,
+                                    boutConfig: competition.boutConfig,
+                                  ),
+                                ),
+                                displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
+                              ]
+                            ],
+                          ));
+                        }).toList()),
+                  ),
+                  Divider(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: competitionBouts.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () =>
+                                  navigateToCompetitionBoutScreen(context, competition, competitionBouts[index]),
+                              child: IntrinsicHeight(
+                                child: BoutListItem(
+                                  boutConfig: competition.boutConfig,
+                                  bout: competitionBouts[index].bout,
+                                  weightClass: competitionBouts[index].weightCategory?.weightClass,
+                                  ageCategory: competitionBouts[index].weightCategory?.ageCategory,
+                                ),
+                              ),
+                            ),
+                            const Divider(height: 1),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+              return column;
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  handleSelectedCompetition(Competition competition, BuildContext context) {
+    // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+    context.go('/${CompetitionOverview.route}/${competition.id}');
+  }
+}

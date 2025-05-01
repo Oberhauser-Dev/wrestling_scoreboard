@@ -9,5 +9,5 @@ class DivisionWeightClassController extends OrganizationalController<DivisionWei
     return _singleton;
   }
 
-  DivisionWeightClassController._internal() : super(tableName: 'division_weight_class');
+  DivisionWeightClassController._internal() : super();
 }

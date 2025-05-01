@@ -82,7 +82,9 @@ abstract class Person with _$Person implements DataObject, Organizational {
   }
 
   @override
-  String get tableName => 'person';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'person';
 
   @override
   Person copyWithId(int? id) {

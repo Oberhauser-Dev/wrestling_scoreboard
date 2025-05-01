@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
@@ -100,8 +100,8 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   }
 
   displayDropDown(BoutRole role) {
-    ParticipantState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
-    ParticipantState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
+    AthleteBoutState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
+    AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
 
     return ThemedContainer(
       color: role == widget.boutState.bout.winnerRole ? role.color() : null,
@@ -125,9 +125,9 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                   (BoutResult boutResult) {
                     final resultRule = BoutConfig.resultRule(
                       result: boutResult,
-                      style: widget.boutState.bout.weightClass?.style ?? WrestlingStyle.free,
-                      technicalPointsWinner: ParticipantState.getTechnicalPoints(actions, role),
-                      technicalPointsLoser: ParticipantState.getTechnicalPoints(
+                      style: widget.boutState.weightClass?.style ?? WrestlingStyle.free,
+                      technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, role),
+                      technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
                           actions, role == BoutRole.red ? BoutRole.blue : BoutRole.red),
                       rules: widget.boutState.boutRules,
                     );
@@ -159,7 +159,9 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                     winnerRole: val != null && !val.affectsBoth() ? role : null,
                     result: val,
                   );
-                  bout = bout.updateClassificationPoints(actions, rules: widget.boutState.boutRules);
+                  bout = bout.updateClassificationPoints(actions,
+                      rules: widget.boutState.boutRules,
+                      style: widget.boutState.weightClass?.style ?? WrestlingStyle.free);
                   dataManager.createOrUpdateSingle(bout);
                   if (bout.r != null) dataManager.createOrUpdateSingle(bout.r!);
                   if (bout.b != null) dataManager.createOrUpdateSingle(bout.b!);

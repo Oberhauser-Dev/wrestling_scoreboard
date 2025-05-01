@@ -535,8 +535,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/flutter_riverpod"
-      ref: "221a80cb"
-      resolved-ref: "221a80cb780d05ce4cfefd612eedd60f1632ae15"
+      ref: "1c7a5db"
+      resolved-ref: "1c7a5dbb09ef04d40e615e9932ee24c1be1d9b01"
       url: "https://github.com/rrousselGit/riverpod.git"
     source: git
     version: "3.0.0-dev.3"
@@ -1027,8 +1027,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/riverpod"
-      ref: "221a80cb"
-      resolved-ref: "221a80cb780d05ce4cfefd612eedd60f1632ae15"
+      ref: "1c7a5db"
+      resolved-ref: "1c7a5dbb09ef04d40e615e9932ee24c1be1d9b01"
       url: "https://github.com/rrousselGit/riverpod.git"
     source: git
     version: "3.0.0-dev.3"
@@ -1036,8 +1036,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/riverpod_analyzer_utils"
-      ref: "221a80cb"
-      resolved-ref: "221a80cb780d05ce4cfefd612eedd60f1632ae15"
+      ref: "1c7a5db"
+      resolved-ref: "1c7a5dbb09ef04d40e615e9932ee24c1be1d9b01"
       url: "https://github.com/rrousselGit/riverpod.git"
     source: git
     version: "1.0.0-dev.1"
@@ -1045,8 +1045,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/riverpod_annotation"
-      ref: "221a80cb"
-      resolved-ref: "221a80cb780d05ce4cfefd612eedd60f1632ae15"
+      ref: "1c7a5db"
+      resolved-ref: "1c7a5dbb09ef04d40e615e9932ee24c1be1d9b01"
       url: "https://github.com/rrousselGit/riverpod.git"
     source: git
     version: "3.0.0-dev.3"
@@ -1054,8 +1054,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/riverpod_generator"
-      ref: "221a80cb"
-      resolved-ref: "221a80cb780d05ce4cfefd612eedd60f1632ae15"
+      ref: "1c7a5db"
+      resolved-ref: "1c7a5dbb09ef04d40e615e9932ee24c1be1d9b01"
       url: "https://github.com/rrousselGit/riverpod.git"
     source: git
     version: "3.0.0-dev.11"

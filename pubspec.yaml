@@ -7,6 +7,7 @@ workspace:
   - wrestling_scoreboard_client
   - wrestling_scoreboard_server
   - wrestling_scoreboard_common
+  - wrestling_scoreboard_generator
 
 dev_dependencies:
   melos: ^7.0.0-dev.8

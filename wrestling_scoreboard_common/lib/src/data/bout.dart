@@ -14,10 +14,8 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     int? id,
     String? orgSyncId,
     Organization? organization,
-    ParticipantState? r, // red
-    ParticipantState? b, // blue
-    WeightClass? weightClass,
-    int? pool,
+    AthleteBoutState? r, // red
+    AthleteBoutState? b, // blue
     BoutRole? winnerRole,
     BoutResult? result,
     @Default(Duration.zero) Duration duration,
@@ -33,7 +31,6 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       if (organization != null) 'organization_id': organization?.id!,
       'red_id': r?.id!,
       'blue_id': b?.id!,
-      'weight_class_id': weightClass?.id!,
       'winner_role': winnerRole?.name,
       'bout_result': result?.name,
       'duration_millis': duration.inMilliseconds,
@@ -45,16 +42,14 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     final blueId = e['blue_id'] as int?;
     final winner = e['winner_role'] as String?;
     final boutResult = e['bout_result'] as String?;
-    final weightClassId = e['weight_class_id'] as int?;
     final durationMillis = e['duration_millis'] as int?;
     final organizationId = e['organization_id'] as int?;
     return Bout(
       id: e['id'] as int?,
       orgSyncId: e['org_sync_id'] as String?,
       organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
-      r: redId == null ? null : await getSingle<ParticipantState>(redId),
-      b: blueId == null ? null : await getSingle<ParticipantState>(blueId),
-      weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
+      r: redId == null ? null : await getSingle<AthleteBoutState>(redId),
+      b: blueId == null ? null : await getSingle<AthleteBoutState>(blueId),
       winnerRole: winner == null ? null : BoutRole.values.byName(winner),
       result: boutResult == null ? null : BoutResult.values.byName(boutResult),
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
@@ -64,14 +59,15 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
   Bout updateClassificationPoints(
     List<BoutAction> actions, {
     required List<BoutResultRule> rules,
+    required WrestlingStyle style,
   }) {
     if (result != null && winnerRole != null) {
       final resultRule = BoutConfig.resultRule(
         result: result!,
-        style: weightClass?.style ?? WrestlingStyle.free,
-        technicalPointsWinner: ParticipantState.getTechnicalPoints(actions, winnerRole!),
+        style: style,
+        technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, winnerRole!),
         technicalPointsLoser:
-            ParticipantState.getTechnicalPoints(actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
+            AthleteBoutState.getTechnicalPoints(actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
         rules: rules,
       );
 
@@ -102,11 +98,12 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       o is Bout &&
       o.runtimeType == runtimeType &&
       (r?.equalDuringBout(o.r) ?? (r == null && o.r == null)) &&
-      (b?.equalDuringBout(o.b) ?? (b == null && o.b == null)) &&
-      weightClass == o.weightClass;
+      (b?.equalDuringBout(o.b) ?? (b == null && o.b == null));
 
   @override
-  String get tableName => 'bout';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'bout';
 
   @override
   Bout copyWithId(int? id) {
@@ -116,7 +113,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
   static Set<String> searchableAttributes = {};
 
   static Map<String, Type> searchableForeignAttributeMapping = {
-    'red_id': ParticipantState,
-    'blue_id': ParticipantState,
+    'red_id': AthleteBoutState,
+    'blue_id': AthleteBoutState,
   };
 }

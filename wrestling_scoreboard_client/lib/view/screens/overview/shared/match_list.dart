@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';

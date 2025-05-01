@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'team_match.freezed.dart';
+
 part 'team_match.g.dart';
 
 /// For team matches only.
@@ -16,8 +17,8 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     int? id,
     String? orgSyncId,
     Organization? organization,
-    required Lineup home,
-    required Lineup guest,
+    required TeamLineup home,
+    required TeamLineup guest,
     League? league,
     int? seasonPartition,
     Person? matChairman,
@@ -35,8 +36,8 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   factory TeamMatch.fromJson(Map<String, Object?> json) => _$TeamMatchFromJson(json);
 
   static Future<TeamMatch> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    final home = await getSingle<Lineup>(e['home_id'] as int);
-    final guest = await getSingle<Lineup>(e['guest_id'] as int);
+    final home = await getSingle<TeamLineup>(e['home_id'] as int);
+    final guest = await getSingle<TeamLineup>(e['guest_id'] as int);
     final int? refereeId = e['referee_id'];
     final int? matChairmanId = e['mat_chairman_id'];
     final int? judgeId = e['judge_id'];
@@ -87,15 +88,15 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       });
   }
 
-  static int getHomePoints(Iterable<Bout> bouts) {
-    return getClassificationPoints(bouts.map((bout) => bout.r));
+  static int getHomePoints(Iterable<TeamMatchBout> bouts) {
+    return getClassificationPoints(bouts.map((tmb) => tmb.bout.r));
   }
 
-  static int getGuestPoints(Iterable<Bout> bouts) {
-    return getClassificationPoints(bouts.map((bout) => bout.b));
+  static int getGuestPoints(Iterable<TeamMatchBout> bouts) {
+    return getClassificationPoints(bouts.map((tmb) => tmb.bout.b));
   }
 
-  static int getClassificationPoints(Iterable<ParticipantState?> participationStates) {
+  static int getClassificationPoints(Iterable<AthleteBoutState?> participationStates) {
     var res = 0;
     for (final state in participationStates) {
       res += state?.classificationPoints ?? 0;
@@ -103,10 +104,11 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     return res;
   }
 
-  @override
-  Future<List<Bout>> generateBouts(
-      List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) async {
-    final bouts = <Bout>[];
+  Future<List<TeamMatchBout>> generateBouts(
+    List<List<TeamLineupParticipation>> teamParticipations,
+    List<WeightClass> weightClasses,
+  ) async {
+    final bouts = <TeamMatchBout>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {
       final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
@@ -122,9 +124,14 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
-      var bout = Bout(
-        r: red == null ? null : ParticipantState(participation: red),
-        b: blue == null ? null : ParticipantState(participation: blue),
+      var bout = TeamMatchBout(
+        organization: organization,
+        teamMatch: this,
+        pos: bouts.length,
+        bout: Bout(
+          r: red == null ? null : AthleteBoutState(membership: red.membership),
+          b: blue == null ? null : AthleteBoutState(membership: blue.membership),
+        ),
         weightClass: weightClass,
       );
       bouts.add(bout);
@@ -133,7 +140,9 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   }
 
   @override
-  String get tableName => 'team_match';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'team_match';
 
   @override
   TeamMatch copyWithId(int? id) {

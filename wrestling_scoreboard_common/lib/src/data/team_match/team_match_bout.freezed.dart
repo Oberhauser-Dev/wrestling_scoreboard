@@ -21,6 +21,7 @@ mixin _$TeamMatchBout {
   int get pos;
   TeamMatch get teamMatch;
   Bout get bout;
+  WeightClass? get weightClass;
 
   /// Create a copy of TeamMatchBout
   /// with the given fields replaced by the non-null parameter values.
@@ -42,16 +43,17 @@ mixin _$TeamMatchBout {
             (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.teamMatch, teamMatch) || other.teamMatch == teamMatch) &&
-            (identical(other.bout, bout) || other.bout == bout));
+            (identical(other.bout, bout) || other.bout == bout) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout, weightClass);
 
   @override
   String toString() {
-    return 'TeamMatchBout(id: $id, orgSyncId: $orgSyncId, organization: $organization, pos: $pos, teamMatch: $teamMatch, bout: $bout)';
+    return 'TeamMatchBout(id: $id, orgSyncId: $orgSyncId, organization: $organization, pos: $pos, teamMatch: $teamMatch, bout: $bout, weightClass: $weightClass)';
   }
 }
 
@@ -59,11 +61,19 @@ mixin _$TeamMatchBout {
 abstract mixin class $TeamMatchBoutCopyWith<$Res> {
   factory $TeamMatchBoutCopyWith(TeamMatchBout value, $Res Function(TeamMatchBout) _then) = _$TeamMatchBoutCopyWithImpl;
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, int pos, TeamMatch teamMatch, Bout bout});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      int pos,
+      TeamMatch teamMatch,
+      Bout bout,
+      WeightClass? weightClass});
 
   $OrganizationCopyWith<$Res>? get organization;
   $TeamMatchCopyWith<$Res> get teamMatch;
   $BoutCopyWith<$Res> get bout;
+  $WeightClassCopyWith<$Res>? get weightClass;
 }
 
 /// @nodoc
@@ -84,6 +94,7 @@ class _$TeamMatchBoutCopyWithImpl<$Res> implements $TeamMatchBoutCopyWith<$Res> 
     Object? pos = null,
     Object? teamMatch = null,
     Object? bout = null,
+    Object? weightClass = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -110,6 +121,10 @@ class _$TeamMatchBoutCopyWithImpl<$Res> implements $TeamMatchBoutCopyWith<$Res> 
           ? _self.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
+      weightClass: freezed == weightClass
+          ? _self.weightClass
+          : weightClass // ignore: cast_nullable_to_non_nullable
+              as WeightClass?,
     ));
   }
 
@@ -146,13 +161,33 @@ class _$TeamMatchBoutCopyWithImpl<$Res> implements $TeamMatchBoutCopyWith<$Res> 
       return _then(_self.copyWith(bout: value));
     });
   }
+
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WeightClassCopyWith<$Res>? get weightClass {
+    if (_self.weightClass == null) {
+      return null;
+    }
+
+    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
+      return _then(_self.copyWith(weightClass: value));
+    });
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _TeamMatchBout extends TeamMatchBout {
   const _TeamMatchBout(
-      {this.id, this.orgSyncId, this.organization, required this.pos, required this.teamMatch, required this.bout})
+      {this.id,
+      this.orgSyncId,
+      this.organization,
+      required this.pos,
+      required this.teamMatch,
+      required this.bout,
+      this.weightClass})
       : super._();
   factory _TeamMatchBout.fromJson(Map<String, dynamic> json) => _$TeamMatchBoutFromJson(json);
 
@@ -168,6 +203,8 @@ class _TeamMatchBout extends TeamMatchBout {
   final TeamMatch teamMatch;
   @override
   final Bout bout;
+  @override
+  final WeightClass? weightClass;
 
   /// Create a copy of TeamMatchBout
   /// with the given fields replaced by the non-null parameter values.
@@ -194,16 +231,17 @@ class _TeamMatchBout extends TeamMatchBout {
             (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.pos, pos) || other.pos == pos) &&
             (identical(other.teamMatch, teamMatch) || other.teamMatch == teamMatch) &&
-            (identical(other.bout, bout) || other.bout == bout));
+            (identical(other.bout, bout) || other.bout == bout) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, pos, teamMatch, bout, weightClass);
 
   @override
   String toString() {
-    return 'TeamMatchBout(id: $id, orgSyncId: $orgSyncId, organization: $organization, pos: $pos, teamMatch: $teamMatch, bout: $bout)';
+    return 'TeamMatchBout(id: $id, orgSyncId: $orgSyncId, organization: $organization, pos: $pos, teamMatch: $teamMatch, bout: $bout, weightClass: $weightClass)';
   }
 }
 
@@ -213,7 +251,14 @@ abstract mixin class _$TeamMatchBoutCopyWith<$Res> implements $TeamMatchBoutCopy
       __$TeamMatchBoutCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, int pos, TeamMatch teamMatch, Bout bout});
+  $Res call(
+      {int? id,
+      String? orgSyncId,
+      Organization? organization,
+      int pos,
+      TeamMatch teamMatch,
+      Bout bout,
+      WeightClass? weightClass});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
@@ -221,6 +266,8 @@ abstract mixin class _$TeamMatchBoutCopyWith<$Res> implements $TeamMatchBoutCopy
   $TeamMatchCopyWith<$Res> get teamMatch;
   @override
   $BoutCopyWith<$Res> get bout;
+  @override
+  $WeightClassCopyWith<$Res>? get weightClass;
 }
 
 /// @nodoc
@@ -241,6 +288,7 @@ class __$TeamMatchBoutCopyWithImpl<$Res> implements _$TeamMatchBoutCopyWith<$Res
     Object? pos = null,
     Object? teamMatch = null,
     Object? bout = null,
+    Object? weightClass = freezed,
   }) {
     return _then(_TeamMatchBout(
       id: freezed == id
@@ -267,6 +315,10 @@ class __$TeamMatchBoutCopyWithImpl<$Res> implements _$TeamMatchBoutCopyWith<$Res
           ? _self.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
+      weightClass: freezed == weightClass
+          ? _self.weightClass
+          : weightClass // ignore: cast_nullable_to_non_nullable
+              as WeightClass?,
     ));
   }
 
@@ -301,6 +353,20 @@ class __$TeamMatchBoutCopyWithImpl<$Res> implements _$TeamMatchBoutCopyWith<$Res
   $BoutCopyWith<$Res> get bout {
     return $BoutCopyWith<$Res>(_self.bout, (value) {
       return _then(_self.copyWith(bout: value));
+    });
+  }
+
+  /// Create a copy of TeamMatchBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WeightClassCopyWith<$Res>? get weightClass {
+    if (_self.weightClass == null) {
+      return null;
+    }
+
+    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
+      return _then(_self.copyWith(weightClass: value));
     });
   }
 }

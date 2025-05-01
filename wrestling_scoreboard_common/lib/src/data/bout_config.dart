@@ -29,7 +29,7 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
 
   factory BoutConfig.fromJson(Map<String, Object?> json) => _$BoutConfigFromJson(json);
 
-  static Future<BoutConfig> fromRaw(Map<String, dynamic> e) async {
+  static Future<BoutConfig> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final periodSeconds = e['period_duration_secs'] as int?;
     final breakSeconds = e['break_duration_secs'] as int?;
     final activitySeconds = e['activity_duration_secs'] as int?;
@@ -61,7 +61,9 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
   }
 
   @override
-  String get tableName => 'bout_config';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'bout_config';
 
   Duration get totalPeriodDuration => periodDuration * periodCount;
 

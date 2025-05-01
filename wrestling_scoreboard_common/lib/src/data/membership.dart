@@ -52,7 +52,9 @@ abstract class Membership with _$Membership implements DataObject, Organizationa
   }
 
   @override
-  String get tableName => 'membership';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'membership';
 
   @override
   Membership copyWithId(int? id) {

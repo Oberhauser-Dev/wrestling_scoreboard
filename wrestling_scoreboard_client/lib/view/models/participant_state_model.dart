@@ -1,7 +1,8 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ParticipantStateModel {
-  ParticipantState? pStatus;
+  AthleteBoutState? pStatus;
+  double? weight;
   ObservableStopwatch injuryStopwatch = ObservableStopwatch();
   ObservableStopwatch bleedingInjuryStopwatch = ObservableStopwatch();
   ObservableStopwatch? activityStopwatch;
@@ -10,5 +11,5 @@ class ParticipantStateModel {
   bool isBleedingInjury = false;
   bool isBleedingInjuryDisplayed = false;
 
-  ParticipantStateModel(this.pStatus);
+  ParticipantStateModel(this.pStatus, this.weight);
 }

@@ -18,8 +18,8 @@ mixin _$TeamMatch {
   int? get id;
   String? get orgSyncId;
   Organization? get organization;
-  Lineup get home;
-  Lineup get guest;
+  TeamLineup get home;
+  TeamLineup get guest;
   League? get league;
   int? get seasonPartition;
   Person? get matChairman;
@@ -85,8 +85,8 @@ abstract mixin class $TeamMatchCopyWith<$Res> {
       {int? id,
       String? orgSyncId,
       Organization? organization,
-      Lineup home,
-      Lineup guest,
+      TeamLineup home,
+      TeamLineup guest,
       League? league,
       int? seasonPartition,
       Person? matChairman,
@@ -101,8 +101,8 @@ abstract mixin class $TeamMatchCopyWith<$Res> {
       String? comment});
 
   $OrganizationCopyWith<$Res>? get organization;
-  $LineupCopyWith<$Res> get home;
-  $LineupCopyWith<$Res> get guest;
+  $TeamLineupCopyWith<$Res> get home;
+  $TeamLineupCopyWith<$Res> get guest;
   $LeagueCopyWith<$Res>? get league;
   $PersonCopyWith<$Res>? get matChairman;
   $PersonCopyWith<$Res>? get referee;
@@ -157,11 +157,11 @@ class _$TeamMatchCopyWithImpl<$Res> implements $TeamMatchCopyWith<$Res> {
       home: null == home
           ? _self.home
           : home // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       guest: null == guest
           ? _self.guest
           : guest // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       league: freezed == league
           ? _self.league
           : league // ignore: cast_nullable_to_non_nullable
@@ -231,8 +231,8 @@ class _$TeamMatchCopyWithImpl<$Res> implements $TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get home {
-    return $LineupCopyWith<$Res>(_self.home, (value) {
+  $TeamLineupCopyWith<$Res> get home {
+    return $TeamLineupCopyWith<$Res>(_self.home, (value) {
       return _then(_self.copyWith(home: value));
     });
   }
@@ -241,8 +241,8 @@ class _$TeamMatchCopyWithImpl<$Res> implements $TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get guest {
-    return $LineupCopyWith<$Res>(_self.guest, (value) {
+  $TeamLineupCopyWith<$Res> get guest {
+    return $TeamLineupCopyWith<$Res>(_self.guest, (value) {
       return _then(_self.copyWith(guest: value));
     });
   }
@@ -363,9 +363,9 @@ class _TeamMatch extends TeamMatch {
   @override
   final Organization? organization;
   @override
-  final Lineup home;
+  final TeamLineup home;
   @override
-  final Lineup guest;
+  final TeamLineup guest;
   @override
   final League? league;
   @override
@@ -449,8 +449,8 @@ abstract mixin class _$TeamMatchCopyWith<$Res> implements $TeamMatchCopyWith<$Re
       {int? id,
       String? orgSyncId,
       Organization? organization,
-      Lineup home,
-      Lineup guest,
+      TeamLineup home,
+      TeamLineup guest,
       League? league,
       int? seasonPartition,
       Person? matChairman,
@@ -467,9 +467,9 @@ abstract mixin class _$TeamMatchCopyWith<$Res> implements $TeamMatchCopyWith<$Re
   @override
   $OrganizationCopyWith<$Res>? get organization;
   @override
-  $LineupCopyWith<$Res> get home;
+  $TeamLineupCopyWith<$Res> get home;
   @override
-  $LineupCopyWith<$Res> get guest;
+  $TeamLineupCopyWith<$Res> get guest;
   @override
   $LeagueCopyWith<$Res>? get league;
   @override
@@ -530,11 +530,11 @@ class __$TeamMatchCopyWithImpl<$Res> implements _$TeamMatchCopyWith<$Res> {
       home: null == home
           ? _self.home
           : home // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       guest: null == guest
           ? _self.guest
           : guest // ignore: cast_nullable_to_non_nullable
-              as Lineup,
+              as TeamLineup,
       league: freezed == league
           ? _self.league
           : league // ignore: cast_nullable_to_non_nullable
@@ -604,8 +604,8 @@ class __$TeamMatchCopyWithImpl<$Res> implements _$TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get home {
-    return $LineupCopyWith<$Res>(_self.home, (value) {
+  $TeamLineupCopyWith<$Res> get home {
+    return $TeamLineupCopyWith<$Res>(_self.home, (value) {
       return _then(_self.copyWith(home: value));
     });
   }
@@ -614,8 +614,8 @@ class __$TeamMatchCopyWithImpl<$Res> implements _$TeamMatchCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LineupCopyWith<$Res> get guest {
-    return $LineupCopyWith<$Res>(_self.guest, (value) {
+  $TeamLineupCopyWith<$Res> get guest {
+    return $TeamLineupCopyWith<$Res>(_self.guest, (value) {
       return _then(_self.copyWith(guest: value));
     });
   }

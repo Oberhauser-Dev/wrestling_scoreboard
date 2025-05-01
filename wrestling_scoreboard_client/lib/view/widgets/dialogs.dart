@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -133,7 +133,7 @@ Future<void> showExceptionDialog({
   required BuildContext context,
   required Object exception,
   required StackTrace? stackTrace,
-  Function()? onRetry,
+  void Function()? onRetry,
 }) async {
   if (onRetry == null) {
     return await showOkDialog(
@@ -147,7 +147,10 @@ Future<void> showExceptionDialog({
   await showDialog(
     context: context,
     builder: (context) => OkCancelDialog<bool>(
-      getResult: () => onRetry(),
+      getResult: () {
+        onRetry();
+        return true;
+      },
       okText: context.l10n.retry,
       child: ExceptionInfo(
         exception,
@@ -191,7 +194,7 @@ Future<void> showLoadingDialog({
 Future<void> catchAsync(
   BuildContext context,
   Future<void> Function() doAsync, {
-  Function()? onRetry,
+  void Function()? onRetry,
 }) async {
   try {
     await doAsync();

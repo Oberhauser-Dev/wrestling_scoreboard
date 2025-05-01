@@ -14,6 +14,8 @@ _TeamMatchBout _$TeamMatchBoutFromJson(Map<String, dynamic> json) => _TeamMatchB
       pos: (json['pos'] as num).toInt(),
       teamMatch: TeamMatch.fromJson(json['teamMatch'] as Map<String, dynamic>),
       bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),
+      weightClass:
+          json['weightClass'] == null ? null : WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TeamMatchBoutToJson(_TeamMatchBout instance) => <String, dynamic>{
@@ -23,4 +25,5 @@ Map<String, dynamic> _$TeamMatchBoutToJson(_TeamMatchBout instance) => <String, 
       'pos': instance.pos,
       'teamMatch': instance.teamMatch.toJson(),
       'bout': instance.bout.toJson(),
+      'weightClass': instance.weightClass?.toJson(),
     };

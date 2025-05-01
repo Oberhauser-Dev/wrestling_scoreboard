@@ -18,10 +18,8 @@ mixin _$Bout {
   int? get id;
   String? get orgSyncId;
   Organization? get organization;
-  ParticipantState? get r; // red
-  ParticipantState? get b; // blue
-  WeightClass? get weightClass;
-  int? get pool;
+  AthleteBoutState? get r; // red
+  AthleteBoutState? get b; // blue
   BoutRole? get winnerRole;
   BoutResult? get result;
   Duration get duration;
@@ -45,8 +43,6 @@ mixin _$Bout {
             (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.pool, pool) || other.pool == pool) &&
             (identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole) &&
             (identical(other.result, result) || other.result == result) &&
             (identical(other.duration, duration) || other.duration == duration));
@@ -54,12 +50,11 @@ mixin _$Bout {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, orgSyncId, organization, r, b, weightClass, pool, winnerRole, result, duration);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, r, b, winnerRole, result, duration);
 
   @override
   String toString() {
-    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 }
 
@@ -71,18 +66,15 @@ abstract mixin class $BoutCopyWith<$Res> {
       {int? id,
       String? orgSyncId,
       Organization? organization,
-      ParticipantState? r,
-      ParticipantState? b,
-      WeightClass? weightClass,
-      int? pool,
+      AthleteBoutState? r,
+      AthleteBoutState? b,
       BoutRole? winnerRole,
       BoutResult? result,
       Duration duration});
 
   $OrganizationCopyWith<$Res>? get organization;
-  $ParticipantStateCopyWith<$Res>? get r;
-  $ParticipantStateCopyWith<$Res>? get b;
-  $WeightClassCopyWith<$Res>? get weightClass;
+  $AthleteBoutStateCopyWith<$Res>? get r;
+  $AthleteBoutStateCopyWith<$Res>? get b;
 }
 
 /// @nodoc
@@ -102,8 +94,6 @@ class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
     Object? organization = freezed,
     Object? r = freezed,
     Object? b = freezed,
-    Object? weightClass = freezed,
-    Object? pool = freezed,
     Object? winnerRole = freezed,
     Object? result = freezed,
     Object? duration = null,
@@ -124,19 +114,11 @@ class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
       r: freezed == r
           ? _self.r
           : r // ignore: cast_nullable_to_non_nullable
-              as ParticipantState?,
+              as AthleteBoutState?,
       b: freezed == b
           ? _self.b
           : b // ignore: cast_nullable_to_non_nullable
-              as ParticipantState?,
-      weightClass: freezed == weightClass
-          ? _self.weightClass
-          : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass?,
-      pool: freezed == pool
-          ? _self.pool
-          : pool // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as AthleteBoutState?,
       winnerRole: freezed == winnerRole
           ? _self.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable
@@ -170,12 +152,12 @@ class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ParticipantStateCopyWith<$Res>? get r {
+  $AthleteBoutStateCopyWith<$Res>? get r {
     if (_self.r == null) {
       return null;
     }
 
-    return $ParticipantStateCopyWith<$Res>(_self.r!, (value) {
+    return $AthleteBoutStateCopyWith<$Res>(_self.r!, (value) {
       return _then(_self.copyWith(r: value));
     });
   }
@@ -184,27 +166,13 @@ class _$BoutCopyWithImpl<$Res> implements $BoutCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ParticipantStateCopyWith<$Res>? get b {
+  $AthleteBoutStateCopyWith<$Res>? get b {
     if (_self.b == null) {
       return null;
     }
 
-    return $ParticipantStateCopyWith<$Res>(_self.b!, (value) {
+    return $AthleteBoutStateCopyWith<$Res>(_self.b!, (value) {
       return _then(_self.copyWith(b: value));
-    });
-  }
-
-  /// Create a copy of Bout
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $WeightClassCopyWith<$Res>? get weightClass {
-    if (_self.weightClass == null) {
-      return null;
-    }
-
-    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
-      return _then(_self.copyWith(weightClass: value));
     });
   }
 }
@@ -218,8 +186,6 @@ class _Bout extends Bout {
       this.organization,
       this.r,
       this.b,
-      this.weightClass,
-      this.pool,
       this.winnerRole,
       this.result,
       this.duration = Duration.zero})
@@ -233,15 +199,11 @@ class _Bout extends Bout {
   @override
   final Organization? organization;
   @override
-  final ParticipantState? r;
+  final AthleteBoutState? r;
 // red
   @override
-  final ParticipantState? b;
+  final AthleteBoutState? b;
 // blue
-  @override
-  final WeightClass? weightClass;
-  @override
-  final int? pool;
   @override
   final BoutRole? winnerRole;
   @override
@@ -274,8 +236,6 @@ class _Bout extends Bout {
             (identical(other.organization, organization) || other.organization == organization) &&
             (identical(other.r, r) || other.r == r) &&
             (identical(other.b, b) || other.b == b) &&
-            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
-            (identical(other.pool, pool) || other.pool == pool) &&
             (identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole) &&
             (identical(other.result, result) || other.result == result) &&
             (identical(other.duration, duration) || other.duration == duration));
@@ -283,12 +243,11 @@ class _Bout extends Bout {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, orgSyncId, organization, r, b, weightClass, pool, winnerRole, result, duration);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, r, b, winnerRole, result, duration);
 
   @override
   String toString() {
-    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, weightClass: $weightClass, pool: $pool, winnerRole: $winnerRole, result: $result, duration: $duration)';
+    return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration)';
   }
 }
 
@@ -301,10 +260,8 @@ abstract mixin class _$BoutCopyWith<$Res> implements $BoutCopyWith<$Res> {
       {int? id,
       String? orgSyncId,
       Organization? organization,
-      ParticipantState? r,
-      ParticipantState? b,
-      WeightClass? weightClass,
-      int? pool,
+      AthleteBoutState? r,
+      AthleteBoutState? b,
       BoutRole? winnerRole,
       BoutResult? result,
       Duration duration});
@@ -312,11 +269,9 @@ abstract mixin class _$BoutCopyWith<$Res> implements $BoutCopyWith<$Res> {
   @override
   $OrganizationCopyWith<$Res>? get organization;
   @override
-  $ParticipantStateCopyWith<$Res>? get r;
+  $AthleteBoutStateCopyWith<$Res>? get r;
   @override
-  $ParticipantStateCopyWith<$Res>? get b;
-  @override
-  $WeightClassCopyWith<$Res>? get weightClass;
+  $AthleteBoutStateCopyWith<$Res>? get b;
 }
 
 /// @nodoc
@@ -336,8 +291,6 @@ class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
     Object? organization = freezed,
     Object? r = freezed,
     Object? b = freezed,
-    Object? weightClass = freezed,
-    Object? pool = freezed,
     Object? winnerRole = freezed,
     Object? result = freezed,
     Object? duration = null,
@@ -358,19 +311,11 @@ class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
       r: freezed == r
           ? _self.r
           : r // ignore: cast_nullable_to_non_nullable
-              as ParticipantState?,
+              as AthleteBoutState?,
       b: freezed == b
           ? _self.b
           : b // ignore: cast_nullable_to_non_nullable
-              as ParticipantState?,
-      weightClass: freezed == weightClass
-          ? _self.weightClass
-          : weightClass // ignore: cast_nullable_to_non_nullable
-              as WeightClass?,
-      pool: freezed == pool
-          ? _self.pool
-          : pool // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as AthleteBoutState?,
       winnerRole: freezed == winnerRole
           ? _self.winnerRole
           : winnerRole // ignore: cast_nullable_to_non_nullable
@@ -404,12 +349,12 @@ class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ParticipantStateCopyWith<$Res>? get r {
+  $AthleteBoutStateCopyWith<$Res>? get r {
     if (_self.r == null) {
       return null;
     }
 
-    return $ParticipantStateCopyWith<$Res>(_self.r!, (value) {
+    return $AthleteBoutStateCopyWith<$Res>(_self.r!, (value) {
       return _then(_self.copyWith(r: value));
     });
   }
@@ -418,27 +363,13 @@ class __$BoutCopyWithImpl<$Res> implements _$BoutCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ParticipantStateCopyWith<$Res>? get b {
+  $AthleteBoutStateCopyWith<$Res>? get b {
     if (_self.b == null) {
       return null;
     }
 
-    return $ParticipantStateCopyWith<$Res>(_self.b!, (value) {
+    return $AthleteBoutStateCopyWith<$Res>(_self.b!, (value) {
       return _then(_self.copyWith(b: value));
-    });
-  }
-
-  /// Create a copy of Bout
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $WeightClassCopyWith<$Res>? get weightClass {
-    if (_self.weightClass == null) {
-      return null;
-    }
-
-    return $WeightClassCopyWith<$Res>(_self.weightClass!, (value) {
-      return _then(_self.copyWith(weightClass: value));
     });
   }
 }

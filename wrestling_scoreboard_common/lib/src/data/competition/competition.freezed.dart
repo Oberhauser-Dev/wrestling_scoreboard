@@ -25,6 +25,10 @@ mixin _$Competition {
   String? get no;
   int? get visitorsCount;
   String? get comment;
+  int get matCount;
+
+  /// The ranks which must be determined
+  dynamic get maxRanking;
 
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
@@ -50,17 +54,19 @@ mixin _$Competition {
             (identical(other.date, date) || other.date == date) &&
             (identical(other.no, no) || other.no == no) &&
             (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
-            (identical(other.comment, comment) || other.comment == comment));
+            (identical(other.comment, comment) || other.comment == comment) &&
+            (identical(other.matCount, matCount) || other.matCount == matCount) &&
+            const DeepCollectionEquality().equals(other.maxRanking, maxRanking));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no,
+      visitorsCount, comment, matCount, const DeepCollectionEquality().hash(maxRanking));
 
   @override
   String toString() {
-    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxRanking: $maxRanking)';
   }
 }
 
@@ -78,7 +84,9 @@ abstract mixin class $CompetitionCopyWith<$Res> {
       DateTime date,
       String? no,
       int? visitorsCount,
-      String? comment});
+      String? comment,
+      int matCount,
+      dynamic maxRanking});
 
   $OrganizationCopyWith<$Res>? get organization;
   $BoutConfigCopyWith<$Res> get boutConfig;
@@ -106,6 +114,8 @@ class _$CompetitionCopyWithImpl<$Res> implements $CompetitionCopyWith<$Res> {
     Object? no = freezed,
     Object? visitorsCount = freezed,
     Object? comment = freezed,
+    Object? matCount = null,
+    Object? maxRanking = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -148,6 +158,14 @@ class _$CompetitionCopyWithImpl<$Res> implements $CompetitionCopyWith<$Res> {
           ? _self.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String?,
+      matCount: null == matCount
+          ? _self.matCount
+          : matCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxRanking: freezed == maxRanking
+          ? _self.maxRanking
+          : maxRanking // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 
@@ -189,7 +207,9 @@ class _Competition extends Competition {
       required this.date,
       this.no,
       this.visitorsCount,
-      this.comment})
+      this.comment,
+      required this.matCount,
+      this.maxRanking = 10})
       : super._();
   factory _Competition.fromJson(Map<String, dynamic> json) => _$CompetitionFromJson(json);
 
@@ -213,6 +233,13 @@ class _Competition extends Competition {
   final int? visitorsCount;
   @override
   final String? comment;
+  @override
+  final int matCount;
+
+  /// The ranks which must be determined
+  @override
+  @JsonKey()
+  final dynamic maxRanking;
 
   /// Create a copy of Competition
   /// with the given fields replaced by the non-null parameter values.
@@ -242,17 +269,19 @@ class _Competition extends Competition {
             (identical(other.date, date) || other.date == date) &&
             (identical(other.no, no) || other.no == no) &&
             (identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount) &&
-            (identical(other.comment, comment) || other.comment == comment));
+            (identical(other.comment, comment) || other.comment == comment) &&
+            (identical(other.matCount, matCount) || other.matCount == matCount) &&
+            const DeepCollectionEquality().equals(other.maxRanking, maxRanking));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no, visitorsCount, comment);
+  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, boutConfig, location, date, no,
+      visitorsCount, comment, matCount, const DeepCollectionEquality().hash(maxRanking));
 
   @override
   String toString() {
-    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment)';
+    return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxRanking: $maxRanking)';
   }
 }
 
@@ -271,7 +300,9 @@ abstract mixin class _$CompetitionCopyWith<$Res> implements $CompetitionCopyWith
       DateTime date,
       String? no,
       int? visitorsCount,
-      String? comment});
+      String? comment,
+      int matCount,
+      dynamic maxRanking});
 
   @override
   $OrganizationCopyWith<$Res>? get organization;
@@ -301,6 +332,8 @@ class __$CompetitionCopyWithImpl<$Res> implements _$CompetitionCopyWith<$Res> {
     Object? no = freezed,
     Object? visitorsCount = freezed,
     Object? comment = freezed,
+    Object? matCount = null,
+    Object? maxRanking = freezed,
   }) {
     return _then(_Competition(
       id: freezed == id
@@ -343,6 +376,14 @@ class __$CompetitionCopyWithImpl<$Res> implements _$CompetitionCopyWith<$Res> {
           ? _self.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String?,
+      matCount: null == matCount
+          ? _self.matCount
+          : matCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxRanking: freezed == maxRanking
+          ? _self.maxRanking
+          : maxRanking // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 

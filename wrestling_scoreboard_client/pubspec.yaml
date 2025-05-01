@@ -66,27 +66,27 @@ dependency_overrides:
     git:
       url: https://github.com/rrousselGit/riverpod.git
       path: packages/riverpod
-      ref: 221a80cb # dev
+      ref: 1c7a5db # dev
   flutter_riverpod:
     git:
       url: https://github.com/rrousselGit/riverpod.git
       path: packages/flutter_riverpod
-      ref: 221a80cb # dev
+      ref: 1c7a5db # dev
   riverpod_annotation:
     git:
       url: https://github.com/rrousselGit/riverpod.git
       path: packages/riverpod_annotation
-      ref: 221a80cb # dev
+      ref: 1c7a5db # dev
   riverpod_generator:
     git:
       url: https://github.com/rrousselGit/riverpod.git
       path: packages/riverpod_generator
-      ref: 221a80cb # dev
+      ref: 1c7a5db # dev
   riverpod_analyzer_utils:
     git:
       url: https://github.com/rrousselGit/riverpod.git
       path: packages/riverpod_analyzer_utils
-      ref: 221a80cb # dev
+      ref: 1c7a5db # dev
 
 flutter:
   uses-material-design: true

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/search.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
@@ -38,8 +38,8 @@ class ContentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: icon != null ? Icon(icon) : null,
-      title: Text(title, style: onTap == null ? TextStyle(color: Theme.of(context).disabledColor) : null),
-      subtitle: (subtitle != null) ? Text(subtitle!) : null,
+      title: Text(title),
+      subtitle: (subtitle != null) ? Text(subtitle!, style: TextStyle(color: Theme.of(context).disabledColor)) : null,
       trailing: trailing,
       onTap: onTap,
     );
@@ -147,6 +147,15 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
   void initState() {
     _filteredItems = widget.items;
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SearchableGroupedList<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset list, if items have changed
+    setState(() {
+      _filteredItems = widget.items;
+    });
   }
 
   @override

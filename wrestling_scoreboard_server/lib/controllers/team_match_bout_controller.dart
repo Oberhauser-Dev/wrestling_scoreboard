@@ -8,5 +8,14 @@ class TeamMatchBoutController extends OrganizationalController<TeamMatchBout> {
     return _singleton;
   }
 
-  TeamMatchBoutController._internal() : super(tableName: 'team_match_bout');
+  Future<List<TeamMatchBout>> getByTeamMatch(bool obfuscate, int id) async {
+    return await getMany(
+      conditions: ['team_match_id = @id'],
+      substitutionValues: {'id': id},
+      orderBy: ['pos'],
+      obfuscate: obfuscate,
+    );
+  }
+
+  TeamMatchBoutController._internal() : super();
 }

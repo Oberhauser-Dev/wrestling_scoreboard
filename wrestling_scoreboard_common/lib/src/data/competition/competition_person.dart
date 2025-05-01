@@ -38,7 +38,9 @@ abstract class CompetitionPerson with _$CompetitionPerson implements DataObject 
   }
 
   @override
-  String get tableName => 'competition_person';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'competition_person';
 
   @override
   CompetitionPerson copyWithId(int? id) {

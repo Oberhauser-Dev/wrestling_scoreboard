@@ -4,10 +4,9 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -19,35 +18,7 @@ class LeagueController extends OrganizationalController<League> with ImportContr
     return _singleton;
   }
 
-  LeagueController._internal() : super(tableName: 'league');
-
-  Future<Response> requestTeams(Request request, User? user, String id) async {
-    return TeamController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestLeagueTeamParticipations(Request request, User? user, String id) async {
-    return LeagueTeamParticipationController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestTeamMatchs(Request request, User? user, String id) async {
-    return TeamMatchController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      orderBy: ['date'],
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
+  LeagueController._internal() : super();
 
   static String _weightClassesQuery(bool filterBySeasonPartition) => '''
         SELECT wc.* 
@@ -72,16 +43,6 @@ class LeagueController extends OrganizationalController<League> with ImportContr
           if (seasonPartition != null) 'season_partition': seasonPartition,
         },
         obfuscate: obfuscate);
-  }
-
-  Future<Response> requestLeagueWeightClasses(Request request, User? user, String id) async {
-    return LeagueWeightClassController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      orderBy: ['season_partition', 'pos'],
-      obfuscate: user?.obfuscate ?? true,
-    );
   }
 
   Future<List<LeagueWeightClass>> getLeagueWeightClasses(
@@ -112,8 +73,8 @@ class LeagueController extends OrganizationalController<League> with ImportContr
       substitutionValues: {'id': entity.id},
       onUpdateOrCreate: (prevTeamMatch, teamMatch) async {
         return teamMatch.copyWith(
-          home: await LineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
-          guest: await LineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
+          home: await TeamLineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
+          guest: await TeamLineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
           referee: teamMatch.referee == null
               ? null
               : await PersonController().updateOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
@@ -132,8 +93,8 @@ class LeagueController extends OrganizationalController<League> with ImportContr
         );
       },
       onDelete: (previous) async {
-        await LineupController().deleteSingle(previous.home.id!);
-        await LineupController().deleteSingle(previous.guest.id!);
+        await TeamLineupController().deleteSingle(previous.home.id!);
+        await TeamLineupController().deleteSingle(previous.guest.id!);
         // Do not delete persons
       },
       obfuscate: obfuscate,

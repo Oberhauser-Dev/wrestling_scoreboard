@@ -8,7 +8,7 @@ environment:
   sdk: ^3.7.0
 
 dependencies:
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   freezed_annotation: ^3.0.0
   country: ^5.0.0
   http: ^1.2.1
@@ -22,3 +22,5 @@ dev_dependencies:
   json_serializable: ^6.7.1
   lints: ^5.1.1
   test: ^1.16.0
+  wrestling_scoreboard_generator:
+    path: ../wrestling_scoreboard_generator

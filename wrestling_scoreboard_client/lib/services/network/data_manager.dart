@@ -66,7 +66,7 @@ abstract class DataManager implements AuthManager {
 
   /// CREATE: generate bouts of a wrestling event
   /// If [isReset] is true, then delete all previous Bouts and TeamMatchBouts, else reuse the states.
-  Future<void> generateBouts<S extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]);
+  Future<void> generateBouts<S extends DataObject>(S dataObject, [bool isReset = false]);
 
   Future<Migration> getMigration();
 

@@ -18,6 +18,11 @@ mixin _$CompetitionBout {
   int? get id;
   Competition get competition;
   Bout get bout;
+  int get pos;
+  int? get mat;
+  int? get round;
+  RoundType get roundType;
+  CompetitionWeightCategory? get weightCategory;
 
   /// Create a copy of CompetitionBout
   /// with the given fields replaced by the non-null parameter values.
@@ -36,16 +41,21 @@ mixin _$CompetitionBout {
             other is CompetitionBout &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.competition, competition) || other.competition == competition) &&
-            (identical(other.bout, bout) || other.bout == bout));
+            (identical(other.bout, bout) || other.bout == bout) &&
+            (identical(other.pos, pos) || other.pos == pos) &&
+            (identical(other.mat, mat) || other.mat == mat) &&
+            (identical(other.round, round) || other.round == round) &&
+            (identical(other.roundType, roundType) || other.roundType == roundType) &&
+            (identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, competition, bout);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout, pos, mat, round, roundType, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, roundType: $roundType, weightCategory: $weightCategory)';
   }
 }
 
@@ -54,10 +64,19 @@ abstract mixin class $CompetitionBoutCopyWith<$Res> {
   factory $CompetitionBoutCopyWith(CompetitionBout value, $Res Function(CompetitionBout) _then) =
       _$CompetitionBoutCopyWithImpl;
   @useResult
-  $Res call({int? id, Competition competition, Bout bout});
+  $Res call(
+      {int? id,
+      Competition competition,
+      Bout bout,
+      int pos,
+      int? mat,
+      int? round,
+      RoundType roundType,
+      CompetitionWeightCategory? weightCategory});
 
   $CompetitionCopyWith<$Res> get competition;
   $BoutCopyWith<$Res> get bout;
+  $CompetitionWeightCategoryCopyWith<$Res>? get weightCategory;
 }
 
 /// @nodoc
@@ -75,6 +94,11 @@ class _$CompetitionBoutCopyWithImpl<$Res> implements $CompetitionBoutCopyWith<$R
     Object? id = freezed,
     Object? competition = null,
     Object? bout = null,
+    Object? pos = null,
+    Object? mat = freezed,
+    Object? round = freezed,
+    Object? roundType = null,
+    Object? weightCategory = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -89,6 +113,26 @@ class _$CompetitionBoutCopyWithImpl<$Res> implements $CompetitionBoutCopyWith<$R
           ? _self.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
+      pos: null == pos
+          ? _self.pos
+          : pos // ignore: cast_nullable_to_non_nullable
+              as int,
+      mat: freezed == mat
+          ? _self.mat
+          : mat // ignore: cast_nullable_to_non_nullable
+              as int?,
+      round: freezed == round
+          ? _self.round
+          : round // ignore: cast_nullable_to_non_nullable
+              as int?,
+      roundType: null == roundType
+          ? _self.roundType
+          : roundType // ignore: cast_nullable_to_non_nullable
+              as RoundType,
+      weightCategory: freezed == weightCategory
+          ? _self.weightCategory
+          : weightCategory // ignore: cast_nullable_to_non_nullable
+              as CompetitionWeightCategory?,
     ));
   }
 
@@ -111,12 +155,35 @@ class _$CompetitionBoutCopyWithImpl<$Res> implements $CompetitionBoutCopyWith<$R
       return _then(_self.copyWith(bout: value));
     });
   }
+
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CompetitionWeightCategoryCopyWith<$Res>? get weightCategory {
+    if (_self.weightCategory == null) {
+      return null;
+    }
+
+    return $CompetitionWeightCategoryCopyWith<$Res>(_self.weightCategory!, (value) {
+      return _then(_self.copyWith(weightCategory: value));
+    });
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _CompetitionBout extends CompetitionBout {
-  const _CompetitionBout({this.id, required this.competition, required this.bout}) : super._();
+  const _CompetitionBout(
+      {this.id,
+      required this.competition,
+      required this.bout,
+      required this.pos,
+      this.mat,
+      this.round,
+      this.roundType = RoundType.qualification,
+      this.weightCategory})
+      : super._();
   factory _CompetitionBout.fromJson(Map<String, dynamic> json) => _$CompetitionBoutFromJson(json);
 
   @override
@@ -125,6 +192,17 @@ class _CompetitionBout extends CompetitionBout {
   final Competition competition;
   @override
   final Bout bout;
+  @override
+  final int pos;
+  @override
+  final int? mat;
+  @override
+  final int? round;
+  @override
+  @JsonKey()
+  final RoundType roundType;
+  @override
+  final CompetitionWeightCategory? weightCategory;
 
   /// Create a copy of CompetitionBout
   /// with the given fields replaced by the non-null parameter values.
@@ -148,16 +226,21 @@ class _CompetitionBout extends CompetitionBout {
             other is _CompetitionBout &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.competition, competition) || other.competition == competition) &&
-            (identical(other.bout, bout) || other.bout == bout));
+            (identical(other.bout, bout) || other.bout == bout) &&
+            (identical(other.pos, pos) || other.pos == pos) &&
+            (identical(other.mat, mat) || other.mat == mat) &&
+            (identical(other.round, round) || other.round == round) &&
+            (identical(other.roundType, roundType) || other.roundType == roundType) &&
+            (identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, competition, bout);
+  int get hashCode => Object.hash(runtimeType, id, competition, bout, pos, mat, round, roundType, weightCategory);
 
   @override
   String toString() {
-    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout)';
+    return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, roundType: $roundType, weightCategory: $weightCategory)';
   }
 }
 
@@ -167,12 +250,22 @@ abstract mixin class _$CompetitionBoutCopyWith<$Res> implements $CompetitionBout
       __$CompetitionBoutCopyWithImpl;
   @override
   @useResult
-  $Res call({int? id, Competition competition, Bout bout});
+  $Res call(
+      {int? id,
+      Competition competition,
+      Bout bout,
+      int pos,
+      int? mat,
+      int? round,
+      RoundType roundType,
+      CompetitionWeightCategory? weightCategory});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
   @override
   $BoutCopyWith<$Res> get bout;
+  @override
+  $CompetitionWeightCategoryCopyWith<$Res>? get weightCategory;
 }
 
 /// @nodoc
@@ -190,6 +283,11 @@ class __$CompetitionBoutCopyWithImpl<$Res> implements _$CompetitionBoutCopyWith<
     Object? id = freezed,
     Object? competition = null,
     Object? bout = null,
+    Object? pos = null,
+    Object? mat = freezed,
+    Object? round = freezed,
+    Object? roundType = null,
+    Object? weightCategory = freezed,
   }) {
     return _then(_CompetitionBout(
       id: freezed == id
@@ -204,6 +302,26 @@ class __$CompetitionBoutCopyWithImpl<$Res> implements _$CompetitionBoutCopyWith<
           ? _self.bout
           : bout // ignore: cast_nullable_to_non_nullable
               as Bout,
+      pos: null == pos
+          ? _self.pos
+          : pos // ignore: cast_nullable_to_non_nullable
+              as int,
+      mat: freezed == mat
+          ? _self.mat
+          : mat // ignore: cast_nullable_to_non_nullable
+              as int?,
+      round: freezed == round
+          ? _self.round
+          : round // ignore: cast_nullable_to_non_nullable
+              as int?,
+      roundType: null == roundType
+          ? _self.roundType
+          : roundType // ignore: cast_nullable_to_non_nullable
+              as RoundType,
+      weightCategory: freezed == weightCategory
+          ? _self.weightCategory
+          : weightCategory // ignore: cast_nullable_to_non_nullable
+              as CompetitionWeightCategory?,
     ));
   }
 
@@ -224,6 +342,20 @@ class __$CompetitionBoutCopyWithImpl<$Res> implements _$CompetitionBoutCopyWith<
   $BoutCopyWith<$Res> get bout {
     return $BoutCopyWith<$Res>(_self.bout, (value) {
       return _then(_self.copyWith(bout: value));
+    });
+  }
+
+  /// Create a copy of CompetitionBout
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CompetitionWeightCategoryCopyWith<$Res>? get weightCategory {
+    if (_self.weightCategory == null) {
+      return null;
+    }
+
+    return $CompetitionWeightCategoryCopyWith<$Res>(_self.weightCategory!, (value) {
+      return _then(_self.copyWith(weightCategory: value));
     });
   }
 }

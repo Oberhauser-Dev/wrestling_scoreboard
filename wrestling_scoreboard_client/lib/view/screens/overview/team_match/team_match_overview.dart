@@ -13,12 +13,12 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/lineup_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/shared/bout_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -60,6 +60,17 @@ class TeamMatchOverview extends ConsumerWidget {
                 return MapEntry(teamMatchBout, boutActions);
               })));
               final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+
+              final homeParticipations =
+                  await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
+              ).future);
+
+              final guestParticipations =
+                  await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
+              ).future);
+
               if (context.mounted) {
                 final bytes = await TeamMatchTranscript(
                   teamMatchBoutActions: teamMatchBoutActions,
@@ -67,6 +78,8 @@ class TeamMatchOverview extends ConsumerWidget {
                   teamMatch: match,
                   boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                   isTimeCountDown: isTimeCountDown,
+                  guestParticipations: guestParticipations,
+                  homeParticipations: homeParticipations,
                 ).buildPdf();
                 Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
               }
@@ -78,16 +91,17 @@ class TeamMatchOverview extends ConsumerWidget {
             label: localizations.match,
             details: '${match.home.team.name} - ${match.guest.team.name}',
             actions: [
-              ConditionalOrganizationImportAction(
-                  id: id, organization: match.organization!, importType: OrganizationImportType.teamMatch),
+              if (match.organization != null)
+                ConditionalOrganizationImportAction(
+                    id: id, organization: match.organization!, importType: OrganizationImportType.teamMatch),
               // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
               IconButton(
                   onPressed: () async {
                     final reporter = match.organization?.getReporter();
                     if (reporter != null) {
-                      final bouts = await _getBouts(ref, match: match);
+                      final tmbouts = await _getBouts(ref, match: match);
                       final boutMap = Map.fromEntries(await Future.wait(
-                          bouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout)))));
+                          tmbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout)))));
                       final reportStr = reporter.exportTeamMatchReport(match, boutMap);
 
                       await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
@@ -120,10 +134,10 @@ class TeamMatchOverview extends ConsumerWidget {
               Tab(child: HeadingText(localizations.bouts)),
               Tab(child: HeadingText(localizations.persons)),
             ],
-            body: SingleConsumer<Lineup>(
+            body: SingleConsumer<TeamLineup>(
               id: match.home.id!,
               initialData: match.home,
-              builder: (context, homeLineup) => SingleConsumer<Lineup>(
+              builder: (context, homeLineup) => SingleConsumer<TeamLineup>(
                 id: match.guest.id!,
                 initialData: match.guest,
                 builder: (context, guestLineup) {
@@ -252,7 +266,7 @@ class TeamMatchOverview extends ConsumerWidget {
                               itemBuilder: (context, index) => items[index],
                             );
                           }),
-                    BoutList(filterObject: match),
+                    TeamMatchBoutList(filterObject: match),
                     GroupedList(
                       header: const HeadingItem(),
                       itemCount: contentItems.length,
@@ -267,8 +281,9 @@ class TeamMatchOverview extends ConsumerWidget {
         });
   }
 
-  Future<List<Bout>> _getBouts(WidgetRef ref, {required TeamMatch match}) => ref.readAsync(
-      manyDataStreamProvider<Bout, TeamMatch>(ManyProviderData<Bout, TeamMatch>(filterObject: match)).future);
+  Future<List<TeamMatchBout>> _getBouts(WidgetRef ref, {required TeamMatch match}) => ref.readAsync(
+      manyDataStreamProvider<TeamMatchBout, TeamMatch>(ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match))
+          .future);
 
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
       manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
@@ -280,13 +295,13 @@ class TeamMatchOverview extends ConsumerWidget {
   handleSelectedLineup(
     BuildContext context,
     WidgetRef ref,
-    Lineup lineup,
+    TeamLineup lineup,
     TeamMatch match,
     NavigatorState navigator, {
     required League league,
   }) async {
     final dataManager = await ref.read(dataManagerNotifierProvider);
-    final participations = await dataManager.readMany<Participation, Lineup>(filterObject: lineup);
+    final participations = await dataManager.readMany<TeamLineupParticipation, TeamLineup>(filterObject: lineup);
     final leagueWeightClasses = (await dataManager.readMany<LeagueWeightClass, League>(filterObject: league))
         .where((element) => element.seasonPartition == match.seasonPartition)
         .toList();
@@ -298,8 +313,8 @@ class TeamMatchOverview extends ConsumerWidget {
               .toList();
       weightClasses = divisionWeightClasses.map((e) => e.weightClass).toList();
     }
-    Lineup? proposedLineup;
-    List<Participation>? proposedParticipations;
+    TeamLineup? proposedLineup;
+    List<TeamLineupParticipation>? proposedParticipations;
     if (participations.isEmpty) {
       // Load lineup from previous fight as proposal
       var matches = await ref.readAsync(manyDataStreamProvider<TeamMatch, League>(
@@ -319,13 +334,14 @@ class TeamMatchOverview extends ConsumerWidget {
           importType: OrganizationImportType.teamMatch,
         );
         proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
-        proposedParticipations = await dataManager.readMany<Participation, Lineup>(filterObject: proposedLineup);
+        proposedParticipations =
+            await dataManager.readMany<TeamLineupParticipation, TeamLineup>(filterObject: proposedLineup);
       }
     }
     navigator.push(
       MaterialPageRoute(
         builder: (context) {
-          return LineupEdit(
+          return TeamLineupEdit(
             weightClasses: weightClasses,
             participations: participations,
             lineup: lineup,

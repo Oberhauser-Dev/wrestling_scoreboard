@@ -20,5 +20,5 @@ class TeamClubAffiliationController extends ShelfController<TeamClubAffiliation>
     return many.zeroOrOne;
   }
 
-  TeamClubAffiliationController._internal() : super(tableName: 'team_club_affiliation');
+  TeamClubAffiliationController._internal() : super();
 }

@@ -21,6 +21,10 @@ abstract class Competition extends WrestlingEvent with _$Competition {
     String? no,
     int? visitorsCount,
     String? comment,
+    required int matCount,
+
+    /// The ranks which must be determined
+    @Default(10) maxRanking,
   }) = _Competition;
 
   factory Competition.fromJson(Map<String, Object?> json) => _$CompetitionFromJson(json);
@@ -34,9 +38,12 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       orgSyncId: e['org_sync_id'] as String?,
       organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       name: e['name'],
+      no: e['no'] as String?,
       location: e['location'] as String?,
       date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
+      matCount: e['mat_count'] as int,
+      maxRanking: e['max_ranking'] as int,
       comment: e['comment'] as String?,
       boutConfig: boutConfig,
     );
@@ -48,17 +55,20 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       ..addAll({
         'name': name,
         'bout_config_id': boutConfig.id!,
+        'mat_count': matCount,
+        'max_ranking': maxRanking,
       });
   }
 
-  @override
-  Future<List<Bout>> generateBouts(List<List<Participation>> teamParticipations, List<WeightClass> weightClasses) {
+  Future<List<CompetitionBout>> generateBouts(
+      List<List<CompetitionParticipation>> teamParticipations, List<WeightClass> weightClasses) {
     // TODO: implement generateBouts
     throw UnimplementedError();
   }
 
   @override
-  String get tableName => 'competition';
+  String get tableName => cTableName;
+  static const cTableName = 'competition';
 
   @override
   Competition copyWithId(int? id) {

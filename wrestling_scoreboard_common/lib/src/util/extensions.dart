@@ -61,6 +61,16 @@ extension IndexOfLetter on String {
   }
 }
 
+extension LetterOfIndex on int {
+  /// Converts number to a letter:
+  /// 0 -> A
+  /// 1 -> B
+  /// 2 -> C
+  String toLetter() {
+    return String.fromCharCode(this + 65);
+  }
+}
+
 extension GroupListByIterable<T> on Iterable<T> {
   Map<Iterable<K>, List<T>> groupListsByIterable<K>(Iterable<K> Function(T element) keyOf) {
     var result = <Iterable<K>, List<T>>{};

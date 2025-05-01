@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
@@ -16,7 +14,6 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/request.dart';
 
 import 'bout_config_controller.dart';
 import 'league_controller.dart';
@@ -28,58 +25,13 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     return _singleton;
   }
 
-  OrganizationController._internal() : super(tableName: 'organization');
+  OrganizationController._internal() : super();
 
-  Future<Response> requestDivisions(Request request, User? user, String id) async {
-    return DivisionController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['organization_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestClubs(Request request, User? user, String id) async {
-    return ClubController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['organization_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestPersons(Request request, User? user, String id) async {
-    return PersonController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['organization_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<List<Person>> getPersons(User? user, int id) async {
+  Future<List<Person>> getPersons(bool obfuscate, int id) async {
     return await PersonController().getMany(
       conditions: ['organization_id = @id'],
       substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestCompetitions(Request request, User? user, String id) async {
-    return CompetitionController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['organization_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestChildOrganizations(Request request, User? user, String id) async {
-    return OrganizationController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['parent_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
+      obfuscate: obfuscate,
     );
   }
 

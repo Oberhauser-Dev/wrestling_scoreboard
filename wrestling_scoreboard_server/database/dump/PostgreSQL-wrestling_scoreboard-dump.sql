@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
+-- Dumped from database version 17.2
+-- Dumped by pg_dump version 17.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -95,6 +96,20 @@ CREATE TYPE public.bout_role AS ENUM (
 ALTER TYPE public.bout_role OWNER TO wrestling;
 
 --
+-- Name: competition_system; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.competition_system AS ENUM (
+    'singleElimination',
+    'doubleElimination',
+    'nordic',
+    'twoPools'
+);
+
+
+ALTER TYPE public.competition_system OWNER TO wrestling;
+
+--
 -- Name: gender; Type: TYPE; Schema: public; Owner: wrestling
 --
 
@@ -132,6 +147,21 @@ CREATE TYPE public.report_provider AS ENUM (
 
 
 ALTER TYPE public.report_provider OWNER TO wrestling;
+
+--
+-- Name: round_type; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.round_type AS ENUM (
+    'qualification',
+    'elimination',
+    'repechage',
+    'semiFinals',
+    'finals'
+);
+
+
+ALTER TYPE public.round_type OWNER TO wrestling;
 
 --
 -- Name: user_privilege; Type: TYPE; Schema: public; Owner: wrestling
@@ -176,6 +206,57 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: age_category; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.age_category (
+    id integer NOT NULL,
+    org_sync_id character varying(127),
+    organization_id integer,
+    name character varying(127) NOT NULL,
+    min_age smallint,
+    max_age smallint
+);
+
+
+ALTER TABLE public.age_category OWNER TO wrestling;
+
+--
+-- Name: age_category_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.age_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.age_category_id_seq OWNER TO wrestling;
+
+--
+-- Name: age_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.age_category_id_seq OWNED BY public.age_category.id;
+
+
+--
+-- Name: athlete_bout_state; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.athlete_bout_state (
+    id integer NOT NULL,
+    classification_points smallint,
+    membership_id integer NOT NULL
+);
+
+
+ALTER TABLE public.athlete_bout_state OWNER TO wrestling;
+
+--
 -- Name: bout; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -183,7 +264,6 @@ CREATE TABLE public.bout (
     id integer NOT NULL,
     red_id integer,
     blue_id integer,
-    weight_class_id integer,
     winner_role public.bout_role,
     bout_result public.bout_result,
     duration_millis integer,
@@ -394,7 +474,9 @@ ALTER TABLE public.wrestling_event OWNER TO wrestling;
 
 CREATE TABLE public.competition (
     name character varying(127),
-    bout_config_id integer NOT NULL
+    bout_config_id integer NOT NULL,
+    mat_count smallint DEFAULT 0 NOT NULL,
+    max_ranking smallint DEFAULT 10 NOT NULL
 )
 INHERITS (public.wrestling_event);
 
@@ -408,7 +490,12 @@ ALTER TABLE public.competition OWNER TO wrestling;
 CREATE TABLE public.competition_bout (
     id integer NOT NULL,
     competition_id integer NOT NULL,
-    bout_id integer
+    bout_id integer,
+    pos integer DEFAULT 0 NOT NULL,
+    mat smallint,
+    round smallint,
+    weight_category_id integer,
+    round_type public.round_type DEFAULT 'qualification'::public.round_type NOT NULL
 );
 
 
@@ -459,6 +546,84 @@ ALTER SEQUENCE public.competition_id_seq OWNED BY public.competition.id;
 
 
 --
+-- Name: competition_lineup; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.competition_lineup (
+    id integer NOT NULL,
+    competition_id integer NOT NULL,
+    club_id integer NOT NULL,
+    leader_id integer,
+    coach_id integer
+);
+
+
+ALTER TABLE public.competition_lineup OWNER TO wrestling;
+
+--
+-- Name: competition_lineup_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.competition_lineup_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.competition_lineup_id_seq OWNER TO wrestling;
+
+--
+-- Name: competition_lineup_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.competition_lineup_id_seq OWNED BY public.competition_lineup.id;
+
+
+--
+-- Name: competition_participation; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.competition_participation (
+    id integer NOT NULL,
+    competition_lineup_id integer NOT NULL,
+    membership_id integer NOT NULL,
+    weight_category_id integer,
+    weight numeric(5,2),
+    pool_group smallint,
+    pool_draw_number smallint,
+    eliminated boolean DEFAULT false NOT NULL,
+    disqualified boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.competition_participation OWNER TO wrestling;
+
+--
+-- Name: competition_participation_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.competition_participation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.competition_participation_id_seq OWNER TO wrestling;
+
+--
+-- Name: competition_participation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.competition_participation_id_seq OWNED BY public.competition_participation.id;
+
+
+--
 -- Name: competition_person; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -471,6 +636,81 @@ CREATE TABLE public.competition_person (
 
 
 ALTER TABLE public.competition_person OWNER TO wrestling;
+
+--
+-- Name: competition_system_affiliation; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.competition_system_affiliation (
+    id integer NOT NULL,
+    competition_id integer NOT NULL,
+    competition_system public.competition_system NOT NULL,
+    max_contestants integer
+);
+
+
+ALTER TABLE public.competition_system_affiliation OWNER TO wrestling;
+
+--
+-- Name: competition_system_affiliation_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.competition_system_affiliation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.competition_system_affiliation_id_seq OWNER TO wrestling;
+
+--
+-- Name: competition_system_affiliation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.competition_system_affiliation_id_seq OWNED BY public.competition_system_affiliation.id;
+
+
+--
+-- Name: competition_weight_category; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.competition_weight_category (
+    id integer NOT NULL,
+    org_sync_id character varying(127),
+    organization_id integer,
+    weight_class_id integer NOT NULL,
+    age_category_id integer NOT NULL,
+    competition_id integer NOT NULL,
+    paired_round smallint
+);
+
+
+ALTER TABLE public.competition_weight_category OWNER TO wrestling;
+
+--
+-- Name: competition_weight_category_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.competition_weight_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.competition_weight_category_id_seq OWNER TO wrestling;
+
+--
+-- Name: competition_weight_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.competition_weight_category_id_seq OWNED BY public.competition_weight_category.id;
+
 
 --
 -- Name: division; Type: TABLE; Schema: public; Owner: wrestling
@@ -689,10 +929,10 @@ ALTER SEQUENCE public.league_weight_class_id_seq OWNED BY public.league_weight_c
 
 
 --
--- Name: lineup; Type: TABLE; Schema: public; Owner: wrestling
+-- Name: team_lineup; Type: TABLE; Schema: public; Owner: wrestling
 --
 
-CREATE TABLE public.lineup (
+CREATE TABLE public.team_lineup (
     id integer NOT NULL,
     team_id integer,
     leader_id integer,
@@ -700,7 +940,7 @@ CREATE TABLE public.lineup (
 );
 
 
-ALTER TABLE public.lineup OWNER TO wrestling;
+ALTER TABLE public.team_lineup OWNER TO wrestling;
 
 --
 -- Name: lineup_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
@@ -721,7 +961,7 @@ ALTER SEQUENCE public.lineup_id_seq OWNER TO wrestling;
 -- Name: lineup_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.lineup_id_seq OWNED BY public.lineup.id;
+ALTER SEQUENCE public.lineup_id_seq OWNED BY public.team_lineup.id;
 
 
 --
@@ -813,19 +1053,6 @@ ALTER SEQUENCE public.organization_id_seq OWNED BY public.organization.id;
 
 
 --
--- Name: participant_state; Type: TABLE; Schema: public; Owner: wrestling
---
-
-CREATE TABLE public.participant_state (
-    id integer NOT NULL,
-    participation_id integer NOT NULL,
-    classification_points smallint
-);
-
-
-ALTER TABLE public.participant_state OWNER TO wrestling;
-
---
 -- Name: participant_state_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
 --
 
@@ -844,14 +1071,14 @@ ALTER SEQUENCE public.participant_state_id_seq OWNER TO wrestling;
 -- Name: participant_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.participant_state_id_seq OWNED BY public.participant_state.id;
+ALTER SEQUENCE public.participant_state_id_seq OWNED BY public.athlete_bout_state.id;
 
 
 --
--- Name: participation; Type: TABLE; Schema: public; Owner: wrestling
+-- Name: team_lineup_participation; Type: TABLE; Schema: public; Owner: wrestling
 --
 
-CREATE TABLE public.participation (
+CREATE TABLE public.team_lineup_participation (
     id integer NOT NULL,
     membership_id integer NOT NULL,
     lineup_id integer NOT NULL,
@@ -860,7 +1087,7 @@ CREATE TABLE public.participation (
 );
 
 
-ALTER TABLE public.participation OWNER TO wrestling;
+ALTER TABLE public.team_lineup_participation OWNER TO wrestling;
 
 --
 -- Name: participation_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
@@ -881,7 +1108,7 @@ ALTER SEQUENCE public.participation_id_seq OWNER TO wrestling;
 -- Name: participation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
 --
 
-ALTER SEQUENCE public.participation_id_seq OWNED BY public.participation.id;
+ALTER SEQUENCE public.participation_id_seq OWNED BY public.team_lineup_participation.id;
 
 
 --
@@ -1049,7 +1276,8 @@ CREATE TABLE public.team_match_bout (
     bout_id integer NOT NULL,
     pos integer DEFAULT 0 NOT NULL,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    weight_class_id integer NOT NULL
 );
 
 
@@ -1181,6 +1409,20 @@ ALTER SEQUENCE public.wrestling_event_id_seq OWNED BY public.wrestling_event.id;
 
 
 --
+-- Name: age_category id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.age_category ALTER COLUMN id SET DEFAULT nextval('public.age_category_id_seq'::regclass);
+
+
+--
+-- Name: athlete_bout_state id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.athlete_bout_state ALTER COLUMN id SET DEFAULT nextval('public.participant_state_id_seq'::regclass);
+
+
+--
 -- Name: bout id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1230,10 +1472,38 @@ ALTER TABLE ONLY public.competition_bout ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: competition_lineup id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_lineup ALTER COLUMN id SET DEFAULT nextval('public.competition_lineup_id_seq'::regclass);
+
+
+--
+-- Name: competition_participation id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_participation ALTER COLUMN id SET DEFAULT nextval('public.competition_participation_id_seq'::regclass);
+
+
+--
 -- Name: competition_person id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.competition_person ALTER COLUMN id SET DEFAULT nextval('public.event_person_id_seq'::regclass);
+
+
+--
+-- Name: competition_system_affiliation id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_system_affiliation ALTER COLUMN id SET DEFAULT nextval('public.competition_system_affiliation_id_seq'::regclass);
+
+
+--
+-- Name: competition_weight_category id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category ALTER COLUMN id SET DEFAULT nextval('public.competition_weight_category_id_seq'::regclass);
 
 
 --
@@ -1272,13 +1542,6 @@ ALTER TABLE ONLY public.league_weight_class ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- Name: lineup id; Type: DEFAULT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.lineup ALTER COLUMN id SET DEFAULT nextval('public.lineup_id_seq'::regclass);
-
-
---
 -- Name: membership id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1290,20 +1553,6 @@ ALTER TABLE ONLY public.membership ALTER COLUMN id SET DEFAULT nextval('public.m
 --
 
 ALTER TABLE ONLY public.organization ALTER COLUMN id SET DEFAULT nextval('public.organization_id_seq'::regclass);
-
-
---
--- Name: participant_state id; Type: DEFAULT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participant_state ALTER COLUMN id SET DEFAULT nextval('public.participant_state_id_seq'::regclass);
-
-
---
--- Name: participation id; Type: DEFAULT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participation ALTER COLUMN id SET DEFAULT nextval('public.participation_id_seq'::regclass);
 
 
 --
@@ -1335,6 +1584,20 @@ ALTER TABLE ONLY public.team_club_affiliation ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- Name: team_lineup id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup ALTER COLUMN id SET DEFAULT nextval('public.lineup_id_seq'::regclass);
+
+
+--
+-- Name: team_lineup_participation id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup_participation ALTER COLUMN id SET DEFAULT nextval('public.participation_id_seq'::regclass);
+
+
+--
 -- Name: team_match id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1363,24 +1626,68 @@ ALTER TABLE ONLY public.wrestling_event ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Data for Name: age_category; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.age_category (id, org_sync_id, organization_id, name, min_age, max_age) FROM stdin;
+\.
+
+
+--
+-- Data for Name: athlete_bout_state; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.athlete_bout_state (id, classification_points, membership_id) FROM stdin;
+26	\N	9
+31	\N	21
+32	\N	13
+33	\N	4
+34	\N	8
+35	\N	1
+36	\N	10
+40	\N	19
+41	\N	12
+44	\N	2
+45	\N	15
+46	\N	22
+47	\N	5
+50	\N	20
+51	\N	9
+52	\N	1
+53	\N	13
+56	\N	4
+57	\N	8
+62	\N	18
+65	\N	19
+66	\N	12
+69	\N	2
+70	\N	7
+73	\N	3
+74	\N	5
+75	\N	17
+76	\N	9
+\.
+
+
+--
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
-28	33	34	20	\N	\N	0	\N	\N
-29	35	36	21	\N	\N	0	\N	\N
-32	40	41	22	\N	\N	0	\N	\N
-34	44	45	23	\N	\N	0	\N	\N
-35	46	47	24	\N	\N	0	\N	\N
-37	50	51	25	\N	\N	0	\N	\N
-38	52	53	26	\N	\N	0	\N	\N
-40	56	57	27	\N	\N	0	\N	\N
-43	62	\N	28	\N	\N	0	\N	\N
-45	65	66	29	\N	\N	0	\N	\N
-47	69	70	30	\N	\N	0	\N	\N
-49	73	74	31	\N	\N	0	\N	\N
-50	75	76	32	\N	\N	0	\N	\N
-27	31	32	19	\N	\N	0	\N	\N
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
+28	33	34	\N	\N	0	\N	\N
+29	35	36	\N	\N	0	\N	\N
+32	40	41	\N	\N	0	\N	\N
+34	44	45	\N	\N	0	\N	\N
+35	46	47	\N	\N	0	\N	\N
+37	50	51	\N	\N	0	\N	\N
+38	52	53	\N	\N	0	\N	\N
+40	56	57	\N	\N	0	\N	\N
+43	62	\N	\N	\N	0	\N	\N
+45	65	66	\N	\N	0	\N	\N
+47	69	70	\N	\N	0	\N	\N
+49	73	74	\N	\N	0	\N	\N
+50	75	76	\N	\N	0	\N	\N
+27	31	32	\N	\N	0	\N	\N
 \.
 
 
@@ -1435,8 +1742,8 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 -- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1
+COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking) FROM stdin;
+1	2021-07-17	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1	0	10
 \.
 
 
@@ -1444,7 +1751,23 @@ COPY public.competition (id, date, location, visitors_count, comment, no, organi
 -- Data for Name: competition_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_bout (id, competition_id, bout_id) FROM stdin;
+COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, weight_category_id, round_type) FROM stdin;
+\.
+
+
+--
+-- Data for Name: competition_lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.competition_lineup (id, competition_id, club_id, leader_id, coach_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: competition_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, pool_group, pool_draw_number, eliminated, disqualified) FROM stdin;
 \.
 
 
@@ -1453,6 +1776,22 @@ COPY public.competition_bout (id, competition_id, bout_id) FROM stdin;
 --
 
 COPY public.competition_person (id, competition_id, person_id, person_role) FROM stdin;
+\.
+
+
+--
+-- Data for Name: competition_system_affiliation; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.competition_system_affiliation (id, competition_id, competition_system, max_contestants) FROM stdin;
+\.
+
+
+--
+-- Data for Name: competition_weight_category; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, age_category_id, competition_id, paired_round) FROM stdin;
 \.
 
 
@@ -1536,18 +1875,6 @@ COPY public.league_weight_class (id, league_id, weight_class_id, pos, season_par
 
 
 --
--- Data for Name: lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
---
-
-COPY public.lineup (id, team_id, leader_id, coach_id) FROM stdin;
-3	2	\N	\N
-4	3	\N	\N
-2	3	14	8
-1	1	16	4
-\.
-
-
---
 -- Data for Name: membership; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1582,7 +1909,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.2.0-pre.11	0.0.0
+0.3.0-pre.4	0.0.0
 \.
 
 
@@ -1592,77 +1919,6 @@ COPY public.migration (semver, min_client_version) FROM stdin;
 
 COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
 1	United World Wrestling	UWW	\N	\N	\N
-\.
-
-
---
--- Data for Name: participant_state; Type: TABLE DATA; Schema: public; Owner: wrestling
---
-
-COPY public.participant_state (id, participation_id, classification_points) FROM stdin;
-26	6	\N
-31	13	\N
-32	24	\N
-33	14	\N
-34	23	\N
-35	15	\N
-36	26	\N
-40	10	\N
-41	28	\N
-44	9	\N
-45	25	\N
-46	12	\N
-47	30	\N
-50	11	\N
-51	31	\N
-52	1	\N
-53	5	\N
-56	4	\N
-57	8	\N
-62	16	\N
-65	20	\N
-66	27	\N
-69	22	\N
-70	29	\N
-73	3	\N
-74	7	\N
-75	21	\N
-76	6	\N
-\.
-
-
---
--- Data for Name: participation; Type: TABLE DATA; Schema: public; Owner: wrestling
---
-
-COPY public.participation (id, membership_id, lineup_id, weight_class_id, weight) FROM stdin;
-4	4	1	10	110.00
-8	8	2	10	129.80
-13	21	1	19	40.00
-14	4	1	20	110.00
-9	2	1	23	66.00
-10	19	1	22	98.00
-11	20	1	25	75.00
-15	1	1	21	61.00
-12	22	1	24	86.00
-1	1	1	1	50.12
-16	18	1	28	61.00
-20	19	1	29	97.00
-21	17	1	32	75.00
-22	2	1	30	66.00
-3	3	1	31	77.12
-23	8	2	20	130.00
-24	13	2	19	56.00
-25	15	2	23	66.00
-26	10	2	21	61.00
-7	5	2	31	80.20
-27	12	2	29	98.00
-28	12	2	22	98.00
-29	7	2	30	66.00
-5	13	2	26	55.30
-30	5	2	24	86.00
-6	9	2	32	70.95
-31	9	2	25	75.00
 \.
 
 
@@ -1729,6 +1985,53 @@ COPY public.team_club_affiliation (id, team_id, club_id) FROM stdin;
 
 
 --
+-- Data for Name: team_lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.team_lineup (id, team_id, leader_id, coach_id) FROM stdin;
+3	2	\N	\N
+4	3	\N	\N
+2	3	14	8
+1	1	16	4
+\.
+
+
+--
+-- Data for Name: team_lineup_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_class_id, weight) FROM stdin;
+4	4	1	10	110.00
+8	8	2	10	129.80
+13	21	1	19	40.00
+14	4	1	20	110.00
+9	2	1	23	66.00
+10	19	1	22	98.00
+11	20	1	25	75.00
+15	1	1	21	61.00
+12	22	1	24	86.00
+1	1	1	1	50.12
+16	18	1	28	61.00
+20	19	1	29	97.00
+21	17	1	32	75.00
+22	2	1	30	66.00
+3	3	1	31	77.12
+23	8	2	20	130.00
+24	13	2	19	56.00
+25	15	2	23	66.00
+26	10	2	21	61.00
+7	5	2	31	80.20
+27	12	2	29	98.00
+28	12	2	22	98.00
+29	7	2	30	66.00
+5	13	2	26	55.30
+30	5	2	24	86.00
+6	9	2	32	70.95
+31	9	2	25	75.00
+\.
+
+
+--
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1741,21 +2044,21 @@ COPY public.team_match (id, date, location, visitors_count, comment, no, organiz
 -- Data for Name: team_match_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organization_id) FROM stdin;
-25	1	27	0	\N	\N
-26	1	28	1	\N	\N
-27	1	29	2	\N	\N
-30	1	32	3	\N	\N
-32	1	34	4	\N	\N
-33	1	35	5	\N	\N
-35	1	37	6	\N	\N
-36	1	38	7	\N	\N
-38	1	40	8	\N	\N
-41	1	43	9	\N	\N
-43	1	45	10	\N	\N
-45	1	47	11	\N	\N
-47	1	49	12	\N	\N
-48	1	50	13	\N	\N
+COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organization_id, weight_class_id) FROM stdin;
+25	1	27	0	\N	\N	19
+26	1	28	1	\N	\N	20
+27	1	29	2	\N	\N	21
+30	1	32	3	\N	\N	22
+32	1	34	4	\N	\N	23
+33	1	35	5	\N	\N	24
+35	1	37	6	\N	\N	25
+36	1	38	7	\N	\N	26
+38	1	40	8	\N	\N	27
+41	1	43	9	\N	\N	28
+43	1	45	10	\N	\N	29
+45	1	47	11	\N	\N	30
+47	1	49	12	\N	\N	31
+48	1	50	13	\N	\N	32
 \.
 
 
@@ -1808,6 +2111,13 @@ COPY public.wrestling_event (id, date, location, visitors_count, comment, no, or
 
 
 --
+-- Name: age_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.age_category_id_seq', 1, false);
+
+
+--
 -- Name: bout_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -1854,6 +2164,34 @@ SELECT pg_catalog.setval('public.competition_bout_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.competition_id_seq', 1, true);
+
+
+--
+-- Name: competition_lineup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.competition_lineup_id_seq', 1, false);
+
+
+--
+-- Name: competition_participation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.competition_participation_id_seq', 1, false);
+
+
+--
+-- Name: competition_system_affiliation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.competition_system_affiliation_id_seq', 1, false);
+
+
+--
+-- Name: competition_weight_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.competition_weight_category_id_seq', 1, false);
 
 
 --
@@ -1990,6 +2328,22 @@ SELECT pg_catalog.setval('public.wrestling_event_id_seq', 1, true);
 
 
 --
+-- Name: age_category age_category_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.age_category
+    ADD CONSTRAINT age_category_pk PRIMARY KEY (id);
+
+
+--
+-- Name: athlete_bout_state athlete_bout_state_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.athlete_bout_state
+    ADD CONSTRAINT athlete_bout_state_pk PRIMARY KEY (id);
+
+
+--
 -- Name: bout_action bout_action_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2038,11 +2392,43 @@ ALTER TABLE ONLY public.competition_bout
 
 
 --
+-- Name: competition_lineup competition_lineup_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_lineup
+    ADD CONSTRAINT competition_lineup_pk PRIMARY KEY (id);
+
+
+--
+-- Name: competition_participation competition_participation_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_participation
+    ADD CONSTRAINT competition_participation_pk PRIMARY KEY (id);
+
+
+--
 -- Name: competition competition_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.competition
     ADD CONSTRAINT competition_pk PRIMARY KEY (id);
+
+
+--
+-- Name: competition_system_affiliation competition_system_affiliation_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_system_affiliation
+    ADD CONSTRAINT competition_system_affiliation_pk PRIMARY KEY (id);
+
+
+--
+-- Name: competition_weight_category competition_weight_category_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category
+    ADD CONSTRAINT competition_weight_category_pk PRIMARY KEY (id);
 
 
 --
@@ -2102,14 +2488,6 @@ ALTER TABLE ONLY public.league_weight_class
 
 
 --
--- Name: lineup lineup_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_pk PRIMARY KEY (id);
-
-
---
 -- Name: membership membership_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2134,26 +2512,10 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: participant_state participant_state_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_lineup_participation participation_uk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.participant_state
-    ADD CONSTRAINT participant_state_pk PRIMARY KEY (id);
-
-
---
--- Name: participation participation_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participation
-    ADD CONSTRAINT participation_pk PRIMARY KEY (id);
-
-
---
--- Name: participation participation_uk; Type: CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participation
+ALTER TABLE ONLY public.team_lineup_participation
     ADD CONSTRAINT participation_uk UNIQUE (membership_id, lineup_id, weight_class_id);
 
 
@@ -2179,6 +2541,22 @@ ALTER TABLE ONLY public.team_club_affiliation
 
 ALTER TABLE ONLY public.team_club_affiliation
     ADD CONSTRAINT team_club_affiliation_pk_2 UNIQUE (team_id, club_id);
+
+
+--
+-- Name: team_lineup_participation team_lineup_participation_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup_participation
+    ADD CONSTRAINT team_lineup_participation_pk PRIMARY KEY (id);
+
+
+--
+-- Name: team_lineup team_lineup_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup
+    ADD CONSTRAINT team_lineup_pk PRIMARY KEY (id);
 
 
 --
@@ -2280,6 +2658,22 @@ CREATE UNIQUE INDEX team_match_bout_id_uindex ON public.team_match_bout USING bt
 
 
 --
+-- Name: age_category age_category_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.age_category
+    ADD CONSTRAINT age_category_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id) ON DELETE CASCADE;
+
+
+--
+-- Name: athlete_bout_state athlete_bout_state_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.athlete_bout_state
+    ADD CONSTRAINT athlete_bout_state_membership_id_fk FOREIGN KEY (membership_id) REFERENCES public.membership(id) ON DELETE CASCADE;
+
+
+--
 -- Name: bout_action bout_action_bout_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2300,7 +2694,7 @@ ALTER TABLE ONLY public.bout
 --
 
 ALTER TABLE ONLY public.bout
-    ADD CONSTRAINT bout_participant_state_id_fk FOREIGN KEY (red_id) REFERENCES public.participant_state(id) ON DELETE CASCADE;
+    ADD CONSTRAINT bout_participant_state_id_fk FOREIGN KEY (red_id) REFERENCES public.athlete_bout_state(id) ON DELETE CASCADE;
 
 
 --
@@ -2308,7 +2702,7 @@ ALTER TABLE ONLY public.bout
 --
 
 ALTER TABLE ONLY public.bout
-    ADD CONSTRAINT bout_participant_state_id_fk_2 FOREIGN KEY (blue_id) REFERENCES public.participant_state(id) ON DELETE CASCADE;
+    ADD CONSTRAINT bout_participant_state_id_fk_2 FOREIGN KEY (blue_id) REFERENCES public.athlete_bout_state(id) ON DELETE CASCADE;
 
 
 --
@@ -2317,14 +2711,6 @@ ALTER TABLE ONLY public.bout
 
 ALTER TABLE ONLY public.bout_result_rule
     ADD CONSTRAINT bout_result_rule_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id);
-
-
---
--- Name: bout bout_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.bout
-    ADD CONSTRAINT bout_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
 
 
 --
@@ -2352,11 +2738,123 @@ ALTER TABLE ONLY public.competition_bout
 
 
 --
+-- Name: competition_bout competition_bout_competition_weight_category_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_bout
+    ADD CONSTRAINT competition_bout_competition_weight_category_id_fk FOREIGN KEY (weight_category_id) REFERENCES public.competition_weight_category(id);
+
+
+--
 -- Name: competition competition_bout_config_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.competition
     ADD CONSTRAINT competition_bout_config_id_fk FOREIGN KEY (bout_config_id) REFERENCES public.bout_config(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_lineup competition_lineup_club_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_lineup
+    ADD CONSTRAINT competition_lineup_club_id_fk FOREIGN KEY (club_id) REFERENCES public.club(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_lineup competition_lineup_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_lineup
+    ADD CONSTRAINT competition_lineup_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_lineup competition_lineup_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_lineup
+    ADD CONSTRAINT competition_lineup_membership_id_fk FOREIGN KEY (leader_id) REFERENCES public.membership(id);
+
+
+--
+-- Name: competition_lineup competition_lineup_membership_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_lineup
+    ADD CONSTRAINT competition_lineup_membership_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.membership(id);
+
+
+--
+-- Name: competition_participation competition_participation_competition_lineup_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_participation
+    ADD CONSTRAINT competition_participation_competition_lineup_id_fk FOREIGN KEY (competition_lineup_id) REFERENCES public.competition_lineup(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_participation competition_participation_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_participation
+    ADD CONSTRAINT competition_participation_membership_id_fk FOREIGN KEY (membership_id) REFERENCES public.membership(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_participation competition_participation_weight_category_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_participation
+    ADD CONSTRAINT competition_participation_weight_category_id_fk FOREIGN KEY (weight_category_id) REFERENCES public.competition_weight_category(id);
+
+
+--
+-- Name: competition_person competition_person_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_person
+    ADD CONSTRAINT competition_person_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_system_affiliation competition_system_affiliation_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_system_affiliation
+    ADD CONSTRAINT competition_system_affiliation_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id);
+
+
+--
+-- Name: competition_weight_category competition_weight_category_age_category_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category
+    ADD CONSTRAINT competition_weight_category_age_category_id_fk FOREIGN KEY (age_category_id) REFERENCES public.age_category(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_weight_category competition_weight_category_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category
+    ADD CONSTRAINT competition_weight_category_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_weight_category competition_weight_category_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category
+    ADD CONSTRAINT competition_weight_category_organization_id_fk FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: competition_weight_category competition_weight_category_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category
+    ADD CONSTRAINT competition_weight_category_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
 
 
 --
@@ -2416,14 +2914,6 @@ ALTER TABLE ONLY public.competition_person
 
 
 --
--- Name: competition_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.competition_person
-    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (competition_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
-
-
---
 -- Name: league league_division_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2480,30 +2970,6 @@ ALTER TABLE ONLY public.league_weight_class
 
 
 --
--- Name: lineup lineup_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_membership_id_fk FOREIGN KEY (leader_id) REFERENCES public.membership(id) ON DELETE CASCADE;
-
-
---
--- Name: lineup lineup_membership_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_membership_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.membership(id) ON DELETE CASCADE;
-
-
---
--- Name: lineup lineup_team_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_team_id_fk FOREIGN KEY (team_id) REFERENCES public.team(id);
-
-
---
 -- Name: membership membership_club_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2536,35 +3002,11 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: participant_state participant_state_participation_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_lineup_participation participation_lineup_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.participant_state
-    ADD CONSTRAINT participant_state_participation_id_fk FOREIGN KEY (participation_id) REFERENCES public.participation(id) ON DELETE CASCADE;
-
-
---
--- Name: participation participation_lineup_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participation
-    ADD CONSTRAINT participation_lineup_id_fk FOREIGN KEY (lineup_id) REFERENCES public.lineup(id);
-
-
---
--- Name: participation participation_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participation
-    ADD CONSTRAINT participation_membership_id_fk FOREIGN KEY (membership_id) REFERENCES public.membership(id) ON DELETE CASCADE;
-
-
---
--- Name: participation participation_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.participation
-    ADD CONSTRAINT participation_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.team_lineup_participation
+    ADD CONSTRAINT participation_lineup_id_fk FOREIGN KEY (lineup_id) REFERENCES public.team_lineup(id);
 
 
 --
@@ -2592,6 +3034,46 @@ ALTER TABLE ONLY public.team_club_affiliation
 
 
 --
+-- Name: team_lineup team_lineup_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup
+    ADD CONSTRAINT team_lineup_membership_id_fk FOREIGN KEY (coach_id) REFERENCES public.membership(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_lineup team_lineup_membership_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup
+    ADD CONSTRAINT team_lineup_membership_id_fk_2 FOREIGN KEY (leader_id) REFERENCES public.membership(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_lineup_participation team_lineup_participation_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup_participation
+    ADD CONSTRAINT team_lineup_participation_membership_id_fk FOREIGN KEY (membership_id) REFERENCES public.membership(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_lineup_participation team_lineup_participation_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup_participation
+    ADD CONSTRAINT team_lineup_participation_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
+
+
+--
+-- Name: team_lineup team_lineup_team_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup
+    ADD CONSTRAINT team_lineup_team_id_fk FOREIGN KEY (team_id) REFERENCES public.team(id);
+
+
+--
 -- Name: team_match_bout team_match_bout_bout_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2616,6 +3098,14 @@ ALTER TABLE ONLY public.team_match_bout
 
 
 --
+-- Name: team_match_bout team_match_bout_weight_class_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match_bout
+    ADD CONSTRAINT team_match_bout_weight_class_id_fk FOREIGN KEY (weight_class_id) REFERENCES public.weight_class(id) ON DELETE CASCADE;
+
+
+--
 -- Name: team_match team_match_league_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2628,7 +3118,7 @@ ALTER TABLE ONLY public.team_match
 --
 
 ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_lineup_id_fk FOREIGN KEY (home_id) REFERENCES public.lineup(id) ON DELETE CASCADE;
+    ADD CONSTRAINT team_match_lineup_id_fk FOREIGN KEY (home_id) REFERENCES public.team_lineup(id) ON DELETE CASCADE;
 
 
 --
@@ -2636,7 +3126,7 @@ ALTER TABLE ONLY public.team_match
 --
 
 ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_lineup_id_fk_2 FOREIGN KEY (guest_id) REFERENCES public.lineup(id);
+    ADD CONSTRAINT team_match_lineup_id_fk_2 FOREIGN KEY (guest_id) REFERENCES public.team_lineup(id);
 
 
 --

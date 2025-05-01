@@ -21,7 +21,7 @@ abstract class WeightClass with _$WeightClass implements DataObject {
 
   String get name => [weight.toString(), unit.toAbbr(), if (suffix != null && suffix!.isNotEmpty) suffix].join(' ');
 
-  static Future<WeightClass> fromRaw(Map<String, dynamic> e) async => WeightClass(
+  static Future<WeightClass> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => WeightClass(
         id: e['id'] as int?,
         suffix: e['suffix'] as String?,
         weight: e['weight'] as int,
@@ -41,7 +41,9 @@ abstract class WeightClass with _$WeightClass implements DataObject {
   }
 
   @override
-  String get tableName => 'weight_class';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'weight_class';
 
   // TODO: check if needed, with freezed serialization
   @override

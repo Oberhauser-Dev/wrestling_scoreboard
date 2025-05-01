@@ -4,26 +4,31 @@ import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/age_category_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/participant_state_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
@@ -31,6 +36,9 @@ import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
+
+import 'competition_lineup_controller.dart';
+import 'competition_person_controller.dart';
 
 final logger = Logger('api_route');
 
@@ -112,7 +120,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
 }
 
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
-  ShelfController({required super.tableName, super.primaryKeyName});
+  ShelfController({super.primaryKeyName});
 
   Future<Response> requestSingle(Request request, User? user, String id) async {
     return handleRequestSingle(
@@ -195,32 +203,28 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
   Future<Response> postSingle(Request request, User? user) async {
     final message = await request.readAsString();
     try {
-      return _handlePostSingle(jsonDecode(message));
-    } on FormatException catch (e) {
-      final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
-          '\nFormatException: ${e.message}';
-      logger.warning(errMessage.toString());
-      return Response.notFound(errMessage);
-    }
-  }
-
-  Future<Response> _handlePostSingle(Map<String, Object?> json) async {
-    try {
       final id = await handleJson<T>(
-        json,
+        jsonDecode(message),
         handleSingle: handleSingle,
         handleMany: handleMany,
         handleSingleRaw: handleSingleRaw,
         handleManyRaw: handleManyRaw,
       );
       return Response.ok(jsonEncode(id));
+    } on FormatException catch (e) {
+      final errMessage = 'The data object of table "$tableName" could not be created. Check the format: $message'
+          '\nFormatException: ${e.message}';
+      logger.warning(errMessage.toString());
+      return Response.badRequest(body: errMessage);
     } on InvalidParameterException catch (e) {
-      return Response.notFound(e.message);
+      return Response.badRequest(body: e.message);
     }
   }
 
   static ShelfController? getControllerFromDataType(Type t) {
     switch (t) {
+      case const (AgeCategory):
+        return AgeCategoryController();
       case const (Bout):
         return BoutController();
       case const (BoutAction):
@@ -233,6 +237,18 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return ClubController();
       case const (Competition):
         return CompetitionController();
+      case const (CompetitionPerson):
+        return CompetitionPersonController();
+      case const (CompetitionBout):
+        return CompetitionBoutController();
+      case const (CompetitionLineup):
+        return CompetitionLineupController();
+      case const (CompetitionSystemAffiliation):
+        return CompetitionSystemAffiliationController();
+      case const (CompetitionWeightCategory):
+        return CompetitionWeightCategoryController();
+      case const (CompetitionParticipation):
+        return CompetitionParticipationController();
       case const (Organization):
         return OrganizationController();
       case const (Division):
@@ -245,14 +261,14 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return LeagueTeamParticipationController();
       case const (LeagueWeightClass):
         return LeagueWeightClassController();
-      case const (Lineup):
-        return LineupController();
+      case const (TeamLineup):
+        return TeamLineupController();
       case const (Membership):
         return MembershipController();
-      case const (Participation):
-        return ParticipationController();
-      case const (ParticipantState):
-        return ParticipantStateController();
+      case const (TeamLineupParticipation):
+        return TeamLineupParticipationController();
+      case const (AthleteBoutState):
+        return AthleteBoutStateController();
       case const (Person):
         return PersonController();
       case const (SecuredUser):
@@ -274,13 +290,15 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
 }
 
 abstract class EntityController<T extends DataObject> {
-  String tableName;
+  late final String tableName;
   String primaryKeyName;
 
   late psql.Statement getSingleRawStmt;
   late psql.Statement deleteSingleStmt;
 
-  EntityController({required this.tableName, this.primaryKeyName = 'id'});
+  EntityController({this.primaryKeyName = 'id'}) {
+    tableName = getTableNameFromType(T);
+  }
 
   static Future<void> initAll() async {
     // Reinit all prepared statements
@@ -299,7 +317,7 @@ abstract class EntityController<T extends DataObject> {
 
   Future<T> getSingle(int id, {required bool obfuscate}) async {
     final single = await getSingleRaw(id, obfuscate: obfuscate);
-    return DataObject.fromRaw<T>(
+    return DataObjectParser.fromRaw<T>(
         single, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate));
   }
 
@@ -334,12 +352,12 @@ abstract class EntityController<T extends DataObject> {
       final res = await stmt.bind(bindingData).toList();
       if (res.isEmpty || res.last.isEmpty) {
         throw InvalidParameterException(
-            'The data object of table $tableName could not be updated. Check the attributes: $data');
+            'The data object of table "$tableName" could not be updated. Check the attributes: $data');
       }
       return res.last[0] as int;
     } on psql.PgException catch (e) {
       throw InvalidParameterException(
-          'The data object of table $tableName could not be created. Check the attributes: $data\n'
+          'The data object of table "$tableName" could not be created. Check the attributes: $data\n'
           'PgException: {"message": ${e.message}}');
     }
   }
@@ -374,12 +392,12 @@ abstract class EntityController<T extends DataObject> {
       final res = await stmt.bind(bindingData).toList();
       if (res.isEmpty || res.last.isEmpty) {
         throw InvalidParameterException(
-            'The data object of table $tableName could not be updated. Check the attributes: $data');
+            'The data object of table "$tableName" could not be updated. Check the attributes: $data');
       }
       return res.last[0] as int;
     } on psql.PgException catch (e) {
       throw InvalidParameterException(
-          'The data object of table $tableName could not be updated. Check the attributes: $data'
+          'The data object of table "$tableName" could not be updated. Check the attributes: $data'
           '\nPgException: {"message": ${e.message}');
     }
   }
@@ -540,7 +558,7 @@ abstract class EntityController<T extends DataObject> {
       orderBy: orderBy,
       obfuscate: obfuscate,
     ))
-        .map((e) async => await DataObject.fromRaw<T>(
+        .map((e) async => await DataObjectParser.fromRaw<T>(
             e, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate)))
         .toList());
   }
@@ -551,7 +569,7 @@ abstract class EntityController<T extends DataObject> {
     required bool obfuscate,
   }) async {
     return Future.wait((await getManyRawFromQuery(sqlQuery, substitutionValues: substitutionValues))
-        .map((e) async => await DataObject.fromRaw<T>(
+        .map((e) async => await DataObjectParser.fromRaw<T>(
             e, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate)))
         .toList());
   }
@@ -632,7 +650,7 @@ abstract class EntityController<T extends DataObject> {
   }) async {
     return Future.wait(res.map((row) async {
       final e = row[tableName]!;
-      return await DataObject.fromRaw<T>(
+      return await DataObjectParser.fromRaw<T>(
           e, <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate));
     }));
   }

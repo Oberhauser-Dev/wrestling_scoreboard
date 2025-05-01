@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/view/app_navigation.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/match/match_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/team_match_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/competition/weight_category_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
@@ -17,8 +20,15 @@ import 'package:wrestling_scoreboard_client/view/screens/more/profile/profile.da
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_up.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
@@ -132,6 +142,75 @@ getRouter() {
               GoRoute(
                 path: '${PersonOverview.route}/:person_id',
                 builder: (context, state) => PersonOverview(id: int.parse(state.pathParameters['person_id']!)),
+              ),
+              GoRoute(
+                path: '${AgeCategoryOverview.route}/:age_category_id',
+                builder: (context, state) =>
+                    AgeCategoryOverview(id: int.parse(state.pathParameters['age_category_id']!)),
+              ),
+              GoRoute(
+                path: '${CompetitionOverview.route}/:competition_id',
+                builder: (context, state) =>
+                    CompetitionOverview(id: int.parse(state.pathParameters['competition_id']!)),
+                routes: [
+                  GoRoute(
+                    path: CompetitionDisplay.route,
+                    parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                    builder: (context, state) =>
+                        CompetitionDisplay(id: int.parse(state.pathParameters['competition_id']!)),
+                  ),
+                  GoRoute(
+                      path: '${CompetitionBoutOverview.route}/:competition_bout_id',
+                      parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                      builder: (context, state) {
+                        final competitionBoutId = int.parse(state.pathParameters['competition_bout_id']!);
+                        return CompetitionBoutOverview(id: competitionBoutId);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: CompetitionBoutDisplay.route,
+                          parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                          builder: (context, state) {
+                            final competitionId = int.parse(state.pathParameters['competition_id']!);
+                            final competitionBoutId = int.parse(state.pathParameters['competition_bout_id']!);
+                            return CompetitionBoutDisplay(
+                                competitionId: competitionId, competitionBoutId: competitionBoutId);
+                          },
+                        ),
+                      ]),
+                  GoRoute(
+                      path: '${CompetitionWeightCategoryOverview.route}/:competition_weight_category_id',
+                      builder: (context, state) => CompetitionWeightCategoryOverview(
+                          id: int.parse(state.pathParameters['competition_weight_category_id']!)),
+                      routes: [
+                        GoRoute(
+                          path: CompetitionWeightCategoryDisplay.route,
+                          parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                          builder: (context, state) => CompetitionWeightCategoryDisplay(
+                              id: int.parse(state.pathParameters['competition_weight_category_id']!)),
+                        ),
+                      ]),
+                ],
+              ),
+              GoRoute(
+                path: '${CompetitionSystemAffiliationOverview.route}/:competition_system_affiliation_id',
+                builder: (context, state) => CompetitionSystemAffiliationOverview(
+                    id: int.parse(state.pathParameters['competition_system_affiliation_id']!)),
+              ),
+              GoRoute(
+                path: '${CompetitionWeightCategoryOverview.route}/:competition_weight_category_id',
+                builder: (context, state) => CompetitionWeightCategoryOverview(
+                    id: int.parse(state.pathParameters['competition_weight_category_id']!)),
+              ),
+              GoRoute(
+                path: '${CompetitionLineupOverview.route}/:competition_lineup_id',
+                builder: (context, state) =>
+                    CompetitionLineupOverview(id: int.parse(state.pathParameters['competition_lineup_id']!)),
+              ),
+              GoRoute(
+                path: '${CompetitionParticipationOverview.route}/:competition_participation_id',
+                builder: (context, state) => CompetitionParticipationOverview(
+                    id: int.parse(state.pathParameters['competition_participation_id']!)),
               ),
             ],
           ),

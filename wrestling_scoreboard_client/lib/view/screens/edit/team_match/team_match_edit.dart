@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -42,6 +44,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   League? _league;
   int? _seasonPartition;
   late DateTime _date;
+  int? _visitorsCount;
   String? _comment;
 
   // Persons
@@ -153,6 +156,21 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
             // TODO: filter by teams of same league, but may add an option to search all teams
             _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
             return _availableTeams!.toList();
+          },
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.confirmation_number),
+        title: TextFormField(
+          initialValue: widget.teamMatch?.visitorsCount.toString(),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.visitors,
+          ),
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 9223372036854775808)],
+          onSaved: (String? value) {
+            _visitorsCount = int.tryParse(value ?? '');
           },
         ),
       ),
@@ -295,22 +313,23 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       var home = widget.teamMatch?.home;
       if (home == null) {
         final homeId =
-            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _homeTeam!));
-        home = Lineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
+            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(team: _homeTeam!));
+        home = TeamLineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(id: home.id, team: _homeTeam!));
+        await (await ref.read(dataManagerNotifierProvider))
+            .createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
       }
 
       var guest = widget.teamMatch?.guest;
       if (guest == null) {
         final guestId =
-            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Lineup(team: _guestTeam!));
-        guest = Lineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
+            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(team: _guestTeam!));
+        guest = TeamLineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
         await (await ref.read(dataManagerNotifierProvider))
-            .createOrUpdateSingle(Lineup(id: guest.id, team: _guestTeam!));
+            .createOrUpdateSingle(TeamLineup(id: guest.id, team: _guestTeam!));
       }
 
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
@@ -331,6 +350,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           timeKeeper: _timeKeeper,
           transcriptWriter: _transcriptWriter,
           comment: _comment,
+          visitorsCount: _visitorsCount,
         ),
       );
       navigator.pop();

@@ -26,5 +26,5 @@ abstract class Migration with _$Migration {
     };
   }
 
-  String get tableName => 'migration';
+  static const cTableName = 'migration';
 }

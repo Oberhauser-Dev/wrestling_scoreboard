@@ -21,9 +21,9 @@ String localizeType(BuildContext context, Type type) {
     const (TeamMatchBout) => '${localizations.bouts} (${localizations.league})',
     const (WeightClass) => localizations.weightClasses,
     const (BoutAction) => localizations.actions,
-    const (Participation) => localizations.participations,
+    const (TeamLineupParticipation) => localizations.participations,
     const (Competition) => localizations.competitions,
-    const (Lineup) => localizations.lineups,
+    const (TeamLineup) => localizations.lineups,
     const (BoutConfig) => localizations.boutConfig,
     _ => throw Exception('Localization not defined for $type'),
   };

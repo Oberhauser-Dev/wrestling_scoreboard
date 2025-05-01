@@ -90,10 +90,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('de'),
-    Locale('en')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('de'), Locale('en')];
 
   /// The internationalized app name
   ///
@@ -551,6 +548,12 @@ abstract class AppLocalizations {
   /// **'Save & Generate'**
   String get saveAndGenerate;
 
+  /// No description provided for @generate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get generate;
+
   /// No description provided for @add.
   ///
   /// In en, this message translates to:
@@ -833,17 +836,71 @@ abstract class AppLocalizations {
   /// **'Pool'**
   String get pool;
 
+  /// No description provided for @rank.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank'**
+  String get rank;
+
   /// No description provided for @round.
   ///
   /// In en, this message translates to:
   /// **'Round'**
   String get round;
 
+  /// No description provided for @qualification.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualification'**
+  String get qualification;
+
+  /// No description provided for @elimination.
+  ///
+  /// In en, this message translates to:
+  /// **'Elimination'**
+  String get elimination;
+
+  /// No description provided for @eliminated.
+  ///
+  /// In en, this message translates to:
+  /// **'Eliminated'**
+  String get eliminated;
+
+  /// No description provided for @disqualified.
+  ///
+  /// In en, this message translates to:
+  /// **'Disqualified'**
+  String get disqualified;
+
+  /// No description provided for @repechage.
+  ///
+  /// In en, this message translates to:
+  /// **'Repechage'**
+  String get repechage;
+
+  /// No description provided for @finals.
+  ///
+  /// In en, this message translates to:
+  /// **'Final'**
+  String get finals;
+
+  /// No description provided for @semiFinals.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-Final'**
+  String get semiFinals;
+
   /// No description provided for @mat.
   ///
   /// In en, this message translates to:
   /// **'Mat'**
   String get mat;
+
+  /// No description provided for @mats.
+  ///
+  /// In en, this message translates to:
+  /// **'Mats'**
+  String get mats;
 
   /// No description provided for @status.
   ///
@@ -893,11 +950,35 @@ abstract class AppLocalizations {
   /// **'Weight Classes'**
   String get weightClasses;
 
+  /// No description provided for @weightCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Category'**
+  String get weightCategory;
+
+  /// No description provided for @weightCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Categories'**
+  String get weightCategories;
+
   /// No description provided for @weightUnit.
   ///
   /// In en, this message translates to:
   /// **'Weight Unit'**
   String get weightUnit;
+
+  /// No description provided for @ageCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Age Category'**
+  String get ageCategory;
+
+  /// No description provided for @ageCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Age Categories'**
+  String get ageCategories;
 
   /// No description provided for @suffix.
   ///
@@ -1103,6 +1184,18 @@ abstract class AppLocalizations {
   /// **'Competitions'**
   String get competitions;
 
+  /// No description provided for @competitionSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Competition System'**
+  String get competitionSystem;
+
+  /// No description provided for @competitionSystems.
+  ///
+  /// In en, this message translates to:
+  /// **'Competition Systems'**
+  String get competitionSystems;
+
   /// No description provided for @boutDay.
   ///
   /// In en, this message translates to:
@@ -1126,6 +1219,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Matches'**
   String get matches;
+
+  /// No description provided for @competitionNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Competition-ID'**
+  String get competitionNumber;
 
   /// No description provided for @matchNumber.
   ///
@@ -1313,17 +1412,35 @@ abstract class AppLocalizations {
   /// **'Technical Points'**
   String get technicalPoints;
 
+  /// No description provided for @technicalPointsAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'TP'**
+  String get technicalPointsAbbr;
+
   /// No description provided for @classificationPoints.
   ///
   /// In en, this message translates to:
   /// **'Classification Points'**
   String get classificationPoints;
 
+  /// No description provided for @classificationPointsAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'CP'**
+  String get classificationPointsAbbr;
+
   /// No description provided for @difference.
   ///
   /// In en, this message translates to:
   /// **'Difference'**
   String get difference;
+
+  /// No description provided for @participation.
+  ///
+  /// In en, this message translates to:
+  /// **'Participation'**
+  String get participation;
 
   /// No description provided for @participations.
   ///
@@ -1366,6 +1483,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Winner'**
   String get winner;
+
+  /// No description provided for @wins.
+  ///
+  /// In en, this message translates to:
+  /// **'Wins'**
+  String get wins;
 
   /// No description provided for @loser.
   ///
@@ -1553,6 +1676,18 @@ abstract class AppLocalizations {
   /// **'Days'**
   String get days;
 
+  /// No description provided for @minimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum'**
+  String get minimum;
+
+  /// No description provided for @maximum.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum'**
+  String get maximum;
+
   /// No description provided for @referee.
   ///
   /// In en, this message translates to:
@@ -1666,18 +1801,16 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return AppLocalizationsDe();
-    case 'en': return AppLocalizationsEn();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
   }
 
-  throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

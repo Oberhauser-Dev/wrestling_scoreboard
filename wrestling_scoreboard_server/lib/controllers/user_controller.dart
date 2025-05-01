@@ -13,7 +13,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     return _singleton;
   }
 
-  SecuredUserController._internal() : super(tableName: 'secured_user');
+  SecuredUserController._internal() : super();
 
   Future<Response> postSingleUser(Request request, User? user) async {
     try {
@@ -22,7 +22,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
       final id = await createSingleUser(user);
       return Response.ok(jsonEncode(id));
     } on InvalidParameterException catch (e) {
-      return Response.notFound(e.message);
+      return Response.badRequest(body: e.message);
     }
   }
 

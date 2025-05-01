@@ -64,7 +64,7 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
       $NotifierProviderElement(this, pointer);
 }
 
-String _$dataManagerNotifierHash() => r'503f87972a6b26b65ba10e6df7580c973fc8a08f';
+String _$dataManagerNotifierHash() => r'df52461a8e9f979643219a0d9924bc6c774b690f';
 
 abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
@@ -204,7 +204,7 @@ final class WebSocketStateStreamProvider
   }
 }
 
-String _$webSocketStateStreamHash() => r'046cdb4052ca78dcc18a13b84248602709b861fb';
+String _$webSocketStateStreamHash() => r'996b5eccf84b174ae0ac89cae94d4316f91186b4';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

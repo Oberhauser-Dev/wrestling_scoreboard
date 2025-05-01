@@ -43,7 +43,9 @@ abstract class Team with _$Team implements DataObject, Organizational {
   }
 
   @override
-  String get tableName => 'team';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'team';
 
   @override
   Team copyWithId(int? id) {

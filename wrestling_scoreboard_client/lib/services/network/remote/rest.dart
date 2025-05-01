@@ -34,13 +34,13 @@ class RestDataManager extends DataManager {
   @override
   Future<T> readSingle<T extends DataObject>(int id) async {
     final json = await readSingleJson<T>(id, isRaw: false);
-    return DataObject.fromJson<T>(json);
+    return DataObjectParser.fromJson<T>(json);
   }
 
   @override
   Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject}) async {
     final json = await readManyJson<T, S>(filterObject: filterObject, isRaw: false);
-    return json.map((e) => DataObject.fromJson<T>(e)).toList();
+    return json.map((e) => DataObjectParser.fromJson<T>(e)).toList();
   }
 
   Future<void> _handleResponse(http.Response response, {required String errorMessage}) async {
@@ -80,8 +80,8 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> generateBouts<T extends WrestlingEvent>(WrestlingEvent wrestlingEvent, [bool isReset = false]) async {
-    final prepend = '${_getPathFromType(T)}/${wrestlingEvent.id}';
+  Future<void> generateBouts<T extends DataObject>(T dataObject, [bool isReset = false]) async {
+    final prepend = '${_getPathFromType(T)}/${dataObject.id}';
     final uri = Uri.parse('$_apiUrl$prepend/bouts/generate')
         .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: _headers);
@@ -117,7 +117,7 @@ class RestDataManager extends DataManager {
 
   @override
   Future<Migration> getMigration() async {
-    final uri = Uri.parse('$_apiUrl/database/migration');
+    final uri = Uri.parse('$_apiUrl/database/${Migration.cTableName}');
     final response = await http.get(uri, headers: _headers);
 
     await _handleResponse(response, errorMessage: 'Failed to get the migration versions');

@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/division_weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/league_weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/team_match.dart';
@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_client/utils/search.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
@@ -78,7 +79,7 @@ class HomeState extends ConsumerState<Home> {
               context: context,
               child: Column(
                 children: [
-                  Text('There was a problem with the object of type $T and id $id.'),
+                  Text('There was a problem with the object of type "$T" and id "$id".'),
                   ExceptionInfo(
                     exception ?? localizations.errorOccurred,
                     stackTrace: stackTrace,
@@ -294,6 +295,13 @@ class _EntityGrid extends ConsumerWidget {
             Icons.foundation,
             ids.map((id, value) => MapEntry(id, value as Club?)),
             ClubOverview.route,
+            (d) => d.name,
+            context: context,
+          ),
+        'competition' => _buildGroup<Competition>(
+            Icons.leaderboard,
+            ids.map((id, value) => MapEntry(id, value as Competition?)),
+            CompetitionOverview.route,
             (d) => d.name,
             context: context,
           ),

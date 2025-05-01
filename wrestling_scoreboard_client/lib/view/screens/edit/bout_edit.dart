@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
-import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -16,15 +16,11 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class BoutEdit extends ConsumerStatefulWidget {
   final Bout? bout;
   final BoutConfig boutConfig;
-  final Lineup lineupRed;
-  final Lineup lineupBlue;
 
   const BoutEdit({
     super.key,
     this.bout,
     required this.boutConfig,
-    required this.lineupRed,
-    required this.lineupBlue,
   });
 }
 
@@ -33,12 +29,9 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
 
   BoutRole? _winnerRole;
   BoutResult? _boutResult;
-  WeightClass? _weightClass;
-  Participation? _redParticipation;
-  Participation? _blueParticipation;
+  Membership? _redMembership;
+  Membership? _blueMembership;
   Duration? _boutDuration;
-
-  Future<List<WeightClass>> get availableWeightClasses;
 
   @override
   void initState() {
@@ -46,9 +39,8 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     _boutDuration = widget.bout?.duration;
     _winnerRole = widget.bout?.winnerRole;
     _boutResult = widget.bout?.result;
-    _weightClass = widget.bout?.weightClass;
-    _redParticipation = widget.bout?.r?.participation;
-    _blueParticipation = widget.bout?.b?.participation;
+    _redMembership = widget.bout?.r?.membership;
+    _blueMembership = widget.bout?.b?.membership;
   }
 
   @override
@@ -57,41 +49,29 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     required String classLocale,
     required int? id,
     required List<Widget> fields,
+    Future<Iterable<Membership>> Function()? getRedMemberships,
+    Future<Iterable<Membership>> Function()? getBlueMemberships,
   }) {
     final localizations = context.l10n;
     final navigator = Navigator.of(context);
 
     final items = [
       ...fields,
-      ParticipantSelectTile(
+      MembershipSelectTile(
         label: localizations.red,
-        lineup: widget.lineupRed,
-        participation: widget.bout?.r?.participation,
-        createOrUpdateParticipantState: (participation) => _redParticipation = participation,
-        deleteParticipantState: (participation) => _redParticipation = null,
+        getMemberships: getRedMemberships!,
+        membership: widget.bout?.r?.membership,
+        createOrUpdateAtheleteBoutState: (membership) => _redMembership = membership,
+        deleteAtheleteBoutState: (membership) => _redMembership = null,
+        organization: widget.bout?.organization,
       ),
-      ParticipantSelectTile(
+      MembershipSelectTile(
         label: localizations.blue,
-        lineup: widget.lineupBlue,
-        participation: widget.bout?.b?.participation,
-        createOrUpdateParticipantState: (participation) => _blueParticipation = participation,
-        deleteParticipantState: (participation) => _blueParticipation = null,
-      ),
-      ListTile(
-        title: SearchableDropdown<WeightClass>(
-          icon: const Icon(Icons.fitness_center),
-          selectedItem: _weightClass,
-          label: context.l10n.weightClass,
-          context: context,
-          onSaved: (WeightClass? value) => setState(() {
-            _weightClass = value;
-          }),
-          itemAsString: (u) => u.name,
-          asyncItems: (String filter) async {
-            final boutWeightClasses = await availableWeightClasses;
-            return boutWeightClasses.toList();
-          },
-        ),
+        getMemberships: getBlueMemberships!,
+        membership: widget.bout?.b?.membership,
+        createOrUpdateAtheleteBoutState: (membership) => _blueMembership = membership,
+        deleteAtheleteBoutState: (membership) => _blueMembership = null,
+        organization: widget.bout?.organization,
       ),
       ListTile(
         leading: const Icon(Icons.emoji_events),
@@ -160,33 +140,32 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      Future<ParticipantState?> updateParticipantState(
-          Participation? newParticipation, ParticipantState? oldParticipantState) async {
-        if (newParticipation != oldParticipantState?.participation) {
-          if (oldParticipantState != null) {
-            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<ParticipantState>(oldParticipantState);
+      Future<AthleteBoutState?> updateAthleteBoutState(
+        Membership? newMembership,
+        AthleteBoutState? oldAthleteBoutState,
+      ) async {
+        if (newMembership != oldAthleteBoutState?.membership) {
+          if (oldAthleteBoutState != null) {
+            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<AthleteBoutState>(oldAthleteBoutState);
           }
-          if (newParticipation != null) {
-            final newParticipantState = ParticipantState(participation: newParticipation);
-            return newParticipantState.copyWithId(await (await ref.read(dataManagerNotifierProvider))
-                .createOrUpdateSingle<ParticipantState>(newParticipantState));
+          if (newMembership != null) {
+            final newAthleteBoutState = AthleteBoutState(membership: newMembership);
+            return newAthleteBoutState.copyWithId(await (await ref.read(dataManagerNotifierProvider))
+                .createOrUpdateSingle<AthleteBoutState>(newAthleteBoutState));
           } else {
             return null;
           }
         } else {
-          return oldParticipantState;
+          return oldAthleteBoutState;
         }
       }
 
-      var bout = Bout(
-        id: widget.bout?.id,
-        weightClass: _weightClass,
+      var bout = (widget.bout ?? Bout()).copyWith(
         result: _boutResult,
         winnerRole: _winnerRole,
-        r: await updateParticipantState(_redParticipation, widget.bout?.r),
-        b: await updateParticipantState(_blueParticipation, widget.bout?.b),
+        r: await updateAthleteBoutState(_redMembership, widget.bout?.r),
+        b: await updateAthleteBoutState(_blueMembership, widget.bout?.b),
         duration: _boutDuration ?? Duration.zero,
-        pool: widget.bout?.pool,
       );
 
       bout = bout.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout));
@@ -196,70 +175,45 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
   }
 }
 
-class ParticipantSelectTile extends ConsumerWidget {
+class MembershipSelectTile extends ConsumerWidget {
   final String label;
-  final Participation? participation;
-  final Lineup lineup;
-  final void Function(Participation participation) deleteParticipantState;
-  final void Function(Participation participation) createOrUpdateParticipantState;
+  final Membership? membership;
+  final Organization? organization;
+  final void Function(Membership membership) deleteAtheleteBoutState;
+  final void Function(Membership membership) createOrUpdateAtheleteBoutState;
+  final Future<Iterable<Membership>> Function() getMemberships;
 
-  const ParticipantSelectTile({
+  const MembershipSelectTile({
     super.key,
     required this.label,
-    this.participation,
-    required this.lineup,
-    required this.deleteParticipantState,
-    required this.createOrUpdateParticipantState,
+    this.membership,
+    required this.organization,
+    required this.getMemberships,
+    required this.deleteAtheleteBoutState,
+    required this.createOrUpdateAtheleteBoutState,
   });
-
-  Future<List<Participation>> _filterParticipants(
-    WidgetRef ref,
-    String? filter,
-    Lineup lineup,
-  ) async {
-    final participations = await _getParticipations(ref, lineup: lineup);
-    return (filter == null
-            ? participations
-            : participations.where((element) => element.membership.person.fullName.contains(filter)))
-        .toList();
-  }
-
-  Future<List<Participation>> _getParticipations(WidgetRef ref, {required Lineup lineup}) async {
-    return ref.watch(manyDataStreamProvider<Participation, Lineup>(ManyProviderData(filterObject: lineup)).future);
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       leading: const Icon(Icons.person),
-      title: Row(
-        children: [
-          Expanded(
-            flex: 80,
-            child: Container(
-              padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: SearchableDropdown<Participation>(
-                selectedItem: participation,
-                label: label,
-                context: context,
-                onSaved: (Participation? newParticipation) {
-                  if (participation == newParticipation) return;
+      title: MembershipDropdown(
+        selectedItem: membership,
+        organization: organization,
+        label: label,
+        getOrSetMemberships: getMemberships,
+        onSave: (Membership? newMembership) {
+          if (membership == newMembership) return;
 
-                  // Delete old participation, if not null
-                  if (participation?.id != null) {
-                    deleteParticipantState(participation!);
-                  }
+          // Delete old membership, if not null
+          if (membership?.id != null) {
+            deleteAtheleteBoutState(membership!);
+          }
 
-                  if (newParticipation != null) {
-                    createOrUpdateParticipantState(newParticipation);
-                  }
-                },
-                itemAsString: (u) => u.membership.person.fullName,
-                asyncItems: (String filter) => _filterParticipants(ref, filter, lineup),
-              ),
-            ),
-          ),
-        ],
+          if (newMembership != null) {
+            createOrUpdateAtheleteBoutState(newMembership);
+          }
+        },
       ),
     );
   }

@@ -14,12 +14,12 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
     return _singleton;
   }
 
-  TeamController._internal() : super(tableName: 'team');
+  TeamController._internal() : super();
 
   static const teamMatchesQuery = '''
         SELECT tm.*
-        FROM team_match AS tm
-        JOIN lineup AS lu ON tm.home_id = lu.id OR tm.guest_id = lu.id
+        FROM ${TeamMatch.cTableName} AS tm
+        JOIN ${TeamLineup.cTableName} AS lu ON tm.home_id = lu.id OR tm.guest_id = lu.id
         WHERE lu.team_id = @id
         ORDER BY date;''';
 
@@ -31,8 +31,8 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
 
   static const clubsQuery = '''
         SELECT c.*
-        FROM club AS c
-        JOIN team_club_affiliation AS tca ON c.id = tca.club_id
+        FROM ${Club.cTableName} AS c
+        JOIN ${TeamClubAffiliation.cTableName} AS tca ON c.id = tca.club_id
         WHERE tca.team_id = @id
         ORDER BY c.name;''';
 

@@ -86,7 +86,8 @@ abstract class User with _$User implements AbstractUser {
   }
 
   @override
-  String get tableName => 'user';
+  String get tableName => cTableName;
+  static const cTableName = 'user';
 
   @override
   User copyWithId(int? id) {
@@ -158,7 +159,9 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   }
 
   @override
-  String get tableName => 'secured_user';
+  @override
+  String get tableName => cTableName;
+  static const cTableName = 'secured_user';
 
   @override
   SecuredUser copyWithId(int? id) {

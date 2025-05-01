@@ -9,7 +9,7 @@ class LeagueTeamParticipationController extends ShelfController<LeagueTeamPartic
     return _singleton;
   }
 
-  LeagueTeamParticipationController._internal() : super(tableName: 'league_team_participation');
+  LeagueTeamParticipationController._internal() : super();
 
   Future<LeagueTeamParticipation?> getByLeagueAndTeamId({
     required int teamId,

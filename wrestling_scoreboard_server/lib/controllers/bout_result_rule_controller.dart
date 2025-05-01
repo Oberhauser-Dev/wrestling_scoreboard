@@ -9,7 +9,7 @@ class BoutResultRuleController extends ShelfController<BoutResultRule> {
     return _singleton;
   }
 
-  BoutResultRuleController._internal() : super(tableName: 'bout_result_rule');
+  BoutResultRuleController._internal() : super();
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {

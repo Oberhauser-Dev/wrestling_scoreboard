@@ -11,8 +11,8 @@ _TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => _TeamMatch(
       orgSyncId: json['orgSyncId'] as String?,
       organization:
           json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
-      home: Lineup.fromJson(json['home'] as Map<String, dynamic>),
-      guest: Lineup.fromJson(json['guest'] as Map<String, dynamic>),
+      home: TeamLineup.fromJson(json['home'] as Map<String, dynamic>),
+      guest: TeamLineup.fromJson(json['guest'] as Map<String, dynamic>),
       league: json['league'] == null ? null : League.fromJson(json['league'] as Map<String, dynamic>),
       seasonPartition: (json['seasonPartition'] as num?)?.toInt(),
       matChairman: json['matChairman'] == null ? null : Person.fromJson(json['matChairman'] as Map<String, dynamic>),

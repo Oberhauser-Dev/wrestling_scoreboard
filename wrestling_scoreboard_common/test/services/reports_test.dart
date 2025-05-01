@@ -24,8 +24,8 @@ void main() {
   );
   final clubA = Club(name: 'Club A', organization: organizationNRW);
   final clubB = Club(name: 'Club B', organization: organizationDRB);
-  final lineupA = Lineup(team: Team(name: 'Team A'));
-  final lineupB = Lineup(team: Team(name: 'Team B'));
+  final lineupA = TeamLineup(team: Team(name: 'Team A'));
+  final lineupB = TeamLineup(team: Team(name: 'Team B'));
   final teamMatch = TeamMatch(
     league: league,
     home: lineupA,
@@ -39,46 +39,39 @@ void main() {
   );
   final bout = Bout(
     duration: Duration(minutes: 2),
-    r: ParticipantState(
+    r: AthleteBoutState(
       classificationPoints: 4,
-      participation: Participation(
-        lineup: lineupA,
-        weight: 9,
-        membership: Membership(
-          no: 'LizNoA',
-          club: clubA,
-          person: Person(
-            prename: 'PrenameA',
-            surname: 'SurnameA',
-            birthDate: DateTime.now().subtract(Duration(days: 365)),
-            gender: Gender.female,
-            nationality: Countries.usa,
-          ),
+      membership: Membership(
+        no: 'LizNoA',
+        club: clubA,
+        person: Person(
+          prename: 'PrenameA',
+          surname: 'SurnameA',
+          birthDate: DateTime.now().subtract(Duration(days: 365)),
+          gender: Gender.female,
+          nationality: Countries.usa,
         ),
       ),
     ),
-    b: ParticipantState(
+    b: AthleteBoutState(
       classificationPoints: 0,
-      participation: Participation(
-        lineup: lineupB,
-        weight: 8,
-        membership: Membership(
-          no: 'LizNoB',
-          club: clubB,
-          person: Person(
-            prename: 'PrenameB',
-            surname: 'SurnameB',
-            birthDate: DateTime.now().subtract(Duration(days: 366)),
-            gender: Gender.male,
-            nationality: Countries.aut,
-          ),
+      membership: Membership(
+        no: 'LizNoB',
+        club: clubB,
+        person: Person(
+          prename: 'PrenameB',
+          surname: 'SurnameB',
+          birthDate: DateTime.now().subtract(Duration(days: 366)),
+          gender: Gender.male,
+          nationality: Countries.aut,
         ),
       ),
     ),
-    weightClass: WeightClass(weight: 10, style: WrestlingStyle.free),
     winnerRole: BoutRole.red,
     result: BoutResult.vfa,
   );
+  final teamMatchBout = TeamMatchBout(
+      pos: 0, teamMatch: teamMatch, bout: bout, weightClass: WeightClass(weight: 10, style: WrestlingStyle.free));
 
   group('Reports', () {
     test('Germany, NRW', () {
@@ -86,7 +79,7 @@ void main() {
       final report = wrestlingReport.exportTeamMatchReport(
         teamMatch,
         {
-          bout: [
+          teamMatchBout: [
             BoutAction(
               actionType: BoutActionType.passivity,
               bout: bout,

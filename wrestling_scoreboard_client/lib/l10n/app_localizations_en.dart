@@ -78,13 +78,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get apiProvider => 'API Provider';
 
   @override
-  String get warningOverrideDatabase => 'This action overrides the existing database. Are you sure, you want to continue?';
+  String get warningOverrideDatabase =>
+      'This action overrides the existing database. Are you sure, you want to continue?';
 
   @override
   String get importFromApiProvider => 'Sync with API provider';
 
   @override
-  String get warningImportFromApiProvider => 'This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?';
+  String get warningImportFromApiProvider =>
+      'This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?';
 
   @override
   String get proposeFirstImportFromApiProvider => 'Cannot determine the last import. Would you like import the data?';
@@ -103,7 +105,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proposeApiImportDuration => 'Duration for proposing an API import';
 
   @override
-  String get importIncludeSubjacent => 'Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!';
+  String get importIncludeSubjacent =>
+      'Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!';
 
   @override
   String get reportProvider => 'Report Provider';
@@ -136,7 +139,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get username => 'Username';
 
   @override
-  String get usernameRequirementsWarning => 'A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).';
+  String get usernameRequirementsWarning =>
+      'A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).';
 
   @override
   String get password => 'Password';
@@ -196,7 +200,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imprint => 'Imprint';
 
   @override
-  String get imprint_phrase => '**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX';
+  String get imprint_phrase =>
+      '**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX';
 
   @override
   String get about => 'About';
@@ -214,13 +219,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_Contact => 'Contact';
 
   @override
-  String get about_contact_phrase => 'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
+  String get about_contact_phrase =>
+      'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
 
   @override
   String get about_Development => 'Development';
 
   @override
-  String get about_development_phrase => 'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
+  String get about_development_phrase =>
+      'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
 
   @override
   String get privacy_policy => 'Privacy Policy';
@@ -242,6 +249,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveAndGenerate => 'Save & Generate';
+
+  @override
+  String get generate => 'Generate';
 
   @override
   String get add => 'Add';
@@ -328,13 +338,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidParameterException => 'The change was not successful, please check your input parameters.';
 
   @override
-  String get warningBoutGenerate => 'This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?';
+  String get warningBoutGenerate =>
+      'This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?';
 
   @override
   String get warningPrefilledLineup => 'The lineup was prefilled with values from a previous match!';
 
   @override
-  String get infoUseDivisionWeightClass => 'Only define weight classes per league, if they differ from those of its division!';
+  String get infoUseDivisionWeightClass =>
+      'Only define weight classes per league, if they differ from those of its division!';
 
   @override
   String get retry => 'Retry';
@@ -385,10 +397,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pool => 'Pool';
 
   @override
+  String get rank => 'Rank';
+
+  @override
   String get round => 'Round';
 
   @override
+  String get qualification => 'Qualification';
+
+  @override
+  String get elimination => 'Elimination';
+
+  @override
+  String get eliminated => 'Eliminated';
+
+  @override
+  String get disqualified => 'Disqualified';
+
+  @override
+  String get repechage => 'Repechage';
+
+  @override
+  String get finals => 'Final';
+
+  @override
+  String get semiFinals => 'Semi-Final';
+
+  @override
   String get mat => 'Mat';
+
+  @override
+  String get mats => 'Mats';
 
   @override
   String get status => 'Status';
@@ -415,7 +454,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weightClasses => 'Weight Classes';
 
   @override
+  String get weightCategory => 'Weight Category';
+
+  @override
+  String get weightCategories => 'Weight Categories';
+
+  @override
   String get weightUnit => 'Weight Unit';
+
+  @override
+  String get ageCategory => 'Age Category';
+
+  @override
+  String get ageCategories => 'Age Categories';
 
   @override
   String get suffix => 'Category';
@@ -520,6 +571,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get competitions => 'Competitions';
 
   @override
+  String get competitionSystem => 'Competition System';
+
+  @override
+  String get competitionSystems => 'Competition Systems';
+
+  @override
   String get boutDay => 'Bout Day';
 
   @override
@@ -530,6 +587,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matches => 'Matches';
+
+  @override
+  String get competitionNumber => 'Competition-ID';
 
   @override
   String get matchNumber => 'Match-ID';
@@ -562,7 +622,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultBothVin => 'Both wrestlers are injured';
 
   @override
-  String get boutResultVca => 'Victory by cautions - the opponent received 3 cautions \"O\" due to error against the rules';
+  String get boutResultVca =>
+      'Victory by cautions - the opponent received 3 cautions \"O\" due to error against the rules';
 
   @override
   String get boutResultVsu => 'Technical superiority';
@@ -577,7 +638,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultBothVfo => 'None of wrestlers pass the weight or show up on the mat';
 
   @override
-  String get boutResultDsq => 'Victory by disqualification of the opponent from the whole competition due to infringement of the rules';
+  String get boutResultDsq =>
+      'Victory by disqualification of the opponent from the whole competition due to infringement of the rules';
 
   @override
   String get boutResultBothDsq => 'In case both wrestlers have been disqualified due to infringement of the rules';
@@ -625,10 +687,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get technicalPoints => 'Technical Points';
 
   @override
+  String get technicalPointsAbbr => 'TP';
+
+  @override
   String get classificationPoints => 'Classification Points';
 
   @override
+  String get classificationPointsAbbr => 'CP';
+
+  @override
   String get difference => 'Difference';
+
+  @override
+  String get participation => 'Participation';
 
   @override
   String get participations => 'Participations';
@@ -650,6 +721,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get winner => 'Winner';
+
+  @override
+  String get wins => 'Wins';
 
   @override
   String get loser => 'Loser';
@@ -743,6 +817,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get days => 'Days';
+
+  @override
+  String get minimum => 'Minimum';
+
+  @override
+  String get maximum => 'Maximum';
 
   @override
   String get referee => 'Referee';

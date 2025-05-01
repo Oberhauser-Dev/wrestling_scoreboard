@@ -19,8 +19,8 @@ extension AuthRequest on Request {
       }
     }
 
-    final authService = BearerAuthService.fromHeader(authorizationHeader);
     try {
+      final authService = BearerAuthService.fromHeader(authorizationHeader);
       final user = await authService.getUser();
       if (user == null) {
         return Response.unauthorized('User not found from JWT token.');
@@ -34,6 +34,8 @@ extension AuthRequest on Request {
       return Response.unauthorized('JWT token expired');
     } on JWTException catch (ex) {
       return Response.badRequest(body: 'JWTException was thrown : $ex');
+    } on FormatException catch (ex) {
+      return Response.badRequest(body: 'FormatException: $ex');
     }
   }
 }

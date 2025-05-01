@@ -23,13 +23,17 @@ flutter pub run build_runner build --delete-conflicting-outputs
 ## Adding a new data object type
 
 Update following files accordingly:
-- `package:wrestling_scoreboard_common/lib/src/util/data_wrapper.dart`
-- `package:wrestling_scoreboard_common/lib/src/data/data_oject.dart`
-- `package:wrestling_scoreboard_common/lib/src/data.dart`
-- `package:wrestling_scoreboard_server/lib/routes/api_route.dart`
-- `package:wrestling_scoreboard_server/lib/controllers/websocket_handler.dart`
-- `package:wrestling_scoreboard_server/lib/controllers/entity_controller.dart@getControllerFromDataType`
-- `package:wrestling_scoreboard_server/public/index.html`
-- Migrate and export database
-- `package:wrestling_scoreboard_client/lib/mocks/mock_data_provider.dart`
-- `package:wrestling_scoreboard_client/lib/mocks/mocks.dart`
+- `package:wrestling_scoreboard_common`
+  - `lib/src/util/data_wrapper.dart`
+  - `lib/src/data/data_oject.dart`
+  - `lib/src/data.dart`
+- `package:wrestling_scoreboard_server`
+  - `lib/routes/api_route.dart`
+  - `lib/controllers/websocket_handler.dart`
+  - `lib/controllers/entity_controller.dart@getControllerFromDataType`
+  - `public/index.html`
+  - Migrate and export database
+- `package:wrestling_scoreboard_client`
+  - `lib/mocks/mock_data_provider.dart`
+  - `lib/mocks/mocks.dart`
+  - `lib/mocks/services/network/data_manager.dart`

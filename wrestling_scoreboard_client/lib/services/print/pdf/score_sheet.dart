@@ -21,6 +21,7 @@ class ScoreSheet extends PdfSheet {
     required this.wrestlingEvent,
     required this.boutConfig,
     required this.boutRules,
+    required this.weightClass,
     required this.isTimeCountDown,
     super.baseColor,
     super.accentColor,
@@ -28,6 +29,7 @@ class ScoreSheet extends PdfSheet {
   });
 
   final Bout bout;
+  final WeightClass? weightClass;
   final List<BoutAction> boutActions;
   final BoutConfig boutConfig;
   final List<BoutResultRule> boutRules;
@@ -127,7 +129,7 @@ class ScoreSheet extends PdfSheet {
   }
 
   Widget _buildInfoHeader2(Context context) {
-    final isFreeStyle = bout.weightClass?.style == WrestlingStyle.free;
+    final isFreeStyle = weightClass?.style == WrestlingStyle.free;
     return Table(
       columnWidths: {
         0: const FlexColumnWidth(2),
@@ -154,8 +156,8 @@ class ScoreSheet extends PdfSheet {
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
             buildFormCell(
-                title: '${localizations.weightClass} (${bout.weightClass?.unit.toAbbr()})',
-                content: bout.weightClass?.weight.toString(),
+                title: '${localizations.weightClass} (${weightClass?.unit.toAbbr()})',
+                content: weightClass?.weight.toString(),
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
             buildFormCell(
@@ -163,11 +165,11 @@ class ScoreSheet extends PdfSheet {
                 content: bout.id?.toString() ?? '',
                 color: PdfColors.grey300,
                 pencilColor: PdfSheet.pencilColor),
-            buildFormCell(
-                title: localizations.pool.toUpperCase(),
-                content: bout.pool?.toString() ?? '',
-                color: PdfColors.grey300,
-                pencilColor: PdfSheet.pencilColor),
+            // buildFormCell(
+            //     title: localizations.pool.toUpperCase(),
+            //     content: bout.pool?.toString() ?? '',
+            //     color: PdfColors.grey300,
+            //     pencilColor: PdfSheet.pencilColor),
             buildFormCell(
                 title: localizations.round.toUpperCase(),
                 content: '',
@@ -250,11 +252,9 @@ class ScoreSheet extends PdfSheet {
     }
 
     return Row(children: [
-      buildParticipantColumn(
-          isLeft: true, membership: bout.r?.participation.membership, borderColor: PdfSheet.homeColor),
+      buildParticipantColumn(isLeft: true, membership: bout.r?.membership, borderColor: PdfSheet.homeColor),
       Container(width: PdfSheet.horizontalGap),
-      buildParticipantColumn(
-          isLeft: false, membership: bout.b?.participation.membership, borderColor: PdfSheet.guestColor),
+      buildParticipantColumn(isLeft: false, membership: bout.b?.membership, borderColor: PdfSheet.guestColor),
     ]);
   }
 
@@ -263,9 +263,9 @@ class ScoreSheet extends PdfSheet {
     if (bout.winnerRole != null && bout.result != null) {
       resultRule = BoutConfig.resultRule(
         result: bout.result!,
-        style: bout.weightClass?.style ?? WrestlingStyle.free,
-        technicalPointsWinner: ParticipantState.getTechnicalPoints(boutActions, bout.winnerRole!),
-        technicalPointsLoser: ParticipantState.getTechnicalPoints(
+        style: weightClass?.style ?? WrestlingStyle.free,
+        technicalPointsWinner: AthleteBoutState.getTechnicalPoints(boutActions, bout.winnerRole!),
+        technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
             boutActions, bout.winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
         rules: boutRules,
       );
@@ -407,7 +407,7 @@ class ScoreSheet extends PdfSheet {
 
       return TableRow(children: [
         buildFormCell(
-            content: ParticipantState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
+            content: AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
             borderColor: PdfSheet.homeColor,
             height: roundCellHeight),
         buildPeriodTechnicalPoints(periodActions, BoutRole.red),
@@ -418,7 +418,7 @@ class ScoreSheet extends PdfSheet {
             alignment: Alignment.center),
         buildPeriodTechnicalPoints(periodActions, BoutRole.blue),
         buildFormCell(
-            content: ParticipantState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
+            content: AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
             borderColor: PdfSheet.guestColor,
             height: roundCellHeight),
       ]);
@@ -515,7 +515,7 @@ class ScoreSheet extends PdfSheet {
         TableRow(
           children: [
             Container(),
-            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.red).toString(),
+            buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
                 height: headerCellHeight,
                 borderWidth: 2,
                 borderColor: PdfSheet.homeColor,
@@ -524,7 +524,7 @@ class ScoreSheet extends PdfSheet {
             buildClassificationPoints(bout.r?.classificationPoints, PdfSheet.homeColor),
             Container(),
             buildClassificationPoints(bout.b?.classificationPoints, PdfSheet.guestColor),
-            buildTextCell(ParticipantState.getTechnicalPoints(actions, BoutRole.blue).toString(),
+            buildTextCell(AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
                 height: headerCellHeight,
                 borderWidth: 2,
                 borderColor: PdfSheet.guestColor,
