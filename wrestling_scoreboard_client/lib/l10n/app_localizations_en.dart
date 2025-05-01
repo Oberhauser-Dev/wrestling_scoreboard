@@ -78,13 +78,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get apiProvider => 'API Provider';
 
   @override
-  String get warningOverrideDatabase => 'This action overrides the existing database. Are you sure, you want to continue?';
+  String get warningOverrideDatabase =>
+      'This action overrides the existing database. Are you sure, you want to continue?';
 
   @override
   String get importFromApiProvider => 'Sync with API provider';
 
   @override
-  String get warningImportFromApiProvider => 'This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?';
+  String get warningImportFromApiProvider =>
+      'This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?';
 
   @override
   String get proposeFirstImportFromApiProvider => 'Cannot determine the last import. Would you like import the data?';
@@ -103,7 +105,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proposeApiImportDuration => 'Duration for proposing an API import';
 
   @override
-  String get importIncludeSubjacent => 'Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!';
+  String get importIncludeSubjacent =>
+      'Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!';
 
   @override
   String get reportProvider => 'Report Provider';
@@ -136,7 +139,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get username => 'Username';
 
   @override
-  String get usernameRequirementsWarning => 'A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).';
+  String get usernameRequirementsWarning =>
+      'A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).';
 
   @override
   String get password => 'Password';
@@ -196,7 +200,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imprint => 'Imprint';
 
   @override
-  String get imprint_phrase => '**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX';
+  String get imprint_phrase =>
+      '**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX';
 
   @override
   String get about => 'About';
@@ -214,13 +219,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_Contact => 'Contact';
 
   @override
-  String get about_contact_phrase => 'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
+  String get about_contact_phrase =>
+      'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
 
   @override
   String get about_Development => 'Development';
 
   @override
-  String get about_development_phrase => 'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
+  String get about_development_phrase =>
+      'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
 
   @override
   String get privacy_policy => 'Privacy Policy';
@@ -328,13 +335,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidParameterException => 'The change was not successful, please check your input parameters.';
 
   @override
-  String get warningBoutGenerate => 'This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?';
+  String get warningBoutGenerate =>
+      'This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?';
 
   @override
   String get warningPrefilledLineup => 'The lineup was prefilled with values from a previous match!';
 
   @override
-  String get infoUseDivisionWeightClass => 'Only define weight classes per league, if they differ from those of its division!';
+  String get infoUseDivisionWeightClass =>
+      'Only define weight classes per league, if they differ from those of its division!';
 
   @override
   String get retry => 'Retry';
@@ -604,7 +613,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultBothVin => 'Both wrestlers are injured';
 
   @override
-  String get boutResultVca => 'Victory by cautions - the opponent received 3 cautions \"O\" due to error against the rules';
+  String get boutResultVca =>
+      'Victory by cautions - the opponent received 3 cautions \"O\" due to error against the rules';
 
   @override
   String get boutResultVsu => 'Technical superiority';
@@ -619,7 +629,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultBothVfo => 'None of wrestlers pass the weight or show up on the mat';
 
   @override
-  String get boutResultDsq => 'Victory by disqualification of the opponent from the whole competition due to infringement of the rules';
+  String get boutResultDsq =>
+      'Victory by disqualification of the opponent from the whole competition due to infringement of the rules';
 
   @override
   String get boutResultBothDsq => 'In case both wrestlers have been disqualified due to infringement of the rules';
