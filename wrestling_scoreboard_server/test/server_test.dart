@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
@@ -118,5 +119,12 @@ void main() {
 
       await instance.close();
     });
+  });
+
+  test('Controllers', () async {
+    for (final dataType in dataTypes) {
+      if (dataType == User) continue;
+      expect(ShelfController.getControllerFromDataType(dataType)?.runtimeType.toString(), '${dataType}Controller');
+    }
   });
 }

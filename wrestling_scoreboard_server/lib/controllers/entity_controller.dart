@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/age_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
@@ -11,7 +12,11 @@ import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.d
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
@@ -19,11 +24,11 @@ import 'package:wrestling_scoreboard_server/controllers/league_team_participatio
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
@@ -31,6 +36,9 @@ import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
+
+import 'competition_lineup_controller.dart';
+import 'competition_person_controller.dart';
 
 final logger = Logger('api_route');
 
@@ -221,6 +229,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
 
   static ShelfController? getControllerFromDataType(Type t) {
     switch (t) {
+      case const (AgeCategory):
+        return AgeCategoryController();
       case const (Bout):
         return BoutController();
       case const (BoutAction):
@@ -233,6 +243,18 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return ClubController();
       case const (Competition):
         return CompetitionController();
+      case const (CompetitionPerson):
+        return CompetitionPersonController();
+      case const (CompetitionBout):
+        return CompetitionBoutController();
+      case const (CompetitionLineup):
+        return CompetitionLineupController();
+      case const (CompetitionSystemAffiliation):
+        return CompetitionSystemAffiliationController();
+      case const (CompetitionWeightCategory):
+        return CompetitionWeightCategoryController();
+      case const (CompetitionParticipation):
+        return CompetitionParticipationController();
       case const (Organization):
         return OrganizationController();
       case const (Division):
