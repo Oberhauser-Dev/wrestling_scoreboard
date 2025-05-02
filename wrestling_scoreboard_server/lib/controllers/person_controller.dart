@@ -5,14 +5,13 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
-import 'package:wrestling_scoreboard_server/request.dart';
 
 final _logger = Logger('PersonController');
 
@@ -69,9 +68,10 @@ class PersonController extends OrganizationalController<Person> {
             final lineupsByCoach = await lnc.getByCoach(user, deleteMembership.id!);
             await Future.wait(lineupsByCoach.map((e) => lnc.updateSingle(e.copyWith(coach: replacingMembership))));
 
-            final participations = await TeamLineupParticipationController().getByMembership(user, deleteMembership.id!);
-            await Future.wait(participations
-                .map((e) => TeamLineupParticipationController().updateSingle(e.copyWith(membership: replacingMembership))));
+            final participations =
+                await TeamLineupParticipationController().getByMembership(user, deleteMembership.id!);
+            await Future.wait(participations.map(
+                (e) => TeamLineupParticipationController().updateSingle(e.copyWith(membership: replacingMembership))));
 
             final wasDeleted = await MembershipController().deleteSingle(deleteMembership.id!);
             if (!wasDeleted) return Response.badRequest(body: 'Membership ${deleteMembership.id} could not be deleted');
@@ -130,15 +130,6 @@ class PersonController extends OrganizationalController<Person> {
 
   Future<List<Membership>> getMemberships(User? user, int id) async {
     return await MembershipController().getMany(
-      conditions: ['person_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestMemberships(Request request, User? user, String id) async {
-    return MembershipController().handleRequestMany(
-      isRaw: request.isRaw,
       conditions: ['person_id = @id'],
       substitutionValues: {'id': id},
       obfuscate: user?.obfuscate ?? true,

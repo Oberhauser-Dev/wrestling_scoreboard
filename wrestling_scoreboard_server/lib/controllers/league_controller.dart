@@ -4,10 +4,9 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_team_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -20,34 +19,6 @@ class LeagueController extends OrganizationalController<League> with ImportContr
   }
 
   LeagueController._internal() : super();
-
-  Future<Response> requestTeams(Request request, User? user, String id) async {
-    return TeamController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestLeagueTeamParticipations(Request request, User? user, String id) async {
-    return LeagueTeamParticipationController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
-  Future<Response> requestTeamMatchs(Request request, User? user, String id) async {
-    return TeamMatchController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      orderBy: ['date'],
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
 
   static String _weightClassesQuery(bool filterBySeasonPartition) => '''
         SELECT wc.* 
@@ -72,16 +43,6 @@ class LeagueController extends OrganizationalController<League> with ImportContr
           if (seasonPartition != null) 'season_partition': seasonPartition,
         },
         obfuscate: obfuscate);
-  }
-
-  Future<Response> requestLeagueWeightClasses(Request request, User? user, String id) async {
-    return LeagueWeightClassController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': id},
-      orderBy: ['season_partition', 'pos'],
-      obfuscate: user?.obfuscate ?? true,
-    );
   }
 
   Future<List<LeagueWeightClass>> getLeagueWeightClasses(

@@ -2,7 +2,6 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
@@ -33,15 +32,6 @@ class MembershipController extends OrganizationalController<Membership> {
       sqlQuery: _teamMatchBoutsQuery,
       substitutionValues: {'id': id},
       obfuscate: obfuscate,
-    );
-  }
-
-  Future<Response> requestParticipations(Request request, User? user, String id) async {
-    return TeamLineupParticipationController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['membership_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
     );
   }
 

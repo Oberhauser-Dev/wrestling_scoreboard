@@ -2,7 +2,6 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -15,15 +14,6 @@ class DivisionController extends OrganizationalController<Division> {
   }
 
   DivisionController._internal() : super();
-
-  Future<Response> requestLeagues(Request request, User? user, String id) async {
-    return LeagueController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['division_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
 
   static String _weightClassesQuery(bool filterBySeasonPartition) => '''
         SELECT wc.* 
@@ -41,16 +31,6 @@ class DivisionController extends OrganizationalController<Division> {
     );
   }
 
-  Future<Response> requestDivisionWeightClasses(Request request, User? user, String id) async {
-    return DivisionWeightClassController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['division_id = @id'],
-      substitutionValues: {'id': id},
-      orderBy: ['season_partition', 'pos'],
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
-
   Future<List<DivisionWeightClass>> getDivisionWeightClasses(
     String id, {
     int? seasonPartition,
@@ -61,15 +41,6 @@ class DivisionController extends OrganizationalController<Division> {
       substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
       orderBy: ['season_partition', 'pos'],
       obfuscate: obfuscate,
-    );
-  }
-
-  Future<Response> requestChildDivisions(Request request, User? user, String id) async {
-    return DivisionController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['parent_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
     );
   }
 }

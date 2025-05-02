@@ -1,10 +1,7 @@
 import 'package:postgres/postgres.dart' as psql;
-import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
-import 'package:wrestling_scoreboard_server/request.dart';
+import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 
 import 'bout_action_controller.dart';
 
@@ -16,15 +13,6 @@ class BoutController extends OrganizationalController<Bout> {
   }
 
   BoutController._internal() : super();
-
-  Future<Response> requestBoutActions(Request request, User? user, String id) async {
-    return BoutActionController().handleRequestMany(
-      isRaw: request.isRaw,
-      conditions: ['bout_id = @id'],
-      substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
-    );
-  }
 
   @override
   Future<bool> deleteSingle(int id) async {
