@@ -14,6 +14,10 @@ class CompetitionParticipationController extends ShelfController<CompetitionPart
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'weight': psql.Type.numeric};
+    return {
+      'weight': psql.Type.numeric,
+      'pool_group': psql.Type.smallInteger,
+      'pool_draw_number': psql.Type.smallInteger,
+    };
   }
 }

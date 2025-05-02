@@ -28,7 +28,13 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'comment': psql.Type.text};
+    return {
+      'mat_count': psql.Type.smallInteger,
+      'max_ranking': psql.Type.smallInteger,
+      'mat': psql.Type.smallInteger,
+      'round': psql.Type.smallInteger,
+      'comment': psql.Type.text,
+    };
   }
 
   @override
