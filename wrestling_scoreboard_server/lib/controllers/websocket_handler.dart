@@ -43,6 +43,13 @@ void broadcast(Future<String?> Function(bool obfuscate) builder) async {
 /// Update filtered lists (often the list they are contained in).
 /// Currently do not update list of all entities (as it should only be used in special cases)
 void broadcastSingle<T extends DataObject>(T single) async {
+  directDataObjectRelations[T]?.forEach((propertyTableName, propertyConfig) {
+    final (propertyType, orderBy) = propertyConfig;
+    broadcast((obfuscate) async {
+      return _updateInListOfFilter(single, propertyType, propertyTableName, orderBy, obfuscate);
+    });
+  });
+
   if (single is Club) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await ClubController().getMany(
@@ -54,51 +61,17 @@ void broadcastSingle<T extends DataObject>(T single) async {
         isRaw: false,
         filterType: Organization,
         filterId: single.organization.id)));
-  } else if (single is Bout) {
-  } else if (single is BoutConfig) {
-  } else if (single is BoutResultRule) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.boutConfig, 'bout_config_id', obfuscate));
-  } else if (single is BoutAction) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.bout, 'bout_id', obfuscate));
-  } else if (single is Competition) {
-    if (single.organization != null) {
-      broadcast((obfuscate) async => _updateInListOfFilter(single, single.organization!, 'organization_id', obfuscate));
-    }
-  } else if (single is CompetitionLineup) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.competition, 'competition_id', obfuscate));
   } else if (single is Organization) {
     // SpecialCase: the full Organization list has to be updated with no filter, shouldn't occur often
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await OrganizationController().getMany(obfuscate: obfuscate), Organization, CRUD.update,
         isRaw: false)));
-  } else if (single is Division) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.organization, 'organization_id', obfuscate));
-  } else if (single is DivisionWeightClass) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.division, 'division_id', obfuscate));
-  } else if (single is League) {
-  } else if (single is LeagueTeamParticipation) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.league, 'league_id', obfuscate));
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.team, 'team_id', obfuscate));
-  } else if (single is LeagueWeightClass) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.league, 'league_id', obfuscate));
-  } else if (single is TeamLineup) {
-    // No filtered list needs to be handled.
-  } else if (single is Membership) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.club, 'club_id', obfuscate));
-  } else if (single is TeamLineupParticipation) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.lineup, 'lineup_id', obfuscate));
-  } else if (single is AthleteBoutState) {
-  } else if (single is Person) {
-    if (single.organization != null) {
-      broadcast((obfuscate) async => _updateInListOfFilter(single, single.organization!, 'organization_id', obfuscate));
-    }
   } else if (single is SecuredUser) {
     // SpecialCase: the full User list has to be updated with no filter, shouldn't occur often
     // TODO: Don't broadcast to people with no admin access
     /*broadcast((obfuscate) async => jsonEncode(manyToJson(
         await SecuredUserController().getManyRaw(obfuscate: obfuscate), Organization, CRUD.update,
         isRaw: true)));*/
-  } else if (single is Team) {
   } else if (single is TeamClubAffiliation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         (await TeamClubAffiliationController().getMany(
@@ -137,34 +110,31 @@ void broadcastSingle<T extends DataObject>(T single) async {
       return jsonEncode(manyToJson(guestMatches, TeamMatch, CRUD.update,
           isRaw: false, filterType: Team, filterId: single.guest.team.id));
     });
-
-    if (single.league?.id != null) {
-      broadcast((obfuscate) async => _updateInListOfFilter(single, single.league!, 'league_id', obfuscate));
-    }
-  } else if (single is TeamMatchBout) {
-    broadcast((obfuscate) async => _updateInListOfFilter(single, single.teamMatch, 'team_match_id', obfuscate));
-  } else if (single is WeightClass) {
-  } else {
-    throw DataUnimplementedError(CRUD.update, T);
   }
 }
 
 // Updates the filtered list, where the dataObject is contained.
-Future<String?> _updateInListOfFilter<T extends DataObject, F extends DataObject>(
+Future<String?> _updateInListOfFilter<T extends DataObject>(
   T dataObject,
-  F? filterObject,
+  Type filterType,
   String propertyTableName,
+  List<String> orderBy,
   bool obfuscate,
 ) async {
-  if (filterObject == null) return null;
+  // TODO: Check whether this is performant enough:
+  final propertyId = dataObject.toRaw()[propertyTableName];
+  if (propertyId == null) return null;
   return jsonEncode(manyToJson(
       await ShelfController.getControllerFromDataType(T)!.getMany(
-          conditions: ['$propertyTableName = @id'], substitutionValues: {'id': filterObject.id}, obfuscate: obfuscate),
+          conditions: ['$propertyTableName = @id'],
+          substitutionValues: {'id': propertyId},
+          orderBy: orderBy,
+          obfuscate: obfuscate),
       T,
       CRUD.update,
       isRaw: false,
-      filterType: F,
-      filterId: filterObject.id));
+      filterType: filterType,
+      filterId: propertyId));
 }
 
 void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
