@@ -170,7 +170,8 @@ Future<String?> _updateInListOfFilter<T extends DataObject, F extends DataObject
 void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
   directDataObjectRelations[T]?.forEach((propertyTableName, propertyConfig) {
     final (propertyType, orderBy) = propertyConfig;
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, propertyType, propertyTableName, obfuscate));
+    broadcast(
+        (obfuscate) async => _updateRawInListOfFilter(T, single, propertyType, propertyTableName, orderBy, obfuscate));
   });
 
   if (T == Organization) {
@@ -225,13 +226,17 @@ Future<String?> _updateRawInListOfFilter<F extends DataObject>(
   Map<String, dynamic> single,
   Type filterType,
   String propertyTableName,
+  List<String> orderBy,
   bool obfuscate,
 ) async {
   final propertyId = single[propertyTableName];
   if (propertyId == null) return null;
   return jsonEncode(manyToJson(
       await ShelfController.getControllerFromDataType(dataType)!.getManyRaw(
-          conditions: ['$propertyTableName = @id'], substitutionValues: {'id': propertyId}, obfuscate: obfuscate),
+          orderBy: orderBy,
+          conditions: ['$propertyTableName = @id'],
+          substitutionValues: {'id': propertyId},
+          obfuscate: obfuscate),
       dataType,
       CRUD.update,
       isRaw: true,
