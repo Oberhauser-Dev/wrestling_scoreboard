@@ -23,6 +23,9 @@ final Map<WebSocketChannel, UserPrivilege> webSocketPool = <WebSocketChannel, Us
 void broadcast(Future<String?> Function(bool obfuscate) builder) async {
   final futureData = builder(false);
   final futureObfuscatedData = builder(true);
+
+  futureData.then((value) => _logger.finest('Broadcast: $value'));
+
   // Use map to perform asynchronously
   await Future.wait(webSocketPool.entries.map((poolEntry) async {
     // Send obfuscated data to users with no read privilege
