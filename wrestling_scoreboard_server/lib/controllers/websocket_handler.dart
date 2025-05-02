@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_co
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/auth.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 
@@ -19,13 +20,23 @@ final _logger = Logger('Websocket');
 
 final Map<WebSocketChannel, UserPrivilege> webSocketPool = <WebSocketChannel, UserPrivilege>{};
 
-void broadcast(Future<String> Function(bool obfuscate) builder) async {
+void broadcast(Future<String?> Function(bool obfuscate) builder) async {
   final futureData = builder(false);
   final futureObfuscatedData = builder(true);
   // Use map to perform asynchronously
   await Future.wait(webSocketPool.entries.map((poolEntry) async {
     // Send obfuscated data to users with no read privilege
-    poolEntry.key.sink.add(poolEntry.value <= UserPrivilege.none ? (await futureObfuscatedData) : (await futureData));
+    if (poolEntry.value <= UserPrivilege.none) {
+      final obfuscatedData = await futureObfuscatedData;
+      if (obfuscatedData != null) {
+        poolEntry.key.sink.add(obfuscatedData);
+      }
+    } else {
+      final data = await futureData;
+      if (data != null) {
+        poolEntry.key.sink.add(data);
+      }
+    }
   }));
 }
 
@@ -139,60 +150,34 @@ void broadcastSingle<T extends DataObject>(T single) async {
 }
 
 // Updates the filtered list, where the dataObject is contained.
-Future<String> _updateInListOfFilter<T extends DataObject, F extends DataObject>(
+Future<String?> _updateInListOfFilter<T extends DataObject, F extends DataObject>(
   T dataObject,
-  F filterObject,
+  F? filterObject,
   String propertyTableName,
   bool obfuscate,
-) async =>
-    jsonEncode(manyToJson(
-        await ShelfController.getControllerFromDataType(T)!.getMany(
-            conditions: ['$propertyTableName = @id'],
-            substitutionValues: {'id': filterObject.id},
-            obfuscate: obfuscate),
-        T,
-        CRUD.update,
-        isRaw: false,
-        filterType: F,
-        filterId: filterObject.id));
+) async {
+  if (filterObject == null) return null;
+  return jsonEncode(manyToJson(
+      await ShelfController.getControllerFromDataType(T)!.getMany(
+          conditions: ['$propertyTableName = @id'], substitutionValues: {'id': filterObject.id}, obfuscate: obfuscate),
+      T,
+      CRUD.update,
+      isRaw: false,
+      filterType: F,
+      filterId: filterObject.id));
+}
 
 void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
-  if (T == Club) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Organization, 'organization_id', obfuscate));
-  } else if (T == Bout) {
-  } else if (T == BoutConfig) {
-  } else if (T == BoutResultRule) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, BoutConfig, 'bout_config_id', obfuscate));
-  } else if (T == BoutAction) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Bout, 'bout_id', obfuscate));
-  } else if (T == Organization) {
+  directDataObjectRelations[T]?.forEach((propertyTableName, propertyConfig) {
+    final (propertyType, orderBy) = propertyConfig;
+    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, propertyType, propertyTableName, obfuscate));
+  });
+
+  if (T == Organization) {
     // SpecialCase: the full Organization list has to be updated with no filter, shouldn't occur often
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         await OrganizationController().getManyRaw(obfuscate: obfuscate), Organization, CRUD.update,
         isRaw: true)));
-  } else if (T == Division) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Organization, 'organization_id', obfuscate));
-  } else if (T == DivisionWeightClass) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Division, 'division_id', obfuscate));
-  } else if (T == League) {
-  } else if (T == LeagueTeamParticipation) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, League, 'league_id', obfuscate));
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Team, 'team_id', obfuscate));
-  } else if (T == LeagueWeightClass) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, League, 'league_id', obfuscate));
-  } else if (T == TeamLineup) {
-    // No filtered list needs to be handled.
-  } else if (T == Membership) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Club, 'club_id', obfuscate));
-  } else if (T == TeamLineupParticipation) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, TeamLineup, 'lineup_id', obfuscate));
-  } else if (T == AthleteBoutState) {
-  } else if (T == Person) {
-    if (single['organization_id'] != null) {
-      broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, Organization, 'organization_id', obfuscate));
-    }
-  } else if (T == SecuredUser) {
-  } else if (T == Team) {
   } else if (T == TeamClubAffiliation) {
     broadcast((obfuscate) async => jsonEncode(manyToJson(
         (await TeamClubAffiliationController().getMany(
@@ -231,36 +216,28 @@ void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async
         .getManyRawFromQuery(TeamController.teamMatchesQuery, substitutionValues: {'id': guestTeamId});
     broadcast((obfuscate) async => jsonEncode(
         manyToJson(guestMatches, TeamMatch, CRUD.update, isRaw: true, filterType: Team, filterId: guestTeamId)));
-
-    if (single['league_id'] != null) {
-      broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, League, 'league_id', obfuscate));
-    }
-  } else if (T == TeamMatchBout) {
-    broadcast((obfuscate) async => _updateRawInListOfFilter(T, single, TeamMatch, 'team_match_id', obfuscate));
-  } else if (T == WeightClass) {
-  } else {
-    throw DataUnimplementedError(CRUD.update, T);
   }
 }
 
 // Updates the filtered list, where the raw dataObject is contained.
-Future<String> _updateRawInListOfFilter<F extends DataObject>(
+Future<String?> _updateRawInListOfFilter<F extends DataObject>(
   Type dataType,
   Map<String, dynamic> single,
   Type filterType,
   String propertyTableName,
   bool obfuscate,
-) async =>
-    jsonEncode(manyToJson(
-        await ShelfController.getControllerFromDataType(dataType)!.getManyRaw(
-            conditions: ['$propertyTableName = @id'],
-            substitutionValues: {'id': single[propertyTableName]},
-            obfuscate: obfuscate),
-        dataType,
-        CRUD.update,
-        isRaw: true,
-        filterType: filterType,
-        filterId: single[propertyTableName]));
+) async {
+  final propertyId = single[propertyTableName];
+  if (propertyId == null) return null;
+  return jsonEncode(manyToJson(
+      await ShelfController.getControllerFromDataType(dataType)!.getManyRaw(
+          conditions: ['$propertyTableName = @id'], substitutionValues: {'id': propertyId}, obfuscate: obfuscate),
+      dataType,
+      CRUD.update,
+      isRaw: true,
+      filterType: filterType,
+      filterId: propertyId));
+}
 
 Future<int> handleSingle<T extends DataObject>({
   required CRUD operation,
@@ -295,7 +272,7 @@ Future<int> handleSingle<T extends DataObject>({
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
     broadcastSingle<T>(single);
   } else if (operation == CRUD.update && single is BoutAction) {
-    // Update nonetheless, if it changes order of items
+    // Update nonetheless, if order of items has changed
     broadcastSingle<T>(single);
   }
   return single.id!;
@@ -333,7 +310,7 @@ Future<int> handleSingleRaw<T extends DataObject>({
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
     broadcastSingleRaw<T>(single);
   } else if (operation == CRUD.update && T == BoutAction) {
-    // Update nonetheless, if it changes order of items
+    // Update nonetheless, if order of items has changed
     broadcastSingleRaw<T>(single);
   }
   return single['id'];
