@@ -3,7 +3,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
 
-class CompetitionParticipationController extends ShelfController<TeamLineupParticipation> {
+class CompetitionParticipationController extends ShelfController<CompetitionParticipation> {
   static final CompetitionParticipationController _singleton = CompetitionParticipationController._internal();
 
   factory CompetitionParticipationController() {

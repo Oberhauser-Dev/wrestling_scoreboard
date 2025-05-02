@@ -124,7 +124,9 @@ void main() {
   test('Controllers', () async {
     for (final dataType in dataTypes) {
       if (dataType == User) continue;
-      expect(ShelfController.getControllerFromDataType(dataType)?.runtimeType.toString(), '${dataType}Controller');
+      final controller = ShelfController.getControllerFromDataType(dataType)!;
+      expect(controller.runtimeType.toString(), '${dataType}Controller');
+      expect(controller.tableName, getTableNameFromType(dataType));
     }
   });
 }
