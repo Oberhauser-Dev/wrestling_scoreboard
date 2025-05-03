@@ -39,7 +39,7 @@ abstract class AgeCategory with _$AgeCategory implements DataObject, Organizatio
       if (orgSyncId != null) 'org_sync_id': orgSyncId,
       if (organization != null) 'organization_id': organization?.id!,
       'min_age': minAge,
-      'max_age': minAge,
+      'max_age': maxAge,
       'name': name,
     };
   }

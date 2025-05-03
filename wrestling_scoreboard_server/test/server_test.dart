@@ -100,7 +100,7 @@ void main() {
   });
 
   group('API', () {
-    test('GET', () async {
+    test('GET all', () async {
       final db = PostgresDb();
       await db.open();
       await db.clear();
