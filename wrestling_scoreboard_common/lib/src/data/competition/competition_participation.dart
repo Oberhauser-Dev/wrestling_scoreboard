@@ -36,7 +36,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
   }
 
   static Future<CompetitionParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    final weightCategoryId = e['competition_weight_category_id'] as int?;
+    final weightCategoryId = e['weight_category_id'] as int?;
     final lineup = await getSingle<CompetitionLineup>(e['competition_lineup_id'] as int);
     final membership = await getSingle<Membership>(e['membership_id'] as int);
     final weightEncoded = e['weight'];
@@ -66,7 +66,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      'competition_weight_category_id': weightCategory?.id!,
+      'weight_category_id': weightCategory?.id!,
       'competition_lineup_id': lineup.id!,
       'membership_id': membership.id!,
       'weight': weight,

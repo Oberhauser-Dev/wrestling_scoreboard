@@ -11,23 +11,6 @@ alter table public.competition
 alter table public.competition
     add max_ranking smallint default 10 not null;
 
-alter table public.competition_bout
-    add pos integer default 0 not null;
-
-alter table public.competition_bout
-    add mat smallint;
-
-alter table public.competition_bout
-    add round smallint;
-
-alter table public.competition_bout
-    add weight_category_id integer
-        constraint competition_bout_competition_weight_category_id_fk
-            references public.competition_weight_category;
-
-alter table public.competition_bout
-    add round_type round_type default 'qualification' not null;
-
 
 create table public.age_category
 (
@@ -91,10 +74,29 @@ create table public.competition_weight_category
     competition_id  integer not null
         constraint competition_weight_category_competition_id_fk
             references public.competition
-            on delete cascade
+            on delete cascade,
+    paired_round smallint
 );
 
 alter table public.competition_weight_category owner to wrestling;
+
+
+alter table public.competition_bout
+    add pos integer default 0 not null;
+
+alter table public.competition_bout
+    add mat smallint;
+
+alter table public.competition_bout
+    add round smallint;
+
+alter table public.competition_bout
+    add weight_category_id integer
+        constraint competition_bout_competition_weight_category_id_fk
+            references public.competition_weight_category;
+
+alter table public.competition_bout
+    add round_type round_type default 'qualification' not null;
 
 
 create table public.competition_participation

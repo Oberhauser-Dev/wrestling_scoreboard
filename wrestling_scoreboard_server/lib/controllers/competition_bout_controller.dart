@@ -1,3 +1,4 @@
+import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
@@ -10,4 +11,12 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
   }
 
   CompetitionBoutController._internal() : super();
+
+  @override
+  Map<String, psql.Type?> getPostgresDataTypes() {
+    return {
+      'mat': psql.Type.smallInteger,
+      'round': psql.Type.smallInteger,
+    };
+  }
 }

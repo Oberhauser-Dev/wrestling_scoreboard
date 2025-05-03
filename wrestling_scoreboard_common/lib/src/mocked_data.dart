@@ -179,8 +179,6 @@ class MockedData {
     );
   }
 
-  late final menRPWMatch = initMenRPWMatch();
-
   TeamMatch initJnRPWMatch() {
     TeamLineup home = TeamLineup(id: 3, team: homeTeamJuniors);
     TeamLineup guest = TeamLineup(id: 4, team: guestTeam);
@@ -193,13 +191,11 @@ class MockedData {
       guest: guest,
       referee: referee,
       location: 'Springfield',
-      date: DateTime.now(),
+      date: DateTime.utc(2025, 5, 3),
       league: leagueJnRPW,
       organization: organization,
     );
   }
-
-  late final jnRPWMatch = initJnRPWMatch();
 
   late final boutState1R = AthleteBoutState(id: 1, membership: r1, classificationPoints: 5);
   late final boutState1B = AthleteBoutState(id: 2, membership: b1, classificationPoints: 0);
@@ -438,6 +434,15 @@ class MockedData {
       duration: Duration(seconds: 100),
       role: BoutRole.red,
       pointCount: 2);
+
+  // Initialize in constructor, so it gets executed on creation.
+  late final TeamMatch menRPWMatch;
+  late final TeamMatch jnRPWMatch;
+
+  MockedData() {
+    menRPWMatch = initMenRPWMatch();
+    jnRPWMatch = initJnRPWMatch();
+  }
 
   late final List<Club> _clubs = [homeClub, guestClub];
   late final List<BoutAction> _boutActions = [boutAction1, boutAction2, boutAction3];

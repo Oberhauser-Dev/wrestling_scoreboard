@@ -494,6 +494,7 @@ CREATE TABLE public.competition_bout (
     pos integer DEFAULT 0 NOT NULL,
     mat smallint,
     round smallint,
+    weight_category_id integer,
     round_type public.round_type DEFAULT 'qualification'::public.round_type NOT NULL
 );
 
@@ -682,7 +683,8 @@ CREATE TABLE public.competition_weight_category (
     organization_id integer,
     weight_class_id integer NOT NULL,
     age_category_id integer NOT NULL,
-    competition_id integer NOT NULL
+    competition_id integer NOT NULL,
+    paired_round smallint
 );
 
 
@@ -1749,7 +1751,7 @@ COPY public.competition (id, date, location, visitors_count, comment, no, organi
 -- Data for Name: competition_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, round_type) FROM stdin;
+COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, weight_category_id, round_type) FROM stdin;
 \.
 
 
@@ -1789,7 +1791,7 @@ COPY public.competition_system_affiliation (id, competition_id, competition_syst
 -- Data for Name: competition_weight_category; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, age_category_id, competition_id) FROM stdin;
+COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, age_category_id, competition_id, paired_round) FROM stdin;
 \.
 
 
@@ -2733,6 +2735,14 @@ ALTER TABLE ONLY public.competition_bout
 
 ALTER TABLE ONLY public.competition_bout
     ADD CONSTRAINT competition_bout_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_bout competition_bout_competition_weight_category_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_bout
+    ADD CONSTRAINT competition_bout_competition_weight_category_id_fk FOREIGN KEY (weight_category_id) REFERENCES public.competition_weight_category(id);
 
 
 --
