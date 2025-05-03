@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'competition.freezed.dart';
-
 part 'competition.g.dart';
 
 /// For team matches only.
@@ -39,6 +38,7 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       orgSyncId: e['org_sync_id'] as String?,
       organization: organizationId == null ? null : await getSingle<Organization>(organizationId),
       name: e['name'],
+      no: e['no'] as String?,
       location: e['location'] as String?,
       date: e['date'] as DateTime,
       visitorsCount: e['visitors_count'] as int?,
@@ -65,8 +65,6 @@ abstract class Competition extends WrestlingEvent with _$Competition {
     // TODO: implement generateBouts
     throw UnimplementedError();
   }
-
-  @override
 
   @override
   String get tableName => cTableName;

@@ -4,7 +4,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 
 part 'authorization.freezed.dart';
-
 part 'authorization.g.dart';
 
 abstract class AuthService {
@@ -31,7 +30,7 @@ abstract class BasicAuthService with _$BasicAuthService implements AuthService {
   factory BasicAuthService.fromHeader(String authHeader) {
     final parts = authHeader.split(' ');
     if (parts.length != 2 || parts[0] != 'Basic') {
-      throw Exception('Auth header is not valid');
+      throw FormatException('Auth header is not valid');
     }
     final String decoded = utf8.decode(base64.decode(parts[1]));
     final credentials = decoded.split(':');
@@ -61,7 +60,7 @@ abstract class BearerAuthService with _$BearerAuthService implements AuthService
   factory BearerAuthService.fromHeader(String authHeader) {
     final parts = authHeader.split(' ');
     if (parts.length != 2 || parts[0] != 'Bearer') {
-      throw Exception('Auth header is not valid');
+      throw FormatException('Auth header is not valid');
     }
 
     return BearerAuthService(token: parts[1]);

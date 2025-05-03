@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
@@ -100,6 +102,28 @@ void main() {
   });
 
   group('API', () {
+    Future<Map<String, String>> getAuthHeaders(String apiUrl) async {
+      final defaultHeaders = {
+        "Content-Type": "application/json",
+      };
+
+      Future<String> signIn(BasicAuthService authService) async {
+        final uri = Uri.parse('$apiUrl/auth/sign_in');
+        final response = await http.post(uri, headers: {
+          ...authService.header,
+          ...defaultHeaders,
+        });
+        return response.body;
+      }
+
+      final token = await signIn(BasicAuthService(username: 'admin', password: 'admin'));
+
+      return {
+        "Content-Type": "application/json",
+        ...BearerAuthService(token: token).header,
+      };
+    }
+
     test('GET all', () async {
       final db = PostgresDb();
       await db.open();
@@ -112,9 +136,77 @@ void main() {
         if (dataType == SecuredUser) continue;
         final tableName = getTableNameFromType(dataType);
         final url = 'http://${instance.address.address}:${instance.port}/api/${tableName}s';
-        print('Test url: $url');
         final res = await http.get(Uri.parse(url));
         expect(res.statusCode, 200);
+      }
+
+      await instance.close();
+    });
+
+    test('POST and GET single', () async {
+      final db = PostgresDb();
+      await db.open();
+      await db.reset();
+
+      final instance = await server.init();
+      final mockedData = MockedData();
+
+      final apiUrl = 'http://${instance.address.address}:${instance.port}/api';
+
+      DataObject getMockedDataObject(Type type) {
+        return switch (type) {
+          const (AgeCategory) => mockedData.ageCategoryAJuniors,
+          const (Bout) => mockedData.bout1,
+          const (BoutAction) => mockedData.boutAction1,
+          const (BoutConfig) => mockedData.boutConfig,
+          const (BoutResultRule) => mockedData.boutResultRule,
+          const (Club) => mockedData.homeClub,
+          const (Competition) => mockedData.competition,
+          const (CompetitionPerson) => mockedData.competitionPerson,
+          const (CompetitionBout) => mockedData.competitionBout1,
+          const (CompetitionLineup) => mockedData.competitionLineup1,
+          const (CompetitionSystemAffiliation) => mockedData.competitionSystemAffiliationTwoPools,
+          const (CompetitionWeightCategory) => mockedData.competitionWeightCategory,
+          const (CompetitionParticipation) => mockedData.competitionParticipation1,
+          const (Organization) => mockedData.organization,
+          const (Division) => mockedData.adultDivision,
+          const (DivisionWeightClass) => mockedData.divisionWc57,
+          const (League) => mockedData.leagueMenRPW,
+          const (LeagueTeamParticipation) => mockedData.htMenRPW,
+          const (LeagueWeightClass) => mockedData.leagueWc57,
+          const (TeamLineup) => mockedData.menRpwHomeTeamLineup,
+          const (Membership) => mockedData.r1,
+          const (TeamLineupParticipation) => mockedData.menRpwHomeTeamLineupParticipation,
+          const (AthleteBoutState) => mockedData.boutState1R,
+          const (Person) => mockedData.p1,
+          const (Team) => mockedData.homeTeam,
+          const (TeamClubAffiliation) => mockedData.homeTeamAffiliation,
+          const (TeamMatch) => mockedData.menRPWMatch,
+          const (TeamMatchBout) => mockedData.tmb1,
+          const (WeightClass) => mockedData.wc57,
+          _ => throw UnimplementedError(),
+        };
+      }
+
+      final authHeaders = await getAuthHeaders(apiUrl);
+
+      for (final dataType in dataTypes.reversed) {
+        if (dataType == User) continue;
+        if (dataType == SecuredUser) continue;
+
+        DataObject obj = getMockedDataObject(dataType);
+        final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
+        final tableUrl = '$apiUrl/${obj.tableName}';
+        final uri = Uri.parse(tableUrl);
+        final postRes = await http.post(uri, headers: authHeaders, body: body);
+        expect(postRes.statusCode, 200);
+
+        final objectId = jsonDecode(postRes.body);
+        obj = obj.copyWithId(objectId);
+
+        final getRes = await http.get(Uri.parse('$tableUrl/$objectId'), headers: authHeaders);
+        expect(getRes.statusCode, 200);
+        expect(jsonDecode(getRes.body), obj.toJson());
       }
 
       await instance.close();

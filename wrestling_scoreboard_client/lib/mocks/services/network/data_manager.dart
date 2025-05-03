@@ -4,10 +4,11 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:wrestling_scoreboard_client/mocks/services/network/data.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+// ignore: implementation_imports
+import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
 
 class MockDataManager extends DataManager {
   final latency = const Duration(milliseconds: 100);
