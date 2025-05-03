@@ -199,7 +199,7 @@ void main() {
         final tableUrl = '$apiUrl/${obj.tableName}';
         final uri = Uri.parse(tableUrl);
         final postRes = await http.post(uri, headers: authHeaders, body: body);
-        expect(postRes.statusCode, 200);
+        expect(postRes.statusCode, 200, reason: postRes.body);
 
         final objectId = jsonDecode(postRes.body);
         obj = obj.copyWithId(objectId);

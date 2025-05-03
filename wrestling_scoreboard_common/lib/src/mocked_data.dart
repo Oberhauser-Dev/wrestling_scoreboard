@@ -18,8 +18,8 @@ class MockedData {
   late final adultDivision = Division(
     id: 1,
     name: 'Adult',
-    startDate: DateTime(2021),
-    endDate: DateTime(2022),
+    startDate: DateTime.utc(2021),
+    endDate: DateTime.utc(2022),
     boutConfig: boutConfig,
     seasonPartitions: 2,
     organization: organization,
@@ -28,8 +28,8 @@ class MockedData {
   late final juniorDivision = Division(
     id: 2,
     name: 'Junior',
-    startDate: DateTime(2021),
-    endDate: DateTime(2022),
+    startDate: DateTime.utc(2021),
+    endDate: DateTime.utc(2022),
     boutConfig: boutConfig,
     seasonPartitions: 2,
     organization: organization,
@@ -38,8 +38,8 @@ class MockedData {
   late final leagueMenRPW = League(
     id: 1,
     name: 'Real Pro Wrestling',
-    startDate: DateTime(2021),
-    endDate: DateTime(2022),
+    startDate: DateTime.utc(2021),
+    endDate: DateTime.utc(2022),
     division: adultDivision,
     boutDays: 14,
     organization: organization,
@@ -48,8 +48,8 @@ class MockedData {
   late final leagueJnRPW = League(
     id: 2,
     name: 'Real Pro Wrestling Jn',
-    startDate: DateTime(2021),
-    endDate: DateTime(2022),
+    startDate: DateTime.utc(2021),
+    endDate: DateTime.utc(2022),
     division: juniorDivision,
     boutDays: 14,
     organization: organization,
@@ -57,8 +57,8 @@ class MockedData {
   late final leagueNational = League(
     id: 3,
     name: 'National League',
-    startDate: DateTime(2021),
-    endDate: DateTime(2022),
+    startDate: DateTime.utc(2021),
+    endDate: DateTime.utc(2022),
     division: adultDivision,
     boutDays: 14,
     organization: organization,
@@ -262,7 +262,7 @@ class MockedData {
   );
 
   late final competition = Competition(
-    id: 1,
+    id: 0,
     no: 'abc',
     name: 'Wittelsbacher-Land-Turnier',
     boutConfig: boutConfig,
@@ -274,12 +274,13 @@ class MockedData {
     matCount: 6,
   );
 
-  late final competitionPerson = CompetitionPerson(competition: competition, person: p1, role: PersonRole.timeKeeper);
+  late final competitionPerson =
+      CompetitionPerson(id: 0, competition: competition, person: p1, role: PersonRole.timeKeeper);
 
   late final competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
       id: 0, competitionSystem: CompetitionSystem.nordic, competition: competition, maxContestants: 6);
   late final competitionSystemAffiliationTwoPools =
-      CompetitionSystemAffiliation(id: 1, competitionSystem: CompetitionSystem.twoPools, competition: competition);
+      CompetitionSystemAffiliation(id: 0, competitionSystem: CompetitionSystem.twoPools, competition: competition);
 
   late final ageCategoryAJuniors =
       AgeCategory(id: 0, name: 'A-Juniors', minAge: 16, maxAge: 18, organization: organization);

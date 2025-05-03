@@ -26,7 +26,7 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
       id: e['id'] as int?,
       competition: competition,
       competitionSystem: CompetitionSystem.values.byName(competitionSystem),
-      maxContestants: e['max_contestants'] as int,
+      maxContestants: e['max_contestants'] as int?,
     );
   }
 
@@ -35,7 +35,7 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
     return {
       if (id != null) 'id': id,
       'competition_id': competition.id!,
-      'competition_system_id': competitionSystem.name,
+      'competition_system': competitionSystem.name,
       'max_contestants': maxContestants,
     };
   }

@@ -124,7 +124,7 @@ class PersonController extends OrganizationalController<Person> {
       final errMessage = 'The data objects $tableName could not be merged. Check the format: $message'
           '\nFormatException: ${e.message}';
       _logger.warning(errMessage.toString());
-      return Response.notFound(errMessage);
+      return Response.badRequest(body: errMessage);
     }
   }
 

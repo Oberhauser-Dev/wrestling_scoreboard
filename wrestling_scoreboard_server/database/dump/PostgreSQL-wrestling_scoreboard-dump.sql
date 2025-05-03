@@ -2800,6 +2800,14 @@ ALTER TABLE ONLY public.competition_participation
 
 
 --
+-- Name: competition_person competition_person_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_person
+    ADD CONSTRAINT competition_person_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
+
+
+--
 -- Name: competition_system_affiliation competition_system_affiliation_competition_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2893,14 +2901,6 @@ ALTER TABLE ONLY public.division_weight_class
 
 ALTER TABLE ONLY public.competition_person
     ADD CONSTRAINT event_person_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id) ON DELETE CASCADE;
-
-
---
--- Name: competition_person event_person_wrestling_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.competition_person
-    ADD CONSTRAINT event_person_wrestling_event_id_fk FOREIGN KEY (competition_id) REFERENCES public.wrestling_event(id) ON DELETE CASCADE;
 
 
 --

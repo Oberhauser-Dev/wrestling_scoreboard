@@ -22,7 +22,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
       final id = await createSingleUser(user);
       return Response.ok(jsonEncode(id));
     } on InvalidParameterException catch (e) {
-      return Response.notFound(e.message);
+      return Response.badRequest(body: e.message);
     }
   }
 

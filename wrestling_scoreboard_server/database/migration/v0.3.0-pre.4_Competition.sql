@@ -144,3 +144,11 @@ create table public.competition_system_affiliation
 );
 
 alter table public.competition_system_affiliation owner to wrestling;
+
+alter table public.competition_person
+    drop constraint event_person_wrestling_event_id_fk;
+
+alter table public.competition_person
+    add constraint competition_person_competition_id_fk
+        foreign key (competition_id) references public.competition
+            on delete cascade;
