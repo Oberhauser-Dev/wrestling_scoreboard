@@ -153,37 +153,37 @@ void main() {
 
       final apiUrl = 'http://${instance.address.address}:${instance.port}/api';
 
-      DataObject getMockedDataObject(Type type) {
+      Iterable<DataObject> getMockedDataObjects(Type type) {
         return switch (type) {
-          const (AgeCategory) => mockedData.ageCategoryAJuniors,
-          const (Bout) => mockedData.bout1,
-          const (BoutAction) => mockedData.boutAction1,
-          const (BoutConfig) => mockedData.boutConfig,
-          const (BoutResultRule) => mockedData.boutResultRule,
-          const (Club) => mockedData.homeClub,
-          const (Competition) => mockedData.competition,
-          const (CompetitionPerson) => mockedData.competitionPerson,
-          const (CompetitionBout) => mockedData.competitionBout1,
-          const (CompetitionLineup) => mockedData.competitionLineup1,
-          const (CompetitionSystemAffiliation) => mockedData.competitionSystemAffiliationTwoPools,
-          const (CompetitionWeightCategory) => mockedData.competitionWeightCategory,
-          const (CompetitionParticipation) => mockedData.competitionParticipation1,
-          const (Organization) => mockedData.organization,
-          const (Division) => mockedData.adultDivision,
-          const (DivisionWeightClass) => mockedData.divisionWc57,
-          const (League) => mockedData.leagueMenRPW,
-          const (LeagueTeamParticipation) => mockedData.htMenRPW,
-          const (LeagueWeightClass) => mockedData.leagueWc57,
-          const (TeamLineup) => mockedData.menRpwHomeTeamLineup,
-          const (Membership) => mockedData.r1,
-          const (TeamLineupParticipation) => mockedData.menRpwHomeTeamLineupParticipation,
-          const (AthleteBoutState) => mockedData.boutState1R,
-          const (Person) => mockedData.p1,
-          const (Team) => mockedData.homeTeam,
-          const (TeamClubAffiliation) => mockedData.homeTeamAffiliation,
-          const (TeamMatch) => mockedData.menRPWMatch,
-          const (TeamMatchBout) => mockedData.tmb1,
-          const (WeightClass) => mockedData.wc57,
+          const (AgeCategory) => mockedData.getAgeCategories(),
+          const (Bout) => mockedData.getBouts(),
+          const (BoutAction) => mockedData.getBoutActions(),
+          const (BoutConfig) => mockedData.getBoutConfigs(),
+          const (BoutResultRule) => mockedData.getBoutResultRules(),
+          const (Club) => mockedData.getClubs(),
+          const (Competition) => mockedData.getCompetitions(),
+          const (CompetitionPerson) => mockedData.getCompetitionPersons(),
+          const (CompetitionBout) => mockedData.getCompetitionBouts(),
+          const (CompetitionLineup) => mockedData.getCompetitionLineups(),
+          const (CompetitionSystemAffiliation) => mockedData.getCompetitionSystemAffiliations(),
+          const (CompetitionWeightCategory) => mockedData.getCompetitionWeightCategories(),
+          const (CompetitionParticipation) => mockedData.getCompetitionParticipations(),
+          const (Organization) => mockedData.getOrganizations(),
+          const (Division) => mockedData.getDivisions(),
+          const (DivisionWeightClass) => mockedData.getDivisionWeightClasses(),
+          const (League) => mockedData.getLeagues(),
+          const (LeagueTeamParticipation) => mockedData.getLeagueTeamParticipations(),
+          const (LeagueWeightClass) => mockedData.getLeagueWeightClasses(),
+          const (TeamLineup) => mockedData.getTeamLineups(),
+          const (Membership) => mockedData.getMemberships(),
+          const (TeamLineupParticipation) => mockedData.getTeamLineupParticipations(),
+          const (AthleteBoutState) => mockedData.getAthleteBoutStates(),
+          const (Person) => mockedData.getPersons(),
+          const (Team) => mockedData.getTeams(),
+          const (TeamClubAffiliation) => mockedData.getTeamClubAffiliations(),
+          const (TeamMatch) => mockedData.getTeamMatches(),
+          const (TeamMatchBout) => mockedData.getTeamMatchBouts(),
+          const (WeightClass) => mockedData.getWeightClasses(),
           _ => throw UnimplementedError(),
         };
       }
@@ -194,19 +194,21 @@ void main() {
         if (dataType == User) continue;
         if (dataType == SecuredUser) continue;
 
-        DataObject obj = getMockedDataObject(dataType);
-        final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
-        final tableUrl = '$apiUrl/${obj.tableName}';
-        final uri = Uri.parse(tableUrl);
-        final postRes = await http.post(uri, headers: authHeaders, body: body);
-        expect(postRes.statusCode, 200, reason: postRes.body);
+        Iterable<DataObject> objs = getMockedDataObjects(dataType);
+        for (var obj in objs) {
+          final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
+          final tableUrl = '$apiUrl/${obj.tableName}';
+          final uri = Uri.parse(tableUrl);
+          final postRes = await http.post(uri, headers: authHeaders, body: body);
+          expect(postRes.statusCode, 200, reason: postRes.body);
 
-        final objectId = jsonDecode(postRes.body);
-        obj = obj.copyWithId(objectId);
+          final objectId = jsonDecode(postRes.body);
+          obj = obj.copyWithId(objectId);
 
-        final getRes = await http.get(Uri.parse('$tableUrl/$objectId'), headers: authHeaders);
-        expect(getRes.statusCode, 200);
-        expect(jsonDecode(getRes.body), obj.toJson());
+          final getRes = await http.get(Uri.parse('$tableUrl/$objectId'), headers: authHeaders);
+          expect(getRes.statusCode, 200);
+          expect(jsonDecode(getRes.body), obj.toJson());
+        }
       }
 
       await instance.close();

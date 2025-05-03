@@ -16,8 +16,8 @@ class ClubController extends OrganizationalController<Club> {
 
   static const teamsQuery = '''
         SELECT t.*
-        FROM team AS t
-        JOIN team_club_affiliation AS tca ON t.id = tca.team_id
+        FROM ${Team.cTableName} AS t
+        JOIN ${TeamClubAffiliation.cTableName} AS tca ON t.id = tca.team_id
         WHERE tca.club_id = @id
         ORDER BY t.name;''';
 

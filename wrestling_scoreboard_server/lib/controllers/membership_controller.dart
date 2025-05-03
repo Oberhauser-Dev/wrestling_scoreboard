@@ -16,12 +16,11 @@ class MembershipController extends OrganizationalController<Membership> {
 
   static const _teamMatchBoutsQuery = '''
         SELECT tmb.* 
-        FROM bout as b
-        JOIN participant_state AS pst ON b.red_id = pst.id OR b.blue_id = pst.id
-        JOIN participation AS p ON pst.participation_id = p.id
-        JOIN team_match_bout AS tmb ON tmb.bout_id = b.id
-        JOIN team_match AS tm ON tmb.team_match_id = tm.id
-        WHERE p.membership_id = @id
+        FROM ${Bout.cTableName} as b
+        JOIN ${AthleteBoutState.cTableName} AS pst ON b.red_id = pst.id OR b.blue_id = pst.id
+        JOIN ${TeamMatchBout.cTableName} AS tmb ON tmb.bout_id = b.id
+        JOIN ${TeamMatch.cTableName} AS tm ON tmb.team_match_id = tm.id
+        WHERE pst.membership_id = @id
         ORDER BY tm.date DESC, tmb.pos;''';
 
   Future<Response> requestTeamMatchBouts(Request request, User? user, String id) async {

@@ -127,7 +127,7 @@ class MockDataManager extends DataManager {
           if (filterObject is TeamMatch) return mockedData.getTeamMatchBoutsOfTeamMatch(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (TeamLineupParticipation):
-          if (filterObject is TeamLineup) return mockedData.getParticipationsOfLineup(filterObject).cast<T>();
+          if (filterObject is TeamLineup) return mockedData.getTeamLineupParticipationsOfLineup(filterObject).cast<T>();
           throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (WeightClass):
           // TODO may remove in favor of getDivisionWeightClassesOfLeague
@@ -137,7 +137,7 @@ class MockDataManager extends DataManager {
           throw DataUnimplementedError(CRUD.read, T, filterObject);
       }
     }
-    return _getListOfType<T>(CRUD.read);
+    return _getListOfType<T>();
   }
 
   T _addToListWithUniqueId<T extends DataObject>(List<T> objects, T object) {
@@ -310,7 +310,7 @@ class MockDataManager extends DataManager {
     objList.remove(single);
     objList.add(single);
     if (single is TeamLineup) {
-      final participations = mockedData.getParticipations();
+      final participations = mockedData.getTeamLineupParticipations();
       final participationsWithLineup = participations.where((element) => element.lineup.id == single.id);
       for (final participationWithLineup in participationsWithLineup) {
         participations.remove(participationWithLineup);
@@ -360,7 +360,7 @@ class MockDataManager extends DataManager {
       ));
     } else if (single is TeamLineupParticipation) {
       getManyStreamController<TeamLineupParticipation>(filterType: TeamLineup)?.add(ManyDataObject(
-        data: mockedData.getParticipationsOfLineup(single.lineup),
+        data: mockedData.getTeamLineupParticipationsOfLineup(single.lineup),
         filterType: TeamLineup,
         filterId: single.lineup.id,
       ));
@@ -398,7 +398,7 @@ class MockDataManager extends DataManager {
 
   List<T> _getListOfObject<T extends DataObject>(T obj, CRUD crud) {
     if (obj is AthleteBoutState) {
-      return mockedData.getParticipantStates().cast<T>();
+      return mockedData.getAthleteBoutStates().cast<T>();
     } else if (obj is Bout) {
       return mockedData.getBouts().cast<T>();
     } else if (obj is BoutAction) {
@@ -430,9 +430,9 @@ class MockDataManager extends DataManager {
     } else if (obj is Organization) {
       return mockedData.getOrganizations().cast<T>();
     } else if (obj is TeamLineup) {
-      return mockedData.getLineups().cast<T>();
+      return mockedData.getTeamLineups().cast<T>();
     } else if (obj is TeamLineupParticipation) {
-      return mockedData.getParticipations().cast<T>();
+      return mockedData.getTeamLineupParticipations().cast<T>();
     } else if (obj is Team) {
       return mockedData.getTeams().cast<T>();
     } else if (obj is TeamMatch) {
@@ -448,7 +448,7 @@ class MockDataManager extends DataManager {
     }
   }
 
-  List<T> _getListOfType<T extends DataObject>(CRUD crud) {
+  List<T> _getListOfType<T extends DataObject>() {
     switch (T) {
       case const (Club):
         return mockedData.getClubs().cast<T>();
@@ -477,13 +477,13 @@ class MockDataManager extends DataManager {
       case const (DivisionWeightClass):
         return mockedData.getDivisionWeightClasses().cast<T>();
       case const (TeamLineup):
-        return mockedData.getLineups().cast<T>();
+        return mockedData.getTeamLineups().cast<T>();
       case const (Membership):
         return mockedData.getMemberships().cast<T>();
       case const (TeamLineupParticipation):
-        return mockedData.getParticipations().cast<T>();
+        return mockedData.getTeamLineupParticipations().cast<T>();
       case const (AthleteBoutState):
-        return mockedData.getParticipantStates().cast<T>();
+        return mockedData.getAthleteBoutStates().cast<T>();
       case const (Person):
         return mockedData.getPersons().cast<T>();
       case const (Team):
@@ -495,7 +495,7 @@ class MockDataManager extends DataManager {
       case const (WeightClass):
         return mockedData.getWeightClasses().cast<T>();
       default:
-        throw DataUnimplementedError(crud, T);
+        throw UnimplementedError();
     }
   }
 

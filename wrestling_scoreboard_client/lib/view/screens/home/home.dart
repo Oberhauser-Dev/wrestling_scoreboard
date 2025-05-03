@@ -79,7 +79,7 @@ class HomeState extends ConsumerState<Home> {
               context: context,
               child: Column(
                 children: [
-                  Text('There was a problem with the object of type $T and id $id.'),
+                  Text('There was a problem with the object of type "$T" and id "$id".'),
                   ExceptionInfo(
                     exception ?? localizations.errorOccurred,
                     stackTrace: stackTrace,

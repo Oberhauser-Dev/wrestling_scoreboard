@@ -31,8 +31,8 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
   static const _boutsQuery = '''
         SELECT f.* 
-        FROM bout as f 
-        JOIN team_match_bout AS tmf ON tmf.bout_id = f.id
+        FROM ${Bout.cTableName} as f 
+        JOIN ${TeamMatchBout.cTableName} AS tmf ON tmf.bout_id = f.id
         WHERE tmf.team_match_id = @id
         ORDER BY tmf.pos;''';
 

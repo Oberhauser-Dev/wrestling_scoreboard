@@ -212,7 +212,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
       );
       return Response.ok(jsonEncode(id));
     } on FormatException catch (e) {
-      final errMessage = 'The data object of table $tableName could not be created. Check the format: $message'
+      final errMessage = 'The data object of table "$tableName" could not be created. Check the format: $message'
           '\nFormatException: ${e.message}';
       logger.warning(errMessage.toString());
       return Response.badRequest(body: errMessage);
@@ -352,12 +352,12 @@ abstract class EntityController<T extends DataObject> {
       final res = await stmt.bind(bindingData).toList();
       if (res.isEmpty || res.last.isEmpty) {
         throw InvalidParameterException(
-            'The data object of table $tableName could not be updated. Check the attributes: $data');
+            'The data object of table "$tableName" could not be updated. Check the attributes: $data');
       }
       return res.last[0] as int;
     } on psql.PgException catch (e) {
       throw InvalidParameterException(
-          'The data object of table $tableName could not be created. Check the attributes: $data\n'
+          'The data object of table "$tableName" could not be created. Check the attributes: $data\n'
           'PgException: {"message": ${e.message}}');
     }
   }
@@ -392,12 +392,12 @@ abstract class EntityController<T extends DataObject> {
       final res = await stmt.bind(bindingData).toList();
       if (res.isEmpty || res.last.isEmpty) {
         throw InvalidParameterException(
-            'The data object of table $tableName could not be updated. Check the attributes: $data');
+            'The data object of table "$tableName" could not be updated. Check the attributes: $data');
       }
       return res.last[0] as int;
     } on psql.PgException catch (e) {
       throw InvalidParameterException(
-          'The data object of table $tableName could not be updated. Check the attributes: $data'
+          'The data object of table "$tableName" could not be updated. Check the attributes: $data'
           '\nPgException: {"message": ${e.message}');
     }
   }

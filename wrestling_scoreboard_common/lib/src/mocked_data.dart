@@ -115,6 +115,7 @@ class MockedData {
   late final p3 =
       Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female, organization: organization);
   late final p4 = Person(id: 4, prename: 'Homer', surname: 'Simpson', gender: Gender.male, organization: organization);
+
   late final r1 = Membership(id: 1, person: p1, club: homeClub);
   late final r2 = Membership(id: 2, person: p2, club: homeClub);
   late final r3 = Membership(id: 3, person: p3, club: homeClub);
@@ -125,37 +126,40 @@ class MockedData {
   late final p6 = Person(id: 6, prename: 'Chris', surname: 'Griffin', gender: Gender.male, organization: organization);
   late final p7 = Person(id: 7, prename: 'Lois', surname: 'Griffin', gender: Gender.female, organization: organization);
   late final p8 = Person(id: 8, prename: 'Peter', surname: 'Griffin', gender: Gender.male, organization: organization);
+
   late final b1 = Membership(id: 5, person: p5, club: guestClub);
   late final b2 = Membership(id: 6, person: p6, club: guestClub);
   late final b3 = Membership(id: 7, person: p7, club: guestClub);
   late final b4 = Membership(id: 8, person: p8, club: guestClub);
 
-  late final TeamLineup menRpwHomeTeamLineup = TeamLineup(id: 1, team: homeTeam);
-  late final TeamLineup menRpwGuestTeamLineup = TeamLineup(id: 2, team: guestTeam);
-  late final menRpwHomeTeamLineupParticipation =
-      TeamLineupParticipation(id: 1, membership: r1, lineup: menRpwHomeTeamLineup, weightClass: wc57, weight: 55.8);
+  final referee = const Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
+  final judge = const Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
+  final matChairman = const Person(id: 11, prename: 'Mr', surname: 'Chairman', gender: Gender.male);
+  final timeKeeper = const Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
+  final transcriptWriter = const Person(id: 13, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
 
   TeamMatch initMenRPWMatch() {
-    _participations.add(
+    final menRpwHomeTeamLineup = TeamLineup(id: 1, team: homeTeam);
+    final menRpwGuestTeamLineup = TeamLineup(id: 2, team: guestTeam);
+    _teamLineups.add(menRpwHomeTeamLineup);
+    _teamLineups.add(menRpwGuestTeamLineup);
+    _teamLineupParticipations.add(
+        TeamLineupParticipation(id: 1, membership: r1, lineup: menRpwHomeTeamLineup, weightClass: wc57, weight: 55.8));
+    _teamLineupParticipations.add(
         TeamLineupParticipation(id: 2, membership: r2, lineup: menRpwHomeTeamLineup, weightClass: wc61, weight: 60.15));
-    _participations.add(
+    _teamLineupParticipations.add(
         TeamLineupParticipation(id: 3, membership: r3, lineup: menRpwHomeTeamLineup, weightClass: wc75A, weight: 73.3));
-    _participations.add(TeamLineupParticipation(
+    _teamLineupParticipations.add(TeamLineupParticipation(
         id: 4, membership: r4, lineup: menRpwHomeTeamLineup, weightClass: wc130, weight: 133.5));
-    _participations.add(
+    _teamLineupParticipations.add(
         TeamLineupParticipation(id: 5, membership: b1, lineup: menRpwGuestTeamLineup, weightClass: wc57, weight: 57.0));
-    _participations
+    _teamLineupParticipations
         .add(TeamLineupParticipation(id: 6, membership: b2, lineup: menRpwGuestTeamLineup, weightClass: wc66));
-    _participations.add(TeamLineupParticipation(
+    _teamLineupParticipations.add(TeamLineupParticipation(
         id: 7, membership: b3, lineup: menRpwGuestTeamLineup, weightClass: wc75A, weight: 72.4));
-    _participations.add(TeamLineupParticipation(
+    _teamLineupParticipations.add(TeamLineupParticipation(
         id: 8, membership: b4, lineup: menRpwGuestTeamLineup, weightClass: wc130, weight: 129.9));
 
-    Person referee = const Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
-    Person judge = const Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
-    Person matChairman = const Person(id: 11, prename: 'Mr', surname: 'Chairman', gender: Gender.male);
-    Person timeKeeper = const Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
-    Person transcriptWriter = const Person(id: 12, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
     return TeamMatch(
       id: 1,
       no: '123456',
@@ -166,7 +170,7 @@ class MockedData {
       matChairman: matChairman,
       timeKeeper: timeKeeper,
       transcriptWriter: transcriptWriter,
-      date: DateTime.now(),
+      date: DateTime.utc(2025, 5, 3),
       comment: 'Some commment',
       visitorsCount: 123,
       location: 'Springfield',
@@ -183,9 +187,6 @@ class MockedData {
     _teamLineups.add(home);
     _teamLineups.add(guest);
 
-    // Miss participants
-
-    Person referee = const Person(id: 10, prename: 'Mr', surname: 'Schiri', gender: Gender.male);
     return TeamMatch(
       id: 2,
       home: home,
@@ -203,7 +204,7 @@ class MockedData {
   late final boutState1R = AthleteBoutState(id: 1, membership: r1, classificationPoints: 5);
   late final boutState1B = AthleteBoutState(id: 2, membership: b1, classificationPoints: 0);
   late final bout1 = Bout(
-    id: 1,
+    id: 0,
     r: boutState1R,
     b: boutState1B,
     organization: organization,
@@ -212,34 +213,42 @@ class MockedData {
     duration: Duration(seconds: 180),
   );
 
+  late final boutState2R = AthleteBoutState(id: 3, membership: r2, classificationPoints: 1);
+  late final boutState2B = AthleteBoutState(id: 4, membership: b2, classificationPoints: 3);
   late final bout2 = Bout(
-    id: 2,
-    r: AthleteBoutState(id: 3, membership: r2, classificationPoints: 1),
-    b: AthleteBoutState(id: 4, membership: b2, classificationPoints: 3),
+    id: 1,
+    r: boutState2R,
+    b: boutState2B,
     organization: organization,
     result: BoutResult.vca,
     winnerRole: BoutRole.blue,
     duration: Duration(seconds: 180),
   );
 
+  late final boutState3R = AthleteBoutState(id: 5, membership: r1, classificationPoints: 1);
+  late final boutState3B = AthleteBoutState(id: 6, membership: b2, classificationPoints: 3);
   late final bout3 = Bout(
-    id: 3,
-    r: AthleteBoutState(id: 5, membership: r1),
-    b: AthleteBoutState(id: 6, membership: b2),
+    id: 2,
+    r: boutState3R,
+    b: boutState3B,
     organization: organization,
   );
 
+  late final boutState4R = AthleteBoutState(id: 7, membership: r2);
+  late final boutState4B = AthleteBoutState(id: 8, membership: b1);
   late final bout4 = Bout(
-    id: 4,
-    r: AthleteBoutState(id: 7, membership: r2),
-    b: AthleteBoutState(id: 8, membership: b1),
+    id: 3,
+    r: boutState4R,
+    b: boutState4B,
     organization: organization,
   );
 
+  late final boutState5R = AthleteBoutState(id: 20, membership: r1);
+  late final boutState5B = AthleteBoutState(id: 21, membership: r4);
   late final bout5 = Bout(
-    id: 5,
-    r: AthleteBoutState(id: 20, membership: r1),
-    b: AthleteBoutState(id: 21, membership: r4),
+    id: 4,
+    r: boutState5R,
+    b: boutState5B,
     organization: organization,
   );
 
@@ -280,7 +289,7 @@ class MockedData {
   late final competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
       id: 0, competitionSystem: CompetitionSystem.nordic, competition: competition, maxContestants: 6);
   late final competitionSystemAffiliationTwoPools =
-      CompetitionSystemAffiliation(id: 0, competitionSystem: CompetitionSystem.twoPools, competition: competition);
+      CompetitionSystemAffiliation(id: 1, competitionSystem: CompetitionSystem.twoPools, competition: competition);
 
   late final ageCategoryAJuniors =
       AgeCategory(id: 0, name: 'A-Juniors', minAge: 16, maxAge: 18, organization: organization);
@@ -438,11 +447,37 @@ class MockedData {
   late final List<DivisionWeightClass> _divisionWeightClasses = [divisionWc57];
   late final List<LeagueWeightClass> _leagueWeightClasses = [leagueWc57];
   late final List<LeagueTeamParticipation> _leagueTeamParticipations = [htMenRPW, gtMenRPW, htjJnRPW, htNat, gtNat];
-  late final List<TeamLineup> _teamLineups = [menRpwHomeTeamLineup, menRpwGuestTeamLineup];
+  late final List<TeamLineup> _teamLineups = []; // Is filled during initialization of team matches
   late final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
-  late final List<TeamLineupParticipation> _participations = [menRpwHomeTeamLineupParticipation];
-  late final List<AthleteBoutState> _participantStates = [boutState1R, boutState1B];
-  late final List<Person> _persons = [p1, p2, p3, p4, p5, p6, p7, p8];
+  late final List<TeamLineupParticipation> _teamLineupParticipations =
+      []; // Is filled during initialization of team matches
+  late final List<AthleteBoutState> _athleteBoutStates = [
+    boutState1R,
+    boutState1B,
+    boutState2R,
+    boutState2B,
+    boutState3R,
+    boutState3B,
+    boutState4R,
+    boutState4B,
+    boutState5R,
+    boutState5B,
+  ];
+  late final List<Person> _persons = [
+    p1,
+    p2,
+    p3,
+    p4,
+    p5,
+    p6,
+    p7,
+    p8,
+    referee,
+    timeKeeper,
+    judge,
+    matChairman,
+    transcriptWriter,
+  ];
   late final List<Team> _teams = [homeTeam, homeTeamJuniors, guestTeam];
   late final List<TeamClubAffiliation> _teamClubAffiliations = [
     homeTeamAffiliation,
@@ -558,7 +593,7 @@ class MockedData {
     return getLeagueTeamParticipations().where((element) => element.team == team).toList();
   }
 
-  List<TeamLineup> getLineups() => _teamLineups;
+  List<TeamLineup> getTeamLineups() => _teamLineups;
 
   List<Membership> getMemberships() => _memberships;
 
@@ -566,13 +601,13 @@ class MockedData {
     return getMemberships().where((element) => element.club == club).toList();
   }
 
-  List<TeamLineupParticipation> getParticipations() => _participations;
+  List<TeamLineupParticipation> getTeamLineupParticipations() => _teamLineupParticipations;
 
-  List<TeamLineupParticipation> getParticipationsOfLineup(TeamLineup lineup) {
-    return getParticipations().where((element) => element.lineup == lineup).toList();
+  List<TeamLineupParticipation> getTeamLineupParticipationsOfLineup(TeamLineup lineup) {
+    return getTeamLineupParticipations().where((element) => element.lineup == lineup).toList();
   }
 
-  List<AthleteBoutState> getParticipantStates() => _participantStates;
+  List<AthleteBoutState> getAthleteBoutStates() => _athleteBoutStates;
 
   List<Person> getPersons() => _persons;
 
@@ -604,10 +639,10 @@ class MockedData {
 
   List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
 
-  List<Bout> getBouts() => [
+  List<Bout> getBouts() => {
         ..._teamMatchBouts.map((e) => e.bout),
         ..._competitionBouts.map((e) => e.bout),
-      ];
+      }.toList();
 
   List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
     return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
