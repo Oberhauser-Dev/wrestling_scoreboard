@@ -68,7 +68,7 @@ final class DataManagerNotifierProvider
 }
 
 String _$dataManagerNotifierHash() =>
-    r'503f87972a6b26b65ba10e6df7580c973fc8a08f';
+    r'df52461a8e9f979643219a0d9924bc6c774b690f';
 
 abstract class _$DataManagerNotifier
     extends $Notifier<Raw<Future<DataManager>>> {
