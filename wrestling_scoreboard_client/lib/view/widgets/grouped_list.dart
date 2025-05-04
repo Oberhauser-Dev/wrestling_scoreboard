@@ -150,6 +150,15 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
   }
 
   @override
+  void didUpdateWidget(covariant SearchableGroupedList<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset list, if items have changed
+    setState(() {
+      _filteredItems = widget.items;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GroupedList(
       header: ListTile(
