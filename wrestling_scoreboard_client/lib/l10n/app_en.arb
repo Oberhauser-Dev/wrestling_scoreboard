@@ -148,6 +148,8 @@
   "round": "Round",
   "qualification": "Qualification",
   "elimination": "Elimination",
+  "eliminated": "Eliminated",
+  "disqualified": "Disqualified",
   "repechage": "Repechage",
   "finals": "Final",
   "semiFinals": "Semi-Final",

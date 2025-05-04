@@ -97,8 +97,10 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             FilterableManyConsumer<CompetitionParticipation, CompetitionWeightCategory>.edit(
               context: context,
               filterObject: competitionWeightCategory,
-              editPageBuilder: (context) =>
-                  CompetitionParticipationEdit(initialCompetition: competitionWeightCategory.competition),
+              editPageBuilder: (context) => CompetitionParticipationEdit(
+                initialCompetition: competitionWeightCategory.competition,
+                initialWeightCategory: competitionWeightCategory,
+              ),
               mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
               itemBuilder: (context, item) => ContentItem(
                 title: item.name,

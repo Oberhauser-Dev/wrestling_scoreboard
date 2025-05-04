@@ -47,6 +47,36 @@ class CompetitionParticipationOverview extends ConsumerWidget {
               subtitle: localizations.membership,
               icon: Icons.person,
             ),
+            ContentItem(
+              title: competitionParticipation.weightCategory?.name ?? '-',
+              subtitle: localizations.weightCategory,
+              icon: Icons.category,
+            ),
+            ContentItem(
+              title: competitionParticipation.weight?.toString() ?? '-',
+              subtitle: localizations.weight,
+              icon: Icons.fitness_center,
+            ),
+            ContentItem(
+              title: competitionParticipation.poolGroup?.toString() ?? '-',
+              subtitle: localizations.pool,
+              icon: Icons.pool,
+            ),
+            ContentItem(
+              title: competitionParticipation.poolDrawNumber?.toString() ?? '-',
+              subtitle: localizations.numberAbbreviation,
+              icon: Icons.numbers,
+            ),
+            ContentItem(
+              title: competitionParticipation.eliminated.toString(),
+              subtitle: localizations.eliminated,
+              icon: Icons.cancel_outlined,
+            ),
+            ContentItem(
+              title: competitionParticipation.disqualified.toString(),
+              subtitle: localizations.disqualified,
+              icon: Icons.block_outlined,
+            ),
           ],
         );
         return FavoriteScaffold<CompetitionParticipation>(

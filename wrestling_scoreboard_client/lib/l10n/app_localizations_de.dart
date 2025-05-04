@@ -410,6 +410,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get elimination => 'Eliminierung';
 
   @override
+  String get eliminated => 'Ausgeschieden';
+
+  @override
+  String get disqualified => 'Disqualifiziert';
+
+  @override
   String get repechage => 'Hoffnung';
 
   @override

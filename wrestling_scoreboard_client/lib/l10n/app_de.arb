@@ -145,6 +145,8 @@
   "round": "Runde",
   "qualification": "Qualifikation",
   "elimination": "Eliminierung",
+  "eliminated": "Ausgeschieden",
+  "disqualified": "Disqualifiziert",
   "repechage": "Hoffnung",
   "finals": "Finale",
   "semiFinals": "Halbfinale",

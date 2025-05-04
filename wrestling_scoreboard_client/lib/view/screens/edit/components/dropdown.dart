@@ -14,6 +14,7 @@ class MembershipDropdown extends ConsumerWidget {
   final Membership? selectedItem;
   final String label;
   final Organization? organization;
+  final bool allowEmpty;
 
   const MembershipDropdown({
     super.key,
@@ -23,6 +24,7 @@ class MembershipDropdown extends ConsumerWidget {
     this.organization,
     this.onChange,
     required this.onSave,
+    this.allowEmpty = true,
   });
 
   @override
@@ -40,6 +42,7 @@ class MembershipDropdown extends ConsumerWidget {
           asyncItems: (String filter) async {
             return _filterMemberships(ref, filter, organization, await getOrSetMemberships());
           },
+          allowEmpty: allowEmpty,
           disableFilter: true,
           containerBuilder: (context, popupWidget) {
             return Column(

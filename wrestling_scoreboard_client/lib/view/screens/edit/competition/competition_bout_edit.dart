@@ -85,7 +85,7 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
           title: SearchableDropdown<CompetitionWeightCategory>(
             icon: const Icon(Icons.fitness_center),
             selectedItem: _weightCategory,
-            label: context.l10n.weightClass,
+            label: context.l10n.weightCategory,
             context: context,
             onSaved: (value) => setState(() {
               _weightCategory = value;

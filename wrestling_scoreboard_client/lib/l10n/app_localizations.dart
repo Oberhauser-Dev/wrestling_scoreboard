@@ -854,6 +854,18 @@ abstract class AppLocalizations {
   /// **'Elimination'**
   String get elimination;
 
+  /// No description provided for @eliminated.
+  ///
+  /// In en, this message translates to:
+  /// **'Eliminated'**
+  String get eliminated;
+
+  /// No description provided for @disqualified.
+  ///
+  /// In en, this message translates to:
+  /// **'Disqualified'**
+  String get disqualified;
+
   /// No description provided for @repechage.
   ///
   /// In en, this message translates to:

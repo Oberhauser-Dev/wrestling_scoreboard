@@ -97,13 +97,14 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
                 .createOrUpdateSingle<Person>(participation.membership.person);
             participation = participation.copyWith(
                 membership:
-                participation.membership.copyWith(person: participation.membership.person.copyWithId(personId)));
+                    participation.membership.copyWith(person: participation.membership.person.copyWithId(personId)));
           }
           final membershipId = await (await ref.read(dataManagerNotifierProvider))
               .createOrUpdateSingle<Membership>(participation.membership);
           participation = participation.copyWith(membership: participation.membership.copyWithId(membershipId));
         }
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<TeamLineupParticipation>(participation);
+        await (await ref.read(dataManagerNotifierProvider))
+            .createOrUpdateSingle<TeamLineupParticipation>(participation);
       });
       if (onSubmitGenerate != null) await onSubmitGenerate();
       navigator.pop();
@@ -136,17 +137,19 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   }
 
   Future<Iterable<Membership>> _getMemberships() async {
-    final clubs = await ref.readAsync(manyDataStreamProvider<Club, Team>(
-      ManyProviderData<Club, Team>(filterObject: widget.lineup.team),
-    ).future);
-
-    final clubMemberships = await Future.wait(clubs.map((club) async {
-      return await ref.readAsync(manyDataStreamProvider<Membership, Club>(
-        ManyProviderData<Membership, Club>(filterObject: club),
+    if (_memberships == null) {
+      final clubs = await ref.readAsync(manyDataStreamProvider<Club, Team>(
+        ManyProviderData<Club, Team>(filterObject: widget.lineup.team),
       ).future);
-    }));
 
-    _memberships ??= clubMemberships.expand((membership) => membership);
+      final clubMemberships = await Future.wait(clubs.map((club) async {
+        return await ref.readAsync(manyDataStreamProvider<Membership, Club>(
+          ManyProviderData<Membership, Club>(filterObject: club),
+        ).future);
+      }));
+
+      _memberships = clubMemberships.expand((membership) => membership);
+    }
     return _memberships!;
   }
 
@@ -164,6 +167,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
           if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
             IconCard(icon: const Icon(Icons.warning), child: Text(localizations.warningPrefilledLineup)),
           ListTile(
+            leading: Icon(Icons.person),
             title: MembershipDropdown(
               label: localizations.leader,
               getOrSetMemberships: _getMemberships,
@@ -175,6 +179,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.person),
             title: MembershipDropdown(
               label: localizations.coach,
               getOrSetMemberships: _getMemberships,
@@ -273,6 +278,8 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     return ListTile(
+      // TODO replace with image of person
+      leading: Icon(Icons.person_2),
       title: Row(
         children: [
           Expanded(
@@ -281,7 +288,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
               child: MembershipDropdown(
                 label:
-                '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
+                    '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
                 getOrSetMemberships: widget.getOrSetMemberships,
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;

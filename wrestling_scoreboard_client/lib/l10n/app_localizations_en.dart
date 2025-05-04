@@ -406,6 +406,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get elimination => 'Elimination';
 
   @override
+  String get eliminated => 'Eliminated';
+
+  @override
+  String get disqualified => 'Disqualified';
+
+  @override
   String get repechage => 'Repechage';
 
   @override
