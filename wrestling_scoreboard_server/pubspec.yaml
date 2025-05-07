@@ -2,10 +2,11 @@ name: wrestling_scoreboard_server
 description: Server for a wrestling scoreboard.
 version: 0.1.1
 homepage: https://server.wrestling-scoreboard.oberhauser.dev
+resolution: workspace
 publish_to: 'none'
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.7.0
 
 dependencies:
   dotenv: ^4.1.0
