@@ -40,7 +40,6 @@ abstract class Club with _$Club implements DataObject, Organizational {
       );
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'club';

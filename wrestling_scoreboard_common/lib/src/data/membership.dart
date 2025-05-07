@@ -52,7 +52,6 @@ abstract class Membership with _$Membership implements DataObject, Organizationa
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'membership';

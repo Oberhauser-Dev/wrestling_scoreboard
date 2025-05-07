@@ -44,7 +44,6 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'competition_weight_category';

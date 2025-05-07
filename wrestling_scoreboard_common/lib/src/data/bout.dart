@@ -101,7 +101,6 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       (b?.equalDuringBout(o.b) ?? (b == null && o.b == null));
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'bout';

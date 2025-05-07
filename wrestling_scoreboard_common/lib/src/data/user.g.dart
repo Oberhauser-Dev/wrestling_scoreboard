@@ -11,13 +11,9 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
       email: json['email'] as String?,
       username: json['username'] as String,
       password: json['password'] as String?,
-      person: json['person'] == null
-          ? null
-          : Person.fromJson(json['person'] as Map<String, dynamic>),
+      person: json['person'] == null ? null : Person.fromJson(json['person'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      privilege:
-          $enumDecodeNullable(_$UserPrivilegeEnumMap, json['privilege']) ??
-              UserPrivilege.none,
+      privilege: $enumDecodeNullable(_$UserPrivilegeEnumMap, json['privilege']) ?? UserPrivilege.none,
     );
 
 Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
@@ -41,21 +37,14 @@ _SecuredUser _$SecuredUserFromJson(Map<String, dynamic> json) => _SecuredUser(
       id: (json['id'] as num?)?.toInt(),
       email: json['email'] as String?,
       username: json['username'] as String,
-      passwordHash: (json['passwordHash'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
+      passwordHash: (json['passwordHash'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
       salt: json['salt'] as String?,
-      person: json['person'] == null
-          ? null
-          : Person.fromJson(json['person'] as Map<String, dynamic>),
+      person: json['person'] == null ? null : Person.fromJson(json['person'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      privilege:
-          $enumDecodeNullable(_$UserPrivilegeEnumMap, json['privilege']) ??
-              UserPrivilege.none,
+      privilege: $enumDecodeNullable(_$UserPrivilegeEnumMap, json['privilege']) ?? UserPrivilege.none,
     );
 
-Map<String, dynamic> _$SecuredUserToJson(_SecuredUser instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SecuredUserToJson(_SecuredUser instance) => <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
       'username': instance.username,

@@ -114,6 +114,7 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
         .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionBout));
   }
 
-  Future<List<CompetitionWeightCategory>> get availableWeightCategories async => (await ref.read(dataManagerNotifierProvider))
-      .readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
+  Future<List<CompetitionWeightCategory>> get availableWeightCategories async =>
+      (await ref.read(dataManagerNotifierProvider))
+          .readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
 }

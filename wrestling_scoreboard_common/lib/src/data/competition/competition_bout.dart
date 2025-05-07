@@ -56,7 +56,6 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'competition_bout';

@@ -15,8 +15,7 @@ _BoutAction _$BoutActionFromJson(Map<String, dynamic> json) => _BoutAction(
       pointCount: (json['pointCount'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$BoutActionToJson(_BoutAction instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$BoutActionToJson(_BoutAction instance) => <String, dynamic>{
       'id': instance.id,
       'actionType': _$BoutActionTypeEnumMap[instance.actionType]!,
       'bout': instance.bout.toJson(),

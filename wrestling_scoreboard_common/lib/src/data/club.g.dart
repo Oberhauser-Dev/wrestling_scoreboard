@@ -9,8 +9,7 @@ part of 'club.dart';
 _Club _$ClubFromJson(Map<String, dynamic> json) => _Club(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
-      organization:
-          Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,
       no: json['no'] as String?,
     );

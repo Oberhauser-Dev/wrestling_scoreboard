@@ -9,10 +9,8 @@ part of 'network_provider.dart';
 @ProviderFor(DataManagerNotifier)
 const dataManagerNotifierProvider = DataManagerNotifierProvider._();
 
-final class DataManagerNotifierProvider
-    extends $NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>> {
-  const DataManagerNotifierProvider._(
-      {super.runNotifierBuildOverride, DataManagerNotifier Function()? create})
+final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>> {
+  const DataManagerNotifierProvider._({super.runNotifierBuildOverride, DataManagerNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -62,27 +60,21 @@ final class DataManagerNotifierProvider
 
   @$internal
   @override
-  $NotifierProviderElement<DataManagerNotifier, Raw<Future<DataManager>>>
-      $createElement($ProviderPointer pointer) =>
-          $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<DataManagerNotifier, Raw<Future<DataManager>>> $createElement($ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
-String _$dataManagerNotifierHash() =>
-    r'df52461a8e9f979643219a0d9924bc6c774b690f';
+String _$dataManagerNotifierHash() => r'df52461a8e9f979643219a0d9924bc6c774b690f';
 
-abstract class _$DataManagerNotifier
-    extends $Notifier<Raw<Future<DataManager>>> {
+abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<DataManager>>>;
-    final element = ref.element as $ClassProviderElement<
-        NotifierBase<Raw<Future<DataManager>>>,
-        Raw<Future<DataManager>>,
-        Object?,
-        Object?>;
+    final element = ref.element
+        as $ClassProviderElement<NotifierBase<Raw<Future<DataManager>>>, Raw<Future<DataManager>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -90,11 +82,10 @@ abstract class _$DataManagerNotifier
 @ProviderFor(WebSocketManagerNotifier)
 const webSocketManagerNotifierProvider = WebSocketManagerNotifierProvider._();
 
-final class WebSocketManagerNotifierProvider extends $NotifierProvider<
-    WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> {
+final class WebSocketManagerNotifierProvider
+    extends $NotifierProvider<WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> {
   const WebSocketManagerNotifierProvider._(
-      {super.runNotifierBuildOverride,
-      WebSocketManagerNotifier Function()? create})
+      {super.runNotifierBuildOverride, WebSocketManagerNotifier Function()? create})
       : _createCb = create,
         super(
           from: null,
@@ -121,8 +112,7 @@ final class WebSocketManagerNotifierProvider extends $NotifierProvider<
 
   @$internal
   @override
-  WebSocketManagerNotifier create() =>
-      _createCb?.call() ?? WebSocketManagerNotifier();
+  WebSocketManagerNotifier create() => _createCb?.call() ?? WebSocketManagerNotifier();
 
   @$internal
   @override
@@ -145,28 +135,22 @@ final class WebSocketManagerNotifierProvider extends $NotifierProvider<
 
   @$internal
   @override
-  $NotifierProviderElement<WebSocketManagerNotifier,
-      Raw<Future<WebSocketManager>>> $createElement(
+  $NotifierProviderElement<WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> $createElement(
           $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
-String _$webSocketManagerNotifierHash() =>
-    r'265576c4812245258bd39d047948d2def4d4c4a9';
+String _$webSocketManagerNotifierHash() => r'265576c4812245258bd39d047948d2def4d4c4a9';
 
-abstract class _$WebSocketManagerNotifier
-    extends $Notifier<Raw<Future<WebSocketManager>>> {
+abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
   @$internal
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>>;
-    final element = ref.element as $ClassProviderElement<
-        NotifierBase<Raw<Future<WebSocketManager>>>,
-        Raw<Future<WebSocketManager>>,
-        Object?,
-        Object?>;
+    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<WebSocketManager>>>,
+        Raw<Future<WebSocketManager>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -174,11 +158,9 @@ abstract class _$WebSocketManagerNotifier
 @ProviderFor(webSocketStateStream)
 const webSocketStateStreamProvider = WebSocketStateStreamProvider._();
 
-final class WebSocketStateStreamProvider extends $FunctionalProvider<
-        AsyncValue<WebSocketConnectionState>, Stream<WebSocketConnectionState>>
-    with
-        $FutureModifier<WebSocketConnectionState>,
-        $StreamProvider<WebSocketConnectionState> {
+final class WebSocketStateStreamProvider
+    extends $FunctionalProvider<AsyncValue<WebSocketConnectionState>, Stream<WebSocketConnectionState>>
+    with $FutureModifier<WebSocketConnectionState>, $StreamProvider<WebSocketConnectionState> {
   const WebSocketStateStreamProvider._(
       {Stream<WebSocketConnectionState> Function(
         Ref ref,
@@ -203,8 +185,7 @@ final class WebSocketStateStreamProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $StreamProviderElement<WebSocketConnectionState> $createElement(
-          $ProviderPointer pointer) =>
+  $StreamProviderElement<WebSocketConnectionState> $createElement($ProviderPointer pointer) =>
       $StreamProviderElement(this, pointer);
 
   @override
@@ -223,8 +204,7 @@ final class WebSocketStateStreamProvider extends $FunctionalProvider<
   }
 }
 
-String _$webSocketStateStreamHash() =>
-    r'996b5eccf84b174ae0ac89cae94d4316f91186b4';
+String _$webSocketStateStreamHash() => r'996b5eccf84b174ae0ac89cae94d4316f91186b4';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

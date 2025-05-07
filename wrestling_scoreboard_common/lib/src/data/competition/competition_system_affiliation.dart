@@ -16,7 +16,8 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
     int? maxContestants,
   }) = _CompetitionSystemAffiliation;
 
-  factory CompetitionSystemAffiliation.fromJson(Map<String, Object?> json) => _$CompetitionSystemAffiliationFromJson(json);
+  factory CompetitionSystemAffiliation.fromJson(Map<String, Object?> json) =>
+      _$CompetitionSystemAffiliationFromJson(json);
 
   static Future<CompetitionSystemAffiliation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final competition = await getSingle<Competition>(e['competition_id'] as int);
@@ -41,7 +42,6 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'competition_system_affiliation';

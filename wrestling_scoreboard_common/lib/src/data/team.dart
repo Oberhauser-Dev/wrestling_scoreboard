@@ -43,7 +43,6 @@ abstract class Team with _$Team implements DataObject, Organizational {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'team';

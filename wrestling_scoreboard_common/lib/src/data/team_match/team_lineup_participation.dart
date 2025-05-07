@@ -62,7 +62,6 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'team_lineup_participation';

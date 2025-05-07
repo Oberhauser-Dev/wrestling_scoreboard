@@ -61,7 +61,6 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'bout_config';

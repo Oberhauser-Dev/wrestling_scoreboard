@@ -38,7 +38,6 @@ abstract class TeamClubAffiliation with _$TeamClubAffiliation implements DataObj
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'team_club_affiliation';

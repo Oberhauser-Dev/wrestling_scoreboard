@@ -9,12 +9,10 @@ part of 'competition.dart';
 _Competition _$CompetitionFromJson(Map<String, dynamic> json) => _Competition(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
-      organization: json['organization'] == null
-          ? null
-          : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,
-      boutConfig:
-          BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
+      boutConfig: BoutConfig.fromJson(json['boutConfig'] as Map<String, dynamic>),
       location: json['location'] as String?,
       date: DateTime.parse(json['date'] as String),
       no: json['no'] as String?,
@@ -24,8 +22,7 @@ _Competition _$CompetitionFromJson(Map<String, dynamic> json) => _Competition(
       maxRanking: json['maxRanking'] ?? 10,
     );
 
-Map<String, dynamic> _$CompetitionToJson(_Competition instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$CompetitionToJson(_Competition instance) => <String, dynamic>{
       'id': instance.id,
       'orgSyncId': instance.orgSyncId,
       'organization': instance.organization?.toJson(),

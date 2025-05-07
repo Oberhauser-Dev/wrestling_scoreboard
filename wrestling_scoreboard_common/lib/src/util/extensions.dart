@@ -77,7 +77,7 @@ extension GroupListByIterable<T> on Iterable<T> {
     for (var element in this) {
       final keyValue = keyOf(element);
       final key = result.keys.firstWhere(
-            (tmpKey) => DeepCollectionEquality().equals(tmpKey, keyValue),
+        (tmpKey) => DeepCollectionEquality().equals(tmpKey, keyValue),
         orElse: () => keyValue,
       );
       (result[key] ??= []).add(element);

@@ -26,8 +26,7 @@ mixin _$TeamLineupParticipation {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $TeamLineupParticipationCopyWith<TeamLineupParticipation> get copyWith =>
-      _$TeamLineupParticipationCopyWithImpl<TeamLineupParticipation>(
-          this as TeamLineupParticipation, _$identity);
+      _$TeamLineupParticipationCopyWithImpl<TeamLineupParticipation>(this as TeamLineupParticipation, _$identity);
 
   /// Serializes this TeamLineupParticipation to a JSON map.
   Map<String, dynamic> toJson();
@@ -38,18 +37,15 @@ mixin _$TeamLineupParticipation {
         (other.runtimeType == runtimeType &&
             other is TeamLineupParticipation &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.membership, membership) ||
-                other.membership == membership) &&
+            (identical(other.membership, membership) || other.membership == membership) &&
             (identical(other.lineup, lineup) || other.lineup == lineup) &&
-            (identical(other.weightClass, weightClass) ||
-                other.weightClass == weightClass) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
             (identical(other.weight, weight) || other.weight == weight));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
+  int get hashCode => Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
 
   @override
   String toString() {
@@ -59,16 +55,11 @@ mixin _$TeamLineupParticipation {
 
 /// @nodoc
 abstract mixin class $TeamLineupParticipationCopyWith<$Res> {
-  factory $TeamLineupParticipationCopyWith(TeamLineupParticipation value,
-          $Res Function(TeamLineupParticipation) _then) =
+  factory $TeamLineupParticipationCopyWith(
+          TeamLineupParticipation value, $Res Function(TeamLineupParticipation) _then) =
       _$TeamLineupParticipationCopyWithImpl;
   @useResult
-  $Res call(
-      {int? id,
-      Membership membership,
-      TeamLineup lineup,
-      WeightClass? weightClass,
-      double? weight});
+  $Res call({int? id, Membership membership, TeamLineup lineup, WeightClass? weightClass, double? weight});
 
   $MembershipCopyWith<$Res> get membership;
   $TeamLineupCopyWith<$Res> get lineup;
@@ -76,8 +67,7 @@ abstract mixin class $TeamLineupParticipationCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TeamLineupParticipationCopyWithImpl<$Res>
-    implements $TeamLineupParticipationCopyWith<$Res> {
+class _$TeamLineupParticipationCopyWithImpl<$Res> implements $TeamLineupParticipationCopyWith<$Res> {
   _$TeamLineupParticipationCopyWithImpl(this._self, this._then);
 
   final TeamLineupParticipation _self;
@@ -157,14 +147,9 @@ class _$TeamLineupParticipationCopyWithImpl<$Res>
 @JsonSerializable()
 class _TeamLineupParticipation extends TeamLineupParticipation {
   const _TeamLineupParticipation(
-      {this.id,
-      required this.membership,
-      required this.lineup,
-      this.weightClass,
-      this.weight})
+      {this.id, required this.membership, required this.lineup, this.weightClass, this.weight})
       : super._();
-  factory _TeamLineupParticipation.fromJson(Map<String, dynamic> json) =>
-      _$TeamLineupParticipationFromJson(json);
+  factory _TeamLineupParticipation.fromJson(Map<String, dynamic> json) => _$TeamLineupParticipationFromJson(json);
 
   @override
   final int? id;
@@ -183,8 +168,7 @@ class _TeamLineupParticipation extends TeamLineupParticipation {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   _$TeamLineupParticipationCopyWith<_TeamLineupParticipation> get copyWith =>
-      __$TeamLineupParticipationCopyWithImpl<_TeamLineupParticipation>(
-          this, _$identity);
+      __$TeamLineupParticipationCopyWithImpl<_TeamLineupParticipation>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -199,18 +183,15 @@ class _TeamLineupParticipation extends TeamLineupParticipation {
         (other.runtimeType == runtimeType &&
             other is _TeamLineupParticipation &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.membership, membership) ||
-                other.membership == membership) &&
+            (identical(other.membership, membership) || other.membership == membership) &&
             (identical(other.lineup, lineup) || other.lineup == lineup) &&
-            (identical(other.weightClass, weightClass) ||
-                other.weightClass == weightClass) &&
+            (identical(other.weightClass, weightClass) || other.weightClass == weightClass) &&
             (identical(other.weight, weight) || other.weight == weight));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
+  int get hashCode => Object.hash(runtimeType, id, membership, lineup, weightClass, weight);
 
   @override
   String toString() {
@@ -219,19 +200,13 @@ class _TeamLineupParticipation extends TeamLineupParticipation {
 }
 
 /// @nodoc
-abstract mixin class _$TeamLineupParticipationCopyWith<$Res>
-    implements $TeamLineupParticipationCopyWith<$Res> {
-  factory _$TeamLineupParticipationCopyWith(_TeamLineupParticipation value,
-          $Res Function(_TeamLineupParticipation) _then) =
+abstract mixin class _$TeamLineupParticipationCopyWith<$Res> implements $TeamLineupParticipationCopyWith<$Res> {
+  factory _$TeamLineupParticipationCopyWith(
+          _TeamLineupParticipation value, $Res Function(_TeamLineupParticipation) _then) =
       __$TeamLineupParticipationCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {int? id,
-      Membership membership,
-      TeamLineup lineup,
-      WeightClass? weightClass,
-      double? weight});
+  $Res call({int? id, Membership membership, TeamLineup lineup, WeightClass? weightClass, double? weight});
 
   @override
   $MembershipCopyWith<$Res> get membership;
@@ -242,8 +217,7 @@ abstract mixin class _$TeamLineupParticipationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$TeamLineupParticipationCopyWithImpl<$Res>
-    implements _$TeamLineupParticipationCopyWith<$Res> {
+class __$TeamLineupParticipationCopyWithImpl<$Res> implements _$TeamLineupParticipationCopyWith<$Res> {
   __$TeamLineupParticipationCopyWithImpl(this._self, this._then);
 
   final _TeamLineupParticipation _self;

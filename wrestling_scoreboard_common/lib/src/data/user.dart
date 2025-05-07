@@ -159,7 +159,6 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'secured_user';

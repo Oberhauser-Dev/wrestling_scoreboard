@@ -29,7 +29,6 @@ abstract class BoutResultRule with _$BoutResultRule implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'bout_result_rule';

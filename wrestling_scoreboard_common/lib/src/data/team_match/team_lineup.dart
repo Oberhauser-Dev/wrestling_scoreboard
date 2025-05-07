@@ -41,7 +41,6 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'team_lineup';

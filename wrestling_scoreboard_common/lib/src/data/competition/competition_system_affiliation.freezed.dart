@@ -24,9 +24,8 @@ mixin _$CompetitionSystemAffiliation {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $CompetitionSystemAffiliationCopyWith<CompetitionSystemAffiliation>
-      get copyWith => _$CompetitionSystemAffiliationCopyWithImpl<
-              CompetitionSystemAffiliation>(
+  $CompetitionSystemAffiliationCopyWith<CompetitionSystemAffiliation> get copyWith =>
+      _$CompetitionSystemAffiliationCopyWithImpl<CompetitionSystemAffiliation>(
           this as CompetitionSystemAffiliation, _$identity);
 
   /// Serializes this CompetitionSystemAffiliation to a JSON map.
@@ -38,18 +37,14 @@ mixin _$CompetitionSystemAffiliation {
         (other.runtimeType == runtimeType &&
             other is CompetitionSystemAffiliation &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
-            (identical(other.competitionSystem, competitionSystem) ||
-                other.competitionSystem == competitionSystem) &&
-            (identical(other.maxContestants, maxContestants) ||
-                other.maxContestants == maxContestants));
+            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competitionSystem, competitionSystem) || other.competitionSystem == competitionSystem) &&
+            (identical(other.maxContestants, maxContestants) || other.maxContestants == maxContestants));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, competition, competitionSystem, maxContestants);
+  int get hashCode => Object.hash(runtimeType, id, competition, competitionSystem, maxContestants);
 
   @override
   String toString() {
@@ -60,22 +55,16 @@ mixin _$CompetitionSystemAffiliation {
 /// @nodoc
 abstract mixin class $CompetitionSystemAffiliationCopyWith<$Res> {
   factory $CompetitionSystemAffiliationCopyWith(
-          CompetitionSystemAffiliation value,
-          $Res Function(CompetitionSystemAffiliation) _then) =
+          CompetitionSystemAffiliation value, $Res Function(CompetitionSystemAffiliation) _then) =
       _$CompetitionSystemAffiliationCopyWithImpl;
   @useResult
-  $Res call(
-      {int? id,
-      Competition competition,
-      CompetitionSystem competitionSystem,
-      int? maxContestants});
+  $Res call({int? id, Competition competition, CompetitionSystem competitionSystem, int? maxContestants});
 
   $CompetitionCopyWith<$Res> get competition;
 }
 
 /// @nodoc
-class _$CompetitionSystemAffiliationCopyWithImpl<$Res>
-    implements $CompetitionSystemAffiliationCopyWith<$Res> {
+class _$CompetitionSystemAffiliationCopyWithImpl<$Res> implements $CompetitionSystemAffiliationCopyWith<$Res> {
   _$CompetitionSystemAffiliationCopyWithImpl(this._self, this._then);
 
   final CompetitionSystemAffiliation _self;
@@ -126,10 +115,7 @@ class _$CompetitionSystemAffiliationCopyWithImpl<$Res>
 @JsonSerializable()
 class _CompetitionSystemAffiliation extends CompetitionSystemAffiliation {
   const _CompetitionSystemAffiliation(
-      {this.id,
-      required this.competition,
-      required this.competitionSystem,
-      this.maxContestants})
+      {this.id, required this.competition, required this.competitionSystem, this.maxContestants})
       : super._();
   factory _CompetitionSystemAffiliation.fromJson(Map<String, dynamic> json) =>
       _$CompetitionSystemAffiliationFromJson(json);
@@ -148,9 +134,8 @@ class _CompetitionSystemAffiliation extends CompetitionSystemAffiliation {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CompetitionSystemAffiliationCopyWith<_CompetitionSystemAffiliation>
-      get copyWith => __$CompetitionSystemAffiliationCopyWithImpl<
-          _CompetitionSystemAffiliation>(this, _$identity);
+  _$CompetitionSystemAffiliationCopyWith<_CompetitionSystemAffiliation> get copyWith =>
+      __$CompetitionSystemAffiliationCopyWithImpl<_CompetitionSystemAffiliation>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -165,18 +150,14 @@ class _CompetitionSystemAffiliation extends CompetitionSystemAffiliation {
         (other.runtimeType == runtimeType &&
             other is _CompetitionSystemAffiliation &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.competition, competition) ||
-                other.competition == competition) &&
-            (identical(other.competitionSystem, competitionSystem) ||
-                other.competitionSystem == competitionSystem) &&
-            (identical(other.maxContestants, maxContestants) ||
-                other.maxContestants == maxContestants));
+            (identical(other.competition, competition) || other.competition == competition) &&
+            (identical(other.competitionSystem, competitionSystem) || other.competitionSystem == competitionSystem) &&
+            (identical(other.maxContestants, maxContestants) || other.maxContestants == maxContestants));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, competition, competitionSystem, maxContestants);
+  int get hashCode => Object.hash(runtimeType, id, competition, competitionSystem, maxContestants);
 
   @override
   String toString() {
@@ -188,24 +169,18 @@ class _CompetitionSystemAffiliation extends CompetitionSystemAffiliation {
 abstract mixin class _$CompetitionSystemAffiliationCopyWith<$Res>
     implements $CompetitionSystemAffiliationCopyWith<$Res> {
   factory _$CompetitionSystemAffiliationCopyWith(
-          _CompetitionSystemAffiliation value,
-          $Res Function(_CompetitionSystemAffiliation) _then) =
+          _CompetitionSystemAffiliation value, $Res Function(_CompetitionSystemAffiliation) _then) =
       __$CompetitionSystemAffiliationCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {int? id,
-      Competition competition,
-      CompetitionSystem competitionSystem,
-      int? maxContestants});
+  $Res call({int? id, Competition competition, CompetitionSystem competitionSystem, int? maxContestants});
 
   @override
   $CompetitionCopyWith<$Res> get competition;
 }
 
 /// @nodoc
-class __$CompetitionSystemAffiliationCopyWithImpl<$Res>
-    implements _$CompetitionSystemAffiliationCopyWith<$Res> {
+class __$CompetitionSystemAffiliationCopyWithImpl<$Res> implements _$CompetitionSystemAffiliationCopyWith<$Res> {
   __$CompetitionSystemAffiliationCopyWithImpl(this._self, this._then);
 
   final _CompetitionSystemAffiliation _self;

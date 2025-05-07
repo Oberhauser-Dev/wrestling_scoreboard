@@ -43,7 +43,6 @@ abstract class BoutAction with _$BoutAction implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'bout_action';

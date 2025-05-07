@@ -38,7 +38,6 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'athlete_bout_state';

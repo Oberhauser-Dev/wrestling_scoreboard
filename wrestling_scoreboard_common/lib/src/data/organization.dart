@@ -49,7 +49,6 @@ abstract class Organization with _$Organization implements DataObject {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'organization';

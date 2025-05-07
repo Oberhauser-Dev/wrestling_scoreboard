@@ -57,7 +57,6 @@ abstract class Division with _$Division implements DataObject, Organizational {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'division';

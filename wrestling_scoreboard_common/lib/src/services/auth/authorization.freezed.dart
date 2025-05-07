@@ -23,8 +23,7 @@ mixin _$BasicAuthService {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $BasicAuthServiceCopyWith<BasicAuthService> get copyWith =>
-      _$BasicAuthServiceCopyWithImpl<BasicAuthService>(
-          this as BasicAuthService, _$identity);
+      _$BasicAuthServiceCopyWithImpl<BasicAuthService>(this as BasicAuthService, _$identity);
 
   /// Serializes this BasicAuthService to a JSON map.
   Map<String, dynamic> toJson();
@@ -34,10 +33,8 @@ mixin _$BasicAuthService {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is BasicAuthService &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.password, password) ||
-                other.password == password));
+            (identical(other.username, username) || other.username == username) &&
+            (identical(other.password, password) || other.password == password));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -52,16 +49,14 @@ mixin _$BasicAuthService {
 
 /// @nodoc
 abstract mixin class $BasicAuthServiceCopyWith<$Res> {
-  factory $BasicAuthServiceCopyWith(
-          BasicAuthService value, $Res Function(BasicAuthService) _then) =
+  factory $BasicAuthServiceCopyWith(BasicAuthService value, $Res Function(BasicAuthService) _then) =
       _$BasicAuthServiceCopyWithImpl;
   @useResult
   $Res call({String username, String password});
 }
 
 /// @nodoc
-class _$BasicAuthServiceCopyWithImpl<$Res>
-    implements $BasicAuthServiceCopyWith<$Res> {
+class _$BasicAuthServiceCopyWithImpl<$Res> implements $BasicAuthServiceCopyWith<$Res> {
   _$BasicAuthServiceCopyWithImpl(this._self, this._then);
 
   final BasicAuthService _self;
@@ -91,10 +86,8 @@ class _$BasicAuthServiceCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _BasicAuthService extends BasicAuthService {
-  const _BasicAuthService({required this.username, required this.password})
-      : super._();
-  factory _BasicAuthService.fromJson(Map<String, dynamic> json) =>
-      _$BasicAuthServiceFromJson(json);
+  const _BasicAuthService({required this.username, required this.password}) : super._();
+  factory _BasicAuthService.fromJson(Map<String, dynamic> json) => _$BasicAuthServiceFromJson(json);
 
   @override
   final String username;
@@ -121,10 +114,8 @@ class _BasicAuthService extends BasicAuthService {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _BasicAuthService &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.password, password) ||
-                other.password == password));
+            (identical(other.username, username) || other.username == username) &&
+            (identical(other.password, password) || other.password == password));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -138,10 +129,8 @@ class _BasicAuthService extends BasicAuthService {
 }
 
 /// @nodoc
-abstract mixin class _$BasicAuthServiceCopyWith<$Res>
-    implements $BasicAuthServiceCopyWith<$Res> {
-  factory _$BasicAuthServiceCopyWith(
-          _BasicAuthService value, $Res Function(_BasicAuthService) _then) =
+abstract mixin class _$BasicAuthServiceCopyWith<$Res> implements $BasicAuthServiceCopyWith<$Res> {
+  factory _$BasicAuthServiceCopyWith(_BasicAuthService value, $Res Function(_BasicAuthService) _then) =
       __$BasicAuthServiceCopyWithImpl;
   @override
   @useResult
@@ -149,8 +138,7 @@ abstract mixin class _$BasicAuthServiceCopyWith<$Res>
 }
 
 /// @nodoc
-class __$BasicAuthServiceCopyWithImpl<$Res>
-    implements _$BasicAuthServiceCopyWith<$Res> {
+class __$BasicAuthServiceCopyWithImpl<$Res> implements _$BasicAuthServiceCopyWith<$Res> {
   __$BasicAuthServiceCopyWithImpl(this._self, this._then);
 
   final _BasicAuthService _self;
@@ -186,8 +174,7 @@ mixin _$BearerAuthService {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $BearerAuthServiceCopyWith<BearerAuthService> get copyWith =>
-      _$BearerAuthServiceCopyWithImpl<BearerAuthService>(
-          this as BearerAuthService, _$identity);
+      _$BearerAuthServiceCopyWithImpl<BearerAuthService>(this as BearerAuthService, _$identity);
 
   /// Serializes this BearerAuthService to a JSON map.
   Map<String, dynamic> toJson();
@@ -212,16 +199,14 @@ mixin _$BearerAuthService {
 
 /// @nodoc
 abstract mixin class $BearerAuthServiceCopyWith<$Res> {
-  factory $BearerAuthServiceCopyWith(
-          BearerAuthService value, $Res Function(BearerAuthService) _then) =
+  factory $BearerAuthServiceCopyWith(BearerAuthService value, $Res Function(BearerAuthService) _then) =
       _$BearerAuthServiceCopyWithImpl;
   @useResult
   $Res call({String token});
 }
 
 /// @nodoc
-class _$BearerAuthServiceCopyWithImpl<$Res>
-    implements $BearerAuthServiceCopyWith<$Res> {
+class _$BearerAuthServiceCopyWithImpl<$Res> implements $BearerAuthServiceCopyWith<$Res> {
   _$BearerAuthServiceCopyWithImpl(this._self, this._then);
 
   final BearerAuthService _self;
@@ -247,8 +232,7 @@ class _$BearerAuthServiceCopyWithImpl<$Res>
 @JsonSerializable()
 class _BearerAuthService extends BearerAuthService {
   const _BearerAuthService({required this.token}) : super._();
-  factory _BearerAuthService.fromJson(Map<String, dynamic> json) =>
-      _$BearerAuthServiceFromJson(json);
+  factory _BearerAuthService.fromJson(Map<String, dynamic> json) => _$BearerAuthServiceFromJson(json);
 
   @override
   final String token;
@@ -287,10 +271,8 @@ class _BearerAuthService extends BearerAuthService {
 }
 
 /// @nodoc
-abstract mixin class _$BearerAuthServiceCopyWith<$Res>
-    implements $BearerAuthServiceCopyWith<$Res> {
-  factory _$BearerAuthServiceCopyWith(
-          _BearerAuthService value, $Res Function(_BearerAuthService) _then) =
+abstract mixin class _$BearerAuthServiceCopyWith<$Res> implements $BearerAuthServiceCopyWith<$Res> {
+  factory _$BearerAuthServiceCopyWith(_BearerAuthService value, $Res Function(_BearerAuthService) _then) =
       __$BearerAuthServiceCopyWithImpl;
   @override
   @useResult
@@ -298,8 +280,7 @@ abstract mixin class _$BearerAuthServiceCopyWith<$Res>
 }
 
 /// @nodoc
-class __$BearerAuthServiceCopyWithImpl<$Res>
-    implements _$BearerAuthServiceCopyWith<$Res> {
+class __$BearerAuthServiceCopyWithImpl<$Res> implements _$BearerAuthServiceCopyWith<$Res> {
   __$BearerAuthServiceCopyWithImpl(this._self, this._then);
 
   final _BearerAuthService _self;

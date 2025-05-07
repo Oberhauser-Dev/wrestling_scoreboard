@@ -9,9 +9,8 @@ part of 'league.dart';
 _League _$LeagueFromJson(Map<String, dynamic> json) => _League(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
-      organization: json['organization'] == null
-          ? null
-          : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: DateTime.parse(json['endDate'] as String),

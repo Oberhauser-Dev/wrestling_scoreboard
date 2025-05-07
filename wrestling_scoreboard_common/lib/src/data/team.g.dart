@@ -9,9 +9,8 @@ part of 'team.dart';
 _Team _$TeamFromJson(Map<String, dynamic> json) => _Team(
       id: (json['id'] as num?)?.toInt(),
       orgSyncId: json['orgSyncId'] as String?,
-      organization: json['organization'] == null
-          ? null
-          : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      organization:
+          json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
       name: json['name'] as String,
       description: json['description'] as String?,
     );

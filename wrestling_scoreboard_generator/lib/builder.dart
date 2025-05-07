@@ -8,16 +8,13 @@ import 'package:source_gen/source_gen.dart';
 // TODO: remove when https://github.com/dart-lang/source_gen/issues/743 is resolved.
 // ignore_for_file: deprecated_member_use
 
-Builder genericDataObjectBuilder(BuilderOptions options) =>
-    GenericDataObjectBuilder();
+Builder genericDataObjectBuilder(BuilderOptions options) => GenericDataObjectBuilder();
 
 extension on ClassElement {
   bool get isDataObject {
     return !name.startsWith('_') &&
         mixins.isNotEmpty &&
-        allSupertypes
-            .map((i) => i.element3.name3)
-            .any((name) => name == 'DataObject');
+        allSupertypes.map((i) => i.element3.name3).any((name) => name == 'DataObject');
   }
 
   bool hasGettersOfClass(ClassElement cElement) {
@@ -34,10 +31,7 @@ extension on ClassElement {
 
 class GenericDataObjectBuilder implements Builder {
   static AssetId _allFileOutput(BuildStep buildStep) {
-    return AssetId(
-      buildStep.inputId.package,
-      p.join('lib', 'src', 'generic_data_objects.dart'),
-    );
+    return AssetId(buildStep.inputId.package, p.join('lib', 'src', 'generic_data_objects.dart'));
   }
 
   @override
@@ -46,8 +40,7 @@ class GenericDataObjectBuilder implements Builder {
 
     final assetsStream = buildStep.findAssets(Glob(r'**.dart'));
     await for (final input in assetsStream) {
-      if (input.path.endsWith('.freezed.dart') ||
-          input.path.endsWith('.g.dart')) {
+      if (input.path.endsWith('.freezed.dart') || input.path.endsWith('.g.dart')) {
         continue;
       }
       final library = await buildStep.resolver.libraryFor(input);

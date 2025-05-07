@@ -9,8 +9,7 @@ part of 'data_provider.dart';
 @ProviderFor(singleDataStream)
 const singleDataStreamProvider = SingleDataStreamFamily._();
 
-final class SingleDataStreamProvider<T extends DataObject>
-    extends $FunctionalProvider<AsyncValue<T>, Stream<T>>
+final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalProvider<AsyncValue<T>, Stream<T>>
     with $FutureModifier<T>, $StreamProvider<T> {
   const SingleDataStreamProvider._(
       {required SingleDataStreamFamily super.from,
@@ -43,9 +42,7 @@ final class SingleDataStreamProvider<T extends DataObject>
     ) create,
   ) {
     return SingleDataStreamProvider<T>._(
-        argument: argument as SingleProviderData<T>,
-        from: from! as SingleDataStreamFamily,
-        create: create<T>);
+        argument: argument as SingleProviderData<T>, from: from! as SingleDataStreamFamily, create: create<T>);
   }
 
   @override
@@ -57,8 +54,7 @@ final class SingleDataStreamProvider<T extends DataObject>
 
   @$internal
   @override
-  $StreamProviderElement<T> $createElement($ProviderPointer pointer) =>
-      $StreamProviderElement(this, pointer);
+  $StreamProviderElement<T> $createElement($ProviderPointer pointer) => $StreamProviderElement(this, pointer);
 
   @override
   SingleDataStreamProvider<T> $copyWithCreate(
@@ -88,9 +84,7 @@ final class SingleDataStreamProvider<T extends DataObject>
 
   @override
   bool operator ==(Object other) {
-    return other is SingleDataStreamProvider &&
-        other.runtimeType == runtimeType &&
-        other.argument == argument;
+    return other is SingleDataStreamProvider && other.runtimeType == runtimeType && other.argument == argument;
   }
 
   @override
@@ -182,9 +176,7 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
     ) create,
   ) {
     return ManyDataStreamProvider<T, S>._(
-        argument: argument as ManyProviderData<T, S>,
-        from: from! as ManyDataStreamFamily,
-        create: create<T, S>);
+        argument: argument as ManyProviderData<T, S>, from: from! as ManyDataStreamFamily, create: create<T, S>);
   }
 
   @override
@@ -196,8 +188,7 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
 
   @$internal
   @override
-  $StreamProviderElement<List<T>> $createElement($ProviderPointer pointer) =>
-      $StreamProviderElement(this, pointer);
+  $StreamProviderElement<List<T>> $createElement($ProviderPointer pointer) => $StreamProviderElement(this, pointer);
 
   @override
   ManyDataStreamProvider<T, S> $copyWithCreate(
@@ -227,9 +218,7 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
 
   @override
   bool operator ==(Object other) {
-    return other is ManyDataStreamProvider &&
-        other.runtimeType == runtimeType &&
-        other.argument == argument;
+    return other is ManyDataStreamProvider && other.runtimeType == runtimeType && other.argument == argument;
   }
 
   @override
@@ -250,11 +239,10 @@ final class ManyDataStreamFamily extends Family {
           isAutoDispose: true,
         );
 
-  ManyDataStreamProvider<T, S>
-      call<T extends DataObject, S extends DataObject?>(
+  ManyDataStreamProvider<T, S> call<T extends DataObject, S extends DataObject?>(
     ManyProviderData<T, S> pData,
   ) =>
-          ManyDataStreamProvider<T, S>._(argument: pData, from: this);
+      ManyDataStreamProvider<T, S>._(argument: pData, from: this);
 
   @override
   String debugGetCreateSourceHash() => _$manyDataStreamHash();
@@ -274,8 +262,7 @@ final class ManyDataStreamFamily extends Family {
       createElement: (pointer) {
         final provider = pointer.origin as ManyDataStreamProvider;
 
-        return provider
-            ._copyWithCreate(<T extends DataObject, S extends DataObject?>(
+        return provider._copyWithCreate(<T extends DataObject, S extends DataObject?>(
           ref,
           ManyProviderData<T, S> pData,
         ) {

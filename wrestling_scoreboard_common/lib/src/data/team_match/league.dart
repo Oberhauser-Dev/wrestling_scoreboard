@@ -56,7 +56,6 @@ abstract class League with _$League implements DataObject, Organizational {
   }
 
   @override
-
   @override
   String get tableName => cTableName;
   static const cTableName = 'league';

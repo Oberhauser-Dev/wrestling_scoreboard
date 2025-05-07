@@ -131,8 +131,8 @@ class ApiRoute {
         '/${Competition.cTableName}/<id|[0-9]+>/api/last_import', competitionController.requestLastImportUtcDateTime);
 
     final competitionWeightCategoryController = CompetitionWeightCategoryController();
-    router.restrictedPostOne(
-        '/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate', competitionWeightCategoryController.generateBouts);
+    router.restrictedPostOne('/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
+        competitionWeightCategoryController.generateBouts);
 
     // This nested catch-all, will only catch /api/.* when mounted above.
     // Notice that ordering if annotated handlers and mounts is significant.

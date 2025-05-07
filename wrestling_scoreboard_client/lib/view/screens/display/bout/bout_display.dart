@@ -492,10 +492,10 @@ class BoutState extends ConsumerState<BoutScreen> {
                               if (widget.ageCategory != null)
                                 Center(
                                     child: ScaledText(
-                                      widget.ageCategory!.name,
-                                      fontSize: 22,
-                                      minFontSize: 10,
-                                    )),
+                                  widget.ageCategory!.name,
+                                  fontSize: 22,
+                                  minFontSize: 10,
+                                )),
                               if (weightClass != null)
                                 Center(
                                     child: ScaledText(

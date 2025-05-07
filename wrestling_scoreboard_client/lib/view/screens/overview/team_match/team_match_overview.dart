@@ -61,7 +61,8 @@ class TeamMatchOverview extends ConsumerWidget {
               })));
               final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
 
-              final homeParticipations = await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+              final homeParticipations =
+                  await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
                 ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
               ).future);
 
