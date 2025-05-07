@@ -26,7 +26,8 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
   /// isReset: delete all previous Bouts and CompetitionBouts, else reuse the states
   Future<Response> generateBouts(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
-    final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool(); // TODO
+    // TODO: option to reset, override existing bouts if present, keep athlete bout state.
+    // final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
 
     final participations =

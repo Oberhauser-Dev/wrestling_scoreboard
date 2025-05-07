@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';

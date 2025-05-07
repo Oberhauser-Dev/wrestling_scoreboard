@@ -67,6 +67,7 @@ class GenericDataObjectBuilder implements Builder {
     );
 
     final output = '''
+// ignore: prefer_relative_imports
 import 'package:wrestling_scoreboard_common/common.dart';
 /// This file is generated, DO NOT CHANGE BY HAND.
 

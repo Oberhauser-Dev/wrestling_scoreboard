@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
@@ -239,13 +237,13 @@ class CompetitionOverview extends ConsumerWidget {
         });
   }
 
-  Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) =>
-      ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(
-              ManyProviderData<CompetitionBout, Competition>(filterObject: competition))
-          .future);
-
-  Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
-      manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
+  // Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) =>
+  //     ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(
+  //             ManyProviderData<CompetitionBout, Competition>(filterObject: competition))
+  //         .future);
+  //
+  // Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
+  //     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
 
   _handleSelectedCompetitionDisplay(Competition competition, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${competition.id}/${CompetitionDisplay.route}');

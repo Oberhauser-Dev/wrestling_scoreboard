@@ -117,7 +117,7 @@ class RestDataManager extends DataManager {
 
   @override
   Future<Migration> getMigration() async {
-    final uri = Uri.parse('$_apiUrl/database/migration');
+    final uri = Uri.parse('$_apiUrl/database/${Migration.cTableName}');
     final response = await http.get(uri, headers: _headers);
 
     await _handleResponse(response, errorMessage: 'Failed to get the migration versions');

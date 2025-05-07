@@ -69,7 +69,7 @@ extension DatabaseExt on PostgresDb {
   }*/
 
   Future<Migration> getMigration() async {
-    final res = await connection.execute('SELECT * FROM migration LIMIT 1;');
+    final res = await connection.execute('SELECT * FROM ${Migration.cTableName} LIMIT 1;');
     final row = res.zeroOrOne;
     // TODO: Workaround for migrating the migration table, can be removed after the next stable release.
     final columnMap = row!.toColumnMap();
