@@ -94,7 +94,6 @@ dependency_overrides:
       ref: 221a80cb # dev
 
 flutter:
-  generate: true
   uses-material-design: true
 
   assets:
