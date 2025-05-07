@@ -1,7 +1,1 @@
-enum RoundType {
-  qualification,
-  elimination,
-  repechage,
-  semiFinals,
-  finals;
-}
+enum RoundType { qualification, elimination, repechage, semiFinals, finals }

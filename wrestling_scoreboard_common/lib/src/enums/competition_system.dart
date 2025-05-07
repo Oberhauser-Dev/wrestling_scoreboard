@@ -1,6 +1,1 @@
-enum CompetitionSystem {
-  singleElimination,
-  doubleElimination,
-  nordic,
-  twoPools;
-}
+enum CompetitionSystem { singleElimination, doubleElimination, nordic, twoPools }

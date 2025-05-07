@@ -46,28 +46,29 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
   @override
   Widget build(BuildContext context) {
     return LoadingBuilder<bool>(
-        future: ref.watch(timeCountDownNotifierProvider),
-        builder: (context, isTimeCountDown) {
-          Duration adjustedTime() => _currentTime.invertIf(isTimeCountDown, max: widget.maxDuration);
-          return GestureDetector(
-            onTap: () async {
-              final val = await showDurationDialog(
-                context: context,
-                initialDuration: adjustedTime(),
-                maxValue: widget.maxDuration,
-              );
-              if (val != null) {
-                widget.stopwatch.elapsed = val.invertIf(isTimeCountDown, max: widget.maxDuration);
-              }
-            },
-            child: ScaledText(
-              adjustedTime().formatMinutesAndSeconds(),
-              fontSize: widget.fontSize ?? 14,
-              color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
-              minFontSize: 12,
-              softWrap: false,
-            ),
-          );
-        });
+      future: ref.watch(timeCountDownNotifierProvider),
+      builder: (context, isTimeCountDown) {
+        Duration adjustedTime() => _currentTime.invertIf(isTimeCountDown, max: widget.maxDuration);
+        return GestureDetector(
+          onTap: () async {
+            final val = await showDurationDialog(
+              context: context,
+              initialDuration: adjustedTime(),
+              maxValue: widget.maxDuration,
+            );
+            if (val != null) {
+              widget.stopwatch.elapsed = val.invertIf(isTimeCountDown, max: widget.maxDuration);
+            }
+          },
+          child: ScaledText(
+            adjustedTime().formatMinutesAndSeconds(),
+            fontSize: widget.fontSize ?? 14,
+            color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
+            minFontSize: 12,
+            softWrap: false,
+          ),
+        );
+      },
+    );
   }
 }

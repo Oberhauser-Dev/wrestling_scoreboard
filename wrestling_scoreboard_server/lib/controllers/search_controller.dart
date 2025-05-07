@@ -23,8 +23,9 @@ class SearchController {
 
     if (useProvider && (!isValidLikeSearch || searchAllTypes || searchOrganizationId == null)) {
       return Response.badRequest(
-          body:
-              'Searching the API provider without specifying a type, the organization and a search string is not supported!');
+        body:
+            'Searching the API provider without specifying a type, the organization and a search string is not supported!',
+      );
     }
 
     final Set<Type> searchTypes;
@@ -34,12 +35,13 @@ class SearchController {
       searchTypes = {if (searchableAttr != null) querySearchType};
     } else {
       // All searchable types, but avoid expensive searches
-      searchTypes = searchableDataTypes.keys.toSet()
-        ..remove(Bout)
-        ..remove(CompetitionBout)
-        ..remove(Membership)
-        ..remove(TeamMatch)
-        ..remove(TeamMatchBout);
+      searchTypes =
+          searchableDataTypes.keys.toSet()
+            ..remove(Bout)
+            ..remove(CompetitionBout)
+            ..remove(Membership)
+            ..remove(TeamMatch)
+            ..remove(TeamMatchBout);
 
       if (searchOrganizationId != null) {
         // Remove non-organizational classes, but to do it dynamically we have to know, which Type does not not inherit (Organizational).
@@ -75,14 +77,17 @@ class SearchController {
           }
         } else if (!searchAllTypes) {
           manyJson = await entityController?.getManyJson(
-              isRaw: raw,
-              conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,
-              substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null,
-              obfuscate: obfuscate);
+            isRaw: raw,
+            conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,
+            substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null,
+            obfuscate: obfuscate,
+          );
         } else {
           return Response.badRequest(
-              body: 'You must either search by a type via "type", '
-                  'by a search string with at least 3 characters "like", or both.');
+            body:
+                'You must either search by a type via "type", '
+                'by a search string with at least 3 characters "like", or both.',
+          );
         }
         if (manyJson != null) {
           manyJsonList.add(manyJson);

@@ -11,7 +11,7 @@ class CompetitionWeightCategoryEdit extends WeightClassEdit {
   final Competition initialCompetition;
 
   CompetitionWeightCategoryEdit({this.competitionWeightCategory, required this.initialCompetition, super.key})
-      : super(weightClass: competitionWeightCategory?.weightClass);
+    : super(weightClass: competitionWeightCategory?.weightClass);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => CompetitionWeightCategoryEditState();
@@ -30,29 +30,33 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    return buildEdit(context,
-        id: widget.competitionWeightCategory?.id,
-        classLocale: localizations.weightClass,
-        fields: [
-          ListTile(
-            title: SearchableDropdown<AgeCategory>(
-              icon: const Icon(Icons.school),
-              selectedItem: _ageCategory,
-              label: localizations.ageCategory,
-              context: context,
-              onSaved: (value) => setState(() {
-                _ageCategory = value;
-              }),
-              allowEmpty: false,
-              itemAsString: (u) => u.name,
-              asyncItems: (String filter) async {
-                _availableAgeCategories ??= await (await ref.read(dataManagerNotifierProvider))
-                    .readMany<AgeCategory, Organization>(filterObject: widget.initialCompetition.organization);
-                return _availableAgeCategories!.toList();
-              },
-            ),
+    return buildEdit(
+      context,
+      id: widget.competitionWeightCategory?.id,
+      classLocale: localizations.weightClass,
+      fields: [
+        ListTile(
+          title: SearchableDropdown<AgeCategory>(
+            icon: const Icon(Icons.school),
+            selectedItem: _ageCategory,
+            label: localizations.ageCategory,
+            context: context,
+            onSaved:
+                (value) => setState(() {
+                  _ageCategory = value;
+                }),
+            allowEmpty: false,
+            itemAsString: (u) => u.name,
+            asyncItems: (String filter) async {
+              _availableAgeCategories ??= await (await ref.read(
+                dataManagerNotifierProvider,
+              )).readMany<AgeCategory, Organization>(filterObject: widget.initialCompetition.organization);
+              return _availableAgeCategories!.toList();
+            },
           ),
-        ]);
+        ),
+      ],
+    );
   }
 
   @override
@@ -64,6 +68,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
       ageCategory: _ageCategory!,
     );
     competitionWeightCategory = competitionWeightCategory.copyWithId(
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionWeightCategory));
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionWeightCategory),
+    );
   }
 }

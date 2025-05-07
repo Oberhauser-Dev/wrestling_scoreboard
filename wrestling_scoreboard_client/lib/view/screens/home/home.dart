@@ -60,14 +60,12 @@ class HomeState extends ConsumerState<Home> {
     final Widget gridEntries;
     if (_searchResults != null) {
       if (_searchResults!.isEmpty) {
-        gridEntries = Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Text(localizations.noItems),
-        );
+        gridEntries = Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: Text(localizations.noItems));
       } else {
         gridEntries = _EntityGrid(
           entities: _searchResults!.map(
-              (key, resultsOfType) => MapEntry(key, Map.fromEntries(resultsOfType.map((r) => MapEntry(r.id!, r))))),
+            (key, resultsOfType) => MapEntry(key, Map.fromEntries(resultsOfType.map((r) => MapEntry(r.id!, r)))),
+          ),
           onHandleException: <T extends DataObject>({
             required BuildContext context,
             required int id,
@@ -80,10 +78,7 @@ class HomeState extends ConsumerState<Home> {
               child: Column(
                 children: [
                   Text('There was a problem with the object of type "$T" and id "$id".'),
-                  ExceptionInfo(
-                    exception ?? localizations.errorOccurred,
-                    stackTrace: stackTrace,
-                  ),
+                  ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
                 ],
               ),
             );
@@ -92,67 +87,65 @@ class HomeState extends ConsumerState<Home> {
       }
     } else {
       gridEntries = LoadingBuilder(
-          future: ref.watch(favoritesNotifierProvider),
-          builder: (context, favorites) {
-            if (favorites.isEmpty) {
-              return Center(
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      const TextSpan(text: "No favorites yet. Add some using the "),
-                      const WidgetSpan(child: Icon(Icons.star, size: 14)),
-                      const TextSpan(text: " symbol on the top right corner while "),
-                      TextSpan(
-                        text: "exploring.",
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()..onTap = () => context.go('/${Explore.route}'),
-                      ),
-                    ],
-                  ),
+        future: ref.watch(favoritesNotifierProvider),
+        builder: (context, favorites) {
+          if (favorites.isEmpty) {
+            return Center(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(text: "No favorites yet. Add some using the "),
+                    const WidgetSpan(child: Icon(Icons.star, size: 14)),
+                    const TextSpan(text: " symbol on the top right corner while "),
+                    TextSpan(
+                      text: "exploring.",
+                      style: const TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()..onTap = () => context.go('/${Explore.route}'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          return _EntityGrid(
+            entities: favorites.map((k, ids) => MapEntry(k, Map.fromEntries(ids.map((id) => MapEntry(id, null))))),
+            actionItemBuilder: <T extends DataObject>(context, id) {
+              final localizations = context.l10n;
+              return [
+                PopupMenuItem(
+                  child: Text(localizations.remove),
+                  onTap: () {
+                    final notifier = ref.read(favoritesNotifierProvider.notifier);
+                    notifier.removeFavorite(getTableNameFromType(T), id);
+                  },
+                ),
+              ];
+            },
+            onHandleException: <T extends DataObject>({
+              required BuildContext context,
+              required int id,
+              Object? exception,
+              StackTrace? stackTrace,
+            }) async {
+              final localizations = context.l10n;
+              final removeItem = await showOkCancelDialog(
+                okText: localizations.remove,
+                context: context,
+                child: Column(
+                  children: [
+                    Text('There was a problem with the object of type $T and id $id.'),
+                    ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
+                  ],
                 ),
               );
-            }
-            return _EntityGrid(
-              entities: favorites.map((k, ids) => MapEntry(k, Map.fromEntries(ids.map((id) => MapEntry(id, null))))),
-              actionItemBuilder: <T extends DataObject>(context, id) {
-                final localizations = context.l10n;
-                return [
-                  PopupMenuItem(
-                    child: Text(localizations.remove),
-                    onTap: () {
-                      final notifier = ref.read(favoritesNotifierProvider.notifier);
-                      notifier.removeFavorite(getTableNameFromType(T), id);
-                    },
-                  ),
-                ];
-              },
-              onHandleException: <T extends DataObject>({
-                required BuildContext context,
-                required int id,
-                Object? exception,
-                StackTrace? stackTrace,
-              }) async {
-                final localizations = context.l10n;
-                final removeItem = await showOkCancelDialog(
-                  okText: localizations.remove,
-                  context: context,
-                  child: Column(
-                    children: [
-                      Text('There was a problem with the object of type $T and id $id.'),
-                      ExceptionInfo(
-                        exception ?? localizations.errorOccurred,
-                        stackTrace: stackTrace,
-                      ),
-                    ],
-                  ),
-                );
-                if (removeItem) {
-                  final notifier = ref.read(favoritesNotifierProvider.notifier);
-                  notifier.removeFavorite(getTableNameFromType(T), id);
-                }
-              },
-            );
-          });
+              if (removeItem) {
+                final notifier = ref.read(favoritesNotifierProvider.notifier);
+                notifier.removeFavorite(getTableNameFromType(T), id);
+              }
+            },
+          );
+        },
+      );
     }
 
     return WindowStateScaffold(
@@ -168,10 +161,12 @@ class HomeState extends ConsumerState<Home> {
                 leading: const Icon(Icons.search),
                 trailing: [
                   IconButton(
-                      onPressed: () => setState(() {
-                            _showFilterOptions = !_showFilterOptions;
-                          }),
-                      icon: Icon(_showFilterOptions ? Icons.tune_outlined : Icons.tune))
+                    onPressed:
+                        () => setState(() {
+                          _showFilterOptions = !_showFilterOptions;
+                        }),
+                    icon: Icon(_showFilterOptions ? Icons.tune_outlined : Icons.tune),
+                  ),
                 ],
                 elevation: WidgetStateProperty.all(0),
                 side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
@@ -185,10 +180,11 @@ class HomeState extends ConsumerState<Home> {
                     try {
                       final authService = (await ref.read(orgAuthNotifierProvider))[_searchOrganization?.id];
                       final results = await (await ref.read(dataManagerNotifierProvider)).search(
-                          searchTerm: searchTerm,
-                          type: _searchType,
-                          organizationId: _searchOrganization?.id,
-                          authService: authService);
+                        searchTerm: searchTerm,
+                        type: _searchType,
+                        organizationId: _searchOrganization?.id,
+                        authService: authService,
+                      );
                       setState(() {
                         _searchResults = results;
                       });
@@ -208,10 +204,12 @@ class HomeState extends ConsumerState<Home> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: SimpleDropdown<Type?>(
-                      options: [null, ...searchableDataTypes.keys].map((type) => MapEntry(
-                            type,
-                            Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
-                          )),
+                      options: [null, ...searchableDataTypes.keys].map(
+                        (type) => MapEntry(
+                          type,
+                          Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
+                        ),
+                      ),
                       selected: _searchType,
                       onChange: (value) {
                         setState(() {
@@ -226,12 +224,16 @@ class HomeState extends ConsumerState<Home> {
                     child: ManyConsumer<Organization, Null>(
                       builder: (BuildContext context, List<Organization> organizations) {
                         return SimpleDropdown<Organization?>(
-                          options: [null, ...organizations].map((organization) => MapEntry(
-                                organization,
-                                Text(organization != null
+                          options: [null, ...organizations].map(
+                            (organization) => MapEntry(
+                              organization,
+                              Text(
+                                organization != null
                                     ? organization.name
-                                    : '${localizations.optionSelect} ${localizations.organization}'),
-                              )),
+                                    : '${localizations.optionSelect} ${localizations.organization}',
+                              ),
+                            ),
+                          ),
                           selected: _searchOrganization,
                           onChange: (value) {
                             setState(() {
@@ -241,10 +243,11 @@ class HomeState extends ConsumerState<Home> {
                           isExpanded: false,
                         );
                       },
-                      onException: (context, exception, {stackTrace}) => SizedBox(
-                        width: 250,
-                        child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
-                      ),
+                      onException:
+                          (context, exception, {stackTrace}) => SizedBox(
+                            width: 250,
+                            child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
+                          ),
                     ),
                   ),
                 ],
@@ -271,7 +274,8 @@ class _EntityGrid extends ConsumerWidget {
     required BuildContext context,
     Object? exception,
     StackTrace? stackTrace,
-  }) onHandleException;
+  })
+  onHandleException;
   final List<PopupMenuItem<T>> Function<T extends DataObject>(BuildContext context, int id)? actionItemBuilder;
 
   const _EntityGrid({required this.entities, required this.onHandleException, this.actionItemBuilder});
@@ -284,117 +288,118 @@ class _EntityGrid extends ConsumerWidget {
       return switch (tableName) {
         // 'bout_config' => buildGroup<BoutConfig>(localizations.boutConfigs, Icons.question_mark, ids, (d) => d.id.toString()),
         'bout' => _buildGroup<Bout>(
-            Icons.sports_kabaddi,
-            ids.map((id, value) => MapEntry(id, value as Bout?)),
-            BoutOverview.route,
-            (d) => d.title(context),
-            context: context,
-          ),
+          Icons.sports_kabaddi,
+          ids.map((id, value) => MapEntry(id, value as Bout?)),
+          BoutOverview.route,
+          (d) => d.title(context),
+          context: context,
+        ),
         // 'bout_action' => buildGroup<BoutAction>(localizations.actions, Icons.question_mark, ids, BoutOverview.route, (d) => d.id.toString()),
         'club' => _buildGroup<Club>(
-            Icons.foundation,
-            ids.map((id, value) => MapEntry(id, value as Club?)),
-            ClubOverview.route,
-            (d) => d.name,
-            context: context,
-          ),
+          Icons.foundation,
+          ids.map((id, value) => MapEntry(id, value as Club?)),
+          ClubOverview.route,
+          (d) => d.name,
+          context: context,
+        ),
         'competition' => _buildGroup<Competition>(
-            Icons.leaderboard,
-            ids.map((id, value) => MapEntry(id, value as Competition?)),
-            CompetitionOverview.route,
-            (d) => d.name,
-            context: context,
-          ),
+          Icons.leaderboard,
+          ids.map((id, value) => MapEntry(id, value as Competition?)),
+          CompetitionOverview.route,
+          (d) => d.name,
+          context: context,
+        ),
         'organization' => _buildGroup<Organization>(
-            Icons.corporate_fare,
-            ids.map((id, value) => MapEntry(id, value as Organization?)),
-            OrganizationOverview.route,
-            (d) => d.name,
-            context: context,
-          ),
+          Icons.corporate_fare,
+          ids.map((id, value) => MapEntry(id, value as Organization?)),
+          OrganizationOverview.route,
+          (d) => d.name,
+          context: context,
+        ),
         'division' => _buildGroup<Division>(
-            Icons.inventory,
-            ids.map((id, value) => MapEntry(id, value as Division?)),
-            DivisionOverview.route,
-            (d) => '${d.fullname}, ${d.startDate.year}',
-            context: context,
-          ),
+          Icons.inventory,
+          ids.map((id, value) => MapEntry(id, value as Division?)),
+          DivisionOverview.route,
+          (d) => '${d.fullname}, ${d.startDate.year}',
+          context: context,
+        ),
         'league' => _buildGroup<League>(
-            Icons.emoji_events,
-            ids.map((id, value) => MapEntry(id, value as League?)),
-            LeagueOverview.route,
-            (d) => '${d.fullname}, ${d.startDate.year}',
-            context: context,
-          ),
+          Icons.emoji_events,
+          ids.map((id, value) => MapEntry(id, value as League?)),
+          LeagueOverview.route,
+          (d) => '${d.fullname}, ${d.startDate.year}',
+          context: context,
+        ),
         'division_weight_class' => _buildGroup<DivisionWeightClass>(
-            Icons.fitness_center,
-            ids.map((id, value) => MapEntry(id, value as DivisionWeightClass?)),
-            DivisionWeightClassOverview.route,
-            (d) => d.localize(context),
-            context: context,
-          ),
+          Icons.fitness_center,
+          ids.map((id, value) => MapEntry(id, value as DivisionWeightClass?)),
+          DivisionWeightClassOverview.route,
+          (d) => d.localize(context),
+          context: context,
+        ),
         'league_team_participation' => _buildGroup<LeagueTeamParticipation>(
-            Icons.group,
-            ids.map((id, value) => MapEntry(id, value as LeagueTeamParticipation?)),
-            LeagueTeamParticipationOverview.route,
-            (d) => d.team.name,
-            context: context,
-          ),
+          Icons.group,
+          ids.map((id, value) => MapEntry(id, value as LeagueTeamParticipation?)),
+          LeagueTeamParticipationOverview.route,
+          (d) => d.team.name,
+          context: context,
+        ),
         'league_weight_class' => _buildGroup<LeagueWeightClass>(
-            Icons.fitness_center,
-            ids.map((id, value) => MapEntry(id, value as LeagueWeightClass?)),
-            LeagueWeightClassOverview.route,
-            (d) => d.localize(context),
-            context: context,
-          ),
+          Icons.fitness_center,
+          ids.map((id, value) => MapEntry(id, value as LeagueWeightClass?)),
+          LeagueWeightClassOverview.route,
+          (d) => d.localize(context),
+          context: context,
+        ),
         // 'lineup' => buildGroup<Lineup>(localizations.lineups, Icons.view_list, ids, LineupOverview.route, (d) => d.team.name),
         'membership' => _buildGroup<Membership>(
-            Icons.person,
-            ids.map((id, value) => MapEntry(id, value as Membership?)),
-            MembershipOverview.route,
-            (d) => d.info,
-            context: context,
-          ),
+          Icons.person,
+          ids.map((id, value) => MapEntry(id, value as Membership?)),
+          MembershipOverview.route,
+          (d) => d.info,
+          context: context,
+        ),
         // 'participation' => buildGroup<Participation>(localizations.participations, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
         // 'participant_state' => buildGroup<ParticipantState>(localizations.participantStates, Icons.question_mark, ids, BoutOverview.route, (d) => d.name),
         'person' => _buildGroup<Person>(
-            Icons.person,
-            ids.map((id, value) => MapEntry(id, value as Person?)),
-            PersonOverview.route,
-            (d) => d.fullName,
-            context: context,
-          ),
+          Icons.person,
+          ids.map((id, value) => MapEntry(id, value as Person?)),
+          PersonOverview.route,
+          (d) => d.fullName,
+          context: context,
+        ),
         'team' => _buildGroup<Team>(
-            Icons.group,
-            ids.map((id, value) => MapEntry(id, value as Team?)),
-            TeamOverview.route,
-            (d) => d.name,
-            context: context,
-          ),
+          Icons.group,
+          ids.map((id, value) => MapEntry(id, value as Team?)),
+          TeamOverview.route,
+          (d) => d.name,
+          context: context,
+        ),
         'team_match' => _buildGroup<TeamMatch>(
-            Icons.event,
-            ids.map((id, value) => MapEntry(id, value as TeamMatch?)),
-            TeamMatchOverview.route,
-            (d) => d.localize(context),
-            context: context,
-          ),
+          Icons.event,
+          ids.map((id, value) => MapEntry(id, value as TeamMatch?)),
+          TeamMatchOverview.route,
+          (d) => d.localize(context),
+          context: context,
+        ),
         'team_match_bout' => _buildGroup<TeamMatchBout>(
-            Icons.sports_kabaddi,
-            ids.map((id, value) => MapEntry(id, value as TeamMatchBout?)),
-            TeamMatchBoutOverview.route,
-            (d) => d.bout.title(context),
-            context: context,
-          ),
+          Icons.sports_kabaddi,
+          ids.map((id, value) => MapEntry(id, value as TeamMatchBout?)),
+          TeamMatchBoutOverview.route,
+          (d) => d.bout.title(context),
+          context: context,
+        ),
         // 'competition' =>
         //   buildGroup<Competition>(localizations.competitions, Icons.leaderboard, ids, CompetitionOverview.route, (d) => d.name),
         'weight_class' => _buildGroup<WeightClass>(
-            Icons.fitness_center,
-            ids.map((id, value) => MapEntry(id, value as WeightClass?)),
-            WeightClassOverview.route,
-            (d) => d.name,
-            context: context,
-          ),
-        _ => (() {
+          Icons.fitness_center,
+          ids.map((id, value) => MapEntry(id, value as WeightClass?)),
+          WeightClassOverview.route,
+          (d) => d.name,
+          context: context,
+        ),
+        _ =>
+          (() {
             final notifier = ref.read(favoritesNotifierProvider.notifier);
             ids.forEach((id, value) => notifier.removeFavorite(tableName, id));
             throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.');
@@ -418,9 +423,10 @@ class _EntityGrid extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           maxCrossAxisExtent: 150,
-          children: ids.entries
-              .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
-              .toList(),
+          children:
+              ids.entries
+                  .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
+                  .toList(),
         ),
       ],
     );
@@ -434,55 +440,62 @@ class _EntityGrid extends ConsumerWidget {
     required BuildContext context,
   }) {
     return SingleConsumer<T>(
-        onException: (context, exception, {stackTrace}) => Card(
-              child: Center(
-                child: IconButton(
-                    onPressed: () =>
-                        onHandleException<T>(id: id, context: context, exception: exception, stackTrace: stackTrace),
-                    icon: const Icon(Icons.warning)),
+      onException:
+          (context, exception, {stackTrace}) => Card(
+            child: Center(
+              child: IconButton(
+                onPressed:
+                    () => onHandleException<T>(id: id, context: context, exception: exception, stackTrace: stackTrace),
+                icon: const Icon(Icons.warning),
               ),
             ),
-        id: id,
-        initialData: initialData,
-        builder: (context, data) {
-          return InkWell(
-            onTap: () {
-              context.push('/$route/$id');
-            },
-            child: Card(
-                clipBehavior: Clip.hardEdge,
-                child: Container(
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(image: AssetImage('assets/images/icons/launcher.png'))),
-                  child: Stack(
+          ),
+      id: id,
+      initialData: initialData,
+      builder: (context, data) {
+        return InkWell(
+          onTap: () {
+            context.push('/$route/$id');
+          },
+          child: Card(
+            clipBehavior: Clip.hardEdge,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage('assets/images/icons/launcher.png')),
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                              child: Container(
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                  child: Center(
-                                      child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
-                                  ))),
+                      ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                          child: Container(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                      if (actionItemBuilder != null)
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: PopupMenuButton<T>(itemBuilder: (context) => actionItemBuilder!(context, id)),
                         ),
+                      ),
                     ],
                   ),
-                )),
-          );
-        });
+                  if (actionItemBuilder != null)
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: PopupMenuButton<T>(itemBuilder: (context) => actionItemBuilder!(context, id)),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

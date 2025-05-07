@@ -15,10 +15,7 @@ class CompetitionBoutEdit extends BoutEdit {
   final Competition initialCompetition;
 
   CompetitionBoutEdit({this.competitionBout, required this.initialCompetition, super.key})
-      : super(
-          bout: competitionBout?.bout,
-          boutConfig: initialCompetition.boutConfig,
-        );
+    : super(bout: competitionBout?.bout, boutConfig: initialCompetition.boutConfig);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => CompetitionBoutEditState();
@@ -37,15 +34,21 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
   }
 
   Future<Iterable<Membership>> _getMemberships() async {
-    final lineups = await ref.readAsync(manyDataStreamProvider<CompetitionLineup, Competition>(
-      ManyProviderData<CompetitionLineup, Competition>(filterObject: widget.initialCompetition),
-    ).future);
+    final lineups = await ref.readAsync(
+      manyDataStreamProvider<CompetitionLineup, Competition>(
+        ManyProviderData<CompetitionLineup, Competition>(filterObject: widget.initialCompetition),
+      ).future,
+    );
 
-    final participations = await Future.wait(lineups.map((lineup) async {
-      return await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, CompetitionLineup>(
-        ManyProviderData<CompetitionParticipation, CompetitionLineup>(filterObject: lineup),
-      ).future);
-    }));
+    final participations = await Future.wait(
+      lineups.map((lineup) async {
+        return await ref.readAsync(
+          manyDataStreamProvider<CompetitionParticipation, CompetitionLineup>(
+            ManyProviderData<CompetitionParticipation, CompetitionLineup>(filterObject: lineup),
+          ).future,
+        );
+      }),
+    );
 
     return participations.expand((participations) => participations).map((e) => e.membership);
   }
@@ -87,9 +90,10 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
             selectedItem: _weightCategory,
             label: context.l10n.weightCategory,
             context: context,
-            onSaved: (value) => setState(() {
-              _weightCategory = value;
-            }),
+            onSaved:
+                (value) => setState(() {
+                  _weightCategory = value;
+                }),
             itemAsString: (u) => u.name,
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightCategories;
@@ -110,11 +114,12 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
       bout: bout,
       weightCategory: _weightCategory,
     );
-    competitionBout = competitionBout
-        .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionBout));
+    competitionBout = competitionBout.copyWithId(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionBout),
+    );
   }
 
-  Future<List<CompetitionWeightCategory>> get availableWeightCategories async =>
-      (await ref.read(dataManagerNotifierProvider))
-          .readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
+  Future<List<CompetitionWeightCategory>> get availableWeightCategories async => (await ref.read(
+    dataManagerNotifierProvider,
+  )).readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
 }

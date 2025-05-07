@@ -28,17 +28,11 @@ class AgeCategoryOverview extends ConsumerWidget {
       builder: (context, ageCategory) {
         final description = InfoWidget(
           obj: ageCategory,
-          editPage: AgeCategoryEdit(
-            ageCategory: ageCategory,
-          ),
+          editPage: AgeCategoryEdit(ageCategory: ageCategory),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<AgeCategory>(ageCategory),
           classLocale: localizations.ageCategory,
           children: [
-            ContentItem(
-              title: ageCategory.name,
-              subtitle: localizations.name,
-              icon: Icons.description,
-            ),
+            ContentItem(title: ageCategory.name, subtitle: localizations.name, icon: Icons.description),
             ContentItem(
               title: ageCategory.minAge.toString(),
               subtitle: '${localizations.age} (${localizations.minimum})',
@@ -55,12 +49,8 @@ class AgeCategoryOverview extends ConsumerWidget {
           dataObject: ageCategory,
           label: localizations.ageCategory,
           details: ageCategory.name,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
-          body: TabGroup(items: [
-            description,
-          ]),
+          tabs: [Tab(child: HeadingText(localizations.info))],
+          body: TabGroup(items: [description]),
         );
       },
     );

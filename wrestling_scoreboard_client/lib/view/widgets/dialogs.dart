@@ -7,12 +7,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 
 class SizedDialog extends StatelessWidget {
   /// Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
-  const SizedDialog({
-    super.key,
-    required this.actions,
-    required this.child,
-    this.isScrollable = true,
-  });
+  const SizedDialog({super.key, required this.actions, required this.child, this.isScrollable = true});
 
   final List<Widget> actions;
   final Widget child;
@@ -21,10 +16,7 @@ class SizedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: SizedBox(
-        width: 300,
-        child: isScrollable ? SingleChildScrollView(child: child) : child,
-      ),
+      content: SizedBox(width: 300, child: isScrollable ? SingleChildScrollView(child: child) : child),
       actions: actions,
     );
   }
@@ -39,12 +31,7 @@ class OkDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     return SizedDialog(
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(localizations.ok),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(localizations.ok))],
       child: child,
     );
   }
@@ -59,24 +46,14 @@ class CancelDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     return SizedDialog(
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(localizations.cancel),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(localizations.cancel))],
       child: child,
     );
   }
 }
 
 Future<void> showOkDialog({required BuildContext context, required Widget child}) async {
-  await showDialog(
-    context: context,
-    builder: (context) => OkDialog(
-      child: child,
-    ),
-  );
+  await showDialog(context: context, builder: (context) => OkDialog(child: child));
 }
 
 class OkCancelDialog<T extends Object?> extends StatelessWidget {
@@ -99,32 +76,18 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
     return SizedDialog(
       isScrollable: isScrollable,
       actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(localizations.cancel),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context, getResult()),
-          child: Text(okText ?? localizations.ok),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(localizations.cancel)),
+        TextButton(onPressed: () => Navigator.pop(context, getResult()), child: Text(okText ?? localizations.ok)),
       ],
       child: child,
     );
   }
 }
 
-Future<bool> showOkCancelDialog({
-  required BuildContext context,
-  required Widget child,
-  String? okText,
-}) async {
+Future<bool> showOkCancelDialog({required BuildContext context, required Widget child, String? okText}) async {
   return (await showDialog<bool>(
         context: context,
-        builder: (context) => OkCancelDialog<bool>(
-          getResult: () => true,
-          okText: okText,
-          child: child,
-        ),
+        builder: (context) => OkCancelDialog<bool>(getResult: () => true, okText: okText, child: child),
       )) ??
       false;
 }
@@ -136,27 +99,19 @@ Future<void> showExceptionDialog({
   void Function()? onRetry,
 }) async {
   if (onRetry == null) {
-    return await showOkDialog(
-      context: context,
-      child: ExceptionInfo(
-        exception,
-        stackTrace: stackTrace,
-      ),
-    );
+    return await showOkDialog(context: context, child: ExceptionInfo(exception, stackTrace: stackTrace));
   }
   await showDialog(
     context: context,
-    builder: (context) => OkCancelDialog<bool>(
-      getResult: () {
-        onRetry();
-        return true;
-      },
-      okText: context.l10n.retry,
-      child: ExceptionInfo(
-        exception,
-        stackTrace: stackTrace,
-      ),
-    ),
+    builder:
+        (context) => OkCancelDialog<bool>(
+          getResult: () {
+            onRetry();
+            return true;
+          },
+          okText: context.l10n.retry,
+          child: ExceptionInfo(exception, stackTrace: stackTrace),
+        ),
   );
 }
 
@@ -169,17 +124,18 @@ Future<void> showLoadingDialog({
     useRootNavigator: false, // Pop from outside of this dialog.
     context: context,
     barrierDismissible: false,
-    builder: (context) => ResponsiveContainer(
-      child: CancelDialog(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(label),
-            const Padding(padding: EdgeInsets.all(8), child: Center(child: CircularProgressIndicator())),
-          ],
+    builder:
+        (context) => ResponsiveContainer(
+          child: CancelDialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(label),
+                const Padding(padding: EdgeInsets.all(8), child: Center(child: CircularProgressIndicator())),
+              ],
+            ),
+          ),
         ),
-      ),
-    ),
   );
   try {
     await runAsync(context);
@@ -191,11 +147,7 @@ Future<void> showLoadingDialog({
   }
 }
 
-Future<void> catchAsync(
-  BuildContext context,
-  Future<void> Function() doAsync, {
-  void Function()? onRetry,
-}) async {
+Future<void> catchAsync(BuildContext context, Future<void> Function() doAsync, {void Function()? onRetry}) async {
   try {
     await doAsync();
   } catch (exception, stackTrace) {
@@ -214,10 +166,7 @@ class TextInputDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     String? result;
     return OkCancelDialog(
-      child: TextFormField(
-        initialValue: initialValue,
-        onChanged: (value) => result = value,
-      ),
+      child: TextFormField(initialValue: initialValue, onChanged: (value) => result = value),
       getResult: () => result,
     );
   }
@@ -274,34 +223,35 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
   @override
   Widget build(BuildContext context) {
     return OkCancelDialog<T?>(
-        isScrollable: widget.shrinkWrap,
-        child: ListView.builder(
-          // key: Key(result.toString()), // Specifying a key will reset the list position, so try to avoid it.
-          shrinkWrap: widget.shrinkWrap,
-          itemCount: widget.itemCount ?? widget.values?.length,
-          itemBuilder: (context, index) {
-            final T? key;
-            final Widget child;
-            if (widget.values != null) {
-              final entry = widget.values![index];
-              key = entry.key;
-              child = Text(entry.value);
-            } else {
-              (key, child) = widget.builder!(index);
-            }
-            return RadioListTile<T?>(
-              value: key,
-              groupValue: result,
-              onChanged: (v) {
-                if (widget.onChanged != null) widget.onChanged!(v);
-                setState(() {
-                  result = v;
-                });
-              },
-              title: child,
-            );
-          },
-        ),
-        getResult: () => result);
+      isScrollable: widget.shrinkWrap,
+      child: ListView.builder(
+        // key: Key(result.toString()), // Specifying a key will reset the list position, so try to avoid it.
+        shrinkWrap: widget.shrinkWrap,
+        itemCount: widget.itemCount ?? widget.values?.length,
+        itemBuilder: (context, index) {
+          final T? key;
+          final Widget child;
+          if (widget.values != null) {
+            final entry = widget.values![index];
+            key = entry.key;
+            child = Text(entry.value);
+          } else {
+            (key, child) = widget.builder!(index);
+          }
+          return RadioListTile<T?>(
+            value: key,
+            groupValue: result,
+            onChanged: (v) {
+              if (widget.onChanged != null) widget.onChanged!(v);
+              setState(() {
+                result = v;
+              });
+            },
+            title: child,
+          );
+        },
+      ),
+      getResult: () => result,
+    );
   }
 }

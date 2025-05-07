@@ -29,43 +29,25 @@ class UserOverview extends ConsumerWidget {
       builder: (context, data) {
         final description = InfoWidget(
           obj: data,
-          editPage: UserEdit(
-            user: data,
-          ),
+          editPage: UserEdit(user: data),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<SecuredUser>(data),
           classLocale: localizations.user,
           children: [
-            ContentItem(
-              title: data.username,
-              subtitle: localizations.username,
-              icon: Icons.person,
-            ),
+            ContentItem(title: data.username, subtitle: localizations.username, icon: Icons.person),
             ContentItem(
               title: data.createdAt.toDateTimeString(context),
               subtitle: localizations.joinedOn,
               icon: Icons.calendar_today,
             ),
-            ContentItem(
-              title: data.email ?? '-',
-              subtitle: localizations.email,
-              icon: Icons.email,
-            ),
-            ContentItem(
-              title: data.privilege.name,
-              subtitle: localizations.privilege,
-              icon: Icons.key,
-            ),
+            ContentItem(title: data.email ?? '-', subtitle: localizations.email, icon: Icons.email),
+            ContentItem(title: data.privilege.name, subtitle: localizations.privilege, icon: Icons.key),
           ],
         );
         return OverviewScaffold(
           label: localizations.user,
           details: data.username,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
-          body: TabGroup(items: [
-            description,
-          ]),
+          tabs: [Tab(child: HeadingText(localizations.info))],
+          body: TabGroup(items: [description]),
         );
       },
     );

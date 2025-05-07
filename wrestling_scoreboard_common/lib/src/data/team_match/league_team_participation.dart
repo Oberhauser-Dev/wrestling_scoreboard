@@ -10,21 +10,14 @@ part 'league_team_participation.g.dart';
 abstract class LeagueTeamParticipation with _$LeagueTeamParticipation implements DataObject {
   const LeagueTeamParticipation._();
 
-  const factory LeagueTeamParticipation({
-    int? id,
-    required League league,
-    required Team team,
-  }) = _LeagueTeamParticipation;
+  const factory LeagueTeamParticipation({int? id, required League league, required Team team}) =
+      _LeagueTeamParticipation;
 
   factory LeagueTeamParticipation.fromJson(Map<String, Object?> json) => _$LeagueTeamParticipationFromJson(json);
 
   @override
   Map<String, dynamic> toRaw() {
-    return {
-      if (id != null) 'id': id,
-      'league_id': league.id!,
-      'team_id': team.id!,
-    };
+    return {if (id != null) 'id': id, 'league_id': league.id!, 'team_id': team.id!};
   }
 
   static Future<LeagueTeamParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>

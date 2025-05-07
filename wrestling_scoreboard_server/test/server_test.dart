@@ -76,7 +76,8 @@ void main() {
     await db.reset();
 
     final org = await OrganizationController().createSingleReturn(
-        Organization(name: 'BaRiVe', abbreviation: 'BRV', apiProvider: WrestlingApiProvider.deByRingenApi));
+      Organization(name: 'BaRiVe', abbreviation: 'BRV', apiProvider: WrestlingApiProvider.deByRingenApi),
+    );
 
     final firstImportSql = await executeMockedImport(db, org);
     final secondImportSql = await executeMockedImport(db, org);
@@ -103,25 +104,17 @@ void main() {
 
   group('API', () {
     Future<Map<String, String>> getAuthHeaders(String apiUrl) async {
-      final defaultHeaders = {
-        "Content-Type": "application/json",
-      };
+      final defaultHeaders = {"Content-Type": "application/json"};
 
       Future<String> signIn(BasicAuthService authService) async {
         final uri = Uri.parse('$apiUrl/auth/sign_in');
-        final response = await http.post(uri, headers: {
-          ...authService.header,
-          ...defaultHeaders,
-        });
+        final response = await http.post(uri, headers: {...authService.header, ...defaultHeaders});
         return response.body;
       }
 
       final token = await signIn(BasicAuthService(username: 'admin', password: 'admin'));
 
-      return {
-        "Content-Type": "application/json",
-        ...BearerAuthService(token: token).header,
-      };
+      return {"Content-Type": "application/json", ...BearerAuthService(token: token).header};
     }
 
     test('GET all', () async {

@@ -22,11 +22,12 @@ class ConditionalOrganizationImportAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-        visible: organization.apiProvider != null,
-        child: Restricted(
-          privilege: UserPrivilege.write,
-          child: OrganizationImportAction(id: id, orgId: organization.id!, importType: importType),
-        ));
+      visible: organization.apiProvider != null,
+      child: Restricted(
+        privilege: UserPrivilege.write,
+        child: OrganizationImportAction(id: id, orgId: organization.id!, importType: importType),
+      ),
+    );
   }
 }
 
@@ -103,10 +104,14 @@ Future<void> checkProposeImport(
       final localizations = context.l10n;
       final result = await showDialog<bool>(
         context: context,
-        builder: (context) => _IncludeSubjacentDialog(
-            child: Text(lastUpdated == null
-                ? localizations.proposeFirstImportFromApiProvider
-                : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated))),
+        builder:
+            (context) => _IncludeSubjacentDialog(
+              child: Text(
+                lastUpdated == null
+                    ? localizations.proposeFirstImportFromApiProvider
+                    : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated),
+              ),
+            ),
       );
       if (result != null && context.mounted) {
         await _processImport(context, ref, orgId: orgId, id: id, importType: importType, includeSubjacent: result);
@@ -123,39 +128,44 @@ Future<void> _processImport(
   required OrganizationImportType importType,
   required bool includeSubjacent,
 }) async {
-  await catchAsync(
-    context,
-    () {
-      final localizations = context.l10n;
-      return showLoadingDialog(
-        label: localizations.importFromApiProvider,
-        runAsync: (BuildContext context) async {
-          final dataManager = await ref.read(dataManagerNotifierProvider);
-          final authService = (await ref.read(orgAuthNotifierProvider))[orgId];
-          switch (importType) {
-            case OrganizationImportType.organization:
-              await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);
-            case OrganizationImportType.team:
-              await dataManager.organizationTeamImport(id,
-                  includeSubjacent: includeSubjacent, authService: authService);
-            case OrganizationImportType.league:
-              await dataManager.organizationLeagueImport(id,
-                  includeSubjacent: includeSubjacent, authService: authService);
-            case OrganizationImportType.competition:
-              await dataManager.organizationCompetitionImport(id,
-                  includeSubjacent: includeSubjacent, authService: authService);
-            case OrganizationImportType.teamMatch:
-              await dataManager.organizationTeamMatchImport(id,
-                  includeSubjacent: includeSubjacent, authService: authService);
-          }
-          if (context.mounted) {
-            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-          }
-        },
-        context: context,
-      );
-    },
-  );
+  await catchAsync(context, () {
+    final localizations = context.l10n;
+    return showLoadingDialog(
+      label: localizations.importFromApiProvider,
+      runAsync: (BuildContext context) async {
+        final dataManager = await ref.read(dataManagerNotifierProvider);
+        final authService = (await ref.read(orgAuthNotifierProvider))[orgId];
+        switch (importType) {
+          case OrganizationImportType.organization:
+            await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);
+          case OrganizationImportType.team:
+            await dataManager.organizationTeamImport(id, includeSubjacent: includeSubjacent, authService: authService);
+          case OrganizationImportType.league:
+            await dataManager.organizationLeagueImport(
+              id,
+              includeSubjacent: includeSubjacent,
+              authService: authService,
+            );
+          case OrganizationImportType.competition:
+            await dataManager.organizationCompetitionImport(
+              id,
+              includeSubjacent: includeSubjacent,
+              authService: authService,
+            );
+          case OrganizationImportType.teamMatch:
+            await dataManager.organizationTeamMatchImport(
+              id,
+              includeSubjacent: includeSubjacent,
+              authService: authService,
+            );
+        }
+        if (context.mounted) {
+          await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+        }
+      },
+      context: context,
+    );
+  });
 }
 
 class _IncludeSubjacentDialog extends StatefulWidget {
@@ -184,11 +194,10 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
             child: CheckboxListTile(
               title: Text(localizations.importIncludeSubjacent),
               value: _includeSubjacent,
-              onChanged: (v) => setState(
-                () {
-                  _includeSubjacent = v ?? false;
-                },
-              ),
+              onChanged:
+                  (v) => setState(() {
+                    _includeSubjacent = v ?? false;
+                  }),
             ),
           ),
         ],
@@ -197,10 +206,4 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
   }
 }
 
-enum OrganizationImportType {
-  organization,
-  team,
-  league,
-  competition,
-  teamMatch,
-}
+enum OrganizationImportType { organization, team, league, competition, teamMatch }

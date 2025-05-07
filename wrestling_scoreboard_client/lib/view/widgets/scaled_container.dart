@@ -6,13 +6,7 @@ class ScaledContainer extends StatelessWidget {
   final double? height;
   final Color? color;
 
-  const ScaledContainer({
-    this.child,
-    this.width,
-    this.height,
-    this.color,
-    super.key,
-  });
+  const ScaledContainer({this.child, this.width, this.height, this.color, super.key});
 
   @override
   Widget build(BuildContext context) {

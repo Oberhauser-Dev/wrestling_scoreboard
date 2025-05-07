@@ -55,9 +55,6 @@ class FittedText extends Text {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
-      child: super.build(context),
-    );
+    return FittedBox(fit: BoxFit.contain, child: super.build(context));
   }
 }

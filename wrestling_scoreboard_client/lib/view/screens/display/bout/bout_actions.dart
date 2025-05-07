@@ -28,66 +28,69 @@ class ActionsWidget extends ConsumerWidget {
     double padding = width / 100;
 
     return LoadingBuilder<bool>(
-        future: ref.watch(timeCountDownNotifierProvider),
-        builder: (context, isTimeCountDown) {
-          return SingleChildScrollView(
-            reverse: true,
-            scrollDirection: Axis.horizontal,
-            child: IntrinsicHeight(
-              child: Row(
-                children: [
-                  ...actions.map((action) {
-                    return SingleConsumer<BoutAction>(
-                        id: action.id,
-                        initialData: action,
-                        builder: (context, action) {
-                          final color = action.role.color();
-                          return PopupMenuButton(
-                            itemBuilder: (context) {
-                              return [
-                                PopupMenuItem<String>(
-                                  child: Text(localizations.remove),
-                                  onTap: () async =>
+      future: ref.watch(timeCountDownNotifierProvider),
+      builder: (context, isTimeCountDown) {
+        return SingleChildScrollView(
+          reverse: true,
+          scrollDirection: Axis.horizontal,
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                ...actions.map((action) {
+                  return SingleConsumer<BoutAction>(
+                    id: action.id,
+                    initialData: action,
+                    builder: (context, action) {
+                      final color = action.role.color();
+                      return PopupMenuButton(
+                        itemBuilder: (context) {
+                          return [
+                            PopupMenuItem<String>(
+                              child: Text(localizations.remove),
+                              onTap:
+                                  () async =>
                                       (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutAction>(action),
-                                ),
-                                PopupMenuItem<String>(
-                                  child: Text(localizations.edit),
-                                  onTap: () async {
-                                    final val = await showDurationDialog(
-                                      context: context,
-                                      initialDuration: action.duration
-                                          .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration),
-                                      maxValue: boutConfig.totalPeriodDuration,
-                                    );
-                                    if (val != null) {
-                                      (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutAction>(
-                                          action.copyWith(
-                                              duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val));
-                                    }
-                                  },
-                                ),
-                              ];
-                            },
-                            tooltip:
-                                (isTimeCountDown ? boutConfig.totalPeriodDuration - action.duration : action.duration)
-                                    .formatMinutesAndSeconds(),
-                            child: ThemedContainer(
-                              margin: const EdgeInsets.symmetric(horizontal: 1),
-                              padding: EdgeInsets.all(padding),
-                              color: color,
-                              child: ScaledText(
-                                action.actionValue,
-                                fontSize: 28,
-                                softWrap: false,
-                              ),
                             ),
-                          );
-                        });
-                  }),
-                ],
-              ),
+                            PopupMenuItem<String>(
+                              child: Text(localizations.edit),
+                              onTap: () async {
+                                final val = await showDurationDialog(
+                                  context: context,
+                                  initialDuration: action.duration.invertIf(
+                                    isTimeCountDown,
+                                    max: boutConfig.totalPeriodDuration,
+                                  ),
+                                  maxValue: boutConfig.totalPeriodDuration,
+                                );
+                                if (val != null) {
+                                  (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutAction>(
+                                    action.copyWith(
+                                      duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ];
+                        },
+                        tooltip:
+                            (isTimeCountDown ? boutConfig.totalPeriodDuration - action.duration : action.duration)
+                                .formatMinutesAndSeconds(),
+                        child: ThemedContainer(
+                          margin: const EdgeInsets.symmetric(horizontal: 1),
+                          padding: EdgeInsets.all(padding),
+                          color: color,
+                          child: ScaledText(action.actionValue, fontSize: 28, softWrap: false),
+                        ),
+                      );
+                    },
+                  );
+                }),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

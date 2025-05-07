@@ -14,10 +14,7 @@ abstract class AuthService {
 abstract class BasicAuthService with _$BasicAuthService implements AuthService {
   const BasicAuthService._();
 
-  const factory BasicAuthService({
-    required String username,
-    required String password,
-  }) = _BasicAuthService;
+  const factory BasicAuthService({required String username, required String password}) = _BasicAuthService;
 
   factory BasicAuthService.fromJson(Map<String, Object?> json) => _$BasicAuthServiceFromJson(json);
 
@@ -45,9 +42,7 @@ abstract class BasicAuthService with _$BasicAuthService implements AuthService {
 abstract class BearerAuthService with _$BearerAuthService implements AuthService {
   const BearerAuthService._();
 
-  const factory BearerAuthService({
-    required String token,
-  }) = _BearerAuthService;
+  const factory BearerAuthService({required String token}) = _BearerAuthService;
 
   factory BearerAuthService.fromJson(Map<String, Object?> json) => _$BearerAuthServiceFromJson(json);
 

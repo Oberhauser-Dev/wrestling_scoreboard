@@ -18,10 +18,7 @@ class HeadingItem extends StatelessWidget {
   const HeadingItem({this.title, this.trailing, super.key});
 
   @override
-  Widget build(BuildContext context) => ListTile(
-        title: title != null ? HeadingText(title!) : null,
-        trailing: trailing,
-      );
+  Widget build(BuildContext context) => ListTile(title: title != null ? HeadingText(title!) : null, trailing: trailing);
 }
 
 /// A ListItem that contains data to display a message.
@@ -89,12 +86,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
       initialData: initialData,
       hintText: hintText,
       trailing: RestrictedAddButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: editPageBuilder,
-          ),
-        ),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: editPageBuilder)),
       ),
     );
   }
@@ -175,10 +167,9 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
             } else {
               try {
                 // TODO: Support server side filter type
-                final results = await (await ref.read(dataManagerNotifierProvider)).search(
-                  searchTerm: searchTerm,
-                  type: T,
-                );
+                final results = await (await ref.read(
+                  dataManagerNotifierProvider,
+                )).search(searchTerm: searchTerm, type: T);
                 Set<T> parsedResults = results[getTableNameFromType(T)]?.map((item) => item as T).toSet() ?? {};
                 setState(() {
                   // TODO: Remove intersection, if support server side filter type
@@ -228,20 +219,15 @@ class GroupedList extends StatelessWidget {
       children: [
         header,
         if (itemCount <= 0)
-          ListTile(
-            title: Center(
-                child: Text(
-              context.l10n.noItems,
-              style: Theme.of(context).textTheme.bodySmall,
-            )),
-          )
+          ListTile(title: Center(child: Text(context.l10n.noItems, style: Theme.of(context).textTheme.bodySmall)))
         else
           Expanded(
-              child: ScrollablePositionedList.builder(
-            itemCount: itemCount,
-            initialScrollIndex: initialItemIndex,
-            itemBuilder: (context, index) => itemBuilder(context, index),
-          )),
+            child: ScrollablePositionedList.builder(
+              itemCount: itemCount,
+              initialScrollIndex: initialItemIndex,
+              itemBuilder: (context, index) => itemBuilder(context, index),
+            ),
+          ),
       ],
     );
   }

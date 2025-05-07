@@ -28,10 +28,7 @@ class DivisionWeightClassOverview extends WeightClassOverview<DivisionWeightClas
           context,
           ref,
           classLocale: localizations.weightClass,
-          editPage: DivisionWeightClassEdit(
-            divisionWeightClass: data,
-            initialDivision: data.division,
-          ),
+          editPage: DivisionWeightClassEdit(divisionWeightClass: data, initialDivision: data.division),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<DivisionWeightClass>(data),
           tiles: [
             ContentItem(

@@ -40,37 +40,50 @@ class MatchDisplay extends ConsumerWidget {
         final pdfAction = IconButton(
           icon: const Icon(Icons.print),
           onPressed: () async {
-            final teamMatchBouts = await ref.readAsync(manyDataStreamProvider<TeamMatchBout, TeamMatch>(
-              ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
-            ).future);
+            final teamMatchBouts = await ref.readAsync(
+              manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+                ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
+              ).future,
+            );
 
-            final teamMatchBoutActions = Map.fromEntries(await Future.wait(teamMatchBouts.map((teamMatchBout) async {
-              final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
-                ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
-              ).future);
-              // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
-              return MapEntry(teamMatchBout, boutActions);
-            })));
+            final teamMatchBoutActions = Map.fromEntries(
+              await Future.wait(
+                teamMatchBouts.map((teamMatchBout) async {
+                  final boutActions = await ref.readAsync(
+                    manyDataStreamProvider<BoutAction, Bout>(
+                      ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
+                    ).future,
+                  );
+                  // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+                  return MapEntry(teamMatchBout, boutActions);
+                }),
+              ),
+            );
             final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
 
-            final homeParticipations = await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-              ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-            ).future);
+            final homeParticipations = await ref.readAsync(
+              manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
+              ).future,
+            );
 
-            final guestParticipations = await ref.readAsync(manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-              ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-            ).future);
+            final guestParticipations = await ref.readAsync(
+              manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
+              ).future,
+            );
 
             if (context.mounted) {
-              final bytes = await TeamMatchTranscript(
-                teamMatchBoutActions: teamMatchBoutActions,
-                buildContext: context,
-                teamMatch: match,
-                boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                isTimeCountDown: isTimeCountDown,
-                homeParticipations: homeParticipations,
-                guestParticipations: guestParticipations,
-              ).buildPdf();
+              final bytes =
+                  await TeamMatchTranscript(
+                    teamMatchBoutActions: teamMatchBoutActions,
+                    buildContext: context,
+                    teamMatch: match,
+                    boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                    isTimeCountDown: isTimeCountDown,
+                    homeParticipations: homeParticipations,
+                    guestParticipations: guestParticipations,
+                  ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
             }
           },
@@ -93,27 +106,30 @@ class MatchDisplay extends ConsumerWidget {
 
               final headerItems = <Widget>[
                 Padding(
-                    padding: EdgeInsets.all(padding),
-                    child: Center(
-                        child: ScaledText(
-                      matchInfos.join('\n'),
-                      softWrap: false,
-                      fontSize: 12,
-                      minFontSize: 10,
-                    ))),
+                  padding: EdgeInsets.all(padding),
+                  child: Center(
+                    child: ScaledText(matchInfos.join('\n'), softWrap: false, fontSize: 12, minFontSize: 10),
+                  ),
+                ),
                 ...CommonElements.getTeamHeader(
-                    match.home.team, match.guest.team, teamMatchBouts.map((e) => e.bout).toList(), context),
+                  match.home.team,
+                  match.guest.team,
+                  teamMatchBouts.map((e) => e.bout).toList(),
+                  context,
+                ),
               ];
               final column = Column(
                 children: [
                   IntrinsicHeight(
                     child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: headerItems
-                            .asMap()
-                            .entries
-                            .map((entry) => Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value))
-                            .toList()),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children:
+                          headerItems
+                              .asMap()
+                              .entries
+                              .map((entry) => Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value))
+                              .toList(),
+                    ),
                   ),
                   Expanded(
                     child: ListView.builder(

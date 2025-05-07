@@ -7,14 +7,7 @@ class ThemedContainer extends StatelessWidget {
   final EdgeInsets? margin;
   final Widget child;
 
-  const ThemedContainer({
-    required this.child,
-    this.height,
-    this.color,
-    this.padding,
-    this.margin,
-    super.key,
-  });
+  const ThemedContainer({required this.child, this.height, this.color, this.padding, this.margin, super.key});
 
   @override
   Widget build(BuildContext context) {

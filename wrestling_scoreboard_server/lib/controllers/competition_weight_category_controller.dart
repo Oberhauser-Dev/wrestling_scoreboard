@@ -30,13 +30,18 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     // final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
 
-    final participations =
-        await CompetitionParticipationController().getByWeightCategory(false, competitionWeightCategory.id!);
-    final competitionSystemAffiliations = await CompetitionSystemAffiliationController()
-        .getByCompetition(obfuscate, competitionWeightCategory.competition.id!);
+    final participations = await CompetitionParticipationController().getByWeightCategory(
+      false,
+      competitionWeightCategory.id!,
+    );
+    final competitionSystemAffiliations = await CompetitionSystemAffiliationController().getByCompetition(
+      obfuscate,
+      competitionWeightCategory.competition.id!,
+    );
     // Sort DESC
-    competitionSystemAffiliations
-        .sort((a, b) => (b.maxContestants ?? double.infinity).compareTo(a.maxContestants ?? double.infinity));
+    competitionSystemAffiliations.sort(
+      (a, b) => (b.maxContestants ?? double.infinity).compareTo(a.maxContestants ?? double.infinity),
+    );
     CompetitionSystemAffiliation? competitionSystemAffiliation;
     // Get the competition system affiliation, which matches the max contestants
     for (final csa in competitionSystemAffiliations) {
@@ -89,20 +94,32 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     broadcast((obfuscate) async {
       final List<CompetitionBout> competitionBouts;
       if (obfuscate) {
-        competitionBouts =
-            await CompetitionBoutController().getByWeightCategory(obfuscate, competitionWeightCategory.id!);
+        competitionBouts = await CompetitionBoutController().getByWeightCategory(
+          obfuscate,
+          competitionWeightCategory.id!,
+        );
       } else {
         competitionBouts = createdBouts;
       }
-      return jsonEncode(manyToJson(competitionBouts, CompetitionBout, CRUD.update,
-          isRaw: false, filterType: CompetitionWeightCategory, filterId: competitionWeightCategory.id));
+      return jsonEncode(
+        manyToJson(
+          competitionBouts,
+          CompetitionBout,
+          CRUD.update,
+          isRaw: false,
+          filterType: CompetitionWeightCategory,
+          filterId: competitionWeightCategory.id,
+        ),
+      );
     });
 
     return Response.ok('{"status": "success"}');
   }
 
   List<List<CompetitionBout>> _bergerTable(
-      List<CompetitionParticipation?> participations, CompetitionWeightCategory weightCategory) {
+    List<CompetitionParticipation?> participations,
+    CompetitionWeightCategory weightCategory,
+  ) {
     participations = [...participations]; // copy array to avoid side effects
     if (participations.length.isOdd) participations.insert(0, null);
     final useDummy = false;
@@ -116,41 +133,41 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     final fixed = participations[0];
 
     int posCount = 0;
-    final gen = Iterable.generate(numberOfRounds).map((roundIndex) {
-      final genBoutsPerRound = Iterable.generate(boutsPerRound);
-      final boutsArr = <CompetitionBout>[];
-      for (final k in genBoutsPerRound) {
-        if (useDummy || (columnA[k] != null && columnB[k] != null)) {
-          boutsArr.insert(
-              0,
-              CompetitionBout(
-                competition: weightCategory.competition,
-                pos: posCount,
-                weightCategory: weightCategory,
-                round: roundIndex,
-                bout: Bout(
-                  organization: weightCategory.competition.organization,
-                  r: columnA[k] == null ? null : AthleteBoutState(membership: columnA[k]!.membership),
-                  b: columnB[k] == null ? null : AthleteBoutState(membership: columnB[k]!.membership),
+    final gen =
+        Iterable.generate(numberOfRounds).map((roundIndex) {
+          final genBoutsPerRound = Iterable.generate(boutsPerRound);
+          final boutsArr = <CompetitionBout>[];
+          for (final k in genBoutsPerRound) {
+            if (useDummy || (columnA[k] != null && columnB[k] != null)) {
+              boutsArr.insert(
+                0,
+                CompetitionBout(
+                  competition: weightCategory.competition,
+                  pos: posCount,
+                  weightCategory: weightCategory,
+                  round: roundIndex,
+                  bout: Bout(
+                    organization: weightCategory.competition.organization,
+                    r: columnA[k] == null ? null : AthleteBoutState(membership: columnA[k]!.membership),
+                    b: columnB[k] == null ? null : AthleteBoutState(membership: columnB[k]!.membership),
+                  ),
                 ),
-              ));
-          posCount++;
-        }
-      }
+              );
+              posCount++;
+            }
+          }
 
-      // rotate elements
-      final pop = columnA.removeLast();
-      columnA = [fixed, columnB.removeAt(0), ...columnA.slice(1)];
-      columnB.insert(0, pop);
-      return boutsArr;
-    }).toList();
+          // rotate elements
+          final pop = columnA.removeLast();
+          columnA = [fixed, columnB.removeAt(0), ...columnA.slice(1)];
+          columnB.insert(0, pop);
+          return boutsArr;
+        }).toList();
     return gen;
   }
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'paired_round': psql.Type.smallInteger,
-    };
+    return {'paired_round': psql.Type.smallInteger};
   }
 }

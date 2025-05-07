@@ -63,8 +63,5 @@ abstract class Membership with _$Membership implements DataObject, Organizationa
 
   static Set<String> searchableAttributes = {'no'};
 
-  static Map<String, Type> searchableForeignAttributeMapping = {
-    'person_id': Person,
-    'club_id': Club,
-  };
+  static Map<String, Type> searchableForeignAttributeMapping = {'person_id': Person, 'club_id': Club};
 }

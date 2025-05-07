@@ -22,20 +22,21 @@ class AdminOverview extends ConsumerWidget {
     return OverviewScaffold(
       label: localizations.administration,
       details: '',
-      tabs: [
-        Tab(child: HeadingText(localizations.users)),
-      ],
-      body: TabGroup(items: [
-        FilterableManyConsumer<SecuredUser, Null>.edit(
-          context: context,
-          editPageBuilder: (context) => const UserEdit(),
-          itemBuilder: (context, item) => ContentItem(
-            title: item.username,
-            icon: Icons.account_circle,
-            onTap: () => handleSelectedUser(item, context),
+      tabs: [Tab(child: HeadingText(localizations.users))],
+      body: TabGroup(
+        items: [
+          FilterableManyConsumer<SecuredUser, Null>.edit(
+            context: context,
+            editPageBuilder: (context) => const UserEdit(),
+            itemBuilder:
+                (context, item) => ContentItem(
+                  title: item.username,
+                  icon: Icons.account_circle,
+                  onTap: () => handleSelectedUser(item, context),
+                ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 

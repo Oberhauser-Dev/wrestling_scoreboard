@@ -32,12 +32,7 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
 
   @override
   Map<String, dynamic> toRaw() {
-    return {
-      if (id != null) 'id': id,
-      'team_id': team.id!,
-      'leader_id': leader?.id!,
-      'coach_id': coach?.id!,
-    };
+    return {if (id != null) 'id': id, 'team_id': team.id!, 'leader_id': leader?.id!, 'coach_id': coach?.id!};
   }
 
   @override

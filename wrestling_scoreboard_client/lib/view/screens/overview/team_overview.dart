@@ -29,38 +29,34 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
     return SingleConsumer<Team>(
-        id: id,
-        initialData: team,
-        builder: (context, team) {
-          final description = InfoWidget(
-              obj: team,
-              editPage: TeamEdit(
-                team: team,
-              ),
-              onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Team>(team),
-              classLocale: localizations.team,
-              children: [
-                ContentItem(
-                  title: team.description ?? '-',
-                  subtitle: localizations.description,
-                  icon: Icons.subject,
-                ),
-              ]);
-          return FavoriteScaffold<Team>(
-            dataObject: team,
-            label: localizations.team,
-            details: team.name,
-            actions: const [
-              // TODO: Enable, when endpoint is ready
-              // ConditionalOrganizationImportAction(
-              //     id: id, organization: team.organization!, importType: OrganizationImportType.team)
-            ],
-            tabs: [
-              Tab(child: HeadingText(localizations.info)),
-              Tab(child: HeadingText(localizations.matches)),
-              Tab(child: HeadingText(localizations.clubs)),
-            ],
-            body: TabGroup(items: [
+      id: id,
+      initialData: team,
+      builder: (context, team) {
+        final description = InfoWidget(
+          obj: team,
+          editPage: TeamEdit(team: team),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Team>(team),
+          classLocale: localizations.team,
+          children: [
+            ContentItem(title: team.description ?? '-', subtitle: localizations.description, icon: Icons.subject),
+          ],
+        );
+        return FavoriteScaffold<Team>(
+          dataObject: team,
+          label: localizations.team,
+          details: team.name,
+          actions: const [
+            // TODO: Enable, when endpoint is ready
+            // ConditionalOrganizationImportAction(
+            //     id: id, organization: team.organization!, importType: OrganizationImportType.team)
+          ],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.matches)),
+            Tab(child: HeadingText(localizations.clubs)),
+          ],
+          body: TabGroup(
+            items: [
               description,
               MatchList<Team>(filterObject: team),
               FilterableManyConsumer<Club, Team>(
@@ -68,48 +64,55 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                 trailing: MenuAnchor(
                   menuChildren: [
                     MenuItemButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ClubEdit(
-                            initialOrganization: team.organization,
-                            onCreated: (club) async {
-                              await (await ref.read(dataManagerNotifierProvider))
-                                  .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                            },
+                      onPressed:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => ClubEdit(
+                                    initialOrganization: team.organization,
+                                    onCreated: (club) async {
+                                      await (await ref.read(
+                                        dataManagerNotifierProvider,
+                                      )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                                    },
+                                  ),
+                            ),
                           ),
-                        ),
-                      ),
                       child: Text(localizations.create),
                     ),
                     MenuItemButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TeamClubAffiliationEdit(
-                            initialTeam: team,
+                      onPressed:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TeamClubAffiliationEdit(initialTeam: team)),
                           ),
-                        ),
-                      ),
                       child: Text(localizations.addExisting),
                     ),
                   ],
-                  builder: (context, controller, child) => RestrictedAddButton(
-                    onPressed: () {
-                      if (controller.isOpen) {
-                        controller.close();
-                      } else {
-                        controller.open();
-                      }
-                    },
-                  ),
+                  builder:
+                      (context, controller, child) => RestrictedAddButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                      ),
                 ),
-                itemBuilder: (context, club) => ContentItem(
-                    title: club.name, icon: Icons.foundation, onTap: () => handleSelectedClub(club, context)),
+                itemBuilder:
+                    (context, club) => ContentItem(
+                      title: club.name,
+                      icon: Icons.foundation,
+                      onTap: () => handleSelectedClub(club, context),
+                    ),
               ),
-            ]),
-          );
-        });
+            ],
+          ),
+        );
+      },
+    );
   }
 
   handleSelectedClub(Club club, BuildContext context) {

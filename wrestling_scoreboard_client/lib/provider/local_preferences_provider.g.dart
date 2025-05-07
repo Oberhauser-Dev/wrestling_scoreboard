@@ -14,16 +14,16 @@ const localeNotifierProvider = LocaleNotifierProvider._();
 final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw<Future<Locale?>>> {
   /// Null value represents the system locale `Platform.localeName`.
   const LocaleNotifierProvider._({super.runNotifierBuildOverride, LocaleNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'localeNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localeNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final LocaleNotifier Function()? _createCb;
 
@@ -32,10 +32,7 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<Locale?>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Locale?>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<Locale?>>>(value));
   }
 
   @$internal
@@ -44,20 +41,13 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
 
   @$internal
   @override
-  LocaleNotifierProvider $copyWithCreate(
-    LocaleNotifier Function() create,
-  ) {
+  LocaleNotifierProvider $copyWithCreate(LocaleNotifier Function() create) {
     return LocaleNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  LocaleNotifierProvider $copyWithBuild(
-    Raw<Future<Locale?>> Function(
-      Ref,
-      LocaleNotifier,
-    ) build,
-  ) {
+  LocaleNotifierProvider $copyWithBuild(Raw<Future<Locale?>> Function(Ref, LocaleNotifier) build) {
     return LocaleNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -76,8 +66,9 @@ abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Locale?>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<Locale?>>>, Raw<Future<Locale?>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<NotifierBase<Raw<Future<Locale?>>>, Raw<Future<Locale?>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -87,16 +78,16 @@ const themeModeNotifierProvider = ThemeModeNotifierProvider._();
 
 final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifier, Raw<Future<ThemeMode>>> {
   const ThemeModeNotifierProvider._({super.runNotifierBuildOverride, ThemeModeNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'themeModeNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'themeModeNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final ThemeModeNotifier Function()? _createCb;
 
@@ -105,10 +96,7 @@ final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifie
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<ThemeMode>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<ThemeMode>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<ThemeMode>>>(value));
   }
 
   @$internal
@@ -117,20 +105,13 @@ final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifie
 
   @$internal
   @override
-  ThemeModeNotifierProvider $copyWithCreate(
-    ThemeModeNotifier Function() create,
-  ) {
+  ThemeModeNotifierProvider $copyWithCreate(ThemeModeNotifier Function() create) {
     return ThemeModeNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  ThemeModeNotifierProvider $copyWithBuild(
-    Raw<Future<ThemeMode>> Function(
-      Ref,
-      ThemeModeNotifier,
-    ) build,
-  ) {
+  ThemeModeNotifierProvider $copyWithBuild(Raw<Future<ThemeMode>> Function(Ref, ThemeModeNotifier) build) {
     return ThemeModeNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -149,8 +130,9 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<ThemeMode>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<ThemeMode>>>, Raw<Future<ThemeMode>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<NotifierBase<Raw<Future<ThemeMode>>>, Raw<Future<ThemeMode>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -160,16 +142,16 @@ const fontFamilyNotifierProvider = FontFamilyNotifierProvider._();
 
 final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotifier, Raw<Future<String?>>> {
   const FontFamilyNotifierProvider._({super.runNotifierBuildOverride, FontFamilyNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'fontFamilyNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'fontFamilyNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final FontFamilyNotifier Function()? _createCb;
 
@@ -178,10 +160,7 @@ final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotif
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<String?>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<String?>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<String?>>>(value));
   }
 
   @$internal
@@ -190,20 +169,13 @@ final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotif
 
   @$internal
   @override
-  FontFamilyNotifierProvider $copyWithCreate(
-    FontFamilyNotifier Function() create,
-  ) {
+  FontFamilyNotifierProvider $copyWithCreate(FontFamilyNotifier Function() create) {
     return FontFamilyNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  FontFamilyNotifierProvider $copyWithBuild(
-    Raw<Future<String?>> Function(
-      Ref,
-      FontFamilyNotifier,
-    ) build,
-  ) {
+  FontFamilyNotifierProvider $copyWithBuild(Raw<Future<String?>> Function(Ref, FontFamilyNotifier) build) {
     return FontFamilyNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -222,8 +194,9 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String?>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<String?>>>, Raw<Future<String?>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<NotifierBase<Raw<Future<String?>>>, Raw<Future<String?>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -233,16 +206,16 @@ const webSocketUrlNotifierProvider = WebSocketUrlNotifierProvider._();
 
 final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlNotifier, Raw<Future<String>>> {
   const WebSocketUrlNotifierProvider._({super.runNotifierBuildOverride, WebSocketUrlNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'webSocketUrlNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'webSocketUrlNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final WebSocketUrlNotifier Function()? _createCb;
 
@@ -251,10 +224,7 @@ final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlN
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<String>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<String>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<String>>>(value));
   }
 
   @$internal
@@ -263,20 +233,13 @@ final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlN
 
   @$internal
   @override
-  WebSocketUrlNotifierProvider $copyWithCreate(
-    WebSocketUrlNotifier Function() create,
-  ) {
+  WebSocketUrlNotifierProvider $copyWithCreate(WebSocketUrlNotifier Function() create) {
     return WebSocketUrlNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  WebSocketUrlNotifierProvider $copyWithBuild(
-    Raw<Future<String>> Function(
-      Ref,
-      WebSocketUrlNotifier,
-    ) build,
-  ) {
+  WebSocketUrlNotifierProvider $copyWithBuild(Raw<Future<String>> Function(Ref, WebSocketUrlNotifier) build) {
     return WebSocketUrlNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -306,16 +269,16 @@ const networkTimeoutNotifierProvider = NetworkTimeoutNotifierProvider._();
 
 final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTimeoutNotifier, Raw<Future<Duration>>> {
   const NetworkTimeoutNotifierProvider._({super.runNotifierBuildOverride, NetworkTimeoutNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'networkTimeoutNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'networkTimeoutNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final NetworkTimeoutNotifier Function()? _createCb;
 
@@ -324,10 +287,7 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<Duration>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Duration>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<Duration>>>(value));
   }
 
   @$internal
@@ -336,20 +296,13 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
 
   @$internal
   @override
-  NetworkTimeoutNotifierProvider $copyWithCreate(
-    NetworkTimeoutNotifier Function() create,
-  ) {
+  NetworkTimeoutNotifierProvider $copyWithCreate(NetworkTimeoutNotifier Function() create) {
     return NetworkTimeoutNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  NetworkTimeoutNotifierProvider $copyWithBuild(
-    Raw<Future<Duration>> Function(
-      Ref,
-      NetworkTimeoutNotifier,
-    ) build,
-  ) {
+  NetworkTimeoutNotifierProvider $copyWithBuild(Raw<Future<Duration>> Function(Ref, NetworkTimeoutNotifier) build) {
     return NetworkTimeoutNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -368,8 +321,9 @@ abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>>
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Duration>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<Duration>>>, Raw<Future<Duration>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<NotifierBase<Raw<Future<Duration>>>, Raw<Future<Duration>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -379,16 +333,16 @@ const apiUrlNotifierProvider = ApiUrlNotifierProvider._();
 
 final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw<Future<String>>> {
   const ApiUrlNotifierProvider._({super.runNotifierBuildOverride, ApiUrlNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'apiUrlNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'apiUrlNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final ApiUrlNotifier Function()? _createCb;
 
@@ -397,10 +351,7 @@ final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<String>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<String>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<String>>>(value));
   }
 
   @$internal
@@ -409,20 +360,13 @@ final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw
 
   @$internal
   @override
-  ApiUrlNotifierProvider $copyWithCreate(
-    ApiUrlNotifier Function() create,
-  ) {
+  ApiUrlNotifierProvider $copyWithCreate(ApiUrlNotifier Function() create) {
     return ApiUrlNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  ApiUrlNotifierProvider $copyWithBuild(
-    Raw<Future<String>> Function(
-      Ref,
-      ApiUrlNotifier,
-    ) build,
-  ) {
+  ApiUrlNotifierProvider $copyWithBuild(Raw<Future<String>> Function(Ref, ApiUrlNotifier) build) {
     return ApiUrlNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -452,16 +396,16 @@ const bellSoundNotifierProvider = BellSoundNotifierProvider._();
 
 final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifier, Raw<Future<String>>> {
   const BellSoundNotifierProvider._({super.runNotifierBuildOverride, BellSoundNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'bellSoundNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'bellSoundNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final BellSoundNotifier Function()? _createCb;
 
@@ -470,10 +414,7 @@ final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifie
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<String>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<String>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<String>>>(value));
   }
 
   @$internal
@@ -482,20 +423,13 @@ final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifie
 
   @$internal
   @override
-  BellSoundNotifierProvider $copyWithCreate(
-    BellSoundNotifier Function() create,
-  ) {
+  BellSoundNotifierProvider $copyWithCreate(BellSoundNotifier Function() create) {
     return BellSoundNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  BellSoundNotifierProvider $copyWithBuild(
-    Raw<Future<String>> Function(
-      Ref,
-      BellSoundNotifier,
-    ) build,
-  ) {
+  BellSoundNotifierProvider $copyWithBuild(Raw<Future<String>> Function(Ref, BellSoundNotifier) build) {
     return BellSoundNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -525,16 +459,16 @@ const timeCountDownNotifierProvider = TimeCountDownNotifierProvider._();
 
 final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDownNotifier, Raw<Future<bool>>> {
   const TimeCountDownNotifierProvider._({super.runNotifierBuildOverride, TimeCountDownNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'timeCountDownNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'timeCountDownNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final TimeCountDownNotifier Function()? _createCb;
 
@@ -543,10 +477,7 @@ final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDow
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<bool>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<bool>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<bool>>>(value));
   }
 
   @$internal
@@ -555,20 +486,13 @@ final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDow
 
   @$internal
   @override
-  TimeCountDownNotifierProvider $copyWithCreate(
-    TimeCountDownNotifier Function() create,
-  ) {
+  TimeCountDownNotifierProvider $copyWithCreate(TimeCountDownNotifier Function() create) {
     return TimeCountDownNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  TimeCountDownNotifierProvider $copyWithBuild(
-    Raw<Future<bool>> Function(
-      Ref,
-      TimeCountDownNotifier,
-    ) build,
-  ) {
+  TimeCountDownNotifierProvider $copyWithBuild(Raw<Future<bool>> Function(Ref, TimeCountDownNotifier) build) {
     return TimeCountDownNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -598,16 +522,16 @@ const favoritesNotifierProvider = FavoritesNotifierProvider._();
 
 final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> {
   const FavoritesNotifierProvider._({super.runNotifierBuildOverride, FavoritesNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'favoritesNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'favoritesNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final FavoritesNotifier Function()? _createCb;
 
@@ -616,10 +540,7 @@ final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifie
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<Map<String, Set<int>>>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Map<String, Set<int>>>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<Map<String, Set<int>>>>>(value));
   }
 
   @$internal
@@ -628,28 +549,21 @@ final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifie
 
   @$internal
   @override
-  FavoritesNotifierProvider $copyWithCreate(
-    FavoritesNotifier Function() create,
-  ) {
+  FavoritesNotifierProvider $copyWithCreate(FavoritesNotifier Function() create) {
     return FavoritesNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  FavoritesNotifierProvider $copyWithBuild(
-    Raw<Future<Map<String, Set<int>>>> Function(
-      Ref,
-      FavoritesNotifier,
-    ) build,
-  ) {
+  FavoritesNotifierProvider $copyWithBuild(Raw<Future<Map<String, Set<int>>>> Function(Ref, FavoritesNotifier) build) {
     return FavoritesNotifierProvider._(runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
   $NotifierProviderElement<FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(this, pointer);
 }
 
 String _$favoritesNotifierHash() => r'97f2d02bbc78a039c8a97863a8900b91e623730f';
@@ -661,8 +575,14 @@ abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Map<String, Set<int>>>>>;
-    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<Map<String, Set<int>>>>>,
-        Raw<Future<Map<String, Set<int>>>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<Map<String, Set<int>>>>>,
+              Raw<Future<Map<String, Set<int>>>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -672,16 +592,16 @@ const orgAuthNotifierProvider = OrgAuthNotifierProvider._();
 
 final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> {
   const OrgAuthNotifierProvider._({super.runNotifierBuildOverride, OrgAuthNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'orgAuthNotifierProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'orgAuthNotifierProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final OrgAuthNotifier Function()? _createCb;
 
@@ -690,10 +610,7 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<Map<int, AuthService>>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Map<int, AuthService>>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<Map<int, AuthService>>>>(value));
   }
 
   @$internal
@@ -702,28 +619,21 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
 
   @$internal
   @override
-  OrgAuthNotifierProvider $copyWithCreate(
-    OrgAuthNotifier Function() create,
-  ) {
+  OrgAuthNotifierProvider $copyWithCreate(OrgAuthNotifier Function() create) {
     return OrgAuthNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  OrgAuthNotifierProvider $copyWithBuild(
-    Raw<Future<Map<int, AuthService>>> Function(
-      Ref,
-      OrgAuthNotifier,
-    ) build,
-  ) {
+  OrgAuthNotifierProvider $copyWithBuild(Raw<Future<Map<int, AuthService>>> Function(Ref, OrgAuthNotifier) build) {
     return OrgAuthNotifierProvider._(runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
   $NotifierProviderElement<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(this, pointer);
 }
 
 String _$orgAuthNotifierHash() => r'0c4640e47bee1b05ac64d6f5ec26a85eaad2e13f';
@@ -735,8 +645,14 @@ abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthServi
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Map<int, AuthService>>>>;
-    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<Map<int, AuthService>>>>,
-        Raw<Future<Map<int, AuthService>>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<Map<int, AuthService>>>>,
+              Raw<Future<Map<int, AuthService>>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -746,18 +662,19 @@ const proposeApiImportDurationNotifierProvider = ProposeApiImportDurationNotifie
 
 final class ProposeApiImportDurationNotifierProvider
     extends $NotifierProvider<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> {
-  const ProposeApiImportDurationNotifierProvider._(
-      {super.runNotifierBuildOverride, ProposeApiImportDurationNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'proposeApiImportDurationNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+  const ProposeApiImportDurationNotifierProvider._({
+    super.runNotifierBuildOverride,
+    ProposeApiImportDurationNotifier Function()? create,
+  }) : _createCb = create,
+       super(
+         from: null,
+         argument: null,
+         retry: null,
+         name: r'proposeApiImportDurationNotifierProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         allTransitiveDependencies: null,
+       );
 
   final ProposeApiImportDurationNotifier Function()? _createCb;
 
@@ -766,10 +683,7 @@ final class ProposeApiImportDurationNotifierProvider
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<Duration>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<Duration>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<Duration>>>(value));
   }
 
   @$internal
@@ -778,19 +692,14 @@ final class ProposeApiImportDurationNotifierProvider
 
   @$internal
   @override
-  ProposeApiImportDurationNotifierProvider $copyWithCreate(
-    ProposeApiImportDurationNotifier Function() create,
-  ) {
+  ProposeApiImportDurationNotifierProvider $copyWithCreate(ProposeApiImportDurationNotifier Function() create) {
     return ProposeApiImportDurationNotifierProvider._(create: create);
   }
 
   @$internal
   @override
   ProposeApiImportDurationNotifierProvider $copyWithBuild(
-    Raw<Future<Duration>> Function(
-      Ref,
-      ProposeApiImportDurationNotifier,
-    ) build,
+    Raw<Future<Duration>> Function(Ref, ProposeApiImportDurationNotifier) build,
   ) {
     return ProposeApiImportDurationNotifierProvider._(runNotifierBuildOverride: build);
   }
@@ -798,8 +707,8 @@ final class ProposeApiImportDurationNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(this, pointer);
 }
 
 String _$proposeApiImportDurationNotifierHash() => r'eeddaf8abe731269562eac53d8bd127bc34484ff';
@@ -811,8 +720,9 @@ abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<D
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<Duration>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<Duration>>>, Raw<Future<Duration>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<NotifierBase<Raw<Future<Duration>>>, Raw<Future<Duration>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -822,16 +732,16 @@ const jwtNotifierProvider = JwtNotifierProvider._();
 
 final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Future<String?>>> {
   const JwtNotifierProvider._({super.runNotifierBuildOverride, JwtNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'jwtNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'jwtNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final JwtNotifier Function()? _createCb;
 
@@ -840,10 +750,7 @@ final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Futur
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<String?>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<String?>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<String?>>>(value));
   }
 
   @$internal
@@ -852,20 +759,13 @@ final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Futur
 
   @$internal
   @override
-  JwtNotifierProvider $copyWithCreate(
-    JwtNotifier Function() create,
-  ) {
+  JwtNotifierProvider $copyWithCreate(JwtNotifier Function() create) {
     return JwtNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  JwtNotifierProvider $copyWithBuild(
-    Raw<Future<String?>> Function(
-      Ref,
-      JwtNotifier,
-    ) build,
-  ) {
+  JwtNotifierProvider $copyWithBuild(Raw<Future<String?>> Function(Ref, JwtNotifier) build) {
     return JwtNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -884,8 +784,9 @@ abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<String?>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<String?>>>, Raw<Future<String?>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<NotifierBase<Raw<Future<String?>>>, Raw<Future<String?>>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

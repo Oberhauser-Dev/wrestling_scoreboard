@@ -27,17 +27,18 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
     if (id == null) {
       return builder(context, initialData);
     }
-    final stream =
-        ref.watch(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: initialData, id: id!)).future);
+    final stream = ref.watch(
+      singleDataStreamProvider<T>(SingleProviderData<T>(initialData: initialData, id: id!)).future,
+    );
     return LoadingBuilder<T>(
       builder: builder,
       future: stream,
       initialData: null,
       // Handle initial data via the stream
-      onRetry: () async => (await ref.read(webSocketManagerNotifierProvider))
-          .onWebSocketConnection
-          .sink
-          .add(WebSocketConnectionState.connecting),
+      onRetry:
+          () async => (await ref.read(
+            webSocketManagerNotifierProvider,
+          )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
       onException: onException,
     );
   }
@@ -49,13 +50,7 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
   final Widget Function(BuildContext context, T data) builder;
   final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
 
-  const SingleConsumer({
-    required this.builder,
-    required this.id,
-    this.initialData,
-    super.key,
-    this.onException,
-  });
+  const SingleConsumer({required this.builder, required this.id, this.initialData, super.key, this.onException});
 
   @override
   Widget build(BuildContext context) {
@@ -87,16 +82,16 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stream = ref.watch(
-        manyDataStreamProvider<T, S>(ManyProviderData<T, S>(initialData: initialData, filterObject: filterObject))
-            .future);
+      manyDataStreamProvider<T, S>(ManyProviderData<T, S>(initialData: initialData, filterObject: filterObject)).future,
+    );
     return LoadingBuilder<List<T>>(
       builder: builder,
       future: stream,
       initialData: null, // Handle initial data via the stream
-      onRetry: () async => (await ref.read(webSocketManagerNotifierProvider))
-          .onWebSocketConnection
-          .sink
-          .add(WebSocketConnectionState.connecting),
+      onRetry:
+          () async => (await ref.read(
+            webSocketManagerNotifierProvider,
+          )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
       onException: onException,
     );
   }

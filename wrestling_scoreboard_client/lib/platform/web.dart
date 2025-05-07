@@ -3,9 +3,8 @@ import 'dart:js_interop';
 import 'package:web/web.dart' as web;
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 
-getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) => WebWindowStateManager(
-      setWindowState: setWindowState,
-    );
+getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) =>
+    WebWindowStateManager(setWindowState: setWindowState);
 
 class WebWindowStateManager extends WindowStateManager {
   WebWindowStateManager({required super.setWindowState});

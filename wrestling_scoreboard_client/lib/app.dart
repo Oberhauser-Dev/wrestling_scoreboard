@@ -64,24 +64,16 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     if (brightness == Brightness.light) {
       theme = ThemeData.light();
       theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: primaryColor,
-          secondary: primaryColor.shade800,
-        ),
+        colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade800),
       );
     } else {
       theme = ThemeData.dark();
       theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: primaryColor,
-          secondary: primaryColor.shade300,
-        ),
+        colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade300),
       );
     }
     if (fontFamily != null) {
-      return theme.copyWith(
-        textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme),
-      );
+      return theme.copyWith(textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme));
     }
     return theme;
   }
@@ -145,7 +137,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
             onInvoke: (AppActionIntent intent) {
               return intent.handle(context, ref);
             },
-          )
+          ),
         },
         child: widget.child,
       ),
@@ -169,62 +161,57 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
 
     // Start listening
     void onRetry() async {
-      (await ref.read(webSocketManagerNotifierProvider))
-          .onWebSocketConnection
-          .sink
-          .add(WebSocketConnectionState.connecting);
+      (await ref.read(
+        webSocketManagerNotifierProvider,
+      )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
     }
 
     // Listen to the websocket provider as soon as possible to not miss any state changes.
     ref.listenManual(webSocketStateStreamProvider.future, (previous, next) async {
-      await catchAsync(
-        context,
-        () async {
-          final connectionState = await next;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-              final localizations = context.l10n;
-              showExceptionDialog(
-                  context: context, exception: localizations.noWebSocketConnection, stackTrace: null, onRetry: onRetry);
-            }
-          });
-        },
-        onRetry: onRetry,
-      );
+      await catchAsync(context, () async {
+        final connectionState = await next;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && connectionState == WebSocketConnectionState.disconnected) {
+            final localizations = context.l10n;
+            showExceptionDialog(
+              context: context,
+              exception: localizations.noWebSocketConnection,
+              stackTrace: null,
+              onRetry: onRetry,
+            );
+          }
+        });
+      }, onRetry: onRetry);
     });
 
-    ref.listenManual(
-      dataManagerNotifierProvider,
-      (previous, next) async {
-        final dataManager = await next;
-        final migration = await dataManager.getMigration();
-        // TODO: Also check, if the server version is too old.
-        final minClientVersion = Version.parse(migration.minClientVersion);
-        final packageVersion = Version.parse(packageInfo.version);
-        final serverVersion = Version.parse(migration.semver);
-        final clientTooOld = packageVersion < minClientVersion;
-        final minSupportedServerVersion = Version(0, 1, 1);
-        final serverTooOld = serverVersion < minSupportedServerVersion;
-        if (clientTooOld || serverTooOld) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              var compatibilityWarning =
-                  'This client with version "${packageInfo.version}" is not compatible with the server version "${migration.semver}". ';
-              if (clientTooOld) {
-                compatibilityWarning += 'The minimum supported client version is "${migration.minClientVersion}".\n';
-              } else {
-                compatibilityWarning +=
-                    'The server probably should be updated to the minimum compatible server version "${minSupportedServerVersion.canonicalizedVersion}".\n';
-              }
+    ref.listenManual(dataManagerNotifierProvider, (previous, next) async {
+      final dataManager = await next;
+      final migration = await dataManager.getMigration();
+      // TODO: Also check, if the server version is too old.
+      final minClientVersion = Version.parse(migration.minClientVersion);
+      final packageVersion = Version.parse(packageInfo.version);
+      final serverVersion = Version.parse(migration.semver);
+      final clientTooOld = packageVersion < minClientVersion;
+      final minSupportedServerVersion = Version(0, 1, 1);
+      final serverTooOld = serverVersion < minSupportedServerVersion;
+      if (clientTooOld || serverTooOld) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            var compatibilityWarning =
+                'This client with version "${packageInfo.version}" is not compatible with the server version "${migration.semver}". ';
+            if (clientTooOld) {
+              compatibilityWarning += 'The minimum supported client version is "${migration.minClientVersion}".\n';
+            } else {
               compatibilityWarning +=
-                  'Please download a compatible client from "https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases" or change the server in the settings.';
-              showOkDialog(context: context, child: SelectableText(compatibilityWarning));
+                  'The server probably should be updated to the minimum compatible server version "${minSupportedServerVersion.canonicalizedVersion}".\n';
             }
-          });
-        }
-      },
-      fireImmediately: true,
-    );
+            compatibilityWarning +=
+                'Please download a compatible client from "https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases" or change the server in the settings.';
+            showOkDialog(context: context, child: SelectableText(compatibilityWarning));
+          }
+        });
+      }
+    }, fireImmediately: true);
   }
 
   @override

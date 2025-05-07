@@ -9,8 +9,9 @@ void main() {
       expect(dataType, getTypeFromTableName(getTableNameFromType(dataType)));
     }
 
-    final sortedTableNames =
-        dataTypes.map((dataType) => getTableNameFromType(dataType)).sorted((a, b) => a.compareTo(b));
+    final sortedTableNames = dataTypes
+        .map((dataType) => getTableNameFromType(dataType))
+        .sorted((a, b) => a.compareTo(b));
     print(sortedTableNames.indexed.map((e) => '${e.$1} ${e.$2}').join('\n'));
   });
 

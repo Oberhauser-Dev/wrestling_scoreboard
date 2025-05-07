@@ -14,9 +14,6 @@ class AgeCategoryController extends ShelfController<AgeCategory> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'min_age': psql.Type.smallInteger,
-      'max_age': psql.Type.smallInteger,
-    };
+    return {'min_age': psql.Type.smallInteger, 'max_age': psql.Type.smallInteger};
   }
 }

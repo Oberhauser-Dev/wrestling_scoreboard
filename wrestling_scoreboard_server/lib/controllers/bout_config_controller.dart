@@ -13,8 +13,6 @@ class BoutConfigController extends ShelfController<BoutConfig> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'period_count': psql.Type.smallInteger,
-    };
+    return {'period_count': psql.Type.smallInteger};
   }
 }

@@ -35,15 +35,12 @@ class CompetitionLineupOverview extends ConsumerWidget {
             competitionLineup: competitionLineup,
             initialCompetition: competitionLineup.competition,
           ),
-          onDelete: () async =>
-              (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
+          onDelete:
+              () async =>
+                  (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
           classLocale: localizations.lineup,
           children: [
-            ContentItem(
-              title: competitionLineup.club.name,
-              subtitle: localizations.club,
-              icon: Icons.foundation,
-            ),
+            ContentItem(title: competitionLineup.club.name, subtitle: localizations.club, icon: Icons.foundation),
             ContentItem(
               title: competitionLineup.competition.name,
               subtitle: localizations.competition,
@@ -55,25 +52,28 @@ class CompetitionLineupOverview extends ConsumerWidget {
           dataObject: competitionLineup,
           label: localizations.lineup,
           details: competitionLineup.club.name,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.participations)),
-          ],
-          body: TabGroup(items: [
-            description,
-            FilterableManyConsumer<CompetitionParticipation, CompetitionLineup>.edit(
-              context: context,
-              filterObject: competitionLineup,
-              editPageBuilder: (context) => CompetitionParticipationEdit(
-                  initialLineup: competitionLineup, initialCompetition: competitionLineup.competition),
-              mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
-              itemBuilder: (context, item) => ContentItem(
-                title: item.name,
-                icon: Icons.person,
-                onTap: () => _handleSelectedParticipation(item, context),
+          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.participations))],
+          body: TabGroup(
+            items: [
+              description,
+              FilterableManyConsumer<CompetitionParticipation, CompetitionLineup>.edit(
+                context: context,
+                filterObject: competitionLineup,
+                editPageBuilder:
+                    (context) => CompetitionParticipationEdit(
+                      initialLineup: competitionLineup,
+                      initialCompetition: competitionLineup.competition,
+                    ),
+                mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.name,
+                      icon: Icons.person,
+                      onTap: () => _handleSelectedParticipation(item, context),
+                    ),
               ),
-            ),
-          ]),
+            ],
+          ),
         );
       },
     );

@@ -11,16 +11,16 @@ const userNotifierProvider = UserNotifierProvider._();
 
 final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
   const UserNotifierProvider._({super.runNotifierBuildOverride, UserNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'userNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final UserNotifier Function()? _createCb;
 
@@ -29,10 +29,7 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<User?>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<User?>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<User?>>>(value));
   }
 
   @$internal
@@ -41,20 +38,13 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
 
   @$internal
   @override
-  UserNotifierProvider $copyWithCreate(
-    UserNotifier Function() create,
-  ) {
+  UserNotifierProvider $copyWithCreate(UserNotifier Function() create) {
     return UserNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  UserNotifierProvider $copyWithBuild(
-    Raw<Future<User?>> Function(
-      Ref,
-      UserNotifier,
-    ) build,
-  ) {
+  UserNotifierProvider $copyWithBuild(Raw<Future<User?>> Function(Ref, UserNotifier) build) {
     return UserNotifierProvider._(runNotifierBuildOverride: build);
   }
 

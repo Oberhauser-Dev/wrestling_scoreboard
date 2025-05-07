@@ -18,11 +18,12 @@ class OrganizationsView extends StatelessWidget {
         context: context,
         editPageBuilder: (context) => const OrganizationEdit(),
         hintText: localizations.organizations,
-        itemBuilder: (context, item) => ContentItem(
-          title: item.name,
-          icon: Icons.corporate_fare,
-          onTap: () => handleSelectedOrganization(item, context),
-        ),
+        itemBuilder:
+            (context, item) => ContentItem(
+              title: item.name,
+              icon: Icons.corporate_fare,
+              onTap: () => handleSelectedOrganization(item, context),
+            ),
       ),
     );
   }

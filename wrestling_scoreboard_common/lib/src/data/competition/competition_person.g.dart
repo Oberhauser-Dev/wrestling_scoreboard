@@ -7,18 +7,18 @@ part of 'competition_person.dart';
 // **************************************************************************
 
 _CompetitionPerson _$CompetitionPersonFromJson(Map<String, dynamic> json) => _CompetitionPerson(
-      id: (json['id'] as num?)?.toInt(),
-      competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
-      person: Person.fromJson(json['person'] as Map<String, dynamic>),
-      role: $enumDecode(_$PersonRoleEnumMap, json['role']),
-    );
+  id: (json['id'] as num?)?.toInt(),
+  competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
+  person: Person.fromJson(json['person'] as Map<String, dynamic>),
+  role: $enumDecode(_$PersonRoleEnumMap, json['role']),
+);
 
 Map<String, dynamic> _$CompetitionPersonToJson(_CompetitionPerson instance) => <String, dynamic>{
-      'id': instance.id,
-      'competition': instance.competition.toJson(),
-      'person': instance.person.toJson(),
-      'role': _$PersonRoleEnumMap[instance.role]!,
-    };
+  'id': instance.id,
+  'competition': instance.competition.toJson(),
+  'person': instance.person.toJson(),
+  'role': _$PersonRoleEnumMap[instance.role]!,
+};
 
 const _$PersonRoleEnumMap = {
   PersonRole.referee: 'referee',

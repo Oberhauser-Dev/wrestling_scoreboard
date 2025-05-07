@@ -46,9 +46,10 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     }
 
     return organization.getApi(
-        <T extends Organizational>(orgSyncId, {required int orgId}) =>
-            OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
-        authService: authService);
+      <T extends Organizational>(orgSyncId, {required int orgId}) =>
+          OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
+      authService: authService,
+    );
   }
 
   @override
@@ -67,8 +68,11 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       teamClubAffiliation = teamClubAffiliation.copyWith(club: club, team: team);
 
       // Do not add team club affiliations multiple times.
-      final previousTeamClubAffiliation = await TeamClubAffiliationController()
-          .getByTeamAndClubId(teamId: team.id!, clubId: club.id!, obfuscate: obfuscate);
+      final previousTeamClubAffiliation = await TeamClubAffiliationController().getByTeamAndClubId(
+        teamId: team.id!,
+        clubId: club.id!,
+        obfuscate: obfuscate,
+      );
       if (previousTeamClubAffiliation == null) {
         await TeamClubAffiliationController().createSingle(TeamClubAffiliation(team: team, club: club));
       }
@@ -82,17 +86,24 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       substitutionValues: {'id': entity.id},
       onUpdateOrCreate: (previousDivision, division) async {
         var boutResultRules = divisionBoutResultRuleMap[division]!;
-        final boutConfig = await BoutConfigController()
-            .updateOnDiffSingle(division.boutConfig, previous: previousDivision?.boutConfig);
+        final boutConfig = await BoutConfigController().updateOnDiffSingle(
+          division.boutConfig,
+          previous: previousDivision?.boutConfig,
+        );
         boutResultRules = boutResultRules.map((rule) => rule.copyWith(boutConfig: boutConfig));
         final prevRules = await BoutResultRuleController().getMany(
-            conditions: ['bout_config_id = @id'], substitutionValues: {'id': boutConfig.id}, obfuscate: obfuscate);
+          conditions: ['bout_config_id = @id'],
+          substitutionValues: {'id': boutConfig.id},
+          obfuscate: obfuscate,
+        );
         await BoutResultRuleController().updateOnDiffMany(boutResultRules.toList(), previous: prevRules);
         return division.copyWith(boutConfig: boutConfig);
       },
       onDelete: (previous) async {
-        await BoutResultRuleController()
-            .deleteMany(conditions: ['bout_config_id=@id'], substitutionValues: {'id': previous.boutConfig.id});
+        await BoutResultRuleController().deleteMany(
+          conditions: ['bout_config_id=@id'],
+          substitutionValues: {'id': previous.boutConfig.id},
+        );
         await BoutConfigController().deleteSingle(previous.boutConfig.id!);
       },
     );
@@ -106,8 +117,9 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         obfuscate: obfuscate,
       );
 
-      final (divisionWeightClasses, leagueWeightClasses) =
-          await apiProvider.importDivisionAndLeagueWeightClasses(division: division);
+      final (divisionWeightClasses, leagueWeightClasses) = await apiProvider.importDivisionAndLeagueWeightClasses(
+        division: division,
+      );
 
       await DivisionWeightClassController().updateOrCreateManyOfOrg(
         divisionWeightClasses.toList(),
@@ -115,8 +127,10 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         substitutionValues: {'id': division.id},
         obfuscate: obfuscate,
         onUpdateOrCreate: (previousWeightClass, current) async {
-          final weightClass = await WeightClassController()
-              .updateOnDiffSingle(current.weightClass, previous: previousWeightClass?.weightClass);
+          final weightClass = await WeightClassController().updateOnDiffSingle(
+            current.weightClass,
+            previous: previousWeightClass?.weightClass,
+          );
           return current.copyWith(weightClass: weightClass);
         },
         onDelete: (toBeDeleted) async => await WeightClassController().deleteSingle(toBeDeleted.weightClass.id!),
@@ -133,8 +147,10 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
           substitutionValues: {'id': league.id},
           obfuscate: obfuscate,
           onUpdateOrCreate: (previousWeightClass, current) async {
-            final weightClass = await WeightClassController()
-                .updateOnDiffSingle(current.weightClass, previous: previousWeightClass?.weightClass);
+            final weightClass = await WeightClassController().updateOnDiffSingle(
+              current.weightClass,
+              previous: previousWeightClass?.weightClass,
+            );
             return current.copyWith(weightClass: weightClass);
           },
           onDelete: (toBeDeleted) async => await WeightClassController().deleteSingle(toBeDeleted.weightClass.id!),
@@ -142,8 +158,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       });
 
       return leagues;
-    }))
-        .expand((league) => league);
+    })).expand((league) => league);
 
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {

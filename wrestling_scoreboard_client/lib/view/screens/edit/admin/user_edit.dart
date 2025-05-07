@@ -49,17 +49,9 @@ class UserEditState extends ConsumerState<UserEdit> {
         initialValue: _username,
         validator: (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
       ),
-      EmailInput(
-        initialValue: _email,
-        onSave: (String? value) => _email = value,
-        isMandatory: false,
-      ),
+      EmailInput(initialValue: _email, onSave: (String? value) => _email = value, isMandatory: false),
       if (widget.user?.id == null)
-        PasswordInput(
-          isMandatory: true,
-          onSaved: (String? value) => _password = value,
-          isNewPassword: true,
-        ),
+        PasswordInput(isMandatory: true, onSaved: (String? value) => _password = value, isNewPassword: true),
       ListTile(
         leading: const Icon(Icons.key),
         title: ButtonTheme(
@@ -68,14 +60,12 @@ class UserEditState extends ConsumerState<UserEdit> {
             isNullable: false,
             hint: localizations.privilege,
             isExpanded: true,
-            options: UserPrivilege.values.map((value) => MapEntry(
-                  value,
-                  Text(value.name),
-                )),
+            options: UserPrivilege.values.map((value) => MapEntry(value, Text(value.name))),
             selected: _userPrivilege,
-            onChange: (newValue) => setState(() {
-              _userPrivilege = newValue!;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _userPrivilege = newValue!;
+                }),
           ),
         ),
       ),
@@ -106,9 +96,9 @@ class UserEditState extends ConsumerState<UserEdit> {
           person: _person,
           password: _password,
         );
-        securedUser = user
-            .toSecuredUser()
-            .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(user));
+        securedUser = user.toSecuredUser().copyWithId(
+          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(user),
+        );
       } else {
         securedUser = widget.user!.copyWith(
           username: _username!,
@@ -117,8 +107,9 @@ class UserEditState extends ConsumerState<UserEdit> {
           person: _person,
           // Disallow changing the password of already existing users (for now). One should delete and recreate an account in such edge cases.
         );
-        securedUser = widget.user!
-            .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(securedUser));
+        securedUser = widget.user!.copyWithId(
+          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(securedUser),
+        );
       }
 
       if (widget.onCreated != null) {

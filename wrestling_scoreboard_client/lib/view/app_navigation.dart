@@ -44,18 +44,9 @@ class _AppNavigationState extends State<AppNavigation> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            label: localizations.start,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.explore),
-            label: localizations.explore,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.more_horiz),
-            label: localizations.more,
-          ),
+          BottomNavigationBarItem(icon: const Icon(Icons.home), label: localizations.start),
+          BottomNavigationBarItem(icon: const Icon(Icons.explore), label: localizations.explore),
+          BottomNavigationBarItem(icon: const Icon(Icons.more_horiz), label: localizations.more),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

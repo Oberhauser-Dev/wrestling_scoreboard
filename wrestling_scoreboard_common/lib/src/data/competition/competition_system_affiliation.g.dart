@@ -15,11 +15,11 @@ _CompetitionSystemAffiliation _$CompetitionSystemAffiliationFromJson(Map<String,
     );
 
 Map<String, dynamic> _$CompetitionSystemAffiliationToJson(_CompetitionSystemAffiliation instance) => <String, dynamic>{
-      'id': instance.id,
-      'competition': instance.competition.toJson(),
-      'competitionSystem': _$CompetitionSystemEnumMap[instance.competitionSystem]!,
-      'maxContestants': instance.maxContestants,
-    };
+  'id': instance.id,
+  'competition': instance.competition.toJson(),
+  'competitionSystem': _$CompetitionSystemEnumMap[instance.competitionSystem]!,
+  'maxContestants': instance.maxContestants,
+};
 
 const _$CompetitionSystemEnumMap = {
   CompetitionSystem.singleElimination: 'singleElimination',

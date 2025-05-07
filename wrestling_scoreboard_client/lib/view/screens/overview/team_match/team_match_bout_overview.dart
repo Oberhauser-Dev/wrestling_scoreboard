@@ -22,7 +22,7 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
   final TeamMatchBout? teamMatchBout;
 
   TeamMatchBoutOverview({super.key, required this.id, this.teamMatchBout})
-      : super(boutConfig: teamMatchBout?.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig);
+    : super(boutConfig: teamMatchBout?.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,30 +34,36 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
       builder: (context, teamMatchBout) {
         final bout = teamMatchBout.bout;
         Future<List<BoutAction>> getActions() => ref.readAsync(
-            manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
+          manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
+        );
 
         final pdfAction = IconButton(
           icon: const Icon(Icons.print),
           onPressed: () async {
             final actions = await getActions();
-            final boutRules = teamMatchBout.teamMatch.league == null
-                ? TeamMatch.defaultBoutResultRules
-                : await ref.readAsync(manyDataStreamProvider<BoutResultRule, BoutConfig>(
+            final boutRules =
+                teamMatchBout.teamMatch.league == null
+                    ? TeamMatch.defaultBoutResultRules
+                    : await ref.readAsync(
+                      manyDataStreamProvider<BoutResultRule, BoutConfig>(
                         ManyProviderData<BoutResultRule, BoutConfig>(
-                            filterObject: teamMatchBout.teamMatch.league!.division.boutConfig))
-                    .future);
+                          filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
+                        ),
+                      ).future,
+                    );
             final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
             if (context.mounted) {
-              final bytes = await ScoreSheet(
-                bout: bout,
-                boutActions: actions,
-                buildContext: context,
-                wrestlingEvent: teamMatchBout.teamMatch,
-                boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                boutRules: boutRules,
-                isTimeCountDown: isTimeCountDown,
-                weightClass: teamMatchBout.weightClass,
-              ).buildPdf();
+              final bytes =
+                  await ScoreSheet(
+                    bout: bout,
+                    boutActions: actions,
+                    buildContext: context,
+                    wrestlingEvent: teamMatchBout.teamMatch,
+                    boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                    boutRules: boutRules,
+                    isTimeCountDown: isTimeCountDown,
+                    weightClass: teamMatchBout.weightClass,
+                  ).buildPdf();
               Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }
           },
@@ -67,12 +73,9 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
           context,
           ref,
           classLocale: localizations.bout,
-          editPage: TeamMatchBoutEdit(
-            teamMatchBout: teamMatchBout,
-            initialTeamMatch: teamMatchBout.teamMatch,
-          ),
-          onDelete: () async =>
-              (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchBout>(teamMatchBout),
+          editPage: TeamMatchBoutEdit(teamMatchBout: teamMatchBout, initialTeamMatch: teamMatchBout.teamMatch),
+          onDelete:
+              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchBout>(teamMatchBout),
           tiles: [],
           actions: [
             pdfAction,
@@ -83,7 +86,7 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
                 onPressed: () => handleSelectedBoutDisplay(teamMatchBout, context),
                 label: Text(localizations.display),
               ),
-            )
+            ),
           ],
           dataId: teamMatchBout.bout.id!,
           initialData: teamMatchBout.bout,
@@ -95,7 +98,8 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
 
   handleSelectedBoutDisplay(TeamMatchBout bout, BuildContext context) {
     context.push(
-        '/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}');
+      '/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}',
+    );
   }
 }
 

@@ -14,7 +14,7 @@ class DivisionWeightClassEdit extends WeightClassEdit {
   final Division initialDivision;
 
   DivisionWeightClassEdit({this.divisionWeightClass, required this.initialDivision, super.key})
-      : super(weightClass: divisionWeightClass?.weightClass);
+    : super(weightClass: divisionWeightClass?.weightClass);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => DivisionWeightClassEditState();
@@ -33,34 +33,39 @@ class DivisionWeightClassEditState extends WeightClassEditState<DivisionWeightCl
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    return buildEdit(context, id: widget.divisionWeightClass?.id, classLocale: localizations.weightClass, fields: [
-      ListTile(
-        leading: const Icon(Icons.format_list_numbered),
-        title: TextFormField(
-          initialValue: widget.divisionWeightClass?.pos.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.position,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-          onSaved: (String? value) {
-            _pos = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
-      ),
-      if (widget.initialDivision.seasonPartitions > 1)
+    return buildEdit(
+      context,
+      id: widget.divisionWeightClass?.id,
+      classLocale: localizations.weightClass,
+      fields: [
         ListTile(
-          leading: const Icon(Icons.sunny_snowing),
-          title: IndexedToggleButtons(
-            label: localizations.seasonPartition,
-            onPressed: (e) => setState(() => _seasonPartition = e),
-            selected: _seasonPartition,
-            numOptions: widget.initialDivision.seasonPartitions,
-            getTitle: (e) => e.asSeasonPartition(context, widget.initialDivision.seasonPartitions),
+          leading: const Icon(Icons.format_list_numbered),
+          title: TextFormField(
+            initialValue: widget.divisionWeightClass?.pos.toString() ?? '',
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+              labelText: localizations.position,
+            ),
+            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
+            onSaved: (String? value) {
+              _pos = int.tryParse(value ?? '') ?? 0;
+            },
           ),
         ),
-    ]);
+        if (widget.initialDivision.seasonPartitions > 1)
+          ListTile(
+            leading: const Icon(Icons.sunny_snowing),
+            title: IndexedToggleButtons(
+              label: localizations.seasonPartition,
+              onPressed: (e) => setState(() => _seasonPartition = e),
+              selected: _seasonPartition,
+              numOptions: widget.initialDivision.seasonPartitions,
+              getTitle: (e) => e.asSeasonPartition(context, widget.initialDivision.seasonPartitions),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -72,7 +77,8 @@ class DivisionWeightClassEditState extends WeightClassEditState<DivisionWeightCl
       weightClass: weightClass,
       seasonPartition: _seasonPartition,
     );
-    divisionWeightClass = divisionWeightClass
-        .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(divisionWeightClass));
+    divisionWeightClass = divisionWeightClass.copyWithId(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(divisionWeightClass),
+    );
   }
 }

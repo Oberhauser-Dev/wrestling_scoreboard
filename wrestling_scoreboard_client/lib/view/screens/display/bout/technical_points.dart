@@ -50,16 +50,20 @@ class TechnicalPoints extends StatelessWidget {
           ),
           if (pStatusModel.activityStopwatch != null && boutConfig.activityDuration != null)
             Expanded(
-                flex: 30,
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              flex: 30,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                   ScaledText(context.l10n.activityTimeAbbr, fontSize: timerFontSize),
                   TimeDisplay(
                     pStatusModel.activityStopwatch!,
                     white,
                     fontSize: timerFontSize,
                     maxDuration: boutConfig.activityDuration!,
-                  )
-                ])),
+                  ),
+                ],
+              ),
+            ),
           if (pStatusModel.isInjuryDisplayed && boutConfig.injuryDuration != null)
             Expanded(
               flex: 30,
@@ -72,7 +76,7 @@ class TechnicalPoints extends StatelessWidget {
                     white,
                     fontSize: timerFontSize,
                     maxDuration: boutConfig.injuryDuration!,
-                  )
+                  ),
                 ],
               ),
             ),
@@ -88,7 +92,7 @@ class TechnicalPoints extends StatelessWidget {
                     white,
                     fontSize: timerFontSize,
                     maxDuration: boutConfig.bleedingInjuryDuration!,
-                  )
+                  ),
                 ],
               ),
             ),

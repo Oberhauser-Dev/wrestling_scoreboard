@@ -9,11 +9,7 @@ class Restricted extends ConsumerWidget {
   final Widget child;
   final UserPrivilege privilege;
 
-  const Restricted({
-    super.key,
-    required this.child,
-    this.privilege = UserPrivilege.write,
-  });
+  const Restricted({super.key, required this.child, this.privilege = UserPrivilege.write});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,14 +17,13 @@ class Restricted extends ConsumerWidget {
       future: ref.watch(userNotifierProvider),
       // Center widget has no size, so use CircularProgressIndicator directly.
       onLoad: (context) => const CircularProgressIndicator(),
-      onException: (context, exception, {stackTrace}) => IconButton(
-          onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
-          icon: const Icon(Icons.warning)),
+      onException:
+          (context, exception, {stackTrace}) => IconButton(
+            onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
+            icon: const Icon(Icons.warning),
+          ),
       builder: (context, user) {
-        return Visibility(
-          visible: user != null && user.privilege >= privilege,
-          child: child,
-        );
+        return Visibility(visible: user != null && user.privilege >= privilege, child: child);
       },
     );
   }
@@ -38,20 +33,10 @@ class RestrictedAddButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final UserPrivilege privilege;
 
-  const RestrictedAddButton({
-    super.key,
-    this.onPressed,
-    this.privilege = UserPrivilege.write,
-  });
+  const RestrictedAddButton({super.key, this.onPressed, this.privilege = UserPrivilege.write});
 
   @override
   Widget build(BuildContext context) {
-    return Restricted(
-      privilege: privilege,
-      child: IconButton(
-        icon: const Icon(Icons.add),
-        onPressed: onPressed,
-      ),
-    );
+    return Restricted(privilege: privilege, child: IconButton(icon: const Icon(Icons.add), onPressed: onPressed));
   }
 }

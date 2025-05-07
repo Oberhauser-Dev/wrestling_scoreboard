@@ -14,10 +14,6 @@ class BoutActionController extends ShelfController<BoutAction> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'point_count': psql.Type.smallInteger,
-      'bout_role': null,
-      'action_type': null,
-    };
+    return {'point_count': psql.Type.smallInteger, 'bout_role': null, 'action_type': null};
   }
 }

@@ -35,65 +35,67 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       appBar: AppBar(title: Text(localizations.auth_signUp)),
       body: ResponsiveScrollView(
         child: Card(
-            child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              CustomTextInput(
-                onSaved: (String? value) => _username = value,
-                label: localizations.username,
-                isMandatory: true,
-                validator: (v) =>
-                    (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
-              ),
-              // EmailInput(
-              //   onSave: (String? value) => _email = value,
-              //   isMandatory: false,
-              // ),
-              PasswordInput(
-                onSaved: (String? value) => _password = value,
-                isNewPassword: true,
-                isMandatory: true,
-              ),
-              PasswordInput(
-                onSaved: (String? value) => _passwordAgain = value,
-                isNewPassword: true,
-                isRepetition: true,
-                isMandatory: true,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ElevatedButton(
-                  onPressed: () => catchAsync(context, () async {
-                    _formKey.currentState!.save();
-                    if (_formKey.currentState!.validate()) {
-                      if (_password != _passwordAgain) {
-                        throw Exception('Passwords must match!');
-                      }
-                      final navigator = Navigator.of(context);
-                      await ref.read(userNotifierProvider.notifier).signUp(User(
-                            email: _email,
-                            username: _username!,
-                            password: _password!,
-                            createdAt: DateTime.now(),
-                            // TODO: may add ability to connect person to account
-                          ));
-                      navigator.pop();
-                    }
-                  }),
-                  child: Text(localizations.auth_signUp),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                CustomTextInput(
+                  onSaved: (String? value) => _username = value,
+                  label: localizations.username,
+                  isMandatory: true,
+                  validator:
+                      (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: InkWell(
-                  onTap: () => context.push('/${MoreScreen.route}/${SignInScreen.route}'),
-                  child: Text(localizations.auth_signInPrompt_phrase),
+                // EmailInput(
+                //   onSave: (String? value) => _email = value,
+                //   isMandatory: false,
+                // ),
+                PasswordInput(onSaved: (String? value) => _password = value, isNewPassword: true, isMandatory: true),
+                PasswordInput(
+                  onSaved: (String? value) => _passwordAgain = value,
+                  isNewPassword: true,
+                  isRepetition: true,
+                  isMandatory: true,
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ElevatedButton(
+                    onPressed:
+                        () => catchAsync(context, () async {
+                          _formKey.currentState!.save();
+                          if (_formKey.currentState!.validate()) {
+                            if (_password != _passwordAgain) {
+                              throw Exception('Passwords must match!');
+                            }
+                            final navigator = Navigator.of(context);
+                            await ref
+                                .read(userNotifierProvider.notifier)
+                                .signUp(
+                                  User(
+                                    email: _email,
+                                    username: _username!,
+                                    password: _password!,
+                                    createdAt: DateTime.now(),
+                                    // TODO: may add ability to connect person to account
+                                  ),
+                                );
+                            navigator.pop();
+                          }
+                        }),
+                    child: Text(localizations.auth_signUp),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: InkWell(
+                    onTap: () => context.push('/${MoreScreen.route}/${SignInScreen.route}'),
+                    child: Text(localizations.auth_signInPrompt_phrase),
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

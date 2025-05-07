@@ -62,11 +62,7 @@ abstract class BoutOverview<T extends DataObject> extends ConsumerWidget impleme
               subtitle: localizations.blue,
               icon: Icons.person,
             ),
-            ContentItem(
-              title: data.winnerRole?.name ?? '-',
-              subtitle: localizations.winner,
-              icon: Icons.emoji_events,
-            ),
+            ContentItem(title: data.winnerRole?.name ?? '-', subtitle: localizations.winner, icon: Icons.emoji_events),
             TooltipVisibility(
               visible: data.result != null,
               child: Tooltip(
@@ -79,29 +75,27 @@ abstract class BoutOverview<T extends DataObject> extends ConsumerWidget impleme
               ),
             ),
             LoadingBuilder<bool>(
-                future: ref.watch(timeCountDownNotifierProvider),
-                builder: (context, isTimeCountDown) {
-                  return ContentItem(
-                    title: data.duration
-                        .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                        .formatMinutesAndSeconds(),
-                    subtitle: localizations.duration,
-                    icon: Icons.timer,
-                  );
-                }),
+              future: ref.watch(timeCountDownNotifierProvider),
+              builder: (context, isTimeCountDown) {
+                return ContentItem(
+                  title:
+                      data.duration
+                          .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                          .formatMinutesAndSeconds(),
+                  subtitle: localizations.duration,
+                  icon: Icons.timer,
+                );
+              },
+            ),
           ],
         );
         return FavoriteScaffold<T>(
           dataObject: subClassData,
           label: classLocale,
           details: details ?? data.title(context),
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
+          tabs: [Tab(child: HeadingText(localizations.info))],
           actions: actions,
-          body: TabGroup(items: [
-            description,
-          ]),
+          body: TabGroup(items: [description]),
         );
       },
     );

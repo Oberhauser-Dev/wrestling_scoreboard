@@ -33,8 +33,10 @@ class CompetitionParticipationOverview extends ConsumerWidget {
             initialLineup: competitionParticipation.lineup,
             initialCompetition: competitionParticipation.lineup.competition,
           ),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider))
-              .deleteSingle<CompetitionParticipation>(competitionParticipation),
+          onDelete:
+              () async => (await ref.read(
+                dataManagerNotifierProvider,
+              )).deleteSingle<CompetitionParticipation>(competitionParticipation),
           classLocale: localizations.participation,
           children: [
             ContentItem(
@@ -83,12 +85,8 @@ class CompetitionParticipationOverview extends ConsumerWidget {
           dataObject: competitionParticipation,
           label: localizations.participation,
           details: competitionParticipation.name,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
-          body: TabGroup(items: [
-            description,
-          ]),
+          tabs: [Tab(child: HeadingText(localizations.info))],
+          body: TabGroup(items: [description]),
         );
       },
     );

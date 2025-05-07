@@ -64,16 +64,8 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
           ],
           children: [
             ...?tiles,
-            ContentItem(
-              title: person.fullName,
-              subtitle: localizations.name,
-              icon: Icons.person,
-            ),
-            ContentItem(
-              title: person.age?.toString() ?? '-',
-              subtitle: localizations.age,
-              icon: Icons.event,
-            ),
+            ContentItem(title: person.fullName, subtitle: localizations.name, icon: Icons.person),
+            ContentItem(title: person.age?.toString() ?? '-', subtitle: localizations.age, icon: Icons.event),
             ContentItem(
               title: person.birthDate?.toDateString(context) ?? '-',
               subtitle: localizations.dateOfBirth,
@@ -85,9 +77,10 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
               icon: Icons.description,
             ),
             ContentItem(
-              title: person.nationality == null
-                  ? '-'
-                  : '${person.nationality?.nationality} (${person.nationality?.isoShortName})',
+              title:
+                  person.nationality == null
+                      ? '-'
+                      : '${person.nationality?.nationality} (${person.nationality?.isoShortName})',
               subtitle: localizations.nationality,
               icon: Icons.location_on,
             ),
@@ -98,15 +91,9 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
           dataObject: subClassData,
           label: classLocale,
           details: details ?? person.fullName,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            ...relations.keys,
-          ],
+          tabs: [Tab(child: HeadingText(localizations.info)), ...relations.keys],
           actions: actions,
-          body: TabGroup(items: [
-            description,
-            ...relations.values,
-          ]),
+          body: TabGroup(items: [description, ...relations.values]),
         );
       },
     );
@@ -126,35 +113,35 @@ class PersonOverview extends AbstractPersonOverview<Person> {
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
     return SingleConsumer<Person>(
-        id: id,
-        initialData: person,
-        builder: (context, person) {
-          return buildOverview(
-            context,
-            ref,
-            dataId: id,
-            initialData: person,
-            subClassData: person,
-            classLocale: localizations.person,
-            editPage: PersonEdit(
-              person: person,
-              initialOrganization: person.organization ?? initialOrganization,
-            ),
-            onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person),
-            buildRelations: (Person person) => {
-              Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.edit(
-                context: context,
-                editPageBuilder: (context) => MembershipEdit(initialPerson: person),
-                filterObject: person,
-                itemBuilder: (context, membership) => ContentItem(
-                  title: '${membership.info},\t${membership.person.gender?.localize(context)}',
-                  icon: Icons.person,
-                  onTap: () => handleSelectedMembership(membership, context),
+      id: id,
+      initialData: person,
+      builder: (context, person) {
+        return buildOverview(
+          context,
+          ref,
+          dataId: id,
+          initialData: person,
+          subClassData: person,
+          classLocale: localizations.person,
+          editPage: PersonEdit(person: person, initialOrganization: person.organization ?? initialOrganization),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person),
+          buildRelations:
+              (Person person) => {
+                Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.edit(
+                  context: context,
+                  editPageBuilder: (context) => MembershipEdit(initialPerson: person),
+                  filterObject: person,
+                  itemBuilder:
+                      (context, membership) => ContentItem(
+                        title: '${membership.info},\t${membership.person.gender?.localize(context)}',
+                        icon: Icons.person,
+                        onTap: () => handleSelectedMembership(membership, context),
+                      ),
                 ),
-              ),
-            },
-          );
-        });
+              },
+        );
+      },
+    );
   }
 
   handleSelectedMembership(Membership membership, BuildContext context) {
@@ -180,8 +167,10 @@ Future<void> mergePersonsDialog(BuildContext context, WidgetRef ref, {required L
   await catchAsync(context, () async {
     final confirmed = await showOkCancelDialog(
       context: context,
-      child: Text('Are you sure to merge instances of "${persons.first.fullName}"?\n'
-          'This action changes all dependent dependent data, such as Memberships.'),
+      child: Text(
+        'Are you sure to merge instances of "${persons.first.fullName}"?\n'
+        'This action changes all dependent dependent data, such as Memberships.',
+      ),
     );
     if (confirmed && context.mounted) {
       final dataManager = await ref.read(dataManagerNotifierProvider);
@@ -197,8 +186,10 @@ Future<void> mergeAllPersonsDialog(
 }) async {
   final confirmed = await showOkCancelDialog(
     context: context,
-    child: const Text('Are you sure to merge instances of ALL persons?\n'
-        'This action changes all dependent dependent data, such as Memberships.'),
+    child: const Text(
+      'Are you sure to merge instances of ALL persons?\n'
+      'This action changes all dependent dependent data, such as Memberships.',
+    ),
   );
   if (confirmed) {
     final dataManager = await ref.read(dataManagerNotifierProvider);
@@ -228,16 +219,17 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
 
   @override
   void initState() {
-    _availablePersonsFuture = (() async {
-      final availablePersons = await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Organization>(
-        filterObject: widget.organization,
-      );
-      availablePersons.remove(widget.pivotPerson);
-      setState(() {
-        _mergePerson ??= availablePersons.where((ap) => ap.fullName == widget.pivotPerson.fullName).firstOrNull;
-      });
-      return availablePersons;
-    })();
+    _availablePersonsFuture =
+        (() async {
+          final availablePersons = await (await ref.read(
+            dataManagerNotifierProvider,
+          )).readMany<Person, Organization>(filterObject: widget.organization);
+          availablePersons.remove(widget.pivotPerson);
+          setState(() {
+            _mergePerson ??= availablePersons.where((ap) => ap.fullName == widget.pivotPerson.fullName).firstOrNull;
+          });
+          return availablePersons;
+        })();
     super.initState();
   }
 
@@ -247,28 +239,30 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
     return OkCancelDialog<Person?>(
       getResult: () => _mergePerson,
       child: LoadingBuilder(
-          future: _availablePersonsFuture,
-          builder: (context, data) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(localizations.mergeObjectData),
-                SearchableDropdown<Person>(
-                  icon: const Icon(Icons.person),
-                  selectedItem: _mergePerson,
-                  label: localizations.person,
-                  context: context,
-                  onChanged: (Person? value) => setState(() {
-                    _mergePerson = value;
-                  }),
-                  itemAsString: (u) => '${u.fullName}, ${u.birthDate?.toDateString(context)}',
-                  asyncItems: (String filter) async {
-                    return data;
-                  },
-                ),
-              ],
-            );
-          }),
+        future: _availablePersonsFuture,
+        builder: (context, data) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(localizations.mergeObjectData),
+              SearchableDropdown<Person>(
+                icon: const Icon(Icons.person),
+                selectedItem: _mergePerson,
+                label: localizations.person,
+                context: context,
+                onChanged:
+                    (Person? value) => setState(() {
+                      _mergePerson = value;
+                    }),
+                itemAsString: (u) => '${u.fullName}, ${u.birthDate?.toDateString(context)}',
+                asyncItems: (String filter) async {
+                  return data;
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

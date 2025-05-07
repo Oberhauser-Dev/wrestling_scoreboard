@@ -49,15 +49,17 @@ class PersonController extends OrganizationalController<Person> {
       for (final deletePerson in deletePersons) {
         final deleteMemberships = await getMemberships(user, deletePerson.id!);
         for (final deleteMembership in deleteMemberships) {
-          final replacingMembership = keepMemberships
-              .where((m) => m.club == deleteMembership.club && m.organization == deleteMembership.organization)
-              .firstOrNull;
+          final replacingMembership =
+              keepMemberships
+                  .where((m) => m.club == deleteMembership.club && m.organization == deleteMembership.organization)
+                  .firstOrNull;
           if (replacingMembership != null) {
             if (replacingMembership.no != null &&
                 deleteMembership.no != null &&
                 replacingMembership.no != deleteMembership.no) {
               _logger.warning(
-                  'Replacing Membership ${deleteMembership.id} (${deleteMembership.no}) with ${replacingMembership.id} (${replacingMembership.no}) lead to a different club number.');
+                'Replacing Membership ${deleteMembership.id} (${deleteMembership.no}) with ${replacingMembership.id} (${replacingMembership.no}) lead to a different club number.',
+              );
             }
 
             // Update deleted memberships
@@ -68,10 +70,15 @@ class PersonController extends OrganizationalController<Person> {
             final lineupsByCoach = await lnc.getByCoach(user, deleteMembership.id!);
             await Future.wait(lineupsByCoach.map((e) => lnc.updateSingle(e.copyWith(coach: replacingMembership))));
 
-            final participations =
-                await TeamLineupParticipationController().getByMembership(user, deleteMembership.id!);
-            await Future.wait(participations.map(
-                (e) => TeamLineupParticipationController().updateSingle(e.copyWith(membership: replacingMembership))));
+            final participations = await TeamLineupParticipationController().getByMembership(
+              user,
+              deleteMembership.id!,
+            );
+            await Future.wait(
+              participations.map(
+                (e) => TeamLineupParticipationController().updateSingle(e.copyWith(membership: replacingMembership)),
+              ),
+            );
 
             final wasDeleted = await MembershipController().deleteSingle(deleteMembership.id!);
             if (!wasDeleted) return Response.badRequest(body: 'Membership ${deleteMembership.id} could not be deleted');
@@ -92,7 +99,8 @@ class PersonController extends OrganizationalController<Person> {
 
         await Future.wait(teamMatchsByReferee.map((e) => tmc.updateSingle(e.copyWith(referee: keepPerson))));
         await Future.wait(
-            teamMatchsByTranscriptWriter.map((e) => tmc.updateSingle(e.copyWith(transcriptWriter: keepPerson))));
+          teamMatchsByTranscriptWriter.map((e) => tmc.updateSingle(e.copyWith(transcriptWriter: keepPerson))),
+        );
         await Future.wait(teamMatchsByTimeKeeper.map((e) => tmc.updateSingle(e.copyWith(timeKeeper: keepPerson))));
         await Future.wait(teamMatchsByMatChairman.map((e) => tmc.updateSingle(e.copyWith(matChairman: keepPerson))));
         await Future.wait(teamMatchsByJudge.map((e) => tmc.updateSingle(e.copyWith(judge: keepPerson))));
@@ -115,17 +123,23 @@ class PersonController extends OrganizationalController<Person> {
       await updateSingle(keepPerson);
 
       // Update list of persons for its organization
-      broadcast((obfuscate) async => jsonEncode(manyToJson(
-          await OrganizationController().getPersons(user?.obfuscate ?? true, keepPerson.organization!.id!),
-          Person,
-          CRUD.update,
-          isRaw: false,
-          filterType: Organization,
-          filterId: keepPerson.organization!.id)));
+      broadcast(
+        (obfuscate) async => jsonEncode(
+          manyToJson(
+            await OrganizationController().getPersons(user?.obfuscate ?? true, keepPerson.organization!.id!),
+            Person,
+            CRUD.update,
+            isRaw: false,
+            filterType: Organization,
+            filterId: keepPerson.organization!.id,
+          ),
+        ),
+      );
 
       return Response.ok('{"status": "success"}');
     } on FormatException catch (e) {
-      final errMessage = 'The data objects $tableName could not be merged. Check the format: $message'
+      final errMessage =
+          'The data objects $tableName could not be merged. Check the format: $message'
           '\nFormatException: ${e.message}';
       _logger.warning(errMessage.toString());
       return Response.badRequest(body: errMessage);
@@ -142,8 +156,6 @@ class PersonController extends OrganizationalController<Person> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'gender': null,
-    };
+    return {'gender': null};
   }
 }

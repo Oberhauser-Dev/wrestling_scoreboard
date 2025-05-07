@@ -27,9 +27,6 @@ class BoutController extends OrganizationalController<Bout> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'winner_role': null,
-      'bout_result': null,
-    };
+    return {'winner_role': null, 'bout_result': null};
   }
 }

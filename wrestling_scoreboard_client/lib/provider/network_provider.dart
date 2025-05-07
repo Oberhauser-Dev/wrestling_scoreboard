@@ -14,11 +14,12 @@ class DataManagerNotifier extends _$DataManagerNotifier {
     final apiUrl = await ref.watch(apiUrlNotifierProvider);
     final jwtToken = await ref.watch(jwtNotifierProvider);
     return RestDataManager(
-        apiUrl: apiUrl,
-        authService: jwtToken == null ? null : BearerAuthService(token: jwtToken),
-        onResetAuth: () async {
-          if (ref.mounted) await ref.read(jwtNotifierProvider.notifier).setState(null);
-        });
+      apiUrl: apiUrl,
+      authService: jwtToken == null ? null : BearerAuthService(token: jwtToken),
+      onResetAuth: () async {
+        if (ref.mounted) await ref.read(jwtNotifierProvider.notifier).setState(null);
+      },
+    );
   }
 }
 
@@ -39,8 +40,8 @@ class WebSocketManagerNotifier extends _$WebSocketManagerNotifier {
 @Riverpod(keepAlive: true)
 Stream<WebSocketConnectionState> webSocketStateStream(Ref ref) async* {
   final webSocketManager = await ref.watch(webSocketManagerNotifierProvider);
-  final webSocketConnectionStream = webSocketManager.onWebSocketConnection.stream
-      .distinct()
-      .where((event) => event == WebSocketConnectionState.disconnected || event == WebSocketConnectionState.connected);
+  final webSocketConnectionStream = webSocketManager.onWebSocketConnection.stream.distinct().where(
+    (event) => event == WebSocketConnectionState.disconnected || event == WebSocketConnectionState.connected,
+  );
   yield* webSocketConnectionStream;
 }

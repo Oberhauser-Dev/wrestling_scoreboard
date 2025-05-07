@@ -1,5 +1,5 @@
 String? getWrestlerJson(passCode) => switch (passCode) {
-      1234 => r'''
+  1234 => r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -32,7 +32,7 @@ String? getWrestlerJson(passCode) => switch (passCode) {
   }
 }
 ''',
-      4321 => r'''
+  4321 => r'''
 {
   "rpcid": null,
   "rc": "ok",
@@ -67,5 +67,5 @@ String? getWrestlerJson(passCode) => switch (passCode) {
   }
 }
 ''',
-      _ => null,
-    };
+  _ => null,
+};

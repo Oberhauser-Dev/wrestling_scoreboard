@@ -89,19 +89,23 @@ abstract class BoutConfigOverview<T extends DataObject> extends ConsumerWidget
             Tab(child: HeadingText(localizations.boutResultRules)),
           ],
           actions: actions,
-          body: TabGroup(items: [
-            description,
-            ...relations.values,
-            FilterableManyConsumer<BoutResultRule, BoutConfig>.edit(
-              context: context,
-              editPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
-              filterObject: boutConfig,
-              itemBuilder: (context, item) => ContentItem(
-                  title: item.localize(context),
-                  icon: Icons.rule,
-                  onTap: () => handleSelectedBoutResultRule(item, context)),
-            ),
-          ]),
+          body: TabGroup(
+            items: [
+              description,
+              ...relations.values,
+              FilterableManyConsumer<BoutResultRule, BoutConfig>.edit(
+                context: context,
+                editPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
+                filterObject: boutConfig,
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.localize(context),
+                      icon: Icons.rule,
+                      onTap: () => handleSelectedBoutResultRule(item, context),
+                    ),
+              ),
+            ],
+          ),
         );
       },
     );

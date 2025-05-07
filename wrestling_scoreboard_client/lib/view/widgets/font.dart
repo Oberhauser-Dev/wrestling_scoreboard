@@ -9,11 +9,9 @@ class HeadingText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(bottom: 10, top: 20),
-        child: Text(
-          heading.toUpperCase(),
-          style: Theme.of(context).textTheme.bodySmall,
-        ));
+      padding: const EdgeInsets.only(bottom: 10, top: 20),
+      child: Text(heading.toUpperCase(), style: Theme.of(context).textTheme.bodySmall),
+    );
   }
 }
 

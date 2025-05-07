@@ -4,17 +4,13 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/foundation.dart';
-import 'package:wrestling_scoreboard_client/platform/none.dart' if (dart.library.js_interop) 'package:web/web.dart'
+import 'package:wrestling_scoreboard_client/platform/none.dart'
+    if (dart.library.js_interop) 'package:web/web.dart'
     as web;
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
 Future<void> exportPNG({required String fileBaseName, required Uint8List image}) async {
-  await downloadSelector(
-    content: image,
-    fileExtension: 'png',
-    fileBaseName: fileBaseName,
-    mimeType: 'image/png',
-  );
+  await downloadSelector(content: image, fileExtension: 'png', fileBaseName: fileBaseName, mimeType: 'image/png');
 }
 
 Future<void> exportSQL({required String fileBaseName, required String sqlString}) async {
@@ -27,24 +23,14 @@ Future<void> exportSQL({required String fileBaseName, required String sqlString}
 }
 
 Future<void> exportRDB({required String fileBaseName, required String rdbString}) async {
-  await downloadSelector(
-    content: rdbString,
-    fileExtension: 'rdb',
-    fileBaseName: fileBaseName,
-    mimeType: 'text/rdb',
-  );
+  await downloadSelector(content: rdbString, fileExtension: 'rdb', fileBaseName: fileBaseName, mimeType: 'text/rdb');
 }
 
 /// Exports a [table] (list of rows) as CSV to the specified [fileBaseName] (without extension).
 Future<void> exportCSV({required String fileBaseName, required List<List<dynamic>> table}) async {
   const converter = ListToCsvConverter();
   final content = converter.convert(table);
-  await downloadSelector(
-    content: content,
-    fileExtension: 'csv',
-    fileBaseName: fileBaseName,
-    mimeType: 'text/csv',
-  );
+  await downloadSelector(content: content, fileExtension: 'csv', fileBaseName: fileBaseName, mimeType: 'text/csv');
 }
 
 Future<void> downloadSelector<T>({

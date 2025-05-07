@@ -47,39 +47,19 @@ abstract class WeightClassOverview<T extends DataObject> extends ConsumerWidget
           classLocale: classLocale,
           children: [
             ...tiles,
-            ContentItem(
-              title: data.weight.toString(),
-              subtitle: localizations.weight,
-              icon: Icons.fitness_center,
-            ),
-            ContentItem(
-              title: data.style.localize(context),
-              subtitle: localizations.wrestlingStyle,
-              icon: Icons.style,
-            ),
-            ContentItem(
-              title: data.unit.toAbbr(),
-              subtitle: localizations.weightUnit,
-              icon: Icons.straighten,
-            ),
-            ContentItem(
-              title: data.suffix ?? '-',
-              subtitle: localizations.suffix,
-              icon: Icons.description,
-            ),
+            ContentItem(title: data.weight.toString(), subtitle: localizations.weight, icon: Icons.fitness_center),
+            ContentItem(title: data.style.localize(context), subtitle: localizations.wrestlingStyle, icon: Icons.style),
+            ContentItem(title: data.unit.toAbbr(), subtitle: localizations.weightUnit, icon: Icons.straighten),
+            ContentItem(title: data.suffix ?? '-', subtitle: localizations.suffix, icon: Icons.description),
           ],
         );
         return FavoriteScaffold<T>(
           dataObject: subClassData,
           label: classLocale,
           details: details ?? data.name,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
+          tabs: [Tab(child: HeadingText(localizations.info))],
           actions: actions,
-          body: TabGroup(items: [
-            description,
-          ]),
+          body: TabGroup(items: [description]),
         );
       },
     );

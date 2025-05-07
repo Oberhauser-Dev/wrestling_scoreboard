@@ -3,9 +3,8 @@ import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
-getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) => IOWindowStateManager(
-      setWindowState: setWindowState,
-    );
+getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) =>
+    IOWindowStateManager(setWindowState: setWindowState);
 
 class IOWindowStateManager extends WindowStateManager with WindowListener {
   IOWindowStateManager({required super.setWindowState});

@@ -14,10 +14,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'mat': psql.Type.smallInteger,
-      'round': psql.Type.smallInteger,
-    };
+    return {'mat': psql.Type.smallInteger, 'round': psql.Type.smallInteger};
   }
 
   Future<List<CompetitionBout>> getByWeightCategory(bool obfuscate, int id) async {

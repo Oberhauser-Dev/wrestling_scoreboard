@@ -27,9 +27,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   }
 
   Future<int> createSingleUser(User user) async {
-    user = user.copyWith(
-      createdAt: DateTime.now(),
-    );
+    user = user.copyWith(createdAt: DateTime.now());
     return await SecuredUserController().createSingle(user.toSecuredUser());
   }
 

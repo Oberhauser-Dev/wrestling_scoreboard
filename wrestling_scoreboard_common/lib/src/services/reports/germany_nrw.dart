@@ -57,8 +57,10 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
   NrwGermanyWrestlingReporter(this.organization);
 
   String _handleComment(String comment) {
-    String escapedComment =
-        _htmlEscape.convert(_sanitizeString(comment)).replaceAll('(', '&#40;').replaceAll(')', '&#41;');
+    String escapedComment = _htmlEscape
+        .convert(_sanitizeString(comment))
+        .replaceAll('(', '&#40;')
+        .replaceAll(')', '&#41;');
 
     // Allow more than 200 characters for now.
     /*if (escapedComment.length >= 200) {
@@ -101,22 +103,26 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     final boutInfos = boutMap.entries.map((entry) {
       final teamMatchBout = entry.key;
       final bout = teamMatchBout.bout;
-      var points = entry.value.asMap().entries.map((boutActionEntry) {
-        final boutActionIndex = boutActionEntry.key;
-        final action = boutActionEntry.value;
-        String actionValue = action.actionValue;
-        if (teamMatchBout.weightClass?.style == WrestlingStyle.free) {
-          // In germany: 'P' is handled as 'A' activity period, whereas a verbal admonition 'V' before a passivity ('P' / 'A' in Germany) is written as first 'P'.
-          if (action.actionType == BoutActionType.passivity) {
-            actionValue = 'A';
-          } else if (action.actionType == BoutActionType.caution &&
-              entry.value.length > (boutActionIndex + 1) &&
-              entry.value[boutActionIndex + 1].actionType == BoutActionType.passivity) {
-            actionValue = 'P';
-          }
-        }
-        return '$actionValue${action.role == BoutRole.red ? 'R' : 'B'}${action.duration.inSeconds}';
-      }).join(',');
+      var points = entry.value
+          .asMap()
+          .entries
+          .map((boutActionEntry) {
+            final boutActionIndex = boutActionEntry.key;
+            final action = boutActionEntry.value;
+            String actionValue = action.actionValue;
+            if (teamMatchBout.weightClass?.style == WrestlingStyle.free) {
+              // In germany: 'P' is handled as 'A' activity period, whereas a verbal admonition 'V' before a passivity ('P' / 'A' in Germany) is written as first 'P'.
+              if (action.actionType == BoutActionType.passivity) {
+                actionValue = 'A';
+              } else if (action.actionType == BoutActionType.caution &&
+                  entry.value.length > (boutActionIndex + 1) &&
+                  entry.value[boutActionIndex + 1].actionType == BoutActionType.passivity) {
+                actionValue = 'P';
+              }
+            }
+            return '$actionValue${action.role == BoutRole.red ? 'R' : 'B'}${action.duration.inSeconds}';
+          })
+          .join(',');
       if (points.isNotEmpty) {
         points = '(points $points)';
       }

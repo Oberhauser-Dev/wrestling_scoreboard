@@ -87,7 +87,5 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     return copyWith(id: id);
   }
 
-  static Map<String, Type> searchableForeignAttributeMapping = {
-    'membership_id': Membership,
-  };
+  static Map<String, Type> searchableForeignAttributeMapping = {'membership_id': Membership};
 }

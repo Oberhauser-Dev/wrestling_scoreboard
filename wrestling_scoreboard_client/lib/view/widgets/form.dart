@@ -31,7 +31,8 @@ class CustomTextInput extends StatelessWidget {
         maxLines: isMultiline ? null : 1,
         keyboardType: isMultiline ? TextInputType.multiline : null,
         onSaved: onSaved,
-        validator: validator ??
+        validator:
+            validator ??
             (value) {
               if (isMandatory && (value == null || value.isEmpty)) {
                 return localizations.mandatoryField;
@@ -39,10 +40,7 @@ class CustomTextInput extends StatelessWidget {
               return null;
             },
         initialValue: initialValue,
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: label,
-        ),
+        decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: label),
       ),
     );
   }
@@ -53,12 +51,7 @@ class EmailInput extends StatelessWidget {
   final FormFieldSetter<String> onSave;
   final bool isMandatory;
 
-  const EmailInput({
-    this.initialValue,
-    required this.onSave,
-    this.isMandatory = false,
-    super.key,
-  });
+  const EmailInput({this.initialValue, required this.onSave, this.isMandatory = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +67,7 @@ class EmailInput extends StatelessWidget {
           }
           return null;
         },
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: localizations.email,
-        ),
+        decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.email),
         autofillHints: const [AutofillHints.email],
       ),
     );

@@ -32,12 +32,12 @@ abstract class Club with _$Club implements DataObject, Organizational {
   }
 
   static Future<Club> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => Club(
-        id: e['id'] as int?,
-        orgSyncId: e['org_sync_id'] as String?,
-        organization: (await getSingle<Organization>(e['organization_id'] as int)),
-        no: e['no'] as String?,
-        name: e['name'] as String,
-      );
+    id: e['id'] as int?,
+    orgSyncId: e['org_sync_id'] as String?,
+    organization: (await getSingle<Organization>(e['organization_id'] as int)),
+    no: e['no'] as String?,
+    name: e['name'] as String,
+  );
 
   @override
   @override

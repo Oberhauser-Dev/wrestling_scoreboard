@@ -20,11 +20,7 @@ class ImprintScreen extends StatelessWidget {
         child: PaddedCard(
           child: Column(
             children: [
-              ListTile(
-                  title: Text(
-                localizations.imprint,
-                style: Theme.of(context).textTheme.headlineSmall,
-              )),
+              ListTile(title: Text(localizations.imprint, style: Theme.of(context).textTheme.headlineSmall)),
               ListTile(
                 title: MarkdownBody(
                   shrinkWrap: true,

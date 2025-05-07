@@ -31,15 +31,7 @@ class AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(label),
-        Text(
-          '  $details',
-          style: TextStyle(color: Theme.of(context).disabledColor),
-        ),
-      ],
-    );
+    return Row(children: [Text(label), Text('  $details', style: TextStyle(color: Theme.of(context).disabledColor))]);
   }
 }
 
@@ -73,22 +65,23 @@ class FavoriteScaffold<T extends DataObject> extends ConsumerWidget {
       actions: [
         ...?this.actions,
         LoadingBuilder(
-            future: ref.watch(favoritesNotifierProvider),
-            builder: (BuildContext context, favorites) {
-              final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
-              return IconButton(
-                onPressed: () {
-                  final notifier = ref.read(favoritesNotifierProvider.notifier);
-                  if (isFavorite) {
-                    notifier.removeFavorite(tableName, dataObject.id!);
-                  } else {
-                    notifier.addFavorite(tableName, dataObject.id!);
-                  }
-                },
-                icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
-                tooltip: localizations.favorite,
-              );
-            })
+          future: ref.watch(favoritesNotifierProvider),
+          builder: (BuildContext context, favorites) {
+            final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
+            return IconButton(
+              onPressed: () {
+                final notifier = ref.read(favoritesNotifierProvider.notifier);
+                if (isFavorite) {
+                  notifier.removeFavorite(tableName, dataObject.id!);
+                } else {
+                  notifier.addFavorite(tableName, dataObject.id!);
+                }
+              },
+              icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
+              tooltip: localizations.favorite,
+            );
+          },
+        ),
       ],
     );
   }
@@ -117,9 +110,7 @@ class OverviewScaffold extends ConsumerWidget {
       child: WindowStateScaffold(
         appBarTitle: AppBarTitle(label: label, details: details),
         appBarBottom: TabBar(tabs: tabs, tabAlignment: TabAlignment.center, isScrollable: true),
-        actions: [
-          ...?actions,
-        ],
+        actions: [...?actions],
         body: body,
       ),
     );

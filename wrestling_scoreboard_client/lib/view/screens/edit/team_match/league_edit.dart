@@ -48,10 +48,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
       ListTile(
         leading: const Icon(Icons.description),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.name,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
           initialValue: widget.league?.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -67,21 +64,19 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         title: TextFormField(
           key: ValueKey(_startDate),
           readOnly: true,
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.startDate,
-          ),
-          onTap: () => showDatePicker(
-            initialDatePickerMode: DatePickerMode.year,
-            context: context,
-            initialDate: _startDate,
-            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-          ).then((value) {
-            if (value != null) {
-              setState(() => _startDate = value);
-            }
-          }),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.startDate),
+          onTap:
+              () => showDatePicker(
+                initialDatePickerMode: DatePickerMode.year,
+                context: context,
+                initialDate: _startDate,
+                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+              ).then((value) {
+                if (value != null) {
+                  setState(() => _startDate = value);
+                }
+              }),
           initialValue: _startDate.toDateString(context),
         ),
       ),
@@ -90,21 +85,19 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         title: TextFormField(
           key: ValueKey(_endDate),
           readOnly: true,
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.endDate,
-          ),
-          onTap: () => showDatePicker(
-            initialDatePickerMode: DatePickerMode.year,
-            context: context,
-            initialDate: _endDate,
-            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-          ).then((value) {
-            if (value != null) {
-              setState(() => _endDate = value);
-            }
-          }),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.endDate),
+          onTap:
+              () => showDatePicker(
+                initialDatePickerMode: DatePickerMode.year,
+                context: context,
+                initialDate: _endDate,
+                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+              ).then((value) {
+                if (value != null) {
+                  setState(() => _endDate = value);
+                }
+              }),
           initialValue: _endDate.toDateString(context),
         ),
       ),
@@ -130,9 +123,10 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           selectedItem: _division,
           label: localizations.division,
           context: context,
-          onSaved: (Division? value) => setState(() {
-            _division = value;
-          }),
+          onSaved:
+              (Division? value) => setState(() {
+                _division = value;
+              }),
           itemAsString: (u) => u.fullname,
           allowEmpty: false,
           asyncItems: (String filter) async {
@@ -156,7 +150,8 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(League(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+        League(
           id: widget.league?.id,
           organization: widget.league?.organization ?? widget.initialDivision?.organization,
           orgSyncId: widget.league?.orgSyncId,
@@ -164,7 +159,9 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           startDate: _startDate,
           endDate: _endDate,
           division: _division!,
-          boutDays: _boutDays));
+          boutDays: _boutDays,
+        ),
+      );
       navigator.pop();
     }
   }

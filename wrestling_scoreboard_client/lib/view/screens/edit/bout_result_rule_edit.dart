@@ -60,12 +60,15 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
             isNullable: false,
             selected: _boutResult,
             options: BoutResult.values.map(
-              (BoutResult boutResult) => MapEntry(boutResult,
-                  Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context)))),
+              (BoutResult boutResult) => MapEntry(
+                boutResult,
+                Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context))),
+              ),
             ),
-            onChange: (BoutResult? newValue) => setState(() {
-              _boutResult = newValue!;
-            }),
+            onChange:
+                (BoutResult? newValue) => setState(() {
+                  _boutResult = newValue!;
+                }),
           ),
         ),
       ),
@@ -150,9 +153,10 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
           selectedItem: _boutConfig,
           label: localizations.boutConfig,
           context: context,
-          onSaved: (BoutConfig? value) => setState(() {
-            _boutConfig = value;
-          }),
+          onSaved:
+              (BoutConfig? value) => setState(() {
+                _boutConfig = value;
+              }),
           allowEmpty: false,
           itemAsString: (u) => u.localize(context),
           asyncItems: (String filter) async {
@@ -188,7 +192,8 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
         boutConfig: _boutConfig!,
       );
       boutResultRule = boutResultRule.copyWithId(
-          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutResultRule>(boutResultRule));
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutResultRule>(boutResultRule),
+      );
       if (widget.onCreated != null) {
         await widget.onCreated!(boutResultRule);
       }

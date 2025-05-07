@@ -50,9 +50,10 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
             options: CompetitionSystem.values.map(
               (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
             ),
-            onChange: (newValue) => setState(() {
-              _competitionSystem = newValue;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _competitionSystem = newValue;
+                }),
           ),
         ),
       ),

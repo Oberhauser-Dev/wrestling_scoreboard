@@ -33,48 +33,49 @@ class MoreScreen extends ConsumerWidget {
             future: ref.watch(userNotifierProvider),
             builder: (context, user) {
               return Column(
-                children: ListTile.divideTiles(
-                  context: context,
-                  tiles: [
-                    ListTile(
-                      leading: const Icon(Icons.settings),
-                      title: Text(localizations.settings),
-                      onTap: () => context.push('/${MoreScreen.route}/${CustomSettingsScreen.route}'),
-                    ),
-                    if (user?.privilege == UserPrivilege.admin)
-                      ListTile(
-                        leading: const Icon(Icons.admin_panel_settings),
-                        title: Text(localizations.administration),
-                        onTap: () => context.push('/${MoreScreen.route}/${AdminOverview.route}'),
-                      ),
-                    ListTile(
-                      leading: const Icon(Icons.info),
-                      title: Text(localizations.imprint),
-                      onTap: () => context.push('/${MoreScreen.route}/${ImprintScreen.route}'),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.info),
-                      title: Text(localizations.about),
-                      onTap: () => context.push('/${MoreScreen.route}/${AboutScreen.route}'),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.policy),
-                      title: Text(localizations.privacy_policy),
-                      onTap: () => context.push('/${MoreScreen.route}/${PrivacyPolicyScreen.route}'),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.person),
-                      title: Text(user == null ? localizations.auth_signIn : localizations.profile),
-                      onTap: () {
-                        if (user == null) {
-                          context.push('/${MoreScreen.route}/${SignInScreen.route}');
-                        } else {
-                          context.push('/${MoreScreen.route}/${ProfileScreen.route}');
-                        }
-                      },
-                    ),
-                  ],
-                ).toList(),
+                children:
+                    ListTile.divideTiles(
+                      context: context,
+                      tiles: [
+                        ListTile(
+                          leading: const Icon(Icons.settings),
+                          title: Text(localizations.settings),
+                          onTap: () => context.push('/${MoreScreen.route}/${CustomSettingsScreen.route}'),
+                        ),
+                        if (user?.privilege == UserPrivilege.admin)
+                          ListTile(
+                            leading: const Icon(Icons.admin_panel_settings),
+                            title: Text(localizations.administration),
+                            onTap: () => context.push('/${MoreScreen.route}/${AdminOverview.route}'),
+                          ),
+                        ListTile(
+                          leading: const Icon(Icons.info),
+                          title: Text(localizations.imprint),
+                          onTap: () => context.push('/${MoreScreen.route}/${ImprintScreen.route}'),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.info),
+                          title: Text(localizations.about),
+                          onTap: () => context.push('/${MoreScreen.route}/${AboutScreen.route}'),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.policy),
+                          title: Text(localizations.privacy_policy),
+                          onTap: () => context.push('/${MoreScreen.route}/${PrivacyPolicyScreen.route}'),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.person),
+                          title: Text(user == null ? localizations.auth_signIn : localizations.profile),
+                          onTap: () {
+                            if (user == null) {
+                              context.push('/${MoreScreen.route}/${SignInScreen.route}');
+                            } else {
+                              context.push('/${MoreScreen.route}/${ProfileScreen.route}');
+                            }
+                          },
+                        ),
+                      ],
+                    ).toList(),
               );
             },
             onException: (context, exception, {stackTrace}) {

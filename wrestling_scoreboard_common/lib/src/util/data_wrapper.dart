@@ -56,22 +56,16 @@ Map<String, dynamic> manyToJson(
   };
 }
 
-typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({
-  required CRUD operation,
-  required T single,
-});
-typedef HandleSingleRawCallback = Future<int> Function<T extends DataObject>({
-  required CRUD operation,
-  required Map<String, dynamic> single,
-});
-typedef HandleManyCallback = Future<void> Function<T extends DataObject>({
-  required CRUD operation,
-  required ManyDataObject<T> many,
-});
-typedef HandleManyRawCallback = Future<void> Function<T extends DataObject>({
-  required CRUD operation,
-  required ManyDataObject<Map<String, dynamic>> many,
-});
+typedef HandleSingleCallback = Future<int> Function<T extends DataObject>({required CRUD operation, required T single});
+typedef HandleSingleRawCallback =
+    Future<int> Function<T extends DataObject>({required CRUD operation, required Map<String, dynamic> single});
+typedef HandleManyCallback =
+    Future<void> Function<T extends DataObject>({required CRUD operation, required ManyDataObject<T> many});
+typedef HandleManyRawCallback =
+    Future<void> Function<T extends DataObject>({
+      required CRUD operation,
+      required ManyDataObject<Map<String, dynamic>> many,
+    });
 
 Map<String, dynamic> parseSingleRawJson(Map<String, dynamic> json) {
   return json['data'];
@@ -86,11 +80,13 @@ ManyDataObject<Map<String, dynamic>> parseManyRawJson(Map<String, dynamic> json)
   final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
   final int? filterId = json['filterId'];
   return ManyDataObject<Map<String, dynamic>>(
-      data: data.map((e) {
-        return e as Map<String, dynamic>;
-      }).toList(),
-      filterType: filterType,
-      filterId: filterId);
+    data:
+        data.map((e) {
+          return e as Map<String, dynamic>;
+        }).toList(),
+    filterType: filterType,
+    filterId: filterId,
+  );
 }
 
 ManyDataObject<T> parseManyJson<T extends DataObject>(Map<String, dynamic> json) {
@@ -98,11 +94,13 @@ ManyDataObject<T> parseManyJson<T extends DataObject>(Map<String, dynamic> json)
   final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
   final int? filterId = json['filterId'];
   return ManyDataObject<T>(
-      data: data.map((e) {
-        return DataObjectParser.fromJson<T>(e as Map<String, dynamic>);
-      }).toList(),
-      filterType: filterType,
-      filterId: filterId);
+    data:
+        data.map((e) {
+          return DataObjectParser.fromJson<T>(e as Map<String, dynamic>);
+        }).toList(),
+    filterType: filterType,
+    filterId: filterId,
+  );
 }
 
 Future<int?> handleJson<T extends DataObject>(
@@ -120,10 +118,7 @@ Future<int?> handleJson<T extends DataObject>(
     if (isRaw) {
       await handleManyRaw<T>(operation: operation, many: parseManyRawJson(json));
     } else {
-      await handleMany<T>(
-        operation: operation,
-        many: parseManyJson<T>(json),
-      );
+      await handleMany<T>(operation: operation, many: parseManyJson<T>(json));
     }
   } else {
     if (isRaw) {

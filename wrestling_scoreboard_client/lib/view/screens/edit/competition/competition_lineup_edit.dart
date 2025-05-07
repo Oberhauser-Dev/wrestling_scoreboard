@@ -13,11 +13,7 @@ class CompetitionLineupEdit extends ConsumerStatefulWidget {
   final CompetitionLineup? competitionLineup;
   final Competition initialCompetition;
 
-  const CompetitionLineupEdit({
-    this.competitionLineup,
-    required this.initialCompetition,
-    super.key,
-  });
+  const CompetitionLineupEdit({this.competitionLineup, required this.initialCompetition, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => CompetitionLineupEditState();
@@ -54,13 +50,14 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           selectedItem: _club,
           label: localizations.club,
           context: context,
-          onSaved: (Club? value) => setState(() {
-            _club = value;
-          }),
+          onSaved:
+              (Club? value) => setState(() {
+                _club = value;
+              }),
           onChanged: (club) async {
-            final memberships = await ref.readAsync(manyDataStreamProvider<Membership, Club>(
-              ManyProviderData<Membership, Club>(filterObject: club),
-            ).future);
+            final memberships = await ref.readAsync(
+              manyDataStreamProvider<Membership, Club>(ManyProviderData<Membership, Club>(filterObject: club)).future,
+            );
             setState(() {
               // Reset memberships, if changing the club.
               _leader = null;
@@ -81,9 +78,10 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           getOrSetMemberships: () async => _memberships ?? [],
           organization: widget.initialCompetition.organization,
           selectedItem: _leader,
-          onSave: (value) => setState(() {
-            _leader = value;
-          }),
+          onSave:
+              (value) => setState(() {
+                _leader = value;
+              }),
         ),
       ),
       ListTile(
@@ -92,9 +90,10 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           getOrSetMemberships: () async => _memberships ?? [],
           organization: widget.initialCompetition.organization,
           selectedItem: _coach,
-          onSave: (value) => setState(() {
-            _coach = value;
-          }),
+          onSave:
+              (value) => setState(() {
+                _coach = value;
+              }),
         ),
       ),
     ];

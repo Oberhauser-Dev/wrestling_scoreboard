@@ -3,22 +3,13 @@ import 'package:pdf/widgets.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-buildCheckBox({
-  bool isChecked = false,
-  PdfColor pencilColor = PdfSheet.pencilColor,
-  PdfColor? checkBoxColor,
-}) =>
+buildCheckBox({bool isChecked = false, PdfColor pencilColor = PdfSheet.pencilColor, PdfColor? checkBoxColor}) =>
     Container(
       color: checkBoxColor,
       margin: const EdgeInsets.all(4),
       height: 20,
       width: 20,
-      foregroundDecoration: BoxDecoration(
-        border: Border.all(
-          color: PdfColors.grey,
-          width: .5,
-        ),
-      ),
+      foregroundDecoration: BoxDecoration(border: Border.all(color: PdfColors.grey, width: .5)),
       alignment: Alignment.center,
       child: isChecked ? Text('×', style: TextStyle(fontSize: 20, color: pencilColor)) : null,
     );
@@ -36,19 +27,17 @@ Widget buildTextCell(
   Alignment alignment = Alignment.centerLeft,
 }) {
   return Container(
-      color: color,
-      margin: margin,
-      padding: const EdgeInsets.all(2),
-      alignment: alignment,
-      foregroundDecoration: BoxDecoration(
-        border: Border.all(
-          color: borderColor ?? PdfColors.grey,
-          width: borderWidth ?? .5,
-        ),
-      ),
-      height: height,
-      width: width,
-      child: Text(title, style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black)));
+    color: color,
+    margin: margin,
+    padding: const EdgeInsets.all(2),
+    alignment: alignment,
+    foregroundDecoration: BoxDecoration(
+      border: Border.all(color: borderColor ?? PdfColors.grey, width: borderWidth ?? .5),
+    ),
+    height: height,
+    width: width,
+    child: Text(title, style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black)),
+  );
 }
 
 Widget buildFormCell({
@@ -87,12 +76,7 @@ Widget buildFormCellWidget({
   return Container(
     height: height,
     width: width,
-    foregroundDecoration: BoxDecoration(
-      border: Border.all(
-        color: borderColor,
-        width: .5,
-      ),
-    ),
+    foregroundDecoration: BoxDecoration(border: Border.all(color: borderColor, width: .5)),
     color: color,
     child: Stack(
       children: [
@@ -103,12 +87,7 @@ Widget buildFormCellWidget({
             child: Text(title.toUpperCase(), style: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold)),
           ),
         if (content != null)
-          Expanded(
-              child: Container(
-            padding: contentPadding,
-            alignment: contentAlignment,
-            child: content,
-          )),
+          Expanded(child: Container(padding: contentPadding, alignment: contentAlignment, child: content)),
       ],
     ),
   );

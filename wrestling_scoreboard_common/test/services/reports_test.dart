@@ -11,9 +11,7 @@ void main() {
     endDate: DateTime(2000),
     boutConfig: BoutConfig(),
     seasonPartitions: 2,
-    organization: Organization(
-      name: 'Test Organization',
-    ),
+    organization: Organization(name: 'Test Organization'),
   );
   final league = League(
     name: 'Test League',
@@ -34,8 +32,10 @@ void main() {
     no: 'matchNo',
     visitorsCount: 5,
     referee: Person(prename: 'Mr.', surname: 'Referee'),
-    comment: 'Match comment: Semicolon;OpeningParenthesis(ClosingParenthesis)LessThan<GreaterThan>AndSign&'
-        .padRight(200, '0'),
+    comment: 'Match comment: Semicolon;OpeningParenthesis(ClosingParenthesis)LessThan<GreaterThan>AndSign&'.padRight(
+      200,
+      '0',
+    ),
   );
   final bout = Bout(
     duration: Duration(minutes: 2),
@@ -71,38 +71,39 @@ void main() {
     result: BoutResult.vfa,
   );
   final teamMatchBout = TeamMatchBout(
-      pos: 0, teamMatch: teamMatch, bout: bout, weightClass: WeightClass(weight: 10, style: WrestlingStyle.free));
+    pos: 0,
+    teamMatch: teamMatch,
+    bout: bout,
+    weightClass: WeightClass(weight: 10, style: WrestlingStyle.free),
+  );
 
   group('Reports', () {
     test('Germany, NRW', () {
       final wrestlingReport = WrestlingReportProvider.deNwRdb274.getReporter(organizationNRW);
-      final report = wrestlingReport.exportTeamMatchReport(
-        teamMatch,
-        {
-          teamMatchBout: [
-            BoutAction(
-              actionType: BoutActionType.passivity,
-              bout: bout,
-              duration: Duration(seconds: 30),
-              role: BoutRole.blue,
-            ),
-            BoutAction(
-              actionType: BoutActionType.points,
-              bout: bout,
-              duration: Duration(minutes: 1),
-              pointCount: 4,
-              role: BoutRole.red,
-            ),
-            BoutAction(
-              actionType: BoutActionType.points,
-              bout: bout,
-              duration: Duration(minutes: 2),
-              pointCount: 2,
-              role: BoutRole.blue,
-            ),
-          ]
-        },
-      );
+      final report = wrestlingReport.exportTeamMatchReport(teamMatch, {
+        teamMatchBout: [
+          BoutAction(
+            actionType: BoutActionType.passivity,
+            bout: bout,
+            duration: Duration(seconds: 30),
+            role: BoutRole.blue,
+          ),
+          BoutAction(
+            actionType: BoutActionType.points,
+            bout: bout,
+            duration: Duration(minutes: 1),
+            pointCount: 4,
+            role: BoutRole.red,
+          ),
+          BoutAction(
+            actionType: BoutActionType.points,
+            bout: bout,
+            duration: Duration(minutes: 2),
+            pointCount: 2,
+            role: BoutRole.blue,
+          ),
+        ],
+      });
       expect(
         report,
         'rdbi;2.0.0;MK;matchNo;Test Division Test League;1.1.2000;Team A;Team B;4;0;5;Referee;Mr.;Match comment: Semicolon,OpeningParenthesis&#40;ClosingParenthesis&#41;LessThan&lt;GreaterThan&gt;AndSign&amp;000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n'

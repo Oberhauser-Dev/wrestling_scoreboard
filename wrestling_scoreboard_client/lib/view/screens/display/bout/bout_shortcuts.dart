@@ -171,29 +171,32 @@ class BoutScreenActionIntent extends Intent {
       case BoutScreenActions.redOne:
         // NOTE: Do not used bout.duration as time, as it is not up to date.
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.red,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 1);
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 1,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redTwo:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.red,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 2);
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 2,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redThree:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.red,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 3);
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 3,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redFour:
@@ -217,23 +220,39 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redVerbal:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.verbal);
+        var action = BoutAction(
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.verbal,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redPassivity:
         var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.passivity);
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.passivity,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redCaution:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.caution);
+        var action = BoutAction(
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.caution,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redDismissal:
         var action = BoutAction(
-            bout: bout, role: BoutRole.red, duration: stopwatch.elapsed, actionType: BoutActionType.dismissal);
+          bout: bout,
+          role: BoutRole.red,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.dismissal,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redActivityTime:
@@ -257,67 +276,88 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.blueOne:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 1);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 1,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueTwo:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 2);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 2,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueThree:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 3);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 3,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFour:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 4);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 4,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFive:
         var action = BoutAction(
-            bout: bout,
-            role: BoutRole.blue,
-            duration: stopwatch.elapsed,
-            actionType: BoutActionType.points,
-            pointCount: 5);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.points,
+          pointCount: 5,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueVerbal:
-        var action =
-            BoutAction(bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.verbal);
+        var action = BoutAction(
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.verbal,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.passivity);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.passivity,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueCaution:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.caution);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.caution,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueDismissal:
         var action = BoutAction(
-            bout: bout, role: BoutRole.blue, duration: stopwatch.elapsed, actionType: BoutActionType.dismissal);
+          bout: bout,
+          role: BoutRole.blue,
+          duration: stopwatch.elapsed,
+          actionType: BoutActionType.dismissal,
+        );
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueUndo:
@@ -362,15 +402,16 @@ class BoutActionHandler extends ConsumerWidget {
   final Function(BoutScreenActions action) doAction;
   final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
 
-  const BoutActionHandler(
-      {required this.child,
-      required this.stopwatch,
-      required this.bouts,
-      required this.getActions,
-      required this.boutIndex,
-      required this.doAction,
-      super.key,
-      required this.navigateToBoutByIndex});
+  const BoutActionHandler({
+    required this.child,
+    required this.stopwatch,
+    required this.bouts,
+    required this.getActions,
+    required this.boutIndex,
+    required this.doAction,
+    super.key,
+    required this.navigateToBoutByIndex,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -428,7 +469,7 @@ class BoutActionHandler extends ConsumerWidget {
         actions: <Type, Action<Intent>>{
           BoutScreenActionIntent: CallbackAction<BoutScreenActionIntent>(
             onInvoke: (BoutScreenActionIntent intent) => handleIntent(intent, context: context),
-          )
+          ),
         },
         child: KeyboardListener(
           focusNode: FocusNode(),

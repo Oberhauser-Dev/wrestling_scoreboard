@@ -15,19 +15,21 @@ class DurationFormField extends FormField<Duration> {
     required this.maxValue,
     this.onChange,
     super.onSaved,
-  }) : super(builder: (FormFieldState<Duration?> state) {
-          return DurationPicker(
-            initialValue: initialValue,
-            minValue: minValue,
-            maxValue: maxValue,
-            onChange: (Duration? duration) {
-              state.didChange(duration);
-              if (onChange != null) {
-                onChange(duration);
-              }
-            },
-          );
-        });
+  }) : super(
+         builder: (FormFieldState<Duration?> state) {
+           return DurationPicker(
+             initialValue: initialValue,
+             minValue: minValue,
+             maxValue: maxValue,
+             onChange: (Duration? duration) {
+               state.didChange(duration);
+               if (onChange != null) {
+                 onChange(duration);
+               }
+             },
+           );
+         },
+       );
 }
 
 class DurationPicker extends StatefulWidget {
@@ -75,7 +77,9 @@ class _DurationPickerState extends State<DurationPicker> {
             ),
             inputFormatters: <TextInputFormatter>[
               NumericalRangeFormatter(
-                  min: widget.minValue.inMinutes.toDouble(), max: widget.maxValue.inMinutes.toDouble())
+                min: widget.minValue.inMinutes.toDouble(),
+                max: widget.maxValue.inMinutes.toDouble(),
+              ),
             ],
             onChanged: (String? value) {
               _minutes = int.tryParse(value ?? '') ?? 0;

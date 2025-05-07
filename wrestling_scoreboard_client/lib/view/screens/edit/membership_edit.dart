@@ -11,12 +11,8 @@ class MembershipEdit extends AbstractPersonEdit {
   final Club? initialClub;
   final Person? initialPerson;
 
-  MembershipEdit({
-    this.membership,
-    this.initialClub,
-    this.initialPerson,
-    super.key,
-  }) : super(person: membership?.person ?? initialPerson, initialOrganization: initialClub?.organization);
+  MembershipEdit({this.membership, this.initialClub, this.initialPerson, super.key})
+    : super(person: membership?.person ?? initialPerson, initialOrganization: initialClub?.organization);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MembershipEditState();
@@ -36,48 +32,55 @@ class MembershipEditState extends AbstractPersonEditState<MembershipEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    return buildEdit(context, id: widget.membership?.id, classLocale: localizations.membership, fields: [
-      ListTile(
-        leading: const Icon(Icons.tag),
-        title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.membershipNumber,
-            hintText: localizations.optional,
+    return buildEdit(
+      context,
+      id: widget.membership?.id,
+      classLocale: localizations.membership,
+      fields: [
+        ListTile(
+          leading: const Icon(Icons.tag),
+          title: TextFormField(
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: localizations.membershipNumber,
+              hintText: localizations.optional,
+            ),
+            initialValue: widget.membership?.no,
+            onSaved: (newValue) {
+              if (newValue == null || newValue.isEmpty) {
+                _no = null;
+              } else {
+                _no = newValue;
+              }
+            },
           ),
-          initialValue: widget.membership?.no,
-          onSaved: (newValue) {
-            if (newValue == null || newValue.isEmpty) {
-              _no = null;
-            } else {
-              _no = newValue;
-            }
-          },
         ),
-      ),
-      ListTile(
-        title: SearchableDropdown<Club>(
-          icon: const Icon(Icons.foundation),
-          selectedItem: _club,
-          label: localizations.club,
-          context: context,
-          onSaved: (Club? value) => setState(() {
-            _club = value;
-          }),
-          itemAsString: (u) => u.name,
-          asyncItems: (String filter) async {
-            _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
-            return _availableClubs!.toList();
-          },
+        ListTile(
+          title: SearchableDropdown<Club>(
+            icon: const Icon(Icons.foundation),
+            selectedItem: _club,
+            label: localizations.club,
+            context: context,
+            onSaved:
+                (Club? value) => setState(() {
+                  _club = value;
+                }),
+            itemAsString: (u) => u.name,
+            asyncItems: (String filter) async {
+              _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
+              return _availableClubs!.toList();
+            },
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   @override
   Future<void> handleNested(person) async {
     var membership = Membership(id: widget.membership?.id, person: person, club: _club!, no: _no);
-    membership =
-        membership.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(membership));
+    membership = membership.copyWithId(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(membership),
+    );
   }
 }

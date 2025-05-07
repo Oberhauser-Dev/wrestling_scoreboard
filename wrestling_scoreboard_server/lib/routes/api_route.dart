@@ -44,15 +44,16 @@ class ApiRoute {
       relationMap.forEach((tableName, propertyConfig) {
         final (propertyType, orderBy) = propertyConfig;
         router.restrictedGetOne(
-            '/${getTableNameFromType(propertyType)}/<id|[0-9]+>/${getTableNameFromType(dataObjectType)}s',
-            (Request request, User? user, String id) =>
-                ShelfController.getControllerFromDataType(dataObjectType)!.handleRequestMany(
-                  isRaw: request.isRaw,
-                  conditions: ['$tableName = @id'],
-                  substitutionValues: {'id': id},
-                  orderBy: orderBy,
-                  obfuscate: user?.obfuscate ?? true,
-                ));
+          '/${getTableNameFromType(propertyType)}/<id|[0-9]+>/${getTableNameFromType(dataObjectType)}s',
+          (Request request, User? user, String id) =>
+              ShelfController.getControllerFromDataType(dataObjectType)!.handleRequestMany(
+                isRaw: request.isRaw,
+                conditions: ['$tableName = @id'],
+                substitutionValues: {'id': id},
+                orderBy: orderBy,
+                obfuscate: user?.obfuscate ?? true,
+              ),
+        );
       });
     });
 
@@ -76,7 +77,10 @@ class ApiRoute {
     router.restrictedPost('/${SecuredUser.cTableName}', userController.postSingle, UserPrivilege.admin); // Update
     router.restrictedGet('/${SecuredUser.cTableName}s', userController.requestMany, UserPrivilege.admin);
     router.restrictedGetOne(
-        '/${SecuredUser.cTableName}s/<id|[0-9]+>', userController.requestSingle, UserPrivilege.admin);
+      '/${SecuredUser.cTableName}s/<id|[0-9]+>',
+      userController.requestSingle,
+      UserPrivilege.admin,
+    );
 
     final searchController = SearchController();
     router.restrictedGet('/search', searchController.search);
@@ -89,22 +93,32 @@ class ApiRoute {
     final organizationController = OrganizationController();
     router.restrictedPostOne('/${Organization.cTableName}/<id|[0-9]+>/api/import', organizationController.postImport);
     router.restrictedGetOne(
-        '/${Organization.cTableName}/<id|[0-9]+>/api/last_import', organizationController.requestLastImportUtcDateTime);
+      '/${Organization.cTableName}/<id|[0-9]+>/api/last_import',
+      organizationController.requestLastImportUtcDateTime,
+    );
 
     final divisionController = DivisionController();
     router.restrictedGetOne(
-        '/${Division.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s', divisionController.requestWeightClasses);
+      '/${Division.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s',
+      divisionController.requestWeightClasses,
+    );
 
     final leagueController = LeagueController();
     router.restrictedPostOne('/${League.cTableName}/<id|[0-9]+>/api/import', leagueController.postImport);
     router.restrictedGetOne(
-        '/${League.cTableName}/<id|[0-9]+>/api/last_import', leagueController.requestLastImportUtcDateTime);
+      '/${League.cTableName}/<id|[0-9]+>/api/last_import',
+      leagueController.requestLastImportUtcDateTime,
+    );
     router.restrictedGetOne(
-        '/${League.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s', leagueController.requestWeightClasses);
+      '/${League.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s',
+      leagueController.requestWeightClasses,
+    );
 
     final membershipController = MembershipController();
-    router.restrictedGetOne('/${Membership.cTableName}/<id|[0-9]+>/${TeamMatchBout.cTableName}s',
-        membershipController.requestTeamMatchBouts);
+    router.restrictedGetOne(
+      '/${Membership.cTableName}/<id|[0-9]+>/${TeamMatchBout.cTableName}s',
+      membershipController.requestTeamMatchBouts,
+    );
 
     final personController = PersonController();
     router.restrictedPost('/${Person.cTableName}/merge', personController.postMerge);
@@ -112,27 +126,39 @@ class ApiRoute {
     final teamController = TeamController();
     router.restrictedPostOne('/${Team.cTableName}/<id|[0-9]+>/api/import', teamController.postImport);
     router.restrictedGetOne(
-        '/${Team.cTableName}/<id|[0-9]+>/api/last_import', teamController.requestLastImportUtcDateTime);
+      '/${Team.cTableName}/<id|[0-9]+>/api/last_import',
+      teamController.requestLastImportUtcDateTime,
+    );
     router.restrictedGetOne(
-        '/${Team.cTableName}/<id|[0-9]+>/${TeamMatch.cTableName}s', teamController.requestTeamMatches);
+      '/${Team.cTableName}/<id|[0-9]+>/${TeamMatch.cTableName}s',
+      teamController.requestTeamMatches,
+    );
     router.restrictedGetOne('/${Team.cTableName}/<id|[0-9]+>/${Club.cTableName}s', teamController.requestClubs);
 
     final matchController = TeamMatchController();
     router.restrictedPostOne('/${TeamMatch.cTableName}/<id|[0-9]+>/api/import', matchController.postImport);
     router.restrictedGetOne(
-        '/${TeamMatch.cTableName}/<id|[0-9]+>/api/last_import', matchController.requestLastImportUtcDateTime);
+      '/${TeamMatch.cTableName}/<id|[0-9]+>/api/last_import',
+      matchController.requestLastImportUtcDateTime,
+    );
     router.restrictedPostOne(
-        '/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate', matchController.generateBouts);
+      '/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
+      matchController.generateBouts,
+    );
     router.restrictedGetOne('/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s', matchController.requestBouts);
 
     final competitionController = CompetitionController();
     router.restrictedPostOne('/${Competition.cTableName}/<id|[0-9]+>/api/import', competitionController.postImport);
     router.restrictedGetOne(
-        '/${Competition.cTableName}/<id|[0-9]+>/api/last_import', competitionController.requestLastImportUtcDateTime);
+      '/${Competition.cTableName}/<id|[0-9]+>/api/last_import',
+      competitionController.requestLastImportUtcDateTime,
+    );
 
     final competitionWeightCategoryController = CompetitionWeightCategoryController();
-    router.restrictedPostOne('/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
-        competitionWeightCategoryController.generateBouts);
+    router.restrictedPostOne(
+      '/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
+      competitionWeightCategoryController.generateBouts,
+    );
 
     // This nested catch-all, will only catch /api/.* when mounted above.
     // Notice that ordering if annotated handlers and mounts is significant.

@@ -36,10 +36,7 @@ class TeamEditState extends ConsumerState<TeamEdit> {
       ListTile(
         leading: const Icon(Icons.short_text),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.name,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
           initialValue: widget.team?.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -53,10 +50,7 @@ class TeamEditState extends ConsumerState<TeamEdit> {
       ListTile(
         leading: const Icon(Icons.subject),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.description,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.description),
           initialValue: widget.team?.description,
           onSaved: (newValue) => _description = newValue,
         ),

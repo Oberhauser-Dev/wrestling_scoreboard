@@ -50,7 +50,8 @@ class MembershipDropdown extends ConsumerWidget {
                 if (authServiceMap[organization?.id] == null)
                   const PaddedCard(
                     child: Text(
-                        "⚠ You have not specified any credentials for this organization, therefore you can't search for sensitive data."),
+                      "⚠ You have not specified any credentials for this organization, therefore you can't search for sensitive data.",
+                    ),
                   ),
                 Expanded(child: popupWidget),
               ],
@@ -78,9 +79,10 @@ class MembershipDropdown extends ConsumerWidget {
 
     // If filter string is a number, search for membership no or at API provider, if present.
     filter = number.toString();
-    final filteredMemberships = memberships
-        .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
-        .toList();
+    final filteredMemberships =
+        memberships
+            .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
+            .toList();
 
     const enableApiProviderSearch = true;
     if (enableApiProviderSearch) {
@@ -96,8 +98,9 @@ class MembershipDropdown extends ConsumerWidget {
         Iterable<Membership> providerMemberships =
             providerResults[getTableNameFromType(Membership)]?.map((membership) => membership as Membership) ?? [];
         // Remove all memberships, which are already in the list.
-        providerMemberships =
-            providerMemberships.where((m) => filteredMemberships.where((fm) => fm.no == m.no).isEmpty);
+        providerMemberships = providerMemberships.where(
+          (m) => filteredMemberships.where((fm) => fm.no == m.no).isEmpty,
+        );
         filteredMemberships.addAll(providerMemberships);
       }
     }

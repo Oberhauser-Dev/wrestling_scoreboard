@@ -42,10 +42,7 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
       ListTile(
         leading: const Icon(Icons.description),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.name,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
           initialValue: widget.ageCategory?.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -92,9 +89,10 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
           selectedItem: _organization,
           label: localizations.organization,
           context: context,
-          onSaved: (Organization? value) => setState(() {
-            _organization = value;
-          }),
+          onSaved:
+              (Organization? value) => setState(() {
+                _organization = value;
+              }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
