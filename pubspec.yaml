@@ -1,6 +1,53 @@
 name: wrestling_scoreboard
+repository: https://github.com/Oberhauser-dev/wrestling_scoreboard
+publish_to: none
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.7.0
+workspace:
+  - wrestling_scoreboard_client
+  - wrestling_scoreboard_server
+  - wrestling_scoreboard_common
 
 dev_dependencies:
-  melos: ^4.0.0
+  melos: ^7.0.0-dev.8
+
+melos:
+  command:
+    version:
+      # Only allow versioning to happen on main branch.
+      branch: main
+      # Generates a link to a prefilled GitHub release creation page.
+      releaseUrl: true
+      includeCommitId: true
+      linkToCommits: true
+
+    bootstrap:
+      environment:
+        sdk: ^3.7.0
+
+  scripts:
+    lint:all:
+      steps:
+        - analyze
+        - format
+      description: Run all static analysis checks.
+
+    analyze:
+      run: melos exec dart analyze .
+      description: Run `dart analyze` for all packages.
+
+    format-check:
+      run: melos exec dart format . --set-exit-if-changed
+      description: Run `dart format` checks for all packages.
+
+    upgrade: melos exec flutter pub upgrade
+
+    test:select:
+      run: melos exec -c 1 -- flutter test
+      packageFilters:
+        dirExists: test
+      description: Run `flutter test` for selected packages.
+
+    test:
+      run: melos run test:select --no-select
+      description: Run all Flutter tests in this project.

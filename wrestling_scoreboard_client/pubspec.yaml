@@ -1,6 +1,7 @@
 name: wrestling_scoreboard_client
 description: Wrestling software for managing team matches and competitions.
 
+resolution: workspace
 publish_to: 'none'
 
 homepage: 'https://wrestling-scoreboard.oberhauser.dev'
@@ -8,7 +9,7 @@ repository: 'https://github.com/Oberhauser-Dev/wrestling_scoreboard/tree/main/wr
 version: 0.1.2
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.7.0
 
 dependencies:
   flutter:
@@ -28,7 +29,7 @@ dependencies:
   wrestling_scoreboard_common:
     path: ../wrestling_scoreboard_common
   pdf: ^3.11.1
-  printing: ^5.13.2
+  printing: ^5.14.2
   url_launcher: ^6.2.2
   package_info_plus: ^8.0.1
   flutter_markdown: ^0.7.1
@@ -60,12 +61,6 @@ dependency_overrides:
       url: https://github.com/Gustl22/dart_pdf.git
       path: pdf
       ref: 313-column-span
-  # TODO(gustl22): Remove when published: https://github.com/DavBfr/dart_pdf/pull/1790
-  printing:
-    git:
-      url: https://github.com/DavBfr/dart_pdf.git
-      path: printing
-      ref: 426086f62146f977be8247997beb78cc8516c35d
   # TODO(gustl22): Remove when published: https://github.com/rrousselGit/riverpod/commit/d7816cfc6748d9df0f0d9e75e75834f1c89714dc
   riverpod:
     git:
