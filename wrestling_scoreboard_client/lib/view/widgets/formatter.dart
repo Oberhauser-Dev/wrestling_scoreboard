@@ -7,10 +7,7 @@ class NumericalRangeFormatter extends TextInputFormatter {
   NumericalRangeFormatter({required this.min, required this.max});
 
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     newValue = newValue.copyWith(text: newValue.text.replaceAll(',', '.'));
     final parsed = double.tryParse(newValue.text);
     if (parsed == null) {

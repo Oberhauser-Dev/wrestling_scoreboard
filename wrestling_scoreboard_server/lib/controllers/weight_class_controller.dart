@@ -14,10 +14,6 @@ class WeightClassController extends ShelfController<WeightClass> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {
-      'weight': psql.Type.smallInteger,
-      'style': null,
-      'unit': null,
-    };
+    return {'weight': psql.Type.smallInteger, 'style': null, 'unit': null};
   }
 }

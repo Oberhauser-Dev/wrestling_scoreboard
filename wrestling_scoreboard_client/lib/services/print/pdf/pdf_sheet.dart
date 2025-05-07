@@ -10,10 +10,16 @@ import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class PdfSheet {
-  static const PdfPageFormat a4 =
-      PdfPageFormat(21.0 * PdfPageFormat.cm, 29.7 * PdfPageFormat.cm, marginAll: 1.0 * PdfPageFormat.cm);
-  static const PdfPageFormat a4Cross =
-      PdfPageFormat(29.7 * PdfPageFormat.cm, 21.0 * PdfPageFormat.cm, marginAll: 1.0 * PdfPageFormat.cm);
+  static const PdfPageFormat a4 = PdfPageFormat(
+    21.0 * PdfPageFormat.cm,
+    29.7 * PdfPageFormat.cm,
+    marginAll: 1.0 * PdfPageFormat.cm,
+  );
+  static const PdfPageFormat a4Cross = PdfPageFormat(
+    29.7 * PdfPageFormat.cm,
+    21.0 * PdfPageFormat.cm,
+    marginAll: 1.0 * PdfPageFormat.cm,
+  );
 
   static const horizontalGap = 8.0;
   static const verticalGap = 8.0;
@@ -54,12 +60,7 @@ abstract class PdfSheet {
     );
   }
 
-  Future<PageTheme> buildTheme({
-    PdfPageFormat pageFormat = PdfSheet.a4,
-    Font? base,
-    Font? bold,
-    Font? italic,
-  }) async {
+  Future<PageTheme> buildTheme({PdfPageFormat pageFormat = PdfSheet.a4, Font? base, Font? bold, Font? italic}) async {
     return PageTheme(
       pageFormat: pageFormat,
       theme: ThemeData.withFont(
@@ -71,49 +72,57 @@ abstract class PdfSheet {
   }
 
   Widget buildInfo(Context context, WrestlingEvent wrestlingEvent) {
-    return Table(columnWidths: {
-      0: const FlexColumnWidth(2),
-      1: const FlexColumnWidth(1),
-      2: const FlexColumnWidth(1),
-      3: const FlexColumnWidth(1),
-      4: const FixedColumnWidth(120),
-    }, children: [
-      TableRow(
-        children: [
-          TableCell(
-            columnSpan: wrestlingEvent is TeamMatch ? 1 : 2,
-            child: buildFormCell(
+    return Table(
+      columnWidths: {
+        0: const FlexColumnWidth(2),
+        1: const FlexColumnWidth(1),
+        2: const FlexColumnWidth(1),
+        3: const FlexColumnWidth(1),
+        4: const FixedColumnWidth(120),
+      },
+      children: [
+        TableRow(
+          children: [
+            TableCell(
+              columnSpan: wrestlingEvent is TeamMatch ? 1 : 2,
+              child: buildFormCell(
                 title: '${localizations.event}-${localizations.name}',
-                content: wrestlingEvent is TeamMatch
-                    ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
-                    : (wrestlingEvent as Competition).name,
+                content:
+                    wrestlingEvent is TeamMatch
+                        ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
+                        : (wrestlingEvent as Competition).name,
                 color: PdfColors.grey100,
                 pencilColor: PdfSheet.pencilColor,
-                height: 40),
-          ),
-          if (wrestlingEvent is TeamMatch)
-            buildFormCell(
+                height: 40,
+              ),
+            ),
+            if (wrestlingEvent is TeamMatch)
+              buildFormCell(
                 title: localizations.league,
                 content: wrestlingEvent.league?.fullname,
                 color: PdfColors.grey100,
                 pencilColor: PdfSheet.pencilColor,
-                height: 40),
-          buildFormCell(
+                height: 40,
+              ),
+            buildFormCell(
               title: localizations.date,
               content: wrestlingEvent.date.toDateTimeStringFromLocaleName(localizations.localeName),
               color: PdfColors.grey100,
               pencilColor: PdfSheet.pencilColor,
-              height: 40),
-          buildFormCell(
+              height: 40,
+            ),
+            buildFormCell(
               title: localizations.place,
               // ?? localizations.location,
               content: wrestlingEvent.location,
               color: PdfColors.grey100,
               pencilColor: PdfSheet.pencilColor,
-              height: 40),
-        ],
-      ),
-    ]);
+              height: 40,
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Widget buildPerson({required String title, String? no, double? width}) {
@@ -131,13 +140,15 @@ abstract class PdfSheet {
 
     return [
       buildPerson(
-          title: localizations.timeKeeper.toUpperCase(),
-          no: timeKeeper == null ? '' : '${timeKeeper.id} / ${timeKeeper.fullName}',
-          width: width),
+        title: localizations.timeKeeper.toUpperCase(),
+        no: timeKeeper == null ? '' : '${timeKeeper.id} / ${timeKeeper.fullName}',
+        width: width,
+      ),
       buildPerson(
-          title: localizations.transcriptionWriter.toUpperCase(),
-          no: transcriptWriter == null ? '' : '${transcriptWriter.id} / ${transcriptWriter.fullName}',
-          width: width),
+        title: localizations.transcriptionWriter.toUpperCase(),
+        no: transcriptWriter == null ? '' : '${transcriptWriter.id} / ${transcriptWriter.fullName}',
+        width: width,
+      ),
     ];
   }
 
@@ -150,9 +161,10 @@ abstract class PdfSheet {
     return stewards
         .map(
           (steward) => buildPerson(
-              title: localizations.steward.toUpperCase(),
-              no: steward == null ? '' : '${steward.id} / ${steward.fullName}',
-              width: width),
+            title: localizations.steward.toUpperCase(),
+            no: steward == null ? '' : '${steward.id} / ${steward.fullName}',
+            width: width,
+          ),
         )
         .toList();
   }
@@ -174,17 +186,20 @@ abstract class PdfSheet {
 
     return [
       buildPerson(
-          title: localizations.matChairman.toUpperCase(),
-          no: matChairman == null ? '' : '${matChairman.id} / ${matChairman.fullName}',
-          width: width),
+        title: localizations.matChairman.toUpperCase(),
+        no: matChairman == null ? '' : '${matChairman.id} / ${matChairman.fullName}',
+        width: width,
+      ),
       buildPerson(
-          title: localizations.referee.toUpperCase(),
-          no: referee == null ? '' : '${referee.id} / ${referee.fullName}',
-          width: width),
+        title: localizations.referee.toUpperCase(),
+        no: referee == null ? '' : '${referee.id} / ${referee.fullName}',
+        width: width,
+      ),
       buildPerson(
-          title: localizations.judge.toUpperCase(),
-          no: judge == null ? '' : '${judge.id} / ${judge.fullName}',
-          width: width),
+        title: localizations.judge.toUpperCase(),
+        no: judge == null ? '' : '${judge.id} / ${judge.fullName}',
+        width: width,
+      ),
     ];
   }
 }

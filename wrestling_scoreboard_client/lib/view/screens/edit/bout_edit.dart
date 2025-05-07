@@ -17,11 +17,7 @@ abstract class BoutEdit extends ConsumerStatefulWidget {
   final Bout? bout;
   final BoutConfig boutConfig;
 
-  const BoutEdit({
-    super.key,
-    this.bout,
-    required this.boutConfig,
-  });
+  const BoutEdit({super.key, this.bout, required this.boutConfig});
 }
 
 abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implements AbstractEditState<Bout> {
@@ -81,17 +77,11 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
             hint: localizations.winner,
             isNullable: true,
             selected: _winnerRole,
-            options: BoutRole.values.map(
-              (BoutRole value) => MapEntry(
-                value,
-                Text(
-                  value.name,
-                ),
-              ),
-            ),
-            onChange: (BoutRole? newValue) => setState(() {
-              _winnerRole = newValue;
-            }),
+            options: BoutRole.values.map((BoutRole value) => MapEntry(value, Text(value.name))),
+            onChange:
+                (BoutRole? newValue) => setState(() {
+                  _winnerRole = newValue;
+                }),
           ),
         ),
       ),
@@ -104,12 +94,15 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
             isNullable: true,
             selected: _boutResult,
             options: BoutResult.values.map(
-              (BoutResult boutResult) => MapEntry(boutResult,
-                  Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context)))),
+              (BoutResult boutResult) => MapEntry(
+                boutResult,
+                Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context))),
+              ),
             ),
-            onChange: (BoutResult? newValue) => setState(() {
-              _boutResult = newValue;
-            }),
+            onChange:
+                (BoutResult? newValue) => setState(() {
+                  _boutResult = newValue;
+                }),
           ),
         ),
       ),
@@ -117,23 +110,29 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         leading: const Icon(Icons.timer),
         subtitle: Text(localizations.duration),
         title: LoadingBuilder<bool>(
-            future: ref.watch(timeCountDownNotifierProvider),
-            builder: (context, isTimeCountDown) {
-              return DurationFormField(
-                initialValue: _boutDuration?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration),
-                maxValue: widget.boutConfig.totalPeriodDuration,
-                onSaved: (Duration? value) {
-                  _boutDuration = value?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration);
-                },
-              );
-            }),
+          future: ref.watch(timeCountDownNotifierProvider),
+          builder: (context, isTimeCountDown) {
+            return DurationFormField(
+              initialValue: _boutDuration?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration),
+              maxValue: widget.boutConfig.totalPeriodDuration,
+              onSaved: (Duration? value) {
+                _boutDuration = value?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration);
+              },
+            );
+          },
+        ),
       ),
     ];
 
     return Form(
-        key: _formKey,
-        child: EditWidget(
-            typeLocalization: classLocale, id: widget.bout?.id, onSubmit: () => handleSubmit(navigator), items: items));
+      key: _formKey,
+      child: EditWidget(
+        typeLocalization: classLocale,
+        id: widget.bout?.id,
+        onSubmit: () => handleSubmit(navigator),
+        items: items,
+      ),
+    );
   }
 
   Future<void> handleSubmit(NavigatorState navigator) async {
@@ -150,8 +149,11 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
           }
           if (newMembership != null) {
             final newAthleteBoutState = AthleteBoutState(membership: newMembership);
-            return newAthleteBoutState.copyWithId(await (await ref.read(dataManagerNotifierProvider))
-                .createOrUpdateSingle<AthleteBoutState>(newAthleteBoutState));
+            return newAthleteBoutState.copyWithId(
+              await (await ref.read(
+                dataManagerNotifierProvider,
+              )).createOrUpdateSingle<AthleteBoutState>(newAthleteBoutState),
+            );
           } else {
             return null;
           }

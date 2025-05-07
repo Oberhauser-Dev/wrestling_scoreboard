@@ -32,8 +32,10 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
             competitionSystemAffiliation: competitionSystemAffiliation,
             initialCompetition: competitionSystemAffiliation.competition,
           ),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider))
-              .deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
+          onDelete:
+              () async => (await ref.read(
+                dataManagerNotifierProvider,
+              )).deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
           classLocale: localizations.competitionSystem,
           children: [
             ContentItem(
@@ -52,12 +54,8 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
           dataObject: competitionSystemAffiliation,
           label: localizations.competitionSystem,
           details: competitionSystemAffiliation.competitionSystem.name,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
-          body: TabGroup(items: [
-            description,
-          ]),
+          tabs: [Tab(child: HeadingText(localizations.info))],
+          body: TabGroup(items: [description]),
         );
       },
     );

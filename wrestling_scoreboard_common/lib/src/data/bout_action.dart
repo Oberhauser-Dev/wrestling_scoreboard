@@ -22,13 +22,13 @@ abstract class BoutAction with _$BoutAction implements DataObject {
   factory BoutAction.fromJson(Map<String, Object?> json) => _$BoutActionFromJson(json);
 
   static Future<BoutAction> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async => BoutAction(
-        id: e['id'] as int?,
-        actionType: BoutActionType.values.byName(e['action_type']),
-        duration: Duration(milliseconds: e['duration_millis']),
-        role: BoutRole.values.byName(e['bout_role']),
-        pointCount: e['point_count'] as int?,
-        bout: (await getSingle<Bout>(e['bout_id'] as int)),
-      );
+    id: e['id'] as int?,
+    actionType: BoutActionType.values.byName(e['action_type']),
+    duration: Duration(milliseconds: e['duration_millis']),
+    role: BoutRole.values.byName(e['bout_role']),
+    pointCount: e['point_count'] as int?,
+    bout: (await getSingle<Bout>(e['bout_id'] as int)),
+  );
 
   @override
   Map<String, dynamic> toRaw() {

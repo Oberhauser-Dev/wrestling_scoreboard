@@ -24,10 +24,7 @@ class SingleProviderData<T extends DataObject> {
 }
 
 @riverpod
-Stream<T> singleDataStream<T extends DataObject>(
-  Ref ref,
-  SingleProviderData<T> pData,
-) async* {
+Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> pData) async* {
   ref.cache();
   // Reload, whenever the stream is connected
   final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);

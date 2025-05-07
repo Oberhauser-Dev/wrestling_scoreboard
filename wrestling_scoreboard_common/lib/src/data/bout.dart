@@ -66,8 +66,10 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
         result: result!,
         style: style,
         technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, winnerRole!),
-        technicalPointsLoser:
-            AthleteBoutState.getTechnicalPoints(actions, winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red),
+        technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
+          actions,
+          winnerRole == BoutRole.red ? BoutRole.blue : BoutRole.red,
+        ),
         rules: rules,
       );
 
@@ -81,16 +83,14 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
               winnerRole == BoutRole.red ? resultRule.winnerClassificationPoints : resultRule.loserClassificationPoints,
         ),
         b: b?.copyWith(
-          classificationPoints: winnerRole == BoutRole.blue
-              ? resultRule.winnerClassificationPoints
-              : resultRule.loserClassificationPoints,
+          classificationPoints:
+              winnerRole == BoutRole.blue
+                  ? resultRule.winnerClassificationPoints
+                  : resultRule.loserClassificationPoints,
         ),
       );
     } else {
-      return copyWith(
-        r: r?.copyWith(classificationPoints: null),
-        b: b?.copyWith(classificationPoints: null),
-      );
+      return copyWith(r: r?.copyWith(classificationPoints: null), b: b?.copyWith(classificationPoints: null));
     }
   }
 

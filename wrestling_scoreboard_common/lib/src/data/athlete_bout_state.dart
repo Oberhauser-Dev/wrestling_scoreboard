@@ -10,11 +10,8 @@ part 'athlete_bout_state.g.dart';
 abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
   const AthleteBoutState._();
 
-  const factory AthleteBoutState({
-    int? id,
-    required Membership membership,
-    int? classificationPoints,
-  }) = _AthleteBoutState;
+  const factory AthleteBoutState({int? id, required Membership membership, int? classificationPoints}) =
+      _AthleteBoutState;
 
   factory AthleteBoutState.fromJson(Map<String, Object?> json) => _$AthleteBoutStateFromJson(json);
 
@@ -30,11 +27,7 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
 
   @override
   Map<String, dynamic> toRaw() {
-    return {
-      if (id != null) 'id': id,
-      'membership_id': membership.id!,
-      'classification_points': classificationPoints,
-    };
+    return {if (id != null) 'id': id, 'membership_id': membership.id!, 'classification_points': classificationPoints};
   }
 
   @override
@@ -59,7 +52,5 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
     return copyWith(id: id);
   }
 
-  static Map<String, Type> searchableForeignAttributeMapping = {
-    'membership_id': Membership,
-  };
+  static Map<String, Type> searchableForeignAttributeMapping = {'membership_id': Membership};
 }

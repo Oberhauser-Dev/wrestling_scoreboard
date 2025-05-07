@@ -56,10 +56,7 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
       ListTile(
         leading: const Icon(Icons.description),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.name,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
           initialValue: widget.organization?.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -73,10 +70,7 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
       ListTile(
         leading: const Icon(Icons.short_text),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.abbreviation,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.abbreviation),
           initialValue: widget.organization?.abbreviation,
           onSaved: (newValue) => _abbreviation = newValue,
         ),
@@ -87,9 +81,10 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           selectedItem: _parent,
           label: localizations.umbrellaOrganization,
           context: context,
-          onSaved: (Organization? value) => setState(() {
-            _parent = value;
-          }),
+          onSaved:
+              (Organization? value) => setState(() {
+                _parent = value;
+              }),
           allowEmpty: true,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
@@ -107,14 +102,12 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
             isNullable: true,
             hint: localizations.apiProvider,
             isExpanded: true,
-            options: WrestlingApiProvider.values.map((value) => MapEntry(
-                  value,
-                  Text(value.name),
-                )),
+            options: WrestlingApiProvider.values.map((value) => MapEntry(value, Text(value.name))),
             selected: _apiProvider,
-            onChange: (newValue) => setState(() {
-              _apiProvider = newValue;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _apiProvider = newValue;
+                }),
           ),
         ),
       ),
@@ -125,10 +118,7 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
             key: Key(_apiProviderAuth.toString()),
             // Workaround to update initialValue
             autofillHints: const [AutofillHints.username],
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: localizations.username,
-            ),
+            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.username),
             initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).username : null,
             onSaved: (newValue) {
               final currentAuth = _apiProviderAuth;
@@ -162,14 +152,12 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
             isNullable: true,
             hint: localizations.reportProvider,
             isExpanded: true,
-            options: WrestlingReportProvider.values.map((value) => MapEntry(
-                  value,
-                  Text(value.name),
-                )),
+            options: WrestlingReportProvider.values.map((value) => MapEntry(value, Text(value.name))),
             selected: _reportProvider,
-            onChange: (newValue) => setState(() {
-              _reportProvider = newValue;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _reportProvider = newValue;
+                }),
           ),
         ),
       ),
@@ -189,14 +177,16 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Organization(
-        id: widget.organization?.id,
-        name: _name!,
-        abbreviation: _abbreviation,
-        parent: _parent,
-        reportProvider: _reportProvider,
-        apiProvider: _apiProvider,
-      ));
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+        Organization(
+          id: widget.organization?.id,
+          name: _name!,
+          abbreviation: _abbreviation,
+          parent: _parent,
+          reportProvider: _reportProvider,
+          apiProvider: _apiProvider,
+        ),
+      );
       if (widget.organization?.id != null && _apiProviderAuth != null) {
         ref.read(orgAuthNotifierProvider.notifier).addOrgAuthService(widget.organization!.id!, _apiProviderAuth!);
       }

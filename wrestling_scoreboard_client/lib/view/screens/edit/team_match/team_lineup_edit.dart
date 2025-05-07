@@ -60,32 +60,34 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     _coach = widget.lineup.coach;
 
     if (widget.participations.isNotEmpty) {
-      _participations = Map.fromEntries(widget.weightClasses.map((e) {
-        final participation = widget.participations.where((participation) => participation.weightClass == e).zeroOrOne;
-        return MapEntry(e, participation);
-      }));
+      _participations = Map.fromEntries(
+        widget.weightClasses.map((e) {
+          final participation =
+              widget.participations.where((participation) => participation.weightClass == e).zeroOrOne;
+          return MapEntry(e, participation);
+        }),
+      );
     } else {
       // Copy participations from an old match.
-      _participations = Map.fromEntries(widget.weightClasses.map((e) {
-        var participation =
-            widget.initialParticipations?.where((participation) => participation.weightClass == e).zeroOrOne;
-        if (participation != null) {
-          participation = participation.copyWith(id: null, lineup: widget.lineup);
-        }
-        return MapEntry(e, participation);
-      }));
+      _participations = Map.fromEntries(
+        widget.weightClasses.map((e) {
+          var participation =
+              widget.initialParticipations?.where((participation) => participation.weightClass == e).zeroOrOne;
+          if (participation != null) {
+            participation = participation.copyWith(id: null, lineup: widget.lineup);
+          }
+          return MapEntry(e, participation);
+        }),
+      );
     }
   }
 
   Future<void> handleSubmit(NavigatorState navigator, {Future<void> Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(
-        id: widget.lineup.id,
-        team: widget.lineup.team,
-        leader: _leader,
-        coach: _coach,
-      ));
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+        TeamLineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach),
+      );
       await Future.forEach(_deleteParticipations, (TeamLineupParticipation element) async {
         await (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamLineupParticipation>(element);
       });
@@ -93,18 +95,23 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         // Create missing membership and person, if not present in database yet. This means, that the data was fetched from an API provider.
         if (participation.membership.id == null) {
           if (participation.membership.person.id == null) {
-            final personId = await (await ref.read(dataManagerNotifierProvider))
-                .createOrUpdateSingle<Person>(participation.membership.person);
+            final personId = await (await ref.read(
+              dataManagerNotifierProvider,
+            )).createOrUpdateSingle<Person>(participation.membership.person);
             participation = participation.copyWith(
-                membership:
-                    participation.membership.copyWith(person: participation.membership.person.copyWithId(personId)));
+              membership: participation.membership.copyWith(
+                person: participation.membership.person.copyWithId(personId),
+              ),
+            );
           }
-          final membershipId = await (await ref.read(dataManagerNotifierProvider))
-              .createOrUpdateSingle<Membership>(participation.membership);
+          final membershipId = await (await ref.read(
+            dataManagerNotifierProvider,
+          )).createOrUpdateSingle<Membership>(participation.membership);
           participation = participation.copyWith(membership: participation.membership.copyWithId(membershipId));
         }
-        await (await ref.read(dataManagerNotifierProvider))
-            .createOrUpdateSingle<TeamLineupParticipation>(participation);
+        await (await ref.read(
+          dataManagerNotifierProvider,
+        )).createOrUpdateSingle<TeamLineupParticipation>(participation);
       });
       if (onSubmitGenerate != null) await onSubmitGenerate();
       navigator.pop();
@@ -138,15 +145,17 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
 
   Future<Iterable<Membership>> _getMemberships() async {
     if (_memberships == null) {
-      final clubs = await ref.readAsync(manyDataStreamProvider<Club, Team>(
-        ManyProviderData<Club, Team>(filterObject: widget.lineup.team),
-      ).future);
+      final clubs = await ref.readAsync(
+        manyDataStreamProvider<Club, Team>(ManyProviderData<Club, Team>(filterObject: widget.lineup.team)).future,
+      );
 
-      final clubMemberships = await Future.wait(clubs.map((club) async {
-        return await ref.readAsync(manyDataStreamProvider<Membership, Club>(
-          ManyProviderData<Membership, Club>(filterObject: club),
-        ).future);
-      }));
+      final clubMemberships = await Future.wait(
+        clubs.map((club) async {
+          return await ref.readAsync(
+            manyDataStreamProvider<Membership, Club>(ManyProviderData<Membership, Club>(filterObject: club)).future,
+          );
+        }),
+      );
 
       _memberships = clubMemberships.expand((membership) => membership);
     }
@@ -173,9 +182,10 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
               getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
               selectedItem: _leader,
-              onSave: (Membership? value) => setState(() {
-                _leader = value;
-              }),
+              onSave:
+                  (Membership? value) => setState(() {
+                    _leader = value;
+                  }),
             ),
           ),
           ListTile(
@@ -185,9 +195,10 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
               getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
               selectedItem: _coach,
-              onSave: (Membership? value) => setState(() {
-                _coach = value;
-              }),
+              onSave:
+                  (Membership? value) => setState(() {
+                    _coach = value;
+                  }),
             ),
           ),
           ..._participations.entries.map((mapEntry) {

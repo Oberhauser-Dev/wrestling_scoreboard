@@ -1,8 +1,6 @@
 import 'package:shelf/shelf.dart';
 
-final contentTypeJsonHeader = {
-  'content-type': 'application/json',
-};
+final contentTypeJsonHeader = {'content-type': 'application/json'};
 
 Response _responseHandler(Response response) => response.change(headers: contentTypeJsonHeader);
 

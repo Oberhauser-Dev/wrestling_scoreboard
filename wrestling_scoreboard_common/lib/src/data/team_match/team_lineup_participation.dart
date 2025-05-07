@@ -71,7 +71,5 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
     return copyWith(id: id);
   }
 
-  static Map<String, Type> searchableForeignAttributeMapping = {
-    'membership_id': Membership,
-  };
+  static Map<String, Type> searchableForeignAttributeMapping = {'membership_id': Membership};
 }

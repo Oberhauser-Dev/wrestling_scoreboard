@@ -25,33 +25,27 @@ class MembershipOverview extends AbstractPersonOverview<Membership> {
       id: id,
       initialData: membership,
       builder: (context, membership) {
-        return buildOverview(context, ref,
-            dataId: membership.person.id!,
-            initialData: membership.person,
-            subClassData: membership,
-            classLocale: localizations.membership,
-            editPage: MembershipEdit(
-              membership: membership,
-              initialClub: membership.club,
-            ),
-            onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Membership>(membership),
-            tiles: [
-              ContentItem(
-                title: membership.no ?? '-',
-                subtitle: localizations.membershipNumber,
-                icon: Icons.tag,
-              ),
-              ContentItem(
-                title: membership.club.name,
-                subtitle: localizations.club,
-                icon: Icons.foundation,
-              )
-            ],
-            buildRelations: (Person person) => {
-                  Tab(child: HeadingText('${localizations.bouts} (${localizations.league})')):
-                      TeamMatchBoutList(filterObject: membership),
-                  // TODO: Add competition bouts
-                });
+        return buildOverview(
+          context,
+          ref,
+          dataId: membership.person.id!,
+          initialData: membership.person,
+          subClassData: membership,
+          classLocale: localizations.membership,
+          editPage: MembershipEdit(membership: membership, initialClub: membership.club),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Membership>(membership),
+          tiles: [
+            ContentItem(title: membership.no ?? '-', subtitle: localizations.membershipNumber, icon: Icons.tag),
+            ContentItem(title: membership.club.name, subtitle: localizations.club, icon: Icons.foundation),
+          ],
+          buildRelations:
+              (Person person) => {
+                Tab(child: HeadingText('${localizations.bouts} (${localizations.league})')): TeamMatchBoutList(
+                  filterObject: membership,
+                ),
+                // TODO: Add competition bouts
+              },
+        );
       },
     );
   }

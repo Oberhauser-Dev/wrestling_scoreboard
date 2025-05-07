@@ -35,18 +35,14 @@ class SearchableDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
-      decoratorProps: DropDownDecoratorProps(
-        decoration: InputDecoration(labelText: label, icon: icon),
-      ),
+      decoratorProps: DropDownDecoratorProps(decoration: InputDecoration(labelText: label, icon: icon)),
       popupProps: PopupProps.menu(
         searchFieldProps: const TextFieldProps(decoration: InputDecoration(prefixIcon: Icon(Icons.search))),
         showSearchBox: true,
         disableFilter: disableFilter,
         containerBuilder: containerBuilder,
       ),
-      suffixProps: DropdownSuffixProps(
-        clearButtonProps: const ClearButtonProps(isVisible: true),
-      ),
+      suffixProps: DropdownSuffixProps(clearButtonProps: const ClearButtonProps(isVisible: true)),
       compareFn: (item1, item2) => itemAsString(item1).compareTo(itemAsString(item2)) >= 0,
       items: (filter, _) => asyncItems(filter),
       filterFn: onFilter,
@@ -86,12 +82,7 @@ class SimpleDropdown<T> extends StatelessWidget {
       isExpanded: isExpanded,
       selected: selected,
       onChange: onChange,
-      options: options.map<DropdownMenuItem<T>>(
-        (entry) => DropdownMenuItem<T>(
-          value: entry.key,
-          child: entry.value,
-        ),
-      ),
+      options: options.map<DropdownMenuItem<T>>((entry) => DropdownMenuItem<T>(value: entry.key, child: entry.value)),
       alignment: alignment,
       isNullable: isNullable,
     );
@@ -122,10 +113,12 @@ class CustomDropdown<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = options.toList();
     if (isNullable) {
-      items.add(DropdownMenuItem<T>(
-        value: null,
-        child: Text(context.l10n.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
-      ));
+      items.add(
+        DropdownMenuItem<T>(
+          value: null,
+          child: Text(context.l10n.optionSelect, style: TextStyle(color: Theme.of(context).disabledColor)),
+        ),
+      );
     }
     return DropdownButton<T>(
       hint: hint == null ? null : Text(hint!),

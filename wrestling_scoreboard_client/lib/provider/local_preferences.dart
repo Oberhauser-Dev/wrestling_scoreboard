@@ -22,10 +22,7 @@ class Preferences {
   static const keyOrganizationAuth = 'org-auth';
   static const keyJwtToken = 'jwt';
 
-  static final supportedLanguages = {
-    const Locale('en', 'US'),
-    const Locale('de', 'DE'),
-  };
+  static final supportedLanguages = {const Locale('en', 'US'), const Locale('de', 'DE')};
 
   static Future<void> setString(String key, String? value) async {
     final prefs = await SharedPreferences.getInstance();

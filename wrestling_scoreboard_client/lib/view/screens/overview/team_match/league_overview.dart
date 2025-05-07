@@ -37,9 +37,7 @@ class LeagueOverview extends ConsumerWidget {
       builder: (context, data) {
         final description = InfoWidget(
           obj: data,
-          editPage: LeagueEdit(
-            league: data,
-          ),
+          editPage: LeagueEdit(league: data),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
@@ -48,21 +46,9 @@ class LeagueOverview extends ConsumerWidget {
               subtitle: localizations.startDate,
               icon: Icons.event,
             ),
-            ContentItem(
-              title: data.endDate.toDateString(context),
-              subtitle: localizations.endDate,
-              icon: Icons.event,
-            ),
-            ContentItem(
-              title: data.boutDays.toString(),
-              subtitle: localizations.boutDays,
-              icon: Icons.calendar_month,
-            ),
-            ContentItem(
-              title: data.division.fullname,
-              subtitle: localizations.division,
-              icon: Icons.inventory,
-            ),
+            ContentItem(title: data.endDate.toDateString(context), subtitle: localizations.endDate, icon: Icons.event),
+            ContentItem(title: data.boutDays.toString(), subtitle: localizations.boutDays, icon: Icons.calendar_month),
+            ContentItem(title: data.division.fullname, subtitle: localizations.division, icon: Icons.inventory),
           ],
         );
         return FavoriteScaffold<League>(
@@ -71,7 +57,10 @@ class LeagueOverview extends ConsumerWidget {
           details: '${data.fullname}, ${data.startDate.year}',
           actions: [
             ConditionalOrganizationImportAction(
-                id: id, organization: data.organization!, importType: OrganizationImportType.league)
+              id: id,
+              organization: data.organization!,
+              importType: OrganizationImportType.league,
+            ),
           ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),
@@ -79,30 +68,35 @@ class LeagueOverview extends ConsumerWidget {
             Tab(child: HeadingText(localizations.participatingTeams)),
             Tab(child: HeadingText(localizations.weightClasses)),
           ],
-          body: TabGroup(items: [
-            description,
-            MatchList<League>(filterObject: data),
-            FilterableManyConsumer<LeagueTeamParticipation, League>.edit(
-              context: context,
-              editPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
-              filterObject: data,
-              mapData: (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
-              itemBuilder: (context, item) => ContentItem(
-                title: item.team.name,
-                icon: Icons.group,
-                onTap: () => handleSelectedTeam(item, context),
+          body: TabGroup(
+            items: [
+              description,
+              MatchList<League>(filterObject: data),
+              FilterableManyConsumer<LeagueTeamParticipation, League>.edit(
+                context: context,
+                editPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
+                filterObject: data,
+                mapData: (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.team.name,
+                      icon: Icons.group,
+                      onTap: () => handleSelectedTeam(item, context),
+                    ),
               ),
-            ),
-            FilterableManyConsumer<LeagueWeightClass, League>.edit(
-              context: context,
-              editPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
-              filterObject: data,
-              itemBuilder: (context, item) => ContentItem(
-                  title: item.localize(context),
-                  icon: Icons.fitness_center,
-                  onTap: () => handleSelectedWeightClass(item, context)),
-            )
-          ]),
+              FilterableManyConsumer<LeagueWeightClass, League>.edit(
+                context: context,
+                editPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
+                filterObject: data,
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.localize(context),
+                      icon: Icons.fitness_center,
+                      onTap: () => handleSelectedWeightClass(item, context),
+                    ),
+              ),
+            ],
+          ),
         );
       },
     );

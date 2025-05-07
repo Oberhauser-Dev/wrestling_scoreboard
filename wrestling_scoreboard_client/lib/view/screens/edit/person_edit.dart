@@ -50,10 +50,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
       ListTile(
         leading: const Icon(Icons.person),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.prename,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.prename),
           initialValue: widget.person?.prename,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -67,10 +64,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
       ListTile(
         leading: const SizedBox(),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.surname,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.surname),
           initialValue: widget.person?.surname,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -86,21 +80,19 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
         title: TextFormField(
           key: ValueKey(_dateOfBirth),
           readOnly: true,
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.date,
-          ),
-          onTap: () => showDatePicker(
-            initialDatePickerMode: DatePickerMode.year,
-            context: context,
-            initialDate: _dateOfBirth ?? DateTime.now().subtract(const Duration(days: 365 * 20)),
-            firstDate: DateTime.now().subtract(const Duration(days: 365 * 100)),
-            lastDate: DateTime.now(),
-          ).then((value) {
-            if (value != null) {
-              setState(() => _dateOfBirth = value);
-            }
-          }),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.date),
+          onTap:
+              () => showDatePicker(
+                initialDatePickerMode: DatePickerMode.year,
+                context: context,
+                initialDate: _dateOfBirth ?? DateTime.now().subtract(const Duration(days: 365 * 20)),
+                firstDate: DateTime.now().subtract(const Duration(days: 365 * 100)),
+                lastDate: DateTime.now(),
+              ).then((value) {
+                if (value != null) {
+                  setState(() => _dateOfBirth = value);
+                }
+              }),
           initialValue: _dateOfBirth?.toDateString(context),
         ),
       ),
@@ -112,14 +104,12 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
             isNullable: true,
             hint: localizations.gender,
             isExpanded: true,
-            options: Gender.values.map((Gender value) => MapEntry(
-                  value,
-                  Text(value.localize(context)),
-                )),
+            options: Gender.values.map((Gender value) => MapEntry(value, Text(value.localize(context)))),
             selected: _gender,
-            onChange: (newValue) => setState(() {
-              _gender = newValue;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _gender = newValue;
+                }),
           ),
         ),
       ),
@@ -131,9 +121,10 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
           selectedItem: _nationality,
           label: localizations.nationality,
           context: context,
-          onSaved: (Country? value) => setState(() {
-            _nationality = value;
-          }),
+          onSaved:
+              (Country? value) => setState(() {
+                _nationality = value;
+              }),
           itemAsString: (u) => '${u.nationality} (${u.isoShortName})',
           asyncItems: (String filter) async {
             return Countries.values;
@@ -147,12 +138,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
 
     return Form(
       key: _formKey,
-      child: EditWidget(
-        typeLocalization: classLocale,
-        id: id,
-        onSubmit: () => handleSubmit(navigator),
-        items: items,
-      ),
+      child: EditWidget(typeLocalization: classLocale, id: id, onSubmit: () => handleSubmit(navigator), items: items),
     );
   }
 
@@ -177,11 +163,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
 }
 
 class PersonEdit extends AbstractPersonEdit {
-  const PersonEdit({
-    super.person,
-    super.key,
-    required super.initialOrganization,
-  });
+  const PersonEdit({super.person, super.key, required super.initialOrganization});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => PersonEditState();

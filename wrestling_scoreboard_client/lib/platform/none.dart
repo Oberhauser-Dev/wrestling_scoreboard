@@ -1,15 +1,12 @@
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 
-getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) => NoneWindowStateManager(
-      setWindowState: setWindowState,
-    );
+getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) =>
+    NoneWindowStateManager(setWindowState: setWindowState);
 
 class NoneWindowStateManager {
   final Future<void> Function(WindowState newState) setWindowState;
 
-  NoneWindowStateManager({
-    required this.setWindowState,
-  }) {
+  NoneWindowStateManager({required this.setWindowState}) {
     listenToWindowState();
   }
 

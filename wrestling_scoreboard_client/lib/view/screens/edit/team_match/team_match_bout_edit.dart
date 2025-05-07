@@ -15,10 +15,10 @@ class TeamMatchBoutEdit extends BoutEdit {
   final TeamMatch initialTeamMatch;
 
   TeamMatchBoutEdit({this.teamMatchBout, required this.initialTeamMatch, super.key})
-      : super(
-          bout: teamMatchBout?.bout,
-          boutConfig: initialTeamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-        );
+    : super(
+        bout: teamMatchBout?.bout,
+        boutConfig: initialTeamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+      );
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TeamMatchBoutEditState();
@@ -38,15 +38,17 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
   }
 
   Future<Iterable<Membership>> _getMemberships(TeamLineup lineup) async {
-    final clubs = await ref.readAsync(manyDataStreamProvider<Club, Team>(
-      ManyProviderData<Club, Team>(filterObject: lineup.team),
-    ).future);
+    final clubs = await ref.readAsync(
+      manyDataStreamProvider<Club, Team>(ManyProviderData<Club, Team>(filterObject: lineup.team)).future,
+    );
 
-    final clubMemberships = await Future.wait(clubs.map((club) async {
-      return await ref.readAsync(manyDataStreamProvider<Membership, Club>(
-        ManyProviderData<Membership, Club>(filterObject: club),
-      ).future);
-    }));
+    final clubMemberships = await Future.wait(
+      clubs.map((club) async {
+        return await ref.readAsync(
+          manyDataStreamProvider<Membership, Club>(ManyProviderData<Membership, Club>(filterObject: club)).future,
+        );
+      }),
+    );
 
     return clubMemberships.expand((membership) => membership);
   }
@@ -88,9 +90,10 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
             selectedItem: _weightClass,
             label: context.l10n.weightClass,
             context: context,
-            onSaved: (WeightClass? value) => setState(() {
-              _weightClass = value;
-            }),
+            onSaved:
+                (WeightClass? value) => setState(() {
+                  _weightClass = value;
+                }),
             itemAsString: (u) => u.name,
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightClasses;
@@ -111,18 +114,25 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
       bout: bout,
       weightClass: _weightClass,
     );
-    teamMatchBout = teamMatchBout
-        .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(teamMatchBout));
+    teamMatchBout = teamMatchBout.copyWithId(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(teamMatchBout),
+    );
   }
 
   Future<List<WeightClass>> get availableWeightClasses async {
     // TODO: recheck if where the calculation is done for weightClasses: Server or Client
     final List<WeightClass> weightClasses = [];
-    weightClasses.addAll(await (await ref.read(dataManagerNotifierProvider))
-        .readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league));
+    weightClasses.addAll(
+      await (await ref.read(
+        dataManagerNotifierProvider,
+      )).readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league),
+    );
     if (weightClasses.isEmpty) {
-      weightClasses.addAll(await (await ref.read(dataManagerNotifierProvider))
-          .readMany<WeightClass, Division>(filterObject: widget.initialTeamMatch.league?.division));
+      weightClasses.addAll(
+        await (await ref.read(
+          dataManagerNotifierProvider,
+        )).readMany<WeightClass, Division>(filterObject: widget.initialTeamMatch.league?.division),
+      );
     }
     return weightClasses;
   }

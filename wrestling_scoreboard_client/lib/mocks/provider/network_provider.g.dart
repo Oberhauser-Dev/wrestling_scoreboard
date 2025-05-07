@@ -12,16 +12,16 @@ const mockDataManagerNotifierProvider = MockDataManagerNotifierProvider._();
 final class MockDataManagerNotifierProvider
     extends $NotifierProvider<MockDataManagerNotifier, Raw<Future<DataManager>>> {
   const MockDataManagerNotifierProvider._({super.runNotifierBuildOverride, MockDataManagerNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'mockDataManagerNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'mockDataManagerNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final MockDataManagerNotifier Function()? _createCb;
 
@@ -30,10 +30,7 @@ final class MockDataManagerNotifierProvider
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<DataManager>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<DataManager>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<DataManager>>>(value));
   }
 
   @$internal
@@ -42,19 +39,14 @@ final class MockDataManagerNotifierProvider
 
   @$internal
   @override
-  MockDataManagerNotifierProvider $copyWithCreate(
-    MockDataManagerNotifier Function() create,
-  ) {
+  MockDataManagerNotifierProvider $copyWithCreate(MockDataManagerNotifier Function() create) {
     return MockDataManagerNotifierProvider._(create: create);
   }
 
   @$internal
   @override
   MockDataManagerNotifierProvider $copyWithBuild(
-    Raw<Future<DataManager>> Function(
-      Ref,
-      MockDataManagerNotifier,
-    ) build,
+    Raw<Future<DataManager>> Function(Ref, MockDataManagerNotifier) build,
   ) {
     return MockDataManagerNotifierProvider._(runNotifierBuildOverride: build);
   }
@@ -62,8 +54,8 @@ final class MockDataManagerNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<MockDataManagerNotifier, Raw<Future<DataManager>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(this, pointer);
 }
 
 String _$mockDataManagerNotifierHash() => r'9c3e0e3c990b61d515e8b2f23636bb3ca9201415';
@@ -75,8 +67,14 @@ abstract class _$MockDataManagerNotifier extends $Notifier<Raw<Future<DataManage
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<DataManager>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<DataManager>>>, Raw<Future<DataManager>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<DataManager>>>,
+              Raw<Future<DataManager>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -86,18 +84,19 @@ const mockWebsocketManagerNotifierProvider = MockWebsocketManagerNotifierProvide
 
 final class MockWebsocketManagerNotifierProvider
     extends $NotifierProvider<MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
-  const MockWebsocketManagerNotifierProvider._(
-      {super.runNotifierBuildOverride, MockWebsocketManagerNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'mockWebsocketManagerNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+  const MockWebsocketManagerNotifierProvider._({
+    super.runNotifierBuildOverride,
+    MockWebsocketManagerNotifier Function()? create,
+  }) : _createCb = create,
+       super(
+         from: null,
+         argument: null,
+         retry: null,
+         name: r'mockWebsocketManagerNotifierProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         allTransitiveDependencies: null,
+       );
 
   final MockWebsocketManagerNotifier Function()? _createCb;
 
@@ -106,10 +105,7 @@ final class MockWebsocketManagerNotifierProvider
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<WebSocketManager>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<WebSocketManager>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<WebSocketManager>>>(value));
   }
 
   @$internal
@@ -118,19 +114,14 @@ final class MockWebsocketManagerNotifierProvider
 
   @$internal
   @override
-  MockWebsocketManagerNotifierProvider $copyWithCreate(
-    MockWebsocketManagerNotifier Function() create,
-  ) {
+  MockWebsocketManagerNotifierProvider $copyWithCreate(MockWebsocketManagerNotifier Function() create) {
     return MockWebsocketManagerNotifierProvider._(create: create);
   }
 
   @$internal
   @override
   MockWebsocketManagerNotifierProvider $copyWithBuild(
-    Raw<Future<WebSocketManager>> Function(
-      Ref,
-      MockWebsocketManagerNotifier,
-    ) build,
+    Raw<Future<WebSocketManager>> Function(Ref, MockWebsocketManagerNotifier) build,
   ) {
     return MockWebsocketManagerNotifierProvider._(runNotifierBuildOverride: build);
   }
@@ -138,8 +129,8 @@ final class MockWebsocketManagerNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(this, pointer);
 }
 
 String _$mockWebsocketManagerNotifierHash() => r'709ed2a007d7a6ac50c4c2680f750b6c1e730e95';
@@ -151,8 +142,14 @@ abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSo
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>>;
-    final element = ref.element as $ClassProviderElement<NotifierBase<Raw<Future<WebSocketManager>>>,
-        Raw<Future<WebSocketManager>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<WebSocketManager>>>,
+              Raw<Future<WebSocketManager>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

@@ -52,16 +52,24 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id), obfuscate: false));
     final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(false, teamMatch.id!));
-    final leagueWeightClasses = teamMatch.league?.id == null
-        ? <LeagueWeightClass>[]
-        : (await LeagueController().getLeagueWeightClasses(teamMatch.league!.id.toString(),
-            seasonPartition: teamMatch.seasonPartition, obfuscate: false));
+    final leagueWeightClasses =
+        teamMatch.league?.id == null
+            ? <LeagueWeightClass>[]
+            : (await LeagueController().getLeagueWeightClasses(
+              teamMatch.league!.id.toString(),
+              seasonPartition: teamMatch.seasonPartition,
+              obfuscate: false,
+            ));
     List<WeightClass> weightClasses = leagueWeightClasses.map((lwc) => lwc.weightClass).toList();
     if (weightClasses.isEmpty) {
-      final divisionWeightClasses = teamMatch.league?.division.id == null
-          ? <DivisionWeightClass>[]
-          : (await DivisionController().getDivisionWeightClasses(teamMatch.league!.division.id.toString(),
-              seasonPartition: teamMatch.seasonPartition, obfuscate: false));
+      final divisionWeightClasses =
+          teamMatch.league?.division.id == null
+              ? <DivisionWeightClass>[]
+              : (await DivisionController().getDivisionWeightClasses(
+                teamMatch.league!.division.id.toString(),
+                seasonPartition: teamMatch.seasonPartition,
+                obfuscate: false,
+              ));
       weightClasses = divisionWeightClasses.map((dwc) => dwc.weightClass).toList();
     }
     // Reorder weightClasses according to bout order:
@@ -98,10 +106,16 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       sectionPos += sectionLength;
     }
 
-    final homeParticipations = await TeamLineupParticipationController()
-        .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.home.id}, obfuscate: false);
-    final guestParticipations = await TeamLineupParticipationController()
-        .getMany(conditions: ['lineup_id = @id'], substitutionValues: {'id': teamMatch.guest.id}, obfuscate: false);
+    final homeParticipations = await TeamLineupParticipationController().getMany(
+      conditions: ['lineup_id = @id'],
+      substitutionValues: {'id': teamMatch.home.id},
+      obfuscate: false,
+    );
+    final guestParticipations = await TeamLineupParticipationController().getMany(
+      conditions: ['lineup_id = @id'],
+      substitutionValues: {'id': teamMatch.guest.id},
+      obfuscate: false,
+    );
 
     final newBouts = await teamMatch.generateBouts([homeParticipations, guestParticipations], sortedWeightClasses);
     final tmBouts = List.of(newBouts);
@@ -136,7 +150,9 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       } else {
         tmb = tmb.copyWithId(res.first['id']);
         tmBouts[entry.key] = await TeamMatchBout.fromRaw(
-            res.first, <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: false));
+          res.first,
+          <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: false),
+        );
         final conn = PostgresDb().connection;
         await conn.execute('UPDATE team_match_bout SET pos = ${tmb.pos} WHERE id = ${tmb.id};');
       }
@@ -166,8 +182,16 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       } else {
         teamMatchBouts = tmBouts;
       }
-      return jsonEncode(manyToJson(teamMatchBouts, TeamMatchBout, CRUD.update,
-          isRaw: false, filterType: TeamMatch, filterId: teamMatch.id));
+      return jsonEncode(
+        manyToJson(
+          teamMatchBouts,
+          TeamMatchBout,
+          CRUD.update,
+          isRaw: false,
+          filterType: TeamMatch,
+          filterId: teamMatch.id,
+        ),
+      );
     });
 
     return Response.ok('{"status": "success"}');
@@ -262,14 +286,19 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
         // Add missing id to bout of boutActions
         final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
-        final prevBoutActions = await BoutActionController()
-            .getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': bout.id}, obfuscate: obfuscate);
+        final prevBoutActions = await BoutActionController().getMany(
+          conditions: ['bout_id = @id'],
+          substitutionValues: {'id': bout.id},
+          obfuscate: obfuscate,
+        );
         await BoutActionController().updateOnDiffMany(boutActions.toList(), previous: prevBoutActions);
         return current.copyWith(bout: bout);
       },
       onDelete: (previous) async {
-        await BoutActionController()
-            .deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': previous.bout.id});
+        await BoutActionController().deleteMany(
+          conditions: ['bout_id=@id'],
+          substitutionValues: {'id': previous.bout.id},
+        );
 
         if (previous.bout.r != null) {
           await AthleteBoutStateController().deleteSingle(previous.bout.r!.id!);
@@ -283,9 +312,13 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     );
 
     await _updateLineupParticipations(
-        entity.home, Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.r))));
+      entity.home,
+      Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.r))),
+    );
     await _updateLineupParticipations(
-        entity.guest, Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))));
+      entity.guest,
+      Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))),
+    );
 
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
@@ -294,25 +327,28 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
   }
 
   Future<void> _updateLineupParticipations(
-      TeamLineup lineup, Map<WeightClass, AthleteBoutState?> participantsMap) async {
+    TeamLineup lineup,
+    Map<WeightClass, AthleteBoutState?> participantsMap,
+  ) async {
     final prevParticipations = await TeamLineupParticipationController().getByLineup(null, lineup.id!);
 
     await TeamLineupParticipationController().updateOnDiffMany(
-        participantsMap.entries
-            .map((entry) {
-              final weightClass = entry.key;
-              final athleteBoutState = entry.value;
-              if (athleteBoutState == null) return null;
-              return TeamLineupParticipation(
-                lineup: lineup,
-                membership: athleteBoutState.membership,
-                weight: null, // TODO: Weight not available in import (yet)
-                weightClass: weightClass,
-              );
-            })
-            .nonNulls
-            .toList(),
-        previous: prevParticipations);
+      participantsMap.entries
+          .map((entry) {
+            final weightClass = entry.key;
+            final athleteBoutState = entry.value;
+            if (athleteBoutState == null) return null;
+            return TeamLineupParticipation(
+              lineup: lineup,
+              membership: athleteBoutState.membership,
+              weight: null, // TODO: Weight not available in import (yet)
+              weightClass: weightClass,
+            );
+          })
+          .nonNulls
+          .toList(),
+      previous: prevParticipations,
+    );
   }
 
   Future<AthleteBoutState?> _saveDeepParticipantState(
@@ -323,14 +359,20 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
     required bool obfuscate,
   }) async {
     if (athleteBoutState != null) {
-      final person =
-          await PersonController().updateOrCreateSingleOfOrg(athleteBoutState.membership.person, obfuscate: obfuscate);
+      final person = await PersonController().updateOrCreateSingleOfOrg(
+        athleteBoutState.membership.person,
+        obfuscate: obfuscate,
+      );
 
-      final membership = await MembershipController()
-          .updateOrCreateSingleOfOrg(athleteBoutState.membership.copyWith(person: person), obfuscate: obfuscate);
+      final membership = await MembershipController().updateOrCreateSingleOfOrg(
+        athleteBoutState.membership.copyWith(person: person),
+        obfuscate: obfuscate,
+      );
 
-      athleteBoutState = await AthleteBoutStateController()
-          .updateOnDiffSingle(athleteBoutState.copyWith(membership: membership), previous: previousAthleteBoutState);
+      athleteBoutState = await AthleteBoutStateController().updateOnDiffSingle(
+        athleteBoutState.copyWith(membership: membership),
+        previous: previousAthleteBoutState,
+      );
 
       return athleteBoutState;
     }

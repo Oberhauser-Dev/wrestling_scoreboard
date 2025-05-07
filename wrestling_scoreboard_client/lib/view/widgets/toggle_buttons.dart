@@ -26,9 +26,10 @@ class IndexedToggleButtons extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(4)),
           onPressed: onPressed,
           isSelected: Iterable.generate(numOptions, (e) => e == selected).toList(),
-          children: Iterable.generate(numOptions, (e) {
-            return Padding(padding: const EdgeInsets.all(8), child: Text(getTitle(e)));
-          }).toList(),
+          children:
+              Iterable.generate(numOptions, (e) {
+                return Padding(padding: const EdgeInsets.all(8), child: Text(getTitle(e)));
+              }).toList(),
         ),
       ],
     );

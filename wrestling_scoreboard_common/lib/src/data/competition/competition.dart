@@ -52,16 +52,13 @@ abstract class Competition extends WrestlingEvent with _$Competition {
   @override
   Map<String, dynamic> toRaw() {
     return super.toRaw()
-      ..addAll({
-        'name': name,
-        'bout_config_id': boutConfig.id!,
-        'mat_count': matCount,
-        'max_ranking': maxRanking,
-      });
+      ..addAll({'name': name, 'bout_config_id': boutConfig.id!, 'mat_count': matCount, 'max_ranking': maxRanking});
   }
 
   Future<List<CompetitionBout>> generateBouts(
-      List<List<CompetitionParticipation>> teamParticipations, List<WeightClass> weightClasses) {
+    List<List<CompetitionParticipation>> teamParticipations,
+    List<WeightClass> weightClasses,
+  ) {
     // TODO: implement generateBouts
     throw UnimplementedError();
   }

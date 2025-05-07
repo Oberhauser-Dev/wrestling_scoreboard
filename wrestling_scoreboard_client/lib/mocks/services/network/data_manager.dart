@@ -33,8 +33,9 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject?>(
-      {S? filterObject}) async {
+  Future<Iterable<Map<String, dynamic>>> readManyJson<T extends DataObject, S extends DataObject?>({
+    S? filterObject,
+  }) async {
     throw UnimplementedError('Raw types are not supported in Mock mode');
     // return Future.value(getManyMocksFromClass<T>(filterObject: filterObject).map((e) => e.toJson()));
   }
@@ -221,9 +222,7 @@ class MockDataManager extends DataManager {
       final participationsWithLineup = participations.where((element) => element.lineup.id == single.id);
       for (final participationWithLineup in participationsWithLineup) {
         participations.remove(participationWithLineup);
-        participations.add(participationWithLineup.copyWith(
-          lineup: single,
-        ));
+        participations.add(participationWithLineup.copyWith(lineup: single));
       }
     }
     _getSingleStreamControllerOfObject(single, CRUD.update).add(single);
@@ -244,33 +243,33 @@ class MockDataManager extends DataManager {
       getManyStreamController<Club>()?.add(ManyDataObject(data: mockedData.getClubs()));
     } else if (single is Bout) {
     } else if (single is BoutAction) {
-      getManyStreamController<BoutAction>(filterType: Bout)?.add(ManyDataObject(
-        data: mockedData.getBoutActionsOfBout(single.bout),
-        filterType: Bout,
-        filterId: single.bout.id,
-      ));
+      getManyStreamController<BoutAction>(filterType: Bout)?.add(
+        ManyDataObject(data: mockedData.getBoutActionsOfBout(single.bout), filterType: Bout, filterId: single.bout.id),
+      );
     } else if (single is League) {
       getManyStreamController<League>()?.add(ManyDataObject(data: mockedData.getLeagues()));
     } else if (single is DivisionWeightClass) {
-      getManyStreamController<DivisionWeightClass>(filterType: League)?.add(ManyDataObject(
-        data: mockedData.getDivisionWeightClassesOfDivision(single.division),
-        filterType: League,
-        filterId: single.division.id,
-      ));
+      getManyStreamController<DivisionWeightClass>(filterType: League)?.add(
+        ManyDataObject(
+          data: mockedData.getDivisionWeightClassesOfDivision(single.division),
+          filterType: League,
+          filterId: single.division.id,
+        ),
+      );
     } else if (single is TeamLineup) {
       // No filtered list needs to be handled.
     } else if (single is Membership) {
-      getManyStreamController<Membership>(filterType: Club)?.add(ManyDataObject(
-        data: mockedData.getMembershipsOfClub(single.club),
-        filterType: Club,
-        filterId: single.club.id,
-      ));
+      getManyStreamController<Membership>(filterType: Club)?.add(
+        ManyDataObject(data: mockedData.getMembershipsOfClub(single.club), filterType: Club, filterId: single.club.id),
+      );
     } else if (single is TeamLineupParticipation) {
-      getManyStreamController<TeamLineupParticipation>(filterType: TeamLineup)?.add(ManyDataObject(
-        data: mockedData.getTeamLineupParticipationsOfLineup(single.lineup),
-        filterType: TeamLineup,
-        filterId: single.lineup.id,
-      ));
+      getManyStreamController<TeamLineupParticipation>(filterType: TeamLineup)?.add(
+        ManyDataObject(
+          data: mockedData.getTeamLineupParticipationsOfLineup(single.lineup),
+          filterType: TeamLineup,
+          filterId: single.lineup.id,
+        ),
+      );
     } else if (single is AthleteBoutState) {
     } else if (single is Person) {
     } else if (single is Team) {
@@ -288,16 +287,20 @@ class MockDataManager extends DataManager {
       //   ));
       // }
     } else if (single is TeamMatch) {
-      getManyStreamController<TeamMatch>(filterType: Team)?.add(ManyDataObject(
-        data: mockedData.getTeamMatchesOfTeam(single.home.team),
-        filterType: Team,
-        filterId: single.home.id,
-      ));
-      getManyStreamController<TeamMatch>(filterType: Team)?.add(ManyDataObject(
-        data: mockedData.getTeamMatchesOfTeam(single.guest.team),
-        filterType: Team,
-        filterId: single.guest.id,
-      ));
+      getManyStreamController<TeamMatch>(filterType: Team)?.add(
+        ManyDataObject(
+          data: mockedData.getTeamMatchesOfTeam(single.home.team),
+          filterType: Team,
+          filterId: single.home.id,
+        ),
+      );
+      getManyStreamController<TeamMatch>(filterType: Team)?.add(
+        ManyDataObject(
+          data: mockedData.getTeamMatchesOfTeam(single.guest.team),
+          filterType: Team,
+          filterId: single.guest.id,
+        ),
+      );
     } else {
       throw DataUnimplementedError(CRUD.update, T);
     }
@@ -554,12 +557,7 @@ class MockDataManager extends DataManager {
 
   @override
   Future<User?> getUser() async {
-    return User(
-      username: 'admin',
-      privilege: UserPrivilege.admin,
-      person: null,
-      createdAt: DateTime.now(),
-    );
+    return User(username: 'admin', privilege: UserPrivilege.admin, person: null, createdAt: DateTime.now());
   }
 
   @override

@@ -10,21 +10,21 @@ void main() {
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
 
   BoutConfig getAdultBoutConfig() => const BoutConfig(
-        periodDuration: Duration(minutes: 3),
-        periodCount: 2,
-        breakDuration: Duration(seconds: 30),
-        activityDuration: Duration(seconds: 30),
-        injuryDuration: Duration(minutes: 2),
-        bleedingInjuryDuration: Duration(minutes: 4),
-      );
+    periodDuration: Duration(minutes: 3),
+    periodCount: 2,
+    breakDuration: Duration(seconds: 30),
+    activityDuration: Duration(seconds: 30),
+    injuryDuration: Duration(minutes: 2),
+    bleedingInjuryDuration: Duration(minutes: 4),
+  );
   BoutConfig getYouthBoutConfig() => const BoutConfig(
-        periodDuration: Duration(minutes: 2),
-        periodCount: 2,
-        breakDuration: Duration(seconds: 30),
-        activityDuration: Duration(seconds: 30),
-        injuryDuration: Duration(minutes: 2),
-        bleedingInjuryDuration: Duration(minutes: 4),
-      );
+    periodDuration: Duration(minutes: 2),
+    periodCount: 2,
+    breakDuration: Duration(seconds: 30),
+    activityDuration: Duration(seconds: 30),
+    injuryDuration: Duration(minutes: 2),
+    bleedingInjuryDuration: Duration(minutes: 4),
+  );
 
   final testDivisionJunior = Division(
     name: '(S) Bezirksliga',
@@ -67,12 +67,24 @@ void main() {
   );
 
   final testClubMering = Club(name: 'TSC Mering', organization: organizationNRW, orgSyncId: '70434', no: '70434');
-  final testClubGeiselhoering =
-      Club(name: 'TV Geiselhöring', organization: organizationNRW, orgSyncId: '20178', no: '20178');
-  final testClubUntergriesbach =
-      Club(name: 'SV Untergriesbach', organization: organizationNRW, orgSyncId: '20696', no: '20696');
-  final testClubBerchtesgaden =
-      Club(name: 'TSV Berchtesgaden', organization: organizationNRW, orgSyncId: '10142', no: '10142');
+  final testClubGeiselhoering = Club(
+    name: 'TV Geiselhöring',
+    organization: organizationNRW,
+    orgSyncId: '20178',
+    no: '20178',
+  );
+  final testClubUntergriesbach = Club(
+    name: 'SV Untergriesbach',
+    organization: organizationNRW,
+    orgSyncId: '20696',
+    no: '20696',
+  );
+  final testClubBerchtesgaden = Club(
+    name: 'TSV Berchtesgaden',
+    organization: organizationNRW,
+    orgSyncId: '10142',
+    no: '10142',
+  );
 
   final testMembership = Membership(
     no: '1234',
@@ -92,15 +104,18 @@ void main() {
 
   final testTeamMering = Team(orgSyncId: 'TSC Mering', organization: organizationNRW, name: 'TSC Mering');
 
-  final testTeamUntergriesbach =
-      Team(name: 'SV Untergriesbach', organization: organizationNRW, orgSyncId: 'SV Untergriesbach');
-
-  final testLineupUntergriesbach = TeamLineup(
-    team: testTeamUntergriesbach,
+  final testTeamUntergriesbach = Team(
+    name: 'SV Untergriesbach',
+    organization: organizationNRW,
+    orgSyncId: 'SV Untergriesbach',
   );
 
-  final testTeamClubAffiliationUntergriesbach =
-      TeamClubAffiliation(team: testTeamUntergriesbach, club: testClubUntergriesbach);
+  final testLineupUntergriesbach = TeamLineup(team: testTeamUntergriesbach);
+
+  final testTeamClubAffiliationUntergriesbach = TeamClubAffiliation(
+    team: testTeamUntergriesbach,
+    club: testClubUntergriesbach,
+  );
 
   final testTeamBerchtesgaden = Team(
     orgSyncId: 'TSV Berchtesgaden',
@@ -109,14 +124,12 @@ void main() {
     description: null,
   );
 
-  final testTeamClubAffiliationBerchtesgaden =
-      TeamClubAffiliation(team: testTeamBerchtesgaden, club: testClubBerchtesgaden);
-
-  final testLineupBerchtesgaden = TeamLineup(
+  final testTeamClubAffiliationBerchtesgaden = TeamClubAffiliation(
     team: testTeamBerchtesgaden,
-    leader: null,
-    coach: null,
+    club: testClubBerchtesgaden,
   );
+
+  final testLineupBerchtesgaden = TeamLineup(team: testTeamBerchtesgaden, leader: null, coach: null);
 
   final testTeamMatch = TeamMatch(
     league: testBayerligaSuedLeague,
@@ -146,29 +159,31 @@ void main() {
         switch (T) {
           case const (Club):
             return (await wrestlingApi.importTeamClubAffiliations())
-                .firstWhere((tca) => tca.club.orgSyncId == orgSyncId)
-                .club as T;
+                    .firstWhere((tca) => tca.club.orgSyncId == orgSyncId)
+                    .club
+                as T;
           case const (Team):
             return (await wrestlingApi.importTeamClubAffiliations())
-                .firstWhere((tca) => tca.team.orgSyncId == orgSyncId)
-                .team as T;
+                    .firstWhere((tca) => tca.team.orgSyncId == orgSyncId)
+                    .team
+                as T;
           case const (DivisionWeightClass):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
-            final weightClasses = (await Future.wait(divisions.keys
-                    .map((division) => wrestlingApi.importDivisionAndLeagueWeightClasses(division: division))))
-                .expand((w) => w.$1);
+            final weightClasses = (await Future.wait(
+              divisions.keys.map((division) => wrestlingApi.importDivisionAndLeagueWeightClasses(division: division)),
+            )).expand((w) => w.$1);
             return weightClasses.singleWhere((w) => w.orgSyncId == orgSyncId) as T;
           case const (League):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
-            final leagues =
-                (await Future.wait(divisions.keys.map((division) => wrestlingApi.importLeagues(division: division))))
-                    .expand((l) => l);
+            final leagues = (await Future.wait(
+              divisions.keys.map((division) => wrestlingApi.importLeagues(division: division)),
+            )).expand((l) => l);
             return leagues.singleWhere((l) => l.orgSyncId == orgSyncId) as T;
           case const (LeagueWeightClass):
             final divisions = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
-            final weightClasses = (await Future.wait(divisions.keys
-                    .map((division) => wrestlingApi.importDivisionAndLeagueWeightClasses(division: division))))
-                .expand((w) => w.$2);
+            final weightClasses = (await Future.wait(
+              divisions.keys.map((division) => wrestlingApi.importDivisionAndLeagueWeightClasses(division: division)),
+            )).expand((w) => w.$2);
             return weightClasses.singleWhere((w) => w.orgSyncId == orgSyncId) as T;
           default:
             throw UnimplementedError('Type $T with orgSyncId $orgSyncId not found');
@@ -181,83 +196,83 @@ void main() {
   group('APIs', () {
     group('Germany, NRW', () {
       Iterable<BoutResultRule> boutResultRules(BoutConfig config) => [
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vfa,
-              winnerClassificationPoints: 4,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vin,
-              winnerClassificationPoints: 4,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vca,
-              winnerClassificationPoints: 4,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vsu,
-              technicalPointsDifference: 15,
-              winnerClassificationPoints: 4,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vpo,
-              technicalPointsDifference: 8,
-              winnerClassificationPoints: 3,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vpo,
-              technicalPointsDifference: 3,
-              winnerClassificationPoints: 2,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vpo,
-              technicalPointsDifference: 1,
-              winnerClassificationPoints: 1,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.vfo,
-              winnerClassificationPoints: 4,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.dsq,
-              winnerClassificationPoints: 4,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.bothDsq,
-              winnerClassificationPoints: 0,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.bothVfo,
-              winnerClassificationPoints: 0,
-              loserClassificationPoints: 0,
-            ),
-            BoutResultRule(
-              boutConfig: config,
-              boutResult: BoutResult.bothVin,
-              winnerClassificationPoints: 0,
-              loserClassificationPoints: 0,
-            ),
-          ];
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vfa,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vin,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vca,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vsu,
+          technicalPointsDifference: 15,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vpo,
+          technicalPointsDifference: 8,
+          winnerClassificationPoints: 3,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vpo,
+          technicalPointsDifference: 3,
+          winnerClassificationPoints: 2,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vpo,
+          technicalPointsDifference: 1,
+          winnerClassificationPoints: 1,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.vfo,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.dsq,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.bothDsq,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.bothVfo,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.bothVin,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+      ];
 
       test('Divisions', () async {
         final divisionBoutConfigRulesMap = await wrestlingApi.importDivisions(minDate: DateTime.utc(2023));
@@ -306,8 +321,9 @@ void main() {
       });
 
       test('DivisionWeightClasses', () async {
-        final (divisionWeightClasses, leagueWeightClasses) =
-            await wrestlingApi.importDivisionAndLeagueWeightClasses(division: testDivisionBayernliga);
+        final (divisionWeightClasses, leagueWeightClasses) = await wrestlingApi.importDivisionAndLeagueWeightClasses(
+          division: testDivisionBayernliga,
+        );
         expect(leagueWeightClasses, []);
         expect(divisionWeightClasses, [
           // Season partition 1
@@ -521,15 +537,28 @@ void main() {
 
       test('Team Club Affiliations', () async {
         final clubs = await wrestlingApi.importTeamClubAffiliations();
-        final clubWillmering =
-            Club(name: 'RG Willmering', organization: organizationNRW, orgSyncId: '30525', no: '30525');
+        final clubWillmering = Club(
+          name: 'RG Willmering',
+          organization: organizationNRW,
+          orgSyncId: '30525',
+          no: '30525',
+        );
         final clubCham = Club(name: 'ASV Cham', organization: organizationNRW, orgSyncId: '30074', no: '30074');
-        final teamWillmeringCham =
-            Team(name: 'WKG Willmering/Cham', orgSyncId: 'WKG Willmering/Cham', organization: organizationNRW);
-        final teamWillmeringChamS =
-            Team(name: 'S - WKG Willmering/Cham', orgSyncId: 'S - WKG Willmering/Cham', organization: organizationNRW);
-        final teamWillmeringCham2 =
-            Team(name: 'WKG Willmering/Cham II', orgSyncId: 'WKG Willmering/Cham II', organization: organizationNRW);
+        final teamWillmeringCham = Team(
+          name: 'WKG Willmering/Cham',
+          orgSyncId: 'WKG Willmering/Cham',
+          organization: organizationNRW,
+        );
+        final teamWillmeringChamS = Team(
+          name: 'S - WKG Willmering/Cham',
+          orgSyncId: 'S - WKG Willmering/Cham',
+          organization: organizationNRW,
+        );
+        final teamWillmeringCham2 = Team(
+          name: 'WKG Willmering/Cham II',
+          orgSyncId: 'WKG Willmering/Cham II',
+          organization: organizationNRW,
+        );
         expect(clubs, [
           TeamClubAffiliation(team: teamWillmeringCham, club: clubWillmering),
           TeamClubAffiliation(team: teamWillmeringCham2, club: clubWillmering),
@@ -538,41 +567,55 @@ void main() {
           TeamClubAffiliation(team: teamWillmeringCham2, club: clubCham),
           TeamClubAffiliation(team: teamWillmeringChamS, club: clubCham),
           TeamClubAffiliation(
-              team: Team(name: 'TV Geiselhöring', orgSyncId: 'TV Geiselhöring', organization: organizationNRW),
-              club: testClubGeiselhoering),
+            team: Team(name: 'TV Geiselhöring', orgSyncId: 'TV Geiselhöring', organization: organizationNRW),
+            club: testClubGeiselhoering,
+          ),
           TeamClubAffiliation(
-              team: Team(name: 'S - TV Geiselhöring', orgSyncId: 'S - TV Geiselhöring', organization: organizationNRW),
-              club: testClubGeiselhoering),
+            team: Team(name: 'S - TV Geiselhöring', orgSyncId: 'S - TV Geiselhöring', organization: organizationNRW),
+            club: testClubGeiselhoering,
+          ),
           TeamClubAffiliation(
-              team: Team(name: 'TV Geiselhöring II', orgSyncId: 'TV Geiselhöring II', organization: organizationNRW),
-              club: testClubGeiselhoering),
+            team: Team(name: 'TV Geiselhöring II', orgSyncId: 'TV Geiselhöring II', organization: organizationNRW),
+            club: testClubGeiselhoering,
+          ),
           TeamClubAffiliation(team: testTeamMering, club: testClubMering),
           TeamClubAffiliation(
-              team: Team(name: 'S - TSC Mering', orgSyncId: 'S - TSC Mering', organization: organizationNRW),
-              club: testClubMering),
+            team: Team(name: 'S - TSC Mering', orgSyncId: 'S - TSC Mering', organization: organizationNRW),
+            club: testClubMering,
+          ),
           TeamClubAffiliation(
-              team: Team(name: 'TSC Mering II', orgSyncId: 'TSC Mering II', organization: organizationNRW),
-              club: testClubMering),
+            team: Team(name: 'TSC Mering II', orgSyncId: 'TSC Mering II', organization: organizationNRW),
+            club: testClubMering,
+          ),
           TeamClubAffiliation(
-              team: Team(name: 'S - TSC Mering II', orgSyncId: 'S - TSC Mering II', organization: organizationNRW),
-              club: testClubMering),
+            team: Team(name: 'S - TSC Mering II', orgSyncId: 'S - TSC Mering II', organization: organizationNRW),
+            club: testClubMering,
+          ),
           testTeamClubAffiliationBerchtesgaden,
           TeamClubAffiliation(
-              team: Team(
-                  name: 'S - TSV Berchtesgaden', orgSyncId: 'S - TSV Berchtesgaden', organization: organizationNRW),
-              club: testClubBerchtesgaden),
+            team: Team(
+              name: 'S - TSV Berchtesgaden',
+              orgSyncId: 'S - TSV Berchtesgaden',
+              organization: organizationNRW,
+            ),
+            club: testClubBerchtesgaden,
+          ),
           TeamClubAffiliation(
-              team:
-                  Team(name: 'TSV Berchtesgaden II', orgSyncId: 'TSV Berchtesgaden II', organization: organizationNRW),
-              club: testClubBerchtesgaden),
+            team: Team(name: 'TSV Berchtesgaden II', orgSyncId: 'TSV Berchtesgaden II', organization: organizationNRW),
+            club: testClubBerchtesgaden,
+          ),
           TeamClubAffiliation(
-              team:
-                  Team(name: 'SV Untergriesbach II', orgSyncId: 'SV Untergriesbach II', organization: organizationNRW),
-              club: testClubUntergriesbach),
+            team: Team(name: 'SV Untergriesbach II', orgSyncId: 'SV Untergriesbach II', organization: organizationNRW),
+            club: testClubUntergriesbach,
+          ),
           TeamClubAffiliation(
-              team: Team(
-                  name: 'S - SV Untergriesbach', orgSyncId: 'S - SV Untergriesbach', organization: organizationNRW),
-              club: testClubUntergriesbach),
+            team: Team(
+              name: 'S - SV Untergriesbach',
+              orgSyncId: 'S - SV Untergriesbach',
+              organization: organizationNRW,
+            ),
+            club: testClubUntergriesbach,
+          ),
           testTeamClubAffiliationUntergriesbach,
         ]);
       });
@@ -587,30 +630,32 @@ void main() {
         expect(teamMatches, [
           testTeamMatch,
           TeamMatch(
-              orgSyncId: '029013c',
-              no: '029013c',
+            orgSyncId: '029013c',
+            no: '029013c',
+            organization: organizationNRW,
+            home: testLineupBerchtesgaden,
+            guest: TeamLineup(team: testTeamMering, leader: null, coach: null),
+            league: testBayerligaSuedLeague,
+            seasonPartition: 0,
+            matChairman: null,
+            referee: Person(
+              id: null,
+              orgSyncId: 'Fröhlich_Peter_null',
               organization: organizationNRW,
-              home: testLineupBerchtesgaden,
-              guest: TeamLineup(team: testTeamMering, leader: null, coach: null),
-              league: testBayerligaSuedLeague,
-              seasonPartition: 0,
-              matChairman: null,
-              referee: Person(
-                  id: null,
-                  orgSyncId: 'Fröhlich_Peter_null',
-                  organization: organizationNRW,
-                  prename: 'Fröhlich',
-                  surname: 'Peter',
-                  gender: null,
-                  birthDate: null,
-                  nationality: null),
-              judge: null,
-              timeKeeper: null,
-              transcriptWriter: null,
-              location: 'Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden',
-              date: DateTime(2023, 10, 21, 19),
-              visitorsCount: 813,
-              comment: 'TSV BGD 57kg übergewicht'),
+              prename: 'Fröhlich',
+              surname: 'Peter',
+              gender: null,
+              birthDate: null,
+              nationality: null,
+            ),
+            judge: null,
+            timeKeeper: null,
+            transcriptWriter: null,
+            location: 'Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden',
+            date: DateTime(2023, 10, 21, 19),
+            visitorsCount: 813,
+            comment: 'TSV BGD 57kg übergewicht',
+          ),
         ]);
       });
 
@@ -630,10 +675,7 @@ void main() {
           result: BoutResult.vpo,
           winnerRole: BoutRole.blue,
           organization: organizationNRW,
-          r: AthleteBoutState(
-            classificationPoints: 0,
-            membership: testMembership,
-          ),
+          r: AthleteBoutState(classificationPoints: 0, membership: testMembership),
           b: AthleteBoutState(
             classificationPoints: 1,
             membership: Membership(
@@ -665,71 +707,82 @@ void main() {
         expect(teamMatchBouts, <TeamMatchBout, Iterable<BoutAction>>{
           expectedBout: <BoutAction>[
             BoutAction(
-                role: BoutRole.red,
-                actionType: BoutActionType.points,
-                duration: Duration(seconds: 26),
-                pointCount: 2,
-                bout: bout),
+              role: BoutRole.red,
+              actionType: BoutActionType.points,
+              duration: Duration(seconds: 26),
+              pointCount: 2,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.blue,
-                actionType: BoutActionType.points,
-                duration: Duration(seconds: 37),
-                pointCount: 2,
-                bout: bout),
+              role: BoutRole.blue,
+              actionType: BoutActionType.points,
+              duration: Duration(seconds: 37),
+              pointCount: 2,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.blue,
-                actionType: BoutActionType.verbal,
-                duration: Duration(seconds: 98),
-                pointCount: null,
-                bout: bout),
+              role: BoutRole.blue,
+              actionType: BoutActionType.verbal,
+              duration: Duration(seconds: 98),
+              pointCount: null,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.blue,
-                actionType: BoutActionType.passivity,
-                duration: Duration(seconds: 124),
-                pointCount: null,
-                bout: bout),
+              role: BoutRole.blue,
+              actionType: BoutActionType.passivity,
+              duration: Duration(seconds: 124),
+              pointCount: null,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.red,
-                actionType: BoutActionType.points,
-                duration: Duration(seconds: 156),
-                pointCount: 1,
-                bout: bout),
+              role: BoutRole.red,
+              actionType: BoutActionType.points,
+              duration: Duration(seconds: 156),
+              pointCount: 1,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.red,
-                actionType: BoutActionType.verbal,
-                duration: Duration(seconds: 252),
-                pointCount: null,
-                bout: bout),
+              role: BoutRole.red,
+              actionType: BoutActionType.verbal,
+              duration: Duration(seconds: 252),
+              pointCount: null,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.red,
-                actionType: BoutActionType.passivity,
-                duration: Duration(seconds: 292),
-                pointCount: null,
-                bout: bout),
+              role: BoutRole.red,
+              actionType: BoutActionType.passivity,
+              duration: Duration(seconds: 292),
+              pointCount: null,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.blue,
-                actionType: BoutActionType.points,
-                duration: Duration(seconds: 326),
-                pointCount: 1,
-                bout: bout),
+              role: BoutRole.blue,
+              actionType: BoutActionType.points,
+              duration: Duration(seconds: 326),
+              pointCount: 1,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.red,
-                actionType: BoutActionType.points,
-                duration: Duration(seconds: 337),
-                pointCount: 1,
-                bout: bout),
+              role: BoutRole.red,
+              actionType: BoutActionType.points,
+              duration: Duration(seconds: 337),
+              pointCount: 1,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.blue,
-                actionType: BoutActionType.passivity,
-                duration: Duration(seconds: 360),
-                pointCount: null,
-                bout: bout),
+              role: BoutRole.blue,
+              actionType: BoutActionType.passivity,
+              duration: Duration(seconds: 360),
+              pointCount: null,
+              bout: bout,
+            ),
             BoutAction(
-                role: BoutRole.blue,
-                actionType: BoutActionType.points,
-                duration: Duration(seconds: 360),
-                pointCount: 2,
-                bout: bout),
+              role: BoutRole.blue,
+              actionType: BoutActionType.points,
+              duration: Duration(seconds: 360),
+              pointCount: 2,
+              bout: bout,
+            ),
           ],
         });
       });

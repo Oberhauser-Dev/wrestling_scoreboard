@@ -43,32 +43,18 @@ class OrganizationOverview extends ConsumerWidget {
       builder: (context, data) {
         final description = InfoWidget(
           obj: data,
-          editPage: OrganizationEdit(
-            organization: data,
-          ),
+          editPage: OrganizationEdit(organization: data),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Organization>(data),
           classLocale: localizations.organization,
           children: [
-            ContentItem(
-              title: data.name,
-              subtitle: localizations.name,
-              icon: Icons.description,
-            ),
-            ContentItem(
-              title: data.abbreviation ?? '-',
-              subtitle: localizations.abbreviation,
-              icon: Icons.short_text,
-            ),
+            ContentItem(title: data.name, subtitle: localizations.name, icon: Icons.description),
+            ContentItem(title: data.abbreviation ?? '-', subtitle: localizations.abbreviation, icon: Icons.short_text),
             ContentItem(
               title: data.parent?.name ?? '-',
               subtitle: localizations.umbrellaOrganization,
               icon: Icons.corporate_fare,
             ),
-            ContentItem(
-              title: data.apiProvider?.name ?? '-',
-              subtitle: localizations.apiProvider,
-              icon: Icons.api,
-            ),
+            ContentItem(title: data.apiProvider?.name ?? '-', subtitle: localizations.apiProvider, icon: Icons.api),
             ContentItem(
               title: data.reportProvider?.name ?? '-',
               subtitle: localizations.reportProvider,
@@ -82,7 +68,10 @@ class OrganizationOverview extends ConsumerWidget {
           details: data.name,
           actions: [
             ConditionalOrganizationImportAction(
-                id: id, organization: data, importType: OrganizationImportType.organization),
+              id: id,
+              organization: data,
+              importType: OrganizationImportType.organization,
+            ),
           ],
           tabs: [
             Tab(child: HeadingText(localizations.info)),
@@ -93,64 +82,74 @@ class OrganizationOverview extends ConsumerWidget {
             Tab(child: HeadingText(localizations.persons)),
             Tab(child: HeadingText('${localizations.sub}-${localizations.organizations}')),
           ],
-          body: TabGroup(items: [
-            description,
-            FilterableManyConsumer<Division, Organization>.edit(
-              context: context,
-              filterObject: data,
-              editPageBuilder: (context) => DivisionEdit(initialOrganization: data),
-              mapData: (divisions) => divisions
-                ..sort((a, b) {
-                  final comparison = b.startDate.compareTo(a.startDate);
-                  if (comparison != 0) return comparison;
-                  return a.name.compareTo(b.name);
-                }),
-              itemBuilder: (context, item) => ContentItem(
-                title: '${item.fullname}, ${item.startDate.year}',
-                icon: Icons.inventory,
-                onTap: () => handleSelectedDivision(item, context),
+          body: TabGroup(
+            items: [
+              description,
+              FilterableManyConsumer<Division, Organization>.edit(
+                context: context,
+                filterObject: data,
+                editPageBuilder: (context) => DivisionEdit(initialOrganization: data),
+                mapData:
+                    (divisions) =>
+                        divisions..sort((a, b) {
+                          final comparison = b.startDate.compareTo(a.startDate);
+                          if (comparison != 0) return comparison;
+                          return a.name.compareTo(b.name);
+                        }),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: '${item.fullname}, ${item.startDate.year}',
+                      icon: Icons.inventory,
+                      onTap: () => handleSelectedDivision(item, context),
+                    ),
               ),
-            ),
-            FilterableManyConsumer<Club, Organization>.edit(
-              context: context,
-              filterObject: data,
-              mapData: (List<Club> clubs) => clubs..sort((a, b) => a.name.compareTo(b.name)),
-              editPageBuilder: (context) => ClubEdit(initialOrganization: data),
-              itemBuilder: (context, item) => ContentItem(
-                title: item.name,
-                icon: Icons.foundation,
-                onTap: () => handleSelectedClub(item, context),
+              FilterableManyConsumer<Club, Organization>.edit(
+                context: context,
+                filterObject: data,
+                mapData: (List<Club> clubs) => clubs..sort((a, b) => a.name.compareTo(b.name)),
+                editPageBuilder: (context) => ClubEdit(initialOrganization: data),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.name,
+                      icon: Icons.foundation,
+                      onTap: () => handleSelectedClub(item, context),
+                    ),
               ),
-            ),
-            FilterableManyConsumer<Competition, Organization>.edit(
-              context: context,
-              filterObject: data,
-              editPageBuilder: (context) => CompetitionEdit(initialOrganization: data),
-              itemBuilder: (context, item) => ContentItem(
-                  title: item.name, icon: Icons.leaderboard, onTap: () => handleSelectedCompetition(item, context)),
-            ),
-            FilterableManyConsumer<AgeCategory, Organization>.edit(
-              context: context,
-              filterObject: data,
-              editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: data),
-              itemBuilder: (context, item) => ContentItem(
-                  title: '${item.name} (${item.minAge} - ${item.maxAge})',
-                  icon: Icons.school,
-                  onTap: () => handleSelectedAgeCategory(item, context)),
-            ),
-            FilterableManyConsumer<Person, Organization>.edit(
-              context: context,
-              filterObject: data,
-              editPageBuilder: (context) => PersonEdit(initialOrganization: data),
-              mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
-              prependBuilder: (context, persons) {
-                final duplicatePersons = persons
-                    .groupListsBy((element) => element.fullName)
-                    .entries
-                    .where((entry) => entry.value.length > 1);
-                return duplicatePersons.isEmpty
-                    ? null
-                    : Restricted(
+              FilterableManyConsumer<Competition, Organization>.edit(
+                context: context,
+                filterObject: data,
+                editPageBuilder: (context) => CompetitionEdit(initialOrganization: data),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.name,
+                      icon: Icons.leaderboard,
+                      onTap: () => handleSelectedCompetition(item, context),
+                    ),
+              ),
+              FilterableManyConsumer<AgeCategory, Organization>.edit(
+                context: context,
+                filterObject: data,
+                editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: data),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: '${item.name} (${item.minAge} - ${item.maxAge})',
+                      icon: Icons.school,
+                      onTap: () => handleSelectedAgeCategory(item, context),
+                    ),
+              ),
+              FilterableManyConsumer<Person, Organization>.edit(
+                context: context,
+                filterObject: data,
+                editPageBuilder: (context) => PersonEdit(initialOrganization: data),
+                mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
+                prependBuilder: (context, persons) {
+                  final duplicatePersons = persons
+                      .groupListsBy((element) => element.fullName)
+                      .entries
+                      .where((entry) => entry.value.length > 1);
+                  return duplicatePersons.isEmpty
+                      ? null
+                      : Restricted(
                         privilege: UserPrivilege.admin,
                         child: PaddedCard(
                           child: Column(
@@ -158,43 +157,53 @@ class OrganizationOverview extends ConsumerWidget {
                             children: [
                               const Icon(Icons.warning),
                               const Text('Following persons have the same name, are they duplicates?'),
-                              ...duplicatePersons.map((similarPersons) => ListTile(
-                                    title: Text('${similarPersons.key} (${similarPersons.value.length})'),
-                                    trailing: IconButton(
-                                      tooltip: localizations.mergeObjectData,
-                                      onPressed: () => mergePersonsDialog(context, ref, persons: similarPersons.value),
-                                      icon: const Icon(Icons.merge),
-                                    ),
-                                    // Use most up to date entry (last) as base merge object
-                                    onTap: () => handleSelectedPerson(similarPersons.value.last, context),
-                                  )),
+                              ...duplicatePersons.map(
+                                (similarPersons) => ListTile(
+                                  title: Text('${similarPersons.key} (${similarPersons.value.length})'),
+                                  trailing: IconButton(
+                                    tooltip: localizations.mergeObjectData,
+                                    onPressed: () => mergePersonsDialog(context, ref, persons: similarPersons.value),
+                                    icon: const Icon(Icons.merge),
+                                  ),
+                                  // Use most up to date entry (last) as base merge object
+                                  onTap: () => handleSelectedPerson(similarPersons.value.last, context),
+                                ),
+                              ),
                               TextButton.icon(
-                                onPressed: () => mergeAllPersonsDialog(context, ref,
-                                    allPersons: duplicatePersons.map((e) => e.value)),
+                                onPressed:
+                                    () => mergeAllPersonsDialog(
+                                      context,
+                                      ref,
+                                      allPersons: duplicatePersons.map((e) => e.value),
+                                    ),
                                 icon: const Icon(Icons.merge),
                                 label: const Text('Merge ALL'),
                               ),
                             ],
                           ),
-                        ));
-              },
-              itemBuilder: (context, item) => ContentItem(
-                title: item.fullName,
-                icon: Icons.person,
-                onTap: () => handleSelectedPerson(item, context),
+                        ),
+                      );
+                },
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.fullName,
+                      icon: Icons.person,
+                      onTap: () => handleSelectedPerson(item, context),
+                    ),
               ),
-            ),
-            FilterableManyConsumer<Organization, Organization>.edit(
-              context: context,
-              editPageBuilder: (context) => OrganizationEdit(initialParent: data),
-              filterObject: data,
-              itemBuilder: (context, item) => ContentItem(
-                title: item.fullname,
-                icon: Icons.inventory,
-                onTap: () => handleSelectedChildOrganization(item, context),
+              FilterableManyConsumer<Organization, Organization>.edit(
+                context: context,
+                editPageBuilder: (context) => OrganizationEdit(initialParent: data),
+                filterObject: data,
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.fullname,
+                      icon: Icons.inventory,
+                      onTap: () => handleSelectedChildOrganization(item, context),
+                    ),
               ),
-            ),
-          ]),
+            ],
+          ),
         );
       },
     );

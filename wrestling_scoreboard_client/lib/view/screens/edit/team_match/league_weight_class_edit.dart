@@ -15,7 +15,7 @@ class LeagueWeightClassEdit extends WeightClassEdit {
   final League initialLeague;
 
   LeagueWeightClassEdit({this.leagueWeightClass, required this.initialLeague, super.key})
-      : super(weightClass: leagueWeightClass?.weightClass);
+    : super(weightClass: leagueWeightClass?.weightClass);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => LeagueWeightClassEditState();
@@ -34,35 +34,40 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    return buildEdit(context, id: widget.leagueWeightClass?.id, classLocale: localizations.weightClass, fields: [
-      IconCard(icon: const Icon(Icons.info), child: Text(localizations.infoUseDivisionWeightClass)),
-      ListTile(
-        leading: const Icon(Icons.format_list_numbered),
-        title: TextFormField(
-          initialValue: widget.leagueWeightClass?.pos.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.position,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-          onSaved: (String? value) {
-            _pos = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
-      ),
-      if (widget.initialLeague.division.seasonPartitions > 1)
+    return buildEdit(
+      context,
+      id: widget.leagueWeightClass?.id,
+      classLocale: localizations.weightClass,
+      fields: [
+        IconCard(icon: const Icon(Icons.info), child: Text(localizations.infoUseDivisionWeightClass)),
         ListTile(
-          leading: const Icon(Icons.sunny_snowing),
-          title: IndexedToggleButtons(
-            label: localizations.seasonPartition,
-            onPressed: (e) => setState(() => _seasonPartition = e),
-            selected: _seasonPartition,
-            numOptions: widget.initialLeague.division.seasonPartitions,
-            getTitle: (e) => e.asSeasonPartition(context, widget.initialLeague.division.seasonPartitions),
+          leading: const Icon(Icons.format_list_numbered),
+          title: TextFormField(
+            initialValue: widget.leagueWeightClass?.pos.toString() ?? '',
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+              labelText: localizations.position,
+            ),
+            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
+            onSaved: (String? value) {
+              _pos = int.tryParse(value ?? '') ?? 0;
+            },
           ),
         ),
-    ]);
+        if (widget.initialLeague.division.seasonPartitions > 1)
+          ListTile(
+            leading: const Icon(Icons.sunny_snowing),
+            title: IndexedToggleButtons(
+              label: localizations.seasonPartition,
+              onPressed: (e) => setState(() => _seasonPartition = e),
+              selected: _seasonPartition,
+              numOptions: widget.initialLeague.division.seasonPartitions,
+              getTitle: (e) => e.asSeasonPartition(context, widget.initialLeague.division.seasonPartitions),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -74,7 +79,8 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
       weightClass: weightClass,
       seasonPartition: _seasonPartition,
     );
-    leagueWeightClass = leagueWeightClass
-        .copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(leagueWeightClass));
+    leagueWeightClass = leagueWeightClass.copyWithId(
+      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(leagueWeightClass),
+    );
   }
 }

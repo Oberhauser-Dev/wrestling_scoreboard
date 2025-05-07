@@ -22,15 +22,16 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: PaddedCard(
           child: ListTile(
             title: LoadingBuilder(
-                future: DefaultAssetBundle.of(context).loadString('assets/docs/privacy-policy-en.md'),
-                builder: (context, data) {
-                  return MarkdownBody(
-                    shrinkWrap: true,
-                    selectable: true,
-                    data: data,
-                    onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
-                  );
-                }),
+              future: DefaultAssetBundle.of(context).loadString('assets/docs/privacy-policy-en.md'),
+              builder: (context, data) {
+                return MarkdownBody(
+                  shrinkWrap: true,
+                  selectable: true,
+                  data: data,
+                  onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -23,7 +23,7 @@ class ExceptionCard extends StatelessWidget {
           children: [
             ExceptionInfo(exception, stackTrace: stackTrace),
             if (onRetry != null) const SizedBox(height: 16),
-            if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(context.l10n.retry))
+            if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(context.l10n.retry)),
           ],
         ),
       ),

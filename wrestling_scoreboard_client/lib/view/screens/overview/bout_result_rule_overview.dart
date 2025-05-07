@@ -34,11 +34,9 @@ class BoutResultRuleOverview extends ConsumerWidget {
       builder: (context, boutResultRule) {
         final description = InfoWidget(
           obj: boutResultRule,
-          editPage: BoutResultRuleEdit(
-            boutResultRule: boutResultRule,
-          ),
-          onDelete: () async =>
-              (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutResultRule>(boutResultRule),
+          editPage: BoutResultRuleEdit(boutResultRule: boutResultRule),
+          onDelete:
+              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutResultRule>(boutResultRule),
           classLocale: localizations.boutResultRule,
           children: [
             ContentItem(
@@ -72,12 +70,8 @@ class BoutResultRuleOverview extends ConsumerWidget {
           dataObject: boutResultRule,
           label: localizations.boutResultRule,
           details: boutResultRule.localize(context),
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
-          body: TabGroup(items: [
-            description,
-          ]),
+          tabs: [Tab(child: HeadingText(localizations.info))],
+          body: TabGroup(items: [description]),
         );
       },
     );

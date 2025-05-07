@@ -9,11 +9,7 @@ enum WrestlingApiProvider {
 
   String get name => toString().split('.').last;
 
-  WrestlingApi getApi(
-    Organization organization, {
-    required GetSingleOfOrg getSingleOfOrg,
-    AuthService? authService,
-  }) {
+  WrestlingApi getApi(Organization organization, {required GetSingleOfOrg getSingleOfOrg, AuthService? authService}) {
     switch (this) {
       case WrestlingApiProvider.deNwRingenApi:
         return ByGermanyWrestlingApi(

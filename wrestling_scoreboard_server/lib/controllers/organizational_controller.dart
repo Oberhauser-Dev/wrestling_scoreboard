@@ -15,14 +15,17 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
   Future<void> init() async {
     await super.init();
     getSingleOfOrgRawStmt = await PostgresDb().connection.prepare(
-        psql.Sql.named('SELECT * FROM $tableName WHERE organization_id = @orgId AND org_sync_id = @orgSyncId;'));
+      psql.Sql.named('SELECT * FROM $tableName WHERE organization_id = @orgId AND org_sync_id = @orgSyncId;'),
+    );
   }
 
   /// Get a single data object via a foreign id (sync id), given by an organization.
   Future<T> getSingleOfOrg(String orgSyncId, {required int orgId, required bool obfuscate}) async {
     final single = await getSingleOfOrgRaw(orgSyncId, orgId: orgId);
     return DataObjectParser.fromRaw<T>(
-        single, <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: obfuscate));
+      single,
+      <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: obfuscate),
+    );
   }
 
   Future<Map<String, dynamic>> getSingleOfOrgRaw(String orgSyncId, {required int orgId}) async {
@@ -50,8 +53,11 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
       throw Exception('Organization id and sync id must not be null: $dataObject');
     }
     try {
-      final previous = await getSingleOfOrg(organizational.orgSyncId!,
-          orgId: organizational.organization!.id!, obfuscate: obfuscate);
+      final previous = await getSingleOfOrg(
+        organizational.orgSyncId!,
+        orgId: organizational.organization!.id!,
+        obfuscate: obfuscate,
+      );
       if (onUpdateOrCreate != null) {
         dataObject = await onUpdateOrCreate(previous);
       }
@@ -80,11 +86,13 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
     );
     final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
     // Delete not included entities
-    await Future.wait(previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId)).map((prev) async {
-      if (await deleteSingle(prev.id!) && onDelete != null) {
-        await onDelete(prev);
-      }
-    }));
+    await Future.wait(
+      previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId)).map((prev) async {
+        if (await deleteSingle(prev.id!) && onDelete != null) {
+          await onDelete(prev);
+        }
+      }),
+    );
 
     // Execute one after one (synchronously) as it may fails when creating the same source twice in the onUpdateOrCreate method.
     return await forEachFuture(
@@ -97,9 +105,15 @@ abstract class OrganizationalController<T extends Organizational> extends ShelfC
     );
   }
 
-  static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(String orgSyncId,
-      {required int orgId, required bool obfuscate}) {
-    return (ShelfController.getControllerFromDataType(T) as OrganizationalController<T>)
-        .getSingleOfOrg(orgSyncId, orgId: orgId, obfuscate: obfuscate);
+  static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(
+    String orgSyncId, {
+    required int orgId,
+    required bool obfuscate,
+  }) {
+    return (ShelfController.getControllerFromDataType(T) as OrganizationalController<T>).getSingleOfOrg(
+      orgSyncId,
+      orgId: orgId,
+      obfuscate: obfuscate,
+    );
   }
 }

@@ -36,12 +36,7 @@ class InfoWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => editPage,
-                    ),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => editPage));
                 },
               ),
               IconButton(

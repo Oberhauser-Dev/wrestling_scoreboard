@@ -11,16 +11,16 @@ const bellPlayerNotifierProvider = BellPlayerNotifierProvider._();
 
 final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotifier, Raw<Future<AudioPlayer>>> {
   const BellPlayerNotifierProvider._({super.runNotifierBuildOverride, BellPlayerNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'bellPlayerNotifierProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
+    : _createCb = create,
+      super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'bellPlayerNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        allTransitiveDependencies: null,
+      );
 
   final BellPlayerNotifier Function()? _createCb;
 
@@ -29,10 +29,7 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<AudioPlayer>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Raw<Future<AudioPlayer>>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<AudioPlayer>>>(value));
   }
 
   @$internal
@@ -41,20 +38,13 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
 
   @$internal
   @override
-  BellPlayerNotifierProvider $copyWithCreate(
-    BellPlayerNotifier Function() create,
-  ) {
+  BellPlayerNotifierProvider $copyWithCreate(BellPlayerNotifier Function() create) {
     return BellPlayerNotifierProvider._(create: create);
   }
 
   @$internal
   @override
-  BellPlayerNotifierProvider $copyWithBuild(
-    Raw<Future<AudioPlayer>> Function(
-      Ref,
-      BellPlayerNotifier,
-    ) build,
-  ) {
+  BellPlayerNotifierProvider $copyWithBuild(Raw<Future<AudioPlayer>> Function(Ref, BellPlayerNotifier) build) {
     return BellPlayerNotifierProvider._(runNotifierBuildOverride: build);
   }
 
@@ -73,8 +63,14 @@ abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> 
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<AudioPlayer>>>;
-    final element = ref.element
-        as $ClassProviderElement<NotifierBase<Raw<Future<AudioPlayer>>>, Raw<Future<AudioPlayer>>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<AudioPlayer>>>,
+              Raw<Future<AudioPlayer>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

@@ -20,27 +20,25 @@ import 'middleware/cors.dart';
 Future<HttpServer> init() async {
   // Init logger
   Logger.root.level = env.logLevel ?? Level.INFO;
-  Logger.root.onRecord.listen(
-    (record) async {
-      String text = '[${record.time}] ${record.level.name}: ${record.message}';
-      if (record.error != null) {
-        text += '\nError: ${record.error}';
-        if (record.stackTrace != null) {
-          text += 'StackTrace: ${record.stackTrace}';
-        }
+  Logger.root.onRecord.listen((record) async {
+    String text = '[${record.time}] ${record.level.name}: ${record.message}';
+    if (record.error != null) {
+      text += '\nError: ${record.error}';
+      if (record.stackTrace != null) {
+        text += 'StackTrace: ${record.stackTrace}';
       }
-      text = switch (record.level) {
-        Level.FINEST => '\x1B[38;5;247m$text\x1B[0m',
-        Level.FINER => '\x1B[38;5;248m$text\x1B[0m',
-        Level.FINE => '\x1B[38;5;249m$text\x1B[0m',
-        Level.CONFIG => '\x1B[34m$text\x1B[0m',
-        Level.WARNING => '\x1B[33m$text\x1B[0m',
-        Level.SEVERE || Level.SHOUT => '\x1B[31m$text\x1B[0m',
-        _ => text,
-      };
-      print(text);
-    },
-  );
+    }
+    text = switch (record.level) {
+      Level.FINEST => '\x1B[38;5;247m$text\x1B[0m',
+      Level.FINER => '\x1B[38;5;248m$text\x1B[0m',
+      Level.FINE => '\x1B[38;5;249m$text\x1B[0m',
+      Level.CONFIG => '\x1B[34m$text\x1B[0m',
+      Level.WARNING => '\x1B[33m$text\x1B[0m',
+      Level.SEVERE || Level.SHOUT => '\x1B[31m$text\x1B[0m',
+      _ => text,
+    };
+    print(text);
+  });
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
@@ -54,30 +52,31 @@ Future<HttpServer> init() async {
   final webSocketLog = Logger('Websocket');
 
   // Router instance to handler requests.
-  final router = shelf_router.Router()
-    ..mount('/api', ApiRoute().pipeline)
-    ..mount('/ws', (Request request) {
-      try {
-        return websocketHandler(request);
-      } on HijackException catch (error, _) {
-        // A HijackException should bypass the response-writing logic entirely.
-        webSocketLog.warning('Warning: HijackException thrown on WebsocketHandler.\n$error');
-        // TODO hide stack trace or handle better
-        // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
-        rethrow;
-      } catch (error, _) {
-        webSocketLog.severe('Error thrown by Websocket Handler handler.\n$error');
-        return Response.internalServerError();
-      }
-    })
-    ..mount('/about', (Request request) async {
-      final pubspec = await parsePubspec();
-      return Response.ok('''
+  final router =
+      shelf_router.Router()
+        ..mount('/api', ApiRoute().pipeline)
+        ..mount('/ws', (Request request) {
+          try {
+            return websocketHandler(request);
+          } on HijackException catch (error, _) {
+            // A HijackException should bypass the response-writing logic entirely.
+            webSocketLog.warning('Warning: HijackException thrown on WebsocketHandler.\n$error');
+            // TODO hide stack trace or handle better
+            // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
+            rethrow;
+          } catch (error, _) {
+            webSocketLog.severe('Error thrown by Websocket Handler handler.\n$error');
+            return Response.internalServerError();
+          }
+        })
+        ..mount('/about', (Request request) async {
+          final pubspec = await parsePubspec();
+          return Response.ok('''
     Name: ${pubspec.name}
     Description: ${pubspec.description}
     Version: ${pubspec.version}
     ''');
-    });
+        });
 
   // Serve files from the file system.
   final staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');

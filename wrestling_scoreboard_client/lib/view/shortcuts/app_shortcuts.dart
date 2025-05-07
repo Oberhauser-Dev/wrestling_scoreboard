@@ -5,10 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 
-enum AppAction {
-  toggleFullScreen,
-  closeFullScreen,
-}
+enum AppAction { toggleFullScreen, closeFullScreen }
 
 class AppActionIntent extends Intent {
   const AppActionIntent({required this.type});

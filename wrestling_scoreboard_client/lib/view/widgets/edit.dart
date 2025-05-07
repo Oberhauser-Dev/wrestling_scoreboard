@@ -9,23 +9,11 @@ class EditWidget extends StatelessWidget {
   final Future<void> Function() onSubmit;
   final List<Widget> items;
 
-  const EditWidget({
-    super.key,
-    required this.typeLocalization,
-    required this.onSubmit,
-    required this.items,
-    this.id,
-  });
+  const EditWidget({super.key, required this.typeLocalization, required this.onSubmit, required this.items, this.id});
 
   List<Widget> _buildActions(BuildContext context) {
     final localizations = context.l10n;
-    return [
-      EditAction(
-        icon: const Icon(Icons.save),
-        label: Text(localizations.save),
-        onSubmit: onSubmit,
-      ),
-    ];
+    return [EditAction(icon: const Icon(Icons.save), label: Text(localizations.save), onSubmit: onSubmit)];
   }
 
   @override
@@ -58,25 +46,16 @@ class CustomizableEditWidget extends StatelessWidget {
     final localizations = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         title: Row(
           children: [
             Text('${id == null ? localizations.create : localizations.edit} $typeLocalization'),
-            if (id != null)
-              Text(
-                ' #$id',
-                style: TextStyle(color: Theme.of(context).disabledColor),
-              ),
+            if (id != null) Text(' #$id', style: TextStyle(color: Theme.of(context).disabledColor)),
           ],
         ),
         actions: buildActions(context),
       ),
-      body: ResponsiveColumn(
-        children: items,
-      ),
+      body: ResponsiveColumn(children: items),
     );
   }
 }
@@ -92,11 +71,7 @@ class EditAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      child: ElevatedButton.icon(
-        icon: icon,
-        onPressed: () => catchAsync(context, onSubmit),
-        label: label,
-      ),
+      child: ElevatedButton.icon(icon: icon, onPressed: () => catchAsync(context, onSubmit), label: label),
     );
   }
 }

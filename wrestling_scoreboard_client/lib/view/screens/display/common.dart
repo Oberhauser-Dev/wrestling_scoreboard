@@ -14,27 +14,32 @@ class ClassificationPointsDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final participationStatesFuture = Future.wait(participationStates.map((participationState) async {
-      return participationState == null
-          ? null
-          : ref.watch(singleDataStreamProvider<AthleteBoutState>(
-              SingleProviderData<AthleteBoutState>(initialData: participationState, id: participationState.id!),
-            ).future);
-    }));
+    final participationStatesFuture = Future.wait(
+      participationStates.map((participationState) async {
+        return participationState == null
+            ? null
+            : ref.watch(
+              singleDataStreamProvider<AthleteBoutState>(
+                SingleProviderData<AthleteBoutState>(initialData: participationState, id: participationState.id!),
+              ).future,
+            );
+      }),
+    );
     return ThemedContainer(
       color: color,
       child: Center(
         child: LoadingBuilder<List<AthleteBoutState?>>(
-            future: participationStatesFuture,
-            initialData: null, // Handle initial data via the stream
-            builder: (context, participationStates) {
-              return ScaledText(
-                TeamMatch.getClassificationPoints(participationStates).toString(),
-                fontSize: 36,
-                minFontSize: 16,
-                softWrap: false,
-              );
-            }),
+          future: participationStatesFuture,
+          initialData: null, // Handle initial data via the stream
+          builder: (context, participationStates) {
+            return ScaledText(
+              TeamMatch.getClassificationPoints(participationStates).toString(),
+              fontSize: 36,
+              minFontSize: 16,
+              softWrap: false,
+            );
+          },
+        ),
       ),
     );
   }
@@ -48,15 +53,10 @@ class CommonElements {
 
     return [
       ThemedContainer(
-          color: Colors.red.shade800,
-          padding: edgeInsets,
-          child: Center(
-            child: ScaledText(
-              home.name,
-              fontSize: 28,
-              minFontSize: 16,
-            ),
-          )),
+        color: Colors.red.shade800,
+        padding: edgeInsets,
+        child: Center(child: ScaledText(home.name, fontSize: 28, minFontSize: 16)),
+      ),
       Row(
         children: [
           Expanded(
@@ -76,13 +76,7 @@ class CommonElements {
       ThemedContainer(
         color: Colors.blue.shade800,
         padding: edgeInsets,
-        child: Center(
-          child: ScaledText(
-            guest.name,
-            fontSize: 28,
-            minFontSize: 16,
-          ),
-        ),
+        child: Center(child: ScaledText(guest.name, fontSize: 28, minFontSize: 16)),
       ),
     ];
   }

@@ -7,9 +7,7 @@ import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.d
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class RestDataManager extends DataManager {
-  static const rawQueryParameter = {
-    'isRaw': 'true',
-  };
+  static const rawQueryParameter = {'isRaw': 'true'};
 
   late final Map<String, String> _headers;
 
@@ -21,10 +19,7 @@ class RestDataManager extends DataManager {
 
   RestDataManager({required String? apiUrl, super.authService, required this.onResetAuth}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
-    _headers = {
-      "Content-Type": "application/json",
-      ...?authService?.header,
-    };
+    _headers = {"Content-Type": "application/json", ...?authService?.header};
   }
 
   String _getPathFromType(Type t) {
@@ -54,8 +49,9 @@ class RestDataManager extends DataManager {
 
   @override
   Future<Map<String, dynamic>> readSingleJson<T extends DataObject>(int id, {bool isRaw = true}) async {
-    final uri =
-        Uri.parse('$_apiUrl${_getPathFromType(T)}/$id').replace(queryParameters: isRaw ? rawQueryParameter : null);
+    final uri = Uri.parse(
+      '$_apiUrl${_getPathFromType(T)}/$id',
+    ).replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri, headers: _headers);
     await _handleResponse(response, errorMessage: 'Failed to READ single ${T.toString()}');
     return jsonDecode(response.body);
@@ -70,8 +66,9 @@ class RestDataManager extends DataManager {
     if (filterObject != null) {
       prepend = '${_getPathFromType(S)}/${filterObject.id}';
     }
-    final uri =
-        Uri.parse('$_apiUrl$prepend${_getPathFromType(T)}s').replace(queryParameters: isRaw ? rawQueryParameter : null);
+    final uri = Uri.parse(
+      '$_apiUrl$prepend${_getPathFromType(T)}s',
+    ).replace(queryParameters: isRaw ? rawQueryParameter : null);
     final response = await http.get(uri, headers: _headers);
     await _handleResponse(response, errorMessage: 'Failed to READ many ${T.toString()}');
 
@@ -82,22 +79,24 @@ class RestDataManager extends DataManager {
   @override
   Future<void> generateBouts<T extends DataObject>(T dataObject, [bool isReset = false]) async {
     final prepend = '${_getPathFromType(T)}/${dataObject.id}';
-    final uri = Uri.parse('$_apiUrl$prepend/bouts/generate')
-        .replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
+    final uri = Uri.parse(
+      '$_apiUrl$prepend/bouts/generate',
+    ).replace(queryParameters: isReset ? const {'isReset': 'true'} : null);
     final response = await http.post(uri, headers: _headers);
     await _handleResponse(response, errorMessage: 'Failed to CREATE generated bouts for $T (${dataObject.toString()})');
   }
 
   @override
-
   /// As we need the return value immediately, we need to use the rest API.
   Future<int> createOrUpdateSingle<T extends DataObject>(T obj) async {
     final body = jsonEncode(singleToJson(obj, T, obj.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/${obj.tableName}');
     final response = await http.post(uri, headers: _headers, body: body);
 
-    await _handleResponse(response,
-        errorMessage: 'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}');
+    await _handleResponse(
+      response,
+      errorMessage: 'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}',
+    );
     return jsonDecode(response.body);
   }
 
@@ -165,9 +164,9 @@ class RestDataManager extends DataManager {
         body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.update));
       }
     }
-    final uri = Uri.parse('$_apiUrl/$table/$id/api/import').replace(queryParameters: {
-      'subjacent': includeSubjacent.toString(),
-    });
+    final uri = Uri.parse(
+      '$_apiUrl/$table/$id/api/import',
+    ).replace(queryParameters: {'subjacent': includeSubjacent.toString()});
     final response = await http.post(uri, body: body, headers: _headers);
     await _handleResponse(response, errorMessage: 'Failed to import from $table $id');
   }
@@ -230,12 +229,14 @@ class RestDataManager extends DataManager {
         body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.read));
       }
     }
-    final uri = Uri.parse('$_apiUrl/search').replace(queryParameters: {
-      if (searchTerm.isNotEmpty) 'like': searchTerm,
-      if (type != null) 'type': getTableNameFromType(type),
-      if (organizationId != null) 'org': organizationId.toString(),
-      if (includeApiProviderResults) 'use_provider': includeApiProviderResults.toString(),
-    });
+    final uri = Uri.parse('$_apiUrl/search').replace(
+      queryParameters: {
+        if (searchTerm.isNotEmpty) 'like': searchTerm,
+        if (type != null) 'type': getTableNameFromType(type),
+        if (organizationId != null) 'org': organizationId.toString(),
+        if (includeApiProviderResults) 'use_provider': includeApiProviderResults.toString(),
+      },
+    );
     final response =
         body == null ? await http.get(uri, headers: _headers) : await http.post(uri, body: body, headers: _headers);
 
@@ -259,8 +260,10 @@ class RestDataManager extends DataManager {
       throw RestException('There should not be returned single raw data on a search', response: response);
     }
 
-    Future<void> handleManyRaw<T extends DataObject>(
-        {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
+    Future<void> handleManyRaw<T extends DataObject>({
+      required CRUD operation,
+      required ManyDataObject<Map<String, dynamic>> many,
+    }) async {
       throw RestException('There should not be returned many raw data on a search', response: response);
     }
 
@@ -283,18 +286,17 @@ class RestDataManager extends DataManager {
     final body = jsonEncode(singleToJson(user, User, user.id != null ? CRUD.update : CRUD.create));
     final uri = Uri.parse('$_apiUrl/auth/sign_up');
     final response = await http.post(uri, headers: _headers, body: body);
-    await _handleResponse(response,
-        errorMessage: 'Failed to ${user.id != null ? 'UPDATE' : 'CREATE'} single ${user.tableName}');
+    await _handleResponse(
+      response,
+      errorMessage: 'Failed to ${user.id != null ? 'UPDATE' : 'CREATE'} single ${user.tableName}',
+    );
     return jsonDecode(response.body);
   }
 
   @override
   Future<String> signIn(BasicAuthService authService) async {
     final uri = Uri.parse('$_apiUrl/auth/sign_in');
-    final response = await http.post(uri, headers: {
-      ...authService.header,
-      ..._headers,
-    });
+    final response = await http.post(uri, headers: {...authService.header, ..._headers});
 
     await _handleResponse(response, errorMessage: 'Failed to sign in with username ${authService.username}');
     return response.body;
@@ -313,11 +315,7 @@ class RestDataManager extends DataManager {
   @override
   Future<void> updateUser(User user) async {
     final uri = Uri.parse('$_apiUrl/auth/user');
-    final response = await http.post(
-      uri,
-      headers: _headers,
-      body: jsonEncode(user.toJson()),
-    );
+    final response = await http.post(uri, headers: _headers, body: jsonEncode(user.toJson()));
 
     await _handleResponse(response, errorMessage: 'Failed to change password');
   }

@@ -27,7 +27,8 @@ extension AuthRequest on Request {
       }
       if (user.privilege < privilege) {
         return Response.forbidden(
-            'You don\'t have the permission for this request. Ask the administrator in order to give you access.');
+          'You don\'t have the permission for this request. Ask the administrator in order to give you access.',
+        );
       }
       return handler(this, user);
     } on JWTExpiredException {

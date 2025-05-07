@@ -12,9 +12,6 @@ class Explore extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
-    return WindowStateScaffold(
-      appBarTitle: Text(localizations.explore),
-      body: const OrganizationsView(),
-    );
+    return WindowStateScaffold(appBarTitle: Text(localizations.explore), body: const OrganizationsView());
   }
 }

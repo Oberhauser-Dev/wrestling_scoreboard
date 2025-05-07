@@ -8,12 +8,7 @@ import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/url.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-enum WebSocketConnectionState {
-  connecting,
-  connected,
-  disconnecting,
-  disconnected,
-}
+enum WebSocketConnectionState { connecting, connected, disconnecting, disconnected }
 
 /// Close event codes: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
 /// Custom:
@@ -34,8 +29,10 @@ class WebSocketManager {
       return single.id!;
     }
 
-    Future<int> handleSingleRaw<T extends DataObject>(
-        {required CRUD operation, required Map<String, dynamic> single}) async {
+    Future<int> handleSingleRaw<T extends DataObject>({
+      required CRUD operation,
+      required Map<String, dynamic> single,
+    }) async {
       if (operation == CRUD.update) {
         dataManager.getSingleRawStreamController<T>()?.sink.add(single);
       }
@@ -48,21 +45,28 @@ class WebSocketManager {
       dataManager.getManyStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 
-    Future<void> handleManyRaw<T extends DataObject>(
-        {required CRUD operation, required ManyDataObject<Map<String, dynamic>> many}) async {
-      final tmp =
-          ManyDataObject<Map<String, dynamic>>(data: many.data, filterId: many.filterId, filterType: many.filterType);
+    Future<void> handleManyRaw<T extends DataObject>({
+      required CRUD operation,
+      required ManyDataObject<Map<String, dynamic>> many,
+    }) async {
+      final tmp = ManyDataObject<Map<String, dynamic>>(
+        data: many.data,
+        filterId: many.filterId,
+        filterType: many.filterType,
+      );
       final filterType = many.filterType;
       dataManager.getManyRawStreamController<T>(filterType: filterType)?.sink.add(tmp);
     }
 
     messageHandler(dynamic message) {
       final json = jsonDecode(message);
-      handleGenericJson(json,
-          handleSingle: handleSingle,
-          handleMany: handleMany,
-          handleSingleRaw: handleSingleRaw,
-          handleManyRaw: handleManyRaw);
+      handleGenericJson(
+        json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw,
+      );
     }
 
     if (url != null) {
@@ -73,27 +77,31 @@ class WebSocketManager {
         await _channel?.sink.close(4210);
         try {
           _channel = WebSocketChannel.connect(Uri.parse(_wsUrl!));
-          _channel?.stream.listen(messageHandler, onError: (e) {
-            if (e is WebSocketChannelException) {
-              log('Websocket connection refused by server');
-              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnecting);
-            }
-          }, onDone: () {
-            if (_channel?.closeCode == 4210) {
-              log('Websocket connection reconnecting: ${_channel?.closeReason}');
-              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
-            } else if (_channel?.closeCode == 1001) {
-              log('Websocket connection closed by client ${_channel?.closeReason}');
-              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
-            } else if (_channel?.closeCode == null) {
-              log('Websocket connection closed by server');
-              // Avoid overriding previous SocketException with setting a disconnected state
-            } else {
-              log('Websocket connection closed by server ${_channel?.closeReason}');
-              onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
-            }
-            _channel = null;
-          });
+          _channel?.stream.listen(
+            messageHandler,
+            onError: (e) {
+              if (e is WebSocketChannelException) {
+                log('Websocket connection refused by server');
+                onWebSocketConnection.sink.add(WebSocketConnectionState.disconnecting);
+              }
+            },
+            onDone: () {
+              if (_channel?.closeCode == 4210) {
+                log('Websocket connection reconnecting: ${_channel?.closeReason}');
+                onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+              } else if (_channel?.closeCode == 1001) {
+                log('Websocket connection closed by client ${_channel?.closeReason}');
+                onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+              } else if (_channel?.closeCode == null) {
+                log('Websocket connection closed by server');
+                // Avoid overriding previous SocketException with setting a disconnected state
+              } else {
+                log('Websocket connection closed by server ${_channel?.closeReason}');
+                onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+              }
+              _channel = null;
+            },
+          );
           await _channel?.ready.timeout(const Duration(seconds: 5));
           log('Websocket connection established: $_wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);

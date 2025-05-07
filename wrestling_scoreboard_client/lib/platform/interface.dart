@@ -1,9 +1,7 @@
 abstract class WindowStateManager {
   final Future<void> Function(WindowState newState) setWindowState;
 
-  WindowStateManager({
-    required this.setWindowState,
-  }) {
+  WindowStateManager({required this.setWindowState}) {
     listenToWindowState();
   }
 

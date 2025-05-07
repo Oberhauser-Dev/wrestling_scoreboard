@@ -76,7 +76,9 @@ class BoutActionControls extends StatelessWidget {
         displayActionControl(
           context.l10n.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           prepareCallback(
-              const BoutScreenActionIntent.redActivityTime(), const BoutScreenActionIntent.blueActivityTime()),
+            const BoutScreenActionIntent.redActivityTime(),
+            const BoutScreenActionIntent.blueActivityTime(),
+          ),
           color,
           tooltipMessage: localizations.activityDuration,
         ),
@@ -90,8 +92,10 @@ class BoutActionControls extends StatelessWidget {
       if (boutConfig.bleedingInjuryDuration != null)
         displayActionControl(
           context.l10n.bleedingInjuryTimeShort, // BZ Bleeding Injury Time, Verletzungszeit Blut
-          prepareCallback(const BoutScreenActionIntent.redBleedingInjuryTime(),
-              const BoutScreenActionIntent.blueBleedingInjuryTime()),
+          prepareCallback(
+            const BoutScreenActionIntent.redBleedingInjuryTime(),
+            const BoutScreenActionIntent.blueBleedingInjuryTime(),
+          ),
           color,
           tooltipMessage: localizations.bleedingInjuryDuration,
         ),
@@ -102,19 +106,14 @@ class BoutActionControls extends StatelessWidget {
         tooltipMessage: '${localizations.deleteLatestAction} (⌫)',
       ),
     ];
-    return IntrinsicWidth(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: actions,
-      ),
-    );
+    return IntrinsicWidth(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: actions));
   }
 
   displayActionControl(String text, void Function()? callback, MaterialColor color, {String? tooltipMessage}) {
     return Expanded(
-        child: DelayedTooltip(
-      message: tooltipMessage,
-      child: OutlinedButton(
+      child: DelayedTooltip(
+        message: tooltipMessage,
+        child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,
             visualDensity: VisualDensity.compact,
@@ -125,7 +124,9 @@ class BoutActionControls extends StatelessWidget {
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
           ),
           onPressed: callback,
-          child: ScaledText(text, fontSize: 10, minFontSize: 8, softWrap: false)),
-    ));
+          child: ScaledText(text, fontSize: 10, minFontSize: 8, softWrap: false),
+        ),
+      ),
+    );
   }
 }

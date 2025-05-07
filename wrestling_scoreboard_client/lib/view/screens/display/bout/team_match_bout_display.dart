@@ -10,7 +10,8 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) {
   context.push(
-      '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}');
+    '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}',
+  );
 }
 
 /// Class to load a single bout, while also consider the previous and the next bout.
@@ -22,85 +23,87 @@ class TeamMatchBoutDisplay extends StatelessWidget {
   final int teamMatchBoutId;
   final TeamMatch? initialMatch;
 
-  const TeamMatchBoutDisplay({
-    required this.matchId,
-    required this.teamMatchBoutId,
-    this.initialMatch,
-    super.key,
-  });
+  const TeamMatchBoutDisplay({required this.matchId, required this.teamMatchBoutId, this.initialMatch, super.key});
 
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     return SingleConsumer<TeamMatch>(
-        id: matchId,
-        initialData: initialMatch,
-        builder: (context, match) {
-          return ManyConsumer<TeamMatchBout, TeamMatch>(
-              filterObject: match,
-              builder: (context, teamMatchBouts) {
-                if (teamMatchBouts.isEmpty) {
-                  return Center(
-                    child: Text(
-                      localizations.noItems,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  );
-                }
-                final teamMatchBout = teamMatchBouts.singleWhere((element) => element.id == teamMatchBoutId);
-                final teamMatchBoutIndex = teamMatchBouts.indexOf(teamMatchBout);
-                // Use bout to get the actual state, but use teamMatchBout for navigation.
-                return SingleConsumer<Bout>(
-                    id: teamMatchBout.bout.id,
-                    initialData: teamMatchBout.bout,
-                    builder: (context, bout) {
-                      return ManyConsumer<TeamLineupParticipation, TeamLineup>(
-                          filterObject: match.home,
-                          builder: (context, homeParticipations) {
-                            final homeParticipation =
-                                TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                    participations: homeParticipations,
-                                    membership: bout.r?.membership,
-                                    weightClass: teamMatchBout.weightClass);
-                            return ManyConsumer<TeamLineupParticipation, TeamLineup>(
-                                filterObject: match.guest,
-                                builder: (context, guestParticipations) {
-                                  final guestParticipation =
-                                      TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                          participations: guestParticipations,
-                                          membership: bout.r?.membership,
-                                          weightClass: teamMatchBout.weightClass);
-                                  return ManyConsumer<BoutResultRule, BoutConfig>(
-                                      filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
-                                      builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
-                                        final bouts = teamMatchBouts.map((e) => e.bout).toList();
-                                        return BoutScreen(
-                                          wrestlingEvent: match,
-                                          boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                                          boutRules: boutResultRules,
-                                          bouts: bouts,
-                                          boutIndex: teamMatchBoutIndex,
-                                          bout: bout,
-                                          onPressBoutInfo: (BuildContext context) {
-                                            // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                                            context.go(
-                                                '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}');
-                                          },
-                                          navigateToBoutByIndex: (context, index) {
-                                            context.pop();
-                                            navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
-                                          },
-                                          headerItems: CommonElements.getTeamHeader(
-                                              match.home.team, match.guest.team, bouts, context),
-                                          weightClass: teamMatchBout.weightClass,
-                                          weightR: homeParticipation?.weight,
-                                          weightB: guestParticipation?.weight,
-                                        );
-                                      });
-                                });
-                          });
-                    });
-              });
-        });
+      id: matchId,
+      initialData: initialMatch,
+      builder: (context, match) {
+        return ManyConsumer<TeamMatchBout, TeamMatch>(
+          filterObject: match,
+          builder: (context, teamMatchBouts) {
+            if (teamMatchBouts.isEmpty) {
+              return Center(child: Text(localizations.noItems, style: Theme.of(context).textTheme.bodySmall));
+            }
+            final teamMatchBout = teamMatchBouts.singleWhere((element) => element.id == teamMatchBoutId);
+            final teamMatchBoutIndex = teamMatchBouts.indexOf(teamMatchBout);
+            // Use bout to get the actual state, but use teamMatchBout for navigation.
+            return SingleConsumer<Bout>(
+              id: teamMatchBout.bout.id,
+              initialData: teamMatchBout.bout,
+              builder: (context, bout) {
+                return ManyConsumer<TeamLineupParticipation, TeamLineup>(
+                  filterObject: match.home,
+                  builder: (context, homeParticipations) {
+                    final homeParticipation = TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
+                      participations: homeParticipations,
+                      membership: bout.r?.membership,
+                      weightClass: teamMatchBout.weightClass,
+                    );
+                    return ManyConsumer<TeamLineupParticipation, TeamLineup>(
+                      filterObject: match.guest,
+                      builder: (context, guestParticipations) {
+                        final guestParticipation =
+                            TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
+                              participations: guestParticipations,
+                              membership: bout.r?.membership,
+                              weightClass: teamMatchBout.weightClass,
+                            );
+                        return ManyConsumer<BoutResultRule, BoutConfig>(
+                          filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
+                          builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
+                            final bouts = teamMatchBouts.map((e) => e.bout).toList();
+                            return BoutScreen(
+                              wrestlingEvent: match,
+                              boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                              boutRules: boutResultRules,
+                              bouts: bouts,
+                              boutIndex: teamMatchBoutIndex,
+                              bout: bout,
+                              onPressBoutInfo: (BuildContext context) {
+                                // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+                                context.go(
+                                  '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}',
+                                );
+                              },
+                              navigateToBoutByIndex: (context, index) {
+                                context.pop();
+                                navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);
+                              },
+                              headerItems: CommonElements.getTeamHeader(
+                                match.home.team,
+                                match.guest.team,
+                                bouts,
+                                context,
+                              ),
+                              weightClass: teamMatchBout.weightClass,
+                              weightR: homeParticipation?.weight,
+                              weightB: guestParticipation?.weight,
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }

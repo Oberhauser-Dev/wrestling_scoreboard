@@ -23,11 +23,7 @@ class ObservableStopwatch extends Stopwatch {
   final Duration tick;
   final bool roundToUnit;
 
-  ObservableStopwatch({
-    this.limit,
-    this.tick = const Duration(milliseconds: 30),
-    this.roundToUnit = true,
-  });
+  ObservableStopwatch({this.limit, this.tick = const Duration(milliseconds: 30), this.roundToUnit = true});
 
   @override
   Duration get elapsed => super.elapsed + presetDuration;

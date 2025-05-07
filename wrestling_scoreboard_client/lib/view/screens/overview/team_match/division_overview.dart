@@ -36,9 +36,7 @@ class DivisionOverview extends BoutConfigOverview<Division> {
           ref,
           classLocale: localizations.division,
           details: '${data.name}, ${data.startDate.year}',
-          editPage: DivisionEdit(
-            division: data,
-          ),
+          editPage: DivisionEdit(division: data),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Division>(data),
           tiles: [
             ContentItem(
@@ -61,48 +59,51 @@ class DivisionOverview extends BoutConfigOverview<Division> {
               subtitle: localizations.organization,
               icon: Icons.corporate_fare,
             ),
-            ContentItem(
-              title: data.parent?.fullname ?? '-',
-              subtitle: localizations.division,
-              icon: Icons.inventory,
-            ),
+            ContentItem(title: data.parent?.fullname ?? '-', subtitle: localizations.division, icon: Icons.inventory),
           ],
           dataId: data.boutConfig.id!,
           initialData: data.boutConfig,
           subClassData: data,
-          buildRelations: (boutConfig) => {
-            Tab(child: HeadingText(localizations.leagues)): FilterableManyConsumer<League, Division>.edit(
-              context: context,
-              editPageBuilder: (context) => LeagueEdit(initialDivision: data),
-              filterObject: data,
-              itemBuilder: (context, item) => ContentItem(
-                title: '${item.fullname}, ${item.startDate.year}',
-                icon: Icons.emoji_events,
-                onTap: () => handleSelectedLeague(item, context),
-              ),
-            ),
-            Tab(child: HeadingText(localizations.weightClasses)):
-                FilterableManyConsumer<DivisionWeightClass, Division>.edit(
-              context: context,
-              editPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: data),
-              filterObject: data,
-              itemBuilder: (context, item) => ContentItem(
-                  title: item.localize(context),
-                  icon: Icons.fitness_center,
-                  onTap: () => handleSelectedWeightClass(item, context)),
-            ),
-            Tab(child: HeadingText('${localizations.sub}-${localizations.divisions}')):
-                FilterableManyConsumer<Division, Division>.edit(
-              context: context,
-              editPageBuilder: (context) => DivisionEdit(initialParent: data),
-              filterObject: data,
-              itemBuilder: (context, item) => ContentItem(
-                title: data.fullname,
-                icon: Icons.inventory,
-                onTap: () => handleSelectedChildDivision(data, context),
-              ),
-            ),
-          },
+          buildRelations:
+              (boutConfig) => {
+                Tab(child: HeadingText(localizations.leagues)): FilterableManyConsumer<League, Division>.edit(
+                  context: context,
+                  editPageBuilder: (context) => LeagueEdit(initialDivision: data),
+                  filterObject: data,
+                  itemBuilder:
+                      (context, item) => ContentItem(
+                        title: '${item.fullname}, ${item.startDate.year}',
+                        icon: Icons.emoji_events,
+                        onTap: () => handleSelectedLeague(item, context),
+                      ),
+                ),
+                Tab(
+                  child: HeadingText(localizations.weightClasses),
+                ): FilterableManyConsumer<DivisionWeightClass, Division>.edit(
+                  context: context,
+                  editPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: data),
+                  filterObject: data,
+                  itemBuilder:
+                      (context, item) => ContentItem(
+                        title: item.localize(context),
+                        icon: Icons.fitness_center,
+                        onTap: () => handleSelectedWeightClass(item, context),
+                      ),
+                ),
+                Tab(
+                  child: HeadingText('${localizations.sub}-${localizations.divisions}'),
+                ): FilterableManyConsumer<Division, Division>.edit(
+                  context: context,
+                  editPageBuilder: (context) => DivisionEdit(initialParent: data),
+                  filterObject: data,
+                  itemBuilder:
+                      (context, item) => ContentItem(
+                        title: data.fullname,
+                        icon: Icons.inventory,
+                        onTap: () => handleSelectedChildDivision(data, context),
+                      ),
+                ),
+              },
         );
       },
     );

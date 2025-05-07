@@ -14,10 +14,14 @@ Future<T> runSynchronized<T>({
 }) async {
   Completer? completer;
   try {
-    completer = await _lockTransaction(key: key, canAbort: canAbort)
-        .timeout(timeout, onTimeout: () => throw 'Locking for $key took longer than $timeout.');
-    final result = await runAsync().timeout(timeout,
-        onTimeout: () => throw 'Async execution in synchronized block for $key took longer than $timeout.');
+    completer = await _lockTransaction(
+      key: key,
+      canAbort: canAbort,
+    ).timeout(timeout, onTimeout: () => throw 'Locking for $key took longer than $timeout.');
+    final result = await runAsync().timeout(
+      timeout,
+      onTimeout: () => throw 'Async execution in synchronized block for $key took longer than $timeout.',
+    );
     completer?.complete();
     return result;
   } catch (error) {
@@ -53,8 +57,10 @@ Future<T> retry<T>({
 }) async {
   for (int attempt = 0; attempt < attempts; attempt++) {
     try {
-      return await runAsync()
-          .timeout(timeout, onTimeout: () => throw 'Async execution took longer than $timeout. Retry ${attempt + 1}');
+      return await runAsync().timeout(
+        timeout,
+        onTimeout: () => throw 'Async execution took longer than $timeout. Retry ${attempt + 1}',
+      );
     } catch (error) {
       log.info(error);
     }

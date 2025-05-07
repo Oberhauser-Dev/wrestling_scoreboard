@@ -40,34 +40,32 @@ class WindowStateScaffold extends ConsumerWidget {
     final localizations = context.l10n;
     final alwaysShowAppBar = !hideAppBarOnFullscreen || isMobile;
     return LoadingBuilder<WindowState>(
-        future: ref.watch(windowStateNotifierProvider),
-        builder: (BuildContext context, WindowState data) {
-          final hideAppBar = data == WindowState.fullscreen;
-          final appBar = AppBar(
-            title: appBarTitle,
-            bottom: appBarBottom,
-            actions: [
-              ...?actions,
-              IconButton(
-                icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
-                onPressed: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
-                tooltip: localizations.toggleFullscreen,
-              ),
-            ],
-          );
-          if (alwaysShowAppBar) {
-            return Scaffold(
-              appBar: appBar,
-              body: body,
-            );
-          }
-          return Stack(
-            alignment: AlignmentDirectional.topStart,
-            children: [
-              Scaffold(
-                appBar: hideAppBar
-                    ? null
-                    : PreferredSizeImpl(
+      future: ref.watch(windowStateNotifierProvider),
+      builder: (BuildContext context, WindowState data) {
+        final hideAppBar = data == WindowState.fullscreen;
+        final appBar = AppBar(
+          title: appBarTitle,
+          bottom: appBarBottom,
+          actions: [
+            ...?actions,
+            IconButton(
+              icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
+              onPressed: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
+              tooltip: localizations.toggleFullscreen,
+            ),
+          ],
+        );
+        if (alwaysShowAppBar) {
+          return Scaffold(appBar: appBar, body: body);
+        }
+        return Stack(
+          alignment: AlignmentDirectional.topStart,
+          children: [
+            Scaffold(
+              appBar:
+                  hideAppBar
+                      ? null
+                      : PreferredSizeImpl(
                         preferredSize: const Size.fromHeight(kToolbarHeight),
                         child: MouseRegion(
                           onEnter: (event) async {
@@ -84,24 +82,24 @@ class WindowStateScaffold extends ConsumerWidget {
                             }
                           },
                           child: appBar,
-                        )),
-                body: body,
+                        ),
+                      ),
+              body: body,
+            ),
+            if (hideAppBar)
+              // Add a one pixel trigger at the top of the screen.
+              // Must be on the bottom of the stack, to register mouse inputs
+              MouseRegion(
+                cursor: SystemMouseCursors.allScroll,
+                child: Container(height: 1),
+                onEnter: (event) async {
+                  await ref.read(windowStateNotifierProvider.notifier).setFullscreenState(showAppbar: true);
+                },
+                // On Exit is called via the AppBar, to ensure AppBar is not disappearing, if still pointing to it.
               ),
-              if (hideAppBar)
-                // Add a one pixel trigger at the top of the screen.
-                // Must be on the bottom of the stack, to register mouse inputs
-                MouseRegion(
-                  cursor: SystemMouseCursors.allScroll,
-                  child: Container(
-                    height: 1,
-                  ),
-                  onEnter: (event) async {
-                    await ref.read(windowStateNotifierProvider.notifier).setFullscreenState(showAppbar: true);
-                  },
-                  // On Exit is called via the AppBar, to ensure AppBar is not disappearing, if still pointing to it.
-                ),
-            ],
-          );
-        });
+          ],
+        );
+      },
+    );
   }
 }

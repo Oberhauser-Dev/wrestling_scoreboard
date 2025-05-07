@@ -37,19 +37,14 @@ class LeagueController extends OrganizationalController<League> with ImportContr
   }
 
   Future<List<WeightClass>> getWeightClasses(String id, {int? seasonPartition, required bool obfuscate}) {
-    return WeightClassController().getManyFromQuery(_weightClassesQuery(seasonPartition != null),
-        substitutionValues: {
-          'id': id,
-          if (seasonPartition != null) 'season_partition': seasonPartition,
-        },
-        obfuscate: obfuscate);
+    return WeightClassController().getManyFromQuery(
+      _weightClassesQuery(seasonPartition != null),
+      substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
+      obfuscate: obfuscate,
+    );
   }
 
-  Future<List<LeagueWeightClass>> getLeagueWeightClasses(
-    String id, {
-    int? seasonPartition,
-    required bool obfuscate,
-  }) {
+  Future<List<LeagueWeightClass>> getLeagueWeightClasses(String id, {int? seasonPartition, required bool obfuscate}) {
     return LeagueWeightClassController().getMany(
       conditions: ['league_id = @id', if (seasonPartition != null) 'season_partition = @season_partition'],
       substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
@@ -75,21 +70,29 @@ class LeagueController extends OrganizationalController<League> with ImportContr
         return teamMatch.copyWith(
           home: await TeamLineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
           guest: await TeamLineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
-          referee: teamMatch.referee == null
-              ? null
-              : await PersonController().updateOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
-          judge: teamMatch.judge == null
-              ? null
-              : await PersonController().updateOrCreateSingleOfOrg(teamMatch.judge!, obfuscate: obfuscate),
-          matChairman: teamMatch.matChairman == null
-              ? null
-              : await PersonController().updateOrCreateSingleOfOrg(teamMatch.matChairman!, obfuscate: obfuscate),
-          transcriptWriter: teamMatch.transcriptWriter == null
-              ? null
-              : await PersonController().updateOrCreateSingleOfOrg(teamMatch.transcriptWriter!, obfuscate: obfuscate),
-          timeKeeper: teamMatch.timeKeeper == null
-              ? null
-              : await PersonController().updateOrCreateSingleOfOrg(teamMatch.timeKeeper!, obfuscate: obfuscate),
+          referee:
+              teamMatch.referee == null
+                  ? null
+                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
+          judge:
+              teamMatch.judge == null
+                  ? null
+                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.judge!, obfuscate: obfuscate),
+          matChairman:
+              teamMatch.matChairman == null
+                  ? null
+                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.matChairman!, obfuscate: obfuscate),
+          transcriptWriter:
+              teamMatch.transcriptWriter == null
+                  ? null
+                  : await PersonController().updateOrCreateSingleOfOrg(
+                    teamMatch.transcriptWriter!,
+                    obfuscate: obfuscate,
+                  ),
+          timeKeeper:
+              teamMatch.timeKeeper == null
+                  ? null
+                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.timeKeeper!, obfuscate: obfuscate),
         );
       },
       onDelete: (previous) async {
@@ -102,17 +105,25 @@ class LeagueController extends OrganizationalController<League> with ImportContr
 
     await forEachFuture(teamMatchs, (teamMatch) async {
       // Do not add teams to a league multiple times.
-      final previousHomeTeamParticipation = await LeagueTeamParticipationController()
-          .getByLeagueAndTeamId(teamId: teamMatch.home.team.id!, leagueId: entity.id!, obfuscate: obfuscate);
+      final previousHomeTeamParticipation = await LeagueTeamParticipationController().getByLeagueAndTeamId(
+        teamId: teamMatch.home.team.id!,
+        leagueId: entity.id!,
+        obfuscate: obfuscate,
+      );
       if (previousHomeTeamParticipation == null) {
-        await LeagueTeamParticipationController()
-            .createSingle(LeagueTeamParticipation(league: entity, team: teamMatch.home.team));
+        await LeagueTeamParticipationController().createSingle(
+          LeagueTeamParticipation(league: entity, team: teamMatch.home.team),
+        );
       }
-      final previousGuestTeamParticipation = await LeagueTeamParticipationController()
-          .getByLeagueAndTeamId(teamId: teamMatch.guest.team.id!, leagueId: entity.id!, obfuscate: obfuscate);
+      final previousGuestTeamParticipation = await LeagueTeamParticipationController().getByLeagueAndTeamId(
+        teamId: teamMatch.guest.team.id!,
+        leagueId: entity.id!,
+        obfuscate: obfuscate,
+      );
       if (previousGuestTeamParticipation == null) {
-        await LeagueTeamParticipationController()
-            .createSingle(LeagueTeamParticipation(league: entity, team: teamMatch.guest.team));
+        await LeagueTeamParticipationController().createSingle(
+          LeagueTeamParticipation(league: entity, team: teamMatch.guest.team),
+        );
       }
     });
 

@@ -63,13 +63,15 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           selectedItem: _lineup,
           label: localizations.lineup,
           context: context,
-          onSaved: (value) => setState(() {
-            _lineup = value;
-          }),
+          onSaved:
+              (value) => setState(() {
+                _lineup = value;
+              }),
           itemAsString: (u) => u.club.name,
           asyncItems: (String filter) async {
-            _availableLineups ??= await (await ref.read(dataManagerNotifierProvider))
-                .readMany<CompetitionLineup, Competition>(filterObject: widget.initialCompetition);
+            _availableLineups ??= await (await ref.read(
+              dataManagerNotifierProvider,
+            )).readMany<CompetitionLineup, Competition>(filterObject: widget.initialCompetition);
             return _availableLineups!.toList();
           },
         ),
@@ -82,9 +84,10 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           organization: widget.initialCompetition.organization,
           selectedItem: _membership,
           allowEmpty: false,
-          onSave: (value) => setState(() {
-            _membership = value;
-          }),
+          onSave:
+              (value) => setState(() {
+                _membership = value;
+              }),
         ),
       ),
       ListTile(
@@ -94,13 +97,15 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           selectedItem: _weightCategory,
           label: localizations.weightCategory,
           context: context,
-          onSaved: (value) => setState(() {
-            _weightCategory = value;
-          }),
+          onSaved:
+              (value) => setState(() {
+                _weightCategory = value;
+              }),
           itemAsString: (w) => w.name,
           asyncItems: (String filter) async {
-            _availableWeightCategories ??= await (await ref.read(dataManagerNotifierProvider))
-                .readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
+            _availableWeightCategories ??= await (await ref.read(
+              dataManagerNotifierProvider,
+            )).readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
             return _availableWeightCategories!.toList();
           },
         ),
@@ -120,7 +125,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
             _weight = newValue;
           },
         ),
-      )
+      ),
     ];
 
     return Form(
@@ -136,9 +141,11 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
 
   Future<Iterable<Membership>> _getMemberships() async {
     if (_availableMemberships == null && _lineup != null) {
-      _availableMemberships = await ref.readAsync(manyDataStreamProvider<Membership, Club>(
-        ManyProviderData<Membership, Club>(filterObject: _lineup!.club),
-      ).future);
+      _availableMemberships = await ref.readAsync(
+        manyDataStreamProvider<Membership, Club>(
+          ManyProviderData<Membership, Club>(filterObject: _lineup!.club),
+        ).future,
+      );
     }
     return _availableMemberships ?? [];
   }

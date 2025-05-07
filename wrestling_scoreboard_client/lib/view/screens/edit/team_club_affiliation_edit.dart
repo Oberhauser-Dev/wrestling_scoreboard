@@ -11,12 +11,7 @@ class TeamClubAffiliationEdit extends ConsumerStatefulWidget {
   final Team? initialTeam;
   final Club? initialClub;
 
-  const TeamClubAffiliationEdit({
-    this.affiliation,
-    this.initialTeam,
-    this.initialClub,
-    super.key,
-  });
+  const TeamClubAffiliationEdit({this.affiliation, this.initialTeam, this.initialClub, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TeamEditState();
@@ -49,9 +44,10 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
           selectedItem: _team,
           label: localizations.team,
           context: context,
-          onSaved: (Team? value) => setState(() {
-            _team = value;
-          }),
+          onSaved:
+              (Team? value) => setState(() {
+                _team = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
@@ -65,9 +61,10 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
           selectedItem: _club,
           label: localizations.club,
           context: context,
-          onSaved: (Club? value) => setState(() {
-            _club = value;
-          }),
+          onSaved:
+              (Club? value) => setState(() {
+                _club = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
@@ -91,11 +88,9 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamClubAffiliation(
-        id: widget.affiliation?.id,
-        team: _team!,
-        club: _club!,
-      ));
+      await (await ref.read(
+        dataManagerNotifierProvider,
+      )).createOrUpdateSingle(TeamClubAffiliation(id: widget.affiliation?.id, team: _team!, club: _club!));
       navigator.pop();
     }
   }

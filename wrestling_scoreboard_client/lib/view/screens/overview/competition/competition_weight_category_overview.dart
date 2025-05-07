@@ -40,8 +40,10 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             competitionWeightCategory: competitionWeightCategory,
             initialCompetition: competitionWeightCategory.competition,
           ),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider))
-              .deleteSingle<CompetitionWeightCategory>(competitionWeightCategory),
+          onDelete:
+              () async => (await ref.read(
+                dataManagerNotifierProvider,
+              )).deleteSingle<CompetitionWeightCategory>(competitionWeightCategory),
           classLocale: localizations.weightCategory,
           children: [
             ContentItem(
@@ -88,27 +90,28 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
               },
             ),
           ],
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.participations)),
-          ],
-          body: TabGroup(items: [
-            description,
-            FilterableManyConsumer<CompetitionParticipation, CompetitionWeightCategory>.edit(
-              context: context,
-              filterObject: competitionWeightCategory,
-              editPageBuilder: (context) => CompetitionParticipationEdit(
-                initialCompetition: competitionWeightCategory.competition,
-                initialWeightCategory: competitionWeightCategory,
+          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.participations))],
+          body: TabGroup(
+            items: [
+              description,
+              FilterableManyConsumer<CompetitionParticipation, CompetitionWeightCategory>.edit(
+                context: context,
+                filterObject: competitionWeightCategory,
+                editPageBuilder:
+                    (context) => CompetitionParticipationEdit(
+                      initialCompetition: competitionWeightCategory.competition,
+                      initialWeightCategory: competitionWeightCategory,
+                    ),
+                mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.name,
+                      icon: Icons.person,
+                      onTap: () => _handleSelectedParticipation(item, context),
+                    ),
               ),
-              mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
-              itemBuilder: (context, item) => ContentItem(
-                title: item.name,
-                icon: Icons.person,
-                onTap: () => _handleSelectedParticipation(item, context),
-              ),
-            ),
-          ]),
+            ],
+          ),
         );
       },
     );
@@ -120,7 +123,8 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
 
   _handleSelectedWeightCategoryDisplay(CompetitionWeightCategory category, BuildContext context) {
     context.push(
-        '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/${CompetitionWeightCategoryDisplay.route}');
+      '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/${CompetitionWeightCategoryDisplay.route}',
+    );
   }
 
   Future<void> _handleSubmit(WidgetRef ref, NavigatorState navigator, CompetitionWeightCategory weightCategory) async {

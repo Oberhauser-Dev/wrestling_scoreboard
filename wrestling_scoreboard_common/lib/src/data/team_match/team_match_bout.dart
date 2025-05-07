@@ -65,7 +65,5 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
 
   static Set<String> searchableAttributes = {};
 
-  static Map<String, Type> searchableForeignAttributeMapping = {
-    'bout_id': Bout,
-  };
+  static Map<String, Type> searchableForeignAttributeMapping = {'bout_id': Bout};
 }

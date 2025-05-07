@@ -154,9 +154,10 @@ class FavoritesNotifier extends _$FavoritesNotifier {
 
   Future<void> _setFavorites(Map<String, Set<int>> favorites) async {
     state = Future.value(favorites);
-    final preferenceList = favorites.entries.map((e) {
-      return '${e.key}=${e.value.join(',')}';
-    }).toList();
+    final preferenceList =
+        favorites.entries.map((e) {
+          return '${e.key}=${e.value.join(',')}';
+        }).toList();
     await Preferences.setStringList(Preferences.keyFavorites, preferenceList);
   }
 
@@ -205,18 +206,19 @@ class OrgAuthNotifier extends _$OrgAuthNotifier {
 
   Future<void> _setOrgAuthServices(Map<int, AuthService> orgAuthServices) async {
     state = Future.value(orgAuthServices);
-    final orgAuthList = orgAuthServices.entries.map((e) {
-      final authService = e.value;
-      final String authType;
-      final String authJson;
-      if (authService is BasicAuthService) {
-        authType = getTableNameFromType(BasicAuthService);
-        authJson = Uri.encodeFull(jsonEncode(authService.toJson()));
-      } else {
-        throw UnimplementedError('AuthService ${e.runtimeType} not known');
-      }
-      return '${e.key}=$authType=$authJson';
-    }).toList();
+    final orgAuthList =
+        orgAuthServices.entries.map((e) {
+          final authService = e.value;
+          final String authType;
+          final String authJson;
+          if (authService is BasicAuthService) {
+            authType = getTableNameFromType(BasicAuthService);
+            authJson = Uri.encodeFull(jsonEncode(authService.toJson()));
+          } else {
+            throw UnimplementedError('AuthService ${e.runtimeType} not known');
+          }
+          return '${e.key}=$authType=$authJson';
+        }).toList();
     // TODO: use secure storage: https://pub.dev/packages/flutter_secure_storage
     await Preferences.setStringList(Preferences.keyOrganizationAuth, orgAuthList);
   }

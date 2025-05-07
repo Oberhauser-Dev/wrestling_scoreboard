@@ -74,26 +74,21 @@ class CompetitionDisplay extends ConsumerWidget {
 
         Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
           return Container(
-              color: role.color(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: ScaledText(
-                      state?.membership.person.fullName ?? localizations.participantVacant,
-                      fontSize: 18,
-                      minFontSize: 12,
-                    ),
+            color: role.color(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: ScaledText(
+                    state?.membership.person.fullName ?? localizations.participantVacant,
+                    fontSize: 18,
+                    minFontSize: 12,
                   ),
-                  Center(
-                    child: ScaledText(
-                      state?.membership.club.name ?? '',
-                      fontSize: 12,
-                      minFontSize: 12,
-                    ),
-                  ),
-                ],
-              ));
+                ),
+                Center(child: ScaledText(state?.membership.club.name ?? '', fontSize: 12, minFontSize: 12)),
+              ],
+            ),
+          );
         }
 
         return WindowStateScaffold(
@@ -114,72 +109,62 @@ class CompetitionDisplay extends ConsumerWidget {
                   Row(
                     children: [
                       Column(
-                        children: competitionInfos
-                            .map(
-                              (e) => Center(
-                                  child: ScaledText(
-                                e,
-                                softWrap: false,
-                                fontSize: 10,
-                                minFontSize: 8,
-                              )),
-                            )
-                            .toList(),
+                        children:
+                            competitionInfos
+                                .map((e) => Center(child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8)))
+                                .toList(),
                       ),
                       Expanded(
                         child: Center(
-                            child: ScaledText(
-                          competition.name,
-                          softWrap: false,
-                          fontSize: 16,
-                          minFontSize: 12,
-                        )),
+                          child: ScaledText(competition.name, softWrap: false, fontSize: 16, minFontSize: 12),
+                        ),
                       ),
-                      Center(
-                          child: ScaledText(
-                        'Estimated end: TODO',
-                        softWrap: false,
-                        fontSize: 10,
-                        minFontSize: 8,
-                      ))
+                      Center(child: ScaledText('Estimated end: TODO', softWrap: false, fontSize: 10, minFontSize: 8)),
                     ],
                   ),
                   Divider(),
                   IntrinsicHeight(
                     child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        spacing: 12,
-                        children: Iterable.generate(competition.matCount, (index) {
-                          final matCompetitionBout = competitionBouts
-                              .where((element) => element.mat == index)
-                              .sorted((a, b) => a.pos.compareTo(b.pos))
-                              .firstOrNull;
-                          return Expanded(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 12,
+                      children:
+                          Iterable.generate(competition.matCount, (index) {
+                            final matCompetitionBout =
+                                competitionBouts
+                                    .where((element) => element.mat == index)
+                                    .sorted((a, b) => a.pos.compareTo(b.pos))
+                                    .firstOrNull;
+                            return Expanded(
                               child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
-                              if (matCompetitionBout == null)
-                                Center(child: ScaledText('No bout'))
-                              else ...[
-                                Center(
-                                  child: ScaledText(matCompetitionBout.weightCategory?.name ?? '---',
-                                      fontSize: 12, minFontSize: 10),
-                                ),
-                                displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
-                                SizedBox(
-                                  height: width / 30,
-                                  child: SmallBoutStateDisplay(
-                                    bout: matCompetitionBout.bout,
-                                    boutConfig: competition.boutConfig,
-                                  ),
-                                ),
-                                displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
-                              ]
-                            ],
-                          ));
-                        }).toList()),
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
+                                  if (matCompetitionBout == null)
+                                    Center(child: ScaledText('No bout'))
+                                  else ...[
+                                    Center(
+                                      child: ScaledText(
+                                        matCompetitionBout.weightCategory?.name ?? '---',
+                                        fontSize: 12,
+                                        minFontSize: 10,
+                                      ),
+                                    ),
+                                    displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
+                                    SizedBox(
+                                      height: width / 30,
+                                      child: SmallBoutStateDisplay(
+                                        bout: matCompetitionBout.bout,
+                                        boutConfig: competition.boutConfig,
+                                      ),
+                                    ),
+                                    displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
+                                  ],
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                    ),
                   ),
                   Divider(),
                   Expanded(
@@ -189,8 +174,8 @@ class CompetitionDisplay extends ConsumerWidget {
                         return Column(
                           children: [
                             InkWell(
-                              onTap: () =>
-                                  navigateToCompetitionBoutScreen(context, competition, competitionBouts[index]),
+                              onTap:
+                                  () => navigateToCompetitionBoutScreen(context, competition, competitionBouts[index]),
                               child: IntrinsicHeight(
                                 child: BoutListItem(
                                   boutConfig: competition.boutConfig,

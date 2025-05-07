@@ -12,8 +12,9 @@ class TeamLineupController extends ShelfController<TeamLineup> {
     return _singleton;
   }
 
-  static final teamIdStmt =
-      PostgresDb().connection.prepare(psql.Sql.named('SELECT team_id FROM ${TeamLineup.cTableName} WHERE id = @id'));
+  static final teamIdStmt = PostgresDb().connection.prepare(
+    psql.Sql.named('SELECT team_id FROM ${TeamLineup.cTableName} WHERE id = @id'),
+  );
 
   TeamLineupController._internal() : super();
 

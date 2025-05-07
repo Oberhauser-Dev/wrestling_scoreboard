@@ -15,7 +15,7 @@ class DivisionEdit extends BoutConfigEdit {
   final Division? initialParent;
 
   DivisionEdit({this.division, this.initialOrganization, this.initialParent, super.key})
-      : super(boutConfig: division?.boutConfig);
+    : super(boutConfig: division?.boutConfig);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => DivisionEditState();
@@ -46,135 +46,137 @@ class DivisionEditState extends BoutConfigEditState<DivisionEdit> {
   Widget build(BuildContext context) {
     final localizations = context.l10n;
 
-    return buildEdit(context, id: widget.division?.id, classLocale: localizations.division, fields: [
-      ListTile(
-        leading: const Icon(Icons.description),
-        title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.name,
+    return buildEdit(
+      context,
+      id: widget.division?.id,
+      classLocale: localizations.division,
+      fields: [
+        ListTile(
+          leading: const Icon(Icons.description),
+          title: TextFormField(
+            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
+            initialValue: widget.division?.name,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return localizations.mandatoryField;
+              }
+              return null;
+            },
+            onSaved: (newValue) => _name = newValue,
           ),
-          initialValue: widget.division?.name,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _name = newValue,
         ),
-      ),
-      ListTile(
-        leading: const Icon(Icons.event),
-        title: TextFormField(
-          key: ValueKey(_startDate),
-          readOnly: true,
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.startDate,
+        ListTile(
+          leading: const Icon(Icons.event),
+          title: TextFormField(
+            key: ValueKey(_startDate),
+            readOnly: true,
+            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.startDate),
+            onTap:
+                () => showDatePicker(
+                  initialDatePickerMode: DatePickerMode.year,
+                  context: context,
+                  initialDate: _startDate,
+                  firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                  lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                ).then((value) {
+                  if (value != null) {
+                    setState(() => _startDate = value);
+                  }
+                }),
+            initialValue: _startDate.toDateString(context),
           ),
-          onTap: () => showDatePicker(
-            initialDatePickerMode: DatePickerMode.year,
+        ),
+        ListTile(
+          leading: const Icon(Icons.event),
+          title: TextFormField(
+            key: ValueKey(_endDate),
+            readOnly: true,
+            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.endDate),
+            onTap:
+                () => showDatePicker(
+                  initialDatePickerMode: DatePickerMode.year,
+                  context: context,
+                  initialDate: _endDate,
+                  firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                  lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                ).then((value) {
+                  if (value != null) {
+                    setState(() => _endDate = value);
+                  }
+                }),
+            initialValue: _endDate.toDateString(context),
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.sunny_snowing),
+          title: TextFormField(
+            initialValue: widget.division?.seasonPartitions.toString() ?? '',
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+              labelText: localizations.seasonPartitions,
+            ),
+            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
+            onSaved: (String? value) {
+              _seasonPartitions = int.tryParse(value ?? '') ?? 1;
+              if (_seasonPartitions < 1) _seasonPartitions = 1;
+            },
+          ),
+        ),
+        ListTile(
+          title: SearchableDropdown<Organization>(
+            icon: const Icon(Icons.corporate_fare),
+            selectedItem: _organization,
+            label: localizations.organization,
             context: context,
-            initialDate: _startDate,
-            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-          ).then((value) {
-            if (value != null) {
-              setState(() => _startDate = value);
-            }
-          }),
-          initialValue: _startDate.toDateString(context),
-        ),
-      ),
-      ListTile(
-        leading: const Icon(Icons.event),
-        title: TextFormField(
-          key: ValueKey(_endDate),
-          readOnly: true,
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.endDate,
+            onSaved:
+                (Organization? value) => setState(() {
+                  _organization = value;
+                }),
+            allowEmpty: false,
+            itemAsString: (u) => u.name,
+            asyncItems: (String filter) async {
+              _availableOrganizations ??=
+                  await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+              return _availableOrganizations!.toList();
+            },
           ),
-          onTap: () => showDatePicker(
-            initialDatePickerMode: DatePickerMode.year,
+        ),
+        ListTile(
+          title: SearchableDropdown<Division>(
+            icon: const Icon(Icons.inventory),
+            selectedItem: _parentDivision,
+            label: localizations.division,
             context: context,
-            initialDate: _endDate,
-            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-          ).then((value) {
-            if (value != null) {
-              setState(() => _endDate = value);
-            }
-          }),
-          initialValue: _endDate.toDateString(context),
-        ),
-      ),
-      ListTile(
-        leading: const Icon(Icons.sunny_snowing),
-        title: TextFormField(
-          initialValue: widget.division?.seasonPartitions.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.seasonPartitions,
+            onSaved:
+                (Division? value) => setState(() {
+                  _parentDivision = value;
+                }),
+            itemAsString: (u) => u.fullname,
+            asyncItems: (String filter) async {
+              _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
+              return _availableDivisions!.toList();
+            },
           ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
-          onSaved: (String? value) {
-            _seasonPartitions = int.tryParse(value ?? '') ?? 1;
-            if (_seasonPartitions < 1) _seasonPartitions = 1;
-          },
         ),
-      ),
-      ListTile(
-        title: SearchableDropdown<Organization>(
-          icon: const Icon(Icons.corporate_fare),
-          selectedItem: _organization,
-          label: localizations.organization,
-          context: context,
-          onSaved: (Organization? value) => setState(() {
-            _organization = value;
-          }),
-          allowEmpty: false,
-          itemAsString: (u) => u.name,
-          asyncItems: (String filter) async {
-            _availableOrganizations ??=
-                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
-            return _availableOrganizations!.toList();
-          },
-        ),
-      ),
-      ListTile(
-        title: SearchableDropdown<Division>(
-          icon: const Icon(Icons.inventory),
-          selectedItem: _parentDivision,
-          label: localizations.division,
-          context: context,
-          onSaved: (Division? value) => setState(() {
-            _parentDivision = value;
-          }),
-          itemAsString: (u) => u.fullname,
-          asyncItems: (String filter) async {
-            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
-            return _availableDivisions!.toList();
-          },
-        ),
-      ),
-    ]);
+      ],
+    );
   }
 
   @override
   Future<void> handleNested(BoutConfig dataObject) async {
-    await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(Division(
-      id: widget.division?.id,
-      name: _name!,
-      startDate: _startDate,
-      endDate: _endDate,
-      boutConfig: dataObject,
-      seasonPartitions: _seasonPartitions,
-      organization: _organization!,
-      parent: _parentDivision,
-      orgSyncId: widget.division?.orgSyncId,
-    ));
+    await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      Division(
+        id: widget.division?.id,
+        name: _name!,
+        startDate: _startDate,
+        endDate: _endDate,
+        boutConfig: dataObject,
+        seasonPartitions: _seasonPartitions,
+        organization: _organization!,
+        parent: _parentDivision,
+        orgSyncId: widget.division?.orgSyncId,
+      ),
+    );
   }
 }

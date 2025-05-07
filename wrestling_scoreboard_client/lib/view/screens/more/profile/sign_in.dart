@@ -32,43 +32,47 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       appBar: AppBar(title: Text(localizations.auth_signIn)),
       body: ResponsiveScrollView(
         child: Card(
-            child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              CustomTextInput(
-                onSaved: (String? value) => _username = value,
-                isMandatory: true,
-                label: localizations.username,
-              ),
-              PasswordInput(
-                onSaved: (String? value) => _password = value,
-                isNewPassword: false,
-                // Do not make mandatory, as first login is with password 'admin', which does not fulfill the requirements.
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ElevatedButton(
-                  onPressed: () => catchAsync(context, () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      await ref.read(userNotifierProvider.notifier).signIn(username: _username!, password: _password!);
-                      if (context.mounted) Navigator.of(context).pop();
-                    }
-                  }),
-                  child: Text(localizations.auth_signIn),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                CustomTextInput(
+                  onSaved: (String? value) => _username = value,
+                  isMandatory: true,
+                  label: localizations.username,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: InkWell(
-                  onTap: () => context.push('/${MoreScreen.route}/${SignUpScreen.route}'),
-                  child: Text(localizations.auth_signUpPrompt_phrase),
+                PasswordInput(
+                  onSaved: (String? value) => _password = value,
+                  isNewPassword: false,
+                  // Do not make mandatory, as first login is with password 'admin', which does not fulfill the requirements.
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ElevatedButton(
+                    onPressed:
+                        () => catchAsync(context, () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            await ref
+                                .read(userNotifierProvider.notifier)
+                                .signIn(username: _username!, password: _password!);
+                            if (context.mounted) Navigator.of(context).pop();
+                          }
+                        }),
+                    child: Text(localizations.auth_signIn),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: InkWell(
+                    onTap: () => context.push('/${MoreScreen.route}/${SignUpScreen.route}'),
+                    child: Text(localizations.auth_signUpPrompt_phrase),
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

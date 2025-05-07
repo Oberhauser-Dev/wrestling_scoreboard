@@ -80,14 +80,15 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
     required List<BoutResultRule> rules,
   }) {
     final diff = technicalPointsWinner - technicalPointsLoser;
-    final applyingRules = rules.where((rule) {
-      final matchResult = rule.boutResult == result;
-      final matchStyle = rule.style == null || rule.style == style;
-      final matchDiff = rule.technicalPointsDifference == null ? true : diff >= rule.technicalPointsDifference!;
-      final matchPointsLoser = technicalPointsLoser >= (rule.loserTechnicalPoints ?? 0);
-      final matchPointsWinner = technicalPointsWinner >= (rule.winnerTechnicalPoints ?? 0);
-      return matchResult && matchStyle && matchDiff && matchPointsLoser && matchPointsWinner;
-    }).toList();
+    final applyingRules =
+        rules.where((rule) {
+          final matchResult = rule.boutResult == result;
+          final matchStyle = rule.style == null || rule.style == style;
+          final matchDiff = rule.technicalPointsDifference == null ? true : diff >= rule.technicalPointsDifference!;
+          final matchPointsLoser = technicalPointsLoser >= (rule.loserTechnicalPoints ?? 0);
+          final matchPointsWinner = technicalPointsWinner >= (rule.winnerTechnicalPoints ?? 0);
+          return matchResult && matchStyle && matchDiff && matchPointsLoser && matchPointsWinner;
+        }).toList();
     if (applyingRules.isEmpty) {
       return null;
     }

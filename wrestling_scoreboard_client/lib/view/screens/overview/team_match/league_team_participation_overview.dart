@@ -27,35 +27,22 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
       initialData: leagueTeamParticipation,
       builder: (context, data) {
         final description = InfoWidget(
-            obj: data,
-            editPage: LeagueTeamParticipationEdit(
-              participation: data,
-            ),
-            onDelete: () async =>
-                (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueTeamParticipation>(data),
-            classLocale: localizations.team,
-            children: [
-              ContentItem(
-                title: data.team.name,
-                subtitle: localizations.team,
-                icon: Icons.group,
-              ),
-              ContentItem(
-                title: data.league.name,
-                subtitle: localizations.league,
-                icon: Icons.emoji_events,
-              ),
-            ]);
+          obj: data,
+          editPage: LeagueTeamParticipationEdit(participation: data),
+          onDelete:
+              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueTeamParticipation>(data),
+          classLocale: localizations.team,
+          children: [
+            ContentItem(title: data.team.name, subtitle: localizations.team, icon: Icons.group),
+            ContentItem(title: data.league.name, subtitle: localizations.league, icon: Icons.emoji_events),
+          ],
+        );
         return FavoriteScaffold<LeagueTeamParticipation>(
           dataObject: data,
           label: localizations.participatingTeam,
           details: data.team.name,
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-          ],
-          body: TabGroup(items: [
-            description,
-          ]),
+          tabs: [Tab(child: HeadingText(localizations.info))],
+          body: TabGroup(items: [description]),
         );
       },
     );

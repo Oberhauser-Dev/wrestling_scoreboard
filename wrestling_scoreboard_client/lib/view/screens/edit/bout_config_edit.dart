@@ -112,12 +112,7 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
 
     return Form(
       key: _formKey,
-      child: EditWidget(
-        typeLocalization: classLocale,
-        id: id,
-        onSubmit: () => handleSubmit(navigator),
-        items: items,
-      ),
+      child: EditWidget(typeLocalization: classLocale, id: id, onSubmit: () => handleSubmit(navigator), items: items),
     );
   }
 
@@ -133,8 +128,9 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
         bleedingInjuryDuration: _bleedingInjuryDuration,
         periodCount: _periodCount!,
       );
-      boutConfig =
-          boutConfig.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(boutConfig));
+      boutConfig = boutConfig.copyWithId(
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(boutConfig),
+      );
       await handleNested(boutConfig);
       navigator.pop();
     }

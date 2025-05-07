@@ -22,6 +22,8 @@ abstract class Organizational extends DataObject {
 
 class DataUnimplementedError extends UnimplementedError {
   DataUnimplementedError(CRUD operationType, Type type, [DataObject? filterObject])
-      : super('Data ${operationType.toString().substring(5).toUpperCase()}-request for "${type.toString()}" '
-            '${filterObject == null ? '' : 'in "${filterObject.runtimeType.toString()}"'} not found.');
+    : super(
+        'Data ${operationType.toString().substring(5).toUpperCase()}-request for "${type.toString()}" '
+        '${filterObject == null ? '' : 'in "${filterObject.runtimeType.toString()}"'} not found.',
+      );
 }

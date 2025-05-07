@@ -67,15 +67,13 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
             hint: localizations.wrestlingStyle,
             isExpanded: true,
             options: WrestlingStyle.values.map((WrestlingStyle style) {
-              return MapEntry(
-                style,
-                Text('${style.localize(context)} (${style.abbreviation(context)})'),
-              );
+              return MapEntry(style, Text('${style.localize(context)} (${style.abbreviation(context)})'));
             }),
             selected: _wrestlingStyle,
-            onChange: (newValue) => setState(() {
-              _wrestlingStyle = newValue!;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _wrestlingStyle = newValue!;
+                }),
           ),
         ),
       ),
@@ -90,9 +88,10 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
               return MapEntry(value, Text(value.toAbbr()));
             }),
             selected: _unit,
-            onChange: (newValue) => setState(() {
-              _unit = newValue!;
-            }),
+            onChange:
+                (newValue) => setState(() {
+                  _unit = newValue!;
+                }),
           ),
         ),
       ),
@@ -111,21 +110,29 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
     ];
 
     return Form(
-        key: _formKey,
-        child: EditWidget(
-            typeLocalization: classLocale,
-            id: widget.weightClass?.id,
-            onSubmit: () => handleSubmit(navigator),
-            items: items));
+      key: _formKey,
+      child: EditWidget(
+        typeLocalization: classLocale,
+        id: widget.weightClass?.id,
+        onSubmit: () => handleSubmit(navigator),
+        items: items,
+      ),
+    );
   }
 
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       var weightClass = WeightClass(
-          id: widget.weightClass?.id, suffix: _suffix!, weight: _weight, style: _wrestlingStyle, unit: _unit);
-      weightClass =
-          weightClass.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(weightClass));
+        id: widget.weightClass?.id,
+        suffix: _suffix!,
+        weight: _weight,
+        style: _wrestlingStyle,
+        unit: _unit,
+      );
+      weightClass = weightClass.copyWithId(
+        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(weightClass),
+      );
       await handleNested(weightClass);
       navigator.pop();
     }

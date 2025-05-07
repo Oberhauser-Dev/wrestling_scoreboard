@@ -18,13 +18,7 @@ class TeamMatchEdit extends ConsumerStatefulWidget {
   final Team? initialGuestTeam;
   final League? initialLeague;
 
-  const TeamMatchEdit({
-    this.teamMatch,
-    this.initialHomeTeam,
-    this.initialGuestTeam,
-    this.initialLeague,
-    super.key,
-  });
+  const TeamMatchEdit({this.teamMatch, this.initialHomeTeam, this.initialGuestTeam, this.initialLeague, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TeamMatchEditState();
@@ -83,10 +77,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       ListTile(
         leading: const Icon(Icons.tag),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.matchNumber,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.matchNumber),
           initialValue: widget.teamMatch?.no,
           onSaved: (newValue) => _no = newValue,
         ),
@@ -94,10 +85,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       ListTile(
         leading: const Icon(Icons.place),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.place,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.place),
           initialValue: widget.teamMatch?.location,
           onSaved: (newValue) => _location = newValue,
         ),
@@ -107,21 +95,19 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         title: TextFormField(
           key: ValueKey(_date),
           readOnly: true,
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.date,
-          ),
-          onTap: () => showDatePicker(
-            initialDatePickerMode: DatePickerMode.day,
-            context: context,
-            initialDate: _date,
-            firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-          ).then((value) {
-            if (value != null) {
-              setState(() => _date = value);
-            }
-          }),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.date),
+          onTap:
+              () => showDatePicker(
+                initialDatePickerMode: DatePickerMode.day,
+                context: context,
+                initialDate: _date,
+                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+              ).then((value) {
+                if (value != null) {
+                  setState(() => _date = value);
+                }
+              }),
           initialValue: _date.toDateTimeString(context),
         ),
       ),
@@ -131,9 +117,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _homeTeam,
           label: '${localizations.team} ${localizations.red}',
           context: context,
-          onSaved: (Team? value) => setState(() {
-            _homeTeam = value;
-          }),
+          onSaved:
+              (Team? value) => setState(() {
+                _homeTeam = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams, needs disableFilter option
@@ -148,9 +135,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _guestTeam,
           label: '${localizations.team} ${localizations.blue}',
           context: context,
-          onSaved: (Team? value) => setState(() {
-            _guestTeam = value;
-          }),
+          onSaved:
+              (Team? value) => setState(() {
+                _guestTeam = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             // TODO: filter by teams of same league, but may add an option to search all teams
@@ -177,10 +165,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       ListTile(
         leading: const Icon(Icons.comment),
         title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.comment,
-          ),
+          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.comment),
           initialValue: widget.teamMatch?.comment,
           onSaved: (newValue) => _comment = newValue,
         ),
@@ -191,9 +176,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _league,
           label: localizations.league,
           context: context,
-          onSaved: (League? value) => setState(() {
-            _league = value;
-          }),
+          onSaved:
+              (League? value) => setState(() {
+                _league = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
@@ -219,9 +205,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _referee,
           label: localizations.referee,
           context: context,
-          onSaved: (Person? value) => setState(() {
-            _referee = value;
-          }),
+          onSaved:
+              (Person? value) => setState(() {
+                _referee = value;
+              }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
@@ -235,9 +222,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _matChairman,
           label: localizations.matChairman,
           context: context,
-          onSaved: (Person? value) => setState(() {
-            _matChairman = value;
-          }),
+          onSaved:
+              (Person? value) => setState(() {
+                _matChairman = value;
+              }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
@@ -251,9 +239,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _judge,
           label: localizations.judge,
           context: context,
-          onSaved: (Person? value) => setState(() {
-            _judge = value;
-          }),
+          onSaved:
+              (Person? value) => setState(() {
+                _judge = value;
+              }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
@@ -267,9 +256,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _timeKeeper,
           label: localizations.timeKeeper,
           context: context,
-          onSaved: (Person? value) => setState(() {
-            _timeKeeper = value;
-          }),
+          onSaved:
+              (Person? value) => setState(() {
+                _timeKeeper = value;
+              }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
@@ -283,9 +273,10 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _transcriptWriter,
           label: localizations.transcriptionWriter,
           context: context,
-          onSaved: (Person? value) => setState(() {
-            _transcriptWriter = value;
-          }),
+          onSaved:
+              (Person? value) => setState(() {
+                _transcriptWriter = value;
+              }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Person, Null>();
@@ -312,24 +303,28 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
       var home = widget.teamMatch?.home;
       if (home == null) {
-        final homeId =
-            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(team: _homeTeam!));
+        final homeId = await (await ref.read(
+          dataManagerNotifierProvider,
+        )).createOrUpdateSingle(TeamLineup(team: _homeTeam!));
         home = TeamLineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerNotifierProvider))
-            .createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
+        await (await ref.read(
+          dataManagerNotifierProvider,
+        )).createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
       }
 
       var guest = widget.teamMatch?.guest;
       if (guest == null) {
-        final guestId =
-            await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(TeamLineup(team: _guestTeam!));
+        final guestId = await (await ref.read(
+          dataManagerNotifierProvider,
+        )).createOrUpdateSingle(TeamLineup(team: _guestTeam!));
         guest = TeamLineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerNotifierProvider))
-            .createOrUpdateSingle(TeamLineup(id: guest.id, team: _guestTeam!));
+        await (await ref.read(
+          dataManagerNotifierProvider,
+        )).createOrUpdateSingle(TeamLineup(id: guest.id, team: _guestTeam!));
       }
 
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(

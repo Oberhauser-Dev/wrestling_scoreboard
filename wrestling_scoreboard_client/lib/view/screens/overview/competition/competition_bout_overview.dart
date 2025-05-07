@@ -17,7 +17,7 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
   final CompetitionBout? competitionBout;
 
   CompetitionBoutOverview({super.key, required this.id, this.competitionBout})
-      : super(boutConfig: competitionBout?.competition.boutConfig ?? Competition.defaultBoutConfig);
+    : super(boutConfig: competitionBout?.competition.boutConfig ?? Competition.defaultBoutConfig);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,8 +64,8 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
             competitionBout: competitionBout,
             initialCompetition: competitionBout.competition,
           ),
-          onDelete: () async =>
-              (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionBout>(competitionBout),
+          onDelete:
+              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionBout>(competitionBout),
           tiles: [],
           actions: [
             // pdfAction,
@@ -76,7 +76,7 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
                 onPressed: () => handleSelectedBoutDisplay(competitionBout, context),
                 label: Text(localizations.display),
               ),
-            )
+            ),
           ],
           dataId: competitionBout.bout.id!,
           initialData: competitionBout.bout,
@@ -88,7 +88,8 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
 
   handleSelectedBoutDisplay(CompetitionBout bout, BuildContext context) {
     context.push(
-        '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}');
+      '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}',
+    );
   }
 }
 

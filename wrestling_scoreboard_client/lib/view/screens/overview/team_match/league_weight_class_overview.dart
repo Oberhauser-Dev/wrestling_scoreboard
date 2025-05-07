@@ -28,10 +28,7 @@ class LeagueWeightClassOverview extends WeightClassOverview<LeagueWeightClass> {
           context,
           ref,
           classLocale: localizations.weightClass,
-          editPage: LeagueWeightClassEdit(
-            leagueWeightClass: data,
-            initialLeague: data.league,
-          ),
+          editPage: LeagueWeightClassEdit(leagueWeightClass: data, initialLeague: data.league),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueWeightClass>(data),
           tiles: [
             ContentItem(

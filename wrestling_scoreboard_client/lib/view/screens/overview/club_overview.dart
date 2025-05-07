@@ -36,18 +36,10 @@ class ClubOverview extends ConsumerWidget {
       builder: (context, club) {
         final description = InfoWidget(
           obj: club,
-          editPage: ClubEdit(
-            club: club,
-          ),
+          editPage: ClubEdit(club: club),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Club>(club),
           classLocale: localizations.club,
-          children: [
-            ContentItem(
-              title: club.no ?? '-',
-              subtitle: localizations.clubNumber,
-              icon: Icons.tag,
-            )
-          ],
+          children: [ContentItem(title: club.no ?? '-', subtitle: localizations.clubNumber, icon: Icons.tag)],
         );
         return FavoriteScaffold<Club>(
           dataObject: club,
@@ -58,63 +50,71 @@ class ClubOverview extends ConsumerWidget {
             Tab(child: HeadingText(localizations.teams)),
             Tab(child: HeadingText(localizations.memberships)),
           ],
-          body: TabGroup(items: [
-            description,
-            FilterableManyConsumer<Team, Club>(
-              filterObject: club,
-              trailing: MenuAnchor(
-                menuChildren: [
-                  MenuItemButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TeamEdit(
-                          initialOrganization: club.organization,
-                          onCreated: (team) async {
-                            await (await ref.read(dataManagerNotifierProvider))
-                                .createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                          },
-                        ),
-                      ),
+          body: TabGroup(
+            items: [
+              description,
+              FilterableManyConsumer<Team, Club>(
+                filterObject: club,
+                trailing: MenuAnchor(
+                  menuChildren: [
+                    MenuItemButton(
+                      onPressed:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => TeamEdit(
+                                    initialOrganization: club.organization,
+                                    onCreated: (team) async {
+                                      await (await ref.read(
+                                        dataManagerNotifierProvider,
+                                      )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                                    },
+                                  ),
+                            ),
+                          ),
+                      child: Text(localizations.create),
                     ),
-                    child: Text(localizations.create),
-                  ),
-                  MenuItemButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TeamClubAffiliationEdit(
-                          initialClub: club,
-                        ),
-                      ),
+                    MenuItemButton(
+                      onPressed:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TeamClubAffiliationEdit(initialClub: club)),
+                          ),
+                      child: Text(localizations.addExisting),
                     ),
-                    child: Text(localizations.addExisting),
-                  ),
-                ],
-                builder: (context, controller, child) => RestrictedAddButton(
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
+                  ],
+                  builder:
+                      (context, controller, child) => RestrictedAddButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                      ),
                 ),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.name,
+                      icon: Icons.group,
+                      onTap: () => handleSelectedTeam(item, context),
+                    ),
               ),
-              itemBuilder: (context, item) =>
-                  ContentItem(title: item.name, icon: Icons.group, onTap: () => handleSelectedTeam(item, context)),
-            ),
-            FilterableManyConsumer<Membership, Club>.edit(
-              context: context,
-              filterObject: club,
-              editPageBuilder: (context) => MembershipEdit(initialClub: club),
-              itemBuilder: (context, item) => ContentItem(
-                title: '${item.info},\t${item.person.gender?.localize(context)}',
-                icon: Icons.person,
-                onTap: () => handleSelectedMembership(item, context),
+              FilterableManyConsumer<Membership, Club>.edit(
+                context: context,
+                filterObject: club,
+                editPageBuilder: (context) => MembershipEdit(initialClub: club),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: '${item.info},\t${item.person.gender?.localize(context)}',
+                      icon: Icons.person,
+                      onTap: () => handleSelectedMembership(item, context),
+                    ),
               ),
-            ),
-          ]),
+            ],
+          ),
         );
       },
     );

@@ -22,18 +22,18 @@ class TeamMatchBoutList<T extends DataObject?> extends StatelessWidget {
     return FilterableManyConsumer<TeamMatchBout, T>(
       filterObject: filterObject,
       // Adding a bout should not be an option for memberships
-      trailing: filterObject is TeamMatch
-          ? RestrictedAddButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TeamMatchBoutEdit(
-                    initialTeamMatch: filterObject as TeamMatch,
-                  ),
-                ),
-              ),
-            )
-          : null,
+      trailing:
+          filterObject is TeamMatch
+              ? RestrictedAddButton(
+                onPressed:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TeamMatchBoutEdit(initialTeamMatch: filterObject as TeamMatch),
+                      ),
+                    ),
+              )
+              : null,
       itemBuilder: (context, teamMatchBout) {
         final bout = teamMatchBout.bout;
         final weightClass = teamMatchBout.weightClass;
@@ -45,20 +45,26 @@ class TeamMatchBoutList<T extends DataObject?> extends StatelessWidget {
               text: '${teamMatchBout.teamMatch.date.toDateString(context)}, $weightClassStr',
               children: [
                 TextSpan(
-                    text: bout.r?.fullName(context) ?? localizations.participantVacant,
-                    style: filterObject is! Membership || bout.r?.membership == filterObject
-                        ? TextStyle(
+                  text: bout.r?.fullName(context) ?? localizations.participantVacant,
+                  style:
+                      filterObject is! Membership || bout.r?.membership == filterObject
+                          ? TextStyle(
                             color: bout.r == null ? Theme.of(context).disabledColor : Colors.red,
-                            fontWeight: filterObject is! Membership ? null : FontWeight.bold)
-                        : null),
+                            fontWeight: filterObject is! Membership ? null : FontWeight.bold,
+                          )
+                          : null,
+                ),
                 const TextSpan(text: ' - '),
                 TextSpan(
-                    text: bout.b?.fullName(context) ?? localizations.participantVacant,
-                    style: filterObject is! Membership || bout.b?.membership == filterObject
-                        ? TextStyle(
+                  text: bout.b?.fullName(context) ?? localizations.participantVacant,
+                  style:
+                      filterObject is! Membership || bout.b?.membership == filterObject
+                          ? TextStyle(
                             color: bout.b == null ? Theme.of(context).disabledColor : Colors.blue,
-                            fontWeight: filterObject is! Membership ? null : FontWeight.bold)
-                        : null),
+                            fontWeight: filterObject is! Membership ? null : FontWeight.bold,
+                          )
+                          : null,
+                ),
               ],
             ),
           ),

@@ -26,7 +26,11 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
   Future<Response> requestTeamMatches(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
     return TeamMatchController().handleRequestManyFromQuery(
-        isRaw: request.isRaw, sqlQuery: teamMatchesQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
+      isRaw: request.isRaw,
+      sqlQuery: teamMatchesQuery,
+      substitutionValues: {'id': id},
+      obfuscate: obfuscate,
+    );
   }
 
   static const clubsQuery = '''
@@ -39,7 +43,11 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
   Future<Response> requestClubs(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
     return ClubController().handleRequestManyFromQuery(
-        isRaw: request.isRaw, sqlQuery: clubsQuery, substitutionValues: {'id': id}, obfuscate: obfuscate);
+      isRaw: request.isRaw,
+      sqlQuery: clubsQuery,
+      substitutionValues: {'id': id},
+      obfuscate: obfuscate,
+    );
   }
 
   @override

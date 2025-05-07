@@ -138,10 +138,7 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
 
   SecuredUser changePassword(String password) {
     final (passwordHash, salt) = _hashAndSaltPassword(password: password);
-    return copyWith(
-      passwordHash: passwordHash,
-      salt: salt,
-    );
+    return copyWith(passwordHash: passwordHash, salt: salt);
   }
 
   @override
@@ -169,14 +166,7 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   }
 
   User toUser() {
-    return User(
-      id: id,
-      username: username,
-      email: email,
-      person: person,
-      createdAt: createdAt,
-      privilege: privilege,
-    );
+    return User(id: id, username: username, email: email, person: person, createdAt: createdAt, privilege: privilege);
   }
 
   static List<int> hashPassword({required String password, required String salt}) {

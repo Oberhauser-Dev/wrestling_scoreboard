@@ -17,9 +17,10 @@ class LeagueTeamParticipationController extends ShelfController<LeagueTeamPartic
     required obfuscate,
   }) async {
     final many = await getMany(
-        conditions: ['team_id = @teamId', 'league_id = @leagueId'],
-        substitutionValues: {'teamId': teamId, 'leagueId': leagueId},
-        obfuscate: obfuscate);
+      conditions: ['team_id = @teamId', 'league_id = @leagueId'],
+      substitutionValues: {'teamId': teamId, 'leagueId': leagueId},
+      obfuscate: obfuscate,
+    );
     return many.zeroOrOne;
   }
 }

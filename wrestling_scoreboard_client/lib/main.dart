@@ -33,9 +33,7 @@ void main() async {
     await windowManager.ensureInitialized();
   }
 
-  for (var fileName in [
-    'Roboto-LICENSE.txt',
-  ]) {
+  for (var fileName in ['Roboto-LICENSE.txt']) {
     LicenseRegistry.addLicense(() async* {
       final license = await rootBundle.loadString('assets/fonts/google/$fileName');
       yield LicenseEntryWithLineBreaks(['google_fonts'], license);

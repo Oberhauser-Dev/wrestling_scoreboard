@@ -10,10 +10,7 @@ class PaddedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paddedChild = Padding(
-      padding: const EdgeInsets.all(16),
-      child: child,
-    );
+    final paddedChild = Padding(padding: const EdgeInsets.all(16), child: child);
     return switch (_variant) {
       _CardVariant.elevated => Card(child: paddedChild),
       _CardVariant.filled => Card.filled(child: paddedChild),

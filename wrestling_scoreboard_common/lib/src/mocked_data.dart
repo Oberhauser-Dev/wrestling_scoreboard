@@ -2,8 +2,12 @@ import '../common.dart';
 
 class MockedData {
   late final organization = Organization(id: 0, name: 'Deutscher Ringer Bund', abbreviation: 'DRB');
-  late final organization2 =
-      Organization(id: 1, name: 'Bayerischer Ringer Verband', abbreviation: 'BRV', parent: organization);
+  late final organization2 = Organization(
+    id: 1,
+    name: 'Bayerischer Ringer Verband',
+    abbreviation: 'BRV',
+    parent: organization,
+  );
 
   final boutConfig = BoutConfig(id: 1);
 
@@ -67,27 +71,15 @@ class MockedData {
   late final homeClub = Club(id: 1, name: 'Springfield Wrestlers', organization: organization);
   late final guestClub = Club(id: 2, name: 'Quahog Hunters', organization: organization);
 
-  late final homeTeam = const Team(
-    id: 1,
-    name: 'Springfield Wrestlers',
-    description: '1. Team Men',
-  );
-  late final homeTeamJuniors = const Team(
-    id: 2,
-    name: 'Springfield Wrestlers Jn',
-    description: 'Juniors',
-  );
-  late final guestTeam = const Team(
-    id: 3,
-    name: 'Quahog Hunters II',
-    description: '2. Team Men',
-  );
+  late final homeTeam = const Team(id: 1, name: 'Springfield Wrestlers', description: '1. Team Men');
+  late final homeTeamJuniors = const Team(id: 2, name: 'Springfield Wrestlers Jn', description: 'Juniors');
+  late final guestTeam = const Team(id: 3, name: 'Quahog Hunters II', description: '2. Team Men');
 
   late final homeTeamAffiliation = TeamClubAffiliation(team: homeTeam, club: homeClub);
   late final homeTeamJuniorsAffiliation = TeamClubAffiliation(team: homeTeamJuniors, club: homeClub);
   late final guestTeamAffiliation = TeamClubAffiliation(team: guestTeam, club: guestClub);
 
-// Teams per League
+  // Teams per League
   late final htMenRPW = LeagueTeamParticipation(id: 1, league: leagueMenRPW, team: homeTeam);
   late final htjJnRPW = LeagueTeamParticipation(id: 2, league: leagueJnRPW, team: homeTeamJuniors);
   late final gtMenRPW = LeagueTeamParticipation(id: 3, league: leagueMenRPW, team: guestTeam);
@@ -109,11 +101,16 @@ class MockedData {
 
   late final leagueWc57 = LeagueWeightClass(id: 0, pos: 0, league: leagueMenRPW, weightClass: wc57);
 
-// TEAM 1
+  // TEAM 1
   late final p1 = Person(id: 1, prename: 'Lisa', surname: 'Simpson', gender: Gender.female, organization: organization);
   late final p2 = Person(id: 2, prename: 'Bart', surname: 'Simpson', gender: Gender.male, organization: organization);
-  late final p3 =
-      Person(id: 3, prename: 'March', surname: 'Simpson', gender: Gender.female, organization: organization);
+  late final p3 = Person(
+    id: 3,
+    prename: 'March',
+    surname: 'Simpson',
+    gender: Gender.female,
+    organization: organization,
+  );
   late final p4 = Person(id: 4, prename: 'Homer', surname: 'Simpson', gender: Gender.male, organization: organization);
 
   late final r1 = Membership(id: 1, person: p1, club: homeClub);
@@ -121,7 +118,7 @@ class MockedData {
   late final r3 = Membership(id: 3, person: p3, club: homeClub);
   late final r4 = Membership(id: 4, person: p4, club: homeClub);
 
-// TEAM 2
+  // TEAM 2
   late final p5 = Person(id: 5, prename: 'Meg', surname: 'Griffin', gender: Gender.female, organization: organization);
   late final p6 = Person(id: 6, prename: 'Chris', surname: 'Griffin', gender: Gender.male, organization: organization);
   late final p7 = Person(id: 7, prename: 'Lois', surname: 'Griffin', gender: Gender.female, organization: organization);
@@ -144,21 +141,29 @@ class MockedData {
     _teamLineups.add(menRpwHomeTeamLineup);
     _teamLineups.add(menRpwGuestTeamLineup);
     _teamLineupParticipations.add(
-        TeamLineupParticipation(id: 1, membership: r1, lineup: menRpwHomeTeamLineup, weightClass: wc57, weight: 55.8));
+      TeamLineupParticipation(id: 1, membership: r1, lineup: menRpwHomeTeamLineup, weightClass: wc57, weight: 55.8),
+    );
     _teamLineupParticipations.add(
-        TeamLineupParticipation(id: 2, membership: r2, lineup: menRpwHomeTeamLineup, weightClass: wc61, weight: 60.15));
+      TeamLineupParticipation(id: 2, membership: r2, lineup: menRpwHomeTeamLineup, weightClass: wc61, weight: 60.15),
+    );
     _teamLineupParticipations.add(
-        TeamLineupParticipation(id: 3, membership: r3, lineup: menRpwHomeTeamLineup, weightClass: wc75A, weight: 73.3));
-    _teamLineupParticipations.add(TeamLineupParticipation(
-        id: 4, membership: r4, lineup: menRpwHomeTeamLineup, weightClass: wc130, weight: 133.5));
+      TeamLineupParticipation(id: 3, membership: r3, lineup: menRpwHomeTeamLineup, weightClass: wc75A, weight: 73.3),
+    );
     _teamLineupParticipations.add(
-        TeamLineupParticipation(id: 5, membership: b1, lineup: menRpwGuestTeamLineup, weightClass: wc57, weight: 57.0));
-    _teamLineupParticipations
-        .add(TeamLineupParticipation(id: 6, membership: b2, lineup: menRpwGuestTeamLineup, weightClass: wc66));
-    _teamLineupParticipations.add(TeamLineupParticipation(
-        id: 7, membership: b3, lineup: menRpwGuestTeamLineup, weightClass: wc75A, weight: 72.4));
-    _teamLineupParticipations.add(TeamLineupParticipation(
-        id: 8, membership: b4, lineup: menRpwGuestTeamLineup, weightClass: wc130, weight: 129.9));
+      TeamLineupParticipation(id: 4, membership: r4, lineup: menRpwHomeTeamLineup, weightClass: wc130, weight: 133.5),
+    );
+    _teamLineupParticipations.add(
+      TeamLineupParticipation(id: 5, membership: b1, lineup: menRpwGuestTeamLineup, weightClass: wc57, weight: 57.0),
+    );
+    _teamLineupParticipations.add(
+      TeamLineupParticipation(id: 6, membership: b2, lineup: menRpwGuestTeamLineup, weightClass: wc66),
+    );
+    _teamLineupParticipations.add(
+      TeamLineupParticipation(id: 7, membership: b3, lineup: menRpwGuestTeamLineup, weightClass: wc75A, weight: 72.4),
+    );
+    _teamLineupParticipations.add(
+      TeamLineupParticipation(id: 8, membership: b4, lineup: menRpwGuestTeamLineup, weightClass: wc130, weight: 129.9),
+    );
 
     return TeamMatch(
       id: 1,
@@ -223,30 +228,15 @@ class MockedData {
 
   late final boutState3R = AthleteBoutState(id: 5, membership: r1, classificationPoints: 1);
   late final boutState3B = AthleteBoutState(id: 6, membership: b2, classificationPoints: 3);
-  late final bout3 = Bout(
-    id: 2,
-    r: boutState3R,
-    b: boutState3B,
-    organization: organization,
-  );
+  late final bout3 = Bout(id: 2, r: boutState3R, b: boutState3B, organization: organization);
 
   late final boutState4R = AthleteBoutState(id: 7, membership: r2);
   late final boutState4B = AthleteBoutState(id: 8, membership: b1);
-  late final bout4 = Bout(
-    id: 3,
-    r: boutState4R,
-    b: boutState4B,
-    organization: organization,
-  );
+  late final bout4 = Bout(id: 3, r: boutState4R, b: boutState4B, organization: organization);
 
   late final boutState5R = AthleteBoutState(id: 20, membership: r1);
   late final boutState5B = AthleteBoutState(id: 21, membership: r4);
-  late final bout5 = Bout(
-    id: 4,
-    r: boutState5R,
-    b: boutState5B,
-    organization: organization,
-  );
+  late final bout5 = Bout(id: 4, r: boutState5R, b: boutState5B, organization: organization);
 
   late final tmb1 = TeamMatchBout(
     id: 1,
@@ -279,26 +269,55 @@ class MockedData {
     matCount: 6,
   );
 
-  late final competitionPerson =
-      CompetitionPerson(id: 0, competition: competition, person: p1, role: PersonRole.timeKeeper);
+  late final competitionPerson = CompetitionPerson(
+    id: 0,
+    competition: competition,
+    person: p1,
+    role: PersonRole.timeKeeper,
+  );
 
   late final competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
-      id: 0, competitionSystem: CompetitionSystem.nordic, competition: competition, maxContestants: 6);
-  late final competitionSystemAffiliationTwoPools =
-      CompetitionSystemAffiliation(id: 1, competitionSystem: CompetitionSystem.twoPools, competition: competition);
+    id: 0,
+    competitionSystem: CompetitionSystem.nordic,
+    competition: competition,
+    maxContestants: 6,
+  );
+  late final competitionSystemAffiliationTwoPools = CompetitionSystemAffiliation(
+    id: 1,
+    competitionSystem: CompetitionSystem.twoPools,
+    competition: competition,
+  );
 
-  late final ageCategoryAJuniors =
-      AgeCategory(id: 0, name: 'A-Juniors', minAge: 16, maxAge: 18, organization: organization);
-  late final ageCategoryCJuniors =
-      AgeCategory(id: 1, name: 'C-Juniors', minAge: 12, maxAge: 14, organization: organization);
+  late final ageCategoryAJuniors = AgeCategory(
+    id: 0,
+    name: 'A-Juniors',
+    minAge: 16,
+    maxAge: 18,
+    organization: organization,
+  );
+  late final ageCategoryCJuniors = AgeCategory(
+    id: 1,
+    name: 'C-Juniors',
+    minAge: 12,
+    maxAge: 14,
+    organization: organization,
+  );
 
   late final competitionLineup1 = CompetitionLineup(id: 0, competition: competition, club: homeClub);
   late final competitionLineup2 = CompetitionLineup(id: 1, competition: competition, club: guestClub);
-  late final competitionWeightCategory =
-      CompetitionWeightCategory(id: 1, competition: competition, weightClass: wc61, ageCategory: ageCategoryAJuniors);
+  late final competitionWeightCategory = CompetitionWeightCategory(
+    id: 1,
+    competition: competition,
+    weightClass: wc61,
+    ageCategory: ageCategoryAJuniors,
+  );
 
-  late final competitionWeightCategory2 =
-      CompetitionWeightCategory(id: 2, competition: competition, weightClass: wc57, ageCategory: ageCategoryCJuniors);
+  late final competitionWeightCategory2 = CompetitionWeightCategory(
+    id: 2,
+    competition: competition,
+    weightClass: wc57,
+    ageCategory: ageCategoryCJuniors,
+  );
 
   late final competitionParticipation1 = CompetitionParticipation(
     id: 1,
@@ -421,19 +440,25 @@ class MockedData {
   );
 
   late final boutAction1 = BoutAction(
-      actionType: BoutActionType.points,
-      bout: bout1,
-      duration: Duration(seconds: 29),
-      role: BoutRole.red,
-      pointCount: 4);
+    actionType: BoutActionType.points,
+    bout: bout1,
+    duration: Duration(seconds: 29),
+    role: BoutRole.red,
+    pointCount: 4,
+  );
   late final boutAction2 = BoutAction(
-      actionType: BoutActionType.caution, bout: bout2, duration: Duration(seconds: 129), role: BoutRole.blue);
+    actionType: BoutActionType.caution,
+    bout: bout2,
+    duration: Duration(seconds: 129),
+    role: BoutRole.blue,
+  );
   late final boutAction3 = BoutAction(
-      actionType: BoutActionType.points,
-      bout: bout2,
-      duration: Duration(seconds: 100),
-      role: BoutRole.red,
-      pointCount: 2);
+    actionType: BoutActionType.points,
+    bout: bout2,
+    duration: Duration(seconds: 100),
+    role: BoutRole.red,
+    pointCount: 2,
+  );
 
   // Initialize in constructor, so it gets executed on creation.
   late final TeamMatch menRPWMatch;
@@ -487,7 +512,7 @@ class MockedData {
   late final List<TeamClubAffiliation> _teamClubAffiliations = [
     homeTeamAffiliation,
     homeTeamJuniorsAffiliation,
-    guestTeamAffiliation
+    guestTeamAffiliation,
   ];
 
   late final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
@@ -504,9 +529,7 @@ class MockedData {
     competitionSystemAffiliationNordic,
     competitionSystemAffiliationTwoPools,
   ];
-  late final List<CompetitionPerson> _competitionPersons = [
-    competitionPerson,
-  ];
+  late final List<CompetitionPerson> _competitionPersons = [competitionPerson];
   late final List<CompetitionBout> _competitionBouts = [
     competitionBout1,
     competitionBout2,
@@ -644,10 +667,7 @@ class MockedData {
 
   List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
 
-  List<Bout> getBouts() => {
-        ..._teamMatchBouts.map((e) => e.bout),
-        ..._competitionBouts.map((e) => e.bout),
-      }.toList();
+  List<Bout> getBouts() => {..._teamMatchBouts.map((e) => e.bout), ..._competitionBouts.map((e) => e.bout)}.toList();
 
   List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
     return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
@@ -700,7 +720,8 @@ class MockedData {
   List<CompetitionParticipation> getCompetitionParticipations() => _competitionParticipations;
 
   List<CompetitionParticipation> getCompetitionParticipationsOfWeightCategory(
-      CompetitionWeightCategory weightCategory) {
+    CompetitionWeightCategory weightCategory,
+  ) {
     return getCompetitionParticipations().where((element) => element.weightCategory == weightCategory).toList();
   }
 

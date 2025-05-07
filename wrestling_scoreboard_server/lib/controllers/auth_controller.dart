@@ -70,17 +70,11 @@ class AuthController {
 
     final jwt = JWT(
       // Payload
-      {
-        'id': user.id,
-        'username': user.username,
-      },
+      {'id': user.id, 'username': user.username},
       subject: '${user.id}',
       issuer: jwtIssuer,
     );
-    final token = jwt.sign(
-      SecretKey(jwtSecret),
-      expiresIn: Duration(days: jwtExpiresInDays),
-    );
+    final token = jwt.sign(SecretKey(jwtSecret), expiresIn: Duration(days: jwtExpiresInDays));
     return token;
   }
 }

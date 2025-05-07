@@ -11,12 +11,7 @@ class LeagueTeamParticipationEdit extends ConsumerStatefulWidget {
   final Team? initialTeam;
   final League? initialLeague;
 
-  const LeagueTeamParticipationEdit({
-    this.participation,
-    this.initialTeam,
-    this.initialLeague,
-    super.key,
-  });
+  const LeagueTeamParticipationEdit({this.participation, this.initialTeam, this.initialLeague, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TeamEditState();
@@ -49,9 +44,10 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           selectedItem: _team,
           label: localizations.team,
           context: context,
-          onSaved: (Team? value) => setState(() {
-            _team = value;
-          }),
+          onSaved:
+              (Team? value) => setState(() {
+                _team = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
@@ -65,9 +61,10 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           selectedItem: _league,
           label: localizations.league,
           context: context,
-          onSaved: (League? value) => setState(() {
-            _league = value;
-          }),
+          onSaved:
+              (League? value) => setState(() {
+                _league = value;
+              }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
@@ -91,11 +88,9 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(LeagueTeamParticipation(
-        id: widget.participation?.id,
-        team: _team!,
-        league: _league!,
-      ));
+      await (await ref.read(
+        dataManagerNotifierProvider,
+      )).createOrUpdateSingle(LeagueTeamParticipation(id: widget.participation?.id, team: _team!, league: _league!));
       navigator.pop();
     }
   }

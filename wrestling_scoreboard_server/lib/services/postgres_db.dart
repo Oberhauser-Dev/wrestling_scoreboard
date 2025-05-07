@@ -25,9 +25,10 @@ class PostgresDb {
 
   psql.Connection? _connection;
 
-  psql.Connection get connection => _connection != null
-      ? _connection!
-      : throw Exception('Database connection has not yet been initialized. Plz call `open()` first.');
+  psql.Connection get connection =>
+      _connection != null
+          ? _connection!
+          : throw Exception('Database connection has not yet been initialized. Plz call `open()` first.');
 
   factory PostgresDb() {
     return _singleton;
@@ -37,16 +38,15 @@ class PostgresDb {
 
   Future<void> open() async {
     _connection ??= await psql.Connection.open(
-        psql.Endpoint(
-          host: postgresHost,
-          port: postgresPort,
-          database: postgresDatabaseName,
-          username: dbUser,
-          password: dbPW,
-        ),
-        settings: psql.ConnectionSettings(
-          sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable,
-        ));
+      psql.Endpoint(
+        host: postgresHost,
+        port: postgresPort,
+        database: postgresDatabaseName,
+        username: dbUser,
+        password: dbPW,
+      ),
+      settings: psql.ConnectionSettings(sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable),
+    );
   }
 
   Future<void> close() async {
@@ -93,10 +93,11 @@ extension DatabaseExt on PostgresDb {
 
     final dir = Directory('database/migration');
     final List<FileSystemEntity> entities = await dir.list().toList();
-    final migrationMap = entities.map((entity) {
-      final migrationVersion = entity.uri.pathSegments.last.split('_')[0];
-      return MapEntry(Version.parse(migrationVersion.replaceFirst('v', '')), entity);
-    }).toList();
+    final migrationMap =
+        entities.map((entity) {
+          final migrationVersion = entity.uri.pathSegments.last.split('_')[0];
+          return MapEntry(Version.parse(migrationVersion.replaceFirst('v', '')), entity);
+        }).toList();
     migrationMap.sort((a, b) => a.key.compareTo(b.key));
     int migrationStartIndex = 0;
     while (migrationStartIndex < migrationMap.length) {
@@ -141,8 +142,13 @@ extension DatabaseExt on PostgresDb {
 
     // Recreate default admin
     await SecuredUserController().createSingle(
-        User(username: 'admin', createdAt: DateTime.now(), privilege: UserPrivilege.admin, password: 'admin')
-            .toSecuredUser());
+      User(
+        username: 'admin',
+        createdAt: DateTime.now(),
+        privilege: UserPrivilege.admin,
+        password: 'admin',
+      ).toSecuredUser(),
+    );
   }
 
   Future<void> executeSqlFile(String sqlFilePath) async {
@@ -159,8 +165,13 @@ extension DatabaseExt on PostgresDb {
       postgresPort.toString(),
       postgresDatabaseName,
     ];
-    final processResult =
-        await Process.run('psql', args, environment: {'PGPASSWORD': dbPW}, stdoutEncoding: utf8, stderrEncoding: utf8);
+    final processResult = await Process.run(
+      'psql',
+      args,
+      environment: {'PGPASSWORD': dbPW},
+      stdoutEncoding: utf8,
+      stderrEncoding: utf8,
+    );
 
     if (processResult.exitCode != 0) {
       throw processResult.stderr;
@@ -191,8 +202,13 @@ extension DatabaseExt on PostgresDb {
       '--schema',
       'public',
     ];
-    final process = await Process.run('pg_dump', args,
-        environment: {'PGPASSWORD': dbPW}, stdoutEncoding: utf8, stderrEncoding: utf8);
+    final process = await Process.run(
+      'pg_dump',
+      args,
+      environment: {'PGPASSWORD': dbPW},
+      stdoutEncoding: utf8,
+      stderrEncoding: utf8,
+    );
 
     if (process.exitCode == 0) {
       return process.stdout;
@@ -203,8 +219,11 @@ extension DatabaseExt on PostgresDb {
 
   static sanitizeSql(String sqlString) {
     sqlString = sqlString.replaceAll('\r\n', '\n');
-    return sqlString.split('\n').where((line) {
-      return !(line.startsWith('-- Dumped') || line.startsWith('SET transaction_timeout'));
-    }).join('\n');
+    return sqlString
+        .split('\n')
+        .where((line) {
+          return !(line.startsWith('-- Dumped') || line.startsWith('SET transaction_timeout'));
+        })
+        .join('\n');
   }
 }

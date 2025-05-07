@@ -20,10 +20,7 @@ abstract class DataManager implements AuthManager {
   Future<List<T>> readMany<T extends DataObject, S extends DataObject?>({S? filterObject});
 
   /// READ: get a single object
-  Stream<T> streamSingle<T extends DataObject>(
-    int id, {
-    bool init = false,
-  }) async* {
+  Stream<T> streamSingle<T extends DataObject>(int id, {bool init = false}) async* {
     final controller = getOrCreateSingleStreamController<T>();
     if (init) {
       yield await readSingle<T>(id);
@@ -144,8 +141,9 @@ abstract class DataManager implements AuthManager {
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
-  StreamController<ManyDataObject<Map<String, dynamic>>>? getManyRawStreamController<T extends DataObject>(
-      {Type? filterType = Null}) {
+  StreamController<ManyDataObject<Map<String, dynamic>>>? getManyRawStreamController<T extends DataObject>({
+    Type? filterType = Null,
+  }) {
     filterType ??= Null;
     Map<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>? streamControllersOfType =
         _manyRawStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<Map<String, dynamic>>>>();
@@ -168,8 +166,9 @@ abstract class DataManager implements AuthManager {
     return streamController;
   }
 
-  StreamController<ManyDataObject<Map<String, dynamic>>> getOrCreateManyRawStreamController<T extends DataObject>(
-      {Type? filterType = Null}) {
+  StreamController<ManyDataObject<Map<String, dynamic>>> getOrCreateManyRawStreamController<T extends DataObject>({
+    Type? filterType = Null,
+  }) {
     filterType ??= Null;
     var streamController = getManyRawStreamController<T>(filterType: filterType);
     if (streamController == null) {
