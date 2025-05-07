@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
@@ -28,11 +27,11 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
 
   OrganizationController._internal() : super();
 
-  Future<List<Person>> getPersons(User? user, int id) async {
+  Future<List<Person>> getPersons(bool obfuscate, int id) async {
     return await PersonController().getMany(
       conditions: ['organization_id = @id'],
       substitutionValues: {'id': id},
-      obfuscate: user?.obfuscate ?? true,
+      obfuscate: obfuscate,
     );
   }
 

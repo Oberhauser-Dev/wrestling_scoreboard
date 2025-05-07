@@ -1,6 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -128,6 +129,10 @@ class ApiRoute {
     router.restrictedPostOne('/${Competition.cTableName}/<id|[0-9]+>/api/import', competitionController.postImport);
     router.restrictedGetOne(
         '/${Competition.cTableName}/<id|[0-9]+>/api/last_import', competitionController.requestLastImportUtcDateTime);
+
+    final competitionWeightCategoryController = CompetitionWeightCategoryController();
+    router.restrictedPostOne(
+        '/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate', competitionWeightCategoryController.generateBouts);
 
     // This nested catch-all, will only catch /api/.* when mounted above.
     // Notice that ordering if annotated handlers and mounts is significant.

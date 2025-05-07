@@ -92,6 +92,7 @@
   "edit": "Bearbeiten",
   "save": "Speichern",
   "saveAndGenerate": "Speichern & Generieren",
+  "generate": "Generieren",
   "add": "Hinzufügen",
   "addExisting": "Existierende hinzufügen",
   "mergeObjectData": "Objekt-Daten zusammenführen",

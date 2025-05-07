@@ -10,4 +10,13 @@ class CompetitionSystemAffiliationController extends ShelfController<Competition
   }
 
   CompetitionSystemAffiliationController._internal() : super();
+
+  Future<List<CompetitionSystemAffiliation>> getByCompetition(bool obfuscate, int id) async {
+    return await getMany(
+      conditions: ['competition_id = @id'],
+      substitutionValues: {'id': id},
+      orderBy: ['max_contestants'],
+      obfuscate: obfuscate,
+    );
+  }
 }

@@ -548,6 +548,12 @@ abstract class AppLocalizations {
   /// **'Save & Generate'**
   String get saveAndGenerate;
 
+  /// No description provided for @generate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get generate;
+
   /// No description provided for @add.
   ///
   /// In en, this message translates to:

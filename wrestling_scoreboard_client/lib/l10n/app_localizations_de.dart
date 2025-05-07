@@ -253,6 +253,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get saveAndGenerate => 'Speichern & Generieren';
 
   @override
+  String get generate => 'Generieren';
+
+  @override
   String get add => 'Hinzufügen';
 
   @override

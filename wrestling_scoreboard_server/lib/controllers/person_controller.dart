@@ -116,8 +116,12 @@ class PersonController extends OrganizationalController<Person> {
 
       // Update list of persons for its organization
       broadcast((obfuscate) async => jsonEncode(manyToJson(
-          await OrganizationController().getPersons(user, keepPerson.organization!.id!), Person, CRUD.update,
-          isRaw: false, filterType: Organization, filterId: keepPerson.organization!.id)));
+          await OrganizationController().getPersons(user?.obfuscate ?? true, keepPerson.organization!.id!),
+          Person,
+          CRUD.update,
+          isRaw: false,
+          filterType: Organization,
+          filterId: keepPerson.organization!.id)));
 
       return Response.ok('{"status": "success"}');
     } on FormatException catch (e) {

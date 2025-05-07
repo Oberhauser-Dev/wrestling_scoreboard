@@ -251,6 +251,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveAndGenerate => 'Save & Generate';
 
   @override
+  String get generate => 'Generate';
+
+  @override
   String get add => 'Add';
 
   @override

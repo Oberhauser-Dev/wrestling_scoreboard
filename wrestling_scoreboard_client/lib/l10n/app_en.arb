@@ -95,6 +95,7 @@
   "edit": "Edit",
   "save": "Save",
   "saveAndGenerate": "Save & Generate",
+  "generate": "Generate",
   "add": "Add",
   "addExisting": "Add existing",
   "mergeObjectData": "Merge Object Data",

@@ -49,10 +49,9 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
   /// isReset: delete all previous Bouts and TeamMatchBouts, else reuse the states
   Future<Response> generateBouts(Request request, User? user, String id) async {
-    final bool obfuscate = user?.obfuscate ?? true;
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id), obfuscate: false));
-    final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(user, teamMatch.id!));
+    final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(false, teamMatch.id!));
     final leagueWeightClasses = teamMatch.league?.id == null
         ? <LeagueWeightClass>[]
         : (await LeagueController().getLeagueWeightClasses(teamMatch.league!.id.toString(),
@@ -131,7 +130,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
         if (bout.b != null) {
           bout = bout.copyWith(b: bout.b!.copyWithId(await AthleteBoutStateController().createSingle(bout.b!)));
         }
-        bout = bout.copyWithId(await BoutController().createSingle(bout));
+        bout = await BoutController().createSingleReturn(bout);
         tmb = await TeamMatchBoutController().createSingleReturn(tmb.copyWith(bout: bout));
         tmBouts[entry.key] = tmb;
       } else {
@@ -160,9 +159,16 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       });
     }
 
-    // TODO: handle obfuscate.
-    broadcast((obfuscate) async => jsonEncode(
-        manyToJson(tmBouts, Bout, CRUD.update, isRaw: false, filterType: TeamMatch, filterId: teamMatch.id)));
+    broadcast((obfuscate) async {
+      final List<TeamMatchBout> teamMatchBouts;
+      if (obfuscate) {
+        teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(obfuscate, teamMatch.id!);
+      } else {
+        teamMatchBouts = tmBouts;
+      }
+      return jsonEncode(manyToJson(teamMatchBouts, TeamMatchBout, CRUD.update,
+          isRaw: false, filterType: TeamMatch, filterId: teamMatch.id));
+    });
 
     return Response.ok('{"status": "success"}');
   }

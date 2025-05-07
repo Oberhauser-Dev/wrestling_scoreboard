@@ -76,7 +76,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             ),
             EditAction(
               icon: const Icon(Icons.autorenew),
-              label: Text(localizations.saveAndGenerate),
+              label: Text(localizations.generate),
               onSubmit: () async {
                 final hasConfirmed = await showOkCancelDialog(
                   context: context,
