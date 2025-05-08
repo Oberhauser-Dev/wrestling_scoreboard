@@ -27,8 +27,31 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
   Future<Response> generateBouts(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
     // TODO: option to reset, override existing bouts if present, keep athlete bout state.
-    // final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
+    final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
+
+    final oldCompetitionBouts = await CompetitionBoutController().getByWeightCategory(
+      obfuscate,
+      competitionWeightCategory.id!,
+    );
+    if (isReset) {
+      await Future.forEach(oldCompetitionBouts, (CompetitionBout competitionBout) async {
+        if (competitionBout.id != null) {
+          await CompetitionBoutController().deleteSingle(competitionBout.id!);
+          await BoutController().deleteSingle(competitionBout.bout.id!);
+          // TODO delete athlete bout state (?)
+        }
+      });
+    } else {
+      // TODO: just delete those who aren't reused any more
+      await Future.forEach(oldCompetitionBouts, (CompetitionBout competitionBout) async {
+        if (competitionBout.id != null) {
+          await CompetitionBoutController().deleteSingle(competitionBout.id!);
+          await BoutController().deleteSingle(competitionBout.bout.id!);
+          // TODO delete athlete bout state (?)
+        }
+      });
+    }
 
     final participations = await CompetitionParticipationController().getByWeightCategory(
       false,

@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/competition/compet
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
@@ -66,7 +67,14 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
           ),
           onDelete:
               () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionBout>(competitionBout),
-          tiles: [],
+          tiles: [
+            ContentItem(title: competitionBout.mat?.toString() ?? '-', subtitle: localizations.mat, icon: Icons.adjust),
+            ContentItem(
+              title: competitionBout.round?.toString() ?? '-',
+              subtitle: localizations.round,
+              icon: Icons.restart_alt,
+            ),
+          ],
           actions: [
             // pdfAction,
             Padding(

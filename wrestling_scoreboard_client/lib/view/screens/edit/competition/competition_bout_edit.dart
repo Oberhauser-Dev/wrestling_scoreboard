@@ -23,6 +23,8 @@ class CompetitionBoutEdit extends BoutEdit {
 
 class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
   int _pos = 0;
+  int? _mat;
+  int? _round;
   CompetitionWeightCategory? _weightCategory;
 
   Iterable<Membership>? _memberships;
@@ -31,6 +33,8 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
   void initState() {
     super.initState();
     _weightCategory = widget.competitionBout?.weightCategory;
+    _mat = widget.competitionBout?.mat;
+    _round = widget.competitionBout?.round;
   }
 
   Future<Iterable<Membership>> _getMemberships() async {
@@ -85,6 +89,36 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
           ),
         ),
         ListTile(
+          leading: const Icon(Icons.adjust), // Replace with square_dot
+          title: TextFormField(
+            initialValue: _mat?.toString() ?? '',
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+              labelText: localizations.mat,
+            ),
+            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
+            onSaved: (String? value) {
+              _mat = int.tryParse(value ?? '') ?? 0;
+            },
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.restart_alt),
+          title: TextFormField(
+            initialValue: _round?.toString() ?? '',
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 20),
+              labelText: localizations.round,
+            ),
+            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
+            onSaved: (String? value) {
+              _round = int.tryParse(value ?? '') ?? 0;
+            },
+          ),
+        ),
+        ListTile(
           title: SearchableDropdown<CompetitionWeightCategory>(
             icon: const Icon(Icons.fitness_center),
             selectedItem: _weightCategory,
@@ -113,6 +147,8 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
       pos: _pos,
       bout: bout,
       weightCategory: _weightCategory,
+      mat: _mat,
+      round: _round,
     );
     competitionBout = competitionBout.copyWithId(
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionBout),
