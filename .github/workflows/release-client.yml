@@ -5,6 +5,12 @@ on:
     tags:
       - 'wrestling_scoreboard_client-*'
   workflow_dispatch:
+    inputs:
+      app_version:
+        description: 'App version'
+        required: true
+        default: ''
+        type: string
 
 jobs:
   pre-run:
@@ -13,7 +19,7 @@ jobs:
     steps:
       - id: release-version
         run: |
-          TAG="${{ github.ref_name }}"
+          TAG="${{ inputs.app_version || github.ref_name }}"
           RELEASE_VERSION="${TAG#*wrestling_scoreboard_client-}"
           echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
     outputs:
@@ -70,10 +76,10 @@ jobs:
           sudo apt-get install -y libunwind-dev
           sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - name: Build
-        uses: oberhauser-dev/flutter-release-action@v0
+        uses: oberhauser-dev/flutter-release-action@dev
         with:
           working-directory: wrestling_scoreboard_client
-          dry-run: false
+          dry-run: true
           app-name: 'wrestling_scoreboard_client'
           app-version: ${{ needs.pre-run.outputs.release-version }}
           tag: ${{ github.ref }}
@@ -91,7 +97,7 @@ jobs:
           android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
   publish-client:
-    needs: [ release-client, pre-run ]
+    needs: [ pre-run ] # release-client
     name: Publish Client on ${{ matrix.publish-distributor }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
     defaults:
@@ -131,11 +137,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libunwind-dev
           sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - name: Print ref and ref_name
+        run: |
+          echo "ref: ${{ github.ref }}"
+          echo "ref_name: ${{ github.ref_name }}"
+      - name: Print App version
+        run: |
+          echo "app_version: ${{ inputs.app_version }}"
       - name: Publish
-        uses: oberhauser-dev/flutter-release-action@v0
+        uses: oberhauser-dev/flutter-release-action@dev
         with:
           working-directory: wrestling_scoreboard_client
-          dry-run: false
+          dry-run: true
           app-name: 'wrestling_scoreboard_client'
           app-version: ${{ needs.pre-run.outputs.release-version }}
           tag: ${{ github.ref }}
@@ -169,3 +182,8 @@ jobs:
           publish-web-ssh-port: ${{ secrets.WEB_SSH_PORT }}
           publish-web-ssh-user: ${{ secrets.WEB_SSH_USER }}
           publish-web-ssh-private-key-base64: ${{ secrets.WEB_SSH_PRIVATE_KEY }}
+#      - name: Setup tmate session
+#        if: ${{ failure() }}
+#        uses: mxschmitt/action-tmate@v3
+#        with:
+#          limit-access-to-actor: true
