@@ -23,7 +23,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
   final _formKey = GlobalKey<FormState>();
 
   Iterable<Club>? _availableClubs;
-  Iterable<Membership>? _memberships;
+  Iterable<Membership>? _availableMemberships;
 
   Membership? _leader;
   Membership? _coach;
@@ -35,6 +35,15 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
     _leader = widget.competitionLineup?.leader;
     _coach = widget.competitionLineup?.coach;
     _club = widget.competitionLineup?.club;
+  }
+
+  Future<Iterable<Membership>> _getMemberships() async {
+    if (_availableMemberships == null && _club != null) {
+      _availableMemberships = await ref.readAsync(
+        manyDataStreamProvider<Membership, Club>(ManyProviderData<Membership, Club>(filterObject: _club)).future,
+      );
+    }
+    return _availableMemberships ?? [];
   }
 
   @override
@@ -55,14 +64,12 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
                 _club = value;
               }),
           onChanged: (club) async {
-            final memberships = await ref.readAsync(
-              manyDataStreamProvider<Membership, Club>(ManyProviderData<Membership, Club>(filterObject: club)).future,
-            );
+            _club = club;
             setState(() {
               // Reset memberships, if changing the club.
               _leader = null;
               _coach = null;
-              _memberships = memberships;
+              _availableMemberships = null;
             });
           },
           itemAsString: (u) => u.name,
@@ -75,7 +82,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
       ListTile(
         title: MembershipDropdown(
           label: localizations.leader,
-          getOrSetMemberships: () async => _memberships ?? [],
+          getOrSetMemberships: () async => _getMemberships(),
           organization: widget.initialCompetition.organization,
           selectedItem: _leader,
           onSave:
@@ -87,7 +94,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
       ListTile(
         title: MembershipDropdown(
           label: localizations.coach,
-          getOrSetMemberships: () async => _memberships ?? [],
+          getOrSetMemberships: () async => _getMemberships(),
           organization: widget.initialCompetition.organization,
           selectedItem: _coach,
           onSave:
