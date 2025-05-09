@@ -75,6 +75,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           bouts: competitionBouts.map((e) => e.bout).toList(),
                           boutIndex: competitionBoutIndex,
                           bout: bout,
+                          mat: competitionBout.mat,
                           onPressBoutInfo: (BuildContext context) {
                             // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
                             context.go(
@@ -85,7 +86,8 @@ class CompetitionBoutDisplay extends StatelessWidget {
                             context.pop();
                             navigateToCompetitionBoutScreen(context, competition, competitionBouts[index]);
                           },
-                          headerItems: [], // TODO
+                          // TODO
+                          headerItems: [],
                           weightClass: competitionBout.weightCategory?.weightClass,
                           ageCategory: competitionBout.weightCategory?.ageCategory,
                           weightR: homeParticipation?.weight,
