@@ -143,36 +143,43 @@ class CompetitionDisplay extends StatelessWidget {
                             if (matCompetitionBout != null) {
                               matDisplay = InkWell(
                                 onTap: () => navigateToCompetitionBoutScreen(context, competition, matCompetitionBout!),
-                                child: Column(
-                                  children: [
-                                    Center(
-                                      child: ScaledText(
-                                        matCompetitionBout.weightCategory?.name ?? '---',
-                                        fontSize: 12,
-                                        minFontSize: 10,
-                                      ),
-                                    ),
-                                    displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
-                                    SizedBox(
-                                      height: width / 30,
-                                      child: SmallBoutStateDisplay(
-                                        bout: matCompetitionBout.bout,
-                                        boutConfig: competition.boutConfig,
-                                      ),
-                                    ),
-                                    displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
-                                  ],
+                                child: SingleConsumer<Bout>(
+                                  id: matCompetitionBout.bout.id,
+                                  initialData: matCompetitionBout.bout,
+                                  builder: (context, bout) {
+                                    Widget column = Column(
+                                      children: [
+                                        Center(
+                                          child: ScaledText(
+                                            matCompetitionBout!.weightCategory?.name ?? '---',
+                                            fontSize: 12,
+                                            minFontSize: 10,
+                                          ),
+                                        ),
+                                        displayParticipant(bout.r, BoutRole.red),
+                                        SizedBox(
+                                          height: width / 30,
+                                          child: SmallBoutStateDisplay(bout: bout, boutConfig: competition.boutConfig),
+                                        ),
+                                        displayParticipant(bout.b, BoutRole.blue),
+                                      ],
+                                    );
+
+                                    if (bout.result != null) {
+                                      column = Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          column,
+                                          Container(
+                                            color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return column;
+                                  },
                                 ),
                               );
-                              if (matCompetitionBout.bout.result != null) {
-                                matDisplay = Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    matDisplay,
-                                    Container(color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5)),
-                                  ],
-                                );
-                              }
                             } else {
                               matDisplay = Center(child: ScaledText('No bout'));
                             }
