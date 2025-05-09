@@ -335,7 +335,9 @@ Future<int> handleSingle<T extends DataObject>({
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
     broadcastSingle<T>(single);
-  } else if (operation == CRUD.update && single is BoutAction) {
+  } else if (operation == CRUD.update &&
+      (single is BoutAction /* Order of BoutAction changes */ ||
+          single is CompetitionBout /* Mat changes in display */ )) {
     // Update nonetheless, if order of items has changed
     broadcastSingle<T>(single);
   }
@@ -374,7 +376,8 @@ Future<int> handleSingleRaw<T extends DataObject>({
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
     broadcastSingleRaw<T>(single);
-  } else if (operation == CRUD.update && T == BoutAction) {
+  } else if (operation == CRUD.update &&
+      (T == BoutAction /* Order of BoutAction changes */ || T == CompetitionBout /* Mat changes in display */ )) {
     // Update nonetheless, if order of items has changed
     broadcastSingleRaw<T>(single);
   }

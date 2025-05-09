@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/competition/weight_category_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_participation_edit.dart';
@@ -60,6 +61,12 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
               title: competitionWeightCategory.weightClass.name,
               subtitle: localizations.weightClass,
               icon: Icons.label,
+            ),
+            ContentItem(
+              title:
+                  '${competitionWeightCategory.weightClass.style.localize(context)} (${competitionWeightCategory.weightClass.style.abbreviation(context)})',
+              subtitle: localizations.weightClass,
+              icon: Icons.style,
             ),
           ],
         );

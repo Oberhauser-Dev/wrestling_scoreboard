@@ -38,6 +38,7 @@ class BoutScreen extends ConsumerStatefulWidget {
   final double? weightB;
   final WeightClass? weightClass;
   final AgeCategory? ageCategory;
+  final int? mat;
 
   // TODO: may overwrite in settings to be more flexible
   final BoutConfig boutConfig;
@@ -61,6 +62,7 @@ class BoutScreen extends ConsumerStatefulWidget {
     this.ageCategory,
     required this.weightR,
     required this.weightB,
+    this.mat,
     super.key,
   });
 
@@ -470,6 +472,14 @@ class BoutState extends ConsumerState<BoutScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              if (widget.mat != null)
+                                Center(
+                                  child: ScaledText(
+                                    '${localizations.mat} ${widget.mat! + 1}',
+                                    fontSize: 22,
+                                    minFontSize: 10,
+                                  ),
+                                ),
                               Row(
                                 children: [
                                   Expanded(
@@ -488,13 +498,11 @@ class BoutState extends ConsumerState<BoutScreen> {
                               if (weightClass != null)
                                 Center(
                                   child: ScaledText(
-                                    '${weightClass!.style.localize(context)}',
-                                    fontSize: 22,
+                                    '${weightClass!.name} | ${weightClass!.style.abbreviation(context)}',
+                                    fontSize: 26,
                                     minFontSize: 10,
                                   ),
                                 ),
-                              if (weightClass != null)
-                                Center(child: ScaledText(weightClass!.name, fontSize: 26, minFontSize: 10)),
                             ],
                           ),
                         ),

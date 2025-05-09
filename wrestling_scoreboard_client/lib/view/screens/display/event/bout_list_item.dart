@@ -97,54 +97,60 @@ class SmallBoutStateDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ManyConsumer<BoutAction, Bout>(
-      filterObject: bout,
-      builder:
-          (context, actions) => Row(
-            children: [
-              Expanded(
-                flex: 50,
-                child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout, actions: actions),
-              ),
-              Expanded(
-                flex: 100,
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 70,
-                      child: ThemedContainer(
-                        color: bout.winnerRole?.color().shade800,
-                        child: Center(child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12)),
-                      ),
+    return SingleConsumer(
+      initialData: bout,
+      id: bout.id,
+      builder: (context, bout) {
+        return ManyConsumer<BoutAction, Bout>(
+          filterObject: bout,
+          builder:
+              (context, actions) => Row(
+                children: [
+                  Expanded(
+                    flex: 50,
+                    child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout, actions: actions),
+                  ),
+                  Expanded(
+                    flex: 100,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          flex: 70,
+                          child: ThemedContainer(
+                            color: bout.winnerRole?.color().shade800,
+                            child: Center(child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 50,
+                          child: Center(
+                            child:
+                                bout.result != null || bout.duration > Duration.zero
+                                    ? LoadingBuilder<bool>(
+                                      future: ref.watch(timeCountDownNotifierProvider),
+                                      builder: (context, isTimeCountDown) {
+                                        return ScaledText(
+                                          bout.duration
+                                              .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                                              .formatMinutesAndSeconds(),
+                                          fontSize: 8,
+                                        );
+                                      },
+                                    )
+                                    : null,
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 50,
-                      child: Center(
-                        child:
-                            bout.result != null || bout.duration > Duration.zero
-                                ? LoadingBuilder<bool>(
-                                  future: ref.watch(timeCountDownNotifierProvider),
-                                  builder: (context, isTimeCountDown) {
-                                    return ScaledText(
-                                      bout.duration
-                                          .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                                          .formatMinutesAndSeconds(),
-                                      fontSize: 8,
-                                    );
-                                  },
-                                )
-                                : null,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    flex: 50,
+                    child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout, actions: actions),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 50,
-                child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout, actions: actions),
-              ),
-            ],
-          ),
+        );
+      },
     );
   }
 

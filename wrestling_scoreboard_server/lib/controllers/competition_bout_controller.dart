@@ -1,4 +1,5 @@
 import 'package:postgres/postgres.dart' as psql;
+import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
@@ -11,6 +12,12 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
   }
 
   CompetitionBoutController._internal() : super();
+
+  @override
+  Future<Response> postSingle(Request request, User? user) {
+    // TODO: avoid updating mat, if boutResult is null and another bout is already happening on the same mat (without boutResult).
+    return super.postSingle(request, user);
+  }
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
