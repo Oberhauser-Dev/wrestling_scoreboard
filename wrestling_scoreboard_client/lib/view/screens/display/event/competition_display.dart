@@ -197,8 +197,10 @@ class _CompetitionDisplayState extends ConsumerState<CompetitionDisplay> {
                   Divider(height: 1),
                   Expanded(
                     child: ScrollablePositionedList.builder(
-                      itemScrollController: _itemScrollController,
-                      initialScrollIndex: initialBoutListIndex,
+                      // TODO: initialScrollIndex is not updated in ScrollablePositionedList, this also cannot properly be set via the itemScrollController
+                      // ScrollablePositionedList currently is not maintained
+                      key: ValueKey(competitionBouts),
+                      initialScrollIndex: competitionBouts.indexWhere((element) => element.mat == null),
                       itemCount: competitionBouts.length,
                       itemBuilder: (context, index) {
                         final competitionBout = competitionBouts[index];
