@@ -17,7 +17,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class CompetitionDisplay extends ConsumerStatefulWidget {
+class CompetitionDisplay extends StatelessWidget {
   static const route = 'display';
 
   final int id;
@@ -26,19 +26,12 @@ class CompetitionDisplay extends ConsumerStatefulWidget {
   const CompetitionDisplay({required this.id, this.competition, super.key});
 
   @override
-  ConsumerState<CompetitionDisplay> createState() => _CompetitionDisplayState();
-}
-
-class _CompetitionDisplayState extends ConsumerState<CompetitionDisplay> {
-  final _itemScrollController = ItemScrollController();
-
-  @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     double width = MediaQuery.of(context).size.width;
     return SingleConsumer<Competition>(
-      id: widget.id,
-      initialData: widget.competition,
+      id: id,
+      initialData: competition,
       builder: (context, competition) {
         final infoAction = IconButton(
           icon: const Icon(Icons.info),
@@ -111,14 +104,6 @@ class _CompetitionDisplayState extends ConsumerState<CompetitionDisplay> {
           body: ManyConsumer<CompetitionBout, Competition>(
             filterObject: competition,
             builder: (context, competitionBouts) {
-              // TODO: this should be done in a listener, not in a builder:
-              final initialBoutListIndex = competitionBouts.indexWhere((element) => element.mat == null);
-              if (_itemScrollController.isAttached) {
-                _itemScrollController.scrollTo(
-                  index: initialBoutListIndex,
-                  duration: const Duration(milliseconds: 150),
-                );
-              }
               final competitionInfos = [
                 '${localizations.competitionNumber}: ${competition.id ?? ''}',
                 '${localizations.date}: ${competition.date.toDateString(context)}',
@@ -154,43 +139,53 @@ class _CompetitionDisplayState extends ConsumerState<CompetitionDisplay> {
                                 matCompetitionBouts.where((element) => element.bout.result == null).firstOrNull;
                             matCompetitionBout ??=
                                 matCompetitionBouts.where((element) => element.bout.result != null).lastOrNull;
-                            Widget matDisplay = Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
-                                if (matCompetitionBout == null)
-                                  Center(child: ScaledText('No bout'))
-                                else ...[
-                                  Center(
-                                    child: ScaledText(
-                                      matCompetitionBout.weightCategory?.name ?? '---',
-                                      fontSize: 12,
-                                      minFontSize: 10,
+                            Widget matDisplay;
+                            if (matCompetitionBout != null) {
+                              matDisplay = InkWell(
+                                onTap: () => navigateToCompetitionBoutScreen(context, competition, matCompetitionBout!),
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: ScaledText(
+                                        matCompetitionBout.weightCategory?.name ?? '---',
+                                        fontSize: 12,
+                                        minFontSize: 10,
+                                      ),
                                     ),
-                                  ),
-                                  displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
-                                  SizedBox(
-                                    height: width / 30,
-                                    child: SmallBoutStateDisplay(
-                                      bout: matCompetitionBout.bout,
-                                      boutConfig: competition.boutConfig,
+                                    displayParticipant(matCompetitionBout.bout.r, BoutRole.red),
+                                    SizedBox(
+                                      height: width / 30,
+                                      child: SmallBoutStateDisplay(
+                                        bout: matCompetitionBout.bout,
+                                        boutConfig: competition.boutConfig,
+                                      ),
                                     ),
-                                  ),
-                                  displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
-                                ],
-                              ],
-                            );
-                            if (matCompetitionBout?.bout.result != null) {
-                              matDisplay = Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  matDisplay,
-                                  Container(color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5)),
-                                ],
+                                    displayParticipant(matCompetitionBout.bout.b, BoutRole.blue),
+                                  ],
+                                ),
                               );
+                              if (matCompetitionBout.bout.result != null) {
+                                matDisplay = Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    matDisplay,
+                                    Container(color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5)),
+                                  ],
+                                );
+                              }
+                            } else {
+                              matDisplay = Center(child: ScaledText('No bout'));
                             }
-                            return Expanded(child: matDisplay);
+                            return Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
+                                  Expanded(child: matDisplay),
+                                ],
+                              ),
+                            );
                           }).toList(),
                     ),
                   ),
