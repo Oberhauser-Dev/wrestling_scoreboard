@@ -43,7 +43,8 @@ class CompetitionBoutDisplay extends StatelessWidget {
               return Center(child: Text(localizations.noItems, style: Theme.of(context).textTheme.bodySmall));
             }
             final competitionBout = competitionBouts.singleWhere((element) => element.id == competitionBoutId);
-            final competitionBoutIndex = competitionBouts.indexOf(competitionBout);
+            final matCompetitionBouts = competitionBouts.where((cb) => cb.mat == competitionBout.mat).toList();
+            final matCompetitionBoutIndex = matCompetitionBouts.indexOf(competitionBout);
             // Use bout to get the actual state, but use competitionBout for navigation.
             return SingleConsumer<Bout>(
               id: competitionBout.bout.id,
@@ -72,9 +73,10 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           wrestlingEvent: competition,
                           boutConfig: competition.boutConfig,
                           boutRules: boutResultRules,
-                          bouts: competitionBouts.map((e) => e.bout).toList(),
-                          boutIndex: competitionBoutIndex,
+                          bouts: matCompetitionBouts.map((e) => e.bout).toList(),
+                          boutIndex: matCompetitionBoutIndex,
                           bout: bout,
+                          mat: competitionBout.mat,
                           onPressBoutInfo: (BuildContext context) {
                             // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
                             context.go(
@@ -83,9 +85,10 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           },
                           navigateToBoutByIndex: (context, index) {
                             context.pop();
-                            navigateToCompetitionBoutScreen(context, competition, competitionBouts[index]);
+                            navigateToCompetitionBoutScreen(context, competition, matCompetitionBouts[index]);
                           },
-                          headerItems: [], // TODO
+                          // TODO
+                          headerItems: [],
                           weightClass: competitionBout.weightCategory?.weightClass,
                           ageCategory: competitionBout.weightCategory?.ageCategory,
                           weightR: homeParticipation?.weight,

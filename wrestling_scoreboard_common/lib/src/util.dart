@@ -1,3 +1,4 @@
+export 'util/convert.dart';
 export 'util/data_wrapper.dart';
 export 'util/date_time.dart';
 export 'util/extensions.dart';

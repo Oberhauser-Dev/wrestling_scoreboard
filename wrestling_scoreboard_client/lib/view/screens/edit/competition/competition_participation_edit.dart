@@ -67,6 +67,13 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
               (value) => setState(() {
                 _lineup = value;
               }),
+          onChanged: (value) {
+            _lineup = value;
+            // Reset Memberships when club has changed.
+            setState(() {
+              _availableMemberships = null;
+            });
+          },
           itemAsString: (u) => u.club.name,
           asyncItems: (String filter) async {
             _availableLineups ??= await (await ref.read(
@@ -79,7 +86,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
       ListTile(
         leading: Icon(Icons.person),
         title: MembershipDropdown(
-          label: localizations.leader,
+          label: localizations.membership,
           getOrSetMemberships: () async => _getMemberships(),
           organization: widget.initialCompetition.organization,
           selectedItem: _membership,
