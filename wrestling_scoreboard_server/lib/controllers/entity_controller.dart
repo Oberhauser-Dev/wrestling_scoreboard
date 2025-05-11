@@ -123,15 +123,15 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
 abstract class ShelfController<T extends DataObject> extends EntityController<T> {
   ShelfController({super.primaryKeyName});
 
-  Future<Response> requestSingle(Request request, User? user, String id) async {
-    return handleRequestSingle(int.parse(id), isRaw: request.isRaw, obfuscate: user?.obfuscate ?? true);
+  Future<Response> getRequestSingle(Request request, User? user, String id) async {
+    return handleGetRequestSingle(int.parse(id), isRaw: request.isRaw, obfuscate: user?.obfuscate ?? true);
   }
 
-  Future<Response> requestMany(Request request, User? user) async {
-    return handleRequestMany(isRaw: request.isRaw, obfuscate: user?.obfuscate ?? true);
+  Future<Response> getRequestMany(Request request, User? user) async {
+    return handleGetRequestMany(isRaw: request.isRaw, obfuscate: user?.obfuscate ?? true);
   }
 
-  Future<Response> handleRequestSingle(int id, {bool isRaw = false, bool obfuscate = false}) async {
+  Future<Response> handleGetRequestSingle(int id, {bool isRaw = false, bool obfuscate = false}) async {
     if (isRaw) {
       final single = await getSingleRaw(id, obfuscate: obfuscate);
       return Response.ok(rawJsonEncode(single));
@@ -141,7 +141,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     }
   }
 
-  Future<Response> handleRequestMany({
+  Future<Response> handleGetRequestMany({
     bool isRaw = false,
     List<String>? conditions,
     Conjunction conjunction = Conjunction.and,
@@ -170,7 +170,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     }
   }
 
-  Future<Response> handleRequestManyFromQuery({
+  Future<Response> handleGetRequestManyFromQuery({
     bool isRaw = false,
     required String sqlQuery,
     Map<String, dynamic>? substitutionValues,
@@ -185,28 +185,29 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     }
   }
 
-  Future<T> readSingle(Request request) async {
-    final message = await request.readAsString();
-    return parseSingleJson<T>(jsonDecode(message));
-  }
-
-  Future<Response> postSingle(Request request, User? user) async {
+  Future<Response> postRequestSingle(Request request, User? user) async {
     final message = await request.readAsString();
     try {
-      final id = await handleJson<T>(
-        jsonDecode(message),
-        handleSingle: handleSingle,
-        handleMany: handleMany,
-        handleSingleRaw: handleSingleRaw,
-        handleManyRaw: handleManyRaw,
-      );
-      return Response.ok(jsonEncode(id));
+      return handlePostRequestSingle(jsonDecode(message));
     } on FormatException catch (e) {
       final errMessage =
           'The data object of table "$tableName" could not be created. Check the format: $message'
           '\nFormatException: ${e.message}';
       logger.warning(errMessage.toString());
       return Response.badRequest(body: errMessage);
+    }
+  }
+
+  Future<Response> handlePostRequestSingle(Map<String, Object?> json) async {
+    try {
+      final id = await handleJson<T>(
+        json,
+        handleSingle: handleSingle,
+        handleMany: handleMany,
+        handleSingleRaw: handleSingleRaw,
+        handleManyRaw: handleManyRaw,
+      );
+      return Response.ok(jsonEncode(id));
     } on InvalidParameterException catch (e) {
       return Response.badRequest(body: e.message);
     }

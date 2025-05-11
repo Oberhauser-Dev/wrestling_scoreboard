@@ -25,7 +25,7 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
 
   Future<Response> requestTeamMatches(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
-    return TeamMatchController().handleRequestManyFromQuery(
+    return TeamMatchController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: teamMatchesQuery,
       substitutionValues: {'id': id},
@@ -42,7 +42,7 @@ class TeamController extends OrganizationalController<Team> with ImportControlle
 
   Future<Response> requestClubs(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
-    return ClubController().handleRequestManyFromQuery(
+    return ClubController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: clubsQuery,
       substitutionValues: {'id': id},

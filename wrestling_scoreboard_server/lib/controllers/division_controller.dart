@@ -23,7 +23,7 @@ class DivisionController extends OrganizationalController<Division> {
         ORDER BY dwc.pos;''';
 
   Future<Response> requestWeightClasses(Request request, User? user, String id) async {
-    return WeightClassController().handleRequestManyFromQuery(
+    return WeightClassController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: _weightClassesQuery(false),
       substitutionValues: {'id': id},

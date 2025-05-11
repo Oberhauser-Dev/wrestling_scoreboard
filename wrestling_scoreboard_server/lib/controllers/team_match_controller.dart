@@ -39,7 +39,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
   Future<Response> requestBouts(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
 
-    return BoutController().handleRequestManyFromQuery(
+    return BoutController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: _boutsQuery,
       substitutionValues: {'id': id},

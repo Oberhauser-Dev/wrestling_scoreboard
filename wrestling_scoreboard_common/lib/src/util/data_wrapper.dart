@@ -124,8 +124,7 @@ Future<int?> handleJson<T extends DataObject>(
     if (isRaw) {
       return await handleSingleRaw<T>(operation: operation, single: parseSingleRawJson(json));
     } else {
-      final single = parseSingleJson<T>(json);
-      return await handleSingle<T>(operation: operation, single: single);
+      return await handleSingle<T>(operation: operation, single: parseSingleJson<T>(json));
     }
   }
   return null;
