@@ -23,7 +23,7 @@ class ClubController extends OrganizationalController<Club> {
 
   Future<Response> requestTeams(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
-    return TeamController().handleRequestManyFromQuery(
+    return TeamController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: teamsQuery,
       substitutionValues: {'id': id},

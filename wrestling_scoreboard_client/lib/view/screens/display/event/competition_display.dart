@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/competitio
 import 'package:wrestling_scoreboard_client/view/screens/display/event/bout_list_item.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
@@ -268,9 +269,12 @@ class _CompetitionBoutListItem extends ConsumerWidget {
                   onFieldSubmitted: (value) async {
                     int? mat = int.tryParse(value);
                     if (mat != null) mat = mat - 1;
-                    (await ref.read(
-                      dataManagerNotifierProvider,
-                    )).createOrUpdateSingle(competitionBout.copyWith(mat: mat));
+                    await catchAsync(
+                      context,
+                      () async => (await ref.read(
+                        dataManagerNotifierProvider,
+                      )).createOrUpdateSingle(competitionBout.copyWith(mat: mat)),
+                    );
                   },
                 ),
               ),

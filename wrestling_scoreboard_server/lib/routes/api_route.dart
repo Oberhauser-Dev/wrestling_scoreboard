@@ -34,9 +34,9 @@ class ApiRoute {
 
       final controller = ShelfController.getControllerFromDataType(dataType)!;
       final typeRoute = '/${controller.tableName}';
-      router.restrictedPost(typeRoute, controller.postSingle);
-      router.restrictedGet('${typeRoute}s', controller.requestMany);
-      router.restrictedGetOne('$typeRoute/<id|[0-9]+>', controller.requestSingle);
+      router.restrictedPost(typeRoute, controller.postRequestSingle);
+      router.restrictedGet('${typeRoute}s', controller.getRequestMany);
+      router.restrictedGetOne('$typeRoute/<id|[0-9]+>', controller.getRequestSingle);
     }
 
     // Generate GET endpoints simple object relations
@@ -46,7 +46,7 @@ class ApiRoute {
         router.restrictedGetOne(
           '/${getTableNameFromType(propertyType)}/<id|[0-9]+>/${getTableNameFromType(dataObjectType)}s',
           (Request request, User? user, String id) =>
-              ShelfController.getControllerFromDataType(dataObjectType)!.handleRequestMany(
+              ShelfController.getControllerFromDataType(dataObjectType)!.handleGetRequestMany(
                 isRaw: request.isRaw,
                 conditions: ['$tableName = @id'],
                 substitutionValues: {'id': id},
@@ -74,11 +74,11 @@ class ApiRoute {
 
     final userController = SecuredUserController();
     router.restrictedPost('/user', userController.postSingleUser, UserPrivilege.admin); // Create
-    router.restrictedPost('/${SecuredUser.cTableName}', userController.postSingle, UserPrivilege.admin); // Update
-    router.restrictedGet('/${SecuredUser.cTableName}s', userController.requestMany, UserPrivilege.admin);
+    router.restrictedPost('/${SecuredUser.cTableName}', userController.postRequestSingle, UserPrivilege.admin); // Update
+    router.restrictedGet('/${SecuredUser.cTableName}s', userController.getRequestMany, UserPrivilege.admin);
     router.restrictedGetOne(
       '/${SecuredUser.cTableName}s/<id|[0-9]+>',
-      userController.requestSingle,
+      userController.getRequestSingle,
       UserPrivilege.admin,
     );
 

@@ -26,7 +26,7 @@ class MembershipController extends OrganizationalController<Membership> {
   Future<Response> requestTeamMatchBouts(Request request, User? user, String id) async {
     final bool obfuscate = user?.obfuscate ?? true;
 
-    return TeamMatchBoutController().handleRequestManyFromQuery(
+    return TeamMatchBoutController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: _teamMatchBoutsQuery,
       substitutionValues: {'id': id},

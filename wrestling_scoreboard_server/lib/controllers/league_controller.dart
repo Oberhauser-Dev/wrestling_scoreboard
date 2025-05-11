@@ -22,13 +22,13 @@ class LeagueController extends OrganizationalController<League> with ImportContr
 
   static String _weightClassesQuery(bool filterBySeasonPartition) => '''
         SELECT wc.* 
-        FROM weight_class as wc
-        JOIN league_weight_class AS dwc ON dwc.weight_class_id = wc.id
+        FROM ${WeightClass.cTableName} as wc
+        JOIN ${LeagueWeightClass.cTableName} AS dwc ON dwc.weight_class_id = wc.id
         WHERE dwc.league_id = @id ${filterBySeasonPartition ? 'AND dwc.season_partition = @season_partition' : ''}
         ORDER BY dwc.pos;''';
 
   Future<Response> requestWeightClasses(Request request, User? user, String id) async {
-    return WeightClassController().handleRequestManyFromQuery(
+    return WeightClassController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: _weightClassesQuery(false),
       substitutionValues: {'id': id},
