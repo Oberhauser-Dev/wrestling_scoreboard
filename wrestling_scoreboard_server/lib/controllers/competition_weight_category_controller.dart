@@ -76,6 +76,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     }
     final List<CompetitionBout> createdBouts;
     final List<CompetitionParticipation> updatedParticipations = [];
+    final CompetitionWeightCategory updatedCompetitionWeightCategory;
     switch (competitionSystemAffiliation.competitionSystem) {
       case CompetitionSystem.nordic:
         // https://en.wikipedia.org/wiki/Round-robin_tournament
@@ -86,13 +87,34 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           final updatedParticipation = participation.copyWith(poolDrawNumber: drawNumber);
           updatedParticipations.add(updatedParticipation);
         }
-        createdBouts =
-            _bergerTable(updatedParticipations, competitionWeightCategory).expand((element) => element).toList();
-      // TODO alter participations
-      // TODO alter bouts
+        final competitionBoutsBergerTable = _generateCompetitionBergerTable(
+          updatedParticipations,
+          competitionWeightCategory,
+        );
+        createdBouts = competitionBoutsBergerTable.expand((element) => element).toList();
+        updatedCompetitionWeightCategory = competitionWeightCategory.copyWith(
+          pairedRound: competitionBoutsBergerTable.length - 1,
+        );
       case CompetitionSystem.twoPools:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        createdBouts = [];
+        participations.shuffle();
+        final splittedParticipations = participations.slices((participations.length / 2).ceil());
+        for (final poolParticipationsIndexed in splittedParticipations.indexed) {
+          final (poolGroup, poolParticipations) = poolParticipationsIndexed;
+          final updatedPoolParticipations = <CompetitionParticipation>[];
+          for (final participationIndexed in poolParticipations.indexed) {
+            final (drawNumber, poolParticipation) = participationIndexed;
+            final updatedParticipation = poolParticipation.copyWith(poolDrawNumber: drawNumber, poolGroup: poolGroup);
+            updatedPoolParticipations.add(updatedParticipation);
+          }
+
+          updatedParticipations.addAll(updatedPoolParticipations);
+          // Only generate first round, as the others are not determined yet.
+          createdBouts.addAll(
+            _generateCompetitionBoutsOfRound(updatedPoolParticipations, competitionWeightCategory, round: 0),
+          );
+        }
+        updatedCompetitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 0);
       case CompetitionSystem.singleElimination:
         // TODO: Handle this case.
         throw UnimplementedError();
@@ -101,7 +123,13 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
         throw UnimplementedError();
     }
 
-    for (var element in createdBouts.indexed) {
+    await updateSingle(updatedCompetitionWeightCategory);
+
+    for (final participation in updatedParticipations) {
+      await CompetitionParticipationController().updateSingle(participation);
+    }
+
+    for (final element in createdBouts.indexed) {
       final (index, competitionBout) = element;
       Bout bout = competitionBout.bout;
       if (bout.r != null) {
@@ -139,11 +167,52 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     return Response.ok('{"status": "success"}');
   }
 
-  List<List<CompetitionBout>> _bergerTable(
-    List<CompetitionParticipation?> participations,
+  List<CompetitionBout> _generateCompetitionBoutsOfRound(
+    List<CompetitionParticipation> participations,
+    CompetitionWeightCategory weightCategory, {
+    required int round,
+  }) {
+    final bergerTable = _bergerTable(participations.length, weightCategory);
+    final boutsOfRound = bergerTable[round];
+    return _convertBoutsOfRound(boutsOfRound, round, weightCategory, participations);
+  }
+
+  List<List<CompetitionBout>> _generateCompetitionBergerTable(
+    List<CompetitionParticipation> participations,
     CompetitionWeightCategory weightCategory,
   ) {
-    participations = [...participations]; // copy array to avoid side effects
+    final bergerTable = _bergerTable(participations.length, weightCategory);
+    return bergerTable.indexed.map((indexedRoundBouts) {
+      final (round, boutsOfRound) = indexedRoundBouts;
+      return _convertBoutsOfRound(boutsOfRound, round, weightCategory, participations);
+    }).toList();
+  }
+
+  List<CompetitionBout> _convertBoutsOfRound(
+    List<(int?, int?)> boutsOfRound,
+    int round,
+    CompetitionWeightCategory weightCategory,
+    List<CompetitionParticipation> participations,
+  ) {
+    return boutsOfRound.indexed.map((indexedBoutTuple) {
+      final (boutIndex, boutTuple) = indexedBoutTuple;
+      final (rIndex, bIndex) = boutTuple;
+      return CompetitionBout(
+        competition: weightCategory.competition,
+        pos: (round * participations.length) + boutIndex,
+        weightCategory: weightCategory,
+        round: round,
+        bout: Bout(
+          organization: weightCategory.competition.organization,
+          r: rIndex == null ? null : AthleteBoutState(membership: participations[rIndex].membership),
+          b: bIndex == null ? null : AthleteBoutState(membership: participations[bIndex].membership),
+        ),
+      );
+    }).toList();
+  }
+
+  List<List<(int?, int?)>> _bergerTable(int participationSize, CompetitionWeightCategory weightCategory) {
+    final List<int?> participations = Iterable<int>.generate(participationSize).toList();
     if (participations.length.isOdd) participations.insert(0, null);
     final useDummy = false;
 
@@ -151,32 +220,17 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     final numberOfRounds = n - 1;
     final boutsPerRound = n ~/ 2;
 
-    List<CompetitionParticipation?> columnA = participations.slice(0, boutsPerRound).toList();
-    List<CompetitionParticipation?> columnB = participations.slice(boutsPerRound).toList();
+    List<int?> columnA = participations.slice(0, boutsPerRound).toList();
+    List<int?> columnB = participations.slice(boutsPerRound).toList();
     final fixed = participations[0];
 
-    int posCount = 0;
     final gen =
-        Iterable.generate(numberOfRounds).map((roundIndex) {
-          final genBoutsPerRound = Iterable.generate(boutsPerRound);
-          final boutsArr = <CompetitionBout>[];
+        Iterable<int>.generate(numberOfRounds).map((roundIndex) {
+          final genBoutsPerRound = Iterable<int>.generate(boutsPerRound);
+          final boutsArr = <(int?, int?)>[];
           for (final k in genBoutsPerRound) {
             if (useDummy || (columnA[k] != null && columnB[k] != null)) {
-              boutsArr.insert(
-                0,
-                CompetitionBout(
-                  competition: weightCategory.competition,
-                  pos: posCount,
-                  weightCategory: weightCategory,
-                  round: roundIndex,
-                  bout: Bout(
-                    organization: weightCategory.competition.organization,
-                    r: columnA[k] == null ? null : AthleteBoutState(membership: columnA[k]!.membership),
-                    b: columnB[k] == null ? null : AthleteBoutState(membership: columnB[k]!.membership),
-                  ),
-                ),
-              );
-              posCount++;
+              boutsArr.insert(0, (columnA[k], columnB[k]));
             }
           }
 

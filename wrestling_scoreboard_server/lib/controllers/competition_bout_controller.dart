@@ -5,6 +5,7 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 
+import 'competition_weight_category_controller.dart';
 import 'entity_controller.dart';
 
 class CompetitionBoutController extends ShelfController<CompetitionBout> {
@@ -28,23 +29,35 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
     try {
       final json = jsonDecode(message);
       final updatedCompetitionBout = parseSingleJson<CompetitionBout>(json);
-      if (updatedCompetitionBout.mat != null && updatedCompetitionBout.bout.result == null) {
-        final curCompetitionBouts = await getManyFromQuery(
-          _currentCompetitionBoutOfMatQuery,
-          obfuscate: user?.obfuscate ?? true,
-          substitutionValues: {'mat': updatedCompetitionBout.mat},
-        );
-        // final operation = CRUD.values.byName(json['operation']);
-        if (curCompetitionBouts.isNotEmpty) {
-          final curCompetitionBout = curCompetitionBouts.first;
-          // Always let update itself
-          if (curCompetitionBout.id != json['id']) {
-            return Response.badRequest(
-              body:
-                  'Mat ${updatedCompetitionBout.mat} is already occupied a CompetitionBout. Please add a bout result first:\n${curCompetitionBout.toJson()}',
-            );
+      final obfuscate = user?.obfuscate ?? true;
+      if (updatedCompetitionBout.bout.result == null) {
+        if (updatedCompetitionBout.mat != null) {
+          // Prohibit from adding a bout to an already occupied mat
+          final curCompetitionBoutsOfMat = await getManyFromQuery(
+            _currentCompetitionBoutOfMatQuery,
+            obfuscate: obfuscate,
+            substitutionValues: {'mat': updatedCompetitionBout.mat},
+          );
+          // final operation = CRUD.values.byName(json['operation']);
+          if (curCompetitionBoutsOfMat.isNotEmpty) {
+            final curCompetitionBout = curCompetitionBoutsOfMat.first;
+            // Always let update itself
+            if (curCompetitionBout.id != json['id']) {
+              return Response.badRequest(
+                body:
+                    'Mat ${updatedCompetitionBout.mat} is already occupied a CompetitionBout. Please add a bout result first:\n${curCompetitionBout.toJson()}',
+              );
+            }
           }
         }
+      } else if (updatedCompetitionBout.weightCategory?.id != null) {
+        final weightCategory = await CompetitionWeightCategoryController().getSingle(
+          updatedCompetitionBout.weightCategory!.id!,
+          obfuscate: obfuscate,
+        );
+        if (weightCategory.pairedRound != null &&
+            updatedCompetitionBout.round != null &&
+            updatedCompetitionBout.round! >= weightCategory.pairedRound!) {}
       }
       return handlePostRequestSingle(json);
     } on FormatException catch (e) {
