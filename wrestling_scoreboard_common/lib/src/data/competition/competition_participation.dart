@@ -62,6 +62,8 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     return '${membership.person.fullName} | ${lineup.club.name}';
   }
 
+  bool get isExcluded => disqualified || eliminated;
+
   @override
   Map<String, dynamic> toRaw() {
     return {

@@ -28,7 +28,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     final bool obfuscate = user?.obfuscate ?? true;
     // TODO: option to reset, override existing bouts if present, keep athlete bout state.
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
-    final competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
+    CompetitionWeightCategory competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
 
     final oldCompetitionBouts = await CompetitionBoutController().getByWeightCategory(
       obfuscate,
@@ -76,7 +76,6 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     }
     final List<CompetitionBout> createdBouts;
     final List<CompetitionParticipation> updatedParticipations = [];
-    final CompetitionWeightCategory updatedCompetitionWeightCategory;
     switch (competitionSystemAffiliation.competitionSystem) {
       case CompetitionSystem.nordic:
         // https://en.wikipedia.org/wiki/Round-robin_tournament
@@ -92,7 +91,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           competitionWeightCategory,
         );
         createdBouts = competitionBoutsBergerTable.expand((element) => element).toList();
-        updatedCompetitionWeightCategory = competitionWeightCategory.copyWith(
+        competitionWeightCategory = competitionWeightCategory.copyWith(
           pairedRound: competitionBoutsBergerTable.length - 1,
         );
       case CompetitionSystem.twoPools:
@@ -111,10 +110,10 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           updatedParticipations.addAll(updatedPoolParticipations);
           // Only generate first round, as the others are not determined yet.
           createdBouts.addAll(
-            _generateCompetitionBoutsOfRound(updatedPoolParticipations, competitionWeightCategory, round: 0),
+            generateCompetitionBoutsOfRound(updatedPoolParticipations, competitionWeightCategory, round: 0),
           );
         }
-        updatedCompetitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 0);
+        competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 0);
       case CompetitionSystem.singleElimination:
         // TODO: Handle this case.
         throw UnimplementedError();
@@ -123,12 +122,24 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
         throw UnimplementedError();
     }
 
-    await updateSingle(updatedCompetitionWeightCategory);
+    competitionWeightCategory = competitionWeightCategory.copyWith(
+      competitionSystem: competitionSystemAffiliation.competitionSystem,
+    );
+    await updateSingle(competitionWeightCategory);
 
     for (final participation in updatedParticipations) {
       await CompetitionParticipationController().updateSingle(participation);
     }
 
+    await createAndBroadcastBouts(createdBouts, competitionWeightCategory);
+
+    return Response.ok('{"status": "success"}');
+  }
+
+  static Future<void> createAndBroadcastBouts(
+    List<CompetitionBout> createdBouts,
+    CompetitionWeightCategory competitionWeightCategory,
+  ) async {
     for (final element in createdBouts.indexed) {
       final (index, competitionBout) = element;
       Bout bout = competitionBout.bout;
@@ -163,11 +174,9 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
         ),
       );
     });
-
-    return Response.ok('{"status": "success"}');
   }
 
-  List<CompetitionBout> _generateCompetitionBoutsOfRound(
+  static List<CompetitionBout> generateCompetitionBoutsOfRound(
     List<CompetitionParticipation> participations,
     CompetitionWeightCategory weightCategory, {
     required int round,
@@ -177,7 +186,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     return _convertBoutsOfRound(boutsOfRound, round, weightCategory, participations);
   }
 
-  List<List<CompetitionBout>> _generateCompetitionBergerTable(
+  static List<List<CompetitionBout>> _generateCompetitionBergerTable(
     List<CompetitionParticipation> participations,
     CompetitionWeightCategory weightCategory,
   ) {
@@ -188,30 +197,35 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     }).toList();
   }
 
-  List<CompetitionBout> _convertBoutsOfRound(
+  static List<CompetitionBout> _convertBoutsOfRound(
     List<(int?, int?)> boutsOfRound,
     int round,
     CompetitionWeightCategory weightCategory,
     List<CompetitionParticipation> participations,
   ) {
-    return boutsOfRound.indexed.map((indexedBoutTuple) {
-      final (boutIndex, boutTuple) = indexedBoutTuple;
-      final (rIndex, bIndex) = boutTuple;
-      return CompetitionBout(
-        competition: weightCategory.competition,
-        pos: (round * participations.length) + boutIndex,
-        weightCategory: weightCategory,
-        round: round,
-        bout: Bout(
-          organization: weightCategory.competition.organization,
-          r: rIndex == null ? null : AthleteBoutState(membership: participations[rIndex].membership),
-          b: bIndex == null ? null : AthleteBoutState(membership: participations[bIndex].membership),
-        ),
-      );
-    }).toList();
+    return boutsOfRound.indexed
+        .map((indexedBoutTuple) {
+          final (boutIndex, boutTuple) = indexedBoutTuple;
+          final (rIndex, bIndex) = boutTuple;
+          if (rIndex == null || bIndex == null) return null;
+          if (participations[rIndex].isExcluded || participations[bIndex].isExcluded) return null;
+          return CompetitionBout(
+            competition: weightCategory.competition,
+            pos: (round * participations.length) + boutIndex,
+            weightCategory: weightCategory,
+            round: round,
+            bout: Bout(
+              organization: weightCategory.competition.organization,
+              r: AthleteBoutState(membership: participations[rIndex].membership),
+              b: AthleteBoutState(membership: participations[bIndex].membership),
+            ),
+          );
+        })
+        .nonNulls
+        .toList();
   }
 
-  List<List<(int?, int?)>> _bergerTable(int participationSize, CompetitionWeightCategory weightCategory) {
+  static List<List<(int?, int?)>> _bergerTable(int participationSize, CompetitionWeightCategory weightCategory) {
     final List<int?> participations = Iterable<int>.generate(participationSize).toList();
     if (participations.length.isOdd) participations.insert(0, null);
     final useDummy = false;
