@@ -117,7 +117,7 @@ $CompetitionWeightCategoryCopyWith<$Res>? get weightCategory {
 @JsonSerializable()
 
 class _CompetitionBout extends CompetitionBout {
-  const _CompetitionBout({this.id, required this.competition, required this.bout, required this.pos, this.mat, this.round, this.roundType = RoundType.qualification, this.weightCategory}): super._();
+  const _CompetitionBout({this.id, required this.competition, required this.bout, required this.pos, this.mat, this.round, this.roundType = RoundType.elimination, this.weightCategory}): super._();
   factory _CompetitionBout.fromJson(Map<String, dynamic> json) => _$CompetitionBoutFromJson(json);
 
 @override final  int? id;

@@ -65,8 +65,19 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             ContentItem(
               title:
                   '${competitionWeightCategory.weightClass.style.localize(context)} (${competitionWeightCategory.weightClass.style.abbreviation(context)})',
-              subtitle: localizations.weightClass,
+              subtitle: localizations.wrestlingStyle,
               icon: Icons.style,
+            ),
+
+            ContentItem(
+              title: competitionWeightCategory.competitionSystem?.name ?? '-',
+              subtitle: localizations.competitionSystem,
+              icon: Icons.label,
+            ),
+            ContentItem(
+              title: competitionWeightCategory.poolGroupCount.toString(),
+              subtitle: localizations.poolGroupCount,
+              icon: Icons.pool,
             ),
           ],
         );

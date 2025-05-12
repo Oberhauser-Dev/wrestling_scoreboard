@@ -109,6 +109,11 @@ class CompetitionDisplay extends StatelessWidget {
                 '${localizations.competitionNumber}: ${competition.id ?? ''}',
                 '${localizations.date}: ${competition.date.toDateString(context)}',
               ];
+              int initialScrollIndex = competitionBouts.indexWhere((element) => element.mat == null);
+              if (initialScrollIndex < 0) {
+                // Scroll to last element if non is found
+                initialScrollIndex = competitionBouts.length - 1;
+              }
               final column = Column(
                 children: [
                   Row(
@@ -143,7 +148,7 @@ class CompetitionDisplay extends StatelessWidget {
                             Widget matDisplay;
                             if (matCompetitionBout != null) {
                               matDisplay = InkWell(
-                                onTap: () => navigateToCompetitionBoutScreen(context, competition, matCompetitionBout!),
+                                onTap: () => navigateToCompetitionBoutScreen(context, matCompetitionBout!),
                                 child: SingleConsumer<Bout>(
                                   id: matCompetitionBout.bout.id,
                                   initialData: matCompetitionBout.bout,
@@ -203,9 +208,10 @@ class CompetitionDisplay extends StatelessWidget {
                       // TODO: initialScrollIndex is not updated in ScrollablePositionedList, this also cannot properly be set via the itemScrollController
                       // ScrollablePositionedList currently is not maintained
                       key: ValueKey(competitionBouts),
-                      initialScrollIndex: competitionBouts.indexWhere((element) => element.mat == null),
+                      initialScrollIndex: initialScrollIndex,
                       itemCount: competitionBouts.length,
                       itemBuilder: (context, index) {
+                        if (index == -1) return Center(child: Text(localizations.noItems));
                         final competitionBout = competitionBouts[index];
                         return Column(
                           children: [
@@ -241,7 +247,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: () => navigateToCompetitionBoutScreen(context, competition, competitionBout),
+      onTap: () => navigateToCompetitionBoutScreen(context, competitionBout),
       child: IntrinsicHeight(
         child: DefaultTextStyle.merge(
           style: competitionBout.mat == null ? null : TextStyle(color: Theme.of(context).disabledColor),

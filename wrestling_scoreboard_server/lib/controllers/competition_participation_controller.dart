@@ -16,6 +16,7 @@ class CompetitionParticipationController extends ShelfController<CompetitionPart
     return await getMany(
       conditions: ['weight_category_id = @id'],
       substitutionValues: {'id': id},
+      orderBy: ['pool_group', 'pool_draw_number'],
       obfuscate: obfuscate,
     );
   }

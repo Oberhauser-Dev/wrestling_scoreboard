@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionParticipationItem extends ConsumerWidget {
@@ -77,45 +78,48 @@ class CompetitionParticipationItem extends ConsumerWidget {
               cBout.bout,
             ).then((actions) => AthleteBoutState.getTechnicalPoints(actions, role));
             futureTechnicalPointsList.add(futureTechnicalPoints);
-            item = Container(
-              decoration: BoxDecoration(border: Border.all(color: role.color())),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: ScaledText(
-                        '${opponentParticipation?.poolGroup?.toLetter() ?? ''}${opponentParticipation?.poolDrawNumber ?? '-'}',
+            item = InkWell(
+              onTap: () => navigateToCompetitionBoutScreen(context, cBout),
+              child: Container(
+                decoration: BoxDecoration(border: Border.all(color: role.color())),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: ScaledText(
+                          '${opponentParticipation?.poolGroup?.toLetter() ?? ''}${opponentParticipation?.poolDrawNumber ?? '-'}',
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: cBout.bout.winnerRole == role ? role.color() : null,
-                      child: Column(
-                        children: [
-                          ScaledText(cBout.bout.result?.abbreviation(context) ?? '-', fontSize: 8),
-                          LoadingBuilder(
-                            future: futureTechnicalPoints,
-                            builder: (context, technicalPoints) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ScaledText(
-                                    boutState?.classificationPoints?.toString() ?? '-',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 8,
-                                  ),
-                                  if (technicalPoints > 0 || boutState?.classificationPoints != null)
-                                    ScaledText(' | $technicalPoints', fontSize: 8),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
+                    Expanded(
+                      child: Container(
+                        color: cBout.bout.winnerRole == role ? role.color() : null,
+                        child: Column(
+                          children: [
+                            ScaledText(cBout.bout.result?.abbreviation(context) ?? '-', fontSize: 8),
+                            LoadingBuilder(
+                              future: futureTechnicalPoints,
+                              builder: (context, technicalPoints) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ScaledText(
+                                      boutState?.classificationPoints?.toString() ?? '-',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 8,
+                                    ),
+                                    if (technicalPoints > 0 || boutState?.classificationPoints != null)
+                                      ScaledText(' | $technicalPoints', fontSize: 8),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           } else {

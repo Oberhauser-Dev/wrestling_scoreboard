@@ -13,7 +13,7 @@ _CompetitionBout _$CompetitionBoutFromJson(Map<String, dynamic> json) => _Compet
   pos: (json['pos'] as num).toInt(),
   mat: (json['mat'] as num?)?.toInt(),
   round: (json['round'] as num?)?.toInt(),
-  roundType: $enumDecodeNullable(_$RoundTypeEnumMap, json['roundType']) ?? RoundType.qualification,
+  roundType: $enumDecodeNullable(_$RoundTypeEnumMap, json['roundType']) ?? RoundType.elimination,
   weightCategory:
       json['weightCategory'] == null
           ? null

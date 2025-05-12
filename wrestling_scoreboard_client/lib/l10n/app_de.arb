@@ -142,6 +142,7 @@
   "singleCompetitionScoreSheet": "Punktzettel für Einzelmeisterschaften",
   "signature": "Unterschrift",
   "pool": "Pool",
+  "poolGroupCount": "Anzahl der Poolgruppen",
   "rank": "Platz",
   "round": "Runde",
   "qualification": "Qualifikation",

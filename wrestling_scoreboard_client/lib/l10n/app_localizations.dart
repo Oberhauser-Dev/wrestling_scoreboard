@@ -836,6 +836,12 @@ abstract class AppLocalizations {
   /// **'Pool'**
   String get pool;
 
+  /// No description provided for @poolGroupCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Pool group count'**
+  String get poolGroupCount;
+
   /// No description provided for @rank.
   ///
   /// In en, this message translates to:

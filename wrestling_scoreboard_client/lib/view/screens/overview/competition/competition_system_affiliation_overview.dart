@@ -44,6 +44,11 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
               icon: Icons.label,
             ),
             ContentItem(
+              title: competitionSystemAffiliation.poolGroupCount.toString(),
+              subtitle: localizations.poolGroupCount,
+              icon: Icons.pool,
+            ),
+            ContentItem(
               title: competitionSystemAffiliation.maxContestants?.toString() ?? 'unset',
               subtitle: '${localizations.participations} (${localizations.maximum})',
               icon: Icons.numbers,
