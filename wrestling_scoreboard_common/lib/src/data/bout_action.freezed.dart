@@ -15,242 +15,167 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$BoutAction {
-  int? get id;
-  BoutActionType get actionType;
-  Bout get bout;
-  Duration get duration;
-  BoutRole get role;
-  int? get pointCount;
 
-  /// Create a copy of BoutAction
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $BoutActionCopyWith<BoutAction> get copyWith => _$BoutActionCopyWithImpl<BoutAction>(this as BoutAction, _$identity);
+ int? get id; BoutActionType get actionType; Bout get bout; Duration get duration; BoutRole get role; int? get pointCount;
+/// Create a copy of BoutAction
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$BoutActionCopyWith<BoutAction> get copyWith => _$BoutActionCopyWithImpl<BoutAction>(this as BoutAction, _$identity);
 
   /// Serializes this BoutAction to a JSON map.
   Map<String, dynamic> toJson();
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is BoutAction &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.actionType, actionType) || other.actionType == actionType) &&
-            (identical(other.bout, bout) || other.bout == bout) &&
-            (identical(other.duration, duration) || other.duration == duration) &&
-            (identical(other.role, role) || other.role == role) &&
-            (identical(other.pointCount, pointCount) || other.pointCount == pointCount));
-  }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, actionType, bout, duration, role, pointCount);
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BoutAction&&(identical(other.id, id) || other.id == id)&&(identical(other.actionType, actionType) || other.actionType == actionType)&&(identical(other.bout, bout) || other.bout == bout)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.role, role) || other.role == role)&&(identical(other.pointCount, pointCount) || other.pointCount == pointCount));
+}
 
-  @override
-  String toString() {
-    return 'BoutAction(id: $id, actionType: $actionType, bout: $bout, duration: $duration, role: $role, pointCount: $pointCount)';
-  }
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,actionType,bout,duration,role,pointCount);
+
+@override
+String toString() {
+  return 'BoutAction(id: $id, actionType: $actionType, bout: $bout, duration: $duration, role: $role, pointCount: $pointCount)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $BoutActionCopyWith<$Res> {
+abstract mixin class $BoutActionCopyWith<$Res>  {
   factory $BoutActionCopyWith(BoutAction value, $Res Function(BoutAction) _then) = _$BoutActionCopyWithImpl;
-  @useResult
-  $Res call({int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount});
+@useResult
+$Res call({
+ int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount
+});
 
-  $BoutCopyWith<$Res> get bout;
+
+$BoutCopyWith<$Res> get bout;
+
 }
-
 /// @nodoc
-class _$BoutActionCopyWithImpl<$Res> implements $BoutActionCopyWith<$Res> {
+class _$BoutActionCopyWithImpl<$Res>
+    implements $BoutActionCopyWith<$Res> {
   _$BoutActionCopyWithImpl(this._self, this._then);
 
   final BoutAction _self;
   final $Res Function(BoutAction) _then;
 
-  /// Create a copy of BoutAction
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? actionType = null,
-    Object? bout = null,
-    Object? duration = null,
-    Object? role = null,
-    Object? pointCount = freezed,
-  }) {
-    return _then(_self.copyWith(
-      id: freezed == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      actionType: null == actionType
-          ? _self.actionType
-          : actionType // ignore: cast_nullable_to_non_nullable
-              as BoutActionType,
-      bout: null == bout
-          ? _self.bout
-          : bout // ignore: cast_nullable_to_non_nullable
-              as Bout,
-      duration: null == duration
-          ? _self.duration
-          : duration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      role: null == role
-          ? _self.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as BoutRole,
-      pointCount: freezed == pointCount
-          ? _self.pointCount
-          : pointCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
-  }
-
-  /// Create a copy of BoutAction
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BoutCopyWith<$Res> get bout {
-    return $BoutCopyWith<$Res>(_self.bout, (value) {
-      return _then(_self.copyWith(bout: value));
-    });
-  }
+/// Create a copy of BoutAction
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? actionType = null,Object? bout = null,Object? duration = null,Object? role = null,Object? pointCount = freezed,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,actionType: null == actionType ? _self.actionType : actionType // ignore: cast_nullable_to_non_nullable
+as BoutActionType,bout: null == bout ? _self.bout : bout // ignore: cast_nullable_to_non_nullable
+as Bout,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as Duration,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as BoutRole,pointCount: freezed == pointCount ? _self.pointCount : pointCount // ignore: cast_nullable_to_non_nullable
+as int?,
+  ));
 }
+/// Create a copy of BoutAction
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BoutCopyWith<$Res> get bout {
+  
+  return $BoutCopyWith<$Res>(_self.bout, (value) {
+    return _then(_self.copyWith(bout: value));
+  });
+}
+}
+
 
 /// @nodoc
 @JsonSerializable()
+
 class _BoutAction extends BoutAction {
-  const _BoutAction(
-      {this.id,
-      required this.actionType,
-      required this.bout,
-      required this.duration,
-      required this.role,
-      this.pointCount})
-      : super._();
+  const _BoutAction({this.id, required this.actionType, required this.bout, required this.duration, required this.role, this.pointCount}): super._();
   factory _BoutAction.fromJson(Map<String, dynamic> json) => _$BoutActionFromJson(json);
 
-  @override
-  final int? id;
-  @override
-  final BoutActionType actionType;
-  @override
-  final Bout bout;
-  @override
-  final Duration duration;
-  @override
-  final BoutRole role;
-  @override
-  final int? pointCount;
+@override final  int? id;
+@override final  BoutActionType actionType;
+@override final  Bout bout;
+@override final  Duration duration;
+@override final  BoutRole role;
+@override final  int? pointCount;
 
-  /// Create a copy of BoutAction
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$BoutActionCopyWith<_BoutAction> get copyWith => __$BoutActionCopyWithImpl<_BoutAction>(this, _$identity);
+/// Create a copy of BoutAction
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$BoutActionCopyWith<_BoutAction> get copyWith => __$BoutActionCopyWithImpl<_BoutAction>(this, _$identity);
 
-  @override
-  Map<String, dynamic> toJson() {
-    return _$BoutActionToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$BoutActionToJson(this, );
+}
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BoutAction &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.actionType, actionType) || other.actionType == actionType) &&
-            (identical(other.bout, bout) || other.bout == bout) &&
-            (identical(other.duration, duration) || other.duration == duration) &&
-            (identical(other.role, role) || other.role == role) &&
-            (identical(other.pointCount, pointCount) || other.pointCount == pointCount));
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BoutAction&&(identical(other.id, id) || other.id == id)&&(identical(other.actionType, actionType) || other.actionType == actionType)&&(identical(other.bout, bout) || other.bout == bout)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.role, role) || other.role == role)&&(identical(other.pointCount, pointCount) || other.pointCount == pointCount));
+}
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, actionType, bout, duration, role, pointCount);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,actionType,bout,duration,role,pointCount);
 
-  @override
-  String toString() {
-    return 'BoutAction(id: $id, actionType: $actionType, bout: $bout, duration: $duration, role: $role, pointCount: $pointCount)';
-  }
+@override
+String toString() {
+  return 'BoutAction(id: $id, actionType: $actionType, bout: $bout, duration: $duration, role: $role, pointCount: $pointCount)';
+}
+
+
 }
 
 /// @nodoc
 abstract mixin class _$BoutActionCopyWith<$Res> implements $BoutActionCopyWith<$Res> {
   factory _$BoutActionCopyWith(_BoutAction value, $Res Function(_BoutAction) _then) = __$BoutActionCopyWithImpl;
-  @override
-  @useResult
-  $Res call({int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount});
+@override @useResult
+$Res call({
+ int? id, BoutActionType actionType, Bout bout, Duration duration, BoutRole role, int? pointCount
+});
 
-  @override
-  $BoutCopyWith<$Res> get bout;
+
+@override $BoutCopyWith<$Res> get bout;
+
 }
-
 /// @nodoc
-class __$BoutActionCopyWithImpl<$Res> implements _$BoutActionCopyWith<$Res> {
+class __$BoutActionCopyWithImpl<$Res>
+    implements _$BoutActionCopyWith<$Res> {
   __$BoutActionCopyWithImpl(this._self, this._then);
 
   final _BoutAction _self;
   final $Res Function(_BoutAction) _then;
 
-  /// Create a copy of BoutAction
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? id = freezed,
-    Object? actionType = null,
-    Object? bout = null,
-    Object? duration = null,
-    Object? role = null,
-    Object? pointCount = freezed,
-  }) {
-    return _then(_BoutAction(
-      id: freezed == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      actionType: null == actionType
-          ? _self.actionType
-          : actionType // ignore: cast_nullable_to_non_nullable
-              as BoutActionType,
-      bout: null == bout
-          ? _self.bout
-          : bout // ignore: cast_nullable_to_non_nullable
-              as Bout,
-      duration: null == duration
-          ? _self.duration
-          : duration // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      role: null == role
-          ? _self.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as BoutRole,
-      pointCount: freezed == pointCount
-          ? _self.pointCount
-          : pointCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
-  }
+/// Create a copy of BoutAction
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? actionType = null,Object? bout = null,Object? duration = null,Object? role = null,Object? pointCount = freezed,}) {
+  return _then(_BoutAction(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,actionType: null == actionType ? _self.actionType : actionType // ignore: cast_nullable_to_non_nullable
+as BoutActionType,bout: null == bout ? _self.bout : bout // ignore: cast_nullable_to_non_nullable
+as Bout,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as Duration,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as BoutRole,pointCount: freezed == pointCount ? _self.pointCount : pointCount // ignore: cast_nullable_to_non_nullable
+as int?,
+  ));
+}
 
-  /// Create a copy of BoutAction
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BoutCopyWith<$Res> get bout {
-    return $BoutCopyWith<$Res>(_self.bout, (value) {
-      return _then(_self.copyWith(bout: value));
-    });
-  }
+/// Create a copy of BoutAction
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BoutCopyWith<$Res> get bout {
+  
+  return $BoutCopyWith<$Res>(_self.bout, (value) {
+    return _then(_self.copyWith(bout: value));
+  });
+}
 }
 
 // dart format on

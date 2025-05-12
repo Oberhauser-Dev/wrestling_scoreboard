@@ -15,228 +15,170 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Team {
-  int? get id;
-  String? get orgSyncId;
-  Organization? get organization;
-  String get name;
-  String? get description;
 
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $TeamCopyWith<Team> get copyWith => _$TeamCopyWithImpl<Team>(this as Team, _$identity);
+ int? get id; String? get orgSyncId; Organization? get organization; String get name; String? get description;
+/// Create a copy of Team
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TeamCopyWith<Team> get copyWith => _$TeamCopyWithImpl<Team>(this as Team, _$identity);
 
   /// Serializes this Team to a JSON map.
   Map<String, dynamic> toJson();
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is Team &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) || other.description == description));
-  }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Team&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description));
+}
 
-  @override
-  String toString() {
-    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
-  }
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,name,description);
+
+@override
+String toString() {
+  return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $TeamCopyWith<$Res> {
+abstract mixin class $TeamCopyWith<$Res>  {
   factory $TeamCopyWith(Team value, $Res Function(Team) _then) = _$TeamCopyWithImpl;
-  @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
+@useResult
+$Res call({
+ int? id, String? orgSyncId, Organization? organization, String name, String? description
+});
 
-  $OrganizationCopyWith<$Res>? get organization;
+
+$OrganizationCopyWith<$Res>? get organization;
+
 }
-
 /// @nodoc
-class _$TeamCopyWithImpl<$Res> implements $TeamCopyWith<$Res> {
+class _$TeamCopyWithImpl<$Res>
+    implements $TeamCopyWith<$Res> {
   _$TeamCopyWithImpl(this._self, this._then);
 
   final Team _self;
   final $Res Function(Team) _then;
 
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
-    Object? name = null,
-    Object? description = freezed,
-  }) {
-    return _then(_self.copyWith(
-      id: freezed == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _self.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _self.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      name: null == name
-          ? _self.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _self.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $OrganizationCopyWith<$Res>? get organization {
-    if (_self.organization == null) {
-      return null;
-    }
-
-    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
-      return _then(_self.copyWith(organization: value));
-    });
-  }
+/// Create a copy of Team
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? name = null,Object? description = freezed,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
+as String?,organization: freezed == organization ? _self.organization : organization // ignore: cast_nullable_to_non_nullable
+as Organization?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
+/// Create a copy of Team
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrganizationCopyWith<$Res>? get organization {
+    if (_self.organization == null) {
+    return null;
+  }
+
+  return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+    return _then(_self.copyWith(organization: value));
+  });
+}
+}
+
 
 /// @nodoc
 @JsonSerializable()
+
 class _Team extends Team {
-  const _Team({this.id, this.orgSyncId, this.organization, required this.name, this.description}) : super._();
+  const _Team({this.id, this.orgSyncId, this.organization, required this.name, this.description}): super._();
   factory _Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
-  @override
-  final int? id;
-  @override
-  final String? orgSyncId;
-  @override
-  final Organization? organization;
-  @override
-  final String name;
-  @override
-  final String? description;
+@override final  int? id;
+@override final  String? orgSyncId;
+@override final  Organization? organization;
+@override final  String name;
+@override final  String? description;
 
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$TeamCopyWith<_Team> get copyWith => __$TeamCopyWithImpl<_Team>(this, _$identity);
+/// Create a copy of Team
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TeamCopyWith<_Team> get copyWith => __$TeamCopyWithImpl<_Team>(this, _$identity);
 
-  @override
-  Map<String, dynamic> toJson() {
-    return _$TeamToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$TeamToJson(this, );
+}
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Team &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId) &&
-            (identical(other.organization, organization) || other.organization == organization) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) || other.description == description));
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Team&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description));
+}
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, orgSyncId, organization, name, description);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,name,description);
 
-  @override
-  String toString() {
-    return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
-  }
+@override
+String toString() {
+  return 'Team(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, description: $description)';
+}
+
+
 }
 
 /// @nodoc
 abstract mixin class _$TeamCopyWith<$Res> implements $TeamCopyWith<$Res> {
   factory _$TeamCopyWith(_Team value, $Res Function(_Team) _then) = __$TeamCopyWithImpl;
-  @override
-  @useResult
-  $Res call({int? id, String? orgSyncId, Organization? organization, String name, String? description});
+@override @useResult
+$Res call({
+ int? id, String? orgSyncId, Organization? organization, String name, String? description
+});
 
-  @override
-  $OrganizationCopyWith<$Res>? get organization;
+
+@override $OrganizationCopyWith<$Res>? get organization;
+
 }
-
 /// @nodoc
-class __$TeamCopyWithImpl<$Res> implements _$TeamCopyWith<$Res> {
+class __$TeamCopyWithImpl<$Res>
+    implements _$TeamCopyWith<$Res> {
   __$TeamCopyWithImpl(this._self, this._then);
 
   final _Team _self;
   final $Res Function(_Team) _then;
 
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? id = freezed,
-    Object? orgSyncId = freezed,
-    Object? organization = freezed,
-    Object? name = null,
-    Object? description = freezed,
-  }) {
-    return _then(_Team(
-      id: freezed == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      orgSyncId: freezed == orgSyncId
-          ? _self.orgSyncId
-          : orgSyncId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      organization: freezed == organization
-          ? _self.organization
-          : organization // ignore: cast_nullable_to_non_nullable
-              as Organization?,
-      name: null == name
-          ? _self.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _self.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
+/// Create a copy of Team
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? name = null,Object? description = freezed,}) {
+  return _then(_Team(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
+as String?,organization: freezed == organization ? _self.organization : organization // ignore: cast_nullable_to_non_nullable
+as Organization?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
 
-  /// Create a copy of Team
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $OrganizationCopyWith<$Res>? get organization {
+/// Create a copy of Team
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrganizationCopyWith<$Res>? get organization {
     if (_self.organization == null) {
-      return null;
-    }
-
-    return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
-      return _then(_self.copyWith(organization: value));
-    });
+    return null;
   }
+
+  return $OrganizationCopyWith<$Res>(_self.organization!, (value) {
+    return _then(_self.copyWith(organization: value));
+  });
+}
 }
 
 // dart format on
