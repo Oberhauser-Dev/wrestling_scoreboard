@@ -16,7 +16,6 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
   factory AthleteBoutState.fromJson(Map<String, Object?> json) => _$AthleteBoutStateFromJson(json);
 
   static Future<AthleteBoutState> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    // TODO renamed participant to membership
     final membership = await getSingle<Membership>(e['membership_id'] as int);
     return AthleteBoutState(
       id: e['id'] as int?,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:postgres/postgres.dart' as psql;
@@ -8,6 +9,7 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/utils/competition_system_algorithms.dart';
 
 import 'athlete_bout_state_controller.dart';
 import 'bout_controller.dart';
@@ -28,18 +30,17 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     final bool obfuscate = user?.obfuscate ?? true;
     // TODO: option to reset, override existing bouts if present, keep athlete bout state.
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
-    final competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
+    CompetitionWeightCategory competitionWeightCategory = (await getSingle(int.parse(id), obfuscate: false));
 
     final oldCompetitionBouts = await CompetitionBoutController().getByWeightCategory(
-      obfuscate,
       competitionWeightCategory.id!,
+      obfuscate: obfuscate,
     );
     if (isReset) {
       await Future.forEach(oldCompetitionBouts, (CompetitionBout competitionBout) async {
         if (competitionBout.id != null) {
           await CompetitionBoutController().deleteSingle(competitionBout.id!);
-          await BoutController().deleteSingle(competitionBout.bout.id!);
-          // TODO delete athlete bout state (?)
+          // Bout, AthleteBoutState and BoutActions are deleted subsequently
         }
       });
     } else {
@@ -47,8 +48,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       await Future.forEach(oldCompetitionBouts, (CompetitionBout competitionBout) async {
         if (competitionBout.id != null) {
           await CompetitionBoutController().deleteSingle(competitionBout.id!);
-          await BoutController().deleteSingle(competitionBout.bout.id!);
-          // TODO delete athlete bout state (?)
+          // Bout, AthleteBoutState and BoutActions are deleted subsequently
         }
       });
     }
@@ -57,51 +57,113 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       false,
       competitionWeightCategory.id!,
     );
-    final competitionSystemAffiliations = await CompetitionSystemAffiliationController().getByCompetition(
-      obfuscate,
-      competitionWeightCategory.competition.id!,
-    );
-    // Sort DESC
-    competitionSystemAffiliations.sort(
-      (a, b) => (b.maxContestants ?? double.infinity).compareTo(a.maxContestants ?? double.infinity),
-    );
-    CompetitionSystemAffiliation? competitionSystemAffiliation;
-    // Get the competition system affiliation, which matches the max contestants
-    for (final csa in competitionSystemAffiliations) {
-      if (participations.length > (csa.maxContestants ?? double.infinity)) break;
-      competitionSystemAffiliation = csa;
+
+    CompetitionSystem? competitionSystem = competitionWeightCategory.competitionSystem;
+    int? poolGroupCount = competitionWeightCategory.poolGroupCount;
+    if (competitionSystem == null || isReset) {
+      final competitionSystemAffiliations = await CompetitionSystemAffiliationController().getByCompetition(
+        obfuscate,
+        competitionWeightCategory.competition.id!,
+      );
+      // Sort DESC
+      competitionSystemAffiliations.sort(
+        (a, b) => (b.maxContestants ?? double.infinity).compareTo(a.maxContestants ?? double.infinity),
+      );
+      CompetitionSystemAffiliation? competitionSystemAffiliation;
+      // Get the competition system affiliation, which matches the max contestants
+      for (final csa in competitionSystemAffiliations) {
+        if (participations.length > (csa.maxContestants ?? double.infinity)) break;
+        competitionSystemAffiliation = csa;
+      }
+      competitionSystem = competitionSystemAffiliation?.competitionSystem;
+      poolGroupCount = competitionSystemAffiliation?.poolGroupCount;
     }
-    if (competitionSystemAffiliation == null) {
+    if (competitionSystem == null || poolGroupCount == null) {
       throw Exception('No matching competition system found for competition ${competitionWeightCategory.competition}');
     }
-    final List<CompetitionBout> createdBouts;
+    final List<CompetitionBout> createdBouts = [];
     final List<CompetitionParticipation> updatedParticipations = [];
-    switch (competitionSystemAffiliation.competitionSystem) {
+    participations.shuffle(MockableRandom.create());
+    switch (competitionSystem) {
       case CompetitionSystem.nordic:
-        // https://en.wikipedia.org/wiki/Round-robin_tournament
-        participations.shuffle();
-        for (final participationIndexed in participations.indexed) {
-          final drawNumber = participationIndexed.$1;
-          final participation = participationIndexed.$2;
-          final updatedParticipation = participation.copyWith(poolDrawNumber: drawNumber);
-          updatedParticipations.add(updatedParticipation);
+        int pairedRounds = 0;
+        final splittedParticipations = participations.slices((participations.length / poolGroupCount).ceil());
+        for (final poolParticipationsIndexed in splittedParticipations.indexed) {
+          final (poolGroup, poolParticipations) = poolParticipationsIndexed;
+          final updatedPoolParticipations = _drawNumberAndPool(poolParticipations, pool: poolGroup);
+          updatedParticipations.addAll(updatedPoolParticipations);
+          final rounds = convertBouts(
+            competitionWeightCategory,
+            updatedPoolParticipations,
+            boutIndexList: generateBergerTable(participations.length),
+            roundType: RoundType.elimination,
+          );
+          pairedRounds = math.max(rounds.length, pairedRounds);
+          createdBouts.addAll(rounds.expand((element) => element).toList());
         }
-        createdBouts =
-            _bergerTable(updatedParticipations, competitionWeightCategory).expand((element) => element).toList();
-      // TODO alter participations
-      // TODO alter bouts
-      case CompetitionSystem.twoPools:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: pairedRounds);
       case CompetitionSystem.singleElimination:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        final splittedParticipations = participations.slices((participations.length / poolGroupCount).ceil());
+        for (final poolParticipationsIndexed in splittedParticipations.indexed) {
+          final (poolGroup, poolParticipations) = poolParticipationsIndexed;
+          final updatedPoolParticipations = _drawNumberAndPool(poolParticipations, pool: poolGroup);
+          updatedParticipations.addAll(updatedPoolParticipations);
+          // Only generate first round, as the others are not determined yet.
+          createdBouts.addAll(
+            convertBoutsOfRound(
+              competitionWeightCategory,
+              updatedPoolParticipations,
+              boutIndexListOfRound: generateSingleEliminationRound(
+                Iterable<int>.generate(updatedPoolParticipations.length).toList(),
+              ),
+              round: 0,
+              roundType: RoundType.elimination,
+            ),
+          );
+        }
+        competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 0);
       case CompetitionSystem.doubleElimination:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        final splittedParticipations = participations.slices((participations.length / poolGroupCount).ceil());
+        for (final poolParticipationsIndexed in splittedParticipations.indexed) {
+          final (poolGroup, poolParticipations) = poolParticipationsIndexed;
+          final updatedPoolParticipations = _drawNumberAndPool(poolParticipations, pool: poolGroup);
+          updatedParticipations.addAll(updatedPoolParticipations);
+          // Only generate first round, as the others are not determined yet.
+          createdBouts.addAll(
+            convertBoutsOfRound(
+              competitionWeightCategory,
+              updatedPoolParticipations,
+              boutIndexListOfRound: generateDoubleEliminationRound(
+                winnerBracket: Iterable<int>.generate(updatedPoolParticipations.length).toList(),
+              ),
+              round: 0,
+              roundType: RoundType.elimination,
+            ),
+          );
+        }
+        competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 0);
     }
 
-    for (var element in createdBouts.indexed) {
+    competitionWeightCategory = competitionWeightCategory.copyWith(
+      competitionSystem: competitionSystem,
+      poolGroupCount: poolGroupCount,
+    );
+    await updateSingle(competitionWeightCategory);
+
+    for (final participation in updatedParticipations) {
+      await CompetitionParticipationController().updateSingle(participation);
+    }
+
+    await createAndBroadcastBouts(createdBouts, competitionWeightCategory);
+
+    return Response.ok('{"status": "success"}');
+  }
+
+  static Future<void> createAndBroadcastBouts(
+    List<CompetitionBout> createdBouts,
+    CompetitionWeightCategory competitionWeightCategory,
+  ) async {
+    for (final element in createdBouts.indexed) {
       final (index, competitionBout) = element;
       Bout bout = competitionBout.bout;
       if (bout.r != null) {
@@ -118,8 +180,8 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       final List<CompetitionBout> competitionBouts;
       if (obfuscate) {
         competitionBouts = await CompetitionBoutController().getByWeightCategory(
-          obfuscate,
           competitionWeightCategory.id!,
+          obfuscate: obfuscate,
         );
       } else {
         competitionBouts = createdBouts;
@@ -135,62 +197,68 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
         ),
       );
     });
-
-    return Response.ok('{"status": "success"}');
   }
 
-  List<List<CompetitionBout>> _bergerTable(
-    List<CompetitionParticipation?> participations,
+  static List<List<CompetitionBout>> convertBouts(
     CompetitionWeightCategory weightCategory,
-  ) {
-    participations = [...participations]; // copy array to avoid side effects
-    if (participations.length.isOdd) participations.insert(0, null);
-    final useDummy = false;
+    List<CompetitionParticipation> participations, {
+    required List<List<(int?, int?)>> boutIndexList,
+    required RoundType roundType,
+  }) {
+    return boutIndexList.indexed.map((indexedRoundBouts) {
+      final (round, boutsOfRound) = indexedRoundBouts;
+      return convertBoutsOfRound(
+        weightCategory,
+        participations,
+        boutIndexListOfRound: boutsOfRound,
+        round: round,
+        roundType: roundType,
+      );
+    }).toList();
+  }
 
-    final n = participations.length;
-    final numberOfRounds = n - 1;
-    final boutsPerRound = n ~/ 2;
-
-    List<CompetitionParticipation?> columnA = participations.slice(0, boutsPerRound).toList();
-    List<CompetitionParticipation?> columnB = participations.slice(boutsPerRound).toList();
-    final fixed = participations[0];
-
-    int posCount = 0;
-    final gen =
-        Iterable.generate(numberOfRounds).map((roundIndex) {
-          final genBoutsPerRound = Iterable.generate(boutsPerRound);
-          final boutsArr = <CompetitionBout>[];
-          for (final k in genBoutsPerRound) {
-            if (useDummy || (columnA[k] != null && columnB[k] != null)) {
-              boutsArr.insert(
-                0,
-                CompetitionBout(
-                  competition: weightCategory.competition,
-                  pos: posCount,
-                  weightCategory: weightCategory,
-                  round: roundIndex,
-                  bout: Bout(
-                    organization: weightCategory.competition.organization,
-                    r: columnA[k] == null ? null : AthleteBoutState(membership: columnA[k]!.membership),
-                    b: columnB[k] == null ? null : AthleteBoutState(membership: columnB[k]!.membership),
-                  ),
-                ),
-              );
-              posCount++;
-            }
-          }
-
-          // rotate elements
-          final pop = columnA.removeLast();
-          columnA = [fixed, columnB.removeAt(0), ...columnA.slice(1)];
-          columnB.insert(0, pop);
-          return boutsArr;
-        }).toList();
-    return gen;
+  static List<CompetitionBout> convertBoutsOfRound(
+    CompetitionWeightCategory weightCategory,
+    List<CompetitionParticipation> participations, {
+    required List<(int?, int?)> boutIndexListOfRound,
+    required int round,
+    required RoundType roundType,
+  }) {
+    return boutIndexListOfRound.indexed
+        .map((indexedBoutTuple) {
+          final (boutIndex, boutTuple) = indexedBoutTuple;
+          final (rIndex, bIndex) = boutTuple;
+          if (rIndex == null || bIndex == null) return null;
+          if (participations[rIndex].isExcluded || participations[bIndex].isExcluded) return null;
+          return CompetitionBout(
+            competition: weightCategory.competition,
+            pos: (round * participations.length) + boutIndex,
+            weightCategory: weightCategory,
+            round: round,
+            bout: Bout(
+              organization: weightCategory.competition.organization,
+              r: AthleteBoutState(membership: participations[rIndex].membership),
+              b: AthleteBoutState(membership: participations[bIndex].membership),
+            ),
+            roundType: roundType,
+          );
+        })
+        .nonNulls
+        .toList();
   }
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'paired_round': psql.Type.smallInteger};
+    return {'paired_round': psql.Type.smallInteger, 'pool_group_count': psql.Type.smallInteger};
+  }
+
+  List<CompetitionParticipation> _drawNumberAndPool(List<CompetitionParticipation> participations, {int? pool}) {
+    List<CompetitionParticipation> updatedParticipations = [];
+    for (final participationIndexed in participations.indexed) {
+      final (drawNumber, participation) = participationIndexed;
+      final updatedParticipation = participation.copyWith(poolDrawNumber: drawNumber, poolGroup: pool);
+      updatedParticipations.add(updatedParticipation);
+    }
+    return updatedParticipations;
   }
 }

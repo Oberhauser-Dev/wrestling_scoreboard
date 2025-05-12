@@ -5,6 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
+import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
@@ -15,6 +20,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 void main() {
   MockableDateTime.isMocked = true;
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
+  MockableRandom.isMocked = true;
 
   test('DB import and export match', () async {
     final db = PostgresDb();
@@ -117,6 +123,42 @@ void main() {
       return {"Content-Type": "application/json", ...BearerAuthService(token: token).header};
     }
 
+    final mockedData = MockedData();
+    Iterable<DataObject> getMockedDataObjects(Type type) {
+      return switch (type) {
+        const (AgeCategory) => mockedData.getAgeCategories(),
+        const (Bout) => mockedData.getBouts(),
+        const (BoutAction) => mockedData.getBoutActions(),
+        const (BoutConfig) => mockedData.getBoutConfigs(),
+        const (BoutResultRule) => mockedData.getBoutResultRules(),
+        const (Club) => mockedData.getClubs(),
+        const (Competition) => mockedData.getCompetitions(),
+        const (CompetitionPerson) => mockedData.getCompetitionPersons(),
+        const (CompetitionBout) => mockedData.getCompetitionBouts(),
+        const (CompetitionLineup) => mockedData.getCompetitionLineups(),
+        const (CompetitionSystemAffiliation) => mockedData.getCompetitionSystemAffiliations(),
+        const (CompetitionWeightCategory) => mockedData.getCompetitionWeightCategories(),
+        const (CompetitionParticipation) => mockedData.getCompetitionParticipations(),
+        const (Organization) => mockedData.getOrganizations(),
+        const (Division) => mockedData.getDivisions(),
+        const (DivisionWeightClass) => mockedData.getDivisionWeightClasses(),
+        const (League) => mockedData.getLeagues(),
+        const (LeagueTeamParticipation) => mockedData.getLeagueTeamParticipations(),
+        const (LeagueWeightClass) => mockedData.getLeagueWeightClasses(),
+        const (TeamLineup) => mockedData.getTeamLineups(),
+        const (Membership) => mockedData.getMemberships(),
+        const (TeamLineupParticipation) => mockedData.getTeamLineupParticipations(),
+        const (AthleteBoutState) => mockedData.getAthleteBoutStates(),
+        const (Person) => mockedData.getPersons(),
+        const (Team) => mockedData.getTeams(),
+        const (TeamClubAffiliation) => mockedData.getTeamClubAffiliations(),
+        const (TeamMatch) => mockedData.getTeamMatches(),
+        const (TeamMatchBout) => mockedData.getTeamMatchBouts(),
+        const (WeightClass) => mockedData.getWeightClasses(),
+        _ => throw UnimplementedError(),
+      };
+    }
+
     test('GET all', () async {
       final db = PostgresDb();
       await db.open();
@@ -142,45 +184,7 @@ void main() {
       await db.reset();
 
       final instance = await server.init();
-      final mockedData = MockedData();
-
       final apiUrl = 'http://${instance.address.address}:${instance.port}/api';
-
-      Iterable<DataObject> getMockedDataObjects(Type type) {
-        return switch (type) {
-          const (AgeCategory) => mockedData.getAgeCategories(),
-          const (Bout) => mockedData.getBouts(),
-          const (BoutAction) => mockedData.getBoutActions(),
-          const (BoutConfig) => mockedData.getBoutConfigs(),
-          const (BoutResultRule) => mockedData.getBoutResultRules(),
-          const (Club) => mockedData.getClubs(),
-          const (Competition) => mockedData.getCompetitions(),
-          const (CompetitionPerson) => mockedData.getCompetitionPersons(),
-          const (CompetitionBout) => mockedData.getCompetitionBouts(),
-          const (CompetitionLineup) => mockedData.getCompetitionLineups(),
-          const (CompetitionSystemAffiliation) => mockedData.getCompetitionSystemAffiliations(),
-          const (CompetitionWeightCategory) => mockedData.getCompetitionWeightCategories(),
-          const (CompetitionParticipation) => mockedData.getCompetitionParticipations(),
-          const (Organization) => mockedData.getOrganizations(),
-          const (Division) => mockedData.getDivisions(),
-          const (DivisionWeightClass) => mockedData.getDivisionWeightClasses(),
-          const (League) => mockedData.getLeagues(),
-          const (LeagueTeamParticipation) => mockedData.getLeagueTeamParticipations(),
-          const (LeagueWeightClass) => mockedData.getLeagueWeightClasses(),
-          const (TeamLineup) => mockedData.getTeamLineups(),
-          const (Membership) => mockedData.getMemberships(),
-          const (TeamLineupParticipation) => mockedData.getTeamLineupParticipations(),
-          const (AthleteBoutState) => mockedData.getAthleteBoutStates(),
-          const (Person) => mockedData.getPersons(),
-          const (Team) => mockedData.getTeams(),
-          const (TeamClubAffiliation) => mockedData.getTeamClubAffiliations(),
-          const (TeamMatch) => mockedData.getTeamMatches(),
-          const (TeamMatchBout) => mockedData.getTeamMatchBouts(),
-          const (WeightClass) => mockedData.getWeightClasses(),
-          _ => throw UnimplementedError(),
-        };
-      }
-
       final authHeaders = await getAuthHeaders(apiUrl);
 
       for (final dataType in dataTypes.reversed) {
@@ -203,6 +207,103 @@ void main() {
           expect(jsonDecode(getRes.body), obj.toJson());
         }
       }
+
+      await instance.close();
+    });
+
+    test('Competition', () async {
+      final db = PostgresDb();
+      await db.open();
+      await db.reset();
+
+      final instance = await server.init();
+      final apiUrl = 'http://${instance.address.address}:${instance.port}/api';
+      final authHeaders = await getAuthHeaders(apiUrl);
+
+      final competitionDataTypes = [
+        CompetitionParticipation,
+        // CompetitionBout,
+        CompetitionWeightCategory,
+        WeightClass,
+        CompetitionLineup,
+        // BoutAction,
+        // Bout,
+        // AthleteBoutState,
+        Membership,
+        CompetitionPerson,
+        Person,
+        CompetitionSystemAffiliation,
+        Competition,
+        Club,
+        AgeCategory,
+        Organization,
+        BoutResultRule,
+        BoutConfig,
+      ];
+      for (final dataType in competitionDataTypes.reversed) {
+        Iterable<DataObject> objs = getMockedDataObjects(dataType);
+        for (var obj in objs) {
+          final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
+          final tableUrl = '$apiUrl/${obj.tableName}';
+          final uri = Uri.parse(tableUrl);
+          final postRes = await http.post(uri, headers: authHeaders, body: body);
+          expect(postRes.statusCode, 200, reason: postRes.body);
+        }
+      }
+
+      CompetitionWeightCategory competitionWeightCategory = mockedData.competitionWeightCategory;
+      final competitionWeightCategoryGenerateUri = Uri.parse(
+        '$apiUrl/${CompetitionWeightCategory.cTableName}/${competitionWeightCategory.id}/${Bout.cTableName}s/generate',
+      );
+      http.Response generateRes = await http.post(competitionWeightCategoryGenerateUri, headers: authHeaders);
+      expect(generateRes.statusCode, 200, reason: generateRes.body);
+
+      competitionWeightCategory = await CompetitionWeightCategoryController().getSingle(
+        competitionWeightCategory.id!,
+        obfuscate: false,
+      );
+      expect(competitionWeightCategory.competitionSystem, CompetitionSystem.doubleElimination);
+      expect(competitionWeightCategory.poolGroupCount, 2);
+      List<CompetitionBout> competitionBouts = await CompetitionBoutController().getByWeightCategory(
+        competitionWeightCategory.id!,
+        obfuscate: false,
+      );
+      expect(competitionBouts.length, 3);
+      expect(competitionBouts.every((element) => element.round == 0), true);
+      expect((await BoutController().getMany(obfuscate: false)).length, 3);
+      expect((await AthleteBoutStateController().getMany(obfuscate: false)).length, 6);
+
+      // Create some bout actions, to see if they are getting deleted
+      await BoutActionController().createSingle(
+        BoutAction(
+          actionType: BoutActionType.points,
+          bout: competitionBouts.first.bout,
+          duration: Duration.zero,
+          role: BoutRole.red,
+        ),
+      );
+      await BoutActionController().createSingle(
+        BoutAction(
+          actionType: BoutActionType.points,
+          bout: competitionBouts.first.bout,
+          duration: Duration.zero,
+          role: BoutRole.blue,
+        ),
+      );
+      expect((await BoutActionController().getMany(obfuscate: false)).length, 2);
+
+      // Generate a second time and check if see the same results
+      generateRes = await http.post(competitionWeightCategoryGenerateUri, headers: authHeaders);
+      expect(generateRes.statusCode, 200, reason: generateRes.body);
+
+      competitionBouts = await CompetitionBoutController().getByWeightCategory(
+        competitionWeightCategory.id!,
+        obfuscate: false,
+      );
+      expect(competitionBouts.length, 2);
+      expect((await BoutController().getMany(obfuscate: false)).length, 2);
+      expect((await AthleteBoutStateController().getMany(obfuscate: false)).length, 4);
+      expect((await BoutActionController().getMany(obfuscate: false)).length, 0);
 
       await instance.close();
     });

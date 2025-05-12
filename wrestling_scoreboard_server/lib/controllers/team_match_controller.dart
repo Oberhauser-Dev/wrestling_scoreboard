@@ -161,7 +161,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       await Future.forEach(oldTmBouts, (TeamMatchBout tmBout) async {
         if (tmBout.id != null) {
           await TeamMatchBoutController().deleteSingle(tmBout.id!);
-          await BoutController().deleteSingle(tmBout.bout.id!);
+          // Bout, AthleteBoutState and BoutActions are deleted subsequently
         }
       });
     } else {
@@ -170,7 +170,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
       await Future.forEach(unusedBouts, (TeamMatchBout tmb) async {
         if (tmb.id != null) {
           await TeamMatchBoutController().deleteSingle(tmb.id!);
-          await BoutController().deleteSingle(tmb.bout.id!);
+          // Bout, AthleteBoutState and BoutActions are deleted subsequently
         }
       });
     }

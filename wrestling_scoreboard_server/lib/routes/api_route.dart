@@ -74,7 +74,11 @@ class ApiRoute {
 
     final userController = SecuredUserController();
     router.restrictedPost('/user', userController.postSingleUser, UserPrivilege.admin); // Create
-    router.restrictedPost('/${SecuredUser.cTableName}', userController.postRequestSingle, UserPrivilege.admin); // Update
+    router.restrictedPost(
+      '/${SecuredUser.cTableName}',
+      userController.postRequestSingle,
+      UserPrivilege.admin,
+    ); // Update
     router.restrictedGet('/${SecuredUser.cTableName}s', userController.getRequestMany, UserPrivilege.admin);
     router.restrictedGetOne(
       '/${SecuredUser.cTableName}s/<id|[0-9]+>',

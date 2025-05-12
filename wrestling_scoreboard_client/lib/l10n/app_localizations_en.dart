@@ -397,6 +397,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pool => 'Pool';
 
   @override
+  String get poolGroupCount => 'Pool group count';
+
+  @override
   String get rank => 'Rank';
 
   @override

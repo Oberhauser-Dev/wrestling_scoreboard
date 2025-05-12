@@ -16,7 +16,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     required int pos,
     int? mat,
     int? round,
-    @Default(RoundType.qualification) RoundType roundType,
+    @Default(RoundType.elimination) RoundType roundType,
     CompetitionWeightCategory? weightCategory,
   }) = _CompetitionBout;
 

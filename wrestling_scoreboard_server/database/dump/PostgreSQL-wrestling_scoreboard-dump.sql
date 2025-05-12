@@ -645,7 +645,8 @@ CREATE TABLE public.competition_system_affiliation (
     id integer NOT NULL,
     competition_id integer NOT NULL,
     competition_system public.competition_system NOT NULL,
-    max_contestants integer
+    max_contestants integer,
+    pool_group_count smallint DEFAULT 1 NOT NULL
 );
 
 
@@ -684,7 +685,9 @@ CREATE TABLE public.competition_weight_category (
     weight_class_id integer NOT NULL,
     age_category_id integer NOT NULL,
     competition_id integer NOT NULL,
-    paired_round smallint
+    paired_round smallint,
+    competition_system public.competition_system,
+    pool_group_count smallint DEFAULT 1 NOT NULL
 );
 
 
@@ -1783,7 +1786,7 @@ COPY public.competition_person (id, competition_id, person_id, person_role) FROM
 -- Data for Name: competition_system_affiliation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_system_affiliation (id, competition_id, competition_system, max_contestants) FROM stdin;
+COPY public.competition_system_affiliation (id, competition_id, competition_system, max_contestants, pool_group_count) FROM stdin;
 \.
 
 
@@ -1791,7 +1794,7 @@ COPY public.competition_system_affiliation (id, competition_id, competition_syst
 -- Data for Name: competition_weight_category; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, age_category_id, competition_id, paired_round) FROM stdin;
+COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, age_category_id, competition_id, paired_round, competition_system, pool_group_count) FROM stdin;
 \.
 
 
@@ -1909,7 +1912,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.4	0.0.0
+0.3.0-pre.6	0.0.0
 \.
 
 

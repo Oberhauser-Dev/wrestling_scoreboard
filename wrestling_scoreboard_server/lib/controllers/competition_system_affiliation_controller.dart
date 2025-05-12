@@ -1,3 +1,4 @@
+import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 
 import 'entity_controller.dart';
@@ -18,5 +19,10 @@ class CompetitionSystemAffiliationController extends ShelfController<Competition
       orderBy: ['max_contestants'],
       obfuscate: obfuscate,
     );
+  }
+
+  @override
+  Map<String, psql.Type?> getPostgresDataTypes() {
+    return {'pool_group_count': psql.Type.smallInteger};
   }
 }

@@ -7,9 +7,9 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToCompetitionBoutScreen(BuildContext context, Competition competition, CompetitionBout bout) {
+void navigateToCompetitionBoutScreen(BuildContext context, CompetitionBout bout) {
   context.push(
-    '/${CompetitionOverview.route}/${competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}',
+    '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}',
   );
 }
 
@@ -85,7 +85,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           },
                           navigateToBoutByIndex: (context, index) {
                             context.pop();
-                            navigateToCompetitionBoutScreen(context, competition, matCompetitionBouts[index]);
+                            navigateToCompetitionBoutScreen(context, matCompetitionBouts[index]);
                           },
                           // TODO
                           headerItems: [],

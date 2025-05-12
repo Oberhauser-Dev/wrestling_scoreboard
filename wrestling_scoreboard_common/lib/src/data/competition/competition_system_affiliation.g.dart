@@ -12,6 +12,7 @@ _CompetitionSystemAffiliation _$CompetitionSystemAffiliationFromJson(Map<String,
       competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
       competitionSystem: $enumDecode(_$CompetitionSystemEnumMap, json['competitionSystem']),
       maxContestants: (json['maxContestants'] as num?)?.toInt(),
+      poolGroupCount: (json['poolGroupCount'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$CompetitionSystemAffiliationToJson(_CompetitionSystemAffiliation instance) => <String, dynamic>{
@@ -19,11 +20,11 @@ Map<String, dynamic> _$CompetitionSystemAffiliationToJson(_CompetitionSystemAffi
   'competition': instance.competition.toJson(),
   'competitionSystem': _$CompetitionSystemEnumMap[instance.competitionSystem]!,
   'maxContestants': instance.maxContestants,
+  'poolGroupCount': instance.poolGroupCount,
 };
 
 const _$CompetitionSystemEnumMap = {
   CompetitionSystem.singleElimination: 'singleElimination',
   CompetitionSystem.doubleElimination: 'doubleElimination',
   CompetitionSystem.nordic: 'nordic',
-  CompetitionSystem.twoPools: 'twoPools',
 };

@@ -25,12 +25,15 @@ class CompetitionSystemAffiliationEdit extends ConsumerStatefulWidget {
 class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSystemAffiliationEdit> {
   final _formKey = GlobalKey<FormState>();
   CompetitionSystem? _competitionSystem;
-  int _maxContestants = 0;
+  late int _poolGroupCount;
+  int? _maxContestants;
 
   @override
   void initState() {
     super.initState();
     _competitionSystem = widget.competitionSystemAffiliation?.competitionSystem;
+    _poolGroupCount = widget.competitionSystemAffiliation?.poolGroupCount ?? 1;
+    _maxContestants = widget.competitionSystemAffiliation?.maxContestants;
   }
 
   @override
@@ -58,9 +61,24 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
         ),
       ),
       ListTile(
+        leading: const Icon(Icons.pool),
+        title: TextFormField(
+          initialValue: _poolGroupCount.toString(),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+            labelText: localizations.poolGroupCount,
+          ),
+          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
+          onSaved: (String? value) {
+            _poolGroupCount = int.tryParse(value ?? '') ?? 1;
+          },
+        ),
+      ),
+      ListTile(
         leading: const Icon(Icons.vertical_align_top),
         title: TextFormField(
-          initialValue: widget.competitionSystemAffiliation?.maxContestants?.toString() ?? '',
+          initialValue: _maxContestants?.toString() ?? '',
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
@@ -68,7 +86,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
           ),
           inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
           onSaved: (String? value) {
-            _maxContestants = int.tryParse(value ?? '') ?? 0;
+            _maxContestants = int.tryParse(value ?? '');
           },
         ),
       ),
@@ -93,6 +111,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
         competition: widget.competitionSystemAffiliation?.competition ?? widget.initialCompetition,
         competitionSystem: _competitionSystem!,
         maxContestants: _maxContestants,
+        poolGroupCount: _poolGroupCount,
       );
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(csa);
       navigator.pop();
