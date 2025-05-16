@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'competition_weight_category.freezed.dart';
+
 part 'competition_weight_category.g.dart';
 
 @freezed
@@ -15,6 +16,7 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     required AgeCategory ageCategory,
     required Competition competition,
     CompetitionSystem? competitionSystem,
+    @Default(1) int poolGroupCount,
     int? pairedRound,
   }) = _CompetitionWeightCategory;
 
@@ -32,6 +34,7 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
       weightClass: await getSingle<WeightClass>(weightClassId),
       pairedRound: e['paired_round'] as int?,
       competitionSystem: competitionSystem == null ? null : CompetitionSystem.values.byName(competitionSystem),
+      poolGroupCount: e['pool_group_count'] as int,
     );
   }
 
@@ -44,6 +47,7 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
       'competition_id': competition.id!,
       'paired_round': pairedRound,
       'competition_system': competitionSystem?.name,
+      'pool_group_count': poolGroupCount,
     };
   }
 

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CompetitionSystemAffiliation {
 
- int? get id; Competition get competition; CompetitionSystem get competitionSystem; int? get maxContestants;
+ int? get id; Competition get competition; CompetitionSystem get competitionSystem; int? get maxContestants; int get poolGroupCount;
 /// Create a copy of CompetitionSystemAffiliation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $CompetitionSystemAffiliationCopyWith<CompetitionSystemAffiliation> get copyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompetitionSystemAffiliation&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.competitionSystem, competitionSystem) || other.competitionSystem == competitionSystem)&&(identical(other.maxContestants, maxContestants) || other.maxContestants == maxContestants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompetitionSystemAffiliation&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.competitionSystem, competitionSystem) || other.competitionSystem == competitionSystem)&&(identical(other.maxContestants, maxContestants) || other.maxContestants == maxContestants)&&(identical(other.poolGroupCount, poolGroupCount) || other.poolGroupCount == poolGroupCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,competition,competitionSystem,maxContestants);
+int get hashCode => Object.hash(runtimeType,id,competition,competitionSystem,maxContestants,poolGroupCount);
 
 @override
 String toString() {
-  return 'CompetitionSystemAffiliation(id: $id, competition: $competition, competitionSystem: $competitionSystem, maxContestants: $maxContestants)';
+  return 'CompetitionSystemAffiliation(id: $id, competition: $competition, competitionSystem: $competitionSystem, maxContestants: $maxContestants, poolGroupCount: $poolGroupCount)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $CompetitionSystemAffiliationCopyWith<$Res>  {
   factory $CompetitionSystemAffiliationCopyWith(CompetitionSystemAffiliation value, $Res Function(CompetitionSystemAffiliation) _then) = _$CompetitionSystemAffiliationCopyWithImpl;
 @useResult
 $Res call({
- int? id, Competition competition, CompetitionSystem competitionSystem, int? maxContestants
+ int? id, Competition competition, CompetitionSystem competitionSystem, int? maxContestants, int poolGroupCount
 });
 
 
@@ -66,13 +66,14 @@ class _$CompetitionSystemAffiliationCopyWithImpl<$Res>
 
 /// Create a copy of CompetitionSystemAffiliation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? competition = null,Object? competitionSystem = null,Object? maxContestants = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? competition = null,Object? competitionSystem = null,Object? maxContestants = freezed,Object? poolGroupCount = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,competition: null == competition ? _self.competition : competition // ignore: cast_nullable_to_non_nullable
 as Competition,competitionSystem: null == competitionSystem ? _self.competitionSystem : competitionSystem // ignore: cast_nullable_to_non_nullable
 as CompetitionSystem,maxContestants: freezed == maxContestants ? _self.maxContestants : maxContestants // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,poolGroupCount: null == poolGroupCount ? _self.poolGroupCount : poolGroupCount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 /// Create a copy of CompetitionSystemAffiliation
@@ -92,13 +93,14 @@ $CompetitionCopyWith<$Res> get competition {
 @JsonSerializable()
 
 class _CompetitionSystemAffiliation extends CompetitionSystemAffiliation {
-  const _CompetitionSystemAffiliation({this.id, required this.competition, required this.competitionSystem, this.maxContestants}): super._();
+  const _CompetitionSystemAffiliation({this.id, required this.competition, required this.competitionSystem, this.maxContestants, this.poolGroupCount = 1}): super._();
   factory _CompetitionSystemAffiliation.fromJson(Map<String, dynamic> json) => _$CompetitionSystemAffiliationFromJson(json);
 
 @override final  int? id;
 @override final  Competition competition;
 @override final  CompetitionSystem competitionSystem;
 @override final  int? maxContestants;
+@override@JsonKey() final  int poolGroupCount;
 
 /// Create a copy of CompetitionSystemAffiliation
 /// with the given fields replaced by the non-null parameter values.
@@ -113,16 +115,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompetitionSystemAffiliation&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.competitionSystem, competitionSystem) || other.competitionSystem == competitionSystem)&&(identical(other.maxContestants, maxContestants) || other.maxContestants == maxContestants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompetitionSystemAffiliation&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.competitionSystem, competitionSystem) || other.competitionSystem == competitionSystem)&&(identical(other.maxContestants, maxContestants) || other.maxContestants == maxContestants)&&(identical(other.poolGroupCount, poolGroupCount) || other.poolGroupCount == poolGroupCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,competition,competitionSystem,maxContestants);
+int get hashCode => Object.hash(runtimeType,id,competition,competitionSystem,maxContestants,poolGroupCount);
 
 @override
 String toString() {
-  return 'CompetitionSystemAffiliation(id: $id, competition: $competition, competitionSystem: $competitionSystem, maxContestants: $maxContestants)';
+  return 'CompetitionSystemAffiliation(id: $id, competition: $competition, competitionSystem: $competitionSystem, maxContestants: $maxContestants, poolGroupCount: $poolGroupCount)';
 }
 
 
@@ -133,7 +135,7 @@ abstract mixin class _$CompetitionSystemAffiliationCopyWith<$Res> implements $Co
   factory _$CompetitionSystemAffiliationCopyWith(_CompetitionSystemAffiliation value, $Res Function(_CompetitionSystemAffiliation) _then) = __$CompetitionSystemAffiliationCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, Competition competition, CompetitionSystem competitionSystem, int? maxContestants
+ int? id, Competition competition, CompetitionSystem competitionSystem, int? maxContestants, int poolGroupCount
 });
 
 
@@ -150,13 +152,14 @@ class __$CompetitionSystemAffiliationCopyWithImpl<$Res>
 
 /// Create a copy of CompetitionSystemAffiliation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? competition = null,Object? competitionSystem = null,Object? maxContestants = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? competition = null,Object? competitionSystem = null,Object? maxContestants = freezed,Object? poolGroupCount = null,}) {
   return _then(_CompetitionSystemAffiliation(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,competition: null == competition ? _self.competition : competition // ignore: cast_nullable_to_non_nullable
 as Competition,competitionSystem: null == competitionSystem ? _self.competitionSystem : competitionSystem // ignore: cast_nullable_to_non_nullable
 as CompetitionSystem,maxContestants: freezed == maxContestants ? _self.maxContestants : maxContestants // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,poolGroupCount: null == poolGroupCount ? _self.poolGroupCount : poolGroupCount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

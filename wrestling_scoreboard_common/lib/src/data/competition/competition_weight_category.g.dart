@@ -12,6 +12,7 @@ _CompetitionWeightCategory _$CompetitionWeightCategoryFromJson(Map<String, dynam
   ageCategory: AgeCategory.fromJson(json['ageCategory'] as Map<String, dynamic>),
   competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
   competitionSystem: $enumDecodeNullable(_$CompetitionSystemEnumMap, json['competitionSystem']),
+  poolGroupCount: (json['poolGroupCount'] as num?)?.toInt() ?? 1,
   pairedRound: (json['pairedRound'] as num?)?.toInt(),
 );
 
@@ -21,6 +22,7 @@ Map<String, dynamic> _$CompetitionWeightCategoryToJson(_CompetitionWeightCategor
   'ageCategory': instance.ageCategory.toJson(),
   'competition': instance.competition.toJson(),
   'competitionSystem': _$CompetitionSystemEnumMap[instance.competitionSystem],
+  'poolGroupCount': instance.poolGroupCount,
   'pairedRound': instance.pairedRound,
 };
 
@@ -28,5 +30,4 @@ const _$CompetitionSystemEnumMap = {
   CompetitionSystem.singleElimination: 'singleElimination',
   CompetitionSystem.doubleElimination: 'doubleElimination',
   CompetitionSystem.nordic: 'nordic',
-  CompetitionSystem.twoPools: 'twoPools',
 };

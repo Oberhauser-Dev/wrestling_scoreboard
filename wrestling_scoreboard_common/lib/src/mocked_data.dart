@@ -284,7 +284,8 @@ class MockedData {
   );
   late final competitionSystemAffiliationTwoPools = CompetitionSystemAffiliation(
     id: 1,
-    competitionSystem: CompetitionSystem.twoPools,
+    competitionSystem: CompetitionSystem.doubleElimination,
+    poolGroupCount: 2,
     competition: competition,
   );
 

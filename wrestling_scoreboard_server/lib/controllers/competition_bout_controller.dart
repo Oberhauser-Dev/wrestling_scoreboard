@@ -5,6 +5,7 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/utils/competition_system_algorithms.dart';
 
 import 'competition_participation_controller.dart';
 import 'competition_weight_category_controller.dart';
@@ -67,7 +68,10 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             );
           }
 
-          final competitionBouts = await getByWeightCategory(obfuscate, updatedCompetitionBout.weightCategory!.id!);
+          final competitionBouts = await getByWeightCategory(
+            updatedCompetitionBout.weightCategory!.id!,
+            obfuscate: obfuscate,
+          );
           final competitionBoutsOfRound = competitionBouts.where((cb) => cb.round == updatedCompetitionBout.round);
 
           if (competitionBoutsOfRound.every((cb) => cb.bout.result != null)) {
@@ -75,34 +79,41 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             switch (weightCategory.competitionSystem) {
               case CompetitionSystem.nordic:
               // Do nothing, or update list of bouts
-              case CompetitionSystem.twoPools:
+              case CompetitionSystem.singleElimination:
                 final participations = await CompetitionParticipationController().getByWeightCategory(
                   false,
                   weightCategory.id!,
                 );
-                for (final (index, participation) in participations.indexed) {
-                  // Skip already excluded participants.
-                  if (participation.isExcluded) continue;
-                  // Eliminate participants with 2 or more losses.
-                  final participantLosses = competitionBouts.where((cb) {
-                    return (cb.bout.r?.membership == participation.membership && cb.bout.winnerRole != BoutRole.red) ||
-                        (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
-                  });
-                  if (participantLosses.length >= 2) {
-                    participations[index] = participation.copyWith(eliminated: true);
-                    await CompetitionParticipationController().updateSingle(participations[index]);
-                  }
-                }
 
                 final pairedRound = weightCategory.pairedRound! + 1;
                 final poolParticipationGroups = participations.groupListsBy((participation) => participation.poolGroup);
                 final List<CompetitionBout> createdCompetitionBouts = [];
                 for (final poolParticipations in poolParticipationGroups.values) {
+                  final List<CompetitionParticipation> nonEliminatedPoolParticipants = [];
+                  for (final participation in poolParticipations) {
+                    // Skip already excluded participants.
+                    if (participation.isExcluded) continue;
+                    // Eliminate participants with 2 or more losses.
+                    final participantLosses = competitionBouts.where((cb) {
+                      return (cb.bout.r?.membership == participation.membership &&
+                              cb.bout.winnerRole != BoutRole.red) ||
+                          (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
+                    });
+                    if (participantLosses.isEmpty) {
+                      nonEliminatedPoolParticipants.add(participation);
+                    } else {
+                      await CompetitionParticipationController().updateSingle(participation.copyWith(eliminated: true));
+                    }
+                  }
+
                   createdCompetitionBouts.addAll(
-                    CompetitionWeightCategoryController.generateCompetitionBoutsOfRound(
-                      poolParticipations,
+                    CompetitionWeightCategoryController.convertBoutsOfRound(
                       weightCategory,
+                      nonEliminatedPoolParticipants,
                       round: pairedRound,
+                      boutIndexListOfRound: generateSingleEliminationRound(
+                        Iterable<int>.generate(nonEliminatedPoolParticipants.length).toList(),
+                      ),
                     ),
                   );
                 }
@@ -114,14 +125,61 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                 await CompetitionWeightCategoryController().updateSingle(
                   weightCategory.copyWith(pairedRound: pairedRound),
                 );
-
-              case CompetitionSystem.singleElimination:
-                // TODO: Handle this case.
-                throw UnimplementedError();
               case CompetitionSystem.doubleElimination:
-                // TODO: Handle this case.
-                throw UnimplementedError();
-              default:
+                final participations = await CompetitionParticipationController().getByWeightCategory(
+                  false,
+                  weightCategory.id!,
+                );
+
+                final pairedRound = weightCategory.pairedRound! + 1;
+                final poolParticipationGroups = participations.groupListsBy((participation) => participation.poolGroup);
+                final List<CompetitionBout> createdCompetitionBouts = [];
+                for (final poolParticipations in poolParticipationGroups.values) {
+                  final List<int> winnerBracket = [];
+                  final List<int> looserBracket = [];
+                  final List<CompetitionParticipation> nonEliminatedPoolParticipants = [];
+                  for (final participation in poolParticipations) {
+                    // Skip already excluded participants.
+                    if (participation.isExcluded) continue;
+                    // Eliminate participants with 2 or more losses.
+                    final participantLosses = competitionBouts.where((cb) {
+                      return (cb.bout.r?.membership == participation.membership &&
+                              cb.bout.winnerRole != BoutRole.red) ||
+                          (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
+                    });
+                    if (participantLosses.isEmpty) {
+                      winnerBracket.add(nonEliminatedPoolParticipants.length);
+                      nonEliminatedPoolParticipants.add(participation);
+                    } else if (participantLosses.length == 1) {
+                      looserBracket.add(nonEliminatedPoolParticipants.length);
+                      nonEliminatedPoolParticipants.add(participation);
+                    } else {
+                      await CompetitionParticipationController().updateSingle(participation.copyWith(eliminated: true));
+                    }
+                  }
+
+                  createdCompetitionBouts.addAll(
+                    CompetitionWeightCategoryController.convertBoutsOfRound(
+                      weightCategory,
+                      nonEliminatedPoolParticipants,
+                      round: pairedRound,
+                      boutIndexListOfRound: generateDoubleEliminationRound(
+                        winnerBracket: winnerBracket,
+                        looserBracket: looserBracket,
+                      ),
+                    ),
+                  );
+                }
+                await CompetitionWeightCategoryController.createAndBroadcastBouts(
+                  createdCompetitionBouts,
+                  weightCategory,
+                );
+
+                await CompetitionWeightCategoryController().updateSingle(
+                  weightCategory.copyWith(pairedRound: pairedRound),
+                );
+              case null:
+              // Nothing to do
             }
           }
         }
@@ -141,7 +199,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
     return {'mat': psql.Type.smallInteger, 'round': psql.Type.smallInteger};
   }
 
-  Future<List<CompetitionBout>> getByWeightCategory(bool obfuscate, int id) async {
+  Future<List<CompetitionBout>> getByWeightCategory(int id, {required bool obfuscate}) async {
     return await getMany(
       conditions: ['weight_category_id = @id'],
       substitutionValues: {'id': id},

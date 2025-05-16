@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'competition_system_affiliation.freezed.dart';
+
 part 'competition_system_affiliation.g.dart';
 
 @freezed
@@ -14,6 +15,7 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
     required Competition competition,
     required CompetitionSystem competitionSystem,
     int? maxContestants,
+    @Default(1) int poolGroupCount,
   }) = _CompetitionSystemAffiliation;
 
   factory CompetitionSystemAffiliation.fromJson(Map<String, Object?> json) =>
@@ -27,6 +29,7 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
       id: e['id'] as int?,
       competition: competition,
       competitionSystem: CompetitionSystem.values.byName(competitionSystem),
+      poolGroupCount: e['pool_group_count'] as int,
       maxContestants: e['max_contestants'] as int?,
     );
   }
@@ -37,6 +40,7 @@ abstract class CompetitionSystemAffiliation with _$CompetitionSystemAffiliation 
       if (id != null) 'id': id,
       'competition_id': competition.id!,
       'competition_system': competitionSystem.name,
+      'pool_group_count': poolGroupCount,
       'max_contestants': maxContestants,
     };
   }
