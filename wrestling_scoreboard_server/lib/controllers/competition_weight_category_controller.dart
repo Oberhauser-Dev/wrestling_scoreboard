@@ -238,7 +238,10 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'paired_round': psql.Type.smallInteger};
+    return {
+      'paired_round': psql.Type.smallInteger,
+      'pool_group_count': psql.Type.smallInteger,
+    };
   }
 
   List<CompetitionParticipation> _drawNumberAndPool(List<CompetitionParticipation> participations, {int? pool}) {
