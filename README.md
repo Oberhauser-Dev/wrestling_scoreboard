@@ -3,7 +3,12 @@
 Repository for managing Wrestling software: client, server and shared libraries.
 Available for Linux, Windows, macOS, Web, Android and iOS.
 
-Tags: scoreboard, wrestling, scoring, bracket, mat, team, fight, competition, tournament, display, points, bracket, team, athlete, bout
+Tags: scoreboard, wrestling, scoring, bout, mat, team, fight, competition, tournament, display, points, bracket, team, athlete, elimination
+
+> **NOTE:** This project is still experimental.
+> Use with care.
+> 
+> This might include unfinished features, bugs, or incompatibilities with older versions.
 
 ## Screenshots
 
