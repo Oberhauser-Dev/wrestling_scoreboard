@@ -17,8 +17,7 @@ _CompetitionParticipation _$CompetitionParticipationFromJson(Map<String, dynamic
   weight: (json['weight'] as num?)?.toDouble(),
   poolGroup: (json['poolGroup'] as num?)?.toInt(),
   poolDrawNumber: (json['poolDrawNumber'] as num?)?.toInt(),
-  eliminated: json['eliminated'] as bool? ?? false,
-  disqualified: json['disqualified'] as bool? ?? false,
+  contestantStatus: $enumDecodeNullable(_$ContestantStatusEnumMap, json['contestantStatus']),
 );
 
 Map<String, dynamic> _$CompetitionParticipationToJson(_CompetitionParticipation instance) => <String, dynamic>{
@@ -29,6 +28,11 @@ Map<String, dynamic> _$CompetitionParticipationToJson(_CompetitionParticipation 
   'weight': instance.weight,
   'poolGroup': instance.poolGroup,
   'poolDrawNumber': instance.poolDrawNumber,
-  'eliminated': instance.eliminated,
-  'disqualified': instance.disqualified,
+  'contestantStatus': _$ContestantStatusEnumMap[instance.contestantStatus],
+};
+
+const _$ContestantStatusEnumMap = {
+  ContestantStatus.eliminated: 'eliminated',
+  ContestantStatus.disqualified: 'disqualified',
+  ContestantStatus.injured: 'injured',
 };

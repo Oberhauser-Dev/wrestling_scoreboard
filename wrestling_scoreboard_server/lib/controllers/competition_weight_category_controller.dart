@@ -53,10 +53,23 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       });
     }
 
-    final participations = await CompetitionParticipationController().getByWeightCategory(
+    List<CompetitionParticipation> participations = await CompetitionParticipationController().getByWeightCategory(
       false,
       competitionWeightCategory.id!,
     );
+    // Reset elimination
+    participations =
+        participations
+            .map(
+              (e) => e.copyWith(
+                contestantStatus: e.contestantStatus == ContestantStatus.eliminated ? null : e.contestantStatus,
+              ),
+            )
+            .toList();
+    participations.removeWhere((element) => element.isExcluded);
+    if (participations.isEmpty) {
+      throw Exception('No eligible contestants found to pair: ${competitionWeightCategory.name}');
+    }
 
     CompetitionSystem? competitionSystem = competitionWeightCategory.competitionSystem;
     int? poolGroupCount = competitionWeightCategory.poolGroupCount;
@@ -128,7 +141,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           final (poolGroup, poolParticipations) = poolParticipationsIndexed;
           final updatedPoolParticipations = _drawNumberAndPool(poolParticipations, pool: poolGroup);
           updatedParticipations.addAll(updatedPoolParticipations);
-          // Only generate first round, as the others are not determined yet.
+          // Only generate first round, as the winner and looser bracket will be determined after each round.
           createdBouts.addAll(
             convertBoutsOfRound(
               competitionWeightCategory,
@@ -142,6 +155,23 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           );
         }
         competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 0);
+      case CompetitionSystem.nordicDoubleElimination:
+        final splittedParticipations = participations.slices((participations.length / poolGroupCount).ceil());
+        for (final poolParticipationsIndexed in splittedParticipations.indexed) {
+          final (poolGroup, poolParticipations) = poolParticipationsIndexed;
+          final updatedPoolParticipations = _drawNumberAndPool(poolParticipations, pool: poolGroup);
+          updatedParticipations.addAll(updatedPoolParticipations);
+          // Generate the first two rounds, as they can be determined.
+          final rounds = convertBouts(
+            competitionWeightCategory,
+            updatedPoolParticipations,
+            boutIndexList: generateBergerTable(updatedPoolParticipations.length),
+            roundType: RoundType.elimination,
+          );
+          createdBouts.addAll(rounds[0]);
+          createdBouts.addAll(rounds[1]);
+        }
+        competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 1);
     }
 
     competitionWeightCategory = competitionWeightCategory.copyWith(
@@ -204,6 +234,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     List<CompetitionParticipation> participations, {
     required List<List<(int?, int?)>> boutIndexList,
     required RoundType roundType,
+    int roundShift = 0,
   }) {
     return boutIndexList.indexed.map((indexedRoundBouts) {
       final (round, boutsOfRound) = indexedRoundBouts;
@@ -211,7 +242,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
         weightCategory,
         participations,
         boutIndexListOfRound: boutsOfRound,
-        round: round,
+        round: roundShift + round,
         roundType: roundType,
       );
     }).toList();

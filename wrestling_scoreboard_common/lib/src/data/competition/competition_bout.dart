@@ -60,6 +60,10 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
   String get tableName => cTableName;
   static const cTableName = 'competition_bout';
 
+  int? get displayRound => round != null ? (round! + 1) : null;
+
+  int? get displayMat => mat != null ? (mat! + 1) : null;
+
   @override
   CompetitionBout copyWithId(int? id) {
     return copyWith(id: id);

@@ -103,11 +103,25 @@ CREATE TYPE public.competition_system AS ENUM (
     'singleElimination',
     'doubleElimination',
     'nordic',
-    'twoPools'
+    'twoPools',
+    'nordicDoubleElimination'
 );
 
 
 ALTER TYPE public.competition_system OWNER TO wrestling;
+
+--
+-- Name: contestant_status; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.contestant_status AS ENUM (
+    'eliminated',
+    'disqualified',
+    'injured'
+);
+
+
+ALTER TYPE public.contestant_status OWNER TO wrestling;
 
 --
 -- Name: gender; Type: TYPE; Schema: public; Owner: wrestling
@@ -594,8 +608,7 @@ CREATE TABLE public.competition_participation (
     weight numeric(5,2),
     pool_group smallint,
     pool_draw_number smallint,
-    eliminated boolean DEFAULT false NOT NULL,
-    disqualified boolean DEFAULT false NOT NULL
+    contestant_status public.contestant_status
 );
 
 
@@ -1770,7 +1783,7 @@ COPY public.competition_lineup (id, competition_id, club_id, leader_id, coach_id
 -- Data for Name: competition_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, pool_group, pool_draw_number, eliminated, disqualified) FROM stdin;
+COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, pool_group, pool_draw_number, contestant_status) FROM stdin;
 \.
 
 
@@ -1912,7 +1925,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.6	0.0.0
+0.3.0-pre.8	0.0.0
 \.
 
 

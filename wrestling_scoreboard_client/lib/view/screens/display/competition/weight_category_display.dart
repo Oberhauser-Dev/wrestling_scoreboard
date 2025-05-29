@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -90,10 +92,12 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
               return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
                 filterObject: competitionWeightCategory,
                 builder: (context, competitionBouts) {
-                  final competitionBoutsByRound = competitionBouts.groupSetsBy((element) => element.round);
+                  final competitionBoutsByRound = SplayTreeMap<int?, Set<CompetitionBout>>.from(
+                    competitionBouts.groupSetsBy((element) => element.round),
+                  );
                   final participantWidgets = <Widget>[];
-                  for (final poolGroup in competitionParticipationsByPool.keys) {
-                    if (poolGroup != null && competitionParticipationsByPool.length > 1) {
+                  for (int poolGroup = 0; poolGroup < competitionWeightCategory.poolGroupCount; poolGroup++) {
+                    if (competitionWeightCategory.poolGroupCount > 1) {
                       participantWidgets.add(
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
@@ -104,6 +108,9 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                       );
                     }
                     final participationsOfPoolGroup = competitionParticipationsByPool[poolGroup]!;
+                    participationsOfPoolGroup.sort(
+                      (a, b) => (a.poolDrawNumber ?? -1).compareTo(b.poolDrawNumber ?? -1),
+                    );
                     for (final participationOfPoolGroup in participationsOfPoolGroup) {
                       participantWidgets.add(
                         Column(
@@ -168,22 +175,21 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                               child: ScaledText(localizations.club),
                             ),
                             VerticalDivider(width: 1),
-                            ...competitionBoutsByRound.keys
-                                .where((element) => element != null && element >= 0)
-                                .map(
-                                  (e) => Row(
-                                    children: [
-                                      ScaledContainer(
-                                        width: CompetitionParticipationItem.roundRelativeWidth,
-                                        child: ScaledText(
-                                          '${competitionBoutsByRound[e]?.first.roundType.localize(context)} ${e! + 1}',
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      VerticalDivider(width: 1),
-                                    ],
+                            ...competitionBoutsByRound.keys.where((round) => round != null && round >= 0).map((round) {
+                              final competitionBout = competitionBoutsByRound[round]!.first;
+                              return Row(
+                                children: [
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.roundRelativeWidth,
+                                    child: ScaledText(
+                                      '${competitionBout.roundType.localize(context)} ${competitionBout.displayRound}',
+                                      fontSize: 10,
+                                    ),
                                   ),
-                                ),
+                                  VerticalDivider(width: 1),
+                                ],
+                              );
+                            }),
                             ScaledContainer(
                               width: CompetitionParticipationItem.pointsRelativeWidth,
                               child: ScaledText(localizations.wins, fontSize: 8),

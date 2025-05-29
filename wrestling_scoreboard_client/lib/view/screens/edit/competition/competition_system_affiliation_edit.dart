@@ -24,14 +24,14 @@ class CompetitionSystemAffiliationEdit extends ConsumerStatefulWidget {
 
 class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSystemAffiliationEdit> {
   final _formKey = GlobalKey<FormState>();
-  CompetitionSystem? _competitionSystem;
+  late CompetitionSystem _competitionSystem;
   late int _poolGroupCount;
   int? _maxContestants;
 
   @override
   void initState() {
     super.initState();
-    _competitionSystem = widget.competitionSystemAffiliation?.competitionSystem;
+    _competitionSystem = widget.competitionSystemAffiliation?.competitionSystem ?? CompetitionSystem.nordic;
     _poolGroupCount = widget.competitionSystemAffiliation?.poolGroupCount ?? 1;
     _maxContestants = widget.competitionSystemAffiliation?.maxContestants;
   }
@@ -48,14 +48,14 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
           alignedDropdown: true,
           child: SimpleDropdown<CompetitionSystem>(
             hint: localizations.result,
-            isNullable: true,
+            isNullable: false,
             selected: _competitionSystem,
             options: CompetitionSystem.values.map(
               (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
             ),
             onChange:
                 (newValue) => setState(() {
-                  _competitionSystem = newValue;
+                  if (newValue != null) _competitionSystem = newValue;
                 }),
           ),
         ),
@@ -109,7 +109,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
       CompetitionSystemAffiliation csa = CompetitionSystemAffiliation(
         id: widget.competitionSystemAffiliation?.id,
         competition: widget.competitionSystemAffiliation?.competition ?? widget.initialCompetition,
-        competitionSystem: _competitionSystem!,
+        competitionSystem: _competitionSystem,
         maxContestants: _maxContestants,
         poolGroupCount: _poolGroupCount,
       );

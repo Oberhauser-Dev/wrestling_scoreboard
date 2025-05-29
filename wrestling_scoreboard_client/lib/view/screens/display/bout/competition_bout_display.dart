@@ -76,7 +76,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           bouts: matCompetitionBouts.map((e) => e.bout).toList(),
                           boutIndex: matCompetitionBoutIndex,
                           bout: bout,
-                          mat: competitionBout.mat,
+                          mat: competitionBout.displayMat,
                           onPressBoutInfo: (BuildContext context) {
                             // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
                             context.go(

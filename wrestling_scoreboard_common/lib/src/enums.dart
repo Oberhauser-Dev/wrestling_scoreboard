@@ -2,6 +2,7 @@ export 'enums/bout_action_type.dart';
 export 'enums/bout_result.dart';
 export 'enums/bout_role.dart';
 export 'enums/competition_system.dart';
+export 'enums/contestant_status.dart';
 export 'enums/crud.dart';
 export 'enums/gender.dart';
 export 'enums/person_role.dart';

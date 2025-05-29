@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
@@ -69,7 +68,7 @@ class CompetitionLineupOverview extends ConsumerWidget {
                     (context, item) => ContentItem(
                       title: item.name,
                       icon: Icons.person,
-                      onTap: () => _handleSelectedParticipation(item, context),
+                      onTap: () => navigateToCompetitionParticipationOverview(context, item),
                     ),
               ),
             ],
@@ -77,9 +76,5 @@ class CompetitionLineupOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  _handleSelectedParticipation(CompetitionParticipation participation, BuildContext context) {
-    context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
   }
 }

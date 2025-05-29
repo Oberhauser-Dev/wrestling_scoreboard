@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/contestant_status.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
@@ -10,6 +12,10 @@ import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+
+navigateToCompetitionParticipationOverview(BuildContext context, CompetitionParticipation participation) {
+  context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
+}
 
 class CompetitionParticipationOverview extends ConsumerWidget {
   static const route = 'competition_participation';
@@ -65,19 +71,14 @@ class CompetitionParticipationOverview extends ConsumerWidget {
               icon: Icons.pool,
             ),
             ContentItem(
-              title: competitionParticipation.poolDrawNumber?.toString() ?? '-',
+              title: competitionParticipation.displayPoolDrawNumber?.toString() ?? '-',
               subtitle: localizations.numberAbbreviation,
               icon: Icons.numbers,
             ),
             ContentItem(
-              title: competitionParticipation.eliminated.toString(),
-              subtitle: localizations.eliminated,
+              title: competitionParticipation.contestantStatus?.localize(context) ?? '-',
+              subtitle: localizations.contestantStatus,
               icon: Icons.cancel_outlined,
-            ),
-            ContentItem(
-              title: competitionParticipation.disqualified.toString(),
-              subtitle: localizations.disqualified,
-              icon: Icons.block_outlined,
             ),
           ],
         );

@@ -20,8 +20,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     double? weight,
     int? poolGroup,
     int? poolDrawNumber,
-    @Default(false) bool eliminated,
-    @Default(false) bool disqualified,
+    ContestantStatus? contestantStatus,
   }) = _CompetitionParticipation;
 
   factory CompetitionParticipation.fromJson(Map<String, Object?> json) => _$CompetitionParticipationFromJson(json);
@@ -45,6 +44,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     if (weightEncoded != null) {
       weight = double.parse(weightEncoded);
     }
+    final contestantStatus = e['contestant_status'] as String?;
 
     return CompetitionParticipation(
       id: e['id'] as int?,
@@ -54,16 +54,20 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       weight: weight,
       poolGroup: e['pool_group'] as int?,
       poolDrawNumber: e['pool_draw_number'] as int?,
-      eliminated: e['eliminated'] as bool,
-      disqualified: e['disqualified'] as bool,
+      contestantStatus: contestantStatus == null ? null : ContestantStatus.values.byName(contestantStatus),
     );
   }
 
-  String get name {
-    return '${membership.person.fullName} | ${lineup.club.name}';
-  }
+  String get name => '${membership.person.fullName} | ${lineup.club.name}';
 
-  bool get isExcluded => disqualified || eliminated;
+  int? get displayPoolDrawNumber => poolDrawNumber != null ? (poolDrawNumber! + 1) : null;
+
+  String get displayPoolId => '${poolGroup?.toLetter() ?? ''}${displayPoolDrawNumber?.toString() ?? '-'}';
+
+  bool get isExcluded =>
+      contestantStatus == ContestantStatus.eliminated ||
+      contestantStatus == ContestantStatus.disqualified ||
+      contestantStatus == ContestantStatus.injured;
 
   @override
   Map<String, dynamic> toRaw() {
@@ -75,8 +79,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       'weight': weight,
       'pool_group': poolGroup,
       'pool_draw_number': poolDrawNumber,
-      'eliminated': eliminated,
-      'disqualified': disqualified,
+      'contestant_status': contestantStatus?.name,
     };
   }
 

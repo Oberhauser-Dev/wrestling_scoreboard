@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/contestant_status.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -39,6 +40,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
   Membership? _membership;
   CompetitionLineup? _lineup;
   CompetitionWeightCategory? _weightCategory;
+  ContestantStatus? _contestantStatus;
   double? _weight;
 
   @override
@@ -48,6 +50,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
     _lineup = widget.competitionParticipation?.lineup ?? widget.initialLineup;
     _weightCategory = widget.competitionParticipation?.weightCategory ?? widget.initialWeightCategory;
     _weight = widget.competitionParticipation?.weight;
+    _contestantStatus = widget.competitionParticipation?.contestantStatus;
   }
 
   @override
@@ -133,6 +136,19 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           },
         ),
       ),
+      ListTile(
+        leading: const Icon(Icons.cancel_outlined),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<ContestantStatus>(
+            hint: localizations.result,
+            isNullable: true,
+            selected: _contestantStatus,
+            options: ContestantStatus.values.map((status) => MapEntry(status, Text(status.localize(context)))),
+            onChange: (newValue) => setState(() => _contestantStatus = newValue),
+          ),
+        ),
+      ),
     ];
 
     return Form(
@@ -166,8 +182,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
         membership: _membership!,
         weightCategory: _weightCategory,
         weight: _weight,
-        disqualified: widget.competitionParticipation?.disqualified ?? false,
-        eliminated: widget.competitionParticipation?.eliminated ?? false,
+        contestantStatus: _contestantStatus,
         poolDrawNumber: widget.competitionParticipation?.poolDrawNumber,
         poolGroup: widget.competitionParticipation?.poolDrawNumber,
       );

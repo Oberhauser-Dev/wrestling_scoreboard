@@ -475,7 +475,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                               if (widget.mat != null)
                                 Center(
                                   child: ScaledText(
-                                    '${localizations.mat} ${widget.mat! + 1}',
+                                    '${localizations.mat} ${widget.mat}',
                                     fontSize: 22,
                                     minFontSize: 10,
                                   ),
