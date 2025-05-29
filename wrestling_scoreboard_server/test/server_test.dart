@@ -300,9 +300,9 @@ void main() {
         competitionWeightCategory.id!,
         obfuscate: false,
       );
-      expect(competitionBouts.length, 2);
-      expect((await BoutController().getMany(obfuscate: false)).length, 2);
-      expect((await AthleteBoutStateController().getMany(obfuscate: false)).length, 4);
+      expect(competitionBouts.length, 3);
+      expect((await BoutController().getMany(obfuscate: false)).length, 3);
+      expect((await AthleteBoutStateController().getMany(obfuscate: false)).length, 6);
       expect((await BoutActionController().getMany(obfuscate: false)).length, 0);
 
       await instance.close();

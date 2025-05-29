@@ -27,4 +27,5 @@ const _$CompetitionSystemEnumMap = {
   CompetitionSystem.singleElimination: 'singleElimination',
   CompetitionSystem.doubleElimination: 'doubleElimination',
   CompetitionSystem.nordic: 'nordic',
+  CompetitionSystem.nordicDoubleElimination: 'nordicDoubleElimination',
 };

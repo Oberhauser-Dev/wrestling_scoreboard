@@ -103,7 +103,12 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
                   child: Text(localizations.warningBoutGenerate),
                 );
                 if (hasConfirmed && context.mounted) {
-                  await catchAsync(context, () => _handleSubmit(ref, navigator, competitionWeightCategory));
+                  await catchAsync(context, () async {
+                    await _handleGenerateBouts(ref, navigator, competitionWeightCategory);
+                    if (context.mounted) {
+                      await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                    }
+                  });
                 }
               },
             ),
@@ -125,7 +130,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
                     (context, item) => ContentItem(
                       title: item.name,
                       icon: Icons.person,
-                      onTap: () => _handleSelectedParticipation(item, context),
+                      onTap: () => navigateToCompetitionParticipationOverview(context, item),
                     ),
               ),
             ],
@@ -135,19 +140,19 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
     );
   }
 
-  _handleSelectedParticipation(CompetitionParticipation participation, BuildContext context) {
-    context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
-  }
-
   _handleSelectedWeightCategoryDisplay(CompetitionWeightCategory category, BuildContext context) {
     context.push(
       '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/${CompetitionWeightCategoryDisplay.route}',
     );
   }
 
-  Future<void> _handleSubmit(WidgetRef ref, NavigatorState navigator, CompetitionWeightCategory weightCategory) async {
+  Future<void> _handleGenerateBouts(
+    WidgetRef ref,
+    NavigatorState navigator,
+    CompetitionWeightCategory weightCategory,
+  ) async {
     final dataManager = await ref.read(dataManagerNotifierProvider);
-    await dataManager.generateBouts<CompetitionWeightCategory>(weightCategory, false);
-    navigator.pop();
+    // TODO: set isReset to false, when more general approach to generate bouts is available
+    await dataManager.generateBouts<CompetitionWeightCategory>(weightCategory, true);
   }
 }

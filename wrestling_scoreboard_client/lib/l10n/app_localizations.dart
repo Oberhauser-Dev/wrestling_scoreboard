@@ -860,6 +860,12 @@ abstract class AppLocalizations {
   /// **'Qualification'**
   String get qualification;
 
+  /// No description provided for @contestantStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Contestant Status'**
+  String get contestantStatus;
+
   /// No description provided for @elimination.
   ///
   /// In en, this message translates to:
@@ -871,6 +877,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Eliminated'**
   String get eliminated;
+
+  /// No description provided for @injured.
+  ///
+  /// In en, this message translates to:
+  /// **'Injured'**
+  String get injured;
 
   /// No description provided for @disqualified.
   ///

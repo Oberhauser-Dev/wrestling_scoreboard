@@ -348,8 +348,7 @@ class MockedData {
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
     weight: 59.2,
-    disqualified: true,
-    eliminated: true,
+    contestantStatus: ContestantStatus.disqualified,
   );
 
   late final competitionParticipation4 = CompetitionParticipation(
@@ -390,6 +389,16 @@ class MockedData {
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
     weight: 58.3,
+  );
+
+  late final competitionParticipation8 = CompetitionParticipation(
+    id: 13,
+    poolDrawNumber: 3,
+    poolGroup: 1,
+    membership: b4,
+    lineup: competitionLineup2,
+    weightCategory: competitionWeightCategory,
+    weight: 58.4,
   );
 
   late final competitionBout1 = CompetitionBout(
@@ -551,6 +560,7 @@ class MockedData {
     competitionParticipation5,
     competitionParticipation6,
     competitionParticipation7,
+    competitionParticipation8,
   ];
 
   List<AgeCategory> getAgeCategories() => _ageCategories;

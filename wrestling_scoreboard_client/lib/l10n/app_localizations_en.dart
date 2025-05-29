@@ -409,10 +409,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get qualification => 'Qualification';
 
   @override
+  String get contestantStatus => 'Contestant Status';
+
+  @override
   String get elimination => 'Elimination';
 
   @override
   String get eliminated => 'Eliminated';
+
+  @override
+  String get injured => 'Injured';
 
   @override
   String get disqualified => 'Disqualified';

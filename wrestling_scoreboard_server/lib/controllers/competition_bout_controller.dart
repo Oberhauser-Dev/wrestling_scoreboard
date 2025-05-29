@@ -1,4 +1,6 @@
+import 'dart:collection';
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:postgres/postgres.dart' as psql;
@@ -109,37 +111,12 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                 );
                 createdCompetitionBouts.addAll(poolCompetitionBouts);
               }
+              // If all pool bouts were finished
               if (createdCompetitionBouts.isEmpty) {
                 // Calculate pool rankings
                 final List<List<(CompetitionParticipation, int, int)>> poolRankings = [];
                 for (final poolParticipations in poolParticipationGroups.values) {
-                  final List<(CompetitionParticipation, int, int)> poolRanking = [];
-                  for (final participant in poolParticipations) {
-                    final participantBoutsRed = pastCompetitionBouts.where(
-                      (bout) => bout.bout.r?.membership == participant.membership,
-                    );
-                    final participantBoutsBlue = pastCompetitionBouts.where(
-                      (bout) => bout.bout.b?.membership == participant.membership,
-                    );
-                    final classificationPoints =
-                        participantBoutsRed.fold<int>(
-                          0,
-                          (previousValue, element) => previousValue + (element.bout.r?.classificationPoints ?? 0),
-                        ) +
-                        participantBoutsBlue.fold<int>(
-                          0,
-                          (previousValue, element) => previousValue + (element.bout.b?.classificationPoints ?? 0),
-                        );
-                    // TODO: get all bout actions to sum up the technical points
-                    final technicalPoints = 0;
-                    poolRanking.add((participant, classificationPoints, technicalPoints));
-                    poolRanking.sort((a, b) {
-                      int cmp = b.$2.compareTo(a.$2);
-                      if (cmp != 0) return cmp;
-                      return b.$3.compareTo(a.$3);
-                    });
-                  }
-                  poolRankings.add(poolRanking);
+                  poolRankings.add(_calculateRanking(poolParticipations, pastCompetitionBouts));
                 }
                 if (weightCategory.poolGroupCount >= 2) {
                   // Slice pools in 2, so each can compete against another pool (in most cases there are only 2 pools anyways).
@@ -224,6 +201,40 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
     );
   }
 
+  /// Calculate the ranking as tuple of (participant, classificationPoints, technicalPoints)
+  List<(CompetitionParticipation, int, int)> _calculateRanking(
+    Iterable<CompetitionParticipation> participations,
+    Iterable<CompetitionBout> pastCompetitionBouts,
+  ) {
+    final List<(CompetitionParticipation, int, int)> ranking = [];
+    for (final participant in participations) {
+      final participantBoutsRed = pastCompetitionBouts.where(
+        (bout) => bout.bout.r?.membership == participant.membership,
+      );
+      final participantBoutsBlue = pastCompetitionBouts.where(
+        (bout) => bout.bout.b?.membership == participant.membership,
+      );
+      final classificationPoints =
+          participantBoutsRed.fold<int>(
+            0,
+            (previousValue, element) => previousValue + (element.bout.r?.classificationPoints ?? 0),
+          ) +
+          participantBoutsBlue.fold<int>(
+            0,
+            (previousValue, element) => previousValue + (element.bout.b?.classificationPoints ?? 0),
+          );
+      // TODO: get all bout actions to sum up the technical points
+      final technicalPoints = 0;
+      ranking.add((participant, classificationPoints, technicalPoints));
+      ranking.sort((a, b) {
+        int cmp = b.$2.compareTo(a.$2);
+        if (cmp != 0) return cmp;
+        return b.$3.compareTo(a.$3);
+      });
+    }
+    return ranking;
+  }
+
   Future<List<CompetitionBout>> _updatePoolCompetitionBouts({
     required CompetitionWeightCategory weightCategory,
     required List<CompetitionParticipation> poolParticipations,
@@ -233,7 +244,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
     final roundType = RoundType.elimination;
     switch (weightCategory.competitionSystem) {
       case CompetitionSystem.singleElimination:
-        final List<CompetitionParticipation> nonEliminatedPoolParticipants = [];
+        final Set<CompetitionParticipation> nonEliminatedPoolParticipants = {};
         for (final participation in poolParticipations) {
           // Skip already excluded participants.
           if (participation.isExcluded) continue;
@@ -245,13 +256,15 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           if (participantLosses.isEmpty) {
             nonEliminatedPoolParticipants.add(participation);
           } else {
-            await CompetitionParticipationController().updateSingle(participation.copyWith(eliminated: true));
+            await CompetitionParticipationController().updateSingle(
+              participation.copyWith(contestantStatus: ContestantStatus.eliminated),
+            );
           }
         }
 
         return CompetitionWeightCategoryController.convertBoutsOfRound(
           weightCategory,
-          nonEliminatedPoolParticipants,
+          nonEliminatedPoolParticipants.toList(),
           round: pairedRound,
           boutIndexListOfRound: generateSingleEliminationRound(
             Iterable<int>.generate(nonEliminatedPoolParticipants.length).toList(),
@@ -277,12 +290,15 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             looserBracket.add(nonEliminatedPoolParticipants.length);
             nonEliminatedPoolParticipants.add(participation);
           } else {
-            await CompetitionParticipationController().updateSingle(participation.copyWith(eliminated: true));
+            await CompetitionParticipationController().updateSingle(
+              participation.copyWith(contestantStatus: ContestantStatus.eliminated),
+            );
           }
         }
 
         if (winnerBracket.length <= 1 && looserBracket.length <= 1) {
           if (winnerBracket.isNotEmpty && looserBracket.isNotEmpty) {
+            // Add the final fight of winner and looser bracket
             return CompetitionWeightCategoryController.convertBoutsOfRound(
               weightCategory,
               nonEliminatedPoolParticipants,
@@ -291,6 +307,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
               roundType: roundType,
             );
           } else {
+            // No bouts left -> finished
             return [];
           }
         } else {
@@ -305,9 +322,86 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             roundType: roundType,
           );
         }
+      case CompetitionSystem.nordicDoubleElimination:
+        final Set<CompetitionParticipation> nonEliminatedPoolParticipants = {};
+        final Set<CompetitionParticipation> eliminatedPoolParticipants = {};
+        for (final participation in poolParticipations) {
+          // Skip already excluded participants.
+          if (participation.isExcluded) continue;
+          // Eliminate participants with 2 or more losses.
+          final participantLosses = pastCompetitionBouts.where((cb) {
+            return (cb.bout.r?.membership == participation.membership && cb.bout.winnerRole != BoutRole.red) ||
+                (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
+          });
+          if (participantLosses.length <= 1) {
+            nonEliminatedPoolParticipants.add(participation);
+          } else {
+            eliminatedPoolParticipants.add(participation);
+          }
+        }
+
+        if (nonEliminatedPoolParticipants.length <= 2) {
+          final ranking = _calculateRanking(poolParticipations, pastCompetitionBouts);
+          nonEliminatedPoolParticipants.add(ranking[0].$1);
+          eliminatedPoolParticipants.remove(ranking[0].$1);
+          nonEliminatedPoolParticipants.add(ranking[1].$1);
+          eliminatedPoolParticipants.remove(ranking[1].$1);
+          nonEliminatedPoolParticipants.add(ranking[2].$1);
+          eliminatedPoolParticipants.remove(ranking[2].$1);
+
+          if (nonEliminatedPoolParticipants.length > 3) {
+            throw Exception(
+              'Something went wrong during the pool pairing! More than 3 participants left. Please investigate!\n$poolParticipations',
+            );
+          }
+        }
+
+        // Set status of newly eliminated participants
+        for (final participation in eliminatedPoolParticipants) {
+          await CompetitionParticipationController().updateSingle(
+            participation.copyWith(contestantStatus: ContestantStatus.eliminated),
+          );
+        }
+
+        // Calculate a nordic system with the remaining participants.
+        final rounds = CompetitionWeightCategoryController.convertBouts(
+          weightCategory,
+          nonEliminatedPoolParticipants.toList(),
+          boutIndexList: generateBergerTable(nonEliminatedPoolParticipants.length),
+          roundType: RoundType.elimination,
+          roundShift: pairedRound,
+        );
+        var remainingBouts = rounds.expand((element) => element).toList();
+        final pastPairingIds = _comparableHashSet(
+          pastCompetitionBouts.map((e) => {e.bout.r?.membership.id, e.bout.b?.membership.id}),
+        );
+        // Skip all bouts, which already have taken place.
+        remainingBouts.removeWhere((remainingBout) {
+          final pIdSet = {remainingBout.bout.r?.membership.id, remainingBout.bout.b?.membership.id};
+          return pastPairingIds.contains(pIdSet);
+        });
+        final maxBoutCount = math.min(remainingBouts.length, nonEliminatedPoolParticipants.length ~/ 2);
+        final List<CompetitionBout> roundBouts = [];
+        for (int i = 0; roundBouts.length <= maxBoutCount && i < remainingBouts.length; i++) {
+          // Skip a bout, if one of its participant already has a fight in the upcoming round.
+          final boutToAdd = remainingBouts[i];
+          final upcomingMembershipIds = roundBouts
+              .map((e) => {e.bout.r?.membership.id, e.bout.b?.membership.id})
+              .expand((element) => element);
+          if (!(upcomingMembershipIds.contains(boutToAdd.bout.r?.membership.id) ||
+              upcomingMembershipIds.contains(boutToAdd.bout.b?.membership.id))) {
+            roundBouts.add(boutToAdd);
+          }
+        }
+        // TODO: If the max bout count cannot be fulfilled, replace the last added item with the next possible one.
+        // TODO: If the max bout count still cannot be fulfilled, recursively remove the last 2[,3,...,n] items and replace with the next possible ones, until the max bout count is matched, or keep the last possible combination.
+        return roundBouts;
       default:
         // Nothing to pair
         return [];
     }
   }
+
+  HashSet<Set<int?>> _comparableHashSet(Iterable<Set<int?>> values) =>
+      HashSet<Set<int?>>(equals: DeepCollectionEquality().equals)..addAll(values);
 }

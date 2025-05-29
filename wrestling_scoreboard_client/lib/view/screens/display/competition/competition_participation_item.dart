@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionParticipationItem extends ConsumerWidget {
@@ -84,13 +86,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
                 decoration: BoxDecoration(border: Border.all(color: role.color())),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Center(
-                        child: ScaledText(
-                          '${opponentParticipation?.poolGroup?.toLetter() ?? ''}${opponentParticipation?.poolDrawNumber ?? '-'}',
-                        ),
-                      ),
-                    ),
+                    Expanded(child: Center(child: ScaledText(opponentParticipation?.displayPoolId ?? ''))),
                     Expanded(
                       child: Container(
                         color: cBout.bout.winnerRole == role ? role.color() : null,
@@ -135,20 +131,28 @@ class CompetitionParticipationItem extends ConsumerWidget {
           );
           i++;
         }
-        final isDisabled = participation.disqualified || participation.eliminated;
         final row = Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ScaledContainer(
               width: CompetitionParticipationItem.numberRelativeWidth,
-              child: ScaledText('${participation.poolGroup?.toLetter() ?? ''}${participation.poolDrawNumber ?? '-'}'),
+              child: ScaledText(participation.displayPoolId),
             ),
             VerticalDivider(),
             ScaledContainer(
               width: CompetitionParticipationItem.nameRelativeWidth,
-              child: ScaledText(
-                participation.membership.person.fullName,
-                decoration: isDisabled ? TextDecoration.lineThrough : null,
+              child: InkWell(
+                onTap: () {
+                  // FIXME: use `navigateToCompetitionParticipationOverview` route, https://github.com/flutter/flutter/issues/140586
+                  context.go('/${CompetitionParticipationOverview.route}/${participation.id}');
+                },
+                child: ScaledText(
+                  participation.membership.person.fullName,
+                  decoration:
+                      participation.contestantStatus == ContestantStatus.disqualified
+                          ? TextDecoration.lineThrough
+                          : null,
+                ),
               ),
             ),
             VerticalDivider(),
@@ -156,7 +160,8 @@ class CompetitionParticipationItem extends ConsumerWidget {
               width: CompetitionParticipationItem.clubRelativeWidth,
               child: ScaledText(
                 participation.lineup.club.name,
-                decoration: isDisabled ? TextDecoration.lineThrough : null,
+                decoration:
+                    participation.contestantStatus == ContestantStatus.disqualified ? TextDecoration.lineThrough : null,
               ),
             ),
             VerticalDivider(width: 1),
@@ -190,7 +195,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
             VerticalDivider(width: 1),
           ],
         );
-        if (isDisabled) {
+        if (participation.isExcluded) {
           return DefaultTextStyle.merge(child: row, style: TextStyle(color: Theme.of(context).disabledColor));
         }
         return row;

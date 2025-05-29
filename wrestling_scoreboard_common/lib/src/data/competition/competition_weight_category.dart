@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'competition_weight_category.freezed.dart';
-
 part 'competition_weight_category.g.dart';
 
 @freezed
@@ -57,6 +56,8 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
   static const cTableName = 'competition_weight_category';
 
   String get name => '${ageCategory.name} | ${weightClass.name}';
+
+  int? get displayPairedRound => pairedRound != null ? (pairedRound! + 1) : null;
 
   @override
   CompetitionWeightCategory copyWithId(int? id) {

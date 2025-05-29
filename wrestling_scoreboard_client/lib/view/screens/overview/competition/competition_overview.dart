@@ -160,7 +160,8 @@ class CompetitionOverview extends ConsumerWidget {
             filterObject: competition,
             itemBuilder: (context, competitionSystemAffiliation) {
               return ContentItem(
-                title: competitionSystemAffiliation.competitionSystem.name,
+                title:
+                    '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
                 icon: Icons.account_tree,
                 onTap: () async => _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
               );
