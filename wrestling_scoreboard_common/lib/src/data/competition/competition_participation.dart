@@ -5,6 +5,7 @@ import '../../../common.dart';
 part 'competition_participation.freezed.dart';
 part 'competition_participation.g.dart';
 
+// TODO: rename to CompetitionContestant
 /// The competition_participation of a person (member) on a team match or competition through the teams lineup.
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
 @freezed

@@ -40,8 +40,6 @@ enum BoutResult {
   /// Beide Ringer disqualifiziert wegen Unsportlichkeit / Regelwidrigkeit (DQ2)
   bothDsq;
 
-  String get name => toString().split('.').last;
-
   bool affectsBoth() {
     return this == BoutResult.bothVfo || this == BoutResult.bothVin || this == BoutResult.bothDsq;
   }

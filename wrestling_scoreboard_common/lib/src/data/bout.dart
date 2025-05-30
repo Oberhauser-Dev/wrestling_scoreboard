@@ -5,7 +5,7 @@ import '../../common.dart';
 part 'bout.freezed.dart';
 part 'bout.g.dart';
 
-/// The bout between two persons, which are represented by a ParticipantStatus.
+/// The bout between two persons, which are represented by a ParticipantState.
 @freezed
 abstract class Bout with _$Bout implements DataObject, Organizational {
   const Bout._();

@@ -3,7 +3,5 @@ enum BoutActionType {
   passivity, // 'P' (in greco) or 'A' (in free style)
   verbal, // V admonition 'V'
   caution, // yellow card 'O'
-  dismissal; // red card 'D'
-
-  String get name => toString().split('.').last;
+  dismissal, // red card 'D'
 }
