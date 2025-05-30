@@ -11,7 +11,5 @@ enum UserPrivilege with EnumIndexOrdering {
   write,
 
   /// User can edit privileges
-  admin;
-
-  String get name => toString().split('.').last;
+  admin,
 }
