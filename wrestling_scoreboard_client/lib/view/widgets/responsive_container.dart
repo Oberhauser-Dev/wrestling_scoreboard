@@ -2,16 +2,14 @@ import 'package:flutter/cupertino.dart';
 
 class ResponsiveContainer extends StatelessWidget {
   final Widget child;
+  final Alignment alignment;
 
-  const ResponsiveContainer({required this.child, super.key});
+  const ResponsiveContainer({required this.child, super.key, this.alignment = Alignment.topCenter});
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    return Align(
-      alignment: Alignment.topCenter,
-      child: SizedBox(width: _calculateContainerSize(screenSize), child: child),
-    );
+    return Align(alignment: alignment, child: SizedBox(width: _calculateContainerSize(screenSize), child: child));
   }
 
   double _calculateContainerSize(Size screenSize) {

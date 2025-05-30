@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class ExceptionCard extends StatelessWidget {
   final Object exception;
@@ -14,7 +15,8 @@ class ExceptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return ResponsiveContainer(
+      alignment: Alignment.center,
       child: PaddedCard(
         child: Column(
           mainAxisSize: MainAxisSize.min,
