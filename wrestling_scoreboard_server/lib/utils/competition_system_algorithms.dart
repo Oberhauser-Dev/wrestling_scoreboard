@@ -1,13 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 
 /// Returns a list of rounds (index) which hold a lists of bouts with red (id) and blue (id)
-List<List<(int?, int?)>> generateBergerTable(int participationSize) {
+List<List<(int?, int?)>> generateBergerTable(int participationSize, {int? maxRounds}) {
   final List<int?> participations = Iterable<int?>.generate(participationSize).toList();
   if (participations.length.isOdd) participations.insert(0, null);
   final useDummy = false;
 
   final n = participations.length;
-  final numberOfRounds = n - 1;
+  final numberOfRounds = math.min(maxRounds ?? participationSize - 1, participationSize - 1);
   final boutsPerRound = n ~/ 2;
 
   List<int?> columnA = participations.slice(0, boutsPerRound).toList();
@@ -49,4 +51,43 @@ List<(int?, int?)> generateDoubleEliminationRound({
   list.addAll(generateSingleEliminationRound(winnerBracket));
   list.addAll(generateSingleEliminationRound(looserBracket));
   return list;
+}
+
+Iterable<(int, int)> generateByeDoubleEliminationRound(List<int> remaining, Iterable<Set<int>> previousPairings) {
+  Iterable<Set<int>>? pairWithThreshold(
+    List<int> singles,
+    Iterable<Set<int>> oldPairs,
+    Iterable<Set<int>> newPairs,
+    int threshold,
+  ) {
+    if (singles.length <= threshold) return newPairs;
+
+    for (int i = 0; i < singles.length - 1; i++) {
+      for (int j = i + 1; j < singles.length; j++) {
+        final pair = {singles[i], singles[j]};
+        if (!{...oldPairs, ...newPairs}.any((s) => s.containsAll(pair))) {
+          List<int> recursiveSingles =
+              List.from(singles)
+                ..remove(singles[i])
+                ..remove(singles[j]);
+          final Iterable<Set<int>> recursivePairs = Set.from(newPairs)..add(pair);
+          final result = pairWithThreshold(recursiveSingles, oldPairs, recursivePairs, threshold);
+          if (result != null) return result;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  Iterable<(int, int)>? newPairings;
+  for (int i = 1; i <= remaining.length; i++) {
+    newPairings = pairWithThreshold(remaining, previousPairings, {}, i)?.map((e) {
+      final pair = e.toList();
+      return (pair[0], pair[1]);
+    });
+    if (newPairings != null) break;
+  }
+
+  return newPairings ?? [];
 }

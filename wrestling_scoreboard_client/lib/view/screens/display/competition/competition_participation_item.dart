@@ -17,6 +17,13 @@ class CompetitionParticipationItem extends ConsumerWidget {
   final CompetitionParticipation participation;
   final List<CompetitionParticipation> participations;
   final Map<int?, Set<CompetitionBout>> competitionBoutsByRound;
+
+  /// Ranking starts at 1
+  final int ranking;
+
+  /// Pool Ranking starts at 1
+  final int poolRanking;
+
   static const numberRelativeWidth = 0.03;
   static const nameRelativeWidth = 0.18;
   static const clubRelativeWidth = 0.15;
@@ -28,6 +35,8 @@ class CompetitionParticipationItem extends ConsumerWidget {
     required this.participation,
     required this.participations,
     required this.competitionBoutsByRound,
+    required this.ranking,
+    required this.poolRanking,
   });
 
   Future<List<BoutAction>> _getActions(WidgetRef ref, Bout bout) => ref.readAsync(
@@ -187,11 +196,15 @@ class CompetitionParticipationItem extends ConsumerWidget {
               ),
             ),
             VerticalDivider(width: 1),
-            // TODO: calculate
-            ScaledContainer(width: CompetitionParticipationItem.pointsRelativeWidth, child: ScaledText('-')),
+            ScaledContainer(
+              width: CompetitionParticipationItem.pointsRelativeWidth,
+              child: ScaledText(poolRanking.toString()),
+            ),
             VerticalDivider(width: 1),
-            // TODO: calculate
-            ScaledContainer(width: CompetitionParticipationItem.pointsRelativeWidth, child: ScaledText('-')),
+            ScaledContainer(
+              width: CompetitionParticipationItem.pointsRelativeWidth,
+              child: ScaledText(ranking.toString()),
+            ),
             VerticalDivider(width: 1),
           ],
         );

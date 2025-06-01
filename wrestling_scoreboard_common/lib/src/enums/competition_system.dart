@@ -9,6 +9,7 @@ enum CompetitionSystem {
   /// https://en.wikipedia.org/wiki/Round-robin_tournament
   nordic,
 
+  /// TODO: rewritten
   /// Mainly used in pool system.
   ///
   /// Run the nordic system.
