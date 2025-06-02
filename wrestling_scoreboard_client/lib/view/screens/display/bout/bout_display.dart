@@ -38,6 +38,7 @@ class BoutScreen extends ConsumerStatefulWidget {
   final double? weightB;
   final WeightClass? weightClass;
   final AgeCategory? ageCategory;
+  final String? roundDescription;
   final int? mat;
 
   // TODO: may overwrite in settings to be more flexible
@@ -59,6 +60,7 @@ class BoutScreen extends ConsumerStatefulWidget {
     required this.boutRules,
     required this.wrestlingEvent,
     required this.weightClass,
+    this.roundDescription,
     this.ageCategory,
     required this.weightR,
     required this.weightB,
@@ -493,6 +495,8 @@ class BoutState extends ConsumerState<BoutScreen> {
                                   ),
                                 ],
                               ),
+                              if (widget.roundDescription != null)
+                                Center(child: ScaledText(widget.roundDescription!, fontSize: 22, minFontSize: 10)),
                               if (widget.ageCategory != null)
                                 Center(child: ScaledText(widget.ageCategory!.name, fontSize: 22, minFontSize: 10)),
                               if (weightClass != null)

@@ -3,12 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
-import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -16,13 +13,15 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CompetitionParticipationItem extends ConsumerWidget {
   final CompetitionParticipation participation;
   final List<CompetitionParticipation> participations;
-  final Map<int?, Set<CompetitionBout>> competitionBoutsByRound;
+  final Map<int?, Map<CompetitionBout, Iterable<BoutAction>>> competitionBoutsByRound;
 
   /// Ranking starts at 1
-  final int ranking;
+  final int? ranking;
 
   /// Pool Ranking starts at 1
-  final int poolRanking;
+  final int? poolRanking;
+
+  final RankingMetric? rankingMetric;
 
   static const numberRelativeWidth = 0.03;
   static const nameRelativeWidth = 0.18;
@@ -37,11 +36,8 @@ class CompetitionParticipationItem extends ConsumerWidget {
     required this.competitionBoutsByRound,
     required this.ranking,
     required this.poolRanking,
+    required this.rankingMetric,
   });
-
-  Future<List<BoutAction>> _getActions(WidgetRef ref, Bout bout) => ref.readAsync(
-    manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
-  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,13 +47,11 @@ class CompetitionParticipationItem extends ConsumerWidget {
       builder: (context, participation) {
         final items = <Widget>[];
         int i = 0;
-        int wins = 0;
-        int classificationPointsSum = 0;
-        List<Future<int>> futureTechnicalPointsList = [];
         while (competitionBoutsByRound[i] != null) {
           final Widget item;
+          final competitionBoutsOfRound = competitionBoutsByRound[i]!;
           final cBout =
-              competitionBoutsByRound[i]!
+              competitionBoutsOfRound.keys
                   .where(
                     (element) =>
                         element.bout.r?.membership == participation.membership ||
@@ -80,15 +74,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
               opponentParticipation =
                   participations.where((element) => element.membership == cBout.bout.r?.membership).zeroOrOne;
             }
-            if (cBout.bout.winnerRole == role) {
-              wins++;
-            }
-            classificationPointsSum += boutState?.classificationPoints ?? 0;
-            final futureTechnicalPoints = _getActions(
-              ref,
-              cBout.bout,
-            ).then((actions) => AthleteBoutState.getTechnicalPoints(actions, role));
-            futureTechnicalPointsList.add(futureTechnicalPoints);
+            final technicalPoints = AthleteBoutState.getTechnicalPoints(competitionBoutsOfRound[cBout]!, role);
             item = InkWell(
               onTap: () => navigateToCompetitionBoutScreen(context, cBout),
               child: Container(
@@ -102,22 +88,17 @@ class CompetitionParticipationItem extends ConsumerWidget {
                         child: Column(
                           children: [
                             ScaledText(cBout.bout.result?.abbreviation(context) ?? '-', fontSize: 8),
-                            LoadingBuilder(
-                              future: futureTechnicalPoints,
-                              builder: (context, technicalPoints) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ScaledText(
-                                      boutState?.classificationPoints?.toString() ?? '-',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 8,
-                                    ),
-                                    if (technicalPoints > 0 || boutState?.classificationPoints != null)
-                                      ScaledText(' | $technicalPoints', fontSize: 8),
-                                  ],
-                                );
-                              },
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ScaledText(
+                                  boutState?.classificationPoints?.toString() ?? '-',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 8,
+                                ),
+                                if (technicalPoints > 0 || boutState?.classificationPoints != null)
+                                  ScaledText(' | $technicalPoints', fontSize: 8),
+                              ],
                             ),
                           ],
                         ),
@@ -178,32 +159,27 @@ class CompetitionParticipationItem extends ConsumerWidget {
             VerticalDivider(width: 1),
             ScaledContainer(
               width: CompetitionParticipationItem.pointsRelativeWidth,
-              child: ScaledText(wins.toString()),
+              child: ScaledText(rankingMetric?.wins.toString() ?? '-'),
             ),
             VerticalDivider(width: 1),
             ScaledContainer(
               width: CompetitionParticipationItem.pointsRelativeWidth,
-              child: ScaledText(classificationPointsSum.toString()),
+              child: ScaledText(rankingMetric?.classificationPoints.toString() ?? '-'),
             ),
             VerticalDivider(width: 1),
             ScaledContainer(
               width: CompetitionParticipationItem.pointsRelativeWidth,
-              child: LoadingBuilder(
-                future: Future.wait(futureTechnicalPointsList).then((list) => list.fold(0, (prev, cur) => prev + cur)),
-                builder: (context, technicalPointsSum) {
-                  return ScaledText(technicalPointsSum.toString());
-                },
-              ),
+              child: ScaledText(rankingMetric?.technicalPoints.toString() ?? '-'),
             ),
             VerticalDivider(width: 1),
             ScaledContainer(
               width: CompetitionParticipationItem.pointsRelativeWidth,
-              child: ScaledText(poolRanking.toString()),
+              child: ScaledText(poolRanking?.toString() ?? '-'),
             ),
             VerticalDivider(width: 1),
             ScaledContainer(
               width: CompetitionParticipationItem.pointsRelativeWidth,
-              child: ScaledText(ranking.toString()),
+              child: ScaledText(ranking?.toString() ?? '-'),
             ),
             VerticalDivider(width: 1),
           ],

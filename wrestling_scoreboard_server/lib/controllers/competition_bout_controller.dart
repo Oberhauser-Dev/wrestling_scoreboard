@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/utils/competition_system_algorithms.dart';
 
+import 'bout_action_controller.dart';
 import 'competition_participation_controller.dart';
 import 'competition_weight_category_controller.dart';
 import 'entity_controller.dart';
@@ -84,6 +85,11 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             updatedCompetitionBout.weightCategory!.id!,
             obfuscate: obfuscate,
           );
+          final pastCompetitionBoutsWithActions = await Future.wait(
+            pastCompetitionBouts.map(
+              (cb) async => MapEntry(cb, await BoutActionController().getByBout(cb.bout.id!, obfuscate: obfuscate)),
+            ),
+          );
           final competitionBoutsOfRound = pastCompetitionBouts.where((cb) => cb.round == updatedCompetitionBout.round);
 
           if (competitionBoutsOfRound.every((cb) => cb.bout.result != null)) {
@@ -100,11 +106,14 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             final List<CompetitionBout> createdCompetitionBouts = [];
 
             if (roundType == RoundType.elimination) {
+              final pastEliminationBouts = Map.fromEntries(
+                pastCompetitionBoutsWithActions.where((cb) => cb.key.roundType == RoundType.elimination),
+              );
               for (final poolParticipations in poolParticipationGroups.values) {
                 final poolCompetitionBouts = await _updatePoolCompetitionBouts(
                   weightCategory: weightCategory,
                   pairedRound: pairedRound,
-                  pastCompetitionBouts: pastCompetitionBouts,
+                  pastCompetitionBoutsWithActions: pastEliminationBouts,
                   poolParticipations: poolParticipations,
                 );
                 createdCompetitionBouts.addAll(poolCompetitionBouts);
@@ -112,15 +121,19 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
               // If all pool bouts were finished
               if (createdCompetitionBouts.isEmpty) {
                 // Calculate pool rankings
-                final List<List<(CompetitionParticipation, int, int)>> poolRankings = [];
+                final List<List<RankingMetric>> rankingByPool = [];
                 for (final poolParticipations in poolParticipationGroups.values) {
-                  poolRankings.add(
-                    CompetitionWeightCategory.calculateRanking(poolParticipations, pastCompetitionBouts),
+                  rankingByPool.add(
+                    CompetitionWeightCategory.calculatePoolRanking(
+                      poolParticipations,
+                      pastEliminationBouts,
+                      weightCategory.competitionSystem,
+                    ),
                   );
                 }
                 if (weightCategory.poolGroupCount >= 2) {
                   // Slice pools in 2, so each can compete against another pool (in most cases there are only 2 pools anyways).
-                  final poolRankingSlices = poolRankings.slices(2);
+                  final poolRankingSlices = rankingByPool.slices(2);
                   // TODO: implement "across" mode.
                   final isAcross = false;
                   for (final poolRankingSlice in poolRankingSlices) {
@@ -130,7 +143,8 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                       createdCompetitionBouts.addAll(
                         CompetitionWeightCategoryController.convertBoutsOfRound(
                           weightCategory,
-                          [poolRankingSlice[0][0].$1, poolRankingSlice[1][0].$1],
+                          // [Pool A][first] against [Pool B][second]
+                          [poolRankingSlice[0][0].participation, poolRankingSlice[1][1].participation],
                           round: pairedRound,
                           boutIndexListOfRound: [(0, 1)],
                           roundType: roundType,
@@ -139,7 +153,8 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                       createdCompetitionBouts.addAll(
                         CompetitionWeightCategoryController.convertBoutsOfRound(
                           weightCategory,
-                          [poolRankingSlice[0][1].$1, poolRankingSlice[1][1].$1],
+                          // [Pool A][second] against [Pool B][first]
+                          [poolRankingSlice[0][1].participation, poolRankingSlice[1][0].participation],
                           round: pairedRound,
                           boutIndexListOfRound: [(0, 1)],
                           roundType: roundType,
@@ -148,24 +163,23 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                       // TODO: pair finals
                     } else {
                       roundType = RoundType.finals;
-                      createdCompetitionBouts.addAll(
-                        CompetitionWeightCategoryController.convertBoutsOfRound(
-                          weightCategory,
-                          [poolRankingSlice[0][0].$1, poolRankingSlice[1][1].$1],
-                          round: pairedRound,
-                          boutIndexListOfRound: [(0, 1)],
-                          roundType: roundType,
-                        ),
-                      );
-                      createdCompetitionBouts.addAll(
-                        CompetitionWeightCategoryController.convertBoutsOfRound(
-                          weightCategory,
-                          [poolRankingSlice[0][1].$1, poolRankingSlice[1][0].$1],
-                          round: pairedRound,
-                          boutIndexListOfRound: [(0, 1)],
-                          roundType: roundType,
-                        ),
-                      );
+                      int rank = 0;
+                      while (rank < poolRankingSlice[0].length &&
+                          rank < poolRankingSlice[1].length &&
+                          rank < maxPoolFinalists) {
+                        createdCompetitionBouts.addAll(
+                          CompetitionWeightCategoryController.convertBoutsOfRound(
+                            weightCategory,
+                            // [Pool A][rank] against [Pool B][rank]
+                            [poolRankingSlice[0][rank].participation, poolRankingSlice[1][rank].participation],
+                            round: pairedRound,
+                            boutIndexListOfRound: [(0, 1)],
+                            roundType: roundType,
+                            rank: rank,
+                          ),
+                        );
+                        rank++;
+                      }
                     }
                   }
                 }
@@ -190,7 +204,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'mat': psql.Type.smallInteger, 'round': psql.Type.smallInteger};
+    return {'mat': psql.Type.smallInteger, 'round': psql.Type.smallInteger, 'rank': psql.Type.smallInteger};
   }
 
   Future<List<CompetitionBout>> getByWeightCategory(int id, {required bool obfuscate}) async {
@@ -201,10 +215,12 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
     );
   }
 
+  static const maxPoolFinalists = 3;
+
   Future<List<CompetitionBout>> _updatePoolCompetitionBouts({
     required CompetitionWeightCategory weightCategory,
     required List<CompetitionParticipation> poolParticipations,
-    required List<CompetitionBout> pastCompetitionBouts,
+    required Map<CompetitionBout, Iterable<BoutAction>> pastCompetitionBoutsWithActions,
     required int pairedRound,
   }) async {
     final roundType = RoundType.elimination;
@@ -215,7 +231,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           // Skip already excluded participants.
           if (participation.isExcluded) continue;
           // Eliminate participants with 2 or more losses.
-          final participantLosses = pastCompetitionBouts.where((cb) {
+          final participantLosses = pastCompetitionBoutsWithActions.keys.where((cb) {
             return (cb.bout.r?.membership == participation.membership && cb.bout.winnerRole != BoutRole.red) ||
                 (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
           });
@@ -245,7 +261,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           // Skip already excluded participants.
           if (participation.isExcluded) continue;
           // Eliminate participants with 2 or more losses.
-          final participantLosses = pastCompetitionBouts.where((cb) {
+          final participantLosses = pastCompetitionBoutsWithActions.keys.where((cb) {
             return (cb.bout.r?.membership == participation.membership && cb.bout.winnerRole != BoutRole.red) ||
                 (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
           });
@@ -295,7 +311,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           // Skip already excluded participants.
           if (participation.isExcluded) continue;
           // Eliminate participants with 2 or more losses.
-          final participantLosses = pastCompetitionBouts.where((cb) {
+          final participantLosses = pastCompetitionBoutsWithActions.keys.where((cb) {
             return (cb.bout.r?.membership == participation.membership && cb.bout.winnerRole != BoutRole.red) ||
                 (cb.bout.b?.membership == participation.membership && cb.bout.winnerRole != BoutRole.blue);
           });
@@ -306,18 +322,21 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           }
         }
 
-        if (nonEliminatedPoolParticipants.length <= 2) {
-          // At least 3 participants need to be ranked.
-          final ranking = CompetitionWeightCategory.calculateRanking(poolParticipations, pastCompetitionBouts);
+        if (nonEliminatedPoolParticipants.length < maxPoolFinalists) {
+          // At least $rankedPoolCount participants need to be ranked.
+          final ranking = CompetitionWeightCategory.calculateRankingByPoints(
+            poolParticipations,
+            pastCompetitionBoutsWithActions,
+          );
 
-          for (int i = 0; i < 3 && i < ranking.length; i++) {
-            nonEliminatedPoolParticipants.add(ranking[i].$1);
-            eliminatedPoolParticipants.remove(ranking[i].$1);
+          for (int i = 0; i < maxPoolFinalists && i < ranking.length; i++) {
+            nonEliminatedPoolParticipants.add(ranking[i].participation);
+            eliminatedPoolParticipants.remove(ranking[i].participation);
           }
 
-          if (nonEliminatedPoolParticipants.length > 3) {
+          if (nonEliminatedPoolParticipants.length > maxPoolFinalists) {
             throw Exception(
-              'Something went wrong during the pool pairing! More than 3 participants left. Please investigate!\n$poolParticipations',
+              'Something went wrong during the pool pairing! More than $maxPoolFinalists participants left. Please investigate!\n$poolParticipations',
             );
           }
         }
@@ -336,7 +355,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           boutIndexListOfRound:
               generateByeDoubleEliminationRound(
                 nonEliminatedPoolParticipantsAsList.map((e) => e.membership.id!).toList(),
-                pastCompetitionBouts.map((e) => {e.bout.r!.membership.id!, e.bout.b!.membership.id!}),
+                pastCompetitionBoutsWithActions.keys.map((e) => {e.bout.r!.membership.id!, e.bout.b!.membership.id!}),
               ).map((boutMembershipIds) {
                 // Convert membership id to index of participants list
                 return (

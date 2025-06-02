@@ -56,6 +56,10 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     );
   }
 
+  AthleteBoutState? get winner => winnerRole == BoutRole.red ? r : (winnerRole == BoutRole.blue ? b : null);
+
+  AthleteBoutState? get looser => winnerRole == BoutRole.red ? b : (winnerRole == BoutRole.blue ? r : null);
+
   Bout updateClassificationPoints(
     List<BoutAction> actions, {
     required List<BoutResultRule> rules,

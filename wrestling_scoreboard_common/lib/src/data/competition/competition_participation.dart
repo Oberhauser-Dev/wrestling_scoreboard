@@ -64,6 +64,11 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
 
   String get displayPoolId => '${poolGroup?.toLetter() ?? ''}${displayPoolDrawNumber?.toString() ?? '-'}';
 
+  bool get isRanked =>
+      contestantStatus == null ||
+      contestantStatus == ContestantStatus.eliminated ||
+      contestantStatus == ContestantStatus.injured;
+
   bool get isExcluded =>
       contestantStatus == ContestantStatus.eliminated ||
       contestantStatus == ContestantStatus.disqualified ||

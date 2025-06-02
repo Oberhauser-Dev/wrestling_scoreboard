@@ -247,12 +247,14 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     }).toList();
   }
 
+  /// The [boutIndexListOfRound] is the list of bouts referencing the index in [participations] list.
   static List<CompetitionBout> convertBoutsOfRound(
     CompetitionWeightCategory weightCategory,
     List<CompetitionParticipation> participations, {
     required List<(int?, int?)> boutIndexListOfRound,
     required int round,
     required RoundType roundType,
+    int? rank,
   }) {
     return boutIndexListOfRound.indexed
         .map((indexedBoutTuple) {
@@ -271,6 +273,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
               b: AthleteBoutState(membership: participations[bIndex].membership),
             ),
             roundType: roundType,
+            rank: rank,
           );
         })
         .nonNulls

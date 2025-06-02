@@ -406,6 +406,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get round => 'Round';
 
   @override
+  String get roundType => 'Round Type';
+
+  @override
   String get qualification => 'Qualification';
 
   @override

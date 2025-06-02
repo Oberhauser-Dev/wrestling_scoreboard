@@ -410,6 +410,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get round => 'Runde';
 
   @override
+  String get roundType => 'Rundentyp';
+
+  @override
   String get qualification => 'Qualifikation';
 
   @override

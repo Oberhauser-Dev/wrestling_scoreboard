@@ -52,19 +52,16 @@
   "resetDatabase": "Reset database",
   "bellSound": "Bell sound",
   "timeCountDown": "Count down the time",
-
   "profile": "Profile",
   "username": "Username",
   "usernameRequirementsWarning": "A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).",
   "password": "Password",
   "email": "Email",
-
   "administration": "Administration",
   "users": "Users",
   "user": "User",
   "joinedOn": "Joined on",
   "privilege": "Privilege",
-
   "auth_signIn": "Sign in",
   "auth_signInPrompt_phrase": "Already have an account? Sign In",
   "auth_signIntoAccount_phrase": "Sign in to your account",
@@ -76,7 +73,6 @@
   "auth_password_save_phrase": "Save password",
   "auth_change_password": "Change password",
   "auth_agreeTermsAndConditions_phrase": "I read and agree to Terms & Conditions",
-
   "imprint": "Imprint",
   "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",
   "about": "About",
@@ -88,7 +84,6 @@
   "about_Development": "Development",
   "about_development_phrase": "August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)",
   "privacy_policy": "Privacy Policy",
-
   "optionSelect": "select",
   "noneSelected": "None selected",
   "create": "Create",
@@ -129,7 +124,6 @@
   "infoUseDivisionWeightClass": "Only define weight classes per league, if they differ from those of its division!",
   "retry": "Retry",
   "networkTimeout": "Network timeout",
-
   "event": "Event",
   "place": "Place",
   "date": "Date",
@@ -137,7 +131,6 @@
   "seconds": "Seconds",
   "startDate": "Beginning",
   "endDate": "End",
-
   "wrestlingRulesPdf": "https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf",
   "teamMatchTranscript": "Transcript for Team Matches",
   "teamMatchScoreSheet": "Score sheet for Team Matches",
@@ -148,6 +141,7 @@
   "poolGroupCount": "Pool group count",
   "rank": "Rank",
   "round": "Round",
+  "roundType": "Round Type",
   "qualification": "Qualification",
   "contestantStatus": "Contestant Status",
   "elimination": "Elimination",
@@ -164,7 +158,6 @@
   "numberAbbreviation": "No.",
   "total": "Total",
   "participantVacant": "vacant",
-
   "weight": "Weight",
   "weightClass": "Weight Class",
   "weightClasses": "Weight Classes",
@@ -254,7 +247,6 @@
   "boutConfig": "Bout configuration",
   "boutResultRule": "Bout Result Rule",
   "boutResultRules": "Bout Result Rules",
-
   "red": "Red",
   "blue": "Blue",
   "winner": "Winner",
@@ -292,7 +284,6 @@
   "days": "Days",
   "minimum": "Minimum",
   "maximum": "Maximum",
-
   "referee": "Referee",
   "refereeAbbr": "REF",
   "judge": "Judge",
@@ -300,7 +291,6 @@
   "timeKeeper": "Time Keeper",
   "transcriptionWriter": "Transcription Writer",
   "steward": "Steward",
-
   "prename": "Prename",
   "surname": "Surname",
   "age": "Age",

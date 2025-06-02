@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
@@ -37,12 +37,11 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
       itemBuilder: (context, competitionBout) {
         final bout = competitionBout.bout;
         final weightCategory = competitionBout.weightCategory;
-        final weightCategoryStr =
-            '${weightCategory?.name}, ${weightCategory?.weightClass.style.abbreviation(context)} | ';
+        final weightCategoryStr = '${weightCategory?.name}, ${weightCategory?.weightClass.style.abbreviation(context)}';
         return ListTile(
           title: Text.rich(
             TextSpan(
-              text: '${competitionBout.competition.date.toDateString(context)}, $weightCategoryStr',
+              text: '$weightCategoryStr | ${competitionBout.roundDescription(context)} | ',
               children: [
                 TextSpan(
                   text: bout.r?.fullName(context) ?? localizations.participantVacant,
