@@ -307,13 +307,13 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
         }
 
         if (nonEliminatedPoolParticipants.length <= 2) {
+          // At least 3 participants need to be ranked.
           final ranking = CompetitionWeightCategory.calculateRanking(poolParticipations, pastCompetitionBouts);
-          nonEliminatedPoolParticipants.add(ranking[0].$1);
-          eliminatedPoolParticipants.remove(ranking[0].$1);
-          nonEliminatedPoolParticipants.add(ranking[1].$1);
-          eliminatedPoolParticipants.remove(ranking[1].$1);
-          nonEliminatedPoolParticipants.add(ranking[2].$1);
-          eliminatedPoolParticipants.remove(ranking[2].$1);
+
+          for (int i = 0; i < 3 && i < ranking.length; i++) {
+            nonEliminatedPoolParticipants.add(ranking[i].$1);
+            eliminatedPoolParticipants.remove(ranking[i].$1);
+          }
 
           if (nonEliminatedPoolParticipants.length > 3) {
             throw Exception(
