@@ -119,7 +119,7 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                     for (final participationOfPoolGroup in participationsOfPoolGroup) {
                       final poolRanking = CompetitionWeightCategory.calculateRanking(
                         participationsOfPoolGroup,
-                        competitionBouts,
+                        competitionBouts.where((cb) => cb.roundType == RoundType.elimination),
                       );
                       participantWidgets.add(
                         Column(

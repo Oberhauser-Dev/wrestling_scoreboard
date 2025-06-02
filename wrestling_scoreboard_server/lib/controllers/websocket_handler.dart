@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/auth.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 
+import 'competition_bout_controller.dart';
 import 'entity_controller.dart';
 
 final _logger = Logger('Websocket');
@@ -55,7 +56,27 @@ void broadcastSingle<T extends DataObject>(T single) async {
     });
   });
 
-  if (single is Club) {
+  if (single is Bout) {
+    // Update the competition bout, if its bout has changed, but only if the a result is present.
+    if (single.result != null) {
+      broadcast(
+        (obfuscate) async => jsonEncode(
+          manyToJson(
+            await CompetitionBoutController().getMany(
+              conditions: ['bout_id = @id'],
+              substitutionValues: {'id': single.id},
+              obfuscate: obfuscate,
+            ),
+            CompetitionBout,
+            CRUD.update,
+            isRaw: false,
+            filterType: Bout,
+            filterId: single.id,
+          ),
+        ),
+      );
+    }
+  } else if (single is Club) {
     broadcast(
       (obfuscate) async => jsonEncode(
         manyToJson(
@@ -336,7 +357,8 @@ Future<int> handleSingle<T extends DataObject>({
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
     broadcastSingle<T>(single);
   } else if (operation == CRUD.update &&
-      (single is BoutAction /* Order of BoutAction changes */ ||
+      (single is Bout /* Bout result changes ranking */ ||
+          single is BoutAction /* Order of BoutAction changes */ ||
           single is CompetitionBout /* Mat changes in display */ )) {
     // Update nonetheless, if order of items has changed
     broadcastSingle<T>(single);

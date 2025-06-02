@@ -100,11 +100,12 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
             final List<CompetitionBout> createdCompetitionBouts = [];
 
             if (roundType == RoundType.elimination) {
+              final pastEliminationBouts = pastCompetitionBouts.where((cb) => cb.roundType == RoundType.elimination);
               for (final poolParticipations in poolParticipationGroups.values) {
                 final poolCompetitionBouts = await _updatePoolCompetitionBouts(
                   weightCategory: weightCategory,
                   pairedRound: pairedRound,
-                  pastCompetitionBouts: pastCompetitionBouts,
+                  pastCompetitionBouts: pastEliminationBouts,
                   poolParticipations: poolParticipations,
                 );
                 createdCompetitionBouts.addAll(poolCompetitionBouts);
@@ -114,9 +115,26 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                 // Calculate pool rankings
                 final List<List<(CompetitionParticipation, int, int)>> poolRankings = [];
                 for (final poolParticipations in poolParticipationGroups.values) {
-                  poolRankings.add(
-                    CompetitionWeightCategory.calculateRanking(poolParticipations, pastCompetitionBouts),
-                  );
+                  final qualifactionGroups = poolParticipations.groupListsBy((element) => !element.isExcluded);
+                  final List<CompetitionParticipation> poolRanking = [];
+                  if (qualifactionGroups[true] != null) {
+                    // Add the ones who are not excluded, e.g. when the ranking only applies between the last 3.
+                    poolRanking.addAll(
+                      CompetitionWeightCategory.calculateRanking(
+                        qualifactionGroups[true]!,
+                        pastEliminationBouts,
+                      ).map((e) => e.$1),
+                    );
+                  }
+                  if (qualifactionGroups[false] != null) {
+                    // Add the ones who are excluded
+                    poolRanking.addAll(
+                      CompetitionWeightCategory.calculateRanking(
+                        qualifactionGroups[false]!,
+                        pastEliminationBouts,
+                      ).map((e) => e.$1),
+                    );
+                  }
                 }
                 if (weightCategory.poolGroupCount >= 2) {
                   // Slice pools in 2, so each can compete against another pool (in most cases there are only 2 pools anyways).
@@ -204,7 +222,7 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
   Future<List<CompetitionBout>> _updatePoolCompetitionBouts({
     required CompetitionWeightCategory weightCategory,
     required List<CompetitionParticipation> poolParticipations,
-    required List<CompetitionBout> pastCompetitionBouts,
+    required Iterable<CompetitionBout> pastCompetitionBouts,
     required int pairedRound,
   }) async {
     final roundType = RoundType.elimination;
