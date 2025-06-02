@@ -1,6 +1,4 @@
-import 'dart:collection';
 import 'dart:convert';
-import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:postgres/postgres.dart' as psql;
@@ -116,7 +114,9 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
                 // Calculate pool rankings
                 final List<List<(CompetitionParticipation, int, int)>> poolRankings = [];
                 for (final poolParticipations in poolParticipationGroups.values) {
-                  poolRankings.add(_calculateRanking(poolParticipations, pastCompetitionBouts));
+                  poolRankings.add(
+                    CompetitionWeightCategory.calculateRanking(poolParticipations, pastCompetitionBouts),
+                  );
                 }
                 if (weightCategory.poolGroupCount >= 2) {
                   // Slice pools in 2, so each can compete against another pool (in most cases there are only 2 pools anyways).
@@ -199,40 +199,6 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
       substitutionValues: {'id': id},
       obfuscate: obfuscate,
     );
-  }
-
-  /// Calculate the ranking as tuple of (participant, classificationPoints, technicalPoints)
-  List<(CompetitionParticipation, int, int)> _calculateRanking(
-    Iterable<CompetitionParticipation> participations,
-    Iterable<CompetitionBout> pastCompetitionBouts,
-  ) {
-    final List<(CompetitionParticipation, int, int)> ranking = [];
-    for (final participant in participations) {
-      final participantBoutsRed = pastCompetitionBouts.where(
-        (bout) => bout.bout.r?.membership == participant.membership,
-      );
-      final participantBoutsBlue = pastCompetitionBouts.where(
-        (bout) => bout.bout.b?.membership == participant.membership,
-      );
-      final classificationPoints =
-          participantBoutsRed.fold<int>(
-            0,
-            (previousValue, element) => previousValue + (element.bout.r?.classificationPoints ?? 0),
-          ) +
-          participantBoutsBlue.fold<int>(
-            0,
-            (previousValue, element) => previousValue + (element.bout.b?.classificationPoints ?? 0),
-          );
-      // TODO: get all bout actions to sum up the technical points
-      final technicalPoints = 0;
-      ranking.add((participant, classificationPoints, technicalPoints));
-      ranking.sort((a, b) {
-        int cmp = b.$2.compareTo(a.$2);
-        if (cmp != 0) return cmp;
-        return b.$3.compareTo(a.$3);
-      });
-    }
-    return ranking;
   }
 
   Future<List<CompetitionBout>> _updatePoolCompetitionBouts({
@@ -341,13 +307,13 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
         }
 
         if (nonEliminatedPoolParticipants.length <= 2) {
-          final ranking = _calculateRanking(poolParticipations, pastCompetitionBouts);
-          nonEliminatedPoolParticipants.add(ranking[0].$1);
-          eliminatedPoolParticipants.remove(ranking[0].$1);
-          nonEliminatedPoolParticipants.add(ranking[1].$1);
-          eliminatedPoolParticipants.remove(ranking[1].$1);
-          nonEliminatedPoolParticipants.add(ranking[2].$1);
-          eliminatedPoolParticipants.remove(ranking[2].$1);
+          // At least 3 participants need to be ranked.
+          final ranking = CompetitionWeightCategory.calculateRanking(poolParticipations, pastCompetitionBouts);
+
+          for (int i = 0; i < 3 && i < ranking.length; i++) {
+            nonEliminatedPoolParticipants.add(ranking[i].$1);
+            eliminatedPoolParticipants.remove(ranking[i].$1);
+          }
 
           if (nonEliminatedPoolParticipants.length > 3) {
             throw Exception(
@@ -363,45 +329,31 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
           );
         }
 
-        // Calculate a nordic system with the remaining participants.
-        final rounds = CompetitionWeightCategoryController.convertBouts(
+        final nonEliminatedPoolParticipantsAsList = nonEliminatedPoolParticipants.toList();
+        return CompetitionWeightCategoryController.convertBoutsOfRound(
           weightCategory,
-          nonEliminatedPoolParticipants.toList(),
-          boutIndexList: generateBergerTable(nonEliminatedPoolParticipants.length),
+          nonEliminatedPoolParticipantsAsList,
+          boutIndexListOfRound:
+              generateByeDoubleEliminationRound(
+                nonEliminatedPoolParticipantsAsList.map((e) => e.membership.id!).toList(),
+                pastCompetitionBouts.map((e) => {e.bout.r!.membership.id!, e.bout.b!.membership.id!}),
+              ).map((boutMembershipIds) {
+                // Convert membership id to index of participants list
+                return (
+                  nonEliminatedPoolParticipantsAsList.indexWhere(
+                    (participant) => participant.membership.id == boutMembershipIds.$1,
+                  ),
+                  nonEliminatedPoolParticipantsAsList.indexWhere(
+                    (participant) => participant.membership.id == boutMembershipIds.$2,
+                  ),
+                );
+              }).toList(),
           roundType: RoundType.elimination,
-          roundShift: pairedRound,
+          round: pairedRound,
         );
-        var remainingBouts = rounds.expand((element) => element).toList();
-        final pastPairingIds = _comparableHashSet(
-          pastCompetitionBouts.map((e) => {e.bout.r?.membership.id, e.bout.b?.membership.id}),
-        );
-        // Skip all bouts, which already have taken place.
-        remainingBouts.removeWhere((remainingBout) {
-          final pIdSet = {remainingBout.bout.r?.membership.id, remainingBout.bout.b?.membership.id};
-          return pastPairingIds.contains(pIdSet);
-        });
-        final maxBoutCount = math.min(remainingBouts.length, nonEliminatedPoolParticipants.length ~/ 2);
-        final List<CompetitionBout> roundBouts = [];
-        for (int i = 0; roundBouts.length <= maxBoutCount && i < remainingBouts.length; i++) {
-          // Skip a bout, if one of its participant already has a fight in the upcoming round.
-          final boutToAdd = remainingBouts[i];
-          final upcomingMembershipIds = roundBouts
-              .map((e) => {e.bout.r?.membership.id, e.bout.b?.membership.id})
-              .expand((element) => element);
-          if (!(upcomingMembershipIds.contains(boutToAdd.bout.r?.membership.id) ||
-              upcomingMembershipIds.contains(boutToAdd.bout.b?.membership.id))) {
-            roundBouts.add(boutToAdd);
-          }
-        }
-        // TODO: If the max bout count cannot be fulfilled, replace the last added item with the next possible one.
-        // TODO: If the max bout count still cannot be fulfilled, recursively remove the last 2[,3,...,n] items and replace with the next possible ones, until the max bout count is matched, or keep the last possible combination.
-        return roundBouts;
       default:
         // Nothing to pair
         return [];
     }
   }
-
-  HashSet<Set<int?>> _comparableHashSet(Iterable<Set<int?>> values) =>
-      HashSet<Set<int?>>(equals: DeepCollectionEquality().equals)..addAll(values);
 }

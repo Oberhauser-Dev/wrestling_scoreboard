@@ -63,4 +63,38 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
   CompetitionWeightCategory copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  /// Calculate the ranking as tuple of (participant, classificationPoints, technicalPoints)
+  static List<(CompetitionParticipation, int, int)> calculateRanking(
+    Iterable<CompetitionParticipation> participations,
+    Iterable<CompetitionBout> pastCompetitionBouts,
+  ) {
+    final List<(CompetitionParticipation, int, int)> ranking = [];
+    for (final participant in participations) {
+      final participantBoutsRed = pastCompetitionBouts.where(
+        (bout) => bout.bout.r?.membership == participant.membership,
+      );
+      final participantBoutsBlue = pastCompetitionBouts.where(
+        (bout) => bout.bout.b?.membership == participant.membership,
+      );
+      final classificationPoints =
+          participantBoutsRed.fold<int>(
+            0,
+            (previousValue, element) => previousValue + (element.bout.r?.classificationPoints ?? 0),
+          ) +
+          participantBoutsBlue.fold<int>(
+            0,
+            (previousValue, element) => previousValue + (element.bout.b?.classificationPoints ?? 0),
+          );
+      // TODO: get all bout actions to sum up the technical points
+      final technicalPoints = 0;
+      ranking.add((participant, classificationPoints, technicalPoints));
+      ranking.sort((a, b) {
+        int cmp = b.$2.compareTo(a.$2);
+        if (cmp != 0) return cmp;
+        return b.$3.compareTo(a.$3);
+      });
+    }
+    return ranking;
+  }
 }

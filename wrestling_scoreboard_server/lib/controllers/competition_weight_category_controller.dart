@@ -165,11 +165,10 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           final rounds = convertBouts(
             competitionWeightCategory,
             updatedPoolParticipations,
-            boutIndexList: generateBergerTable(updatedPoolParticipations.length),
+            boutIndexList: generateBergerTable(updatedPoolParticipations.length, maxRounds: 2),
             roundType: RoundType.elimination,
           );
-          createdBouts.addAll(rounds[0]);
-          createdBouts.addAll(rounds[1]);
+          createdBouts.addAll(rounds.expand((element) => element));
         }
         competitionWeightCategory = competitionWeightCategory.copyWith(pairedRound: 1);
     }

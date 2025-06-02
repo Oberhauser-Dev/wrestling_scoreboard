@@ -89,9 +89,14 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
               final competitionParticipationsByPool = competitionParticipations.groupListsBy(
                 (element) => element.poolGroup,
               );
+
               return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
                 filterObject: competitionWeightCategory,
                 builder: (context, competitionBouts) {
+                  final ranking = CompetitionWeightCategory.calculateRanking(
+                    competitionParticipations,
+                    competitionBouts,
+                  );
                   final competitionBoutsByRound = SplayTreeMap<int?, Set<CompetitionBout>>.from(
                     competitionBouts.groupSetsBy((element) => element.round),
                   );
@@ -112,6 +117,10 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                       (a, b) => (a.poolDrawNumber ?? -1).compareTo(b.poolDrawNumber ?? -1),
                     );
                     for (final participationOfPoolGroup in participationsOfPoolGroup) {
+                      final poolRanking = CompetitionWeightCategory.calculateRanking(
+                        participationsOfPoolGroup,
+                        competitionBouts,
+                      );
                       participantWidgets.add(
                         Column(
                           children: [
@@ -121,6 +130,9 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                                 // Need to pass all participations as it can pair with another pool in the finals.
                                 participations: competitionParticipations,
                                 competitionBoutsByRound: competitionBoutsByRound,
+                                ranking: ranking.indexWhere((element) => element.$1 == participationOfPoolGroup) + 1,
+                                poolRanking:
+                                    poolRanking.indexWhere((element) => element.$1 == participationOfPoolGroup) + 1,
                               ),
                             ),
                             const Divider(height: 1),
