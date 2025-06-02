@@ -16,6 +16,12 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
     required int pos,
     int? mat,
     int? round,
+
+    /// The rank the bout is fought for. Rank is described as x * 2 + 1 (+1)
+    /// 0: 1+2
+    /// 1: 3+4
+    /// 2: 5+6 ...
+    int? rank,
     @Default(RoundType.elimination) RoundType roundType,
     CompetitionWeightCategory? weightCategory,
   }) = _CompetitionBout;
@@ -35,11 +41,14 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
       pos: e['pos'] as int,
       mat: e['mat'] as int?,
       round: e['round'] as int?,
+      rank: e['rank'] as int?,
       roundType: RoundType.values.byName(e['round_type']),
     );
   }
 
   bool equalDuringBout(CompetitionBout o) => bout.equalDuringBout(o.bout) && weightCategory == o.weightCategory;
+
+  String? get displayRanks => rank == null ? null : '${rank! * 2 + 1}+${rank! * 2 + 2}';
 
   @override
   Map<String, dynamic> toRaw() {
@@ -49,6 +58,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject {
       'mat': mat,
       'round': round,
       'round_type': roundType.name,
+      'rank': rank,
       'competition_id': competition.id!,
       'bout_id': bout.id!,
       'weight_category_id': weightCategory?.id,

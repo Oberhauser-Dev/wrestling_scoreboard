@@ -286,11 +286,7 @@ class TeamMatchController extends OrganizationalController<TeamMatch> with Impor
 
         // Add missing id to bout of boutActions
         final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
-        final prevBoutActions = await BoutActionController().getMany(
-          conditions: ['bout_id = @id'],
-          substitutionValues: {'id': bout.id},
-          obfuscate: obfuscate,
-        );
+        final prevBoutActions = await BoutActionController().getByBout(bout.id!, obfuscate: obfuscate);
         await BoutActionController().updateOnDiffMany(boutActions.toList(), previous: prevBoutActions);
         return current.copyWith(bout: bout);
       },

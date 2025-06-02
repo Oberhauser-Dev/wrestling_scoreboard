@@ -145,6 +145,7 @@
   "poolGroupCount": "Anzahl der Poolgruppen",
   "rank": "Platz",
   "round": "Runde",
+  "roundType": "Rundentyp",
   "qualification": "Qualifikation",
   "contestantStatus": "Teilnehmer-Status",
   "elimination": "Eliminierung",

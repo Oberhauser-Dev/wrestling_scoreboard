@@ -16,7 +16,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CompetitionBout {
 
- int? get id; Competition get competition; Bout get bout; int get pos; int? get mat; int? get round; RoundType get roundType; CompetitionWeightCategory? get weightCategory;
+ int? get id; Competition get competition; Bout get bout; int get pos; int? get mat; int? get round;/// The rank the bout is fought for. Rank is described as x * 2 + 1 (+1)
+/// 0: 1+2
+/// 1: 3+4
+/// 2: 5+6 ...
+ int? get rank; RoundType get roundType; CompetitionWeightCategory? get weightCategory;
 /// Create a copy of CompetitionBout
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +33,16 @@ $CompetitionBoutCopyWith<CompetitionBout> get copyWith => _$CompetitionBoutCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompetitionBout&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.bout, bout) || other.bout == bout)&&(identical(other.pos, pos) || other.pos == pos)&&(identical(other.mat, mat) || other.mat == mat)&&(identical(other.round, round) || other.round == round)&&(identical(other.roundType, roundType) || other.roundType == roundType)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompetitionBout&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.bout, bout) || other.bout == bout)&&(identical(other.pos, pos) || other.pos == pos)&&(identical(other.mat, mat) || other.mat == mat)&&(identical(other.round, round) || other.round == round)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.roundType, roundType) || other.roundType == roundType)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,competition,bout,pos,mat,round,roundType,weightCategory);
+int get hashCode => Object.hash(runtimeType,id,competition,bout,pos,mat,round,rank,roundType,weightCategory);
 
 @override
 String toString() {
-  return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, roundType: $roundType, weightCategory: $weightCategory)';
+  return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, rank: $rank, roundType: $roundType, weightCategory: $weightCategory)';
 }
 
 
@@ -49,7 +53,7 @@ abstract mixin class $CompetitionBoutCopyWith<$Res>  {
   factory $CompetitionBoutCopyWith(CompetitionBout value, $Res Function(CompetitionBout) _then) = _$CompetitionBoutCopyWithImpl;
 @useResult
 $Res call({
- int? id, Competition competition, Bout bout, int pos, int? mat, int? round, RoundType roundType, CompetitionWeightCategory? weightCategory
+ int? id, Competition competition, Bout bout, int pos, int? mat, int? round, int? rank, RoundType roundType, CompetitionWeightCategory? weightCategory
 });
 
 
@@ -66,7 +70,7 @@ class _$CompetitionBoutCopyWithImpl<$Res>
 
 /// Create a copy of CompetitionBout
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? competition = null,Object? bout = null,Object? pos = null,Object? mat = freezed,Object? round = freezed,Object? roundType = null,Object? weightCategory = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? competition = null,Object? bout = null,Object? pos = null,Object? mat = freezed,Object? round = freezed,Object? rank = freezed,Object? roundType = null,Object? weightCategory = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,competition: null == competition ? _self.competition : competition // ignore: cast_nullable_to_non_nullable
@@ -74,6 +78,7 @@ as Competition,bout: null == bout ? _self.bout : bout // ignore: cast_nullable_t
 as Bout,pos: null == pos ? _self.pos : pos // ignore: cast_nullable_to_non_nullable
 as int,mat: freezed == mat ? _self.mat : mat // ignore: cast_nullable_to_non_nullable
 as int?,round: freezed == round ? _self.round : round // ignore: cast_nullable_to_non_nullable
+as int?,rank: freezed == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
 as int?,roundType: null == roundType ? _self.roundType : roundType // ignore: cast_nullable_to_non_nullable
 as RoundType,weightCategory: freezed == weightCategory ? _self.weightCategory : weightCategory // ignore: cast_nullable_to_non_nullable
 as CompetitionWeightCategory?,
@@ -117,7 +122,7 @@ $CompetitionWeightCategoryCopyWith<$Res>? get weightCategory {
 @JsonSerializable()
 
 class _CompetitionBout extends CompetitionBout {
-  const _CompetitionBout({this.id, required this.competition, required this.bout, required this.pos, this.mat, this.round, this.roundType = RoundType.elimination, this.weightCategory}): super._();
+  const _CompetitionBout({this.id, required this.competition, required this.bout, required this.pos, this.mat, this.round, this.rank, this.roundType = RoundType.elimination, this.weightCategory}): super._();
   factory _CompetitionBout.fromJson(Map<String, dynamic> json) => _$CompetitionBoutFromJson(json);
 
 @override final  int? id;
@@ -126,6 +131,11 @@ class _CompetitionBout extends CompetitionBout {
 @override final  int pos;
 @override final  int? mat;
 @override final  int? round;
+/// The rank the bout is fought for. Rank is described as x * 2 + 1 (+1)
+/// 0: 1+2
+/// 1: 3+4
+/// 2: 5+6 ...
+@override final  int? rank;
 @override@JsonKey() final  RoundType roundType;
 @override final  CompetitionWeightCategory? weightCategory;
 
@@ -142,16 +152,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompetitionBout&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.bout, bout) || other.bout == bout)&&(identical(other.pos, pos) || other.pos == pos)&&(identical(other.mat, mat) || other.mat == mat)&&(identical(other.round, round) || other.round == round)&&(identical(other.roundType, roundType) || other.roundType == roundType)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompetitionBout&&(identical(other.id, id) || other.id == id)&&(identical(other.competition, competition) || other.competition == competition)&&(identical(other.bout, bout) || other.bout == bout)&&(identical(other.pos, pos) || other.pos == pos)&&(identical(other.mat, mat) || other.mat == mat)&&(identical(other.round, round) || other.round == round)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.roundType, roundType) || other.roundType == roundType)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,competition,bout,pos,mat,round,roundType,weightCategory);
+int get hashCode => Object.hash(runtimeType,id,competition,bout,pos,mat,round,rank,roundType,weightCategory);
 
 @override
 String toString() {
-  return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, roundType: $roundType, weightCategory: $weightCategory)';
+  return 'CompetitionBout(id: $id, competition: $competition, bout: $bout, pos: $pos, mat: $mat, round: $round, rank: $rank, roundType: $roundType, weightCategory: $weightCategory)';
 }
 
 
@@ -162,7 +172,7 @@ abstract mixin class _$CompetitionBoutCopyWith<$Res> implements $CompetitionBout
   factory _$CompetitionBoutCopyWith(_CompetitionBout value, $Res Function(_CompetitionBout) _then) = __$CompetitionBoutCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, Competition competition, Bout bout, int pos, int? mat, int? round, RoundType roundType, CompetitionWeightCategory? weightCategory
+ int? id, Competition competition, Bout bout, int pos, int? mat, int? round, int? rank, RoundType roundType, CompetitionWeightCategory? weightCategory
 });
 
 
@@ -179,7 +189,7 @@ class __$CompetitionBoutCopyWithImpl<$Res>
 
 /// Create a copy of CompetitionBout
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? competition = null,Object? bout = null,Object? pos = null,Object? mat = freezed,Object? round = freezed,Object? roundType = null,Object? weightCategory = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? competition = null,Object? bout = null,Object? pos = null,Object? mat = freezed,Object? round = freezed,Object? rank = freezed,Object? roundType = null,Object? weightCategory = freezed,}) {
   return _then(_CompetitionBout(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,competition: null == competition ? _self.competition : competition // ignore: cast_nullable_to_non_nullable
@@ -187,6 +197,7 @@ as Competition,bout: null == bout ? _self.bout : bout // ignore: cast_nullable_t
 as Bout,pos: null == pos ? _self.pos : pos // ignore: cast_nullable_to_non_nullable
 as int,mat: freezed == mat ? _self.mat : mat // ignore: cast_nullable_to_non_nullable
 as int?,round: freezed == round ? _self.round : round // ignore: cast_nullable_to_non_nullable
+as int?,rank: freezed == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
 as int?,roundType: null == roundType ? _self.roundType : roundType // ignore: cast_nullable_to_non_nullable
 as RoundType,weightCategory: freezed == weightCategory ? _self.weightCategory : weightCategory // ignore: cast_nullable_to_non_nullable
 as CompetitionWeightCategory?,

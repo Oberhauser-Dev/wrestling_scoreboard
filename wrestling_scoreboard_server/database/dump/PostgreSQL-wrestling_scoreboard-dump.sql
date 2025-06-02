@@ -509,7 +509,8 @@ CREATE TABLE public.competition_bout (
     mat smallint,
     round smallint,
     weight_category_id integer,
-    round_type public.round_type DEFAULT 'qualification'::public.round_type NOT NULL
+    round_type public.round_type DEFAULT 'qualification'::public.round_type NOT NULL,
+    rank smallint
 );
 
 
@@ -1767,7 +1768,7 @@ COPY public.competition (id, date, location, visitors_count, comment, no, organi
 -- Data for Name: competition_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, weight_category_id, round_type) FROM stdin;
+COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, weight_category_id, round_type, rank) FROM stdin;
 \.
 
 
@@ -1925,7 +1926,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.8	0.0.0
+0.3.0-pre.9	0.0.0
 \.
 
 

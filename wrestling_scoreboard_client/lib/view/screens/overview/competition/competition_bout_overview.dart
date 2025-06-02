@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_bout_edit.dart';
@@ -73,6 +74,16 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
               title: competitionBout.round?.toString() ?? '-',
               subtitle: localizations.round,
               icon: Icons.restart_alt,
+            ),
+            ContentItem(
+              title: competitionBout.roundType.localize(context),
+              subtitle: localizations.roundType,
+              icon: Icons.restart_alt,
+            ),
+            ContentItem(
+              title: competitionBout.displayRanks ?? '-',
+              subtitle: localizations.rank,
+              icon: Icons.leaderboard,
             ),
           ],
           actions: [

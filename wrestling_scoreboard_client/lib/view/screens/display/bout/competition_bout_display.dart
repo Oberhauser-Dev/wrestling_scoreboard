@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
@@ -91,6 +92,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           headerItems: [],
                           weightClass: competitionBout.weightCategory?.weightClass,
                           ageCategory: competitionBout.weightCategory?.ageCategory,
+                          roundDescription: competitionBout.roundDescription(context),
                           weightR: homeParticipation?.weight,
                           weightB: guestParticipation?.weight,
                         );

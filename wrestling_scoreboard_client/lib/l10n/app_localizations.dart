@@ -854,6 +854,12 @@ abstract class AppLocalizations {
   /// **'Round'**
   String get round;
 
+  /// No description provided for @roundType.
+  ///
+  /// In en, this message translates to:
+  /// **'Round Type'**
+  String get roundType;
+
   /// No description provided for @qualification.
   ///
   /// In en, this message translates to:

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
@@ -64,37 +65,144 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     return copyWith(id: id);
   }
 
-  /// Calculate the ranking as tuple of (participant, classificationPoints, technicalPoints)
-  static List<(CompetitionParticipation, int, int)> calculateRanking(
+  // TODO: Also consider semi-finals
+  static List<RankingMetric> calculateRankingByFinals(
     Iterable<CompetitionParticipation> participations,
-    Iterable<CompetitionBout> pastCompetitionBouts,
+    Map<CompetitionBout, Iterable<BoutAction>> pastCompetitionBouts,
   ) {
-    final List<(CompetitionParticipation, int, int)> ranking = [];
+    final List<RankingMetric> ranking = [];
+    participations = participations.where((p) => p.isRanked);
+    final finalsBouts = pastCompetitionBouts.keys.where(
+      (pcb) => pcb.roundType == RoundType.finals && pcb.bout.winnerRole != null,
+    );
+    if (finalsBouts.isEmpty) {
+      // Return empty ranking, if finals did not yet took place.
+      return ranking;
+    }
+    final unrankedParticipations = participations.toSet();
+
+    int rank = 0;
+    while (finalsBouts.where((pcb) => pcb.rank == rank).zeroOrOne != null) {
+      final compBout = finalsBouts.firstWhere((pcb) => pcb.rank == rank);
+
+      final winner = participations.where((p) => p.membership == compBout.bout.winner?.membership).single;
+      ranking.add(_getPointsOfParticipant(winner, pastCompetitionBouts));
+      unrankedParticipations.remove(winner);
+
+      final looser = participations.where((p) => p.membership == compBout.bout.looser?.membership).single;
+      ranking.add(_getPointsOfParticipant(looser, pastCompetitionBouts));
+      unrankedParticipations.remove(looser);
+
+      rank++;
+    }
+
+    // Rank all remaining participants by points
+    ranking.addAll(calculateRankingByPoints(unrankedParticipations, pastCompetitionBouts));
+    return ranking;
+  }
+
+  /// Calculate the ranking as tuple of (participant, classificationPoints, technicalPoints)
+  static List<RankingMetric> calculatePoolRanking(
+    Iterable<CompetitionParticipation> participations,
+    Map<CompetitionBout, Iterable<BoutAction>> pastCompetitionBouts,
+    CompetitionSystem? competitionSystem,
+  ) {
+    final List<RankingMetric> poolRanking = [];
+    participations = participations.where((element) => element.isRanked);
+    switch (competitionSystem) {
+      case null:
+        return [];
+      case CompetitionSystem.singleElimination:
+      case CompetitionSystem.doubleElimination:
+      case CompetitionSystem.nordic:
+        poolRanking.addAll(calculateRankingByPoints(participations, pastCompetitionBouts));
+      case CompetitionSystem.nordicDoubleElimination:
+        final qualificationGroups = participations.groupListsBy((element) => !element.isExcluded);
+        if (qualificationGroups[true] != null) {
+          // Add the ones who are not excluded, e.g. when the ranking only applies between the last 3.
+          poolRanking.addAll(calculateRankingByPoints(qualificationGroups[true]!, pastCompetitionBouts));
+        }
+        if (qualificationGroups[false] != null) {
+          // Add the ones who are excluded
+          poolRanking.addAll(calculateRankingByPoints(qualificationGroups[false]!, pastCompetitionBouts));
+        }
+    }
+    return poolRanking;
+  }
+
+  static List<RankingMetric> calculateRankingByPoints(
+    Iterable<CompetitionParticipation> participations,
+    Map<CompetitionBout, Iterable<BoutAction>> pastCompetitionBouts,
+  ) {
+    final List<RankingMetric> ranking = [];
+    participations = participations.where((element) => element.isRanked);
     for (final participant in participations) {
-      final participantBoutsRed = pastCompetitionBouts.where(
-        (bout) => bout.bout.r?.membership == participant.membership,
-      );
-      final participantBoutsBlue = pastCompetitionBouts.where(
-        (bout) => bout.bout.b?.membership == participant.membership,
-      );
-      final classificationPoints =
-          participantBoutsRed.fold<int>(
-            0,
-            (previousValue, element) => previousValue + (element.bout.r?.classificationPoints ?? 0),
-          ) +
-          participantBoutsBlue.fold<int>(
-            0,
-            (previousValue, element) => previousValue + (element.bout.b?.classificationPoints ?? 0),
-          );
-      // TODO: get all bout actions to sum up the technical points
-      final technicalPoints = 0;
-      ranking.add((participant, classificationPoints, technicalPoints));
+      ranking.add(_getPointsOfParticipant(participant, pastCompetitionBouts));
       ranking.sort((a, b) {
-        int cmp = b.$2.compareTo(a.$2);
+        int cmp = b.classificationPoints.compareTo(a.classificationPoints);
         if (cmp != 0) return cmp;
-        return b.$3.compareTo(a.$3);
+        return b.technicalPoints.compareTo(a.technicalPoints);
       });
     }
     return ranking;
   }
+
+  static RankingMetric _getPointsOfParticipant(
+    CompetitionParticipation participant,
+    Map<CompetitionBout, Iterable<BoutAction>> pastCompetitionBouts,
+  ) {
+    final participantBoutsRed = pastCompetitionBouts.keys.where(
+      (bout) => bout.bout.r?.membership == participant.membership,
+    );
+    final participantBoutsBlue = pastCompetitionBouts.keys.where(
+      (bout) => bout.bout.b?.membership == participant.membership,
+    );
+
+    final classificationPoints =
+        participantBoutsRed.fold<int>(
+          0,
+          (previousValue, cb) => previousValue + (cb.bout.r?.classificationPoints ?? 0),
+        ) +
+        participantBoutsBlue.fold<int>(
+          0,
+          (previousValue, cb) => previousValue + (cb.bout.b?.classificationPoints ?? 0),
+        );
+
+    final technicalPoints =
+        participantBoutsRed.fold<int>(
+          0,
+          (previousValue, cb) =>
+              previousValue + AthleteBoutState.getTechnicalPoints(pastCompetitionBouts[cb]!, BoutRole.red),
+        ) +
+        participantBoutsBlue.fold<int>(
+          0,
+          (previousValue, cb) =>
+              previousValue + AthleteBoutState.getTechnicalPoints(pastCompetitionBouts[cb]!, BoutRole.blue),
+        );
+
+    final wins =
+        participantBoutsRed.where((cb) => cb.bout.winnerRole == BoutRole.red).length +
+        participantBoutsRed.where((cb) => cb.bout.winnerRole == BoutRole.blue).length;
+
+    return RankingMetric(
+      participation: participant,
+      classificationPoints: classificationPoints,
+      technicalPoints: technicalPoints,
+      wins: wins,
+    );
+  }
+}
+
+class RankingMetric {
+  final CompetitionParticipation participation;
+  final int classificationPoints;
+  final int technicalPoints;
+  final int wins;
+
+  RankingMetric({
+    required this.participation,
+    required this.classificationPoints,
+    required this.technicalPoints,
+    required this.wins,
+  });
 }
