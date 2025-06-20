@@ -31,7 +31,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.29.3'
+        default: '3.32.4'
         type: string
       flutter_channel:
         required: false
