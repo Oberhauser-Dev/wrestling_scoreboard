@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MembershipEdit extends AbstractPersonEdit {
@@ -37,23 +38,12 @@ class MembershipEditState extends AbstractPersonEditState<MembershipEdit> {
       id: widget.membership?.id,
       classLocale: localizations.membership,
       fields: [
-        ListTile(
-          leading: const Icon(Icons.tag),
-          title: TextFormField(
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: localizations.membershipNumber,
-              hintText: localizations.optional,
-            ),
-            initialValue: widget.membership?.no,
-            onSaved: (newValue) {
-              if (newValue == null || newValue.isEmpty) {
-                _no = null;
-              } else {
-                _no = newValue;
-              }
-            },
-          ),
+        CustomTextInput(
+          iconData: Icons.tag,
+          label: localizations.membershipNumber,
+          initialValue: widget.membership?.no,
+          isMandatory: false,
+          onSaved: (value) => _no = value,
         ),
         ListTile(
           title: SearchableDropdown<Club>(

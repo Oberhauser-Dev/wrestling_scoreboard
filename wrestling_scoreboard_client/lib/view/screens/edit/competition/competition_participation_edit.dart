@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/contestant_status.dart';
@@ -9,6 +8,7 @@ import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -120,21 +120,13 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           },
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.fitness_center),
-        title: TextFormField(
-          initialValue: _weight?.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.weight,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-          onChanged: (String? value) {
-            final newValue = (value == null || value.isEmpty) ? null : double.parse(value);
-            _weight = newValue;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.fitness_center,
+        label: localizations.weight,
+        isMandatory: false,
+        initialValue: _weight,
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+        onSaved: (value) => _weight = value,
       ),
       ListTile(
         leading: const Icon(Icons.cancel_outlined),

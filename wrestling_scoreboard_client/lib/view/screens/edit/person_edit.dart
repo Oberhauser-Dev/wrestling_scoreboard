@@ -1,13 +1,14 @@
 import 'package:country/country.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class AbstractPersonEdit extends ConsumerStatefulWidget {
@@ -47,33 +48,18 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
 
     final items = [
       ...fields,
-      ListTile(
-        leading: const Icon(Icons.person),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.prename),
-          initialValue: widget.person?.prename,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _prename = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.person,
+        label: localizations.prename,
+        initialValue: widget.person?.prename,
+        isMandatory: true,
+        onSaved: (value) => _prename = value,
       ),
-      ListTile(
-        leading: const SizedBox(),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.surname),
-          initialValue: widget.person?.surname,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _surname = newValue,
-        ),
+      CustomTextInput(
+        label: localizations.surname,
+        initialValue: widget.person?.surname,
+        isMandatory: true,
+        onSaved: (value) => _surname = value,
       ),
       ListTile(
         leading: const Icon(Icons.date_range),

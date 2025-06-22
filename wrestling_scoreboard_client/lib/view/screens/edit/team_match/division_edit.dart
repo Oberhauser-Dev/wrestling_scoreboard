@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_config_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -51,19 +51,12 @@ class DivisionEditState extends BoutConfigEditState<DivisionEdit> {
       id: widget.division?.id,
       classLocale: localizations.division,
       fields: [
-        ListTile(
-          leading: const Icon(Icons.description),
-          title: TextFormField(
-            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
-            initialValue: widget.division?.name,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return localizations.mandatoryField;
-              }
-              return null;
-            },
-            onSaved: (newValue) => _name = newValue,
-          ),
+        CustomTextInput(
+          iconData: Icons.description,
+          label: localizations.name,
+          initialValue: widget.division?.name,
+          isMandatory: true,
+          onSaved: (value) => _name = value,
         ),
         ListTile(
           leading: const Icon(Icons.event),
@@ -107,21 +100,13 @@ class DivisionEditState extends BoutConfigEditState<DivisionEdit> {
             initialValue: _endDate.toDateString(context),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.sunny_snowing),
-          title: TextFormField(
-            initialValue: widget.division?.seasonPartitions.toString() ?? '',
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.seasonPartitions,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
-            onSaved: (String? value) {
-              _seasonPartitions = int.tryParse(value ?? '') ?? 1;
-              if (_seasonPartitions < 1) _seasonPartitions = 1;
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.sunny_snowing,
+          initialValue: widget.division?.seasonPartitions,
+          label: localizations.seasonPartitions,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 10),
+          isMandatory: true,
+          onSaved: (int? value) => _seasonPartitions = value ?? 1,
         ),
         ListTile(
           title: SearchableDropdown<Organization>(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
@@ -51,16 +50,12 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
           iconData: Icons.short_text,
           initialValue: widget.competition?.name,
         ),
-        ListTile(
-          leading: const Icon(Icons.tag),
-          title: TextFormField(
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: localizations.competitionNumber,
-            ),
-            initialValue: widget.competition?.no,
-            onSaved: (newValue) => _no = newValue,
-          ),
+        CustomTextInput(
+          iconData: Icons.tag,
+          label: localizations.competitionNumber,
+          initialValue: widget.competition?.no,
+          isMandatory: false,
+          onSaved: (value) => _no = value,
         ),
         CustomTextInput(
           onSaved: (String? value) => _location = value,
@@ -90,43 +85,29 @@ class CompetitionEditState extends BoutConfigEditState<CompetitionEdit> {
             initialValue: _date.toDateTimeString(context),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.adjust), // Replace with square_dot
-          title: TextFormField(
-            initialValue: widget.competition?.matCount.toString(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.mats,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-            onSaved: (String? value) {
-              _matCount = int.tryParse(value ?? '') ?? 1;
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.adjust,
+          // Replace with square_dot
+          initialValue: widget.competition?.matCount,
+          label: localizations.mats,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: true,
+          onSaved: (int? value) => _matCount = value,
         ),
-        ListTile(
-          leading: const Icon(Icons.confirmation_number),
-          title: TextFormField(
-            initialValue: widget.competition?.visitorsCount.toString(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.visitors,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 9223372036854775808)],
-            onSaved: (String? value) {
-              _visitorsCount = int.tryParse(value ?? '');
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.confirmation_number,
+          initialValue: widget.competition?.visitorsCount,
+          label: localizations.visitors,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 9223372036854775808),
+          isMandatory: false,
+          onSaved: (int? value) => _visitorsCount = value,
         ),
-        ListTile(
-          leading: const Icon(Icons.comment),
-          title: TextFormField(
-            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.comment),
-            initialValue: widget.competition?.comment,
-            onSaved: (newValue) => _comment = newValue,
-          ),
+        CustomTextInput(
+          iconData: Icons.comment,
+          label: localizations.comment,
+          initialValue: widget.competition?.comment,
+          isMandatory: false,
+          onSaved: (value) => _comment = value,
         ),
       ],
     );

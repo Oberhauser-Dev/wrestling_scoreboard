@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -60,35 +60,21 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
           ),
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.pool),
-        title: TextFormField(
-          initialValue: _poolGroupCount.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.poolGroupCount,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-          onSaved: (String? value) {
-            _poolGroupCount = int.tryParse(value ?? '') ?? 1;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.pool,
+        initialValue: _poolGroupCount,
+        label: localizations.poolGroupCount,
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+        isMandatory: true,
+        onSaved: (int? value) => _poolGroupCount = value ?? 1,
       ),
-      ListTile(
-        leading: const Icon(Icons.vertical_align_top),
-        title: TextFormField(
-          initialValue: _maxContestants?.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.maximum,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-          onSaved: (String? value) {
-            _maxContestants = int.tryParse(value ?? '');
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.vertical_align_top,
+        initialValue: _maxContestants,
+        label: localizations.maximum,
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+        isMandatory: false,
+        onSaved: (int? value) => _maxContestants = value,
       ),
     ];
 
