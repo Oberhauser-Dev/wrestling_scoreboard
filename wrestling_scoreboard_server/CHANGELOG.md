@@ -1,3 +1,32 @@
+## 0.3.0
+
+ - **REFACTOR**: Apply dart format. ([eefaec04](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eefaec04c236a79eba6310204665c953851b1e9b))
+ - **FIX**: Disallow assigning CompetitionBout to mat, if already occupied. ([e85e6ade](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e85e6ade299e387dd5c338b5d4ef3da98a8fa6d6))
+ - **FIX**: Competition flaws ([#129](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/129)). ([b4c89201](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b4c8920127f639f517669d9dd4cd6b7781e172d0))
+ - **FIX**: Apply MockableDateTime. ([6e12b22f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6e12b22f1ba98a7ea3819e7a9f17c7acf6d3d429))
+ - **FIX**: Obfuscate org_sync_id (closes [#118](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/118)). ([c4d33dc5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c4d33dc5cdc6855635b292252a25b20af2116740))
+ - **FIX**: Avoid duplicate participations. ([9cee0b36](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9cee0b36965bd4002857b23d7e7f6d01d9fde790))
+ - **FIX**: Migrate database after restore. ([bfa8fa54](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bfa8fa54e63c5292e9853b83e724250e324f06a8))
+ - **FIX**: Order of team weight classes and bouts with multiple sections. ([16399ae6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/16399ae6b6688da157a07c515dcea9ae27075482))
+ - **FIX**: Replace singleOrNull with zeroOrOne. ([5d1ba644](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d1ba644719d51ce92d5efed2c097aa86fb5b139))
+ - **FIX**: Lineup: Avoid adding participation twice, add foreign team key. ([b6453ec1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b6453ec11273c7a9b162ed74d5174d29a2dfe9b3))
+ - **FEAT**: Ranking for pools and finals. ([fbf9c6e8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbf9c6e86815c91455b960186ec5e7e00e6f7e3e))
+ - **FEAT**: Introduce ByeDoubleElimination ([#133](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/133)). ([4e07920c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4e07920c1ac5d3827d0f4156f402d0d92b1c8d34))
+ - **FEAT**: Introduce nordicDoubleElimination CompetitionSystem. ([750c8e3e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/750c8e3e4c9b99cffd0f3a1ca990d2a1d7bf9422))
+ - **FEAT**: Add competitionSystem to CompetitionWeightCategory, generation of pool rounds. ([56a53940](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/56a539409195ad65f92d1f4913ae32c73264966d))
+ - **FEAT**: Support Competitions ([#35](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/35)). ([54435ff7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/54435ff798098a0442b522026b13bff26aa55f4c))
+ - **FEAT**: Upgrade to Flutter 3.29.0, freezed, riverpod. ([d6492324](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d6492324bc8c1bd3279f5122aff4dba5e6205f8b))
+ - **FEAT**: Support Flutter 3.27.x. ([c63dcae3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c63dcae3673313a7917a76c4260a52581f940d75))
+ - **FEAT**: Filterable Entity Lists (closes [#95](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/95)). ([f16e91e7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f16e91e782ff39da06590c57549a2b5773adcb4e))
+ - **FEAT**: Improve Merge Person Dialog. ([c1de3183](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c1de318374f13cfad59edf26ac4fc4dedab47418))
+ - **FEAT**: Merge person objects. ([da86f970](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/da86f9702450abce4f4d39eb86be41c4fea90779))
+ - **FEAT**: Persons of Organization. ([58cc7947](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/58cc79471c5e408607add97f7287c5686e9a3539))
+ - **FEAT**: Reflect all states from UWW score sheet (closes [#19](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/19)). ([57ea75f4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/57ea75f4f16c3217e7b6e640380c4721b5485cbe))
+ - **FEAT**: Min Client version (closes [#68](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/68)). ([5b941242](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5b9412421273efb9bbefa233fae4ed9497e7a8c5))
+ - **FEAT**: Support Weight Class per League (closes [#82](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/82)). ([0bfa485f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0bfa485fb98679c527fa4d4edfa44d30c26b8166))
+ - **FEAT**: Prioritize scheme for seasonPartition in TeamMatch. ([3dd834f7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3dd834f7e0e15d954e89a6667a6b01a0d38bcfb8))
+ - **DOCS**: Increase client max body size in nginx. ([ad84c440](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ad84c440c90d456b0d197e29c7105efb51bd91e5))
+
 ## 0.1.1
 
  - **FIX**: Allow adjacent import only for admins. ([dbab8896](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dbab889601f01649780505bbe558cbb6e350356f))
