@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamEdit extends ConsumerStatefulWidget {
@@ -33,27 +34,19 @@ class TeamEditState extends ConsumerState<TeamEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.short_text),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
-          initialValue: widget.team?.name,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _name = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.short_text,
+        label: localizations.name,
+        initialValue: widget.team?.name,
+        isMandatory: true,
+        onSaved: (value) => _name = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.subject),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.description),
-          initialValue: widget.team?.description,
-          onSaved: (newValue) => _description = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.subject,
+        label: localizations.description,
+        initialValue: widget.team?.description,
+        isMandatory: false,
+        onSaved: (value) => _description = value,
       ),
     ];
 

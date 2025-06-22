@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -93,20 +93,13 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
           },
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.repeat),
-        title: TextFormField(
-          initialValue: (widget.boutConfig?.periodCount ?? BoutConfig.defaultPeriodCount).toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.periodCount,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 10)],
-          onSaved: (String? value) {
-            _periodCount = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.repeat,
+        initialValue: widget.boutConfig?.periodCount ?? BoutConfig.defaultPeriodCount,
+        label: localizations.periodCount,
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 10),
+        isMandatory: true,
+        onSaved: (int? value) => _periodCount = value,
       ),
     ];
 

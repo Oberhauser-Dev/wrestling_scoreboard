@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
@@ -53,27 +53,19 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.description),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
-          initialValue: widget.organization?.name,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _name = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.description,
+        label: localizations.name,
+        initialValue: widget.organization?.name,
+        isMandatory: true,
+        onSaved: (value) => _name = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.short_text),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.abbreviation),
-          initialValue: widget.organization?.abbreviation,
-          onSaved: (newValue) => _abbreviation = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.short_text,
+        label: localizations.abbreviation,
+        initialValue: widget.organization?.abbreviation,
+        isMandatory: false,
+        onSaved: (value) => _abbreviation = value,
       ),
       ListTile(
         title: SearchableDropdown<Organization>(

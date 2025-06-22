@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubEdit extends ConsumerStatefulWidget {
@@ -37,27 +38,19 @@ class ClubEditState extends ConsumerState<ClubEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.description),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
-          initialValue: widget.club?.name,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _name = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.description,
+        label: localizations.name,
+        initialValue: widget.club?.name,
+        isMandatory: true,
+        onSaved: (value) => _name = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.tag),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.clubNumber),
-          initialValue: widget.club?.no,
-          onSaved: (newValue) => _no = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.tag,
+        label: localizations.clubNumber,
+        initialValue: widget.club?.no,
+        isMandatory: false,
+        onSaved: (value) => _no = value,
       ),
       ListTile(
         title: SearchableDropdown<Organization>(

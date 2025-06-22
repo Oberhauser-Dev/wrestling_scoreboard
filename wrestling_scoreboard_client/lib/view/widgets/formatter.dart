@@ -4,7 +4,7 @@ class NumericalRangeFormatter extends TextInputFormatter {
   final double min;
   final double max;
 
-  NumericalRangeFormatter({required this.min, required this.max});
+  const NumericalRangeFormatter({required this.min, required this.max});
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {

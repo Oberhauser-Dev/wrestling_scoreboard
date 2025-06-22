@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -45,19 +45,12 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.description),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
-          initialValue: widget.league?.name,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _name = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.description,
+        label: localizations.name,
+        initialValue: widget.league?.name,
+        isMandatory: true,
+        onSaved: (value) => _name = value,
       ),
       ListTile(
         leading: const Icon(Icons.date_range),
@@ -101,21 +94,13 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           initialValue: _endDate.toDateString(context),
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.calendar_month),
-        title: TextFormField(
-          initialValue: (widget.league?.boutDays ?? 0).toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.boutDays,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 100)],
-          onSaved: (String? value) {
-            _boutDays = int.tryParse(value ?? '') ?? 1;
-            if (_boutDays < 1) _boutDays = 2;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.calendar_month,
+        initialValue: (widget.league?.boutDays ?? 0),
+        label: localizations.boutDays,
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 100),
+        isMandatory: true,
+        onSaved: (int? value) => _boutDays = value ?? 1,
       ),
       ListTile(
         title: SearchableDropdown<Division>(

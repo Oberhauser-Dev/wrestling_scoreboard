@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 
 class CustomTextInput extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
@@ -30,7 +32,8 @@ class CustomTextInput extends StatelessWidget {
         readOnly: onSaved == null,
         maxLines: isMultiline ? null : 1,
         keyboardType: isMultiline ? TextInputType.multiline : null,
-        onSaved: onSaved,
+        // Convert empty value to null
+        onSaved: onSaved == null ? null : (value) => onSaved!((value?.isEmpty ?? true) ? null : value),
         validator:
             validator ??
             (value) {
@@ -40,7 +43,70 @@ class CustomTextInput extends StatelessWidget {
               return null;
             },
         initialValue: initialValue,
-        decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: label),
+        decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
+          labelText: label,
+          hintText: isMandatory ? null : localizations.optional,
+        ),
+      ),
+    );
+  }
+}
+
+class NumericalInput<T extends num> extends StatelessWidget {
+  final FormFieldSetter<T>? onSaved;
+  final IconData? iconData;
+  final String label;
+  final T? initialValue;
+  final bool isMandatory;
+  final FormFieldValidator<String>? validator;
+  final TextInputFormatter inputFormatter;
+
+  const NumericalInput({
+    super.key,
+    this.onSaved,
+    this.iconData,
+    required this.label,
+    this.initialValue,
+    this.isMandatory = false,
+    this.validator,
+    this.inputFormatter = const NumericalRangeFormatter(min: 0, max: 1000),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return ListTile(
+      leading: iconData != null ? Icon(iconData) : const SizedBox(),
+      title: TextFormField(
+        initialValue: initialValue?.toString() ?? '',
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
+          labelText: label,
+          hintText: isMandatory ? null : localizations.optional,
+        ),
+        inputFormatters: <TextInputFormatter>[inputFormatter],
+        onSaved:
+            onSaved == null
+                ? null
+                : (String? value) {
+                  if (T == int) {
+                    onSaved!(int.tryParse(value ?? '') as T?);
+                  } else if (T == double) {
+                    onSaved!(double.tryParse(value ?? '') as T?);
+                  } else {
+                    onSaved!(num.tryParse(value ?? '') as T?);
+                  }
+                },
+        validator:
+            validator ??
+            (value) {
+              if (isMandatory && (value == null || value.isEmpty)) {
+                return localizations.mandatoryField;
+              }
+              return null;
+            },
       ),
     );
   }
@@ -67,7 +133,11 @@ class EmailInput extends StatelessWidget {
           }
           return null;
         },
-        decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.email),
+        decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
+          labelText: localizations.email,
+          hintText: isMandatory ? null : localizations.optional,
+        ),
         autofillHints: const [AutofillHints.email],
       ),
     );
@@ -116,6 +186,7 @@ class PasswordInput extends StatelessWidget {
         decoration: InputDecoration(
           border: const UnderlineInputBorder(),
           labelText: isRepetition ? 'Repeat ${localizations.auth_Password}' : localizations.auth_Password,
+          hintText: isMandatory ? null : localizations.optional,
         ),
         autofillHints: [isNewPassword ? AutofillHints.newPassword : AutofillHints.password],
       ),

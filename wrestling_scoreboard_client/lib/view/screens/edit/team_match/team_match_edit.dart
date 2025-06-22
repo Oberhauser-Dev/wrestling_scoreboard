@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
@@ -7,6 +6,7 @@ import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
@@ -74,21 +74,19 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.tag),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.matchNumber),
-          initialValue: widget.teamMatch?.no,
-          onSaved: (newValue) => _no = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.tag,
+        label: localizations.matchNumber,
+        initialValue: widget.teamMatch?.no,
+        isMandatory: false,
+        onSaved: (value) => _no = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.place),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.place),
-          initialValue: widget.teamMatch?.location,
-          onSaved: (newValue) => _location = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.place,
+        label: localizations.place,
+        initialValue: widget.teamMatch?.location,
+        isMandatory: false,
+        onSaved: (value) => _location = value,
       ),
       ListTile(
         leading: const Icon(Icons.date_range),
@@ -147,28 +145,20 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           },
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.confirmation_number),
-        title: TextFormField(
-          initialValue: widget.teamMatch?.visitorsCount.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.visitors,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 9223372036854775808)],
-          onSaved: (String? value) {
-            _visitorsCount = int.tryParse(value ?? '');
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.confirmation_number,
+        initialValue: widget.teamMatch?.visitorsCount,
+        label: localizations.visitors,
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 9223372036854775808),
+        isMandatory: false,
+        onSaved: (int? value) => _visitorsCount = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.comment),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.comment),
-          initialValue: widget.teamMatch?.comment,
-          onSaved: (newValue) => _comment = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.comment,
+        label: localizations.comment,
+        initialValue: widget.teamMatch?.comment,
+        isMandatory: false,
+        onSaved: (value) => _comment = value,
       ),
       ListTile(
         title: SearchableDropdown<League>(

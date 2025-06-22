@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -40,20 +40,13 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
       classLocale: localizations.weightClass,
       fields: [
         IconCard(icon: const Icon(Icons.info), child: Text(localizations.infoUseDivisionWeightClass)),
-        ListTile(
-          leading: const Icon(Icons.format_list_numbered),
-          title: TextFormField(
-            initialValue: widget.leagueWeightClass?.pos.toString() ?? '',
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.position,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-            onSaved: (String? value) {
-              _pos = int.tryParse(value ?? '') ?? 0;
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.format_list_numbered,
+          initialValue: widget.leagueWeightClass?.pos,
+          label: localizations.position,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: true,
+          onSaved: (int? value) => _pos = value ?? 0,
         ),
         if (widget.initialLeague.division.seasonPartitions > 1)
           ListTile(

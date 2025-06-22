@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class AgeCategoryEdit extends ConsumerStatefulWidget {
@@ -39,49 +38,26 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.description),
-        title: TextFormField(
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.name),
-          initialValue: widget.ageCategory?.name,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return localizations.mandatoryField;
-            }
-            return null;
-          },
-          onSaved: (newValue) => _name = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.description,
+        label: localizations.name,
+        initialValue: widget.ageCategory?.name,
+        isMandatory: true,
+        onSaved: (newValue) => _name = newValue,
       ),
-      ListTile(
-        leading: const Icon(Icons.school),
-        title: TextFormField(
-          initialValue: widget.ageCategory?.minAge.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.age} (${localizations.minimum})',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _minAge = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
+      NumericalInput(
+        initialValue: widget.ageCategory?.minAge,
+        iconData: Icons.school,
+        label: '${localizations.age} (${localizations.minimum})',
+        isMandatory: true,
+        onSaved: (int? value) => _minAge = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.school),
-        title: TextFormField(
-          initialValue: widget.ageCategory?.maxAge.toString(),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.age} (${localizations.maximum})',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _maxAge = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
+      NumericalInput(
+        initialValue: widget.ageCategory?.maxAge,
+        iconData: Icons.school,
+        label: '${localizations.age} (${localizations.maximum})',
+        isMandatory: true,
+        onSaved: (int? value) => _maxAge = value,
       ),
       ListTile(
         title: SearchableDropdown<Organization>(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -7,6 +6,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -73,50 +73,29 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
         return _memberships!;
       },
       fields: [
-        ListTile(
-          leading: const Icon(Icons.format_list_numbered),
-          title: TextFormField(
-            initialValue: widget.competitionBout?.pos.toString() ?? '',
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.position,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-            onSaved: (String? value) {
-              _pos = int.tryParse(value ?? '') ?? 0;
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.format_list_numbered,
+          initialValue: widget.competitionBout?.pos,
+          label: localizations.position,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: true,
+          onSaved: (int? value) => _pos = value ?? 0,
         ),
-        ListTile(
-          leading: const Icon(Icons.adjust), // Replace with square_dot
-          title: TextFormField(
-            initialValue: _mat?.toString() ?? '',
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.mat,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-            onSaved: (String? value) {
-              _mat = int.tryParse(value ?? '') ?? 0;
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.adjust, // Replace with square_dot
+          initialValue: _mat,
+          label: localizations.mat,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: false,
+          onSaved: (int? value) => _mat = value,
         ),
-        ListTile(
-          leading: const Icon(Icons.restart_alt),
-          title: TextFormField(
-            initialValue: _round?.toString() ?? '',
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.round,
-            ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-            onSaved: (String? value) {
-              _round = int.tryParse(value ?? '') ?? 0;
-            },
-          ),
+        NumericalInput(
+          iconData: Icons.restart_alt,
+          initialValue: _round,
+          label: localizations.round,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: false,
+          onSaved: (int? value) => _round = value,
         ),
         ListTile(
           title: SearchableDropdown<CompetitionWeightCategory>(
@@ -124,10 +103,7 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
             selectedItem: _weightCategory,
             label: context.l10n.weightCategory,
             context: context,
-            onSaved:
-                (value) => setState(() {
-                  _weightCategory = value;
-                }),
+            onSaved: (value) => setState(() => _weightCategory = value),
             itemAsString: (u) => u.name,
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightCategories;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_config.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -72,80 +72,45 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
           ),
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.pin),
-        title: TextFormField(
-          initialValue: widget.boutResultRule?.winnerClassificationPoints.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.classificationPoints} ${localizations.winner}',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _winnerClassificationPoints = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.pin,
+        initialValue: widget.boutResultRule?.winnerClassificationPoints,
+        label: '${localizations.classificationPoints} ${localizations.winner}',
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
+        isMandatory: true,
+        onSaved: (int? value) => _winnerClassificationPoints = value ?? 0,
       ),
-      ListTile(
-        leading: const Icon(Icons.pin),
-        title: TextFormField(
-          initialValue: widget.boutResultRule?.loserClassificationPoints.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.classificationPoints} ${localizations.loser}',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _loserClassificationPoints = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.pin,
+        initialValue: widget.boutResultRule?.loserClassificationPoints,
+        label: '${localizations.classificationPoints} ${localizations.loser}',
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
+        isMandatory: true,
+        onSaved: (int? value) => _loserClassificationPoints = value ?? 0,
       ),
-      ListTile(
-        leading: const Icon(Icons.pin_outlined),
-        title: TextFormField(
-          initialValue: widget.boutResultRule?.winnerTechnicalPoints?.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.technicalPoints} ${localizations.winner}',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _winnerTechnicalPoints = int.tryParse(value ?? '');
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.pin_outlined,
+        initialValue: widget.boutResultRule?.winnerTechnicalPoints,
+        label: '${localizations.technicalPoints} ${localizations.winner}',
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
+        isMandatory: false,
+        onSaved: (int? value) => _winnerTechnicalPoints = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.pin_outlined),
-        title: TextFormField(
-          initialValue: widget.boutResultRule?.loserTechnicalPoints?.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.technicalPoints} ${localizations.loser}',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _loserTechnicalPoints = int.tryParse(value ?? '');
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.pin_outlined,
+        initialValue: widget.boutResultRule?.loserTechnicalPoints,
+        label: '${localizations.technicalPoints} ${localizations.loser}',
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
+        isMandatory: false,
+        onSaved: (int? value) => _loserTechnicalPoints = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.difference),
-        title: TextFormField(
-          initialValue: widget.boutResultRule?.technicalPointsDifference?.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: '${localizations.technicalPoints} ${localizations.difference}',
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 1000)],
-          onSaved: (String? value) {
-            _technicalPointsDifference = int.tryParse(value ?? '');
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.difference,
+        initialValue: widget.boutResultRule?.technicalPointsDifference,
+        label: '${localizations.technicalPoints} ${localizations.difference}',
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
+        isMandatory: false,
+        onSaved: (int? value) => _technicalPointsDifference = value,
       ),
       ListTile(
         title: SearchableDropdown<BoutConfig>(

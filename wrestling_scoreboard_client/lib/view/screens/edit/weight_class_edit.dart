@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class WeightClassEdit extends ConsumerStatefulWidget {
@@ -21,7 +20,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
   final _formKey = GlobalKey<FormState>();
 
   String? _suffix;
-  var _weight = 0;
+  int _weight = 0;
   late WrestlingStyle _wrestlingStyle;
   late WeightUnit _unit;
 
@@ -44,20 +43,12 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
 
     final items = [
       ...fields,
-      ListTile(
-        leading: const Icon(Icons.fitness_center),
-        title: TextFormField(
-          initialValue: widget.weightClass?.weight.toString() ?? '',
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20),
-            labelText: localizations.weight,
-          ),
-          inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
-          onSaved: (String? value) {
-            _weight = int.tryParse(value ?? '') ?? 0;
-          },
-        ),
+      NumericalInput(
+        iconData: Icons.fitness_center,
+        initialValue: widget.weightClass?.weight,
+        label: localizations.weight,
+        isMandatory: true,
+        onSaved: (int? value) => _weight = value ?? 0,
       ),
       ListTile(
         leading: const Icon(Icons.style),
@@ -89,23 +80,18 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
             }),
             selected: _unit,
             onChange:
-                (newValue) => setState(() {
-                  _unit = newValue!;
+                (value) => setState(() {
+                  _unit = value!;
                 }),
           ),
         ),
       ),
-      ListTile(
-        leading: const Icon(Icons.description),
-        title: TextFormField(
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: localizations.suffix,
-            hintText: localizations.optional,
-          ),
-          initialValue: widget.weightClass?.suffix ?? '',
-          onSaved: (newValue) => _suffix = newValue,
-        ),
+      CustomTextInput(
+        iconData: Icons.description,
+        label: localizations.suffix,
+        isMandatory: false,
+        initialValue: widget.weightClass?.suffix,
+        onSaved: (value) => _suffix = value,
       ),
     ];
 
