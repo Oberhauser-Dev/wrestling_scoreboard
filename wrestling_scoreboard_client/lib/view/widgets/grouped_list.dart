@@ -4,6 +4,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/search.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -156,7 +157,7 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
       header: ListTile(
         leading: const Icon(Icons.search),
         title: TextField(
-          autofocus: true,
+          autofocus: isOnDesktop,
           enabled: widget.items.isNotEmpty,
           decoration: InputDecoration(hintText: widget.hintText),
           onChanged: (searchTerm) async {

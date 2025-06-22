@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-final isMobile =
-    !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
-final isDesktop = !kIsWeb && !isMobile;
+final isOnMobile = defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS;
+final isMobile = !kIsWeb && isOnMobile;
+final isOnDesktop = !isOnMobile;
+final isDesktop = !kIsWeb && isOnDesktop;
 
 extension ColorExtension on Color {
   /// Get disabled state of a color.

@@ -29,6 +29,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/weight_class_overview.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
@@ -156,7 +157,7 @@ class HomeState extends ConsumerState<Home> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: SearchBar(
-                autoFocus: true,
+                autoFocus: isOnDesktop,
                 padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
                 leading: const Icon(Icons.search),
                 trailing: [
