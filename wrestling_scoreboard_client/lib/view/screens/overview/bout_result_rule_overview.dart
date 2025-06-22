@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_config.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result_rule.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_result_rule_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
@@ -41,7 +41,7 @@ class BoutResultRuleOverview extends ConsumerWidget {
           children: [
             ContentItem(
               title: boutResultRule.boutConfig.localize(context),
-              subtitle: localizations.boutResult,
+              subtitle: localizations.boutConfig,
               icon: Icons.tune,
             ),
             ContentItem(

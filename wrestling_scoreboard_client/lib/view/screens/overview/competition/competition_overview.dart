@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/competition/compet
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
@@ -17,11 +17,9 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competi
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class CompetitionOverview extends ConsumerWidget {
+class CompetitionOverview extends BoutConfigOverview<Competition> {
   static const route = 'competition';
 
   final int id;
@@ -109,28 +107,8 @@ class CompetitionOverview extends ConsumerWidget {
         //     icon: Icons.security,
         //   ),
         // ];
-        final items = [
-          InfoWidget(
-            obj: competition,
-            editPage: CompetitionEdit(competition: competition),
-            onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Competition>(competition),
-            classLocale: localizations.competition,
-            children: [
-              ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
-              ContentItem(
-                title: competition.location ?? 'no location',
-                subtitle: localizations.place,
-                icon: Icons.place,
-              ),
-              ContentItem(
-                title: competition.date.toDateTimeString(context),
-                subtitle: localizations.date,
-                icon: Icons.date_range,
-              ),
-              ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
-            ],
-          ),
-          FilterableManyConsumer<CompetitionLineup, Competition>.edit(
+        final items = {
+          Tab(child: HeadingText(localizations.lineups)): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
             context: context,
             editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
             filterObject: competition,
@@ -142,7 +120,10 @@ class CompetitionOverview extends ConsumerWidget {
               );
             },
           ),
-          FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
+
+          Tab(
+            child: HeadingText(localizations.weightCategories),
+          ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
             context: context,
             editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
             filterObject: competition,
@@ -154,7 +135,9 @@ class CompetitionOverview extends ConsumerWidget {
               );
             },
           ),
-          FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
+          Tab(
+            child: HeadingText(localizations.competitionSystems),
+          ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
             context: context,
             editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
             filterObject: competition,
@@ -167,17 +150,35 @@ class CompetitionOverview extends ConsumerWidget {
               );
             },
           ),
-          CompetitionBoutList(filterObject: competition),
+          Tab(child: HeadingText(localizations.bouts)): CompetitionBoutList(filterObject: competition),
+
+          // Tab(child: HeadingText(localizations.persons)):
           // GroupedList(
           //   header: const HeadingItem(),
           //   itemCount: contentItems.length,
           //   itemBuilder: (context, index) => contentItems[index],
           // ),
-        ];
+        };
 
-        return FavoriteScaffold<Competition>(
-          dataObject: competition,
-          label: localizations.competition,
+        return buildOverview(
+          context,
+          ref,
+          classLocale: localizations.competition,
+          initialData: competition.boutConfig,
+          editPage: CompetitionEdit(competition: competition),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Competition>(competition),
+          tiles: [
+            ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
+            ContentItem(title: competition.location ?? 'no location', subtitle: localizations.place, icon: Icons.place),
+            ContentItem(
+              title: competition.date.toDateTimeString(context),
+              subtitle: localizations.date,
+              icon: Icons.date_range,
+            ),
+            ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
+          ],
+          dataId: competition.id!,
+          subClassData: competition,
           details: competition.name,
           actions: [
             // if (competition.organization != null)
@@ -217,15 +218,7 @@ class CompetitionOverview extends ConsumerWidget {
               ),
             ),
           ],
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.lineups)),
-            Tab(child: HeadingText(localizations.weightCategories)),
-            Tab(child: HeadingText(localizations.competitionSystems)),
-            Tab(child: HeadingText(localizations.bouts)),
-            // Tab(child: HeadingText(localizations.persons)),
-          ],
-          body: TabGroup(items: items),
+          buildRelations: (boutConfig) => items,
         );
       },
     );
