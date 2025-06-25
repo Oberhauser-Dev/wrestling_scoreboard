@@ -6,21 +6,24 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/import_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
-import 'bout_controller.dart';
-import 'entity_controller.dart';
+import 'common/entity_controller.dart';
 
-class TeamMatchController extends OrganizationalController<TeamMatch> with ImportController<TeamMatch> {
+class TeamMatchController extends ShelfController<TeamMatch>
+    with OrganizationalController<TeamMatch>, ImportController<TeamMatch> {
   static final TeamMatchController _singleton = TeamMatchController._internal();
 
   factory TeamMatchController() {

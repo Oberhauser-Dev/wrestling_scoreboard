@@ -403,6 +403,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rank => 'Rank';
 
   @override
+  String get cycle => 'Cycle';
+
+  @override
+  String get cycles => 'Cycles';
+
+  @override
   String get round => 'Round';
 
   @override

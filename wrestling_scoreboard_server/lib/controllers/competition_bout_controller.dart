@@ -1,19 +1,16 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/orderable_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/utils/competition_system_algorithms.dart';
 
-import 'bout_action_controller.dart';
-import 'competition_participation_controller.dart';
-import 'competition_weight_category_controller.dart';
-import 'entity_controller.dart';
-
-class CompetitionBoutController extends ShelfController<CompetitionBout> {
+class CompetitionBoutController extends ShelfController<CompetitionBout> with OrderableController<CompetitionBout> {
   static final CompetitionBoutController _singleton = CompetitionBoutController._internal();
 
   factory CompetitionBoutController() {
@@ -37,169 +34,159 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
         WHERE cb.mat = @mat AND b.bout_result IS NULL;''';
 
   @override
-  Future<Response> postRequestSingle(Request request, User? user) async {
-    final message = await request.readAsString();
-    try {
-      final json = jsonDecode(message);
-      final updatedCompetitionBout = parseSingleJson<CompetitionBout>(json);
-      final obfuscate = user?.obfuscate ?? true;
-      if (updatedCompetitionBout.bout.result == null) {
-        if (updatedCompetitionBout.mat != null) {
-          // Update bout mat
-          // Prohibit from adding a bout to an already occupied mat
-          final curCompetitionBoutsOfMat = await getManyFromQuery(
-            _currentCompetitionBoutOfMatQuery,
-            obfuscate: obfuscate,
-            substitutionValues: {'mat': updatedCompetitionBout.mat},
-          );
-          // final operation = CRUD.values.byName(json['operation']);
-          if (curCompetitionBoutsOfMat.isNotEmpty) {
-            // Don't let occupy the mat with more than one bout
-            final curCompetitionBout = curCompetitionBoutsOfMat.first;
-            if (curCompetitionBout.id != json['id']) {
-              // But only complain if the updated bout is not the current one on the mat
-              return Response.badRequest(
-                body:
-                    'Mat ${updatedCompetitionBout.mat} is already occupied a CompetitionBout. Please add a bout result first:\n${curCompetitionBout.toJson()}',
-              );
-            }
+  Future<Response> handlePostRequestSingle(Map<String, Object?> json) async {
+    final updatedCompetitionBout = parseSingleJson<CompetitionBout>(json);
+    final obfuscate = false;
+    if (updatedCompetitionBout.bout.result == null) {
+      if (updatedCompetitionBout.mat != null) {
+        // Update bout mat
+        // Prohibit from adding a bout to an already occupied mat
+        final curCompetitionBoutsOfMat = await getManyFromQuery(
+          _currentCompetitionBoutOfMatQuery,
+          obfuscate: obfuscate,
+          substitutionValues: {'mat': updatedCompetitionBout.mat},
+        );
+        // final operation = CRUD.values.byName(json['operation']);
+        if (curCompetitionBoutsOfMat.isNotEmpty) {
+          // Don't let occupy the mat with more than one bout
+          final curCompetitionBout = curCompetitionBoutsOfMat.first;
+          if (curCompetitionBout.id != json['id']) {
+            // But only complain if the updated bout is not the current one on the mat
+            return Response.badRequest(
+              body:
+                  'Mat ${updatedCompetitionBout.mat} is already occupied a CompetitionBout. Please add a bout result first:\n${curCompetitionBout.toJson()}',
+            );
           }
         }
-      } else if (updatedCompetitionBout.weightCategory?.id != null) {
-        final weightCategory = await CompetitionWeightCategoryController().getSingle(
+      }
+    } else if (updatedCompetitionBout.weightCategory?.id != null) {
+      final weightCategory = await CompetitionWeightCategoryController().getSingle(
+        updatedCompetitionBout.weightCategory!.id!,
+        obfuscate: obfuscate,
+      );
+
+      if (weightCategory.pairedRound != null &&
+          updatedCompetitionBout.round != null &&
+          updatedCompetitionBout.round! >= weightCategory.pairedRound!) {
+        // Only compute if pairedRound is equal to round of updated bout
+        if (updatedCompetitionBout.round! > weightCategory.pairedRound!) {
+          throw Exception(
+            'Round of bout $updatedCompetitionBout must be smaller or equal to paired round ${weightCategory.pairedRound}',
+          );
+        }
+
+        final pastCompetitionBouts = await getByWeightCategory(
           updatedCompetitionBout.weightCategory!.id!,
           obfuscate: obfuscate,
         );
+        final pastCompetitionBoutsWithActions = await Future.wait(
+          pastCompetitionBouts.map(
+            (cb) async => MapEntry(cb, await BoutActionController().getByBout(cb.bout.id!, obfuscate: obfuscate)),
+          ),
+        );
+        final competitionBoutsOfRound = pastCompetitionBouts.where((cb) => cb.round == updatedCompetitionBout.round);
 
-        if (weightCategory.pairedRound != null &&
-            updatedCompetitionBout.round != null &&
-            updatedCompetitionBout.round! >= weightCategory.pairedRound!) {
-          // Only compute if pairedRound is equal to round of updated bout
-          if (updatedCompetitionBout.round! > weightCategory.pairedRound!) {
-            throw Exception(
-              'Round of bout $updatedCompetitionBout must be smaller or equal to paired round ${weightCategory.pairedRound}',
-            );
-          }
+        if (competitionBoutsOfRound.every((cb) => cb.bout.result != null)) {
+          // Every bout has a bout result, so can pair a new round
+          RoundType roundType = updatedCompetitionBout.roundType;
+          final pairedRound = weightCategory.pairedRound! + 1;
 
-          final pastCompetitionBouts = await getByWeightCategory(
-            updatedCompetitionBout.weightCategory!.id!,
-            obfuscate: obfuscate,
+          final participations = await CompetitionParticipationController().getByWeightCategory(
+            false,
+            weightCategory.id!,
           );
-          final pastCompetitionBoutsWithActions = await Future.wait(
-            pastCompetitionBouts.map(
-              (cb) async => MapEntry(cb, await BoutActionController().getByBout(cb.bout.id!, obfuscate: obfuscate)),
-            ),
-          );
-          final competitionBoutsOfRound = pastCompetitionBouts.where((cb) => cb.round == updatedCompetitionBout.round);
 
-          if (competitionBoutsOfRound.every((cb) => cb.bout.result != null)) {
-            // Every bout has a bout result, so can pair a new round
-            RoundType roundType = updatedCompetitionBout.roundType;
-            final pairedRound = weightCategory.pairedRound! + 1;
+          final poolParticipationGroups = participations.groupListsBy((participation) => participation.poolGroup);
+          final List<CompetitionBout> createdCompetitionBouts = [];
 
-            final participations = await CompetitionParticipationController().getByWeightCategory(
-              false,
-              weightCategory.id!,
+          if (roundType == RoundType.elimination) {
+            final pastEliminationBouts = Map.fromEntries(
+              pastCompetitionBoutsWithActions.where((cb) => cb.key.roundType == RoundType.elimination),
             );
-
-            final poolParticipationGroups = participations.groupListsBy((participation) => participation.poolGroup);
-            final List<CompetitionBout> createdCompetitionBouts = [];
-
-            if (roundType == RoundType.elimination) {
-              final pastEliminationBouts = Map.fromEntries(
-                pastCompetitionBoutsWithActions.where((cb) => cb.key.roundType == RoundType.elimination),
+            for (final poolParticipations in poolParticipationGroups.values) {
+              final poolCompetitionBouts = await _updatePoolCompetitionBouts(
+                weightCategory: weightCategory,
+                pairedRound: pairedRound,
+                pastCompetitionBoutsWithActions: pastEliminationBouts,
+                poolParticipations: poolParticipations,
               );
+              createdCompetitionBouts.addAll(poolCompetitionBouts);
+            }
+            // If all pool bouts were finished
+            if (createdCompetitionBouts.isEmpty) {
+              // Calculate pool rankings
+              final List<List<RankingMetric>> rankingByPool = [];
               for (final poolParticipations in poolParticipationGroups.values) {
-                final poolCompetitionBouts = await _updatePoolCompetitionBouts(
-                  weightCategory: weightCategory,
-                  pairedRound: pairedRound,
-                  pastCompetitionBoutsWithActions: pastEliminationBouts,
-                  poolParticipations: poolParticipations,
+                rankingByPool.add(
+                  CompetitionWeightCategory.calculatePoolRanking(
+                    poolParticipations,
+                    pastEliminationBouts,
+                    weightCategory.competitionSystem,
+                  ),
                 );
-                createdCompetitionBouts.addAll(poolCompetitionBouts);
               }
-              // If all pool bouts were finished
-              if (createdCompetitionBouts.isEmpty) {
-                // Calculate pool rankings
-                final List<List<RankingMetric>> rankingByPool = [];
-                for (final poolParticipations in poolParticipationGroups.values) {
-                  rankingByPool.add(
-                    CompetitionWeightCategory.calculatePoolRanking(
-                      poolParticipations,
-                      pastEliminationBouts,
-                      weightCategory.competitionSystem,
-                    ),
-                  );
-                }
-                if (weightCategory.poolGroupCount >= 2) {
-                  // Slice pools in 2, so each can compete against another pool (in most cases there are only 2 pools anyways).
-                  final poolRankingSlices = rankingByPool.slices(2);
-                  // TODO: implement "across" mode.
-                  final isAcross = false;
-                  for (final poolRankingSlice in poolRankingSlices) {
-                    // ignore: dead_code
-                    if (isAcross) {
-                      roundType = RoundType.semiFinals;
+              if (weightCategory.poolGroupCount >= 2) {
+                // Slice pools in 2, so each can compete against another pool (in most cases there are only 2 pools anyways).
+                final poolRankingSlices = rankingByPool.slices(2);
+                // TODO: implement "across" mode.
+                final isAcross = false;
+                for (final poolRankingSlice in poolRankingSlices) {
+                  // ignore: dead_code
+                  if (isAcross) {
+                    roundType = RoundType.semiFinals;
+                    createdCompetitionBouts.addAll(
+                      CompetitionWeightCategoryController.convertBoutsOfRound(
+                        weightCategory,
+                        // [Pool A][first] against [Pool B][second]
+                        [poolRankingSlice[0][0].participation, poolRankingSlice[1][1].participation],
+                        round: pairedRound,
+                        boutIndexListOfRound: [(0, 1)],
+                        roundType: roundType,
+                      ),
+                    );
+                    createdCompetitionBouts.addAll(
+                      CompetitionWeightCategoryController.convertBoutsOfRound(
+                        weightCategory,
+                        // [Pool A][second] against [Pool B][first]
+                        [poolRankingSlice[0][1].participation, poolRankingSlice[1][0].participation],
+                        round: pairedRound,
+                        boutIndexListOfRound: [(0, 1)],
+                        roundType: roundType,
+                      ),
+                    );
+                    // TODO: pair finals
+                  } else {
+                    roundType = RoundType.finals;
+                    int rank = 0;
+                    while (rank < poolRankingSlice[0].length &&
+                        rank < poolRankingSlice[1].length &&
+                        rank < maxPoolFinalists) {
                       createdCompetitionBouts.addAll(
                         CompetitionWeightCategoryController.convertBoutsOfRound(
                           weightCategory,
-                          // [Pool A][first] against [Pool B][second]
-                          [poolRankingSlice[0][0].participation, poolRankingSlice[1][1].participation],
+                          // [Pool A][rank] against [Pool B][rank]
+                          [poolRankingSlice[0][rank].participation, poolRankingSlice[1][rank].participation],
                           round: pairedRound,
                           boutIndexListOfRound: [(0, 1)],
                           roundType: roundType,
+                          rank: rank,
                         ),
                       );
-                      createdCompetitionBouts.addAll(
-                        CompetitionWeightCategoryController.convertBoutsOfRound(
-                          weightCategory,
-                          // [Pool A][second] against [Pool B][first]
-                          [poolRankingSlice[0][1].participation, poolRankingSlice[1][0].participation],
-                          round: pairedRound,
-                          boutIndexListOfRound: [(0, 1)],
-                          roundType: roundType,
-                        ),
-                      );
-                      // TODO: pair finals
-                    } else {
-                      roundType = RoundType.finals;
-                      int rank = 0;
-                      while (rank < poolRankingSlice[0].length &&
-                          rank < poolRankingSlice[1].length &&
-                          rank < maxPoolFinalists) {
-                        createdCompetitionBouts.addAll(
-                          CompetitionWeightCategoryController.convertBoutsOfRound(
-                            weightCategory,
-                            // [Pool A][rank] against [Pool B][rank]
-                            [poolRankingSlice[0][rank].participation, poolRankingSlice[1][rank].participation],
-                            round: pairedRound,
-                            boutIndexListOfRound: [(0, 1)],
-                            roundType: roundType,
-                            rank: rank,
-                          ),
-                        );
-                        rank++;
-                      }
+                      rank++;
                     }
                   }
                 }
               }
             }
-
-            await CompetitionWeightCategoryController.createAndBroadcastBouts(createdCompetitionBouts, weightCategory);
-
-            await CompetitionWeightCategoryController().updateSingle(weightCategory.copyWith(pairedRound: pairedRound));
           }
+
+          await CompetitionWeightCategoryController.createAndBroadcastBouts(createdCompetitionBouts, weightCategory);
+
+          await CompetitionWeightCategoryController().updateSingle(weightCategory.copyWith(pairedRound: pairedRound));
         }
       }
-      return handlePostRequestSingle(json);
-    } on FormatException catch (e) {
-      final errMessage =
-          'The data object of table "$tableName" could not be created. Check the format: $message'
-          '\nFormatException: ${e.message}';
-      logger.warning(errMessage.toString());
-      return Response.badRequest(body: errMessage);
     }
+    return super.handlePostRequestSingle(json);
   }
 
   @override
@@ -374,5 +361,28 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> {
         // Nothing to pair
         return [];
     }
+  }
+
+  @override
+  Future<void> reorderBlocks({
+    required Type orderType,
+    required Type filterType,
+    required int filterId,
+    String? orderByStmt,
+  }) {
+    // Adjust round by subtracting all earlier skipped cycles
+    orderByStmt ??= '''
+      (t.round + (
+        SELECT COUNT(*)
+        FROM unnest(ot.skipped_cycles) AS sc
+        WHERE sc <= t.round
+      ))
+    ''';
+    return super.reorderBlocks(
+      orderType: orderType,
+      filterType: filterType,
+      filterId: filterId,
+      orderByStmt: orderByStmt,
+    );
   }
 }

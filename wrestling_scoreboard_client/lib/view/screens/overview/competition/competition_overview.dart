@@ -5,11 +5,14 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_age_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_age_category_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_cycle_management.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
@@ -108,6 +111,7 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
         //   ),
         // ];
         final items = {
+          Tab(child: HeadingText(localizations.cycles)): CompetitionCycleManagement(competition: competition),
           Tab(child: HeadingText(localizations.lineups)): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
             context: context,
             editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
@@ -120,7 +124,20 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
               );
             },
           ),
-
+          Tab(
+            child: HeadingText(localizations.ageCategories),
+          ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, competitionAgeCategory) {
+              return ContentItem(
+                title: competitionAgeCategory.ageCategory.name,
+                icon: Icons.school,
+                onTap: () async => _handleSelectedCompetitionAgeCategory(context, competitionAgeCategory),
+              );
+            },
+          ),
           Tab(
             child: HeadingText(localizations.weightCategories),
           ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
@@ -246,6 +263,10 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
 
   _handleSelectedCompetitionLineup(BuildContext context, CompetitionLineup lineup) {
     context.push('/${CompetitionLineupOverview.route}/${lineup.id}');
+  }
+
+  _handleSelectedCompetitionAgeCategory(BuildContext context, CompetitionAgeCategory competitionAgeCategory) {
+    context.push('/${CompetitionAgeCategoryOverview.route}/${competitionAgeCategory.id}');
   }
 }
 

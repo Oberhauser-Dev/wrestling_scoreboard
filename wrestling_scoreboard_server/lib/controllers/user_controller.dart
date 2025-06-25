@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
 class SecuredUserController extends ShelfController<SecuredUser> {
   static final SecuredUserController _singleton = SecuredUserController._internal();

@@ -5,7 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 
 import 'environment.dart';

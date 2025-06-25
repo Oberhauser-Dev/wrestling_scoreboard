@@ -1,7 +1,6 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
 class CompetitionSystemAffiliationController extends ShelfController<CompetitionSystemAffiliation> {
   static final CompetitionSystemAffiliationController _singleton = CompetitionSystemAffiliationController._internal();

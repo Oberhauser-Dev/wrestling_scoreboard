@@ -407,6 +407,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get rank => 'Platz';
 
   @override
+  String get cycle => 'Zyklus';
+
+  @override
+  String get cycles => 'Zyklen';
+
+  @override
   String get round => 'Runde';
 
   @override

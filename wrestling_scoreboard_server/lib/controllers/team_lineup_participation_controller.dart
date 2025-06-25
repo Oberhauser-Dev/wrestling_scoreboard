@@ -1,8 +1,7 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
-
-import 'entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
 class TeamLineupParticipationController extends ShelfController<TeamLineupParticipation> {
   static final TeamLineupParticipationController _singleton = TeamLineupParticipationController._internal();

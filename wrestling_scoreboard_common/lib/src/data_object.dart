@@ -15,9 +15,13 @@ abstract class DataObject {
 }
 
 abstract class Organizational extends DataObject {
-  String? get orgSyncId => null;
+  String? get orgSyncId;
 
-  Organization? get organization => null;
+  Organization? get organization;
+}
+
+abstract class Orderable extends DataObject {
+  int get pos;
 }
 
 class DataUnimplementedError extends UnimplementedError {

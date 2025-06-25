@@ -23,6 +23,7 @@ import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
@@ -201,6 +202,13 @@ getRouter() {
                       ),
                     ],
                   ),
+                  GoRoute(
+                    path: '${CompetitionAgeCategoryOverview.route}/:competition_age_category_id',
+                    builder:
+                        (context, state) => CompetitionAgeCategoryOverview(
+                          id: int.parse(state.pathParameters['competition_age_category_id']!),
+                        ),
+                  ),
                 ],
               ),
               GoRoute(
@@ -215,6 +223,13 @@ getRouter() {
                 builder:
                     (context, state) => CompetitionWeightCategoryOverview(
                       id: int.parse(state.pathParameters['competition_weight_category_id']!),
+                    ),
+              ),
+              GoRoute(
+                path: '${CompetitionAgeCategoryOverview.route}/:competition_age_category_id',
+                builder:
+                    (context, state) => CompetitionAgeCategoryOverview(
+                      id: int.parse(state.pathParameters['competition_age_category_id']!),
                     ),
               ),
               GoRoute(

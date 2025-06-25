@@ -20,15 +20,16 @@ class CompetitionWeightCategoryEdit extends WeightClassEdit {
 }
 
 class CompetitionWeightCategoryEditState extends WeightClassEditState<CompetitionWeightCategoryEdit> {
-  Iterable<AgeCategory>? _availableAgeCategories;
-  AgeCategory? _ageCategory;
+  Iterable<CompetitionAgeCategory>? _availableCompetitionAgeCategories;
+  CompetitionAgeCategory? _competitionAgeCategory;
   CompetitionSystem? _competitionSystem;
   late int _poolGroupCount;
+  int _pos = 0;
 
   @override
   void initState() {
     super.initState();
-    _ageCategory = widget.competitionWeightCategory?.ageCategory;
+    _competitionAgeCategory = widget.competitionWeightCategory?.competitionAgeCategory;
     _competitionSystem = widget.competitionWeightCategory?.competitionSystem;
     _poolGroupCount = widget.competitionWeightCategory?.poolGroupCount ?? 1;
   }
@@ -41,23 +42,31 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
       id: widget.competitionWeightCategory?.id,
       classLocale: localizations.weightClass,
       fields: [
+        NumericalInput(
+          iconData: Icons.format_list_numbered,
+          initialValue: widget.competitionWeightCategory?.pos,
+          label: localizations.position,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: true,
+          onSaved: (int? value) => _pos = value ?? 0,
+        ),
         ListTile(
-          title: SearchableDropdown<AgeCategory>(
+          title: SearchableDropdown<CompetitionAgeCategory>(
             icon: const Icon(Icons.school),
-            selectedItem: _ageCategory,
+            selectedItem: _competitionAgeCategory,
             label: localizations.ageCategory,
             context: context,
             onSaved:
                 (value) => setState(() {
-                  _ageCategory = value;
+                  _competitionAgeCategory = value;
                 }),
             allowEmpty: false,
-            itemAsString: (u) => u.name,
+            itemAsString: (u) => u.ageCategory.name,
             asyncItems: (String filter) async {
-              _availableAgeCategories ??= await (await ref.read(
+              _availableCompetitionAgeCategories ??= (await (await ref.read(
                 dataManagerNotifierProvider,
-              )).readMany<AgeCategory, Organization>(filterObject: widget.initialCompetition.organization);
-              return _availableAgeCategories!.toList();
+              )).readMany<CompetitionAgeCategory, Competition>(filterObject: widget.initialCompetition));
+              return _availableCompetitionAgeCategories!.toList();
             },
           ),
         ),
@@ -97,9 +106,10 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
       id: widget.competitionWeightCategory?.id,
       weightClass: weightClass,
       competition: widget.competitionWeightCategory?.competition ?? widget.initialCompetition,
-      ageCategory: _ageCategory!,
+      competitionAgeCategory: _competitionAgeCategory!,
       poolGroupCount: _poolGroupCount,
       competitionSystem: _competitionSystem,
+      pos: _pos,
     );
     competitionWeightCategory = competitionWeightCategory.copyWithId(
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionWeightCategory),

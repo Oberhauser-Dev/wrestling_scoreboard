@@ -53,7 +53,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
               icon: Icons.leaderboard,
             ),
             ContentItem(
-              title: competitionWeightCategory.ageCategory.name,
+              title: competitionWeightCategory.competitionAgeCategory.ageCategory.name,
               subtitle: localizations.ageCategory,
               icon: Icons.school,
             ),

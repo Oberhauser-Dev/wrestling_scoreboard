@@ -8,9 +8,9 @@ import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
 import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
@@ -137,6 +137,7 @@ void main() {
         const (CompetitionBout) => mockedData.getCompetitionBouts(),
         const (CompetitionLineup) => mockedData.getCompetitionLineups(),
         const (CompetitionSystemAffiliation) => mockedData.getCompetitionSystemAffiliations(),
+        const (CompetitionAgeCategory) => mockedData.getCompetitionAgeCategories(),
         const (CompetitionWeightCategory) => mockedData.getCompetitionWeightCategories(),
         const (CompetitionParticipation) => mockedData.getCompetitionParticipations(),
         const (Organization) => mockedData.getOrganizations(),
@@ -224,6 +225,7 @@ void main() {
         CompetitionParticipation,
         // CompetitionBout,
         CompetitionWeightCategory,
+        CompetitionAgeCategory,
         WeightClass,
         CompetitionLineup,
         // BoutAction,

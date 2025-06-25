@@ -260,7 +260,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
                   boutConfig: competition.boutConfig,
                   bout: competitionBout.bout,
                   weightClass: competitionBout.weightCategory?.weightClass,
-                  ageCategory: competitionBout.weightCategory?.ageCategory,
+                  ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
                 ),
               ),
               SizedBox(

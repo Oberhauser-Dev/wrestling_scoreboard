@@ -1,6 +1,6 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
 class BoutResultRuleController extends ShelfController<BoutResultRule> {
   static final BoutResultRuleController _singleton = BoutResultRuleController._internal();

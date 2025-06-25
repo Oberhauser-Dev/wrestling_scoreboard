@@ -310,13 +310,25 @@ class MockedData {
     id: 1,
     competition: competition,
     weightClass: wc61,
-    ageCategory: ageCategoryAJuniors,
+    competitionAgeCategory: competitionAgeCategory,
   );
 
   late final competitionWeightCategory2 = CompetitionWeightCategory(
     id: 2,
     competition: competition,
     weightClass: wc57,
+    competitionAgeCategory: competitionAgeCategory2,
+  );
+
+  late final competitionAgeCategory = CompetitionAgeCategory(
+    id: 1,
+    competition: competition,
+    ageCategory: ageCategoryAJuniors,
+  );
+
+  late final competitionAgeCategory2 = CompetitionAgeCategory(
+    id: 2,
+    competition: competition,
     ageCategory: ageCategoryCJuniors,
   );
 
@@ -551,6 +563,7 @@ class MockedData {
     competitionWeightCategory,
     competitionWeightCategory2,
   ];
+  late final List<CompetitionAgeCategory> _competitionAgeCategories = [competitionAgeCategory, competitionAgeCategory2];
   late final List<CompetitionLineup> _competitionLineups = [competitionLineup1, competitionLineup2];
   late final List<CompetitionParticipation> _competitionParticipations = [
     competitionParticipation1,
@@ -700,8 +713,14 @@ class MockedData {
 
   List<CompetitionWeightCategory> getCompetitionWeightCategories() => _competitionWeightCategories;
 
+  List<CompetitionAgeCategory> getCompetitionAgeCategories() => _competitionAgeCategories;
+
   List<CompetitionWeightCategory> getCompetitionWeightCategoriesOfCompetition(Competition competition) {
     return getCompetitionWeightCategories().where((element) => element.competition == competition).toList();
+  }
+
+  List<CompetitionAgeCategory> getCompetitionAgeCategoriesOfCompetition(Competition competition) {
+    return getCompetitionAgeCategories().where((element) => element.competition == competition).toList();
   }
 
   List<CompetitionSystemAffiliation> getCompetitionSystemAffiliations() => _competitionSystemAffiliations;

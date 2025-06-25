@@ -140,6 +140,8 @@
   "pool": "Pool",
   "poolGroupCount": "Pool group count",
   "rank": "Rank",
+  "cycle": "Cycle",
+  "cycles": "Cycles",
   "round": "Round",
   "roundType": "Round Type",
   "qualification": "Qualification",

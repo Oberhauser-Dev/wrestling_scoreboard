@@ -1,8 +1,9 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/orderable_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
@@ -34,6 +35,9 @@ class ApiRoute {
 
       final controller = ShelfController.getControllerFromDataType(dataType)!;
       final typeRoute = '/${controller.tableName}';
+      if (controller is OrderableController) {
+        router.restrictedPostOne('$typeRoute/<id|[0-9]+>/reorder', controller.postRequestReorder);
+      }
       router.restrictedPost(typeRoute, controller.postRequestSingle);
       router.restrictedGet('${typeRoute}s', controller.getRequestMany);
       router.restrictedGetOne('$typeRoute/<id|[0-9]+>', controller.getRequestSingle);
@@ -41,14 +45,14 @@ class ApiRoute {
 
     // Generate GET endpoints simple object relations
     directDataObjectRelations.forEach((dataObjectType, relationMap) {
-      relationMap.forEach((tableName, propertyConfig) {
-        final (propertyType, orderBy) = propertyConfig;
+      relationMap.forEach((propertyType, propertyConfig) {
+        final (tableRef, orderBy) = propertyConfig;
         router.restrictedGetOne(
           '/${getTableNameFromType(propertyType)}/<id|[0-9]+>/${getTableNameFromType(dataObjectType)}s',
           (Request request, User? user, String id) =>
               ShelfController.getControllerFromDataType(dataObjectType)!.handleGetRequestMany(
                 isRaw: request.isRaw,
-                conditions: ['$tableName = @id'],
+                conditions: ['$tableRef = @id'],
                 substitutionValues: {'id': id},
                 orderBy: orderBy,
                 obfuscate: user?.obfuscate ?? true,

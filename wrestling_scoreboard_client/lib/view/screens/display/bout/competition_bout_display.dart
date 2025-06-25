@@ -91,7 +91,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           // TODO
                           headerItems: [],
                           weightClass: competitionBout.weightCategory?.weightClass,
-                          ageCategory: competitionBout.weightCategory?.ageCategory,
+                          ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
                           roundDescription: competitionBout.roundDescription(context),
                           weightR: homeParticipation?.weight,
                           weightB: guestParticipation?.weight,
