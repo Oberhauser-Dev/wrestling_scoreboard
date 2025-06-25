@@ -1,8 +1,11 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/orderable_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
-class TeamMatchBoutController extends OrganizationalController<TeamMatchBout> {
+class TeamMatchBoutController extends ShelfController<TeamMatchBout>
+    with OrganizationalController<TeamMatchBout>, OrderableController<TeamMatchBout> {
   static final TeamMatchBoutController _singleton = TeamMatchBoutController._internal();
 
   factory TeamMatchBoutController() {

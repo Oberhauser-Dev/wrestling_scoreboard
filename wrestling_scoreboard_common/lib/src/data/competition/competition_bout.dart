@@ -6,7 +6,7 @@ part 'competition_bout.freezed.dart';
 part 'competition_bout.g.dart';
 
 @freezed
-abstract class CompetitionBout with _$CompetitionBout implements DataObject {
+abstract class CompetitionBout with _$CompetitionBout implements DataObject, Orderable {
   const CompetitionBout._();
 
   const factory CompetitionBout({

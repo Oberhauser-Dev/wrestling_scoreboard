@@ -73,7 +73,7 @@ class RestDataManager extends DataManager {
     await _handleResponse(response, errorMessage: 'Failed to READ many ${T.toString()}');
 
     final List<dynamic> json = jsonDecode(response.body);
-    return json.map((e) => e as Map<String, dynamic>).toList(); // TODO check order
+    return json.map((e) => e as Map<String, dynamic>).toList();
   }
 
   @override
@@ -103,6 +103,25 @@ class RestDataManager extends DataManager {
   @override
   Future<void> deleteSingle<T extends DataObject>(T single) async {
     _webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
+  }
+
+  @override
+  Future<void> reorder<T extends Orderable, S extends DataObject?>({
+    required int id,
+    required int newIndex,
+    S? filterObject,
+  }) async {
+    final uri = Uri.parse('$_apiUrl${_getPathFromType(T)}/$id/reorder').replace(
+      queryParameters:
+          filterObject != null
+              ? {
+                'filterTypes': jsonEncode([getTableNameFromType(S)]),
+                'filterIds': jsonEncode([filterObject.id]),
+              }
+              : null,
+    );
+    final response = await http.post(uri, body: newIndex.toString(), headers: _headers);
+    await _handleResponse(response, errorMessage: 'Failed to reorder ${T.toString()}');
   }
 
   @override

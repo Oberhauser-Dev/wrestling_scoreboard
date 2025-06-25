@@ -5,6 +5,9 @@ import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
@@ -13,9 +16,6 @@ import 'package:wrestling_scoreboard_server/controllers/team_match_controller.da
 import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/auth.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
-
-import 'competition_bout_controller.dart';
-import 'entity_controller.dart';
 
 final _logger = Logger('Websocket');
 
@@ -49,10 +49,10 @@ void broadcast(Future<String?> Function(bool obfuscate) builder) async {
 /// Update filtered lists (often the list they are contained in).
 /// Currently do not update list of all entities (as it should only be used in special cases)
 void broadcastSingle<T extends DataObject>(T single) async {
-  directDataObjectRelations[T]?.forEach((propertyTableName, propertyConfig) {
-    final (propertyType, orderBy) = propertyConfig;
+  directDataObjectRelations[T]?.forEach((propertyType, propertyConfig) {
+    final (propertyTableRef, orderBy) = propertyConfig;
     broadcast((obfuscate) async {
-      return _updateInListOfFilter(single, propertyType, propertyTableName, orderBy, obfuscate);
+      return _updateInListOfFilter(single, propertyType, propertyTableRef, orderBy, obfuscate);
     });
   });
 
@@ -233,10 +233,10 @@ Future<String?> _updateInListOfFilter<T extends DataObject>(
 }
 
 void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
-  directDataObjectRelations[T]?.forEach((propertyTableName, propertyConfig) {
-    final (propertyType, orderBy) = propertyConfig;
+  directDataObjectRelations[T]?.forEach((propertyType, propertyConfig) {
+    final (propertyTableRef, orderBy) = propertyConfig;
     broadcast(
-      (obfuscate) async => _updateRawInListOfFilter(T, single, propertyType, propertyTableName, orderBy, obfuscate),
+      (obfuscate) async => _updateRawInListOfFilter(T, single, propertyType, propertyTableRef, orderBy, obfuscate),
     );
   });
 

@@ -89,6 +89,11 @@ class MockDataManager extends DataManager {
             return mockedData.getCompetitionWeightCategoriesOfCompetition(filterObject).cast<T>();
           }
           throw DataUnimplementedError(CRUD.read, T, filterObject);
+        case const (CompetitionAgeCategory):
+          if (filterObject is Competition) {
+            return mockedData.getCompetitionAgeCategoriesOfCompetition(filterObject).cast<T>();
+          }
+          throw DataUnimplementedError(CRUD.read, T, filterObject);
         case const (Division):
           if (filterObject is Organization) return mockedData.getDivisionsOfOrganization(filterObject).cast<T>();
           if (filterObject is Division) return mockedData.getDivisionsOfDivision(filterObject).cast<T>();
@@ -569,6 +574,16 @@ class MockDataManager extends DataManager {
   @override
   Future<void> mergeObjects<T extends DataObject>(List<T> objects) {
     // TODO: implement mergeObjects
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> reorder<T extends Orderable, S extends DataObject?>({
+    required int id,
+    required int newIndex,
+    S? filterObject,
+  }) {
+    // TODO: implement reorder
     throw UnimplementedError();
   }
 }

@@ -848,6 +848,18 @@ abstract class AppLocalizations {
   /// **'Rank'**
   String get rank;
 
+  /// No description provided for @cycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle'**
+  String get cycle;
+
+  /// No description provided for @cycles.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycles'**
+  String get cycles;
+
   /// No description provided for @round.
   ///
   /// In en, this message translates to:

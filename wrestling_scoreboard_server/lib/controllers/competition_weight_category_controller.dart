@@ -5,18 +5,20 @@ import 'package:collection/collection.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/orderable_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/utils/competition_system_algorithms.dart';
 
-import 'athlete_bout_state_controller.dart';
-import 'bout_controller.dart';
-import 'competition_bout_controller.dart';
-import 'entity_controller.dart';
-
-class CompetitionWeightCategoryController extends ShelfController<CompetitionWeightCategory> {
+class CompetitionWeightCategoryController extends ShelfController<CompetitionWeightCategory>
+    with OrderableController<CompetitionWeightCategory> {
   static final CompetitionWeightCategoryController _singleton = CompetitionWeightCategoryController._internal();
 
   factory CompetitionWeightCategoryController() {
@@ -24,6 +26,50 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
   }
 
   CompetitionWeightCategoryController._internal() : super();
+
+  @override
+  Future<Response> handlePostRequestSingle(Map<String, Object?> json) async {
+    // If updating the skipped_cycles, then also update the competition bout order.
+    final updatedCompetitionWeightCategory = parseSingleJson<CompetitionWeightCategory>(json);
+
+    CompetitionWeightCategory? oldCompetitionWeightCategory;
+    final operation = CRUD.values.byName(json['operation'] as String);
+    if (operation == CRUD.update) {
+      oldCompetitionWeightCategory = await getSingle(updatedCompetitionWeightCategory.id!, obfuscate: false);
+    }
+
+    // Need to update before further sorting calculations
+    final response = await super.handlePostRequestSingle(json);
+
+    // There are probably no bouts to sort, if no competition_weight_category was present
+    if (oldCompetitionWeightCategory != null &&
+        !SetEquality().equals(
+          oldCompetitionWeightCategory.skippedCycles.toSet(),
+          updatedCompetitionWeightCategory.skippedCycles.toSet(),
+        )) {
+      await CompetitionBoutController().reorderBlocks(
+        orderType: CompetitionWeightCategory,
+        filterType: Competition,
+        filterId: updatedCompetitionWeightCategory.competition.id!,
+      );
+    }
+    return response;
+  }
+
+  @override
+  Future<Response> postRequestReorder(Request request, User? user, String idAsStr) async {
+    final response = await super.postRequestReorder(request, user, idAsStr);
+    final filterTypes = request.filterTypes.map((ft) => getTypeFromTableName(ft)).toList();
+    final filterIds = request.filterIds;
+    for (int i = 0; i < filterTypes.length; i++) {
+      await CompetitionBoutController().reorderBlocks(
+        orderType: CompetitionWeightCategory,
+        filterType: filterTypes[i],
+        filterId: filterIds[i],
+      );
+    }
+    return response;
+  }
 
   /// isReset: delete all previous Bouts and CompetitionBouts, else reuse the states
   Future<Response> generateBouts(Request request, User? user, String id) async {
@@ -282,7 +328,11 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'paired_round': psql.Type.smallInteger, 'pool_group_count': psql.Type.smallInteger};
+    return {
+      'paired_round': psql.Type.smallInteger,
+      'pool_group_count': psql.Type.smallInteger,
+      'skipped_cycles': psql.Type.smallIntegerArray,
+    };
   }
 
   List<CompetitionParticipation> _drawNumberAndPool(List<CompetitionParticipation> participations, {int? pool}) {

@@ -1,6 +1,5 @@
 import 'package:wrestling_scoreboard_common/common.dart';
-
-import 'entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
 class CompetitionLineupController extends ShelfController<CompetitionLineup> {
   static final CompetitionLineupController _singleton = CompetitionLineupController._internal();

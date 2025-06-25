@@ -5,17 +5,18 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/websocket_handler.dart';
 
 final _logger = Logger('PersonController');
 
-class PersonController extends OrganizationalController<Person> {
+class PersonController extends ShelfController<Person> with OrganizationalController<Person> {
   static final PersonController _singleton = PersonController._internal();
 
   factory PersonController() {

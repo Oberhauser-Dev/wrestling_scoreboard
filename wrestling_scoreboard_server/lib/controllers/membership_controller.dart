@@ -1,11 +1,12 @@
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
-class MembershipController extends OrganizationalController<Membership> {
+class MembershipController extends ShelfController<Membership> with OrganizationalController<Membership> {
   static final MembershipController _singleton = MembershipController._internal();
 
   factory MembershipController() {

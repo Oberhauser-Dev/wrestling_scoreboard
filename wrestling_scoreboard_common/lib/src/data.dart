@@ -12,6 +12,7 @@ export 'data/competition/competition_participation.dart';
 export 'data/competition/competition_person.dart';
 export 'data/competition/competition_system_affiliation.dart';
 export 'data/competition/competition_weight_category.dart';
+export 'data/competition/competition_age_category.dart';
 export 'data/membership.dart';
 export 'data/migration.dart';
 export 'data/organization.dart';

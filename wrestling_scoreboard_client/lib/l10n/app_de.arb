@@ -144,6 +144,8 @@
   "pool": "Pool",
   "poolGroupCount": "Anzahl der Poolgruppen",
   "rank": "Platz",
+  "cycle": "Zyklus",
+  "cycles": "Zyklen",
   "round": "Runde",
   "roundType": "Rundentyp",
   "qualification": "Qualifikation",

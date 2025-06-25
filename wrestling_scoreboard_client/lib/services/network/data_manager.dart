@@ -59,6 +59,12 @@ abstract class DataManager implements AuthManager {
   /// DELETE: delete a single object
   Future<void> deleteSingle<T extends DataObject>(T single);
 
+  Future<void> reorder<T extends Orderable, S extends DataObject?>({
+    required int id,
+    required int newIndex,
+    S? filterObject,
+  });
+
   Future<void> mergeObjects<T extends DataObject>(List<T> objects);
 
   /// CREATE: generate bouts of a wrestling event

@@ -1,13 +1,13 @@
 import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
-abstract class OrganizationalController<T extends Organizational> extends ShelfController<T> {
+mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   final _logger = Logger('OrganizationalController');
-
-  OrganizationalController();
 
   late psql.Statement getSingleOfOrgRawStmt;
 
