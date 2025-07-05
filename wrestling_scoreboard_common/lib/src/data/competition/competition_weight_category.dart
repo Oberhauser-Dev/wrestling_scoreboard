@@ -71,6 +71,73 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     return copyWith(id: id);
   }
 
+  /// Helper to build your results based on the [poolGroup] via [poolGroupBuilder]
+  /// or the [participation]s [ranking], [poolRanking] and [rankingMetric] via [poolGroupParticipantBuilder].
+  void rankingBuilder({
+    required Iterable<CompetitionParticipation> weightCategoryParticipants,
+    required Map<CompetitionBout, Iterable<BoutAction>> weightCategoryBoutsWithActions,
+    void Function(int poolGroup)? poolGroupBuilder,
+    required void Function(
+      CompetitionParticipation participation,
+      int? ranking,
+      int? poolRanking,
+      RankingMetric? rankingMetric,
+    )
+    poolGroupParticipantBuilder,
+  }) {
+    List<RankingMetric>? ranking;
+    if (poolGroupCount > 1) {
+      ranking = CompetitionWeightCategory.calculateRankingByFinals(
+        weightCategoryParticipants,
+        weightCategoryBoutsWithActions,
+      );
+    }
+
+    for (int poolGroup = 0; poolGroup < poolGroupCount; poolGroup++) {
+      if (poolGroupBuilder != null) poolGroupBuilder(poolGroup);
+
+      final participationsOfPoolGroup =
+          weightCategoryParticipants.where((element) => element.poolGroup == poolGroup).toList();
+      participationsOfPoolGroup.sort((a, b) => (a.poolDrawNumber ?? -1).compareTo(b.poolDrawNumber ?? -1));
+
+      // Map.where alternative
+      final poolRanking = CompetitionWeightCategory.calculatePoolRanking(participationsOfPoolGroup, {
+        for (final key in weightCategoryBoutsWithActions.keys)
+          if (key.roundType == RoundType.elimination) key: weightCategoryBoutsWithActions[key]!,
+      }, competitionSystem);
+      if (poolGroupCount <= 1) {
+        ranking = poolRanking;
+      }
+
+      for (final participationOfPoolGroup in participationsOfPoolGroup) {
+        final rankingInfos = _calculateParticipantRankingPosition(
+          participationOfPoolGroup: participationOfPoolGroup,
+          ranking: ranking,
+          poolRanking: poolRanking,
+        );
+        poolGroupParticipantBuilder(participationOfPoolGroup, rankingInfos.$1, rankingInfos.$2, rankingInfos.$3);
+      }
+    }
+  }
+
+  /// Return
+  /// 1. position of weight category ranking,
+  /// 2. position of pool ranking,
+  /// 3. Ranking metrics for this participant,
+  (int?, int?, RankingMetric?) _calculateParticipantRankingPosition({
+    required CompetitionParticipation participationOfPoolGroup,
+    required List<RankingMetric>? ranking,
+    required List<RankingMetric> poolRanking,
+  }) {
+    final rankingIndex = ranking!.indexWhere((element) => element.participation == participationOfPoolGroup);
+    final poolRankingIndex = poolRanking.indexWhere((element) => element.participation == participationOfPoolGroup);
+    return (
+      rankingIndex == -1 ? null : (rankingIndex + 1),
+      poolRankingIndex == -1 ? null : (poolRankingIndex + 1),
+      poolRankingIndex == -1 ? null : poolRanking[poolRankingIndex],
+    );
+  }
+
   // TODO: Also consider semi-finals
   static List<RankingMetric> calculateRankingByFinals(
     Iterable<CompetitionParticipation> participations,

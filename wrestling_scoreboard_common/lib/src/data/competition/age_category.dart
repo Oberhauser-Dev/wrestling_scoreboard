@@ -14,7 +14,11 @@ abstract class AgeCategory with _$AgeCategory implements DataObject, Organizatio
     String? orgSyncId,
     Organization? organization,
     required String name,
+
+    /// Inclusive
     required int minAge,
+
+    /// Inclusive
     required int maxAge,
   }) = _AgeCategory;
 

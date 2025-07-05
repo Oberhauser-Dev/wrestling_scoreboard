@@ -77,7 +77,7 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
     required WrestlingStyle style,
     required int technicalPointsWinner,
     required int technicalPointsLoser,
-    required List<BoutResultRule> rules,
+    required Iterable<BoutResultRule> rules,
   }) {
     final diff = technicalPointsWinner - technicalPointsLoser;
     final applyingRules =
