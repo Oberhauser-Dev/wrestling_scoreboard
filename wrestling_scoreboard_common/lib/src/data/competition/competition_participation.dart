@@ -64,6 +64,23 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
 
   String get displayPoolId => '${poolGroup?.toLetter() ?? ''}${displayPoolDrawNumber?.toString() ?? '-'}';
 
+  // (PoolDrawNr, PoolGroup) => DisplayPoolId => drawNumber
+  // (0, 0) => A1 => 0
+  // (0, 1) => B1 => 1
+  // (0, 2) => C1 => 2
+  // (1, 0) => A2 => 3
+  // (1, 1) => B2 => 4
+  // (1, 2) => C2 => 5
+  int? get drawNumber =>
+      poolDrawNumber == null || weightCategory == null
+          ? null
+          : ((poolGroup ?? 0) + (poolDrawNumber! * weightCategory!.poolGroupCount));
+
+  int? get displayDrawNumber {
+    final drawN = drawNumber;
+    return drawN == null ? null : (drawN + 1);
+  }
+
   bool get isRanked =>
       contestantStatus == null ||
       contestantStatus == ContestantStatus.eliminated ||

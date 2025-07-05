@@ -23,7 +23,15 @@ abstract class WrestlingReporter {
 
   (TeamMatch teamMatch, Map<TeamMatchBout, List<BoutAction>> boutMap) importTeamMatchReport(String report);
 
-  String exportCompetitionReport(Competition competition, Map<CompetitionBout, List<BoutAction>> boutMap);
+  String exportCompetitionReport({
+    required Competition competition,
+    required Map<CompetitionBout, List<BoutAction>> boutMap,
+    required Iterable<CompetitionLineup> competitionLineups,
+    required Iterable<CompetitionSystemAffiliation> competitionSystems,
+    required Map<CompetitionWeightCategory, Iterable<CompetitionParticipation>> competitionWeightCategoryMap,
+    required Iterable<CompetitionAgeCategory> competitionAgeCategories,
+    required Iterable<BoutResultRule> boutResultRules,
+  });
 
   (Competition competition, Map<CompetitionBout, List<BoutAction>> boutMap) importCompetitionReport(String report);
 }

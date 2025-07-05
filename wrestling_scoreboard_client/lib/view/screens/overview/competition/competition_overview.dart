@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/export.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_age_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
@@ -18,6 +21,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -202,29 +206,78 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
             //   ConditionalOrganizationImportAction(
             //       id: id, organization: competition.organization!, importType: OrganizationImportType.competition),
             // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
-            // IconButton(
-            //     onPressed: () async {
-            //       final reporter = match.organization?.getReporter();
-            //       if (reporter != null) {
-            //         final tmbouts = await _getBouts(ref, match: match);
-            //         final boutMap = Map.fromEntries(await Future.wait(
-            //             tmbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout)))));
-            //         final reportStr = reporter.exportTeamMatchReport(match, boutMap);
-            //
-            //         await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
-            //       } else {
-            //         if (context.mounted) {
-            //           showExceptionDialog(
-            //             context: context,
-            //             exception: Exception(match.organization == null
-            //                 ? 'No organization applied to match with id ${match.id}. Please contact the development team.'
-            //                 : 'No reporter selected for the organization ${match.organization?.name}. Please select one in the organization editor.'),
-            //             stackTrace: null,
-            //           );
-            //         }
-            //       }
-            //     },
-            //     icon: const Icon(Icons.description)),
+            IconButton(
+              onPressed: () async {
+                final reporter = competition.organization?.getReporter();
+                if (reporter != null) {
+                  final cbouts = await _getBouts(ref, competition: competition);
+                  final boutMap = Map.fromEntries(
+                    await Future.wait(
+                      cbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
+                    ),
+                  );
+                  final weightCategories = await ref.readAsync(
+                    manyDataStreamProvider(
+                      ManyProviderData<CompetitionWeightCategory, Competition>(filterObject: competition),
+                    ).future,
+                  );
+                  final weightCategoriesMap = Map.fromEntries(
+                    await Future.wait(
+                      weightCategories.map(
+                        (wc) async => MapEntry(
+                          wc,
+                          await ref.readAsync(
+                            manyDataStreamProvider(
+                              ManyProviderData<CompetitionParticipation, CompetitionWeightCategory>(filterObject: wc),
+                            ).future,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                  final reportStr = reporter.exportCompetitionReport(
+                    competition: competition,
+                    boutMap: boutMap,
+                    boutResultRules: await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<BoutResultRule, BoutConfig>(filterObject: competition.boutConfig),
+                      ).future,
+                    ),
+                    competitionLineups: await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<CompetitionLineup, Competition>(filterObject: competition),
+                      ).future,
+                    ),
+                    competitionSystems: await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<CompetitionSystemAffiliation, Competition>(filterObject: competition),
+                      ).future,
+                    ),
+                    competitionAgeCategories: await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<CompetitionAgeCategory, Competition>(filterObject: competition),
+                      ).future,
+                    ),
+                    competitionWeightCategoryMap: weightCategoriesMap,
+                  );
+
+                  await exportRDB(fileBaseName: competition.fileBaseName, rdbString: reportStr);
+                } else {
+                  if (context.mounted) {
+                    showExceptionDialog(
+                      context: context,
+                      exception: Exception(
+                        competition.organization == null
+                            ? 'No organization applied to competition with id ${competition.id}. Please contact the development team.'
+                            : 'No reporter selected for the organization ${competition.organization?.name}. Please select one in the organization editor.',
+                      ),
+                      stackTrace: null,
+                    );
+                  }
+                }
+              },
+              icon: const Icon(Icons.description),
+            ),
             // pdfAction,
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -241,13 +294,15 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
     );
   }
 
-  // Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) =>
-  //     ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(
-  //             ManyProviderData<CompetitionBout, Competition>(filterObject: competition))
-  //         .future);
-  //
-  // Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
-  //     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
+  Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) => ref.readAsync(
+    manyDataStreamProvider<CompetitionBout, Competition>(
+      ManyProviderData<CompetitionBout, Competition>(filterObject: competition),
+    ).future,
+  );
+
+  Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
+    manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
+  );
 
   _handleSelectedCompetitionDisplay(Competition competition, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${competition.id}/${CompetitionDisplay.route}');

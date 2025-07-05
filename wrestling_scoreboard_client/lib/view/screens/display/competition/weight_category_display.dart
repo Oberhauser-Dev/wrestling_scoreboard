@@ -93,9 +93,6 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                 competitionWeightCategory.competition.name,
                 competitionWeightCategory.competition.date.toDateString(context),
               ];
-              final competitionParticipationsByPool = competitionParticipations.groupListsBy(
-                (element) => element.poolGroup,
-              );
 
               return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
                 filterObject: competitionWeightCategory,
@@ -105,71 +102,48 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                       competitionBouts.map((cb) async => MapEntry(cb, await _getActions(ref, cb.bout))),
                     ),
                     builder: (context, competitionBoutsWithActions) {
-                      List<RankingMetric>? ranking;
-                      if (competitionWeightCategory.poolGroupCount > 1) {
-                        ranking = CompetitionWeightCategory.calculateRankingByFinals(
-                          competitionParticipations,
-                          Map.fromEntries(competitionBoutsWithActions),
-                        );
-                      }
                       final competitionBoutsByRound = SplayTreeMap<int?, Map<CompetitionBout, Iterable<BoutAction>>>.of(
                         competitionBoutsWithActions
                             .groupSetsBy((element) => element.key.round)
                             .map((key, entries) => MapEntry(key, Map.fromEntries(entries))),
                       );
                       final participantWidgets = <Widget>[];
-                      for (int poolGroup = 0; poolGroup < competitionWeightCategory.poolGroupCount; poolGroup++) {
-                        if (competitionWeightCategory.poolGroupCount > 1) {
-                          participantWidgets.add(
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-                              child: Card(
-                                child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}')),
+                      competitionWeightCategory.rankingBuilder(
+                        weightCategoryParticipants: competitionParticipations,
+                        weightCategoryBoutsWithActions: Map.fromEntries(competitionBoutsWithActions),
+                        poolGroupBuilder: (poolGroup) {
+                          if (competitionWeightCategory.poolGroupCount > 1) {
+                            participantWidgets.add(
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                                child: Card(
+                                  child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}')),
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                        final participationsOfPoolGroup = competitionParticipationsByPool[poolGroup]!;
-                        participationsOfPoolGroup.sort(
-                          (a, b) => (a.poolDrawNumber ?? -1).compareTo(b.poolDrawNumber ?? -1),
-                        );
-                        for (final participationOfPoolGroup in participationsOfPoolGroup) {
-                          final poolRanking = CompetitionWeightCategory.calculatePoolRanking(
-                            participationsOfPoolGroup,
-                            Map.fromEntries(
-                              competitionBoutsWithActions.where((cbe) => cbe.key.roundType == RoundType.elimination),
-                            ),
-                            competitionWeightCategory.competitionSystem,
-                          );
-                          if (competitionWeightCategory.poolGroupCount <= 1) {
-                            ranking = poolRanking;
+                            );
                           }
-                          final rankingIndex = ranking!.indexWhere(
-                            (element) => element.participation == participationOfPoolGroup,
-                          );
-                          final poolRankingIndex = poolRanking.indexWhere(
-                            (element) => element.participation == participationOfPoolGroup,
-                          );
+                        },
+                        poolGroupParticipantBuilder: (participation, ranking, poolRanking, rankingMetric) {
                           participantWidgets.add(
                             Column(
                               children: [
                                 IntrinsicHeight(
                                   child: CompetitionParticipationItem(
-                                    participation: participationOfPoolGroup,
+                                    participation: participation,
                                     // Need to pass all participations as it can pair with another pool in the finals.
                                     participations: competitionParticipations,
                                     competitionBoutsByRound: competitionBoutsByRound,
-                                    rankingMetric: poolRankingIndex == -1 ? null : poolRanking[poolRankingIndex],
-                                    ranking: rankingIndex == -1 ? null : (rankingIndex + 1),
-                                    poolRanking: poolRankingIndex == -1 ? null : (poolRankingIndex + 1),
+                                    rankingMetric: rankingMetric,
+                                    ranking: ranking,
+                                    poolRanking: poolRanking,
                                   ),
                                 ),
                                 const Divider(height: 1),
                               ],
                             ),
                           );
-                        }
-                      }
+                        },
+                      );
                       return Column(
                         children: [
                           Row(
