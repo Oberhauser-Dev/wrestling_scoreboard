@@ -46,18 +46,22 @@ abstract class BoutResultRule with _$BoutResultRule implements DataObject {
       'technical_points_difference': technicalPointsDifference,
       'winner_classification_points': winnerClassificationPoints,
       'loser_classification_points': loserClassificationPoints,
+      'style': style?.name,
     };
   }
 
-  static Future<BoutResultRule> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async =>
-      BoutResultRule(
-        id: e['id'] as int?,
-        boutConfig: (await getSingle<BoutConfig>(e['bout_config_id'] as int)),
-        boutResult: BoutResult.values.byName(e['bout_result']),
-        winnerTechnicalPoints: e['winner_technical_points'] as int?,
-        loserTechnicalPoints: e['loser_technical_points'] as int?,
-        technicalPointsDifference: e['technical_points_difference'] as int?,
-        winnerClassificationPoints: e['winner_classification_points'] as int,
-        loserClassificationPoints: e['loser_classification_points'] as int,
-      );
+  static Future<BoutResultRule> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
+    final wrestlingStyleStr = e['style'] as String?;
+    return BoutResultRule(
+      id: e['id'] as int?,
+      boutConfig: (await getSingle<BoutConfig>(e['bout_config_id'] as int)),
+      boutResult: BoutResult.values.byName(e['bout_result']),
+      winnerTechnicalPoints: e['winner_technical_points'] as int?,
+      loserTechnicalPoints: e['loser_technical_points'] as int?,
+      technicalPointsDifference: e['technical_points_difference'] as int?,
+      winnerClassificationPoints: e['winner_classification_points'] as int,
+      loserClassificationPoints: e['loser_classification_points'] as int,
+      style: wrestlingStyleStr == null ? null : WrestlingStyle.values.byName(wrestlingStyleStr),
+    );
+  }
 }
