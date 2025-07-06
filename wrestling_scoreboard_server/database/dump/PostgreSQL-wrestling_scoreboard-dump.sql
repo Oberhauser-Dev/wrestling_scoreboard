@@ -399,7 +399,8 @@ CREATE TABLE public.bout_result_rule (
     loser_technical_points smallint,
     technical_points_difference smallint,
     winner_classification_points smallint NOT NULL,
-    loser_classification_points smallint NOT NULL
+    loser_classification_points smallint NOT NULL,
+    style public.wrestling_style
 );
 
 
@@ -1775,19 +1776,19 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 -- Data for Name: bout_result_rule; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
-1	1	vfa	\N	\N	\N	4	0
-2	1	vin	\N	\N	\N	4	0
-3	1	vca	\N	\N	\N	4	0
-4	1	vsu	\N	\N	15	4	0
-5	1	vpo	\N	\N	8	3	0
-6	1	vpo	\N	\N	3	2	0
-7	1	vpo	\N	\N	1	1	0
-8	1	vfo	\N	\N	\N	4	0
-9	1	dsq	\N	\N	\N	4	0
-10	1	bothDsq	\N	\N	\N	0	0
-11	1	bothVfo	\N	\N	\N	0	0
-12	1	bothVin	\N	\N	\N	0	0
+COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points, style) FROM stdin;
+1	1	vfa	\N	\N	\N	4	0	\N
+2	1	vin	\N	\N	\N	4	0	\N
+3	1	vca	\N	\N	\N	4	0	\N
+4	1	vsu	\N	\N	15	4	0	\N
+5	1	vpo	\N	\N	8	3	0	\N
+6	1	vpo	\N	\N	3	2	0	\N
+7	1	vpo	\N	\N	1	1	0	\N
+8	1	vfo	\N	\N	\N	4	0	\N
+9	1	dsq	\N	\N	\N	4	0	\N
+10	1	bothDsq	\N	\N	\N	0	0	\N
+11	1	bothVfo	\N	\N	\N	0	0	\N
+12	1	bothVin	\N	\N	\N	0	0	\N
 \.
 
 
@@ -1980,7 +1981,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.11	0.0.0
+0.3.0-pre.12	0.0.0
 \.
 
 

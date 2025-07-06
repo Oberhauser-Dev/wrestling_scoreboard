@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_config.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -32,6 +33,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
   int? _winnerTechnicalPoints;
   int? _loserTechnicalPoints;
   int? _technicalPointsDifference;
+  WrestlingStyle? _wrestlingStyle;
 
   @override
   void initState() {
@@ -42,6 +44,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
     _winnerTechnicalPoints = widget.boutResultRule?.winnerTechnicalPoints;
     _loserTechnicalPoints = widget.boutResultRule?.loserTechnicalPoints;
     _technicalPointsDifference = widget.boutResultRule?.technicalPointsDifference;
+    _wrestlingStyle = widget.boutResultRule?.style;
     super.initState();
   }
 
@@ -68,6 +71,25 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
             onChange:
                 (BoutResult? newValue) => setState(() {
                   _boutResult = newValue!;
+                }),
+          ),
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.style),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<WrestlingStyle>(
+            isNullable: true,
+            hint: localizations.wrestlingStyle,
+            isExpanded: true,
+            options: WrestlingStyle.values.map((WrestlingStyle style) {
+              return MapEntry(style, Text('${style.localize(context)} (${style.abbreviation(context)})'));
+            }),
+            selected: _wrestlingStyle,
+            onChange:
+                (newValue) => setState(() {
+                  _wrestlingStyle = newValue;
                 }),
           ),
         ),
@@ -154,6 +176,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
         winnerTechnicalPoints: _winnerTechnicalPoints,
         loserTechnicalPoints: _loserTechnicalPoints,
         technicalPointsDifference: _technicalPointsDifference,
+        style: _wrestlingStyle,
         boutConfig: _boutConfig!,
       );
       boutResultRule = boutResultRule.copyWithId(
