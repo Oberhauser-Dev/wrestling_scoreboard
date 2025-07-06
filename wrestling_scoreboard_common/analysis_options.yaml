@@ -4,9 +4,10 @@ include: package:lints/recommended.yaml
 
 linter:
   rules:
-    prefer_relative_imports: true
-    avoid_print: true
-
+    - prefer_relative_imports
+    - avoid_print
+    - prefer_single_quotes
+    - prefer_final_locals
 
 # Needed for freezed package:
 analyzer:

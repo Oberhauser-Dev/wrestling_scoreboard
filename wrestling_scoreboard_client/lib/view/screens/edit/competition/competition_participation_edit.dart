@@ -168,7 +168,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      CompetitionParticipation cParticipation = CompetitionParticipation(
+      final CompetitionParticipation cParticipation = CompetitionParticipation(
         id: widget.competitionParticipation?.id,
         lineup: _lineup!,
         membership: _membership!,

@@ -94,7 +94,7 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      AgeCategory ageCategory = AgeCategory(
+      final AgeCategory ageCategory = AgeCategory(
         id: widget.ageCategory?.id,
         orgSyncId: widget.ageCategory?.orgSyncId,
         name: _name!,

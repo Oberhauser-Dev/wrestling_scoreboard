@@ -153,7 +153,7 @@ abstract class PdfSheet {
   }
 
   List<Widget> buildStewards(Context context, WrestlingEvent wrestlingEvent, {double? width}) {
-    List<Person?> stewards = [];
+    final List<Person?> stewards = [];
     // TODO: stewards from list
     if (stewards.length < 3) {
       stewards.addAll(Iterable.generate(3 - stewards.length, (i) => null));

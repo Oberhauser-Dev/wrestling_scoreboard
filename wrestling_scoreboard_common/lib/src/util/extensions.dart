@@ -42,9 +42,9 @@ mixin EnumIndexOrdering<T extends Enum> on Enum implements Comparable<T> {
 
 extension ZeroOrOne<T> on Iterable<T> {
   T? get zeroOrOne {
-    Iterator<T> it = iterator;
+    final Iterator<T> it = iterator;
     if (!it.moveNext()) return null;
-    T result = it.current;
+    final T result = it.current;
     if (it.moveNext()) throw StateError('More than one element');
     return result;
   }
@@ -73,7 +73,7 @@ extension LetterOfIndex on int {
 
 extension GroupListByIterable<T> on Iterable<T> {
   Map<Iterable<K>, List<T>> groupListsByIterable<K>(Iterable<K> Function(T element) keyOf) {
-    var result = <Iterable<K>, List<T>>{};
+    final result = <Iterable<K>, List<T>>{};
     for (var element in this) {
       final keyValue = keyOf(element);
       final key = result.keys.firstWhere(

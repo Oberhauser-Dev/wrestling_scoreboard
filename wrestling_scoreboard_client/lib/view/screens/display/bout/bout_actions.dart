@@ -24,8 +24,8 @@ class ActionsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
-    double width = MediaQuery.of(context).size.width;
-    double padding = width / 100;
+    final double width = MediaQuery.of(context).size.width;
+    final double padding = width / 100;
 
     return LoadingBuilder<bool>(
       future: ref.watch(timeCountDownNotifierProvider),

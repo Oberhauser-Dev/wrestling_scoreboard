@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_contr
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/import_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
@@ -19,8 +20,6 @@ import 'package:wrestling_scoreboard_server/controllers/team_lineup_participatio
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
-
-import 'common/entity_controller.dart';
 
 class TeamMatchController extends ShelfController<TeamMatch>
     with OrganizationalController<TeamMatch>, ImportController<TeamMatch> {
@@ -78,7 +77,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
     // Reorder weightClasses according to bout order:
     // Calculate the number of match sections.
     WeightClass? lastWeightClass;
-    List<int> sectionLengths = [];
+    final List<int> sectionLengths = [];
     for (final weightClass in weightClasses) {
       // A weight class is smaller than the one before, a new section starts
       if (lastWeightClass == null || weightClass.weight < lastWeightClass.weight) {

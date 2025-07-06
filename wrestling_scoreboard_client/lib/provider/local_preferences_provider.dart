@@ -85,7 +85,7 @@ class WebSocketUrlNotifier extends _$WebSocketUrlNotifier {
 class NetworkTimeoutNotifier extends _$NetworkTimeoutNotifier {
   @override
   Raw<Future<Duration>> build() async {
-    var networkTimeout = await Preferences.getInt(Preferences.keyNetworkTimeout);
+    final networkTimeout = await Preferences.getInt(Preferences.keyNetworkTimeout);
     return Duration(milliseconds: networkTimeout ?? 10000);
   }
 
@@ -240,7 +240,7 @@ class OrgAuthNotifier extends _$OrgAuthNotifier {
 class ProposeApiImportDurationNotifier extends _$ProposeApiImportDurationNotifier {
   @override
   Raw<Future<Duration>> build() async {
-    var proposeApiImportDurationSecs = await Preferences.getInt(Preferences.keyProposeApiImportDuration);
+    final proposeApiImportDurationSecs = await Preferences.getInt(Preferences.keyProposeApiImportDuration);
     return proposeApiImportDurationSecs != null
         ? Duration(seconds: proposeApiImportDurationSecs)
         : const Duration(days: 2);

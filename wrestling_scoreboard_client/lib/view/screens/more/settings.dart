@@ -407,7 +407,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                   onTap:
                       () => catchAsync(context, () async {
                         const typeGroup = file_selector.XTypeGroup(label: 'SQL', extensions: <String>['sql']);
-                        file_selector.XFile? fileSelectorResult = await file_selector.openFile(
+                        final file_selector.XFile? fileSelectorResult = await file_selector.openFile(
                           acceptedTypeGroups: [typeGroup],
                         );
                         if (fileSelectorResult != null) {

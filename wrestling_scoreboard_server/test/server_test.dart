@@ -110,7 +110,7 @@ void main() {
 
   group('API', () {
     Future<Map<String, String>> getAuthHeaders(String apiUrl) async {
-      final defaultHeaders = {"Content-Type": "application/json"};
+      final defaultHeaders = {'Content-Type': 'application/json'};
 
       Future<String> signIn(BasicAuthService authService) async {
         final uri = Uri.parse('$apiUrl/auth/sign_in');
@@ -120,7 +120,7 @@ void main() {
 
       final token = await signIn(BasicAuthService(username: 'admin', password: 'admin'));
 
-      return {"Content-Type": "application/json", ...BearerAuthService(token: token).header};
+      return {'Content-Type': 'application/json', ...BearerAuthService(token: token).header};
     }
 
     final mockedData = MockedData();
@@ -192,7 +192,7 @@ void main() {
         if (dataType == User) continue;
         if (dataType == SecuredUser) continue;
 
-        Iterable<DataObject> objs = getMockedDataObjects(dataType);
+        final Iterable<DataObject> objs = getMockedDataObjects(dataType);
         for (var obj in objs) {
           final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
           final tableUrl = '$apiUrl/${obj.tableName}';
@@ -243,7 +243,7 @@ void main() {
         BoutConfig,
       ];
       for (final dataType in competitionDataTypes.reversed) {
-        Iterable<DataObject> objs = getMockedDataObjects(dataType);
+        final Iterable<DataObject> objs = getMockedDataObjects(dataType);
         for (var obj in objs) {
           final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
           final tableUrl = '$apiUrl/${obj.tableName}';

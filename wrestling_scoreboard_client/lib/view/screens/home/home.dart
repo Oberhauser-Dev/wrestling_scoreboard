@@ -95,11 +95,11 @@ class HomeState extends ConsumerState<Home> {
               child: Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(text: "No favorites yet. Add some using the "),
+                    const TextSpan(text: 'No favorites yet. Add some using the '),
                     const WidgetSpan(child: Icon(Icons.star, size: 14)),
-                    const TextSpan(text: " symbol on the top right corner while "),
+                    const TextSpan(text: ' symbol on the top right corner while '),
                     TextSpan(
-                      text: "exploring.",
+                      text: 'exploring.',
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()..onTap = () => context.go('/${Explore.route}'),
                     ),

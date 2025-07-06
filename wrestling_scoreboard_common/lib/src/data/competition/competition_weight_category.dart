@@ -212,7 +212,7 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     for (final participant in participations) {
       ranking.add(_getPointsOfParticipant(participant, pastCompetitionBouts));
       ranking.sort((a, b) {
-        int cmp = b.classificationPoints.compareTo(a.classificationPoints);
+        final int cmp = b.classificationPoints.compareTo(a.classificationPoints);
         if (cmp != 0) return cmp;
         return b.technicalPoints.compareTo(a.technicalPoints);
       });

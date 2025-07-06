@@ -119,7 +119,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      CompetitionLineup cLineup = CompetitionLineup(
+      final CompetitionLineup cLineup = CompetitionLineup(
         id: widget.competitionLineup?.id,
         competition: widget.competitionLineup?.competition ?? widget.initialCompetition,
         club: _club!,

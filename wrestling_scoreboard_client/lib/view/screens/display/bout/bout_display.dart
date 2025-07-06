@@ -273,7 +273,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding, double? weight) {
-    var color = role.color();
+    final color = role.color();
 
     return ThemedContainer(
       color: color,
@@ -297,7 +297,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   doAction(BoutScreenActions action) {
     switch (action) {
       case BoutScreenActions.redActivityTime:
-        ParticipantStateModel psm = _r;
+        final ParticipantStateModel psm = _r;
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
@@ -313,7 +313,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         });
         break;
       case BoutScreenActions.redInjuryTime:
-        ParticipantStateModel psm = _r;
+        final ParticipantStateModel psm = _r;
         setState(() {
           if (!_r.injuryStopwatch.hasEnded) {
             // If time is set manually after timer has ended, the timer and display flags differ.
@@ -329,7 +329,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         }
         break;
       case BoutScreenActions.redBleedingInjuryTime:
-        ParticipantStateModel psm = _r;
+        final ParticipantStateModel psm = _r;
         setState(() {
           if (!_r.bleedingInjuryStopwatch.hasEnded) {
             psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
@@ -343,7 +343,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         }
         break;
       case BoutScreenActions.blueActivityTime:
-        ParticipantStateModel psm = _b;
+        final ParticipantStateModel psm = _b;
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
@@ -359,7 +359,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         });
         break;
       case BoutScreenActions.blueInjuryTime:
-        ParticipantStateModel psm = _b;
+        final ParticipantStateModel psm = _b;
         setState(() {
           if (!_b.injuryStopwatch.hasEnded) {
             psm.isInjury = !psm.isInjuryDisplayed;
@@ -373,7 +373,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         }
         break;
       case BoutScreenActions.blueBleedingInjuryTime:
-        ParticipantStateModel psm = _b;
+        final ParticipantStateModel psm = _b;
         setState(() {
           if (!_b.bleedingInjuryStopwatch.hasEnded) {
             psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
@@ -407,11 +407,11 @@ class BoutState extends ConsumerState<BoutScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    double width = MediaQuery.of(context).size.width;
-    double padding = width / 100;
+    final double width = MediaQuery.of(context).size.width;
+    final double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);
 
-    Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onSurface;
+    final Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onSurface;
 
     final pdfAction = IconButton(
       icon: const Icon(Icons.print),

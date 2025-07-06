@@ -13,7 +13,7 @@ List<List<(int?, int?)>> generateBergerTable(int participationSize, {int? maxRou
   final boutsPerRound = n ~/ 2;
 
   List<int?> columnA = participations.slice(0, boutsPerRound).toList();
-  List<int?> columnB = participations.slice(boutsPerRound).toList();
+  final List<int?> columnB = participations.slice(boutsPerRound).toList();
   final fixed = participations[0];
 
   final gen =
@@ -47,7 +47,7 @@ List<(int?, int?)> generateDoubleEliminationRound({
   required List<int> winnerBracket,
   List<int> looserBracket = const [],
 }) {
-  List<(int?, int?)> list = [];
+  final List<(int?, int?)> list = [];
   list.addAll(generateSingleEliminationRound(winnerBracket));
   list.addAll(generateSingleEliminationRound(looserBracket));
   return list;
@@ -66,7 +66,7 @@ Iterable<(int, int)> generateByeDoubleEliminationRound(List<int> remaining, Iter
       for (int j = i + 1; j < singles.length; j++) {
         final pair = {singles[i], singles[j]};
         if (!{...oldPairs, ...newPairs}.any((s) => s.containsAll(pair))) {
-          List<int> recursiveSingles =
+          final List<int> recursiveSingles =
               List.from(singles)
                 ..remove(singles[i])
                 ..remove(singles[j]);

@@ -60,7 +60,7 @@ Future<void> downloadSelector<T>({
       outputPath = (await file_selector.getSaveLocation(suggestedName: fileName))?.path;
     } else {
       // TODO: Not supported on iOS yet: https://github.com/flutter/flutter/issues/111583
-      String? filePath = await file_selector.getDirectoryPath();
+      final String? filePath = await file_selector.getDirectoryPath();
       if (filePath == null) return;
       outputPath = '$filePath/$fileName';
     }

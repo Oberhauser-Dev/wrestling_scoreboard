@@ -40,7 +40,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
 
   static MaterialColor _createMaterialColor(Color color) {
     final strengths = <double>[.05];
-    Map<int, Color> swatch = {};
+    final Map<int, Color> swatch = {};
     final double r = color.r, g = color.g, b = color.b;
 
     for (int i = 1; i < 10; i++) {

@@ -29,7 +29,7 @@ class CompetitionDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return SingleConsumer<Competition>(
       id: id,
       initialData: competition,

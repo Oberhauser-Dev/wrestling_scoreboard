@@ -1,27 +1,26 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/orderable_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/database_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/search_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
+import 'package:wrestling_scoreboard_server/middleware/content_type.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
+import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
-
-import '../controllers/auth_controller.dart';
-import '../controllers/club_controller.dart';
-import '../controllers/competition_controller.dart';
-import '../controllers/database_controller.dart';
-import '../controllers/division_controller.dart';
-import '../controllers/league_controller.dart';
-import '../controllers/membership_controller.dart';
-import '../controllers/organization_controller.dart';
-import '../controllers/person_controller.dart';
-import '../controllers/search_controller.dart';
-import '../controllers/team_controller.dart';
-import '../controllers/team_match_controller.dart';
-import '../middleware/content_type.dart';
-import 'data_object_relations.dart';
 
 class ApiRoute {
   // By exposing a [Router] for an object, it can be mounted in other routers.

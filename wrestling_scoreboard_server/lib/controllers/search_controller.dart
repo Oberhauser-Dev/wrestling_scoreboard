@@ -54,7 +54,7 @@ class SearchController {
 
     try {
       final raw = request.isRaw;
-      List<Map<String, dynamic>> manyJsonList = [];
+      final List<Map<String, dynamic>> manyJsonList = [];
       for (final searchType in searchTypes) {
         final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;

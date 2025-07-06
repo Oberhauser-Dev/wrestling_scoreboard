@@ -125,7 +125,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       final red = homePartList.isNotEmpty ? homePartList.single : null;
       final blue = guestPartList.isNotEmpty ? guestPartList.single : null;
 
-      var bout = TeamMatchBout(
+      final bout = TeamMatchBout(
         organization: organization,
         teamMatch: this,
         pos: bouts.length,

@@ -2,8 +2,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
-
-import 'environment.dart';
+import 'package:wrestling_scoreboard_server/services/environment.dart';
 
 extension AuthRequest on Request {
   Future<Response> restricted({
