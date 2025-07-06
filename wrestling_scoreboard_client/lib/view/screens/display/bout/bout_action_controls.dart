@@ -15,13 +15,13 @@ class BoutActionControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    bool isRed = role == BoutRole.red;
-    MaterialColor color = isRed ? Colors.red : Colors.blue;
+    final bool isRed = role == BoutRole.red;
+    final MaterialColor color = isRed ? Colors.red : Colors.blue;
     void Function()? prepareCallback(BoutScreenActionIntent intentRed, BoutScreenActionIntent intentBlue) {
       return callback == null ? null : () => callback!(isRed ? intentRed : intentBlue);
     }
 
-    var actions = <Widget>[
+    final actions = <Widget>[
       displayActionControl(
         '1',
         prepareCallback(const BoutScreenActionIntent.redOne(), const BoutScreenActionIntent.blueOne()),

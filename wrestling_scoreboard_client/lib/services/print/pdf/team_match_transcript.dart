@@ -397,8 +397,8 @@ class TeamMatchTranscript extends PdfSheet {
         ...teamMatchBoutActions.entries.map((boutEntry) {
           final bout = boutEntry.key;
           final actions = boutEntry.value;
-          PdfColor? winnerColor = bout.bout.winnerRole?.pdfColor;
-          PdfColor? winnerTextColor = bout.bout.winnerRole?.textPdfColor;
+          final PdfColor? winnerColor = bout.bout.winnerRole?.pdfColor;
+          final PdfColor? winnerTextColor = bout.bout.winnerRole?.textPdfColor;
           return TableRow(
             children: [
               buildTextCell(bout.pos.toString(), height: cellHeight, fontSize: cellFontSize),

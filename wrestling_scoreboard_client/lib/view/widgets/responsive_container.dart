@@ -8,7 +8,7 @@ class ResponsiveContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
+    final Size screenSize = MediaQuery.of(context).size;
     return Align(alignment: alignment, child: SizedBox(width: _calculateContainerSize(screenSize), child: child));
   }
 

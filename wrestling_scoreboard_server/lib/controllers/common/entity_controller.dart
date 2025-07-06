@@ -43,7 +43,7 @@ abstract class EntityController<T extends DataObject> {
 
   static Future<void> initAll() async {
     // Reinit all prepared statements
-    Iterable<ShelfController> entityControllers =
+    final Iterable<ShelfController> entityControllers =
         dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
     await Future.forEach(entityControllers, (e) => e.init());
   }
@@ -70,7 +70,7 @@ abstract class EntityController<T extends DataObject> {
     final resStream = getSingleRawStmt.bind({'id': id});
     final many = await resStream.toColumnMap().toList();
     if (many.isEmpty) throw InvalidParameterException('$T with id "$id" not found');
-    var data = many.first;
+    final data = many.first;
     return obfuscate ? this.obfuscate(data) : data;
   }
 
@@ -254,7 +254,7 @@ abstract class EntityController<T extends DataObject> {
               .nonNulls
               .toSet() ??
           {};
-      Map<String, Type> attrTypeMapping = searchableForeignAttributeMapping[searchType] ?? const {};
+      final Map<String, Type> attrTypeMapping = searchableForeignAttributeMapping[searchType] ?? const {};
 
       // Recursively add foreign table attributes with the table name prefix (because they can have the same name as the current table).
       attrTypeMapping.forEach((foreignAttrName, foreignType) {

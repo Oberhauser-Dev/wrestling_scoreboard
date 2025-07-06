@@ -325,7 +325,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     final teamClubAffiliations = <TeamClubAffiliation>[];
     for (var clubJson in clubListJson) {
       String? clubName = clubJson['clubName'];
-      String? clubId = clubJson['clubId'];
+      final String? clubId = clubJson['clubId'];
       if (clubName == null || clubId == null) continue;
       if (clubName != clubName.trim()) {
         clubName = clubName.trim();
@@ -339,7 +339,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
       for (final teamJson in teamListJson) {
         String? teamName = teamJson['teamName'];
-        String? teamId = teamJson['teamId'];
+        final String? teamId = teamJson['teamId'];
         if (teamName == null || teamId == null) continue;
         if (teamName != teamName.trim()) {
           teamName = teamName.trim();

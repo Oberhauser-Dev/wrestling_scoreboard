@@ -336,7 +336,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
   }
 
   List<CompetitionParticipation> _drawNumberAndPool(List<CompetitionParticipation> participations, {int? pool}) {
-    List<CompetitionParticipation> updatedParticipations = [];
+    final List<CompetitionParticipation> updatedParticipations = [];
     for (final participationIndexed in participations.indexed) {
       final (drawNumber, participation) = participationIndexed;
       final updatedParticipation = participation.copyWith(poolDrawNumber: drawNumber, poolGroup: pool);

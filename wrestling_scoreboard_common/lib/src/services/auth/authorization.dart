@@ -20,7 +20,7 @@ abstract class BasicAuthService with _$BasicAuthService implements AuthService {
 
   @override
   Map<String, String> get header {
-    String basicAuth = 'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    final String basicAuth = 'Basic ${base64.encode(utf8.encode('$username:$password'))}';
     return {'authorization': basicAuth};
   }
 
@@ -48,7 +48,7 @@ abstract class BearerAuthService with _$BearerAuthService implements AuthService
 
   @override
   Map<String, String> get header {
-    String bearer = 'Bearer $token';
+    final String bearer = 'Bearer $token';
     return {'authorization': bearer};
   }
 

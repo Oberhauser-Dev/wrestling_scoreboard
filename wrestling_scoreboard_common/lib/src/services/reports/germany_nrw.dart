@@ -135,7 +135,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
   NrwGermanyWrestlingReporter(this.organization);
 
   String _handleComment(String comment) {
-    String escapedComment = _htmlEscape
+    final String escapedComment = _htmlEscape
         .convert(_sanitizeString(comment))
         .replaceAll('(', '&#40;')
         .replaceAll(')', '&#41;');

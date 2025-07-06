@@ -92,7 +92,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      CompetitionSystemAffiliation csa = CompetitionSystemAffiliation(
+      final CompetitionSystemAffiliation csa = CompetitionSystemAffiliation(
         id: widget.competitionSystemAffiliation?.id,
         competition: widget.competitionSystemAffiliation?.competition ?? widget.initialCompetition,
         competitionSystem: _competitionSystem,

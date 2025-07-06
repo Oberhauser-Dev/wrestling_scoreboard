@@ -171,7 +171,7 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
                 final results = await (await ref.read(
                   dataManagerNotifierProvider,
                 )).search(searchTerm: searchTerm, type: T);
-                Set<T> parsedResults = results[getTableNameFromType(T)]?.map((item) => item as T).toSet() ?? {};
+                final Set<T> parsedResults = results[getTableNameFromType(T)]?.map((item) => item as T).toSet() ?? {};
                 setState(() {
                   // TODO: Remove intersection, if support server side filter type
                   _filteredItems = parsedResults.intersection(widget.items.toSet()).toList();

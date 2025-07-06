@@ -1,4 +1,4 @@
-import "dart:typed_data";
+import 'dart:typed_data';
 
 Uint8List int32To5BitChunksBigEndian(int value) {
   const int bitsPerChunk = 5;

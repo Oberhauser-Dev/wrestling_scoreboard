@@ -109,8 +109,8 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   }
 
   displayDropDown(BoutRole role) {
-    AthleteBoutState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
-    AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
+    final AthleteBoutState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
+    final AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
 
     return ThemedContainer(
       color: role == widget.boutState.bout.winnerRole ? role.color() : null,

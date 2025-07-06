@@ -35,7 +35,7 @@ class GenericDataObjectBuilder implements Builder {
   }
 
   @override
-  Future build(BuildStep buildStep) async {
+  Future<void> build(BuildStep buildStep) async {
     final classes = <ClassElement>[];
 
     final assetsStream = buildStep.findAssets(Glob(r'**.dart'));

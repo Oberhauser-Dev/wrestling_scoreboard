@@ -151,7 +151,7 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.nextBout:
         if (context != null) {
-          int index = boutIndex + 1;
+          final int index = boutIndex + 1;
           if (index < bouts.length) {
             navigateToBoutByIndex(context, index);
           }
@@ -159,7 +159,7 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.previousBout:
         if (context != null) {
-          int index = boutIndex - 1;
+          final int index = boutIndex - 1;
           if (index >= 0) {
             navigateToBoutByIndex(context, index);
           }
@@ -170,7 +170,7 @@ class BoutScreenActionIntent extends Intent {
         break;
       case BoutScreenActions.redOne:
         // NOTE: Do not used bout.duration as time, as it is not up to date.
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -180,7 +180,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redTwo:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -190,7 +190,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redThree:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -200,7 +200,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redFour:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -210,7 +210,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redFive:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -220,7 +220,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redVerbal:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -229,7 +229,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redPassivity:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -238,7 +238,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redCaution:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -247,7 +247,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.redDismissal:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
           duration: stopwatch.elapsed,
@@ -275,7 +275,7 @@ class BoutScreenActionIntent extends Intent {
         }
         break;
       case BoutScreenActions.blueOne:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -285,7 +285,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueTwo:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -295,7 +295,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueThree:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -305,7 +305,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFour:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -315,7 +315,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueFive:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -325,7 +325,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueVerbal:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -334,7 +334,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.bluePassivity:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -343,7 +343,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueCaution:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,
@@ -352,7 +352,7 @@ class BoutScreenActionIntent extends Intent {
         await dataManager.createOrUpdateSingle(action);
         break;
       case BoutScreenActions.blueDismissal:
-        var action = BoutAction(
+        final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
           duration: stopwatch.elapsed,

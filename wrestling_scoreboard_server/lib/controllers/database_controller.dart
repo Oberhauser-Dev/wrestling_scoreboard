@@ -26,7 +26,7 @@ class DatabaseController {
   Future<Response> restore(Request request, User? user) async {
     try {
       final message = await request.readAsString();
-      File file = File(
+      final File file = File(
         '${Directory.systemTemp.path}/${message.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0')}.sql',
       );
       await file.writeAsString(message);

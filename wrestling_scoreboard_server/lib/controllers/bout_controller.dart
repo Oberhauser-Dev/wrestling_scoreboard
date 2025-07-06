@@ -1,10 +1,9 @@
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
-
-import 'bout_action_controller.dart';
 
 class BoutController extends ShelfController<Bout> with OrganizationalController<Bout> {
   static final BoutController _singleton = BoutController._internal();

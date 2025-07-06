@@ -8,10 +8,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
+import 'package:wrestling_scoreboard_server/services/environment.dart';
 
-import 'environment.dart';
-
-const _isReleaseMode = bool.fromEnvironment("dart.vm.product");
+const _isReleaseMode = bool.fromEnvironment('dart.vm.product');
 const defaultDatabasePath = './database/dump/PostgreSQL-wrestling_scoreboard-dump.sql';
 
 class PostgresDb {
@@ -134,7 +133,7 @@ extension DatabaseExt on PostgresDb {
 
   Future<void> reset() async {
     await restoreDefault();
-    Iterable<ShelfController> entityControllers =
+    final Iterable<ShelfController> entityControllers =
         dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
     // Remove data
     await Future.forEach(entityControllers, (e) => e.deleteMany());

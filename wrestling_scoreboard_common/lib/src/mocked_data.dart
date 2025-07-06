@@ -185,8 +185,8 @@ class MockedData {
   }
 
   TeamMatch initJnRPWMatch() {
-    TeamLineup home = TeamLineup(id: 3, team: homeTeamJuniors);
-    TeamLineup guest = TeamLineup(id: 4, team: guestTeam);
+    final TeamLineup home = TeamLineup(id: 3, team: homeTeamJuniors);
+    final TeamLineup guest = TeamLineup(id: 4, team: guestTeam);
     _teamLineups.add(home);
     _teamLineups.add(guest);
 

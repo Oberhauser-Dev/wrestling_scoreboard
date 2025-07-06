@@ -19,7 +19,7 @@ class RestDataManager extends DataManager {
 
   RestDataManager({required String? apiUrl, super.authService, required this.onResetAuth}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
-    _headers = {"Content-Type": "application/json", ...?authService?.header};
+    _headers = {'Content-Type': 'application/json', ...?authService?.header};
   }
 
   String _getPathFromType(Type t) {
