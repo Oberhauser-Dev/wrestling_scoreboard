@@ -30,12 +30,21 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder:
-                          (context) => TeamMatchEdit(
-                            initialHomeTeam: filterObject is Team ? filterObject as Team : null,
-                            initialGuestTeam: filterObject is Team ? filterObject as Team : null,
-                            initialLeague: filterObject is League ? filterObject as League : null,
-                          ),
+                      builder: (context) {
+                        if (filterObject is Team) {
+                          final team = filterObject as Team;
+                          return TeamMatchEdit(
+                            initialHomeTeam: team,
+                            initialGuestTeam: team,
+                            initialOrganization: team.organization!,
+                          );
+                        } else if (filterObject is League) {
+                          final league = filterObject as League;
+                          return TeamMatchEdit(initialLeague: league, initialOrganization: league.organization!);
+                        } else {
+                          return TeamMatchEdit();
+                        }
+                      },
                     ),
                   ),
             ),
