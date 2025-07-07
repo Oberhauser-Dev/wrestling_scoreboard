@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -298,8 +298,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
             child: Container(
               padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
               child: MembershipDropdown(
-                label:
-                    '${localizations.weightClass} ${widget.weightClass.name} ${widget.weightClass.style.abbreviation(context)}',
+                label: '${localizations.weightClass} ${widget.weightClass.abbreviation(context)}',
                 getOrSetMemberships: widget.getOrSetMemberships,
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;

@@ -12,14 +12,13 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
+class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<CompetitionBout> {
   static const route = 'competition_bout';
 
   final int id;
   final CompetitionBout? competitionBout;
 
-  CompetitionBoutOverview({super.key, required this.id, this.competitionBout})
-    : super(boutConfig: competitionBout?.competition.boutConfig ?? Competition.defaultBoutConfig);
+  CompetitionBoutOverview({super.key, required this.id, this.competitionBout});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -100,6 +99,7 @@ class CompetitionBoutOverview extends BoutOverview<CompetitionBout> {
           dataId: competitionBout.bout.id!,
           initialData: competitionBout.bout,
           subClassData: competitionBout,
+          boutConfig: competitionBout.competition.boutConfig,
         );
       },
     );

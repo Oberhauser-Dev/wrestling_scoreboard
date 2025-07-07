@@ -14,12 +14,12 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/search.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
@@ -28,7 +28,6 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/lea
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -151,6 +150,13 @@ class HomeState extends ConsumerState<Home> {
 
     return WindowStateScaffold(
       appBarTitle: Text(localizations.start),
+      actions: [
+        IconButton(
+          onPressed: () => navigateToScratchBoutOverview(context, ref),
+          icon: const Icon(Icons.rocket_launch),
+          tooltip: localizations.launchScratchBout,
+        ),
+      ],
       body: ResponsiveContainer(
         child: Column(
           children: [
@@ -288,13 +294,6 @@ class _EntityGrid extends ConsumerWidget {
       final ids = entry.value;
       return switch (tableName) {
         // 'bout_config' => buildGroup<BoutConfig>(localizations.boutConfigs, Icons.question_mark, ids, (d) => d.id.toString()),
-        'bout' => _buildGroup<Bout>(
-          Icons.sports_kabaddi,
-          ids.map((id, value) => MapEntry(id, value as Bout?)),
-          BoutOverview.route,
-          (d) => d.title(context),
-          context: context,
-        ),
         // 'bout_action' => buildGroup<BoutAction>(localizations.actions, Icons.question_mark, ids, BoutOverview.route, (d) => d.id.toString()),
         'club' => _buildGroup<Club>(
           Icons.foundation,
@@ -388,15 +387,6 @@ class _EntityGrid extends ConsumerWidget {
           ids.map((id, value) => MapEntry(id, value as TeamMatchBout?)),
           TeamMatchBoutOverview.route,
           (d) => d.bout.title(context),
-          context: context,
-        ),
-        // 'competition' =>
-        //   buildGroup<Competition>(localizations.competitions, Icons.leaderboard, ids, CompetitionOverview.route, (d) => d.name),
-        'weight_class' => _buildGroup<WeightClass>(
-          Icons.fitness_center,
-          ids.map((id, value) => MapEntry(id, value as WeightClass?)),
-          WeightClassOverview.route,
-          (d) => d.name,
           context: context,
         ),
         _ =>

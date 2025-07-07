@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class BoutConfigEdit extends ConsumerStatefulWidget {
+class BoutConfigEdit extends ConsumerStatefulWidget {
   final BoutConfig? boutConfig;
 
   const BoutConfigEdit({this.boutConfig, super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => BoutConfigEditState();
 }
 
-abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerState<T>
-    implements AbstractEditState<BoutConfig> {
+class BoutConfigEditState extends ConsumerState<BoutConfigEdit> {
   final _formKey = GlobalKey<FormState>();
 
   Duration? _periodDuration;
@@ -27,17 +28,11 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
   int? _periodCount;
 
   @override
-  Widget buildEdit(
-    BuildContext context, {
-    required String classLocale,
-    required int? id,
-    required List<Widget> fields,
-  }) {
+  Widget build(BuildContext context) {
     final localizations = context.l10n;
     final navigator = Navigator.of(context);
 
     final items = [
-      ...fields,
       ListTile(
         leading: const Icon(Icons.timelapse),
         subtitle: Text(localizations.periodDuration),
@@ -105,7 +100,12 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
 
     return Form(
       key: _formKey,
-      child: EditWidget(typeLocalization: classLocale, id: id, onSubmit: () => handleSubmit(navigator), items: items),
+      child: EditWidget(
+        typeLocalization: localizations.boutConfig,
+        id: widget.boutConfig?.id,
+        onSubmit: () => handleSubmit(navigator),
+        items: items,
+      ),
     );
   }
 
@@ -124,7 +124,6 @@ abstract class BoutConfigEditState<T extends BoutConfigEdit> extends ConsumerSta
       boutConfig = boutConfig.copyWithId(
         await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(boutConfig),
       );
-      await handleNested(boutConfig);
       navigator.pop();
     }
   }

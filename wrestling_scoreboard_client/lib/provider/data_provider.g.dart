@@ -24,6 +24,12 @@ final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalPr
          allTransitiveDependencies: null,
        );
 
+  static const $allTransitiveDependencies0 = webSocketStateStreamProvider;
+  static const $allTransitiveDependencies1 = WebSocketStateStreamProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
+
   final Stream<T> Function(Ref ref, SingleProviderData<T> pData)? _createCb;
 
   @override
@@ -77,15 +83,21 @@ final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalPr
   }
 }
 
-String _$singleDataStreamHash() => r'2b8a8841bed763d2f44b75e0a18d97a42bfff52d';
+String _$singleDataStreamHash() => r'1e6ba62eda5bd5b3d5ae5bb32ba861e963c23f1f';
 
 final class SingleDataStreamFamily extends Family {
   const SingleDataStreamFamily._()
     : super(
         retry: null,
         name: r'singleDataStreamProvider',
-        dependencies: null,
-        allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerNotifierProvider],
+        allTransitiveDependencies: const <ProviderOrFamily>{
+          SingleDataStreamProvider.$allTransitiveDependencies0,
+          SingleDataStreamProvider.$allTransitiveDependencies1,
+          SingleDataStreamProvider.$allTransitiveDependencies2,
+          SingleDataStreamProvider.$allTransitiveDependencies3,
+          SingleDataStreamProvider.$allTransitiveDependencies4,
+        },
         isAutoDispose: true,
       );
 
@@ -133,6 +145,12 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
          dependencies: null,
          allTransitiveDependencies: null,
        );
+
+  static const $allTransitiveDependencies0 = webSocketStateStreamProvider;
+  static const $allTransitiveDependencies1 = WebSocketStateStreamProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
 
   final Stream<List<T>> Function(Ref ref, ManyProviderData<T, S> pData)? _createCb;
 
@@ -187,15 +205,21 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   }
 }
 
-String _$manyDataStreamHash() => r'310286d06022804ff1a2b3d8685ef96c50b6422b';
+String _$manyDataStreamHash() => r'cfcc50606c1459ecfd5eea6944524f5217c96b54';
 
 final class ManyDataStreamFamily extends Family {
   const ManyDataStreamFamily._()
     : super(
         retry: null,
         name: r'manyDataStreamProvider',
-        dependencies: null,
-        allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerNotifierProvider],
+        allTransitiveDependencies: const <ProviderOrFamily>{
+          ManyDataStreamProvider.$allTransitiveDependencies0,
+          ManyDataStreamProvider.$allTransitiveDependencies1,
+          ManyDataStreamProvider.$allTransitiveDependencies2,
+          ManyDataStreamProvider.$allTransitiveDependencies3,
+          ManyDataStreamProvider.$allTransitiveDependencies4,
+        },
         isAutoDispose: true,
       );
 

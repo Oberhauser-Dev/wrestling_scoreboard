@@ -31,6 +31,7 @@ class ApiRoute {
     for (var dataType in dataTypes) {
       if (dataType == User) continue;
       if (dataType == SecuredUser) continue;
+      if (dataType == ScratchBout) continue;
 
       final controller = ShelfController.getControllerFromDataType(dataType)!;
       final typeRoute = '/${controller.tableName}';

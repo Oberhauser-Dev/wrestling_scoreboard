@@ -10,7 +10,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MembershipOverview extends AbstractPersonOverview<Membership> {
+class MembershipOverview extends ConsumerWidget with AbstractPersonOverview<Membership> {
   static const route = 'membership';
 
   final int id;

@@ -1,56 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result_rule.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/bout_config_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_result_rule_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_result_rule_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class BoutConfigOverview<T extends DataObject> extends ConsumerWidget
-    implements AbstractOverview<BoutConfig, T> {
-  static const route = 'bout_config';
-
-  const BoutConfigOverview({super.key});
-
+mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
   @override
-  Widget buildOverview(
-    BuildContext context,
-    WidgetRef ref, {
-    required String classLocale,
-    required Widget editPage,
-    required VoidCallback onDelete,
-    required List<Widget> tiles,
-    List<Widget> actions = const [],
-    Map<Tab, Widget> Function(BoutConfig data)? buildRelations,
-    required int dataId,
-    BoutConfig? initialData,
-    String? details,
-    required T subClassData,
-  }) {
+  (Tab, Widget) buildTab(BuildContext context, {required initialData}) {
     final localizations = context.l10n;
-    return SingleConsumer<BoutConfig>(
-      id: dataId,
+    final Widget tabContent = SingleConsumer<BoutConfig>(
+      id: initialData.id,
       initialData: initialData,
       builder: (context, boutConfig) {
-        final description = InfoWidget(
+        return InfoWidget(
           obj: boutConfig,
-          editPage: editPage,
-          onDelete: () async {
-            onDelete();
-            (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutConfig>(boutConfig);
-          },
-          classLocale: classLocale,
+          editPage: BoutConfigEdit(boutConfig: boutConfig),
+          classLocale: localizations.boutConfig,
           children: [
-            ...tiles,
             ContentItem(
               title: '${boutConfig.periodDuration.formatMinutesAndSeconds()} ✕ ${boutConfig.periodCount}',
               subtitle: localizations.periodDuration,
@@ -76,42 +54,37 @@ abstract class BoutConfigOverview<T extends DataObject> extends ConsumerWidget
               subtitle: localizations.bleedingInjuryDuration,
               icon: Icons.timelapse,
             ),
+            FilterableManyConsumer<BoutResultRule, BoutConfig>.edit(
+              context: context,
+              shrinkWrap: true,
+              editPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
+              filterObject: boutConfig,
+              itemBuilder:
+                  (context, item) => ContentItem(
+                    title: item.localize(context),
+                    icon: Icons.rule,
+                    onTap: () {
+                      if (GoRouterState.of(context).isScratchBoutRoute) {
+                        // Ensure the provider scope is available
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => BoutResultRuleOverview(id: item.id!)),
+                        );
+                      } else {
+                        navigateToBoutResultRuleOverview(context, item);
+                      }
+                    },
+                  ),
+            ),
           ],
-        );
-        final relations = buildRelations != null ? buildRelations(boutConfig) : {};
-        return FavoriteScaffold<T>(
-          dataObject: subClassData,
-          label: classLocale,
-          details: details ?? '',
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            ...relations.keys,
-            Tab(child: HeadingText(localizations.boutResultRules)),
-          ],
-          actions: actions,
-          body: TabGroup(
-            items: [
-              description,
-              ...relations.values,
-              FilterableManyConsumer<BoutResultRule, BoutConfig>.edit(
-                context: context,
-                editPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
-                filterObject: boutConfig,
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.localize(context),
-                      icon: Icons.rule,
-                      onTap: () => handleSelectedBoutResultRule(item, context),
-                    ),
-              ),
-            ],
-          ),
         );
       },
     );
+    return (Tab(child: HeadingText(localizations.boutConfig)), tabContent);
   }
 
-  handleSelectedBoutResultRule(BoutResultRule boutResultRule, BuildContext context) {
-    context.push('/${BoutResultRuleOverview.route}/${boutResultRule.id}');
+  @override
+  Future<void> onDelete(BuildContext context, WidgetRef ref, {required BoutConfig single}) async {
+    await (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutConfig>(single);
   }
 }

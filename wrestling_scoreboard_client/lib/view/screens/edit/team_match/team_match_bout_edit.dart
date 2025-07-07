@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -87,7 +88,7 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
                 (WeightClass? value) => setState(() {
                   _weightClass = value;
                 }),
-            itemAsString: (u) => u.name,
+            itemAsString: (u) => u.localize(context),
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightClasses;
               return boutWeightClasses.toList();

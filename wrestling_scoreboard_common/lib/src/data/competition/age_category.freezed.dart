@@ -16,7 +16,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AgeCategory {
 
- int? get id; String? get orgSyncId; Organization? get organization; String get name; int get minAge; int get maxAge;
+ int? get id; String? get orgSyncId; Organization? get organization; String get name;/// Inclusive
+ int get minAge;/// Inclusive
+ int get maxAge;
 /// Create a copy of AgeCategory
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -104,7 +106,9 @@ class _AgeCategory extends AgeCategory {
 @override final  String? orgSyncId;
 @override final  Organization? organization;
 @override final  String name;
+/// Inclusive
 @override final  int minAge;
+/// Inclusive
 @override final  int maxAge;
 
 /// Create a copy of AgeCategory

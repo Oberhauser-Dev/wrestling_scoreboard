@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
@@ -21,6 +21,12 @@ abstract class AbstractOverview<T extends DataObject, E extends DataObject> {
     Map<Tab, Widget> Function(T data)? buildRelations,
     required E subClassData,
   });
+}
+
+abstract class AbstractOverviewTab<T extends DataObject> {
+  Future<void> onDelete(BuildContext context, WidgetRef ref, {required T single});
+
+  (Tab, Widget) buildTab(BuildContext context, {required T initialData});
 }
 
 class AppBarTitle extends StatelessWidget {

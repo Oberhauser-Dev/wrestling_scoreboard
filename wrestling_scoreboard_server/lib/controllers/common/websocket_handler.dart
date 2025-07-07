@@ -48,7 +48,7 @@ void broadcast(Future<String?> Function(bool obfuscate) builder) async {
 
 /// Update filtered lists (often the list they are contained in).
 /// Currently do not update list of all entities (as it should only be used in special cases)
-void broadcastSingle<T extends DataObject>(T single) async {
+void broadcastDependants<T extends DataObject>(T single) async {
   directDataObjectRelations[T]?.forEach((propertyType, propertyConfig) {
     final (propertyTableRef, orderBy) = propertyConfig;
     broadcast((obfuscate) async {
@@ -232,7 +232,7 @@ Future<String?> _updateInListOfFilter<T extends DataObject>(
   );
 }
 
-void broadcastSingleRaw<T extends DataObject>(Map<String, dynamic> single) async {
+void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) async {
   directDataObjectRelations[T]?.forEach((propertyType, propertyConfig) {
     final (propertyTableRef, orderBy) = propertyConfig;
     broadcast(
@@ -380,13 +380,13 @@ Future<int> handleSingle<T extends DataObject>({
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
-    broadcastSingle<T>(single);
+    broadcastDependants<T>(single);
   } else if (operation == CRUD.update &&
       (single is Bout /* Bout result changes ranking */ ||
           single is BoutAction /* Order of BoutAction changes */ ||
           single is CompetitionBout /* Mat changes in display */ )) {
     // Update nonetheless, if order of items has changed
-    broadcastSingle<T>(single);
+    broadcastDependants<T>(single);
   }
   return single.id!;
 }
@@ -422,11 +422,11 @@ Future<int> handleSingleRaw<T extends DataObject>({
   }
   if (operation == CRUD.create || operation == CRUD.delete) {
     // Update doesn't need to update filtered lists, as it should already be listened to the object itself, which gets an update event
-    broadcastSingleRaw<T>(single);
+    broadcastDependantsRaw<T>(single);
   } else if (operation == CRUD.update &&
       (T == BoutAction /* Order of BoutAction changes */ || T == CompetitionBout /* Mat changes in display */ )) {
     // Update nonetheless, if order of items has changed
-    broadcastSingleRaw<T>(single);
+    broadcastDependantsRaw<T>(single);
   }
   return single['id'];
 }

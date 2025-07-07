@@ -23,7 +23,7 @@ class SingleProviderData<T extends DataObject> {
   int get hashCode => Object.hash(id, T);
 }
 
-@riverpod
+@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
 Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> pData) async* {
   ref.cache();
   // Reload, whenever the stream is connected
@@ -58,7 +58,7 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
   int get hashCode => Object.hash(filterObject?.id, T, S);
 }
 
-@riverpod
+@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
 Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   Ref ref,
   ManyProviderData<T, S> pData,

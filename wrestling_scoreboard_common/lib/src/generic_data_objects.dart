@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 final dataTypes = [
   TeamMatchBout,
   TeamLineupParticipation,
+  ScratchBout,
   LeagueWeightClass,
   DivisionWeightClass,
   CompetitionParticipation,
@@ -71,6 +72,7 @@ String getTableNameFromType(Type t) {
     const (CompetitionParticipation) => CompetitionParticipation.cTableName,
     const (DivisionWeightClass) => DivisionWeightClass.cTableName,
     const (LeagueWeightClass) => LeagueWeightClass.cTableName,
+    const (ScratchBout) => ScratchBout.cTableName,
     const (TeamLineupParticipation) => TeamLineupParticipation.cTableName,
     const (TeamMatchBout) => TeamMatchBout.cTableName,
     const (BasicAuthService) => BasicAuthService.cTableName, // Only used for type encoding
@@ -110,6 +112,7 @@ Type getTypeFromTableName(String tableName) {
     CompetitionParticipation.cTableName => CompetitionParticipation,
     DivisionWeightClass.cTableName => DivisionWeightClass,
     LeagueWeightClass.cTableName => LeagueWeightClass,
+    ScratchBout.cTableName => ScratchBout,
     TeamLineupParticipation.cTableName => TeamLineupParticipation,
     TeamMatchBout.cTableName => TeamMatchBout,
     BasicAuthService.cTableName => BasicAuthService, // Only used for type decoding
@@ -336,6 +339,13 @@ Future<int?> handleGenericJson(
       handleSingleRaw: handleSingleRaw,
       handleManyRaw: handleManyRaw,
     ),
+    const (ScratchBout) => handleJson<ScratchBout>(
+      json,
+      handleSingle: handleSingle,
+      handleMany: handleMany,
+      handleSingleRaw: handleSingleRaw,
+      handleManyRaw: handleManyRaw,
+    ),
     const (TeamLineupParticipation) => handleJson<TeamLineupParticipation>(
       json,
       handleSingle: handleSingle,
@@ -387,6 +397,7 @@ extension DataObjectParser on DataObject {
       const (CompetitionParticipation) => CompetitionParticipation.fromJson(json) as T,
       const (DivisionWeightClass) => DivisionWeightClass.fromJson(json) as T,
       const (LeagueWeightClass) => LeagueWeightClass.fromJson(json) as T,
+      const (ScratchBout) => ScratchBout.fromJson(json) as T,
       const (TeamLineupParticipation) => TeamLineupParticipation.fromJson(json) as T,
       const (TeamMatchBout) => TeamMatchBout.fromJson(json) as T,
       _ => throw UnimplementedError('Json conversation for "$T" not found.'),
@@ -425,6 +436,7 @@ extension DataObjectParser on DataObject {
       const (CompetitionParticipation) => (await CompetitionParticipation.fromRaw(raw, getSingle)) as T,
       const (DivisionWeightClass) => (await DivisionWeightClass.fromRaw(raw, getSingle)) as T,
       const (LeagueWeightClass) => (await LeagueWeightClass.fromRaw(raw, getSingle)) as T,
+      const (ScratchBout) => (await ScratchBout.fromRaw(raw, getSingle)) as T,
       const (TeamLineupParticipation) => (await TeamLineupParticipation.fromRaw(raw, getSingle)) as T,
       const (TeamMatchBout) => (await TeamMatchBout.fromRaw(raw, getSingle)) as T,
       _ => throw UnimplementedError('Raw conversation for "$T" not found.'),
