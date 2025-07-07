@@ -312,7 +312,7 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
       $NotifierProviderElement(this, pointer);
 }
 
-String _$networkTimeoutNotifierHash() => r'686b1e7acba03732bd54aa332f2e5805cf5f526c';
+String _$networkTimeoutNotifierHash() => r'22636b6e9a26d31205f86686c2447bd0cf119568';
 
 abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();
@@ -711,7 +711,7 @@ final class ProposeApiImportDurationNotifierProvider
   ) => $NotifierProviderElement(this, pointer);
 }
 
-String _$proposeApiImportDurationNotifierHash() => r'eeddaf8abe731269562eac53d8bd127bc34484ff';
+String _$proposeApiImportDurationNotifierHash() => r'9777ac55dd525899c1c2c1e7579921669381eb8f';
 
 abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();

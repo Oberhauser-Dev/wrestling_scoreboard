@@ -4,6 +4,8 @@ import 'package:wrestling_scoreboard_client/mocks/provider/network_provider.dart
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 
 final mockProviderScope = ProviderScope(
+  // Never retry any provider
+  retry: (retryCount, error) => null,
   overrides: [
     dataManagerNotifierProvider.overrideWith(() => MockDataManagerNotifier()),
     webSocketManagerNotifierProvider.overrideWith(() => MockWebsocketManagerNotifier()),

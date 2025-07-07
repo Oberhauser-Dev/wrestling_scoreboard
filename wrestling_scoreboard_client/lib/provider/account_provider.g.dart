@@ -18,9 +18,21 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
         retry: null,
         name: r'userNotifierProvider',
         isAutoDispose: false,
-        dependencies: null,
-        allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[
+          dataManagerNotifierProvider,
+          localDataManagerNotifierProvider,
+          mockDataManagerNotifierProvider,
+        ],
+        allTransitiveDependencies: const <ProviderOrFamily>[
+          UserNotifierProvider.$allTransitiveDependencies0,
+          UserNotifierProvider.$allTransitiveDependencies1,
+          UserNotifierProvider.$allTransitiveDependencies2,
+        ],
       );
+
+  static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
+  static const $allTransitiveDependencies1 = localDataManagerNotifierProvider;
+  static const $allTransitiveDependencies2 = mockDataManagerNotifierProvider;
 
   final UserNotifier Function()? _createCb;
 
@@ -54,7 +66,7 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
       $NotifierProviderElement(this, pointer);
 }
 
-String _$userNotifierHash() => r'36bea4cc9b89f18b89d1fd78203395da8209b59d';
+String _$userNotifierHash() => r'21fb2222188056c6aca6c0a90dc83f24c3558ca4';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();

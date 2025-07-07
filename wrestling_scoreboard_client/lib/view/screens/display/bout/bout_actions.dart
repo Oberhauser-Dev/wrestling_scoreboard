@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -16,8 +15,16 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class ActionsWidget extends ConsumerWidget {
   final List<BoutAction> actions;
   final BoutConfig boutConfig;
+  final Future<void> Function(BoutAction action) onDeleteAction;
+  final Future<void> Function(BoutAction action) onCreateOrUpdateAction;
 
-  ActionsWidget(this.actions, {required this.boutConfig, super.key}) {
+  ActionsWidget(
+    this.actions, {
+    required this.boutConfig,
+    super.key,
+    required this.onDeleteAction,
+    required this.onCreateOrUpdateAction,
+  }) {
     actions.sort((a, b) => a.duration.compareTo(b.duration));
   }
 
@@ -47,9 +54,7 @@ class ActionsWidget extends ConsumerWidget {
                           return [
                             PopupMenuItem<String>(
                               child: Text(localizations.remove),
-                              onTap:
-                                  () async =>
-                                      (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutAction>(action),
+                              onTap: () async => await onDeleteAction(action),
                             ),
                             PopupMenuItem<String>(
                               child: Text(localizations.edit),
@@ -63,7 +68,7 @@ class ActionsWidget extends ConsumerWidget {
                                   maxValue: boutConfig.totalPeriodDuration,
                                 );
                                 if (val != null) {
-                                  (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutAction>(
+                                  onCreateOrUpdateAction(
                                     action.copyWith(
                                       duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val,
                                     ),

@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/localization/type.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/search.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/scratch_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
@@ -151,6 +152,13 @@ class HomeState extends ConsumerState<Home> {
 
     return WindowStateScaffold(
       appBarTitle: Text(localizations.start),
+      actions: [
+        IconButton(
+          onPressed: () => navigateToScratchBoutScreen(context),
+          icon: const Icon(Icons.rocket_launch),
+          tooltip: localizations.launchScratchBout,
+        ),
+      ],
       body: ResponsiveContainer(
         child: Column(
           children: [

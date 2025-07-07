@@ -6,10 +6,13 @@ part of 'network_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+/// This provider can be scoped, so it can be overridden in a sub scope of the app.
 @ProviderFor(DataManagerNotifier)
 const dataManagerNotifierProvider = DataManagerNotifierProvider._();
 
+/// This provider can be scoped, so it can be overridden in a sub scope of the app.
 final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>> {
+  /// This provider can be scoped, so it can be overridden in a sub scope of the app.
   const DataManagerNotifierProvider._({super.runNotifierBuildOverride, DataManagerNotifier Function()? create})
     : _createCb = create,
       super(
@@ -18,8 +21,8 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
         retry: null,
         name: r'dataManagerNotifierProvider',
         isAutoDispose: false,
-        dependencies: null,
-        allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[],
+        allTransitiveDependencies: const <ProviderOrFamily>[],
       );
 
   final DataManagerNotifier Function()? _createCb;
@@ -54,7 +57,7 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
       $NotifierProviderElement(this, pointer);
 }
 
-String _$dataManagerNotifierHash() => r'df52461a8e9f979643219a0d9924bc6c774b690f';
+String _$dataManagerNotifierHash() => r'c8dea305a880328441dfe1ea59a319cba4065403';
 
 abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
@@ -75,11 +78,14 @@ abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>>
   }
 }
 
+/// This provider can be scoped, so it can be overridden in a sub scope of the app.
 @ProviderFor(WebSocketManagerNotifier)
 const webSocketManagerNotifierProvider = WebSocketManagerNotifierProvider._();
 
+/// This provider can be scoped, so it can be overridden in a sub scope of the app.
 final class WebSocketManagerNotifierProvider
     extends $NotifierProvider<WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> {
+  /// This provider can be scoped, so it can be overridden in a sub scope of the app.
   const WebSocketManagerNotifierProvider._({
     super.runNotifierBuildOverride,
     WebSocketManagerNotifier Function()? create,
@@ -90,9 +96,21 @@ final class WebSocketManagerNotifierProvider
          retry: null,
          name: r'webSocketManagerNotifierProvider',
          isAutoDispose: false,
-         dependencies: null,
-         allTransitiveDependencies: null,
+         dependencies: const <ProviderOrFamily>[
+           dataManagerNotifierProvider,
+           localDataManagerNotifierProvider,
+           mockDataManagerNotifierProvider,
+         ],
+         allTransitiveDependencies: const <ProviderOrFamily>[
+           WebSocketManagerNotifierProvider.$allTransitiveDependencies0,
+           WebSocketManagerNotifierProvider.$allTransitiveDependencies1,
+           WebSocketManagerNotifierProvider.$allTransitiveDependencies2,
+         ],
        );
+
+  static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
+  static const $allTransitiveDependencies1 = localDataManagerNotifierProvider;
+  static const $allTransitiveDependencies2 = mockDataManagerNotifierProvider;
 
   final WebSocketManagerNotifier Function()? _createCb;
 
@@ -129,7 +147,7 @@ final class WebSocketManagerNotifierProvider
   ) => $NotifierProviderElement(this, pointer);
 }
 
-String _$webSocketManagerNotifierHash() => r'265576c4812245258bd39d047948d2def4d4c4a9';
+String _$webSocketManagerNotifierHash() => r'd105d3f2ea6f46d5a3b466ed55beb1fd965ebd6e';
 
 abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
@@ -164,9 +182,27 @@ final class WebSocketStateStreamProvider
         retry: null,
         name: r'webSocketStateStreamProvider',
         isAutoDispose: false,
-        dependencies: null,
-        allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[
+          webSocketManagerNotifierProvider,
+          localWebsocketManagerNotifierProvider,
+          mockWebsocketManagerNotifierProvider,
+        ],
+        allTransitiveDependencies: const <ProviderOrFamily>{
+          WebSocketStateStreamProvider.$allTransitiveDependencies0,
+          WebSocketStateStreamProvider.$allTransitiveDependencies1,
+          WebSocketStateStreamProvider.$allTransitiveDependencies2,
+          WebSocketStateStreamProvider.$allTransitiveDependencies3,
+          WebSocketStateStreamProvider.$allTransitiveDependencies4,
+          WebSocketStateStreamProvider.$allTransitiveDependencies5,
+        },
       );
+
+  static const $allTransitiveDependencies0 = webSocketManagerNotifierProvider;
+  static const $allTransitiveDependencies1 = WebSocketManagerNotifierProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = WebSocketManagerNotifierProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 = WebSocketManagerNotifierProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies4 = localWebsocketManagerNotifierProvider;
+  static const $allTransitiveDependencies5 = mockWebsocketManagerNotifierProvider;
 
   final Stream<WebSocketConnectionState> Function(Ref ref)? _createCb;
 
@@ -190,7 +226,7 @@ final class WebSocketStateStreamProvider
   }
 }
 
-String _$webSocketStateStreamHash() => r'996b5eccf84b174ae0ac89cae94d4316f91186b4';
+String _$webSocketStateStreamHash() => r'8c07bedb8f4026426f3b424dc5bcda22463de2c2';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

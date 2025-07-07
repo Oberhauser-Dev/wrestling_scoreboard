@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart' show BuildContext;
-import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
+import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -90,7 +90,7 @@ abstract class PdfSheet {
                 content:
                     wrestlingEvent is TeamMatch
                         ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
-                        : (wrestlingEvent as Competition).name,
+                        : (wrestlingEvent is Competition ? wrestlingEvent.name : ''),
                 color: PdfColors.grey100,
                 pencilColor: PdfSheet.pencilColor,
                 height: 40,

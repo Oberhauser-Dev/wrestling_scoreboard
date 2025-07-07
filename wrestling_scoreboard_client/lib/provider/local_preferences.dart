@@ -21,6 +21,7 @@ class Preferences {
   static const keyFavorites = 'favorites';
   static const keyOrganizationAuth = 'org-auth';
   static const keyJwtToken = 'jwt';
+  static const keyDataSuffix = '-data';
 
   static final supportedLanguages = {const Locale('en', 'US'), const Locale('de', 'DE')};
 

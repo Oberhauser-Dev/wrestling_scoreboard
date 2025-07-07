@@ -78,12 +78,17 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           boutIndex: matCompetitionBoutIndex,
                           bout: bout,
                           mat: competitionBout.displayMat,
-                          onPressBoutInfo: (BuildContext context) {
-                            // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                            context.go(
-                              '/${CompetitionOverview.route}/${competition.id}/${CompetitionBoutOverview.route}/${competitionBout.id}',
-                            );
-                          },
+                          actions: [
+                            IconButton(
+                              icon: const Icon(Icons.info),
+                              onPressed: () {
+                                // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+                                context.go(
+                                  '/${CompetitionOverview.route}/${competition.id}/${CompetitionBoutOverview.route}/${competitionBout.id}',
+                                );
+                              },
+                            ),
+                          ],
                           navigateToBoutByIndex: (context, index) {
                             context.pop();
                             navigateToCompetitionBoutScreen(context, matCompetitionBouts[index]);

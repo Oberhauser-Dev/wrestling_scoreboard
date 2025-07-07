@@ -735,6 +735,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get boutResultRules => 'Kampfergebnisregeln';
 
   @override
+  String get launchScratchBout => 'Starte Notiz-Kampf';
+
+  @override
   String get red => 'Red';
 
   @override

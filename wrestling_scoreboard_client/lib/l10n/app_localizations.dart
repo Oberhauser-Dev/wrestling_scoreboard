@@ -1502,6 +1502,12 @@ abstract class AppLocalizations {
   /// **'Bout Result Rules'**
   String get boutResultRules;
 
+  /// No description provided for @launchScratchBout.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch Scratch Bout'**
+  String get launchScratchBout;
+
   /// No description provided for @red.
   ///
   /// In en, this message translates to:

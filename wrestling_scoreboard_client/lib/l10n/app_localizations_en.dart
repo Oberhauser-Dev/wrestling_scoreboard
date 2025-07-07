@@ -732,6 +732,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultRules => 'Bout Result Rules';
 
   @override
+  String get launchScratchBout => 'Launch Scratch Bout';
+
+  @override
   String get red => 'Red';
 
   @override
