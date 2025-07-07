@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
@@ -17,8 +19,16 @@ class TeamMatchEdit extends ConsumerStatefulWidget {
   final Team? initialHomeTeam;
   final Team? initialGuestTeam;
   final League? initialLeague;
+  final Organization? initialOrganization;
 
-  const TeamMatchEdit({this.teamMatch, this.initialHomeTeam, this.initialGuestTeam, this.initialLeague, super.key});
+  const TeamMatchEdit({
+    this.teamMatch,
+    this.initialHomeTeam,
+    this.initialGuestTeam,
+    this.initialLeague,
+    this.initialOrganization,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TeamMatchEditState();
@@ -120,11 +130,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
                 _homeTeam = value;
               }),
           itemAsString: (u) => u.name,
-          asyncItems: (String filter) async {
-            // TODO: filter by teams of same league, but may add an option to search all teams, needs disableFilter option
-            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
-            return _availableTeams!.toList();
-          },
+          asyncItems: (String filter) async => await _getTeams(),
         ),
       ),
       ListTile(
@@ -138,11 +144,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
                 _guestTeam = value;
               }),
           itemAsString: (u) => u.name,
-          asyncItems: (String filter) async {
-            // TODO: filter by teams of same league, but may add an option to search all teams
-            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
-            return _availableTeams!.toList();
-          },
+          asyncItems: (String filter) async => await _getTeams(),
         ),
       ),
       NumericalInput(
@@ -170,9 +172,18 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
               (League? value) => setState(() {
                 _league = value;
               }),
+          onChanged: (value) {
+            _league = value;
+            setState(() {
+              _availableTeams = null;
+            });
+          },
+          // Reset team list, if league changes
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
+            _availableLeagues ??= await (await ref.read(
+              dataManagerNotifierProvider,
+            )).readMany<League, Organization>(filterObject: widget.initialOrganization);
             return _availableLeagues!.toList();
           },
         ),
@@ -287,6 +298,16 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     );
   }
 
+  Future<List<Team>> _getTeams() async {
+    if (_availableTeams == null && _league != null) {
+      _availableTeams =
+          (await ref.readAsync(
+            manyDataStreamProvider(ManyProviderData<LeagueTeamParticipation, League>(filterObject: _league)).future,
+          )).map((e) => e.team).toList();
+    }
+    return _availableTeams ?? [];
+  }
+
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -320,7 +341,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
         TeamMatch(
           id: widget.teamMatch?.id,
-          organization: widget.teamMatch?.organization ?? widget.initialLeague?.organization,
+          organization:
+              widget.teamMatch?.organization ?? widget.initialLeague?.organization ?? widget.initialOrganization,
           orgSyncId: widget.teamMatch?.orgSyncId,
           location: _location!,
           no: _no,
