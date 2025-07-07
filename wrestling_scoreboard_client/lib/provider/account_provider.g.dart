@@ -18,9 +18,11 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
         retry: null,
         name: r'userNotifierProvider',
         isAutoDispose: false,
-        dependencies: null,
-        allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
+        allTransitiveDependencies: const <ProviderOrFamily>[UserNotifierProvider.$allTransitiveDependencies0],
       );
+
+  static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
 
   final UserNotifier Function()? _createCb;
 
@@ -54,7 +56,7 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
       $NotifierProviderElement(this, pointer);
 }
 
-String _$userNotifierHash() => r'36bea4cc9b89f18b89d1fd78203395da8209b59d';
+String _$userNotifierHash() => r'c7e7df23f18e9c559245722e3c3281165a4f3120';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();

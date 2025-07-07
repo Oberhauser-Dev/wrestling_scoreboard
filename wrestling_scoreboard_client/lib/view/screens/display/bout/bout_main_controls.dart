@@ -177,9 +177,10 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                   rules: widget.boutState.boutRules,
                   style: widget.boutState.weightClass?.style ?? WrestlingStyle.free,
                 );
-                dataManager.createOrUpdateSingle(bout);
-                if (bout.r != null) dataManager.createOrUpdateSingle(bout.r!);
-                if (bout.b != null) dataManager.createOrUpdateSingle(bout.b!);
+                await dataManager.createOrUpdateSingle(bout);
+                // Need to await saving, otherwise a read of the AthleteBoutState list happens on old values within createOrUpdateSingle (e.g. for local running local bouts).
+                if (bout.r != null) await dataManager.createOrUpdateSingle(bout.r!);
+                if (bout.b != null) await dataManager.createOrUpdateSingle(bout.b!);
 
                 setState(() {
                   widget.boutState.bout = bout;

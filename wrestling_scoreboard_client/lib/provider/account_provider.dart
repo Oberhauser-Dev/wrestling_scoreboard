@@ -5,7 +5,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'account_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier])
 class UserNotifier extends _$UserNotifier {
   @override
   Raw<Future<User?>> build() async {

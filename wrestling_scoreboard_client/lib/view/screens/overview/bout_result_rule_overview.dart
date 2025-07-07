@@ -18,6 +18,10 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
+void navigateToBoutResultRuleOverview(BuildContext context, BoutResultRule boutResultRule) {
+  context.push('/${BoutResultRuleOverview.route}/${boutResultRule.id}');
+}
+
 class BoutResultRuleOverview extends ConsumerWidget {
   static const route = 'bout_result_rule';
 

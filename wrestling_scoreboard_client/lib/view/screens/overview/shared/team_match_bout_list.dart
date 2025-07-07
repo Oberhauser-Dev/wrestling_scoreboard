@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
@@ -37,8 +37,7 @@ class TeamMatchBoutList<T extends DataObject?> extends StatelessWidget {
       itemBuilder: (context, teamMatchBout) {
         final bout = teamMatchBout.bout;
         final weightClass = teamMatchBout.weightClass;
-        final weightClassStr =
-            weightClass == null ? '' : '${weightClass.name}, ${weightClass.style.abbreviation(context)} | ';
+        final weightClassStr = weightClass == null ? '' : '${weightClass.abbreviation(context)} | ';
         return ListTile(
           title: Text.rich(
             TextSpan(

@@ -170,6 +170,8 @@ void main() {
       for (final dataType in dataTypes) {
         if (dataType == User) continue;
         if (dataType == SecuredUser) continue;
+        if (dataType == ScratchBout) continue;
+
         final tableName = getTableNameFromType(dataType);
         final url = 'http://${instance.address.address}:${instance.port}/api/${tableName}s';
         final res = await http.get(Uri.parse(url));
@@ -191,6 +193,7 @@ void main() {
       for (final dataType in dataTypes.reversed) {
         if (dataType == User) continue;
         if (dataType == SecuredUser) continue;
+        if (dataType == ScratchBout) continue;
 
         final Iterable<DataObject> objs = getMockedDataObjects(dataType);
         for (var obj in objs) {
@@ -314,6 +317,8 @@ void main() {
   test('Controllers', () async {
     for (final dataType in dataTypes) {
       if (dataType == User) continue;
+      if (dataType == ScratchBout) continue;
+
       final controller = ShelfController.getControllerFromDataType(dataType)!;
       expect(controller.runtimeType.toString(), '${dataType}Controller');
       expect(controller.tableName, getTableNameFromType(dataType));

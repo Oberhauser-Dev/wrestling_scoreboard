@@ -279,6 +279,10 @@ class ScoreSheet extends PdfSheet {
   }
 
   Widget _buildClassificationPointsTable(Context context) {
+    if (boutRules.isEmpty) {
+      return Container();
+    }
+
     BoutResultRule? resultRule;
     if (bout.winnerRole != null && bout.result != null) {
       resultRule = BoutConfig.resultRule(

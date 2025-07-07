@@ -122,8 +122,7 @@ class WebSocketManager {
     onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
   }
 
-  dynamic addToSink(String val) {
+  void addToSink(String val) {
     _channel?.sink.add(val);
-    return null;
   }
 }

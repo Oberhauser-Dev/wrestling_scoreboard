@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
@@ -11,12 +12,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class WeightClassOverview<T extends DataObject> extends ConsumerWidget
-    implements AbstractOverview<WeightClass, T> {
-  static const route = 'weight_class';
-
-  const WeightClassOverview({super.key});
-
+mixin WeightClassOverview<T extends DataObject> implements AbstractOverview<WeightClass, T> {
   @override
   Widget buildOverview(
     BuildContext context,
@@ -36,30 +32,39 @@ abstract class WeightClassOverview<T extends DataObject> extends ConsumerWidget
     return SingleConsumer<WeightClass>(
       id: dataId,
       initialData: initialData,
-      builder: (context, data) {
+      builder: (context, weightClass) {
         final description = InfoWidget(
-          obj: data,
+          obj: weightClass,
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerNotifierProvider)).deleteSingle<WeightClass>(data);
+            (await ref.read(dataManagerNotifierProvider)).deleteSingle<WeightClass>(weightClass);
           },
           classLocale: classLocale,
           children: [
             ...tiles,
-            ContentItem(title: data.weight.toString(), subtitle: localizations.weight, icon: Icons.fitness_center),
-            ContentItem(title: data.style.localize(context), subtitle: localizations.wrestlingStyle, icon: Icons.style),
-            ContentItem(title: data.unit.toAbbr(), subtitle: localizations.weightUnit, icon: Icons.straighten),
-            ContentItem(title: data.suffix ?? '-', subtitle: localizations.suffix, icon: Icons.description),
+            ContentItem(
+              title: weightClass.weight.toString(),
+              subtitle: localizations.weight,
+              icon: Icons.fitness_center,
+            ),
+            ContentItem(
+              title: weightClass.style.localize(context),
+              subtitle: localizations.wrestlingStyle,
+              icon: Icons.style,
+            ),
+            ContentItem(title: weightClass.unit.toAbbr(), subtitle: localizations.weightUnit, icon: Icons.straighten),
+            ContentItem(title: weightClass.suffix ?? '-', subtitle: localizations.suffix, icon: Icons.description),
           ],
         );
+        final relations = buildRelations != null ? buildRelations(weightClass) : {};
         return FavoriteScaffold<T>(
           dataObject: subClassData,
           label: classLocale,
-          details: details ?? data.name,
-          tabs: [Tab(child: HeadingText(localizations.info))],
+          details: details ?? weightClass.abbreviation(context),
+          tabs: [Tab(child: HeadingText(localizations.info)), ...relations.keys],
           actions: actions,
-          body: TabGroup(items: [description]),
+          body: TabGroup(items: [description, ...relations.values]),
         );
       },
     );

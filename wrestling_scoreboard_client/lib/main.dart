@@ -11,7 +11,11 @@ import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 
-const defaultProviderScope = ProviderScope(child: WrestlingScoreboardApp());
+final defaultProviderScope = ProviderScope(
+  // Never retry any provider
+  retry: (retryCount, error) => null,
+  child: WrestlingScoreboardApp(),
+);
 
 void main() async {
   // Use [HashUrlStrategy] by default to support Single Page Application without configuring the server.

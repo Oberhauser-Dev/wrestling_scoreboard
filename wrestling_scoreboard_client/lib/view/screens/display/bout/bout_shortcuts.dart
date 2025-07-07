@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -122,7 +120,6 @@ class BoutScreenActionIntent extends Intent {
   final BoutScreenActions type;
 
   Future<void> handle(
-    DataManager dataManager,
     ObservableStopwatch stopwatch,
     List<Bout> bouts,
     Future<List<BoutAction>> Function() getActions,
@@ -130,6 +127,8 @@ class BoutScreenActionIntent extends Intent {
     Function(BoutScreenActions action) doAction, {
     BuildContext? context,
     required void Function(BuildContext context, int boutIndex) navigateToBoutByIndex,
+    required Future<void> Function(BoutAction action) createOrUpdateAction,
+    required Future<void> Function(BoutAction action) deleteAction,
   }) async {
     final bout = bouts[boutIndex];
     switch (type) {
@@ -177,7 +176,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 1,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redTwo:
         final action = BoutAction(
@@ -187,7 +186,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 2,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redThree:
         final action = BoutAction(
@@ -197,7 +196,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 3,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redFour:
         final action = BoutAction(
@@ -207,7 +206,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 4,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redFive:
         final action = BoutAction(
@@ -217,7 +216,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 5,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redVerbal:
         final action = BoutAction(
@@ -226,7 +225,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.verbal,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redPassivity:
         final action = BoutAction(
@@ -235,7 +234,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.passivity,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redCaution:
         final action = BoutAction(
@@ -244,7 +243,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.caution,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redDismissal:
         final action = BoutAction(
@@ -253,7 +252,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.dismissal,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.redActivityTime:
         doAction(BoutScreenActions.redActivityTime);
@@ -270,7 +269,7 @@ class BoutScreenActionIntent extends Intent {
           final rActions = actions.where((el) => el.role == BoutRole.red);
           if (rActions.isNotEmpty) {
             final action = rActions.last;
-            dataManager.deleteSingle<BoutAction>(action);
+            deleteAction(action);
           }
         }
         break;
@@ -282,7 +281,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 1,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueTwo:
         final action = BoutAction(
@@ -292,7 +291,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 2,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueThree:
         final action = BoutAction(
@@ -302,7 +301,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 3,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueFour:
         final action = BoutAction(
@@ -312,7 +311,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 4,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueFive:
         final action = BoutAction(
@@ -322,7 +321,7 @@ class BoutScreenActionIntent extends Intent {
           actionType: BoutActionType.points,
           pointCount: 5,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueVerbal:
         final action = BoutAction(
@@ -331,7 +330,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.verbal,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.bluePassivity:
         final action = BoutAction(
@@ -340,7 +339,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.passivity,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueCaution:
         final action = BoutAction(
@@ -349,7 +348,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.caution,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueDismissal:
         final action = BoutAction(
@@ -358,7 +357,7 @@ class BoutScreenActionIntent extends Intent {
           duration: stopwatch.elapsed,
           actionType: BoutActionType.dismissal,
         );
-        await dataManager.createOrUpdateSingle(action);
+        await createOrUpdateAction(action);
         break;
       case BoutScreenActions.blueUndo:
         if (bout.b != null) {
@@ -366,7 +365,7 @@ class BoutScreenActionIntent extends Intent {
           final bActions = actions.where((el) => el.role == BoutRole.blue);
           if (bActions.isNotEmpty) {
             final action = bActions.last;
-            dataManager.deleteSingle<BoutAction>(action);
+            deleteAction(action);
           }
         }
         break;
@@ -383,7 +382,7 @@ class BoutScreenActionIntent extends Intent {
         final actions = await getActions();
         if (actions.isNotEmpty) {
           final action = actions.last;
-          dataManager.deleteSingle<BoutAction>(action);
+          deleteAction(action);
         }
         break;
       case BoutScreenActions.horn:
@@ -393,6 +392,38 @@ class BoutScreenActionIntent extends Intent {
   }
 }
 
+const redOneIntent = BoutScreenActionIntent.redOne();
+const redTwoIntent = BoutScreenActionIntent.redTwo();
+const redThreeIntent = BoutScreenActionIntent.redThree();
+const redFourIntent = BoutScreenActionIntent.redFour();
+const redFiveIntent = BoutScreenActionIntent.redFive();
+
+const blueOneIntent = BoutScreenActionIntent.blueOne();
+const blueTwoIntent = BoutScreenActionIntent.blueTwo();
+const blueThreeIntent = BoutScreenActionIntent.blueThree();
+const blueFourIntent = BoutScreenActionIntent.blueFour();
+const blueFiveIntent = BoutScreenActionIntent.blueFive();
+
+final shortcuts = <LogicalKeySet, Intent>{
+  LogicalKeySet(LogicalKeyboardKey.space): const BoutScreenActionIntent.startStop(),
+  LogicalKeySet(LogicalKeyboardKey.arrowUp): const BoutScreenActionIntent.addOneSec(),
+  LogicalKeySet(LogicalKeyboardKey.arrowDown): const BoutScreenActionIntent.rmOneSec(),
+  LogicalKeySet(LogicalKeyboardKey.backspace): const BoutScreenActionIntent.undo(),
+  LogicalKeySet(LogicalKeyboardKey.arrowRight): const BoutScreenActionIntent.nextBout(),
+  LogicalKeySet(LogicalKeyboardKey.arrowLeft): const BoutScreenActionIntent.previousBout(),
+  LogicalKeySet(LogicalKeyboardKey.keyQ, LogicalKeyboardKey.control): const BoutScreenActionIntent.quit(),
+  LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
+  LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
+  LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
+  LogicalKeySet(LogicalKeyboardKey.digit4): redFourIntent,
+  LogicalKeySet(LogicalKeyboardKey.digit5): redFiveIntent,
+  LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
+  LogicalKeySet(LogicalKeyboardKey.numpad2): blueTwoIntent,
+  LogicalKeySet(LogicalKeyboardKey.numpad3): blueThreeIntent,
+  LogicalKeySet(LogicalKeyboardKey.numpad4): blueFourIntent,
+  LogicalKeySet(LogicalKeyboardKey.numpad5): blueFiveIntent,
+};
+
 class BoutActionHandler extends ConsumerWidget {
   final Widget child;
   final ObservableStopwatch stopwatch;
@@ -401,6 +432,8 @@ class BoutActionHandler extends ConsumerWidget {
   final int boutIndex;
   final Function(BoutScreenActions action) doAction;
   final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
+  final Future<void> Function(BoutAction action) createOrUpdateAction;
+  final Future<void> Function(BoutAction action) deleteAction;
 
   const BoutActionHandler({
     required this.child,
@@ -411,60 +444,14 @@ class BoutActionHandler extends ConsumerWidget {
     required this.doAction,
     super.key,
     required this.navigateToBoutByIndex,
+    required this.createOrUpdateAction,
+    required this.deleteAction,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> handleIntent(BoutScreenActionIntent intent, {required BuildContext context}) async {
-      final dataManager = await ref.read(dataManagerNotifierProvider);
-      if (context.mounted) {
-        await catchAsync(context, () async {
-          await intent.handle(
-            dataManager,
-            stopwatch,
-            bouts,
-            getActions,
-            boutIndex,
-            doAction,
-            context: context,
-            navigateToBoutByIndex: navigateToBoutByIndex,
-          );
-        });
-      }
-    }
-
-    const redOneIntent = BoutScreenActionIntent.redOne();
-    const redTwoIntent = BoutScreenActionIntent.redTwo();
-    const redThreeIntent = BoutScreenActionIntent.redThree();
-    const redFourIntent = BoutScreenActionIntent.redFour();
-    const redFiveIntent = BoutScreenActionIntent.redFive();
-
-    const blueOneIntent = BoutScreenActionIntent.blueOne();
-    const blueTwoIntent = BoutScreenActionIntent.blueTwo();
-    const blueThreeIntent = BoutScreenActionIntent.blueThree();
-    const blueFourIntent = BoutScreenActionIntent.blueFour();
-    const blueFiveIntent = BoutScreenActionIntent.blueFive();
-
     return Shortcuts(
-      shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.space): const BoutScreenActionIntent.startStop(),
-        LogicalKeySet(LogicalKeyboardKey.arrowUp): const BoutScreenActionIntent.addOneSec(),
-        LogicalKeySet(LogicalKeyboardKey.arrowDown): const BoutScreenActionIntent.rmOneSec(),
-        LogicalKeySet(LogicalKeyboardKey.backspace): const BoutScreenActionIntent.undo(),
-        LogicalKeySet(LogicalKeyboardKey.arrowRight): const BoutScreenActionIntent.nextBout(),
-        LogicalKeySet(LogicalKeyboardKey.arrowLeft): const BoutScreenActionIntent.previousBout(),
-        LogicalKeySet(LogicalKeyboardKey.keyQ, LogicalKeyboardKey.control): const BoutScreenActionIntent.quit(),
-        LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
-        LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
-        LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
-        LogicalKeySet(LogicalKeyboardKey.digit4): redFourIntent,
-        LogicalKeySet(LogicalKeyboardKey.digit5): redFiveIntent,
-        LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
-        LogicalKeySet(LogicalKeyboardKey.numpad2): blueTwoIntent,
-        LogicalKeySet(LogicalKeyboardKey.numpad3): blueThreeIntent,
-        LogicalKeySet(LogicalKeyboardKey.numpad4): blueFourIntent,
-        LogicalKeySet(LogicalKeyboardKey.numpad5): blueFiveIntent,
-      },
+      shortcuts: shortcuts,
       child: Actions(
         actions: <Type, Action<Intent>>{
           BoutScreenActionIntent: CallbackAction<BoutScreenActionIntent>(
@@ -504,5 +491,23 @@ class BoutActionHandler extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> handleIntent(BoutScreenActionIntent intent, {required BuildContext context}) async {
+    if (context.mounted) {
+      await catchAsync(context, () async {
+        await intent.handle(
+          stopwatch,
+          bouts,
+          getActions,
+          boutIndex,
+          doAction,
+          context: context,
+          navigateToBoutByIndex: navigateToBoutByIndex,
+          createOrUpdateAction: createOrUpdateAction,
+          deleteAction: deleteAction,
+        );
+      });
+    }
   }
 }

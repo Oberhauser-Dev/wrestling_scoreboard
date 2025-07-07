@@ -73,12 +73,16 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                               bouts: bouts,
                               boutIndex: teamMatchBoutIndex,
                               bout: bout,
-                              onPressBoutInfo: (BuildContext context) {
-                                // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                                context.go(
-                                  '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}',
-                                );
-                              },
+                              actions: [
+                                IconButton(
+                                  icon: const Icon(Icons.info),
+                                  onPressed:
+                                      // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+                                      () => context.go(
+                                        '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}',
+                                      ),
+                                ),
+                              ],
                               navigateToBoutByIndex: (context, index) {
                                 context.pop();
                                 navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]);

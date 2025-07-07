@@ -15,14 +15,13 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
+class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBout> {
   static const route = 'team_match_bout';
 
   final int id;
   final TeamMatchBout? teamMatchBout;
 
-  TeamMatchBoutOverview({super.key, required this.id, this.teamMatchBout})
-    : super(boutConfig: teamMatchBout?.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig);
+  TeamMatchBoutOverview({super.key, required this.id, this.teamMatchBout});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,6 +90,7 @@ class TeamMatchBoutOverview extends BoutOverview<TeamMatchBout> {
           dataId: teamMatchBout.bout.id!,
           initialData: teamMatchBout.bout,
           subClassData: teamMatchBout,
+          boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
         );
       },
     );

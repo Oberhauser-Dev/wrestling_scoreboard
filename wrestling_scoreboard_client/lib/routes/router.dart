@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/view/app_navigation.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/scratch_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/team_match_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/competition/weight_category_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
@@ -33,6 +34,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
@@ -53,7 +55,35 @@ getRouter() {
           return ConnectionWidget(child: AppNavigation(child: child));
         },
         routes: [
-          GoRoute(path: '/${Home.route}', builder: (context, state) => const Home()),
+          GoRoute(
+            path: '/${Home.route}',
+            builder: (context, state) => const Home(),
+            routes: [
+              ShellRoute(
+                builder: (context, state, child) {
+                  return ScratchBoutProviderScope(child: child);
+                },
+                routes: [
+                  GoRoute(
+                    path: ScratchBoutOverview.route,
+                    builder: (context, state) {
+                      return ScratchBoutOverview();
+                    },
+                    routes: [
+                      GoRoute(
+                        path: ScratchBoutDisplay.route,
+                        // ProviderScope fails when using different parentNavigatorKey
+                        // parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+                        builder: (context, state) {
+                          return ScratchBoutDisplay();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
           GoRoute(
             path: '/${Explore.route}',
             builder: (context, state) => const Explore(),

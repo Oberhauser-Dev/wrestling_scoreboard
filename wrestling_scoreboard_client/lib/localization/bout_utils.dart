@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
+import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension BoutRoleLocalization on BoutRole {
@@ -24,7 +24,7 @@ extension BoutLocalization on Bout {
 extension TeamMatchBoutLocalization on TeamMatchBout {
   String title(BuildContext context) {
     final weightClass = this.weightClass;
-    return '${weightClass == null ? '' : '${weightClass.name}, ${weightClass.style.abbreviation(context)} | '}'
+    return '${weightClass == null ? '' : '${weightClass.abbreviation(context)} | '}'
         '${bout.title(context)}';
   }
 }

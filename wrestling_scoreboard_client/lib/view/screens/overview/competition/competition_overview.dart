@@ -14,19 +14,23 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/competition/compet
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_cycle_management.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class CompetitionOverview extends BoutConfigOverview<Competition> {
+class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
   static const route = 'competition';
 
   final int id;
@@ -42,6 +46,8 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
       id: id,
       initialData: competition,
       builder: (context, competition) {
+        final (boutConfigTab, boutConfigTabContent) = buildTab(context, initialData: competition.boutConfig);
+
         // final pdfAction = IconButton(
         //   icon: const Icon(Icons.print),
         //   onPressed: () async {
@@ -114,94 +120,21 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
         //     icon: Icons.security,
         //   ),
         // ];
-        final items = {
-          Tab(child: HeadingText(localizations.cycles)): CompetitionCycleManagement(competition: competition),
-          Tab(child: HeadingText(localizations.lineups)): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, lineup) {
-              return ContentItem(
-                title: lineup.club.name,
-                icon: Icons.view_list,
-                onTap: () async => _handleSelectedCompetitionLineup(context, lineup),
-              );
-            },
-          ),
-          Tab(
-            child: HeadingText(localizations.ageCategories),
-          ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, competitionAgeCategory) {
-              return ContentItem(
-                title: competitionAgeCategory.ageCategory.name,
-                icon: Icons.school,
-                onTap: () async => _handleSelectedCompetitionAgeCategory(context, competitionAgeCategory),
-              );
-            },
-          ),
-          Tab(
-            child: HeadingText(localizations.weightCategories),
-          ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, weightCategory) {
-              return ContentItem(
-                title: weightCategory.name,
-                icon: Icons.fitness_center,
-                onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
-              );
-            },
-          ),
-          Tab(
-            child: HeadingText(localizations.competitionSystems),
-          ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, competitionSystemAffiliation) {
-              return ContentItem(
-                title:
-                    '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
-                icon: Icons.account_tree,
-                onTap: () async => _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
-              );
-            },
-          ),
-          Tab(child: HeadingText(localizations.bouts)): CompetitionBoutList(filterObject: competition),
 
-          // Tab(child: HeadingText(localizations.persons)):
-          // GroupedList(
-          //   header: const HeadingItem(),
-          //   itemCount: contentItems.length,
-          //   itemBuilder: (context, index) => contentItems[index],
-          // ),
-        };
-
-        return buildOverview(
-          context,
-          ref,
-          classLocale: localizations.competition,
-          initialData: competition.boutConfig,
+        final description = InfoWidget(
+          obj: competition,
           editPage: CompetitionEdit(competition: competition),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Competition>(competition),
-          tiles: [
-            ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
-            ContentItem(title: competition.location ?? 'no location', subtitle: localizations.place, icon: Icons.place),
-            ContentItem(
-              title: competition.date.toDateTimeString(context),
-              subtitle: localizations.date,
-              icon: Icons.date_range,
-            ),
-            ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
-          ],
-          dataId: competition.id!,
-          subClassData: competition,
-          details: competition.name,
+          onDelete: () async {
+            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<Competition>(competition);
+            if (context.mounted) await super.onDelete(context, ref, single: competition.boutConfig);
+          },
+          classLocale: localizations.competition,
           actions: [
+            IconButton(
+              onPressed: () async => navigateToScratchBoutOverview(context, ref, boutConfig: competition.boutConfig),
+              icon: const Icon(Icons.rocket_launch),
+              tooltip: localizations.launchScratchBout,
+            ),
             // if (competition.organization != null)
             //   ConditionalOrganizationImportAction(
             //       id: id, organization: competition.organization!, importType: OrganizationImportType.competition),
@@ -288,7 +221,90 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
               ),
             ),
           ],
-          buildRelations: (boutConfig) => items,
+          children: [
+            ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
+            ContentItem(title: competition.location ?? 'no location', subtitle: localizations.place, icon: Icons.place),
+            ContentItem(
+              title: competition.date.toDateTimeString(context),
+              subtitle: localizations.date,
+              icon: Icons.date_range,
+            ),
+            ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
+          ],
+        );
+
+        final tabItems = {
+          Tab(child: HeadingText(localizations.cycles)): CompetitionCycleManagement(competition: competition),
+          Tab(child: HeadingText(localizations.lineups)): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, lineup) {
+              return ContentItem(
+                title: lineup.club.name,
+                icon: Icons.view_list,
+                onTap: () async => _handleSelectedCompetitionLineup(context, lineup),
+              );
+            },
+          ),
+          Tab(
+            child: HeadingText(localizations.ageCategories),
+          ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, competitionAgeCategory) {
+              return ContentItem(
+                title: competitionAgeCategory.ageCategory.name,
+                icon: Icons.school,
+                onTap: () async => _handleSelectedCompetitionAgeCategory(context, competitionAgeCategory),
+              );
+            },
+          ),
+          Tab(
+            child: HeadingText(localizations.weightCategories),
+          ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, weightCategory) {
+              return ContentItem(
+                title: weightCategory.name,
+                icon: Icons.fitness_center,
+                onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
+              );
+            },
+          ),
+          Tab(
+            child: HeadingText(localizations.competitionSystems),
+          ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, competitionSystemAffiliation) {
+              return ContentItem(
+                title:
+                    '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
+                icon: Icons.account_tree,
+                onTap: () async => _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
+              );
+            },
+          ),
+          Tab(child: HeadingText(localizations.bouts)): CompetitionBoutList(filterObject: competition),
+
+          // Tab(child: HeadingText(localizations.persons)):
+          // GroupedList(
+          //   header: const HeadingItem(),
+          //   itemCount: contentItems.length,
+          //   itemBuilder: (context, index) => contentItems[index],
+          // ),
+        };
+        return FavoriteScaffold<Competition>(
+          dataObject: competition,
+          label: localizations.competition,
+          details: competition.name,
+          tabs: [Tab(child: HeadingText(localizations.info)), boutConfigTab, ...tabItems.keys],
+          body: TabGroup(items: [description, boutConfigTabContent, ...tabItems.values]),
         );
       },
     );

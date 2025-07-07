@@ -53,6 +53,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
   final Widget? Function(BuildContext context, List<T> data)? prependBuilder;
   final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
   final List<T> Function(List<T> data)? mapData;
+  final bool shrinkWrap;
 
   const FilterableManyConsumer({
     required this.itemBuilder,
@@ -63,6 +64,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     this.initialData,
     this.filterObject,
     this.mapData,
+    this.shrinkWrap = false,
     super.key,
   });
 
@@ -77,6 +79,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     Widget? Function(BuildContext context, List<T> data)? prependBuilder,
     Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException,
     List<T> Function(List<T> data)? mapData,
+    bool shrinkWrap = false,
   }) {
     return FilterableManyConsumer<T, S>(
       itemBuilder: itemBuilder,
@@ -89,6 +92,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
       trailing: RestrictedAddButton(
         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: editPageBuilder)),
       ),
+      shrinkWrap: shrinkWrap,
     );
   }
 
@@ -104,6 +108,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
           items: data,
           itemBuilder: (context, e) => SingleConsumer<T>(id: e.id, initialData: e, builder: itemBuilder),
           prepend: prependBuilder == null ? null : prependBuilder!(context, data),
+          shrinkWrap: shrinkWrap,
         );
       },
       initialData: initialData,
@@ -119,6 +124,7 @@ class SearchableGroupedList<T extends DataObject> extends ConsumerStatefulWidget
   final Widget Function(BuildContext context, T item) itemBuilder;
   final Widget? trailing;
   final String? hintText;
+  final bool shrinkWrap;
 
   const SearchableGroupedList({
     super.key,
@@ -127,6 +133,7 @@ class SearchableGroupedList<T extends DataObject> extends ConsumerStatefulWidget
     this.prepend,
     this.trailing,
     this.hintText,
+    this.shrinkWrap = false,
   });
 
   @override
@@ -154,6 +161,7 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
   @override
   Widget build(BuildContext context) {
     return GroupedList(
+      shrinkWrap: widget.shrinkWrap,
       header: ListTile(
         leading: const Icon(Icons.search),
         title: TextField(
@@ -205,6 +213,7 @@ class GroupedList extends StatelessWidget {
   final Widget Function(BuildContext, int index) itemBuilder;
   final int itemCount;
   final int initialItemIndex;
+  final bool shrinkWrap;
 
   const GroupedList({
     required this.header,
@@ -212,6 +221,7 @@ class GroupedList extends StatelessWidget {
     super.key,
     this.initialItemIndex = 0,
     required this.itemCount,
+    this.shrinkWrap = false,
   });
 
   @override
@@ -221,9 +231,17 @@ class GroupedList extends StatelessWidget {
         header,
         if (itemCount <= 0)
           ListTile(title: Center(child: Text(context.l10n.noItems, style: Theme.of(context).textTheme.bodySmall)))
+        else if (shrinkWrap)
+          ScrollablePositionedList.builder(
+            shrinkWrap: true,
+            itemCount: itemCount,
+            initialScrollIndex: initialItemIndex,
+            itemBuilder: (context, index) => itemBuilder(context, index),
+          )
         else
           Expanded(
             child: ScrollablePositionedList.builder(
+              shrinkWrap: false,
               itemCount: itemCount,
               initialScrollIndex: initialItemIndex,
               itemBuilder: (context, index) => itemBuilder(context, index),

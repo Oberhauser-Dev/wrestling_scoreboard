@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -20,10 +20,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidget
-    implements AbstractOverview<Person, T> {
-  const AbstractPersonOverview({super.key});
-
+mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<Person, T> {
   @override
   Widget buildOverview(
     BuildContext context,
@@ -31,7 +28,7 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
     required String classLocale,
     String? details,
     required Widget editPage,
-    required VoidCallback onDelete,
+    required VoidCallback? onDelete,
     List<Widget>? tiles,
     List<Widget> actions = const [],
     Map<Tab, Widget> Function(Person data)? buildRelations,
@@ -48,7 +45,7 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
           obj: person,
           editPage: editPage,
           onDelete: () async {
-            onDelete();
+            if (onDelete != null) onDelete();
             (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person);
           },
           classLocale: classLocale,
@@ -100,7 +97,7 @@ abstract class AbstractPersonOverview<T extends DataObject> extends ConsumerWidg
   }
 }
 
-class PersonOverview extends AbstractPersonOverview<Person> {
+class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> {
   static const route = 'person';
 
   final int id;
@@ -124,7 +121,8 @@ class PersonOverview extends AbstractPersonOverview<Person> {
           subClassData: person,
           classLocale: localizations.person,
           editPage: PersonEdit(person: person, initialOrganization: person.organization ?? initialOrganization),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person),
+          // Already covered in parent
+          onDelete: null,
           buildRelations:
               (Person person) => {
                 Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.edit(

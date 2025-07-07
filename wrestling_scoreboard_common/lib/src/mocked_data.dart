@@ -578,192 +578,61 @@ class MockedData {
 
   List<AgeCategory> getAgeCategories() => _ageCategories;
 
-  List<AgeCategory> getAgeCategoryOfOrganization(Organization organization) {
-    return getAgeCategories().where((element) => element.organization == organization).toList();
-  }
-
   List<Club> getClubs() => _clubs;
-
-  List<Club> getClubsOfOrganization(Organization organization) {
-    return getClubs().where((element) => element.organization == organization).toList();
-  }
-
-  List<CompetitionBout> getBoutsOfCompetition(Competition competition) {
-    return getCompetitionBouts().where((element) => element.competition == competition).toList();
-  }
-
-  List<TeamMatchBout> getBoutsOfTeamMatch(TeamMatch match) {
-    return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
-  }
 
   List<BoutAction> getBoutActions() => _boutActions;
 
-  List<BoutAction> getBoutActionsOfBout(Bout bout) =>
-      getBoutActions().where((element) => element.bout == bout).toList();
-
   List<Organization> getOrganizations() => _organizations;
-
-  List<Organization> getOrganizationsOfOrganization(Organization organization) {
-    return getOrganizations().where((element) => element.parent == organization).toList();
-  }
 
   List<Division> getDivisions() => _divisions;
 
-  List<Division> getDivisionsOfDivision(Division division) {
-    return getDivisions().where((element) => element.parent == division).toList();
-  }
-
-  List<Division> getDivisionsOfOrganization(Organization organization) {
-    return getDivisions().where((element) => element.organization == organization).toList();
-  }
-
   List<League> getLeagues() => _leagues;
-
-  List<League> getLeaguesOfDivision(Division division) {
-    return getLeagues().where((element) => element.division == division).toList();
-  }
 
   List<LeagueWeightClass> getLeagueWeightClasses() => _leagueWeightClasses;
 
-  List<LeagueWeightClass> getLeagueWeightClassesOfLeague(League league) {
-    return getLeagueWeightClasses().where((e) => e.league == league).toList();
-  }
-
   List<DivisionWeightClass> getDivisionWeightClasses() => _divisionWeightClasses;
 
-  List<DivisionWeightClass> getDivisionWeightClassesOfDivision(Division division) {
-    return getDivisionWeightClasses().where((element) => element.division == division).toList();
-  }
-
   List<LeagueTeamParticipation> getLeagueTeamParticipations() => _leagueTeamParticipations;
-
-  List<LeagueTeamParticipation> getLeagueTeamParticipationsOfLeague(League league) {
-    return getLeagueTeamParticipations().where((element) => element.league == league).toList();
-  }
-
-  List<LeagueTeamParticipation> getLeagueTeamParticipationsOfTeam(Team team) {
-    return getLeagueTeamParticipations().where((element) => element.team == team).toList();
-  }
 
   List<TeamLineup> getTeamLineups() => _teamLineups;
 
   List<Membership> getMemberships() => _memberships;
 
-  List<Membership> getMembershipsOfClub(Club club) {
-    return getMemberships().where((element) => element.club == club).toList();
-  }
-
   List<TeamLineupParticipation> getTeamLineupParticipations() => _teamLineupParticipations;
-
-  List<TeamLineupParticipation> getTeamLineupParticipationsOfLineup(TeamLineup lineup) {
-    return getTeamLineupParticipations().where((element) => element.lineup == lineup).toList();
-  }
 
   List<AthleteBoutState> getAthleteBoutStates() => _athleteBoutStates;
 
   List<Person> getPersons() => _persons;
 
-  List<Person> getPersonsOfOrganization(Organization organization) {
-    return getPersons().where((element) => element.organization == organization).toList();
-  }
-
   List<Team> getTeams() => _teams;
 
   List<TeamClubAffiliation> getTeamClubAffiliations() => _teamClubAffiliations;
 
-  List<Team> getTeamsOfClub(Club club) {
-    return getTeamClubAffiliations().where((element) => element.club == club).map((tca) => tca.team).toList();
-  }
-
-  List<Team> getTeamsOfLeague(League league) {
-    return getLeagueTeamParticipationsOfLeague(league).map((e) => e.team).toList();
-  }
-
   List<TeamMatch> getTeamMatches() => _teamMatches;
-
-  List<TeamMatch> getTeamMatchesOfTeam(Team team) {
-    return getTeamMatches().where((element) => element.home.team == team || element.guest.team == team).toList();
-  }
-
-  List<TeamMatch> getTeamMatchesOfLeague(League league) {
-    return getTeamMatches().where((e) => e.league == league).toList();
-  }
 
   List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
 
   List<Bout> getBouts() => {..._teamMatchBouts.map((e) => e.bout), ..._competitionBouts.map((e) => e.bout)}.toList();
 
-  List<TeamMatchBout> getTeamMatchBoutsOfTeamMatch(TeamMatch match) {
-    return getTeamMatchBouts().where((element) => element.teamMatch == match).toList();
-  }
-
   List<BoutConfig> getBoutConfigs() => _boutConfigs;
 
   List<BoutResultRule> getBoutResultRules() => _boutResultRules;
 
-  List<BoutResultRule> getBoutResultRulesOfBoutConfig(BoutConfig boutConfig) {
-    return getBoutResultRules().where((element) => element.boutConfig == boutConfig).toList();
-  }
-
   List<Competition> getCompetitions() => _competitions;
-
-  List<Competition> getCompetitionsOfOrganization(Organization organization) {
-    return getCompetitions().where((element) => element.organization == organization).toList();
-  }
 
   List<CompetitionWeightCategory> getCompetitionWeightCategories() => _competitionWeightCategories;
 
   List<CompetitionAgeCategory> getCompetitionAgeCategories() => _competitionAgeCategories;
 
-  List<CompetitionWeightCategory> getCompetitionWeightCategoriesOfCompetition(Competition competition) {
-    return getCompetitionWeightCategories().where((element) => element.competition == competition).toList();
-  }
-
-  List<CompetitionAgeCategory> getCompetitionAgeCategoriesOfCompetition(Competition competition) {
-    return getCompetitionAgeCategories().where((element) => element.competition == competition).toList();
-  }
-
   List<CompetitionSystemAffiliation> getCompetitionSystemAffiliations() => _competitionSystemAffiliations;
-
-  List<CompetitionSystemAffiliation> getCompetitionSystemAffiliationsOfCompetition(Competition competition) {
-    return getCompetitionSystemAffiliations().where((element) => element.competition == competition).toList();
-  }
 
   List<CompetitionPerson> getCompetitionPersons() => _competitionPersons;
 
   List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
 
-  List<CompetitionBout> getCompetitionBoutsOfCompetition(Competition competition) {
-    return getCompetitionBouts().where((element) => element.competition == competition).toList();
-  }
-
-  List<CompetitionBout> getCompetitionBoutsOfWeightCategory(CompetitionWeightCategory weightCategory) {
-    return getCompetitionBouts().where((element) => element.weightCategory == weightCategory).toList();
-  }
-
   List<CompetitionLineup> getCompetitionLineups() => _competitionLineups;
-
-  List<CompetitionLineup> getCompetitionLineupsOfCompetition(Competition competition) {
-    return getCompetitionLineups().where((element) => element.competition == competition).toList();
-  }
 
   List<CompetitionParticipation> getCompetitionParticipations() => _competitionParticipations;
 
-  List<CompetitionParticipation> getCompetitionParticipationsOfWeightCategory(
-    CompetitionWeightCategory weightCategory,
-  ) {
-    return getCompetitionParticipations().where((element) => element.weightCategory == weightCategory).toList();
-  }
-
-  List<CompetitionParticipation> getCompetitionParticipationsOfLineup(CompetitionLineup lineup) {
-    return getCompetitionParticipations().where((element) => element.lineup == lineup).toList();
-  }
-
   List<WeightClass> getWeightClasses() => _weightClasses;
-
-  List<WeightClass> getWeightClassesOfDivision(Division league) {
-    return (getDivisionWeightClassesOfDivision(league).toList()..sort((a, b) => a.pos - b.pos))
-        .map((e) => e.weightClass)
-        .toList();
-  }
 }
