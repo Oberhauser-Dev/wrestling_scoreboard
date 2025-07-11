@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/scratch_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
@@ -102,6 +103,16 @@ class TeamMatchOverview extends ConsumerWidget {
           label: localizations.match,
           details: '${match.home.team.name} - ${match.guest.team.name}',
           actions: [
+            IconButton(
+              onPressed:
+                  () async => navigateToScratchBoutScreen(
+                    context,
+                    ref,
+                    config: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                  ),
+              icon: const Icon(Icons.rocket_launch),
+              tooltip: localizations.launchScratchBout,
+            ),
             if (match.organization != null)
               ConditionalOrganizationImportAction(
                 id: id,

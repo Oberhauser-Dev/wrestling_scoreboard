@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/local/local_data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/local/local_providers.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/models/scratch_event.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
@@ -11,8 +14,22 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToScratchBoutScreen(BuildContext context) {
-  context.push('/${Home.route}/${ScratchBoutDisplay.route}');
+void navigateToScratchBoutScreen(BuildContext context, WidgetRef ref, {BoutConfig? config}) async {
+  if (config != null) {
+    List<BoutResultRule>? boutResultRules;
+    if (config.id != null) {
+      boutResultRules = await ref.readAsync(
+        manyDataStreamProvider<BoutResultRule, BoutConfig>(ManyProviderData(filterObject: config)).future,
+      );
+      final localDataManager = LocalDataManager(
+        <T extends DataObject>() => ref.read(localDataNotifierProvider<T>().notifier),
+        <T extends DataObject>() => ref.read(localDataNotifierProvider<T>()),
+      );
+      await localDataManager.createOrUpdateSingle(config.copyWithId(0));
+      // TODO: update bout result rules
+    }
+  }
+  if (context.mounted) context.push('/${Home.route}/${ScratchBoutDisplay.route}');
 }
 
 class ScratchBoutDisplay extends StatefulWidget {
@@ -76,7 +93,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                         ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
 
                         if (context.mounted) {
-                          navigateToScratchBoutScreen(context);
+                          navigateToScratchBoutScreen(context, ref);
                         }
                       }
                     },

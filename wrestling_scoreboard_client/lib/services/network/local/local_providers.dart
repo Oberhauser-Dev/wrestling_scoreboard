@@ -28,7 +28,10 @@ class LocalWebsocketManagerNotifier extends _$LocalWebsocketManagerNotifier impl
 class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements DataManagerNotifier {
   @override
   Raw<Future<DataManager>> build() async {
-    return LocalDataManager(ref);
+    return LocalDataManager(
+      <T extends DataObject>() => ref.read(localDataNotifierProvider<T>().notifier),
+      <T extends DataObject>() => ref.read(localDataNotifierProvider<T>()),
+    );
   }
 }
 

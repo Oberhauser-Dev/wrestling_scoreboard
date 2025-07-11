@@ -285,6 +285,7 @@ class MockDataManager extends DataManager {
           filterId: single.bout.id,
         ),
       );
+    } else if (single is BoutConfig) {
     } else if (single is BoutResultRule) {
       getManyStreamController<BoutResultRule>(filterType: BoutConfig)?.add(
         ManyDataObject(

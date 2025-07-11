@@ -154,7 +154,7 @@ class HomeState extends ConsumerState<Home> {
       appBarTitle: Text(localizations.start),
       actions: [
         IconButton(
-          onPressed: () => navigateToScratchBoutScreen(context),
+          onPressed: () => navigateToScratchBoutScreen(context, ref),
           icon: const Icon(Icons.rocket_launch),
           tooltip: localizations.launchScratchBout,
         ),

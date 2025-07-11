@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/scratch_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_age_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
@@ -202,6 +203,16 @@ class CompetitionOverview extends BoutConfigOverview<Competition> {
           subClassData: competition,
           details: competition.name,
           actions: [
+            IconButton(
+              onPressed:
+                  () async => navigateToScratchBoutScreen(
+                    context,
+                    ref,
+                    config: competition.boutConfig,
+                  ),
+              icon: const Icon(Icons.rocket_launch),
+              tooltip: localizations.launchScratchBout,
+            ),
             // if (competition.organization != null)
             //   ConditionalOrganizationImportAction(
             //       id: id, organization: competition.organization!, importType: OrganizationImportType.competition),
