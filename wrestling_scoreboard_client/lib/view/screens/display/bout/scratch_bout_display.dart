@@ -60,6 +60,13 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                     onPressed: () async {
                       final result = await showOkCancelDialog(context: context, child: Text('${localizations.reset}?'));
                       if (result && context.mounted) {
+                        // Some hacky way to refresh the page:
+                        // - family providers such as manyDataStream cannot be invalidated that easily
+                        // - invalidating / refreshing the localDataProvider does not lead to refreshing its dependent providers / the Consumers unless they are actively loaded
+                        // - setState does not force the Consumers to be refreshed.
+                        context.pop();
+
+                        // Need to call invalidation between pop and navigating back, otherwise it will get saved while popping (data safety feature of BoutScreen).
                         // Only reset entities which are displayed, but keep e.g. BoutResultRules
                         await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
                         ref.invalidate(localDataNotifierProvider<BoutAction>());
@@ -69,11 +76,6 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                         ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
 
                         if (context.mounted) {
-                          // Some hacky way to refresh the page:
-                          // - family providers such as manyDataStream cannot be invalidated that easily
-                          // - invalidating / refreshing the localDataProvider does not lead to refreshing its dependent providers / the Consumers unless they are actively loaded
-                          // - setState does not force the Consumers to be refreshed.
-                          context.pop();
                           navigateToScratchBoutScreen(context);
                         }
                       }
