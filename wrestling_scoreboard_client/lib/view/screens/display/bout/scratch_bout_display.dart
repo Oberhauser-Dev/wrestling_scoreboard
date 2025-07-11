@@ -45,29 +45,47 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
       child: SingleConsumer<Bout>(
         id: 0,
         builder: (context, bout) {
-          return BoutScreen(
-            wrestlingEvent: ScratchEvent(),
-            boutConfig: boutConfig,
-            boutRules: boutResultRules,
-            bouts: [bout],
-            boutIndex: 0,
-            bout: bout,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed:
-                    () => showOkCancelDialog(
-                      context: context,
-                      child: SelectableText(
-                        'The settings for the scratch bout will be added in the future, see: https://github.com/Oberhauser-Dev/wrestling_scoreboard/issues/142',
-                      ),
-                    ),
-              ),
-            ],
-            navigateToBoutByIndex: (context, index) {
-              context.pop();
+          return Consumer(
+            builder: (context, ref, child) {
+              return BoutScreen(
+                wrestlingEvent: ScratchEvent(),
+                boutConfig: boutConfig,
+                boutRules: boutResultRules,
+                bouts: [bout],
+                boutIndex: 0,
+                bout: bout,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.restore_page),
+                    onPressed: () async {
+                      final result = await showOkCancelDialog(context: context, child: Text('${localizations.reset}?'));
+                      if (result && context.mounted) {
+                        final dataManager = await ref.read(localDataManagerNotifierProvider);
+                        await dataManager.resetDatabase();
+                        if (context.mounted) {
+                          await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+                        }
+                      }
+                    },
+                    tooltip: localizations.reset,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed:
+                        () => showOkCancelDialog(
+                          context: context,
+                          child: SelectableText(
+                            'The settings for the scratch bout will be added in the future, see: https://github.com/Oberhauser-Dev/wrestling_scoreboard/issues/142',
+                          ),
+                        ),
+                  ),
+                ],
+                navigateToBoutByIndex: (context, index) {
+                  context.pop();
+                },
+                weightClass: WeightClass(weight: 0, style: WrestlingStyle.free),
+              );
             },
-            weightClass: WeightClass(weight: 0, style: WrestlingStyle.free),
           );
         },
       ),

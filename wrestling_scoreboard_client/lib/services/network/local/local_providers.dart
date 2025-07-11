@@ -26,7 +26,7 @@ class LocalWebsocketManagerNotifier extends _$LocalWebsocketManagerNotifier impl
 }
 
 /// This provider can be scoped, so it can be made available in a sub scope of the app.
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true, dependencies: [LocalDataNotifier])
 class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements DataManagerNotifier {
   @override
   Raw<Future<DataManager>> build() async {
@@ -57,7 +57,7 @@ class LocalDataNotifier<T extends DataObject> extends _$LocalDataNotifier<T> {
           jsonList.map(
             (json) => DataObjectParser.fromRaw<T>(
               jsonDecode(json),
-              <T extends DataObject>(int id) async => (await ref.read(dataManagerNotifierProvider)).readSingle<T>(id),
+              <E extends DataObject>(int id) async => (await ref.read(dataManagerNotifierProvider)).readSingle<E>(id),
             ),
           ),
         ),
