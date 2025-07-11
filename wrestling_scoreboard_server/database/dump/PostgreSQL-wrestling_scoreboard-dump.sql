@@ -507,7 +507,7 @@ CREATE TABLE public.competition_age_category (
     age_category_id integer NOT NULL,
     competition_id integer NOT NULL,
     pos integer DEFAULT 0 NOT NULL,
-    skipped_cycles smallint[] NOT NULL
+    skipped_cycles smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL
 );
 
 
@@ -740,7 +740,7 @@ CREATE TABLE public.competition_weight_category (
     competition_system public.competition_system,
     pool_group_count smallint DEFAULT 1 NOT NULL,
     pos integer DEFAULT 0 NOT NULL,
-    skipped_cycles smallint[] NOT NULL,
+    skipped_cycles smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
     competition_age_category_id integer NOT NULL
 );
 

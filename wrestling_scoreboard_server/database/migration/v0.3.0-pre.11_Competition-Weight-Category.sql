@@ -9,7 +9,7 @@ FROM competition_weight_category cwc
 LEFT JOIN competition_age_category cac
   ON cwc.age_category_id = cac.age_category_id
  AND cwc.competition_id = cac.competition_id
-WHERE cac.id IS NULL;
+WHERE cwc.competition_age_category_id IS NULL;
 
 -- 3. Update competition_weight_category to reference competition_age_category
 UPDATE competition_weight_category cwc
