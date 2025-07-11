@@ -63,6 +63,13 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                         final dataManager = await ref.read(dataManagerNotifierProvider);
                         await dataManager.resetDatabase();
                         if (context.mounted) {
+                          // Some hacky way to refresh the page:
+                          // - family providers such as manyDataStream cannot be invalidated that easily
+                          // - invalidating / refreshing the localDataProvider does not lead to refreshing its dependent providers / the Consumers unless they are actively loaded
+                          // - setState does not force the Consumers to be refreshed.
+                          context.pop();
+                          navigateToScratchBoutScreen(context);
+
                           await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                         }
                       }
