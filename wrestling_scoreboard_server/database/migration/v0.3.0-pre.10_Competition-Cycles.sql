@@ -2,8 +2,7 @@ alter table public.competition_weight_category
     add pos integer DEFAULT 0 not null;
 
 alter table public.competition_weight_category
-    add skipped_cycles smallint[] not null;
-
+    add skipped_cycles smallint[] not null default array []::smallint[];
 
 create table public.competition_age_category
 (
@@ -19,7 +18,7 @@ create table public.competition_age_category
             references public.competition
             on delete cascade,
     pos integer DEFAULT 0 NOT NULL,
-    skipped_cycles smallint[] NOT NULL
+    skipped_cycles smallint[] NOT NULL DEFAULT array []::smallint[]
 );
 
 alter table public.competition_age_category
