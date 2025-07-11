@@ -60,7 +60,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                     onPressed: () async {
                       final result = await showOkCancelDialog(context: context, child: Text('${localizations.reset}?'));
                       if (result && context.mounted) {
-                        final dataManager = await ref.read(localDataManagerNotifierProvider);
+                        final dataManager = await ref.read(dataManagerNotifierProvider);
                         await dataManager.resetDatabase();
                         if (context.mounted) {
                           await showOkDialog(context: context, child: Text(localizations.actionSuccessful));

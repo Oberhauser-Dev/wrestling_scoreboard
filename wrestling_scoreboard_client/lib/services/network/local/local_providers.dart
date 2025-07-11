@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wrestling_scoreboard_client/mocks/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
@@ -13,8 +12,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'local_providers.g.dart';
 
-/// This provider can be scoped, so it can be made available in a sub scope of the app.
-@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier, LocalDataManagerNotifier, MockDataManagerNotifier])
+@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier])
 class LocalWebsocketManagerNotifier extends _$LocalWebsocketManagerNotifier implements WebSocketManagerNotifier {
   @override
   Raw<Future<WebSocketManager>> build() async {
@@ -25,7 +23,7 @@ class LocalWebsocketManagerNotifier extends _$LocalWebsocketManagerNotifier impl
   }
 }
 
-/// This provider can be scoped, so it can be made available in a sub scope of the app.
+/// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 @Riverpod(keepAlive: true, dependencies: [LocalDataNotifier])
 class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements DataManagerNotifier {
   @override
@@ -34,7 +32,7 @@ class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements Dat
   }
 }
 
-@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier, LocalDataManagerNotifier, MockDataManagerNotifier])
+@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier])
 class LocalDataNotifier<T extends DataObject> extends _$LocalDataNotifier<T> {
   final organization = Organization(id: 0, name: 'Organization');
   late final person0 = Person(id: 0, prename: 'Red', surname: '');

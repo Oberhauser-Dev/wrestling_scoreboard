@@ -2,9 +2,7 @@
 // See for examples: https://riverpod.dev/docs/essentials/side_effects#updating-our-local-cache-to-match-the-api-response
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wrestling_scoreboard_client/mocks/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/services/network/local/local_providers.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -25,7 +23,7 @@ class SingleProviderData<T extends DataObject> {
   int get hashCode => Object.hash(id, T);
 }
 
-@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier, LocalDataManagerNotifier, MockDataManagerNotifier])
+@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
 Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> pData) async* {
   ref.cache();
   // Reload, whenever the stream is connected
@@ -60,7 +58,7 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
   int get hashCode => Object.hash(filterObject?.id, T, S);
 }
 
-@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier, LocalDataManagerNotifier, MockDataManagerNotifier])
+@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
 Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   Ref ref,
   ManyProviderData<T, S> pData,

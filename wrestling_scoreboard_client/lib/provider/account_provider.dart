@@ -1,13 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wrestling_scoreboard_client/mocks/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/services/network/local/local_providers.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'account_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier, LocalDataManagerNotifier, MockDataManagerNotifier])
+@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier])
 class UserNotifier extends _$UserNotifier {
   @override
   Raw<Future<User?>> build() async {

@@ -6,14 +6,16 @@ part of 'local_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-/// This provider can be scoped, so it can be made available in a sub scope of the app.
 @ProviderFor(LocalWebsocketManagerNotifier)
-const localWebsocketManagerNotifierProvider = LocalWebsocketManagerNotifierProvider._();
+const localWebsocketManagerNotifierProvider =
+    LocalWebsocketManagerNotifierProvider._();
 
-/// This provider can be scoped, so it can be made available in a sub scope of the app.
 final class LocalWebsocketManagerNotifierProvider
-    extends $NotifierProvider<LocalWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
-  /// This provider can be scoped, so it can be made available in a sub scope of the app.
+    extends
+        $NotifierProvider<
+          LocalWebsocketManagerNotifier,
+          Raw<Future<WebSocketManager>>
+        > {
   const LocalWebsocketManagerNotifierProvider._({
     super.runNotifierBuildOverride,
     LocalWebsocketManagerNotifier Function()? create,
@@ -24,21 +26,13 @@ final class LocalWebsocketManagerNotifierProvider
          retry: null,
          name: r'localWebsocketManagerNotifierProvider',
          isAutoDispose: false,
-         dependencies: const <ProviderOrFamily>[
-           dataManagerNotifierProvider,
-           localDataManagerNotifierProvider,
-           mockDataManagerNotifierProvider,
-         ],
+         dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
          allTransitiveDependencies: const <ProviderOrFamily>[
            LocalWebsocketManagerNotifierProvider.$allTransitiveDependencies0,
-           LocalWebsocketManagerNotifierProvider.$allTransitiveDependencies1,
-           LocalWebsocketManagerNotifierProvider.$allTransitiveDependencies2,
          ],
        );
 
   static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
-  static const $allTransitiveDependencies1 = localDataManagerNotifierProvider;
-  static const $allTransitiveDependencies2 = mockDataManagerNotifierProvider;
 
   final LocalWebsocketManagerNotifier Function()? _createCb;
 
@@ -47,37 +41,51 @@ final class LocalWebsocketManagerNotifierProvider
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<WebSocketManager>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<WebSocketManager>>>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<WebSocketManager>>>(value),
+    );
   }
 
   @$internal
   @override
-  LocalWebsocketManagerNotifier create() => _createCb?.call() ?? LocalWebsocketManagerNotifier();
+  LocalWebsocketManagerNotifier create() =>
+      _createCb?.call() ?? LocalWebsocketManagerNotifier();
 
   @$internal
   @override
-  LocalWebsocketManagerNotifierProvider $copyWithCreate(LocalWebsocketManagerNotifier Function() create) {
+  LocalWebsocketManagerNotifierProvider $copyWithCreate(
+    LocalWebsocketManagerNotifier Function() create,
+  ) {
     return LocalWebsocketManagerNotifierProvider._(create: create);
   }
 
   @$internal
   @override
   LocalWebsocketManagerNotifierProvider $copyWithBuild(
-    Raw<Future<WebSocketManager>> Function(Ref, LocalWebsocketManagerNotifier) build,
+    Raw<Future<WebSocketManager>> Function(Ref, LocalWebsocketManagerNotifier)
+    build,
   ) {
-    return LocalWebsocketManagerNotifierProvider._(runNotifierBuildOverride: build);
+    return LocalWebsocketManagerNotifierProvider._(
+      runNotifierBuildOverride: build,
+    );
   }
 
   @$internal
   @override
-  $NotifierProviderElement<LocalWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> $createElement(
-    $ProviderPointer pointer,
-  ) => $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<
+    LocalWebsocketManagerNotifier,
+    Raw<Future<WebSocketManager>>
+  >
+  $createElement($ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
-String _$localWebsocketManagerNotifierHash() => r'287e6eba398f654cdbce9387cdaaf0144210cc69';
+String _$localWebsocketManagerNotifierHash() =>
+    r'507901095468cab49cd07f88c2a83036f8a56cd7';
 
-abstract class _$LocalWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
+abstract class _$LocalWebsocketManagerNotifier
+    extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
   @$internal
   @override
@@ -96,14 +104,15 @@ abstract class _$LocalWebsocketManagerNotifier extends $Notifier<Raw<Future<WebS
   }
 }
 
-/// This provider can be scoped, so it can be made available in a sub scope of the app.
+/// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 @ProviderFor(LocalDataManagerNotifier)
 const localDataManagerNotifierProvider = LocalDataManagerNotifierProvider._();
 
-/// This provider can be scoped, so it can be made available in a sub scope of the app.
+/// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 final class LocalDataManagerNotifierProvider
-    extends $NotifierProvider<LocalDataManagerNotifier, Raw<Future<DataManager>>> {
-  /// This provider can be scoped, so it can be made available in a sub scope of the app.
+    extends
+        $NotifierProvider<LocalDataManagerNotifier, Raw<Future<DataManager>>> {
+  /// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
   const LocalDataManagerNotifierProvider._({
     super.runNotifierBuildOverride,
     LocalDataManagerNotifier Function()? create,
@@ -114,9 +123,16 @@ final class LocalDataManagerNotifierProvider
          retry: null,
          name: r'localDataManagerNotifierProvider',
          isAutoDispose: false,
-         dependencies: const <ProviderOrFamily>[],
-         allTransitiveDependencies: const <ProviderOrFamily>[],
+         dependencies: const <ProviderOrFamily>[localDataNotifierProvider],
+         allTransitiveDependencies: const <ProviderOrFamily>[
+           LocalDataManagerNotifierProvider.$allTransitiveDependencies0,
+           LocalDataManagerNotifierProvider.$allTransitiveDependencies1,
+         ],
        );
+
+  static const $allTransitiveDependencies0 = localDataNotifierProvider;
+  static const $allTransitiveDependencies1 =
+      LocalDataNotifierProvider.$allTransitiveDependencies0;
 
   final LocalDataManagerNotifier Function()? _createCb;
 
@@ -125,16 +141,22 @@ final class LocalDataManagerNotifierProvider
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<DataManager>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<DataManager>>>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<DataManager>>>(value),
+    );
   }
 
   @$internal
   @override
-  LocalDataManagerNotifier create() => _createCb?.call() ?? LocalDataManagerNotifier();
+  LocalDataManagerNotifier create() =>
+      _createCb?.call() ?? LocalDataManagerNotifier();
 
   @$internal
   @override
-  LocalDataManagerNotifierProvider $copyWithCreate(LocalDataManagerNotifier Function() create) {
+  LocalDataManagerNotifierProvider $copyWithCreate(
+    LocalDataManagerNotifier Function() create,
+  ) {
     return LocalDataManagerNotifierProvider._(create: create);
   }
 
@@ -148,14 +170,16 @@ final class LocalDataManagerNotifierProvider
 
   @$internal
   @override
-  $NotifierProviderElement<LocalDataManagerNotifier, Raw<Future<DataManager>>> $createElement(
-    $ProviderPointer pointer,
-  ) => $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<LocalDataManagerNotifier, Raw<Future<DataManager>>>
+  $createElement($ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
-String _$localDataManagerNotifierHash() => r'ba18da9a7504dd9f1aa6f9b056573bd2b1bce088';
+String _$localDataManagerNotifierHash() =>
+    r'4caccb9b16a85ba5e0578d9aae9a31578a5050bb';
 
-abstract class _$LocalDataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
+abstract class _$LocalDataManagerNotifier
+    extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
   @$internal
   @override
@@ -194,22 +218,32 @@ final class LocalDataNotifierProvider<T extends DataObject>
        );
 
   static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
-  static const $allTransitiveDependencies1 = localDataManagerNotifierProvider;
-  static const $allTransitiveDependencies2 = mockDataManagerNotifierProvider;
 
   final LocalDataNotifier<T> Function()? _createCb;
 
   @override
   String debugGetCreateSourceHash() => _$localDataNotifierHash();
 
-  LocalDataNotifierProvider<T> _copyWithCreate(LocalDataNotifier<T> Function<T extends DataObject>() create) {
-    return LocalDataNotifierProvider<T>._(from: from! as LocalDataNotifierFamily, create: create<T>);
+  LocalDataNotifierProvider<T> _copyWithCreate(
+    LocalDataNotifier<T> Function<T extends DataObject>() create,
+  ) {
+    return LocalDataNotifierProvider<T>._(
+      from: from! as LocalDataNotifierFamily,
+      create: create<T>,
+    );
   }
 
   LocalDataNotifierProvider<T> _copyWithBuild(
-    Raw<Future<List<T>>> Function<T extends DataObject>(Ref, LocalDataNotifier<T>) build,
+    Raw<Future<List<T>>> Function<T extends DataObject>(
+      Ref,
+      LocalDataNotifier<T>,
+    )
+    build,
   ) {
-    return LocalDataNotifierProvider<T>._(from: from! as LocalDataNotifierFamily, runNotifierBuildOverride: build<T>);
+    return LocalDataNotifierProvider<T>._(
+      from: from! as LocalDataNotifierFamily,
+      runNotifierBuildOverride: build<T>,
+    );
   }
 
   @override
@@ -221,7 +255,10 @@ final class LocalDataNotifierProvider<T extends DataObject>
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<List<T>>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<List<T>>>>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<List<T>>>>(value),
+    );
   }
 
   @$internal
@@ -230,24 +267,37 @@ final class LocalDataNotifierProvider<T extends DataObject>
 
   @$internal
   @override
-  LocalDataNotifierProvider<T> $copyWithCreate(LocalDataNotifier<T> Function() create) {
-    return LocalDataNotifierProvider<T>._(from: from! as LocalDataNotifierFamily, create: create);
+  LocalDataNotifierProvider<T> $copyWithCreate(
+    LocalDataNotifier<T> Function() create,
+  ) {
+    return LocalDataNotifierProvider<T>._(
+      from: from! as LocalDataNotifierFamily,
+      create: create,
+    );
   }
 
   @$internal
   @override
-  LocalDataNotifierProvider<T> $copyWithBuild(Raw<Future<List<T>>> Function(Ref, LocalDataNotifier<T>) build) {
-    return LocalDataNotifierProvider<T>._(from: from! as LocalDataNotifierFamily, runNotifierBuildOverride: build);
+  LocalDataNotifierProvider<T> $copyWithBuild(
+    Raw<Future<List<T>>> Function(Ref, LocalDataNotifier<T>) build,
+  ) {
+    return LocalDataNotifierProvider<T>._(
+      from: from! as LocalDataNotifierFamily,
+      runNotifierBuildOverride: build,
+    );
   }
 
   @$internal
   @override
-  $NotifierProviderElement<LocalDataNotifier<T>, Raw<Future<List<T>>>> $createElement($ProviderPointer pointer) =>
+  $NotifierProviderElement<LocalDataNotifier<T>, Raw<Future<List<T>>>>
+  $createElement($ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 
   @override
   bool operator ==(Object other) {
-    return other is LocalDataNotifierProvider && other.runtimeType == runtimeType && other.argument == argument;
+    return other is LocalDataNotifierProvider &&
+        other.runtimeType == runtimeType &&
+        other.argument == argument;
   }
 
   @override
@@ -256,27 +306,22 @@ final class LocalDataNotifierProvider<T extends DataObject>
   }
 }
 
-String _$localDataNotifierHash() => r'a0352a853135d7ae947d37a091be164a5d79cd44';
+String _$localDataNotifierHash() => r'b6a94102c95e64fc20a3b161043bc63f01b847aa';
 
 final class LocalDataNotifierFamily extends Family {
   const LocalDataNotifierFamily._()
     : super(
         retry: null,
         name: r'localDataNotifierProvider',
-        dependencies: const <ProviderOrFamily>[
-          dataManagerNotifierProvider,
-          localDataManagerNotifierProvider,
-          mockDataManagerNotifierProvider,
-        ],
+        dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
         allTransitiveDependencies: const <ProviderOrFamily>[
           LocalDataNotifierProvider.$allTransitiveDependencies0,
-          LocalDataNotifierProvider.$allTransitiveDependencies1,
-          LocalDataNotifierProvider.$allTransitiveDependencies2,
         ],
         isAutoDispose: false,
       );
 
-  LocalDataNotifierProvider<T> call<T extends DataObject>() => LocalDataNotifierProvider<T>._(from: this);
+  LocalDataNotifierProvider<T> call<T extends DataObject>() =>
+      LocalDataNotifierProvider<T>._(from: this);
 
   @override
   String debugGetCreateSourceHash() => _$localDataNotifierHash();
@@ -285,7 +330,9 @@ final class LocalDataNotifierFamily extends Family {
   String toString() => r'localDataNotifierProvider';
 
   /// {@macro riverpod.override_with}
-  Override overrideWith(LocalDataNotifier<T> Function<T extends DataObject>() create) {
+  Override overrideWith(
+    LocalDataNotifier<T> Function<T extends DataObject>() create,
+  ) {
     return $FamilyOverride(
       from: this,
       createElement: (pointer) {
@@ -298,7 +345,11 @@ final class LocalDataNotifierFamily extends Family {
 
   /// {@macro riverpod.override_with_build}
   Override overrideWithBuild(
-    Raw<Future<List<T>>> Function<T extends DataObject>(Ref ref, LocalDataNotifier<T> notifier) build,
+    Raw<Future<List<T>>> Function<T extends DataObject>(
+      Ref ref,
+      LocalDataNotifier<T> notifier,
+    )
+    build,
   ) {
     return $FamilyOverride(
       from: this,
@@ -311,7 +362,8 @@ final class LocalDataNotifierFamily extends Family {
   }
 }
 
-abstract class _$LocalDataNotifier<T extends DataObject> extends $Notifier<Raw<Future<List<T>>>> {
+abstract class _$LocalDataNotifier<T extends DataObject>
+    extends $Notifier<Raw<Future<List<T>>>> {
   Raw<Future<List<T>>> build();
   @$internal
   @override
@@ -320,7 +372,12 @@ abstract class _$LocalDataNotifier<T extends DataObject> extends $Notifier<Raw<F
     final ref = this.ref as $Ref<Raw<Future<List<T>>>>;
     final element =
         ref.element
-            as $ClassProviderElement<NotifierBase<Raw<Future<List<T>>>>, Raw<Future<List<T>>>, Object?, Object?>;
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<List<T>>>>,
+              Raw<Future<List<T>>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

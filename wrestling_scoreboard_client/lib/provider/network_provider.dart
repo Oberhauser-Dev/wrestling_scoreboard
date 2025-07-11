@@ -9,8 +9,8 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 part 'network_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [])
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
+@Riverpod(keepAlive: true, dependencies: [])
 class DataManagerNotifier extends _$DataManagerNotifier {
   @override
   Raw<Future<DataManager>> build() async {
@@ -26,8 +26,8 @@ class DataManagerNotifier extends _$DataManagerNotifier {
   }
 }
 
-@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier, LocalDataManagerNotifier, MockDataManagerNotifier])
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
+@Riverpod(keepAlive: true, dependencies: [DataManagerNotifier])
 class WebSocketManagerNotifier extends _$WebSocketManagerNotifier {
   @override
   Raw<Future<WebSocketManager>> build() async {

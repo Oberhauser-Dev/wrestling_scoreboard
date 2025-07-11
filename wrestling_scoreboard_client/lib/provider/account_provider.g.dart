@@ -9,30 +9,25 @@ part of 'account_provider.dart';
 @ProviderFor(UserNotifier)
 const userNotifierProvider = UserNotifierProvider._();
 
-final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
-  const UserNotifierProvider._({super.runNotifierBuildOverride, UserNotifier Function()? create})
-    : _createCb = create,
-      super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'userNotifierProvider',
-        isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
-          dataManagerNotifierProvider,
-          localDataManagerNotifierProvider,
-          mockDataManagerNotifierProvider,
-        ],
-        allTransitiveDependencies: const <ProviderOrFamily>[
-          UserNotifierProvider.$allTransitiveDependencies0,
-          UserNotifierProvider.$allTransitiveDependencies1,
-          UserNotifierProvider.$allTransitiveDependencies2,
-        ],
-      );
+final class UserNotifierProvider
+    extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
+  const UserNotifierProvider._({
+    super.runNotifierBuildOverride,
+    UserNotifier Function()? create,
+  }) : _createCb = create,
+       super(
+         from: null,
+         argument: null,
+         retry: null,
+         name: r'userNotifierProvider',
+         isAutoDispose: false,
+         dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
+         allTransitiveDependencies: const <ProviderOrFamily>[
+           UserNotifierProvider.$allTransitiveDependencies0,
+         ],
+       );
 
   static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
-  static const $allTransitiveDependencies1 = localDataManagerNotifierProvider;
-  static const $allTransitiveDependencies2 = mockDataManagerNotifierProvider;
 
   final UserNotifier Function()? _createCb;
 
@@ -41,7 +36,10 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<User?>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<User?>>>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Raw<Future<User?>>>(value),
+    );
   }
 
   @$internal
@@ -56,17 +54,20 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
 
   @$internal
   @override
-  UserNotifierProvider $copyWithBuild(Raw<Future<User?>> Function(Ref, UserNotifier) build) {
+  UserNotifierProvider $copyWithBuild(
+    Raw<Future<User?>> Function(Ref, UserNotifier) build,
+  ) {
     return UserNotifierProvider._(runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
-  $NotifierProviderElement<UserNotifier, Raw<Future<User?>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
+  $NotifierProviderElement<UserNotifier, Raw<Future<User?>>> $createElement(
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(this, pointer);
 }
 
-String _$userNotifierHash() => r'21fb2222188056c6aca6c0a90dc83f24c3558ca4';
+String _$userNotifierHash() => r'c7e7df23f18e9c559245722e3c3281165a4f3120';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();
@@ -76,7 +77,13 @@ abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
     final created = build();
     final ref = this.ref as $Ref<Raw<Future<User?>>>;
     final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<User?>>>, Raw<Future<User?>>, Object?, Object?>;
+        ref.element
+            as $ClassProviderElement<
+              NotifierBase<Raw<Future<User?>>>,
+              Raw<Future<User?>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

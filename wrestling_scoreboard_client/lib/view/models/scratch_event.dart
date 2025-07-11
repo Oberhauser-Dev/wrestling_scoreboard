@@ -6,6 +6,7 @@ class ScratchEvent extends WrestlingEvent {
     return this;
   }
 
+  @override
   int? get id => null;
 
   @override
