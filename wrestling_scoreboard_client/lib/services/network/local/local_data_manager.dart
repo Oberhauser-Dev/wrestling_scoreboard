@@ -61,14 +61,4 @@ class LocalDataManager extends MockDataManager {
   Future<List<T>> getListOfType<T extends DataObject>() async {
     return (await ref.read(localDataNotifierProvider<T>())).toList();
   }
-
-  @override
-  Future<void> resetDatabase() async {
-    await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
-    ref.invalidate(localDataNotifierProvider<BoutAction>());
-    await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
-    ref.invalidate(localDataNotifierProvider<Bout>());
-    await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
-    ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
-  }
 }

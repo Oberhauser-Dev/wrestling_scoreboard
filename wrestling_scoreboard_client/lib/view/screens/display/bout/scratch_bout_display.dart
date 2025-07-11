@@ -60,8 +60,14 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                     onPressed: () async {
                       final result = await showOkCancelDialog(context: context, child: Text('${localizations.reset}?'));
                       if (result && context.mounted) {
-                        final dataManager = await ref.read(dataManagerNotifierProvider);
-                        await dataManager.resetDatabase();
+                        // Only reset entities which are displayed, but keep e.g. BoutResultRules
+                        await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
+                        ref.invalidate(localDataNotifierProvider<BoutAction>());
+                        await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
+                        ref.invalidate(localDataNotifierProvider<Bout>());
+                        await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
+                        ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
+
                         if (context.mounted) {
                           // Some hacky way to refresh the page:
                           // - family providers such as manyDataStream cannot be invalidated that easily
@@ -69,8 +75,6 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                           // - setState does not force the Consumers to be refreshed.
                           context.pop();
                           navigateToScratchBoutScreen(context);
-
-                          await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                         }
                       }
                     },
