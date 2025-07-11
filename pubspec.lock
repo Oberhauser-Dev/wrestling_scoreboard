@@ -1103,10 +1103,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod_lint
-      sha256: "89a52b7334210dbff8605c3edf26cfe69b15062beed5cbfeff2c3812c33c9e35"
+      sha256: "153e751ee2977f91970ada7069387b5fcd91541b16682ebda6a82bc86b6c3b19"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.5"
+    version: "3.0.0-dev.16"
   rxdart:
     dependency: transitive
     description:
