@@ -8,7 +8,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class RestDataManager extends DataManager {
   static const rawQueryParameter = {'isRaw': 'true'};
+  static const _commonHeaders = {'Content-Type': 'application/json'};
 
+  // Headers inclusive optional Bearer token
   late final Map<String, String> _headers;
 
   late final String? _apiUrl;
@@ -19,7 +21,7 @@ class RestDataManager extends DataManager {
 
   RestDataManager({required String? apiUrl, super.authService, required this.onResetAuth}) {
     _apiUrl = apiUrl == null ? null : adaptLocalhost(apiUrl);
-    _headers = {'Content-Type': 'application/json', ...?authService?.header};
+    _headers = {..._commonHeaders, ...?authService?.header};
   }
 
   String _getPathFromType(Type t) {
@@ -315,7 +317,8 @@ class RestDataManager extends DataManager {
   @override
   Future<String> signIn(BasicAuthService authService) async {
     final uri = Uri.parse('$_apiUrl/auth/sign_in');
-    final response = await http.post(uri, headers: {...authService.header, ..._headers});
+    // Avoid auth headers (Bearer token) of previous session, so use _commmonHeaders
+    final response = await http.post(uri, headers: {..._commonHeaders, ...authService.header});
 
     await _handleResponse(response, errorMessage: 'Failed to sign in with username ${authService.username}');
     return response.body;
