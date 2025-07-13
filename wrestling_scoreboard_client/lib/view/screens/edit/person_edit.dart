@@ -116,7 +116,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
             return Countries.values;
           },
           onFilter: (Country item, String filter) {
-            return item.nationality.toLowerCase().contains(filter);
+            return (item.nationality ?? '').toLowerCase().contains(filter);
           },
         ),
       ),

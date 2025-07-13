@@ -10,63 +10,49 @@ part of 'account_provider.dart';
 const userNotifierProvider = UserNotifierProvider._();
 
 final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
-  const UserNotifierProvider._({super.runNotifierBuildOverride, UserNotifier Function()? create})
-    : _createCb = create,
-      super(
+  const UserNotifierProvider._()
+    : super(
         from: null,
         argument: null,
         retry: null,
         name: r'userNotifierProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
-        allTransitiveDependencies: const <ProviderOrFamily>[UserNotifierProvider.$allTransitiveDependencies0],
+        $allTransitiveDependencies: const <ProviderOrFamily>[UserNotifierProvider.$allTransitiveDependencies0],
       );
 
   static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
 
-  final UserNotifier Function()? _createCb;
-
   @override
   String debugGetCreateSourceHash() => _$userNotifierHash();
 
+  @$internal
+  @override
+  UserNotifier create() => UserNotifier();
+
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<User?>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<User?>>>(value));
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<User?>>>(value));
   }
-
-  @$internal
-  @override
-  UserNotifier create() => _createCb?.call() ?? UserNotifier();
-
-  @$internal
-  @override
-  UserNotifierProvider $copyWithCreate(UserNotifier Function() create) {
-    return UserNotifierProvider._(create: create);
-  }
-
-  @$internal
-  @override
-  UserNotifierProvider $copyWithBuild(Raw<Future<User?>> Function(Ref, UserNotifier) build) {
-    return UserNotifierProvider._(runNotifierBuildOverride: build);
-  }
-
-  @$internal
-  @override
-  $NotifierProviderElement<UserNotifier, Raw<Future<User?>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
 }
 
 String _$userNotifierHash() => r'c7e7df23f18e9c559245722e3c3281165a4f3120';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();
-  @$internal
+  @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<Raw<Future<User?>>>;
+    final ref = this.ref as $Ref<Raw<Future<User?>>, Raw<Future<User?>>>;
     final element =
-        ref.element as $ClassProviderElement<NotifierBase<Raw<Future<User?>>>, Raw<Future<User?>>, Object?, Object?>;
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<User?>>, Raw<Future<User?>>>,
+              Raw<Future<User?>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
