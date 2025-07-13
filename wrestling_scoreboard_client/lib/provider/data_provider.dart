@@ -51,7 +51,7 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
   bool operator ==(Object other) {
     return identical(this, other) ||
         other is ManyProviderData<T, S> &&
-            (filterObject == null && other.filterObject == null || filterObject?.id == other.filterObject?.id);
+            ((filterObject == null && other.filterObject == null) || (filterObject?.id == other.filterObject?.id));
   }
 
   @override

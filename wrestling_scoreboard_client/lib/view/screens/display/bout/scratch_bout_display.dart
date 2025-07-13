@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/local/local_providers.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
@@ -67,16 +68,31 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
 
                                   // Need to call invalidation between pop and navigating back, otherwise it will get saved while popping (data safety feature of BoutScreen).
                                   // Only reset entities which are displayed, but keep e.g. BoutResultRules
-                                  await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
-                                  ref.invalidate(localDataNotifierProvider<BoutAction>());
-                                  await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
-                                  ref.invalidate(localDataNotifierProvider<Bout>());
-                                  await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
-                                  ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
+                                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                                    await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
+                                    ref.invalidate(localDataNotifierProvider<BoutAction>());
+                                    await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
+                                    ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
+                                    await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
+                                    ref.invalidate(localDataNotifierProvider<Bout>());
 
-                                  if (context.mounted) {
-                                    navigateToScratchBoutDisplay(context);
-                                  }
+                                    // Invalidate stream providers
+                                    ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
+                                    ref.invalidate(
+                                      singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 0)),
+                                    );
+                                    ref.invalidate(
+                                      singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 1)),
+                                    );
+                                    ref.invalidate(singleDataStreamProvider<Bout>(SingleProviderData(id: 0)));
+                                    ref.invalidate(
+                                      manyDataStreamProvider<BoutAction, Bout>(ManyProviderData(filterObject: bout)),
+                                    );
+
+                                    if (context.mounted) {
+                                      navigateToScratchBoutDisplay(context);
+                                    }
+                                  });
                                 }
                               },
                               tooltip: localizations.reset,
