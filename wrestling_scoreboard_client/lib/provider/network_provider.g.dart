@@ -13,63 +13,43 @@ const dataManagerNotifierProvider = DataManagerNotifierProvider._();
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
 final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>> {
   /// This provider can be scoped, so it can be overridden in a sub scope of the app.
-  const DataManagerNotifierProvider._({super.runNotifierBuildOverride, DataManagerNotifier Function()? create})
-    : _createCb = create,
-      super(
+  const DataManagerNotifierProvider._()
+    : super(
         from: null,
         argument: null,
         retry: null,
         name: r'dataManagerNotifierProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[],
-        allTransitiveDependencies: const <ProviderOrFamily>[],
+        $allTransitiveDependencies: const <ProviderOrFamily>[],
       );
-
-  final DataManagerNotifier Function()? _createCb;
 
   @override
   String debugGetCreateSourceHash() => _$dataManagerNotifierHash();
 
+  @$internal
+  @override
+  DataManagerNotifier create() => DataManagerNotifier();
+
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<DataManager>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<DataManager>>>(value));
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<DataManager>>>(value));
   }
-
-  @$internal
-  @override
-  DataManagerNotifier create() => _createCb?.call() ?? DataManagerNotifier();
-
-  @$internal
-  @override
-  DataManagerNotifierProvider $copyWithCreate(DataManagerNotifier Function() create) {
-    return DataManagerNotifierProvider._(create: create);
-  }
-
-  @$internal
-  @override
-  DataManagerNotifierProvider $copyWithBuild(Raw<Future<DataManager>> Function(Ref, DataManagerNotifier) build) {
-    return DataManagerNotifierProvider._(runNotifierBuildOverride: build);
-  }
-
-  @$internal
-  @override
-  $NotifierProviderElement<DataManagerNotifier, Raw<Future<DataManager>>> $createElement($ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
 }
 
 String _$dataManagerNotifierHash() => r'c8dea305a880328441dfe1ea59a319cba4065403';
 
 abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
-  @$internal
+  @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<Raw<Future<DataManager>>>;
+    final ref = this.ref as $Ref<Raw<Future<DataManager>>, Raw<Future<DataManager>>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              NotifierBase<Raw<Future<DataManager>>>,
+              AnyNotifier<Raw<Future<DataManager>>, Raw<Future<DataManager>>>,
               Raw<Future<DataManager>>,
               Object?,
               Object?
@@ -86,72 +66,47 @@ const webSocketManagerNotifierProvider = WebSocketManagerNotifierProvider._();
 final class WebSocketManagerNotifierProvider
     extends $NotifierProvider<WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> {
   /// This provider can be scoped, so it can be overridden in a sub scope of the app.
-  const WebSocketManagerNotifierProvider._({
-    super.runNotifierBuildOverride,
-    WebSocketManagerNotifier Function()? create,
-  }) : _createCb = create,
-       super(
-         from: null,
-         argument: null,
-         retry: null,
-         name: r'webSocketManagerNotifierProvider',
-         isAutoDispose: false,
-         dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
-         allTransitiveDependencies: const <ProviderOrFamily>[
-           WebSocketManagerNotifierProvider.$allTransitiveDependencies0,
-         ],
-       );
+  const WebSocketManagerNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'webSocketManagerNotifierProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          WebSocketManagerNotifierProvider.$allTransitiveDependencies0,
+        ],
+      );
 
   static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
-
-  final WebSocketManagerNotifier Function()? _createCb;
 
   @override
   String debugGetCreateSourceHash() => _$webSocketManagerNotifierHash();
 
+  @$internal
+  @override
+  WebSocketManagerNotifier create() => WebSocketManagerNotifier();
+
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Raw<Future<WebSocketManager>> value) {
-    return $ProviderOverride(origin: this, providerOverride: $ValueProvider<Raw<Future<WebSocketManager>>>(value));
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<WebSocketManager>>>(value));
   }
-
-  @$internal
-  @override
-  WebSocketManagerNotifier create() => _createCb?.call() ?? WebSocketManagerNotifier();
-
-  @$internal
-  @override
-  WebSocketManagerNotifierProvider $copyWithCreate(WebSocketManagerNotifier Function() create) {
-    return WebSocketManagerNotifierProvider._(create: create);
-  }
-
-  @$internal
-  @override
-  WebSocketManagerNotifierProvider $copyWithBuild(
-    Raw<Future<WebSocketManager>> Function(Ref, WebSocketManagerNotifier) build,
-  ) {
-    return WebSocketManagerNotifierProvider._(runNotifierBuildOverride: build);
-  }
-
-  @$internal
-  @override
-  $NotifierProviderElement<WebSocketManagerNotifier, Raw<Future<WebSocketManager>>> $createElement(
-    $ProviderPointer pointer,
-  ) => $NotifierProviderElement(this, pointer);
 }
 
 String _$webSocketManagerNotifierHash() => r'b4f127bbe6fc7bfa3804d5af8a33ec0adb83f7f3';
 
 abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
-  @$internal
+  @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>>;
+    final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>, Raw<Future<WebSocketManager>>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              NotifierBase<Raw<Future<WebSocketManager>>>,
+              AnyNotifier<Raw<Future<WebSocketManager>>, Raw<Future<WebSocketManager>>>,
               Raw<Future<WebSocketManager>>,
               Object?,
               Object?
@@ -164,11 +119,15 @@ abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocket
 const webSocketStateStreamProvider = WebSocketStateStreamProvider._();
 
 final class WebSocketStateStreamProvider
-    extends $FunctionalProvider<AsyncValue<WebSocketConnectionState>, Stream<WebSocketConnectionState>>
+    extends
+        $FunctionalProvider<
+          AsyncValue<WebSocketConnectionState>,
+          WebSocketConnectionState,
+          Stream<WebSocketConnectionState>
+        >
     with $FutureModifier<WebSocketConnectionState>, $StreamProvider<WebSocketConnectionState> {
-  const WebSocketStateStreamProvider._({Stream<WebSocketConnectionState> Function(Ref ref)? create})
-    : _createCb = create,
-      super(
+  const WebSocketStateStreamProvider._()
+    : super(
         from: null,
         argument: null,
         retry: null,
@@ -179,7 +138,7 @@ final class WebSocketStateStreamProvider
           localWebsocketManagerNotifierProvider,
           mockWebsocketManagerNotifierProvider,
         ],
-        allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: const <ProviderOrFamily>{
           WebSocketStateStreamProvider.$allTransitiveDependencies0,
           WebSocketStateStreamProvider.$allTransitiveDependencies1,
           WebSocketStateStreamProvider.$allTransitiveDependencies2,
@@ -192,25 +151,17 @@ final class WebSocketStateStreamProvider
   static const $allTransitiveDependencies2 = localWebsocketManagerNotifierProvider;
   static const $allTransitiveDependencies3 = mockWebsocketManagerNotifierProvider;
 
-  final Stream<WebSocketConnectionState> Function(Ref ref)? _createCb;
-
   @override
   String debugGetCreateSourceHash() => _$webSocketStateStreamHash();
 
   @$internal
   @override
   $StreamProviderElement<WebSocketConnectionState> $createElement($ProviderPointer pointer) =>
-      $StreamProviderElement(this, pointer);
-
-  @override
-  WebSocketStateStreamProvider $copyWithCreate(Stream<WebSocketConnectionState> Function(Ref ref) create) {
-    return WebSocketStateStreamProvider._(create: create);
-  }
+      $StreamProviderElement(pointer);
 
   @override
   Stream<WebSocketConnectionState> create(Ref ref) {
-    final _$cb = _createCb ?? webSocketStateStream;
-    return _$cb(ref);
+    return webSocketStateStream(ref);
   }
 }
 

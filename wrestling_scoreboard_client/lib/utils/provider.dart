@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 
 extension WidgetRefExtension on WidgetRef {
   // FIXME: .read not always returns the correct value for Future streams.
