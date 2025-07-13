@@ -485,10 +485,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get weightUnit => 'Gewichtseinheit';
 
   @override
-  String get ageCategory => 'Age Category';
+  String get ageCategory => 'Alters-Kategorie';
 
   @override
-  String get ageCategories => 'Age Categories';
+  String get ageCategories => 'Alters-Kategorien';
 
   @override
   String get suffix => 'Kategorie';
