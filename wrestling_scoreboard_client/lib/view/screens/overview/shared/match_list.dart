@@ -100,11 +100,11 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
     );
   }
 
-  handleSelectedMatch(TeamMatch match, BuildContext context) async {
+  void handleSelectedMatch(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}');
   }
 
-  handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
+  void handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 }

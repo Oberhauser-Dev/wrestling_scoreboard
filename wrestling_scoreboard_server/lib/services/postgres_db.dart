@@ -217,7 +217,7 @@ extension DatabaseExt on PostgresDb {
     }
   }
 
-  static sanitizeSql(String sqlString) {
+  static String sanitizeSql(String sqlString) {
     sqlString = sqlString.replaceAll('\r\n', '\n');
     return sqlString
         .split('\n')

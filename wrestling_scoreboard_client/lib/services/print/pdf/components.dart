@@ -3,16 +3,19 @@ import 'package:pdf/widgets.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-buildCheckBox({bool isChecked = false, PdfColor pencilColor = PdfSheet.pencilColor, PdfColor? checkBoxColor}) =>
-    Container(
-      color: checkBoxColor,
-      margin: const EdgeInsets.all(4),
-      height: 20,
-      width: 20,
-      foregroundDecoration: BoxDecoration(border: Border.all(color: PdfColors.grey, width: .5)),
-      alignment: Alignment.center,
-      child: isChecked ? Text('×', style: TextStyle(fontSize: 20, color: pencilColor)) : null,
-    );
+Container buildCheckBox({
+  bool isChecked = false,
+  PdfColor pencilColor = PdfSheet.pencilColor,
+  PdfColor? checkBoxColor,
+}) => Container(
+  color: checkBoxColor,
+  margin: const EdgeInsets.all(4),
+  height: 20,
+  width: 20,
+  foregroundDecoration: BoxDecoration(border: Border.all(color: PdfColors.grey, width: .5)),
+  alignment: Alignment.center,
+  child: isChecked ? Text('×', style: TextStyle(fontSize: 20, color: pencilColor)) : null,
+);
 
 Widget buildTextCell(
   String title, {

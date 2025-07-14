@@ -96,7 +96,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
     );
   }
 
-  handleSelectedBoutDisplay(TeamMatchBout bout, BuildContext context) {
+  void handleSelectedBoutDisplay(TeamMatchBout bout, BuildContext context) {
     context.push(
       '/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}',
     );

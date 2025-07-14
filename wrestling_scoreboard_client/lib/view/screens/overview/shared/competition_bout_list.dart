@@ -74,7 +74,7 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
     );
   }
 
-  handleSelectedCompetitionBout(CompetitionBout bout, BuildContext context) {
+  void handleSelectedCompetitionBout(CompetitionBout bout, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}');
   }
 }

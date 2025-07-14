@@ -1,19 +1,17 @@
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 
-getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) =>
+WindowStateManager getWindowStateManager({required Future<void> Function(WindowState newState) setWindowState}) =>
     NoneWindowStateManager(setWindowState: setWindowState);
 
-class NoneWindowStateManager {
-  final Future<void> Function(WindowState newState) setWindowState;
+class NoneWindowStateManager extends WindowStateManager {
+  NoneWindowStateManager({required super.setWindowState});
 
-  NoneWindowStateManager({required this.setWindowState}) {
-    listenToWindowState();
-  }
-
+  @override
   void listenToWindowState() {
     throw UnimplementedError('No default implementation given');
   }
 
+  @override
   Future<void> requestWindowState({required bool isFullscreen}) async {
     throw UnimplementedError('No default implementation given');
   }

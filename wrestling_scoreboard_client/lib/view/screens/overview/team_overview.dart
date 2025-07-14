@@ -115,7 +115,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
     );
   }
 
-  handleSelectedClub(Club club, BuildContext context) {
+  void handleSelectedClub(Club club, BuildContext context) {
     context.push('/${ClubOverview.route}/${club.id}');
   }
 }

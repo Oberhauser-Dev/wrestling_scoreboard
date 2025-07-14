@@ -209,27 +209,27 @@ class OrganizationOverview extends ConsumerWidget {
     );
   }
 
-  handleSelectedChildOrganization(Organization organization, BuildContext context) {
+  void handleSelectedChildOrganization(Organization organization, BuildContext context) {
     context.push('/${OrganizationOverview.route}/${organization.id}');
   }
 
-  handleSelectedDivision(Division division, BuildContext context) {
+  void handleSelectedDivision(Division division, BuildContext context) {
     context.push('/${DivisionOverview.route}/${division.id}');
   }
 
-  handleSelectedClub(Club club, BuildContext context) {
+  void handleSelectedClub(Club club, BuildContext context) {
     context.push('/${ClubOverview.route}/${club.id}');
   }
 
-  handleSelectedPerson(Person person, BuildContext context) {
+  void handleSelectedPerson(Person person, BuildContext context) {
     context.push('/${PersonOverview.route}/${person.id}');
   }
 
-  handleSelectedCompetition(Competition competition, BuildContext context) {
+  void handleSelectedCompetition(Competition competition, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${competition.id}');
   }
 
-  handleSelectedAgeCategory(AgeCategory ageCategory, BuildContext context) {
+  void handleSelectedAgeCategory(AgeCategory ageCategory, BuildContext context) {
     context.push('/${AgeCategoryOverview.route}/${ageCategory.id}');
   }
 }

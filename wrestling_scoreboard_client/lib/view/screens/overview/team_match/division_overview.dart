@@ -126,15 +126,15 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
     );
   }
 
-  handleSelectedChildDivision(Division division, BuildContext context) {
+  void handleSelectedChildDivision(Division division, BuildContext context) {
     context.push('/${DivisionOverview.route}/${division.id}');
   }
 
-  handleSelectedLeague(League league, BuildContext context) {
+  void handleSelectedLeague(League league, BuildContext context) {
     context.push('/${LeagueOverview.route}/${league.id}');
   }
 
-  handleSelectedWeightClass(DivisionWeightClass divisionWeightClass, BuildContext context) {
+  void handleSelectedWeightClass(DivisionWeightClass divisionWeightClass, BuildContext context) {
     context.push('/${DivisionWeightClassOverview.route}/${divisionWeightClass.id}');
   }
 }

@@ -142,7 +142,7 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
     );
   }
 
-  handleSelectedMembership(Membership membership, BuildContext context) {
+  void handleSelectedMembership(Membership membership, BuildContext context) {
     context.push('/${MembershipOverview.route}/${membership.id}');
   }
 }

@@ -109,7 +109,7 @@ class BoutActionControls extends StatelessWidget {
     return IntrinsicWidth(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: actions));
   }
 
-  displayActionControl(String text, void Function()? callback, MaterialColor color, {String? tooltipMessage}) {
+  Widget displayActionControl(String text, void Function()? callback, MaterialColor color, {String? tooltipMessage}) {
     return Expanded(
       child: DelayedTooltip(
         message: tooltipMessage,

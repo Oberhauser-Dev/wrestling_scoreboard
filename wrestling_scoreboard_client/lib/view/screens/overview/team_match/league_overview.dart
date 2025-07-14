@@ -102,11 +102,11 @@ class LeagueOverview extends ConsumerWidget {
     );
   }
 
-  handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
+  void handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
     context.push('/${LeagueTeamParticipationOverview.route}/${teamParticipation.id}');
   }
 
-  handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
+  void handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
     context.push('/${LeagueWeightClassOverview.route}/${leagueWeightClass.id}');
   }
 }

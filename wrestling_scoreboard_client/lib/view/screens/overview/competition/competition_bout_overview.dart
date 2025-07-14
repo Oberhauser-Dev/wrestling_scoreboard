@@ -105,7 +105,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
     );
   }
 
-  handleSelectedBoutDisplay(CompetitionBout bout, BuildContext context) {
+  void handleSelectedBoutDisplay(CompetitionBout bout, BuildContext context) {
     context.push(
       '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}',
     );

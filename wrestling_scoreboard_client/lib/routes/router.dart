@@ -44,7 +44,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 
-getRouter() {
+GoRouter getRouter() {
   final rootNavigatorKey = GlobalKey<NavigatorState>();
   return GoRouter(
     initialLocation: '/${Home.route}',

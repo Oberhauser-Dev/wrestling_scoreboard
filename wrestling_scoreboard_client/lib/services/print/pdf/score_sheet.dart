@@ -342,7 +342,7 @@ class ScoreSheet extends PdfSheet {
                   rule.technicalPointsDifference != null) {
                 description += ' ';
                 if (rule.style != null) {
-                  description += '${rule.style!.localize(buildContext).toUpperCase()}';
+                  description += rule.style!.localize(buildContext).toUpperCase();
                 }
                 if (rule.winnerTechnicalPoints != null) {
                   description += '• Winner has ${rule.winnerTechnicalPoints} technical point(s)';

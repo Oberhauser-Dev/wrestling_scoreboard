@@ -325,11 +325,11 @@ class TeamMatchOverview extends ConsumerWidget {
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
 
-  handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
+  void handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 
-  handleSelectedLineup(
+  void handleSelectedLineup(
     BuildContext context,
     WidgetRef ref,
     TeamLineup lineup,

@@ -256,7 +256,7 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
     );
   }
 
-  handleSelectedWeightCategory(CompetitionWeightCategory weightCategory, BuildContext context) {
+  void handleSelectedWeightCategory(CompetitionWeightCategory weightCategory, BuildContext context) {
     // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
     context.go('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }

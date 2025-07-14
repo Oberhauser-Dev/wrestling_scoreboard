@@ -320,23 +320,23 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
 
-  _handleSelectedCompetitionDisplay(Competition competition, BuildContext context) {
+  void _handleSelectedCompetitionDisplay(Competition competition, BuildContext context) {
     context.push('/${CompetitionOverview.route}/${competition.id}/${CompetitionDisplay.route}');
   }
 
-  _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
+  void _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
     context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }
 
-  _handleSelectedCompetitionSystemAffiliation(BuildContext context, CompetitionSystemAffiliation affiliation) {
+  void _handleSelectedCompetitionSystemAffiliation(BuildContext context, CompetitionSystemAffiliation affiliation) {
     context.push('/${CompetitionSystemAffiliationOverview.route}/${affiliation.id}');
   }
 
-  _handleSelectedCompetitionLineup(BuildContext context, CompetitionLineup lineup) {
+  void _handleSelectedCompetitionLineup(BuildContext context, CompetitionLineup lineup) {
     context.push('/${CompetitionLineupOverview.route}/${lineup.id}');
   }
 
-  _handleSelectedCompetitionAgeCategory(BuildContext context, CompetitionAgeCategory competitionAgeCategory) {
+  void _handleSelectedCompetitionAgeCategory(BuildContext context, CompetitionAgeCategory competitionAgeCategory) {
     context.push('/${CompetitionAgeCategoryOverview.route}/${competitionAgeCategory.id}');
   }
 }

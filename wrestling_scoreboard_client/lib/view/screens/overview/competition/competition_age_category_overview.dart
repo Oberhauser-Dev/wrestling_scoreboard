@@ -82,7 +82,7 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
     );
   }
 
-  _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
+  void _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
     context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }
 }

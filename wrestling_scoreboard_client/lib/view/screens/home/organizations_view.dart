@@ -28,7 +28,7 @@ class OrganizationsView extends StatelessWidget {
     );
   }
 
-  handleSelectedOrganization(Organization organization, BuildContext context) {
+  void handleSelectedOrganization(Organization organization, BuildContext context) {
     context.push('/${OrganizationOverview.route}/${organization.id}');
   }
 }
