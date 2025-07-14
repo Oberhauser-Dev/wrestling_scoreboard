@@ -129,6 +129,90 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
             if (context.mounted) await super.onDelete(context, ref, single: competition.boutConfig);
           },
           classLocale: localizations.competition,
+          children: [
+            ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
+            ContentItem(title: competition.location ?? 'no location', subtitle: localizations.place, icon: Icons.place),
+            ContentItem(
+              title: competition.date.toDateTimeString(context),
+              subtitle: localizations.date,
+              icon: Icons.date_range,
+            ),
+            ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
+          ],
+        );
+
+        final tabItems = {
+          Tab(child: HeadingText(localizations.cycles)): CompetitionCycleManagement(competition: competition),
+          Tab(child: HeadingText(localizations.lineups)): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, lineup) {
+              return ContentItem(
+                title: lineup.club.name,
+                icon: Icons.view_list,
+                onTap: () async => _handleSelectedCompetitionLineup(context, lineup),
+              );
+            },
+          ),
+          Tab(
+            child: HeadingText(localizations.ageCategories),
+          ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, competitionAgeCategory) {
+              return ContentItem(
+                title: competitionAgeCategory.ageCategory.name,
+                icon: Icons.school,
+                onTap: () async => _handleSelectedCompetitionAgeCategory(context, competitionAgeCategory),
+              );
+            },
+          ),
+          Tab(
+            child: HeadingText(localizations.weightCategories),
+          ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, weightCategory) {
+              return ContentItem(
+                title: weightCategory.name,
+                icon: Icons.fitness_center,
+                onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
+              );
+            },
+          ),
+          Tab(
+            child: HeadingText(localizations.competitionSystems),
+          ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
+            context: context,
+            editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
+            filterObject: competition,
+            itemBuilder: (context, competitionSystemAffiliation) {
+              return ContentItem(
+                title:
+                    '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
+                icon: Icons.account_tree,
+                onTap: () async => _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
+              );
+            },
+          ),
+          Tab(child: HeadingText(localizations.bouts)): CompetitionBoutList(filterObject: competition),
+
+          // Tab(child: HeadingText(localizations.persons)):
+          // GroupedList(
+          //   header: const HeadingItem(),
+          //   itemCount: contentItems.length,
+          //   itemBuilder: (context, index) => contentItems[index],
+          // ),
+        };
+        return FavoriteScaffold<Competition>(
+          dataObject: competition,
+          label: localizations.competition,
+          details: competition.name,
+          tabs: [Tab(child: HeadingText(localizations.info)), boutConfigTab, ...tabItems.keys],
+          body: TabGroup(items: [description, boutConfigTabContent, ...tabItems.values]),
           actions: [
             IconButton(
               onPressed: () async => navigateToScratchBoutOverview(context, ref, boutConfig: competition.boutConfig),
@@ -221,90 +305,6 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               ),
             ),
           ],
-          children: [
-            ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
-            ContentItem(title: competition.location ?? 'no location', subtitle: localizations.place, icon: Icons.place),
-            ContentItem(
-              title: competition.date.toDateTimeString(context),
-              subtitle: localizations.date,
-              icon: Icons.date_range,
-            ),
-            ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
-          ],
-        );
-
-        final tabItems = {
-          Tab(child: HeadingText(localizations.cycles)): CompetitionCycleManagement(competition: competition),
-          Tab(child: HeadingText(localizations.lineups)): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, lineup) {
-              return ContentItem(
-                title: lineup.club.name,
-                icon: Icons.view_list,
-                onTap: () async => _handleSelectedCompetitionLineup(context, lineup),
-              );
-            },
-          ),
-          Tab(
-            child: HeadingText(localizations.ageCategories),
-          ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, competitionAgeCategory) {
-              return ContentItem(
-                title: competitionAgeCategory.ageCategory.name,
-                icon: Icons.school,
-                onTap: () async => _handleSelectedCompetitionAgeCategory(context, competitionAgeCategory),
-              );
-            },
-          ),
-          Tab(
-            child: HeadingText(localizations.weightCategories),
-          ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, weightCategory) {
-              return ContentItem(
-                title: weightCategory.name,
-                icon: Icons.fitness_center,
-                onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
-              );
-            },
-          ),
-          Tab(
-            child: HeadingText(localizations.competitionSystems),
-          ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
-            context: context,
-            editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
-            filterObject: competition,
-            itemBuilder: (context, competitionSystemAffiliation) {
-              return ContentItem(
-                title:
-                    '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
-                icon: Icons.account_tree,
-                onTap: () async => _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
-              );
-            },
-          ),
-          Tab(child: HeadingText(localizations.bouts)): CompetitionBoutList(filterObject: competition),
-
-          // Tab(child: HeadingText(localizations.persons)):
-          // GroupedList(
-          //   header: const HeadingItem(),
-          //   itemCount: contentItems.length,
-          //   itemBuilder: (context, index) => contentItems[index],
-          // ),
-        };
-        return FavoriteScaffold<Competition>(
-          dataObject: competition,
-          label: localizations.competition,
-          details: competition.name,
-          tabs: [Tab(child: HeadingText(localizations.info)), boutConfigTab, ...tabItems.keys],
-          body: TabGroup(items: [description, boutConfigTabContent, ...tabItems.values]),
         );
       },
     );
