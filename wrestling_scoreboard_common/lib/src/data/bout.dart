@@ -98,9 +98,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     }
   }
 
-  bool equalDuringBout(o) =>
-      o is Bout &&
-      o.runtimeType == runtimeType &&
+  bool equalDuringBout(Bout o) =>
       (r?.equalDuringBout(o.r) ?? (r == null && o.r == null)) &&
       (b?.equalDuringBout(o.b) ?? (b == null && o.b == null));
 

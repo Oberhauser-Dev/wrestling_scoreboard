@@ -216,7 +216,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
   }
 
-  displayName(AthleteBoutState? pStatus, double padding, double? weight) {
+  Widget displayName(AthleteBoutState? pStatus, double padding, double? weight) {
     final localizations = context.l10n;
     return Expanded(
       child: Column(
@@ -247,7 +247,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  displayClassificationPoints(AthleteBoutState? pStatus, MaterialColor color, double padding) {
+  StatelessWidget displayClassificationPoints(AthleteBoutState? pStatus, MaterialColor color, double padding) {
     return pStatus?.classificationPoints != null
         ? ThemedContainer(
           color: color.shade800,
@@ -257,14 +257,14 @@ class BoutState extends ConsumerState<BoutScreen> {
         : Container();
   }
 
-  displayTechnicalPoints(ParticipantStateModel pStatus, BoutRole role) {
+  Expanded displayTechnicalPoints(ParticipantStateModel pStatus, BoutRole role) {
     return Expanded(
       flex: 33,
       child: TechnicalPoints(pStatusModel: pStatus, role: role, bout: bout, boutConfig: boutConfig),
     );
   }
 
-  displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding, double? weight) {
+  ThemedContainer displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding, double? weight) {
     final color = role.color();
     return ThemedContainer(
       color: color,
@@ -285,7 +285,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  doAction(BoutScreenActions action) {
+  void doAction(BoutScreenActions action) {
     switch (action) {
       case BoutScreenActions.redActivityTime:
         final ParticipantStateModel psm = _r;
@@ -388,7 +388,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
   }
 
-  row({required List<Widget> children, EdgeInsets? padding}) {
+  Container row({required List<Widget> children, EdgeInsets? padding}) {
     return Container(
       padding: padding,
       child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)),

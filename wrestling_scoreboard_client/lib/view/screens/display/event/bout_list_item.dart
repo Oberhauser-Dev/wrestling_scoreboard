@@ -30,7 +30,12 @@ class BoutListItem extends ConsumerWidget {
     this.ageCategory,
   });
 
-  displayName({AthleteBoutState? pStatus, required BoutRole role, double? fontSize, required BuildContext context}) {
+  Widget displayName({
+    AthleteBoutState? pStatus,
+    required BoutRole role,
+    double? fontSize,
+    required BuildContext context,
+  }) {
     return ThemedContainer(
       color: role.color(),
       child: Center(

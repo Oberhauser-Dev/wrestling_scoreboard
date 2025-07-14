@@ -232,7 +232,7 @@ class CompetitionDisplay extends StatelessWidget {
     );
   }
 
-  handleSelectedCompetition(Competition competition, BuildContext context) {
+  void handleSelectedCompetition(Competition competition, BuildContext context) {
     // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
     context.go('/${CompetitionOverview.route}/${competition.id}');
   }

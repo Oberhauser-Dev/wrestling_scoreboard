@@ -40,7 +40,7 @@ class AdminOverview extends ConsumerWidget {
     );
   }
 
-  handleSelectedUser(SecuredUser user, BuildContext context) {
+  void handleSelectedUser(SecuredUser user, BuildContext context) {
     context.push('/${MoreScreen.route}/${AdminOverview.route}/${UserOverview.route}/${user.id}');
   }
 }

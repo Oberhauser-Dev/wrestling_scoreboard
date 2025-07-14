@@ -1,4 +1,4 @@
-String? getWrestlerJson(passCode) => switch (passCode) {
+String? getWrestlerJson(int passCode) => switch (passCode) {
   1234 => r'''
 {
   "rpcid": null,

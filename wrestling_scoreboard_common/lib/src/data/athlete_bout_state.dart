@@ -44,7 +44,7 @@ abstract class AthleteBoutState with _$AthleteBoutState implements DataObject {
     return res;
   }
 
-  bool equalDuringBout(o) => o is AthleteBoutState && o.runtimeType == runtimeType && membership == o.membership;
+  bool equalDuringBout(AthleteBoutState? o) => membership == o?.membership;
 
   @override
   AthleteBoutState copyWithId(int? id) {

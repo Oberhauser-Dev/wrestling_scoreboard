@@ -88,11 +88,11 @@ class BoutResultRuleOverview extends ConsumerWidget {
     );
   }
 
-  handleSelectedTeam(Team team, BuildContext context) {
+  void handleSelectedTeam(Team team, BuildContext context) {
     context.push('/${TeamOverview.route}/${team.id}');
   }
 
-  handleSelectedMembership(Membership membership, BuildContext context) {
+  void handleSelectedMembership(Membership membership, BuildContext context) {
     context.push('/${MembershipOverview.route}/${membership.id}');
   }
 }

@@ -133,7 +133,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
     );
   }
 
-  _handleSelectedWeightCategoryDisplay(CompetitionWeightCategory category, BuildContext context) {
+  void _handleSelectedWeightCategoryDisplay(CompetitionWeightCategory category, BuildContext context) {
     context.push(
       '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/${CompetitionWeightCategoryDisplay.route}',
     );

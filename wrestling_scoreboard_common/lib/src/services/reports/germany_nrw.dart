@@ -31,7 +31,7 @@ extension _DateTimeParser on DateTime {
 }
 
 extension _GerBoutResultAbbreviation on BoutResult {
-  get toGerman {
+  String get toGerman {
     switch (this) {
       case BoutResult.vfa:
         return 'SS';
@@ -70,7 +70,7 @@ extension _GerBoutResultAbbreviation on BoutResult {
   // aufgrund Tätlichkeit / Unsportlichkeit
   // KES/KEN Sieg/Niederlage durch Kampfrichterentscheid
   // UGS/UGN Untergewichtssieg/-niederlage
-  get toGermanWinner {
+  String get toGermanWinner {
     switch (this) {
       case BoutResult.vfa:
         return 'SS';
@@ -93,7 +93,7 @@ extension _GerBoutResultAbbreviation on BoutResult {
     }
   }
 
-  get toGermanLoser {
+  String get toGermanLoser {
     switch (this) {
       case BoutResult.vfa:
         return 'SN';

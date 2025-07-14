@@ -74,7 +74,7 @@ class TeamMatchBoutList<T extends DataObject?> extends StatelessWidget {
     );
   }
 
-  handleSelectedTeamMatchBout(TeamMatchBout bout, BuildContext context) {
+  void handleSelectedTeamMatchBout(TeamMatchBout bout, BuildContext context) {
     context.push('/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}');
   }
 }

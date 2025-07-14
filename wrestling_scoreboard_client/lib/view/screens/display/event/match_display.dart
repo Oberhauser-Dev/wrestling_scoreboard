@@ -163,7 +163,7 @@ class MatchDisplay extends ConsumerWidget {
     );
   }
 
-  handleSelectedTeamMatch(TeamMatch match, BuildContext context) {
+  void handleSelectedTeamMatch(TeamMatch match, BuildContext context) {
     // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
     context.go('/${TeamMatchOverview.route}/${match.id}');
   }

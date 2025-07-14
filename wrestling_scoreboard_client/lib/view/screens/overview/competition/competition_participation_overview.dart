@@ -13,7 +13,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-navigateToCompetitionParticipationOverview(BuildContext context, CompetitionParticipation participation) {
+void navigateToCompetitionParticipationOverview(BuildContext context, CompetitionParticipation participation) {
   context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
 }
 
