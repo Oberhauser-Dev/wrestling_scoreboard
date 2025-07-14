@@ -37,7 +37,19 @@ class AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [Text(label), Text('  $details', style: TextStyle(color: Theme.of(context).disabledColor))]);
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Flexible(child: Text(label, overflow: TextOverflow.fade)),
+        Expanded(
+          child: Text(
+            '  $details',
+            style: TextStyle(color: Theme.of(context).disabledColor),
+            overflow: TextOverflow.fade,
+          ),
+        ),
+      ],
+    );
   }
 }
 
