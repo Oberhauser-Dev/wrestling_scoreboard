@@ -111,7 +111,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
       _formKey.currentState!.save();
       var weightClass = WeightClass(
         id: widget.weightClass?.id,
-        suffix: _suffix!,
+        suffix: _suffix,
         weight: _weight,
         style: _wrestlingStyle,
         unit: _unit,
