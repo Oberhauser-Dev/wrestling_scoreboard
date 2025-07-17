@@ -76,6 +76,8 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                                     ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
                                     await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
                                     ref.invalidate(localDataNotifierProvider<Bout>());
+                                    await ref.read(localDataNotifierProvider<ScratchBout>().notifier).setState([]);
+                                    ref.invalidate(localDataNotifierProvider<ScratchBout>());
 
                                     // Invalidate stream providers
                                     ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
@@ -89,6 +91,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                                     ref.invalidate(
                                       manyDataStreamProvider<BoutAction, Bout>(ManyProviderData(filterObject: bout)),
                                     );
+                                    ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
 
                                     if (context.mounted) {
                                       navigateToScratchBoutDisplay(context);
