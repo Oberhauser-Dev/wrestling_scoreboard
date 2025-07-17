@@ -42,6 +42,8 @@
   "proposeApiImportDuration": "Dauer für den Vorschlag eines API-Imports",
   "importIncludeSubjacent": "Importiere auch alle darunderliegenden Daten. Dies kann länger dauern und bei Zeitüberschreitung oder inkonsistenten Daten fehlschlagen!",
   "reportProvider": "Report-Anbieter",
+  "report": "Report",
+  "print": "Drucken",
   "database": "Datenbank",
   "exportDatabase": "Datenbank exportieren",
   "restoreDatabase": "Datenbank wiederherstellen",

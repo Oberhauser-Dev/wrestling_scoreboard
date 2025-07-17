@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/league_weight_class.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -51,52 +51,54 @@ class LeagueOverview extends ConsumerWidget {
             ContentItem(title: data.division.fullname, subtitle: localizations.division, icon: Icons.inventory),
           ],
         );
-        return FavoriteScaffold<League>(
-          dataObject: data,
-          label: localizations.league,
-          details: '${data.fullname}, ${data.startDate.year}',
-          actions: [
-            ConditionalOrganizationImportAction(
-              id: id,
-              organization: data.organization!,
-              importType: OrganizationImportType.league,
-            ),
-          ],
-          tabs: [
-            Tab(child: HeadingText(localizations.info)),
-            Tab(child: HeadingText(localizations.matches)),
-            Tab(child: HeadingText(localizations.participatingTeams)),
-            Tab(child: HeadingText(localizations.weightClasses)),
-          ],
-          body: TabGroup(
-            items: [
-              description,
-              MatchList<League>(filterObject: data),
-              FilterableManyConsumer<LeagueTeamParticipation, League>.edit(
-                context: context,
-                editPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
-                filterObject: data,
-                mapData: (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.team.name,
-                      icon: Icons.group,
-                      onTap: () => handleSelectedTeam(item, context),
-                    ),
+        return ConditionalOrganizationImportActionBuilder(
+          id: id,
+          organization: data.organization,
+          importType: OrganizationImportType.league,
+          builder: (context, importAction) {
+            return FavoriteScaffold<League>(
+              dataObject: data,
+              label: localizations.league,
+              details: '${data.fullname}, ${data.startDate.year}',
+              actions: [if (importAction != null) importAction],
+              tabs: [
+                Tab(child: HeadingText(localizations.info)),
+                Tab(child: HeadingText(localizations.matches)),
+                Tab(child: HeadingText(localizations.participatingTeams)),
+                Tab(child: HeadingText(localizations.weightClasses)),
+              ],
+              body: TabGroup(
+                items: [
+                  description,
+                  MatchList<League>(filterObject: data),
+                  FilterableManyConsumer<LeagueTeamParticipation, League>.edit(
+                    context: context,
+                    editPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
+                    filterObject: data,
+                    mapData:
+                        (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
+                    itemBuilder:
+                        (context, item) => ContentItem(
+                          title: item.team.name,
+                          icon: Icons.group,
+                          onTap: () => handleSelectedTeam(item, context),
+                        ),
+                  ),
+                  FilterableManyConsumer<LeagueWeightClass, League>.edit(
+                    context: context,
+                    editPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
+                    filterObject: data,
+                    itemBuilder:
+                        (context, item) => ContentItem(
+                          title: item.localize(context),
+                          icon: Icons.fitness_center,
+                          onTap: () => handleSelectedWeightClass(item, context),
+                        ),
+                  ),
+                ],
               ),
-              FilterableManyConsumer<LeagueWeightClass, League>.edit(
-                context: context,
-                editPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
-                filterObject: data,
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.localize(context),
-                      icon: Icons.fitness_center,
-                      onTap: () => handleSelectedWeightClass(item, context),
-                    ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

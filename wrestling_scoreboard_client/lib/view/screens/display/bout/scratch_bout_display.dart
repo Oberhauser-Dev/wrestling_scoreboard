@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToScratchBoutDisplay(BuildContext context) {
@@ -52,9 +53,9 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                           boutIndex: 0,
                           bout: bout,
                           actions: [
-                            IconButton(
+                            ResponsiveScaffoldActionItem(
                               icon: const Icon(Icons.restore_page),
-                              onPressed: () async {
+                              onTap: () async {
                                 final result = await showOkCancelDialog(
                                   context: context,
                                   child: Text('${localizations.reset}?'),
@@ -95,7 +96,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                                   });
                                 }
                               },
-                              tooltip: localizations.reset,
+                              label: localizations.reset,
                             ),
                           ],
                           navigateToBoutByIndex: (context, index) {

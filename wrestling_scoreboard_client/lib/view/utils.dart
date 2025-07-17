@@ -14,3 +14,13 @@ extension ColorExtension on Color {
     return withValues(alpha: 0.38);
   }
 }
+
+// Below 600: extraSmallScreen
+const smallScreenMinWidth = 600.0;
+const mediumScreenMinWidth = 768.0;
+const largeScreenMinWidth = 992.0;
+const extraLargeScreenMinWidth = 1200.0;
+
+extension ResponsiveExtension on BuildContext {
+  bool get isMediumScreenOrLarger => MediaQuery.of(this).size.width >= mediumScreenMinWidth;
+}

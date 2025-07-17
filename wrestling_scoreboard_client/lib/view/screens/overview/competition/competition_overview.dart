@@ -27,6 +27,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -214,17 +215,17 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
           tabs: [Tab(child: HeadingText(localizations.info)), boutConfigTab, ...tabItems.keys],
           body: TabGroup(items: [description, boutConfigTabContent, ...tabItems.values]),
           actions: [
-            IconButton(
-              onPressed: () async => navigateToScratchBoutOverview(context, ref, boutConfig: competition.boutConfig),
+            ResponsiveScaffoldActionItem(
+              onTap: () async => navigateToScratchBoutOverview(context, ref, boutConfig: competition.boutConfig),
               icon: const Icon(Icons.rocket_launch),
-              tooltip: localizations.launchScratchBout,
+              label: localizations.launchScratchBout,
             ),
             // if (competition.organization != null)
             //   ConditionalOrganizationImportAction(
             //       id: id, organization: competition.organization!, importType: OrganizationImportType.competition),
             // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
-            IconButton(
-              onPressed: () async {
+            ResponsiveScaffoldActionItem(
+              onTap: () async {
                 final reporter = competition.organization?.getReporter();
                 if (reporter != null) {
                   final cbouts = await _getBouts(ref, competition: competition);
@@ -294,15 +295,14 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 }
               },
               icon: const Icon(Icons.description),
+              label: localizations.report,
             ),
             // pdfAction,
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.tv),
-                onPressed: () => _handleSelectedCompetitionDisplay(competition, context),
-                label: Text(localizations.display),
-              ),
+            ResponsiveScaffoldActionItem(
+              icon: const Icon(Icons.tv),
+              onTap: () => _handleSelectedCompetitionDisplay(competition, context),
+              label: localizations.display,
+              style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
             ),
           ],
         );

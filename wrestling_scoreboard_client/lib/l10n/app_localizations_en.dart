@@ -112,6 +112,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportProvider => 'Report Provider';
 
   @override
+  String get report => 'Report';
+
+  @override
+  String get print => 'Print';
+
+  @override
   String get database => 'Database';
 
   @override

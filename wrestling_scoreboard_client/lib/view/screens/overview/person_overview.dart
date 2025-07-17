@@ -17,6 +17,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -30,7 +31,7 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
     required Widget editPage,
     required VoidCallback? onDelete,
     List<Widget>? tiles,
-    List<Widget> actions = const [],
+    List<ResponsiveScaffoldActionItem> actions = const [],
     Map<Tab, Widget> Function(Person data)? buildRelations,
     required int dataId,
     Person? initialData,

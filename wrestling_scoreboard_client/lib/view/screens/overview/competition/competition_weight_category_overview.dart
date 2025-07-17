@@ -12,10 +12,10 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -79,18 +79,16 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
           label: localizations.weightCategory,
           details: competitionWeightCategory.name,
           actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.tv),
-                onPressed: () => _handleSelectedWeightCategoryDisplay(competitionWeightCategory, context),
-                label: Text(localizations.display),
-              ),
+            ResponsiveScaffoldActionItem(
+              style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+              icon: const Icon(Icons.tv),
+              onTap: () => _handleSelectedWeightCategoryDisplay(competitionWeightCategory, context),
+              label: localizations.display,
             ),
-            EditAction(
+            ResponsiveScaffoldActionItem(
               icon: const Icon(Icons.autorenew),
-              label: Text(localizations.generate),
-              onSubmit: () async {
+              label: localizations.generate,
+              onTap: () async {
                 final hasConfirmed = await showOkCancelDialog(
                   context: context,
                   child: Text(localizations.warningBoutGenerate),
@@ -104,6 +102,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
                   });
                 }
               },
+              style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
             ),
           ],
           tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.participations))],

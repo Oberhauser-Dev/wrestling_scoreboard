@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/competition/com
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
@@ -37,11 +38,13 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
       id: id,
       initialData: competitionWeightCategory,
       builder: (context, competitionWeightCategory) {
-        final infoAction = IconButton(
+        final infoAction = ResponsiveScaffoldActionItem(
+          label: localizations.info,
           icon: const Icon(Icons.info),
-          onPressed: () => handleSelectedWeightCategory(competitionWeightCategory, context),
+          onTap: () => handleSelectedWeightCategory(competitionWeightCategory, context),
         );
-        // final pdfAction = IconButton(
+        // final pdfAction = ResponsiveScaffoldActionItem(
+        //   tooltip: localizations.print,
         //   icon: const Icon(Icons.print),
         //   onPressed: () async {
         //     final competitionBouts = await ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(

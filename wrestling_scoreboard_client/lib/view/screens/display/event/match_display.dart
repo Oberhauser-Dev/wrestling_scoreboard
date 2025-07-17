@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/bout_list_item.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -33,13 +34,15 @@ class MatchDisplay extends ConsumerWidget {
       id: id,
       initialData: teamMatch,
       builder: (context, match) {
-        final infoAction = IconButton(
+        final infoAction = ResponsiveScaffoldActionItem(
+          label: localizations.info,
           icon: const Icon(Icons.info),
-          onPressed: () => handleSelectedTeamMatch(match, context),
+          onTap: () => handleSelectedTeamMatch(match, context),
         );
-        final pdfAction = IconButton(
+        final pdfAction = ResponsiveScaffoldActionItem(
+          label: localizations.print,
           icon: const Icon(Icons.print),
-          onPressed: () async {
+          onTap: () async {
             final teamMatchBouts = await ref.readAsync(
               manyDataStreamProvider<TeamMatchBout, TeamMatch>(
                 ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),

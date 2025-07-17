@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 // TODO: dynamically add or remove participants without weight class
@@ -118,19 +119,21 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     }
   }
 
-  List<Widget> _buildActions(BuildContext context) {
+  List<ResponsiveScaffoldActionItem> _buildActions(BuildContext context) {
     final localizations = context.l10n;
     final navigator = Navigator.of(context);
     return [
-      EditAction(
+      ResponsiveScaffoldActionItem(
+        style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
         icon: const Icon(Icons.save),
-        label: Text(localizations.save),
-        onSubmit: () => handleSubmit(navigator),
+        label: localizations.save,
+        onTap: () => handleSubmit(navigator),
       ),
-      EditAction(
+      ResponsiveScaffoldActionItem(
+        style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
         icon: const Icon(Icons.autorenew),
-        label: Text(localizations.saveAndGenerate),
-        onSubmit: () async {
+        label: localizations.saveAndGenerate,
+        onTap: () async {
           final hasConfirmed = await showOkCancelDialog(
             context: context,
             child: Text(localizations.warningBoutGenerate),

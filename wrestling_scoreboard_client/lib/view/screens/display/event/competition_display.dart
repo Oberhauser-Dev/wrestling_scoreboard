@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -34,11 +35,13 @@ class CompetitionDisplay extends StatelessWidget {
       id: id,
       initialData: competition,
       builder: (context, competition) {
-        final infoAction = IconButton(
+        final infoAction = ResponsiveScaffoldActionItem(
+          label: localizations.info,
           icon: const Icon(Icons.info),
-          onPressed: () => handleSelectedCompetition(competition, context),
+          onTap: () => handleSelectedCompetition(competition, context),
         );
-        // final pdfAction = IconButton(
+        // final pdfAction = ResponsiveScaffoldActionItem(
+        //   tooltip: localizations.print,
         //   icon: const Icon(Icons.print),
         //   onPressed: () async {
         //     final competitionBouts = await ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(

@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToTeamMatchBoutScreen(BuildContext context, TeamMatch match, TeamMatchBout bout) {
@@ -74,9 +75,10 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                               boutIndex: teamMatchBoutIndex,
                               bout: bout,
                               actions: [
-                                IconButton(
+                                ResponsiveScaffoldActionItem(
+                                  label: localizations.info,
                                   icon: const Icon(Icons.info),
-                                  onPressed:
+                                  onTap:
                                       // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
                                       () => context.go(
                                         '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}',

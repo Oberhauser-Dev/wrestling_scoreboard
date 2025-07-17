@@ -151,10 +151,10 @@ class HomeState extends ConsumerState<Home> {
     return WindowStateScaffold(
       appBarTitle: Text(localizations.start),
       actions: [
-        IconButton(
-          onPressed: () => navigateToScratchBoutOverview(context, ref),
+        ResponsiveScaffoldActionItem(
+          onTap: () => navigateToScratchBoutOverview(context, ref),
           icon: const Icon(Icons.rocket_launch),
-          tooltip: localizations.launchScratchBout,
+          label: localizations.launchScratchBout,
         ),
       ],
       body: ResponsiveContainer(

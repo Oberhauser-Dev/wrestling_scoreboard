@@ -45,6 +45,8 @@
   "proposeApiImportDuration": "Duration for proposing an API import",
   "importIncludeSubjacent": "Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!",
   "reportProvider": "Report Provider",
+  "report": "Report",
+  "print": "Print",
   "database": "Database",
   "exportDatabase": "Export database",
   "restoreDatabase": "Restore database",
