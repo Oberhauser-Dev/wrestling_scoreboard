@@ -129,7 +129,7 @@ class ApiRoute {
     );
 
     final personController = PersonController();
-    router.restrictedPost('/${Person.cTableName}/merge', personController.postMerge);
+    router.restrictedPost('/${Person.cTableName}s/merge', personController.postMerge);
 
     final teamController = TeamController();
     router.restrictedPostOne('/${Team.cTableName}/<id|[0-9]+>/api/import', teamController.postImport);
