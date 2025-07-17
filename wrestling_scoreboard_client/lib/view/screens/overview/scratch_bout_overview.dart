@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_ov
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension ScratchBoutRouteExtension on GoRouterState {
@@ -73,13 +74,11 @@ class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>,
                   details: '${bout.r?.membership.person.fullName} - ${bout.b?.membership.person.fullName}',
                   editPage: ScratchBoutEdit(scratchBout: scratchBout),
                   actions: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.tv),
-                        onPressed: () => navigateToScratchBoutDisplay(context),
-                        label: Text(localizations.display),
-                      ),
+                    ResponsiveScaffoldActionItem(
+                      style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+                      icon: const Icon(Icons.tv),
+                      onTap: () => navigateToScratchBoutDisplay(context),
+                      label: localizations.display,
                     ),
                   ],
                   tiles: [

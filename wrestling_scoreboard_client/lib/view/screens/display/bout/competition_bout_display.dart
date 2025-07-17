@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_displ
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 void navigateToCompetitionBoutScreen(BuildContext context, CompetitionBout bout) {
@@ -79,9 +80,10 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           bout: bout,
                           mat: competitionBout.displayMat,
                           actions: [
-                            IconButton(
+                            ResponsiveScaffoldActionItem(
+                              label: localizations.info,
                               icon: const Icon(Icons.info),
-                              onPressed: () {
+                              onTap: () {
                                 // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
                                 context.go(
                                   '/${CompetitionOverview.route}/${competition.id}/${CompetitionBoutOverview.route}/${competitionBout.id}',

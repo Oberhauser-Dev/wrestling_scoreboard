@@ -21,6 +21,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_displ
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
@@ -46,7 +47,7 @@ class BoutScreen extends ConsumerStatefulWidget {
   final List<BoutResultRule> boutRules;
   final List<Widget> headerItems;
   final int boutIndex;
-  final List<Widget> actions;
+  final List<ResponsiveScaffoldActionItem> actions;
   final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
 
   const BoutScreen({
@@ -404,9 +405,10 @@ class BoutState extends ConsumerState<BoutScreen> {
 
     final Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onSurface;
 
-    final pdfAction = IconButton(
+    final pdfAction = ResponsiveScaffoldActionItem(
+      label: localizations.print,
       icon: const Icon(Icons.print),
-      onPressed: () async {
+      onTap: () async {
         final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
         final actions = await ref.readAsync(
           manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,

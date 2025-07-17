@@ -113,6 +113,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reportProvider => 'Report-Anbieter';
 
   @override
+  String get report => 'Report';
+
+  @override
+  String get print => 'Drucken';
+
+  @override
   String get database => 'Datenbank';
 
   @override

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class PreferredSizeImpl extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;
@@ -33,7 +34,7 @@ class WindowStateScaffold extends ConsumerWidget {
   final PreferredSizeWidget? appBarBottom;
   final bool hideAppBarOnFullscreen;
   final Widget body;
-  final List<Widget>? actions;
+  final List<ResponsiveScaffoldActionItem>? actions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,11 +48,15 @@ class WindowStateScaffold extends ConsumerWidget {
           title: appBarTitle,
           bottom: appBarBottom,
           actions: [
-            ...?actions,
-            IconButton(
-              icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
-              onPressed: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
-              tooltip: localizations.toggleFullscreen,
+            ResponsiveScaffoldActions(
+              actionContents: [
+                ...?actions,
+                ResponsiveScaffoldActionItem(
+                  icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
+                  onTap: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
+                  label: localizations.toggleFullscreen,
+                ),
+              ],
             ),
           ],
         );

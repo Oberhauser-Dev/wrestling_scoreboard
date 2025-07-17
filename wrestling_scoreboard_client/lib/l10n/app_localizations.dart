@@ -278,6 +278,18 @@ abstract class AppLocalizations {
   /// **'Report Provider'**
   String get reportProvider;
 
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @print.
+  ///
+  /// In en, this message translates to:
+  /// **'Print'**
+  String get print;
+
   /// No description provided for @database.
   ///
   /// In en, this message translates to:

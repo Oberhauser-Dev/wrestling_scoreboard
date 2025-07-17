@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class EditWidget extends StatelessWidget {
@@ -11,9 +10,9 @@ class EditWidget extends StatelessWidget {
 
   const EditWidget({super.key, required this.typeLocalization, required this.onSubmit, required this.items, this.id});
 
-  List<Widget> _buildActions(BuildContext context) {
+  List<ResponsiveScaffoldActionItem> _buildActions(BuildContext context) {
     final localizations = context.l10n;
-    return [EditAction(icon: const Icon(Icons.save), label: Text(localizations.save), onSubmit: onSubmit)];
+    return [ResponsiveScaffoldActionItem(icon: const Icon(Icons.save), label: localizations.save, onTap: onSubmit)];
   }
 
   @override
@@ -30,7 +29,7 @@ class EditWidget extends StatelessWidget {
 class CustomizableEditWidget extends StatelessWidget {
   final String typeLocalization;
   final int? id;
-  final List<Widget> Function(BuildContext context) buildActions;
+  final List<ResponsiveScaffoldActionItem> Function(BuildContext context) buildActions;
   final List<Widget> items;
 
   const CustomizableEditWidget({
@@ -53,25 +52,9 @@ class CustomizableEditWidget extends StatelessWidget {
             if (id != null) Text(' #$id', style: TextStyle(color: Theme.of(context).disabledColor)),
           ],
         ),
-        actions: buildActions(context),
+        actions: [ResponsiveScaffoldActions(actionContents: buildActions(context))],
       ),
       body: ResponsiveColumn(children: items),
-    );
-  }
-}
-
-class EditAction extends StatelessWidget {
-  final Widget icon;
-  final Widget label;
-  final Future<void> Function() onSubmit;
-
-  const EditAction({super.key, required this.icon, required this.label, required this.onSubmit});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      child: ElevatedButton.icon(icon: icon, onPressed: () => catchAsync(context, onSubmit), label: label),
     );
   }
 }

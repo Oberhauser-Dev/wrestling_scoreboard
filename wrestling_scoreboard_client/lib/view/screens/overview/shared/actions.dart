@@ -1,32 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class ConditionalOrganizationImportAction extends StatelessWidget {
-  final Organization organization;
+class ConditionalOrganizationImportActionBuilder extends StatelessWidget {
+  final Organization? organization;
   final int id;
   final OrganizationImportType importType;
+  final Widget Function(BuildContext context, ResponsiveScaffoldActionItem? actionItem) builder;
 
-  const ConditionalOrganizationImportAction({
+  const ConditionalOrganizationImportActionBuilder({
     required this.id,
     required this.organization,
     required this.importType,
     super.key,
+    required this.builder,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: organization.apiProvider != null,
-      child: Restricted(
-        privilege: UserPrivilege.write,
-        child: OrganizationImportAction(id: id, orgId: organization.id!, importType: importType),
-      ),
+    if (organization?.apiProvider == null) {
+      return builder(context, null);
+    }
+
+    return RestrictedBuilder(
+      privilege: UserPrivilege.write,
+      builder: (BuildContext context, bool hasPrivilege) {
+        if (!hasPrivilege) return builder(context, null);
+        return OrganizationImportAction(id: id, orgId: organization!.id!, importType: importType, builder: builder);
+      },
     );
   }
 }
@@ -35,8 +42,15 @@ class OrganizationImportAction extends ConsumerStatefulWidget {
   final int orgId;
   final int id;
   final OrganizationImportType importType;
+  final Widget Function(BuildContext context, ResponsiveScaffoldActionItem? actionItem) builder;
 
-  const OrganizationImportAction({required this.id, required this.orgId, required this.importType, super.key});
+  const OrganizationImportAction({
+    required this.id,
+    required this.orgId,
+    required this.importType,
+    required this.builder,
+    super.key,
+  });
 
   @override
   ConsumerState<OrganizationImportAction> createState() => _OrganizationImportActionState();
@@ -52,25 +66,28 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    return IconButton(
-      tooltip: localizations.importFromApiProvider,
-      onPressed: () async {
-        final result = await showDialog<bool>(
-          context: context,
-          builder: (context) => _IncludeSubjacentDialog(child: Text(localizations.warningImportFromApiProvider)),
-        );
-        if (result != null && context.mounted) {
-          await _processImport(
-            context,
-            ref,
-            orgId: widget.orgId,
-            id: widget.id,
-            importType: widget.importType,
-            includeSubjacent: result,
+    return widget.builder(
+      context,
+      ResponsiveScaffoldActionItem(
+        label: localizations.importFromApiProvider,
+        onTap: () async {
+          final result = await showDialog<bool>(
+            context: context,
+            builder: (context) => _IncludeSubjacentDialog(child: Text(localizations.warningImportFromApiProvider)),
           );
-        }
-      },
-      icon: const Icon(Icons.import_export),
+          if (result != null && context.mounted) {
+            await _processImport(
+              context,
+              ref,
+              orgId: widget.orgId,
+              id: widget.id,
+              importType: widget.importType,
+              includeSubjacent: result,
+            );
+          }
+        },
+        icon: const Icon(Icons.import_export),
+      ),
     );
   }
 }

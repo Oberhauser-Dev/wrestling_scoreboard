@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<CompetitionBout> {
@@ -87,13 +88,11 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
           ],
           actions: [
             // pdfAction,
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.tv),
-                onPressed: () => handleSelectedBoutDisplay(competitionBout, context),
-                label: Text(localizations.display),
-              ),
+            ResponsiveScaffoldActionItem(
+              style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+              icon: const Icon(Icons.tv),
+              onTap: () => handleSelectedBoutDisplay(competitionBout, context),
+              label: localizations.display,
             ),
           ],
           dataId: competitionBout.bout.id!,

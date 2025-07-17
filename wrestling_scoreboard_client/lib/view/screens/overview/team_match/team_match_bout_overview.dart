@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_ma
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBout> {
@@ -36,9 +37,10 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
         );
 
-        final pdfAction = IconButton(
+        final pdfAction = ResponsiveScaffoldActionItem(
+          label: localizations.print,
           icon: const Icon(Icons.print),
-          onPressed: () async {
+          onTap: () async {
             final actions = await getActions();
             final boutRules =
                 teamMatchBout.teamMatch.league == null
@@ -78,13 +80,11 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           tiles: [],
           actions: [
             pdfAction,
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.tv),
-                onPressed: () => handleSelectedBoutDisplay(teamMatchBout, context),
-                label: Text(localizations.display),
-              ),
+            ResponsiveScaffoldActionItem(
+              style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+              icon: const Icon(Icons.tv),
+              onTap: () => handleSelectedBoutDisplay(teamMatchBout, context),
+              label: localizations.display,
             ),
           ],
           dataId: teamMatchBout.bout.id!,

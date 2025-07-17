@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -22,7 +23,7 @@ mixin WeightClassOverview<T extends DataObject> implements AbstractOverview<Weig
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
-    List<Widget> actions = const [],
+    List<ResponsiveScaffoldActionItem> actions = const [],
     required int dataId,
     WeightClass? initialData,
     Map<Tab, Widget> Function(WeightClass data)? buildRelations,

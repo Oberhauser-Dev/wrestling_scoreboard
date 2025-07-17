@@ -29,6 +29,30 @@ class Restricted extends ConsumerWidget {
   }
 }
 
+class RestrictedBuilder extends ConsumerWidget {
+  final Widget Function(BuildContext context, bool hasPrivilege) builder;
+  final UserPrivilege privilege;
+
+  const RestrictedBuilder({super.key, required this.builder, this.privilege = UserPrivilege.write});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return LoadingBuilder(
+      future: ref.watch(userNotifierProvider),
+      // Center widget has no size, so use CircularProgressIndicator directly.
+      onLoad: (context) => const CircularProgressIndicator(),
+      onException:
+          (context, exception, {stackTrace}) => IconButton(
+            onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
+            icon: const Icon(Icons.warning),
+          ),
+      builder: (context, user) {
+        return builder(context, user != null && user.privilege >= privilege);
+      },
+    );
+  }
+}
+
 class RestrictedAddButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final UserPrivilege privilege;
