@@ -1,6 +1,9 @@
 // TODO: move util/network/data_provider into riverpod provider
 // See for examples: https://riverpod.dev/docs/essentials/side_effects#updating-our-local-cache-to-match-the-api-response
 
+import 'dart:async';
+
+import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
@@ -26,18 +29,29 @@ class SingleProviderData<T extends DataObject> {
 @Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
 Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> pData) async* {
   ref.cache();
-  // Reload, whenever the stream is connected
-  final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);
-  if (wsConnectionState == WebSocketConnectionState.connected) {
-    // TODO: e.g. may be triggered twice
-    if (pData.initialData != null) {
-      yield pData.initialData!;
-    }
-    final dataManager = await ref.watch(dataManagerNotifierProvider);
-    yield* dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
-  } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
-    yield* Stream.error('Server disconnected');
+
+  final dataManager = await ref.watch(dataManagerNotifierProvider);
+  if (pData.initialData != null) {
+    yield pData.initialData!;
   }
+
+  final dataStream = dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
+
+  // Reload, whenever the stream is connected
+  final connectionStateStreamController = StreamController<T>();
+  final sub = ref.listen(webSocketStateStreamProvider.future, (previous, next) async {
+    final wsConnectionState = await next;
+    if (wsConnectionState == WebSocketConnectionState.connected) {
+      connectionStateStreamController.add(await dataManager.readSingle<T>(pData.id));
+    } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
+      connectionStateStreamController.addError(
+        Exception('Server disconnected\nSingleDataStreamProvider: $T (id: ${pData.id})'),
+      );
+    }
+  });
+  ref.onDispose(() => sub.close());
+
+  yield* StreamGroup.merge([dataStream, connectionStateStreamController.stream]);
 }
 
 /// Class to wrap equal many data for providers.
@@ -64,18 +78,29 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   ManyProviderData<T, S> pData,
 ) async* {
   ref.cache();
-  // Reload, whenever the stream is connected
-  final wsConnectionState = await ref.watch(webSocketStateStreamProvider.future);
-  if (wsConnectionState == WebSocketConnectionState.connected) {
-    // TODO: e.g. bout action event triggered twice
-    if (pData.initialData != null) {
-      yield pData.initialData!;
-    }
-    final dataManager = await ref.watch(dataManagerNotifierProvider);
-    yield* dataManager
-        .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
-        .map((event) => event.data);
-  } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
-    yield* Stream.error('Server disconnected');
+
+  final dataManager = await ref.watch(dataManagerNotifierProvider);
+  if (pData.initialData != null) {
+    yield pData.initialData!;
   }
+
+  final dataStream = dataManager
+      .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
+      .map((event) => event.data);
+
+  // Reload, whenever the stream is connected
+  final connectionStateStreamController = StreamController<List<T>>();
+  final sub = ref.listen(webSocketStateStreamProvider.future, (previous, next) async {
+    final wsConnectionState = await next;
+    if (wsConnectionState == WebSocketConnectionState.connected) {
+      connectionStateStreamController.add(await dataManager.readMany<T, S>(filterObject: pData.filterObject));
+    } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
+      connectionStateStreamController.addError(
+        Exception('Server disconnected\nManyDataStreamProvider: $T, $S (filterObject: ${pData.filterObject})'),
+      );
+    }
+  });
+  ref.onDispose(() => sub.close());
+
+  yield* StreamGroup.merge([dataStream, connectionStateStreamController.stream]);
 }
