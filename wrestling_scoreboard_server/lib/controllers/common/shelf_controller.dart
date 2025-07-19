@@ -12,7 +12,6 @@ import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_age_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
@@ -121,18 +120,14 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
   }
 
   Future<Response> handlePostRequestSingle(Map<String, Object?> json) async {
-    try {
-      final id = await handleJson<T>(
-        json,
-        handleSingle: handleSingle,
-        handleMany: handleMany,
-        handleSingleRaw: handleSingleRaw,
-        handleManyRaw: handleManyRaw,
-      );
-      return Response.ok(jsonEncode(id));
-    } on InvalidParameterException catch (e) {
-      return Response.badRequest(body: e.message);
-    }
+    final id = await handleJson<T>(
+      json,
+      handleSingle: handleSingle,
+      handleMany: handleMany,
+      handleSingleRaw: handleSingleRaw,
+      handleManyRaw: handleManyRaw,
+    );
+    return Response.ok(jsonEncode(id));
   }
 
   static ShelfController? getControllerFromDataType(Type t) {

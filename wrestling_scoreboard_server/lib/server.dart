@@ -87,11 +87,15 @@ Future<HttpServer> init() async {
       // If a corresponding file is not found, send requests to a `Router`
       .add(router.call);
 
+  final serverLog = Logger('Server');
+
   // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
   final pipeline = Pipeline()
       // See https://pub.dev/documentation/shelf/latest/shelf/logRequests.html
       .addMiddleware(corsConfig)
-      .addMiddleware(logRequests())
+      .addMiddleware(
+        logRequests(logger: (message, isError) => isError ? serverLog.severe(message) : serverLog.fine(message)),
+      )
       .addHandler(cascade.handler);
 
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
@@ -100,8 +104,6 @@ Future<HttpServer> init() async {
     env.host ?? InternetAddress.anyIPv4, // Allows external connections
     port,
   );
-
-  final serverLog = Logger('Server');
 
   final serverUrl = 'http://${server.address.host}:${server.port}';
   serverLog.info('\n\n############## Server started at ${DateTime.now().toIso8601String()} ###########\n');
