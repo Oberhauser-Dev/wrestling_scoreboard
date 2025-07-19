@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
 class SecuredUserController extends ShelfController<SecuredUser> {
@@ -16,14 +15,10 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   SecuredUserController._internal() : super();
 
   Future<Response> postSingleUser(Request request, User? user) async {
-    try {
-      final message = await request.readAsString();
-      final user = parseSingleJson<User>(jsonDecode(message));
-      final id = await createSingleUser(user);
-      return Response.ok(jsonEncode(id));
-    } on InvalidParameterException catch (e) {
-      return Response.badRequest(body: e.message);
-    }
+    final message = await request.readAsString();
+    final user = parseSingleJson<User>(jsonDecode(message));
+    final id = await createSingleUser(user);
+    return Response.ok(jsonEncode(id));
   }
 
   Future<int> createSingleUser(User user) async {
