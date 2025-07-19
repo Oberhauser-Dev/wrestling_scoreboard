@@ -40,6 +40,7 @@ String _$userNotifierHash() => r'c7e7df23f18e9c559245722e3c3281165a4f3120';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();
+
   @$mustCallSuper
   @override
   void runBuild() {

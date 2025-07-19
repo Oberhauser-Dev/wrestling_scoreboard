@@ -63,7 +63,7 @@ final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalPr
   }
 }
 
-String _$singleDataStreamHash() => r'1e6ba62eda5bd5b3d5ae5bb32ba861e963c23f1f';
+String _$singleDataStreamHash() => r'225c55e292aa8ebfe21efb0b91aa2848e23587cf';
 
 final class SingleDataStreamFamily extends $Family {
   const SingleDataStreamFamily._()
@@ -160,7 +160,7 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   }
 }
 
-String _$manyDataStreamHash() => r'cfcc50606c1459ecfd5eea6944524f5217c96b54';
+String _$manyDataStreamHash() => r'48daaa4af657b8c032446852b39abfdef58b2681';
 
 final class ManyDataStreamFamily extends $Family {
   const ManyDataStreamFamily._()
