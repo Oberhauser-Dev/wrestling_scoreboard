@@ -42,7 +42,7 @@ class ResponsiveColumn extends StatelessWidget {
 class ResponsiveScaffoldActionItem {
   final Widget icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final ResponsiveScaffoldActionItemStyle style;
 
   ResponsiveScaffoldActionItem({

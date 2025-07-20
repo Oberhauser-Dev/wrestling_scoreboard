@@ -21,7 +21,6 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_o
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
@@ -47,271 +46,275 @@ class TeamMatchOverview extends ConsumerWidget {
       id: id,
       initialData: match,
       builder: (context, match) {
-        final pdfAction = ResponsiveScaffoldActionItem(
-          label: localizations.print,
-          icon: const Icon(Icons.print),
-          onTap: () async {
-            final teamMatchBouts = await ref.readAsync(
-              manyDataStreamProvider<TeamMatchBout, TeamMatch>(
-                ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
-              ).future,
-            );
+        return SingleConsumer<Organization>(
+          id: match.organization?.id,
+          initialData: match.organization,
+          builder: (context, organization) {
+            final pdfAction = ResponsiveScaffoldActionItem(
+              label: localizations.print,
+              icon: const Icon(Icons.print),
+              onTap: () async {
+                final teamMatchBouts = await ref.readAsync(
+                  manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+                    ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
+                  ).future,
+                );
 
-            final teamMatchBoutActions = Map.fromEntries(
-              await Future.wait(
-                teamMatchBouts.map((teamMatchBout) async {
-                  final boutActions = await ref.readAsync(
-                    manyDataStreamProvider<BoutAction, Bout>(
-                      ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
-                    ).future,
-                  );
-                  // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
-                  return MapEntry(teamMatchBout, boutActions);
-                }),
-              ),
-            );
-            final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
-
-            final homeParticipations = await ref.readAsync(
-              manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-              ).future,
-            );
-
-            final guestParticipations = await ref.readAsync(
-              manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-              ).future,
-            );
-
-            if (context.mounted) {
-              final bytes =
-                  await TeamMatchTranscript(
-                    teamMatchBoutActions: teamMatchBoutActions,
-                    buildContext: context,
-                    teamMatch: match,
-                    boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                    isTimeCountDown: isTimeCountDown,
-                    guestParticipations: guestParticipations,
-                    homeParticipations: homeParticipations,
-                  ).buildPdf();
-              Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
-            }
-          },
-        );
-
-        return ConditionalOrganizationImportActionBuilder(
-          id: id,
-          organization: match.organization!,
-          importType: OrganizationImportType.teamMatch,
-          builder: (context, importAction) {
-            return FavoriteScaffold<TeamMatch>(
-              dataObject: match,
-              label: localizations.match,
-              details: '${match.home.team.name} - ${match.guest.team.name}',
-              actions: [
-                ResponsiveScaffoldActionItem(
-                  onTap:
-                      () async => navigateToScratchBoutOverview(
-                        context,
-                        ref,
-                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                      ),
-                  icon: const Icon(Icons.rocket_launch),
-                  label: localizations.launchScratchBout,
-                ),
-                if (importAction != null) importAction,
-                // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
-                ResponsiveScaffoldActionItem(
-                  label: localizations.report,
-                  onTap: () async {
-                    final reporter = match.organization?.getReporter();
-                    if (reporter != null) {
-                      final tmbouts = await _getBouts(ref, match: match);
-                      final boutMap = Map.fromEntries(
-                        await Future.wait(
-                          tmbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
-                        ),
+                final teamMatchBoutActions = Map.fromEntries(
+                  await Future.wait(
+                    teamMatchBouts.map((teamMatchBout) async {
+                      final boutActions = await ref.readAsync(
+                        manyDataStreamProvider<BoutAction, Bout>(
+                          ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
+                        ).future,
                       );
-                      final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+                      // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+                      return MapEntry(teamMatchBout, boutActions);
+                    }),
+                  ),
+                );
+                final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
 
-                      await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
-                    } else {
-                      if (context.mounted) {
-                        showExceptionDialog(
-                          context: context,
-                          exception: Exception(
-                            match.organization == null
-                                ? 'No organization applied to match with id ${match.id}. Please contact the development team.'
-                                : 'No reporter selected for the organization ${match.organization?.name}. Please select one in the organization editor.',
+                final homeParticipations = await ref.readAsync(
+                  manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
+                  ).future,
+                );
+
+                final guestParticipations = await ref.readAsync(
+                  manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
+                  ).future,
+                );
+
+                if (context.mounted) {
+                  final bytes =
+                      await TeamMatchTranscript(
+                        teamMatchBoutActions: teamMatchBoutActions,
+                        buildContext: context,
+                        teamMatch: match,
+                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                        isTimeCountDown: isTimeCountDown,
+                        guestParticipations: guestParticipations,
+                        homeParticipations: homeParticipations,
+                      ).buildPdf();
+                  Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
+                }
+              },
+            );
+
+            return ConditionalOrganizationImportActionBuilder(
+              id: id,
+              organization: organization,
+              importType: OrganizationImportType.teamMatch,
+              builder: (context, importAction) {
+                final reporter = organization.getReporter();
+                return FavoriteScaffold<TeamMatch>(
+                  dataObject: match,
+                  label: localizations.match,
+                  details: '${match.home.team.name} - ${match.guest.team.name}',
+                  actions: [
+                    ResponsiveScaffoldActionItem(
+                      onTap:
+                          () async => navigateToScratchBoutOverview(
+                            context,
+                            ref,
+                            boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                           ),
-                          stackTrace: null,
-                        );
-                      }
-                    }
-                  },
-                  icon: const Icon(Icons.description),
-                ),
-                pdfAction,
-                ResponsiveScaffoldActionItem(
-                  style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
-                  icon: const Icon(Icons.tv),
-                  onTap: () => handleSelectedMatchSequence(match, context),
-                  label: localizations.display,
-                ),
-              ],
-              tabs: [
-                Tab(child: HeadingText(localizations.info)),
-                if (match.league != null) Tab(child: HeadingText(localizations.lineups)),
-                Tab(child: HeadingText(localizations.bouts)),
-                Tab(child: HeadingText(localizations.persons)),
-              ],
-              body: SingleConsumer<TeamLineup>(
-                id: match.home.id!,
-                initialData: match.home,
-                builder:
-                    (context, homeLineup) => SingleConsumer<TeamLineup>(
-                      id: match.guest.id!,
-                      initialData: match.guest,
-                      builder: (context, guestLineup) {
-                        final contentItems = [
-                          ContentItem(
-                            title: match.referee?.fullName ?? '-',
-                            subtitle: localizations.referee,
-                            icon: Icons.sports,
-                          ),
-                          ContentItem(
-                            title: match.matChairman?.fullName ?? '-',
-                            subtitle: localizations.matChairman,
-                            icon: Icons.manage_accounts,
-                          ),
-                          ContentItem(
-                            title: match.judge?.fullName ?? '-',
-                            subtitle: localizations.judge,
-                            icon: Icons.manage_accounts,
-                          ),
-                          ContentItem(
-                            title: match.timeKeeper?.fullName ?? '-',
-                            subtitle: localizations.timeKeeper,
-                            icon: Icons.pending_actions,
-                          ),
-                          ContentItem(
-                            title: match.transcriptWriter?.fullName ?? '-',
-                            subtitle: localizations.transcriptionWriter,
-                            icon: Icons.history_edu,
-                          ),
-                          ContentItem(
-                            title: '-', // TODO: Multiple stewards
-                            subtitle: localizations.steward,
-                            icon: Icons.security,
-                          ),
-                        ];
-                        final items = [
-                          InfoWidget(
-                            obj: match,
-                            editPage: TeamMatchEdit(teamMatch: match, initialOrganization: match.organization),
-                            onDelete:
-                                () async =>
-                                    (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
-                            classLocale: localizations.match,
-                            children: [
-                              ContentItem(title: match.no ?? '-', subtitle: localizations.matchNumber, icon: Icons.tag),
+                      icon: const Icon(Icons.rocket_launch),
+                      label: localizations.launchScratchBout,
+                    ),
+                    if (importAction != null) importAction,
+                    // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
+                    ResponsiveScaffoldActionItem(
+                      label:
+                          reporter == null
+                              ? 'No reporter available. Please select one in the organization editor of ${organization.name}.'
+                              : localizations.report,
+                      onTap:
+                          reporter == null
+                              ? null
+                              : () async {
+                                final tmbouts = await _getBouts(ref, match: match);
+                                final boutMap = Map.fromEntries(
+                                  await Future.wait(
+                                    tmbouts.map(
+                                      (bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout)),
+                                    ),
+                                  ),
+                                );
+                                final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+
+                                await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
+                              },
+                      icon: const Icon(Icons.description),
+                    ),
+                    pdfAction,
+                    ResponsiveScaffoldActionItem(
+                      style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+                      icon: const Icon(Icons.tv),
+                      onTap: () => handleSelectedMatchSequence(match, context),
+                      label: localizations.display,
+                    ),
+                  ],
+                  tabs: [
+                    Tab(child: HeadingText(localizations.info)),
+                    if (match.league != null) Tab(child: HeadingText(localizations.lineups)),
+                    Tab(child: HeadingText(localizations.bouts)),
+                    Tab(child: HeadingText(localizations.persons)),
+                  ],
+                  body: SingleConsumer<TeamLineup>(
+                    id: match.home.id!,
+                    initialData: match.home,
+                    builder:
+                        (context, homeLineup) => SingleConsumer<TeamLineup>(
+                          id: match.guest.id!,
+                          initialData: match.guest,
+                          builder: (context, guestLineup) {
+                            final contentItems = [
                               ContentItem(
-                                title: match.location ?? 'no location',
-                                subtitle: localizations.place,
-                                icon: Icons.place,
+                                title: match.referee?.fullName ?? '-',
+                                subtitle: localizations.referee,
+                                icon: Icons.sports,
                               ),
                               ContentItem(
-                                title: match.date.toDateTimeString(context),
-                                subtitle: localizations.date,
-                                icon: Icons.date_range,
+                                title: match.matChairman?.fullName ?? '-',
+                                subtitle: localizations.matChairman,
+                                icon: Icons.manage_accounts,
                               ),
                               ContentItem(
-                                title: homeLineup.team.name,
-                                subtitle: '${localizations.team} ${localizations.red}',
-                                icon: Icons.group,
+                                title: match.judge?.fullName ?? '-',
+                                subtitle: localizations.judge,
+                                icon: Icons.manage_accounts,
                               ),
                               ContentItem(
-                                title: guestLineup.team.name,
-                                subtitle: '${localizations.team} ${localizations.blue}',
-                                icon: Icons.group,
+                                title: match.timeKeeper?.fullName ?? '-',
+                                subtitle: localizations.timeKeeper,
+                                icon: Icons.pending_actions,
                               ),
                               ContentItem(
-                                title: match.comment ?? '-',
-                                subtitle: localizations.comment,
-                                icon: Icons.comment,
+                                title: match.transcriptWriter?.fullName ?? '-',
+                                subtitle: localizations.transcriptionWriter,
+                                icon: Icons.history_edu,
                               ),
                               ContentItem(
-                                title: match.league?.fullname ?? '-',
-                                subtitle: localizations.league,
-                                icon: Icons.emoji_events,
+                                title: '-', // TODO: Multiple stewards
+                                subtitle: localizations.steward,
+                                icon: Icons.security,
                               ),
-                              ContentItem(
-                                title:
-                                    match.seasonPartition?.asSeasonPartition(
-                                      context,
-                                      match.league?.division.seasonPartitions,
-                                    ) ??
-                                    '-',
-                                subtitle: localizations.seasonPartition,
-                                icon: Icons.sunny_snowing,
-                              ),
-                            ],
-                          ),
-                          if (match.league != null)
-                            LoadingBuilder<User?>(
-                              future: ref.watch(userNotifierProvider),
-                              builder: (context, user) {
-                                final items = [
+                            ];
+                            final items = [
+                              InfoWidget(
+                                obj: match,
+                                editPage: TeamMatchEdit(teamMatch: match, initialOrganization: organization),
+                                onDelete:
+                                    () async =>
+                                        (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
+                                classLocale: localizations.match,
+                                children: [
+                                  ContentItem(
+                                    title: match.no ?? '-',
+                                    subtitle: localizations.matchNumber,
+                                    icon: Icons.tag,
+                                  ),
+                                  ContentItem(
+                                    title: match.location ?? 'no location',
+                                    subtitle: localizations.place,
+                                    icon: Icons.place,
+                                  ),
+                                  ContentItem(
+                                    title: match.date.toDateTimeString(context),
+                                    subtitle: localizations.date,
+                                    icon: Icons.date_range,
+                                  ),
                                   ContentItem(
                                     title: homeLineup.team.name,
-                                    icon: Icons.view_list,
-                                    onTap:
-                                        (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                            ? null
-                                            : () async => handleSelectedLineup(
-                                              context,
-                                              ref,
-                                              homeLineup,
-                                              match,
-                                              navigator,
-                                              league: match.league!,
-                                            ),
+                                    subtitle: '${localizations.team} ${localizations.red}',
+                                    icon: Icons.group,
                                   ),
                                   ContentItem(
                                     title: guestLineup.team.name,
-                                    icon: Icons.view_list,
-                                    onTap:
-                                        (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                            ? null
-                                            : () async => handleSelectedLineup(
-                                              context,
-                                              ref,
-                                              guestLineup,
-                                              match,
-                                              navigator,
-                                              league: match.league!,
-                                            ),
+                                    subtitle: '${localizations.team} ${localizations.blue}',
+                                    icon: Icons.group,
                                   ),
-                                ];
-                                return GroupedList(
-                                  header: const HeadingItem(),
-                                  itemCount: items.length,
-                                  itemBuilder: (context, index) => items[index],
-                                );
-                              },
-                            ),
-                          TeamMatchBoutList(filterObject: match),
-                          GroupedList(
-                            header: const HeadingItem(),
-                            itemCount: contentItems.length,
-                            itemBuilder: (context, index) => contentItems[index],
-                          ),
-                        ];
-                        return TabGroup(items: items);
-                      },
-                    ),
-              ),
+                                  ContentItem(
+                                    title: match.comment ?? '-',
+                                    subtitle: localizations.comment,
+                                    icon: Icons.comment,
+                                  ),
+                                  ContentItem(
+                                    title: match.league?.fullname ?? '-',
+                                    subtitle: localizations.league,
+                                    icon: Icons.emoji_events,
+                                  ),
+                                  ContentItem(
+                                    title:
+                                        match.seasonPartition?.asSeasonPartition(
+                                          context,
+                                          match.league?.division.seasonPartitions,
+                                        ) ??
+                                        '-',
+                                    subtitle: localizations.seasonPartition,
+                                    icon: Icons.sunny_snowing,
+                                  ),
+                                ],
+                              ),
+                              if (match.league != null)
+                                LoadingBuilder<User?>(
+                                  future: ref.watch(userNotifierProvider),
+                                  builder: (context, user) {
+                                    final items = [
+                                      ContentItem(
+                                        title: homeLineup.team.name,
+                                        icon: Icons.view_list,
+                                        onTap:
+                                            (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                                ? null
+                                                : () async => handleSelectedLineup(
+                                                  context,
+                                                  ref,
+                                                  homeLineup,
+                                                  match,
+                                                  navigator,
+                                                  league: match.league!,
+                                                ),
+                                      ),
+                                      ContentItem(
+                                        title: guestLineup.team.name,
+                                        icon: Icons.view_list,
+                                        onTap:
+                                            (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                                ? null
+                                                : () async => handleSelectedLineup(
+                                                  context,
+                                                  ref,
+                                                  guestLineup,
+                                                  match,
+                                                  navigator,
+                                                  league: match.league!,
+                                                ),
+                                      ),
+                                    ];
+                                    return GroupedList(
+                                      header: const HeadingItem(),
+                                      itemCount: items.length,
+                                      itemBuilder: (context, index) => items[index],
+                                    );
+                                  },
+                                ),
+                              TeamMatchBoutList(filterObject: match),
+                              GroupedList(
+                                header: const HeadingItem(),
+                                itemCount: contentItems.length,
+                                itemBuilder: (context, index) => contentItems[index],
+                              ),
+                            ];
+                            return TabGroup(items: items);
+                          },
+                        ),
+                  ),
+                );
+              },
             );
           },
         );
