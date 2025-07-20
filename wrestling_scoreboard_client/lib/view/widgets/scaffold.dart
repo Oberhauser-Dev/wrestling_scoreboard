@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
@@ -45,6 +46,9 @@ class WindowStateScaffold extends ConsumerWidget {
       builder: (BuildContext context, WindowState data) {
         final hideAppBar = data == WindowState.fullscreen;
         final appBar = AppBar(
+          // FIXME: For a scratch bout the route is nested in a ShellRoute, which does hide the back button.
+          // https://github.com/flutter/flutter/issues/144687
+          leading: context.canPop() ? BackButton(onPressed: () => Navigator.of(context).pop()) : null,
           title: appBarTitle,
           bottom: appBarBottom,
           actions: [
