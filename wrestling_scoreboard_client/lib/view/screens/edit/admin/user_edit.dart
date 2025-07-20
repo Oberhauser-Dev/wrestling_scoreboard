@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -58,14 +58,11 @@ class UserEditState extends ConsumerState<UserEdit> {
           alignedDropdown: true,
           child: SimpleDropdown<UserPrivilege>(
             isNullable: false,
-            hint: localizations.privilege,
+            label: localizations.privilege,
             isExpanded: true,
             options: UserPrivilege.values.map((value) => MapEntry(value, Text(value.name))),
             selected: _userPrivilege,
-            onChange:
-                (newValue) => setState(() {
-                  _userPrivilege = newValue!;
-                }),
+            onSaved: (newValue) => _userPrivilege = newValue!,
           ),
         ),
       ),

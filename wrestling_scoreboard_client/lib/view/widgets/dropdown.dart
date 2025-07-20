@@ -58,30 +58,33 @@ class SearchableDropdown<T> extends StatelessWidget {
 class SimpleDropdown<T> extends StatelessWidget {
   final Iterable<MapEntry<T, Widget>> options;
   final T? selected;
-  final void Function(T? value) onChange;
+  final void Function(T? value)? onChange;
+  final FormFieldSetter<T>? onSaved;
   final bool isExpanded;
   final bool isNullable;
-  final String? hint;
+  final String? label;
   final AlignmentGeometry alignment;
 
   const SimpleDropdown({
     required this.options,
     required this.selected,
-    required this.onChange,
+    this.onChange,
+    this.onSaved,
     this.isNullable = false,
     this.isExpanded = true,
     super.key,
-    this.hint,
+    this.label,
     this.alignment = AlignmentDirectional.centerStart,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomDropdown<T>(
-      hint: hint,
+      label: label,
       isExpanded: isExpanded,
       selected: selected,
       onChange: onChange,
+      onSaved: onSaved,
       options: options.map<DropdownMenuItem<T>>((entry) => DropdownMenuItem<T>(value: entry.key, child: entry.value)),
       alignment: alignment,
       isNullable: isNullable,
@@ -92,20 +95,22 @@ class SimpleDropdown<T> extends StatelessWidget {
 class CustomDropdown<T> extends StatelessWidget {
   final Iterable<DropdownMenuItem<T>> options;
   final T? selected;
-  final void Function(T? value) onChange;
+  final void Function(T? value)? onChange;
+  final FormFieldSetter<T>? onSaved;
   final bool isExpanded;
   final bool isNullable;
-  final String? hint;
+  final String? label;
   final AlignmentGeometry alignment;
 
   const CustomDropdown({
     required this.options,
     required this.selected,
-    required this.onChange,
+    this.onChange,
+    this.onSaved,
     this.isNullable = false,
     this.isExpanded = true,
     super.key,
-    this.hint,
+    this.label,
     this.alignment = AlignmentDirectional.centerStart,
   });
 
@@ -120,13 +125,16 @@ class CustomDropdown<T> extends StatelessWidget {
         ),
       );
     }
-    return DropdownButton<T>(
-      hint: hint == null ? null : Text(hint!),
+    return DropdownButtonFormField<T>(
+      hint: label == null ? null : Text(label!),
       isExpanded: isExpanded,
       value: selected,
-      onChanged: onChange,
+      // FIXME: onChange method is required, in order to show as enabled: https://github.com/flutter/flutter/issues/57953
+      onChanged: onChange ?? (_) {},
+      onSaved: onSaved,
       items: items,
       alignment: alignment,
+      decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: label),
     );
   }
 }

@@ -133,11 +133,11 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<ContestantStatus>(
-            hint: localizations.result,
+            label: localizations.result,
             isNullable: true,
             selected: _contestantStatus,
             options: ContestantStatus.values.map((status) => MapEntry(status, Text(status.localize(context)))),
-            onChange: (newValue) => setState(() => _contestantStatus = newValue),
+            onSaved: (newValue) => _contestantStatus = newValue,
           ),
         ),
       ),

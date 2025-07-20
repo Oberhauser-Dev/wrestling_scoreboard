@@ -88,14 +88,11 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
           alignedDropdown: true,
           child: SimpleDropdown<Gender>(
             isNullable: true,
-            hint: localizations.gender,
+            label: localizations.gender,
             isExpanded: true,
             options: Gender.values.map((Gender value) => MapEntry(value, Text(value.localize(context)))),
             selected: _gender,
-            onChange:
-                (newValue) => setState(() {
-                  _gender = newValue;
-                }),
+            onSaved: (newValue) => _gender = newValue,
           ),
         ),
       ),

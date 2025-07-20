@@ -74,14 +74,11 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<BoutRole>(
-            hint: localizations.winner,
+            label: localizations.winner,
             isNullable: true,
             selected: _winnerRole,
             options: BoutRole.values.map((BoutRole value) => MapEntry(value, Text(value.name))),
-            onChange:
-                (BoutRole? newValue) => setState(() {
-                  _winnerRole = newValue;
-                }),
+            onSaved: (BoutRole? newValue) => _winnerRole = newValue,
           ),
         ),
       ),
@@ -90,7 +87,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<BoutResult>(
-            hint: localizations.result,
+            label: localizations.result,
             isNullable: true,
             selected: _boutResult,
             options: BoutResult.values.map(
@@ -99,10 +96,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
                 Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context))),
               ),
             ),
-            onChange:
-                (BoutResult? newValue) => setState(() {
-                  _boutResult = newValue;
-                }),
+            onSaved: (BoutResult? newValue) => _boutResult = newValue,
           ),
         ),
       ),

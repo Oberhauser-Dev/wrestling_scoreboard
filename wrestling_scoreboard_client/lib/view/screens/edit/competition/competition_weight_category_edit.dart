@@ -75,16 +75,13 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           title: ButtonTheme(
             alignedDropdown: true,
             child: SimpleDropdown<CompetitionSystem>(
-              hint: localizations.result,
+              label: localizations.result,
               isNullable: true,
               selected: _competitionSystem,
               options: CompetitionSystem.values.map(
                 (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
               ),
-              onChange:
-                  (newValue) => setState(() {
-                    _competitionSystem = newValue;
-                  }),
+              onSaved: (newValue) => _competitionSystem = newValue,
             ),
           ),
         ),
