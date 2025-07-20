@@ -47,16 +47,15 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<CompetitionSystem>(
-            hint: localizations.result,
+            label: localizations.result,
             isNullable: false,
             selected: _competitionSystem,
             options: CompetitionSystem.values.map(
               (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
             ),
-            onChange:
-                (newValue) => setState(() {
-                  if (newValue != null) _competitionSystem = newValue;
-                }),
+            onSaved: (newValue) {
+              if (newValue != null) _competitionSystem = newValue;
+            },
           ),
         ),
       ),

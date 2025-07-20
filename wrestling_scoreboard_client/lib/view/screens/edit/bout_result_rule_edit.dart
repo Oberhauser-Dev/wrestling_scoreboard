@@ -59,7 +59,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<BoutResult>(
-            hint: localizations.result,
+            label: localizations.result,
             isNullable: false,
             selected: _boutResult,
             options: BoutResult.values.map(
@@ -68,10 +68,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
                 Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context))),
               ),
             ),
-            onChange:
-                (BoutResult? newValue) => setState(() {
-                  _boutResult = newValue!;
-                }),
+            onSaved: (BoutResult? newValue) => _boutResult = newValue!,
           ),
         ),
       ),
@@ -81,16 +78,13 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
           alignedDropdown: true,
           child: SimpleDropdown<WrestlingStyle>(
             isNullable: true,
-            hint: localizations.wrestlingStyle,
+            label: localizations.wrestlingStyle,
             isExpanded: true,
             options: WrestlingStyle.values.map((WrestlingStyle style) {
               return MapEntry(style, Text('${style.localize(context)} (${style.abbreviation(context)})'));
             }),
             selected: _wrestlingStyle,
-            onChange:
-                (newValue) => setState(() {
-                  _wrestlingStyle = newValue;
-                }),
+            onSaved: (newValue) => _wrestlingStyle = newValue,
           ),
         ),
       ),

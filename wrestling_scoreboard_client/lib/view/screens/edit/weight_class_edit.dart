@@ -55,16 +55,13 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<WrestlingStyle>(
-            hint: localizations.wrestlingStyle,
+            label: localizations.wrestlingStyle,
             isExpanded: true,
             options: WrestlingStyle.values.map((WrestlingStyle style) {
               return MapEntry(style, Text('${style.localize(context)} (${style.abbreviation(context)})'));
             }),
             selected: _wrestlingStyle,
-            onChange:
-                (newValue) => setState(() {
-                  _wrestlingStyle = newValue!;
-                }),
+            onSaved: (newValue) => _wrestlingStyle = newValue!,
           ),
         ),
       ),
@@ -73,16 +70,13 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
         title: ButtonTheme(
           alignedDropdown: true,
           child: SimpleDropdown<WeightUnit>(
-            hint: localizations.weightUnit,
+            label: localizations.weightUnit,
             isExpanded: true,
             options: WeightUnit.values.map((WeightUnit value) {
               return MapEntry(value, Text(value.toAbbr()));
             }),
             selected: _unit,
-            onChange:
-                (value) => setState(() {
-                  _unit = value!;
-                }),
+            onSaved: (value) => _unit = value!,
           ),
         ),
       ),

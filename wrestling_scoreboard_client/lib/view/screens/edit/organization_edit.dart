@@ -92,14 +92,11 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           alignedDropdown: true,
           child: SimpleDropdown<WrestlingApiProvider>(
             isNullable: true,
-            hint: localizations.apiProvider,
+            label: localizations.apiProvider,
             isExpanded: true,
             options: WrestlingApiProvider.values.map((value) => MapEntry(value, Text(value.name))),
             selected: _apiProvider,
-            onChange:
-                (newValue) => setState(() {
-                  _apiProvider = newValue;
-                }),
+            onSaved: (newValue) => _apiProvider = newValue,
           ),
         ),
       ),
@@ -142,14 +139,11 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           alignedDropdown: true,
           child: SimpleDropdown<WrestlingReportProvider>(
             isNullable: true,
-            hint: localizations.reportProvider,
+            label: localizations.reportProvider,
             isExpanded: true,
             options: WrestlingReportProvider.values.map((value) => MapEntry(value, Text(value.name))),
             selected: _reportProvider,
-            onChange:
-                (newValue) => setState(() {
-                  _reportProvider = newValue;
-                }),
+            onSaved: (newValue) => _reportProvider = newValue,
           ),
         ),
       ),
