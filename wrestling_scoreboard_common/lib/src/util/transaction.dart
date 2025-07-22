@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 
 Map<String, Completer> _transactionLocks = {};
 
-final log = Logger('Transaction');
+final _logger = Logger('Transaction');
 
 Future<T> runSynchronized<T>({
   required String key,
@@ -25,7 +25,7 @@ Future<T> runSynchronized<T>({
     completer?.complete();
     return result;
   } catch (error) {
-    log.info(error);
+    _logger.info(error);
     completer?.completeError(error);
     rethrow;
   } finally {
@@ -62,7 +62,7 @@ Future<T> retry<T>({
         onTimeout: () => throw 'Async execution took longer than $timeout. Retry ${attempt + 1}',
       );
     } catch (error) {
-      log.info(error);
+      _logger.info(error);
     }
   }
   throw Exception('Final attempt went wrong.');

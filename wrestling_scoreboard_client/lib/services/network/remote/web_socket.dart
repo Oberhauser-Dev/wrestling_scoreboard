@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/url.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+
+final _logger = Logger('WebSocketManager');
 
 enum WebSocketConnectionState { connecting, connected, disconnecting, disconnected }
 
@@ -81,29 +83,29 @@ class WebSocketManager {
             messageHandler,
             onError: (e) {
               if (e is WebSocketChannelException) {
-                log('Websocket connection refused by server');
+                _logger.warning('Websocket connection refused by server');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnecting);
               }
             },
             onDone: () {
               if (_channel?.closeCode == 4210) {
-                log('Websocket connection reconnecting: ${_channel?.closeReason}');
+                _logger.info('Websocket connection reconnecting: ${_channel?.closeReason}');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               } else if (_channel?.closeCode == 1001) {
-                log('Websocket connection closed by client ${_channel?.closeReason}');
+                _logger.info('Websocket connection closed by client ${_channel?.closeReason}');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               } else if (_channel?.closeCode == null) {
-                log('Websocket connection closed by server');
+                _logger.info('Websocket connection closed by server');
                 // Avoid overriding previous SocketException with setting a disconnected state
               } else {
-                log('Websocket connection closed by server ${_channel?.closeReason}');
+                _logger.info('Websocket connection closed by server ${_channel?.closeReason}');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               }
               _channel = null;
             },
           );
           await _channel?.ready.timeout(const Duration(seconds: 5));
-          log('Websocket connection established: $_wsUrl');
+          _logger.fine('Websocket connection established: $_wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
           // Send authentication token, if signed in.
           if (dataManager.authService != null) {
@@ -111,7 +113,7 @@ class WebSocketManager {
           }
         } on SocketException catch (e) {
           // Thrown, when connection failed, waiting for `ready` state.
-          log('Websocket connection refused by server: $e');
+          _logger.warning('Websocket connection refused by server: $e');
           onWebSocketConnection.sink.addError(e);
         }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {

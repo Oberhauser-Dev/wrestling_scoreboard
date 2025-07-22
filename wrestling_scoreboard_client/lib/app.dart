@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logging/logging.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
@@ -16,6 +20,7 @@ import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class WrestlingScoreboardApp extends ConsumerStatefulWidget {
   const WrestlingScoreboardApp({super.key});
@@ -211,6 +216,31 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
           }
         });
       }
+    }, fireImmediately: true);
+
+    ref.listenManual(appDataDirectoryNotifierProvider, (previous, next) async {
+      final appDataDir = await next;
+      if (appDataDir == null) return;
+      final now = MockableDateTime.now();
+      final loggingDir = path.join(appDataDir, 'logs');
+
+      // Delete all logs older than 31 days
+      await Directory(loggingDir)
+          .list()
+          .where((event) {
+            final dateStr = event.uri.pathSegments.last.split('_')[0];
+            final date = DateTime.tryParse(dateStr);
+            return date != null && date.isBefore(now.subtract(Duration(days: 31)));
+          })
+          .forEach((element) => element.delete());
+
+      final loggingFile = File(
+        path.join(loggingDir, '${now.toIso8601String().substring(0, 10)}_wrestling-scoreboard-client.log'),
+      );
+      await loggingFile.create(recursive: true);
+      Logger.root.onRecord.listen((record) {
+        loggingFile.writeAsString('${record.formatted}\n', mode: FileMode.append);
+      });
     }, fireImmediately: true);
   }
 

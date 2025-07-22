@@ -41,6 +41,7 @@
   },
   "proposeApiImportDuration": "Dauer für den Vorschlag eines API-Imports",
   "importIncludeSubjacent": "Importiere auch alle darunderliegenden Daten. Dies kann länger dauern und bei Zeitüberschreitung oder inkonsistenten Daten fehlschlagen!",
+  "appDataDirectory": "Ordner für App-Daten",
   "reportProvider": "Report-Anbieter",
   "report": "Report",
   "print": "Drucken",

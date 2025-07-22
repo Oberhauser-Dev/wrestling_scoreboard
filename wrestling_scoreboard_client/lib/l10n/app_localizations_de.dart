@@ -110,6 +110,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Importiere auch alle darunderliegenden Daten. Dies kann länger dauern und bei Zeitüberschreitung oder inkonsistenten Daten fehlschlagen!';
 
   @override
+  String get appDataDirectory => 'Ordner für App-Daten';
+
+  @override
   String get reportProvider => 'Report-Anbieter';
 
   @override

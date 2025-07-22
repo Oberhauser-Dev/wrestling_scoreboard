@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
@@ -228,44 +229,71 @@ class CustomSettingsScreen extends ConsumerWidget {
               );
             },
           ),
-          Restricted(
-            privilege: UserPrivilege.write,
-            child: LoadingBuilder<Duration>(
-              future: ref.watch(proposeApiImportDurationNotifierProvider),
-              builder: (context, proposeApiImportDuration) {
-                return SettingsSection(
-                  title: localizations.services,
-                  action: TextButton(
-                    onPressed: () async {
-                      proposeApiImportDuration = const Duration(days: 2);
-                      await ref
-                          .read(proposeApiImportDurationNotifierProvider.notifier)
-                          .setState(proposeApiImportDuration);
-                    },
-                    child: Text(localizations.reset),
-                  ),
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.timelapse),
-                      title: Text(localizations.proposeApiImportDuration),
-                      subtitle: Text(proposeApiImportDuration.formatDaysHoursMinutes(context)),
-                      onTap: () async {
-                        final val = await showDurationDialog(
-                          context: context,
-                          initialDuration: proposeApiImportDuration,
-                          // TODO: Allow days in duration picker
-                          mode: DurationPickerMode.hm,
-                          maxValue: const Duration(days: 365),
-                        );
-                        if (val != null) {
-                          await ref.read(proposeApiImportDurationNotifierProvider.notifier).setState(val);
-                        }
+          LoadingBuilder<Duration>(
+            future: ref.watch(proposeApiImportDurationNotifierProvider),
+            builder: (context, proposeApiImportDuration) {
+              return LoadingBuilder<String?>(
+                future: ref.watch(appDataDirectoryNotifierProvider),
+                builder: (context, appDataDirectory) {
+                  return SettingsSection(
+                    title: localizations.services,
+                    action: TextButton(
+                      onPressed: () async {
+                        proposeApiImportDuration = const Duration(days: 2);
+                        await ref
+                            .read(proposeApiImportDurationNotifierProvider.notifier)
+                            .setState(proposeApiImportDuration);
+
+                        await ref.read(appDataDirectoryNotifierProvider.notifier).resetState();
                       },
+                      child: Text(localizations.reset),
                     ),
-                  ],
-                );
-              },
-            ),
+                    children: [
+                      Restricted(
+                        privilege: UserPrivilege.write,
+                        child: ListTile(
+                          leading: const Icon(Icons.timelapse),
+                          title: Text(localizations.proposeApiImportDuration),
+                          subtitle: Text(proposeApiImportDuration.formatDaysHoursMinutes(context)),
+                          onTap: () async {
+                            final val = await showDurationDialog(
+                              context: context,
+                              initialDuration: proposeApiImportDuration,
+                              // TODO: Allow days in duration picker
+                              mode: DurationPickerMode.hm,
+                              maxValue: const Duration(days: 365),
+                            );
+                            if (val != null) {
+                              await ref.read(proposeApiImportDurationNotifierProvider.notifier).setState(val);
+                            }
+                          },
+                        ),
+                      ),
+                      // App data is not supported on web
+                      if (!kIsWeb)
+                        ListTile(
+                          leading: const Icon(Icons.folder),
+                          title: Text(localizations.appDataDirectory),
+                          subtitle: Text(appDataDirectory ?? localizations.noneSelected),
+                          onTap: () async {
+                            final String? dirPath = await file_selector.getDirectoryPath();
+                            if (dirPath != null) {
+                              await ref.read(appDataDirectoryNotifierProvider.notifier).setState(dirPath);
+                            }
+                          },
+                          trailing:
+                              appDataDirectory == null
+                                  ? null
+                                  : IconButton(
+                                    icon: Icon(Icons.folder_open),
+                                    onPressed: () => launchUrl(Uri.parse('file:$appDataDirectory')),
+                                  ),
+                        ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
           LoadingBuilder<Duration>(
             future: ref.watch(networkTimeoutNotifierProvider),

@@ -9,6 +9,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
+import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/middleware/cors.dart';
 import 'package:wrestling_scoreboard_server/routes/api_route.dart';
@@ -19,25 +20,7 @@ import 'package:wrestling_scoreboard_server/services/pubspec.dart';
 Future<HttpServer> init() async {
   // Init logger
   Logger.root.level = env.logLevel ?? Level.INFO;
-  Logger.root.onRecord.listen((record) async {
-    String text = '[${record.time}] ${record.level.name}: ${record.message}';
-    if (record.error != null) {
-      text += '\nError: ${record.error}';
-      if (record.stackTrace != null) {
-        text += 'StackTrace: ${record.stackTrace}';
-      }
-    }
-    text = switch (record.level) {
-      Level.FINEST => '\x1B[38;5;247m$text\x1B[0m',
-      Level.FINER => '\x1B[38;5;248m$text\x1B[0m',
-      Level.FINE => '\x1B[38;5;249m$text\x1B[0m',
-      Level.CONFIG => '\x1B[34m$text\x1B[0m',
-      Level.WARNING => '\x1B[33m$text\x1B[0m',
-      Level.SEVERE || Level.SHOUT => '\x1B[31m$text\x1B[0m',
-      _ => text,
-    };
-    print(text);
-  });
+  Logger.root.onRecord.listen((record) => print(record.formatted));
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port

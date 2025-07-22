@@ -44,6 +44,7 @@
   },
   "proposeApiImportDuration": "Duration for proposing an API import",
   "importIncludeSubjacent": "Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!",
+  "appDataDirectory": "App Data Directory",
   "reportProvider": "Report Provider",
   "report": "Report",
   "print": "Print",
