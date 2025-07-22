@@ -109,6 +109,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!';
 
   @override
+  String get appDataDirectory => 'App Data Directory';
+
+  @override
   String get reportProvider => 'Report Provider';
 
   @override

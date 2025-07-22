@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
@@ -107,6 +109,28 @@ class ApiUrlNotifier extends _$ApiUrlNotifier {
   Future<void> setState(String? val) async {
     await Preferences.setString(Preferences.keyApiUrl, val);
     state = Future.value(val);
+  }
+}
+
+@Riverpod()
+class AppDataDirectoryNotifier extends _$AppDataDirectoryNotifier {
+  @override
+  Raw<Future<String?>> build() async {
+    return await Preferences.getString(Preferences.keyAppDataDirectory) ?? (await _defaultDirectory());
+  }
+
+  Future<void> setState(String? val) async {
+    await Preferences.setString(Preferences.keyAppDataDirectory, val);
+    state = Future.value(val);
+  }
+
+  Future<void> resetState() async {
+    await setState(await _defaultDirectory());
+  }
+
+  Future<String?> _defaultDirectory() async {
+    if (kIsWeb) return null;
+    return (await getApplicationSupportDirectory()).path;
   }
 }
 

@@ -4,12 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/mocks/main.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 final defaultProviderScope = ProviderScope(
   // Never retry any provider
@@ -18,6 +20,18 @@ final defaultProviderScope = ProviderScope(
 );
 
 void main() async {
+  Logger.root.level = Level.INFO;
+  Logger.root.onRecord.listen((record) {
+    debugPrint(record.formatted);
+  });
+  if (!kDebugMode) {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      if (!details.silent) {
+        Logger.root.shout('Framework caught an error', details.exception, details.stack);
+      }
+    };
+  }
+
   // Use [HashUrlStrategy] by default to support Single Page Application without configuring the server.
   if (Env.usePathUrlStrategy.fromBool()) {
     usePathUrlStrategy();

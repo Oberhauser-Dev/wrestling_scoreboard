@@ -272,6 +272,12 @@ abstract class AppLocalizations {
   /// **'Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!'**
   String get importIncludeSubjacent;
 
+  /// No description provided for @appDataDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'App Data Directory'**
+  String get appDataDirectory;
+
   /// No description provided for @reportProvider.
   ///
   /// In en, this message translates to:

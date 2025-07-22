@@ -1,13 +1,15 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 import 'dart:math';
 
+import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 // ignore: implementation_imports
 import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
+
+final _logger = Logger('MockDataManager');
 
 class MockDataManager extends DataManager {
   final latency = const Duration(milliseconds: 100);
@@ -565,7 +567,7 @@ class MockWebSocketManager implements WebSocketManager {
 
   @override
   addToSink(String val) {
-    developer.log('addToSink: $val');
+    _logger.fine('addToSink: $val');
   }
 
   @override

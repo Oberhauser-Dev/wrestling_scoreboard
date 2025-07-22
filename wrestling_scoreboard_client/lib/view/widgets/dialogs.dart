@@ -154,6 +154,7 @@ Future<void> catchAsync(BuildContext context, Future<void> Function() doAsync, {
     if (context.mounted) {
       await showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
     }
+    rethrow;
   }
 }
 

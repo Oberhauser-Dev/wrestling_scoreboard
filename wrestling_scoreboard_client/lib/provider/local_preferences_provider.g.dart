@@ -303,6 +303,55 @@ abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   }
 }
 
+@ProviderFor(AppDataDirectoryNotifier)
+const appDataDirectoryNotifierProvider = AppDataDirectoryNotifierProvider._();
+
+final class AppDataDirectoryNotifierProvider extends $NotifierProvider<AppDataDirectoryNotifier, Raw<Future<String?>>> {
+  const AppDataDirectoryNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appDataDirectoryNotifierProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appDataDirectoryNotifierHash();
+
+  @$internal
+  @override
+  AppDataDirectoryNotifier create() => AppDataDirectoryNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<String?>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<String?>>>(value));
+  }
+}
+
+String _$appDataDirectoryNotifierHash() => r'bbd8db761e198e5368dc171247f66769ce7f07bb';
+
+abstract class _$AppDataDirectoryNotifier extends $Notifier<Raw<Future<String?>>> {
+  Raw<Future<String?>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<String?>>, Raw<Future<String?>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<String?>>, Raw<Future<String?>>>,
+              Raw<Future<String?>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(BellSoundNotifier)
 const bellSoundNotifierProvider = BellSoundNotifierProvider._();
 

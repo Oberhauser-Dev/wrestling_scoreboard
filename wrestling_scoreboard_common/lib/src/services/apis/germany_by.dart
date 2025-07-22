@@ -18,7 +18,7 @@ import 'mocks/wrestler.json.dart';
 
 class ByGermanyWrestlingApi extends WrestlingApi {
   final String apiUrl;
-  final log = Logger('ByGermanyWrestlingApi');
+  final _logger = Logger('ByGermanyWrestlingApi');
 
   @override
   final BasicAuthService? authService;
@@ -329,7 +329,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       if (clubName == null || clubId == null) continue;
       if (clubName != clubName.trim()) {
         clubName = clubName.trim();
-        log.warning('Club with club name "$clubName" was trimmed');
+        _logger.warning('Club with club name "$clubName" was trimmed');
       }
 
       final club = Club(name: clubName, no: clubId, orgSyncId: clubId, organization: organization);
@@ -343,7 +343,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         if (teamName == null || teamId == null) continue;
         if (teamName != teamName.trim()) {
           teamName = teamName.trim();
-          log.warning('Team with team name "$teamName" was trimmed');
+          _logger.warning('Team with team name "$teamName" was trimmed');
         }
         final team = Team(name: teamName, orgSyncId: teamName, organization: organization);
         teamClubAffiliations.add(TeamClubAffiliation(team: team, club: club));
@@ -539,7 +539,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             );
             weightClass = divisionWeightClass.weightClass;
           } catch (e, st) {
-            log.severe(
+            _logger.severe(
               'The weight class ${weightClass.name} of division ${teamMatch.league!.division.fullname} cannot be found. '
               'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n'
               '$e\n'
@@ -591,7 +591,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),
               };
             } catch (e, st) {
-              log.severe('Could not parse bout result $result', e, st);
+              _logger.severe('Could not parse bout result $result', e, st);
               rethrow;
             }
           }
@@ -663,7 +663,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 actionType = BoutActionType.points;
                 pointCount = int.tryParse(actionStr);
                 if (pointCount == null) {
-                  log.warning('Action type "$actionStr" could not be parsed: $boutJson. The action is ignored.');
+                  _logger.warning('Action type "$actionStr" could not be parsed: $boutJson. The action is ignored.');
                   return null;
                 }
             }
@@ -684,7 +684,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 try {
                   return parseActionStr(str);
                 } catch (e, st) {
-                  log.severe('Invalid action string format: $str\n$boutJson', e, st);
+                  _logger.severe('Invalid action string format: $str\n$boutJson', e, st);
                   rethrow;
                 }
               }).nonNulls;
@@ -706,7 +706,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       );
       return Map.fromEntries(boutActionMapEntries.nonNulls);
     } on Exception catch (e, st) {
-      log.severe('Could not import bouts from bout list: $boutListJson', e, st);
+      _logger.severe('Could not import bouts from bout list: $boutListJson', e, st);
       rethrow;
     }
   }
@@ -752,7 +752,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          log.fine('Call API: $uri');
+          _logger.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the season list', response: response);
@@ -784,7 +784,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          log.fine('Call API: $uri');
+          _logger.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the saison list', response: response);
@@ -815,7 +815,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         final uri = Uri.parse(apiUrl).replace(queryParameters: {'op': 'listLiga', 'sid': seasonId});
         String body;
         if (!isMock) {
-          log.fine('Call API: $uri');
+          _logger.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the liga list (seasonId: $seasonId)', response: response);
@@ -860,7 +860,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          log.fine('Call API: $uri');
+          _logger.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException(
@@ -898,7 +898,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String body;
         if (!isMock) {
-          log.fine('Call API: $uri');
+          _logger.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException(
@@ -941,7 +941,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
         String? body;
         if (!isMock) {
-          log.fine('Call API: $uri');
+          _logger.fine('Call API: $uri');
           final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the wrestler (passcode: $passCode)', response: response);
