@@ -20,7 +20,7 @@ class TeamMatchBoutController extends ShelfController<TeamMatchBout>
     return super.deleteSingle(id);
   }
 
-  Future<List<TeamMatchBout>> getByTeamMatch(bool obfuscate, int id) async {
+  Future<List<TeamMatchBout>> getByTeamMatch(int id, {required bool obfuscate}) async {
     return await getMany(
       conditions: ['team_match_id = @id'],
       substitutionValues: {'id': id},

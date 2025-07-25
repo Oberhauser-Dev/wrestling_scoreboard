@@ -44,7 +44,8 @@ melos:
     upgrade: melos exec flutter pub upgrade
 
     test:select:
-      run: melos exec -c 1 -- flutter test
+      # Set max concurrency to 1, as server tests share the same database.
+      run: melos exec -c 1 -- flutter test --concurrency=1
       packageFilters:
         dirExists: test
       description: Run `flutter test` for selected packages.
