@@ -130,9 +130,9 @@ class TeamMatchController extends ShelfController<TeamMatch>
         SELECT tmf.*
         FROM team_match_bout AS tmf
         JOIN bout ON bout.id = tmf.bout_id
-        ${hasRed ? 'JOIN participant_state AS ps_red ON ps_red.id = bout.red_id' : ''}
-        ${hasBlue ? 'JOIN participant_state AS ps_blue ON ps_blue.id = bout.blue_id' : ''}
-        WHERE bout.weight_class_id = ${tmb.weightClass!.id}
+        ${hasRed ? 'JOIN athlete_bout_state AS ps_red ON ps_red.id = bout.red_id' : ''}
+        ${hasBlue ? 'JOIN athlete_bout_state AS ps_blue ON ps_blue.id = bout.blue_id' : ''}
+        WHERE tmf.weight_class_id = ${tmb.weightClass!.id}
         AND tmf.team_match_id = ${teamMatch.id}
         AND ${hasRed ? 'ps_red.membership_id = ${tmb.bout.r!.membership.id}' : 'bout.red_id IS NULL'}
         AND ${hasBlue ? 'ps_blue.membership_id = ${tmb.bout.b!.membership.id}' : 'bout.blue_id IS NULL'};
