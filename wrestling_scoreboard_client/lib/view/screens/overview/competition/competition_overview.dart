@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
+import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/competition_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_age_category_edit.dart';
@@ -351,7 +352,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
 
 extension CompetitionFileExt on Competition {
   String get fileBaseName {
-    final fileNameBuilder = [date.toIso8601String().substring(0, 10), no, name];
+    final fileNameBuilder = [date.toFileNameDateFormat(), no, name];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
     return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
   }

@@ -12,6 +12,9 @@ linter:
 analyzer:
   language:
     strict-raw-types: true
+  errors:
+    # Needed for freezed package:
+    invalid_annotation_target: ignore
 
 formatter:
   page_width: 120

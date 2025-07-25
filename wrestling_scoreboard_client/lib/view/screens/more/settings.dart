@@ -10,14 +10,18 @@ import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
+import 'package:wrestling_scoreboard_client/models/backup.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
+import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
@@ -387,10 +391,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                       () => catchAsync(context, () async {
                         final dataManager = await ref.read(dataManagerNotifierProvider);
                         final sqlString = await dataManager.exportDatabase();
-                        final fileBaseName =
-                            '${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-                            'PostgreSQL-wrestling_scoreboard-dump';
-                        await exportSQL(fileBaseName: fileBaseName, sqlString: sqlString);
+                        await exportSQL(
+                          fileBaseName:
+                              '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
+                          sqlString: sqlString,
+                        );
                       }),
                 ),
                 ListTile(
@@ -449,6 +454,76 @@ class CustomSettingsScreen extends ConsumerWidget {
                         }
                       }),
                 ),
+                // Automatic Backup is not supported on web, as we cannot save it to the device
+                if (!kIsWeb)
+                  LoadingBuilder<bool>(
+                    future: ref.watch(backupEnabledNotifierProvider),
+                    builder: (context, isBackupEnabled) {
+                      return LoadingBuilder<List<BackupRule>>(
+                        future: ref.watch(backupRulesNotifierProvider),
+                        builder: (context, backupRules) {
+                          return ExpansionTile(
+                            leading: const Icon(Icons.cloud_download),
+                            title: Text(localizations.localBackup),
+                            trailing: Switch(
+                              value: isBackupEnabled,
+                              onChanged: (enableBackup) async {
+                                await ref.read(backupEnabledNotifierProvider.notifier).setState(enableBackup);
+                              },
+                            ),
+                            children: [
+                              ...backupRules.map(
+                                (backupRule) => ListTile(
+                                  title: Text(backupRule.name),
+                                  subtitle: Text(
+                                    '${localizations.saveEvery}: ${backupRule.period.formatDaysHoursMinutes(context)} | '
+                                    '${localizations.deleteAfter}: ${backupRule.deleteAfter.formatDaysHoursMinutes(context)}',
+                                  ),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () async {
+                                      await ref
+                                          .read(backupRulesNotifierProvider.notifier)
+                                          .setState(backupRules.where((element) => element != backupRule).toList());
+                                    },
+                                  ),
+                                  onTap: () async {
+                                    final newBackupRule = await showDialog<BackupRule>(
+                                      context: context,
+                                      builder:
+                                          (BuildContext context) => BackupRuleEditDialog(initialBackupRule: backupRule),
+                                    );
+                                    if (newBackupRule != null) {
+                                      await ref.read(backupRulesNotifierProvider.notifier).setState([
+                                        ...backupRules.where((element) => element != backupRule),
+                                        newBackupRule,
+                                      ]);
+                                    }
+                                  },
+                                ),
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.add),
+                                title: Text(localizations.add),
+                                onTap: () async {
+                                  final newBackupRule = await showDialog<BackupRule>(
+                                    context: context,
+                                    builder: (BuildContext context) => BackupRuleEditDialog(),
+                                  );
+                                  if (newBackupRule != null) {
+                                    await ref.read(backupRulesNotifierProvider.notifier).setState([
+                                      ...backupRules,
+                                      newBackupRule,
+                                    ]);
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
               ],
             ),
           ),
@@ -518,6 +593,73 @@ class SettingsSection extends StatelessWidget {
         ListTile(title: Text(title), trailing: action),
         Card(child: Column(children: ListTile.divideTiles(context: context, tiles: children).toList())),
       ],
+    );
+  }
+}
+
+class BackupRuleEditDialog extends StatefulWidget {
+  final BackupRule? initialBackupRule;
+
+  const BackupRuleEditDialog({super.key, this.initialBackupRule});
+
+  @override
+  State<BackupRuleEditDialog> createState() => _BackupRuleEditDialogState();
+}
+
+class _BackupRuleEditDialogState extends State<BackupRuleEditDialog> {
+  late String _name;
+  late Duration _period;
+  late Duration _deleteAfter;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = widget.initialBackupRule?.name ?? '';
+    _period = widget.initialBackupRule?.period ?? Duration.zero;
+    _deleteAfter = widget.initialBackupRule?.deleteAfter ?? Duration.zero;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return OkCancelDialog<BackupRule>(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextInput(
+            label: localizations.name,
+            initialValue: _name,
+            isMandatory: true,
+            onChanged: (value) => _name = value,
+          ),
+          Padding(padding: const EdgeInsets.only(top: 8.0), child: Text(localizations.saveEvery)),
+          DurationFormField(
+            initialValue: _period,
+            maxValue: Duration(days: 10000),
+            onChange: (value) {
+              if (value != null) _period = value;
+            },
+            showDays: true,
+            showHours: true,
+            showMinutes: true,
+            showSeconds: false,
+          ),
+          Padding(padding: const EdgeInsets.only(top: 8.0), child: Text(localizations.deleteAfter)),
+          DurationFormField(
+            initialValue: _deleteAfter,
+            maxValue: Duration(days: 10000),
+            onChange: (value) {
+              if (value != null) _deleteAfter = value;
+            },
+            showDays: true,
+            showHours: true,
+            showMinutes: true,
+            showSeconds: false,
+          ),
+        ],
+      ),
+      getResult: () => BackupRule(name: _name, period: _period, deleteAfter: _deleteAfter),
     );
   }
 }

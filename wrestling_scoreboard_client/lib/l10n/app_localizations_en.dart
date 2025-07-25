@@ -136,6 +136,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetDatabase => 'Reset database';
 
   @override
+  String get localBackup => 'Local Backup';
+
+  @override
+  String get saveEvery => 'Save every';
+
+  @override
+  String get deleteAfter => 'Delete after';
+
+  @override
   String get bellSound => 'Bell sound';
 
   @override
@@ -371,6 +380,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get date => 'Date';
+
+  @override
+  String get days => 'Days';
+
+  @override
+  String get hours => 'Hours';
 
   @override
   String get minutes => 'Minutes';
@@ -844,9 +859,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get periodCount => 'Number of periods';
-
-  @override
-  String get days => 'Days';
 
   @override
   String get minimum => 'Minimum';

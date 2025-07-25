@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
+import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_lineup_edit.dart';
@@ -407,14 +408,7 @@ class TeamMatchOverview extends ConsumerWidget {
 
 extension TeamMatchFileExt on TeamMatch {
   String get fileBaseName {
-    final fileNameBuilder = [
-      date.toIso8601String().substring(0, 10),
-      league?.fullname,
-      no,
-      home.team.name,
-      '–',
-      guest.team.name,
-    ];
+    final fileNameBuilder = [date.toFileNameDateFormat(), league?.fullname, no, home.team.name, '–', guest.team.name];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
     return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
   }

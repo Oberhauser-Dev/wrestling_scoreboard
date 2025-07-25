@@ -9,9 +9,9 @@ linter:
     - prefer_single_quotes
     - prefer_final_locals
 
-# Needed for freezed package:
 analyzer:
   errors:
+    # Needed for freezed package:
     invalid_annotation_target: ignore
 
 formatter:

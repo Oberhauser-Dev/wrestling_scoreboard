@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wrestling_scoreboard_client/models/backup.dart';
+import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -286,6 +288,40 @@ class JwtNotifier extends _$JwtNotifier {
   Future<void> setState(String? val) async {
     // TODO: use secure storage: https://pub.dev/packages/flutter_secure_storage
     await Preferences.setString(Preferences.keyJwtToken, val);
+    state = Future.value(val);
+  }
+}
+
+@Riverpod(dependencies: [UserNotifier])
+class BackupEnabledNotifier extends _$BackupEnabledNotifier {
+  @override
+  Raw<Future<bool>> build() async {
+    // Enable by default
+    final user = await ref.watch(userNotifierProvider);
+    if (user == null || user.privilege < UserPrivilege.admin) return false;
+    return await Preferences.getBool(Preferences.keyBackupEnabled) ?? !kIsWeb;
+  }
+
+  Future<void> setState(bool? val) async {
+    await Preferences.setBool(Preferences.keyBackupEnabled, val);
+    state = Future.value(val);
+  }
+}
+
+@Riverpod(dependencies: [BackupEnabledNotifier])
+class BackupRulesNotifier extends _$BackupRulesNotifier {
+  @override
+  Raw<Future<List<BackupRule>>> build() async {
+    final enabled = await ref.watch(backupEnabledNotifierProvider);
+    final rules =
+        ((await Preferences.getStringList(Preferences.keyBackupRules)) ?? [])
+            .map((e) => BackupRule.fromJson(jsonDecode(e)))
+            .toList();
+    return enabled && rules.isEmpty ? BackupRule.defaultBackupRules : rules;
+  }
+
+  Future<void> setState(List<BackupRule> val) async {
+    await Preferences.setStringList(Preferences.keyBackupRules, val.map((e) => jsonEncode(e.toJson())).toList());
     state = Future.value(val);
   }
 }

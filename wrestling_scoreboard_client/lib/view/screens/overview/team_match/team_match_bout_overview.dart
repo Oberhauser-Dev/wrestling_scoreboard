@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
+import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/team_match_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
@@ -106,7 +107,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
 extension BoutFileExt on Bout {
   String getFileBaseName(WrestlingEvent event) {
     final fileNameBuilder = [
-      event.date.toIso8601String().substring(0, 10),
+      event.date.toFileNameDateFormat(),
       id?.toString(),
       r?.membership.person.surname,
       '–',

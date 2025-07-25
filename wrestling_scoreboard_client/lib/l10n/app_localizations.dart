@@ -326,6 +326,24 @@ abstract class AppLocalizations {
   /// **'Reset database'**
   String get resetDatabase;
 
+  /// No description provided for @localBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Backup'**
+  String get localBackup;
+
+  /// No description provided for @saveEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'Save every'**
+  String get saveEvery;
+
+  /// No description provided for @deleteAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete after'**
+  String get deleteAfter;
+
   /// No description provided for @bellSound.
   ///
   /// In en, this message translates to:
@@ -787,6 +805,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date'**
   String get date;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get days;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hours;
 
   /// No description provided for @minutes.
   ///
@@ -1729,12 +1759,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Number of periods'**
   String get periodCount;
-
-  /// No description provided for @days.
-  ///
-  /// In en, this message translates to:
-  /// **'Days'**
-  String get days;
 
   /// No description provided for @minimum.
   ///

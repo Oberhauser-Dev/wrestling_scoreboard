@@ -137,6 +137,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get resetDatabase => 'Datenbank zurücksetzen';
 
   @override
+  String get localBackup => 'Lokales Backup';
+
+  @override
+  String get saveEvery => 'Speichere alle';
+
+  @override
+  String get deleteAfter => 'Lösche nach';
+
+  @override
   String get bellSound => 'Glocken-Sound';
 
   @override
@@ -374,6 +383,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get date => 'Datum';
+
+  @override
+  String get days => 'Tage';
+
+  @override
+  String get hours => 'Stunden';
 
   @override
   String get minutes => 'Minuten';
@@ -847,9 +862,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get periodCount => 'Anzahl der Kampfabschnitte';
-
-  @override
-  String get days => 'Days';
 
   @override
   String get minimum => 'Minimum';
