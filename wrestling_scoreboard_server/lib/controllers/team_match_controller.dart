@@ -53,7 +53,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
   Future<Response> generateBouts(Request request, User? user, String id) async {
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id), obfuscate: false));
-    final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(false, teamMatch.id!));
+    final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: false));
     final leagueWeightClasses =
         teamMatch.league?.id == null
             ? <LeagueWeightClass>[]
@@ -180,7 +180,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
     broadcast((obfuscate) async {
       final List<TeamMatchBout> teamMatchBouts;
       if (obfuscate) {
-        teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(obfuscate, teamMatch.id!);
+        teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: obfuscate);
       } else {
         teamMatchBouts = tmBouts;
       }
