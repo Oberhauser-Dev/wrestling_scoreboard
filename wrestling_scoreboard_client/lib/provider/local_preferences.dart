@@ -24,6 +24,9 @@ class Preferences {
   static const keyJwtToken = 'jwt';
   static const keyDataSuffix = '-data';
 
+  static const keyBackupEnabled = 'backup-enabled';
+  static const keyBackupRules = 'backup-rules';
+
   static final supportedLanguages = {const Locale('en', 'US'), const Locale('de', 'DE')};
 
   static Future<void> setString(String key, String? value) async {

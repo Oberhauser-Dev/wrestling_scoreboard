@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,11 +13,13 @@ import 'package:path/path.dart' as path;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/provider/backup_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -132,6 +136,102 @@ class GlobalWidget extends ConsumerStatefulWidget {
 }
 
 class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
+  final Set<Timer> _backupTimers = {};
+
+  Future<Iterable<MapEntry<DateTime, FileSystemEntity>>> listDateFilesOfDirectory(String dirPath) async {
+    final dir = Directory(dirPath);
+    if (!(await dir.exists())) return [];
+    return (await dir.list().map((fsEntity) {
+          final dateStr = fsEntity.uri.pathSegments.last.split('_')[0];
+          final date = FileNameDateTimeParser.tryParse(dateStr);
+          if (date == null) return null;
+          return MapEntry(date, fsEntity);
+        }).toList())
+        .nonNulls;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Prepare log file
+    ref.listenManual(appDataDirectoryNotifierProvider, (previous, next) async {
+      final appDataDir = await next;
+      if (appDataDir == null) return;
+      final now = MockableDateTime.now();
+      final loggingDir = path.join(appDataDir, 'logs');
+
+      // Delete all logs older than 31 days
+      await Future.wait(
+        (await listDateFilesOfDirectory(loggingDir))
+            .where((entry) {
+              return entry.key.isBefore(now.subtract(Duration(days: 31)));
+            })
+            .map((entry) => entry.value.delete()),
+      );
+
+      final loggingFile = File(path.join(loggingDir, '${now.toFileNameDateFormat()}_wrestling-scoreboard-client.log'));
+      await loggingFile.create(recursive: true);
+      Logger.root.onRecord.listen((record) {
+        loggingFile.writeAsString('${record.formatted}\n', mode: FileMode.append);
+      });
+    }, fireImmediately: true);
+
+    // Prepare backups
+    ref.listenManual(backupNotifierProvider, (previous, next) async {
+      // Clear timers
+      for (final timer in _backupTimers) {
+        timer.cancel();
+      }
+      _backupTimers.clear();
+
+      final (backupDir, backupRules) = await next;
+      if (backupDir == null) return;
+
+      final now = MockableDateTime.now();
+      final dataManager = await ref.read(dataManagerNotifierProvider);
+
+      await Future.wait(
+        backupRules.map((backupRule) async {
+          final ruleDir = path.join(backupDir, backupRule.name);
+          // Delete all backups older than deleteAfter
+          final dateFiles = await listDateFilesOfDirectory(ruleDir);
+          final groupedFiles = dateFiles.groupSetsBy((entry) {
+            return entry.key.isBefore(now.subtract(backupRule.deleteAfter));
+          });
+          final outdatedFiles = groupedFiles[true];
+          final validFiles = groupedFiles[false];
+          if (outdatedFiles != null) await Future.wait(outdatedFiles.map((entry) => entry.value.delete()));
+          final lastUpdateDate = validFiles?.map((e) => e.key).sorted().last;
+          final nextBackupIn =
+              lastUpdateDate == null ? Duration.zero : (backupRule.period - now.difference(lastUpdateDate));
+
+          runBackup(Timer timer) async {
+            // Wait the initial duration, then start the backup.
+            await Future.delayed(nextBackupIn, () async {
+              // Skip, if timer already was removed in the mean time.
+              if (!_backupTimers.contains(timer) || !mounted) return;
+              final sqlString = await dataManager.exportDatabase();
+              final backupFile = File(
+                path.join(
+                  ruleDir,
+                  '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump.sql',
+                ),
+              );
+              await backupFile.create(recursive: true);
+              await backupFile.writeAsString(sqlString, mode: FileMode.writeOnly);
+            });
+          }
+
+          final timer = Timer.periodic(backupRule.period, (timer) => runBackup(timer));
+          _backupTimers.add(timer);
+          // Run the backup the first time as soon as [nextBackupIn].
+          runBackup(timer);
+        }),
+      );
+    }, fireImmediately: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Shortcuts(
@@ -216,31 +316,6 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
           }
         });
       }
-    }, fireImmediately: true);
-
-    ref.listenManual(appDataDirectoryNotifierProvider, (previous, next) async {
-      final appDataDir = await next;
-      if (appDataDir == null) return;
-      final now = MockableDateTime.now();
-      final loggingDir = path.join(appDataDir, 'logs');
-
-      // Delete all logs older than 31 days
-      await Directory(loggingDir)
-          .list()
-          .where((event) {
-            final dateStr = event.uri.pathSegments.last.split('_')[0];
-            final date = DateTime.tryParse(dateStr);
-            return date != null && date.isBefore(now.subtract(Duration(days: 31)));
-          })
-          .forEach((element) => element.delete());
-
-      final loggingFile = File(
-        path.join(loggingDir, '${now.toIso8601String().substring(0, 10)}_wrestling-scoreboard-client.log'),
-      );
-      await loggingFile.create(recursive: true);
-      Logger.root.onRecord.listen((record) {
-        loggingFile.writeAsString('${record.formatted}\n', mode: FileMode.append);
-      });
     }, fireImmediately: true);
   }
 

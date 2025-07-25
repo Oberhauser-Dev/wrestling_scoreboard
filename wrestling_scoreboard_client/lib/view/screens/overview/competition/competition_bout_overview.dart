@@ -114,7 +114,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
 // extension BoutFileExt on Bout {
 //   String getFileBaseName(WrestlingEvent event) {
 //     final fileNameBuilder = [
-//       event.date.toIso8601String().substring(0, 10),
+//       event.date.toFileNameDateFormat(),
 //       id?.toString(),
 //       r?.membership.person.surname,
 //       '–',

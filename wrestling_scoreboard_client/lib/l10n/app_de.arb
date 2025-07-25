@@ -50,6 +50,9 @@
   "restoreDatabase": "Datenbank wiederherstellen",
   "restoreDefaultDatabase": "Standard-Datenbank wiederherstellen",
   "resetDatabase": "Datenbank zurücksetzen",
+  "localBackup": "Lokales Backup",
+  "saveEvery": "Speichere alle",
+  "deleteAfter": "Lösche nach",
   "bellSound": "Glocken-Sound",
   "timeCountDown": "Zähle die Zeit herunter",
 
@@ -133,6 +136,8 @@
   "event": "Veranstaltung",
   "place": "Ort",
   "date": "Datum",
+  "days": "Tage",
+  "hours": "Stunden",
   "minutes": "Minuten",
   "seconds": "Sekunden",
   "startDate": "Beginn",
@@ -293,7 +298,6 @@
   "injuryDuration": "Dauer der Verletzungszeit",
   "bleedingInjuryDuration": "Dauer der Verletzungszeit mit Blut",
   "periodCount": "Anzahl der Kampfabschnitte",
-  "days": "Days",
   "minimum": "Minimum",
   "maximum": "Maximum",
 

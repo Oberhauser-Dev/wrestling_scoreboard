@@ -7,6 +7,10 @@ class DurationFormField extends FormField<Duration> {
   final Duration minValue;
   final Duration maxValue;
   final void Function(Duration?)? onChange;
+  final bool showSeconds;
+  final bool showMinutes;
+  final bool showHours;
+  final bool showDays;
 
   DurationFormField({
     super.key,
@@ -15,6 +19,10 @@ class DurationFormField extends FormField<Duration> {
     required this.maxValue,
     this.onChange,
     super.onSaved,
+    this.showSeconds = true,
+    this.showMinutes = true,
+    this.showHours = false,
+    this.showDays = false,
   }) : super(
          builder: (FormFieldState<Duration?> state) {
            return DurationPicker(
@@ -27,6 +35,10 @@ class DurationFormField extends FormField<Duration> {
                  onChange(duration);
                }
              },
+             showDays: showDays,
+             showHours: showHours,
+             showMinutes: showMinutes,
+             showSeconds: showSeconds,
            );
          },
        );
@@ -37,6 +49,10 @@ class DurationPicker extends StatefulWidget {
   final Duration minValue;
   final Duration maxValue;
   final void Function(Duration?) onChange;
+  final bool showSeconds;
+  final bool showMinutes;
+  final bool showHours;
+  final bool showDays;
 
   const DurationPicker({
     super.key,
@@ -44,6 +60,10 @@ class DurationPicker extends StatefulWidget {
     this.minValue = Duration.zero,
     required this.maxValue,
     required this.onChange,
+    this.showSeconds = true,
+    this.showMinutes = true,
+    this.showHours = false,
+    this.showDays = false,
   });
 
   @override
@@ -51,11 +71,15 @@ class DurationPicker extends StatefulWidget {
 }
 
 class _DurationPickerState extends State<DurationPicker> {
+  late int _days;
+  late int _hours;
   late int _minutes;
   late int _seconds;
 
   @override
   void initState() {
+    _days = widget.initialValue?.inDays ?? 0;
+    _hours = widget.initialValue?.inHours.remainder(24) ?? 0;
     _minutes = widget.initialValue?.inMinutes.remainder(60) ?? 0;
     _seconds = widget.initialValue?.inSeconds.remainder(60) ?? 0;
     super.initState();
@@ -67,42 +91,78 @@ class _DurationPickerState extends State<DurationPicker> {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Expanded(
-          child: TextFormField(
-            initialValue: _minutes.toString(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.minutes,
+        if (widget.showDays)
+          Expanded(
+            child: TextFormField(
+              initialValue: _days.toString(),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: localizations.days),
+              inputFormatters: <TextInputFormatter>[
+                NumericalRangeFormatter(min: widget.minValue.inDays.toDouble(), max: widget.maxValue.inDays.toDouble()),
+              ],
+              onChanged: (String? value) {
+                _days = int.tryParse(value ?? '') ?? 0;
+                widget.onChange(Duration(days: _days, hours: _hours, minutes: _minutes, seconds: _seconds));
+              },
             ),
-            inputFormatters: <TextInputFormatter>[
-              NumericalRangeFormatter(
-                min: widget.minValue.inMinutes.toDouble(),
-                max: widget.maxValue.inMinutes.toDouble(),
-              ),
-            ],
-            onChanged: (String? value) {
-              _minutes = int.tryParse(value ?? '') ?? 0;
-              widget.onChange(Duration(minutes: _minutes, seconds: _seconds));
-            },
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: TextFormField(
-            initialValue: _seconds.toString(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 20),
-              labelText: localizations.seconds,
+        if (widget.showDays && widget.showHours) const SizedBox(width: 16),
+        if (widget.showHours)
+          Expanded(
+            child: TextFormField(
+              initialValue: _hours.toString(),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: localizations.hours),
+              inputFormatters: <TextInputFormatter>[
+                NumericalRangeFormatter(
+                  min: widget.minValue.inHours.toDouble(),
+                  max: widget.maxValue.inHours.toDouble(),
+                ),
+              ],
+              onChanged: (String? value) {
+                _hours = int.tryParse(value ?? '') ?? 0;
+                widget.onChange(Duration(days: _days, hours: _hours, minutes: _minutes, seconds: _seconds));
+              },
             ),
-            inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 0, max: 59)],
-            onChanged: (String? value) {
-              _seconds = int.tryParse(value ?? '') ?? 0;
-              widget.onChange(Duration(minutes: _minutes, seconds: _seconds));
-            },
           ),
-        ),
+        if (widget.showHours && widget.showMinutes) const SizedBox(width: 16),
+        if (widget.showMinutes)
+          Expanded(
+            child: TextFormField(
+              initialValue: _minutes.toString(),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: localizations.minutes),
+              inputFormatters: <TextInputFormatter>[
+                NumericalRangeFormatter(
+                  min: widget.minValue.inMinutes.toDouble(),
+                  max: widget.maxValue.inMinutes.toDouble(),
+                ),
+              ],
+              onChanged: (String? value) {
+                _minutes = int.tryParse(value ?? '') ?? 0;
+                widget.onChange(Duration(days: _days, hours: _hours, minutes: _minutes, seconds: _seconds));
+              },
+            ),
+          ),
+        if (widget.showMinutes && widget.showSeconds) const SizedBox(width: 16),
+        if (widget.showSeconds)
+          Expanded(
+            child: TextFormField(
+              initialValue: _seconds.toString(),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: localizations.seconds),
+              inputFormatters: <TextInputFormatter>[
+                NumericalRangeFormatter(
+                  min: widget.minValue.inSeconds.toDouble(),
+                  max: widget.maxValue.inSeconds.toDouble(),
+                ),
+              ],
+              onChanged: (String? value) {
+                _seconds = int.tryParse(value ?? '') ?? 0;
+                widget.onChange(Duration(days: _days, hours: _hours, minutes: _minutes, seconds: _seconds));
+              },
+            ),
+          ),
       ],
     );
   }

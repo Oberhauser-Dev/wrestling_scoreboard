@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 
 class CustomTextInput extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
+  final ValueChanged<String>? onChanged;
   final IconData? iconData;
   final String label;
   final String? initialValue;
@@ -14,6 +15,7 @@ class CustomTextInput extends StatelessWidget {
 
   const CustomTextInput({
     this.onSaved,
+    this.onChanged,
     required this.label,
     this.iconData,
     this.initialValue,
@@ -29,11 +31,12 @@ class CustomTextInput extends StatelessWidget {
     return ListTile(
       leading: iconData != null ? Icon(iconData) : const SizedBox(),
       title: TextFormField(
-        readOnly: onSaved == null,
+        readOnly: onSaved == null && onChanged == null,
         maxLines: isMultiline ? null : 1,
         keyboardType: isMultiline ? TextInputType.multiline : null,
         // Convert empty value to null
         onSaved: onSaved == null ? null : (value) => onSaved!((value?.isEmpty ?? true) ? null : value),
+        onChanged: onChanged == null ? null : (value) => onChanged!(value),
         validator:
             validator ??
             (value) {

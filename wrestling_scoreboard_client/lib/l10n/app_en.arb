@@ -53,6 +53,9 @@
   "restoreDatabase": "Restore database",
   "restoreDefaultDatabase": "Restore default database",
   "resetDatabase": "Reset database",
+  "localBackup": "Local Backup",
+  "saveEvery": "Save every",
+  "deleteAfter": "Delete after",
   "bellSound": "Bell sound",
   "timeCountDown": "Count down the time",
 
@@ -136,6 +139,8 @@
   "event": "Event",
   "place": "Place",
   "date": "Date",
+  "days": "Days",
+  "hours": "Hours",
   "minutes": "Minutes",
   "seconds": "Seconds",
   "startDate": "Beginning",
@@ -296,7 +301,6 @@
   "injuryDuration": "Injury duration",
   "bleedingInjuryDuration": "Bleeding injury duration",
   "periodCount": "Number of periods",
-  "days": "Days",
   "minimum": "Minimum",
   "maximum": "Maximum",
 

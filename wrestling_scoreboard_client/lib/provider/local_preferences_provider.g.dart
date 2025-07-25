@@ -331,7 +331,7 @@ final class AppDataDirectoryNotifierProvider extends $NotifierProvider<AppDataDi
   }
 }
 
-String _$appDataDirectoryNotifierHash() => r'bbd8db761e198e5368dc171247f66769ce7f07bb';
+String _$appDataDirectoryNotifierHash() => r'be9f3355d01a2af2dba966bde812810739613582';
 
 abstract class _$AppDataDirectoryNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
@@ -646,6 +646,118 @@ abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
             as $ClassProviderElement<
               AnyNotifier<Raw<Future<String?>>, Raw<Future<String?>>>,
               Raw<Future<String?>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(BackupEnabledNotifier)
+const backupEnabledNotifierProvider = BackupEnabledNotifierProvider._();
+
+final class BackupEnabledNotifierProvider extends $NotifierProvider<BackupEnabledNotifier, Raw<Future<bool>>> {
+  const BackupEnabledNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'backupEnabledNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[userNotifierProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          BackupEnabledNotifierProvider.$allTransitiveDependencies0,
+          BackupEnabledNotifierProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = userNotifierProvider;
+  static const $allTransitiveDependencies1 = UserNotifierProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$backupEnabledNotifierHash();
+
+  @$internal
+  @override
+  BackupEnabledNotifier create() => BackupEnabledNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<bool>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<bool>>>(value));
+  }
+}
+
+String _$backupEnabledNotifierHash() => r'bc2faaf1b770ffe556e934d833b20225fc868f5f';
+
+abstract class _$BackupEnabledNotifier extends $Notifier<Raw<Future<bool>>> {
+  Raw<Future<bool>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<bool>>, Raw<Future<bool>>>,
+              Raw<Future<bool>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(BackupRulesNotifier)
+const backupRulesNotifierProvider = BackupRulesNotifierProvider._();
+
+final class BackupRulesNotifierProvider extends $NotifierProvider<BackupRulesNotifier, Raw<Future<List<BackupRule>>>> {
+  const BackupRulesNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'backupRulesNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[backupEnabledNotifierProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          BackupRulesNotifierProvider.$allTransitiveDependencies0,
+          BackupRulesNotifierProvider.$allTransitiveDependencies1,
+          BackupRulesNotifierProvider.$allTransitiveDependencies2,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = backupEnabledNotifierProvider;
+  static const $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
+
+  @override
+  String debugGetCreateSourceHash() => _$backupRulesNotifierHash();
+
+  @$internal
+  @override
+  BackupRulesNotifier create() => BackupRulesNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<List<BackupRule>>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<List<BackupRule>>>>(value));
+  }
+}
+
+String _$backupRulesNotifierHash() => r'1cc55e5e6b59bb303efe891114a2732ab9bd20aa';
+
+abstract class _$BackupRulesNotifier extends $Notifier<Raw<Future<List<BackupRule>>>> {
+  Raw<Future<List<BackupRule>>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<List<BackupRule>>>, Raw<Future<List<BackupRule>>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<List<BackupRule>>>, Raw<Future<List<BackupRule>>>>,
+              Raw<Future<List<BackupRule>>>,
               Object?,
               Object?
             >;
