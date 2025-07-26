@@ -1,3 +1,17 @@
+## 0.3.1
+
+ - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))
+ - **FIX**: Generating bouts for team matches. ([53a5b018](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/53a5b0188e1ae4b964b83bbacf52e1564a277f1f))
+ - **FIX**: Merging persons ([#145](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/145)). ([2b48b7ae](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2b48b7ae91386013a67e0e2f6472604358eb9561))
+ - **FIX**: Apply analysis options. ([890ac5f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/890ac5f2680bfd41dfd492a926d6b41ff813036e))
+ - **FIX**: Migration of Competition Weight Category. ([74bc422e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/74bc422ec1703a0442990fba58c0cfa7c4bbdc2a))
+ - **FIX**: Allow changing wrestling style of BoutResultRule. ([51c847c6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51c847c6bed272219d48da9f7df0df9424389106))
+ - **FEAT**: Write client logs into file (closes [#143](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/143)). ([a97b025f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a97b025f31a2a99e8b593641f776c09f8ce348e0))
+ - **FEAT**: Improve server logs and response handling. ([ec1ad7af](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ec1ad7afa7c210115b66e05d22c62ad3db82295f))
+ - **FEAT**: Scratch Bout Screen (closes [#142](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/142)). ([486a53ad](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/486a53ad369976db789f749463af6dbb3f3d6422))
+ - **FEAT**: Only can select team of current league (closes [#14](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/14)). ([582e0a4e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/582e0a4e2ba8f61e63e5e0cb0b33d705acbcb2f1))
+ - **FEAT**: Cycle Management ([#35](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/35)). ([0d17e25e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0d17e25e8b83674d2b33291b0e57fa7c0779ede4))
+
 ## 0.3.0
 
  - **REFACTOR**: Apply dart format. ([eefaec04](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eefaec04c236a79eba6310204665c953851b1e9b))
