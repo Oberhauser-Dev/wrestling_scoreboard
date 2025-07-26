@@ -3,6 +3,80 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-07-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.1`](#wrestling_scoreboard_client---v031)
+ - [`wrestling_scoreboard_common` - `v0.3.1`](#wrestling_scoreboard_common---v031)
+ - [`wrestling_scoreboard_generator` - `v0.3.0+1`](#wrestling_scoreboard_generator---v0301)
+ - [`wrestling_scoreboard_server` - `v0.3.1`](#wrestling_scoreboard_server---v031)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.1`
+
+ - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))
+ - **REFACTOR**: Replace all TextFormField (closes [#127](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/127)). ([942908c2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/942908c29bd58b171d672a15de5746a88b24ae8a))
+ - **FIX**: Update organization for reporting (closes [#138](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/138)). ([f88fba6e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f88fba6ec34d9fff69d5528f7481c0e82ff48f8e))
+ - **FIX**: Apply decoration to Dropdown. ([c5b42a77](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c5b42a77543909e76d0a9125b759b27ee69eecb6))
+ - **FIX**: Show back button on scratch bout overview. ([0a014606](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0a014606b02fe0556e1af0d5f0b5fbac3be0ab83))
+ - **FIX**: Manual reload on websocket disconnect. ([8a93922c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8a93922cd18d066969dca430c459d98656b74859))
+ - **FIX**: Invalidate Scratch bout providers ([#145](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/145)). ([8372ac4c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8372ac4c658cd96b6e8d67b820a80d1b101d4dea))
+ - **FIX**: Apply analysis options. ([890ac5f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/890ac5f2680bfd41dfd492a926d6b41ff813036e))
+ - **FIX**: Fade title in AppBar if covered ([#145](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/145)). ([54498d8d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/54498d8de36c4bfe7e41e3035621d009999bd631))
+ - **FIX**: Move actions to app bar in competition overview. ([7ba13bd3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7ba13bd3cfe6c0cd7fcf2901b9d712da360ef63a))
+ - **FIX**: Allow empty value for suffix on Weight class edit ([#145](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/145)). ([c18fb83c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c18fb83c4add5e696582c8e695ac422cb546d644))
+ - **FIX**: German translation of age categories. ([c784f4ff](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c784f4ff2148a5c96b19fbeb24da674665aa6c7b))
+ - **FIX**: Invalidate ScratchBout providers. ([c012b225](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c012b22562aa78e9299bc91408233bb3be9e6139))
+ - **FIX**: Avoid sending bearer token on signing in. ([35eb0489](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/35eb04897a44b5304589cc832790bfbae503cf18))
+ - **FIX**: Allow changing wrestling style of BoutResultRule. ([51c847c6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51c847c6bed272219d48da9f7df0df9424389106))
+ - **FEAT**: Support Local backups for admins ([#37](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/37)). ([24ad9d8d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/24ad9d8da312adf02f8281145f2b53f4a374c714))
+ - **FEAT**: Write client logs into file (closes [#143](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/143)). ([a97b025f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a97b025f31a2a99e8b593641f776c09f8ce348e0))
+ - **FEAT**: Collect options in popup menu on small screens ([#145](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/145)). ([b7f1eba4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b7f1eba477f1051d23d80918ff9ae90e019814b4))
+ - **FEAT**: Scratch Bout Screen (closes [#142](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/142)). ([486a53ad](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/486a53ad369976db789f749463af6dbb3f3d6422))
+ - **FEAT**: Only can select team of current league (closes [#14](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/14)). ([582e0a4e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/582e0a4e2ba8f61e63e5e0cb0b33d705acbcb2f1))
+ - **FEAT**: Export tournament as RDB report ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([3a7e8ccd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3a7e8ccdde1231b75bef2003762e9ad1229babcc))
+ - **FEAT**: Cycle Management ([#35](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/35)). ([0d17e25e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0d17e25e8b83674d2b33291b0e57fa7c0779ede4))
+
+#### `wrestling_scoreboard_common` - `v0.3.1`
+
+ - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))
+ - **FIX**: Apply analysis options. ([890ac5f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/890ac5f2680bfd41dfd492a926d6b41ff813036e))
+ - **FIX**: Allow changing wrestling style of BoutResultRule. ([51c847c6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51c847c6bed272219d48da9f7df0df9424389106))
+ - **FEAT**: Support Local backups for admins ([#37](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/37)). ([24ad9d8d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/24ad9d8da312adf02f8281145f2b53f4a374c714))
+ - **FEAT**: Write client logs into file (closes [#143](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/143)). ([a97b025f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a97b025f31a2a99e8b593641f776c09f8ce348e0))
+ - **FEAT**: Scratch Bout Screen (closes [#142](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/142)). ([486a53ad](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/486a53ad369976db789f749463af6dbb3f3d6422))
+ - **FEAT**: Export tournament as RDB report ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([3a7e8ccd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3a7e8ccdde1231b75bef2003762e9ad1229babcc))
+ - **FEAT**: Cycle Management ([#35](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/35)). ([0d17e25e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0d17e25e8b83674d2b33291b0e57fa7c0779ede4))
+
+#### `wrestling_scoreboard_generator` - `v0.3.0+1`
+
+ - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))
+
+#### `wrestling_scoreboard_server` - `v0.3.1`
+
+ - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))
+ - **FIX**: Generating bouts for team matches. ([53a5b018](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/53a5b0188e1ae4b964b83bbacf52e1564a277f1f))
+ - **FIX**: Merging persons ([#145](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/145)). ([2b48b7ae](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2b48b7ae91386013a67e0e2f6472604358eb9561))
+ - **FIX**: Apply analysis options. ([890ac5f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/890ac5f2680bfd41dfd492a926d6b41ff813036e))
+ - **FIX**: Migration of Competition Weight Category. ([74bc422e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/74bc422ec1703a0442990fba58c0cfa7c4bbdc2a))
+ - **FIX**: Allow changing wrestling style of BoutResultRule. ([51c847c6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/51c847c6bed272219d48da9f7df0df9424389106))
+ - **FEAT**: Write client logs into file (closes [#143](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/143)). ([a97b025f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a97b025f31a2a99e8b593641f776c09f8ce348e0))
+ - **FEAT**: Improve server logs and response handling. ([ec1ad7af](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ec1ad7afa7c210115b66e05d22c62ad3db82295f))
+ - **FEAT**: Scratch Bout Screen (closes [#142](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/142)). ([486a53ad](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/486a53ad369976db789f749463af6dbb3f3d6422))
+ - **FEAT**: Only can select team of current league (closes [#14](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/14)). ([582e0a4e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/582e0a4e2ba8f61e63e5e0cb0b33d705acbcb2f1))
+ - **FEAT**: Cycle Management ([#35](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/35)). ([0d17e25e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0d17e25e8b83674d2b33291b0e57fa7c0779ede4))
+
+
 ## 2025-06-22
 
 ### Changes

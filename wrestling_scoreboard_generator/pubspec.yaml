@@ -1,6 +1,6 @@
 name: wrestling_scoreboard_generator
 description: Generated files from wrestling_scoreboard_common
-version: 0.3.0
+version: 0.3.0+1
 resolution: workspace
 publish_to: none
 
