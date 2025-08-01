@@ -1566,10 +1566,11 @@ packages:
   window_manager:
     dependency: transitive
     description:
-      name: window_manager
-      sha256: "7eb6d6c4164ec08e1bf978d6e733f3cebe792e2a23fb07cbca25c2872bfdbdcd"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/window_manager"
+      ref: windows-fullscreen
+      resolved-ref: "5f7858139537d09d5591519bd944294aab02833d"
+      url: "https://github.com/Gustl22/window_manager.git"
+    source: git
     version: "0.5.1"
   xdg_directories:
     dependency: transitive
