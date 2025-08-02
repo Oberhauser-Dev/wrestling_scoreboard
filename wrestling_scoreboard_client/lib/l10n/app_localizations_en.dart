@@ -72,6 +72,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wsUrl => 'Websocket-Url';
 
   @override
+  String get webClientUrl => 'Web Client Url (used for sharing)';
+
+  @override
   String get services => 'Services';
 
   @override
@@ -306,6 +309,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get display => 'Display';
+
+  @override
+  String get share => 'Share';
 
   @override
   String get toggleFullscreen => 'Toggle Fullscreen';

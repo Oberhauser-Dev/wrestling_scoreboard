@@ -75,6 +75,17 @@ class CustomSettingsScreen extends ConsumerWidget {
       return (results[0] as Locale?, results[1] as ThemeMode, results[2] as String?);
     }
 
+    Future<(Duration, String, String, String?)> loadNetworkSettings() async {
+      final results = await Future.wait([
+        ref.watch(networkTimeoutNotifierProvider),
+        ref.watch(apiUrlNotifierProvider),
+        ref.watch(webSocketUrlNotifierProvider),
+        ref.watch(webClientUrlNotifierProvider),
+      ]);
+
+      return (results[0] as Duration, results[1] as String, results[2] as String, results[3] as String?);
+    }
+
     return WindowStateScaffold(
       appBarTitle: Text(localizations.settings),
       body: ResponsiveColumn(
@@ -299,83 +310,95 @@ class CustomSettingsScreen extends ConsumerWidget {
               );
             },
           ),
-          LoadingBuilder<Duration>(
-            future: ref.watch(networkTimeoutNotifierProvider),
-            builder: (context, networkTimeout) {
-              return LoadingBuilder<String>(
-                future: ref.watch(apiUrlNotifierProvider),
-                builder: (context, apiUrl) {
-                  return LoadingBuilder<String>(
-                    future: ref.watch(webSocketUrlNotifierProvider),
-                    builder: (context, wsUrl) {
-                      return SettingsSection(
-                        title: localizations.network,
-                        action: TextButton(
-                          onPressed: () async {
-                            apiUrl = Env.apiUrl.fromString();
-                            await ref.read(apiUrlNotifierProvider.notifier).setState(apiUrl);
+          LoadingBuilder<(Duration, String, String, String?)>(
+            future: loadNetworkSettings(),
+            builder: (context, networkSettings) {
+              var (networkTimeout, apiUrl, wsUrl, webClientUrl) = networkSettings;
+              return SettingsSection(
+                title: localizations.network,
+                action: TextButton(
+                  onPressed: () async {
+                    const defaultNetworkTimeout = Duration(seconds: 10);
+                    await ref.read(networkTimeoutNotifierProvider.notifier).setState(defaultNetworkTimeout);
 
-                            wsUrl = Env.webSocketUrl.fromString();
-                            await ref.read(webSocketUrlNotifierProvider.notifier).setState(wsUrl);
+                    apiUrl = Env.apiUrl.fromString();
+                    await ref.read(apiUrlNotifierProvider.notifier).setState(apiUrl);
 
-                            const defaultNetworkTimeout = Duration(seconds: 10);
-                            await ref.read(networkTimeoutNotifierProvider.notifier).setState(defaultNetworkTimeout);
-                          },
-                          child: Text(localizations.reset),
-                        ),
-                        children: [
-                          ListTile(
-                            subtitle: Text(apiUrl),
-                            title: Text(localizations.apiUrl),
-                            leading: const Icon(Icons.link),
-                            onTap: () async {
-                              final val = await showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return TextInputDialog(initialValue: apiUrl);
-                                },
-                              );
-                              if (val != null) {
-                                await ref.read(apiUrlNotifierProvider.notifier).setState(val);
-                              }
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.link),
-                            title: Text(localizations.wsUrl),
-                            subtitle: Text(wsUrl),
-                            onTap: () async {
-                              final val = await showDialog<String?>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return TextInputDialog(initialValue: wsUrl);
-                                },
-                              );
-                              if (val != null) {
-                                await ref.read(webSocketUrlNotifierProvider.notifier).setState(val);
-                              }
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.running_with_errors),
-                            title: Text(localizations.networkTimeout),
-                            subtitle: Text(networkTimeout.formatSecondsAndMilliseconds()),
-                            onTap: () async {
-                              final val = await showDurationDialog(
-                                context: context,
-                                initialDuration: networkTimeout,
-                                maxValue: const Duration(hours: 1),
-                              );
-                              if (val != null) {
-                                await ref.read(networkTimeoutNotifierProvider.notifier).setState(val);
-                              }
-                            },
-                          ),
-                        ],
+                    wsUrl = Env.webSocketUrl.fromString();
+                    await ref.read(webSocketUrlNotifierProvider.notifier).setState(wsUrl);
+
+                    webClientUrl = Env.webClientUrl.fromString();
+                    if (webClientUrl != null && webClientUrl!.isEmpty) {
+                      webClientUrl = null;
+                    }
+                    await ref.read(webClientUrlNotifierProvider.notifier).setState(webClientUrl);
+                  },
+                  child: Text(localizations.reset),
+                ),
+                children: [
+                  ListTile(
+                    subtitle: Text(apiUrl),
+                    title: Text(localizations.apiUrl),
+                    leading: const Icon(Icons.link),
+                    onTap: () async {
+                      final val = await showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return TextInputDialog(initialValue: apiUrl);
+                        },
                       );
+                      if (val != null) {
+                        await ref.read(apiUrlNotifierProvider.notifier).setState(val);
+                      }
                     },
-                  );
-                },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.link),
+                    title: Text(localizations.wsUrl),
+                    subtitle: Text(wsUrl),
+                    onTap: () async {
+                      final val = await showDialog<String?>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return TextInputDialog(initialValue: wsUrl);
+                        },
+                      );
+                      if (val != null) {
+                        await ref.read(webSocketUrlNotifierProvider.notifier).setState(val);
+                      }
+                    },
+                  ),
+                  if (!kIsWeb)
+                    ListTile(
+                      leading: const Icon(Icons.link),
+                      title: Text(localizations.webClientUrl),
+                      subtitle: Text(webClientUrl ?? '-'),
+                      onTap: () async {
+                        final val = await showDialog<String?>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return TextInputDialog(initialValue: webClientUrl);
+                          },
+                        );
+                        await ref.read(webClientUrlNotifierProvider.notifier).setState(val);
+                      },
+                    ),
+                  ListTile(
+                    leading: const Icon(Icons.running_with_errors),
+                    title: Text(localizations.networkTimeout),
+                    subtitle: Text(networkTimeout.formatSecondsAndMilliseconds()),
+                    onTap: () async {
+                      final val = await showDurationDialog(
+                        context: context,
+                        initialDuration: networkTimeout,
+                        maxValue: const Duration(hours: 1),
+                      );
+                      if (val != null) {
+                        await ref.read(networkTimeoutNotifierProvider.notifier).setState(val);
+                      }
+                    },
+                  ),
+                ],
               );
             },
           ),

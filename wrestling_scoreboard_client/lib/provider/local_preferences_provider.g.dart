@@ -37,7 +37,7 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
   }
 }
 
-String _$localeNotifierHash() => r'd1a158392a814010eadb717b29bdbd563f79c97f';
+String _$localeNotifierHash() => r'bb11642ed6d1ecce845d2d6f67b79020c8d3ec70';
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
@@ -198,6 +198,61 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
             as $ClassProviderElement<
               AnyNotifier<Raw<Future<String>>, Raw<Future<String>>>,
               Raw<Future<String>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+/// The url used to host the client for web. This can be unset.
+/// It is used for sharing the web url on native platforms.
+@ProviderFor(WebClientUrlNotifier)
+const webClientUrlNotifierProvider = WebClientUrlNotifierProvider._();
+
+/// The url used to host the client for web. This can be unset.
+/// It is used for sharing the web url on native platforms.
+final class WebClientUrlNotifierProvider extends $NotifierProvider<WebClientUrlNotifier, Raw<Future<String?>>> {
+  /// The url used to host the client for web. This can be unset.
+  /// It is used for sharing the web url on native platforms.
+  const WebClientUrlNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'webClientUrlNotifierProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$webClientUrlNotifierHash();
+
+  @$internal
+  @override
+  WebClientUrlNotifier create() => WebClientUrlNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<String?>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<String?>>>(value));
+  }
+}
+
+String _$webClientUrlNotifierHash() => r'fdc3fbf0f7e0f02854f3ba36fa7f40c14fae06a6';
+
+abstract class _$WebClientUrlNotifier extends $Notifier<Raw<Future<String?>>> {
+  Raw<Future<String?>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<String?>>, Raw<Future<String?>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<String?>>, Raw<Future<String?>>>,
+              Raw<Future<String?>>,
               Object?,
               Object?
             >;
