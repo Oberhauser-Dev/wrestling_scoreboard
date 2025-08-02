@@ -224,8 +224,8 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               dataObject: competition,
               label: localizations.competition,
               details: competition.name,
-              tabs: [Tab(child: HeadingText(localizations.info)), boutConfigTab, ...tabItems.keys],
-              body: TabGroup(items: [description, boutConfigTabContent, ...tabItems.values]),
+              tabs: [Tab(child: HeadingText(localizations.info)), ...tabItems.keys, boutConfigTab],
+              body: TabGroup(items: [description, ...tabItems.values, boutConfigTabContent]),
               actions: [
                 ResponsiveScaffoldActionItem(
                   onTap: () async => navigateToScratchBoutOverview(context, ref, boutConfig: competition.boutConfig),
