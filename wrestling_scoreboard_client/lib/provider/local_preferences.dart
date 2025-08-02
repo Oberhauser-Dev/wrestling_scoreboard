@@ -8,6 +8,7 @@ class Preferences {
   static const keyThemeMode = 'theme-mode';
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
+  static const keyWebClientUrl = 'web-client-url';
   static const keyAppDataDirectory = 'app-data-directory';
 
   /// Network timeout in milliseconds.

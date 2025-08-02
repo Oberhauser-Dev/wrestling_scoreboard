@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
@@ -15,6 +16,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionLineupOverview extends ConsumerWidget {
   static const route = 'competition_lineup';
+
+  static void navigateTo(BuildContext context, CompetitionLineup dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
 
   final int id;
   final CompetitionLineup? competitionLineup;
@@ -68,7 +73,7 @@ class CompetitionLineupOverview extends ConsumerWidget {
                     (context, item) => ContentItem(
                       title: item.name,
                       icon: Icons.person,
-                      onTap: () => navigateToCompetitionParticipationOverview(context, item),
+                      onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
                     ),
               ),
             ],

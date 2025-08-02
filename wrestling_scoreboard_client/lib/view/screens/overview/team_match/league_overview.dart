@@ -23,6 +23,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class LeagueOverview extends ConsumerWidget {
   static const route = 'league';
 
+  static void navigateTo(BuildContext context, League dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
   final int id;
   final League? league;
 
@@ -81,7 +85,7 @@ class LeagueOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.team.name,
                           icon: Icons.group,
-                          onTap: () => handleSelectedTeam(item, context),
+                          onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<LeagueWeightClass, League>.edit(
@@ -92,7 +96,7 @@ class LeagueOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.localize(context),
                           icon: Icons.fitness_center,
-                          onTap: () => handleSelectedWeightClass(item, context),
+                          onTap: () => LeagueWeightClassOverview.navigateTo(context, item),
                         ),
                   ),
                 ],
@@ -102,13 +106,5 @@ class LeagueOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
-    context.push('/${LeagueTeamParticipationOverview.route}/${teamParticipation.id}');
-  }
-
-  void handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
-    context.push('/${LeagueWeightClassOverview.route}/${leagueWeightClass.id}');
   }
 }

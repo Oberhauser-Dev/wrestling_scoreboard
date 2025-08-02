@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
@@ -87,10 +86,10 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                       ),
                     ),
                     leading: const Icon(Icons.event),
-                    onTap: () => handleSelectedMatch(match, context),
+                    onTap: () => TeamMatchOverview.navigateTo(context, match),
                     trailing: IconButton(
                       icon: const Icon(Icons.tv),
-                      onPressed: () => handleSelectedMatchSequence(match, context),
+                      onPressed: () => MatchDisplay.navigateTo(context, match),
                     ),
                   );
                 },
@@ -98,13 +97,5 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
         );
       },
     );
-  }
-
-  void handleSelectedMatch(TeamMatch match, BuildContext context) {
-    context.push('/${TeamMatchOverview.route}/${match.id}');
-  }
-
-  void handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
-    context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
   }
 }

@@ -71,7 +71,7 @@ mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
                           MaterialPageRoute(builder: (context) => BoutResultRuleOverview(id: item.id!)),
                         );
                       } else {
-                        navigateToBoutResultRuleOverview(context, item);
+                        BoutResultRuleOverview.navigateTo(context, item);
                       }
                     },
                   ),

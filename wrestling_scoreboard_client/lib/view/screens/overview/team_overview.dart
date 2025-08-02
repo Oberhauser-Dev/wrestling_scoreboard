@@ -6,9 +6,11 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_club_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -19,6 +21,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamOverview<T extends DataObject> extends ConsumerWidget {
   static const route = 'team';
+
+  static void navigateTo(BuildContext context, Team team) {
+    context.push('/$route/${team.id}');
+  }
 
   final int id;
   final Team? team;
@@ -54,6 +60,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             Tab(child: HeadingText(localizations.info)),
             Tab(child: HeadingText(localizations.matches)),
             Tab(child: HeadingText(localizations.clubs)),
+            Tab(child: HeadingText(localizations.leagues)),
           ],
           body: TabGroup(
             items: [
@@ -105,7 +112,20 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                     (context, club) => ContentItem(
                       title: club.name,
                       icon: Icons.foundation,
-                      onTap: () => handleSelectedClub(club, context),
+                      onTap: () => ClubOverview.navigateTo(context, club),
+                    ),
+              ),
+              FilterableManyConsumer<LeagueTeamParticipation, Team>.edit(
+                context: context,
+                editPageBuilder: (context) => LeagueTeamParticipationEdit(initialTeam: team),
+                filterObject: team,
+                mapData:
+                    (teamParticipations) => teamParticipations..sort((a, b) => a.league.name.compareTo(b.league.name)),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.league.name,
+                      icon: Icons.group,
+                      onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                     ),
               ),
             ],
@@ -113,9 +133,5 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedClub(Club club, BuildContext context) {
-    context.push('/${ClubOverview.route}/${club.id}');
   }
 }

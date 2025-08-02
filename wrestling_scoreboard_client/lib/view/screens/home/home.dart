@@ -152,7 +152,7 @@ class HomeState extends ConsumerState<Home> {
       appBarTitle: Text(localizations.start),
       actions: [
         ResponsiveScaffoldActionItem(
-          onTap: () => navigateToScratchBoutOverview(context, ref),
+          onTap: () => ScratchBoutOverview.navigateTo(context, ref),
           icon: const Icon(Icons.rocket_launch),
           label: localizations.launchScratchBout,
         ),

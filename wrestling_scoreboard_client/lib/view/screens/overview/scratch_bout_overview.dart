@@ -21,34 +21,34 @@ extension ScratchBoutRouteExtension on GoRouterState {
   bool get isScratchBoutRoute => uri.path.startsWith('/${Home.route}/${ScratchBoutOverview.route}');
 }
 
-void navigateToScratchBoutOverview(BuildContext context, WidgetRef ref, {BoutConfig? boutConfig}) async {
-  if (boutConfig != null) {
-    List<BoutResultRule>? boutResultRules;
-    if (boutConfig.id != null) {
-      boutResultRules = await ref.readAsync(
-        manyDataStreamProvider<BoutResultRule, BoutConfig>(ManyProviderData(filterObject: boutConfig)).future,
-      );
-      // Can override id with local static id, once the result rules have been fetched.
-      boutConfig = boutConfig.copyWithId(0);
-      // Cannot use LocaDataManager as it depends on dataManagerProvider internally, which would require a ProviderScope.
-      // This provider scope is not feasible here as we request the original result rules from the default provider.
-      // Therefore we directly manipulate the local data.
-      await ref.read(localDataNotifierProvider<BoutConfig>().notifier).setState([boutConfig]);
-      ref.invalidate(localDataNotifierProvider<BoutConfig>());
-      // We just assume we can override every bout config & bout result rule without checking the dependency on existing bout configs.
-      if (boutResultRules != null && boutResultRules.isNotEmpty) {
-        await ref
-            .read(localDataNotifierProvider<BoutResultRule>().notifier)
-            .setState(boutResultRules.map((e) => e.copyWith(/*id: null,*/ boutConfig: boutConfig!)).toList());
-        ref.invalidate(localDataNotifierProvider<BoutResultRule>());
-      }
-    }
-  }
-  if (context.mounted) context.push('/${Home.route}/${ScratchBoutOverview.route}');
-}
-
 class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>, BoutConfigOverviewTab {
   static const route = 'scratch';
+
+  static void navigateTo(BuildContext context, WidgetRef ref, {BoutConfig? boutConfig}) async {
+    if (boutConfig != null) {
+      List<BoutResultRule>? boutResultRules;
+      if (boutConfig.id != null) {
+        boutResultRules = await ref.readAsync(
+          manyDataStreamProvider<BoutResultRule, BoutConfig>(ManyProviderData(filterObject: boutConfig)).future,
+        );
+        // Can override id with local static id, once the result rules have been fetched.
+        boutConfig = boutConfig.copyWithId(0);
+        // Cannot use LocaDataManager as it depends on dataManagerProvider internally, which would require a ProviderScope.
+        // This provider scope is not feasible here as we request the original result rules from the default provider.
+        // Therefore we directly manipulate the local data.
+        await ref.read(localDataNotifierProvider<BoutConfig>().notifier).setState([boutConfig]);
+        ref.invalidate(localDataNotifierProvider<BoutConfig>());
+        // We just assume we can override every bout config & bout result rule without checking the dependency on existing bout configs.
+        if (boutResultRules != null && boutResultRules.isNotEmpty) {
+          await ref
+              .read(localDataNotifierProvider<BoutResultRule>().notifier)
+              .setState(boutResultRules.map((e) => e.copyWith(/*id: null,*/ boutConfig: boutConfig!)).toList());
+          ref.invalidate(localDataNotifierProvider<BoutResultRule>());
+        }
+      }
+    }
+    if (context.mounted) context.push('/${Home.route}/$route');
+  }
 
   const ScratchBoutOverview({super.key});
 
@@ -77,7 +77,7 @@ class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>,
                     ResponsiveScaffoldActionItem(
                       style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
                       icon: const Icon(Icons.tv),
-                      onTap: () => navigateToScratchBoutDisplay(context),
+                      onTap: () => ScratchBoutDisplay.navigateTo(context),
                       label: localizations.display,
                     ),
                   ],

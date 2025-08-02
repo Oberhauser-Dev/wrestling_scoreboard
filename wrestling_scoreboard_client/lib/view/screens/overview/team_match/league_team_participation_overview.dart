@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
@@ -13,6 +14,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueTeamParticipationOverview extends ConsumerWidget {
   static const route = 'league_team_participation';
+
+  static void navigateTo(BuildContext context, LeagueTeamParticipation leagueTeamParticipation) {
+    context.push('/$route/${leagueTeamParticipation.id}');
+  }
 
   final int id;
   final LeagueTeamParticipation? leagueTeamParticipation;

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -68,13 +66,9 @@ class TeamMatchBoutList<T extends DataObject?> extends StatelessWidget {
             ),
           ),
           leading: const Icon(Icons.sports_kabaddi),
-          onTap: () => handleSelectedTeamMatchBout(teamMatchBout, context),
+          onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
         );
       },
     );
-  }
-
-  void handleSelectedTeamMatchBout(TeamMatchBout bout, BuildContext context) {
-    context.push('/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}');
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -11,6 +12,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class LeagueWeightClassOverview extends ConsumerWidget with WeightClassOverview<LeagueWeightClass> {
   static const route = 'league_weight_class';
+
+  static void navigateTo(BuildContext context, LeagueWeightClass dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
 
   final int id;
   final LeagueWeightClass? leagueWeightClass;

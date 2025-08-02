@@ -22,6 +22,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CompetitionDisplay extends StatelessWidget {
   static const route = 'display';
 
+  static void navigateTo(BuildContext context, Competition competition) {
+    context.push('/${CompetitionOverview.route}/${competition.id}/$route');
+  }
+
   final int id;
   final Competition? competition;
 
@@ -38,7 +42,7 @@ class CompetitionDisplay extends StatelessWidget {
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
-          onTap: () => handleSelectedCompetition(competition, context),
+          onTap: () => CompetitionOverview.goTo(context, competition),
         );
         // final pdfAction = ResponsiveScaffoldActionItem(
         //   tooltip: localizations.print,
@@ -151,7 +155,7 @@ class CompetitionDisplay extends StatelessWidget {
                             Widget matDisplay;
                             if (matCompetitionBout != null) {
                               matDisplay = InkWell(
-                                onTap: () => navigateToCompetitionBoutScreen(context, matCompetitionBout!),
+                                onTap: () => CompetitionBoutDisplay.navigateTo(context, matCompetitionBout!),
                                 child: SingleConsumer<Bout>(
                                   id: matCompetitionBout.bout.id,
                                   initialData: matCompetitionBout.bout,
@@ -234,11 +238,6 @@ class CompetitionDisplay extends StatelessWidget {
       },
     );
   }
-
-  void handleSelectedCompetition(Competition competition, BuildContext context) {
-    // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-    context.go('/${CompetitionOverview.route}/${competition.id}');
-  }
 }
 
 class _CompetitionBoutListItem extends ConsumerWidget {
@@ -250,7 +249,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: () => navigateToCompetitionBoutScreen(context, competitionBout),
+      onTap: () => CompetitionBoutDisplay.navigateTo(context, competitionBout),
       child: IntrinsicHeight(
         child: DefaultTextStyle.merge(
           style: competitionBout.mat == null ? null : TextStyle(color: Theme.of(context).disabledColor),
