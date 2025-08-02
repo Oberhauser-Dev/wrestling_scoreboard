@@ -22,6 +22,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
   static const route = 'division';
 
+  static void navigateTo(BuildContext context, Division dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
   final int id;
   final Division? division;
 
@@ -93,7 +97,7 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                     (context, item) => ContentItem(
                       title: '${item.fullname}, ${item.startDate.year}',
                       icon: Icons.emoji_events,
-                      onTap: () => handleSelectedLeague(item, context),
+                      onTap: () => LeagueOverview.navigateTo(context, item),
                     ),
               ),
               FilterableManyConsumer<DivisionWeightClass, Division>.edit(
@@ -104,7 +108,7 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                     (context, item) => ContentItem(
                       title: item.localize(context),
                       icon: Icons.fitness_center,
-                      onTap: () => handleSelectedWeightClass(item, context),
+                      onTap: () => DivisionWeightClassOverview.navigateTo(context, item),
                     ),
               ),
               FilterableManyConsumer<Division, Division>.edit(
@@ -115,7 +119,7 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                     (context, item) => ContentItem(
                       title: division.fullname,
                       icon: Icons.inventory,
-                      onTap: () => handleSelectedChildDivision(division, context),
+                      onTap: () => DivisionOverview.navigateTo(context, division),
                     ),
               ),
               boutConfigTabContent,
@@ -124,17 +128,5 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
         );
       },
     );
-  }
-
-  void handleSelectedChildDivision(Division division, BuildContext context) {
-    context.push('/${DivisionOverview.route}/${division.id}');
-  }
-
-  void handleSelectedLeague(League league, BuildContext context) {
-    context.push('/${LeagueOverview.route}/${league.id}');
-  }
-
-  void handleSelectedWeightClass(DivisionWeightClass divisionWeightClass, BuildContext context) {
-    context.push('/${DivisionWeightClassOverview.route}/${divisionWeightClass.id}');
   }
 }

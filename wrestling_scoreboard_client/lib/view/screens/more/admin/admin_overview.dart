@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/admin/user_edit.dart';
-import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/admin/user_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -32,15 +30,11 @@ class AdminOverview extends ConsumerWidget {
                 (context, item) => ContentItem(
                   title: item.username,
                   icon: Icons.account_circle,
-                  onTap: () => handleSelectedUser(item, context),
+                  onTap: () => UserOverview.navigateTo(item, context),
                 ),
           ),
         ],
       ),
     );
-  }
-
-  void handleSelectedUser(SecuredUser user, BuildContext context) {
-    context.push('/${MoreScreen.route}/${AdminOverview.route}/${UserOverview.route}/${user.id}');
   }
 }

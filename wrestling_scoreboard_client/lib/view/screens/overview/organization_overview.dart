@@ -29,6 +29,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class OrganizationOverview extends ConsumerWidget {
   static const route = 'organization';
 
+  static void navigateTo(BuildContext context, Organization organization) {
+    context.push('/$route/${organization.id}');
+  }
+
   final int id;
   final Organization? organization;
 
@@ -99,7 +103,7 @@ class OrganizationOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: '${item.fullname}, ${item.startDate.year}',
                           icon: Icons.inventory,
-                          onTap: () => handleSelectedDivision(item, context),
+                          onTap: () => DivisionOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<Club, Organization>.edit(
@@ -111,7 +115,7 @@ class OrganizationOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.name,
                           icon: Icons.foundation,
-                          onTap: () => handleSelectedClub(item, context),
+                          onTap: () => ClubOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<Competition, Organization>.edit(
@@ -122,7 +126,7 @@ class OrganizationOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.name,
                           icon: Icons.leaderboard,
-                          onTap: () => handleSelectedCompetition(item, context),
+                          onTap: () => CompetitionOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<AgeCategory, Organization>.edit(
@@ -133,7 +137,7 @@ class OrganizationOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: '${item.name} (${item.minAge} - ${item.maxAge})',
                           icon: Icons.school,
-                          onTap: () => handleSelectedAgeCategory(item, context),
+                          onTap: () => AgeCategoryOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<Person, Organization>.edit(
@@ -166,7 +170,7 @@ class OrganizationOverview extends ConsumerWidget {
                                         icon: const Icon(Icons.merge),
                                       ),
                                       // Use most up to date entry (last) as base merge object
-                                      onTap: () => handleSelectedPerson(similarPersons.value.last, context),
+                                      onTap: () => PersonOverview.navigateTo(context, similarPersons.value.last),
                                     ),
                                   ),
                                   TextButton.icon(
@@ -188,7 +192,7 @@ class OrganizationOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.fullName,
                           icon: Icons.person,
-                          onTap: () => handleSelectedPerson(item, context),
+                          onTap: () => PersonOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<Organization, Organization>.edit(
@@ -199,7 +203,7 @@ class OrganizationOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.fullname,
                           icon: Icons.inventory,
-                          onTap: () => handleSelectedChildOrganization(item, context),
+                          onTap: () => OrganizationOverview.navigateTo(context, item),
                         ),
                   ),
                 ],
@@ -209,29 +213,5 @@ class OrganizationOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedChildOrganization(Organization organization, BuildContext context) {
-    context.push('/${OrganizationOverview.route}/${organization.id}');
-  }
-
-  void handleSelectedDivision(Division division, BuildContext context) {
-    context.push('/${DivisionOverview.route}/${division.id}');
-  }
-
-  void handleSelectedClub(Club club, BuildContext context) {
-    context.push('/${ClubOverview.route}/${club.id}');
-  }
-
-  void handleSelectedPerson(Person person, BuildContext context) {
-    context.push('/${PersonOverview.route}/${person.id}');
-  }
-
-  void handleSelectedCompetition(Competition competition, BuildContext context) {
-    context.push('/${CompetitionOverview.route}/${competition.id}');
-  }
-
-  void handleSelectedAgeCategory(AgeCategory ageCategory, BuildContext context) {
-    context.push('/${AgeCategoryOverview.route}/${ageCategory.id}');
   }
 }

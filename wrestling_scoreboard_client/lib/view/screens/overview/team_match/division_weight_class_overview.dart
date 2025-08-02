@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -11,6 +12,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class DivisionWeightClassOverview extends ConsumerWidget with WeightClassOverview<DivisionWeightClass> {
   static const route = 'division_weight_class';
+
+  static void navigateTo(BuildContext context, DivisionWeightClass dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
 
   final int id;
   final DivisionWeightClass? divisionWeightClass;

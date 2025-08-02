@@ -76,7 +76,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
             }
             final technicalPoints = AthleteBoutState.getTechnicalPoints(competitionBoutsOfRound[cBout]!, role);
             item = InkWell(
-              onTap: () => navigateToCompetitionBoutScreen(context, cBout),
+              onTap: () => CompetitionBoutDisplay.navigateTo(context, cBout),
               child: Container(
                 decoration: BoxDecoration(border: Border.all(color: role.color())),
                 child: Row(
@@ -133,7 +133,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
               width: CompetitionParticipationItem.nameRelativeWidth,
               child: InkWell(
                 onTap: () {
-                  // FIXME: use `navigateToCompetitionParticipationOverview` route, https://github.com/flutter/flutter/issues/140586
+                  // FIXME: use `CompetitionParticipationOverview.navigateTo` route, https://github.com/flutter/flutter/issues/140586
                   context.go('/${CompetitionParticipationOverview.route}/${participation.id}');
                 },
                 child: ScaledText(

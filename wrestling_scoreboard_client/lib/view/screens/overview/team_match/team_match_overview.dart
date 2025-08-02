@@ -33,6 +33,15 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class TeamMatchOverview extends ConsumerWidget {
   static const route = 'match';
 
+  static void navigateTo(BuildContext context, TeamMatch dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
+  // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+  static void goTo(BuildContext context, TeamMatch dataObject) {
+    context.go('/$route/${dataObject.id}');
+  }
+
   final int id;
   final TeamMatch? match;
 
@@ -117,7 +126,7 @@ class TeamMatchOverview extends ConsumerWidget {
                   actions: [
                     ResponsiveScaffoldActionItem(
                       onTap:
-                          () async => navigateToScratchBoutOverview(
+                          () async => ScratchBoutOverview.navigateTo(
                             context,
                             ref,
                             boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
@@ -154,7 +163,7 @@ class TeamMatchOverview extends ConsumerWidget {
                     ResponsiveScaffoldActionItem(
                       style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
                       icon: const Icon(Icons.tv),
-                      onTap: () => handleSelectedMatchSequence(match, context),
+                      onTap: () => MatchDisplay.navigateTo(context, match),
                       label: localizations.display,
                     ),
                   ],
@@ -332,10 +341,6 @@ class TeamMatchOverview extends ConsumerWidget {
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
-
-  void handleSelectedMatchSequence(TeamMatch match, BuildContext context) {
-    context.push('/${TeamMatchOverview.route}/${match.id}/${MatchDisplay.route}');
-  }
 
   void handleSelectedLineup(
     BuildContext context,

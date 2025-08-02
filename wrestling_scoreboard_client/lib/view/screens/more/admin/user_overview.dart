@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/admin/user_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/admin/admin_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -14,6 +17,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class UserOverview extends ConsumerWidget {
   static const route = 'user';
+
+  static void navigateTo(SecuredUser user, BuildContext context) {
+    context.push('/${MoreScreen.route}/${AdminOverview.route}/$route/${user.id}');
+  }
 
   final int id;
   final SecuredUser? user;

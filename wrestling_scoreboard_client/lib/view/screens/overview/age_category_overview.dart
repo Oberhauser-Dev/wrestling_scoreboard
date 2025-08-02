@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/age_category_edit.dart';
@@ -13,6 +14,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class AgeCategoryOverview extends ConsumerWidget {
   static const route = 'age_category';
+
+  static void navigateTo(BuildContext context, AgeCategory dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
 
   final int id;
   final AgeCategory? ageCategory;
