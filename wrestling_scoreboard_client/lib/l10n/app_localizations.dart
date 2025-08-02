@@ -218,6 +218,12 @@ abstract class AppLocalizations {
   /// **'Websocket-Url'**
   String get wsUrl;
 
+  /// No description provided for @webClientUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Web Client Url (used for sharing)'**
+  String get webClientUrl;
+
   /// No description provided for @services.
   ///
   /// In en, this message translates to:
@@ -661,6 +667,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Display'**
   String get display;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
 
   /// No description provided for @toggleFullscreen.
   ///

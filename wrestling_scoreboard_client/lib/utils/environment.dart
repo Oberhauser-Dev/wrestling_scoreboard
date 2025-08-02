@@ -1,6 +1,7 @@
 enum Env {
   apiUrl,
   webSocketUrl,
+  webClientUrl,
 
   /// 'mock' -> debug and mock data
   /// 'development' -> debug and connect to API
@@ -19,6 +20,8 @@ enum Env {
         return const String.fromEnvironment('API_URL', defaultValue: 'http://localhost:8080/api');
       case Env.webSocketUrl:
         return const String.fromEnvironment('WEB_SOCKET_URL', defaultValue: 'ws://localhost:8080/ws');
+      case Env.webClientUrl:
+        return const String.fromEnvironment('WEB_CLIENT_URL');
       case Env.appEnvironment:
         return const String.fromEnvironment('APP_ENVIRONMENT', defaultValue: 'development');
       case Env.bellSoundPath:

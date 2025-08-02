@@ -79,8 +79,31 @@ class WebSocketUrlNotifier extends _$WebSocketUrlNotifier {
     return webSocketUrl;
   }
 
-  Future<void> setState(String? val) async {
+  Future<void> setState(String val) async {
     await Preferences.setString(Preferences.keyWsUrl, val);
+    state = Future.value(val);
+  }
+}
+
+/// The url used to host the client for web. This can be unset.
+/// It is used for sharing the web url on native platforms.
+@Riverpod()
+class WebClientUrlNotifier extends _$WebClientUrlNotifier {
+  @override
+  Raw<Future<String?>> build() async {
+    var webClientUrl = await Preferences.getString(Preferences.keyWebClientUrl);
+    webClientUrl ??= Env.webClientUrl.fromString();
+    if (webClientUrl.endsWith('/')) {
+      webClientUrl = webClientUrl.substring(0, webClientUrl.length - 1);
+    }
+    return webClientUrl.isEmpty ? null : webClientUrl;
+  }
+
+  Future<void> setState(String? val) async {
+    if (val != null && val.endsWith('/')) {
+      val = val.substring(0, val.length - 1);
+    }
+    await Preferences.setString(Preferences.keyWebClientUrl, val);
     state = Future.value(val);
   }
 }
@@ -108,7 +131,7 @@ class ApiUrlNotifier extends _$ApiUrlNotifier {
     return apiUrl;
   }
 
-  Future<void> setState(String? val) async {
+  Future<void> setState(String val) async {
     await Preferences.setString(Preferences.keyApiUrl, val);
     state = Future.value(val);
   }
