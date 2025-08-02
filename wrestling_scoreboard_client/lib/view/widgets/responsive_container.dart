@@ -62,11 +62,11 @@ class ResponsiveScaffoldActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showActions = context.isMediumScreenOrLarger || actionContents.length <= 1;
+    final showActionsInAppBar = context.isMediumScreenOrLarger || actionContents.length <= 2;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (showActions)
+        if (showActionsInAppBar)
           ...actionContents.map((a) {
             if (a.style == ResponsiveScaffoldActionItemStyle.elevatedIconAndText) {
               return Padding(
@@ -77,7 +77,7 @@ class ResponsiveScaffoldActions extends StatelessWidget {
             return IconButton(onPressed: a.onTap, icon: a.icon, tooltip: a.label);
           }),
         Visibility(
-          visible: !showActions,
+          visible: !showActionsInAppBar,
           // Maintain state so the popup menu still finds its ancestor
           maintainState: true,
           maintainSize: false,

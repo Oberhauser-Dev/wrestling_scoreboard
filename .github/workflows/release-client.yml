@@ -84,6 +84,7 @@ jobs:
             --dart-define=APP_ENVIRONMENT=production
             --dart-define=API_URL=https://server.wrestling-scoreboard.oberhauser.dev/api
             --dart-define=WEB_SOCKET_URL=wss://server.wrestling-scoreboard.oberhauser.dev/ws
+            --dart-define=WEB_CLIENT_URL=https://wrestling-scoreboard.oberhauser.dev
             --dart-define=USE_PATH_URL_STRATEGY=true
           android-keystore-file-base64: ${{ secrets.ANDROID_KEYSTORE }}
           android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
