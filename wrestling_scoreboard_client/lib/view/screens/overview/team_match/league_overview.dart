@@ -81,7 +81,7 @@ class LeagueOverview extends ConsumerWidget {
                         (context, item) => ContentItem(
                           title: item.team.name,
                           icon: Icons.group,
-                          onTap: () => handleSelectedTeam(item, context),
+                          onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<LeagueWeightClass, League>.edit(
@@ -102,10 +102,6 @@ class LeagueOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedTeam(LeagueTeamParticipation teamParticipation, BuildContext context) {
-    context.push('/${LeagueTeamParticipationOverview.route}/${teamParticipation.id}');
   }
 
   void handleSelectedWeightClass(LeagueWeightClass leagueWeightClass, BuildContext context) {
