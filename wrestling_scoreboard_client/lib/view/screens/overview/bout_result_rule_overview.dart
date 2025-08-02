@@ -9,8 +9,6 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/bout_result_rule_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -18,12 +16,12 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToBoutResultRuleOverview(BuildContext context, BoutResultRule boutResultRule) {
-  context.push('/${BoutResultRuleOverview.route}/${boutResultRule.id}');
-}
-
 class BoutResultRuleOverview extends ConsumerWidget {
   static const route = 'bout_result_rule';
+
+  static void navigateTo(BuildContext context, BoutResultRule boutResultRule) {
+    context.push('/$route/${boutResultRule.id}');
+  }
 
   final int id;
   final BoutResultRule? boutResultRule;
@@ -86,13 +84,5 @@ class BoutResultRuleOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedTeam(Team team, BuildContext context) {
-    context.push('/${TeamOverview.route}/${team.id}');
-  }
-
-  void handleSelectedMembership(Membership membership, BuildContext context) {
-    context.push('/${MembershipOverview.route}/${membership.id}');
   }
 }

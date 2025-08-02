@@ -13,12 +13,12 @@ import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToCompetitionParticipationOverview(BuildContext context, CompetitionParticipation participation) {
-  context.push('/${CompetitionParticipationOverview.route}/${participation.id}');
-}
-
 class CompetitionParticipationOverview extends ConsumerWidget {
   static const route = 'competition_participation';
+
+  static void navigateTo(BuildContext context, CompetitionParticipation participation) {
+    context.push('/$route/${participation.id}');
+  }
 
   final int id;
   final CompetitionParticipation? competitionParticipation;

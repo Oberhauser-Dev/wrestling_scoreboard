@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/club_edit.dart';
@@ -21,6 +21,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubOverview extends ConsumerWidget {
   static const route = 'club';
+
+  static void navigateTo(BuildContext context, Club club) {
+    context.push('/$route/${club.id}');
+  }
 
   final int id;
   final Club? club;
@@ -99,7 +103,7 @@ class ClubOverview extends ConsumerWidget {
                     (context, item) => ContentItem(
                       title: item.name,
                       icon: Icons.group,
-                      onTap: () => handleSelectedTeam(item, context),
+                      onTap: () => TeamOverview.navigateTo(context, item),
                     ),
               ),
               FilterableManyConsumer<Membership, Club>.edit(
@@ -110,7 +114,7 @@ class ClubOverview extends ConsumerWidget {
                     (context, item) => ContentItem(
                       title: '${item.info},\t${item.person.gender?.localize(context)}',
                       icon: Icons.person,
-                      onTap: () => handleSelectedMembership(item, context),
+                      onTap: () => MembershipOverview.navigateTo(context, item),
                     ),
               ),
             ],
@@ -118,13 +122,5 @@ class ClubOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedTeam(Team team, BuildContext context) {
-    context.push('/${TeamOverview.route}/${team.id}');
-  }
-
-  void handleSelectedMembership(Membership membership, BuildContext context) {
-    context.push('/${MembershipOverview.route}/${membership.id}');
   }
 }

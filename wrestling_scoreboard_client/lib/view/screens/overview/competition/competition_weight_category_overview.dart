@@ -8,7 +8,6 @@ import 'package:wrestling_scoreboard_client/view/screens/display/competition/wei
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -21,6 +20,15 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionWeightCategoryOverview extends ConsumerWidget {
   static const route = 'competition_weight_category';
+
+  static void navigateTo(BuildContext context, CompetitionWeightCategory dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
+  // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+  static void goTo(CompetitionWeightCategory weightCategory, BuildContext context) {
+    context.go('/$route/${weightCategory.id}');
+  }
 
   final int id;
   final CompetitionWeightCategory? competitionWeightCategory;
@@ -82,7 +90,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             ResponsiveScaffoldActionItem(
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
               icon: const Icon(Icons.tv),
-              onTap: () => _handleSelectedWeightCategoryDisplay(competitionWeightCategory, context),
+              onTap: () => CompetitionWeightCategoryDisplay.navigateTo(context, competitionWeightCategory),
               label: localizations.display,
             ),
             ResponsiveScaffoldActionItem(
@@ -122,19 +130,13 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
                     (context, item) => ContentItem(
                       title: item.name,
                       icon: Icons.person,
-                      onTap: () => navigateToCompetitionParticipationOverview(context, item),
+                      onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
                     ),
               ),
             ],
           ),
         );
       },
-    );
-  }
-
-  void _handleSelectedWeightCategoryDisplay(CompetitionWeightCategory category, BuildContext context) {
-    context.push(
-      '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/${CompetitionWeightCategoryDisplay.route}',
     );
   }
 

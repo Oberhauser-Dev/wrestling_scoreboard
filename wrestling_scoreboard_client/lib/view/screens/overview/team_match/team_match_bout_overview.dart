@@ -20,6 +20,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBout> {
   static const route = 'team_match_bout';
 
+  static void navigateTo(BuildContext context, TeamMatchBout bout) {
+    context.push('/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}');
+  }
+
   final int id;
   final TeamMatchBout? teamMatchBout;
 
@@ -84,7 +88,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
             ResponsiveScaffoldActionItem(
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
               icon: const Icon(Icons.tv),
-              onTap: () => handleSelectedBoutDisplay(teamMatchBout, context),
+              onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBout),
               label: localizations.display,
             ),
           ],
@@ -94,12 +98,6 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
         );
       },
-    );
-  }
-
-  void handleSelectedBoutDisplay(TeamMatchBout bout, BuildContext context) {
-    context.push(
-      '/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}/${TeamMatchBoutDisplay.route}',
     );
   }
 }

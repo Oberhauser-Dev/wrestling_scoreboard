@@ -22,6 +22,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class TeamOverview<T extends DataObject> extends ConsumerWidget {
   static const route = 'team';
 
+  static void navigateTo(BuildContext context, Team team) {
+    context.push('/$route/${team.id}');
+  }
+
   final int id;
   final Team? team;
 
@@ -108,14 +112,15 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                     (context, club) => ContentItem(
                       title: club.name,
                       icon: Icons.foundation,
-                      onTap: () => handleSelectedClub(club, context),
+                      onTap: () => ClubOverview.navigateTo(context, club),
                     ),
               ),
               FilterableManyConsumer<LeagueTeamParticipation, Team>.edit(
                 context: context,
                 editPageBuilder: (context) => LeagueTeamParticipationEdit(initialTeam: team),
                 filterObject: team,
-                mapData: (teamParticipations) => teamParticipations..sort((a, b) => a.league.name.compareTo(b.league.name)),
+                mapData:
+                    (teamParticipations) => teamParticipations..sort((a, b) => a.league.name.compareTo(b.league.name)),
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: item.league.name,
@@ -128,9 +133,5 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedClub(Club club, BuildContext context) {
-    context.push('/${ClubOverview.route}/${club.id}');
   }
 }

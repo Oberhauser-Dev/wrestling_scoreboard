@@ -34,6 +34,15 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
   static const route = 'competition';
 
+  static void navigateTo(BuildContext context, Competition dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
+  // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
+  static void goTo(BuildContext context, Competition competition) {
+    context.go('/$route/${competition.id}');
+  }
+
   final int id;
   final Competition? competition;
 
@@ -162,7 +171,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   return ContentItem(
                     title: lineup.club.name,
                     icon: Icons.view_list,
-                    onTap: () async => _handleSelectedCompetitionLineup(context, lineup),
+                    onTap: () async => CompetitionLineupOverview.navigateTo(context, lineup),
                   );
                 },
               ),
@@ -176,7 +185,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   return ContentItem(
                     title: competitionAgeCategory.ageCategory.name,
                     icon: Icons.school,
-                    onTap: () async => _handleSelectedCompetitionAgeCategory(context, competitionAgeCategory),
+                    onTap: () async => CompetitionAgeCategoryOverview.navigateTo(context, competitionAgeCategory),
                   );
                 },
               ),
@@ -190,7 +199,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   return ContentItem(
                     title: weightCategory.name,
                     icon: Icons.fitness_center,
-                    onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
+                    onTap: () async => CompetitionWeightCategoryOverview.navigateTo(context, weightCategory),
                   );
                 },
               ),
@@ -206,7 +215,8 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                         '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
                     icon: Icons.account_tree,
                     onTap:
-                        () async => _handleSelectedCompetitionSystemAffiliation(context, competitionSystemAffiliation),
+                        () async =>
+                            CompetitionSystemAffiliationOverview.navigateTo(context, competitionSystemAffiliation),
                   );
                 },
               ),
@@ -228,7 +238,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               body: TabGroup(items: [description, ...tabItems.values, boutConfigTabContent]),
               actions: [
                 ResponsiveScaffoldActionItem(
-                  onTap: () async => navigateToScratchBoutOverview(context, ref, boutConfig: competition.boutConfig),
+                  onTap: () async => ScratchBoutOverview.navigateTo(context, ref, boutConfig: competition.boutConfig),
                   icon: const Icon(Icons.rocket_launch),
                   label: localizations.launchScratchBout,
                 ),
@@ -307,7 +317,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 // pdfAction,
                 ResponsiveScaffoldActionItem(
                   icon: const Icon(Icons.tv),
-                  onTap: () => _handleSelectedCompetitionDisplay(competition, context),
+                  onTap: () => CompetitionDisplay.navigateTo(context, competition),
                   label: localizations.display,
                   style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
                 ),
@@ -328,26 +338,6 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
-
-  void _handleSelectedCompetitionDisplay(Competition competition, BuildContext context) {
-    context.push('/${CompetitionOverview.route}/${competition.id}/${CompetitionDisplay.route}');
-  }
-
-  void _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
-    context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
-  }
-
-  void _handleSelectedCompetitionSystemAffiliation(BuildContext context, CompetitionSystemAffiliation affiliation) {
-    context.push('/${CompetitionSystemAffiliationOverview.route}/${affiliation.id}');
-  }
-
-  void _handleSelectedCompetitionLineup(BuildContext context, CompetitionLineup lineup) {
-    context.push('/${CompetitionLineupOverview.route}/${lineup.id}');
-  }
-
-  void _handleSelectedCompetitionAgeCategory(BuildContext context, CompetitionAgeCategory competitionAgeCategory) {
-    context.push('/${CompetitionAgeCategoryOverview.route}/${competitionAgeCategory.id}');
-  }
 }
 
 extension CompetitionFileExt on Competition {
