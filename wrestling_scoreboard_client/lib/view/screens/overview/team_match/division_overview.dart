@@ -77,15 +77,14 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
           details: '${division.name}, ${division.startDate.year}',
           tabs: [
             Tab(child: HeadingText(localizations.info)),
-            boutConfigTab,
             Tab(child: HeadingText(localizations.leagues)),
             Tab(child: HeadingText(localizations.weightClasses)),
             Tab(child: HeadingText('${localizations.sub}-${localizations.divisions}')),
+            boutConfigTab,
           ],
           body: TabGroup(
             items: [
               description,
-              boutConfigTabContent,
               FilterableManyConsumer<League, Division>.edit(
                 context: context,
                 editPageBuilder: (context) => LeagueEdit(initialDivision: division),
@@ -119,6 +118,7 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                       onTap: () => handleSelectedChildDivision(division, context),
                     ),
               ),
+              boutConfigTabContent,
             ],
           ),
         );
