@@ -16,6 +16,12 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<CompetitionBout> {
   static const route = 'competition_bout';
 
+  static void navigateTo(BuildContext context, CompetitionBout dataObject) {
+    context.push(
+      '/${CompetitionOverview.route}/${dataObject.competition.id}/${CompetitionBoutOverview.route}/${dataObject.id}',
+    );
+  }
+
   final int id;
   final CompetitionBout? competitionBout;
 
@@ -91,7 +97,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
             ResponsiveScaffoldActionItem(
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
               icon: const Icon(Icons.tv),
-              onTap: () => handleSelectedBoutDisplay(competitionBout, context),
+              onTap: () => CompetitionBoutDisplay.navigateTo(context, competitionBout),
               label: localizations.display,
             ),
           ],
@@ -101,12 +107,6 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
           boutConfig: competitionBout.competition.boutConfig,
         );
       },
-    );
-  }
-
-  void handleSelectedBoutDisplay(CompetitionBout bout, BuildContext context) {
-    context.push(
-      '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}',
     );
   }
 }

@@ -9,17 +9,18 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToCompetitionBoutScreen(BuildContext context, CompetitionBout bout) {
-  context.push(
-    '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/${CompetitionBoutDisplay.route}',
-  );
-}
-
 /// Class to load a single bout, while also consider the previous and the next bout.
 /// So must load the whole list of bouts to keep track of what comes next.
 /// TODO: This may can be done server side with its own request in the future.
 class CompetitionBoutDisplay extends StatelessWidget {
   static const route = 'display';
+
+  static void navigateTo(BuildContext context, CompetitionBout bout) {
+    context.push(
+      '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/$route',
+    );
+  }
+
   final int competitionId;
   final int competitionBoutId;
   final Competition? initialMatch;
@@ -93,7 +94,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                           ],
                           navigateToBoutByIndex: (context, index) {
                             context.pop();
-                            navigateToCompetitionBoutScreen(context, matCompetitionBouts[index]);
+                            CompetitionBoutDisplay.navigateTo(context, matCompetitionBouts[index]);
                           },
                           // TODO
                           headerItems: [],

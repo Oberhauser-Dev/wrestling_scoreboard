@@ -20,6 +20,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class MatchDisplay extends ConsumerWidget {
   static const route = 'display';
 
+  static void navigateTo(BuildContext context, TeamMatch match) {
+    context.push('/${TeamMatchOverview.route}/${match.id}/$route');
+  }
+
   final int id;
   final TeamMatch? teamMatch;
 
@@ -37,7 +41,7 @@ class MatchDisplay extends ConsumerWidget {
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
-          onTap: () => handleSelectedTeamMatch(match, context),
+          onTap: () => TeamMatchOverview.goTo(context, match),
         );
         final pdfAction = ResponsiveScaffoldActionItem(
           label: localizations.print,
@@ -141,7 +145,7 @@ class MatchDisplay extends ConsumerWidget {
                         return Column(
                           children: [
                             InkWell(
-                              onTap: () => navigateToTeamMatchBoutScreen(context, match, teamMatchBouts[index]),
+                              onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBouts[index]),
                               child: IntrinsicHeight(
                                 child: BoutListItem(
                                   boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
@@ -164,10 +168,5 @@ class MatchDisplay extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedTeamMatch(TeamMatch match, BuildContext context) {
-    // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-    context.go('/${TeamMatchOverview.route}/${match.id}');
   }
 }

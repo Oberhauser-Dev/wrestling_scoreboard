@@ -12,12 +12,12 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-void navigateToScratchBoutDisplay(BuildContext context) {
-  context.push('/${Home.route}/${ScratchBoutOverview.route}/${ScratchBoutDisplay.route}');
-}
-
 class ScratchBoutDisplay extends StatefulWidget {
   static const route = 'display';
+
+  static void navigateTo(BuildContext context) {
+    context.push('/${Home.route}/${ScratchBoutOverview.route}/$route');
+  }
 
   const ScratchBoutDisplay({super.key});
 
@@ -94,7 +94,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                                     ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
 
                                     if (context.mounted) {
-                                      navigateToScratchBoutDisplay(context);
+                                      ScratchBoutDisplay.navigateTo(context);
                                     }
                                   });
                                 }

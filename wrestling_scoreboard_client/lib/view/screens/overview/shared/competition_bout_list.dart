@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -68,13 +66,9 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
             ),
           ),
           leading: const Icon(Icons.sports_kabaddi),
-          onTap: () => handleSelectedCompetitionBout(competitionBout, context),
+          onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),
         );
       },
     );
-  }
-
-  void handleSelectedCompetitionBout(CompetitionBout bout, BuildContext context) {
-    context.push('/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}');
   }
 }

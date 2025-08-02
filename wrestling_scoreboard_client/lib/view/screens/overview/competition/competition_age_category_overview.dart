@@ -17,6 +17,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CompetitionAgeCategoryOverview extends ConsumerWidget {
   static const route = 'competition_age_category';
 
+  static void navigateTo(BuildContext context, CompetitionAgeCategory dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
   final int id;
   final CompetitionAgeCategory? competitionAgeCategory;
 
@@ -71,7 +75,7 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
                   return ContentItem(
                     title: weightCategory.name,
                     icon: Icons.fitness_center,
-                    onTap: () async => _handleSelectedWeightCategory(context, weightCategory),
+                    onTap: () async => CompetitionWeightCategoryOverview.navigateTo(context, weightCategory),
                   );
                 },
               ),
@@ -80,9 +84,5 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void _handleSelectedWeightCategory(BuildContext context, CompetitionWeightCategory weightCategory) {
-    context.push('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }
 }

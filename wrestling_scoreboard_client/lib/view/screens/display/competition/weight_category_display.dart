@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/competition/competition_participation_item.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
@@ -21,6 +22,12 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionWeightCategoryDisplay extends ConsumerWidget {
   static const route = 'display';
+
+  static void navigateTo(BuildContext context, CompetitionWeightCategory category) {
+    context.push(
+      '/${CompetitionOverview.route}/${category.competition.id}/${CompetitionWeightCategoryOverview.route}/${category.id}/$route',
+    );
+  }
 
   final int id;
   final CompetitionWeightCategory? competitionWeightCategory;
@@ -41,7 +48,7 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
-          onTap: () => handleSelectedWeightCategory(competitionWeightCategory, context),
+          onTap: () => CompetitionWeightCategoryOverview.goTo(competitionWeightCategory, context),
         );
         // final pdfAction = ResponsiveScaffoldActionItem(
         //   tooltip: localizations.print,
@@ -257,10 +264,5 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void handleSelectedWeightCategory(CompetitionWeightCategory weightCategory, BuildContext context) {
-    // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-    context.go('/${CompetitionWeightCategoryOverview.route}/${weightCategory.id}');
   }
 }

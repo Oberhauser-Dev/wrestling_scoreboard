@@ -101,6 +101,10 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
 class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> {
   static const route = 'person';
 
+  static void navigateTo(BuildContext context, Person dataObject) {
+    context.push('/$route/${dataObject.id}');
+  }
+
   final int id;
   final Person? person;
   final Organization? initialOrganization;
@@ -134,17 +138,13 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
                       (context, membership) => ContentItem(
                         title: '${membership.info},\t${membership.person.gender?.localize(context)}',
                         icon: Icons.person,
-                        onTap: () => handleSelectedMembership(membership, context),
+                        onTap: () => MembershipOverview.navigateTo(context, membership),
                       ),
                 ),
               },
         );
       },
     );
-  }
-
-  void handleSelectedMembership(Membership membership, BuildContext context) {
-    context.push('/${MembershipOverview.route}/${membership.id}');
   }
 }
 
