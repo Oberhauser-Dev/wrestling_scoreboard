@@ -18,6 +18,7 @@ import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
@@ -67,9 +68,9 @@ class CustomSettingsScreen extends ConsumerWidget {
 
     Future<(Locale?, ThemeMode, String?)> loadGeneralSettings() async {
       final results = await Future.wait([
-        ref.watch(localeNotifierProvider),
-        ref.watch(themeModeNotifierProvider),
-        ref.watch(fontFamilyNotifierProvider),
+        ref.readAsync(localeNotifierProvider),
+        ref.readAsync(themeModeNotifierProvider),
+        ref.readAsync(fontFamilyNotifierProvider),
       ]);
 
       return (results[0] as Locale?, results[1] as ThemeMode, results[2] as String?);

@@ -20,7 +20,7 @@ class LocaleNotifier extends _$LocaleNotifier {
     final localeStr = await Preferences.getString(Preferences.keyLocale);
     Locale? locale;
     if (localeStr != null) {
-      final splits = localeStr.split('_');
+      final splits = localeStr.split('-');
       if (splits.length > 1) {
         locale = Locale(splits[0], splits[1]);
       } else {
