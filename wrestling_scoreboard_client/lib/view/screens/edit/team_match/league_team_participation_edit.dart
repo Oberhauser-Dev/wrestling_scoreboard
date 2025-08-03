@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -65,7 +65,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
               (League? value) => setState(() {
                 _league = value;
               }),
-          itemAsString: (u) => u.name,
+          itemAsString: (l) => '${l.fullname}, ${l.startDate.year}',
           asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
             return _availableLeagues!.toList();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
@@ -39,7 +40,11 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
           classLocale: localizations.team,
           children: [
             ContentItem(title: data.team.name, subtitle: localizations.team, icon: Icons.group),
-            ContentItem(title: data.league.name, subtitle: localizations.league, icon: Icons.emoji_events),
+            ContentItem(
+              title: '${data.league.fullname}, ${data.league.startDate.toDateString(context)}',
+              subtitle: localizations.league,
+              icon: Icons.emoji_events,
+            ),
           ],
         );
         return FavoriteScaffold<LeagueTeamParticipation>(
