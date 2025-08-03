@@ -120,11 +120,16 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                 editPageBuilder: (context) => LeagueTeamParticipationEdit(initialTeam: team),
                 filterObject: team,
                 mapData:
-                    (teamParticipations) => teamParticipations..sort((a, b) => a.league.name.compareTo(b.league.name)),
+                    (teamParticipations) =>
+                        teamParticipations..sort((a, b) {
+                          final dateComp = b.league.startDate.compareTo(a.league.startDate);
+                          if (dateComp != 0) return dateComp;
+                          return a.league.fullname.compareTo(b.league.fullname);
+                        }),
                 itemBuilder:
                     (context, item) => ContentItem(
-                      title: item.league.name,
-                      icon: Icons.group,
+                      title: '${item.league.fullname}, ${item.league.startDate.year}',
+                      icon: Icons.emoji_events,
                       onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                     ),
               ),
