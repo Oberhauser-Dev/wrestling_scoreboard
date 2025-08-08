@@ -109,7 +109,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
-                    DefaultDurationPickerMaterialLocalizations.delegate,
+                    GlobalMaterialDurationPickerLocalizations.delegate,
                   ],
                   supportedLocales: Preferences.supportedLanguages,
                   builder: (context, child) => GlobalWidget(child: child ?? const CircularProgressIndicator()),

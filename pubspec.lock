@@ -793,10 +793,10 @@ packages:
     dependency: transitive
     description:
       name: material_duration_picker
-      sha256: "6b4ea3fec8886402c0b0323262daa081a4e2ba213a763020c4fb0c9910e61cf2"
+      sha256: "76b401b89d813b61b29118cfb0bf9c517f600d0c85c36ee6b4aa239e922a4557"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2+1"
+    version: "0.1.0"
   melos:
     dependency: "direct dev"
     description:
