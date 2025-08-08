@@ -46,7 +46,7 @@ dependencies:
   file_selector: ^1.0.3
   csv: ^6.0.0
   web: ^1.0.0
-  material_duration_picker: ^0.0.2
+  material_duration_picker: ^0.1.0
   scrollable_positioned_list: ^0.3.8
   pub_semver: ^2.1.4
   linked_scroll_controller: ^0.2.0
