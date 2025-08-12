@@ -103,7 +103,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         title: TextFormField(
           key: ValueKey(_date),
           readOnly: true,
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.date),
+          decoration: CustomInputDecoration(isMandatory: true, label: localizations.date, localizations: localizations),
           onTap:
               () => showDatePicker(
                 initialDatePickerMode: DatePickerMode.day,

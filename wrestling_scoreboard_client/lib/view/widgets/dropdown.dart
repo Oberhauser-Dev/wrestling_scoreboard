@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 
 class SearchableDropdown<T> extends StatelessWidget {
   final T? selectedItem;
@@ -35,7 +36,14 @@ class SearchableDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
-      decoratorProps: DropDownDecoratorProps(decoration: InputDecoration(labelText: label, icon: icon)),
+      decoratorProps: DropDownDecoratorProps(
+        decoration: CustomInputDecoration(
+          label: label,
+          icon: icon,
+          localizations: context.l10n,
+          isMandatory: !allowEmpty,
+        ),
+      ),
       popupProps: PopupProps.menu(
         searchFieldProps: const TextFieldProps(decoration: InputDecoration(prefixIcon: Icon(Icons.search))),
         showSearchBox: true,
@@ -134,7 +142,7 @@ class CustomDropdown<T> extends StatelessWidget {
       onSaved: onSaved,
       items: items,
       alignment: alignment,
-      decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: label),
+      decoration: CustomInputDecoration(label: label, localizations: context.l10n, isMandatory: !isNullable),
     );
   }
 }

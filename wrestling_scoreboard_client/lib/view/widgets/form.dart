@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 
@@ -12,6 +13,7 @@ class CustomTextInput extends StatelessWidget {
   final bool isMultiline;
   final bool isMandatory;
   final FormFieldValidator<String>? validator;
+  final Iterable<String>? autofillHints;
 
   const CustomTextInput({
     this.onSaved,
@@ -23,6 +25,7 @@ class CustomTextInput extends StatelessWidget {
     this.isMandatory = false,
     super.key,
     this.validator,
+    this.autofillHints,
   });
 
   @override
@@ -31,6 +34,7 @@ class CustomTextInput extends StatelessWidget {
     return ListTile(
       leading: iconData != null ? Icon(iconData) : const SizedBox(),
       title: TextFormField(
+        autofillHints: autofillHints,
         readOnly: onSaved == null && onChanged == null,
         maxLines: isMultiline ? null : 1,
         keyboardType: isMultiline ? TextInputType.multiline : null,
@@ -46,11 +50,7 @@ class CustomTextInput extends StatelessWidget {
               return null;
             },
         initialValue: initialValue,
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: label,
-          hintText: isMandatory ? null : localizations.optional,
-        ),
+        decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
       ),
     );
   }
@@ -84,11 +84,7 @@ class NumericalInput<T extends num> extends StatelessWidget {
       title: TextFormField(
         initialValue: initialValue?.toString() ?? '',
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: label,
-          hintText: isMandatory ? null : localizations.optional,
-        ),
+        decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
         inputFormatters: <TextInputFormatter>[inputFormatter],
         onSaved:
             onSaved == null
@@ -125,6 +121,7 @@ class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
+    final label = localizations.email;
     return ListTile(
       leading: const Icon(Icons.email),
       title: TextFormField(
@@ -136,11 +133,7 @@ class EmailInput extends StatelessWidget {
           }
           return null;
         },
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: localizations.email,
-          hintText: isMandatory ? null : localizations.optional,
-        ),
+        decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
         autofillHints: const [AutofillHints.email],
       ),
     );
@@ -166,6 +159,7 @@ class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
+    final label = isRepetition ? 'Repeat ${localizations.auth_Password}' : localizations.auth_Password;
     return ListTile(
       leading: const Icon(Icons.password),
       title: TextFormField(
@@ -186,13 +180,23 @@ class PasswordInput extends StatelessWidget {
           return null;
         },
         obscureText: true,
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: isRepetition ? 'Repeat ${localizations.auth_Password}' : localizations.auth_Password,
-          hintText: isMandatory ? null : localizations.optional,
-        ),
+        decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
         autofillHints: [isNewPassword ? AutofillHints.newPassword : AutofillHints.password],
       ),
     );
   }
+}
+
+class CustomInputDecoration extends InputDecoration {
+  CustomInputDecoration({required bool isMandatory, String? label, required AppLocalizations localizations, super.icon})
+    : super(
+        border: const UnderlineInputBorder(),
+        labelText:
+            label == null
+                ? null
+                : isMandatory
+                ? '$label*'
+                : label,
+        hintText: isMandatory ? null : localizations.optional,
+      );
 }

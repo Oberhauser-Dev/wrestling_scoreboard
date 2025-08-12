@@ -57,7 +57,11 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         title: TextFormField(
           key: ValueKey(_startDate),
           readOnly: true,
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.startDate),
+          decoration: CustomInputDecoration(
+            isMandatory: true,
+            label: localizations.startDate,
+            localizations: localizations,
+          ),
           onTap:
               () => showDatePicker(
                 initialDatePickerMode: DatePickerMode.year,
@@ -78,7 +82,11 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         title: TextFormField(
           key: ValueKey(_endDate),
           readOnly: true,
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.endDate),
+          decoration: CustomInputDecoration(
+            isMandatory: true,
+            label: localizations.endDate,
+            localizations: localizations,
+          ),
           onTap:
               () => showDatePicker(
                 initialDatePickerMode: DatePickerMode.year,

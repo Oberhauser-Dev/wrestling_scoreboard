@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -319,9 +320,10 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
               child: TextFormField(
                 initialValue: widget.participation?.weight?.toString() ?? '',
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  labelText: localizations.weight,
+                decoration: CustomInputDecoration(
+                  isMandatory: false,
+                  label: localizations.weight,
+                  localizations: localizations,
                 ),
                 inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
                 onChanged: (String? value) {
