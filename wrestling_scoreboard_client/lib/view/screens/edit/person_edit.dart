@@ -66,7 +66,11 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
         title: TextFormField(
           key: ValueKey(_dateOfBirth),
           readOnly: true,
-          decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.date),
+          decoration: CustomInputDecoration(
+            isMandatory: false,
+            label: localizations.date,
+            localizations: localizations,
+          ),
           onTap:
               () => showDatePicker(
                 initialDatePickerMode: DatePickerMode.year,
