@@ -18,7 +18,6 @@ import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-// TODO: dynamically add or remove participants without weight class
 class TeamLineupEdit extends ConsumerStatefulWidget {
   final TeamLineup lineup;
   final List<WeightClass> weightClasses;
