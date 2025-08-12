@@ -6,19 +6,49 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class OrganizationEdit extends ConsumerStatefulWidget {
+class OrganizationEdit extends ConsumerWidget {
   final Organization? organization;
   final Organization? initialParent;
 
   const OrganizationEdit({this.organization, this.initialParent, super.key});
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return LoadingBuilder(
+      future: ref.read(orgAuthNotifierProvider),
+      builder: (context, authServices) {
+        BasicAuthService? authService;
+        if (organization?.id != null) {
+          final apiProviderAuth = authServices[organization!.id];
+          if (apiProviderAuth is BasicAuthService) {
+            authService = apiProviderAuth;
+          }
+        }
+        return _OrganizationEdit(
+          organization: organization,
+          initialParent: initialParent,
+          initialAuthService: authService,
+        );
+      },
+    );
+  }
+}
+
+class _OrganizationEdit extends ConsumerStatefulWidget {
+  final Organization? organization;
+  final Organization? initialParent;
+  final BasicAuthService? initialAuthService;
+
+  const _OrganizationEdit({this.organization, this.initialParent, this.initialAuthService});
+
+  @override
   ConsumerState<ConsumerStatefulWidget> createState() => _OrganizationEditState();
 }
 
-class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
+class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
   final _formKey = GlobalKey<FormState>();
   Iterable<Organization>? _availableOrganizations;
 
@@ -27,9 +57,8 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
   Organization? _parent;
   WrestlingApiProvider? _apiProvider;
   WrestlingReportProvider? _reportProvider;
-
-  // Auth for API provider
-  AuthService? _apiProviderAuth;
+  String? _authProviderUsername;
+  String? _authProviderPassword;
 
   @override
   void initState() {
@@ -38,13 +67,8 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
     _apiProvider = widget.organization?.apiProvider;
     _reportProvider = widget.organization?.reportProvider;
 
-    if (widget.organization?.id != null) {
-      ref.read(orgAuthNotifierProvider).then((value) {
-        setState(() {
-          _apiProviderAuth = value[widget.organization!.id];
-        });
-      });
-    }
+    _authProviderUsername = widget.initialAuthService?.username;
+    _authProviderPassword = widget.initialAuthService?.password;
   }
 
   @override
@@ -100,39 +124,19 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           ),
         ),
       ),
-      if (_apiProvider == WrestlingApiProvider.deByRingenApi)
-        ListTile(
-          leading: const Icon(Icons.account_circle),
-          title: TextFormField(
-            key: Key(_apiProviderAuth.toString()),
-            // Workaround to update initialValue
-            autofillHints: const [AutofillHints.username],
-            decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: localizations.username),
-            initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).username : null,
-            onSaved: (newValue) {
-              final currentAuth = _apiProviderAuth;
-              if (currentAuth is BasicAuthService) {
-                _apiProviderAuth = currentAuth.copyWith(username: newValue ?? '');
-              } else {
-                _apiProviderAuth = BasicAuthService(username: newValue ?? '', password: '');
-              }
-            },
-          ),
-        ),
-      if (_apiProvider == WrestlingApiProvider.deByRingenApi)
-        PasswordInput(
-          isMandatory: true,
-          key: Key(_apiProviderAuth.toString()), // Workaround to update initialValue
-          initialValue: _apiProviderAuth is BasicAuthService ? (_apiProviderAuth as BasicAuthService).password : null,
-          onSaved: (newValue) {
-            final currentAuth = _apiProviderAuth;
-            if (currentAuth is BasicAuthService) {
-              _apiProviderAuth = currentAuth.copyWith(password: newValue ?? '');
-            } else {
-              _apiProviderAuth = BasicAuthService(username: '', password: newValue ?? '');
-            }
-          },
-        ),
+      CustomTextInput(
+        autofillHints: const [AutofillHints.username],
+        iconData: Icons.account_circle,
+        label: localizations.username,
+        initialValue: _authProviderUsername,
+        isMandatory: false,
+        onSaved: (newValue) => _authProviderUsername = newValue,
+      ),
+      PasswordInput(
+        isMandatory: false,
+        initialValue: _authProviderPassword,
+        onSaved: (newValue) => _authProviderPassword = newValue,
+      ),
       ListTile(
         leading: const Icon(Icons.description),
         title: ButtonTheme(
@@ -173,8 +177,18 @@ class _OrganizationEditState extends ConsumerState<OrganizationEdit> {
           apiProvider: _apiProvider,
         ),
       );
-      if (widget.organization?.id != null && _apiProviderAuth != null) {
-        ref.read(orgAuthNotifierProvider.notifier).addOrgAuthService(widget.organization!.id!, _apiProviderAuth!);
+      if (widget.organization?.id != null) {
+        if (_authProviderUsername != null && _authProviderPassword != null) {
+          ref
+              .read(orgAuthNotifierProvider.notifier)
+              .addOrgAuthService(
+                widget.organization!.id!,
+                BasicAuthService(username: _authProviderUsername!, password: _authProviderPassword!),
+              );
+        } else if (widget.initialAuthService != null) {
+          // Delete credentials if they already existed
+          ref.read(orgAuthNotifierProvider.notifier).removeOrgAuthService(widget.organization!.id!);
+        }
       }
       navigator.pop();
     }
