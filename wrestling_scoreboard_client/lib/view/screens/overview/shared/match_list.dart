@@ -59,7 +59,7 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                     title: Text.rich(
                       style: match.date.compareTo(today) < 0 ? TextStyle(color: Theme.of(context).disabledColor) : null,
                       TextSpan(
-                        text: '${match.date.toDateString(context)}, ${match.no ?? 'no ID'}, ',
+                        text: '${match.date.toDateString(context)} | ',
                         children: [
                           TextSpan(
                             text: match.home.team.name,
