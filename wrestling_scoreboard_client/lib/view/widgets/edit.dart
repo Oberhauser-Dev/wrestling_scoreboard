@@ -12,7 +12,14 @@ class EditWidget extends StatelessWidget {
 
   List<ResponsiveScaffoldActionItem> _buildActions(BuildContext context) {
     final localizations = context.l10n;
-    return [ResponsiveScaffoldActionItem(icon: const Icon(Icons.save), label: localizations.save, onTap: onSubmit)];
+    return [
+      ResponsiveScaffoldActionItem(
+        icon: const Icon(Icons.save),
+        label: localizations.save,
+        onTap: onSubmit,
+        style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+      ),
+    ];
   }
 
   @override
