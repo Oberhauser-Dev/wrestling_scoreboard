@@ -21,7 +21,9 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
@@ -306,7 +308,33 @@ class TeamMatchOverview extends ConsumerWidget {
                                       ),
                                     ];
                                     return GroupedList(
-                                      header: const HeadingItem(),
+                                      header: HeadingItem(
+                                        trailing: Restricted(
+                                          privilege: UserPrivilege.write,
+                                          child: ElevatedButton.icon(
+                                            icon: const Icon(Icons.autorenew),
+                                            label: Text(localizations.generate),
+                                            onPressed: () async {
+                                              final hasConfirmed = await showOkCancelDialog(
+                                                context: context,
+                                                child: Text(localizations.warningBoutGenerate),
+                                              );
+                                              if (hasConfirmed && context.mounted) {
+                                                await catchAsync(context, () async {
+                                                  final dataManager = await ref.read(dataManagerNotifierProvider);
+                                                  await dataManager.generateBouts<TeamMatch>(match, false);
+                                                  if (context.mounted) {
+                                                    await showOkDialog(
+                                                      context: context,
+                                                      child: Text(localizations.actionSuccessful),
+                                                    );
+                                                  }
+                                                });
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                       itemCount: items.length,
                                       itemBuilder: (context, index) => items[index],
                                     );
