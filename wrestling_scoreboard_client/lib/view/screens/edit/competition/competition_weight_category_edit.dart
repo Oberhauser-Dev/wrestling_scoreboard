@@ -90,7 +90,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           initialValue: _poolGroupCount,
           label: localizations.poolGroupCount,
           inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
-          isMandatory: true,
+          isMandatory: false,
           onSaved: (int? value) => _poolGroupCount = value ?? 1,
         ),
       ],
