@@ -139,10 +139,7 @@ class TeamMatchOverview extends ConsumerWidget {
                     if (importAction != null) importAction,
                     // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
                     ResponsiveScaffoldActionItem(
-                      label:
-                          reporter == null
-                              ? 'No reporter available. Please select one in the organization editor of ${organization.name}.'
-                              : localizations.report,
+                      label: reporter == null ? localizations.warningMissingReporter : localizations.report,
                       onTap:
                           reporter == null
                               ? null
@@ -409,7 +406,7 @@ class TeamMatchOverview extends ConsumerWidget {
         await checkProposeImport(
           context,
           ref,
-          orgId: resolvedMatch.organization!.id!,
+          organization: resolvedMatch.organization!,
           id: resolvedMatch.id!,
           importType: OrganizationImportType.teamMatch,
         );

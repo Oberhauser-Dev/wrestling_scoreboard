@@ -253,6 +253,12 @@ class OrgAuthNotifier extends _$OrgAuthNotifier {
     return {};
   }
 
+  Future<AuthService?> getByOrganization(int? organizationId) async {
+    if (organizationId == null) return null;
+    final authMap = await state;
+    return authMap[organizationId];
+  }
+
   Future<void> _setOrgAuthServices(Map<int, AuthService> orgAuthServices) async {
     state = Future.value(orgAuthServices);
     final orgAuthList =

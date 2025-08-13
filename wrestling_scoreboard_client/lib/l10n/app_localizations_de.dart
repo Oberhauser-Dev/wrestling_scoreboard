@@ -88,6 +88,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get importFromApiProvider => 'Synchronisiere mit API-Anbieter';
 
   @override
+  String get warningMissingApiProviderCredentials =>
+      'Für den Import werden die Zugangsdaten zum API-Provider der Organisation benötigt. Bitte gib Nutzername und Passwort an!';
+
+  @override
   String get warningImportFromApiProvider =>
       'Diese Aktion importiert Objekte dieser Organisation und versucht diese zu integrieren. Bist du sicher, dass du fortfahren möchtest?';
 
@@ -106,7 +110,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get proposeApiImportDuration => 'Dauer für den Vorschlag eines API-Imports';
+  String get proposeApiImportDuration => 'Dauer für die Aufforderung eines API-Imports';
 
   @override
   String get importIncludeSubjacent =>
@@ -117,6 +121,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reportProvider => 'Report-Anbieter';
+
+  @override
+  String get warningMissingReporter => 'Kein Report-Anbieter verfügbar. Wähle einen im Organisations-Editor aus.';
 
   @override
   String get report => 'Report';

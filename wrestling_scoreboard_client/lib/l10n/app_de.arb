@@ -25,6 +25,7 @@
   "apiProvider": "API-Anbieter",
   "warningOverrideDatabase": "Diese Aktion überschreibt die existierende Datenbank. Bist du sicher, dass du fortfahren möchtest?",
   "importFromApiProvider": "Synchronisiere mit API-Anbieter",
+  "warningMissingApiProviderCredentials": "Für den Import werden die Zugangsdaten zum API-Provider der Organisation benötigt. Bitte gib Nutzername und Passwort an!",
   "warningImportFromApiProvider": "Diese Aktion importiert Objekte dieser Organisation und versucht diese zu integrieren. Bist du sicher, dass du fortfahren möchtest?",
   "proposeFirstImportFromApiProvider": "Der letzte Import konnte nicht bestimmt werden. Möchtest du die Daten importieren?",
   "proposeImportFromApiProvider": "Der letzte Import war am {date} um {time} Uhr. Möchtest du die Daten aktualisieren?",
@@ -40,10 +41,11 @@
       }
     }
   },
-  "proposeApiImportDuration": "Dauer für den Vorschlag eines API-Imports",
+  "proposeApiImportDuration": "Dauer für die Aufforderung eines API-Imports",
   "importIncludeSubjacent": "Importiere auch alle darunderliegenden Daten. Dies kann länger dauern und bei Zeitüberschreitung oder inkonsistenten Daten fehlschlagen!",
   "appDataDirectory": "Ordner für App-Daten",
   "reportProvider": "Report-Anbieter",
+  "warningMissingReporter": "Kein Report-Anbieter verfügbar. Wähle einen im Organisations-Editor aus.",
   "report": "Report",
   "print": "Drucken",
   "database": "Datenbank",

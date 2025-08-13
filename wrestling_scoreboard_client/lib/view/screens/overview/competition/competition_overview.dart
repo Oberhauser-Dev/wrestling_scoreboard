@@ -247,10 +247,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 //       id: id, organization: organization!, importType: OrganizationImportType.competition),
                 // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
                 ResponsiveScaffoldActionItem(
-                  label:
-                      reporter == null
-                          ? 'No reporter available. Please select one in the organization editor of ${organization.name}.'
-                          : localizations.report,
+                  label: reporter == null ? localizations.warningMissingReporter : localizations.report,
                   icon: const Icon(Icons.description),
                   onTap:
                       reporter == null
