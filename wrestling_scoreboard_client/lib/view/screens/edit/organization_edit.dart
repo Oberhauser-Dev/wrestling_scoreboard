@@ -18,19 +18,12 @@ class OrganizationEdit extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LoadingBuilder(
-      future: ref.read(orgAuthNotifierProvider),
-      builder: (context, authServices) {
-        BasicAuthService? authService;
-        if (organization?.id != null) {
-          final apiProviderAuth = authServices[organization!.id];
-          if (apiProviderAuth is BasicAuthService) {
-            authService = apiProviderAuth;
-          }
-        }
+      future: ref.read(orgAuthNotifierProvider.notifier).getByOrganization(organization?.id),
+      builder: (context, authService) {
         return _OrganizationEdit(
           organization: organization,
           initialParent: initialParent,
-          initialAuthService: authService,
+          initialAuthService: authService is BasicAuthService ? authService : null,
         );
       },
     );

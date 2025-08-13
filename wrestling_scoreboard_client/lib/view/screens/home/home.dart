@@ -185,7 +185,9 @@ class HomeState extends ConsumerState<Home> {
                     });
                   } else {
                     try {
-                      final authService = (await ref.read(orgAuthNotifierProvider))[_searchOrganization?.id];
+                      final authService = await ref
+                          .read(orgAuthNotifierProvider.notifier)
+                          .getByOrganization(_searchOrganization?.id);
                       final results = await (await ref.read(dataManagerNotifierProvider)).search(
                         searchTerm: searchTerm,
                         type: _searchType,

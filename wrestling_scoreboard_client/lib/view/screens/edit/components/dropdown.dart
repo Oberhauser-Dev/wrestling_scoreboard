@@ -86,7 +86,7 @@ class MembershipDropdown extends ConsumerWidget {
 
     const enableApiProviderSearch = true;
     if (enableApiProviderSearch) {
-      final authService = (await ref.read(orgAuthNotifierProvider))[organization?.id];
+      final authService = await ref.read(orgAuthNotifierProvider.notifier).getByOrganization(organization?.id);
       if (authService != null) {
         final providerResults = await (await ref.read(dataManagerNotifierProvider)).search(
           searchTerm: filter,

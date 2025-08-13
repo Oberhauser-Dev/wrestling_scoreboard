@@ -88,6 +88,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importFromApiProvider => 'Sync with API provider';
 
   @override
+  String get warningMissingApiProviderCredentials =>
+      'The credentials for the API Provider of the organization are required for the import. Please provide a username and a password!';
+
+  @override
   String get warningImportFromApiProvider =>
       'This action imports objects of this organization and tries to integrate them. Are you sure, you want to continue?';
 
@@ -116,6 +120,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportProvider => 'Report Provider';
+
+  @override
+  String get warningMissingReporter => 'No reporter available. Please select one in the organization editor.';
 
   @override
   String get report => 'Report';

@@ -248,6 +248,12 @@ abstract class AppLocalizations {
   /// **'Sync with API provider'**
   String get importFromApiProvider;
 
+  /// No description provided for @warningMissingApiProviderCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'The credentials for the API Provider of the organization are required for the import. Please provide a username and a password!'**
+  String get warningMissingApiProviderCredentials;
+
   /// No description provided for @warningImportFromApiProvider.
   ///
   /// In en, this message translates to:
@@ -289,6 +295,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report Provider'**
   String get reportProvider;
+
+  /// No description provided for @warningMissingReporter.
+  ///
+  /// In en, this message translates to:
+  /// **'No reporter available. Please select one in the organization editor.'**
+  String get warningMissingReporter;
 
   /// No description provided for @report.
   ///
