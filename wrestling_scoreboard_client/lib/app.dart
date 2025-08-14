@@ -189,6 +189,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
       if (backupDir == null) return;
 
       final now = MockableDateTime.now();
+      if (!ref.context.mounted) return;
       final dataManager = await ref.read(dataManagerNotifierProvider);
 
       await Future.wait(
