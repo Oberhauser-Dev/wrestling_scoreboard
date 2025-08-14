@@ -299,7 +299,7 @@ abstract class AppLocalizations {
   /// No description provided for @warningMissingReporter.
   ///
   /// In en, this message translates to:
-  /// **'No reporter available. Please select one in the organization editor.'**
+  /// **'Please provide a Report Provider for this organization.'**
   String get warningMissingReporter;
 
   /// No description provided for @report.

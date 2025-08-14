@@ -122,7 +122,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportProvider => 'Report Provider';
 
   @override
-  String get warningMissingReporter => 'No reporter available. Please select one in the organization editor.';
+  String get warningMissingReporter => 'Please provide a Report Provider for this organization.';
 
   @override
   String get report => 'Report';

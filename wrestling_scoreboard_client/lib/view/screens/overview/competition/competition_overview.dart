@@ -22,6 +22,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -229,7 +230,6 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               //   itemBuilder: (context, index) => contentItems[index],
               // ),
             };
-            final reporter = organization.getReporter();
             return FavoriteScaffold<Competition>(
               dataObject: competition,
               label: localizations.competition,
@@ -245,71 +245,63 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 // if (organization != null)
                 //   ConditionalOrganizationImportAction(
                 //       id: id, organization: organization!, importType: OrganizationImportType.competition),
-                // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
-                ResponsiveScaffoldActionItem(
-                  label: reporter == null ? localizations.warningMissingReporter : localizations.report,
-                  icon: const Icon(Icons.description),
-                  onTap:
-                      reporter == null
-                          ? null
-                          : () async {
-                            final cbouts = await _getBouts(ref, competition: competition);
-                            final boutMap = Map.fromEntries(
-                              await Future.wait(
-                                cbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
-                              ),
-                            );
-                            final weightCategories = await ref.readAsync(
+                OrganizationReportActionItem(
+                  context: context,
+                  organization: organization,
+                  onTap: (reporter) async {
+                    final cbouts = await _getBouts(ref, competition: competition);
+                    final boutMap = Map.fromEntries(
+                      await Future.wait(
+                        cbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
+                      ),
+                    );
+                    final weightCategories = await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<CompetitionWeightCategory, Competition>(filterObject: competition),
+                      ).future,
+                    );
+                    final weightCategoriesMap = Map.fromEntries(
+                      await Future.wait(
+                        weightCategories.map(
+                          (wc) async => MapEntry(
+                            wc,
+                            await ref.readAsync(
                               manyDataStreamProvider(
-                                ManyProviderData<CompetitionWeightCategory, Competition>(filterObject: competition),
+                                ManyProviderData<CompetitionParticipation, CompetitionWeightCategory>(filterObject: wc),
                               ).future,
-                            );
-                            final weightCategoriesMap = Map.fromEntries(
-                              await Future.wait(
-                                weightCategories.map(
-                                  (wc) async => MapEntry(
-                                    wc,
-                                    await ref.readAsync(
-                                      manyDataStreamProvider(
-                                        ManyProviderData<CompetitionParticipation, CompetitionWeightCategory>(
-                                          filterObject: wc,
-                                        ),
-                                      ).future,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                            final reportStr = reporter.exportCompetitionReport(
-                              competition: competition,
-                              boutMap: boutMap,
-                              boutResultRules: await ref.readAsync(
-                                manyDataStreamProvider(
-                                  ManyProviderData<BoutResultRule, BoutConfig>(filterObject: competition.boutConfig),
-                                ).future,
-                              ),
-                              competitionLineups: await ref.readAsync(
-                                manyDataStreamProvider(
-                                  ManyProviderData<CompetitionLineup, Competition>(filterObject: competition),
-                                ).future,
-                              ),
-                              competitionSystems: await ref.readAsync(
-                                manyDataStreamProvider(
-                                  ManyProviderData<CompetitionSystemAffiliation, Competition>(
-                                    filterObject: competition,
-                                  ),
-                                ).future,
-                              ),
-                              competitionAgeCategories: await ref.readAsync(
-                                manyDataStreamProvider(
-                                  ManyProviderData<CompetitionAgeCategory, Competition>(filterObject: competition),
-                                ).future,
-                              ),
-                              competitionWeightCategoryMap: weightCategoriesMap,
-                            );
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                    final reportStr = reporter.exportCompetitionReport(
+                      competition: competition,
+                      boutMap: boutMap,
+                      boutResultRules: await ref.readAsync(
+                        manyDataStreamProvider(
+                          ManyProviderData<BoutResultRule, BoutConfig>(filterObject: competition.boutConfig),
+                        ).future,
+                      ),
+                      competitionLineups: await ref.readAsync(
+                        manyDataStreamProvider(
+                          ManyProviderData<CompetitionLineup, Competition>(filterObject: competition),
+                        ).future,
+                      ),
+                      competitionSystems: await ref.readAsync(
+                        manyDataStreamProvider(
+                          ManyProviderData<CompetitionSystemAffiliation, Competition>(filterObject: competition),
+                        ).future,
+                      ),
+                      competitionAgeCategories: await ref.readAsync(
+                        manyDataStreamProvider(
+                          ManyProviderData<CompetitionAgeCategory, Competition>(filterObject: competition),
+                        ).future,
+                      ),
+                      competitionWeightCategoryMap: weightCategoriesMap,
+                    );
 
-                            await exportRDB(fileBaseName: competition.fileBaseName, rdbString: reportStr);
-                          },
+                    await exportRDB(fileBaseName: competition.fileBaseName, rdbString: reportStr);
+                  },
                 ),
                 // pdfAction,
                 ResponsiveScaffoldActionItem(
