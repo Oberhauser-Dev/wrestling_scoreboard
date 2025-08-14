@@ -253,3 +253,32 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
 }
 
 enum OrganizationImportType { organization, team, league, competition, teamMatch }
+
+class OrganizationReportActionItem extends ResponsiveScaffoldActionItem {
+  OrganizationReportActionItem({
+    required BuildContext context,
+    required Organization organization,
+    required Future<void> Function(WrestlingReporter reporter)? onTap,
+    super.style,
+  }) : super(
+         // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
+         icon: const Icon(Icons.description),
+         label: context.l10n.report,
+         onTap:
+             onTap == null
+                 ? null
+                 : () async {
+                   final reporter = organization.getReporter();
+                   if (reporter == null) {
+                     await showOkDialog(context: context, child: Text(context.l10n.warningMissingReporter));
+                     if (context.mounted) {
+                       await Navigator.of(
+                         context,
+                       ).push(MaterialPageRoute(builder: (context) => OrganizationEdit(organization: organization)));
+                     }
+                   } else {
+                     onTap(reporter);
+                   }
+                 },
+       );
+}

@@ -45,7 +45,7 @@
   "importIncludeSubjacent": "Importiere auch alle darunderliegenden Daten. Dies kann länger dauern und bei Zeitüberschreitung oder inkonsistenten Daten fehlschlagen!",
   "appDataDirectory": "Ordner für App-Daten",
   "reportProvider": "Report-Anbieter",
-  "warningMissingReporter": "Kein Report-Anbieter verfügbar. Wähle einen im Organisations-Editor aus.",
+  "warningMissingReporter": "Bitte gib einen Report-Anbieter für diese Organisation an.",
   "report": "Report",
   "print": "Drucken",
   "database": "Datenbank",

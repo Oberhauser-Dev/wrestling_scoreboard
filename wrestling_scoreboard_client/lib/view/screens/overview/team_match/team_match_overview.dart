@@ -120,7 +120,6 @@ class TeamMatchOverview extends ConsumerWidget {
               organization: organization,
               importType: OrganizationImportType.teamMatch,
               builder: (context, importAction) {
-                final reporter = organization.getReporter();
                 return FavoriteScaffold<TeamMatch>(
                   dataObject: match,
                   label: localizations.match,
@@ -137,26 +136,20 @@ class TeamMatchOverview extends ConsumerWidget {
                       label: localizations.launchScratchBout,
                     ),
                     if (importAction != null) importAction,
-                    // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
-                    ResponsiveScaffoldActionItem(
-                      label: reporter == null ? localizations.warningMissingReporter : localizations.report,
-                      onTap:
-                          reporter == null
-                              ? null
-                              : () async {
-                                final tmbouts = await _getBouts(ref, match: match);
-                                final boutMap = Map.fromEntries(
-                                  await Future.wait(
-                                    tmbouts.map(
-                                      (bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout)),
-                                    ),
-                                  ),
-                                );
-                                final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+                    OrganizationReportActionItem(
+                      context: context,
+                      organization: organization,
+                      onTap: (reporter) async {
+                        final tmbouts = await _getBouts(ref, match: match);
+                        final boutMap = Map.fromEntries(
+                          await Future.wait(
+                            tmbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
+                          ),
+                        );
+                        final reportStr = reporter.exportTeamMatchReport(match, boutMap);
 
-                                await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
-                              },
-                      icon: const Icon(Icons.description),
+                        await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
+                      },
                     ),
                     pdfAction,
                     ResponsiveScaffoldActionItem(

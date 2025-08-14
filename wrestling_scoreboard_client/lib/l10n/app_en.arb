@@ -48,7 +48,7 @@
   "importIncludeSubjacent": "Also import all subjacent data. This may take longer and fail on a timeout or if inconsistent data occurs!",
   "appDataDirectory": "App Data Directory",
   "reportProvider": "Report Provider",
-  "warningMissingReporter": "No reporter available. Please select one in the organization editor.",
+  "warningMissingReporter": "Please provide a Report Provider for this organization.",
   "report": "Report",
   "print": "Print",
   "database": "Database",
