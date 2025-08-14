@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -125,6 +127,7 @@ class SearchableGroupedList<T extends DataObject> extends ConsumerStatefulWidget
   final Widget? trailing;
   final String? hintText;
   final bool shrinkWrap;
+  final int initialItemIndex;
 
   const SearchableGroupedList({
     super.key,
@@ -134,6 +137,7 @@ class SearchableGroupedList<T extends DataObject> extends ConsumerStatefulWidget
     this.trailing,
     this.hintText,
     this.shrinkWrap = false,
+    this.initialItemIndex = 0,
   });
 
   @override
@@ -142,11 +146,18 @@ class SearchableGroupedList<T extends DataObject> extends ConsumerStatefulWidget
 
 class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<SearchableGroupedList<T>> {
   late List<T> _filteredItems;
+  Timer? _throttleTimer;
 
   @override
   void initState() {
     _filteredItems = widget.items;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _throttleTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -162,6 +173,7 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
   Widget build(BuildContext context) {
     return GroupedList(
       shrinkWrap: widget.shrinkWrap,
+      initialItemIndex: widget.initialItemIndex,
       header: ListTile(
         leading: const Icon(Icons.search),
         title: TextField(
@@ -169,26 +181,29 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
           enabled: widget.items.isNotEmpty,
           decoration: InputDecoration(hintText: widget.hintText),
           onChanged: (searchTerm) async {
+            _throttleTimer?.cancel();
             if (!isValidSearchTerm(searchTerm)) {
               setState(() {
                 _filteredItems = widget.items;
               });
             } else {
-              try {
-                // TODO: Support server side filter type
-                final results = await (await ref.read(
-                  dataManagerNotifierProvider,
-                )).search(searchTerm: searchTerm, type: T);
-                final Set<T> parsedResults = results[getTableNameFromType(T)]?.map((item) => item as T).toSet() ?? {};
-                setState(() {
-                  // TODO: Remove intersection, if support server side filter type
-                  _filteredItems = parsedResults.intersection(widget.items.toSet()).toList();
-                });
-              } catch (e, st) {
-                if (context.mounted) {
-                  await showExceptionDialog(context: context, exception: e, stackTrace: st);
+              _throttleTimer = Timer(throttleDuration, () async {
+                try {
+                  // TODO: Support server side filter type
+                  final results = await (await ref.read(
+                    dataManagerNotifierProvider,
+                  )).search(searchTerm: searchTerm, type: T);
+                  final Set<T> parsedResults = results[getTableNameFromType(T)]?.map((item) => item as T).toSet() ?? {};
+                  setState(() {
+                    // TODO: Remove intersection, if support server side filter type
+                    _filteredItems = parsedResults.intersection(widget.items.toSet()).toList();
+                  });
+                } catch (e, st) {
+                  if (context.mounted) {
+                    await showExceptionDialog(context: context, exception: e, stackTrace: st);
+                  }
                 }
-              }
+              });
             }
           },
         ),

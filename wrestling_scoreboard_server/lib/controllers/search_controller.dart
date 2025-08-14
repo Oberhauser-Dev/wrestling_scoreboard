@@ -41,6 +41,7 @@ class SearchController {
             ..remove(CompetitionBout)
             ..remove(Membership)
             ..remove(TeamMatch)
+            ..remove(TeamLineup)
             ..remove(TeamMatchBout);
 
       if (searchOrganizationId != null) {

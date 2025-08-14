@@ -22,38 +22,36 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
       builder: (BuildContext context, List<TeamMatch> matches) {
         final today = DateTime.now().copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
         final firstFutureMatchIndex = matches.indexWhere((match) => match.date.compareTo(today) >= 0);
-        return GroupedList(
-          header: HeadingItem(
-            trailing: RestrictedAddButton(
-              onPressed:
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        if (filterObject is Team) {
-                          final team = filterObject as Team;
-                          return TeamMatchEdit(
-                            initialHomeTeam: team,
-                            initialGuestTeam: team,
-                            initialOrganization: team.organization!,
-                          );
-                        } else if (filterObject is League) {
-                          final league = filterObject as League;
-                          return TeamMatchEdit(initialLeague: league, initialOrganization: league.organization!);
-                        } else {
-                          return TeamMatchEdit();
-                        }
-                      },
-                    ),
+        return SearchableGroupedList(
+          trailing: RestrictedAddButton(
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      if (filterObject is Team) {
+                        final team = filterObject as Team;
+                        return TeamMatchEdit(
+                          initialHomeTeam: team,
+                          initialGuestTeam: team,
+                          initialOrganization: team.organization!,
+                        );
+                      } else if (filterObject is League) {
+                        final league = filterObject as League;
+                        return TeamMatchEdit(initialLeague: league, initialOrganization: league.organization!);
+                      } else {
+                        return TeamMatchEdit();
+                      }
+                    },
                   ),
-            ),
+                ),
           ),
           initialItemIndex: firstFutureMatchIndex >= 0 ? firstFutureMatchIndex : (math.max(matches.length - 1, 0)),
-          itemCount: matches.length,
+          items: matches,
           itemBuilder:
-              (context, index) => SingleConsumer<TeamMatch>(
-                id: matches[index].id!,
-                initialData: matches[index],
+              (context, match) => SingleConsumer<TeamMatch>(
+                id: match.id!,
+                initialData: match,
                 builder: (context, match) {
                   return ListTile(
                     title: Text.rich(
