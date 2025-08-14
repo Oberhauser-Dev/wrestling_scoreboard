@@ -179,4 +179,6 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       loserClassificationPoints: 0,
     ),
   ];
+
+  static Set<String> searchableAttributes = {...WrestlingEvent.searchableAttributes, 'name'};
 }

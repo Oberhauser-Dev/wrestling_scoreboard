@@ -225,70 +225,76 @@ abstract class EntityController<T extends DataObject> {
     required bool obfuscate,
     required Type searchType,
   }) async {
-    bool needsPreciseSearch = false;
-
-    String? mapToCondition(attr, Type type, String searchTableName) {
-      // TODO: get postgres types generated from attributes via macros.
-      final postgresTypes = ShelfController.getControllerFromDataType(type)!.getPostgresDataTypes();
-      final postgresType = postgresTypes.containsKey(attr) ? postgresTypes[attr] : psql.Type.varChar;
-      final tableAttr = '$searchTableName.$attr';
-      if (((postgresType == psql.Type.integer || postgresType == psql.Type.smallInteger) &&
-              int.tryParse(searchStr) != null) ||
-          (postgresType == psql.Type.double && double.tryParse(searchStr) != null)) {
-        needsPreciseSearch = true;
-        return '$tableAttr = @preciseSearch';
-      } else if (postgresType == psql.Type.varChar) {
-        return '$tableAttr ILIKE @search';
-      }
-      return null;
-    }
+    final Iterable<String> searchTokens = searchStr.split(RegExp(r'\s|,|;')).where((str) => str.isNotEmpty);
 
     final joins = <String, String>{};
-
-    // Add attributes of foreign key
-    Set<String> getSearchableAttrTypeMapping(Type searchType, [String? searchTableName]) {
-      searchTableName ??= getTableNameFromType(searchType);
-      final orConditions =
-          searchableDataTypes[searchType]
-              ?.map((attr) => mapToCondition(attr, searchType, searchTableName!))
-              .nonNulls
-              .toSet() ??
-          {};
-      final Map<String, Type> attrTypeMapping = searchableForeignAttributeMapping[searchType] ?? const {};
-
-      // Recursively add foreign table attributes with the table name prefix (because they can have the same name as the current table).
-      attrTypeMapping.forEach((foreignAttrName, foreignType) {
-        final foreignTableName = getTableNameFromType(foreignType);
-        final tableAlias =
-            '${searchTableName}_${foreignAttrName.replaceRange(foreignAttrName.length - 3, foreignAttrName.length, '')}';
-        joins['$foreignTableName AS $tableAlias'] = '$tableAlias.id = $searchTableName.$foreignAttrName';
-        orConditions.addAll(getSearchableAttrTypeMapping(foreignType, tableAlias));
-      });
-
-      return orConditions;
-    }
-
-    final orConditions = getSearchableAttrTypeMapping(searchType);
-
     final List<String> conditions = [];
-    if (orConditions.isNotEmpty) {
-      conditions.add('(${orConditions.join(' OR ')})');
-      // TODO: remove hacky OR composition by allowing nested query conditions.
+    final substitutionValues = <String, dynamic>{};
+
+    for (final (tokenIndex, token) in searchTokens.indexed) {
+      final List<String> orConditions = [];
+      final List<String> preciseSearchConditions = [];
+      final List<String> searchConditions = [];
+
+      void addCondition(attr, Type type, String searchTableName) {
+        // TODO: get postgres types generated from attributes via macros.
+        final postgresTypes = ShelfController.getControllerFromDataType(type)!.getPostgresDataTypes();
+        final postgresType = postgresTypes.containsKey(attr) ? postgresTypes[attr] : psql.Type.varChar;
+        final tableAttr = '$searchTableName.$attr';
+        if (((postgresType == psql.Type.integer || postgresType == psql.Type.smallInteger) &&
+                int.tryParse(token) != null) ||
+            (postgresType == psql.Type.double && double.tryParse(token) != null)) {
+          preciseSearchConditions.add('$tableAttr = @preciseSearch$tokenIndex');
+        } else if (postgresType == psql.Type.varChar) {
+          searchConditions.add('$tableAttr ILIKE @search$tokenIndex');
+        }
+      }
+
+      // Add attributes of foreign key
+      void addSearchableAttrTypeMapping(Type searchType, [String? searchTableName]) {
+        searchTableName ??= getTableNameFromType(searchType);
+        searchableDataTypes[searchType]?.forEach((attr) => addCondition(attr, searchType, searchTableName!));
+        final Map<String, Type> attrTypeMapping = searchableForeignAttributeMapping[searchType] ?? const {};
+
+        // Recursively add foreign table attributes with the table name prefix (because they can have the same name as the current table).
+        attrTypeMapping.forEach((foreignAttrName, foreignType) {
+          final foreignTableName = getTableNameFromType(foreignType);
+          final tableAlias =
+              '${searchTableName}_${foreignAttrName.replaceRange(foreignAttrName.length - 3, foreignAttrName.length, '')}';
+          joins['$foreignTableName AS $tableAlias'] = '$tableAlias.id = $searchTableName.$foreignAttrName';
+          addSearchableAttrTypeMapping(foreignType, tableAlias);
+        });
+      }
+
+      addSearchableAttrTypeMapping(searchType);
+
+      if (searchConditions.isNotEmpty) {
+        // TODO: remove hacky OR composition by allowing nested query conditions.
+        orConditions.add(searchConditions.join(' OR '));
+        substitutionValues['search$tokenIndex'] = '%$token%';
+      }
+      if (preciseSearchConditions.isNotEmpty) {
+        // TODO: remove hacky OR composition by allowing nested query conditions.
+        orConditions.add(preciseSearchConditions.join(' OR '));
+        substitutionValues['preciseSearch$tokenIndex'] = token;
+      }
+
+      if (orConditions.isNotEmpty) {
+        conditions.add(orConditions.map((e) => '($e)').join(' OR '));
+      }
     }
+
     if (organizationId != null) {
       // TODO: Check, which entities support queries with organization_id
       conditions.add('$tableName.organization_id = @org');
     }
 
+    if (organizationId != null) substitutionValues['org'] = organizationId;
     return await getManyJson(
       isRaw: isRaw,
       conditions: conditions,
       joins: joins,
-      substitutionValues: {
-        'search': '%$searchStr%',
-        if (needsPreciseSearch) 'preciseSearch': searchStr,
-        if (organizationId != null) 'org': organizationId,
-      },
+      substitutionValues: substitutionValues,
       conjunction: Conjunction.and,
       obfuscate: obfuscate,
     );

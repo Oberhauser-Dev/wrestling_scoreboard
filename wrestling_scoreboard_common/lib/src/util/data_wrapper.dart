@@ -7,16 +7,15 @@ final Map<Type, Set<String>> searchableDataTypes = {
   Club: Club.searchableAttributes,
   Organization: Organization.searchableAttributes,
   WeightClass: WeightClass.searchableAttributes,
-  // Uses same attributes as WrestlingEvent ATM
-  Competition: WrestlingEvent.searchableAttributes,
-  // Uses same attributes as WrestlingEvent ATM
-  TeamMatch: WrestlingEvent.searchableAttributes,
+  Competition: Competition.searchableAttributes,
+  TeamMatch: TeamMatch.searchableAttributes,
   Division: Division.searchableAttributes,
   League: League.searchableAttributes,
   Membership: Membership.searchableAttributes,
   Person: Person.searchableAttributes,
   Team: Team.searchableAttributes,
   TeamMatchBout: TeamMatchBout.searchableAttributes,
+  TeamLineup: TeamLineup.searchableAttributes,
 };
 
 final Map<Type, Map<String, Type>> searchableForeignAttributeMapping = {
@@ -25,6 +24,8 @@ final Map<Type, Map<String, Type>> searchableForeignAttributeMapping = {
   AthleteBoutState: AthleteBoutState.searchableForeignAttributeMapping,
   TeamLineupParticipation: TeamLineupParticipation.searchableForeignAttributeMapping,
   TeamMatchBout: TeamMatchBout.searchableForeignAttributeMapping,
+  TeamMatch: TeamMatch.searchableForeignAttributeMapping,
+  TeamLineup: TeamLineup.searchableForeignAttributeMapping,
 };
 
 Map<String, dynamic> singleToJson(Object single, Type type, CRUD operation) {

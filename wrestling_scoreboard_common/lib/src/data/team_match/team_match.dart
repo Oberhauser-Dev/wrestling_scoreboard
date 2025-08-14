@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../common.dart';
 
 part 'team_match.freezed.dart';
-
 part 'team_match.g.dart';
 
 /// For team matches only.
@@ -236,4 +235,8 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       loserClassificationPoints: 0,
     ),
   ];
+
+  static Set<String> searchableAttributes = {...WrestlingEvent.searchableAttributes};
+
+  static Map<String, Type> searchableForeignAttributeMapping = {'home_id': TeamLineup, 'guest_id': TeamLineup};
 }

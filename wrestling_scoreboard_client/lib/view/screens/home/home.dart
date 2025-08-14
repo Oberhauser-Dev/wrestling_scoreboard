@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
@@ -52,6 +53,13 @@ class HomeState extends ConsumerState<Home> {
   Type? _searchType;
   Organization? _searchOrganization;
   bool _showFilterOptions = false;
+  Timer? _throttleTimer;
+
+  @override
+  void dispose() {
+    _throttleTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,29 +187,32 @@ class HomeState extends ConsumerState<Home> {
                 side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
                 backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
                 onChanged: (searchTerm) async {
+                  _throttleTimer?.cancel();
                   if (!isValidSearchTerm(searchTerm)) {
                     setState(() {
                       _searchResults = null;
                     });
                   } else {
-                    try {
-                      final authService = await ref
-                          .read(orgAuthNotifierProvider.notifier)
-                          .getByOrganization(_searchOrganization?.id);
-                      final results = await (await ref.read(dataManagerNotifierProvider)).search(
-                        searchTerm: searchTerm,
-                        type: _searchType,
-                        organizationId: _searchOrganization?.id,
-                        authService: authService,
-                      );
-                      setState(() {
-                        _searchResults = results;
-                      });
-                    } catch (e, st) {
-                      if (context.mounted) {
-                        showExceptionDialog(context: context, exception: e, stackTrace: st);
+                    _throttleTimer = Timer(throttleDuration, () async {
+                      try {
+                        final authService = await ref
+                            .read(orgAuthNotifierProvider.notifier)
+                            .getByOrganization(_searchOrganization?.id);
+                        final results = await (await ref.read(dataManagerNotifierProvider)).search(
+                          searchTerm: searchTerm,
+                          type: _searchType,
+                          organizationId: _searchOrganization?.id,
+                          authService: authService,
+                        );
+                        setState(() {
+                          _searchResults = results;
+                        });
+                      } catch (e, st) {
+                        if (context.mounted) {
+                          showExceptionDialog(context: context, exception: e, stackTrace: st);
+                        }
                       }
-                    }
+                    });
                   }
                 },
               ),

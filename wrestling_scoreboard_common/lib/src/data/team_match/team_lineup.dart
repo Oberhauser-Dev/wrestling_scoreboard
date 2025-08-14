@@ -44,4 +44,8 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
   TeamLineup copyWithId(int? id) {
     return copyWith(id: id);
   }
+
+  static Set<String> searchableAttributes = {};
+
+  static Map<String, Type> searchableForeignAttributeMapping = {'team_id': Team};
 }
