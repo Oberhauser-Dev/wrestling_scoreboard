@@ -145,6 +145,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               },
               classLocale: localizations.competition,
               children: [
+                ContentItem(title: competition.name, subtitle: localizations.name, icon: Icons.description),
                 ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
                 ContentItem(
                   title: competition.location ?? 'no location',

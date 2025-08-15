@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -119,7 +121,7 @@ class CompetitionDisplay extends StatelessWidget {
               int initialScrollIndex = competitionBouts.indexWhere((element) => element.mat == null);
               if (initialScrollIndex < 0) {
                 // Scroll to last element if non is found
-                initialScrollIndex = competitionBouts.length - 1;
+                initialScrollIndex = math.max(0, competitionBouts.length - 1);
               }
               final column = Column(
                 children: [
