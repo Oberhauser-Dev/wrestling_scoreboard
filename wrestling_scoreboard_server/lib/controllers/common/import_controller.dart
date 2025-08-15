@@ -17,6 +17,23 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
 
   Organization? getOrganization(T entity);
 
+  Future<Response> postCheckCredentials(Request request, User? user, String entityIdStr) async {
+    final bool obfuscate = user?.obfuscate ?? true;
+    final entityId = int.parse(entityIdStr);
+    final message = await request.readAsString();
+
+    final entity = await getSingle(entityId, obfuscate: obfuscate);
+    final organization = getOrganization(entity);
+    if (organization == null) {
+      throw Exception('No organization found for $T $entityId.');
+    }
+    final apiProvider = await OrganizationController().initApiProvider(message: message, organization: organization);
+    if (apiProvider == null) {
+      throw Exception('No API provider selected for the organization $organization.');
+    }
+    return Response.ok((await apiProvider.checkCredentials()).toString());
+  }
+
   Future<Response> postImport(Request request, User? user, String entityIdStr) async {
     final bool obfuscate = user?.obfuscate ?? true;
     final entityId = int.parse(entityIdStr);

@@ -193,6 +193,19 @@ class RestDataManager extends DataManager {
   }
 
   @override
+  Future<bool> organizationCheckCredentials(int id, {required AuthService authService}) async {
+    String? body;
+    if (authService is BasicAuthService) {
+      body = jsonEncode(singleToJson(authService, BasicAuthService, CRUD.read));
+    }
+
+    final uri = Uri.parse('$_apiUrl/organization/$id/api/check_credentials');
+    final response = await http.post(uri, body: body, headers: _headers);
+    await _handleResponse(response, errorMessage: 'Failed to check credentials for organization $id');
+    return jsonDecode(response.body);
+  }
+
+  @override
   Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
       _import(id, 'organization', includeSubjacent: includeSubjacent, authService: authService);
 

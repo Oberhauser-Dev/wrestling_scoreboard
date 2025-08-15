@@ -60,5 +60,7 @@ abstract class WrestlingApi {
 
   Future<Map<TeamMatchBout, Iterable<BoutAction>>> importTeamMatchBouts({required TeamMatch teamMatch});
 
+  Future<bool> checkCredentials();
+
   Future<List<DataObject>> search({required String searchStr, required Type searchType});
 }

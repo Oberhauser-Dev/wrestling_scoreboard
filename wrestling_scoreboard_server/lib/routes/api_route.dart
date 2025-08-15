@@ -105,6 +105,11 @@ class ApiRoute {
       '/${Organization.cTableName}/<id|[0-9]+>/api/last_import',
       organizationController.requestLastImportUtcDateTime,
     );
+    // Need to use post, as credentials are appended in body
+    router.restrictedPostOne(
+      '/${Organization.cTableName}/<id|[0-9]+>/api/check_credentials',
+      organizationController.postCheckCredentials,
+    );
 
     final divisionController = DivisionController();
     router.restrictedGetOne(
