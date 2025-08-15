@@ -106,14 +106,14 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
         await Future.wait(teamMatchsByMatChairman.map((e) => tmc.updateSingle(e.copyWith(matChairman: keepPerson))));
         await Future.wait(teamMatchsByJudge.map((e) => tmc.updateSingle(e.copyWith(judge: keepPerson))));
 
-        // Override delete person, with all attributes of keep person. So when keepPerson is missing an attribute, it falls back to deletePerson.
-        keepPerson = deletePerson.copyWith(
-          id: keepPerson.id,
-          birthDate: keepPerson.birthDate,
-          gender: keepPerson.gender,
-          nationality: keepPerson.nationality,
-          organization: keepPerson.organization,
-          orgSyncId: keepPerson.orgSyncId,
+        // Override keepPerson. It falls back to deletePerson, if an attribute is missing.
+        keepPerson = keepPerson.copyWith(
+          id: keepPerson.id ?? deletePerson.id,
+          birthDate: keepPerson.birthDate ?? deletePerson.birthDate,
+          gender: keepPerson.gender ?? deletePerson.gender,
+          nationality: keepPerson.nationality ?? deletePerson.nationality,
+          organization: keepPerson.organization ?? deletePerson.organization,
+          orgSyncId: keepPerson.orgSyncId ?? deletePerson.orgSyncId,
           prename: keepPerson.prename,
           surname: keepPerson.surname,
         );
@@ -136,6 +136,11 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
           ),
         ),
       );
+
+      // Broadcast the updated information
+      broadcast((obfuscate) async {
+        return jsonEncode(singleToJson(keepPerson, Person, CRUD.update));
+      });
 
       return Response.ok('{"status": "success"}');
     } on FormatException catch (e) {

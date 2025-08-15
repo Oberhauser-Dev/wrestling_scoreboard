@@ -17,8 +17,6 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -170,43 +168,7 @@ class OrganizationOverview extends ConsumerWidget {
                           .groupListsBy((element) => element.fullName)
                           .entries
                           .where((entry) => entry.value.length > 1);
-                      return duplicatePersons.isEmpty
-                          ? null
-                          : Restricted(
-                            privilege: UserPrivilege.admin,
-                            child: PaddedCard(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.warning),
-                                  const Text('Following persons have the same name, are they duplicates?'),
-                                  ...duplicatePersons.map(
-                                    (similarPersons) => ListTile(
-                                      title: Text('${similarPersons.key} (${similarPersons.value.length})'),
-                                      trailing: IconButton(
-                                        tooltip: localizations.mergeObjectData,
-                                        onPressed:
-                                            () => mergePersonsDialog(context, ref, persons: similarPersons.value),
-                                        icon: const Icon(Icons.merge),
-                                      ),
-                                      // Use most up to date entry (last) as base merge object
-                                      onTap: () => PersonOverview.navigateTo(context, similarPersons.value.last),
-                                    ),
-                                  ),
-                                  TextButton.icon(
-                                    onPressed:
-                                        () => mergeAllPersonsDialog(
-                                          context,
-                                          ref,
-                                          allPersons: duplicatePersons.map((e) => e.value),
-                                        ),
-                                    icon: const Icon(Icons.merge),
-                                    label: const Text('Merge ALL'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                      return duplicatePersons.isEmpty ? null : PersonsMergeCard(duplicatePersonsMap: duplicatePersons);
                     },
                     itemBuilder:
                         (context, item) => ContentItem(

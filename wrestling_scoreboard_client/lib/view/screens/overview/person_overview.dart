@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
@@ -167,8 +168,8 @@ Future<void> mergePersonsDialog(BuildContext context, WidgetRef ref, {required L
     final confirmed = await showOkCancelDialog(
       context: context,
       child: Text(
-        'Are you sure to merge instances of "${persons.first.fullName}"?\n'
-        'This action changes all dependent dependent data, such as Memberships.',
+        'Are you sure to merge instances of "${persons.first.fullName}" (pivot: ${persons.first.id})?\n'
+        'This action changes all dependent data, such as Memberships.',
       ),
     );
     if (confirmed && context.mounted) {
@@ -262,6 +263,99 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
           );
         },
       ),
+    );
+  }
+}
+
+class PersonsMergeCard extends ConsumerWidget {
+  final Iterable<MapEntry<String, List<Person>>> duplicatePersonsMap;
+
+  const PersonsMergeCard({super.key, required this.duplicatePersonsMap});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Restricted(
+      privilege: UserPrivilege.admin,
+      child: PaddedCard(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.warning),
+            const Text(
+              'Following persons have the same name, are they duplicates?\n'
+              'You can reorder the persons before merging, so the person on the top is kept and missing attributes are taken from the ones below.',
+            ),
+            ...duplicatePersonsMap.map(
+              (similarPersons) =>
+                  ReorderablePersonExpansionTile(title: similarPersons.key, persons: similarPersons.value),
+            ),
+            // Disable merge all dialog for now, as the order is not considered from the expandable tile.
+            // Also it might is unsage to just merge all without reviewing individually.
+            // TextButton.icon(
+            //   onPressed: () => mergeAllPersonsDialog(context, ref, allPersons: duplicatePersonsMap.map((e) => e.value)),
+            //   icon: const Icon(Icons.merge),
+            //   label: const Text('Merge ALL'),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReorderablePersonExpansionTile extends ConsumerStatefulWidget {
+  final String title;
+  final List<Person> persons;
+
+  const ReorderablePersonExpansionTile({super.key, required this.title, required this.persons});
+
+  @override
+  ConsumerState<ReorderablePersonExpansionTile> createState() => _ReorderablePersonExpansionTileState();
+}
+
+class _ReorderablePersonExpansionTileState extends ConsumerState<ReorderablePersonExpansionTile> {
+  late List<Person> persons = widget.persons;
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return ExpansionTile(
+      title: Text('${widget.title} (${persons.length})'),
+      trailing: IconButton(
+        tooltip: localizations.mergeObjectData,
+        onPressed: () => mergePersonsDialog(context, ref, persons: persons),
+        icon: const Icon(Icons.merge),
+      ),
+      children: [
+        ReorderableListView(
+          shrinkWrap: true,
+          children:
+              persons
+                  .map(
+                    (person) => ListTile(
+                      key: ValueKey(person.id),
+                      title: Text(
+                        '${person.fullName}, '
+                        '${person.birthDate?.toDateString(context)}, '
+                        '${person.gender?.localize(context)}, '
+                        '(ID: ${person.id}, '
+                        'orgID: ${person.orgSyncId})',
+                      ),
+                      onTap: () => PersonOverview.navigateTo(context, person),
+                    ),
+                  )
+                  .toList(),
+          onReorder: (oldIndex, newIndex) {
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            setState(() {
+              final item = persons.removeAt(oldIndex);
+              persons.insert(newIndex, item);
+            });
+          },
+        ),
+      ],
     );
   }
 }
