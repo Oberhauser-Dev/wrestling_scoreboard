@@ -14,6 +14,7 @@ class CustomTextInput extends StatelessWidget {
   final bool isMandatory;
   final FormFieldValidator<String>? validator;
   final Iterable<String>? autofillHints;
+  final String? errorText;
 
   const CustomTextInput({
     this.onSaved,
@@ -26,6 +27,7 @@ class CustomTextInput extends StatelessWidget {
     super.key,
     this.validator,
     this.autofillHints,
+    this.errorText,
   });
 
   @override
@@ -50,7 +52,12 @@ class CustomTextInput extends StatelessWidget {
               return null;
             },
         initialValue: initialValue,
-        decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
+        decoration: CustomInputDecoration(
+          isMandatory: isMandatory,
+          label: label,
+          localizations: localizations,
+          errorText: errorText,
+        ),
       ),
     );
   }
@@ -146,6 +153,7 @@ class PasswordInput extends StatelessWidget {
   final bool isNewPassword;
   final bool isRepetition;
   final bool isMandatory;
+  final String? errorText;
 
   const PasswordInput({
     this.initialValue,
@@ -154,6 +162,7 @@ class PasswordInput extends StatelessWidget {
     super.key,
     this.isRepetition = false,
     this.isMandatory = false,
+    this.errorText,
   });
 
   @override
@@ -164,12 +173,14 @@ class PasswordInput extends StatelessWidget {
       leading: const Icon(Icons.password),
       title: TextFormField(
         initialValue: initialValue,
-        onSaved: onSaved,
+        // Convert empty value to null
+        onSaved: (value) => onSaved((value?.isEmpty ?? true) ? null : value),
         validator: (value) {
-          if (isMandatory) {
-            if (value == null || value.isEmpty) {
+          if (value == null || value.isEmpty) {
+            if (isMandatory) {
               return localizations.mandatoryField;
             }
+          } else {
             if (!RegExp(r'^(?!.*\s).+$').hasMatch(value)) {
               return 'Password must not contain any whitespace!';
             }
@@ -180,7 +191,12 @@ class PasswordInput extends StatelessWidget {
           return null;
         },
         obscureText: true,
-        decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
+        decoration: CustomInputDecoration(
+          isMandatory: isMandatory,
+          label: label,
+          localizations: localizations,
+          errorText: errorText,
+        ),
         autofillHints: [isNewPassword ? AutofillHints.newPassword : AutofillHints.password],
       ),
     );
@@ -188,15 +204,20 @@ class PasswordInput extends StatelessWidget {
 }
 
 class CustomInputDecoration extends InputDecoration {
-  CustomInputDecoration({required bool isMandatory, String? label, required AppLocalizations localizations, super.icon})
-    : super(
-        border: const UnderlineInputBorder(),
-        labelText:
-            label == null
-                ? null
-                : isMandatory
-                ? '$label*'
-                : label,
-        hintText: isMandatory ? null : localizations.optional,
-      );
+  CustomInputDecoration({
+    required bool isMandatory,
+    String? label,
+    required AppLocalizations localizations,
+    super.errorText,
+    super.icon,
+  }) : super(
+         border: const UnderlineInputBorder(),
+         labelText:
+             label == null
+                 ? null
+                 : isMandatory
+                 ? '$label*'
+                 : label,
+         hintText: isMandatory ? null : localizations.optional,
+       );
 }

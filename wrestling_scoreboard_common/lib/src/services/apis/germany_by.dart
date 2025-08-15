@@ -125,6 +125,21 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   ];
 
   @override
+  Future<bool> checkCredentials() async {
+    if (isMock) {
+      return true;
+    } else {
+      final uri = Uri.parse(apiUrl).replace(queryParameters: {'op': 'getSaisonWrestler', 'passcode': '2781'});
+      _logger.fine('Call API to check credentials: $uri');
+      final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+      if (response.statusCode >= 400) {
+        return false;
+      }
+      return true;
+    }
+  }
+
+  @override
   Future<Map<Division, Iterable<BoutResultRule>>> importDivisions({DateTime? minDate, DateTime? maxDate}) async {
     maxDate ??= MockableDateTime.now();
     minDate ??= DateTime.utc(maxDate.year - 1);

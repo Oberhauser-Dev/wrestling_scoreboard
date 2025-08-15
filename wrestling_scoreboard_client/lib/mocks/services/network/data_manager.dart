@@ -550,6 +550,11 @@ class MockDataManager extends DataManager {
     // TODO: implement reorder
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> organizationCheckCredentials(int id, {required AuthService authService}) async {
+    return true;
+  }
 }
 
 class MockWebSocketManager implements WebSocketManager {

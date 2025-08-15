@@ -81,6 +81,8 @@ abstract class DataManager implements AuthManager {
 
   Future<void> resetDatabase();
 
+  Future<bool> organizationCheckCredentials(int id, {required AuthService authService});
+
   Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService});
 
   Future<void> organizationTeamImport(int id, {bool includeSubjacent = false, AuthService? authService});

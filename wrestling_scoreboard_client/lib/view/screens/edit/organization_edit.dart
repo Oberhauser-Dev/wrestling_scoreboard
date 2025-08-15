@@ -52,6 +52,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
   WrestlingReportProvider? _reportProvider;
   String? _authProviderUsername;
   String? _authProviderPassword;
+  bool _areCredentialsValid = true;
 
   @override
   void initState() {
@@ -124,11 +125,13 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
         initialValue: _authProviderUsername,
         isMandatory: false,
         onSaved: (newValue) => _authProviderUsername = newValue,
+        errorText: _areCredentialsValid ? null : 'Credentials are invalid',
       ),
       PasswordInput(
         isMandatory: false,
         initialValue: _authProviderPassword,
         onSaved: (newValue) => _authProviderPassword = newValue,
+        errorText: _areCredentialsValid ? null : 'Credentials are invalid',
       ),
       ListTile(
         leading: const Icon(Icons.description),
@@ -158,9 +161,36 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
   }
 
   Future<void> handleSubmit(NavigatorState navigator) async {
+    if (!_areCredentialsValid) {
+      // Reset error message from last time, if present.
+      setState(() => _areCredentialsValid = true);
+    }
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      final dataManager = await ref.read(dataManagerNotifierProvider);
+      if (widget.organization?.id != null) {
+        if (_authProviderUsername != null || _authProviderPassword != null) {
+          if (_authProviderUsername == null || _authProviderPassword == null) {
+            // Both must be set
+            setState(() => _areCredentialsValid = false);
+            return;
+          }
+          final authService = BasicAuthService(username: _authProviderUsername!, password: _authProviderPassword!);
+          final areCredentialsValid = await dataManager.organizationCheckCredentials(
+            widget.organization!.id!,
+            authService: authService,
+          );
+          if (!areCredentialsValid) {
+            setState(() => _areCredentialsValid = false);
+            return;
+          }
+          await ref.read(orgAuthNotifierProvider.notifier).addOrgAuthService(widget.organization!.id!, authService);
+        } else if (widget.initialAuthService != null) {
+          // Delete credentials if they already existed
+          await ref.read(orgAuthNotifierProvider.notifier).removeOrgAuthService(widget.organization!.id!);
+        }
+      }
+      await dataManager.createOrUpdateSingle(
         Organization(
           id: widget.organization?.id,
           name: _name!,
@@ -170,19 +200,6 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
           apiProvider: _apiProvider,
         ),
       );
-      if (widget.organization?.id != null) {
-        if (_authProviderUsername != null && _authProviderPassword != null) {
-          ref
-              .read(orgAuthNotifierProvider.notifier)
-              .addOrgAuthService(
-                widget.organization!.id!,
-                BasicAuthService(username: _authProviderUsername!, password: _authProviderPassword!),
-              );
-        } else if (widget.initialAuthService != null) {
-          // Delete credentials if they already existed
-          ref.read(orgAuthNotifierProvider.notifier).removeOrgAuthService(widget.organization!.id!);
-        }
-      }
       navigator.pop();
     }
   }

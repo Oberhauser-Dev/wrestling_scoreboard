@@ -278,13 +278,13 @@ class OrgAuthNotifier extends _$OrgAuthNotifier {
     await Preferences.setStringList(Preferences.keyOrganizationAuth, orgAuthList);
   }
 
-  void addOrgAuthService(int id, AuthService authService) async {
+  Future<void> addOrgAuthService(int id, AuthService authService) async {
     final authServiceMap = await state;
     authServiceMap[id] = authService;
     await _setOrgAuthServices(authServiceMap);
   }
 
-  void removeOrgAuthService(int id) async {
+  Future<void> removeOrgAuthService(int id) async {
     final authServiceMap = await state;
     authServiceMap.remove(id);
     await _setOrgAuthServices(authServiceMap);
