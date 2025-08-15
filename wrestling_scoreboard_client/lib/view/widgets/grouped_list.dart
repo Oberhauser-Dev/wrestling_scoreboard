@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,14 +32,23 @@ class ContentItem extends StatelessWidget {
   final String? subtitle;
   final Widget? trailing;
   final Function()? onTap;
+  final bool isDisabled;
 
-  const ContentItem({required this.title, this.subtitle, this.icon, this.onTap, this.trailing, super.key});
+  const ContentItem({
+    required this.title,
+    this.subtitle,
+    this.icon,
+    this.onTap,
+    this.trailing,
+    this.isDisabled = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: icon != null ? Icon(icon) : null,
-      title: Text(title),
+      title: Text(title, style: isDisabled ? TextStyle(color: Theme.of(context).disabledColor) : null),
       subtitle: (subtitle != null) ? Text(subtitle!, style: TextStyle(color: Theme.of(context).disabledColor)) : null,
       trailing: trailing,
       onTap: onTap,
@@ -56,6 +66,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
   final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
   final List<T> Function(List<T> data)? mapData;
   final bool shrinkWrap;
+  final int Function(List<T> data)? getInitialIndex;
 
   const FilterableManyConsumer({
     required this.itemBuilder,
@@ -67,6 +78,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     this.filterObject,
     this.mapData,
     this.shrinkWrap = false,
+    this.getInitialIndex,
     super.key,
   });
 
@@ -81,6 +93,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     Widget? Function(BuildContext context, List<T> data)? prependBuilder,
     Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException,
     List<T> Function(List<T> data)? mapData,
+    int Function(List<T> data)? getInitialIndex,
     bool shrinkWrap = false,
   }) {
     return FilterableManyConsumer<T, S>(
@@ -95,6 +108,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: editPageBuilder)),
       ),
       shrinkWrap: shrinkWrap,
+      getInitialIndex: getInitialIndex,
     );
   }
 
@@ -111,6 +125,7 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
           itemBuilder: (context, e) => SingleConsumer<T>(id: e.id, initialData: e, builder: itemBuilder),
           prepend: prependBuilder == null ? null : prependBuilder!(context, data),
           shrinkWrap: shrinkWrap,
+          initialItemIndex: getInitialIndex == null ? 0 : getInitialIndex!.call(data),
         );
       },
       initialData: initialData,
@@ -230,14 +245,14 @@ class GroupedList extends StatelessWidget {
   final int initialItemIndex;
   final bool shrinkWrap;
 
-  const GroupedList({
+  GroupedList({
     required this.header,
     required this.itemBuilder,
     super.key,
-    this.initialItemIndex = 0,
+    int? initialItemIndex,
     required this.itemCount,
     this.shrinkWrap = false,
-  });
+  }) : initialItemIndex = math.max(0, initialItemIndex ?? 0);
 
   @override
   Widget build(BuildContext context) {

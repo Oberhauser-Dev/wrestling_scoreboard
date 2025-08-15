@@ -45,6 +45,8 @@ class LeagueOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
+            ContentItem(title: data.division.fullname, subtitle: localizations.division, icon: Icons.inventory),
+            ContentItem(title: data.name, subtitle: localizations.name, icon: Icons.description),
             ContentItem(
               title: data.startDate.toDateString(context),
               subtitle: localizations.startDate,
@@ -52,7 +54,6 @@ class LeagueOverview extends ConsumerWidget {
             ),
             ContentItem(title: data.endDate.toDateString(context), subtitle: localizations.endDate, icon: Icons.event),
             ContentItem(title: data.boutDays.toString(), subtitle: localizations.boutDays, icon: Icons.calendar_month),
-            ContentItem(title: data.division.fullname, subtitle: localizations.division, icon: Icons.inventory),
           ],
         );
         return ConditionalOrganizationImportActionBuilder(

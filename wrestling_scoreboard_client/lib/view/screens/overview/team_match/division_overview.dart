@@ -48,6 +48,7 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
           },
           classLocale: localizations.division,
           children: [
+            ContentItem(title: division.name, subtitle: localizations.name, icon: Icons.description),
             ContentItem(
               title: division.startDate.toDateString(context),
               subtitle: localizations.startDate, // Start date

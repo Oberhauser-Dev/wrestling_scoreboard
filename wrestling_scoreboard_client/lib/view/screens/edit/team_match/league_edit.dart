@@ -45,6 +45,24 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
+      ListTile(
+        title: SearchableDropdown<Division>(
+          icon: const Icon(Icons.inventory),
+          selectedItem: _division,
+          label: localizations.division,
+          context: context,
+          onSaved:
+              (Division? value) => setState(() {
+                _division = value;
+              }),
+          itemAsString: (u) => u.fullname,
+          allowEmpty: false,
+          asyncItems: (String filter) async {
+            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
+            return _availableDivisions!.toList();
+          },
+        ),
+      ),
       CustomTextInput(
         iconData: Icons.description,
         label: localizations.name,
@@ -109,24 +127,6 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         inputFormatter: NumericalRangeFormatter(min: 1, max: 100),
         isMandatory: true,
         onSaved: (int? value) => _boutDays = value ?? 1,
-      ),
-      ListTile(
-        title: SearchableDropdown<Division>(
-          icon: const Icon(Icons.inventory),
-          selectedItem: _division,
-          label: localizations.division,
-          context: context,
-          onSaved:
-              (Division? value) => setState(() {
-                _division = value;
-              }),
-          itemAsString: (u) => u.fullname,
-          allowEmpty: false,
-          asyncItems: (String filter) async {
-            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
-            return _availableDivisions!.toList();
-          },
-        ),
       ),
     ];
     return Form(

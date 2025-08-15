@@ -41,26 +41,35 @@ class OrganizationOverview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
+    final today = MockableDateTime.now().copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
     return SingleConsumer<Organization>(
       id: id,
       initialData: organization,
-      builder: (context, data) {
+      builder: (context, organization) {
         final description = InfoWidget(
-          obj: data,
-          editPage: OrganizationEdit(organization: data),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Organization>(data),
+          obj: organization,
+          editPage: OrganizationEdit(organization: organization),
+          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Organization>(organization),
           classLocale: localizations.organization,
           children: [
-            ContentItem(title: data.name, subtitle: localizations.name, icon: Icons.description),
-            ContentItem(title: data.abbreviation ?? '-', subtitle: localizations.abbreviation, icon: Icons.short_text),
+            ContentItem(title: organization.name, subtitle: localizations.name, icon: Icons.description),
             ContentItem(
-              title: data.parent?.name ?? '-',
+              title: organization.abbreviation ?? '-',
+              subtitle: localizations.abbreviation,
+              icon: Icons.short_text,
+            ),
+            ContentItem(
+              title: organization.parent?.name ?? '-',
               subtitle: localizations.umbrellaOrganization,
               icon: Icons.corporate_fare,
             ),
-            ContentItem(title: data.apiProvider?.name ?? '-', subtitle: localizations.apiProvider, icon: Icons.api),
             ContentItem(
-              title: data.reportProvider?.name ?? '-',
+              title: organization.apiProvider?.name ?? '-',
+              subtitle: localizations.apiProvider,
+              icon: Icons.api,
+            ),
+            ContentItem(
+              title: organization.reportProvider?.name ?? '-',
               subtitle: localizations.reportProvider,
               icon: Icons.description,
             ),
@@ -68,13 +77,13 @@ class OrganizationOverview extends ConsumerWidget {
         );
         return ConditionalOrganizationImportActionBuilder(
           id: id,
-          organization: data,
+          organization: organization,
           importType: OrganizationImportType.organization,
           builder: (context, importAction) {
             return FavoriteScaffold<Organization>(
-              dataObject: data,
+              dataObject: organization,
               label: localizations.organization,
-              details: data.name,
+              details: organization.name,
               actions: [if (importAction != null) importAction],
               tabs: [
                 Tab(child: HeadingText(localizations.info)),
@@ -90,27 +99,29 @@ class OrganizationOverview extends ConsumerWidget {
                   description,
                   FilterableManyConsumer<Division, Organization>.edit(
                     context: context,
-                    filterObject: data,
-                    editPageBuilder: (context) => DivisionEdit(initialOrganization: data),
+                    filterObject: organization,
+                    editPageBuilder: (context) => DivisionEdit(initialOrganization: organization),
                     mapData:
                         (divisions) =>
                             divisions..sort((a, b) {
-                              final comparison = b.startDate.compareTo(a.startDate);
+                              final comparison = a.endDate.compareTo(b.endDate);
                               if (comparison != 0) return comparison;
                               return a.name.compareTo(b.name);
                             }),
+                    getInitialIndex: (data) => data.indexWhere((division) => division.endDate.compareTo(today) >= 0),
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: '${item.fullname}, ${item.startDate.year}',
                           icon: Icons.inventory,
+                          isDisabled: item.endDate.isBefore(today),
                           onTap: () => DivisionOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<Club, Organization>.edit(
                     context: context,
-                    filterObject: data,
+                    filterObject: organization,
                     mapData: (List<Club> clubs) => clubs..sort((a, b) => a.name.compareTo(b.name)),
-                    editPageBuilder: (context) => ClubEdit(initialOrganization: data),
+                    editPageBuilder: (context) => ClubEdit(initialOrganization: organization),
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.name,
@@ -120,19 +131,28 @@ class OrganizationOverview extends ConsumerWidget {
                   ),
                   FilterableManyConsumer<Competition, Organization>.edit(
                     context: context,
-                    filterObject: data,
-                    editPageBuilder: (context) => CompetitionEdit(initialOrganization: data),
+                    filterObject: organization,
+                    editPageBuilder: (context) => CompetitionEdit(initialOrganization: organization),
+                    mapData:
+                        (competitions) =>
+                            competitions..sort((a, b) {
+                              final comparison = a.date.compareTo(b.date);
+                              if (comparison != 0) return comparison;
+                              return a.name.compareTo(b.name);
+                            }),
+                    getInitialIndex: (data) => data.indexWhere((competition) => competition.date.compareTo(today) >= 0),
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.name,
                           icon: Icons.leaderboard,
+                          isDisabled: item.date.isBefore(today),
                           onTap: () => CompetitionOverview.navigateTo(context, item),
                         ),
                   ),
                   FilterableManyConsumer<AgeCategory, Organization>.edit(
                     context: context,
-                    filterObject: data,
-                    editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: data),
+                    filterObject: organization,
+                    editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: organization),
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: '${item.name} (${item.minAge} - ${item.maxAge})',
@@ -142,8 +162,8 @@ class OrganizationOverview extends ConsumerWidget {
                   ),
                   FilterableManyConsumer<Person, Organization>.edit(
                     context: context,
-                    filterObject: data,
-                    editPageBuilder: (context) => PersonEdit(initialOrganization: data),
+                    filterObject: organization,
+                    editPageBuilder: (context) => PersonEdit(initialOrganization: organization),
                     mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
                     prependBuilder: (context, persons) {
                       final duplicatePersons = persons
@@ -197,8 +217,8 @@ class OrganizationOverview extends ConsumerWidget {
                   ),
                   FilterableManyConsumer<Organization, Organization>.edit(
                     context: context,
-                    editPageBuilder: (context) => OrganizationEdit(initialParent: data),
-                    filterObject: data,
+                    editPageBuilder: (context) => OrganizationEdit(initialParent: organization),
+                    filterObject: organization,
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.fullname,

@@ -17,10 +17,10 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final today = MockableDateTime.now().copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
     return ManyConsumer<TeamMatch, T>(
       filterObject: filterObject,
       builder: (BuildContext context, List<TeamMatch> matches) {
-        final today = DateTime.now().copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
         final firstFutureMatchIndex = matches.indexWhere((match) => match.date.compareTo(today) >= 0);
         return SearchableGroupedList(
           trailing: RestrictedAddButton(
@@ -55,7 +55,7 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                 builder: (context, match) {
                   return ListTile(
                     title: Text.rich(
-                      style: match.date.compareTo(today) < 0 ? TextStyle(color: Theme.of(context).disabledColor) : null,
+                      style: match.date.isBefore(today) ? TextStyle(color: Theme.of(context).disabledColor) : null,
                       TextSpan(
                         text: '${match.date.toDateString(context)} | ',
                         children: [
