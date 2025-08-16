@@ -1,3 +1,10 @@
+## 0.3.2
+
+ - **FEAT**: Option to reorder the preferred Persons before merging (closes [#162](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/162)). ([e2aba5c5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e2aba5c5acb8e6dcce5aac5d011edabded06bc0e))
+ - **FEAT**: Check API provider credentials on save (closes [#166](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/166)). ([5e3d5442](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5e3d544205d701c4606a68ddcb4aa0c4f6b7b602))
+ - **FEAT**: Improve data object search capabilities (closes [#165](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/165)). ([397bf9a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/397bf9a55f0b7a3112d5e6541fad811d3cc27090))
+ - **FEAT**: List leagues of team in Team Overview (closes [#151](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/151)). ([345472e0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/345472e095f75de1c76e2d94a60181bf500e7c23))
+
 ## 0.3.1
 
  - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))

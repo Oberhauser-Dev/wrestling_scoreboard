@@ -1,3 +1,8 @@
+## 0.3.2
+
+ - **FEAT**: Check API provider credentials on save (closes [#166](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/166)). ([5e3d5442](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5e3d544205d701c4606a68ddcb4aa0c4f6b7b602))
+ - **FEAT**: Improve data object search capabilities (closes [#165](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/165)). ([397bf9a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/397bf9a55f0b7a3112d5e6541fad811d3cc27090))
+
 ## 0.3.1
 
  - **REFACTOR**: Adapt analysis_options (closes [#85](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/85)). ([09f7f25a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/09f7f25abad009716a604888d2a7b106ce4238a8))

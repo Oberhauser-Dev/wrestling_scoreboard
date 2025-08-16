@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-08-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.2`](#wrestling_scoreboard_client---v032)
+ - [`wrestling_scoreboard_common` - `v0.3.2`](#wrestling_scoreboard_common---v032)
+ - [`wrestling_scoreboard_server` - `v0.3.2`](#wrestling_scoreboard_server---v032)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.2`
+
+ - **REFACTOR**: Use static navigateTo method for navigating. ([1df6a93c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1df6a93c45c9a295131a1072bf6c0273c9e62b41))
+ - **REFACTOR**: Move bout config tab at the end. ([3998a6fe](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3998a6fef20e65753cb75a75a89d23f2abc94448))
+ - **FIX**: Check if ref is still mounted in backupNotifierProvider. ([27dfb5bf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/27dfb5bf815483d2ae5b9d21853fdc8ab490a17b))
+ - **FIX**: Make pool group count not mandatory (closes [#157](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/157)). ([fb47f6d7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fb47f6d75d90717d6781e6a0144b31b81b4acd2c))
+ - **FIX**: Allow empty values for organization auth. ([0a21f64a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0a21f64a7c62b43fdc2dde6f42e3afb9d292a8cd))
+ - **FIX**: Upgrade duration picker dependency (closes [#155](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/155)). ([dc2a3db1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dc2a3db1c71a1356a4b1473cb07f07c8f71c4cbf))
+ - **FIX**: Language preference not restored (closes [#152](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/152)). ([ee576db6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee576db6a4b98758b6f9fa8f830411ca1c94dd92))
+ - **FIX**: Fullscreen on windows ([#153](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/153)). ([dfd085dc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dfd085dcc19e359b97c8a706cf3e33eb09bb9841))
+ - **FEAT**: Option to reorder the preferred Persons before merging (closes [#162](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/162)). ([e2aba5c5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e2aba5c5acb8e6dcce5aac5d011edabded06bc0e))
+ - **FEAT**: Disabled state for events in the past (closes [#172](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/172)). ([314dbb99](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/314dbb99c524828bd8209ec3229c20cea21b8fd1))
+ - **FEAT**: Check API provider credentials on save (closes [#166](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/166)). ([5e3d5442](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5e3d544205d701c4606a68ddcb4aa0c4f6b7b602))
+ - **FEAT**: Improve data object search capabilities (closes [#165](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/165)). ([397bf9a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/397bf9a55f0b7a3112d5e6541fad811d3cc27090))
+ - **FEAT**: Ask to add Report Provider ([#160](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/160)). ([f9f49eb8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f9f49eb8da1a0577bd57d0a808dee64299945fc1))
+ - **FEAT**: Ask the user to login to API provider, if want to import (closes [#160](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/160)). ([d6b27605](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d6b27605f32c17b9fce2f10190d64ee472525390))
+ - **FEAT**: Generate button in team match overview lineup list (closes [#168](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/168)). ([3ef5fee9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3ef5fee966aff641bc106693e3876f305a04dd5c))
+ - **FEAT**: Remove match no from match_list (closes [#164](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/164)). ([997cb9c1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/997cb9c1f07af1ca3b4e52a705a43b6602693083))
+ - **FEAT**: Elevate save button on edit pages. ([ddd56ca7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ddd56ca7b76d473822c636ea533be7a72fcec732))
+ - **FEAT**: Mark mandatory fields with *. ([ad0a53ac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ad0a53ac61fd9efc0a87e3dbab98ba188dc4da7c))
+ - **FEAT**: More info for team league participation ([#151](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/151)). ([678aed79](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/678aed7987245557c10206516c562b2435cf391e))
+ - **FEAT**: Share option for non web platforms (closes [#150](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/150)). ([c2ed7292](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c2ed7292e7591d8008fccaa234a9fe966de7c3de))
+ - **FEAT**: List leagues of team in Team Overview (closes [#151](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/151)). ([345472e0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/345472e095f75de1c76e2d94a60181bf500e7c23))
+
+#### `wrestling_scoreboard_common` - `v0.3.2`
+
+ - **FEAT**: Check API provider credentials on save (closes [#166](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/166)). ([5e3d5442](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5e3d544205d701c4606a68ddcb4aa0c4f6b7b602))
+ - **FEAT**: Improve data object search capabilities (closes [#165](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/165)). ([397bf9a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/397bf9a55f0b7a3112d5e6541fad811d3cc27090))
+
+#### `wrestling_scoreboard_server` - `v0.3.2`
+
+ - **FEAT**: Option to reorder the preferred Persons before merging (closes [#162](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/162)). ([e2aba5c5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e2aba5c5acb8e6dcce5aac5d011edabded06bc0e))
+ - **FEAT**: Check API provider credentials on save (closes [#166](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/166)). ([5e3d5442](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5e3d544205d701c4606a68ddcb4aa0c4f6b7b602))
+ - **FEAT**: Improve data object search capabilities (closes [#165](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/165)). ([397bf9a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/397bf9a55f0b7a3112d5e6541fad811d3cc27090))
+ - **FEAT**: List leagues of team in Team Overview (closes [#151](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/151)). ([345472e0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/345472e095f75de1c76e2d94a60181bf500e7c23))
+
+
 ## 2025-07-26
 
 ### Changes
