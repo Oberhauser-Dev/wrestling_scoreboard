@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_up.dart';
@@ -43,8 +43,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 ),
                 PasswordInput(
                   onSaved: (String? value) => _password = value,
+                  isMandatory: true,
+                  // Allow passwords smaller than minLength, as 'admin' is the standard password, which does not have to fulfill the requirement.
+                  requiresMinLength: false,
                   isNewPassword: false,
-                  // Do not make mandatory, as first login is with password 'admin', which does not fulfill the requirements.
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

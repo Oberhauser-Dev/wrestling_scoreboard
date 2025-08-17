@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/admin/admin_overview.dart';
@@ -64,8 +64,10 @@ class MoreScreen extends ConsumerWidget {
                           onTap: () => context.push('/${MoreScreen.route}/${PrivacyPolicyScreen.route}'),
                         ),
                         ListTile(
-                          leading: const Icon(Icons.person),
-                          title: Text(user == null ? localizations.auth_signIn : localizations.profile),
+                          leading: Icon(user == null ? Icons.login : Icons.account_circle),
+                          title: Text(
+                            user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
+                          ),
                           onTap: () {
                             if (user == null) {
                               context.push('/${MoreScreen.route}/${SignInScreen.route}');
