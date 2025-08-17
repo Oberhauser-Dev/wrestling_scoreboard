@@ -129,6 +129,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
       ),
       PasswordInput(
         isMandatory: false,
+        requiresMinLength: false,
         initialValue: _authProviderPassword,
         onSaved: (newValue) => _authProviderPassword = newValue,
         errorText: _areCredentialsValid ? null : 'Credentials are invalid',

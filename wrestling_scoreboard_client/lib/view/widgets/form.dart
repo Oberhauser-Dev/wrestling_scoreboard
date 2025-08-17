@@ -153,6 +153,7 @@ class PasswordInput extends StatelessWidget {
   final bool isNewPassword;
   final bool isRepetition;
   final bool isMandatory;
+  final bool requiresMinLength;
   final String? errorText;
 
   const PasswordInput({
@@ -162,6 +163,7 @@ class PasswordInput extends StatelessWidget {
     super.key,
     this.isRepetition = false,
     this.isMandatory = false,
+    this.requiresMinLength = true,
     this.errorText,
   });
 
@@ -184,7 +186,7 @@ class PasswordInput extends StatelessWidget {
             if (!RegExp(r'^(?!.*\s).+$').hasMatch(value)) {
               return 'Password must not contain any whitespace!';
             }
-            if (value.length < 8) {
+            if (requiresMinLength && value.length < 8) {
               return 'Password must have at least 8 characters!';
             }
           }
