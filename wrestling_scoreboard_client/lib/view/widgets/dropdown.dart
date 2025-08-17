@@ -45,7 +45,10 @@ class SearchableDropdown<T> extends StatelessWidget {
         ),
       ),
       popupProps: PopupProps.menu(
-        searchFieldProps: const TextFieldProps(decoration: InputDecoration(prefixIcon: Icon(Icons.search))),
+        searchFieldProps: const TextFieldProps(
+          decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
+          autofocus: true,
+        ),
         showSearchBox: true,
         disableFilter: disableFilter,
         containerBuilder: containerBuilder,
