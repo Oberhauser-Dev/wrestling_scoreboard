@@ -44,7 +44,12 @@ import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class Home extends ConsumerStatefulWidget {
-  static const route = 'home';
+  static const route = '';
+
+  /// Use this route to indicate that the path is the root default route on home and does not have a path name.
+  /// If using `Home.route` only with a slash, subpaths would result in `//my-sub-path` instead of `/my-sub-path`.
+  /// This empty string looks like it serves no purpose, but it ensures one can look up all routes supposed to be a subpath of home.
+  static const defaultEmptyRoute = '';
 
   const Home({super.key});
 

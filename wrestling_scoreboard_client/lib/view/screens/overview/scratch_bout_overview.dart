@@ -18,7 +18,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension ScratchBoutRouteExtension on GoRouterState {
-  bool get isScratchBoutRoute => uri.path.startsWith('/${Home.route}/${ScratchBoutOverview.route}');
+  bool get isScratchBoutRoute => uri.path.startsWith('${Home.defaultEmptyRoute}/${ScratchBoutOverview.route}');
 }
 
 class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>, BoutConfigOverviewTab {
@@ -47,7 +47,7 @@ class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>,
         }
       }
     }
-    if (context.mounted) context.push('/${Home.route}/$route');
+    if (context.mounted) context.push('${Home.defaultEmptyRoute}/$route');
   }
 
   const ScratchBoutOverview({super.key});
