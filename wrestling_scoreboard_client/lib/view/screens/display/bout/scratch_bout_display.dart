@@ -16,7 +16,7 @@ class ScratchBoutDisplay extends StatefulWidget {
   static const route = 'display';
 
   static void navigateTo(BuildContext context) {
-    context.push('/${Home.route}/${ScratchBoutOverview.route}/$route');
+    context.push('${Home.defaultEmptyRoute}/${ScratchBoutOverview.route}/$route');
   }
 
   const ScratchBoutDisplay({super.key});
