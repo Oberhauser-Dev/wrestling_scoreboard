@@ -43,7 +43,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class Home extends ConsumerStatefulWidget {
+class Home extends ConsumerWidget {
   static const route = '';
 
   /// Use this route to indicate that the path is the root default route on home and does not have a path name.
@@ -54,10 +54,46 @@ class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => HomeState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = context.l10n;
+    return LoadingBuilder<User?>(
+      future: ref.watch(userNotifierProvider),
+      builder: (context, user) {
+        return WindowStateScaffold(
+          appBarTitle: Text(localizations.start),
+          actions: [
+            ResponsiveScaffoldActionItem(
+              onTap: () => ScratchBoutOverview.navigateTo(context, ref),
+              icon: const Icon(Icons.rocket_launch),
+              label: localizations.launchScratchBout,
+            ),
+            ResponsiveScaffoldActionItem(
+              onTap: () {
+                if (user == null) {
+                  context.push('/${MoreScreen.route}/${SignInScreen.route}');
+                } else {
+                  context.push('/${MoreScreen.route}/${ProfileScreen.route}');
+                }
+              },
+              icon: Icon(user == null ? Icons.login : Icons.account_circle),
+              label: user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
+            ),
+          ],
+          body: ResponsiveContainer(child: _HomeSearch()),
+        );
+      },
+    );
+  }
 }
 
-class HomeState extends ConsumerState<Home> {
+class _HomeSearch extends ConsumerStatefulWidget {
+  const _HomeSearch();
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeSearchState();
+}
+
+class _HomeSearchState extends ConsumerState<_HomeSearch> {
   Map<String, List<DataObject>>? _searchResults;
   Type? _searchType;
   Organization? _searchOrganization;
@@ -165,149 +201,121 @@ class HomeState extends ConsumerState<Home> {
       );
     }
 
-    return LoadingBuilder<User?>(
-      future: ref.watch(userNotifierProvider),
-      builder: (context, user) {
-        return WindowStateScaffold(
-          appBarTitle: Text(localizations.start),
-          actions: [
-            ResponsiveScaffoldActionItem(
-              onTap: () => ScratchBoutOverview.navigateTo(context, ref),
-              icon: const Icon(Icons.rocket_launch),
-              label: localizations.launchScratchBout,
-            ),
-            ResponsiveScaffoldActionItem(
-              onTap: () {
-                if (user == null) {
-                  context.push('/${MoreScreen.route}/${SignInScreen.route}');
-                } else {
-                  context.push('/${MoreScreen.route}/${ProfileScreen.route}');
-                }
-              },
-              icon: Icon(user == null ? Icons.login : Icons.account_circle),
-              label: user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
-            ),
-          ],
-          body: ResponsiveContainer(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: SearchBar(
-                    autoFocus: isOnDesktop,
-                    padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
-                    leading: const Icon(Icons.search),
-                    trailing: [
-                      IconButton(
-                        onPressed:
-                            () => setState(() {
-                              _showFilterOptions = !_showFilterOptions;
-                            }),
-                        icon: Icon(_showFilterOptions ? Icons.tune_outlined : Icons.tune),
-                      ),
-                    ],
-                    elevation: WidgetStateProperty.all(0),
-                    side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
-                    backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
-                    onChanged: (searchTerm) async {
-                      _throttleTimer?.cancel();
-                      if (!isValidSearchTerm(searchTerm)) {
-                        setState(() {
-                          _searchResults = null;
-                        });
-                      } else {
-                        _throttleTimer = Timer(throttleDuration, () async {
-                          try {
-                            final authService = await ref
-                                .read(orgAuthNotifierProvider.notifier)
-                                .getByOrganization(_searchOrganization?.id);
-                            final results = await (await ref.read(dataManagerNotifierProvider)).search(
-                              searchTerm: searchTerm,
-                              type: _searchType,
-                              organizationId: _searchOrganization?.id,
-                              authService: authService,
-                            );
-                            setState(() {
-                              _searchResults = results;
-                            });
-                          } catch (e, st) {
-                            if (context.mounted) {
-                              showExceptionDialog(context: context, exception: e, stackTrace: st);
-                            }
-                          }
-                        });
-                      }
-                    },
-                  ),
-                ),
-                if (_showFilterOptions)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: SimpleDropdown<Type?>(
-                          options: [null, ...searchableDataTypes.keys].map(
-                            (type) => MapEntry(
-                              type,
-                              Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
-                            ),
-                          ),
-                          selected: _searchType,
-                          onChange: (value) {
-                            setState(() {
-                              _searchType = value;
-                            });
-                          },
-                          isExpanded: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ManyConsumer<Organization, Null>(
-                          builder: (BuildContext context, List<Organization> organizations) {
-                            return SimpleDropdown<Organization?>(
-                              options: [null, ...organizations].map(
-                                (organization) => MapEntry(
-                                  organization,
-                                  Text(
-                                    organization != null
-                                        ? organization.name
-                                        : '${localizations.optionSelect} ${localizations.organization}',
-                                  ),
-                                ),
-                              ),
-                              selected: _searchOrganization,
-                              onChange: (value) {
-                                setState(() {
-                                  _searchOrganization = value;
-                                });
-                              },
-                              isExpanded: false,
-                            );
-                          },
-                          onException:
-                              (context, exception, {stackTrace}) => SizedBox(
-                                width: 250,
-                                child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    _searchResults == null ? localizations.favorites : 'Search results',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                Expanded(child: SingleChildScrollView(child: gridEntries)),
-              ],
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: SearchBar(
+            autoFocus: isOnDesktop,
+            padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+            leading: const Icon(Icons.search),
+            trailing: [
+              IconButton(
+                onPressed:
+                    () => setState(() {
+                      _showFilterOptions = !_showFilterOptions;
+                    }),
+                icon: Icon(_showFilterOptions ? Icons.tune_outlined : Icons.tune),
+              ),
+            ],
+            elevation: WidgetStateProperty.all(0),
+            side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary, width: 1)),
+            backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
+            onChanged: (searchTerm) async {
+              _throttleTimer?.cancel();
+              if (!isValidSearchTerm(searchTerm)) {
+                setState(() {
+                  _searchResults = null;
+                });
+              } else {
+                _throttleTimer = Timer(throttleDuration, () async {
+                  try {
+                    final authService = await ref
+                        .read(orgAuthNotifierProvider.notifier)
+                        .getByOrganization(_searchOrganization?.id);
+                    final results = await (await ref.read(dataManagerNotifierProvider)).search(
+                      searchTerm: searchTerm,
+                      type: _searchType,
+                      organizationId: _searchOrganization?.id,
+                      authService: authService,
+                    );
+                    setState(() {
+                      _searchResults = results;
+                    });
+                  } catch (e, st) {
+                    if (context.mounted) {
+                      await showExceptionDialog(context: context, exception: e, stackTrace: st);
+                    }
+                  }
+                });
+              }
+            },
           ),
-        );
-      },
+        ),
+        if (_showFilterOptions)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SimpleDropdown<Type?>(
+                  options: [null, ...searchableDataTypes.keys].map(
+                    (type) => MapEntry(
+                      type,
+                      Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
+                    ),
+                  ),
+                  selected: _searchType,
+                  onChange: (value) {
+                    setState(() {
+                      _searchType = value;
+                    });
+                  },
+                  isExpanded: false,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ManyConsumer<Organization, Null>(
+                  builder: (BuildContext context, List<Organization> organizations) {
+                    return SimpleDropdown<Organization?>(
+                      options: [null, ...organizations].map(
+                        (organization) => MapEntry(
+                          organization,
+                          Text(
+                            organization != null
+                                ? organization.name
+                                : '${localizations.optionSelect} ${localizations.organization}',
+                          ),
+                        ),
+                      ),
+                      selected: _searchOrganization,
+                      onChange: (value) {
+                        setState(() {
+                          _searchOrganization = value;
+                        });
+                      },
+                      isExpanded: false,
+                    );
+                  },
+                  onException:
+                      (context, exception, {stackTrace}) => SizedBox(
+                        width: 250,
+                        child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
+                      ),
+                ),
+              ),
+            ],
+          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Text(
+            _searchResults == null ? localizations.favorites : localizations.searchResults,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+        Expanded(child: SingleChildScrollView(child: gridEntries)),
+      ],
     );
   }
 }

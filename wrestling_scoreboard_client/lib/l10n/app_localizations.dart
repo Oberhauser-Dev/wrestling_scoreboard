@@ -1580,6 +1580,12 @@ abstract class AppLocalizations {
   /// **'Launch Scratch Bout'**
   String get launchScratchBout;
 
+  /// No description provided for @searchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Search results'**
+  String get searchResults;
+
   /// No description provided for @red.
   ///
   /// In en, this message translates to:
