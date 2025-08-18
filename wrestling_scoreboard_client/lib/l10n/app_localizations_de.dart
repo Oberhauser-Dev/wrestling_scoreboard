@@ -775,6 +775,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get launchScratchBout => 'Starte Notiz-Kampf';
 
   @override
+  String get searchResults => 'Suchresultate';
+
+  @override
   String get red => 'Red';
 
   @override

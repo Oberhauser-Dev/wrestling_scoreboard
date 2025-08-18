@@ -772,6 +772,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get launchScratchBout => 'Launch Scratch Bout';
 
   @override
+  String get searchResults => 'Search results';
+
+  @override
   String get red => 'Red';
 
   @override
