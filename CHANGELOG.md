@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-08-19
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.3`](#wrestling_scoreboard_client---v033)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.3`
+
+ - **REFACTOR**: Rename title to Organizations in Explore tab, use home as root route (closes [#159](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/159)). ([000be9ec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/000be9ec632975f763b9814684ae055403dae010))
+ - **FIX**: Search reset on type. ([7da7e3b9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7da7e3b9013e019b51a803b379bf03b9b4460f75))
+ - **FEAT**: Autofocus SearchableDropdown ([#163](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/163)). ([76598e7d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/76598e7d06c47966a615c34f8932e15b89e3cf97))
+ - **FEAT**: Option to Sign in from within home screen (closes [#158](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/158)). ([1fb49130](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1fb49130d8c645b4d64db4797cd6e267efadef06))
+
+
 ## 2025-08-16
 
 ### Changes

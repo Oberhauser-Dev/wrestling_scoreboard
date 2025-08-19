@@ -1,3 +1,10 @@
+## 0.3.3
+
+ - **REFACTOR**: Rename title to Organizations in Explore tab, use home as root route (closes [#159](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/159)). ([000be9ec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/000be9ec632975f763b9814684ae055403dae010))
+ - **FIX**: Search reset on type. ([7da7e3b9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7da7e3b9013e019b51a803b379bf03b9b4460f75))
+ - **FEAT**: Autofocus SearchableDropdown ([#163](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/163)). ([76598e7d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/76598e7d06c47966a615c34f8932e15b89e3cf97))
+ - **FEAT**: Option to Sign in from within home screen (closes [#158](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/158)). ([1fb49130](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1fb49130d8c645b4d64db4797cd6e267efadef06))
+
 ## 0.3.2
 
  - **REFACTOR**: Use static navigateTo method for navigating. ([1df6a93c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1df6a93c45c9a295131a1072bf6c0273c9e62b41))
