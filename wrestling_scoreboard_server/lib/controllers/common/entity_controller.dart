@@ -62,7 +62,7 @@ abstract class EntityController<T extends DataObject> {
     final single = await getSingleRaw(id, obfuscate: obfuscate);
     return DataObjectParser.fromRaw<T>(
       single,
-      <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate),
+      <TSub extends DataObject>(int id) => getSingleFromDataType<TSub>(id, obfuscate: obfuscate),
     );
   }
 
@@ -320,7 +320,7 @@ abstract class EntityController<T extends DataObject> {
           .map(
             (e) async => await DataObjectParser.fromRaw<T>(
               e,
-              <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate),
+              <TSub extends DataObject>(int id) => getSingleFromDataType<TSub>(id, obfuscate: obfuscate),
             ),
           )
           .toList(),
@@ -337,7 +337,7 @@ abstract class EntityController<T extends DataObject> {
           .map(
             (e) async => await DataObjectParser.fromRaw<T>(
               e,
-              <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate),
+              <TSub extends DataObject>(int id) => getSingleFromDataType<TSub>(id, obfuscate: obfuscate),
             ),
           )
           .toList(),
@@ -423,7 +423,7 @@ abstract class EntityController<T extends DataObject> {
         final e = row[tableName]!;
         return await DataObjectParser.fromRaw<T>(
           e,
-          <T extends DataObject>(int id) => getSingleFromDataType<T>(id, obfuscate: obfuscate),
+          <TSub extends DataObject>(int id) => getSingleFromDataType<TSub>(id, obfuscate: obfuscate),
         );
       }),
     );

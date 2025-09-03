@@ -10,7 +10,7 @@ workspace:
   - wrestling_scoreboard_generator
 
 dev_dependencies:
-  melos: ^7.0.0-dev.8
+  melos: ^7.1.0
 
 melos:
   command:
