@@ -116,18 +116,17 @@ class CustomSettingsScreen extends ConsumerWidget {
                     title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
                     subtitle: Text(getTranslationOfLocale(locale)),
                     onTap: () async {
-                      final val = await showDialog<Locale?>(
+                      final List<MapEntry<Locale?, String>> languageSettingValues =
+                          Preferences.supportedLanguages.map((locale) {
+                            return MapEntry<Locale?, String>(locale, getTranslationOfLocale(locale));
+                          }).toList();
+                      languageSettingValues.insert(0, MapEntry(null, getTranslationOfLocale()));
+                      await showRadioDialog<Locale?>(
                         context: context,
-                        builder: (BuildContext context) {
-                          final List<MapEntry<Locale?, String>> languageSettingValues =
-                              Preferences.supportedLanguages.map((locale) {
-                                return MapEntry<Locale?, String>(locale, getTranslationOfLocale(locale));
-                              }).toList();
-                          languageSettingValues.insert(0, MapEntry(null, getTranslationOfLocale()));
-                          return RadioDialog<Locale?>(values: languageSettingValues, initialValue: locale);
-                        },
+                        initialValue: locale,
+                        values: languageSettingValues,
+                        onSuccess: (value) => ref.read(localeNotifierProvider.notifier).setState(value),
                       );
-                      await ref.read(localeNotifierProvider.notifier).setState(val);
                     },
                   ),
                   ListTile(
@@ -135,19 +134,16 @@ class CustomSettingsScreen extends ConsumerWidget {
                     title: Text(localizations.themeMode),
                     subtitle: Text(getTranslationOfThemeMode(themeMode)),
                     onTap: () async {
-                      final val = await showDialog<ThemeMode>(
+                      final List<MapEntry<ThemeMode, String>> themeModeValues =
+                          ThemeMode.values
+                              .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
+                              .toList();
+                      await showRadioDialog<ThemeMode>(
                         context: context,
-                        builder: (BuildContext context) {
-                          final List<MapEntry<ThemeMode, String>> themeModeValues =
-                              ThemeMode.values
-                                  .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
-                                  .toList();
-                          return RadioDialog<ThemeMode>(values: themeModeValues, initialValue: themeMode);
-                        },
+                        initialValue: themeMode,
+                        values: themeModeValues,
+                        onSuccess: (value) => ref.read(themeModeNotifierProvider.notifier).setState(value),
                       );
-                      if (val != null) {
-                        await ref.read(themeModeNotifierProvider.notifier).setState(val);
-                      }
                     },
                   ),
                   ListTile(
@@ -161,13 +157,45 @@ class CustomSettingsScreen extends ConsumerWidget {
                     subtitle: Text(fontFamily ?? localizations.systemSetting),
                     onTap: () async {
                       final currentTextTheme = Theme.of(context).textTheme;
-                      final val = await showDialog<String?>(
+
+                      final List<String?> fontFamilies = [null];
+                      fontFamilies.addAll(GoogleFonts.asMap().keys.toList());
+                      await showRadioDialog<String?>(
                         context: context,
-                        builder: (BuildContext context) {
-                          return _FontSelectionDialog(currentTextTheme: currentTextTheme, fontFamily: fontFamily);
+                        initialValue: fontFamily,
+                        shrinkWrap: false,
+                        itemCount: fontFamilies.length,
+                        itemBuilder: (index) {
+                          final fontFamily = fontFamilies[index];
+                          final fontStyle =
+                              fontFamily != null
+                                  ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
+                                  : Theme.of(context).textTheme
+                                      .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
+                                      .headlineMedium;
+                          return (
+                            fontFamily,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(fontFamily ?? localizations.systemFont, style: fontStyle),
+                                IconButton(
+                                  onPressed:
+                                      () => showOkDialog(
+                                        context: context,
+                                        child: Text(
+                                          'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
+                                          style: fontStyle,
+                                        ),
+                                      ),
+                                  icon: const Icon(Icons.abc),
+                                ),
+                              ],
+                            ),
+                          );
                         },
+                        onSuccess: (value) => ref.read(fontFamilyNotifierProvider.notifier).setState(value),
                       );
-                      await ref.read(fontFamilyNotifierProvider.notifier).setState(val);
                     },
                   ),
                 ],
@@ -207,24 +235,16 @@ class CustomSettingsScreen extends ConsumerWidget {
                                   .entries
                                   .toList();
                           if (context.mounted) {
-                            final val = await showDialog<String>(
+                            await showRadioDialog<String>(
                               context: context,
-                              builder: (BuildContext context) {
-                                return RadioDialog<String>(
-                                  values: bellSoundValues,
-                                  initialValue: bellSoundPath,
-                                  onChanged: (value) async {
-                                    if (value != null) {
-                                      final ap = AudioPlayer();
-                                      await ap.play(AssetSource(value));
-                                    }
-                                  },
-                                );
+                              values: bellSoundValues,
+                              initialValue: bellSoundPath,
+                              onChanged: (value) async {
+                                final ap = AudioPlayer();
+                                await ap.play(AssetSource(value));
                               },
+                              onSuccess: (value) => ref.read(bellSoundNotifierProvider.notifier).setState(value),
                             );
-                            if (val != null) {
-                              await ref.read(bellSoundNotifierProvider.notifier).setState(val);
-                            }
                           }
                         },
                       ),
@@ -552,52 +572,6 @@ class CustomSettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _FontSelectionDialog extends StatelessWidget {
-  final TextTheme currentTextTheme;
-  final String? fontFamily;
-
-  const _FontSelectionDialog({required this.currentTextTheme, required this.fontFamily});
-
-  @override
-  Widget build(BuildContext context) {
-    final localizations = context.l10n;
-
-    final List<String?> fontFamilies = [null];
-    fontFamilies.addAll(GoogleFonts.asMap().keys.toList());
-    return RadioDialog<String?>(
-      shrinkWrap: false,
-      itemCount: fontFamilies.length,
-      builder: (index) {
-        final fontFamily = fontFamilies[index];
-        final fontStyle =
-            fontFamily != null
-                ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
-                : Theme.of(context).textTheme
-                    .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
-                    .headlineMedium;
-        return (
-          fontFamily,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(fontFamily ?? localizations.systemFont, style: fontStyle),
-              IconButton(
-                onPressed:
-                    () => showOkDialog(
-                      context: context,
-                      child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz', style: fontStyle),
-                    ),
-                icon: const Icon(Icons.abc),
-              ),
-            ],
-          ),
-        );
-      },
-      initialValue: fontFamily,
     );
   }
 }

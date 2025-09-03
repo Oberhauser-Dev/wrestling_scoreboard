@@ -60,11 +60,13 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
   final Widget child;
   final String? okText;
   final T Function() getResult;
+  final T? cancelResult;
   final bool isScrollable;
 
   const OkCancelDialog({
     required this.child,
     required this.getResult,
+    this.cancelResult,
     this.okText,
     super.key,
     this.isScrollable = true,
@@ -76,7 +78,7 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
     return SizedDialog(
       isScrollable: isScrollable,
       actions: <Widget>[
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(localizations.cancel)),
+        TextButton(onPressed: () => Navigator.pop(context, cancelResult), child: Text(localizations.cancel)),
         TextButton(onPressed: () => Navigator.pop(context, getResult()), child: Text(okText ?? localizations.ok)),
       ],
       child: child,
@@ -190,30 +192,59 @@ Future<Duration?> showDurationDialog({
   return (res < minValue) ? minValue : ((res > maxValue) ? maxValue : res);
 }
 
+Future<void> showRadioDialog<T>({
+  required BuildContext context,
+  required T initialValue,
+  List<MapEntry<T, String>>? values,
+  required void Function(T value) onSuccess,
+  void Function(T value)? onChanged,
+  (T, Widget) Function(int index)? itemBuilder,
+  int? itemCount,
+  bool shrinkWrap = true,
+}) async {
+  assert(values != null || itemBuilder != null);
+  final value = await showDialog<_DialogResult<T>>(
+    context: context,
+    builder: (BuildContext context) {
+      return RadioDialog<T>(
+        values: values,
+        itemBuilder: itemBuilder,
+        itemCount: itemCount,
+        initialValue: initialValue,
+        onChanged: onChanged,
+        shrinkWrap: shrinkWrap,
+      );
+    },
+  );
+  if (value != null && value is _DialogSuccessResult<T>) {
+    onSuccess(value.unwrap());
+  }
+}
+
 class RadioDialog<T> extends StatefulWidget {
-  final List<MapEntry<T?, String>>? values;
-  final (T?, Widget) Function(int index)? builder;
-  final T? initialValue;
+  final T initialValue;
+  final List<MapEntry<T, String>>? values;
+  final (T, Widget) Function(int index)? itemBuilder;
   final int? itemCount;
-  final void Function(T? value)? onChanged;
+  final void Function(T value)? onChanged;
   final bool shrinkWrap;
 
   const RadioDialog({
     super.key,
     this.values,
-    this.builder,
+    this.itemBuilder,
     required this.initialValue,
     this.onChanged,
     this.itemCount,
     this.shrinkWrap = true,
-  }) : assert(values != null || builder != null);
+  }) : assert(values != null || itemBuilder != null);
 
   @override
   State<RadioDialog<T>> createState() => _RadioDialogState<T>();
 }
 
 class _RadioDialogState<T> extends State<RadioDialog<T>> {
-  T? result;
+  late T result;
 
   @override
   void initState() {
@@ -223,36 +254,55 @@ class _RadioDialogState<T> extends State<RadioDialog<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return OkCancelDialog<T?>(
+    return OkCancelDialog<_DialogResult<T>?>(
       isScrollable: widget.shrinkWrap,
-      child: ListView.builder(
-        // key: Key(result.toString()), // Specifying a key will reset the list position, so try to avoid it.
-        shrinkWrap: widget.shrinkWrap,
-        itemCount: widget.itemCount ?? widget.values?.length,
-        itemBuilder: (context, index) {
-          final T? key;
-          final Widget child;
-          if (widget.values != null) {
-            final entry = widget.values![index];
-            key = entry.key;
-            child = Text(entry.value);
-          } else {
-            (key, child) = widget.builder!(index);
-          }
-          return RadioListTile<T?>(
-            value: key,
-            groupValue: result,
-            onChanged: (v) {
-              if (widget.onChanged != null) widget.onChanged!(v);
-              setState(() {
-                result = v;
-              });
-            },
-            title: child,
-          );
+      getResult: () => _DialogSuccessResult<T>(result),
+      cancelResult: _DialogCancelResult<T>(),
+      child: RadioGroup<T>(
+        groupValue: result,
+        onChanged: (v) {
+          if (widget.onChanged != null) widget.onChanged!(v as T);
+          setState(() {
+            result = v as T;
+          });
         },
+        child: ListView.builder(
+          // key: Key(result.toString()), // Specifying a key will reset the list position, so try to avoid it.
+          shrinkWrap: widget.shrinkWrap,
+          itemCount: widget.itemCount ?? widget.values?.length,
+          itemBuilder: (context, index) {
+            final T key;
+            final Widget child;
+            if (widget.values != null) {
+              final entry = widget.values![index];
+              key = entry.key;
+              child = Text(entry.value);
+            } else {
+              (key, child) = widget.itemBuilder!(index);
+            }
+            return RadioListTile<T>(value: key, title: child);
+          },
+        ),
       ),
-      getResult: () => result,
     );
   }
 }
+
+sealed class _DialogResult<T> {
+  const _DialogResult();
+
+  T unwrap() {
+    if (this is _DialogSuccessResult<T>) {
+      return (this as _DialogSuccessResult<T>).value;
+    }
+    throw Exception('Tried to unwrap a DialogCancel');
+  }
+}
+
+class _DialogSuccessResult<T> extends _DialogResult<T> {
+  final T value;
+
+  const _DialogSuccessResult(this.value);
+}
+
+class _DialogCancelResult<T> extends _DialogResult<T> {}
