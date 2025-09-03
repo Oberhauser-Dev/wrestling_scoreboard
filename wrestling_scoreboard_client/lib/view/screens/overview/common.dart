@@ -81,12 +81,12 @@ class FavoriteScaffold<T extends DataObject> extends ConsumerWidget {
       builder: (BuildContext context, favorites) {
         final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
         return OverviewScaffold(
-          body: this.body,
-          details: this.details,
-          label: this.label,
-          tabs: this.tabs,
+          body: body,
+          details: details,
+          label: label,
+          tabs: tabs,
           actions: [
-            ...?this.actions,
+            ...?actions,
             ResponsiveScaffoldActionItem(
               label: localizations.favorite,
               icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),

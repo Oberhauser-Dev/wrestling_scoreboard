@@ -24,7 +24,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     final single = await getSingleOfOrgRaw(orgSyncId, orgId: orgId);
     return DataObjectParser.fromRaw<T>(
       single,
-      <T extends DataObject>(id) => EntityController.getSingleFromDataType<T>(id, obfuscate: obfuscate),
+      <TSub extends DataObject>(id) => EntityController.getSingleFromDataType<TSub>(id, obfuscate: obfuscate),
     );
   }
 
