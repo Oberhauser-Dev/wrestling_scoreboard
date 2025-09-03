@@ -139,7 +139,7 @@ class CustomDropdown<T> extends StatelessWidget {
     return DropdownButtonFormField<T>(
       hint: label == null ? null : Text(label!),
       isExpanded: isExpanded,
-      value: selected,
+      initialValue: selected,
       // FIXME: onChange method is required, in order to show as enabled: https://github.com/flutter/flutter/issues/57953
       onChanged: onChange ?? (_) {},
       onSaved: onSaved,
