@@ -168,7 +168,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get usernameRequirementsWarning =>
-      'A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).';
+      'A username may only contain lowercase letters, numbers, dot (.) or hyphen (-).';
 
   @override
   String get password => 'Password';

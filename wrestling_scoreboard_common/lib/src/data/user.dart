@@ -36,7 +36,10 @@ abstract class User with _$User implements AbstractUser {
     @Default(UserPrivilege.none) UserPrivilege privilege,
   }) = _User;
 
-  static bool isValidUsername(String username) => RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(username);
+  static bool isValidUsername(String username) => RegExp(r'^[a-z0-9.-]+$').hasMatch(username);
+
+  static bool isValidEmail(String email) =>
+      RegExp(r"^[a-zA-Z0-9a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
 
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
 

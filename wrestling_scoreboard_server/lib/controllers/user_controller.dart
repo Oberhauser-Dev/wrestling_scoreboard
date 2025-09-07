@@ -3,7 +3,24 @@ import 'dart:convert';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+
+User parseAndCheckUser(String message) {
+  var user = parseSingleJson<User>(jsonDecode(message));
+  if (!User.isValidUsername(user.username)) {
+    throw InvalidParameterException('Username not valid: ${user.username}');
+  }
+  if (user.email != null && !User.isValidEmail(user.email!)) {
+    throw InvalidParameterException('Email address not valid: ${user.email}');
+  }
+  user = user.copyWith(
+    // Only allow lowercase usernames to be registered, to avoid confusion with other accounts.
+    username: user.username.toLowerCase(),
+    email: user.email?.toLowerCase(),
+  );
+  return user;
+}
 
 class SecuredUserController extends ShelfController<SecuredUser> {
   static final SecuredUserController _singleton = SecuredUserController._internal();
@@ -16,7 +33,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
 
   Future<Response> postSingleUser(Request request, User? user) async {
     final message = await request.readAsString();
-    final user = parseSingleJson<User>(jsonDecode(message));
+    final user = parseAndCheckUser(message);
     final id = await createSingleUser(user);
     return Response.ok(jsonEncode(id));
   }

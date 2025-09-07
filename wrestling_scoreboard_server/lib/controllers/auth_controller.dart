@@ -19,9 +19,12 @@ class AuthController {
 
   Future<Response> signUp(Request request) async {
     final message = await request.readAsString();
-    final user = parseSingleJson<User>(jsonDecode(message)).copyWith(
-      // Do not allow raising privileges for oneself.
+    var user = parseAndCheckUser(message);
+    user = user.copyWith(
+      // Do not allow setting or raising privileges for oneself.
       privilege: UserPrivilege.none,
+      // Do always set the current date time as createdAt property
+      createdAt: MockableDateTime.now(),
     );
     await SecuredUserController().createSingleUser(user);
     return Response.ok('{"status": "success"}');
@@ -29,17 +32,25 @@ class AuthController {
 
   Future<Response> updateSingle(Request request, User? user) async {
     final message = await request.readAsString();
-    final updatedUser = User.fromJson(jsonDecode(message));
+
+    final updatedUser = parseAndCheckUser(message);
+    if (user == null || updatedUser.id != user.id!) {
+      return Response.badRequest(
+        body: 'The updated user ${updatedUser.id} does not match the currently logged in user ${user?.id}',
+      );
+    }
+
     final updatedSecuredUser = updatedUser.toSecuredUser();
 
-    SecuredUser securedUser = await SecuredUserController().getSingle(user!.id!, obfuscate: false);
+    SecuredUser securedUser = await SecuredUserController().getSingle(user.id!, obfuscate: false);
     securedUser = securedUser.copyWith(
       username: updatedSecuredUser.username,
       email: updatedSecuredUser.email,
       person: updatedSecuredUser.person,
       passwordHash: updatedSecuredUser.passwordHash ?? securedUser.passwordHash,
       salt: updatedSecuredUser.salt ?? securedUser.salt,
-      // Do not allow raising privileges for oneself.
+      // privilege: Do not allow raising privileges for oneself.
+      // createdAt: Do not allow to set the createdAt property.
     );
     await SecuredUserController().updateSingle(securedUser);
     return Response.ok('{"status": "success"}');

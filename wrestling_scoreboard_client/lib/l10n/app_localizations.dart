@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// No description provided for @usernameRequirementsWarning.
   ///
   /// In en, this message translates to:
-  /// **'A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).'**
+  /// **'A username may only contain lowercase letters, numbers, dot (.) or hyphen (-).'**
   String get usernameRequirementsWarning;
 
   /// No description provided for @password.

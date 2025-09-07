@@ -61,7 +61,7 @@
 
   "profile": "Profil",
   "username": "Nutzername",
-  "usernameRequirementsWarning": "Ein Benutzername darf nur alphanumerische Zeichen, Punkt (.), Bindestrich (-) oder Unterstrich (_) enthalten.",
+  "usernameRequirementsWarning": "Ein Benutzername darf nur Kleinbuchstaben, Zahlen, Punkt (.) oder Bindestrich (-) enthalten.",
   "password": "Passwort",
   "email": "E-Mail",
 
