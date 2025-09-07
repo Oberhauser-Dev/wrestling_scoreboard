@@ -169,7 +169,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get usernameRequirementsWarning =>
-      'Ein Benutzername darf nur alphanumerische Zeichen, Punkt (.), Bindestrich (-) oder Unterstrich (_) enthalten.';
+      'Ein Benutzername darf nur Kleinbuchstaben, Zahlen, Punkt (.) oder Bindestrich (-) enthalten.';
 
   @override
   String get password => 'Passwort';

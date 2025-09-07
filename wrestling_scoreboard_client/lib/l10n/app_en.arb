@@ -64,7 +64,7 @@
 
   "profile": "Profile",
   "username": "Username",
-  "usernameRequirementsWarning": "A username may only contain alphanumeric characters, dot (.), hyphen (-) or underscore (_).",
+  "usernameRequirementsWarning": "A username may only contain lowercase letters, numbers, dot (.) or hyphen (-).",
   "password": "Password",
   "email": "Email",
 

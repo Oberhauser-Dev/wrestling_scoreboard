@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class CustomTextInput extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
@@ -120,10 +121,10 @@ class NumericalInput<T extends num> extends StatelessWidget {
 
 class EmailInput extends StatelessWidget {
   final String? initialValue;
-  final FormFieldSetter<String> onSave;
+  final FormFieldSetter<String>? onSaved;
   final bool isMandatory;
 
-  const EmailInput({this.initialValue, required this.onSave, this.isMandatory = false, super.key});
+  const EmailInput({this.initialValue, required this.onSaved, this.isMandatory = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -133,12 +134,18 @@ class EmailInput extends StatelessWidget {
       leading: const Icon(Icons.email),
       title: TextFormField(
         initialValue: initialValue,
-        onSaved: onSave,
+        // Convert empty value to null
+        onSaved: onSaved == null ? null : (value) => onSaved!((value?.isEmpty ?? true) ? null : value),
         validator: (value) {
-          if (isMandatory && (value == null || value.length < 3)) {
-            return 'Please enter a valid email address!';
+          if (value == null || value.isEmpty) {
+            if (isMandatory) {
+              return localizations.mandatoryField;
+            }
+            return null;
+          } else if (User.isValidEmail(value)) {
+            return null;
           }
-          return null;
+          return 'Please enter a valid email address!';
         },
         decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
         autofillHints: const [AutofillHints.email],

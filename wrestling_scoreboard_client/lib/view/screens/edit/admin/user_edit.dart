@@ -49,7 +49,7 @@ class UserEditState extends ConsumerState<UserEdit> {
         initialValue: _username,
         validator: (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
       ),
-      EmailInput(initialValue: _email, onSave: (String? value) => _email = value, isMandatory: false),
+      EmailInput(initialValue: _email, onSaved: (String? value) => _email = value, isMandatory: false),
       if (widget.user?.id == null)
         PasswordInput(isMandatory: true, onSaved: (String? value) => _password = value, isNewPassword: true),
       ListTile(

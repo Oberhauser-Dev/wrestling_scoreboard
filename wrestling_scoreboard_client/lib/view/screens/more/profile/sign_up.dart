@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.dart';
@@ -46,10 +46,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   validator:
                       (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
                 ),
-                // EmailInput(
-                //   onSave: (String? value) => _email = value,
-                //   isMandatory: false,
-                // ),
+                EmailInput(initialValue: _email, onSaved: (String? value) => _email = value, isMandatory: false),
                 PasswordInput(onSaved: (String? value) => _password = value, isNewPassword: true, isMandatory: true),
                 PasswordInput(
                   onSaved: (String? value) => _passwordAgain = value,
