@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 
@@ -53,6 +54,7 @@ class AuthController {
       // createdAt: Do not allow to set the createdAt property.
     );
     await SecuredUserController().updateSingle(securedUser);
+    unicastUpdateSingle<SecuredUser>((obfuscate) async => securedUser, user: user);
     return Response.ok('{"status": "success"}');
   }
 

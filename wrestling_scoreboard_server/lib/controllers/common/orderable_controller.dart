@@ -40,21 +40,14 @@ mixin OrderableController<T extends Orderable> on ShelfController<T> {
 
     // Update list of its filterType + filterId
     for (final i in indexedFilter) {
-      broadcast(
-        (obfuscate) async => jsonEncode(
-          manyToJson(
-            await getMany(
-              conditions: ['${directDataObjectRelations[T]![filterTypes[i]]!.$1} = @fid'],
-              substitutionValues: {'fid': filterIds[i]},
-              obfuscate: obfuscate,
-            ),
-            T,
-            CRUD.update,
-            isRaw: false,
-            filterType: filterTypes[i],
-            filterId: filterIds[i],
-          ),
+      broadcastUpdateMany<T>(
+        (obfuscate) async => await getMany(
+          conditions: ['${directDataObjectRelations[T]![filterTypes[i]]!.$1} = @fid'],
+          substitutionValues: {'fid': filterIds[i]},
+          obfuscate: obfuscate,
         ),
+        filterType: filterTypes[i],
+        filterId: filterIds[i],
       );
     }
 
@@ -86,21 +79,14 @@ WHERE tgt.id = rn.id;
     ''';
     await setManyRawFromQuery(query, substitutionValues: {'fid': filterId});
 
-    broadcast(
-      (obfuscate) async => jsonEncode(
-        manyToJson(
-          await getMany(
-            conditions: ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'],
-            substitutionValues: {'fid': filterId},
-            obfuscate: obfuscate,
-          ),
-          T,
-          CRUD.update,
-          isRaw: false,
-          filterType: filterType,
-          filterId: filterId,
-        ),
+    broadcastUpdateMany<T>(
+      (obfuscate) async => await getMany(
+        conditions: ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'],
+        substitutionValues: {'fid': filterId},
+        obfuscate: obfuscate,
       ),
+      filterType: filterType,
+      filterId: filterId,
     );
   }
 

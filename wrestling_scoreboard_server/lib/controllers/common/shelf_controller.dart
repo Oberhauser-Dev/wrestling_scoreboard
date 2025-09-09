@@ -198,4 +198,6 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return null;
     }
   }
+
+  UserPrivilege get controllerPrivilege => UserPrivilege.none;
 }

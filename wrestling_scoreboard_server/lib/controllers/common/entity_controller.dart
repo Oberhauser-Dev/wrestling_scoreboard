@@ -444,6 +444,7 @@ abstract class EntityController<T extends DataObject> {
     List<String>? conditions,
     Conjunction conjunction = Conjunction.and,
     Map<String, dynamic>? substitutionValues,
+    List<String> orderBy = const [],
     required bool obfuscate,
   }) {
     return ShelfController.getControllerFromDataType(T)?.getMany(
@@ -451,6 +452,7 @@ abstract class EntityController<T extends DataObject> {
           conjunction: conjunction,
           substitutionValues: substitutionValues,
           obfuscate: obfuscate,
+          orderBy: orderBy,
         )
         as Future<List<T>>;
   }

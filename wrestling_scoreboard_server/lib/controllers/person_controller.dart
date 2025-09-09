@@ -124,23 +124,15 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
       await updateSingle(keepPerson);
 
       // Update list of persons for its organization
-      broadcast(
-        (obfuscate) async => jsonEncode(
-          manyToJson(
+      broadcastUpdateMany<Person>(
+        (obfuscate) async =>
             await OrganizationController().getPersons(user?.obfuscate ?? true, keepPerson.organization!.id!),
-            Person,
-            CRUD.update,
-            isRaw: false,
-            filterType: Organization,
-            filterId: keepPerson.organization!.id,
-          ),
-        ),
+        filterType: Organization,
+        filterId: keepPerson.organization!.id,
       );
 
       // Broadcast the updated information
-      broadcast((obfuscate) async {
-        return jsonEncode(singleToJson(keepPerson, Person, CRUD.update));
-      });
+      broadcastUpdateSingle<Person>((obfuscate) async => keepPerson);
 
       return Response.ok('{"status": "success"}');
     } on FormatException catch (e) {

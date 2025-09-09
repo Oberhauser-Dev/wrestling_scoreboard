@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
@@ -251,27 +250,22 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       createdBouts[index] = await CompetitionBoutController().createSingleReturn(competitionBout.copyWith(bout: bout));
     }
 
-    broadcast((obfuscate) async {
-      final List<CompetitionBout> competitionBouts;
-      if (obfuscate) {
-        competitionBouts = await CompetitionBoutController().getByWeightCategory(
-          competitionWeightCategory.id!,
-          obfuscate: obfuscate,
-        );
-      } else {
-        competitionBouts = createdBouts;
-      }
-      return jsonEncode(
-        manyToJson(
-          competitionBouts,
-          CompetitionBout,
-          CRUD.update,
-          isRaw: false,
-          filterType: CompetitionWeightCategory,
-          filterId: competitionWeightCategory.id,
-        ),
-      );
-    });
+    broadcastUpdateMany<CompetitionBout>(
+      (obfuscate) async {
+        final List<CompetitionBout> competitionBouts;
+        if (obfuscate) {
+          competitionBouts = await CompetitionBoutController().getByWeightCategory(
+            competitionWeightCategory.id!,
+            obfuscate: obfuscate,
+          );
+        } else {
+          competitionBouts = createdBouts;
+        }
+        return competitionBouts;
+      },
+      filterType: CompetitionWeightCategory,
+      filterId: competitionWeightCategory.id,
+    );
   }
 
   static List<List<CompetitionBout>> convertBouts(

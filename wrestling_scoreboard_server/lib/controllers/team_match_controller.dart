@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -177,24 +175,19 @@ class TeamMatchController extends ShelfController<TeamMatch>
       });
     }
 
-    broadcast((obfuscate) async {
-      final List<TeamMatchBout> teamMatchBouts;
-      if (obfuscate) {
-        teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: obfuscate);
-      } else {
-        teamMatchBouts = tmBouts;
-      }
-      return jsonEncode(
-        manyToJson(
-          teamMatchBouts,
-          TeamMatchBout,
-          CRUD.update,
-          isRaw: false,
-          filterType: TeamMatch,
-          filterId: teamMatch.id,
-        ),
-      );
-    });
+    broadcastUpdateMany<TeamMatchBout>(
+      (obfuscate) async {
+        final List<TeamMatchBout> teamMatchBouts;
+        if (obfuscate) {
+          teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: obfuscate);
+        } else {
+          teamMatchBouts = tmBouts;
+        }
+        return teamMatchBouts;
+      },
+      filterType: TeamMatch,
+      filterId: teamMatch.id,
+    );
 
     return Response.ok('{"status": "success"}');
   }

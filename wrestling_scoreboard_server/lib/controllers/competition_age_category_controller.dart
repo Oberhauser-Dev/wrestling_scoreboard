@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
@@ -58,15 +56,10 @@ RETURNING $primaryKeyName;
 
       // Need to broadcast the update of the competition_weight_categories for each single item.
       for (final competitionWeightCategoryId in ids) {
-        broadcast((obfuscate) async {
-          return jsonEncode(
-            singleToJson(
+        broadcastUpdateSingle<CompetitionWeightCategory>(
+          (obfuscate) async =>
               await weightCategoryController.getSingle(competitionWeightCategoryId, obfuscate: obfuscate),
-              CompetitionWeightCategory,
-              CRUD.update,
-            ),
-          );
-        });
+        );
       }
 
       await CompetitionBoutController().reorderBlocks(
