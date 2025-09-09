@@ -17,13 +17,13 @@ sudo apt install postgresql-client
 
 ## Setup
 
-### Tipps:
+### Tips:
 
 - Open psql command line: `psql -U postgres`
 - List all users: `\du`
 - Start the database server: `postgres -D /.../PostgreSQL/16/data`
 
-Login as admin:
+Login as database admin:
 ```shell
 PGPASSWORD=my-password
 psql -U postgres # For creation and dropping
@@ -42,7 +42,7 @@ sudo -u postgres psql wrestling_scoreboard -c "SELECT semver FROM migration LIMI
 
 ### User
 
-Create own user `wrestling`, replace `my-password` with the password of your choice:
+Create own database user `wrestling`, replace `my-password` with the password of your choice:
 ```shell
 psql -U postgres -c "CREATE USER wrestling WITH PASSWORD 'my-password';"
 ```
