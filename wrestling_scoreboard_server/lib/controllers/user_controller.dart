@@ -5,6 +5,7 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 
 User parseAndCheckUser(String message) {
   var user = parseSingleJson<User>(jsonDecode(message));
@@ -35,6 +36,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     final message = await request.readAsString();
     final user = parseAndCheckUser(message);
     final id = await createSingleUser(user);
+    broadcastUpdateMany<SecuredUser>((obfuscate) async => await SecuredUserController().getMany(obfuscate: obfuscate));
     return Response.ok(jsonEncode(id));
   }
 
@@ -59,4 +61,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
       'password_hash': psql.Type.byteArray,
     };
   }
+
+  @override
+  UserPrivilege get controllerPrivilege => UserPrivilege.admin;
 }
