@@ -22,6 +22,12 @@ For a manual / more detailed setup of the Postgres database, see the [database d
 
 Execute the `./bin/wrestling-scoreboard-server` executable from within the `wrestling_scoreboard_server` directory, to handle resource paths correctly.
 
+For managing app users and access a default administration user for the app is created:
+  - Username: `admin`
+  - Password: `admin`
+
+It is recommended to sign in to the client and change the password, especially if providing a public server.
+
 ## Deployment
 
 ### Linux Systemd service
