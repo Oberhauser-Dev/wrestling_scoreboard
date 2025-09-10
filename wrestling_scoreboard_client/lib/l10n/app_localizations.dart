@@ -617,8 +617,14 @@ abstract class AppLocalizations {
   /// No description provided for @addExisting.
   ///
   /// In en, this message translates to:
-  /// **'Add existing'**
+  /// **'Link existing object (recommended)'**
   String get addExisting;
+
+  /// No description provided for @createAndAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Create and link new object'**
+  String get createAndAdd;
 
   /// No description provided for @mergeObjectData.
   ///
@@ -1802,6 +1808,18 @@ abstract class AppLocalizations {
   /// **'Maximum'**
   String get maximum;
 
+  /// No description provided for @official.
+  ///
+  /// In en, this message translates to:
+  /// **'Official'**
+  String get official;
+
+  /// No description provided for @officials.
+  ///
+  /// In en, this message translates to:
+  /// **'Officials'**
+  String get officials;
+
   /// No description provided for @referee.
   ///
   /// In en, this message translates to:
@@ -1867,6 +1885,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date of Birth'**
   String get dateOfBirth;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
 
   /// No description provided for @gender.
   ///

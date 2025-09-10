@@ -29,6 +29,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
@@ -215,6 +216,11 @@ GoRouter getRouter() {
       builder:
           (context, state) =>
               CompetitionParticipationOverview(id: int.parse(state.pathParameters['competition_participation_id']!)),
+    ),
+    GoRoute(
+      path: '${CompetitionPersonOverview.route}/:competition_person_id',
+      builder:
+          (context, state) => CompetitionPersonOverview(id: int.parse(state.pathParameters['competition_person_id']!)),
     ),
   ];
   return GoRouter(

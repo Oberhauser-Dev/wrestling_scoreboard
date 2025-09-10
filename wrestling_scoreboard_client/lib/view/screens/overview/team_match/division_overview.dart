@@ -90,9 +90,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
           body: TabGroup(
             items: [
               description,
-              FilterableManyConsumer<League, Division>.edit(
+              FilterableManyConsumer<League, Division>.add(
                 context: context,
-                editPageBuilder: (context) => LeagueEdit(initialDivision: division),
+                addPageBuilder: (context) => LeagueEdit(initialDivision: division),
                 filterObject: division,
                 itemBuilder:
                     (context, item) => ContentItem(
@@ -101,9 +101,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                       onTap: () => LeagueOverview.navigateTo(context, item),
                     ),
               ),
-              FilterableManyConsumer<DivisionWeightClass, Division>.edit(
+              FilterableManyConsumer<DivisionWeightClass, Division>.add(
                 context: context,
-                editPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: division),
+                addPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: division),
                 filterObject: division,
                 itemBuilder:
                     (context, item) => ContentItem(
@@ -112,9 +112,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                       onTap: () => DivisionWeightClassOverview.navigateTo(context, item),
                     ),
               ),
-              FilterableManyConsumer<Division, Division>.edit(
+              FilterableManyConsumer<Division, Division>.add(
                 context: context,
-                editPageBuilder: (context) => DivisionEdit(initialParent: division),
+                addPageBuilder: (context) => DivisionEdit(initialParent: division),
                 filterObject: division,
                 itemBuilder:
                     (context, item) => ContentItem(

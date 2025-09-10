@@ -44,6 +44,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
           selectedItem: _team,
           label: localizations.team,
           context: context,
+          allowEmpty: false,
           onSaved:
               (Team? value) => setState(() {
                 _team = value;
@@ -61,6 +62,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
           selectedItem: _club,
           label: localizations.club,
           context: context,
+          allowEmpty: false,
           onSaved:
               (Club? value) => setState(() {
                 _club = value;

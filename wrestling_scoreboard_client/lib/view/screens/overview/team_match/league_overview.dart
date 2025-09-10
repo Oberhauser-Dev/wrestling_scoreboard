@@ -76,9 +76,9 @@ class LeagueOverview extends ConsumerWidget {
                 items: [
                   description,
                   MatchList<League>(filterObject: data),
-                  FilterableManyConsumer<LeagueTeamParticipation, League>.edit(
+                  FilterableManyConsumer<LeagueTeamParticipation, League>.add(
                     context: context,
-                    editPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
+                    addPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
                     filterObject: data,
                     mapData:
                         (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
@@ -89,9 +89,9 @@ class LeagueOverview extends ConsumerWidget {
                           onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                         ),
                   ),
-                  FilterableManyConsumer<LeagueWeightClass, League>.edit(
+                  FilterableManyConsumer<LeagueWeightClass, League>.add(
                     context: context,
-                    editPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
+                    addPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
                     filterObject: data,
                     itemBuilder:
                         (context, item) => ContentItem(

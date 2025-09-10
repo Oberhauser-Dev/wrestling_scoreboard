@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
+import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
@@ -131,15 +133,27 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
           onDelete: null,
           buildRelations:
               (Person person) => {
-                Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.edit(
+                Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.add(
                   context: context,
-                  editPageBuilder: (context) => MembershipEdit(initialPerson: person),
+                  addPageBuilder:
+                      (context) => MembershipEdit(initialOrganization: person.organization!, initialPerson: person),
                   filterObject: person,
                   itemBuilder:
                       (context, membership) => ContentItem(
                         title: '${membership.info},\t${membership.person.gender?.localize(context)}',
                         icon: Icons.person,
                         onTap: () => MembershipOverview.navigateTo(context, membership),
+                      ),
+                ),
+                Tab(
+                  child: HeadingText('${localizations.officials} (${localizations.competition})'),
+                ): FilterableManyConsumer<CompetitionPerson, Person>(
+                  filterObject: person,
+                  itemBuilder:
+                      (context, competitionPerson) => ContentItem(
+                        title: '${competitionPerson.competition.name} | ${competitionPerson.role.localize(context)}',
+                        icon: Icons.leaderboard,
+                        onTap: () => CompetitionPersonOverview.navigateTo(context, competitionPerson),
                       ),
                 ),
               },

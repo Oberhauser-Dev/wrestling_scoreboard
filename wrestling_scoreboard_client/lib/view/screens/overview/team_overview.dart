@@ -11,7 +11,6 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -66,48 +65,19 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
             items: [
               description,
               MatchList<Team>(filterObject: team),
-              FilterableManyConsumer<Club, Team>(
+              FilterableManyConsumer<Club, Team>.addOrCreate(
+                context: context,
                 filterObject: team,
-                trailing: MenuAnchor(
-                  menuChildren: [
-                    MenuItemButton(
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => ClubEdit(
-                                    initialOrganization: team.organization,
-                                    onCreated: (club) async {
-                                      await (await ref.read(
-                                        dataManagerNotifierProvider,
-                                      )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                                    },
-                                  ),
-                            ),
-                          ),
-                      child: Text(localizations.create),
+                addPageBuilder: (context) => TeamClubAffiliationEdit(initialTeam: team),
+                createPageBuilder:
+                    (context) => ClubEdit(
+                      initialOrganization: team.organization,
+                      onCreated: (club) async {
+                        await (await ref.read(
+                          dataManagerNotifierProvider,
+                        )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                      },
                     ),
-                    MenuItemButton(
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TeamClubAffiliationEdit(initialTeam: team)),
-                          ),
-                      child: Text(localizations.addExisting),
-                    ),
-                  ],
-                  builder:
-                      (context, controller, child) => RestrictedAddButton(
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                        },
-                      ),
-                ),
                 itemBuilder:
                     (context, club) => ContentItem(
                       title: club.name,
@@ -115,9 +85,9 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                       onTap: () => ClubOverview.navigateTo(context, club),
                     ),
               ),
-              FilterableManyConsumer<LeagueTeamParticipation, Team>.edit(
+              FilterableManyConsumer<LeagueTeamParticipation, Team>.add(
                 context: context,
-                editPageBuilder: (context) => LeagueTeamParticipationEdit(initialTeam: team),
+                addPageBuilder: (context) => LeagueTeamParticipationEdit(initialTeam: team),
                 filterObject: team,
                 mapData:
                     (teamParticipations) =>

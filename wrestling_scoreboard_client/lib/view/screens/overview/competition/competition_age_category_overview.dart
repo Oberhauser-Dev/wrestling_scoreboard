@@ -66,9 +66,9 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
           body: TabGroup(
             items: [
               description,
-              FilterableManyConsumer<CompetitionWeightCategory, CompetitionAgeCategory>.edit(
+              FilterableManyConsumer<CompetitionWeightCategory, CompetitionAgeCategory>.add(
                 context: context,
-                editPageBuilder:
+                addPageBuilder:
                     (context) => CompetitionWeightCategoryEdit(initialCompetition: competitionAgeCategory.competition),
                 filterObject: competitionAgeCategory,
                 itemBuilder: (context, weightCategory) {

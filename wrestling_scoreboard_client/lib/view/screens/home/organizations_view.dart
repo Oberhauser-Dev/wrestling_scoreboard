@@ -13,9 +13,9 @@ class OrganizationsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     return ResponsiveContainer(
-      child: FilterableManyConsumer<Organization, Null>.edit(
+      child: FilterableManyConsumer<Organization, Null>.add(
         context: context,
-        editPageBuilder: (context) => const OrganizationEdit(),
+        addPageBuilder: (context) => const OrganizationEdit(),
         hintText: localizations.organizations,
         itemBuilder:
             (context, item) => ContentItem(

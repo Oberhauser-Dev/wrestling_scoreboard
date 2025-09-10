@@ -23,9 +23,9 @@ class AdminOverview extends ConsumerWidget {
       tabs: [Tab(child: HeadingText(localizations.users))],
       body: TabGroup(
         items: [
-          FilterableManyConsumer<SecuredUser, Null>.edit(
+          FilterableManyConsumer<SecuredUser, Null>.add(
             context: context,
-            editPageBuilder: (context) => const UserEdit(),
+            addPageBuilder: (context) => const UserEdit(),
             itemBuilder:
                 (context, item) => ContentItem(
                   title: item.username,
