@@ -60,10 +60,10 @@ class CompetitionLineupOverview extends ConsumerWidget {
           body: TabGroup(
             items: [
               description,
-              FilterableManyConsumer<CompetitionParticipation, CompetitionLineup>.edit(
+              FilterableManyConsumer<CompetitionParticipation, CompetitionLineup>.add(
                 context: context,
                 filterObject: competitionLineup,
-                editPageBuilder:
+                addPageBuilder:
                     (context) => CompetitionParticipationEdit(
                       initialLineup: competitionLineup,
                       initialCompetition: competitionLineup.competition,

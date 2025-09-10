@@ -14,8 +14,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 abstract class AbstractPersonEdit extends ConsumerStatefulWidget {
   final Organization? initialOrganization;
   final Person? person;
+  final Future<void> Function(Person person)? onCreated;
 
-  const AbstractPersonEdit({this.person, required this.initialOrganization, super.key});
+  const AbstractPersonEdit({this.person, required this.initialOrganization, this.onCreated, super.key});
 }
 
 abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends ConsumerState<T>
@@ -144,13 +145,14 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
       );
       person = person.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(person));
       await handleNested(person);
+      await widget.onCreated?.call(person);
       navigator.pop();
     }
   }
 }
 
 class PersonEdit extends AbstractPersonEdit {
-  const PersonEdit({super.person, super.key, required super.initialOrganization});
+  const PersonEdit({super.person, super.key, required super.initialOrganization, super.onCreated});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => PersonEditState();

@@ -82,11 +82,10 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     super.key,
   });
 
-  factory FilterableManyConsumer.edit({
+  factory FilterableManyConsumer.add({
     required BuildContext context,
-    required Widget Function(BuildContext context) editPageBuilder,
+    required Widget Function(BuildContext context) addPageBuilder,
     required Widget Function(BuildContext context, T item) itemBuilder,
-    Widget? trailing,
     String? hintText,
     List<T>? initialData,
     S? filterObject,
@@ -105,7 +104,57 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
       initialData: initialData,
       hintText: hintText,
       trailing: RestrictedAddButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: editPageBuilder)),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: addPageBuilder)),
+      ),
+      shrinkWrap: shrinkWrap,
+      getInitialIndex: getInitialIndex,
+    );
+  }
+
+  factory FilterableManyConsumer.addOrCreate({
+    required BuildContext context,
+    required Widget Function(BuildContext context) addPageBuilder,
+    required Widget Function(BuildContext context) createPageBuilder,
+    required Widget Function(BuildContext context, T item) itemBuilder,
+    String? hintText,
+    List<T>? initialData,
+    S? filterObject,
+    Widget? Function(BuildContext context, List<T> data)? prependBuilder,
+    Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException,
+    List<T> Function(List<T> data)? mapData,
+    int Function(List<T> data)? getInitialIndex,
+    bool shrinkWrap = false,
+  }) {
+    final localizations = context.l10n;
+    return FilterableManyConsumer<T, S>(
+      itemBuilder: itemBuilder,
+      onException: onException,
+      filterObject: filterObject,
+      mapData: mapData,
+      prependBuilder: prependBuilder,
+      initialData: initialData,
+      hintText: hintText,
+      trailing: MenuAnchor(
+        menuChildren: [
+          MenuItemButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: addPageBuilder)),
+            child: Text(localizations.addExisting),
+          ),
+          MenuItemButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: createPageBuilder)),
+            child: Text(localizations.createAndAdd),
+          ),
+        ],
+        builder:
+            (context, controller, child) => RestrictedAddButton(
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+            ),
       ),
       shrinkWrap: shrinkWrap,
       getInitialIndex: getInitialIndex,

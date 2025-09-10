@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
@@ -12,13 +13,16 @@ import 'package:wrestling_scoreboard_client/view/screens/display/event/competiti
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_age_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_cycle_management.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
@@ -165,9 +169,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               Tab(child: HeadingText(localizations.cycles)): CompetitionCycleManagement(competition: competition),
               Tab(
                 child: HeadingText(localizations.lineups),
-              ): FilterableManyConsumer<CompetitionLineup, Competition>.edit(
+              ): FilterableManyConsumer<CompetitionLineup, Competition>.add(
                 context: context,
-                editPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
+                addPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, lineup) {
                   return ContentItem(
@@ -179,9 +183,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               ),
               Tab(
                 child: HeadingText(localizations.ageCategories),
-              ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.edit(
+              ): FilterableManyConsumer<CompetitionAgeCategory, Competition>.add(
                 context: context,
-                editPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
+                addPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, competitionAgeCategory) {
                   return ContentItem(
@@ -193,9 +197,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               ),
               Tab(
                 child: HeadingText(localizations.weightCategories),
-              ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.edit(
+              ): FilterableManyConsumer<CompetitionWeightCategory, Competition>.add(
                 context: context,
-                editPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
+                addPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, weightCategory) {
                   return ContentItem(
@@ -207,9 +211,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               ),
               Tab(
                 child: HeadingText(localizations.competitionSystems),
-              ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.edit(
+              ): FilterableManyConsumer<CompetitionSystemAffiliation, Competition>.add(
                 context: context,
-                editPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
+                addPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, competitionSystemAffiliation) {
                   return ContentItem(
@@ -223,13 +227,35 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 },
               ),
               Tab(child: HeadingText(localizations.bouts)): CompetitionBoutList(filterObject: competition),
-
-              // Tab(child: HeadingText(localizations.persons)):
-              // GroupedList(
-              //   header: const HeadingItem(),
-              //   itemCount: contentItems.length,
-              //   itemBuilder: (context, index) => contentItems[index],
-              // ),
+              Tab(
+                child: HeadingText(localizations.officials),
+              ): FilterableManyConsumer<CompetitionPerson, Competition>.addOrCreate(
+                context: context,
+                addPageBuilder:
+                    (context) => CompetitionPersonEdit(
+                      initialCompetition: competition,
+                      initialOrganization: competition.organization!,
+                    ),
+                createPageBuilder:
+                    (context) => PersonEdit(
+                      initialOrganization: competition.organization!,
+                      onCreated: (person) async {
+                        // TODO: ability to change role inside another implementation of PersonEdit.
+                        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+                          CompetitionPerson(competition: competition, person: person, role: PersonRole.steward),
+                        );
+                      },
+                    ),
+                filterObject: competition,
+                itemBuilder: (context, competitionPerson) {
+                  return ContentItem(
+                    title: '${competitionPerson.role.localize(context)} | ${competitionPerson.person.fullName}',
+                    // TODO: adapt icon to role
+                    icon: Icons.person,
+                    onTap: () async => CompetitionPersonOverview.navigateTo(context, competitionPerson),
+                  );
+                },
+              ),
             };
             return FavoriteScaffold<Competition>(
               dataObject: competition,

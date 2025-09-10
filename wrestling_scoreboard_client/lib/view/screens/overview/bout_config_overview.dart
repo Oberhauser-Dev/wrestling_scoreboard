@@ -54,10 +54,10 @@ mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
               subtitle: localizations.bleedingInjuryDuration,
               icon: Icons.timelapse,
             ),
-            FilterableManyConsumer<BoutResultRule, BoutConfig>.edit(
+            FilterableManyConsumer<BoutResultRule, BoutConfig>.add(
               context: context,
               shrinkWrap: true,
-              editPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
+              addPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
               filterObject: boutConfig,
               itemBuilder:
                   (context, item) => ContentItem(

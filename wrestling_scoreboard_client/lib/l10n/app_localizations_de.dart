@@ -287,7 +287,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get add => 'Hinzufügen';
 
   @override
-  String get addExisting => 'Existierende hinzufügen';
+  String get addExisting => 'Existierendes Objekt verknüpfen (empfohlen)';
+
+  @override
+  String get createAndAdd => 'Erstelle und verknüpfe neues Objekt';
 
   @override
   String get mergeObjectData => 'Objekt-Daten zusammenführen';
@@ -886,6 +889,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get maximum => 'Maximum';
 
   @override
+  String get official => 'Offizielle(r)';
+
+  @override
+  String get officials => 'Offizielle';
+
+  @override
   String get referee => 'Kampfrichter';
 
   @override
@@ -917,6 +926,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get dateOfBirth => 'Geburtsdatum';
+
+  @override
+  String get role => 'Rolle';
 
   @override
   String get gender => 'Geschlecht';

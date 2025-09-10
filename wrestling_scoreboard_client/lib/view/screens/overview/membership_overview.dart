@@ -37,7 +37,7 @@ class MembershipOverview extends ConsumerWidget with AbstractPersonOverview<Memb
           initialData: membership.person,
           subClassData: membership,
           classLocale: localizations.membership,
-          editPage: MembershipEdit(membership: membership, initialClub: membership.club),
+          editPage: MembershipPersonEdit(membership: membership),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Membership>(membership),
           tiles: [
             ContentItem(title: membership.no ?? '-', subtitle: localizations.membershipNumber, icon: Icons.tag),

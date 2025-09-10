@@ -95,10 +95,10 @@ class OrganizationOverview extends ConsumerWidget {
               body: TabGroup(
                 items: [
                   description,
-                  FilterableManyConsumer<Division, Organization>.edit(
+                  FilterableManyConsumer<Division, Organization>.add(
                     context: context,
                     filterObject: organization,
-                    editPageBuilder: (context) => DivisionEdit(initialOrganization: organization),
+                    addPageBuilder: (context) => DivisionEdit(initialOrganization: organization),
                     mapData:
                         (divisions) =>
                             divisions..sort((a, b) {
@@ -115,11 +115,11 @@ class OrganizationOverview extends ConsumerWidget {
                           onTap: () => DivisionOverview.navigateTo(context, item),
                         ),
                   ),
-                  FilterableManyConsumer<Club, Organization>.edit(
+                  FilterableManyConsumer<Club, Organization>.add(
                     context: context,
                     filterObject: organization,
                     mapData: (List<Club> clubs) => clubs..sort((a, b) => a.name.compareTo(b.name)),
-                    editPageBuilder: (context) => ClubEdit(initialOrganization: organization),
+                    addPageBuilder: (context) => ClubEdit(initialOrganization: organization),
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.name,
@@ -127,10 +127,10 @@ class OrganizationOverview extends ConsumerWidget {
                           onTap: () => ClubOverview.navigateTo(context, item),
                         ),
                   ),
-                  FilterableManyConsumer<Competition, Organization>.edit(
+                  FilterableManyConsumer<Competition, Organization>.add(
                     context: context,
                     filterObject: organization,
-                    editPageBuilder: (context) => CompetitionEdit(initialOrganization: organization),
+                    addPageBuilder: (context) => CompetitionEdit(initialOrganization: organization),
                     mapData:
                         (competitions) =>
                             competitions..sort((a, b) {
@@ -147,10 +147,10 @@ class OrganizationOverview extends ConsumerWidget {
                           onTap: () => CompetitionOverview.navigateTo(context, item),
                         ),
                   ),
-                  FilterableManyConsumer<AgeCategory, Organization>.edit(
+                  FilterableManyConsumer<AgeCategory, Organization>.add(
                     context: context,
                     filterObject: organization,
-                    editPageBuilder: (context) => AgeCategoryEdit(initialOrganization: organization),
+                    addPageBuilder: (context) => AgeCategoryEdit(initialOrganization: organization),
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: '${item.name} (${item.minAge} - ${item.maxAge})',
@@ -158,10 +158,10 @@ class OrganizationOverview extends ConsumerWidget {
                           onTap: () => AgeCategoryOverview.navigateTo(context, item),
                         ),
                   ),
-                  FilterableManyConsumer<Person, Organization>.edit(
+                  FilterableManyConsumer<Person, Organization>.add(
                     context: context,
                     filterObject: organization,
-                    editPageBuilder: (context) => PersonEdit(initialOrganization: organization),
+                    addPageBuilder: (context) => PersonEdit(initialOrganization: organization),
                     mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
                     prependBuilder: (context, persons) {
                       final duplicatePersons = persons
@@ -177,9 +177,9 @@ class OrganizationOverview extends ConsumerWidget {
                           onTap: () => PersonOverview.navigateTo(context, item),
                         ),
                   ),
-                  FilterableManyConsumer<Organization, Organization>.edit(
+                  FilterableManyConsumer<Organization, Organization>.add(
                     context: context,
-                    editPageBuilder: (context) => OrganizationEdit(initialParent: organization),
+                    addPageBuilder: (context) => OrganizationEdit(initialParent: organization),
                     filterObject: organization,
                     itemBuilder:
                         (context, item) => ContentItem(

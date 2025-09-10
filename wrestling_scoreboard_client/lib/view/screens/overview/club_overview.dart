@@ -11,7 +11,6 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -57,48 +56,19 @@ class ClubOverview extends ConsumerWidget {
           body: TabGroup(
             items: [
               description,
-              FilterableManyConsumer<Team, Club>(
+              FilterableManyConsumer<Team, Club>.addOrCreate(
+                context: context,
                 filterObject: club,
-                trailing: MenuAnchor(
-                  menuChildren: [
-                    MenuItemButton(
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => TeamEdit(
-                                    initialOrganization: club.organization,
-                                    onCreated: (team) async {
-                                      await (await ref.read(
-                                        dataManagerNotifierProvider,
-                                      )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                                    },
-                                  ),
-                            ),
-                          ),
-                      child: Text(localizations.create),
+                addPageBuilder: (context) => TeamClubAffiliationEdit(initialClub: club),
+                createPageBuilder:
+                    (context) => TeamEdit(
+                      initialOrganization: club.organization,
+                      onCreated: (team) async {
+                        await (await ref.read(
+                          dataManagerNotifierProvider,
+                        )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                      },
                     ),
-                    MenuItemButton(
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TeamClubAffiliationEdit(initialClub: club)),
-                          ),
-                      child: Text(localizations.addExisting),
-                    ),
-                  ],
-                  builder:
-                      (context, controller, child) => RestrictedAddButton(
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                        },
-                      ),
-                ),
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: item.name,
@@ -106,10 +76,11 @@ class ClubOverview extends ConsumerWidget {
                       onTap: () => TeamOverview.navigateTo(context, item),
                     ),
               ),
-              FilterableManyConsumer<Membership, Club>.edit(
+              FilterableManyConsumer<Membership, Club>.addOrCreate(
                 context: context,
                 filterObject: club,
-                editPageBuilder: (context) => MembershipEdit(initialClub: club),
+                addPageBuilder: (context) => MembershipEdit(initialOrganization: club.organization, initialClub: club),
+                createPageBuilder: (context) => MembershipPersonEdit(initialClub: club),
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: '${item.info},\t${item.person.gender?.localize(context)}',
