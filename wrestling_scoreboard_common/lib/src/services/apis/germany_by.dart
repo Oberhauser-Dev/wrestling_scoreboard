@@ -376,7 +376,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     final teamClubAffiliations = await importTeamClubAffiliations();
     final teamMatches = (await Future.wait(
       leagues.map((e) => importTeamMatches(league: e)),
-    )).expand((element) => element).where((teamMatch) {
+    )).expand((element) => element.keys).where((teamMatch) {
       return teamClubAffiliations.any(
         (tca) => tca.team.orgSyncId == teamMatch.home.team.orgSyncId && tca.club.orgSyncId == club.orgSyncId,
       );
@@ -461,13 +461,13 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }
 
   @override
-  Future<Iterable<TeamMatch>> importTeamMatches({required League league}) async {
+  Future<Map<TeamMatch, Map<Person, PersonRole>>> importTeamMatches({required League league}) async {
     final json = await _getCompetitionList(
       ligaId: league.division.name,
       regionId: league.name,
       seasonId: league.startDate.year.toString(),
     );
-    if (json.isEmpty) return <TeamMatch>{};
+    if (json.isEmpty) return {};
 
     final competitionList = json['competitionList'];
     if (competitionList is Map<String, dynamic>) {
@@ -492,33 +492,35 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               schemeIndex != null
                   ? (schemeIndex - 1)
                   : (double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1);
-          return TeamMatch(
-            home: TeamLineup(
-              team: await _getSingleBySyncId<Team>(
-                (competitionJson['homeTeamName'] as String).trim(),
-              ), // teamId is not unique across all IDs
+          return MapEntry(
+            TeamMatch(
+              home: TeamLineup(
+                team: await _getSingleBySyncId<Team>(
+                  (competitionJson['homeTeamName'] as String).trim(),
+                ), // teamId is not unique across all IDs
+              ),
+              guest: TeamLineup(
+                team: await _getSingleBySyncId<Team>(
+                  (competitionJson['opponentTeamName'] as String).trim(),
+                ), // teamId is not unique across all IDs
+              ),
+              date: DateTime.parse('${values['boutDate']} ${values['scaleTime']}'),
+              visitorsCount: int.tryParse(values['audience']),
+              location: values['location'],
+              comment: values['editorComment'],
+              league: league,
+              no: entry.key,
+              seasonPartition: seasonPartition,
+              organization: organization,
+              orgSyncId: entry.key,
             ),
-            guest: TeamLineup(
-              team: await _getSingleBySyncId<Team>(
-                (competitionJson['opponentTeamName'] as String).trim(),
-              ), // teamId is not unique across all IDs
-            ),
-            date: DateTime.parse('${values['boutDate']} ${values['scaleTime']}'),
-            visitorsCount: int.tryParse(values['audience']),
-            location: values['location'],
-            referee: referee,
-            comment: values['editorComment'],
-            league: league,
-            no: entry.key,
-            seasonPartition: seasonPartition,
-            organization: organization,
-            orgSyncId: entry.key,
+            {if (referee != null) referee: PersonRole.referee},
           );
         }),
       );
-      return teamMatches.nonNulls.toSet();
+      return Map.fromEntries(teamMatches.nonNulls);
     }
-    return [];
+    return {};
   }
 
   @override

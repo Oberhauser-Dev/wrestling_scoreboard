@@ -20,11 +20,6 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     required TeamLineup guest,
     League? league,
     int? seasonPartition,
-    Person? matChairman,
-    Person? referee,
-    Person? judge,
-    Person? timeKeeper,
-    Person? transcriptWriter,
     String? no,
     String? location,
     required DateTime date,
@@ -37,11 +32,6 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
   static Future<TeamMatch> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final home = await getSingle<TeamLineup>(e['home_id'] as int);
     final guest = await getSingle<TeamLineup>(e['guest_id'] as int);
-    final int? refereeId = e['referee_id'];
-    final int? matChairmanId = e['mat_chairman_id'];
-    final int? judgeId = e['judge_id'];
-    final int? timeKeeperId = e['time_keeper_id'];
-    final int? transcriptWriterId = e['transcript_writer_id'];
     final int? leagueId = e['league_id'];
     final organizationId = e['organization_id'] as int?;
     // TODO ditch weightclasses, always handle at client
@@ -61,11 +51,6 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       comment: e['comment'] as String?,
       home: home,
       guest: guest,
-      referee: refereeId == null ? null : await getSingle<Person>(refereeId),
-      matChairman: matChairmanId == null ? null : await getSingle<Person>(matChairmanId),
-      judge: judgeId == null ? null : await getSingle<Person>(judgeId),
-      transcriptWriter: transcriptWriterId == null ? null : await getSingle<Person>(transcriptWriterId),
-      timeKeeper: timeKeeperId == null ? null : await getSingle<Person>(timeKeeperId),
       league: leagueId == null ? null : await getSingle<League>(leagueId),
       seasonPartition: e['season_partition'] as int?,
     );
@@ -78,11 +63,6 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       'guest_id': guest.id!,
       'league_id': league?.id!,
       'season_partition': seasonPartition,
-      'referee_id': referee?.id!,
-      'judge_id': judge?.id!,
-      'mat_chairman_id': matChairman?.id!,
-      'transcript_writer_id': transcriptWriter?.id!,
-      'time_keeper_id': timeKeeper?.id!,
     });
   }
 

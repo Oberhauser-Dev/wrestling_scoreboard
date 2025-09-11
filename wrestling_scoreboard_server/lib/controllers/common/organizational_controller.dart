@@ -40,10 +40,12 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   }
 
   /// [onUpdateOrCreate] takes a [T] as previous input value.
+  /// It is executed **before** the entity is updated or created.
   Future<T> updateOrCreateSingleOfOrg(
     T dataObject, {
     required bool obfuscate,
     Future<T> Function(T? previous)? onUpdateOrCreate,
+    Future<void> Function(T? previous, T current)? onUpdatedOrCreated,
   }) async {
     if (dataObject.id != null) {
       throw Exception('Data object already has an id: $dataObject');
@@ -61,15 +63,25 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
       if (onUpdateOrCreate != null) {
         dataObject = await onUpdateOrCreate(previous);
       }
-      return updateOnDiffSingle(dataObject, previous: previous);
+      final current = await updateOnDiffSingle(dataObject, previous: previous);
+      if (onUpdatedOrCreated != null) {
+        onUpdatedOrCreated(previous, current);
+      }
+      return current;
     } on InvalidParameterException catch (_) {
       if (onUpdateOrCreate != null) {
         dataObject = await onUpdateOrCreate(null);
       }
-      return createSingleReturn(dataObject);
+      final current = await createSingleReturn(dataObject);
+      if (onUpdatedOrCreated != null) {
+        onUpdatedOrCreated(null, current);
+      }
+      return current;
     }
   }
 
+  /// [onUpdateOrCreate] is executed before the entity is created or updated.
+  /// [onDeleted] is executed after the entity has been deleted.
   Future<List<T>> updateOrCreateManyOfOrg(
     List<T> dataObjects, {
     required bool obfuscate,
@@ -77,7 +89,9 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     Conjunction conjunction = Conjunction.and,
     required Map<String, dynamic> substitutionValues,
     Future<T> Function(T? previous, T current)? onUpdateOrCreate,
+    Future<void> Function(T? previous, T current)? onUpdatedOrCreated,
     Future<void> Function(T previous)? onDelete,
+    Future<void> Function(T previous)? onDeleted,
   }) async {
     final previous = await getMany(
       conditions: conditions,
@@ -88,8 +102,11 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     // Delete not included entities
     await Future.wait(
       previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId)).map((prev) async {
-        if (await deleteSingle(prev.id!) && onDelete != null) {
+        if (onDelete != null) {
           await onDelete(prev);
+        }
+        if (await deleteSingle(prev.id!) && onDeleted != null) {
+          await onDeleted(prev);
         }
       }),
     );
@@ -101,6 +118,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
         element,
         obfuscate: obfuscate,
         onUpdateOrCreate: onUpdateOrCreate != null ? (previous) => onUpdateOrCreate(previous, element) : null,
+        onUpdatedOrCreated: onUpdatedOrCreated,
       ),
     );
   }

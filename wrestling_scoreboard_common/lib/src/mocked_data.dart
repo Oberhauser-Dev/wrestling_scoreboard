@@ -165,16 +165,11 @@ class MockedData {
       TeamLineupParticipation(id: 8, membership: b4, lineup: menRpwGuestTeamLineup, weightClass: wc130, weight: 129.9),
     );
 
-    return TeamMatch(
+    final tm = TeamMatch(
       id: 1,
       no: '123456',
       home: menRpwHomeTeamLineup,
       guest: menRpwGuestTeamLineup,
-      referee: referee,
-      judge: judge,
-      matChairman: matChairman,
-      timeKeeper: timeKeeper,
-      transcriptWriter: transcriptWriter,
       date: DateTime.utc(2025, 5, 3),
       comment: 'Some commment',
       visitorsCount: 123,
@@ -182,6 +177,13 @@ class MockedData {
       league: leagueMenRPW,
       organization: organization,
     );
+
+    _teamMatchPersons.add(TeamMatchPerson(teamMatch: tm, person: referee, role: PersonRole.referee));
+    _teamMatchPersons.add(TeamMatchPerson(teamMatch: tm, person: judge, role: PersonRole.judge));
+    _teamMatchPersons.add(TeamMatchPerson(teamMatch: tm, person: matChairman, role: PersonRole.matChairman));
+    _teamMatchPersons.add(TeamMatchPerson(teamMatch: tm, person: timeKeeper, role: PersonRole.timeKeeper));
+    _teamMatchPersons.add(TeamMatchPerson(teamMatch: tm, person: transcriptWriter, role: PersonRole.transcriptWriter));
+    return tm;
   }
 
   TeamMatch initJnRPWMatch() {
@@ -190,16 +192,18 @@ class MockedData {
     _teamLineups.add(home);
     _teamLineups.add(guest);
 
-    return TeamMatch(
+    final tm = TeamMatch(
       id: 2,
       home: home,
       guest: guest,
-      referee: referee,
       location: 'Springfield',
       date: DateTime.utc(2025, 5, 3),
       league: leagueJnRPW,
       organization: organization,
     );
+
+    _teamMatchPersons.add(TeamMatchPerson(teamMatch: tm, person: referee, role: PersonRole.referee));
+    return tm;
   }
 
   late final boutState1R = AthleteBoutState(id: 1, membership: r1, classificationPoints: 5);
@@ -503,6 +507,7 @@ class MockedData {
   late final List<Membership> _memberships = [r1, r2, r3, r4, b1, b2, b3, b4];
   late final List<TeamLineupParticipation> _teamLineupParticipations =
       []; // Is filled during initialization of team matches
+  late final List<TeamMatchPerson> _teamMatchPersons = []; // Is filled during initialization of team matches
   late final List<AthleteBoutState> _athleteBoutStates = [
     boutState1R,
     boutState1B,
@@ -611,6 +616,8 @@ class MockedData {
   List<TeamMatch> getTeamMatches() => _teamMatches;
 
   List<TeamMatchBout> getTeamMatchBouts() => _teamMatchBouts;
+
+  List<TeamMatchPerson> getTeamMatchPersons() => _teamMatchPersons;
 
   List<Bout> getBouts() => {..._teamMatchBouts.map((e) => e.bout), ..._competitionBouts.map((e) => e.bout)}.toList();
 

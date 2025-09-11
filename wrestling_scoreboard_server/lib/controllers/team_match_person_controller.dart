@@ -2,14 +2,14 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 
-class CompetitionPersonController extends ShelfController<CompetitionPerson> {
-  static final CompetitionPersonController _singleton = CompetitionPersonController._internal();
+class TeamMatchPersonController extends ShelfController<TeamMatchPerson> {
+  static final TeamMatchPersonController _singleton = TeamMatchPersonController._internal();
 
-  factory CompetitionPersonController() {
+  factory TeamMatchPersonController() {
     return _singleton;
   }
 
-  Future<List<CompetitionPerson>> getByPerson(User? user, int id) async {
+  Future<List<TeamMatchPerson>> getByPerson(User? user, int id) async {
     return await getMany(
       conditions: ['person_id = @id'],
       substitutionValues: {'id': id},
@@ -17,5 +17,5 @@ class CompetitionPersonController extends ShelfController<CompetitionPerson> {
     );
   }
 
-  CompetitionPersonController._internal() : super();
+  TeamMatchPersonController._internal() : super();
 }

@@ -99,7 +99,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         await BoutResultRuleController().updateOnDiffMany(boutResultRules.toList(), previous: prevRules);
         return division.copyWith(boutConfig: boutConfig);
       },
-      onDelete: (previous) async {
+      onDeleted: (previous) async {
         await BoutResultRuleController().deleteMany(
           conditions: ['bout_config_id=@id'],
           substitutionValues: {'id': previous.boutConfig.id},
@@ -133,7 +133,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
           );
           return current.copyWith(weightClass: weightClass);
         },
-        onDelete: (toBeDeleted) async => await WeightClassController().deleteSingle(toBeDeleted.weightClass.id!),
+        onDeleted: (toBeDeleted) async => await WeightClassController().deleteSingle(toBeDeleted.weightClass.id!),
       );
 
       final groupedLeagueWeightClasses = leagueWeightClasses.toList().groupListsBy((lwc) => lwc.league);
@@ -153,7 +153,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
             );
             return current.copyWith(weightClass: weightClass);
           },
-          onDelete: (toBeDeleted) async => await WeightClassController().deleteSingle(toBeDeleted.weightClass.id!),
+          onDeleted: (toBeDeleted) async => await WeightClassController().deleteSingle(toBeDeleted.weightClass.id!),
         );
       });
 

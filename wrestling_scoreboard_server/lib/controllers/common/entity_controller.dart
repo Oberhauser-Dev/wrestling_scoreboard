@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
@@ -31,6 +32,7 @@ Map<Type, psql.Type> typeDartToCodeMap = {
 };
 
 abstract class EntityController<T extends DataObject> {
+  final _logger = Logger('EntityController<$T>');
   late final String tableName;
   String primaryKeyName;
 
@@ -154,6 +156,9 @@ abstract class EntityController<T extends DataObject> {
     }
     dataObject = dataObject.copyWithId(previous.id) as T;
     if (dataObject != previous) {
+      _logger.fine(
+        'updateOnDiffSingle: Update single as of different properties: (prev: ${previous.toJson()}, curr: ${dataObject.toJson()})',
+      );
       await updateSingle(dataObject);
     }
     return dataObject;
@@ -161,6 +166,9 @@ abstract class EntityController<T extends DataObject> {
 
   Future<List<T>> updateOnDiffMany(List<T> dataObjects, {required List<T> previous}) async {
     if (dataObjects.length != previous.length) {
+      _logger.fine(
+        'updateOnDiffMany: Delete and recreate list as of different lengths: (prev: ${previous.length}, curr: ${dataObjects.length})',
+      );
       await Future.wait(previous.map((prev) => deleteSingle(prev.id!)));
       return await createManyReturn(dataObjects);
     } else {

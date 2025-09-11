@@ -160,8 +160,14 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
   }
 
   @override
-  String exportTeamMatchReport(TeamMatch teamMatch, Map<TeamMatchBout, List<BoutAction>> boutMap) {
+  String exportTeamMatchReport({
+    required TeamMatch teamMatch,
+    required Map<TeamMatchBout, List<BoutAction>> boutMap,
+    required Map<Person, PersonRole> officials,
+  }) {
     final bouts = boutMap.keys;
+    final referee =
+        officials.entries.where((official) => official.value == PersonRole.referee).map((e) => e.key).singleOrNull;
     final teamMatchInfos = <Object>[
       'rdbi',
       '2.0.0',
@@ -174,8 +180,8 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       TeamMatch.getHomePoints(bouts),
       TeamMatch.getGuestPoints(bouts),
       teamMatch.visitorsCount ?? '',
-      _sanitizeString(teamMatch.referee?.surname ?? ''),
-      _sanitizeString(teamMatch.referee?.prename ?? ''),
+      _sanitizeString(referee?.surname ?? ''),
+      _sanitizeString(referee?.prename ?? ''),
       _handleComment(teamMatch.comment ?? ''),
     ];
     final boutInfos = boutMap.entries.map((entry) {

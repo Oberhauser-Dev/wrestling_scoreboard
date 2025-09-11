@@ -13,8 +13,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchTranscript extends PdfSheet {
   TeamMatchTranscript({
-    required this.teamMatchBoutActions,
     required this.teamMatch,
+    required this.teamMatchBoutActions,
+    required this.officials,
     required this.homeParticipations,
     required this.guestParticipations,
     required this.boutConfig,
@@ -29,6 +30,7 @@ class TeamMatchTranscript extends PdfSheet {
   final List<TeamLineupParticipation> guestParticipations;
   final BoutConfig boutConfig;
   final TeamMatch teamMatch;
+  final Map<Person, PersonRole> officials;
   final bool isTimeCountDown;
 
   Iterable<Bout> get bouts => teamMatchBoutActions.keys.map((tmb) => tmb.bout);
@@ -123,9 +125,33 @@ class TeamMatchTranscript extends PdfSheet {
   }
 
   Widget _buildPersons(Context context) {
-    final signaturePersons = [...buildReferees(context, event), ...buildTeamLeader(context, event)];
-    final staff = buildStaff(context, event);
-    final stewards = buildStewards(context, event);
+    final groupedOfficials = <PersonRole, Set<Person>>{};
+    officials.forEach((person, personRole) {
+      groupedOfficials.putIfAbsent(personRole, () => {});
+      groupedOfficials[personRole]!.add(person);
+    });
+    final signaturePersons = [
+      ...buildOfficials(
+        order: [PersonRole.referee, PersonRole.matChairman, PersonRole.judge],
+        context,
+        event,
+        groupedOfficials: groupedOfficials,
+      ),
+      ...buildTeamLeader(context, event),
+    ];
+    final staff = buildOfficials(
+      order: [PersonRole.timeKeeper, PersonRole.transcriptWriter],
+      context,
+      event,
+      groupedOfficials: groupedOfficials,
+    );
+    final stewards = buildOfficials(
+      order: [PersonRole.steward],
+      getPlaceHolderCount: (personRole) => 3,
+      context,
+      event,
+      groupedOfficials: groupedOfficials,
+    );
     return Table(
       defaultColumnWidth: const FlexColumnWidth(1),
       children: [

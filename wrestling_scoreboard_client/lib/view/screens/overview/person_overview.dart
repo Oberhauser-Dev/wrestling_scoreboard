@@ -5,12 +5,14 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/localization/person_role.dart';
+import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -152,8 +154,20 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
                   itemBuilder:
                       (context, competitionPerson) => ContentItem(
                         title: '${competitionPerson.competition.name} | ${competitionPerson.role.localize(context)}',
-                        icon: Icons.leaderboard,
+                        icon: competitionPerson.role.icon,
                         onTap: () => CompetitionPersonOverview.navigateTo(context, competitionPerson),
+                      ),
+                ),
+                Tab(
+                  child: HeadingText('${localizations.officials} (${localizations.match})'),
+                ): FilterableManyConsumer<TeamMatchPerson, Person>(
+                  filterObject: person,
+                  itemBuilder:
+                      (context, teamMatchPerson) => ContentItem(
+                        title:
+                            '${teamMatchPerson.teamMatch.localize(context)} | ${teamMatchPerson.role.localize(context)}',
+                        icon: teamMatchPerson.role.icon,
+                        onTap: () => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
                       ),
                 ),
               },

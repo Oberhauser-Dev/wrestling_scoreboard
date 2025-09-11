@@ -33,6 +33,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 /// If closing and reopening screen, data should be updated though.
 class BoutScreen extends ConsumerStatefulWidget {
   final WrestlingEvent wrestlingEvent;
+  final Map<Person, PersonRole> officials;
   final List<Bout> bouts;
   final Bout bout;
   final double? weightR;
@@ -61,6 +62,7 @@ class BoutScreen extends ConsumerStatefulWidget {
     required this.boutConfig,
     required this.boutRules,
     required this.wrestlingEvent,
+    required this.officials,
     this.weightClass,
     this.roundDescription,
     this.ageCategory,
@@ -420,6 +422,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 buildContext: context,
                 boutActions: actions,
                 wrestlingEvent: widget.wrestlingEvent,
+                officials: widget.officials,
                 boutConfig: boutConfig,
                 boutRules: boutRules,
                 isTimeCountDown: isTimeCountDown,

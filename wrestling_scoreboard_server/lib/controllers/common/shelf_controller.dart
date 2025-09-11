@@ -35,6 +35,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.d
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
@@ -192,6 +193,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return TeamMatchController();
       case const (TeamMatchBout):
         return TeamMatchBoutController();
+      case const (TeamMatchPerson):
+        return TeamMatchPersonController();
       case const (WeightClass):
         return WeightClassController();
       default:

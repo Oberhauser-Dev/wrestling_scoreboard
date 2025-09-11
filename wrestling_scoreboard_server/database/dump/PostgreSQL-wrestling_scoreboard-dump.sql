@@ -145,7 +145,9 @@ CREATE TYPE public.person_role AS ENUM (
     'transcriptWriter',
     'timeKeeper',
     'matPresident',
-    'steward'
+    'steward',
+    'matChairman',
+    'judge'
 );
 
 
@@ -1310,12 +1312,7 @@ CREATE TABLE public.team_match (
     comment text,
     home_id integer,
     guest_id integer,
-    referee_id integer,
-    transcript_writer_id integer,
-    time_keeper_id integer,
-    mat_chairman_id integer,
     league_id integer,
-    judge_id integer,
     season_partition integer
 )
 INHERITS (public.wrestling_event);
@@ -1382,6 +1379,42 @@ ALTER SEQUENCE public.team_match_id_seq OWNER TO wrestling;
 --
 
 ALTER SEQUENCE public.team_match_id_seq OWNED BY public.team_match.id;
+
+
+--
+-- Name: team_match_person; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.team_match_person (
+    id integer NOT NULL,
+    team_match_id integer NOT NULL,
+    person_id integer NOT NULL,
+    person_role public.person_role
+);
+
+
+ALTER TABLE public.team_match_person OWNER TO wrestling;
+
+--
+-- Name: team_match_person_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.team_match_person_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.team_match_person_id_seq OWNER TO wrestling;
+
+--
+-- Name: team_match_person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.team_match_person_id_seq OWNED BY public.team_match_person.id;
 
 
 --
@@ -1673,6 +1706,13 @@ ALTER TABLE ONLY public.team_match ALTER COLUMN id SET DEFAULT nextval('public.t
 --
 
 ALTER TABLE ONLY public.team_match_bout ALTER COLUMN id SET DEFAULT nextval('public.team_match_bout_id_seq'::regclass);
+
+
+--
+-- Name: team_match_person id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match_person ALTER COLUMN id SET DEFAULT nextval('public.team_match_person_id_seq'::regclass);
 
 
 --
@@ -1981,7 +2021,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.0-pre.12	0.0.0
+0.3.2	0.0.0
 \.
 
 
@@ -2107,8 +2147,8 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, referee_id, transcript_writer_id, time_keeper_id, mat_chairman_id, league_id, judge_id, season_partition) FROM stdin;
-1	2021-07-10	Springfield	\N	\N		1	\N	1	2	\N	\N	\N	\N	1	\N	1
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition) FROM stdin;
+1	2021-07-10	Springfield	\N	\N		1	\N	1	2	1	1
 \.
 
 
@@ -2131,6 +2171,14 @@ COPY public.team_match_bout (id, team_match_id, bout_id, pos, org_sync_id, organ
 45	1	47	11	\N	\N	30
 47	1	49	12	\N	\N	31
 48	1	50	13	\N	\N	32
+\.
+
+
+--
+-- Data for Name: team_match_person; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.team_match_person (id, team_match_id, person_id, person_role) FROM stdin;
 \.
 
 
@@ -2383,6 +2431,13 @@ SELECT pg_catalog.setval('public.team_match_bout_id_seq', 49, true);
 --
 
 SELECT pg_catalog.setval('public.team_match_id_seq', 1, true);
+
+
+--
+-- Name: team_match_person_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.team_match_person_id_seq', 1, false);
 
 
 --
@@ -2652,6 +2707,14 @@ ALTER TABLE ONLY public.team_lineup
 
 ALTER TABLE ONLY public.team_match_bout
     ADD CONSTRAINT team_match_bout_pk PRIMARY KEY (id);
+
+
+--
+-- Name: team_match_person team_match_person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match_person
+    ADD CONSTRAINT team_match_person_pk PRIMARY KEY (id);
 
 
 --
@@ -3233,43 +3296,19 @@ ALTER TABLE ONLY public.team_match
 
 
 --
--- Name: team_match team_match_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_match_person team_match_person_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_person_id_fk FOREIGN KEY (referee_id) REFERENCES public.person(id);
-
-
---
--- Name: team_match team_match_person_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_person_id_fk_2 FOREIGN KEY (transcript_writer_id) REFERENCES public.person(id);
+ALTER TABLE ONLY public.team_match_person
+    ADD CONSTRAINT team_match_person_person_id_fk FOREIGN KEY (person_id) REFERENCES public.person(id);
 
 
 --
--- Name: team_match team_match_person_id_fk_3; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_match_person team_match_person_team_match_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
-ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_person_id_fk_3 FOREIGN KEY (time_keeper_id) REFERENCES public.person(id) ON DELETE CASCADE;
-
-
---
--- Name: team_match team_match_person_id_fk_4; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_person_id_fk_4 FOREIGN KEY (mat_chairman_id) REFERENCES public.person(id) ON DELETE CASCADE;
-
-
---
--- Name: team_match team_match_person_id_fk_5; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
---
-
-ALTER TABLE ONLY public.team_match
-    ADD CONSTRAINT team_match_person_id_fk_5 FOREIGN KEY (judge_id) REFERENCES public.person(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.team_match_person
+    ADD CONSTRAINT team_match_person_team_match_id_fk FOREIGN KEY (team_match_id) REFERENCES public.team_match(id) ON DELETE CASCADE;
 
 
 --

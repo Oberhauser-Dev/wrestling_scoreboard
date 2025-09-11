@@ -31,7 +31,6 @@ void main() {
     date: DateTime(2000),
     no: 'matchNo',
     visitorsCount: 5,
-    referee: Person(prename: 'Mr.', surname: 'Referee'),
     comment: 'Match comment: Semicolon;OpeningParenthesis(ClosingParenthesis)LessThan<GreaterThan>AndSign&'.padRight(
       200,
       '0',
@@ -80,30 +79,34 @@ void main() {
   group('Reports', () {
     test('Germany, NRW', () {
       final wrestlingReport = WrestlingReportProvider.deNwRdb274.getReporter(organizationNRW);
-      final report = wrestlingReport.exportTeamMatchReport(teamMatch, {
-        teamMatchBout: [
-          BoutAction(
-            actionType: BoutActionType.passivity,
-            bout: bout,
-            duration: Duration(seconds: 30),
-            role: BoutRole.blue,
-          ),
-          BoutAction(
-            actionType: BoutActionType.points,
-            bout: bout,
-            duration: Duration(minutes: 1),
-            pointCount: 4,
-            role: BoutRole.red,
-          ),
-          BoutAction(
-            actionType: BoutActionType.points,
-            bout: bout,
-            duration: Duration(minutes: 2),
-            pointCount: 2,
-            role: BoutRole.blue,
-          ),
-        ],
-      });
+      final report = wrestlingReport.exportTeamMatchReport(
+        teamMatch: teamMatch,
+        boutMap: {
+          teamMatchBout: [
+            BoutAction(
+              actionType: BoutActionType.passivity,
+              bout: bout,
+              duration: Duration(seconds: 30),
+              role: BoutRole.blue,
+            ),
+            BoutAction(
+              actionType: BoutActionType.points,
+              bout: bout,
+              duration: Duration(minutes: 1),
+              pointCount: 4,
+              role: BoutRole.red,
+            ),
+            BoutAction(
+              actionType: BoutActionType.points,
+              bout: bout,
+              duration: Duration(minutes: 2),
+              pointCount: 2,
+              role: BoutRole.blue,
+            ),
+          ],
+        },
+        officials: {Person(prename: 'Mr.', surname: 'Referee'): PersonRole.referee},
+      );
       expect(
         report,
         'rdbi;2.0.0;MK;matchNo;Test Division Test League;1.1.2000;Team A;Team B;4;0;5;Referee;Mr.;Match comment: Semicolon,OpeningParenthesis&#40;ClosingParenthesis&#41;LessThan&lt;GreaterThan&gt;AndSign&amp;000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n'

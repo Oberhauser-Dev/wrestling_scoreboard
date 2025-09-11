@@ -49,6 +49,7 @@ Iterable<DataObject> getMockedDataObjects(Type type) {
     const (TeamClubAffiliation) => mockedData.getTeamClubAffiliations(),
     const (TeamMatch) => mockedData.getTeamMatches(),
     const (TeamMatchBout) => mockedData.getTeamMatchBouts(),
+    const (TeamMatchPerson) => mockedData.getTeamMatchPersons(),
     const (WeightClass) => mockedData.getWeightClasses(),
     _ => throw UnimplementedError(),
   };

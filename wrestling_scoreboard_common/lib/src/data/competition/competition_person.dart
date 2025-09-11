@@ -5,7 +5,6 @@ import '../../../common.dart';
 part 'competition_person.freezed.dart';
 part 'competition_person.g.dart';
 
-/// An action and its value that is fulfilled by the participant during a bout, e.g. points or caution
 @freezed
 abstract class CompetitionPerson with _$CompetitionPerson implements DataObject {
   const CompetitionPerson._();
