@@ -143,12 +143,13 @@ void main() {
     date: DateTime(2023, 10, 28, 19),
     visitorsCount: 295,
     location: 'Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach',
-    referee: Person(
-      prename: 'Mustafa',
-      surname: 'Durak',
-      orgSyncId: 'Mustafa_Durak_null',
-      organization: organizationNRW,
-    ),
+  );
+
+  final testReferee = Person(
+    prename: 'Mustafa',
+    surname: 'Durak',
+    orgSyncId: 'Mustafa_Durak_null',
+    organization: organizationNRW,
   );
 
   setUp(() {
@@ -626,9 +627,9 @@ void main() {
       });
 
       test('TeamMatches', () async {
-        final teamMatches = await wrestlingApi.importTeamMatches(league: testBayerligaSuedLeague);
-        expect(teamMatches, [
-          testTeamMatch,
+        final teamMatchMap = await wrestlingApi.importTeamMatches(league: testBayerligaSuedLeague);
+        expect(teamMatchMap, {
+          testTeamMatch: {testReferee: PersonRole.referee},
           TeamMatch(
             orgSyncId: '029013c',
             no: '029013c',
@@ -637,26 +638,24 @@ void main() {
             guest: TeamLineup(team: testTeamMering, leader: null, coach: null),
             league: testBayerligaSuedLeague,
             seasonPartition: 0,
-            matChairman: null,
-            referee: Person(
-              id: null,
-              orgSyncId: 'Fröhlich_Peter_null',
-              organization: organizationNRW,
-              prename: 'Fröhlich',
-              surname: 'Peter',
-              gender: null,
-              birthDate: null,
-              nationality: null,
-            ),
-            judge: null,
-            timeKeeper: null,
-            transcriptWriter: null,
             location: 'Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden',
             date: DateTime(2023, 10, 21, 19),
             visitorsCount: 813,
             comment: 'TSV BGD 57kg übergewicht',
-          ),
-        ]);
+          ): {
+            Person(
+                  id: null,
+                  orgSyncId: 'Fröhlich_Peter_null',
+                  organization: organizationNRW,
+                  prename: 'Fröhlich',
+                  surname: 'Peter',
+                  gender: null,
+                  birthDate: null,
+                  nationality: null,
+                ):
+                PersonRole.referee,
+          },
+        });
       });
 
       test('TeamMatch Bouts', () async {

@@ -56,7 +56,7 @@ abstract class WrestlingApi {
 
   Future<Iterable<League>> importLeagues({required Division division});
 
-  Future<Iterable<TeamMatch>> importTeamMatches({required League league});
+  Future<Map<TeamMatch, Map<Person, PersonRole>>> importTeamMatches({required League league});
 
   Future<Map<TeamMatchBout, Iterable<BoutAction>>> importTeamMatchBouts({required TeamMatch teamMatch});
 

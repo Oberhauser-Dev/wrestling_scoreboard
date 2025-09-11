@@ -6,6 +6,7 @@ import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -130,76 +131,25 @@ abstract class PdfSheet {
     return buildFormCell(title: '$title (Name/Nr.)', content: no, height: cellHeight, width: width);
   }
 
-  List<Widget> buildStaff(Context context, WrestlingEvent wrestlingEvent, {double? width}) {
-    Person? timeKeeper;
-    Person? transcriptWriter;
-    if (wrestlingEvent is TeamMatch) {
-      timeKeeper = wrestlingEvent.timeKeeper;
-      transcriptWriter = wrestlingEvent.transcriptWriter;
-    } else if (wrestlingEvent is Competition) {}
-
+  List<Widget> buildOfficials(
+    Context context,
+    WrestlingEvent wrestlingEvent, {
+    required List<PersonRole> order,
+    int Function(PersonRole personRole)? getPlaceHolderCount,
+    required Map<PersonRole, Set<Person>> groupedOfficials,
+    double? width,
+  }) {
     return [
-      buildPerson(
-        title: localizations.timeKeeper.toUpperCase(),
-        no: timeKeeper == null ? '' : '${timeKeeper.id} / ${timeKeeper.fullName}',
-        width: width,
-      ),
-      buildPerson(
-        title: localizations.transcriptionWriter.toUpperCase(),
-        no: transcriptWriter == null ? '' : '${transcriptWriter.id} / ${transcriptWriter.fullName}',
-        width: width,
-      ),
-    ];
-  }
-
-  List<Widget> buildStewards(Context context, WrestlingEvent wrestlingEvent, {double? width}) {
-    final List<Person?> stewards = [];
-    // TODO: stewards from list
-    if (stewards.length < 3) {
-      stewards.addAll(Iterable.generate(3 - stewards.length, (i) => null));
-    }
-    return stewards
-        .map(
-          (steward) => buildPerson(
-            title: localizations.steward.toUpperCase(),
-            no: steward == null ? '' : '${steward.id} / ${steward.fullName}',
-            width: width,
-          ),
-        )
-        .toList();
-  }
-
-  List<Widget> buildReferees(Context context, WrestlingEvent wrestlingEvent, {double? width}) {
-    Person? matChairman;
-    Person? referee;
-    Person? judge;
-    if (wrestlingEvent is TeamMatch) {
-      matChairman = wrestlingEvent.matChairman;
-      referee = wrestlingEvent.referee;
-      judge = wrestlingEvent.judge;
-    } else if (wrestlingEvent is Competition) {
-      // TODO: get referees from bout
-      // matChairman = bout.matChairman;
-      // referee = bout.referee;
-      // judge = bout.judge;
-    }
-
-    return [
-      buildPerson(
-        title: localizations.matChairman.toUpperCase(),
-        no: matChairman == null ? '' : '${matChairman.id} / ${matChairman.fullName}',
-        width: width,
-      ),
-      buildPerson(
-        title: localizations.referee.toUpperCase(),
-        no: referee == null ? '' : '${referee.id} / ${referee.fullName}',
-        width: width,
-      ),
-      buildPerson(
-        title: localizations.judge.toUpperCase(),
-        no: judge == null ? '' : '${judge.id} / ${judge.fullName}',
-        width: width,
-      ),
+      for (final personRole in order)
+        ...(groupedOfficials[personRole] ??
+                Iterable.generate(getPlaceHolderCount?.call(personRole) ?? 1, (index) => null).toSet())
+            .map(
+              (person) => buildPerson(
+                title: personRole.localize(buildContext).toUpperCase(),
+                no: person == null ? '' : '${person.id} / ${person.fullName}',
+                width: width,
+              ),
+            ),
     ];
   }
 }

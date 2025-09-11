@@ -107,39 +107,6 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
             //   },
             // );
 
-            // final contentItems = [
-            //   ContentItem(
-            //     title: competition.referee?.fullName ?? '-',
-            //     subtitle: localizations.referee,
-            //     icon: Icons.sports,
-            //   ),
-            //   ContentItem(
-            //     title: competition.matChairman?.fullName ?? '-',
-            //     subtitle: localizations.matChairman,
-            //     icon: Icons.manage_accounts,
-            //   ),
-            //   ContentItem(
-            //     title: competition.judge?.fullName ?? '-',
-            //     subtitle: localizations.judge,
-            //     icon: Icons.manage_accounts,
-            //   ),
-            //   ContentItem(
-            //     title: competition.timeKeeper?.fullName ?? '-',
-            //     subtitle: localizations.timeKeeper,
-            //     icon: Icons.pending_actions,
-            //   ),
-            //   ContentItem(
-            //     title: competition.transcriptWriter?.fullName ?? '-',
-            //     subtitle: localizations.transcriptionWriter,
-            //     icon: Icons.history_edu,
-            //   ),
-            //   ContentItem(
-            //     title: '-', // TODO: Multiple stewards
-            //     subtitle: localizations.steward,
-            //     icon: Icons.security,
-            //   ),
-            // ];
-
             final description = InfoWidget(
               obj: competition,
               editPage: CompetitionEdit(competition: competition),
@@ -250,8 +217,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 itemBuilder: (context, competitionPerson) {
                   return ContentItem(
                     title: '${competitionPerson.role.localize(context)} | ${competitionPerson.person.fullName}',
-                    // TODO: adapt icon to role
-                    icon: Icons.person,
+                    icon: competitionPerson.role.icon,
                     onTap: () async => CompetitionPersonOverview.navigateTo(context, competitionPerson),
                   );
                 },

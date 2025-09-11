@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_server/controllers/league_weight_class_cont
 import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
@@ -61,45 +62,51 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
     bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
-    var teamMatchs = await apiProvider.importTeamMatches(league: entity);
+    final teamMatchMap = await apiProvider.importTeamMatches(league: entity);
 
-    teamMatchs = await TeamMatchController().updateOrCreateManyOfOrg(
-      teamMatchs.toList(),
+    final teamMatchs = await TeamMatchController().updateOrCreateManyOfOrg(
+      teamMatchMap.keys.toList(),
       conditions: ['league_id = @id'],
       substitutionValues: {'id': entity.id},
+      onUpdatedOrCreated: (previous, teamMatch) async {
+        final officials = teamMatchMap.entries.where((tmm) => tmm.key.orgSyncId == teamMatch.orgSyncId).single.value;
+        final prevOfficials = await TeamMatchPersonController().getMany(
+          conditions: ['team_match_id = @id'],
+          substitutionValues: {'id': teamMatch.id},
+          obfuscate: obfuscate,
+        );
+        final updatedOfficials = await forEachFuture(
+          officials.entries,
+          (official) async => MapEntry(
+            await PersonController().updateOrCreateSingleOfOrg(official.key, obfuscate: obfuscate),
+            official.value,
+          ),
+        );
+
+        await TeamMatchPersonController().updateOnDiffMany(
+          updatedOfficials
+              .map((official) => TeamMatchPerson(teamMatch: teamMatch, person: official.key, role: official.value))
+              .toList(),
+          previous: prevOfficials,
+        );
+      },
       onUpdateOrCreate: (prevTeamMatch, teamMatch) async {
         return teamMatch.copyWith(
           home: await TeamLineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
           guest: await TeamLineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
-          referee:
-              teamMatch.referee == null
-                  ? null
-                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.referee!, obfuscate: obfuscate),
-          judge:
-              teamMatch.judge == null
-                  ? null
-                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.judge!, obfuscate: obfuscate),
-          matChairman:
-              teamMatch.matChairman == null
-                  ? null
-                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.matChairman!, obfuscate: obfuscate),
-          transcriptWriter:
-              teamMatch.transcriptWriter == null
-                  ? null
-                  : await PersonController().updateOrCreateSingleOfOrg(
-                    teamMatch.transcriptWriter!,
-                    obfuscate: obfuscate,
-                  ),
-          timeKeeper:
-              teamMatch.timeKeeper == null
-                  ? null
-                  : await PersonController().updateOrCreateSingleOfOrg(teamMatch.timeKeeper!, obfuscate: obfuscate),
         );
       },
       onDelete: (previous) async {
+        // Delete link to task of official person.
+        // Do not delete persons themselves
+        await TeamMatchPersonController().deleteMany(
+          conditions: ['team_match_id=@id'],
+          substitutionValues: {'id': previous.id},
+        );
+      },
+      onDeleted: (previous) async {
         await TeamLineupController().deleteSingle(previous.home.id!);
         await TeamLineupController().deleteSingle(previous.guest.id!);
-        // Do not delete persons
       },
       obfuscate: obfuscate,
     );

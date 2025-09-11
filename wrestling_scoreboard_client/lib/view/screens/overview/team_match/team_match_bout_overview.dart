@@ -57,7 +57,15 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
                         ),
                       ).future,
                     );
+
             final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+
+            final officials = await ref.readAsync(
+              manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
+                ManyProviderData<TeamMatchPerson, TeamMatch>(filterObject: teamMatchBout.teamMatch),
+              ).future,
+            );
+
             if (context.mounted) {
               final bytes =
                   await ScoreSheet(
@@ -65,6 +73,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
                     boutActions: actions,
                     buildContext: context,
                     wrestlingEvent: teamMatchBout.teamMatch,
+                    officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
                     boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                     boutRules: boutRules,
                     isTimeCountDown: isTimeCountDown,

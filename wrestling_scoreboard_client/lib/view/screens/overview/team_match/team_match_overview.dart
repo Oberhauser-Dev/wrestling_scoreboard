@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -15,12 +16,15 @@ import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -66,21 +70,12 @@ class TeamMatchOverview extends ConsumerWidget {
               label: localizations.print,
               icon: const Icon(Icons.print),
               onTap: () async {
-                final teamMatchBouts = await ref.readAsync(
-                  manyDataStreamProvider<TeamMatchBout, TeamMatch>(
-                    ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
-                  ).future,
-                );
+                final teamMatchBouts = await _getBouts(ref, match: match);
 
                 final teamMatchBoutActions = Map.fromEntries(
                   await Future.wait(
                     teamMatchBouts.map((teamMatchBout) async {
-                      final boutActions = await ref.readAsync(
-                        manyDataStreamProvider<BoutAction, Bout>(
-                          ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
-                        ).future,
-                      );
-                      // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+                      final boutActions = await _getActions(ref, bout: teamMatchBout.bout);
                       return MapEntry(teamMatchBout, boutActions);
                     }),
                   ),
@@ -99,12 +94,15 @@ class TeamMatchOverview extends ConsumerWidget {
                   ).future,
                 );
 
+                final officials = await _getOfficials(ref, match: match);
+
                 if (context.mounted) {
                   final bytes =
                       await TeamMatchTranscript(
                         teamMatchBoutActions: teamMatchBoutActions,
                         buildContext: context,
                         teamMatch: match,
+                        officials: officials,
                         boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                         isTimeCountDown: isTimeCountDown,
                         guestParticipations: guestParticipations,
@@ -140,13 +138,19 @@ class TeamMatchOverview extends ConsumerWidget {
                       context: context,
                       organization: organization,
                       onTap: (reporter) async {
-                        final tmbouts = await _getBouts(ref, match: match);
+                        final teamMatchBouts = await _getBouts(ref, match: match);
                         final boutMap = Map.fromEntries(
                           await Future.wait(
-                            tmbouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
+                            teamMatchBouts.map((bout) async => MapEntry(bout, await _getActions(ref, bout: bout.bout))),
                           ),
                         );
-                        final reportStr = reporter.exportTeamMatchReport(match, boutMap);
+
+                        final officials = await _getOfficials(ref, match: match);
+                        final reportStr = reporter.exportTeamMatchReport(
+                          teamMatch: match,
+                          boutMap: boutMap,
+                          officials: officials,
+                        );
 
                         await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
                       },
@@ -163,7 +167,7 @@ class TeamMatchOverview extends ConsumerWidget {
                     Tab(child: HeadingText(localizations.info)),
                     if (match.league != null) Tab(child: HeadingText(localizations.lineups)),
                     Tab(child: HeadingText(localizations.bouts)),
-                    Tab(child: HeadingText(localizations.persons)),
+                    Tab(child: HeadingText(localizations.officials)),
                   ],
                   body: SingleConsumer<TeamLineup>(
                     id: match.home.id!,
@@ -173,38 +177,6 @@ class TeamMatchOverview extends ConsumerWidget {
                           id: match.guest.id!,
                           initialData: match.guest,
                           builder: (context, guestLineup) {
-                            final contentItems = [
-                              ContentItem(
-                                title: match.referee?.fullName ?? '-',
-                                subtitle: localizations.referee,
-                                icon: Icons.sports,
-                              ),
-                              ContentItem(
-                                title: match.matChairman?.fullName ?? '-',
-                                subtitle: localizations.matChairman,
-                                icon: Icons.manage_accounts,
-                              ),
-                              ContentItem(
-                                title: match.judge?.fullName ?? '-',
-                                subtitle: localizations.judge,
-                                icon: Icons.manage_accounts,
-                              ),
-                              ContentItem(
-                                title: match.timeKeeper?.fullName ?? '-',
-                                subtitle: localizations.timeKeeper,
-                                icon: Icons.pending_actions,
-                              ),
-                              ContentItem(
-                                title: match.transcriptWriter?.fullName ?? '-',
-                                subtitle: localizations.transcriptionWriter,
-                                icon: Icons.history_edu,
-                              ),
-                              ContentItem(
-                                title: '-', // TODO: Multiple stewards
-                                subtitle: localizations.steward,
-                                icon: Icons.security,
-                              ),
-                            ];
                             final items = [
                               InfoWidget(
                                 obj: match,
@@ -331,10 +303,32 @@ class TeamMatchOverview extends ConsumerWidget {
                                   },
                                 ),
                               TeamMatchBoutList(filterObject: match),
-                              GroupedList(
-                                header: const HeadingItem(),
-                                itemCount: contentItems.length,
-                                itemBuilder: (context, index) => contentItems[index],
+                              FilterableManyConsumer<TeamMatchPerson, TeamMatch>.addOrCreate(
+                                context: context,
+                                addPageBuilder:
+                                    (context) => TeamMatchPersonEdit(
+                                      initialTeamMatch: match,
+                                      initialOrganization: match.organization!,
+                                    ),
+                                createPageBuilder:
+                                    (context) => PersonEdit(
+                                      initialOrganization: match.organization!,
+                                      onCreated: (person) async {
+                                        // TODO: ability to change role inside another implementation of PersonEdit.
+                                        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+                                          TeamMatchPerson(teamMatch: match, person: person, role: PersonRole.steward),
+                                        );
+                                      },
+                                    ),
+                                filterObject: match,
+                                itemBuilder: (context, teamMatchPerson) {
+                                  return ContentItem(
+                                    title:
+                                        '${teamMatchPerson.role.localize(context)} | ${teamMatchPerson.person.fullName}',
+                                    icon: teamMatchPerson.role.icon,
+                                    onTap: () async => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
+                                  );
+                                },
                               ),
                             ];
                             return TabGroup(items: items);
@@ -359,6 +353,16 @@ class TeamMatchOverview extends ConsumerWidget {
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
+
+  Future<Map<Person, PersonRole>> _getOfficials(WidgetRef ref, {required TeamMatch match}) async {
+    final officials = await ref.readAsync(
+      manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
+        ManyProviderData<TeamMatchPerson, TeamMatch>(filterObject: match),
+      ).future,
+    );
+
+    return Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role)));
+  }
 
   void handleSelectedLineup(
     BuildContext context,

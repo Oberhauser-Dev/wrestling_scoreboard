@@ -8,11 +8,12 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_match_person_controller.dart';
 
 final _logger = Logger('PersonController');
 
@@ -88,23 +89,15 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
             await MembershipController().updateSingle(deleteMembership.copyWith(person: keepPerson));
           }
         }
-        // TODO: Referenced by CompetitionPerson
-        // TODO: Referenced by SecuredUser
+        // TODO: Referenced by SecuredUser: Probably only should be allowed for admins.
 
-        final tmc = TeamMatchController();
-        final teamMatchsByReferee = await tmc.getByReferee(user, deletePerson.id!);
-        final teamMatchsByTranscriptWriter = await tmc.getByTranscriptWriter(user, deletePerson.id!);
-        final teamMatchsByTimeKeeper = await tmc.getByTimeKeeper(user, deletePerson.id!);
-        final teamMatchsByMatChairman = await tmc.getByMatChairman(user, deletePerson.id!);
-        final teamMatchsByJudge = await tmc.getByJudge(user, deletePerson.id!);
+        final tmpc = TeamMatchPersonController();
+        final teamMatchPersonsByPerson = await tmpc.getByPerson(user, deletePerson.id!);
+        await Future.wait(teamMatchPersonsByPerson.map((e) => tmpc.updateSingle(e.copyWith(person: keepPerson))));
 
-        await Future.wait(teamMatchsByReferee.map((e) => tmc.updateSingle(e.copyWith(referee: keepPerson))));
-        await Future.wait(
-          teamMatchsByTranscriptWriter.map((e) => tmc.updateSingle(e.copyWith(transcriptWriter: keepPerson))),
-        );
-        await Future.wait(teamMatchsByTimeKeeper.map((e) => tmc.updateSingle(e.copyWith(timeKeeper: keepPerson))));
-        await Future.wait(teamMatchsByMatChairman.map((e) => tmc.updateSingle(e.copyWith(matChairman: keepPerson))));
-        await Future.wait(teamMatchsByJudge.map((e) => tmc.updateSingle(e.copyWith(judge: keepPerson))));
+        final cpc = CompetitionPersonController();
+        final competitionPersonsByPerson = await cpc.getByPerson(user, deletePerson.id!);
+        await Future.wait(competitionPersonsByPerson.map((e) => cpc.updateSingle(e.copyWith(person: keepPerson))));
 
         // Override keepPerson. It falls back to deletePerson, if an attribute is missing.
         keepPerson = keepPerson.copyWith(

@@ -47,6 +47,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                       builder: (context, ref, child) {
                         return BoutScreen(
                           wrestlingEvent: ScratchEvent(),
+                          officials: {},
                           boutConfig: boutConfig,
                           boutRules: boutResultRules,
                           bouts: [bout],

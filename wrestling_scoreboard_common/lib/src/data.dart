@@ -30,6 +30,7 @@ export 'data/team_match/team_lineup.dart';
 export 'data/team_match/team_lineup_participation.dart';
 export 'data/team_match/team_match.dart';
 export 'data/team_match/team_match_bout.dart';
+export 'data/team_match/team_match_person.dart';
 export 'data/user.dart';
 export 'data/weight_class.dart';
 export 'data/wrestling_event.dart';

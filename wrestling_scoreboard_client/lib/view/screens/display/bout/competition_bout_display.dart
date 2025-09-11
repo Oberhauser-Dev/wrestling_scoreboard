@@ -74,6 +74,8 @@ class CompetitionBoutDisplay extends StatelessWidget {
                       builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
                         return BoutScreen(
                           wrestlingEvent: competition,
+                          // TODO: Need to be able to define official per bout
+                          officials: {},
                           boutConfig: competition.boutConfig,
                           boutRules: boutResultRules,
                           bouts: matCompetitionBouts.map((e) => e.bout).toList(),

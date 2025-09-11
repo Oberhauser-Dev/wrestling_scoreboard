@@ -19,6 +19,7 @@ class ScoreSheet extends PdfSheet {
     required this.bout,
     required this.boutActions,
     required this.wrestlingEvent,
+    required this.officials,
     required this.boutConfig,
     required this.boutRules,
     required this.weightClass,
@@ -34,6 +35,7 @@ class ScoreSheet extends PdfSheet {
   final BoutConfig boutConfig;
   final List<BoutResultRule> boutRules;
   final WrestlingEvent wrestlingEvent;
+  final Map<Person, PersonRole> officials;
   final bool isTimeCountDown;
 
   WrestlingEvent get event => wrestlingEvent;
@@ -46,6 +48,12 @@ class ScoreSheet extends PdfSheet {
 
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
     final actions = boutActions;
+
+    final groupedOfficials = <PersonRole, Set<Person>>{};
+    officials.forEach((person, personRole) {
+      groupedOfficials.putIfAbsent(personRole, () => {});
+      groupedOfficials[personRole]!.add(person);
+    });
 
     // Add page to the PDF
     doc.addPage(
@@ -90,10 +98,18 @@ class ScoreSheet extends PdfSheet {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
-                    [
-                      ...buildReferees(context, event),
-                      ...buildStaff(context, event),
-                    ].map((e) => Expanded(child: e)).toList(),
+                    buildOfficials(
+                      order: [
+                        PersonRole.referee,
+                        PersonRole.matChairman,
+                        PersonRole.judge,
+                        PersonRole.timeKeeper,
+                        PersonRole.transcriptWriter,
+                      ],
+                      context,
+                      event,
+                      groupedOfficials: groupedOfficials,
+                    ).map((e) => Expanded(child: e)).toList(),
                 mainAxisSize: MainAxisSize.max,
               ),
             ],
