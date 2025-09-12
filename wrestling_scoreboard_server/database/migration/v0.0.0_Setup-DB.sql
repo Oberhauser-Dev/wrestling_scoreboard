@@ -68,12 +68,9 @@ CREATE TYPE public.bout_result AS ENUM (
     'vin',
     'vca',
     'vsu',
-    'vsu1',
     'vpo',
-    'vpo1',
     'vfo',
     'dsq',
-    'dsq2',
     'bothDsq',
     'bothVfo',
     'bothVin'
@@ -115,7 +112,6 @@ CREATE TYPE public.person_role AS ENUM (
     'referee',
     'transcriptWriter',
     'timeKeeper',
-    'matPresident',
     'steward'
 );
 
