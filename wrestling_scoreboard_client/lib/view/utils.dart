@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -23,4 +25,24 @@ const extraLargeScreenMinWidth = 1200.0;
 
 extension ResponsiveExtension on BuildContext {
   bool get isMediumScreenOrLarger => MediaQuery.of(this).size.width >= mediumScreenMinWidth;
+}
+
+/// Up to 120 retries
+const _connectionRetryCount = 120;
+
+/// Starts with a delay of 500ms
+const _connectionRetryInitialPeriodMs = 500;
+
+/// Doubles the delay on each retry up to 1 minute
+const _connectionRetryMaxPeriodMs = 60000;
+
+/// Calculate duration until an action should be retried.
+Duration? getRetryDuration(int retryCount) {
+  if (retryCount >= _connectionRetryCount) return null;
+  return Duration(
+    milliseconds: math.min(
+      _connectionRetryInitialPeriodMs * math.pow(2, retryCount).toInt(),
+      _connectionRetryMaxPeriodMs,
+    ),
+  );
 }

@@ -130,7 +130,7 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
               context: context,
               child: Column(
                 children: [
-                  Text('There was a problem with the object of type "$T" and id "$id".'),
+                  Text('There was a problem with the object of type "$T" and id "$id" in search.'),
                   ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
                 ],
               ),
@@ -186,7 +186,7 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                 context: context,
                 child: Column(
                   children: [
-                    Text('There was a problem with the object of type $T and id $id.'),
+                    Text('There was a problem with the object of type "$T" and id "$id" in favorites.'),
                     ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
                   ],
                 ),

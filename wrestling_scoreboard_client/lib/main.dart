@@ -2,20 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/mocks/main.dart';
+import 'package:wrestling_scoreboard_client/services/network/remote/rest.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 final defaultProviderScope = ProviderScope(
-  // Never retry any provider
-  retry: (retryCount, error) => null,
+  retry: (int retryCount, Object error) {
+    // ignores [ProviderException]s (which happens when a provider rethrows the error of another provider)
+    // ignores [Error]s (which are generally programming errors)
+    if (error is ProviderException || error is Error) return null;
+    // ignores [RestException]s with status code 400 (which means the user has a wrong configuration)
+    if (error is RestException && error.response.statusCode == 400) return null;
+    return getRetryDuration(retryCount);
+  },
   child: WrestlingScoreboardApp(),
 );
 
