@@ -560,6 +560,12 @@ abstract class AppLocalizations {
   /// **'August Oberhauser\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)'**
   String get about_development_phrase;
 
+  /// No description provided for @about_SourceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Source Code (GitHub)'**
+  String get about_SourceCode;
+
   /// No description provided for @privacy_policy.
   ///
   /// In en, this message translates to:
