@@ -9,12 +9,14 @@ import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/components/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -47,6 +49,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   final _formKey = GlobalKey<FormState>();
 
   Iterable<Membership>? _memberships;
+  Iterable<Club>? _clubs;
 
   Membership? _leader;
   Membership? _coach;
@@ -146,12 +149,16 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     ];
   }
 
+  Future<Iterable<Club>> _getClubs() async {
+    _clubs ??= await ref.readAsync(
+      manyDataStreamProvider<Club, Team>(ManyProviderData<Club, Team>(filterObject: widget.lineup.team)).future,
+    );
+    return _clubs!;
+  }
+
   Future<Iterable<Membership>> _getMemberships() async {
     if (_memberships == null) {
-      final clubs = await ref.readAsync(
-        manyDataStreamProvider<Club, Team>(ManyProviderData<Club, Team>(filterObject: widget.lineup.team)).future,
-      );
-
+      final clubs = await _getClubs();
       final clubMemberships = await Future.wait(
         clubs.map((club) async {
           return await ref.readAsync(
@@ -175,7 +182,23 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         id: widget.lineup.id,
         buildActions: _buildActions,
         items: [
-          ListTile(title: HeadingText(widget.lineup.team.name)),
+          LoadingBuilder(
+            future: _getClubs(),
+            builder: (context, clubs) {
+              if (clubs.isEmpty) return SizedBox.shrink();
+              return ListTile(
+                title: HeadingText(widget.lineup.team.name),
+                trailing: AddOrCreateButton(
+                  addPageBuilder:
+                      (context) => MembershipEdit(
+                        initialOrganization: widget.lineup.team.organization!,
+                        initialClub: clubs.first,
+                      ),
+                  createPageBuilder: (context) => MembershipPersonEdit(initialClub: clubs.first),
+                ),
+              );
+            },
+          ),
           if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
             IconCard(icon: const Icon(Icons.warning), child: Text(localizations.warningPrefilledLineup)),
           ListTile(
@@ -216,6 +239,42 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
           }),
         ],
       ),
+    );
+  }
+}
+
+class AddOrCreateButton extends StatelessWidget {
+  final Widget Function(BuildContext context) addPageBuilder;
+  final Widget Function(BuildContext context) createPageBuilder;
+
+  const AddOrCreateButton({super.key, required this.addPageBuilder, required this.createPageBuilder});
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return MenuAnchor(
+      menuChildren: [
+        MenuItemButton(
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: addPageBuilder)),
+          child: Text(localizations.addExisting),
+        ),
+        MenuItemButton(
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: createPageBuilder)),
+          child: Text(localizations.createAndAdd),
+        ),
+      ],
+      builder:
+          (context, controller, child) => TextButton.icon(
+            icon: const Icon(Icons.add),
+            label: Text(localizations.membership),
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+          ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class EditWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class EditWidget extends StatelessWidget {
       ResponsiveScaffoldActionItem(
         icon: const Icon(Icons.save),
         label: localizations.save,
-        onTap: onSubmit,
+        onTap: () => catchAsync(context, onSubmit),
         style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
       ),
     ];
