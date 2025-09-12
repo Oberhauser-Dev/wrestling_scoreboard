@@ -151,6 +151,7 @@ jobs:
           publish-stage: internal
           publish-distributor: ${{ matrix.publish-distributor }}
           # Android
+          publish-android-release-status: 'completed' # Release status "completed" only works, if the app was released to the public (open testing or production).
           publish-android-fastlane-secrets-json-base64: ${{ secrets.ANDROID_GOOGLE_PLAY_JSON }}
           android-keystore-file-base64: ${{ secrets.ANDROID_KEYSTORE }}
           android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
