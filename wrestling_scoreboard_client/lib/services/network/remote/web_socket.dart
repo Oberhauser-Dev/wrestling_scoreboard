@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/url.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 final _logger = Logger('WebSocketManager');
@@ -19,6 +20,12 @@ class WebSocketManager {
   final DataManager dataManager;
   WebSocketChannel? _channel;
   String? _wsUrl;
+
+  /// Count retries, after the websocket disconnects.
+  int _retryCount = 0;
+
+  /// Save current retry timer. Only one can run at the same time.
+  Timer? _retryTimer;
 
   /// Manages connection state of WebSocket
   final StreamController<WebSocketConnectionState> onWebSocketConnection = StreamController.broadcast();
@@ -95,11 +102,19 @@ class WebSocketManager {
                 _logger.info('Websocket connection closed by client ${_channel?.closeReason}');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               } else if (_channel?.closeCode == null) {
+                // E.g. refusing the connection.
                 _logger.info('Websocket connection closed by server');
-                // Avoid overriding previous SocketException with setting a disconnected state
+                // Avoid overriding previous SocketException when setting a disconnected state
+
+                _retryConnecting();
               } else {
-                _logger.info('Websocket connection closed by server ${_channel?.closeReason}');
+                // E.g. server is shutting down.
+                _logger.info(
+                  'Websocket connection closed by server (Code: ${_channel?.closeCode}, Reason: ${_channel?.closeReason})',
+                );
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
+
+                _retryConnecting();
               }
               _channel = null;
             },
@@ -107,6 +122,8 @@ class WebSocketManager {
           await _channel?.ready.timeout(const Duration(seconds: 5));
           _logger.fine('Websocket connection established: $_wsUrl');
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
+          // Reset retry count
+          _retryCount = 0;
           // Send authentication token, if signed in.
           if (dataManager.authService != null) {
             addToSink(jsonEncode(dataManager.authService?.header));
@@ -126,5 +143,18 @@ class WebSocketManager {
 
   void addToSink(String val) {
     _channel?.sink.add(val);
+  }
+
+  /// Retry regularly when disconnecting.
+  void _retryConnecting() {
+    // Do not retry multiple times in the same period.
+    if (_retryTimer != null) return;
+    final duration = getRetryDuration(_retryCount);
+    if (duration == null) return;
+    _retryTimer = Timer(duration, () {
+      onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+      _retryTimer = null;
+    });
+    _retryCount++;
   }
 }

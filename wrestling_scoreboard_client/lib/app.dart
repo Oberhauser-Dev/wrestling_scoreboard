@@ -261,6 +261,8 @@ class ConnectionWidget extends ConsumerStatefulWidget {
 }
 
 class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
+  bool _isDialogShown = false;
+
   @override
   void initState() {
     super.initState();
@@ -276,17 +278,24 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
     ref.listenManual(webSocketStateStreamProvider.future, (previous, next) async {
       await catchAsync(context, () async {
         final connectionState = await next;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && connectionState == WebSocketConnectionState.disconnected) {
-            final localizations = context.l10n;
-            showExceptionDialog(
-              context: context,
-              exception: localizations.noWebSocketConnection,
-              stackTrace: null,
-              onRetry: onRetry,
-            );
-          }
-        });
+        if (!_isDialogShown && connectionState == WebSocketConnectionState.disconnected) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            if (mounted) {
+              final localizations = context.l10n;
+              _isDialogShown = true;
+              await showExceptionDialog(
+                context: context,
+                exception: localizations.noWebSocketConnection,
+                stackTrace: null,
+                onRetry: onRetry,
+              );
+              _isDialogShown = false;
+            }
+          });
+        } else if (mounted && _isDialogShown && connectionState == WebSocketConnectionState.connected) {
+          // Pop dialog, if reconnect was successful.
+          Navigator.of(context).pop();
+        }
       }, onRetry: onRetry);
     });
 
