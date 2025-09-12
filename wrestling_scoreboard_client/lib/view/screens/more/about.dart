@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -89,6 +89,12 @@ class AboutScreen extends StatelessWidget {
                           applicationVersion: '${packageInfo.version}+${packageInfo.buildNumber}',
                         ),
                       ),
+                ),
+                Divider(),
+                ListTile(
+                  leading: const Icon(Icons.code),
+                  title: Text(localizations.about_SourceCode),
+                  onTap: () => launchUrl(Uri.parse('https://github.com/Oberhauser-Dev/wrestling_scoreboard')),
                 ),
               ],
             ),

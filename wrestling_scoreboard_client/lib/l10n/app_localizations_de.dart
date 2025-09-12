@@ -260,6 +260,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Oberhauser Dev\n\nEmail: info@oberhauser.dev\n\nWebsite: [oberhauser.dev](https://oberhauser.dev)';
 
   @override
+  String get about_SourceCode => 'Quelltext (GitHub)';
+
+  @override
   String get privacy_policy => 'Datenschutzerklärung';
 
   @override
