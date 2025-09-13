@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
+-- Dumped from database version 17.2
+-- Dumped by pg_dump version 17.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -1831,7 +1832,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.2.0-pre.9	0.0.0
+0.2.0-pre.11	0.0.0
 \.
 
 
@@ -2534,6 +2535,14 @@ ALTER TABLE ONLY public.participation
 
 
 --
+-- Name: participation participation_uk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.participation
+    ADD CONSTRAINT participation_uk UNIQUE (membership_id, lineup_id, weight_class_id);
+
+
+--
 -- Name: person person_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2856,19 +2865,19 @@ ALTER TABLE ONLY public.league_weight_class
 
 
 --
--- Name: lineup lineup_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: lineup lineup_membership_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_person_id_fk FOREIGN KEY (leader_id) REFERENCES public.person(id) ON DELETE CASCADE;
+    ADD CONSTRAINT lineup_membership_id_fk FOREIGN KEY (leader_id) REFERENCES public.membership(id) ON DELETE CASCADE;
 
 
 --
--- Name: lineup lineup_person_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: lineup lineup_membership_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.lineup
-    ADD CONSTRAINT lineup_person_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.person(id) ON DELETE CASCADE;
+    ADD CONSTRAINT lineup_membership_id_fk_2 FOREIGN KEY (coach_id) REFERENCES public.membership(id) ON DELETE CASCADE;
 
 
 --
