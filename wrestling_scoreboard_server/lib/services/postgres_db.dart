@@ -219,6 +219,10 @@ extension DatabaseExt on PostgresDb {
 
   static String sanitizeSql(String sqlString) {
     sqlString = sqlString.replaceAll('\r\n', '\n');
+    // Compatibility to PostgreSQL Fix:
+    // https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
+    sqlString = sqlString.replaceAll(RegExp(r'\n\\restrict(.*)\n'), '');
+    sqlString = sqlString.replaceAll(RegExp(r'\n\\unrestrict(.*)\n'), '');
     return sqlString
         .split('\n')
         .where((line) {
