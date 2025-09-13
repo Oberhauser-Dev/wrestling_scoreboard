@@ -24,6 +24,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -220,6 +221,10 @@ class TeamMatchOverview extends ConsumerWidget {
                                     title: match.league?.fullname ?? '-',
                                     subtitle: localizations.league,
                                     icon: Icons.emoji_events,
+                                    onTap:
+                                        match.league == null
+                                            ? null
+                                            : () => LeagueOverview.navigateTo(context, match.league!),
                                   ),
                                   ContentItem(
                                     title:

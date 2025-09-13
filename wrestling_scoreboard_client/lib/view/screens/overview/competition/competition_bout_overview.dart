@@ -91,6 +91,12 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
               subtitle: localizations.rank,
               icon: Icons.leaderboard,
             ),
+            ContentItem(
+              title: competitionBout.competition.name,
+              subtitle: localizations.competition,
+              icon: Icons.event,
+              onTap: () => CompetitionOverview.navigateTo(context, competitionBout.competition),
+            ),
           ],
           actions: [
             // pdfAction,

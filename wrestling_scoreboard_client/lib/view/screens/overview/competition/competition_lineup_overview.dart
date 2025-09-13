@@ -5,7 +5,9 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_lineup_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_participation_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -44,11 +46,17 @@ class CompetitionLineupOverview extends ConsumerWidget {
                   (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
           classLocale: localizations.lineup,
           children: [
-            ContentItem(title: competitionLineup.club.name, subtitle: localizations.club, icon: Icons.foundation),
+            ContentItem(
+              title: competitionLineup.club.name,
+              subtitle: localizations.club,
+              icon: Icons.foundation,
+              onTap: () => ClubOverview.navigateTo(context, competitionLineup.club),
+            ),
             ContentItem(
               title: competitionLineup.competition.name,
               subtitle: localizations.competition,
               icon: Icons.leaderboard,
+              onTap: () => CompetitionOverview.navigateTo(context, competitionLineup.competition),
             ),
           ],
         );

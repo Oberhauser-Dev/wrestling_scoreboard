@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -43,6 +44,12 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
               )).deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
           classLocale: localizations.competitionSystem,
           children: [
+            ContentItem(
+              title: competitionSystemAffiliation.competition.name,
+              subtitle: localizations.competition,
+              icon: Icons.leaderboard,
+              onTap: () => CompetitionOverview.navigateTo(context, competitionSystemAffiliation.competition),
+            ),
             ContentItem(
               title: competitionSystemAffiliation.competitionSystem.name,
               subtitle: localizations.competitionSystem,

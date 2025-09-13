@@ -60,6 +60,10 @@ class OrganizationOverview extends ConsumerWidget {
               title: organization.parent?.name ?? '-',
               subtitle: localizations.umbrellaOrganization,
               icon: Icons.corporate_fare,
+              onTap:
+                  organization.parent == null
+                      ? null
+                      : () => OrganizationOverview.navigateTo(context, organization.parent!),
             ),
             ContentItem(
               title: organization.apiProvider?.name ?? '-',

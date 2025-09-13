@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -53,11 +54,13 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
               title: bout.r?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.red,
               icon: Icons.person,
+              onTap: bout.r == null ? null : () => MembershipOverview.navigateTo(context, bout.r!.membership),
             ),
             ContentItem(
               title: bout.b?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.blue,
               icon: Icons.person,
+              onTap: bout.b == null ? null : () => MembershipOverview.navigateTo(context, bout.b!.membership),
             ),
             ContentItem(title: bout.winnerRole?.name ?? '-', subtitle: localizations.winner, icon: Icons.emoji_events),
             TooltipVisibility(

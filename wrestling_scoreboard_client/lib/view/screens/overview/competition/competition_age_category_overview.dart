@@ -5,7 +5,9 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_age_category_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_weight_category_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/age_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -49,11 +51,13 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
               title: competitionAgeCategory.competition.name,
               subtitle: localizations.competition,
               icon: Icons.leaderboard,
+              onTap: () => CompetitionOverview.navigateTo(context, competitionAgeCategory.competition),
             ),
             ContentItem(
               title: competitionAgeCategory.ageCategory.name,
               subtitle: localizations.ageCategory,
               icon: Icons.school,
+              onTap: () => AgeCategoryOverview.navigateTo(context, competitionAgeCategory.ageCategory),
             ),
           ],
         );

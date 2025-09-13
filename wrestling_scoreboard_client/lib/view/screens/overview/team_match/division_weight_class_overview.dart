@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/division_weight_class_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -36,6 +37,12 @@ class DivisionWeightClassOverview extends ConsumerWidget with WeightClassOvervie
           editPage: DivisionWeightClassEdit(divisionWeightClass: data, initialDivision: data.division),
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<DivisionWeightClass>(data),
           tiles: [
+            ContentItem(
+              title: data.division.fullname,
+              subtitle: localizations.division,
+              icon: Icons.inventory,
+              onTap: () => DivisionOverview.navigateTo(context, data.division),
+            ),
             ContentItem(
               title: data.seasonPartition?.asSeasonPartition(context, data.division.seasonPartitions) ?? '-',
               subtitle: localizations.seasonPartition,

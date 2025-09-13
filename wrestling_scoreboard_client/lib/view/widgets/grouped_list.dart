@@ -50,7 +50,7 @@ class ContentItem extends StatelessWidget {
       leading: icon != null ? Icon(icon) : null,
       title: Text(title, style: isDisabled ? TextStyle(color: Theme.of(context).disabledColor) : null),
       subtitle: (subtitle != null) ? Text(subtitle!, style: TextStyle(color: Theme.of(context).disabledColor)) : null,
-      trailing: trailing,
+      trailing: trailing ?? (onTap == null ? null : Icon(Icons.chevron_right)),
       onTap: onTap,
     );
   }
