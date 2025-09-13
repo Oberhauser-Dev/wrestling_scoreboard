@@ -133,6 +133,10 @@ class ApiRoute {
       '/${Membership.cTableName}/<id|[0-9]+>/${TeamMatchBout.cTableName}s',
       membershipController.requestTeamMatchBouts,
     );
+    router.restrictedGetOne(
+      '/${Membership.cTableName}/<id|[0-9]+>/${CompetitionBout.cTableName}s',
+      membershipController.requestCompetitionBouts,
+    );
 
     final personController = PersonController();
     router.restrictedPost('/${Person.cTableName}s/merge', personController.postMerge);
