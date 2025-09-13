@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/club_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -48,7 +50,9 @@ class MembershipOverview extends ConsumerWidget with AbstractPersonOverview<Memb
                 Tab(child: HeadingText('${localizations.bouts} (${localizations.league})')): TeamMatchBoutList(
                   filterObject: membership,
                 ),
-                // TODO: Add competition bouts
+                Tab(child: HeadingText('${localizations.bouts} (${localizations.competition})')): CompetitionBoutList(
+                  filterObject: membership,
+                ),
               },
         );
       },

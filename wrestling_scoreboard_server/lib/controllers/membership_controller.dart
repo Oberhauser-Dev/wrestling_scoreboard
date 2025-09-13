@@ -3,6 +3,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
 
@@ -30,6 +31,26 @@ class MembershipController extends ShelfController<Membership> with Organization
     return TeamMatchBoutController().handleGetRequestManyFromQuery(
       isRaw: request.isRaw,
       sqlQuery: _teamMatchBoutsQuery,
+      substitutionValues: {'id': id},
+      obfuscate: obfuscate,
+    );
+  }
+
+  static const _competitionBoutsQuery = '''
+        SELECT cb.* 
+        FROM ${Bout.cTableName} as b
+        JOIN ${AthleteBoutState.cTableName} AS pst ON b.red_id = pst.id OR b.blue_id = pst.id
+        JOIN ${CompetitionBout.cTableName} AS cb ON cb.bout_id = b.id
+        JOIN ${Competition.cTableName} AS cpt ON cb.competition_id = cpt.id
+        WHERE pst.membership_id = @id
+        ORDER BY cpt.date DESC, cb.pos;''';
+
+  Future<Response> requestCompetitionBouts(Request request, User? user, String id) async {
+    final bool obfuscate = user?.obfuscate ?? true;
+
+    return CompetitionBoutController().handleGetRequestManyFromQuery(
+      isRaw: request.isRaw,
+      sqlQuery: _competitionBoutsQuery,
       substitutionValues: {'id': id},
       obfuscate: obfuscate,
     );
