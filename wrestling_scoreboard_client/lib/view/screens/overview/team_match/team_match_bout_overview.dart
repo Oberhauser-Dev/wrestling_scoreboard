@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -14,6 +15,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_ma
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -91,7 +93,14 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           editPage: TeamMatchBoutEdit(teamMatchBout: teamMatchBout, initialTeamMatch: teamMatchBout.teamMatch),
           onDelete:
               () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchBout>(teamMatchBout),
-          tiles: [],
+          tiles: [
+            ContentItem(
+              title: teamMatchBout.teamMatch.localize(context),
+              subtitle: localizations.match,
+              icon: Icons.event,
+              onTap: () => TeamMatchOverview.navigateTo(context, teamMatchBout.teamMatch),
+            ),
+          ],
           actions: [
             pdfAction,
             ResponsiveScaffoldActionItem(

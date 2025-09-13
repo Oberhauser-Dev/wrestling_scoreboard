@@ -11,6 +11,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_team_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -45,7 +46,12 @@ class LeagueOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
-            ContentItem(title: data.division.fullname, subtitle: localizations.division, icon: Icons.inventory),
+            ContentItem(
+              title: data.division.fullname,
+              subtitle: localizations.division,
+              icon: Icons.inventory,
+              onTap: () => DivisionOverview.navigateTo(context, data.division),
+            ),
             ContentItem(title: data.name, subtitle: localizations.name, icon: Icons.description),
             ContentItem(
               title: data.startDate.toDateString(context),

@@ -6,6 +6,8 @@ import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -39,11 +41,17 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
               () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueTeamParticipation>(data),
           classLocale: localizations.team,
           children: [
-            ContentItem(title: data.team.name, subtitle: localizations.team, icon: Icons.group),
+            ContentItem(
+              title: data.team.name,
+              subtitle: localizations.team,
+              icon: Icons.group,
+              onTap: () => TeamOverview.navigateTo(context, data.team),
+            ),
             ContentItem(
               title: '${data.league.fullname}, ${data.league.startDate.toDateString(context)}',
               subtitle: localizations.league,
               icon: Icons.emoji_events,
+              onTap: () => LeagueOverview.navigateTo(context, data.league),
             ),
           ],
         );

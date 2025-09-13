@@ -6,6 +6,9 @@ import 'package:wrestling_scoreboard_client/localization/contestant_status.dart'
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_lineup_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -49,16 +52,25 @@ class CompetitionParticipationOverview extends ConsumerWidget {
               title: competitionParticipation.lineup.club.name,
               subtitle: localizations.lineup,
               icon: Icons.view_list,
+              onTap: () => CompetitionLineupOverview.navigateTo(context, competitionParticipation.lineup),
             ),
             ContentItem(
               title: competitionParticipation.membership.info,
               subtitle: localizations.membership,
               icon: Icons.person,
+              onTap: () => MembershipOverview.navigateTo(context, competitionParticipation.membership),
             ),
             ContentItem(
               title: competitionParticipation.weightCategory?.name ?? '-',
               subtitle: localizations.weightCategory,
               icon: Icons.category,
+              onTap:
+                  competitionParticipation.weightCategory == null
+                      ? null
+                      : () => CompetitionWeightCategoryOverview.navigateTo(
+                        context,
+                        competitionParticipation.weightCategory!,
+                      ),
             ),
             ContentItem(
               title: competitionParticipation.weight?.toString() ?? '-',

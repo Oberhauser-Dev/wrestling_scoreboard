@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/divisio
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/bout_config_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/division_weight_class_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
@@ -68,11 +69,13 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               title: division.organization.fullname,
               subtitle: localizations.organization,
               icon: Icons.corporate_fare,
+              onTap: () => OrganizationOverview.navigateTo(context, division.organization),
             ),
             ContentItem(
               title: division.parent?.fullname ?? '-',
               subtitle: localizations.division,
               icon: Icons.inventory,
+              onTap: division.parent == null ? null : () => DivisionOverview.navigateTo(context, division.parent!),
             ),
           ],
         );
