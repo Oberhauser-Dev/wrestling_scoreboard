@@ -54,6 +54,8 @@ void main() {
       await db.open();
       await db.restore('./database/migration/v0.0.0_Setup-DB.sql');
 
+      // Can be replaced with, for squashing old migration scripts (or use the dump at this commit):
+      // await db.migrate(skipPreparation: true);
       final instance = await server.init();
       await instance.close();
 
@@ -100,7 +102,7 @@ void main() {
       final db = PostgresDb();
       await db.open();
       await db.restore('./test/outdated_api_import.sql');
-      await db.migrate();
+      await db.migrate(/*skipPreparation: true*/); // Skip preparation, if need to squash old migration scripts
 
       final org = (await OrganizationController().getMany(obfuscate: false)).single;
       // This should update the outdated import:

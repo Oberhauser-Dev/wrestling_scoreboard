@@ -79,7 +79,7 @@ extension DatabaseExt on PostgresDb {
     return await Migration.fromRaw(columnMap);
   }
 
-  Future<void> migrate() async {
+  Future<void> migrate({bool skipPreparation = false}) async {
     String semver;
     try {
       final migration = await getMigration();
@@ -114,7 +114,7 @@ extension DatabaseExt on PostgresDb {
       }
       await connection.execute("UPDATE migration SET semver = '${migrationRange.last.key.toString()}';");
     }
-    await _prepare();
+    if (!skipPreparation) await _prepare();
   }
 
   Future<void> restoreDefault() async {
