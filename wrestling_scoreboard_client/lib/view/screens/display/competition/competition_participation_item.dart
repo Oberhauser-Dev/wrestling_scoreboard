@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/competition_bout_display.dart';
@@ -132,10 +131,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
             ScaledContainer(
               width: CompetitionParticipationItem.nameRelativeWidth,
               child: InkWell(
-                onTap: () {
-                  // FIXME: use `CompetitionParticipationOverview.navigateTo` route, https://github.com/flutter/flutter/issues/140586
-                  context.go('/${CompetitionParticipationOverview.route}/${participation.id}');
-                },
+                onTap: () => CompetitionParticipationOverview.navigateTo(context, participation),
                 child: ScaledText(
                   participation.membership.person.fullName,
                   decoration:

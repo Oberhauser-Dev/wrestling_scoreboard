@@ -44,11 +44,6 @@ class TeamMatchOverview extends ConsumerWidget {
     context.push('/$route/${dataObject.id}');
   }
 
-  // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-  static void goTo(BuildContext context, TeamMatch dataObject) {
-    context.go('/$route/${dataObject.id}');
-  }
-
   final int id;
   final TeamMatch? match;
 

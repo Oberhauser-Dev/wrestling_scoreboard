@@ -86,12 +86,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
                             ResponsiveScaffoldActionItem(
                               label: localizations.info,
                               icon: const Icon(Icons.info),
-                              onTap: () {
-                                // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                                context.go(
-                                  '/${CompetitionOverview.route}/${competition.id}/${CompetitionBoutOverview.route}/${competitionBout.id}',
-                                );
-                              },
+                              onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),
                             ),
                           ],
                           navigateToBoutByIndex: (context, index) {

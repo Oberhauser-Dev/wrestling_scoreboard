@@ -44,7 +44,7 @@ class CompetitionDisplay extends StatelessWidget {
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
-          onTap: () => CompetitionOverview.goTo(context, competition),
+          onTap: () => CompetitionOverview.navigateTo(context, competition),
         );
         // final pdfAction = ResponsiveScaffoldActionItem(
         //   tooltip: localizations.print,

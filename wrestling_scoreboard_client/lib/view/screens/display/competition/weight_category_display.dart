@@ -48,7 +48,7 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
-          onTap: () => CompetitionWeightCategoryOverview.goTo(competitionWeightCategory, context),
+          onTap: () => CompetitionWeightCategoryOverview.navigateTo(context, competitionWeightCategory),
         );
         // final pdfAction = ResponsiveScaffoldActionItem(
         //   tooltip: localizations.print,

@@ -42,7 +42,7 @@ class MatchDisplay extends ConsumerWidget {
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
-          onTap: () => TeamMatchOverview.goTo(context, match),
+          onTap: () => TeamMatchOverview.navigateTo(context, match),
         );
         final pdfAction = ResponsiveScaffoldActionItem(
           label: localizations.print,
