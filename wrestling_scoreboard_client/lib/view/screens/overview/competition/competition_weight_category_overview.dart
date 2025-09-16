@@ -27,11 +27,6 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
     context.push('/$route/${dataObject.id}');
   }
 
-  // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-  static void goTo(CompetitionWeightCategory weightCategory, BuildContext context) {
-    context.go('/$route/${weightCategory.id}');
-  }
-
   final int id;
   final CompetitionWeightCategory? competitionWeightCategory;
 

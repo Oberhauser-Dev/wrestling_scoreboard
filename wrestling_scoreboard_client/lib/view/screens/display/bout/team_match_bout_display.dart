@@ -81,11 +81,7 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                                     ResponsiveScaffoldActionItem(
                                       label: localizations.info,
                                       icon: const Icon(Icons.info),
-                                      onTap:
-                                          // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-                                          () => context.go(
-                                            '/${TeamMatchOverview.route}/${match.id}/${TeamMatchBoutOverview.route}/${teamMatchBout.id}',
-                                          ),
+                                      onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
                                     ),
                                   ],
                                   navigateToBoutByIndex: (context, index) {

@@ -43,11 +43,6 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
     context.push('/$route/${dataObject.id}');
   }
 
-  // FIXME: use `push` route, https://github.com/flutter/flutter/issues/140586
-  static void goTo(BuildContext context, Competition competition) {
-    context.go('/$route/${competition.id}');
-  }
-
   final int id;
   final Competition? competition;
 
