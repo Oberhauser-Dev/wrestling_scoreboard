@@ -293,18 +293,19 @@ class MockedData {
     competition: competition,
   );
 
+  // https://www.ringen.de/wp-content/uploads/2016/01/Jugendsportordnung-01012015.pdf
   late final ageCategoryAJuniors = AgeCategory(
     id: 0,
-    name: 'A-Juniors',
-    minAge: 16,
-    maxAge: 18,
+    name: 'A-Juniors (U17)',
+    minAge: 15,
+    maxAge: 17,
     organization: organization,
   );
   late final ageCategoryCJuniors = AgeCategory(
     id: 1,
-    name: 'C-Juniors',
-    minAge: 12,
-    maxAge: 14,
+    name: 'C-Juniors (U12)',
+    minAge: 11,
+    maxAge: 12,
     organization: organization,
   );
 

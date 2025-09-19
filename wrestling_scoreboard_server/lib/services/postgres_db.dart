@@ -6,12 +6,11 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 
 const _isReleaseMode = bool.fromEnvironment('dart.vm.product');
-const defaultDatabasePath = './database/dump/PostgreSQL-wrestling_scoreboard-dump.sql';
+const definitionDatabasePath = './database/dump/wrestling_scoreboard-definition-dump.sql';
+const prepopulatedDatabasePath = './database/dump/wrestling_scoreboard-prepopulated-dump.sql';
 
 class PostgresDb {
   final log = Logger('PostgresDb');
@@ -71,34 +70,22 @@ extension DatabaseExt on PostgresDb {
   Future<Migration> getMigration() async {
     final res = await connection.execute('SELECT * FROM ${Migration.cTableName} LIMIT 1;');
     final row = res.zeroOrOne;
-    // TODO: Workaround for migrating the migration table, can be removed after the next stable release.
-    final columnMap = row!.toColumnMap();
-    if (columnMap['min_client_version'] == null) {
-      columnMap['min_client_version'] = '0.0.0';
-    }
-    return await Migration.fromRaw(columnMap);
+    return await Migration.fromRaw(row!.toColumnMap());
   }
 
-  Future<void> migrate({bool skipPreparation = false}) async {
+  Future<void> migrate({bool skipPreparation = false, Future<void> Function(Version version)? onMigrate}) async {
     String semver;
     try {
       final migration = await getMigration();
       semver = migration.semver;
     } catch (_) {
       // DB has not yet been initialized
-      await restoreDefault();
+      await restorePrepopulated();
       return;
     }
     final databaseVersion = Version.parse(semver);
 
-    final dir = Directory('database/migration');
-    final List<FileSystemEntity> entities = await dir.list().toList();
-    final migrationMap =
-        entities.map((entity) {
-          final migrationVersion = entity.uri.pathSegments.last.split('_')[0];
-          return MapEntry(Version.parse(migrationVersion.replaceFirst('v', '')), entity);
-        }).toList();
-    migrationMap.sort((a, b) => a.key.compareTo(b.key));
+    final migrationMap = await readMigrationScripts(folderPath: 'database/migration');
     int migrationStartIndex = 0;
     while (migrationStartIndex < migrationMap.length) {
       if (databaseVersion.compareTo(migrationMap[migrationStartIndex].key) < 0) {
@@ -111,44 +98,42 @@ extension DatabaseExt on PostgresDb {
       for (var migration in migrationRange) {
         await executeSqlFile(migration.value.path);
         log.info('Migrated DB to ${migration.key}');
+        await onMigrate?.call(migration.key);
       }
       await connection.execute("UPDATE migration SET semver = '${migrationRange.last.key.toString()}';");
     }
     if (!skipPreparation) await _prepare();
   }
 
-  Future<void> restoreDefault() async {
-    await restore(defaultDatabasePath);
-    await _prepare();
+  static Future<List<MapEntry<Version, FileSystemEntity>>> readMigrationScripts({required String folderPath}) async {
+    final dir = Directory(folderPath);
+    final List<FileSystemEntity> entities = await dir.list().toList();
+    final migrationMap =
+        entities.map((entity) {
+          final migrationVersion = entity.uri.pathSegments.last.split('_')[0];
+          return MapEntry(Version.parse(migrationVersion.replaceFirst('v', '')), entity);
+        }).toList();
+    migrationMap.sort((a, b) => a.key.compareTo(b.key));
+    return migrationMap;
   }
 
   Future<void> clear() async {
     await connection.execute('DROP SCHEMA IF EXISTS public CASCADE;');
   }
 
-  Future<void> restore(String dumpPath) async {
-    await clear();
-    await executeSqlFile(dumpPath);
+  Future<void> restorePrepopulated() async {
+    await restore(prepopulatedDatabasePath);
+    await _prepare();
   }
 
   Future<void> reset() async {
-    await restoreDefault();
-    final Iterable<ShelfController> entityControllers =
-        dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
-    // Remove data
-    await Future.forEach(entityControllers, (e) => e.deleteMany());
-    // No need to restore the database semantic version for migration,
-    // as it is no entity controller and therefore keeps it default value.
+    await restore(definitionDatabasePath);
+    await _prepare();
+  }
 
-    // Recreate default admin
-    await SecuredUserController().createSingle(
-      User(
-        username: 'admin',
-        createdAt: DateTime.now(),
-        privilege: UserPrivilege.admin,
-        password: 'admin',
-      ).toSecuredUser(),
-    );
+  Future<void> restore(String dumpPath) async {
+    await clear();
+    await executeSqlFile(dumpPath);
   }
 
   Future<void> executeSqlFile(String sqlFilePath) async {
@@ -190,7 +175,7 @@ extension DatabaseExt on PostgresDb {
     final args = <String>[
       // '--file',
       // './database/dump/${DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll(RegExp(r'\.[0-9]{3}'), '')}-'
-      //     'PostgreSQL-wrestling_scoreboard-dump.sql',
+      //     'wrestling_scoreboard-definition-dump.sql',
       '--username',
       dbUser,
       '--host',

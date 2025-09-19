@@ -30,39 +30,65 @@ void main() {
     });
 
     test('DB import and export match', () async {
-      final defaultDump = await File(defaultDatabasePath).readAsString();
-      await db.restore(defaultDatabasePath);
+      final defaultDump = await File(prepopulatedDatabasePath).readAsString();
+      await db.restore(prepopulatedDatabasePath);
       final databaseExport = await db.export();
       expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(defaultDump));
     });
 
-    test('Start server and load default database', () async {
+    test('Start server and load the prepopulated database', () async {
       final db = PostgresDb();
       await db.open();
       await db.clear();
 
+      // Server init loads the prepopulated database, if no db exists yet.
       final instance = await server.init();
       await instance.close();
 
-      final defaultDump = await File(defaultDatabasePath).readAsString();
+      final prepopulatedDump = await File(prepopulatedDatabasePath).readAsString();
       final databaseExport = await db.export();
-      expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(defaultDump));
+      expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(prepopulatedDump));
     });
 
-    test('Start server and migrate', () async {
+    test('Start server and migrate definition database', () async {
       final db = PostgresDb();
       await db.open();
       await db.restore('./database/migration/v0.0.0_Setup-DB.sql');
 
-      // Can be replaced with, for squashing old migration scripts (or use the dump at this commit):
-      // await db.migrate(skipPreparation: true);
       final instance = await server.init();
       await instance.close();
 
       // At this point the database should already be migrated
-      final defaultDump = await File(defaultDatabasePath).readAsString();
+      final defaultDump = await File(definitionDatabasePath).readAsString();
       final databaseExport = await db.export();
       expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(defaultDump));
+    });
+
+    test('Migrate data to match prepopulated database', () async {
+      final db = PostgresDb();
+      await db.open();
+      await db.restore('./database/migration/v0.0.0_Setup-DB.sql');
+
+      final dataMigratonMap = Map.fromEntries(
+        await DatabaseExt.readMigrationScripts(folderPath: './test/res/migration'),
+      );
+      await db.executeSqlFile('./test/res/migration/v0.0.0_Setup-DB.sql');
+
+      // On each migration step, one can add additional data, which should be present for testing.
+      // This data then is also migrated by the following scripts.
+      await db.migrate(
+        skipPreparation: true,
+        onMigrate: (version) async {
+          if (dataMigratonMap.containsKey(version)) {
+            await db.executeSqlFile(dataMigratonMap[version]!.path);
+          }
+        },
+      );
+
+      // At this point the database should already be migrated
+      final expectedDump = await File(prepopulatedDatabasePath).readAsString();
+      final databaseExport = await db.export();
+      expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(expectedDump));
     });
 
     Future<String> executeMockedImport(PostgresDb db, Organization org) async {
@@ -101,14 +127,14 @@ void main() {
     test('Changes in external API import', () async {
       final db = PostgresDb();
       await db.open();
-      await db.restore('./test/outdated_api_import.sql');
+      await db.restore('./test/res/outdated_api_import.sql');
       await db.migrate(/*skipPreparation: true*/); // Skip preparation, if need to squash old migration scripts
 
       final org = (await OrganizationController().getMany(obfuscate: false)).single;
       // This should update the outdated import:
       final updatedImportSql = await executeMockedImport(db, org);
 
-      await db.restore('./test/expected_api_import.sql');
+      await db.restore('./test/res/expected_api_import.sql');
       await db.migrate();
       final expectedSql = await db.export();
 

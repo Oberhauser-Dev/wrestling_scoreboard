@@ -68,7 +68,7 @@ class ApiRoute {
     router.restrictedGet('/database/export', databaseController.export, UserPrivilege.admin);
     router.restrictedPost('/database/reset', databaseController.reset, UserPrivilege.admin);
     router.restrictedPost('/database/restore', databaseController.restore, UserPrivilege.admin);
-    router.restrictedPost('/database/restore_default', databaseController.restoreDefault, UserPrivilege.admin);
+    router.restrictedPost('/database/restore_default', databaseController.restorePrepopulated, UserPrivilege.admin);
     router.get('/database/${Migration.cTableName}', databaseController.getMigration);
 
     final authController = AuthController();
