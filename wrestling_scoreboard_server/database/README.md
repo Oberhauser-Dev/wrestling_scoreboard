@@ -67,12 +67,12 @@ For peer authentication execute these commands inside the according psql shell.
 
 Restore prepopulated database, execute in directory `server`:
 ```shell
-psql --file=./database/dump/PostgreSQL-wrestling_scoreboard-dump.sql --username=wrestling --host=localhost --port=5432 wrestling_scoreboard
+psql --file=./database/dump/wrestling_scoreboard-definition-dump.sql --username=wrestling --host=localhost --port=5432 wrestling_scoreboard
 ```
 
 ### Export / Dump existing database
 
 Export database, execute in directory `server`:
 ```shell
-pg_dump --dbname=wrestling_scoreboard --file=./database/dump/PostgreSQL-wrestling_scoreboard-dump.sql --schema=public --username=wrestling --host=localhost --port=5432
+pg_dump --dbname=wrestling_scoreboard --file=./database/dump/wrestling_scoreboard-definition-dump.sql --schema=public --username=wrestling --host=localhost --port=5432
 ```

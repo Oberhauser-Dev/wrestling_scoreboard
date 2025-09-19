@@ -39,9 +39,9 @@ class DatabaseController {
   }
 
   /// Restore the default database dump
-  Future<Response> restoreDefault(Request request, User? user) async {
+  Future<Response> restorePrepopulated(Request request, User? user) async {
     try {
-      await PostgresDb().restoreDefault();
+      await PostgresDb().restorePrepopulated();
       return Response.ok('{"status": "success"}');
     } catch (err) {
       return Response.internalServerError(body: '{"err": "$err"}');
