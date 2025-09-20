@@ -19,6 +19,7 @@ enum WebSocketConnectionState { connecting, connected, disconnecting, disconnect
 class WebSocketManager {
   final DataManager dataManager;
   WebSocketChannel? _channel;
+  StreamSubscription<Object?>? _channelSubscription;
   String? _wsUrl;
 
   /// Count retries, after the websocket disconnects.
@@ -83,10 +84,13 @@ class WebSocketManager {
     }
     onWebSocketConnection.stream.listen((connectionState) async {
       if (connectionState == WebSocketConnectionState.connecting && _wsUrl != null) {
-        await _channel?.sink.close(4210);
+        // Close previous session, if existent.
+        // Also cancel subscription immediately to not have conflicting events with newly created channel.
+        _channelSubscription?.cancel();
+        await _channel?.sink.close(4210, 'Reconnecting websocket connection.');
         try {
           _channel = WebSocketChannel.connect(Uri.parse(_wsUrl!));
-          _channel?.stream.listen(
+          _channelSubscription = _channel?.stream.listen(
             messageHandler,
             onError: (e) {
               if (e is WebSocketChannelException) {
@@ -95,6 +99,9 @@ class WebSocketManager {
               }
             },
             onDone: () {
+              // Stream is done, can cancel subscription.
+              _channelSubscription?.cancel();
+              _channelSubscription = null;
               if (_channel?.closeCode == 4210) {
                 _logger.info('Websocket connection reconnecting: ${_channel?.closeReason}');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
@@ -102,13 +109,21 @@ class WebSocketManager {
                 _logger.info('Websocket connection closed by client ${_channel?.closeReason}');
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               } else if (_channel?.closeCode == null) {
-                // E.g. refusing the connection.
-                _logger.info('Websocket connection closed by server');
+                // E.g.
+                // - was not yet connected
+                // - server is already shut down
+                // - no internet
+                // - refusing the connection
+                _logger.info(
+                  'Websocket connection could not be established or was closed by server without close code',
+                );
                 // Avoid overriding previous SocketException when setting a disconnected state
 
                 _retryConnecting();
               } else {
-                // E.g. server is shutting down.
+                // E.g.
+                // - already connected
+                // - server is shutting down
                 _logger.info(
                   'Websocket connection closed by server (Code: ${_channel?.closeCode}, Reason: ${_channel?.closeReason})',
                 );
@@ -134,8 +149,8 @@ class WebSocketManager {
           onWebSocketConnection.sink.addError(e);
         }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {
+        // Subscription is canceled and stream state is set to disconnected in `onDone` listener.
         await _channel?.sink.close(1001);
-        _channel = null;
       }
     });
     onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
