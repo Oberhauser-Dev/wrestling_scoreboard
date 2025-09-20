@@ -23,7 +23,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
   Iterable<CompetitionAgeCategory>? _availableCompetitionAgeCategories;
   CompetitionAgeCategory? _competitionAgeCategory;
   CompetitionSystem? _competitionSystem;
-  late int _poolGroupCount;
+  int? _poolGroupCount;
   int _pos = 0;
 
   @override
@@ -31,7 +31,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
     super.initState();
     _competitionAgeCategory = widget.competitionWeightCategory?.competitionAgeCategory;
     _competitionSystem = widget.competitionWeightCategory?.competitionSystem;
-    _poolGroupCount = widget.competitionWeightCategory?.poolGroupCount ?? 1;
+    _poolGroupCount = widget.competitionWeightCategory?.poolGroupCount;
   }
 
   @override
@@ -75,7 +75,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           title: ButtonTheme(
             alignedDropdown: true,
             child: SimpleDropdown<CompetitionSystem>(
-              label: localizations.result,
+              label: localizations.competitionSystem,
               isNullable: true,
               selected: _competitionSystem,
               options: CompetitionSystem.values.map(
@@ -91,7 +91,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           label: localizations.poolGroupCount,
           inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
           isMandatory: false,
-          onSaved: (int? value) => _poolGroupCount = value ?? 1,
+          onSaved: (int? value) => _poolGroupCount = value,
         ),
       ],
     );
@@ -104,7 +104,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
       weightClass: weightClass,
       competition: widget.competitionWeightCategory?.competition ?? widget.initialCompetition,
       competitionAgeCategory: _competitionAgeCategory!,
-      poolGroupCount: _poolGroupCount,
+      poolGroupCount: _poolGroupCount ?? 1,
       competitionSystem: _competitionSystem,
       pos: _pos,
     );
