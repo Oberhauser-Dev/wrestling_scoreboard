@@ -64,6 +64,15 @@ extension RestrictedRouter on Router {
     UserPrivilege privilege = UserPrivilege.write,
   ]) => delete(route, (Request request) => request.restricted(privilege: privilege, handler: handler));
 
+  void restrictedDeleteOne(
+    String route,
+    Future<Response> Function(Request request, User? user, String arg1) handler, [
+    UserPrivilege privilege = UserPrivilege.write,
+  ]) => delete(
+    route,
+    (Request request, arg1) => request.restricted(privilege: privilege, handler: (r, u) => handler(r, u, arg1)),
+  );
+
   void restrictedPatch(
     String route,
     Future<Response> Function(Request request, User? user) handler, [
