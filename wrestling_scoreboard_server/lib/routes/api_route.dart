@@ -40,6 +40,7 @@ class ApiRoute {
         router.restrictedPostOne('$typeRoute/<id|[0-9]+>/reorder', controller.postRequestReorder);
       }
       router.restrictedPost(typeRoute, controller.postRequestSingle);
+      router.restrictedDeleteOne('$typeRoute/<id|[0-9]+>', controller.deleteRequestSingle);
       router.restrictedGet('${typeRoute}s', controller.getRequestMany);
       router.restrictedGetOne('$typeRoute/<id|[0-9]+>', controller.getRequestSingle);
     }

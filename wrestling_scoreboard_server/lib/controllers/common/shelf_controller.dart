@@ -131,6 +131,11 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     return Response.ok(jsonEncode(id));
   }
 
+  Future<Response> deleteRequestSingle(Request request, User? user, String id) async {
+    final deletionSuccessful = await deleteSingle(int.parse(id));
+    return Response.ok(jsonEncode(deletionSuccessful));
+  }
+
   static ShelfController? getControllerFromDataType(Type t) {
     switch (t) {
       case const (AgeCategory):
