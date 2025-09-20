@@ -163,7 +163,7 @@ void main() {
         await instance.close();
       });
 
-      test('POST and GET single', () async {
+      test('POST, GET, DELETE single', () async {
         final db = PostgresDb();
         await db.open();
         await db.reset();
@@ -172,12 +172,14 @@ void main() {
         final apiUrl = 'http://${instance.address.address}:${instance.port}/api';
         final authHeaders = await getAuthHeaders(apiUrl);
 
+        // CREATE and READ
         for (final dataType in dataTypes.reversed) {
           if (dataType == User) continue;
           if (dataType == SecuredUser) continue;
           if (dataType == ScratchBout) continue;
 
-          final Iterable<DataObject> objs = getMockedDataObjects(dataType);
+          final objs = getMockedDataObjects(dataType);
+          if (objs.isEmpty) throw 'No mocked datatypes provided for $dataType';
           for (var obj in objs) {
             final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
             final tableUrl = '$apiUrl/${obj.tableName}';
@@ -186,13 +188,46 @@ void main() {
             expect(postRes.statusCode, 200, reason: postRes.body);
 
             final objectId = jsonDecode(postRes.body);
-            obj = obj.copyWithId(objectId);
+            expect(obj.id, objectId);
 
             final getRes = await http.get(Uri.parse('$tableUrl/$objectId'), headers: authHeaders);
             expect(getRes.statusCode, 200);
             expect(jsonDecode(getRes.body), obj.toJson());
           }
         }
+
+        // DELETE
+        for (final dataType in dataTypes) {
+          if (dataType == User) continue;
+          if (dataType == SecuredUser) continue;
+          if (dataType == ScratchBout) continue;
+
+          // Following entities should get deleted by its providing entity:
+          // e.g. Bout is deleted by TeamMatchBout, or CompetitionBout.
+          if (dataType == Bout) continue;
+
+          final objs = getMockedDataObjects(dataType);
+          if (objs.isEmpty) throw 'No mocked datatypes provided for $dataType';
+          // Need to delete in reversed order, as entities can be their own parent.
+          for (var obj in objs.reversed) {
+            final body = jsonEncode(singleToJson(obj, dataType, CRUD.delete));
+            final tableUrl = '$apiUrl/${obj.tableName}';
+            final uri = Uri.parse('$tableUrl/${obj.id}');
+            final deleteRes = await http.delete(uri, headers: authHeaders, body: body);
+            expect(deleteRes.statusCode, 200, reason: deleteRes.body);
+
+            final wasSuccessful = jsonDecode(deleteRes.body);
+            expect(wasSuccessful, true);
+
+            final getRes = await http.get(Uri.parse('$tableUrl/${obj.id}'), headers: authHeaders);
+            expect(getRes.statusCode, 400);
+          }
+        }
+
+        // After deletion, no entities should exist any more.
+        final expectedDump = await File(definitionDatabasePath).readAsString();
+        final databaseExport = await db.export();
+        expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(expectedDump));
 
         await instance.close();
       });
