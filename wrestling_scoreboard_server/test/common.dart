@@ -18,7 +18,7 @@ Future<Map<String, String>> getAuthHeaders(String apiUrl) async {
 
 final mockedData = MockedData();
 
-Iterable<DataObject> getMockedDataObjects(Type type) {
+List<DataObject> getMockedDataObjects(Type type) {
   return switch (type) {
     const (AgeCategory) => mockedData.getAgeCategories(),
     const (Bout) => mockedData.getBouts(),
