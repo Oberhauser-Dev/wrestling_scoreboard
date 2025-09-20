@@ -475,6 +475,7 @@ Future<void> handleManyRaw<T extends DataObject>({
 }
 
 final websocketHandler = webSocketHandler((WebSocketChannel webSocket, String? subProtocol) {
+  _logger.fine('New websocket connection: ${webSocket.hashCode}');
   UserPrivilege privilege = UserPrivilege.none;
   webSocketPool[webSocket] = null;
   webSocket.stream.listen(
@@ -508,6 +509,12 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket, String? s
     },
     onDone: () {
       webSocketPool.remove(webSocket);
+      _logger.fine(
+        'Websocket connection done: ${webSocket.hashCode}, Code: ${webSocket.closeCode}, Reason: ${webSocket.closeReason}',
+      );
+    },
+    onError: (err, st) {
+      _logger.warning('Websocket connection error: ${webSocket.hashCode}', err, st);
     },
   );
 }, pingInterval: Duration(seconds: env.webSocketPingIntervalSecs ?? 30));
