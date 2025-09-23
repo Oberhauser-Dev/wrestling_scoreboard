@@ -20,7 +20,7 @@ on:
 
 jobs:
   build-server:
-    name: Build Server for ${{ matrix.platform }}
+    name: Build Server for ${{ matrix.platform }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -29,7 +29,11 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux
+          - os: ubuntu-24.04-arm
+            platform: linux
           - os: windows-latest
+            platform: windows
+          - os: windows-11-arm
             platform: windows
           - os: macos-latest
             platform: macos
@@ -38,7 +42,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
+          # Remove when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
+          channel: ${{ endsWith(matrix.os, '-arm') && 'master' || 'stable' }}
+      - run: flutter doctor
       - uses: bluefireteam/melos-action@v3
       - name: Build
         id: build
