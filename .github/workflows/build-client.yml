@@ -96,7 +96,9 @@ jobs:
             ${{ inputs.enable_android && '{"platform": "android", "os": "ubuntu-latest", "build-type": "apk"},' || '' }}
             ${{ inputs.enable_ios && '{"platform": "ios", "os": "macos-14", "build-type": "ipa"},' || '' }}
             ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-latest", "build-type": "windows"},' || '' }}
+            ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-11-arm", "build-type": "windows"},' || '' }}
             ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-latest", "build-type": "linux"},' || '' }}
+            ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-24.04-arm", "build-type": "linux"},' || '' }}
             ${{ inputs.enable_macos && '{"platform": "macos", "os": "macos-14", "build-type": "macos"},' || '' }}
           '
           # Remove last ',' with ::-1 ❤️
@@ -104,7 +106,7 @@ jobs:
 
   build-client:
     needs: include-jobs
-    name: Build Client for ${{ matrix.platform }}
+    name: Build Client for ${{ matrix.platform }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -117,7 +119,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ inputs.flutter_version }}
-          channel: 'stable'
+          # Remove when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
+          channel: ${{ endsWith(matrix.os, '-arm') && 'master' || 'stable' }}
+      - run: flutter doctor
       - uses: bluefireteam/melos-action@v3
       - uses: actions/setup-java@v4
         if: matrix.platform == 'android'

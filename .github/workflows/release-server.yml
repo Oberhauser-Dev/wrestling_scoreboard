@@ -20,7 +20,7 @@ jobs:
       release-version: ${{ steps.release-version.outputs.version }}
 
   release-server:
-    name: Release Server for ${{ matrix.platform }}
+    name: Release Server for ${{ matrix.platform }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     needs: pre-run
     strategy:
@@ -29,7 +29,11 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux
+          - os: ubuntu-24.04-arm
+            platform: linux
           - os: windows-latest
+            platform: windows
+          - os: windows-11-arm
             platform: windows
           - os: macos-latest
             platform: macos
@@ -38,7 +42,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.5'
-          channel: 'stable'
+          # Remove when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
+          channel: ${{ endsWith(matrix.os, '-arm') && 'master' || 'stable' }}
+      - run: flutter doctor
       - uses: bluefireteam/melos-action@v3
       - name: Release
         uses: oberhauser-dev/dart-release-action@v0
