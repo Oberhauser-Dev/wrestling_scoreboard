@@ -2711,6 +2711,14 @@ ALTER TABLE ONLY public.team_lineup_participation
 
 
 --
+-- Name: team_lineup_participation team_lineup_participation_pk_2; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_lineup_participation
+    ADD CONSTRAINT team_lineup_participation_pk_2 UNIQUE (membership_id, lineup_id, weight_class_id);
+
+
+--
 -- Name: team_lineup team_lineup_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
