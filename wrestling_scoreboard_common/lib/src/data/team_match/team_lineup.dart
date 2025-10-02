@@ -5,7 +5,7 @@ import '../../../common.dart';
 part 'team_lineup.freezed.dart';
 part 'team_lineup.g.dart';
 
-/// The lineup for a team match or competition.
+/// The lineup for a team match.
 @freezed
 abstract class TeamLineup with _$TeamLineup implements DataObject {
   const TeamLineup._();

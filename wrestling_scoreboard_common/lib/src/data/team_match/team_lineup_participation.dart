@@ -5,7 +5,7 @@ import '../../../common.dart';
 part 'team_lineup_participation.freezed.dart';
 part 'team_lineup_participation.g.dart';
 
-/// The participation of a person (member) on a team match or competition through the teams lineup.
+/// The participation of a person (member) on a team match through the teams lineup.
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
 @freezed
 abstract class TeamLineupParticipation with _$TeamLineupParticipation implements DataObject {
