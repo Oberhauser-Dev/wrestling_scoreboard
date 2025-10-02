@@ -85,10 +85,14 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       winnerClassificationPoints: 2,
       loserClassificationPoints: 0,
     ),
+    // The winner must at least have one point
+    // 0:0 is not a valid result
+    // 1:1 is a valid result
     BoutResultRule(
       boutConfig: config,
       boutResult: BoutResult.vpo,
-      technicalPointsDifference: 1,
+      technicalPointsDifference: 0,
+      winnerTechnicalPoints: 1,
       winnerClassificationPoints: 1,
       loserClassificationPoints: 0,
     ),

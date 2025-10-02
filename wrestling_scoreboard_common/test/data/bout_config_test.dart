@@ -62,7 +62,7 @@ void main() {
         expect(resultRule?.winnerClassificationPoints, 4);
         expect(resultRule?.loserClassificationPoints, 1);
       });
-      test('VPO', () {
+      test('VPO, 1 point diff', () {
         final resultRule = BoutConfig.resultRule(
           result: BoutResult.vpo,
           style: wrestlingStyle,
@@ -78,6 +78,17 @@ void main() {
           result: BoutResult.vpo,
           style: wrestlingStyle,
           technicalPointsWinner: 2,
+          technicalPointsLoser: 1,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 3);
+        expect(resultRule?.loserClassificationPoints, 1);
+      });
+      test('VPO, 0 point diff, loser with technical points', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.vpo,
+          style: wrestlingStyle,
+          technicalPointsWinner: 1,
           technicalPointsLoser: 1,
           rules: boutResultRules,
         );
@@ -239,6 +250,17 @@ void main() {
         expect(resultRule?.winnerClassificationPoints, 3);
         expect(resultRule?.loserClassificationPoints, 0);
       });
+      test('VPO, 8 points diff, loser with technical points', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.vpo,
+          style: wrestlingStyle,
+          technicalPointsWinner: 9,
+          technicalPointsLoser: 1,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 3);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
       test('VPO, 3 points diff', () {
         final resultRule = BoutConfig.resultRule(
           result: BoutResult.vpo,
@@ -250,12 +272,45 @@ void main() {
         expect(resultRule?.winnerClassificationPoints, 2);
         expect(resultRule?.loserClassificationPoints, 0);
       });
+      test('VPO, 3 points diff, loser with technical points', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.vpo,
+          style: wrestlingStyle,
+          technicalPointsWinner: 4,
+          technicalPointsLoser: 1,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 2);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
+      test('VPO, 1 points diff, loser with technical points', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.vpo,
+          style: wrestlingStyle,
+          technicalPointsWinner: 2,
+          technicalPointsLoser: 1,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 1);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
       test('VPO, 1 point diff', () {
         final resultRule = BoutConfig.resultRule(
           result: BoutResult.vpo,
           style: wrestlingStyle,
           technicalPointsWinner: 1,
           technicalPointsLoser: 0,
+          rules: boutResultRules,
+        );
+        expect(resultRule?.winnerClassificationPoints, 1);
+        expect(resultRule?.loserClassificationPoints, 0);
+      });
+      test('VPO, 0 point diff, loser with technical points', () {
+        final resultRule = BoutConfig.resultRule(
+          result: BoutResult.vpo,
+          style: wrestlingStyle,
+          technicalPointsWinner: 1,
+          technicalPointsLoser: 1,
           rules: boutResultRules,
         );
         expect(resultRule?.winnerClassificationPoints, 1);

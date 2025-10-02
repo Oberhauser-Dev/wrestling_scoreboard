@@ -1408,7 +1408,6 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
 5	2	vpo	\N	\N	8	3	0
 6	2	vpo	\N	\N	3	2	0
-7	2	vpo	\N	\N	1	1	0
 8	2	vfo	\N	\N	\N	4	0
 9	2	dsq	\N	\N	\N	4	0
 11	3	vfa	\N	\N	\N	4	0
@@ -1417,7 +1416,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 14	3	vsu	\N	\N	15	4	0
 15	3	vpo	\N	\N	8	3	0
 16	3	vpo	\N	\N	3	2	0
-17	3	vpo	\N	\N	1	1	0
 18	3	vfo	\N	\N	\N	4	0
 19	3	dsq	\N	\N	\N	4	0
 21	4	vfa	\N	\N	\N	4	0
@@ -1426,7 +1424,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 24	4	vsu	\N	\N	15	4	0
 25	4	vpo	\N	\N	8	3	0
 26	4	vpo	\N	\N	3	2	0
-27	4	vpo	\N	\N	1	1	0
 28	4	vfo	\N	\N	\N	4	0
 29	4	dsq	\N	\N	\N	4	0
 31	5	vfa	\N	\N	\N	4	0
@@ -1435,7 +1432,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 34	5	vsu	\N	\N	15	4	0
 35	5	vpo	\N	\N	8	3	0
 36	5	vpo	\N	\N	3	2	0
-37	5	vpo	\N	\N	1	1	0
 38	5	vfo	\N	\N	\N	4	0
 39	5	dsq	\N	\N	\N	4	0
 41	6	vfa	\N	\N	\N	4	0
@@ -1444,7 +1440,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 44	6	vsu	\N	\N	15	4	0
 45	6	vpo	\N	\N	8	3	0
 46	6	vpo	\N	\N	3	2	0
-47	6	vpo	\N	\N	1	1	0
 48	6	vfo	\N	\N	\N	4	0
 49	6	dsq	\N	\N	\N	4	0
 51	7	vfa	\N	\N	\N	4	0
@@ -1453,7 +1448,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 54	7	vsu	\N	\N	15	4	0
 55	7	vpo	\N	\N	8	3	0
 56	7	vpo	\N	\N	3	2	0
-57	7	vpo	\N	\N	1	1	0
 58	7	vfo	\N	\N	\N	4	0
 59	7	dsq	\N	\N	\N	4	0
 10	2	bothDsq	\N	\N	\N	0	0
@@ -1474,6 +1468,12 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 70	5	bothVin	\N	\N	\N	0	0
 71	6	bothVin	\N	\N	\N	0	0
 72	7	bothVin	\N	\N	\N	0	0
+7	2	vpo	1	\N	0	1	0
+17	3	vpo	1	\N	0	1	0
+27	4	vpo	1	\N	0	1	0
+37	5	vpo	1	\N	0	1	0
+47	6	vpo	1	\N	0	1	0
+57	7	vpo	1	\N	0	1	0
 1	2	vfa	\N	\N	\N	4	0
 2	2	vin	\N	\N	\N	4	0
 3	2	vca	\N	\N	\N	4	0

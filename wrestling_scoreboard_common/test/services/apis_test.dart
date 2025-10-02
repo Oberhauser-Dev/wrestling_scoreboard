@@ -239,7 +239,8 @@ void main() {
         BoutResultRule(
           boutConfig: config,
           boutResult: BoutResult.vpo,
-          technicalPointsDifference: 1,
+          technicalPointsDifference: 0,
+          winnerTechnicalPoints: 1,
           winnerClassificationPoints: 1,
           loserClassificationPoints: 0,
         ),
