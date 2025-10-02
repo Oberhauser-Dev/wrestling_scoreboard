@@ -140,10 +140,12 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       winnerClassificationPoints: 3,
       loserClassificationPoints: 0,
     ),
+    // 1:1 is a valid result
+    // 0:0 is not a valid result
     BoutResultRule(
       boutConfig: defaultBoutConfig,
       boutResult: BoutResult.vpo,
-      technicalPointsDifference: 1,
+      technicalPointsDifference: 0,
       loserTechnicalPoints: 1,
       winnerClassificationPoints: 3,
       loserClassificationPoints: 1,

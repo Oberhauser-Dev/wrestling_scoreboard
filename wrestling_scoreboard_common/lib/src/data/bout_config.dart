@@ -93,10 +93,20 @@ abstract class BoutConfig with _$BoutConfig implements DataObject {
       return null;
     }
     applyingRules.sort((a, b) {
-      var pDiff = (a.technicalPointsDifference ?? 0) - (b.technicalPointsDifference ?? 0);
-      if (pDiff != 0) return pDiff;
+      var pDiff = 0;
+      // Prioritize loser technical points above technical points difference.
+      // E.g. 8:1 > 4:1 > 1:1 > 8:0 > 4:0 > 1:0
+      // There should always be a rule defined covering maximum point difference for each value of loser technical points.
+      // If 8:1 would not have been defined as rule, it would still take precedence of the rule 4:1 over 8:0.
       pDiff = (a.loserTechnicalPoints ?? 0) - (b.loserTechnicalPoints ?? 0);
       if (pDiff != 0) return pDiff;
+      // If both have the same loser technical points, the technical points difference matters.
+      pDiff = (a.technicalPointsDifference ?? 0) - (b.technicalPointsDifference ?? 0);
+      if (pDiff != 0) return pDiff;
+      // If both have the same technical points difference, the winner technical points matter (only in theory).
+      // This is because the winner points (in practice) never play a role for comparing as they are already covered by the difference.
+      // On the other hand the winner technical points (in practice) are not having a direct influence on the classification points (in prioritization),
+      // whereas loser technical points and point difference have.
       pDiff = (a.winnerTechnicalPoints ?? 0) - (b.winnerTechnicalPoints ?? 0);
       if (pDiff != 0) return pDiff;
       throw Exception('Two rules with the same attributes $a and $b');

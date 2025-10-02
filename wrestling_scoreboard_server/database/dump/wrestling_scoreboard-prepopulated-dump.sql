@@ -1824,12 +1824,12 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 4	1	vsu	\N	\N	15	4	0	\N
 5	1	vpo	\N	\N	8	3	0	\N
 6	1	vpo	\N	\N	3	2	0	\N
-7	1	vpo	\N	\N	1	1	0	\N
 8	1	vfo	\N	\N	\N	4	0	\N
 9	1	dsq	\N	\N	\N	4	0	\N
 10	1	bothDsq	\N	\N	\N	0	0	\N
 11	1	bothVfo	\N	\N	\N	0	0	\N
 12	1	bothVin	\N	\N	\N	0	0	\N
+7	1	vpo	1	\N	0	1	0	\N
 \.
 
 
@@ -2035,7 +2035,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.2	0.0.0
+0.3.3-pre.2	0.0.0
 \.
 
 
