@@ -1371,7 +1371,8 @@ COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result
 --
 -- Data for Name: bout_action; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
-
+-- Id 16 (not existent any more) is an example for removing an entity in a list on import
+-- 16	360000	1	points	red	52
 COPY public.bout_action (id, duration_millis, point_count, action_type, bout_role, bout_id) FROM stdin;
 5	26000	2	points	red	52
 6	37000	2	points	blue	52
@@ -1404,7 +1405,7 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 --
 -- Data for Name: bout_result_rule; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
-
+-- Id 72 is an example for adding an entity in a list on import
 COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
 5	2	vpo	\N	\N	8	3	0
 6	2	vpo	\N	\N	3	2	0
@@ -1467,7 +1468,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 69	4	bothVin	\N	\N	\N	0	0
 70	5	bothVin	\N	\N	\N	0	0
 71	6	bothVin	\N	\N	\N	0	0
-72	7	bothVin	\N	\N	\N	0	0
 7	2	vpo	1	\N	0	1	0
 17	3	vpo	1	\N	0	1	0
 27	4	vpo	1	\N	0	1	0
@@ -1478,6 +1478,7 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 2	2	vin	\N	\N	\N	4	0
 3	2	vca	\N	\N	\N	4	0
 4	2	vsu	\N	\N	15	4	0
+72	7	bothVin	\N	\N	\N	0	0
 \.
 
 
@@ -2192,7 +2193,7 @@ COPY public.wrestling_event (id, date, location, visitors_count, comment, no, or
 -- Name: bout_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.bout_action_id_seq', 15, true);
+SELECT pg_catalog.setval('public.bout_action_id_seq', 16, true);
 
 
 --

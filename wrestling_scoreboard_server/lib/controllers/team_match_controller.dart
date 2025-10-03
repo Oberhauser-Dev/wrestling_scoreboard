@@ -139,10 +139,10 @@ class TeamMatchController extends ShelfController<TeamMatch>
         // Create ParticipantState to be stored in the team match bout
         Bout bout = tmb.bout;
         if (bout.r != null) {
-          bout = bout.copyWith(r: bout.r!.copyWithId(await AthleteBoutStateController().createSingle(bout.r!)));
+          bout = bout.copyWith(r: await AthleteBoutStateController().createSingleReturn(bout.r!));
         }
         if (bout.b != null) {
-          bout = bout.copyWith(b: bout.b!.copyWithId(await AthleteBoutStateController().createSingle(bout.b!)));
+          bout = bout.copyWith(b: await AthleteBoutStateController().createSingleReturn(bout.b!));
         }
         bout = await BoutController().createSingleReturn(bout);
         tmb = await TeamMatchBoutController().createSingleReturn(tmb.copyWith(bout: bout));
