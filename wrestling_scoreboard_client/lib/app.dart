@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
@@ -99,7 +100,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
               future: ref.watch(fontFamilyNotifierProvider),
               builder: (context, fontFamily) {
                 return MaterialApp.router(
-                  //debugShowCheckedModeBanner: false,
+                  debugShowCheckedModeBanner: false,
                   title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
                   theme: _buildTheme(Brightness.light, fontFamily),
                   darkTheme: _buildTheme(Brightness.dark, fontFamily),
@@ -235,7 +236,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Shortcuts(
+    final result = Shortcuts(
       shortcuts: appShortcuts,
       child: Actions(
         actions: <Type, Action<Intent>>{
@@ -248,6 +249,11 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
         child: widget.child,
       ),
     );
+    final isDevelopment = Env.appEnvironment.fromString() == 'development';
+    if (isDevelopment) {
+      return Banner(message: 'DEV', location: BannerLocation.bottomEnd, child: result);
+    }
+    return result;
   }
 }
 

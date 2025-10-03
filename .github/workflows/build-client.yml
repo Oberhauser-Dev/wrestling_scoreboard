@@ -136,13 +136,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libunwind-dev
           sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - name: Calculate short SHA
+        run: echo "GITHUB_SHA_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        # Windows powershell does not parse correctly
+        shell: bash
       - name: Build
         uses: oberhauser-dev/flutter-release-action@v0
         with:
           working-directory: wrestling_scoreboard_client
           dry-run: true
           app-name: 'wrestling_scoreboard_client'
-          build-metadata: nightly.${GITHUB_SHA::7}
+          build-metadata: nightly.${{ env.GITHUB_SHA_SHORT }}
           tag: ${{ github.ref }}
           build-type: ${{ matrix.build-type }}
           token: ${{ github.token }}

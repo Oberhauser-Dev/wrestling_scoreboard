@@ -53,6 +53,10 @@ jobs:
           flutter-version: '3.35.5'
           channel: 'stable'
       - uses: bluefireteam/melos-action@v3
+      - name: Calculate short SHA
+        run: echo "GITHUB_SHA_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        # Windows powershell does not parse correctly
+        shell: bash
       - name: Deploy
         uses: oberhauser-dev/dart-release-action@v0
         with:
@@ -60,7 +64,7 @@ jobs:
           dry-run: false
           main-path: 'bin/server.dart'
           app-name: 'wrestling_scoreboard_server'
-          build-metadata: nightly.${GITHUB_SHA::7}
+          build-metadata: nightly.${{ env.GITHUB_SHA_SHORT }}
           tag: ${{ github.ref }}
           token: ${{ github.token }}
           # build-args: |-
