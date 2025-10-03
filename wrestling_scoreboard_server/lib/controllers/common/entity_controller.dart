@@ -367,13 +367,15 @@ abstract class EntityController<T extends DataObject> {
       // in contrast to the conditions are null, that means everything fulfills the requirement.
       return [];
     }
+    // Always order at least by id to get more consistent results
+    orderBy = [...orderBy, 'id'];
     final query =
         'SELECT $tableName.* FROM $tableName '
         '${joins.entries.map((join) {
           return 'JOIN ${join.key} ON ${join.value} ';
         }).join('\n')} '
         '${conditions == null ? '' : 'WHERE ${conditions.join(' ${conjunction == Conjunction.and ? 'AND' : 'OR'} ')}'} '
-        '${orderBy.isEmpty ? '' : 'ORDER BY ${orderBy.join(',')}'};';
+        '${'ORDER BY ${orderBy.join(',')}'};';
     final many = await getManyRawFromQuery(query, substitutionValues: substitutionValues);
     return obfuscate ? many.map((e) => this.obfuscate(e)).toList() : many;
   }
