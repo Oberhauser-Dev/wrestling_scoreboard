@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -85,6 +86,10 @@ abstract class EntityController<T extends DataObject> {
     return await createSingleRaw(dataObject.toRaw());
   }
 
+  Future<List<int>> createMany(List<T> dataObjects) async {
+    return await createManyRaw(dataObjects.map((dataObject) => dataObject.toRaw()).toList());
+  }
+
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
     final sql = '''
         INSERT INTO $tableName (${data.keys.join(',')}) 
@@ -108,16 +113,42 @@ abstract class EntityController<T extends DataObject> {
     }
   }
 
+  Future<List<int>> createManyRaw(List<Map<String, dynamic>> dataList) async {
+    if (dataList.isEmpty) return [];
+    final keys = dataList.first.keys;
+    final sql = '''
+        INSERT INTO $tableName (${keys.join(',')}) 
+        VALUES (${keys.map((key) => '@$key').join(', ')}) RETURNING $primaryKeyName;
+        ''';
+    final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sql));
+    return Future.wait(
+      dataList.map((data) async {
+        try {
+          final bindingData = _prepareBindingData(data);
+          final res = await stmt.bind(bindingData).toList();
+          if (res.isEmpty || res.last.isEmpty) {
+            throw InvalidParameterException(
+              'The data object of table "$tableName" could not be updated. Check the attributes: $data',
+            );
+          }
+          return res.last[0] as int;
+        } on psql.PgException catch (e) {
+          throw InvalidParameterException(
+            'The data object of table "$tableName" could not be created. Check the attributes: $data\n'
+            'PgException: {"message": ${e.message}}',
+          );
+        }
+      }),
+    );
+  }
+
   Future<T> createSingleReturn(T dataObject) async {
     return dataObject.copyWithId(await createSingle(dataObject)) as T;
   }
 
-  Future<List<int>> createMany(List<T> dataObjects) async {
-    return await Future.wait(dataObjects.map((element) => createSingle(element)));
-  }
-
   Future<List<T>> createManyReturn(List<T> dataObjects) async {
-    return await Future.wait(dataObjects.map((element) => createSingleReturn(element)));
+    final manyIds = await createMany(dataObjects);
+    return dataObjects.mapIndexed((index, dataObject) => dataObject.copyWithId(manyIds[index]) as T).toList();
   }
 
   Future<int> updateSingle(T dataObject) async {
@@ -165,22 +196,42 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<List<T>> updateOnDiffMany(List<T> dataObjects, {required List<T> previous}) async {
-    if (dataObjects.length != previous.length) {
-      _logger.fine(
-        'updateOnDiffMany: Delete and recreate list as of different lengths: (prev: ${previous.length}, curr: ${dataObjects.length})',
-      );
-      await Future.wait(previous.map((prev) => deleteSingle(prev.id!)));
-      return await createManyReturn(dataObjects);
+    final listLengthDiff = dataObjects.length - previous.length;
+    List<T> updatingDataObjects;
+    List<T> creatingDataObjects;
+    List<T> updatingPrevDataObjects;
+    List<T> deletingPrevDataObjects;
+    if (listLengthDiff > 0) {
+      updatingDataObjects = dataObjects.sublist(0, previous.length);
+      creatingDataObjects = dataObjects.sublist(previous.length);
+      updatingPrevDataObjects = previous;
+      deletingPrevDataObjects = [];
+    } else if (listLengthDiff < 0) {
+      updatingDataObjects = dataObjects;
+      creatingDataObjects = [];
+      updatingPrevDataObjects = previous.sublist(0, dataObjects.length);
+      deletingPrevDataObjects = previous.sublist(dataObjects.length);
     } else {
-      return await Future.wait(
-        Map.fromIterables(
-          dataObjects,
-          previous,
-        ).entries.map((element) => updateOnDiffSingle(element.key, previous: element.value)),
-      );
+      updatingDataObjects = dataObjects;
+      creatingDataObjects = [];
+      deletingPrevDataObjects = [];
+      updatingPrevDataObjects = previous;
     }
+    _logger.fine(
+      'updateOnDiffMany: Update list of data objects: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
+    );
+    await Future.wait(deletingPrevDataObjects.map((prev) => deleteSingle(prev.id!)));
+    updatingDataObjects = await Future.wait(
+      Map.fromIterables(
+        updatingDataObjects,
+        updatingPrevDataObjects,
+      ).entries.map((element) => updateOnDiffSingle(element.key, previous: element.value)),
+    );
+    creatingDataObjects = await createManyReturn(creatingDataObjects);
+    return [...updatingDataObjects, ...creatingDataObjects];
   }
 
+  // TODO: Probably can predefine dataTypes for all properties instead of retrieving them from the value.
   Map<String, dynamic> _prepareBindingData(Map<String, dynamic> data) {
     final postgresTypes = getPostgresDataTypes();
     return data.map((key, value) {

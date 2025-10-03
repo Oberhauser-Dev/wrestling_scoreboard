@@ -1371,7 +1371,7 @@ COPY public.bout (id, red_id, blue_id, weight_class_id, winner_role, bout_result
 --
 -- Data for Name: bout_action; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
-
+-- Id 16 is an example for removing an entity in a list on import
 COPY public.bout_action (id, duration_millis, point_count, action_type, bout_role, bout_id) FROM stdin;
 5	26000	2	points	red	52
 6	37000	2	points	blue	52
@@ -1384,6 +1384,7 @@ COPY public.bout_action (id, duration_millis, point_count, action_type, bout_rol
 13	337000	1	points	red	52
 14	360000	\N	passivity	blue	52
 15	360000	2	points	blue	52
+16	360000	1	points	red	52
 \.
 
 
@@ -1404,7 +1405,8 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 --
 -- Data for Name: bout_result_rule; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
-
+-- Id 72 is an example for adding an entity in a list on import
+-- 72	7	bothVin	\N	\N	\N	0	0
 COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
 1	2	vfa	\N	\N	\N	9	9
 2	2	vin	8	8	8	8	8
@@ -1477,7 +1479,6 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 69	4	bothVin	\N	\N	\N	0	0
 70	5	bothVin	\N	\N	\N	0	0
 71	6	bothVin	\N	\N	\N	0	0
-72	7	bothVin	\N	\N	\N	0	0
 \.
 
 
@@ -2024,7 +2025,7 @@ COPY public.wrestling_event (id, date, location, visitors_count, comment, no, or
 -- Name: bout_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.bout_action_id_seq', 15, true);
+SELECT pg_catalog.setval('public.bout_action_id_seq', 16, true);
 
 
 --
@@ -2045,7 +2046,7 @@ SELECT pg_catalog.setval('public.bout_id_seq', 52, true);
 -- Name: bout_result_rule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 72, true);
+SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 71, true);
 
 
 --

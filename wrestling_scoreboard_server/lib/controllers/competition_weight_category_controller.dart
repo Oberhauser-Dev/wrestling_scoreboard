@@ -241,10 +241,10 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       final (index, competitionBout) = element;
       Bout bout = competitionBout.bout;
       if (bout.r != null) {
-        bout = bout.copyWith(r: bout.r!.copyWithId(await AthleteBoutStateController().createSingle(bout.r!)));
+        bout = bout.copyWith(r: await AthleteBoutStateController().createSingleReturn(bout.r!));
       }
       if (bout.b != null) {
-        bout = bout.copyWith(b: bout.b!.copyWithId(await AthleteBoutStateController().createSingle(bout.b!)));
+        bout = bout.copyWith(b: await AthleteBoutStateController().createSingleReturn(bout.b!));
       }
       bout = await BoutController().createSingleReturn(bout);
       createdBouts[index] = await CompetitionBoutController().createSingleReturn(competitionBout.copyWith(bout: bout));
