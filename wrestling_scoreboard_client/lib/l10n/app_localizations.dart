@@ -374,6 +374,24 @@ abstract class AppLocalizations {
   /// **'Count down the time'**
   String get timeCountDown;
 
+  /// No description provided for @incompatibleVersionsPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'This client with version **{clientVersion}** is not compatible with the server version **{serverVersion}**. {compatibilityText}\nPlease download a compatible client from [GitHub - Oberhauser-Dev/wrestling_scoreboard](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases) or change the server URLs in the settings.'**
+  String incompatibleVersionsPhrase(String clientVersion, String serverVersion, String compatibilityText);
+
+  /// No description provided for @compatibleClientPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum supported client version is **{minClientVersion}**.'**
+  String compatibleClientPhrase(String minClientVersion);
+
+  /// No description provided for @compatibleServerPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the server administrator to update to the minimum compatible server version **{minServerVersion}**.'**
+  String compatibleServerPhrase(String minServerVersion);
+
   /// No description provided for @profile.
   ///
   /// In en, this message translates to:

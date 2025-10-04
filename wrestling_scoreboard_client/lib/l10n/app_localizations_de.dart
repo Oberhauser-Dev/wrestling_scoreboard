@@ -162,6 +162,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeCountDown => 'Zähle die Zeit herunter';
 
   @override
+  String incompatibleVersionsPhrase(String clientVersion, String serverVersion, String compatibilityText) {
+    return 'Dieser Client mit der Version **$clientVersion** ist nicht kompatibel mit der Serverversion **$serverVersion**. $compatibilityText\nBitte laden Sie einen kompatiblen Client von [GitHub - Oberhauser-Dev/wrestling_scoreboard](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases) herunter oder ändern Sie die Server-URLs in den Einstellungen.';
+  }
+
+  @override
+  String compatibleClientPhrase(String minClientVersion) {
+    return 'Die minimal unterstützte Client-Version ist **$minClientVersion**.';
+  }
+
+  @override
+  String compatibleServerPhrase(String minServerVersion) {
+    return 'Bitten Sie den Serveradministrator, ein Update auf die minimal kompatible Serverversion **$minServerVersion** durchzuführen.';
+  }
+
+  @override
   String get profile => 'Profil';
 
   @override

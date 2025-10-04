@@ -61,6 +61,36 @@
   "deleteAfter": "Delete after",
   "bellSound": "Bell sound",
   "timeCountDown": "Count down the time",
+  "incompatibleVersionsPhrase": "This client with version **{clientVersion}** is not compatible with the server version **{serverVersion}**. {compatibilityText}\nPlease download a compatible client from [GitHub - Oberhauser-Dev/wrestling_scoreboard](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases) or change the server URLs in the settings.",
+  "@incompatibleVersionsPhrase": {
+    "placeholders": {
+      "clientVersion": {
+        "type": "String"
+      },
+      "serverVersion": {
+        "type": "String"
+      },
+      "compatibilityText": {
+        "type": "String"
+      }
+    }
+  },
+  "compatibleClientPhrase": "The minimum supported client version is **{minClientVersion}**.",
+  "@compatibleClientPhrase": {
+    "placeholders": {
+      "minClientVersion": {
+        "type": "String"
+      }
+    }
+  },
+  "compatibleServerPhrase": "Ask the server administrator to update to the minimum compatible server version **{minServerVersion}**.",
+  "@compatibleServerPhrase": {
+    "placeholders": {
+      "minServerVersion": {
+        "type": "String"
+      }
+    }
+  },
 
   "profile": "Profile",
   "username": "Username",

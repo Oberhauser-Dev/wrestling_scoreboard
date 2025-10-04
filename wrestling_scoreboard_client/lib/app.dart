@@ -5,12 +5,14 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:pub_semver/pub_semver.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/backup_provider.dart';
@@ -308,7 +310,6 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
     ref.listenManual(dataManagerNotifierProvider, (previous, next) async {
       final dataManager = await next;
       final migration = await dataManager.getMigration();
-      // TODO: Also check, if the server version is too old.
       final minClientVersion = Version.parse(migration.minClientVersion);
       final packageVersion = Version.parse(packageInfo.version);
       final serverVersion = Version.parse(migration.semver);
@@ -318,17 +319,24 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
       if (clientTooOld || serverTooOld) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
-            var compatibilityWarning =
-                'This client with version "${packageInfo.version}" is not compatible with the server version "${migration.semver}". ';
-            if (clientTooOld) {
-              compatibilityWarning += 'The minimum supported client version is "${migration.minClientVersion}".\n';
-            } else {
-              compatibilityWarning +=
-                  'The server probably should be updated to the minimum compatible server version "${minSupportedServerVersion.canonicalizedVersion}".\n';
-            }
-            compatibilityWarning +=
-                'Please download a compatible client from "https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases" or change the server in the settings.';
-            showOkDialog(context: context, child: SelectableText(compatibilityWarning));
+            final localizations = context.l10n;
+            final compatibilityWarning =
+                clientTooOld
+                    ? localizations.compatibleClientPhrase(migration.minClientVersion)
+                    : localizations.compatibleServerPhrase(minSupportedServerVersion.canonicalizedVersion);
+            showOkDialog(
+              context: context,
+              child: MarkdownBody(
+                shrinkWrap: true,
+                selectable: true,
+                data: localizations.incompatibleVersionsPhrase(
+                  packageInfo.version,
+                  migration.semver,
+                  compatibilityWarning,
+                ),
+                onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
+              ),
+            );
           }
         });
       }
