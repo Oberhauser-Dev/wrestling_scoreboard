@@ -10,7 +10,7 @@ void main() async {
   PackageInfo.setMockInitialValues(
     appName: 'Wrestling Scoreboard Client',
     packageName: 'wrestling_scoreboard_client',
-    version: '0.2.1',
+    version: '0.3.4',
     buildNumber: '0',
     buildSignature: '',
   );

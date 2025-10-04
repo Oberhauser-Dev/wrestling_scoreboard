@@ -1,3 +1,23 @@
+## 0.3.4
+
+ - **FIX**: Read async value from provider without watching it (rrousselGit/riverpod[#3889](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3889)). ([ea6c3fc4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ea6c3fc48b63467ccf923d532ec8dd8a20582a70))
+ - **FIX**: Unable to update result on bout display. ([d58019f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d58019f267e3acfa0d48d63090bf883be2028d90))
+ - **FIX**: Improved websocket connection handling. ([d8ab9e8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d8ab9e8ba2881483624d2a9a98050319fa44cebb))
+ - **FIX**: Label in editing competition weight category. ([b581dbcc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b581dbccb5731a8116dfffdfd16b6c2f542d687c))
+ - **FIX**: Use rootNavigatorKey consequently for all ShellRoute sub-routes (flutter/flutter[#140586](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/140586)). ([fe2de3ed](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fe2de3ed3d14d9ab2d1cabd232001b3fc2d0e94d))
+ - **FIX**: Restrict User creation parameters. ([f1893b65](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1893b651a0dc9c156dab41514c56224bf3a5dc8))
+ - **FIX**: Differentiate Dialog cancel result. ([b954da5f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b954da5fc08ba1c2ec802f668bfc2f03a76c9e9c))
+ - **FEAT**: Improved Logging for severe errors. ([69cf3c0c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/69cf3c0c807ea4abb6257a2157232721b62e7036))
+ - **FEAT**: Better distinguishable environments (closes [#204](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/204)). ([2cc8c929](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cc8c9299034a7bd712e895e8fd902305593dd11))
+ - **FEAT**: Link all entity properties (closes [#94](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/94)). ([e1c4b5b2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1c4b5b25c354d9953c513f760368d502464aeb5))
+ - **FEAT**: Show bouts of membership for competitions. ([ee96fd71](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee96fd71aa3ece4730ca6c1b9f59ef1f28e0f68b))
+ - **FEAT**: Retry mechanism on connection loss for provider and websockets (closes [#115](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/115)). ([9c559b0f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9c559b0f639d6165292f12798dab9174110a8b55))
+ - **FEAT**: Add option to create memberships inside team lineup edit (closes [#167](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/167)). ([bb5e5ba9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bb5e5ba9d4eab1a42c7e0110b3f54950d507ed33))
+ - **FEAT**: Link "Source Code" in About section (closes [#180](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/180)). ([c301e93d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c301e93d46e43427b6e8ce6b9865c0a8106df6d3))
+ - **FEAT**: Separate Official Persons from event / bout (closes [#169](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/169), closes [#181](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/181)). ([7352a3b5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7352a3b5fc65ee098b430de087cbbf6a0ebbc5c8))
+ - **FEAT**: Link (Add) existing objects (Memberships, TeamClubAffiliations). ([8194ce15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8194ce157e3a7b4ff7da7d86346369bfe4195551))
+ - **FEAT**: Upgrade to Flutter 3.35.x. ([fbc5cb21](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbc5cb213153dbba6dbeb39e78d2556e024ea780))
+
 ## 0.3.3
 
  - **REFACTOR**: Rename title to Organizations in Explore tab, use home as root route (closes [#159](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/159)). ([000be9ec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/000be9ec632975f763b9814684ae055403dae010))

@@ -314,7 +314,8 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
       final packageVersion = Version.parse(packageInfo.version);
       final serverVersion = Version.parse(migration.semver);
       final clientTooOld = packageVersion < minClientVersion;
-      final minSupportedServerVersion = Version(0, 1, 1);
+      // Set min supported server version before release
+      final minSupportedServerVersion = Version(0, 3, 3);
       final serverTooOld = serverVersion < minSupportedServerVersion;
       if (clientTooOld || serverTooOld) {
         WidgetsBinding.instance.addPostFrameCallback((_) {

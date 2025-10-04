@@ -1,3 +1,26 @@
+## 0.3.3
+
+ - **REFACTOR**: Remove `bout_result:vsu1,vpo1,dsq2` and `person_role:matPresident` from default database ([#116](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/116)). ([5daeaf1b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5daeaf1beeea72e5da55ee26ceace59cd0bb8eb1))
+ - **REFACTOR**: Squash migration scripts <= v0.2.x ([#116](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/116)). ([ee497c01](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee497c01afbd1de50fc70b17e8f45e02c913b741))
+ - **FIX**: Update bout rules to allow winning on tie (closes [#202](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/202)). ([82330453](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/82330453b1b6393a0e76643d12a6f627b7d8ebc9))
+ - **FIX**: Disallow duplicate team lineup participations (closes [#196](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/196)). ([3ec26522](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3ec2652271d6b92d342996c725acab9edf2068ba))
+ - **FIX**: Improved websocket connection handling. ([d8ab9e8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d8ab9e8ba2881483624d2a9a98050319fa44cebb))
+ - **FIX**: Compatibility with PostgreSQL vulnerability fix. ([0c7e966a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0c7e966a26545573b3423c45c95fcd0398466545))
+ - **FIX**: Restrict User creation parameters. ([f1893b65](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1893b651a0dc9c156dab41514c56224bf3a5dc8))
+ - **FEAT**: Improved Logging for severe errors. ([69cf3c0c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/69cf3c0c807ea4abb6257a2157232721b62e7036))
+ - **FEAT**: Increase database connection timeout while debugging. ([1cbd34ec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1cbd34ec86a279fc8e62da410d522c88427ec5c9))
+ - **FEAT**: Make creating many entities more performant. ([778c22fd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/778c22fd41d7c4a032525047deb3fa326a117a31))
+ - **FEAT**: Always order entities by id. ([f83819ff](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f83819ffc1c20caafe6fe57da64fd20cfd4dd17e))
+ - **FEAT**: Option to delete via Rest API. ([a6359b7b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a6359b7b215ad1c32bd18e29b3d30eb3162e1803))
+ - **FEAT**: Separate data migration from table migration (closes [#188](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/188)). ([ccf923a3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ccf923a315bf16063636780757d9f63c58b82247))
+ - **FEAT**: Link all entity properties (closes [#94](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/94)). ([e1c4b5b2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1c4b5b25c354d9953c513f760368d502464aeb5))
+ - **FEAT**: Show bouts of membership for competitions. ([ee96fd71](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee96fd71aa3ece4730ca6c1b9f59ef1f28e0f68b))
+ - **FEAT**: Separate Official Persons from event / bout (closes [#169](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/169), closes [#181](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/181)). ([7352a3b5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7352a3b5fc65ee098b430de087cbbf6a0ebbc5c8))
+ - **FEAT**: Link (Add) existing objects (Memberships, TeamClubAffiliations). ([8194ce15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8194ce157e3a7b4ff7da7d86346369bfe4195551))
+ - **FEAT**: Rework broadcast privileges. ([911c02a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/911c02a5b253decd99ce199b0f9d32bd837a58f5))
+ - **FEAT**: Upgrade to Flutter 3.35.x. ([fbc5cb21](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbc5cb213153dbba6dbeb39e78d2556e024ea780))
+ - **DOCS**: State default admin user and password (closes [#183](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/183)). ([b866f9e7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b866f9e755e1d03c7985c62ca9494f1cce016372))
+
 ## 0.3.2
 
  - **FEAT**: Option to reorder the preferred Persons before merging (closes [#162](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/162)). ([e2aba5c5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e2aba5c5acb8e6dcce5aac5d011edabded06bc0e))
