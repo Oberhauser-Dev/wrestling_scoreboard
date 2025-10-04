@@ -219,72 +219,10 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
   }
 
-  Widget displayName(AthleteBoutState? pStatus, double padding, double? weight) {
-    final localizations = context.l10n;
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            padding: EdgeInsets.all(padding),
-            child: Center(
-              child: ScaledText(
-                pStatus?.fullName(context) ?? localizations.participantVacant,
-                color: pStatus == null ? Colors.white30 : Colors.white,
-                fontSize: 40,
-                minFontSize: 20,
-              ),
-            ),
-          ),
-          SizedBox(
-            child: Center(
-              child: ScaledText(
-                (weight != null ? '${weight.toStringAsFixed(1)} $weightUnit' : localizations.participantUnknownWeight),
-                color: weight == null ? Colors.white30 : Colors.white,
-                fontSize: 22,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  StatelessWidget displayClassificationPoints(AthleteBoutState? pStatus, MaterialColor color, double padding) {
-    return pStatus?.classificationPoints != null
-        ? ThemedContainer(
-          color: color.shade800,
-          padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
-          child: Center(child: ScaledText(pStatus!.classificationPoints.toString(), fontSize: 54, minFontSize: 30)),
-        )
-        : Container();
-  }
-
-  Expanded displayTechnicalPoints(ParticipantStateModel pStatus, BoutRole role) {
+  Widget displayTechnicalPoints(ParticipantStateModel pStatus, BoutRole role) {
     return Expanded(
       flex: 33,
       child: TechnicalPoints(pStatusModel: pStatus, role: role, bout: bout, boutConfig: boutConfig),
-    );
-  }
-
-  ThemedContainer displayParticipant(AthleteBoutState? pStatus, BoutRole role, double padding, double? weight) {
-    final color = role.color();
-    return ThemedContainer(
-      color: color,
-      child: IntrinsicHeight(
-        child: NullableSingleConsumer<AthleteBoutState>(
-          id: pStatus?.id,
-          initialData: pStatus,
-          builder: (context, pStatus) {
-            List<Widget> items = [
-              displayName(pStatus, padding, weight),
-              displayClassificationPoints(pStatus, color, padding),
-            ];
-            if (role == BoutRole.blue) items = List.from(items.reversed);
-            return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
-          },
-        ),
-      ),
     );
   }
 
@@ -468,7 +406,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 row(
                   padding: bottomPadding,
                   children: [
-                    Expanded(flex: 50, child: displayParticipant(_r.pStatus, BoutRole.red, padding, _r.weight)),
+                    Expanded(flex: 50, child: _ParticipantDisplay(_r.pStatus, BoutRole.red, padding, _r.weight)),
                     Expanded(
                       flex: 20,
                       child: Column(
@@ -506,7 +444,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                         ],
                       ),
                     ),
-                    Expanded(flex: 50, child: displayParticipant(_b.pStatus, BoutRole.blue, padding, _b.weight)),
+                    Expanded(flex: 50, child: _ParticipantDisplay(_b.pStatus, BoutRole.blue, padding, _b.weight)),
                   ],
                 ),
                 row(
@@ -575,5 +513,86 @@ class BoutState extends ConsumerState<BoutScreen> {
 
     // Save time to database when dispose
     await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
+  }
+}
+
+class _ParticipantDisplay extends StatelessWidget {
+  final AthleteBoutState? pStatus;
+  final BoutRole role;
+  final double padding;
+  final double? weight;
+
+  const _ParticipantDisplay(this.pStatus, this.role, this.padding, this.weight);
+
+  @override
+  Widget build(BuildContext context) {
+    final color = role.color();
+    return ThemedContainer(
+      color: color,
+      child: IntrinsicHeight(
+        child: NullableSingleConsumer<AthleteBoutState>(
+          id: pStatus?.id,
+          initialData: pStatus,
+          builder: (context, pStatus) {
+            List<Widget> items = [
+              _NameDisplay(pStatus: pStatus, padding: padding, weight: weight),
+              displayClassificationPoints(pStatus, color, padding),
+            ];
+            if (role == BoutRole.blue) items = List.from(items.reversed);
+            return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget displayClassificationPoints(AthleteBoutState? pStatus, MaterialColor color, double padding) {
+    return pStatus?.classificationPoints != null
+        ? ThemedContainer(
+          color: color.shade800,
+          padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
+          child: Center(child: ScaledText(pStatus!.classificationPoints.toString(), fontSize: 54, minFontSize: 30)),
+        )
+        : Container();
+  }
+}
+
+class _NameDisplay extends StatelessWidget {
+  final AthleteBoutState? pStatus;
+  final double padding;
+  final double? weight;
+
+  const _NameDisplay({required this.pStatus, required this.padding, required this.weight});
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            padding: EdgeInsets.all(padding),
+            child: Center(
+              child: ScaledText(
+                pStatus?.fullName(context) ?? localizations.participantVacant,
+                color: pStatus == null ? Colors.white30 : Colors.white,
+                fontSize: 40,
+                minFontSize: 20,
+              ),
+            ),
+          ),
+          SizedBox(
+            child: Center(
+              child: ScaledText(
+                (weight != null ? '${weight!.toStringAsFixed(1)} $weightUnit' : localizations.participantUnknownWeight),
+                color: weight == null ? Colors.white30 : Colors.white,
+                fontSize: 22,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

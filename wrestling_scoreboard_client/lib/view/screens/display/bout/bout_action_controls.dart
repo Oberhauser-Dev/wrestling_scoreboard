@@ -22,19 +22,19 @@ class BoutActionControls extends StatelessWidget {
     }
 
     final actions = <Widget>[
-      displayActionControl(
+      _ActionControl(
         '1',
         prepareCallback(const BoutScreenActionIntent.redOne(), const BoutScreenActionIntent.blueOne()),
         color,
         tooltipMessage: '1 ${localizations.point} (${isRed ? '1 | F' : 'Numpad1 | J | ⇧ + 1'})',
       ),
-      displayActionControl(
+      _ActionControl(
         '2',
         prepareCallback(const BoutScreenActionIntent.redTwo(), const BoutScreenActionIntent.blueTwo()),
         color,
         tooltipMessage: '2 ${localizations.points} (${isRed ? '2 | D' : 'Numpad2 | K | ⇧ + 2'})',
       ),
-      displayActionControl(
+      _ActionControl(
         '4',
         prepareCallback(const BoutScreenActionIntent.redFour(), const BoutScreenActionIntent.blueFour()),
         color,
@@ -42,38 +42,38 @@ class BoutActionControls extends StatelessWidget {
       ),
       // TODO: Get character mapping from LogicalKeyboardKey before pressing it.
       // https://github.com/flutter/flutter/issues/25841
-      displayActionControl(
+      _ActionControl(
         '5',
         prepareCallback(const BoutScreenActionIntent.redFive(), const BoutScreenActionIntent.blueFive()),
         color,
         tooltipMessage: '5 ${localizations.points} (${isRed ? '5 | A' : 'Numpad5 | ;/Ö | ⇧ + 5'})',
       ),
-      displayActionControl(
+      _ActionControl(
         localizations.verbalWarningAbbr,
         prepareCallback(const BoutScreenActionIntent.redVerbal(), const BoutScreenActionIntent.blueVerbal()),
         color,
         tooltipMessage: localizations.verbalWarning,
       ),
-      displayActionControl(
+      _ActionControl(
         localizations.passivityAbbr,
         prepareCallback(const BoutScreenActionIntent.redPassivity(), const BoutScreenActionIntent.bluePassivity()),
         color,
         tooltipMessage: localizations.passivity,
       ),
-      displayActionControl(
+      _ActionControl(
         localizations.cautionAbbr,
         prepareCallback(const BoutScreenActionIntent.redCaution(), const BoutScreenActionIntent.blueCaution()),
         color,
         tooltipMessage: localizations.caution,
       ),
-      displayActionControl(
+      _ActionControl(
         localizations.dismissalAbbr,
         prepareCallback(const BoutScreenActionIntent.redDismissal(), const BoutScreenActionIntent.blueDismissal()),
         color,
         tooltipMessage: localizations.dismissal,
       ),
       if (boutConfig.activityDuration != null)
-        displayActionControl(
+        _ActionControl(
           context.l10n.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           prepareCallback(
             const BoutScreenActionIntent.redActivityTime(),
@@ -83,14 +83,14 @@ class BoutActionControls extends StatelessWidget {
           tooltipMessage: localizations.activityDuration,
         ),
       if (boutConfig.injuryDuration != null)
-        displayActionControl(
+        _ActionControl(
           context.l10n.injuryTimeShort, // VZ Injury Time, Verletzungszeit
           prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
           color,
           tooltipMessage: localizations.injuryDuration,
         ),
       if (boutConfig.bleedingInjuryDuration != null)
-        displayActionControl(
+        _ActionControl(
           context.l10n.bleedingInjuryTimeShort, // BZ Bleeding Injury Time, Verletzungszeit Blut
           prepareCallback(
             const BoutScreenActionIntent.redBleedingInjuryTime(),
@@ -99,7 +99,7 @@ class BoutActionControls extends StatelessWidget {
           color,
           tooltipMessage: localizations.bleedingInjuryDuration,
         ),
-      displayActionControl(
+      _ActionControl(
         '⎌',
         prepareCallback(const BoutScreenActionIntent.redUndo(), const BoutScreenActionIntent.blueUndo()),
         color,
@@ -108,8 +108,18 @@ class BoutActionControls extends StatelessWidget {
     ];
     return IntrinsicWidth(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: actions));
   }
+}
 
-  Widget displayActionControl(String text, void Function()? callback, MaterialColor color, {String? tooltipMessage}) {
+class _ActionControl extends StatelessWidget {
+  final String text;
+  final VoidCallback? callback;
+  final MaterialColor color;
+  final String? tooltipMessage;
+
+  const _ActionControl(this.text, this.callback, this.color, {this.tooltipMessage});
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: DelayedTooltip(
         message: tooltipMessage,
