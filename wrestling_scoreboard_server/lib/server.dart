@@ -12,6 +12,7 @@ import 'package:shelf_static/shelf_static.dart' as shelf_static;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/middleware/cors.dart';
+import 'package:wrestling_scoreboard_server/middleware/logging.dart';
 import 'package:wrestling_scoreboard_server/routes/api_route.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
@@ -42,12 +43,16 @@ Future<HttpServer> init() async {
             return websocketHandler(request);
           } on HijackException catch (error, _) {
             // A HijackException should bypass the response-writing logic entirely.
-            webSocketLog.warning('Warning: HijackException thrown on WebsocketHandler.\n$error');
+            webSocketLog.warning(
+              'Warning: HijackException thrown on WebsocketHandler.',
+              error,
+              // stackTrace: We do not log the stackTrace as it does not give any more value
+            );
             // TODO hide stack trace or handle better
             // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
             rethrow;
-          } catch (error, _) {
-            webSocketLog.severe('Error thrown by Websocket Handler handler.\n$error');
+          } catch (error, stackTrace) {
+            webSocketLog.severe('Error thrown by Websocket Handler handler.', error, stackTrace);
             return Response.internalServerError();
           }
         })
@@ -73,13 +78,7 @@ Future<HttpServer> init() async {
   final serverLog = Logger('Server');
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
-  final pipeline = Pipeline()
-      // See https://pub.dev/documentation/shelf/latest/shelf/logRequests.html
-      .addMiddleware(corsConfig)
-      .addMiddleware(
-        logRequests(logger: (message, isError) => isError ? serverLog.severe(message) : serverLog.fine(message)),
-      )
-      .addHandler(cascade.handler);
+  final pipeline = Pipeline().addMiddleware(corsConfig).addMiddleware(loggingConfig).addHandler(cascade.handler);
 
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
   final server = await shelf_io.serve(

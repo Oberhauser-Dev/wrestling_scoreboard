@@ -379,7 +379,7 @@ Future<int> handleSingle<T extends DataObject>({
   required T single,
   UserPrivilege privilege = UserPrivilege.write,
 }) async {
-  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
+  _logger.fine('${operation.name.toUpperCase()} ${single.tableName}/${single.id}');
   final controller = ShelfController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
     if (privilege < UserPrivilege.write) {
@@ -421,7 +421,7 @@ Future<int> handleSingleRaw<T extends DataObject>({
   required Map<String, dynamic> single,
   UserPrivilege privilege = UserPrivilege.write,
 }) async {
-  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}/${single['id']}');
+  _logger.fine('${operation.name.toUpperCase()} ${getTableNameFromType(T)}/${single['id']}');
   final controller = ShelfController.getControllerFromDataType(T);
   if (operation == CRUD.update) {
     if (privilege < UserPrivilege.write) {
@@ -461,7 +461,7 @@ Future<void> handleMany<T extends DataObject>({
   required ManyDataObject<T> many,
   UserPrivilege privilege = UserPrivilege.none,
 }) {
-  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
+  _logger.fine('${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 
@@ -470,7 +470,7 @@ Future<void> handleManyRaw<T extends DataObject>({
   required ManyDataObject<Map<String, dynamic>> many,
   UserPrivilege privilege = UserPrivilege.none,
 }) {
-  _logger.fine('${DateTime.now()} ${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
+  _logger.fine('${operation.name.toUpperCase()} ${getTableNameFromType(T)}s');
   throw DataUnimplementedError(operation, many.runtimeType);
 }
 
