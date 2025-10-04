@@ -38,14 +38,22 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Expanded(flex: 35, child: displayDropDown(BoutRole.red)),
+        Expanded(
+          flex: 35,
+          child: _MainControlDropDown(
+            role: BoutRole.red,
+            bout: widget.boutState.bout,
+            wrestlingStyle: widget.boutState.weightClass?.style,
+            boutRules: widget.boutState.boutRules,
+          ),
+        ),
         Expanded(
           flex: 50,
           child: Row(
             children: [
               Expanded(
                 child:
-                    widget.boutState.widget.bouts.first == widget.boutState.bout
+                    widget.boutState.widget.bouts.first.id == widget.boutState.bout.id
                         ? IconButton(
                           color: Theme.of(context).disabledColor,
                           icon: const Icon(Icons.close),
@@ -81,7 +89,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
               ),
               Expanded(
                 child:
-                    widget.boutState.widget.bouts.last == widget.boutState.bout
+                    widget.boutState.widget.bouts.last.id == widget.boutState.bout.id
                         ? IconButton(
                           color: Theme.of(context).disabledColor,
                           icon: const Icon(Icons.close),
@@ -103,93 +111,114 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
             ],
           ),
         ),
-        Expanded(flex: 35, child: displayDropDown(BoutRole.blue)),
+        Expanded(
+          flex: 35,
+          child: _MainControlDropDown(
+            role: BoutRole.blue,
+            bout: widget.boutState.bout,
+            wrestlingStyle: widget.boutState.weightClass?.style,
+            boutRules: widget.boutState.boutRules,
+          ),
+        ),
       ],
     );
   }
+}
 
-  Widget displayDropDown(BoutRole role) {
-    final AthleteBoutState? pStatus = role == BoutRole.red ? widget.boutState.bout.r : widget.boutState.bout.b;
-    final AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? widget.boutState.bout.r : widget.boutState.bout.b;
+class _MainControlDropDown extends ConsumerWidget {
+  final BoutRole role;
+  final Bout bout;
+  final WrestlingStyle? wrestlingStyle;
+  final List<BoutResultRule> boutRules;
 
-    return ThemedContainer(
-      color: role == widget.boutState.bout.winnerRole ? role.color() : null,
-      child: ButtonTheme(
-        alignedDropdown: true,
-        child: ManyConsumer<BoutAction, Bout>(
-          filterObject: widget.boutState.bout,
-          builder: (context, actions) {
-            // Empty List, if pStatus is empty
-            final List<DropdownMenuItem<BoutResult>> boutResultOptions = [];
-            if (pStatus != null) {
-              final boutResultValues = List.of(BoutResult.values);
-              if (pStatusOpponent == null) {
-                // Cannot select this option, as there is no opponent
-                boutResultValues.remove(BoutResult.bothDsq);
-                boutResultValues.remove(BoutResult.bothVin);
-                // Theoretically the other one does not show up or fails in weigh in, so don't remove the option:
-                // boutResultValues.remove(BoutResult.bothVfo);
-              }
-              boutResultOptions.addAll(
-                boutResultValues.map((BoutResult boutResult) {
-                  final resultRule = BoutConfig.resultRule(
-                    result: boutResult,
-                    style: widget.boutState.weightClass?.style ?? WrestlingStyle.free,
-                    technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, role),
-                    technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
+  const _MainControlDropDown({
+    required this.role,
+    required this.bout,
+    required this.wrestlingStyle,
+    required this.boutRules,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SingleConsumer<Bout>(
+      id: bout.id,
+      initialData: bout,
+      builder: (context, bout) {
+        final AthleteBoutState? pStatus = role == BoutRole.red ? bout.r : bout.b;
+        final AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? bout.r : bout.b;
+        return ThemedContainer(
+          color: role == bout.winnerRole ? role.color() : null,
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: ManyConsumer<BoutAction, Bout>(
+              filterObject: bout,
+              builder: (context, actions) {
+                // Empty List, if pStatus is empty
+                final List<DropdownMenuItem<BoutResult>> boutResultOptions = [];
+                if (pStatus != null) {
+                  final boutResultValues = List.of(BoutResult.values);
+                  if (pStatusOpponent == null) {
+                    // Cannot select this option, as there is no opponent
+                    boutResultValues.remove(BoutResult.bothDsq);
+                    boutResultValues.remove(BoutResult.bothVin);
+                    // Theoretically the other one does not show up or fails in weigh in, so don't remove the option:
+                    // boutResultValues.remove(BoutResult.bothVfo);
+                  }
+                  boutResultOptions.addAll(
+                    boutResultValues.map((BoutResult boutResult) {
+                      final resultRule = BoutConfig.resultRule(
+                        result: boutResult,
+                        style: wrestlingStyle ?? WrestlingStyle.free,
+                        technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, role),
+                        technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
+                          actions,
+                          role == BoutRole.red ? BoutRole.blue : BoutRole.red,
+                        ),
+                        rules: boutRules,
+                      );
+                      final isEnabled = resultRule != null;
+                      return DropdownMenuItem(
+                        // Only allow to select option, if current state and resultRules allow it.
+                        enabled: isEnabled,
+                        value: boutResult,
+                        child: Tooltip(
+                          message: boutResult.description(context),
+                          child: Text(
+                            boutResult.abbreviation(context),
+                            style: isEnabled ? null : TextStyle(color: Theme.of(context).disabledColor),
+                          ),
+                        ),
+                      );
+                    }),
+                  );
+                }
+
+                return CustomDropdown<BoutResult>(
+                  isNullable: true,
+                  selected: role == bout.winnerRole || (bout.result?.affectsBoth() ?? false) ? bout.result : null,
+                  options: boutResultOptions,
+                  onChange: (BoutResult? val) async {
+                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    var updatedBout = bout.copyWith(
+                      winnerRole: val != null && !val.affectsBoth() ? role : null,
+                      result: val,
+                    );
+                    updatedBout = updatedBout.updateClassificationPoints(
                       actions,
-                      role == BoutRole.red ? BoutRole.blue : BoutRole.red,
-                    ),
-                    rules: widget.boutState.boutRules,
-                  );
-                  final isEnabled = resultRule != null;
-                  return DropdownMenuItem(
-                    // Only allow to select option, if current state and resultRules allow it.
-                    enabled: isEnabled,
-                    value: boutResult,
-                    child: Tooltip(
-                      message: boutResult.description(context),
-                      child: Text(
-                        boutResult.abbreviation(context),
-                        style: isEnabled ? null : TextStyle(color: Theme.of(context).disabledColor),
-                      ),
-                    ),
-                  );
-                }),
-              );
-            }
-
-            return CustomDropdown<BoutResult>(
-              isNullable: true,
-              selected:
-                  role == widget.boutState.bout.winnerRole || (widget.boutState.bout.result?.affectsBoth() ?? false)
-                      ? widget.boutState.bout.result
-                      : null,
-              options: boutResultOptions,
-              onChange: (BoutResult? val) async {
-                final dataManager = await ref.read(dataManagerNotifierProvider);
-                var bout = widget.boutState.bout.copyWith(
-                  winnerRole: val != null && !val.affectsBoth() ? role : null,
-                  result: val,
+                      rules: boutRules,
+                      style: wrestlingStyle ?? WrestlingStyle.free,
+                    );
+                    await dataManager.createOrUpdateSingle(updatedBout);
+                    // Need to await saving, otherwise a read of the AthleteBoutState list happens on old values within createOrUpdateSingle (e.g. for local running local bouts).
+                    if (updatedBout.r != null) await dataManager.createOrUpdateSingle(updatedBout.r!);
+                    if (updatedBout.b != null) await dataManager.createOrUpdateSingle(updatedBout.b!);
+                  },
                 );
-                bout = bout.updateClassificationPoints(
-                  actions,
-                  rules: widget.boutState.boutRules,
-                  style: widget.boutState.weightClass?.style ?? WrestlingStyle.free,
-                );
-                await dataManager.createOrUpdateSingle(bout);
-                // Need to await saving, otherwise a read of the AthleteBoutState list happens on old values within createOrUpdateSingle (e.g. for local running local bouts).
-                if (bout.r != null) await dataManager.createOrUpdateSingle(bout.r!);
-                if (bout.b != null) await dataManager.createOrUpdateSingle(bout.b!);
-
-                setState(() {
-                  widget.boutState.bout = bout;
-                });
               },
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

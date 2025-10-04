@@ -62,7 +62,7 @@ class TeamMatchBoutDisplay extends StatelessWidget {
                             final guestParticipation =
                                 TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
                                   participations: guestParticipations,
-                                  membership: bout.r?.membership,
+                                  membership: bout.b?.membership,
                                   weightClass: teamMatchBout.weightClass,
                                 );
                             return ManyConsumer<BoutResultRule, BoutConfig>(
