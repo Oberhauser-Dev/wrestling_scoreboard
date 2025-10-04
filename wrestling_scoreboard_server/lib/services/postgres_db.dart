@@ -44,7 +44,11 @@ class PostgresDb {
         username: dbUser,
         password: dbPW,
       ),
-      settings: psql.ConnectionSettings(sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable),
+      settings: psql.ConnectionSettings(
+        sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable,
+        // Increase connection timeout while debugging
+        connectTimeout: Duration(seconds: _isReleaseMode ? 15 : 180),
+      ),
     );
   }
 
