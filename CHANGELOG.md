@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.4`](#wrestling_scoreboard_client---v034)
+ - [`wrestling_scoreboard_common` - `v0.3.3`](#wrestling_scoreboard_common---v033)
+ - [`wrestling_scoreboard_server` - `v0.3.3`](#wrestling_scoreboard_server---v033)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.4`
+
+ - **FIX**: Read async value from provider without watching it (rrousselGit/riverpod[#3889](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3889)). ([ea6c3fc4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ea6c3fc48b63467ccf923d532ec8dd8a20582a70))
+ - **FIX**: Unable to update result on bout display. ([d58019f2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d58019f267e3acfa0d48d63090bf883be2028d90))
+ - **FIX**: Improved websocket connection handling. ([d8ab9e8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d8ab9e8ba2881483624d2a9a98050319fa44cebb))
+ - **FIX**: Label in editing competition weight category. ([b581dbcc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b581dbccb5731a8116dfffdfd16b6c2f542d687c))
+ - **FIX**: Use rootNavigatorKey consequently for all ShellRoute sub-routes (flutter/flutter[#140586](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/140586)). ([fe2de3ed](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fe2de3ed3d14d9ab2d1cabd232001b3fc2d0e94d))
+ - **FIX**: Restrict User creation parameters. ([f1893b65](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1893b651a0dc9c156dab41514c56224bf3a5dc8))
+ - **FIX**: Differentiate Dialog cancel result. ([b954da5f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b954da5fc08ba1c2ec802f668bfc2f03a76c9e9c))
+ - **FEAT**: Improved Logging for severe errors. ([69cf3c0c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/69cf3c0c807ea4abb6257a2157232721b62e7036))
+ - **FEAT**: Better distinguishable environments (closes [#204](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/204)). ([2cc8c929](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cc8c9299034a7bd712e895e8fd902305593dd11))
+ - **FEAT**: Link all entity properties (closes [#94](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/94)). ([e1c4b5b2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1c4b5b25c354d9953c513f760368d502464aeb5))
+ - **FEAT**: Show bouts of membership for competitions. ([ee96fd71](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee96fd71aa3ece4730ca6c1b9f59ef1f28e0f68b))
+ - **FEAT**: Retry mechanism on connection loss for provider and websockets (closes [#115](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/115)). ([9c559b0f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9c559b0f639d6165292f12798dab9174110a8b55))
+ - **FEAT**: Add option to create memberships inside team lineup edit (closes [#167](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/167)). ([bb5e5ba9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bb5e5ba9d4eab1a42c7e0110b3f54950d507ed33))
+ - **FEAT**: Link "Source Code" in About section (closes [#180](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/180)). ([c301e93d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c301e93d46e43427b6e8ce6b9865c0a8106df6d3))
+ - **FEAT**: Separate Official Persons from event / bout (closes [#169](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/169), closes [#181](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/181)). ([7352a3b5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7352a3b5fc65ee098b430de087cbbf6a0ebbc5c8))
+ - **FEAT**: Link (Add) existing objects (Memberships, TeamClubAffiliations). ([8194ce15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8194ce157e3a7b4ff7da7d86346369bfe4195551))
+ - **FEAT**: Upgrade to Flutter 3.35.x. ([fbc5cb21](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbc5cb213153dbba6dbeb39e78d2556e024ea780))
+
+#### `wrestling_scoreboard_common` - `v0.3.3`
+
+ - **FIX**: Update bout rules to allow winning on tie (closes [#202](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/202)). ([82330453](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/82330453b1b6393a0e76643d12a6f627b7d8ebc9))
+ - **FIX**: Disallow duplicate team lineup participations (closes [#196](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/196)). ([3ec26522](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3ec2652271d6b92d342996c725acab9edf2068ba))
+ - **FIX**: Restrict User creation parameters. ([f1893b65](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1893b651a0dc9c156dab41514c56224bf3a5dc8))
+ - **FEAT**: Separate data migration from table migration (closes [#188](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/188)). ([ccf923a3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ccf923a315bf16063636780757d9f63c58b82247))
+ - **FEAT**: Separate Official Persons from event / bout (closes [#169](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/169), closes [#181](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/181)). ([7352a3b5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7352a3b5fc65ee098b430de087cbbf6a0ebbc5c8))
+
+#### `wrestling_scoreboard_server` - `v0.3.3`
+
+ - **REFACTOR**: Remove `bout_result:vsu1,vpo1,dsq2` and `person_role:matPresident` from default database ([#116](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/116)). ([5daeaf1b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5daeaf1beeea72e5da55ee26ceace59cd0bb8eb1))
+ - **REFACTOR**: Squash migration scripts <= v0.2.x ([#116](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/116)). ([ee497c01](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee497c01afbd1de50fc70b17e8f45e02c913b741))
+ - **FIX**: Update bout rules to allow winning on tie (closes [#202](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/202)). ([82330453](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/82330453b1b6393a0e76643d12a6f627b7d8ebc9))
+ - **FIX**: Disallow duplicate team lineup participations (closes [#196](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/196)). ([3ec26522](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3ec2652271d6b92d342996c725acab9edf2068ba))
+ - **FIX**: Improved websocket connection handling. ([d8ab9e8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d8ab9e8ba2881483624d2a9a98050319fa44cebb))
+ - **FIX**: Compatibility with PostgreSQL vulnerability fix. ([0c7e966a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0c7e966a26545573b3423c45c95fcd0398466545))
+ - **FIX**: Restrict User creation parameters. ([f1893b65](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1893b651a0dc9c156dab41514c56224bf3a5dc8))
+ - **FEAT**: Improved Logging for severe errors. ([69cf3c0c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/69cf3c0c807ea4abb6257a2157232721b62e7036))
+ - **FEAT**: Increase database connection timeout while debugging. ([1cbd34ec](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1cbd34ec86a279fc8e62da410d522c88427ec5c9))
+ - **FEAT**: Make creating many entities more performant. ([778c22fd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/778c22fd41d7c4a032525047deb3fa326a117a31))
+ - **FEAT**: Always order entities by id. ([f83819ff](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f83819ffc1c20caafe6fe57da64fd20cfd4dd17e))
+ - **FEAT**: Option to delete via Rest API. ([a6359b7b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a6359b7b215ad1c32bd18e29b3d30eb3162e1803))
+ - **FEAT**: Separate data migration from table migration (closes [#188](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/188)). ([ccf923a3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ccf923a315bf16063636780757d9f63c58b82247))
+ - **FEAT**: Link all entity properties (closes [#94](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/94)). ([e1c4b5b2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1c4b5b25c354d9953c513f760368d502464aeb5))
+ - **FEAT**: Show bouts of membership for competitions. ([ee96fd71](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ee96fd71aa3ece4730ca6c1b9f59ef1f28e0f68b))
+ - **FEAT**: Separate Official Persons from event / bout (closes [#169](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/169), closes [#181](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/181)). ([7352a3b5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7352a3b5fc65ee098b430de087cbbf6a0ebbc5c8))
+ - **FEAT**: Link (Add) existing objects (Memberships, TeamClubAffiliations). ([8194ce15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8194ce157e3a7b4ff7da7d86346369bfe4195551))
+ - **FEAT**: Rework broadcast privileges. ([911c02a5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/911c02a5b253decd99ce199b0f9d32bd837a58f5))
+ - **FEAT**: Upgrade to Flutter 3.35.x. ([fbc5cb21](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbc5cb213153dbba6dbeb39e78d2556e024ea780))
+ - **DOCS**: State default admin user and password (closes [#183](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/183)). ([b866f9e7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b866f9e755e1d03c7985c62ca9494f1cce016372))
+
+
 ## 2025-08-19
 
 ### Changes

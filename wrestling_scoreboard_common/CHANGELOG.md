@@ -1,3 +1,11 @@
+## 0.3.3
+
+ - **FIX**: Update bout rules to allow winning on tie (closes [#202](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/202)). ([82330453](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/82330453b1b6393a0e76643d12a6f627b7d8ebc9))
+ - **FIX**: Disallow duplicate team lineup participations (closes [#196](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/196)). ([3ec26522](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3ec2652271d6b92d342996c725acab9edf2068ba))
+ - **FIX**: Restrict User creation parameters. ([f1893b65](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1893b651a0dc9c156dab41514c56224bf3a5dc8))
+ - **FEAT**: Separate data migration from table migration (closes [#188](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/188)). ([ccf923a3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ccf923a315bf16063636780757d9f63c58b82247))
+ - **FEAT**: Separate Official Persons from event / bout (closes [#169](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/169), closes [#181](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/181)). ([7352a3b5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7352a3b5fc65ee098b430de087cbbf6a0ebbc5c8))
+
 ## 0.3.2
 
  - **FEAT**: Check API provider credentials on save (closes [#166](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/166)). ([5e3d5442](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5e3d544205d701c4606a68ddcb4aa0c4f6b7b602))
