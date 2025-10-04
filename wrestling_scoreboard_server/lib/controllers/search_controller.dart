@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
+
+final _logger = Logger('SearchController');
 
 class SearchController {
   /// Search all tables
@@ -96,6 +99,16 @@ class SearchController {
       }
       return Response.ok(raw ? rawJsonEncode(manyJsonList) : jsonEncode(manyJsonList));
     } catch (err, stackTrace) {
+      _logger.severe(
+        'Search FAILED ('
+        'likeParam: "$likeParam", '
+        'querySearchTypeStr: $querySearchTypeStr, '
+        'searchOrganizationId: $searchOrganizationId, '
+        'useProvider: $useProvider'
+        ')',
+        err,
+        stackTrace,
+      );
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": $stackTrace}');
     }
   }

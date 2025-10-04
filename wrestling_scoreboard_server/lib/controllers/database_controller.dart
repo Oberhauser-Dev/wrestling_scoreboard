@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
+
+final _logger = Logger('DatabaseController');
 
 class DatabaseController {
   /// Reset all tables
@@ -11,7 +14,8 @@ class DatabaseController {
     try {
       await PostgresDb().reset();
       return Response.ok('{"status": "success"}');
-    } catch (err) {
+    } catch (err, stackTrace) {
+      _logger.severe('Resetting the database FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err"}');
     }
   }
@@ -33,7 +37,8 @@ class DatabaseController {
       await PostgresDb().restore(file.path);
       await PostgresDb().migrate();
       return Response.ok('{"status": "success"}');
-    } catch (err) {
+    } catch (err, stackTrace) {
+      _logger.severe('Restoring the database FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err"}');
     }
   }
@@ -43,7 +48,8 @@ class DatabaseController {
     try {
       await PostgresDb().restorePrepopulated();
       return Response.ok('{"status": "success"}');
-    } catch (err) {
+    } catch (err, stackTrace) {
+      _logger.severe('Restoring the prepopulated database FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err"}');
     }
   }
@@ -53,7 +59,8 @@ class DatabaseController {
     try {
       final migration = await PostgresDb().getMigration();
       return Response.ok(jsonEncode(migration));
-    } catch (err) {
+    } catch (err, stackTrace) {
+      _logger.severe('Getting migration of the database FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err"}');
     }
   }

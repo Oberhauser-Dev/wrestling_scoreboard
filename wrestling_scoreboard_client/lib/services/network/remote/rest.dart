@@ -365,7 +365,7 @@ class RestException implements Exception {
   @override
   String toString() {
     return 'RestException: $message:\n'
-        '\tReason: ${response.reasonPhrase} (${response.statusCode.toString()}):\n'
+        '\tReason: ${response.reasonPhrase} [${response.statusCode.toString()}]:\n'
         '\tBody: ${response.body}';
   }
 }

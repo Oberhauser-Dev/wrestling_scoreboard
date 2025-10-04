@@ -1,8 +1,11 @@
+import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
+
+final _logger = Logger('ImportController');
 
 mixin ImportController<T extends DataObject> implements ShelfController<T> {
   Map<int, DateTime> lastImportUtcDateTime = {};
@@ -61,6 +64,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     } on HttpException catch (err, stackTrace) {
       return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     } catch (err, stackTrace) {
+      _logger.severe('postImport for type "$T" and entityId "$entityId" FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     }
   }
