@@ -5,9 +5,14 @@ import 'package:flutter_riverpod/misc.dart';
 
 extension WidgetRefExtension on WidgetRef {
   // FIXME: .read not always returns the correct value for Future streams.
-  // So use watch to await the result.
+  // So use listenManual to await the result.
   // See: https://github.com/rrousselGit/riverpod/issues/3889
-  T readAsync<T>(ProviderListenable<T> provider) => watch(provider);
+  Future<T> readAsync<T>(ProviderListenable<Future<T>> provider) async {
+    final sub = listenManual(provider, (previous, next) {});
+    final value = await sub.read();
+    sub.close();
+    return value;
+  }
 }
 
 /// See: https://riverpod.dev/docs/essentials/auto_dispose#example-keeping-state-alive-for-a-specific-amount-of-time

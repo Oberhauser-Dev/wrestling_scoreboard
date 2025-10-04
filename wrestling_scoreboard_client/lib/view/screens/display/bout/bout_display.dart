@@ -329,7 +329,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
   }
 
-  Container row({required List<Widget> children, EdgeInsets? padding}) {
+  Widget row({required List<Widget> children, EdgeInsets? padding}) {
     return Container(
       padding: padding,
       child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)),
