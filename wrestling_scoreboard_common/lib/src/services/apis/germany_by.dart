@@ -694,7 +694,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               // Group 0 is the whole matched string
               actionType: actionType,
               bout: bout,
-              role: match.group(2)! == 'R' ? BoutRole.red : BoutRole.blue,
+              role: match.group(2)!.toUpperCase() == 'R' ? BoutRole.red : BoutRole.blue,
               duration: Duration(seconds: int.parse(match.group(3)!)),
             );
           }
