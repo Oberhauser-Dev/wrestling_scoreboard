@@ -74,7 +74,13 @@ dependency_overrides:
     git:
       url: https://github.com/Gustl22/dart_pdf.git
       path: pdf
-      ref: 313-column-span
+      ref: dev
+  # TODO(gustl22): Remove when published: https://github.com/DavBfr/dart_pdf/pull/1884
+  printing:
+    git:
+      url: https://github.com/Gustl22/dart_pdf.git
+      path: printing
+      ref: dev
 
 flutter:
   generate: true
