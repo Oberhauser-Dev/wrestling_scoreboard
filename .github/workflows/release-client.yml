@@ -59,10 +59,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.5'
-          # Remove when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
+          # Remove checks when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
+          flutter-version: ${{ matrix.os == 'windows-11-arm' && '1c6c6f4' || '3.35.5' }}
           channel: ${{ endsWith(matrix.os, '-arm') && 'master' || 'stable' }}
+      # doctor is needed to download the arm master artifacts:
       - run: flutter doctor
+      - run: flutter --version
       - uses: bluefireteam/melos-action@v3
       - uses: actions/setup-java@v4
         if: matrix.platform == 'android'
