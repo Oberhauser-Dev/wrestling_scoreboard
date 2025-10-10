@@ -1,3 +1,7 @@
+## 0.3.3+1
+
+ - Update a dependency to the latest release.
+
 ## 0.3.3
 
  - **REFACTOR**: Remove `bout_result:vsu1,vpo1,dsq2` and `person_role:matPresident` from default database ([#116](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/116)). ([5daeaf1b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5daeaf1beeea72e5da55ee26ceace59cd0bb8eb1))

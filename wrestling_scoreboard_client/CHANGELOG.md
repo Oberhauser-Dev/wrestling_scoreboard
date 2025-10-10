@@ -1,3 +1,8 @@
+## 0.3.4+1
+
+ - **FIX**: Sync time from other clients (closes [#197](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/197)). ([d2ff32b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d2ff32b009f6643a12733089594fe0bf7e3f14f3))
+ - **FIX**: Avoid reloading bout screen on bout update. ([60685d18](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/60685d1818a87bcf006af57c481d860d554346bd))
+
 ## 0.3.4
 
  - **FIX**: Read async value from provider without watching it (rrousselGit/riverpod[#3889](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/3889)). ([ea6c3fc4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ea6c3fc48b63467ccf923d532ec8dd8a20582a70))
