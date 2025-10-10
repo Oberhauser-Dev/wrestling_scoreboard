@@ -92,6 +92,8 @@ class BoutState extends ConsumerState<BoutScreen> {
   late Bout bout;
   int period = 1;
 
+  late final ProviderSubscription<Future<Bout>> _boutSubscription;
+
   @override
   initState() {
     super.initState();
@@ -196,6 +198,22 @@ class BoutState extends ConsumerState<BoutScreen> {
         handleAction(const BoutScreenActionIntent.horn());
       }
     });
+    // Update clock with events from other clients:
+    _boutSubscription = ref.listenManual(
+      singleDataStreamProvider<Bout>(SingleProviderData(id: bout.id!, initialData: bout)).future,
+      (previous, next) async {
+        final bout = await next;
+        if (mounted) {
+          _boutStopwatch.elapsed = bout.duration;
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _boutSubscription.close();
+    super.dispose();
   }
 
   void handleAction(BoutScreenActionIntent intent) async {
