@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.4+1`](#wrestling_scoreboard_client---v0341)
+ - [`wrestling_scoreboard_common` - `v0.3.3+1`](#wrestling_scoreboard_common---v0331)
+ - [`wrestling_scoreboard_server` - `v0.3.3+1`](#wrestling_scoreboard_server---v0331)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `wrestling_scoreboard_server` - `v0.3.3+1`
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.4+1`
+
+ - **FIX**: Sync time from other clients (closes [#197](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/197)). ([d2ff32b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d2ff32b009f6643a12733089594fe0bf7e3f14f3))
+ - **FIX**: Avoid reloading bout screen on bout update. ([60685d18](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/60685d1818a87bcf006af57c481d860d554346bd))
+
+#### `wrestling_scoreboard_common` - `v0.3.3+1`
+
+ - **FIX**: Parse lowercase role of BoutAction on API import (closes [#208](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/208)). ([ff99b217](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ff99b217bed2dc78a09f82dbc7567dce308fe1c3))
+
+
 ## 2025-10-04
 
 ### Changes

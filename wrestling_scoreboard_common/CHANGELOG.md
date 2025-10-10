@@ -1,3 +1,7 @@
+## 0.3.3+1
+
+ - **FIX**: Parse lowercase role of BoutAction on API import (closes [#208](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/208)). ([ff99b217](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ff99b217bed2dc78a09f82dbc7567dce308fe1c3))
+
 ## 0.3.3
 
  - **FIX**: Update bout rules to allow winning on tie (closes [#202](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/202)). ([82330453](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/82330453b1b6393a0e76643d12a6f627b7d8ebc9))
