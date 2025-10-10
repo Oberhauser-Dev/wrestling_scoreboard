@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/competition.dart';
@@ -12,7 +13,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 /// Class to load a single bout, while also consider the previous and the next bout.
 /// So must load the whole list of bouts to keep track of what comes next.
 /// TODO: This may can be done server side with its own request in the future.
-class CompetitionBoutDisplay extends StatelessWidget {
+class CompetitionBoutDisplay extends ConsumerWidget {
   static const route = 'display';
 
   static void navigateTo(BuildContext context, CompetitionBout bout) {
@@ -33,7 +34,7 @@ class CompetitionBoutDisplay extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
     return SingleConsumer<Competition>(
       id: competitionId,
@@ -48,59 +49,58 @@ class CompetitionBoutDisplay extends StatelessWidget {
             final competitionBout = competitionBouts.singleWhere((element) => element.id == competitionBoutId);
             final matCompetitionBouts = competitionBouts.where((cb) => cb.mat == competitionBout.mat).toList();
             final matCompetitionBoutIndex = matCompetitionBouts.indexOf(competitionBout);
-            // Use bout to get the actual state, but use competitionBout for navigation.
-            return SingleConsumer<Bout>(
-              id: competitionBout.bout.id,
-              initialData: competitionBout.bout,
-              builder: (context, bout) {
-                return ManyConsumer<CompetitionParticipation, CompetitionWeightCategory>(
-                  // TODO: change filter mechanism if weightCategory is null
-                  filterObject: competitionBout.weightCategory,
-                  builder: (context, participations) {
-                    final homeParticipation = CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
-                      participations: participations,
-                      membership: bout.r?.membership,
-                      weightCategory: competitionBout.weightCategory,
-                    );
-                    final guestParticipation =
-                        CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
-                          participations: participations,
-                          membership: bout.r?.membership,
-                          weightCategory: competitionBout.weightCategory,
-                        );
+            // Use competitionBout for navigation.
+            return ManyConsumer<CompetitionParticipation, CompetitionWeightCategory>(
+              // TODO: change filter mechanism if weightCategory is null
+              filterObject: competitionBout.weightCategory,
+              builder: (context, participations) {
+                return ManyConsumer<BoutResultRule, BoutConfig>(
+                  filterObject: competitionBout.competition.boutConfig,
+                  builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
+                    return BoutScreen(
+                      wrestlingEvent: competition,
+                      // TODO: Need to be able to define official per bout
+                      officials: {},
+                      boutConfig: competition.boutConfig,
+                      boutRules: boutResultRules,
+                      bouts: matCompetitionBouts.map((e) => e.bout).toList(),
+                      boutIndex: matCompetitionBoutIndex,
+                      bout: competitionBout.bout,
+                      mat: competitionBout.displayMat,
+                      actions: [
+                        ResponsiveScaffoldActionItem(
+                          label: localizations.info,
+                          icon: const Icon(Icons.info),
+                          onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),
+                        ),
+                      ],
+                      navigateToBoutByIndex: (context, index) {
+                        context.pop();
+                        CompetitionBoutDisplay.navigateTo(context, matCompetitionBouts[index]);
+                      },
+                      // TODO
+                      headerItems: [],
+                      weightClass: competitionBout.weightCategory?.weightClass,
+                      ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
+                      roundDescription: competitionBout.roundDescription(context),
+                      getWeightR: (bout) async {
+                        final homeParticipation =
+                            CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
+                              participations: participations,
+                              membership: bout.r?.membership,
+                              weightCategory: competitionBout.weightCategory,
+                            );
+                        return homeParticipation?.weight;
+                      },
+                      getWeightB: (bout) async {
+                        final guestParticipation =
+                            CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
+                              participations: participations,
+                              membership: bout.r?.membership,
+                              weightCategory: competitionBout.weightCategory,
+                            );
 
-                    return ManyConsumer<BoutResultRule, BoutConfig>(
-                      filterObject: competitionBout.competition.boutConfig,
-                      builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
-                        return BoutScreen(
-                          wrestlingEvent: competition,
-                          // TODO: Need to be able to define official per bout
-                          officials: {},
-                          boutConfig: competition.boutConfig,
-                          boutRules: boutResultRules,
-                          bouts: matCompetitionBouts.map((e) => e.bout).toList(),
-                          boutIndex: matCompetitionBoutIndex,
-                          bout: bout,
-                          mat: competitionBout.displayMat,
-                          actions: [
-                            ResponsiveScaffoldActionItem(
-                              label: localizations.info,
-                              icon: const Icon(Icons.info),
-                              onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),
-                            ),
-                          ],
-                          navigateToBoutByIndex: (context, index) {
-                            context.pop();
-                            CompetitionBoutDisplay.navigateTo(context, matCompetitionBouts[index]);
-                          },
-                          // TODO
-                          headerItems: [],
-                          weightClass: competitionBout.weightCategory?.weightClass,
-                          ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
-                          roundDescription: competitionBout.roundDescription(context),
-                          weightR: homeParticipation?.weight,
-                          weightB: guestParticipation?.weight,
-                        );
+                        return guestParticipation?.weight;
                       },
                     );
                   },

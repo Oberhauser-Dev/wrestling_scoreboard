@@ -21,6 +21,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_displ
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
@@ -36,8 +37,8 @@ class BoutScreen extends ConsumerStatefulWidget {
   final Map<Person, PersonRole> officials;
   final List<Bout> bouts;
   final Bout bout;
-  final double? weightR;
-  final double? weightB;
+  final Future<double?> Function(Bout bout)? getWeightR;
+  final Future<double?> Function(Bout bout)? getWeightB;
   final WeightClass? weightClass;
   final AgeCategory? ageCategory;
   final String? roundDescription;
@@ -66,8 +67,9 @@ class BoutScreen extends ConsumerStatefulWidget {
     this.weightClass,
     this.roundDescription,
     this.ageCategory,
-    this.weightR,
-    this.weightB,
+    // Use getter so we don't need to update the whole screen
+    this.getWeightR,
+    this.getWeightB,
     this.mat,
   });
 
@@ -99,8 +101,8 @@ class BoutState extends ConsumerState<BoutScreen> {
     weightClass = widget.weightClass;
     // Set the current period based on the duration:
     period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
-    _r = ParticipantStateModel(bout.r, widget.weightR);
-    _b = ParticipantStateModel(bout.b, widget.weightB);
+    _r = ParticipantStateModel();
+    _b = ParticipantStateModel();
 
     // Regular injury
     _r.injuryStopwatch.limit = boutConfig.injuryDuration;
@@ -406,7 +408,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 row(
                   padding: bottomPadding,
                   children: [
-                    Expanded(flex: 50, child: _ParticipantDisplay(_r.pStatus, BoutRole.red, padding, _r.weight)),
+                    Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.red, padding, widget.getWeightR)),
                     Expanded(
                       flex: 20,
                       child: Column(
@@ -444,7 +446,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                         ],
                       ),
                     ),
-                    Expanded(flex: 50, child: _ParticipantDisplay(_b.pStatus, BoutRole.blue, padding, _b.weight)),
+                    Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.blue, padding, widget.getWeightB)),
                   ],
                 ),
                 row(
@@ -517,12 +519,12 @@ class BoutState extends ConsumerState<BoutScreen> {
 }
 
 class _ParticipantDisplay extends StatelessWidget {
-  final AthleteBoutState? pStatus;
+  final Bout bout;
   final BoutRole role;
   final double padding;
-  final double? weight;
+  final Future<double?> Function(Bout bout)? getWeight;
 
-  const _ParticipantDisplay(this.pStatus, this.role, this.padding, this.weight);
+  const _ParticipantDisplay(this.bout, this.role, this.padding, this.getWeight);
 
   @override
   Widget build(BuildContext context) {
@@ -530,16 +532,28 @@ class _ParticipantDisplay extends StatelessWidget {
     return ThemedContainer(
       color: color,
       child: IntrinsicHeight(
-        child: NullableSingleConsumer<AthleteBoutState>(
-          id: pStatus?.id,
-          initialData: pStatus,
-          builder: (context, pStatus) {
-            List<Widget> items = [
-              _NameDisplay(pStatus: pStatus, padding: padding, weight: weight),
-              displayClassificationPoints(pStatus, color, padding),
-            ];
-            if (role == BoutRole.blue) items = List.from(items.reversed);
-            return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
+        child: SingleConsumer<Bout>(
+          id: bout.id,
+          initialData: bout,
+          builder: (context, bout) {
+            final athleteBoutState = role == BoutRole.red ? bout.r : bout.b;
+            return NullableSingleConsumer<AthleteBoutState>(
+              id: athleteBoutState?.id,
+              initialData: athleteBoutState,
+              builder: (context, pStatus) {
+                List<Widget> items = [
+                  LoadingBuilder(
+                    future: getWeight?.call(bout) ?? Future.value(null),
+                    builder: (context, weight) {
+                      return _NameDisplay(pStatus: pStatus, padding: padding, weight: weight);
+                    },
+                  ),
+                  displayClassificationPoints(pStatus, color, padding),
+                ];
+                if (role == BoutRole.blue) items = List.from(items.reversed);
+                return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
+              },
+            );
           },
         ),
       ),
