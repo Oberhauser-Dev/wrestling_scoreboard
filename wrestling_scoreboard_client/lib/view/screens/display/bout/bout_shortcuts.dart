@@ -120,11 +120,12 @@ class BoutScreenActionIntent extends Intent {
   final BoutScreenActions type;
 
   Future<void> handle(
-    ObservableStopwatch stopwatch,
     List<Bout> bouts,
     Future<List<BoutAction>> Function() getActions,
     int boutIndex,
     Function(BoutScreenActions action) doAction, {
+    required ObservableStopwatch currentStopwatch,
+    required ObservableStopwatch boutStopwatch,
     BuildContext? context,
     required void Function(BuildContext context, int boutIndex) navigateToBoutByIndex,
     required Future<void> Function(BoutAction action) createOrUpdateAction,
@@ -133,20 +134,20 @@ class BoutScreenActionIntent extends Intent {
     final bout = bouts[boutIndex];
     switch (type) {
       case BoutScreenActions.startStop:
-        stopwatch.startStop();
+        currentStopwatch.startStop();
         break;
       case BoutScreenActions.addOneSec:
-        stopwatch.add(const Duration(seconds: 1));
+        currentStopwatch.add(const Duration(seconds: 1));
         break;
       case BoutScreenActions.rmOneSec:
-        if (stopwatch.elapsed > const Duration(seconds: 1)) {
-          stopwatch.add(-const Duration(seconds: 1));
+        if (currentStopwatch.elapsed > const Duration(seconds: 1)) {
+          currentStopwatch.add(-const Duration(seconds: 1));
         } else {
-          stopwatch.add(-stopwatch.elapsed);
+          currentStopwatch.add(-currentStopwatch.elapsed);
         } // Do not reset, as it will may stop the timer
         break;
       case BoutScreenActions.reset:
-        stopwatch.reset();
+        currentStopwatch.reset();
         break;
       case BoutScreenActions.nextBout:
         if (context != null) {
@@ -172,7 +173,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 1,
         );
@@ -182,7 +183,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 2,
         );
@@ -192,7 +193,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 3,
         );
@@ -202,7 +203,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 4,
         );
@@ -212,7 +213,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 5,
         );
@@ -222,7 +223,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.verbal,
         );
         await createOrUpdateAction(action);
@@ -231,7 +232,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.passivity,
         );
         await createOrUpdateAction(action);
@@ -240,7 +241,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.caution,
         );
         await createOrUpdateAction(action);
@@ -249,7 +250,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.red,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.dismissal,
         );
         await createOrUpdateAction(action);
@@ -277,7 +278,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 1,
         );
@@ -287,7 +288,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 2,
         );
@@ -297,7 +298,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 3,
         );
@@ -307,7 +308,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 4,
         );
@@ -317,7 +318,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.points,
           pointCount: 5,
         );
@@ -327,7 +328,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.verbal,
         );
         await createOrUpdateAction(action);
@@ -336,7 +337,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.passivity,
         );
         await createOrUpdateAction(action);
@@ -345,7 +346,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.caution,
         );
         await createOrUpdateAction(action);
@@ -354,7 +355,7 @@ class BoutScreenActionIntent extends Intent {
         final action = BoutAction(
           bout: bout,
           role: BoutRole.blue,
-          duration: stopwatch.elapsed,
+          duration: boutStopwatch.elapsed,
           actionType: BoutActionType.dismissal,
         );
         await createOrUpdateAction(action);
@@ -426,7 +427,8 @@ final shortcuts = <LogicalKeySet, Intent>{
 
 class BoutActionHandler extends ConsumerWidget {
   final Widget child;
-  final ObservableStopwatch stopwatch;
+  final ObservableStopwatch boutStopwatch;
+  final ObservableStopwatch Function() getCurrentStopwatch;
   final List<Bout> bouts;
   final Future<List<BoutAction>> Function() getActions;
   final int boutIndex;
@@ -437,7 +439,8 @@ class BoutActionHandler extends ConsumerWidget {
 
   const BoutActionHandler({
     required this.child,
-    required this.stopwatch,
+    required this.boutStopwatch,
+    required this.getCurrentStopwatch,
     required this.bouts,
     required this.getActions,
     required this.boutIndex,
@@ -497,12 +500,13 @@ class BoutActionHandler extends ConsumerWidget {
     if (context.mounted) {
       await catchAsync(context, () async {
         await intent.handle(
-          stopwatch,
           bouts,
           getActions,
           boutIndex,
           doAction,
           context: context,
+          currentStopwatch: getCurrentStopwatch(),
+          boutStopwatch: boutStopwatch,
           navigateToBoutByIndex: navigateToBoutByIndex,
           createOrUpdateAction: createOrUpdateAction,
           deleteAction: deleteAction,

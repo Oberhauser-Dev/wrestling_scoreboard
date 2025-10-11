@@ -222,7 +222,6 @@ class BoutState extends ConsumerState<BoutScreen> {
       await catchAsync(
         tmpContext,
         () => intent.handle(
-          stopwatch,
           widget.bouts,
           () async => await ref.readAsync(
             manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
@@ -230,6 +229,8 @@ class BoutState extends ConsumerState<BoutScreen> {
           widget.boutIndex,
           doAction,
           context: tmpContext,
+          currentStopwatch: stopwatch,
+          boutStopwatch: _boutStopwatch,
           navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
           createOrUpdateAction:
               (action) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
@@ -399,7 +400,8 @@ class BoutState extends ConsumerState<BoutScreen> {
         createOrUpdateAction:
             (action) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
         deleteAction: (action) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle(action),
-        stopwatch: stopwatch,
+        getCurrentStopwatch: () => stopwatch,
+        boutStopwatch: _boutStopwatch,
         getActions:
             () async => await ref.readAsync(
               manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
