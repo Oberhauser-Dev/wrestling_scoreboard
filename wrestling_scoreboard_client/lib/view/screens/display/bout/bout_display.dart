@@ -203,7 +203,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       singleDataStreamProvider<Bout>(SingleProviderData(id: bout.id!, initialData: bout)).future,
       (previous, next) async {
         final bout = await next;
-        if (mounted) {
+        if (!_boutStopwatch.isDisposed) {
           _boutStopwatch.elapsed = bout.duration;
         }
       },

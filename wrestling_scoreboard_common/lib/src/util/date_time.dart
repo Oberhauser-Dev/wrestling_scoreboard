@@ -22,6 +22,7 @@ class ObservableStopwatch extends Stopwatch {
   Duration? limit;
   final Duration tick;
   final bool roundToUnit;
+  bool isDisposed = false;
 
   ObservableStopwatch({this.limit, this.tick = const Duration(milliseconds: 30), this.roundToUnit = true});
 
@@ -97,6 +98,8 @@ class ObservableStopwatch extends Stopwatch {
   }
 
   void dispose() {
+    if(isDisposed) return;
+    isDisposed = true;
     stop();
     onStart.close();
     onStartStop.close();
