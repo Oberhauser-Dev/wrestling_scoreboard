@@ -100,9 +100,25 @@ class BoutState extends ConsumerState<BoutScreen> {
     boutConfig = widget.boutConfig;
     boutRules = widget.boutRules;
     bout = widget.bout;
-    weightClass = widget.weightClass;
-    // Set the current period based on the duration:
+    // Set the initial current period based on the duration (to avoid wrong trigger of wrong stopwatch):
     period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
+    // Update bout state with events from other clients:
+    _boutSubscription = ref.listenManual(
+      singleDataStreamProvider<Bout>(SingleProviderData(id: bout.id!, initialData: bout)).future,
+      (previous, next) async {
+        bout = await next;
+        // Set the current period based on the duration:
+        period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
+        if (!_boutStopwatch.isDisposed) {
+          _boutStopwatch.elapsed = bout.duration;
+        }
+      },
+      // Ensure the bout is updated immediately (e.g. after leaving and entering the display)
+      // This happens, as the bout object is not refreshed in the underlaying screens to avoid reload animations.
+      fireImmediately: true,
+    );
+
+    weightClass = widget.weightClass;
     _r = ParticipantStateModel();
     _b = ParticipantStateModel();
 
@@ -199,16 +215,6 @@ class BoutState extends ConsumerState<BoutScreen> {
         handleAction(const BoutScreenActionIntent.horn());
       }
     });
-    // Update clock with events from other clients:
-    _boutSubscription = ref.listenManual(
-      singleDataStreamProvider<Bout>(SingleProviderData(id: bout.id!, initialData: bout)).future,
-      (previous, next) async {
-        final bout = await next;
-        if (!_boutStopwatch.isDisposed) {
-          _boutStopwatch.elapsed = bout.duration;
-        }
-      },
-    );
   }
 
   @override
