@@ -19,4 +19,8 @@ extension DurationLocalization on Duration {
   String formatMinutesAndSecondsAndMilliseconds() {
     return '$inMinutes:${inSeconds.remainder(60).toString().padLeft(2, '0')}.${inMilliseconds.remainder(1000).toString().padLeft(3, '0')}s';
   }
+
+  String formatDeciSeconds() {
+    return (inMilliseconds.remainder(1000) / 100).toInt().toString();
+  }
 }

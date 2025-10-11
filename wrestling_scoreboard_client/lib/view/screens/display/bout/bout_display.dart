@@ -482,6 +482,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                           child: TimeDisplay(
                             // Need to replace the time display on changing the stop watch
                             key: ValueKey(stopwatch),
+                            showDeciSecond: true,
                             stopwatch,
                             stopwatchColor,
                             fontSize: 128,

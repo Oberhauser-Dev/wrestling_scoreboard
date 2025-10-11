@@ -15,6 +15,7 @@ class ObservableStopwatch extends Stopwatch {
   final StreamController<Duration> onChange = StreamController.broadcast();
   final StreamController<Duration> onAdd = StreamController.broadcast();
   final StreamController<Duration> onChangeSecond = StreamController.broadcast();
+  final StreamController<Duration> onChangeDeciSecond = StreamController.broadcast();
   final StreamController<Duration> onChangeMinute = StreamController.broadcast();
   Timer? _timer;
   Duration presetDuration = Duration();
@@ -54,12 +55,16 @@ class ObservableStopwatch extends Stopwatch {
   void _handleTick() {
     final elapsed = this.elapsed;
     onChange.add(elapsed);
-    final inSeconds = elapsed.inSeconds;
-    if (inSeconds != _prevDuration.inSeconds) {
-      onChangeSecond.add(roundToUnit ? Duration(seconds: inSeconds) : elapsed);
-      final inMinutes = elapsed.inMinutes;
-      if (inMinutes != _prevDuration.inMinutes) {
-        onChangeMinute.add(roundToUnit ? Duration(minutes: inMinutes) : elapsed);
+    final inDeciSeconds = _toDeciSeconds(elapsed);
+    if (inDeciSeconds != _toDeciSeconds(_prevDuration)) {
+      onChangeDeciSecond.add(roundToUnit ? Duration(milliseconds: inDeciSeconds * 100) : elapsed);
+      final inSeconds = elapsed.inSeconds;
+      if (inSeconds != _prevDuration.inSeconds) {
+        onChangeSecond.add(roundToUnit ? Duration(seconds: inSeconds) : elapsed);
+        final inMinutes = elapsed.inMinutes;
+        if (inMinutes != _prevDuration.inMinutes) {
+          onChangeMinute.add(roundToUnit ? Duration(minutes: inMinutes) : elapsed);
+        }
       }
     }
     if (hasEnded) {
@@ -67,6 +72,10 @@ class ObservableStopwatch extends Stopwatch {
       onEnd.add(elapsed);
     }
     _prevDuration = elapsed;
+  }
+
+  int _toDeciSeconds(Duration duration) {
+    return duration.inMilliseconds ~/ 100;
   }
 
   bool get hasEnded => limit != null && elapsed >= limit!;
@@ -98,7 +107,7 @@ class ObservableStopwatch extends Stopwatch {
   }
 
   void dispose() {
-    if(isDisposed) return;
+    if (isDisposed) return;
     isDisposed = true;
     stop();
     onStart.close();
@@ -107,6 +116,7 @@ class ObservableStopwatch extends Stopwatch {
     onEnd.close();
     onAdd.close();
     onChange.close();
+    onChangeDeciSecond.close();
     onChangeSecond.close();
     onChangeMinute.close();
   }

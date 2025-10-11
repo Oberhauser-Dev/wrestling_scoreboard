@@ -14,8 +14,16 @@ class TimeDisplay extends ConsumerStatefulWidget {
   final ObservableStopwatch stopwatch;
   final double? fontSize;
   final Duration maxDuration;
+  final bool showDeciSecond;
 
-  const TimeDisplay(this.stopwatch, this.color, {this.fontSize, super.key, required this.maxDuration});
+  const TimeDisplay(
+    this.stopwatch,
+    this.color, {
+    this.fontSize,
+    super.key,
+    required this.maxDuration,
+    this.showDeciSecond = false,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TimeDisplayState();
@@ -27,7 +35,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
   @override
   void initState() {
     super.initState();
-    widget.stopwatch.onChangeSecond.stream.listen((duration) {
+    widget.stopwatch.onChangeDeciSecond.stream.listen((duration) {
       if (mounted) {
         setState(() {
           _currentTime = duration;
@@ -60,12 +68,32 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
               widget.stopwatch.elapsed = val.invertIf(isTimeCountDown, max: widget.maxDuration);
             }
           },
-          child: ScaledText(
-            adjustedTime().formatMinutesAndSeconds(),
-            fontSize: widget.fontSize ?? 14,
-            color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
-            minFontSize: 12,
-            softWrap: false,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ScaledText(
+                adjustedTime().formatMinutesAndSeconds(),
+                fontSize: widget.fontSize ?? 14,
+                color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
+                minFontSize: 12,
+                softWrap: false,
+              ),
+              if (widget.showDeciSecond)
+                Padding(
+                  // Align deci seconds to the text baseline
+                  padding: EdgeInsets.symmetric(
+                    vertical: ((widget.fontSize ?? 14) / 4) * MediaQuery.of(context).size.width / 1000,
+                  ),
+                  child: ScaledText(
+                    adjustedTime().formatDeciSeconds(),
+                    fontSize: (widget.fontSize ?? 14) / 4,
+                    color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
+                    minFontSize: 8,
+                    softWrap: false,
+                  ),
+                ),
+            ],
           ),
         );
       },
