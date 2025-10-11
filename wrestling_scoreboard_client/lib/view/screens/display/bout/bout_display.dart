@@ -150,6 +150,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     _boutStopwatch.onStop.stream.listen((event) async {
       _r.activityStopwatch?.stop();
       _b.activityStopwatch?.stop();
+      bout = bout.copyWith(duration: event);
 
       // Save time to database on each stop
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
