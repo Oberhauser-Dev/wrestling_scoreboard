@@ -1,3 +1,11 @@
+## 0.3.5
+
+ - **FIX**: Ensure bout is updated after reentering the bout display. ([a8e8e788](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a8e8e7885266fb6fe0f05149f85b59bfc9cf9fa3))
+ - **FIX**: Save precise time on stop. ([721f5e89](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/721f5e89141273916d9b6854040ea5435e8c09ad))
+ - **FIX**: BoutActions are assigned the wrong time. ([9a8b9750](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9a8b9750f20f977065a2e86cf2a06116d57fab72))
+ - **FIX**: Avoid updating stop watch after being disposed. ([83647e15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83647e151be5e1a749407fab5fa6a299d0c45982))
+ - **FEAT**: Show deci second in bout display. ([d474e195](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d474e19556aeae9ab9db7660233c894d097bfcd8))
+
 ## 0.3.4+1
 
  - **FIX**: Sync time from other clients (closes [#197](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/197)). ([d2ff32b0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d2ff32b009f6643a12733089594fe0bf7e3f14f3))

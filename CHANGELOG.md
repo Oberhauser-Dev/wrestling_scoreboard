@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.5`](#wrestling_scoreboard_client---v035)
+ - [`wrestling_scoreboard_common` - `v0.3.5`](#wrestling_scoreboard_common---v035)
+ - [`wrestling_scoreboard_server` - `v0.3.5`](#wrestling_scoreboard_server---v035)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.5`
+
+ - **FIX**: Ensure bout is updated after reentering the bout display. ([a8e8e788](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a8e8e7885266fb6fe0f05149f85b59bfc9cf9fa3))
+ - **FIX**: Save precise time on stop. ([721f5e89](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/721f5e89141273916d9b6854040ea5435e8c09ad))
+ - **FIX**: BoutActions are assigned the wrong time. ([9a8b9750](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9a8b9750f20f977065a2e86cf2a06116d57fab72))
+ - **FIX**: Avoid updating stop watch after being disposed. ([83647e15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83647e151be5e1a749407fab5fa6a299d0c45982))
+ - **FEAT**: Show deci second in bout display. ([d474e195](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d474e19556aeae9ab9db7660233c894d097bfcd8))
+
+#### `wrestling_scoreboard_common` - `v0.3.5`
+
+ - **FIX**: Avoid updating stop watch after being disposed. ([83647e15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83647e151be5e1a749407fab5fa6a299d0c45982))
+ - **FEAT**: Show deci second in bout display. ([d474e195](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d474e19556aeae9ab9db7660233c894d097bfcd8))
+
+#### `wrestling_scoreboard_server` - `v0.3.5`
+
+ - Update a dependency to the latest release
+
+
 ## 2025-10-10
 
 ### Changes
