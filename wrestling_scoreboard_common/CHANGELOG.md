@@ -1,3 +1,8 @@
+## 0.3.5
+
+ - **FIX**: Avoid updating stop watch after being disposed. ([83647e15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83647e151be5e1a749407fab5fa6a299d0c45982))
+ - **FEAT**: Show deci second in bout display. ([d474e195](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d474e19556aeae9ab9db7660233c894d097bfcd8))
+
 ## 0.3.3+1
 
  - **FIX**: Parse lowercase role of BoutAction on API import (closes [#208](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/208)). ([ff99b217](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ff99b217bed2dc78a09f82dbc7567dce308fe1c3))

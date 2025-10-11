@@ -69,6 +69,11 @@ To create a new version of all packages, call:
 melos version --all --prerelease --preid=beta --diff=v0.0.1-beta.11
 ```
 
+Pin to a specific version:
+```bash
+ melos version -a --no-git-tag-version -V wrestling_scoreboard_client:0.3.5 -V wrestling_scoreboard_common:0.3.5 -V wrestling_scoreboard_server:0.3.5
+```
+
 Please read the documentation for setting up the according components:
 - [Database](wrestling_scoreboard_server/database/README.md)
 - [Server](wrestling_scoreboard_server/README.md#development)
