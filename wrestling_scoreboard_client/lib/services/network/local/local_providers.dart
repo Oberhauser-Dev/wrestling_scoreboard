@@ -37,35 +37,29 @@ class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements Dat
 
 @Riverpod(keepAlive: true)
 class LocalDataNotifier<T extends DataObject> extends _$LocalDataNotifier<T> {
-  final organization = Organization(id: 0, name: 'Organization');
-  late final person0 = Person(id: 0, prename: 'Red', surname: '');
-  late final person1 = Person(id: 1, prename: 'Blue', surname: '');
-  late final club0 = Club(id: 0, organization: organization, name: 'Home');
-  late final club1 = Club(id: 1, organization: organization, name: 'Guest');
-  late final membership0 = Membership(id: 0, club: club0, person: person0);
-  late final membership1 = Membership(id: 1, club: club1, person: person1);
-  late final athleteBoutState0 = AthleteBoutState(id: 0, membership: membership0);
-  late final athleteBoutState1 = AthleteBoutState(id: 1, membership: membership1);
-  late final bout = Bout(id: 0, r: athleteBoutState0, b: athleteBoutState1);
-  late final weightClassFree = WeightClass(id: 0, weight: 0, style: WrestlingStyle.free);
-  late final weightClassGreco = WeightClass(id: 1, weight: 0, style: WrestlingStyle.greco);
+  /// Need to recreate default entities on every initialization, as the original object can get changed during usage.
+  List<T> _createDefaultEntities(List<Map<String, dynamic>> result) {
+    final organization = Organization(id: 0, name: 'Organization');
+    final person0 = Person(id: 0, prename: 'Red', surname: '');
+    final person1 = Person(id: 1, prename: 'Blue', surname: '');
+    final club0 = Club(id: 0, organization: organization, name: 'Home');
+    final club1 = Club(id: 1, organization: organization, name: 'Guest');
+    final membership0 = Membership(id: 0, club: club0, person: person0);
+    final membership1 = Membership(id: 1, club: club1, person: person1);
+    final athleteBoutState0 = AthleteBoutState(id: 0, membership: membership0);
+    final athleteBoutState1 = AthleteBoutState(id: 1, membership: membership1);
+    final bout = Bout(id: 0, r: athleteBoutState0, b: athleteBoutState1);
+    final weightClassFree = WeightClass(id: 0, weight: 0, style: WrestlingStyle.free);
+    final weightClassGreco = WeightClass(id: 1, weight: 0, style: WrestlingStyle.greco);
 
-  final boutConfig = Competition.defaultBoutConfig.copyWithId(0);
-  late final boutResultRules =
-      Competition.defaultBoutResultRules.indexed.map((e) => e.$2.copyWith(id: e.$1, boutConfig: boutConfig)).toList();
+    final boutConfig = Competition.defaultBoutConfig.copyWithId(0);
+    final boutResultRules =
+        Competition.defaultBoutResultRules.indexed.map((e) => e.$2.copyWith(id: e.$1, boutConfig: boutConfig)).toList();
 
-  late final scratchBout = ScratchBout(id: 0, bout: bout, boutConfig: boutConfig, weightClass: weightClassFree);
-
-  @override
-  Raw<Future<List<Map<String, dynamic>>>> build() async {
-    final jsonList = await Preferences.getStringList(getTableNameFromType(T) + Preferences.keyDataSuffix);
-    final List<Map<String, dynamic>> result = [];
-    if (jsonList != null) {
-      result.addAll(jsonList.map((json) => jsonDecode(json)));
-    }
+    final scratchBout = ScratchBout(id: 0, bout: bout, boutConfig: boutConfig, weightClass: weightClassFree);
 
     // Provide a set of default entities to create a scratch bout
-    final List<T> defaultEntities = switch (T) {
+    return switch (T) {
       const (Bout) => [bout as T],
       const (Organization) => [organization as T],
       const (AthleteBoutState) => [athleteBoutState0 as T, athleteBoutState1 as T],
@@ -79,6 +73,17 @@ class LocalDataNotifier<T extends DataObject> extends _$LocalDataNotifier<T> {
       const (ScratchBout) => [scratchBout as T],
       _ => [],
     };
+  }
+
+  @override
+  Raw<Future<List<Map<String, dynamic>>>> build() async {
+    final jsonList = await Preferences.getStringList(getTableNameFromType(T) + Preferences.keyDataSuffix);
+    final List<Map<String, dynamic>> result = [];
+    if (jsonList != null) {
+      result.addAll(jsonList.map((json) => jsonDecode(json)));
+    }
+
+    final defaultEntities = _createDefaultEntities(result);
     final diff = defaultEntities.map((e) => e.id).toSet().difference(result.map((e) => e['id']).toSet());
     if (diff.isNotEmpty) {
       // Always add default entities which were not saved yet.
