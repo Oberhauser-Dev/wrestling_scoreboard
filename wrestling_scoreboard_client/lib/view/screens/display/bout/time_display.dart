@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
@@ -31,24 +33,53 @@ class TimeDisplay extends ConsumerStatefulWidget {
 
 class TimeDisplayState extends ConsumerState<TimeDisplay> {
   late Duration _currentTime;
+  late ObservableStopwatch _stopwatch;
+  StreamSubscription<Duration>? _deciSecondStopwatchSubscription;
+  StreamSubscription<bool>? _startStopStopwatchSubscription;
 
   @override
   void initState() {
     super.initState();
-    widget.stopwatch.onChangeDeciSecond.stream.listen((duration) {
+    _updateStopwatch();
+  }
+
+  @override
+  void didUpdateWidget(covariant TimeDisplay oldWidget) {
+    if (oldWidget.stopwatch != widget.stopwatch) {
+      _updateStopwatch();
+      setState(() {});
+    }
+    if (oldWidget.color != widget.color) {
+      setState(() {});
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _deciSecondStopwatchSubscription?.cancel();
+    _startStopStopwatchSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _updateStopwatch() {
+    _stopwatch = widget.stopwatch;
+    _deciSecondStopwatchSubscription?.cancel();
+    _startStopStopwatchSubscription?.cancel();
+    _deciSecondStopwatchSubscription = _stopwatch.onChangeDeciSecond.stream.listen((duration) {
       if (mounted) {
         setState(() {
           _currentTime = duration;
         });
       }
     });
-    widget.stopwatch.onStartStop.stream.listen((event) {
+    _startStopStopwatchSubscription = _stopwatch.onStartStop.stream.listen((event) {
       // Update color
       if (mounted) {
         setState(() {});
       }
     });
-    _currentTime = widget.stopwatch.elapsed;
+    _currentTime = _stopwatch.elapsed;
   }
 
   @override
@@ -65,7 +96,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
               maxValue: widget.maxDuration,
             );
             if (val != null) {
-              widget.stopwatch.elapsed = val.invertIf(isTimeCountDown, max: widget.maxDuration);
+              _stopwatch.elapsed = val.invertIf(isTimeCountDown, max: widget.maxDuration);
             }
           },
           child: Row(
@@ -75,7 +106,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
               ScaledText(
                 adjustedTime().formatMinutesAndSeconds(),
                 fontSize: widget.fontSize ?? 14,
-                color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
+                color: _stopwatch.isRunning ? widget.color : widget.color.disabled(),
                 minFontSize: 12,
                 softWrap: false,
               ),
@@ -88,7 +119,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
                   child: ScaledText(
                     adjustedTime().formatDeciSeconds(),
                     fontSize: (widget.fontSize ?? 14) / 4,
-                    color: widget.stopwatch.isRunning ? widget.color : widget.color.disabled(),
+                    color: _stopwatch.isRunning ? widget.color : widget.color.disabled(),
                     minFontSize: 8,
                     softWrap: false,
                   ),

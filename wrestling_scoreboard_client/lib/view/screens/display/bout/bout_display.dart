@@ -493,8 +493,6 @@ class BoutState extends ConsumerState<BoutScreen> {
                         child: DelayedTooltip(
                           message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
                           child: TimeDisplay(
-                            // Need to replace the time display on changing the stop watch
-                            key: ValueKey(stopwatch),
                             showDeciSecond: true,
                             stopwatch,
                             stopwatchColor,
