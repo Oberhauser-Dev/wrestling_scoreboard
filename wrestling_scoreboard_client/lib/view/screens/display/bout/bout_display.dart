@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:printing/printing.dart';
@@ -93,6 +95,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   int period = 1;
 
   late final ProviderSubscription<Future<Bout>> _boutSubscription;
+  late final StreamSubscription<Duration> _onEndBreakStopwatchSubscription;
 
   @override
   initState() {
@@ -181,7 +184,9 @@ class BoutState extends ConsumerState<BoutScreen> {
 
         // If is above the time of the current period, then trigger the break
         if (bout.duration.compareTo(boutConfig.periodDuration * period) >= 0) {
-          _boutStopwatch.stop();
+          // Set to exact period end, as internal duration of stopwatch usually is a few milliseconds ahead of the second listener.
+          // Otherwise the timer is displaying a different time (2:59.9) than expected (3:00.0) after a break.
+          _boutStopwatch.stopAt(event);
           if (_r.activityStopwatch != null) {
             _r.activityStopwatch!.dispose();
             _r.activityStopwatch = null;
@@ -206,7 +211,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     });
     stopwatch.add(bout.duration);
     _breakStopwatch = ObservableStopwatch(limit: boutConfig.breakDuration);
-    _breakStopwatch.onEnd.stream.listen((event) {
+    _onEndBreakStopwatchSubscription = _breakStopwatch.onEnd.stream.listen((event) {
       if (stopwatch == _breakStopwatch) {
         _breakStopwatch.reset();
         setState(() {
@@ -220,6 +225,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   @override
   void dispose() {
     _boutSubscription.close();
+    _onEndBreakStopwatchSubscription.cancel();
     super.dispose();
   }
 
