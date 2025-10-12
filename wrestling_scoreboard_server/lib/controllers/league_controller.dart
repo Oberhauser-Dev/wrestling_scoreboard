@@ -66,15 +66,10 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
 
     final teamMatchs = await TeamMatchController().updateOrCreateManyOfOrg(
       teamMatchMap.keys.toList(),
-      conditions: ['league_id = @id'],
-      substitutionValues: {'id': entity.id},
+      filterType: League,
+      filterId: entity.id,
       onUpdatedOrCreated: (previous, teamMatch) async {
         final officials = teamMatchMap.entries.where((tmm) => tmm.key.orgSyncId == teamMatch.orgSyncId).single.value;
-        final prevOfficials = await TeamMatchPersonController().getMany(
-          conditions: ['team_match_id = @id'],
-          substitutionValues: {'id': teamMatch.id},
-          obfuscate: obfuscate,
-        );
         final updatedOfficials = await forEachFuture(
           officials.entries,
           (official) async => MapEntry(
@@ -87,7 +82,8 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
           updatedOfficials
               .map((official) => TeamMatchPerson(teamMatch: teamMatch, person: official.key, role: official.value))
               .toList(),
-          previous: prevOfficials,
+          filterType: TeamMatch,
+          filterId: teamMatch.id,
         );
       },
       onUpdateOrCreate: (prevTeamMatch, teamMatch) async {

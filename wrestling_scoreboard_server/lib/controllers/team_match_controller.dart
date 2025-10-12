@@ -210,8 +210,8 @@ class TeamMatchController extends ShelfController<TeamMatch>
     teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
       teamMatchBouts,
       obfuscate: obfuscate,
-      conditions: ['team_match_id = @id'],
-      substitutionValues: {'id': entity.id},
+      filterType: TeamMatch,
+      filterId: entity.id,
       onUpdateOrCreate: (previous, current) async {
         var bout = current.bout;
         final actions = tmbMap[current]!;
@@ -241,8 +241,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
         // Add missing id to bout of boutActions
         final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
-        final prevBoutActions = await BoutActionController().getByBout(bout.id!, obfuscate: obfuscate);
-        await BoutActionController().updateOnDiffMany(boutActions.toList(), previous: prevBoutActions);
+        await BoutActionController().updateOnDiffMany(boutActions.toList(), filterType: Bout, filterId: bout.id);
         return current.copyWith(bout: bout);
       },
       onDelete: (previous) async {
@@ -282,8 +281,6 @@ class TeamMatchController extends ShelfController<TeamMatch>
     TeamLineup lineup,
     Map<WeightClass, AthleteBoutState?> participantsMap,
   ) async {
-    final prevParticipations = await TeamLineupParticipationController().getByLineup(null, lineup.id!);
-
     await TeamLineupParticipationController().updateOnDiffMany(
       participantsMap.entries
           .map((entry) {
@@ -299,7 +296,8 @@ class TeamMatchController extends ShelfController<TeamMatch>
           })
           .nonNulls
           .toList(),
-      previous: prevParticipations,
+      filterType: TeamLineup,
+      filterId: lineup.id,
     );
   }
 
