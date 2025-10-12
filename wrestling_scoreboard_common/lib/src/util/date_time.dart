@@ -68,7 +68,7 @@ class ObservableStopwatch extends Stopwatch {
       }
     }
     if (hasEnded) {
-      stop();
+      stopAt(limit!);
       onEnd.add(elapsed);
     }
     _prevDuration = elapsed;
@@ -85,6 +85,17 @@ class ObservableStopwatch extends Stopwatch {
     if (isRunning) {
       _timer?.cancel();
       super.stop();
+      onStop.add(elapsed);
+      _onStartStop();
+    }
+  }
+
+  /// Stop precisely at the given [elapsed] duration.
+  void stopAt(Duration elapsed) {
+    if (isRunning) {
+      _timer?.cancel();
+      super.stop();
+      this.elapsed = elapsed;
       onStop.add(elapsed);
       _onStartStop();
     }
