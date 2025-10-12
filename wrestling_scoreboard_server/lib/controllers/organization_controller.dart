@@ -82,8 +82,8 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     final divisions = await DivisionController().updateOrCreateManyOfOrg(
       divisionBoutResultRuleMap.keys.toList(),
       obfuscate: obfuscate,
-      conditions: ['organization_id = @id'],
-      substitutionValues: {'id': entity.id},
+      filterType: Organization,
+      filterId: entity.id,
       onUpdateOrCreate: (previousDivision, division) async {
         var boutResultRules = divisionBoutResultRuleMap[division]!;
         final boutConfig = await BoutConfigController().updateOnDiffSingle(
@@ -91,12 +91,11 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
           previous: previousDivision?.boutConfig,
         );
         boutResultRules = boutResultRules.map((rule) => rule.copyWith(boutConfig: boutConfig));
-        final prevRules = await BoutResultRuleController().getMany(
-          conditions: ['bout_config_id = @id'],
-          substitutionValues: {'id': boutConfig.id},
-          obfuscate: obfuscate,
+        await BoutResultRuleController().updateOnDiffMany(
+          boutResultRules.toList(),
+          filterType: BoutConfig,
+          filterId: boutConfig.id,
         );
-        await BoutResultRuleController().updateOnDiffMany(boutResultRules.toList(), previous: prevRules);
         return division.copyWith(boutConfig: boutConfig);
       },
       onDeleted: (previous) async {
@@ -112,8 +111,8 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       var leagues = await apiProvider.importLeagues(division: division);
       leagues = await LeagueController().updateOrCreateManyOfOrg(
         leagues.toList(),
-        conditions: ['division_id = @id'],
-        substitutionValues: {'id': division.id},
+        filterType: Division,
+        filterId: division.id,
         obfuscate: obfuscate,
       );
 
@@ -123,8 +122,8 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
 
       await DivisionWeightClassController().updateOrCreateManyOfOrg(
         divisionWeightClasses.toList(),
-        conditions: ['division_id = @id'],
-        substitutionValues: {'id': division.id},
+        filterType: Division,
+        filterId: division.id,
         obfuscate: obfuscate,
         onUpdateOrCreate: (previousWeightClass, current) async {
           final weightClass = await WeightClassController().updateOnDiffSingle(
@@ -143,8 +142,8 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
 
         await LeagueWeightClassController().updateOrCreateManyOfOrg(
           currentLeagueWeightClasses,
-          conditions: ['league_id = @id'],
-          substitutionValues: {'id': league.id},
+          filterType: League,
+          filterId: league.id,
           obfuscate: obfuscate,
           onUpdateOrCreate: (previousWeightClass, current) async {
             final weightClass = await WeightClassController().updateOnDiffSingle(

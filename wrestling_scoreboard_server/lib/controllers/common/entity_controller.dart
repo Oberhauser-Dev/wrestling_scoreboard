@@ -4,6 +4,8 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 Map<Type, psql.Type> typeDartToCodeMap = {
@@ -190,12 +192,18 @@ abstract class EntityController<T extends DataObject> {
       _logger.fine(
         'updateOnDiffSingle: Update single as of different properties: (prev: ${previous.toJson()}, curr: ${dataObject.toJson()})',
       );
+      broadcastUpdateSingle(
+        (obfuscate) async => obfuscate ? await getSingle(dataObject.id!, obfuscate: true) : dataObject,
+      );
       await updateSingle(dataObject);
     }
     return dataObject;
   }
 
-  Future<List<T>> updateOnDiffMany(List<T> dataObjects, {required List<T> previous}) async {
+  Future<List<T>> updateOnDiffMany(List<T> dataObjects, {Type? filterType, int? filterId}) async {
+    final conditions = ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'];
+    final substitutionValues = {'fid': filterId};
+    final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
     final listLengthDiff = dataObjects.length - previous.length;
     List<T> updatingDataObjects;
     List<T> creatingDataObjects;
@@ -218,7 +226,7 @@ abstract class EntityController<T extends DataObject> {
       updatingPrevDataObjects = previous;
     }
     _logger.fine(
-      'updateOnDiffMany: Update list of data objects: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
+      'updateOnDiffMany: Update list of data objects <$T>: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
     );
     await Future.wait(deletingPrevDataObjects.map((prev) => deleteSingle(prev.id!)));
     updatingDataObjects = await Future.wait(
@@ -228,7 +236,21 @@ abstract class EntityController<T extends DataObject> {
       ).entries.map((element) => updateOnDiffSingle(element.key, previous: element.value)),
     );
     creatingDataObjects = await createManyReturn(creatingDataObjects);
-    return [...updatingDataObjects, ...creatingDataObjects];
+    final newDataObjects = [...updatingDataObjects, ...creatingDataObjects];
+    if (creatingDataObjects.isNotEmpty || deletingPrevDataObjects.isNotEmpty) {
+      broadcastUpdateMany<T>(
+        (obfuscate) async {
+          if (obfuscate) {
+            return await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: true);
+          } else {
+            return newDataObjects;
+          }
+        },
+        filterType: filterType,
+        filterId: filterId,
+      );
+    }
+    return newDataObjects;
   }
 
   // TODO: Probably can predefine dataTypes for all properties instead of retrieving them from the value.

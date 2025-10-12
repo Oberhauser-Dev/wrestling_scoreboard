@@ -4,6 +4,8 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
@@ -85,14 +87,15 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   Future<List<T>> updateOrCreateManyOfOrg(
     List<T> dataObjects, {
     required bool obfuscate,
-    required List<String> conditions,
-    Conjunction conjunction = Conjunction.and,
-    required Map<String, dynamic> substitutionValues,
+    Type? filterType,
+    int? filterId,
     Future<T> Function(T? previous, T current)? onUpdateOrCreate,
     Future<void> Function(T? previous, T current)? onUpdatedOrCreated,
     Future<void> Function(T previous)? onDelete,
     Future<void> Function(T previous)? onDeleted,
   }) async {
+    final conditions = ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'];
+    final substitutionValues = {'fid': filterId};
     final previous = await getMany(
       conditions: conditions,
       substitutionValues: substitutionValues,
@@ -100,8 +103,17 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     );
     final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
     // Delete not included entities
+    final deletingPrevDataObjects = previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId));
+    final updatingDataObjects = previous.where((Organizational p) => currentOrgSyncIds.contains(p.orgSyncId));
+    final creatingDataObjects = dataObjects.where(
+      (Organizational p) => !previous.map((e) => e.orgSyncId).contains(p.orgSyncId),
+    );
+
+    _logger.fine(
+      'updateOrCreateManyOfOrg: Update list of data objects <$T>: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
+    );
     await Future.wait(
-      previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId)).map((prev) async {
+      deletingPrevDataObjects.map((prev) async {
         if (onDelete != null) {
           await onDelete(prev);
         }
@@ -112,7 +124,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     );
 
     // Execute one after one (synchronously) as it may fails when creating the same source twice in the onUpdateOrCreate method.
-    return await forEachFuture(
+    dataObjects = await forEachFuture(
       dataObjects,
       (element) => updateOrCreateSingleOfOrg(
         element,
@@ -121,6 +133,20 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
         onUpdatedOrCreated: onUpdatedOrCreated,
       ),
     );
+    if (creatingDataObjects.isNotEmpty || deletingPrevDataObjects.isNotEmpty) {
+      broadcastUpdateMany<T>(
+        (obfuscate) async {
+          if (obfuscate) {
+            return await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: true);
+          } else {
+            return dataObjects;
+          }
+        },
+        filterType: filterType,
+        filterId: filterId,
+      );
+    }
+    return dataObjects;
   }
 
   static Future<T> getSingleFromDataTypeOfOrg<T extends Organizational>(
