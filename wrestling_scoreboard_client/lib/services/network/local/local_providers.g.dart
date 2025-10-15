@@ -169,7 +169,7 @@ final class LocalDataNotifierProvider<T extends DataObject>
   }
 }
 
-String _$localDataNotifierHash() => r'8dc38c3fda4a2feda516ddc6d463aa759c3ff3f9';
+String _$localDataNotifierHash() => r'356aafcc80801b8c3735a0f676bcf9f886168143';
 
 final class LocalDataNotifierFamily extends $Family {
   const LocalDataNotifierFamily._()

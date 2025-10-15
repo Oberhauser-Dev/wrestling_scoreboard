@@ -28,7 +28,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    widget.boutState.stopwatch.onStartStop.stream.listen((isRunning) {
+    widget.boutState.mainStopwatch.stopwatch.onStartStop.stream.listen((isRunning) {
       if (mounted) {
         setState(() {
           _isRunning = isRunning;

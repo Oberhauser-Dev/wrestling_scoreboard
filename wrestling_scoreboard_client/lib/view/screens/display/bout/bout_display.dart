@@ -82,9 +82,6 @@ class BoutScreen extends ConsumerStatefulWidget {
 class BoutState extends ConsumerState<BoutScreen> {
   static const flexWidths = [50, 30, 50];
 
-  late ObservableStopwatch stopwatch;
-  late ObservableStopwatch _boutStopwatch;
-  late ObservableStopwatch _breakStopwatch;
   late ParticipantStateModel _r;
   late ParticipantStateModel _b;
   late BoutConfig boutConfig;
@@ -96,6 +93,7 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   late final ProviderSubscription<Future<Bout>> _boutSubscription;
   late final StreamSubscription<Duration> _onEndBreakStopwatchSubscription;
+  late final MainStopwatch mainStopwatch;
 
   @override
   initState() {
@@ -112,8 +110,8 @@ class BoutState extends ConsumerState<BoutScreen> {
         bout = await next;
         // Set the current period based on the duration:
         period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
-        if (!_boutStopwatch.isDisposed) {
-          _boutStopwatch.elapsed = bout.duration;
+        if (!mainStopwatch.boutStopwatch.isDisposed) {
+          mainStopwatch.boutStopwatch.elapsed = bout.duration;
         }
       },
       // Ensure the bout is updated immediately (e.g. after leaving and entering the display)
@@ -161,12 +159,15 @@ class BoutState extends ConsumerState<BoutScreen> {
       handleAction(const BoutScreenActionIntent.horn());
     });
 
-    stopwatch = _boutStopwatch = ObservableStopwatch(limit: boutConfig.totalPeriodDuration);
-    _boutStopwatch.onStart.stream.listen((event) {
+    mainStopwatch = MainStopwatch(
+      boutStopwatch: ObservableStopwatch(limit: boutConfig.totalPeriodDuration),
+      breakStopwatch: ObservableStopwatch(limit: boutConfig.breakDuration),
+    );
+    mainStopwatch.boutStopwatch.onStart.stream.listen((event) {
       _r.activityStopwatch?.start();
       _b.activityStopwatch?.start();
     });
-    _boutStopwatch.onStop.stream.listen((event) async {
+    mainStopwatch.boutStopwatch.onStop.stream.listen((event) async {
       _r.activityStopwatch?.stop();
       _b.activityStopwatch?.stop();
       bout = bout.copyWith(duration: event);
@@ -174,19 +175,19 @@ class BoutState extends ConsumerState<BoutScreen> {
       // Save time to database on each stop
       await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
     });
-    _boutStopwatch.onAdd.stream.listen((event) {
+    mainStopwatch.boutStopwatch.onAdd.stream.listen((event) {
       _r.activityStopwatch?.add(event);
       _b.activityStopwatch?.add(event);
     });
-    _boutStopwatch.onChangeSecond.stream.listen((event) {
-      if (stopwatch == _boutStopwatch) {
+    mainStopwatch.boutStopwatch.onChangeSecond.stream.listen((event) {
+      if (!mainStopwatch.isBreak.value) {
         bout = bout.copyWith(duration: event);
 
         // If is above the time of the current period, then trigger the break
         if (bout.duration.compareTo(boutConfig.periodDuration * period) >= 0) {
           // Set to exact period end, as internal duration of stopwatch usually is a few milliseconds ahead of the second listener.
           // Otherwise the timer is displaying a different time (2:59.9) than expected (3:00.0) after a break.
-          _boutStopwatch.stopAt(event);
+          mainStopwatch.boutStopwatch.stopAt(event);
           if (_r.activityStopwatch != null) {
             _r.activityStopwatch!.dispose();
             _r.activityStopwatch = null;
@@ -197,10 +198,8 @@ class BoutState extends ConsumerState<BoutScreen> {
           }
           handleAction(const BoutScreenActionIntent.horn());
           if (period < boutConfig.periodCount) {
-            setState(() {
-              stopwatch = _breakStopwatch;
-            });
-            _breakStopwatch.start();
+            mainStopwatch.isBreak.value = true;
+            mainStopwatch.breakStopwatch.start();
             period++;
           }
         } else if (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds < (period - 1)) {
@@ -209,14 +208,10 @@ class BoutState extends ConsumerState<BoutScreen> {
         }
       }
     });
-    stopwatch.add(bout.duration);
-    _breakStopwatch = ObservableStopwatch(limit: boutConfig.breakDuration);
-    _onEndBreakStopwatchSubscription = _breakStopwatch.onEnd.stream.listen((event) {
-      if (stopwatch == _breakStopwatch) {
-        _breakStopwatch.reset();
-        setState(() {
-          stopwatch = _boutStopwatch;
-        });
+    _onEndBreakStopwatchSubscription = mainStopwatch.breakStopwatch.onEnd.stream.listen((event) {
+      if (mainStopwatch.isBreak.value) {
+        mainStopwatch.breakStopwatch.reset();
+        mainStopwatch.isBreak.value = false;
         handleAction(const BoutScreenActionIntent.horn());
       }
     });
@@ -242,8 +237,8 @@ class BoutState extends ConsumerState<BoutScreen> {
           widget.boutIndex,
           doAction,
           context: tmpContext,
-          currentStopwatch: stopwatch,
-          boutStopwatch: _boutStopwatch,
+          currentStopwatch: mainStopwatch.stopwatch,
+          boutStopwatch: mainStopwatch.boutStopwatch,
           navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
           createOrUpdateAction:
               (action) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
@@ -269,7 +264,7 @@ class BoutState extends ConsumerState<BoutScreen> {
           psm.activityStopwatch =
               psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
         });
-        if (psm.activityStopwatch != null && _boutStopwatch.isRunning) psm.activityStopwatch!.start();
+        if (psm.activityStopwatch != null && mainStopwatch.boutStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
           handleAction(const BoutScreenActionIntent.horn());
           psm.activityStopwatch?.dispose();
@@ -315,7 +310,7 @@ class BoutState extends ConsumerState<BoutScreen> {
           psm.activityStopwatch =
               psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
         });
-        if (psm.activityStopwatch != null && _boutStopwatch.isRunning) psm.activityStopwatch!.start();
+        if (psm.activityStopwatch != null && mainStopwatch.boutStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) {
           psm.activityStopwatch?.dispose();
           setState(() {
@@ -377,8 +372,6 @@ class BoutState extends ConsumerState<BoutScreen> {
     final double padding = width / 100;
     final bottomPadding = EdgeInsets.only(bottom: padding);
 
-    final Color stopwatchColor = stopwatch == _breakStopwatch ? Colors.orange : Theme.of(context).colorScheme.onSurface;
-
     final pdfAction = ResponsiveScaffoldActionItem(
       label: localizations.print,
       icon: const Icon(Icons.print),
@@ -413,8 +406,8 @@ class BoutState extends ConsumerState<BoutScreen> {
         createOrUpdateAction:
             (action) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
         deleteAction: (action) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle(action),
-        getCurrentStopwatch: () => stopwatch,
-        boutStopwatch: _boutStopwatch,
+        getCurrentStopwatch: () => mainStopwatch.stopwatch,
+        boutStopwatch: mainStopwatch.boutStopwatch,
         getActions:
             () async => await ref.readAsync(
               manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
@@ -492,15 +485,17 @@ class BoutState extends ConsumerState<BoutScreen> {
                       child: Center(
                         child: DelayedTooltip(
                           message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
-                          child: TimeDisplay(
-                            showDeciSecond: true,
-                            stopwatch,
-                            stopwatchColor,
-                            fontSize: 128,
-                            maxDuration:
-                                stopwatch == _breakStopwatch
-                                    ? boutConfig.breakDuration
-                                    : boutConfig.totalPeriodDuration,
+                          child: ValueListenableBuilder(
+                            valueListenable: mainStopwatch.isBreak,
+                            builder: (context, isBreak, _) {
+                              return TimeDisplay(
+                                showDeciSecond: true,
+                                mainStopwatch.stopwatch,
+                                isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
+                                fontSize: 128,
+                                maxDuration: isBreak ? boutConfig.breakDuration : boutConfig.totalPeriodDuration,
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -542,8 +537,8 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   Future<void> save() async {
-    _boutStopwatch.dispose();
-    _breakStopwatch.dispose();
+    mainStopwatch.boutStopwatch.dispose();
+    mainStopwatch.breakStopwatch.dispose();
 
     // Save time to database when dispose
     await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
@@ -601,6 +596,17 @@ class _ParticipantDisplay extends StatelessWidget {
         )
         : Container();
   }
+}
+
+class MainStopwatch {
+  // Use value notifier to not need to reload the whole widget.
+  final isBreak = ValueNotifier(false);
+  final ObservableStopwatch boutStopwatch;
+  final ObservableStopwatch breakStopwatch;
+
+  ObservableStopwatch get stopwatch => isBreak.value ? breakStopwatch : boutStopwatch;
+
+  MainStopwatch({required this.boutStopwatch, required this.breakStopwatch});
 }
 
 class _NameDisplay extends StatelessWidget {
