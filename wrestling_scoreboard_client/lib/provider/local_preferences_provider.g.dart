@@ -184,7 +184,7 @@ final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlN
   }
 }
 
-String _$webSocketUrlNotifierHash() => r'4ea4f9c1880f05b6b6d0d718e043c04145e2a589';
+String _$webSocketUrlNotifierHash() => r'5ce30ab4662573783d643e996d3eb8c14ac58127';
 
 abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
@@ -239,7 +239,7 @@ final class WebClientUrlNotifierProvider extends $NotifierProvider<WebClientUrlN
   }
 }
 
-String _$webClientUrlNotifierHash() => r'fdc3fbf0f7e0f02854f3ba36fa7f40c14fae06a6';
+String _$webClientUrlNotifierHash() => r'defe83fe084e8c4f5faa2eb219ad1393bc5b2f0b';
 
 abstract class _$WebClientUrlNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
@@ -337,7 +337,7 @@ final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw
   }
 }
 
-String _$apiUrlNotifierHash() => r'84cce7dfdf5727e4be7430397825e6dc984b7c04';
+String _$apiUrlNotifierHash() => r'e20d0738971e4b3e4feab8f78df0ce44e7b29e78';
 
 abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
@@ -588,7 +588,7 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
   }
 }
 
-String _$orgAuthNotifierHash() => r'0c4640e47bee1b05ac64d6f5ec26a85eaad2e13f';
+String _$orgAuthNotifierHash() => r'066bd5e8ab63e69aeed226b66879e1daa90c48c0';
 
 abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthService>>>> {
   Raw<Future<Map<int, AuthService>>> build();
