@@ -169,6 +169,17 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final dataManager = await ref.read(dataManagerNotifierProvider);
+      // Need to update the organization before validating the credentials, as the API provider has to be set
+      await dataManager.createOrUpdateSingle(
+        Organization(
+          id: widget.organization?.id,
+          name: _name!,
+          abbreviation: _abbreviation,
+          parent: _parent,
+          reportProvider: _reportProvider,
+          apiProvider: _apiProvider,
+        ),
+      );
       if (widget.organization?.id != null) {
         if (_authProviderUsername != null || _authProviderPassword != null) {
           if (_authProviderUsername == null || _authProviderPassword == null) {
@@ -191,16 +202,6 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
           await ref.read(orgAuthNotifierProvider.notifier).removeOrgAuthService(widget.organization!.id!);
         }
       }
-      await dataManager.createOrUpdateSingle(
-        Organization(
-          id: widget.organization?.id,
-          name: _name!,
-          abbreviation: _abbreviation,
-          parent: _parent,
-          reportProvider: _reportProvider,
-          apiProvider: _apiProvider,
-        ),
-      );
       navigator.pop();
     }
   }
