@@ -46,7 +46,8 @@ extension UserFromAuthService on BearerAuthService {
       throw Exception('JWT_SECRET not specified!');
     }
     final jwt = JWT.verify(token, SecretKey(env.jwtSecret!));
-    final user = await SecuredUserController().getSingleByUsername(jwt.payload['username'] as String);
+    final payload = Map<String, dynamic>.from(jwt.payload as Map);
+    final user = await SecuredUserController().getSingleByUsername(payload['username'] as String);
     return user?.toUser();
   }
 }
