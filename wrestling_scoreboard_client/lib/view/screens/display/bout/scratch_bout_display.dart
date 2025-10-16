@@ -58,40 +58,28 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                               child: Text('${localizations.reset}?'),
                             );
                             if (result && context.mounted) {
-                              // Some hacky way to refresh the page:
-                              // - family providers such as manyDataStream cannot be invalidated that easily
-                              // - invalidating / refreshing the localDataProvider does not lead to refreshing its dependent providers / the Consumers unless they are actively loaded
-                              // - setState does not force the Consumers to be refreshed.
-                              context.pop();
-
-                              // Need to call invalidation between pop and navigating back, otherwise it will get saved while popping (data safety feature of BoutScreen).
+                              // FIXME: Entity is not reset when leaving the scratch provider scope (#187)
                               // Only reset entities which are displayed, but keep e.g. BoutResultRules
-                              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                                await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
-                                ref.invalidate(localDataNotifierProvider<BoutAction>());
-                                await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
-                                ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
-                                await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
-                                ref.invalidate(localDataNotifierProvider<Bout>());
-                                await ref.read(localDataNotifierProvider<ScratchBout>().notifier).setState([]);
-                                ref.invalidate(localDataNotifierProvider<ScratchBout>());
+                              await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
+                              ref.invalidate(localDataNotifierProvider<BoutAction>());
+                              await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
+                              ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
+                              await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
+                              ref.invalidate(localDataNotifierProvider<Bout>());
+                              await ref.read(localDataNotifierProvider<ScratchBout>().notifier).setState([]);
+                              ref.invalidate(localDataNotifierProvider<ScratchBout>());
 
-                                // Invalidate stream providers
-                                ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
-                                ref.invalidate(singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 0)));
-                                ref.invalidate(singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 1)));
-                                ref.invalidate(singleDataStreamProvider<Bout>(SingleProviderData(id: 0)));
-                                ref.invalidate(
-                                  manyDataStreamProvider<BoutAction, Bout>(
-                                    ManyProviderData(filterObject: scratchBout.bout),
-                                  ),
-                                );
-                                ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
-
-                                if (context.mounted) {
-                                  ScratchBoutDisplay.navigateTo(context);
-                                }
-                              });
+                              // Invalidate stream providers
+                              ref.invalidate(singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 0)));
+                              ref.invalidate(singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 1)));
+                              ref.invalidate(singleDataStreamProvider<Bout>(SingleProviderData(id: 0)));
+                              ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
+                              ref.invalidate(
+                                manyDataStreamProvider<BoutAction, Bout>(
+                                  ManyProviderData(filterObject: scratchBout.bout),
+                                ),
+                              );
+                              ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
                             }
                           },
                           label: localizations.reset,
