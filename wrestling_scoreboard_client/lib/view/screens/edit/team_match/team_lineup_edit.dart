@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,34 +90,44 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator, {Future<void> Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      final dataManager = await ref.read(dataManagerNotifierProvider);
+      await dataManager.createOrUpdateSingle(
         TeamLineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach),
       );
       await Future.forEach(_deleteParticipations, (TeamLineupParticipation element) async {
-        await (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamLineupParticipation>(element);
+        await dataManager.deleteSingle<TeamLineupParticipation>(element);
       });
-      await Future.forEach(_createOrUpdateParticipations, (TeamLineupParticipation participation) async {
-        // Create missing membership and person, if not present in database yet. This means, that the data was fetched from an API provider.
+      // Save created memberships and persons (from API), so the don't get created twice / run in an error.
+      final Set<Membership> createdApiMemberships = {};
+      final Set<Person> createdApiPersons = {};
+      // Need to be called sequentially, so duplicate API memberships can be recognized.
+      for (TeamLineupParticipation participation in _createOrUpdateParticipations) {
+        // Create missing membership and person, if not present in database yet.
+        // This means, that the data was fetched from an API provider.
         if (participation.membership.id == null) {
           if (participation.membership.person.id == null) {
-            final personId = await (await ref.read(
-              dataManagerNotifierProvider,
-            )).createOrUpdateSingle<Person>(participation.membership.person);
-            participation = participation.copyWith(
-              membership: participation.membership.copyWith(
-                person: participation.membership.person.copyWithId(personId),
-              ),
+            Person? apiPerson = createdApiPersons.singleWhereOrNull(
+              (person) => person.orgSyncId == participation.membership.person.orgSyncId,
             );
+            if (apiPerson == null) {
+              final personId = await dataManager.createOrUpdateSingle<Person>(participation.membership.person);
+              apiPerson = participation.membership.person.copyWithId(personId);
+              createdApiPersons.add(apiPerson);
+            }
+            participation = participation.copyWith(membership: participation.membership.copyWith(person: apiPerson));
           }
-          final membershipId = await (await ref.read(
-            dataManagerNotifierProvider,
-          )).createOrUpdateSingle<Membership>(participation.membership);
-          participation = participation.copyWith(membership: participation.membership.copyWithId(membershipId));
+          Membership? apiMembership = createdApiMemberships.singleWhereOrNull(
+            (membership) => membership.orgSyncId == participation.membership.orgSyncId,
+          );
+          if (apiMembership == null) {
+            final membershipId = await dataManager.createOrUpdateSingle<Membership>(participation.membership);
+            apiMembership = participation.membership.copyWithId(membershipId);
+            createdApiMemberships.add(apiMembership);
+          }
+          participation = participation.copyWith(membership: apiMembership);
         }
-        await (await ref.read(
-          dataManagerNotifierProvider,
-        )).createOrUpdateSingle<TeamLineupParticipation>(participation);
-      });
+        await dataManager.createOrUpdateSingle<TeamLineupParticipation>(participation);
+      }
       if (onSubmitGenerate != null) await onSubmitGenerate();
       navigator.pop();
     }
