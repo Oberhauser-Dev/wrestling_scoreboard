@@ -39,6 +39,9 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
 
   Future<Response> postImport(Request request, User? user, String entityIdStr) async {
     final bool obfuscate = user?.obfuscate ?? true;
+    if (obfuscate) {
+      return Response.forbidden('A user without read permissions should also not be able to process an import.');
+    }
     final entityId = int.parse(entityIdStr);
     final queryParams = request.requestedUri.queryParameters;
     try {
@@ -59,7 +62,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
       if (apiProvider == null) {
         throw Exception('No API provider selected for the organization $organization.');
       }
-      await import(entity: entity, apiProvider: apiProvider, obfuscate: obfuscate, includeSubjacent: includeSubjacent);
+      await import(entity: entity, apiProvider: apiProvider, includeSubjacent: includeSubjacent);
       return Response.ok('{"status": "success"}');
     } on HttpException catch (err, stackTrace) {
       return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
@@ -69,10 +72,5 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     }
   }
 
-  Future<void> import({
-    required WrestlingApi apiProvider,
-    required T entity,
-    bool obfuscate = true,
-    bool includeSubjacent = false,
-  });
+  Future<void> import({required WrestlingApi apiProvider, required T entity, bool includeSubjacent = false});
 }

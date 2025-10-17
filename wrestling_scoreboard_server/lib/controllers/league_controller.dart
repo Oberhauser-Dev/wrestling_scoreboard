@@ -59,7 +59,6 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
   Future<void> import({
     required WrestlingApi apiProvider,
     required League entity,
-    bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
     final teamMatchMap = await apiProvider.importTeamMatches(league: entity);
@@ -72,10 +71,8 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
         final officials = teamMatchMap.entries.where((tmm) => tmm.key.orgSyncId == teamMatch.orgSyncId).single.value;
         final updatedOfficials = await forEachFuture(
           officials.entries,
-          (official) async => MapEntry(
-            await PersonController().updateOrCreateSingleOfOrg(official.key, obfuscate: obfuscate),
-            official.value,
-          ),
+          (official) async =>
+              MapEntry(await PersonController().updateOrCreateSingleOfOrg(official.key), official.value),
         );
 
         await TeamMatchPersonController().updateOnDiffMany(
@@ -104,7 +101,6 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
         await TeamLineupController().deleteSingle(previous.home.id!);
         await TeamLineupController().deleteSingle(previous.guest.id!);
       },
-      obfuscate: obfuscate,
     );
 
     await forEachFuture(teamMatchs, (teamMatch) async {
@@ -112,7 +108,7 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
       final previousHomeTeamParticipation = await LeagueTeamParticipationController().getByLeagueAndTeamId(
         teamId: teamMatch.home.team.id!,
         leagueId: entity.id!,
-        obfuscate: obfuscate,
+        obfuscate: false,
       );
       if (previousHomeTeamParticipation == null) {
         await LeagueTeamParticipationController().createSingle(
@@ -122,7 +118,7 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
       final previousGuestTeamParticipation = await LeagueTeamParticipationController().getByLeagueAndTeamId(
         teamId: teamMatch.guest.team.id!,
         leagueId: entity.id!,
-        obfuscate: obfuscate,
+        obfuscate: false,
       );
       if (previousGuestTeamParticipation == null) {
         await LeagueTeamParticipationController().createSingle(
@@ -137,7 +133,6 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
         await TeamMatchController().import(
           entity: teamMatch,
           apiProvider: apiProvider,
-          obfuscate: obfuscate,
           includeSubjacent: includeSubjacent,
         );
       }

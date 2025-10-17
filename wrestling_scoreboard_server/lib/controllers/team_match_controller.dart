@@ -201,7 +201,6 @@ class TeamMatchController extends ShelfController<TeamMatch>
   Future<void> import({
     required WrestlingApi apiProvider,
     required TeamMatch entity,
-    bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
     final tmbMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
@@ -209,7 +208,6 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
     teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
       teamMatchBouts,
-      obfuscate: obfuscate,
       filterType: TeamMatch,
       filterId: entity.id,
       onUpdateOrCreate: (previous, current) async {
@@ -218,7 +216,6 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
         bout = await BoutController().updateOrCreateSingleOfOrg(
           bout,
-          obfuscate: obfuscate,
           onUpdateOrCreate: (previousBout) async {
             return bout.copyWith(
               r: await _saveDeepParticipantState(
@@ -226,14 +223,12 @@ class TeamMatchController extends ShelfController<TeamMatch>
                 previousAthleteBoutState: previousBout?.r,
                 lineup: entity.home,
                 weightClass: current.weightClass!,
-                obfuscate: obfuscate,
               ),
               b: await _saveDeepParticipantState(
                 bout.b,
                 previousAthleteBoutState: previousBout?.b,
                 lineup: entity.guest,
                 weightClass: current.weightClass!,
-                obfuscate: obfuscate,
               ),
             );
           },
@@ -306,17 +301,12 @@ class TeamMatchController extends ShelfController<TeamMatch>
     AthleteBoutState? previousAthleteBoutState,
     required TeamLineup lineup,
     required WeightClass weightClass,
-    required bool obfuscate,
   }) async {
     if (athleteBoutState != null) {
-      final person = await PersonController().updateOrCreateSingleOfOrg(
-        athleteBoutState.membership.person,
-        obfuscate: obfuscate,
-      );
+      final person = await PersonController().updateOrCreateSingleOfOrg(athleteBoutState.membership.person);
 
       final membership = await MembershipController().updateOrCreateSingleOfOrg(
         athleteBoutState.membership.copyWith(person: person),
-        obfuscate: obfuscate,
       );
 
       athleteBoutState = await AthleteBoutStateController().updateOnDiffSingle(

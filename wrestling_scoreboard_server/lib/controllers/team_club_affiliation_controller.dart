@@ -11,7 +11,7 @@ class TeamClubAffiliationController extends ShelfController<TeamClubAffiliation>
   Future<TeamClubAffiliation?> getByTeamAndClubId({
     required int teamId,
     required int clubId,
-    required obfuscate,
+    required bool obfuscate,
   }) async {
     final many = await getMany(
       conditions: ['team_id = @teamId', 'club_id = @clubId'],
