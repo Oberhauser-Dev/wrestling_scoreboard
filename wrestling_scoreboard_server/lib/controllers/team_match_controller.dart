@@ -240,20 +240,11 @@ class TeamMatchController extends ShelfController<TeamMatch>
         return current.copyWith(bout: bout);
       },
       onDelete: (previous) async {
-        await BoutActionController().deleteMany(
-          conditions: ['bout_id=@id'],
-          substitutionValues: {'id': previous.bout.id},
-        );
+        // BoutActions are deleted within BoutController().deleteSingle(id)
       },
       onDeleted: (previous) async {
-        if (previous.bout.r != null) {
-          await AthleteBoutStateController().deleteSingle(previous.bout.r!.id!);
-        }
-        if (previous.bout.b != null) {
-          await AthleteBoutStateController().deleteSingle(previous.bout.b!.id!);
-        }
-
-        await BoutController().deleteSingle(previous.bout.id!);
+        // Bout is deleted within TeamMatchBoutController().deleteSingle(id)
+        // AthleteBoutState is deleted within BoutController().deleteSingle(id)
       },
     );
 
