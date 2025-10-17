@@ -56,22 +56,21 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
   Future<void> import({
     required WrestlingApi apiProvider,
     required Organization entity,
-    bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
     final teamClubAffiliations = await apiProvider.importTeamClubAffiliations();
 
     await Future.forEach(teamClubAffiliations, (teamClubAffiliation) async {
       // TODO: if a TeamClubAffiliation is removed, it should also be removed here
-      final club = await ClubController().updateOrCreateSingleOfOrg(teamClubAffiliation.club, obfuscate: obfuscate);
-      final team = await TeamController().updateOrCreateSingleOfOrg(teamClubAffiliation.team, obfuscate: obfuscate);
+      final club = await ClubController().updateOrCreateSingleOfOrg(teamClubAffiliation.club);
+      final team = await TeamController().updateOrCreateSingleOfOrg(teamClubAffiliation.team);
       teamClubAffiliation = teamClubAffiliation.copyWith(club: club, team: team);
 
       // Do not add team club affiliations multiple times.
       final previousTeamClubAffiliation = await TeamClubAffiliationController().getByTeamAndClubId(
         teamId: team.id!,
         clubId: club.id!,
-        obfuscate: obfuscate,
+        obfuscate: false,
       );
       if (previousTeamClubAffiliation == null) {
         await TeamClubAffiliationController().createSingle(TeamClubAffiliation(team: team, club: club));
@@ -81,7 +80,6 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     final divisionBoutResultRuleMap = await apiProvider.importDivisions();
     final divisions = await DivisionController().updateOrCreateManyOfOrg(
       divisionBoutResultRuleMap.keys.toList(),
-      obfuscate: obfuscate,
       filterType: Organization,
       filterId: entity.id,
       onUpdateOrCreate: (previousDivision, division) async {
@@ -113,7 +111,6 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         leagues.toList(),
         filterType: Division,
         filterId: division.id,
-        obfuscate: obfuscate,
       );
 
       final (divisionWeightClasses, leagueWeightClasses) = await apiProvider.importDivisionAndLeagueWeightClasses(
@@ -124,7 +121,6 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         divisionWeightClasses.toList(),
         filterType: Division,
         filterId: division.id,
-        obfuscate: obfuscate,
         onUpdateOrCreate: (previousWeightClass, current) async {
           final weightClass = await WeightClassController().updateOnDiffSingle(
             current.weightClass,
@@ -144,7 +140,6 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
           currentLeagueWeightClasses,
           filterType: League,
           filterId: league.id,
-          obfuscate: obfuscate,
           onUpdateOrCreate: (previousWeightClass, current) async {
             final weightClass = await WeightClassController().updateOnDiffSingle(
               current.weightClass,
@@ -164,7 +159,6 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       for (final league in leagues) {
         await LeagueController().import(
           entity: league,
-          obfuscate: obfuscate,
           includeSubjacent: includeSubjacent,
           apiProvider: apiProvider,
         );

@@ -45,7 +45,6 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   /// It is executed **before** the entity is updated or created.
   Future<T> updateOrCreateSingleOfOrg(
     T dataObject, {
-    required bool obfuscate,
     Future<T> Function(T? previous)? onUpdateOrCreate,
     Future<void> Function(T? previous, T current)? onUpdatedOrCreated,
   }) async {
@@ -60,7 +59,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
       final previous = await getSingleOfOrg(
         organizational.orgSyncId!,
         orgId: organizational.organization!.id!,
-        obfuscate: obfuscate,
+        obfuscate: false,
       );
       if (onUpdateOrCreate != null) {
         dataObject = await onUpdateOrCreate(previous);
@@ -86,7 +85,6 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   /// [onDeleted] is executed after the entity has been deleted.
   Future<List<T>> updateOrCreateManyOfOrg(
     List<T> dataObjects, {
-    required bool obfuscate,
     Type? filterType,
     int? filterId,
     Future<T> Function(T? previous, T current)? onUpdateOrCreate,
@@ -99,7 +97,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     final previous = await getMany(
       conditions: conditions,
       substitutionValues: substitutionValues,
-      obfuscate: obfuscate,
+      obfuscate: false,
     );
     final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
     // Delete not included entities
@@ -128,7 +126,6 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
       dataObjects,
       (element) => updateOrCreateSingleOfOrg(
         element,
-        obfuscate: obfuscate,
         onUpdateOrCreate: onUpdateOrCreate != null ? (previous) => onUpdateOrCreate(previous, element) : null,
         onUpdatedOrCreated: onUpdatedOrCreated,
       ),
