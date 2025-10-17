@@ -144,6 +144,8 @@ extension DatabaseExt on PostgresDb {
     await close();
 
     final args = <String>[
+      '--set',
+      'ON_ERROR_STOP=1',
       '--file',
       sqlFilePath,
       '--username',
