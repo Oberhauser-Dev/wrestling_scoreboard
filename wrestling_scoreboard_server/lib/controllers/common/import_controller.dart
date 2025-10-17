@@ -3,6 +3,7 @@ import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 
 final _logger = Logger('ImportController');
@@ -69,6 +70,27 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
       if (apiProvider == null) {
         throw Exception('No API provider selected for the organization $organization.');
       }
+
+      // Import parent entities first, as they are required by subjacent entities (e.g. TeamMatch requires Clubs)
+      if (entity is! Organization) {
+        await OrganizationController().import(apiProvider: apiProvider, entity: organization, includeSubjacent: false);
+        if (entity is Competition) {
+          // No further parent to update
+        } else if (entity is! League) {
+          if (entity is TeamMatch) {
+            if (entity.league != null) {
+              await LeagueController().import(
+                apiProvider: apiProvider,
+                entity: entity.league!,
+                includeSubjacent: false,
+              );
+            }
+          } else {
+            throw HttpException('Cannot process parent API import for $T');
+          }
+        }
+      }
+
       await import(entity: entity, apiProvider: apiProvider, includeSubjacent: includeSubjacent);
       return Response.ok('{"status": "success"}');
     } on HttpException catch (err, stackTrace) {
