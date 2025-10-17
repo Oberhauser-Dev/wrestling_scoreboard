@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/models/backup.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -453,6 +454,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         if (result && context.mounted) {
                           final dataManager = await ref.read(dataManagerNotifierProvider);
                           await dataManager.resetDatabase();
+                          _invalidateProviders(ref);
                           if (context.mounted) {
                             await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                           }
@@ -471,6 +473,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         if (result && context.mounted) {
                           final dataManager = await ref.read(dataManagerNotifierProvider);
                           await dataManager.restoreDefaultDatabase();
+                          _invalidateProviders(ref);
                           if (context.mounted) {
                             await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                           }
@@ -491,6 +494,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                           await dataManager.restoreDatabase(
                             await fileSelectorResult.readAsString(encoding: const Utf8Codec()),
                           );
+                          _invalidateProviders(ref);
                           if (context.mounted) {
                             await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
                           }
@@ -573,6 +577,11 @@ class CustomSettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  void _invalidateProviders(WidgetRef ref) {
+    ref.invalidate(singleDataStreamProvider);
+    ref.invalidate(manyDataStreamProvider);
   }
 }
 
