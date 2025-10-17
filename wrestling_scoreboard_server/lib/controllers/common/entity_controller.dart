@@ -192,10 +192,10 @@ abstract class EntityController<T extends DataObject> {
       _logger.fine(
         'updateOnDiffSingle: Update single as of different properties: (prev: ${previous.toJson()}, curr: ${dataObject.toJson()})',
       );
-      broadcastUpdateSingle(
-        (obfuscate) async => obfuscate ? await getSingle(dataObject.id!, obfuscate: true) : dataObject,
-      );
       await updateSingle(dataObject);
+      broadcastUpdateSingle(
+            (obfuscate) async => obfuscate ? await getSingle(dataObject.id!, obfuscate: true) : dataObject,
+      );
     }
     return dataObject;
   }
