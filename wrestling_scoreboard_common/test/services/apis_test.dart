@@ -190,6 +190,9 @@ void main() {
             throw UnimplementedError('Type $T with orgSyncId $orgSyncId not found');
         }
       },
+      getMany: <T extends DataObject, S extends DataObject>(S filterObject) async {
+        return [];
+      },
     );
     wrestlingApi.isMock = true;
   });

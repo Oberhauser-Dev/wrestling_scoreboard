@@ -31,11 +31,15 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   @override
   GetSingleOfOrg getSingleOfOrg;
 
+  @override
+  GetMany getMany;
+
   late Future<T> Function<T extends Organizational>(String orgSyncId) _getSingleBySyncId;
 
   ByGermanyWrestlingApi(
     this.organization, {
     required this.getSingleOfOrg,
+    required this.getMany,
     this.apiUrl = 'https://www.brv-ringen.de/Api/dev/cs/',
     this.authService,
   }) {
@@ -400,36 +404,41 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     return memberships.toSet();
   }
 
-  Future<Membership> _getMembership({
+  Future<Membership?> _getMembership({
     required int passCode,
-    required Future<Club?> Function(String clubId) getClub,
+    required Future<Club> Function(String clubId) getClub,
   }) async {
     final json = await _getSaisonWrestler(passCode: passCode);
     final wrestlerJson = json['wrestler'];
-    final club = await getClub(wrestlerJson['clubId']);
-    if (wrestlerJson == null || club == null) {
-      throw Exception('No field "wrestler" and/or "clubId" found for json:\n$json');
-    }
-    return Membership(
-      club: club,
-      organization: organization,
-      no: json['passcode'],
-      orgSyncId: '${wrestlerJson['clubId']}-${json['passcode']}',
-      person: _copyPersonWithOrg(
-        Person(
-          prename: wrestlerJson['givenname'],
-          surname: wrestlerJson['name'],
-          gender:
-              wrestlerJson['gender'] == 'm'
-                  ? Gender.male
-                  : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
-          birthDate: DateTime.parse(wrestlerJson['birthday']).copyWith(isUtc: true),
-          nationality: Countries.values.singleWhereOrNull(
-            (element) => element.unofficialNames.contains(wrestlerJson['nationality']),
+    try {
+      final club = await getClub(wrestlerJson['clubId']);
+      if (wrestlerJson == null) {
+        throw Exception('No field "wrestler" and/or "clubId" found for json:\n$json');
+      }
+      return Membership(
+        club: club,
+        organization: organization,
+        no: json['passcode'],
+        orgSyncId: '${wrestlerJson['clubId']}-${json['passcode']}',
+        person: _copyPersonWithOrg(
+          Person(
+            prename: wrestlerJson['givenname'],
+            surname: wrestlerJson['name'],
+            gender:
+                wrestlerJson['gender'] == 'm'
+                    ? Gender.male
+                    : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
+            birthDate: DateTime.parse(wrestlerJson['birthday']).copyWith(isUtc: true),
+            nationality: Countries.values.singleWhereOrNull(
+              (element) => element.unofficialNames.contains(wrestlerJson['nationality']),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } catch (e, st) {
+      _logger.severe('Could not load membership for passCode $passCode:\n$wrestlerJson', e, st);
+      return null;
+    }
   }
 
   @override
@@ -562,11 +571,22 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           } catch (e, st) {
             _logger.severe(
               'The weight class ${weightClass.name} of division ${teamMatch.league!.division.fullname} cannot be found. '
-              'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n'
-              '$e\n'
-              '$st',
+              'This can happen, if the leagues `noOfBoutDays` is incorrect and therefore the weight classes of the current bout day are misconfigured.\n',
+              e,
+              st,
             );
             return null;
+          }
+
+          Future<Club> getClubWithFallback(clubId, Team fallbackTeam) async {
+            try {
+              return await _getSingleBySyncId<Club>(clubId);
+            } catch (e, st) {
+              _logger.warning('Could not find club with id $clubId', e, st);
+              final clubs = (await getMany<TeamClubAffiliation, Team>(fallbackTeam));
+              if (clubs.isEmpty) rethrow;
+              return clubs.first.club;
+            }
           }
 
           final homeSyncId = int.tryParse(boutJson['homeWrestlerId'] ?? '');
@@ -575,7 +595,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                   ? null
                   : await _getMembership(
                     passCode: homeSyncId,
-                    getClub: (clubId) async => await _getSingleBySyncId<Club>(clubId),
+                    getClub: (clubId) => getClubWithFallback(clubId, teamMatch.home.team),
                   );
 
           final opponentSyncId = int.tryParse(boutJson['opponentWrestlerId'] ?? '');
@@ -584,7 +604,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                   ? null
                   : await _getMembership(
                     passCode: opponentSyncId,
-                    getClub: (clubId) async => await _getSingleBySyncId<Club>(clubId),
+                    getClub: (clubId) => getClubWithFallback(clubId, teamMatch.guest.team),
                   );
 
           BoutResult? getBoutResult(String? result) {
@@ -750,7 +770,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               return await _getSingleBySyncId<Club>(clubId);
             },
           );
-          return [membership];
+          return [if (membership != null) membership];
         } catch (_) {
           return [];
         }

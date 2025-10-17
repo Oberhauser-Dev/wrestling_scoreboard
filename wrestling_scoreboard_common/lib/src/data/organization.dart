@@ -55,8 +55,8 @@ abstract class Organization with _$Organization implements DataObject {
 
   String get fullname => '$name ($abbreviation)';
 
-  WrestlingApi? getApi(GetSingleOfOrg getSingle, {AuthService? authService}) =>
-      apiProvider?.getApi(this, getSingleOfOrg: getSingle, authService: authService);
+  WrestlingApi? getApi(GetSingleOfOrg getSingle, GetMany getMany, {AuthService? authService}) =>
+      apiProvider?.getApi(this, getSingleOfOrg: getSingle, getMany: getMany, authService: authService);
 
   WrestlingReporter? getReporter() => reportProvider?.getReporter(this);
 

@@ -2,6 +2,7 @@ import '../../common.dart';
 import 'apis/germany_by.dart';
 
 typedef GetSingleOfOrg = Future<T> Function<T extends Organizational>(String orgSyncId, {required int orgId});
+typedef GetMany = Future<List<T>> Function<T extends DataObject, S extends DataObject>(S filterObject);
 
 enum WrestlingApiProvider {
   deNwRingenApi,
@@ -9,12 +10,18 @@ enum WrestlingApiProvider {
 
   String get name => toString().split('.').last;
 
-  WrestlingApi getApi(Organization organization, {required GetSingleOfOrg getSingleOfOrg, AuthService? authService}) {
+  WrestlingApi getApi(
+    Organization organization, {
+    required GetSingleOfOrg getSingleOfOrg,
+    required GetMany getMany,
+    AuthService? authService,
+  }) {
     switch (this) {
       case WrestlingApiProvider.deNwRingenApi:
         return ByGermanyWrestlingApi(
           organization,
           getSingleOfOrg: getSingleOfOrg,
+          getMany: getMany,
           apiUrl: 'https://www.brv-ringen.de/Api/dev/cs/',
           authService: authService as BasicAuthService,
         );
@@ -25,6 +32,7 @@ enum WrestlingApiProvider {
         return ByGermanyWrestlingApi(
           organization,
           getSingleOfOrg: getSingleOfOrg,
+          getMany: getMany,
           apiUrl: 'https://www.brv-ringen.de/Api/dev/cs/',
           authService: authService as BasicAuthService?,
         );
@@ -41,6 +49,8 @@ abstract class WrestlingApi {
   Organization get organization;
 
   GetSingleOfOrg get getSingleOfOrg;
+
+  GetMany get getMany;
 
   AuthService? get authService;
 
