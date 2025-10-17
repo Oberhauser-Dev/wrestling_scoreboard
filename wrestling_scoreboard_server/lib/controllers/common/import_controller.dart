@@ -9,6 +9,7 @@ final _logger = Logger('ImportController');
 
 mixin ImportController<T extends DataObject> implements ShelfController<T> {
   Map<int, DateTime> lastImportUtcDateTime = {};
+  bool importInProgress = false;
 
   Future<Response> requestLastImportUtcDateTime(Request request, User? user, String entityId) async {
     return Response.ok(lastImportUtcDateTime[int.parse(entityId)]?.toIso8601String());
@@ -44,6 +45,12 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     }
     final entityId = int.parse(entityIdStr);
     final queryParams = request.requestedUri.queryParameters;
+    if (importInProgress) {
+      return Response.badRequest(
+        body: 'There already is another import for $T in progress. Please wait until finished!',
+      );
+    }
+    importInProgress = true;
     try {
       final message = await request.readAsString();
 
@@ -69,6 +76,8 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     } catch (err, stackTrace) {
       _logger.severe('postImport for type "$T" and entityId "$entityId" FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
+    } finally {
+      importInProgress = false;
     }
   }
 
