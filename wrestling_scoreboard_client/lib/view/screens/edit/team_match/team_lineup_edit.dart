@@ -130,7 +130,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
         icon: const Icon(Icons.save),
         label: localizations.save,
-        onTap: () => handleSubmit(navigator),
+        onTap: () => catchAsync(context, () => handleSubmit(navigator)),
       ),
       ResponsiveScaffoldActionItem(
         style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
