@@ -119,9 +119,12 @@ Future<void> showExceptionDialog({
 
 Future<void> showLoadingDialog({
   required BuildContext context,
-  required Future<void> Function(BuildContext context) runAsync,
-  required String label,
+  required Future<void> Function() runAsync,
+  String? label,
+  void Function()? onRetry,
+  bool showSuccess = true,
 }) async {
+  final localizations = context.l10n;
   showDialog(
     useRootNavigator: false, // Pop from outside of this dialog.
     context: context,
@@ -132,7 +135,7 @@ Future<void> showLoadingDialog({
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(label),
+                if (label != null) Text(label),
                 const Padding(padding: EdgeInsets.all(8), child: Center(child: CircularProgressIndicator())),
               ],
             ),
@@ -140,12 +143,19 @@ Future<void> showLoadingDialog({
         ),
   );
   try {
-    await runAsync(context);
-  } finally {
+    await runAsync();
     if (context.mounted) {
       // Pop loading dialog
       Navigator.of(context).pop();
+      if (showSuccess) await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
     }
+  } catch (exception, stackTrace) {
+    if (context.mounted) {
+      // Pop loading dialog
+      Navigator.of(context).pop();
+      await showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
+    }
+    rethrow;
   }
 }
 
