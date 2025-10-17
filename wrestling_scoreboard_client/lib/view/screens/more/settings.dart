@@ -432,59 +432,67 @@ class CustomSettingsScreen extends ConsumerWidget {
                   leading: const Icon(Icons.cloud_download),
                   title: Text(localizations.exportDatabase),
                   onTap:
-                      () => catchAsync(context, () async {
-                        final dataManager = await ref.read(dataManagerNotifierProvider);
-                        final sqlString = await dataManager.exportDatabase();
-                        await exportSQL(
-                          fileBaseName:
-                              '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
-                          sqlString: sqlString,
-                        );
-                      }),
+                      () => showLoadingDialog(
+                        context: context,
+                        showSuccess: false,
+                        runAsync: () async {
+                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          final sqlString = await dataManager.exportDatabase();
+                          await exportSQL(
+                            fileBaseName:
+                                '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
+                            sqlString: sqlString,
+                          );
+                        },
+                      ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings_backup_restore),
                   title: Text(localizations.resetDatabase),
-                  onTap:
-                      () => catchAsync(context, () async {
-                        final result = await showOkCancelDialog(
-                          context: context,
-                          child: Text(localizations.warningOverrideDatabase),
-                        );
-                        if (result && context.mounted) {
+                  onTap: () async {
+                    final result = await showOkCancelDialog(
+                      context: context,
+                      child: Text(localizations.warningOverrideDatabase),
+                    );
+                    if (result && context.mounted) {
+                      await showLoadingDialog(
+                        context: context,
+                        runAsync: () async {
                           final dataManager = await ref.read(dataManagerNotifierProvider);
                           await dataManager.resetDatabase();
                           _invalidateProviders(ref);
-                          if (context.mounted) {
-                            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                          }
-                        }
-                      }),
+                        },
+                      );
+                    }
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.history),
                   title: Text(localizations.restoreDefaultDatabase),
-                  onTap:
-                      () => catchAsync(context, () async {
-                        final result = await showOkCancelDialog(
-                          context: context,
-                          child: Text(localizations.warningOverrideDatabase),
-                        );
-                        if (result && context.mounted) {
+                  onTap: () async {
+                    final result = await showOkCancelDialog(
+                      context: context,
+                      child: Text(localizations.warningOverrideDatabase),
+                    );
+                    if (result && context.mounted) {
+                      await showLoadingDialog(
+                        context: context,
+                        runAsync: () async {
                           final dataManager = await ref.read(dataManagerNotifierProvider);
                           await dataManager.restoreDefaultDatabase();
                           _invalidateProviders(ref);
-                          if (context.mounted) {
-                            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                          }
-                        }
-                      }),
+                        },
+                      );
+                    }
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.cloud_upload),
                   title: Text(localizations.restoreDatabase),
-                  onTap:
-                      () => catchAsync(context, () async {
+                  onTap: () {
+                    showLoadingDialog(
+                      context: context,
+                      runAsync: () async {
                         const typeGroup = file_selector.XTypeGroup(label: 'SQL', extensions: <String>['sql']);
                         final file_selector.XFile? fileSelectorResult = await file_selector.openFile(
                           acceptedTypeGroups: [typeGroup],
@@ -495,11 +503,10 @@ class CustomSettingsScreen extends ConsumerWidget {
                             await fileSelectorResult.readAsString(encoding: const Utf8Codec()),
                           );
                           _invalidateProviders(ref);
-                          if (context.mounted) {
-                            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                          }
                         }
-                      }),
+                      },
+                    );
+                  },
                 ),
                 // Automatic Backup is not supported on web, as we cannot save it to the device
                 if (!kIsWeb)

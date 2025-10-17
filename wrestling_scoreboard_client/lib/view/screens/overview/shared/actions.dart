@@ -174,44 +174,35 @@ Future<void> _processImport(
   required OrganizationImportType importType,
   required bool includeSubjacent,
 }) async {
-  await catchAsync(context, () {
-    final localizations = context.l10n;
-    return showLoadingDialog(
-      label: localizations.importFromApiProvider,
-      runAsync: (BuildContext context) async {
-        final dataManager = await ref.read(dataManagerNotifierProvider);
-        final authService = await ref.read(orgAuthNotifierProvider.notifier).getByOrganization(orgId);
-        switch (importType) {
-          case OrganizationImportType.organization:
-            await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);
-          case OrganizationImportType.team:
-            await dataManager.organizationTeamImport(id, includeSubjacent: includeSubjacent, authService: authService);
-          case OrganizationImportType.league:
-            await dataManager.organizationLeagueImport(
-              id,
-              includeSubjacent: includeSubjacent,
-              authService: authService,
-            );
-          case OrganizationImportType.competition:
-            await dataManager.organizationCompetitionImport(
-              id,
-              includeSubjacent: includeSubjacent,
-              authService: authService,
-            );
-          case OrganizationImportType.teamMatch:
-            await dataManager.organizationTeamMatchImport(
-              id,
-              includeSubjacent: includeSubjacent,
-              authService: authService,
-            );
-        }
-        if (context.mounted) {
-          await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-        }
-      },
-      context: context,
-    );
-  });
+  final localizations = context.l10n;
+  await showLoadingDialog(
+    context: context,
+    label: localizations.importFromApiProvider,
+    runAsync: () async {
+      final dataManager = await ref.read(dataManagerNotifierProvider);
+      final authService = await ref.read(orgAuthNotifierProvider.notifier).getByOrganization(orgId);
+      switch (importType) {
+        case OrganizationImportType.organization:
+          await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);
+        case OrganizationImportType.team:
+          await dataManager.organizationTeamImport(id, includeSubjacent: includeSubjacent, authService: authService);
+        case OrganizationImportType.league:
+          await dataManager.organizationLeagueImport(id, includeSubjacent: includeSubjacent, authService: authService);
+        case OrganizationImportType.competition:
+          await dataManager.organizationCompetitionImport(
+            id,
+            includeSubjacent: includeSubjacent,
+            authService: authService,
+          );
+        case OrganizationImportType.teamMatch:
+          await dataManager.organizationTeamMatchImport(
+            id,
+            includeSubjacent: includeSubjacent,
+            authService: authService,
+          );
+      }
+    },
+  );
 }
 
 class _IncludeSubjacentDialog extends StatefulWidget {
