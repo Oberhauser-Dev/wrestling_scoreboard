@@ -559,15 +559,25 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             unit: WeightUnit.kilogram,
           );
           try {
-            // TODO also search for league weight class first
-            final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(
-              _getWeightClassOrgSyncId(
-                parentOrgSyncId: teamMatch.league!.division.orgSyncId!,
-                weightClass: weightClass,
-                seasonPartition: teamMatch.seasonPartition ?? 0,
-              ),
-            );
-            weightClass = divisionWeightClass.weightClass;
+            try {
+              final leagueWeightClass = await _getSingleBySyncId<LeagueWeightClass>(
+                _getWeightClassOrgSyncId(
+                  parentOrgSyncId: teamMatch.league!.orgSyncId!,
+                  weightClass: weightClass,
+                  seasonPartition: teamMatch.seasonPartition ?? 0,
+                ),
+              );
+              weightClass = leagueWeightClass.weightClass;
+            } catch (_) {
+              final divisionWeightClass = await _getSingleBySyncId<DivisionWeightClass>(
+                _getWeightClassOrgSyncId(
+                  parentOrgSyncId: teamMatch.league!.division.orgSyncId!,
+                  weightClass: weightClass,
+                  seasonPartition: teamMatch.seasonPartition ?? 0,
+                ),
+              );
+              weightClass = divisionWeightClass.weightClass;
+            }
           } catch (e, st) {
             _logger.severe(
               'The weight class ${weightClass.name} of division ${teamMatch.league!.division.fullname} cannot be found. '
