@@ -168,10 +168,18 @@ class OrganizationOverview extends ConsumerWidget {
                     addPageBuilder: (context) => PersonEdit(initialOrganization: organization),
                     mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
                     prependBuilder: (context, persons) {
-                      final duplicatePersons = persons
-                          .groupListsBy((element) => element.fullName)
-                          .entries
-                          .where((entry) => entry.value.length > 1);
+                      final duplicatePersons =
+                          persons
+                              .groupListsBy((element) => element.fullName)
+                              .entries
+                              .where((entry) => entry.value.length > 1)
+                              .toList();
+                      // Remove entries which all have a different birthdate.
+                      duplicatePersons.removeWhere(
+                        // nonNulls: ensures that persons with `null` birthdate can be merged
+                        // toSet: ensures that the birth dates are distinct
+                        (entry) => entry.value.map((p) => p.birthDate).nonNulls.toSet().length == entry.value.length,
+                      );
                       return duplicatePersons.isEmpty ? null : PersonsMergeCard(duplicatePersonsMap: duplicatePersons);
                     },
                     itemBuilder:
