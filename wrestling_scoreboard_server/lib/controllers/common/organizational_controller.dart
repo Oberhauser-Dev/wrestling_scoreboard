@@ -94,11 +94,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   }) async {
     final conditions = ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'];
     final substitutionValues = {'fid': filterId};
-    final previous = await getMany(
-      conditions: conditions,
-      substitutionValues: substitutionValues,
-      obfuscate: false,
-    );
+    final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
     final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
     // Delete not included entities
     final deletingPrevDataObjects = previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId));

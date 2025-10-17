@@ -194,7 +194,7 @@ abstract class EntityController<T extends DataObject> {
       );
       await updateSingle(dataObject);
       broadcastUpdateSingle(
-            (obfuscate) async => obfuscate ? await getSingle(dataObject.id!, obfuscate: true) : dataObject,
+        (obfuscate) async => obfuscate ? await getSingle(dataObject.id!, obfuscate: true) : dataObject,
       );
     }
     return dataObject;

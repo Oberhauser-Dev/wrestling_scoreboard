@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_config_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_result_rule_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/club_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/import_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
@@ -17,6 +18,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
+import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 
 class OrganizationController extends ShelfController<Organization> with ImportController<Organization> {
   static final OrganizationController _singleton = OrganizationController._internal();
@@ -48,6 +50,15 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     return organization.getApi(
       <T extends Organizational>(orgSyncId, {required int orgId}) =>
           OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
+      <T extends DataObject, S extends DataObject>(S filterObject) async {
+        final conditions = ['${directDataObjectRelations[T]![S]!.$1} = @fid'];
+        final substitutionValues = {'fid': filterObject.id};
+        return await EntityController.getManyFromDataType<T>(
+          conditions: conditions,
+          substitutionValues: substitutionValues,
+          obfuscate: false,
+        );
+      },
       authService: authService,
     );
   }
@@ -157,11 +168,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       for (final league in leagues) {
-        await LeagueController().import(
-          entity: league,
-          includeSubjacent: includeSubjacent,
-          apiProvider: apiProvider,
-        );
+        await LeagueController().import(entity: league, includeSubjacent: includeSubjacent, apiProvider: apiProvider);
       }
     }
   }
