@@ -17,12 +17,15 @@ class BoutController extends ShelfController<Bout> with OrganizationalController
   @override
   Future<bool> deleteSingle(int id) async {
     final boutRaw = await getSingleRaw(id, obfuscate: false);
+    // Delete entities referencing the bout
+    await BoutActionController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': id});
+    final success = await super.deleteSingle(id);
+    // Delete entities referenced by the bout
     final redParticipantState = boutRaw['red_id'] as int?;
     final blueParticipantState = boutRaw['blue_id'] as int?;
     if (redParticipantState != null) await AthleteBoutStateController().deleteSingle(redParticipantState);
     if (blueParticipantState != null) await AthleteBoutStateController().deleteSingle(blueParticipantState);
-    await BoutActionController().deleteMany(conditions: ['bout_id=@id'], substitutionValues: {'id': id});
-    return super.deleteSingle(id);
+    return success;
   }
 
   @override
