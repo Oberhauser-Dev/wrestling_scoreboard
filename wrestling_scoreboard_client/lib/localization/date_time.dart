@@ -7,7 +7,7 @@ extension DateTimeFormatter on DateTime {
   }
 
   String toDateStringFromLocaleName(String localeName) {
-    return DateFormat.yMMMd(localeName).format(this);
+    return DateFormat.yMMMd(localeName).format(toLocal());
   }
 
   String toTimeString(BuildContext context) {
@@ -15,7 +15,7 @@ extension DateTimeFormatter on DateTime {
   }
 
   String toTimeStringFromLocaleName(String localeName) {
-    return DateFormat.Hm(localeName).format(this);
+    return DateFormat.Hm(localeName).format(toLocal());
   }
 
   String toDateTimeString(BuildContext context) {
@@ -23,6 +23,6 @@ extension DateTimeFormatter on DateTime {
   }
 
   String toDateTimeStringFromLocaleName(String localeName) {
-    return DateFormat.yMMMd(localeName).add_Hm().format(this);
+    return DateFormat.yMMMd(localeName).add_Hm().format(toLocal());
   }
 }

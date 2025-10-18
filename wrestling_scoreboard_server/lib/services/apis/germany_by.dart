@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:country/country.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/services/api.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-005029c.json.dart';
@@ -14,6 +15,7 @@ import 'package:wrestling_scoreboard_server/services/apis/mocks/listCompetition.
 import 'package:wrestling_scoreboard_server/services/apis/mocks/listLiga.json.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/listSaison.json.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/wrestler.json.dart';
+import 'package:wrestling_scoreboard_server/utils/date_time.dart';
 
 class ByGermanyWrestlingApi extends WrestlingApi {
   final String apiUrl;
@@ -26,6 +28,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
   @override
   final Organization organization;
+
+  final timeZoneLocation = tz.getLocation('Europe/Berlin');
 
   @override
   GetSingleOfOrg getSingleOfOrg;
@@ -504,6 +508,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               schemeIndex != null
                   ? (schemeIndex - 1)
                   : (double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1);
+          final matchDateTime = DateTime.parse(
+            '${values['boutDate']} ${values['scaleTime']}',
+          ).fromLocation(timeZoneLocation);
           return MapEntry(
             TeamMatch(
               home: TeamLineup(
@@ -516,7 +523,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                   (competitionJson['opponentTeamName'] as String).trim(),
                 ), // teamId is not unique across all IDs
               ),
-              date: DateTime.parse('${values['boutDate']} ${values['scaleTime']}'),
+              date: matchDateTime.toUtc(),
               visitorsCount: int.tryParse(values['audience']),
               location: values['location'],
               comment: values['editorComment'],
