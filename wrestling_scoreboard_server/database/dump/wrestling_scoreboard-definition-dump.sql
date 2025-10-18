@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict pBxq0WnlFxmeQpFm1rqf8dBCaTNm8jBfwr6x77FV7HxrWPfSglBF1c5A6fsV3uA
+\restrict 62q7GY4QkbnEPuf9s67lvETiCgDiHCPpKoBggNeSVZ1UNGgZOfeZFWzFXgkTylL
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -470,7 +470,7 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 
 CREATE TABLE public.wrestling_event (
     id integer NOT NULL,
-    date date,
+    date timestamp with time zone,
     location character varying(100),
     visitors_count integer,
     comment text,
@@ -1303,7 +1303,7 @@ ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
 
 CREATE TABLE public.team_match (
     id integer,
-    date date,
+    date timestamp with time zone,
     location character varying(100),
     visitors_count integer,
     comment text,
@@ -1899,7 +1899,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.6-pre.1	0.3.4
+0.3.6-pre.2	0.3.4
 \.
 
 
@@ -3220,5 +3220,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict pBxq0WnlFxmeQpFm1rqf8dBCaTNm8jBfwr6x77FV7HxrWPfSglBF1c5A6fsV3uA
+\unrestrict 62q7GY4QkbnEPuf9s67lvETiCgDiHCPpKoBggNeSVZ1UNGgZOfeZFWzFXgkTylL
 

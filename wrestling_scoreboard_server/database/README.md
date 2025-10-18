@@ -63,6 +63,12 @@ Assign `wrestling` as owner of `public` schema from within the database `wrestli
 psql -U postgres -d wrestling_scoreboard -c "ALTER SCHEMA public OWNER TO wrestling;"
 ```
 
+Optional: To be consistent we should set the time zone to UTC.
+But it should properly parse in other time zones, too.
+```shell
+psql -U postgres -d wrestling_scoreboard -c "SET TIMEZONE TO 'UTC';"
+```
+
 For peer authentication execute these commands inside the according psql shell.
 
 Restore prepopulated database, execute in directory `server`:
