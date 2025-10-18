@@ -97,11 +97,9 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
     final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
     // Delete not included entities
-    final deletingPrevDataObjects = previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId));
-    final updatingDataObjects = previous.where((Organizational p) => currentOrgSyncIds.contains(p.orgSyncId));
-    final creatingDataObjects = dataObjects.where(
-      (Organizational p) => !previous.map((e) => e.orgSyncId).contains(p.orgSyncId),
-    );
+    final updatingDataObjects = previous.where((p) => currentOrgSyncIds.contains(p.orgSyncId));
+    final deletingPrevDataObjects = previous.where((p) => !currentOrgSyncIds.contains(p.orgSyncId));
+    final creatingDataObjects = dataObjects.where((c) => !previous.map((p) => p.orgSyncId).contains(c.orgSyncId));
 
     _logger.fine(
       'updateOrCreateManyOfOrg: Update list of data objects <$T>: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
