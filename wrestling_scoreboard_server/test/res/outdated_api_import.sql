@@ -1406,6 +1406,7 @@ COPY public.bout_config (id, period_duration_secs, break_duration_secs, activity
 --
 -- Id 72 is an example for adding an entity in a list on import
 -- 72	7	bothVin	\N	\N	\N	0	0
+-- Id 1-4 are an example for updating entities in a list on import
 COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_points, loser_technical_points, technical_points_difference, winner_classification_points, loser_classification_points) FROM stdin;
 1	2	vfa	\N	\N	\N	9	9
 2	2	vin	8	8	8	8	8

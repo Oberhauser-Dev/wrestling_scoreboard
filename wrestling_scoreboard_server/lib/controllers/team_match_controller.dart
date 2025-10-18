@@ -195,7 +195,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'comment': psql.Type.text};
+    return {'date': psql.Type.timestampTz, 'comment': psql.Type.text};
   }
 
   @override
