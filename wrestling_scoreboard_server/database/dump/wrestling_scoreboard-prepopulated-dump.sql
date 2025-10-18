@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict lNBy963hvBpHcWbcQz0RHzsubM2afbpEHRfH71ipHEHL6gHkFUAfVEpSXOGbXok
+\restrict eHIi8bYDh4RdpXaIu20il5AZ91gx2v6B7GCIKSv6wXb3cNushUOHhJPQaW4S5uW
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -470,7 +470,7 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 
 CREATE TABLE public.wrestling_event (
     id integer NOT NULL,
-    date date,
+    date timestamp with time zone,
     location character varying(100),
     visitors_count integer,
     comment text,
@@ -1303,7 +1303,7 @@ ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
 
 CREATE TABLE public.team_match (
     id integer,
-    date date,
+    date timestamp with time zone,
     location character varying(100),
     visitors_count integer,
     comment text,
@@ -1849,7 +1849,7 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 --
 
 COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1	0	10
+1	2021-07-17 00:00:00+00	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1	0	10
 \.
 
 
@@ -2036,7 +2036,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.6-pre.1	0.3.4
+0.3.6-pre.2	0.3.4
 \.
 
 
@@ -2163,7 +2163,7 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 --
 
 COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition) FROM stdin;
-1	2021-07-10	Springfield	\N	\N		1	\N	1	2	1	1
+1	2021-07-10 00:00:00+00	Springfield	\N	\N		1	\N	1	2	1	1
 \.
 
 
@@ -3468,5 +3468,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict lNBy963hvBpHcWbcQz0RHzsubM2afbpEHRfH71ipHEHL6gHkFUAfVEpSXOGbXok
+\unrestrict eHIi8bYDh4RdpXaIu20il5AZ91gx2v6B7GCIKSv6wXb3cNushUOHhJPQaW4S5uW
 
