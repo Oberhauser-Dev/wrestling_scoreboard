@@ -204,39 +204,19 @@ abstract class EntityController<T extends DataObject> {
     final conditions = ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'];
     final substitutionValues = {'fid': filterId};
     final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
-    final listLengthDiff = dataObjects.length - previous.length;
-    List<T> updatingDataObjects;
-    List<T> creatingDataObjects;
-    List<T> updatingPrevDataObjects;
-    List<T> deletingPrevDataObjects;
-    if (listLengthDiff > 0) {
-      updatingDataObjects = dataObjects.sublist(0, previous.length);
-      creatingDataObjects = dataObjects.sublist(previous.length);
-      updatingPrevDataObjects = previous;
-      deletingPrevDataObjects = [];
-    } else if (listLengthDiff < 0) {
-      updatingDataObjects = dataObjects;
-      creatingDataObjects = [];
-      updatingPrevDataObjects = previous.sublist(0, dataObjects.length);
-      deletingPrevDataObjects = previous.sublist(dataObjects.length);
-    } else {
-      updatingDataObjects = dataObjects;
-      creatingDataObjects = [];
-      deletingPrevDataObjects = [];
-      updatingPrevDataObjects = previous;
-    }
+
+    // Keep unchanged data objects to avoid conflicts with unique constraint
+    final unchangedDataObjects = previous.where((p) => dataObjects.contains(p.copyWithId(null)));
+    final deletingPrevDataObjects = previous.toSet().difference(unchangedDataObjects.toSet());
+    List<T> creatingDataObjects =
+        dataObjects.toSet().difference(unchangedDataObjects.map((e) => e.copyWithId(null)).toSet()).toList();
+
     _logger.fine(
-      'updateOnDiffMany: Update list of data objects <$T>: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
+      'updateOnDiffMany: Update list of data objects <$T>: (updating: ${unchangedDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
     );
     await Future.wait(deletingPrevDataObjects.map((prev) => deleteSingle(prev.id!)));
-    updatingDataObjects = await Future.wait(
-      Map.fromIterables(
-        updatingDataObjects,
-        updatingPrevDataObjects,
-      ).entries.map((element) => updateOnDiffSingle(element.key, previous: element.value)),
-    );
     creatingDataObjects = await createManyReturn(creatingDataObjects);
-    final newDataObjects = [...updatingDataObjects, ...creatingDataObjects];
+    final newDataObjects = [...unchangedDataObjects, ...creatingDataObjects];
     if (creatingDataObjects.isNotEmpty || deletingPrevDataObjects.isNotEmpty) {
       broadcastUpdateMany<T>(
         (obfuscate) async {
