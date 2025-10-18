@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_co
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/weight_class_controller.dart';
 import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 
 class OrganizationController extends ShelfController<Organization> with ImportController<Organization> {
   static final OrganizationController _singleton = OrganizationController._internal();
@@ -47,10 +48,12 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       }
     }
 
-    return organization.getApi(
-      <T extends Organizational>(orgSyncId, {required int orgId}) =>
-          OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
-      <T extends DataObject, S extends DataObject>(S filterObject) async {
+    return organization.apiProvider?.getApi(
+      organization,
+      getSingleOfOrg:
+          <T extends Organizational>(orgSyncId, {required int orgId}) =>
+              OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
+      getMany: <T extends DataObject, S extends DataObject>(S filterObject) async {
         final conditions = ['${directDataObjectRelations[T]![S]!.$1} = @fid'];
         final substitutionValues = {'fid': filterObject.id};
         return await EntityController.getManyFromDataType<T>(

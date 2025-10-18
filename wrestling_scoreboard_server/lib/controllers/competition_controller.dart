@@ -2,6 +2,7 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/import_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 
 class CompetitionController extends ShelfController<Competition> with ImportController<Competition> {
   static final CompetitionController _singleton = CompetitionController._internal();
