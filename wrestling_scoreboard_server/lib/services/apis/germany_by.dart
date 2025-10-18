@@ -5,16 +5,15 @@ import 'package:collection/collection.dart';
 import 'package:country/country.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
-
-import '../../../common.dart';
-import '../../util/transaction.dart';
-import 'mocks/competition_s-2023_c-005029c.json.dart';
-import 'mocks/competition_s-2023_c-029013c.json.dart';
-import 'mocks/listClubs.json.dart';
-import 'mocks/listCompetition.json.dart';
-import 'mocks/listLiga.json.dart';
-import 'mocks/listSaison.json.dart';
-import 'mocks/wrestler.json.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-005029c.json.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-029013c.json.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/listClubs.json.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/listCompetition.json.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/listLiga.json.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/listSaison.json.dart';
+import 'package:wrestling_scoreboard_server/services/apis/mocks/wrestler.json.dart';
 
 class ByGermanyWrestlingApi extends WrestlingApi {
   final String apiUrl;

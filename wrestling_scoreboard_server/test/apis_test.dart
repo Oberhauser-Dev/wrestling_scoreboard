@@ -1,8 +1,9 @@
 import 'package:country/country.dart';
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 
-import 'shared.dart';
+import '../../wrestling_scoreboard_common/test/services/shared.dart';
 
 void main() {
   late WrestlingApi wrestlingApi;

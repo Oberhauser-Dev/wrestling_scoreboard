@@ -17,6 +17,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 class TeamMatchController extends ShelfController<TeamMatch>
