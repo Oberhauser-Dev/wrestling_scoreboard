@@ -1,13 +1,17 @@
 import 'package:country/country.dart';
 import 'package:test/test.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 
-import 'shared.dart';
+import '../../wrestling_scoreboard_common/test/services/shared.dart';
 
 void main() {
   late WrestlingApi wrestlingApi;
   MockableDateTime.isMocked = true;
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
+
+  tz.initializeTimeZones();
 
   BoutConfig getAdultBoutConfig() => const BoutConfig(
     periodDuration: Duration(minutes: 3),
@@ -140,7 +144,7 @@ void main() {
     comment: 'Verspäteter Beginn aufgrund Vorkämpfe',
     home: testLineupUntergriesbach,
     guest: testLineupBerchtesgaden,
-    date: DateTime(2023, 10, 28, 19),
+    date: DateTime.utc(2023, 10, 28, 17),
     visitorsCount: 295,
     location: 'Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach',
   );
@@ -189,6 +193,9 @@ void main() {
           default:
             throw UnimplementedError('Type $T with orgSyncId $orgSyncId not found');
         }
+      },
+      getMany: <T extends DataObject, S extends DataObject>(S filterObject) async {
+        return [];
       },
     );
     wrestlingApi.isMock = true;
@@ -640,7 +647,7 @@ void main() {
             league: testBayerligaSuedLeague,
             seasonPartition: 0,
             location: 'Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden',
-            date: DateTime(2023, 10, 21, 19),
+            date: DateTime.utc(2023, 10, 21, 17),
             visitorsCount: 813,
             comment: 'TSV BGD 57kg übergewicht',
           ): {

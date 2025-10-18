@@ -15,11 +15,13 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/models/backup.dart';
 import 'package:wrestling_scoreboard_client/provider/backup_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
@@ -140,6 +142,8 @@ class GlobalWidget extends ConsumerStatefulWidget {
 
 class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
   final Set<Timer> _backupTimers = {};
+  late final ProviderSubscription<Future<String?>> _appDataDirectorySubscription;
+  late final ProviderSubscription<Future<(String?, List<BackupRule>)>> _backupSubscription;
 
   Future<Iterable<MapEntry<DateTime, FileSystemEntity>>> listDateFilesOfDirectory(String dirPath) async {
     final dir = Directory(dirPath);
@@ -158,7 +162,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
     super.initState();
 
     // Prepare log file
-    ref.listenManual(appDataDirectoryNotifierProvider, (previous, next) async {
+    _appDataDirectorySubscription = ref.listenManual(appDataDirectoryNotifierProvider, (previous, next) async {
       final appDataDir = await next;
       if (appDataDir == null) return;
       final now = MockableDateTime.now();
@@ -181,7 +185,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
     }, fireImmediately: true);
 
     // Prepare backups
-    ref.listenManual(backupNotifierProvider, (previous, next) async {
+    _backupSubscription = ref.listenManual(backupNotifierProvider, (previous, next) async {
       // Clear timers
       for (final timer in _backupTimers) {
         timer.cancel();
@@ -237,6 +241,13 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
   }
 
   @override
+  void dispose() {
+    _appDataDirectorySubscription.close();
+    _backupSubscription.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final result = Shortcuts(
       shortcuts: appShortcuts,
@@ -270,6 +281,8 @@ class ConnectionWidget extends ConsumerStatefulWidget {
 
 class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
   bool _isDialogShown = false;
+  late final ProviderSubscription<Future<WebSocketConnectionState>> _websocketStateSubscription;
+  late final ProviderSubscription<Future<DataManager>> _dataManagerSubscription;
 
   @override
   void initState() {
@@ -283,7 +296,7 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
     }
 
     // Listen to the websocket provider as soon as possible to not miss any state changes.
-    ref.listenManual(webSocketStateStreamProvider.future, (previous, next) async {
+    _websocketStateSubscription = ref.listenManual(webSocketStateStreamProvider.future, (previous, next) async {
       await catchAsync(context, () async {
         final connectionState = await next;
         if (!_isDialogShown && connectionState == WebSocketConnectionState.disconnected) {
@@ -307,7 +320,7 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
       }, onRetry: onRetry);
     });
 
-    ref.listenManual(dataManagerNotifierProvider, (previous, next) async {
+    _dataManagerSubscription = ref.listenManual(dataManagerNotifierProvider, (previous, next) async {
       final dataManager = await next;
       final migration = await dataManager.getMigration();
       final minClientVersion = Version.parse(migration.minClientVersion);
@@ -342,6 +355,13 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
         });
       }
     }, fireImmediately: true);
+  }
+
+  @override
+  void dispose() {
+    _websocketStateSubscription.close();
+    _dataManagerSubscription.close();
+    super.dispose();
   }
 
   @override

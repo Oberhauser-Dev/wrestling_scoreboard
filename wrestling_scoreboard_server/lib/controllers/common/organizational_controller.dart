@@ -45,7 +45,6 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   /// It is executed **before** the entity is updated or created.
   Future<T> updateOrCreateSingleOfOrg(
     T dataObject, {
-    required bool obfuscate,
     Future<T> Function(T? previous)? onUpdateOrCreate,
     Future<void> Function(T? previous, T current)? onUpdatedOrCreated,
   }) async {
@@ -60,7 +59,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
       final previous = await getSingleOfOrg(
         organizational.orgSyncId!,
         orgId: organizational.organization!.id!,
-        obfuscate: obfuscate,
+        obfuscate: false,
       );
       if (onUpdateOrCreate != null) {
         dataObject = await onUpdateOrCreate(previous);
@@ -86,7 +85,6 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   /// [onDeleted] is executed after the entity has been deleted.
   Future<List<T>> updateOrCreateManyOfOrg(
     List<T> dataObjects, {
-    required bool obfuscate,
     Type? filterType,
     int? filterId,
     Future<T> Function(T? previous, T current)? onUpdateOrCreate,
@@ -96,18 +94,12 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
   }) async {
     final conditions = ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'];
     final substitutionValues = {'fid': filterId};
-    final previous = await getMany(
-      conditions: conditions,
-      substitutionValues: substitutionValues,
-      obfuscate: obfuscate,
-    );
+    final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
     final currentOrgSyncIds = dataObjects.map((c) => c.orgSyncId);
     // Delete not included entities
-    final deletingPrevDataObjects = previous.where((Organizational p) => !currentOrgSyncIds.contains(p.orgSyncId));
-    final updatingDataObjects = previous.where((Organizational p) => currentOrgSyncIds.contains(p.orgSyncId));
-    final creatingDataObjects = dataObjects.where(
-      (Organizational p) => !previous.map((e) => e.orgSyncId).contains(p.orgSyncId),
-    );
+    final updatingDataObjects = previous.where((p) => currentOrgSyncIds.contains(p.orgSyncId));
+    final deletingPrevDataObjects = previous.where((p) => !currentOrgSyncIds.contains(p.orgSyncId));
+    final creatingDataObjects = dataObjects.where((c) => !previous.map((p) => p.orgSyncId).contains(c.orgSyncId));
 
     _logger.fine(
       'updateOrCreateManyOfOrg: Update list of data objects <$T>: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
@@ -128,7 +120,6 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
       dataObjects,
       (element) => updateOrCreateSingleOfOrg(
         element,
-        obfuscate: obfuscate,
         onUpdateOrCreate: onUpdateOrCreate != null ? (previous) => onUpdateOrCreate(previous, element) : null,
         onUpdatedOrCreated: onUpdatedOrCreated,
       ),

@@ -17,6 +17,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 class TeamMatchController extends ShelfController<TeamMatch>
@@ -194,14 +195,13 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'comment': psql.Type.text};
+    return {'date': psql.Type.timestampTz, 'comment': psql.Type.text};
   }
 
   @override
   Future<void> import({
     required WrestlingApi apiProvider,
     required TeamMatch entity,
-    bool obfuscate = true,
     bool includeSubjacent = false,
   }) async {
     final tmbMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
@@ -209,7 +209,6 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
     teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
       teamMatchBouts,
-      obfuscate: obfuscate,
       filterType: TeamMatch,
       filterId: entity.id,
       onUpdateOrCreate: (previous, current) async {
@@ -218,7 +217,6 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
         bout = await BoutController().updateOrCreateSingleOfOrg(
           bout,
-          obfuscate: obfuscate,
           onUpdateOrCreate: (previousBout) async {
             return bout.copyWith(
               r: await _saveDeepParticipantState(
@@ -226,14 +224,12 @@ class TeamMatchController extends ShelfController<TeamMatch>
                 previousAthleteBoutState: previousBout?.r,
                 lineup: entity.home,
                 weightClass: current.weightClass!,
-                obfuscate: obfuscate,
               ),
               b: await _saveDeepParticipantState(
                 bout.b,
                 previousAthleteBoutState: previousBout?.b,
                 lineup: entity.guest,
                 weightClass: current.weightClass!,
-                obfuscate: obfuscate,
               ),
             );
           },
@@ -245,20 +241,11 @@ class TeamMatchController extends ShelfController<TeamMatch>
         return current.copyWith(bout: bout);
       },
       onDelete: (previous) async {
-        await BoutActionController().deleteMany(
-          conditions: ['bout_id=@id'],
-          substitutionValues: {'id': previous.bout.id},
-        );
+        // BoutActions are deleted within BoutController().deleteSingle(id)
       },
       onDeleted: (previous) async {
-        if (previous.bout.r != null) {
-          await AthleteBoutStateController().deleteSingle(previous.bout.r!.id!);
-        }
-        if (previous.bout.b != null) {
-          await AthleteBoutStateController().deleteSingle(previous.bout.b!.id!);
-        }
-
-        await BoutController().deleteSingle(previous.bout.id!);
+        // Bout is deleted within TeamMatchBoutController().deleteSingle(id)
+        // AthleteBoutState is deleted within BoutController().deleteSingle(id)
       },
     );
 
@@ -306,17 +293,12 @@ class TeamMatchController extends ShelfController<TeamMatch>
     AthleteBoutState? previousAthleteBoutState,
     required TeamLineup lineup,
     required WeightClass weightClass,
-    required bool obfuscate,
   }) async {
     if (athleteBoutState != null) {
-      final person = await PersonController().updateOrCreateSingleOfOrg(
-        athleteBoutState.membership.person,
-        obfuscate: obfuscate,
-      );
+      final person = await PersonController().updateOrCreateSingleOfOrg(athleteBoutState.membership.person);
 
       final membership = await MembershipController().updateOrCreateSingleOfOrg(
         athleteBoutState.membership.copyWith(person: person),
-        obfuscate: obfuscate,
       );
 
       athleteBoutState = await AthleteBoutStateController().updateOnDiffSingle(

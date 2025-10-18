@@ -61,25 +61,14 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                               // FIXME: Entity is not reset when leaving the scratch provider scope (#187)
                               // Only reset entities which are displayed, but keep e.g. BoutResultRules
                               await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
-                              ref.invalidate(localDataNotifierProvider<BoutAction>());
                               await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
-                              ref.invalidate(localDataNotifierProvider<AthleteBoutState>());
                               await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
-                              ref.invalidate(localDataNotifierProvider<Bout>());
                               await ref.read(localDataNotifierProvider<ScratchBout>().notifier).setState([]);
-                              ref.invalidate(localDataNotifierProvider<ScratchBout>());
+                              ref.invalidate(localDataNotifierProvider);
 
                               // Invalidate stream providers
-                              ref.invalidate(singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 0)));
-                              ref.invalidate(singleDataStreamProvider<AthleteBoutState>(SingleProviderData(id: 1)));
-                              ref.invalidate(singleDataStreamProvider<Bout>(SingleProviderData(id: 0)));
-                              ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
-                              ref.invalidate(
-                                manyDataStreamProvider<BoutAction, Bout>(
-                                  ManyProviderData(filterObject: scratchBout.bout),
-                                ),
-                              );
-                              ref.invalidate(singleDataStreamProvider<ScratchBout>(SingleProviderData(id: 0)));
+                              ref.invalidate(singleDataStreamProvider);
+                              ref.invalidate(manyDataStreamProvider);
                             }
                           },
                           label: localizations.reset,

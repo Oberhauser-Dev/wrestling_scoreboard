@@ -2,13 +2,14 @@
 -- PostgreSQL database dump
 --
 
+\restrict eHIi8bYDh4RdpXaIu20il5AZ91gx2v6B7GCIKSv6wXb3cNushUOHhJPQaW4S5uW
+
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -469,7 +470,7 @@ ALTER SEQUENCE public.club_id_seq OWNED BY public.club.id;
 
 CREATE TABLE public.wrestling_event (
     id integer NOT NULL,
-    date date,
+    date timestamp with time zone,
     location character varying(100),
     visitors_count integer,
     comment text,
@@ -1302,7 +1303,7 @@ ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
 
 CREATE TABLE public.team_match (
     id integer,
-    date date,
+    date timestamp with time zone,
     location character varying(100),
     visitors_count integer,
     comment text,
@@ -1848,7 +1849,7 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 --
 
 COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking) FROM stdin;
-1	2021-07-17	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1	0	10
+1	2021-07-17 00:00:00+00	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1	0	10
 \.
 
 
@@ -2035,7 +2036,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.3	0.3.4
+0.3.6-pre.2	0.3.4
 \.
 
 
@@ -2162,7 +2163,7 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 --
 
 COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition) FROM stdin;
-1	2021-07-10	Springfield	\N	\N		1	\N	1	2	1	1
+1	2021-07-10 00:00:00+00	Springfield	\N	\N		1	\N	1	2	1	1
 \.
 
 
@@ -2479,6 +2480,14 @@ SELECT pg_catalog.setval('public.wrestling_event_id_seq', 1, true);
 
 
 --
+-- Name: age_category age_category_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.age_category
+    ADD CONSTRAINT age_category_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
+
+
+--
 -- Name: age_category age_category_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2511,6 +2520,14 @@ ALTER TABLE ONLY public.bout_config
 
 
 --
+-- Name: bout bout_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.bout
+    ADD CONSTRAINT bout_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
+
+
+--
 -- Name: bout bout_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2524,6 +2541,14 @@ ALTER TABLE ONLY public.bout
 
 ALTER TABLE ONLY public.bout_result_rule
     ADD CONSTRAINT bout_result_rule_pk PRIMARY KEY (id);
+
+
+--
+-- Name: club club_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.club
+    ADD CONSTRAINT club_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -2591,11 +2616,27 @@ ALTER TABLE ONLY public.competition_weight_category
 
 
 --
+-- Name: division division_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.division
+    ADD CONSTRAINT division_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
+
+
+--
 -- Name: division division_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.division
     ADD CONSTRAINT division_pk PRIMARY KEY (id);
+
+
+--
+-- Name: division_weight_class division_weight_class_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.division_weight_class
+    ADD CONSTRAINT division_weight_class_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -2612,6 +2653,14 @@ ALTER TABLE ONLY public.division_weight_class
 
 ALTER TABLE ONLY public.competition_person
     ADD CONSTRAINT event_person_pk PRIMARY KEY (id);
+
+
+--
+-- Name: league league_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league
+    ADD CONSTRAINT league_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -2639,11 +2688,27 @@ ALTER TABLE ONLY public.league_team_participation
 
 
 --
+-- Name: league_weight_class league_weight_class_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.league_weight_class
+    ADD CONSTRAINT league_weight_class_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
+
+
+--
 -- Name: league_weight_class league_weight_class_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.league_weight_class
     ADD CONSTRAINT league_weight_class_pk PRIMARY KEY (id);
+
+
+--
+-- Name: membership membership_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.membership
+    ADD CONSTRAINT membership_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -2676,6 +2741,14 @@ ALTER TABLE ONLY public.organization
 
 ALTER TABLE ONLY public.team_lineup_participation
     ADD CONSTRAINT participation_uk UNIQUE (membership_id, lineup_id, weight_class_id);
+
+
+--
+-- Name: person person_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.person
+    ADD CONSTRAINT person_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -2727,6 +2800,14 @@ ALTER TABLE ONLY public.team_lineup
 
 
 --
+-- Name: team_match_bout team_match_bout_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team_match_bout
+    ADD CONSTRAINT team_match_bout_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
+
+
+--
 -- Name: team_match_bout team_match_bout_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -2748,6 +2829,14 @@ ALTER TABLE ONLY public.team_match_person
 
 ALTER TABLE ONLY public.team_match
     ADD CONSTRAINT team_match_pk PRIMARY KEY (id);
+
+
+--
+-- Name: team team_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.team
+    ADD CONSTRAINT team_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -2780,6 +2869,14 @@ ALTER TABLE ONLY public.secured_user
 
 ALTER TABLE ONLY public.weight_class
     ADD CONSTRAINT weight_class_pk PRIMARY KEY (id);
+
+
+--
+-- Name: wrestling_event wrestling_event_org_sync_id_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.wrestling_event
+    ADD CONSTRAINT wrestling_event_org_sync_id_pk UNIQUE (org_sync_id, organization_id);
 
 
 --
@@ -3370,4 +3467,6 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict eHIi8bYDh4RdpXaIu20il5AZ91gx2v6B7GCIKSv6wXb3cNushUOHhJPQaW4S5uW
 

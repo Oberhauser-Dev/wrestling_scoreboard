@@ -9,6 +9,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/middleware/cors.dart';
@@ -22,6 +23,8 @@ Future<HttpServer> init() async {
   // Init logger
   Logger.root.level = env.logLevel ?? Level.INFO;
   Logger.root.onRecord.listen((record) => print(record.formatted));
+
+  tz.initializeTimeZones();
 
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port

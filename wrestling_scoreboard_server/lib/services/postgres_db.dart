@@ -48,6 +48,7 @@ class PostgresDb {
         sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable,
         // Increase connection timeout while debugging
         connectTimeout: Duration(seconds: _isReleaseMode ? 15 : 180),
+        timeZone: 'UTC',
       ),
     );
   }
@@ -144,6 +145,8 @@ extension DatabaseExt on PostgresDb {
     await close();
 
     final args = <String>[
+      '--set',
+      'ON_ERROR_STOP=1',
       '--file',
       sqlFilePath,
       '--username',

@@ -98,13 +98,13 @@ void main() {
       }
       apiProvider.isMock = true;
 
-      await OrganizationController().import(entity: org, obfuscate: false, apiProvider: apiProvider);
+      await OrganizationController().import(entity: org, apiProvider: apiProvider);
 
       final league = await LeagueController().getSingleOfOrg('2023_Bayernliga_Süd', orgId: org.id!, obfuscate: false);
-      await LeagueController().import(entity: league, obfuscate: false, apiProvider: apiProvider);
+      await LeagueController().import(entity: league, apiProvider: apiProvider);
 
       final teamMatch = await TeamMatchController().getSingleOfOrg('005029c', orgId: org.id!, obfuscate: false);
-      await TeamMatchController().import(entity: teamMatch, obfuscate: false, apiProvider: apiProvider);
+      await TeamMatchController().import(entity: teamMatch, apiProvider: apiProvider);
 
       return await db.export();
     }

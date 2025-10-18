@@ -314,8 +314,12 @@ class PersonsMergeCard extends ConsumerWidget {
               'You can reorder the persons before merging, so the person on the top is kept and missing attributes are taken from the ones below.',
             ),
             ...duplicatePersonsMap.map(
-              (similarPersons) =>
-                  ReorderablePersonExpansionTile(title: similarPersons.key, persons: similarPersons.value),
+              (similarPersons) => ReorderablePersonExpansionTile(
+                // Key is needed to ensure the tile is updated when the list shortens
+                key: ValueKey(similarPersons.key),
+                title: similarPersons.key,
+                persons: similarPersons.value,
+              ),
             ),
             // Disable merge all dialog for now, as the order is not considered from the expandable tile.
             // Also it might is unsage to just merge all without reviewing individually.

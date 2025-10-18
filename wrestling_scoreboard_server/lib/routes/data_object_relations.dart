@@ -20,6 +20,7 @@ const Map<Type, Map<Type, (String, List<String>)>> directDataObjectRelations = {
   TeamMatch: {
     League: ('league_id', ['date']),
   },
+  TeamClubAffiliation: {Club: ('club_id', []), Team: ('team_id', [])},
   TeamLineupParticipation: {TeamLineup: ('lineup_id', []), Membership: ('membership_id', [])},
   CompetitionParticipation: {
     CompetitionLineup: ('competition_lineup_id', []),

@@ -7,6 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/common/organizational_co
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
+import 'package:wrestling_scoreboard_server/services/api.dart';
 
 class TeamController extends ShelfController<Team> with OrganizationalController<Team>, ImportController<Team> {
   static final TeamController _singleton = TeamController._internal();

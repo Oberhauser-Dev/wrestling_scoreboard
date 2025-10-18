@@ -13,7 +13,7 @@ class LeagueTeamParticipationController extends ShelfController<LeagueTeamPartic
   Future<LeagueTeamParticipation?> getByLeagueAndTeamId({
     required int teamId,
     required int leagueId,
-    required obfuscate,
+    required bool obfuscate,
   }) async {
     final many = await getMany(
       conditions: ['team_id = @teamId', 'league_id = @leagueId'],

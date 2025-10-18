@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/models/backup.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -431,57 +432,67 @@ class CustomSettingsScreen extends ConsumerWidget {
                   leading: const Icon(Icons.cloud_download),
                   title: Text(localizations.exportDatabase),
                   onTap:
-                      () => catchAsync(context, () async {
-                        final dataManager = await ref.read(dataManagerNotifierProvider);
-                        final sqlString = await dataManager.exportDatabase();
-                        await exportSQL(
-                          fileBaseName:
-                              '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
-                          sqlString: sqlString,
-                        );
-                      }),
+                      () => showLoadingDialog(
+                        context: context,
+                        showSuccess: false,
+                        runAsync: () async {
+                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          final sqlString = await dataManager.exportDatabase();
+                          await exportSQL(
+                            fileBaseName:
+                                '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
+                            sqlString: sqlString,
+                          );
+                        },
+                      ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings_backup_restore),
                   title: Text(localizations.resetDatabase),
-                  onTap:
-                      () => catchAsync(context, () async {
-                        final result = await showOkCancelDialog(
-                          context: context,
-                          child: Text(localizations.warningOverrideDatabase),
-                        );
-                        if (result && context.mounted) {
+                  onTap: () async {
+                    final result = await showOkCancelDialog(
+                      context: context,
+                      child: Text(localizations.warningOverrideDatabase),
+                    );
+                    if (result && context.mounted) {
+                      await showLoadingDialog(
+                        context: context,
+                        runAsync: () async {
                           final dataManager = await ref.read(dataManagerNotifierProvider);
                           await dataManager.resetDatabase();
-                          if (context.mounted) {
-                            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                          }
-                        }
-                      }),
+                          _invalidateProviders(ref);
+                        },
+                      );
+                    }
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.history),
                   title: Text(localizations.restoreDefaultDatabase),
-                  onTap:
-                      () => catchAsync(context, () async {
-                        final result = await showOkCancelDialog(
-                          context: context,
-                          child: Text(localizations.warningOverrideDatabase),
-                        );
-                        if (result && context.mounted) {
+                  onTap: () async {
+                    final result = await showOkCancelDialog(
+                      context: context,
+                      child: Text(localizations.warningOverrideDatabase),
+                    );
+                    if (result && context.mounted) {
+                      await showLoadingDialog(
+                        context: context,
+                        runAsync: () async {
                           final dataManager = await ref.read(dataManagerNotifierProvider);
                           await dataManager.restoreDefaultDatabase();
-                          if (context.mounted) {
-                            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                          }
-                        }
-                      }),
+                          _invalidateProviders(ref);
+                        },
+                      );
+                    }
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.cloud_upload),
                   title: Text(localizations.restoreDatabase),
-                  onTap:
-                      () => catchAsync(context, () async {
+                  onTap: () {
+                    showLoadingDialog(
+                      context: context,
+                      runAsync: () async {
                         const typeGroup = file_selector.XTypeGroup(label: 'SQL', extensions: <String>['sql']);
                         final file_selector.XFile? fileSelectorResult = await file_selector.openFile(
                           acceptedTypeGroups: [typeGroup],
@@ -491,11 +502,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                           await dataManager.restoreDatabase(
                             await fileSelectorResult.readAsString(encoding: const Utf8Codec()),
                           );
-                          if (context.mounted) {
-                            await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-                          }
+                          _invalidateProviders(ref);
                         }
-                      }),
+                      },
+                    );
+                  },
                 ),
                 // Automatic Backup is not supported on web, as we cannot save it to the device
                 if (!kIsWeb)
@@ -573,6 +584,11 @@ class CustomSettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  void _invalidateProviders(WidgetRef ref) {
+    ref.invalidate(singleDataStreamProvider);
+    ref.invalidate(manyDataStreamProvider);
   }
 }
 

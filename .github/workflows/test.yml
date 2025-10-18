@@ -65,4 +65,5 @@ jobs:
           sudo -u postgres psql postgres -c "CREATE USER ${DATABASE_USER} WITH PASSWORD '${DATABASE_PASSWORD}';"
           sudo -u postgres psql postgres -c "CREATE DATABASE ${DATABASE_NAME} WITH OWNER = ${DATABASE_USER};"
           sudo -u postgres psql ${DATABASE_NAME} -c "ALTER SCHEMA public OWNER TO ${DATABASE_USER};"
+          sudo -u postgres psql ${DATABASE_NAME} -c "SET TIMEZONE TO 'UTC';"
       - run: melos run test
