@@ -101,7 +101,7 @@ mixin OrganizationalController<T extends Organizational> on ShelfController<T> {
     final deletingPrevDataObjects = previous.where((p) => !currentOrgSyncIds.contains(p.orgSyncId));
     final creatingDataObjects = dataObjects.where((c) => !previous.map((p) => p.orgSyncId).contains(c.orgSyncId));
 
-    _logger.fine(
+    _logger.finer(
       'updateOrCreateManyOfOrg: Update list of data objects <$T>: (updating: ${updatingDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
     );
     await Future.wait(

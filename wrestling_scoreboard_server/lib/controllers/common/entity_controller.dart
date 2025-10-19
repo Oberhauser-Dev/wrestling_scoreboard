@@ -189,7 +189,7 @@ abstract class EntityController<T extends DataObject> {
     }
     dataObject = dataObject.copyWithId(previous.id) as T;
     if (dataObject != previous) {
-      _logger.fine(
+      _logger.finer(
         'updateOnDiffSingle: Update single as of different properties: (prev: ${previous.toJson()}, curr: ${dataObject.toJson()})',
       );
       await updateSingle(dataObject);
@@ -211,7 +211,7 @@ abstract class EntityController<T extends DataObject> {
     List<T> creatingDataObjects =
         dataObjects.toSet().difference(unchangedDataObjects.map((e) => e.copyWithId(null)).toSet()).toList();
 
-    _logger.fine(
+    _logger.finer(
       'updateOnDiffMany: Update list of data objects <$T>: (updating: ${unchangedDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',
     );
     await Future.wait(deletingPrevDataObjects.map((prev) => deleteSingle(prev.id!)));
