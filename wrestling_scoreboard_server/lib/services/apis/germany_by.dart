@@ -17,6 +17,12 @@ import 'package:wrestling_scoreboard_server/services/apis/mocks/listSaison.json.
 import 'package:wrestling_scoreboard_server/services/apis/mocks/wrestler.json.dart';
 import 'package:wrestling_scoreboard_server/utils/date_time.dart';
 
+final _whiteSpaceRegex = RegExp(r'\s+');
+
+extension on String {
+  String get sanitizedName => replaceAll(_whiteSpaceRegex, ' ').trim();
+}
+
 class ByGermanyWrestlingApi extends WrestlingApi {
   final String apiUrl;
   final _logger = Logger('ByGermanyWrestlingApi');
@@ -335,7 +341,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }
 
   String _getLeagueOrgSyncId({required Division division, required String leagueName}) {
-    leagueName = leagueName.trim();
+    leagueName = leagueName.sanitizedName;
     if (leagueName.isEmpty) {
       // If division has only one league it is the league for whole Bavarian.
       leagueName = totalRegionWildcard;
@@ -353,8 +359,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       String? clubName = clubJson['clubName'];
       final String? clubId = clubJson['clubId'];
       if (clubName == null || clubId == null) continue;
-      if (clubName != clubName.trim()) {
-        clubName = clubName.trim();
+      if (clubName != clubName.sanitizedName) {
+        clubName = clubName.sanitizedName;
         _logger.warning('Club with club name "$clubName" was trimmed');
       }
 
@@ -367,8 +373,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String? teamName = teamJson['teamName'];
         final String? teamId = teamJson['teamId'];
         if (teamName == null || teamId == null) continue;
-        if (teamName != teamName.trim()) {
-          teamName = teamName.trim();
+        // Remove duplicate white space and trim
+        final canonicalTeamName = teamName.sanitizedName;
+        if (teamName != canonicalTeamName) {
+          teamName = canonicalTeamName;
           _logger.warning('Team with team name "$teamName" was trimmed');
         }
         final team = Team(name: teamName, orgSyncId: teamName, organization: organization);
@@ -454,7 +462,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     if (leagueList is Map<String, dynamic>) {
       leagues = await Future.wait(
         leagueList.entries.map((entry) async {
-          String leagueName = entry.key.trim();
+          String leagueName = entry.key.sanitizedName;
           if (leagueName.isEmpty) {
             // If division has only one league it is the league for whole Bavarian.
             leagueName = totalRegionWildcard;
@@ -490,8 +498,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       final teamMatches = await Future.wait(
         competitionList.entries.map((entry) async {
           final Map<String, dynamic> values = entry.value;
-          final refereePrename = values['refereeGivenname'].toString().trim();
-          final refereeSurname = values['refereeName'].toString().trim();
+          final refereePrename = values['refereeGivenname'].toString().sanitizedName;
+          final refereeSurname = values['refereeName'].toString().sanitizedName;
           final referee =
               refereePrename.isNotEmpty && refereeSurname.isNotEmpty
                   ? _copyPersonWithOrg(Person(prename: refereePrename, surname: refereeSurname))
@@ -515,12 +523,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             TeamMatch(
               home: TeamLineup(
                 team: await _getSingleBySyncId<Team>(
-                  (competitionJson['homeTeamName'] as String).trim(),
+                  (competitionJson['homeTeamName'] as String).sanitizedName,
                 ), // teamId is not unique across all IDs
               ),
               guest: TeamLineup(
                 team: await _getSingleBySyncId<Team>(
-                  (competitionJson['opponentTeamName'] as String).trim(),
+                  (competitionJson['opponentTeamName'] as String).sanitizedName,
                 ), // teamId is not unique across all IDs
               ),
               date: matchDateTime.toUtc(),
