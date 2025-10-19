@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -6,6 +7,7 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/import_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
@@ -19,6 +21,8 @@ import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controll
 import 'package:wrestling_scoreboard_server/request.dart';
 import 'package:wrestling_scoreboard_server/services/api.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
+
+final _logger = Logger('TeamMatchController');
 
 class TeamMatchController extends ShelfController<TeamMatch>
     with OrganizationalController<TeamMatch>, ImportController<TeamMatch> {
@@ -297,9 +301,28 @@ class TeamMatchController extends ShelfController<TeamMatch>
     if (athleteBoutState != null) {
       final person = await PersonController().updateOrCreateSingleOfOrg(athleteBoutState.membership.person);
 
-      final membership = await MembershipController().updateOrCreateSingleOfOrg(
-        athleteBoutState.membership.copyWith(person: person),
-      );
+      Membership membership = athleteBoutState.membership.copyWith(person: person);
+      try {
+        membership = await MembershipController().updateOrCreateSingleOfOrg(membership);
+      } on InvalidParameterException catch (e, st) {
+        final existingMemberships = await MembershipController().getMany(
+          conditions: ['person_id = @pid', 'club_id = @cid'],
+          substitutionValues: {'pid': person.id, 'cid': membership.club.id},
+          obfuscate: false,
+        );
+        if (existingMemberships.isNotEmpty) {
+          final existingMembership = existingMemberships.first;
+          _logger.warning(
+            'Membership with club ${membership.club.id} and ${person.id} already exists. '
+            'Update the membership no from "${existingMembership.no}" to "${membership.no}"',
+            e,
+            st,
+          );
+          membership = await MembershipController().updateOnDiffSingle(membership, previous: existingMembership);
+        } else {
+          rethrow;
+        }
+      }
 
       athleteBoutState = await AthleteBoutStateController().updateOnDiffSingle(
         athleteBoutState.copyWith(membership: membership),
