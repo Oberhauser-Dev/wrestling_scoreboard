@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/api.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-005029c.json.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-029013c.json.dart';
@@ -42,6 +43,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
   @override
   GetMany getMany;
+
+  Future<List<T>> getManyByFilter<T extends DataObject, S extends DataObject>(S filterObject) async {
+    final conditions = ['${directDataObjectRelations[T]![S]!.$1} = @fid'];
+    final substitutionValues = {'fid': filterObject.id};
+    return await getMany<T>(conditions: conditions, substitutionValues: substitutionValues);
+  }
 
   late Future<T> Function<T extends Organizational>(String orgSyncId) _getSingleBySyncId;
 
@@ -500,10 +507,19 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           final Map<String, dynamic> values = entry.value;
           final refereePrename = values['refereeGivenname'].toString().sanitizedName;
           final refereeSurname = values['refereeName'].toString().sanitizedName;
-          final referee =
-              refereePrename.isNotEmpty && refereeSurname.isNotEmpty
-                  ? _copyPersonWithOrg(Person(prename: refereePrename, surname: refereeSurname))
-                  : null;
+          Person? referee;
+          if (refereePrename.isNotEmpty && refereeSurname.isNotEmpty) {
+            final persons = await getMany<Person>(
+              conditions: ['prename = @pn', 'surname = @sn'],
+              substitutionValues: {'pn': refereePrename, 'sn': refereeSurname},
+            );
+            if (persons.length == 1) {
+              // Only use the person, if it's unique.
+              referee = persons.first;
+            } else {
+              referee = _copyPersonWithOrg(Person(prename: refereePrename, surname: refereeSurname));
+            }
+          }
 
           final competitionJson =
               (await _getCompetition(
@@ -607,7 +623,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               return await _getSingleBySyncId<Club>(clubId);
             } catch (e, st) {
               _logger.warning('Could not find club with id $clubId', e, st);
-              final clubs = (await getMany<TeamClubAffiliation, Team>(fallbackTeam));
+              final clubs = (await getManyByFilter<TeamClubAffiliation, Team>(fallbackTeam));
               if (clubs.isEmpty) rethrow;
               return clubs.first.club;
             }
@@ -628,7 +644,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                     e,
                     st,
                   );
-                  final teamClubAffiliations = await getMany<TeamClubAffiliation, Team>(fallbackTeam);
+                  final teamClubAffiliations = await getManyByFilter<TeamClubAffiliation, Team>(fallbackTeam);
                   if (teamClubAffiliations.isEmpty) rethrow;
                   final club = teamClubAffiliations.first.club;
                   return Membership(
