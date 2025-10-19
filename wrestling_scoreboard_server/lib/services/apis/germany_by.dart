@@ -605,23 +605,46 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             }
           }
 
-          final homeSyncId = int.tryParse(boutJson['homeWrestlerId'] ?? '');
-          final homeMembership =
-              homeSyncId == null
-                  ? null
-                  : await _getMembership(
-                    passCode: homeSyncId,
-                    getClub: (clubId) => getClubWithFallback(clubId, teamMatch.home.team),
+          Future<Membership?> extractMembership(String jsonPrefix, Team fallbackTeam) async {
+            final membershipSyncId = int.tryParse(boutJson['${jsonPrefix}WrestlerId'] ?? '');
+            if (membershipSyncId != null) {
+              try {
+                return await _getMembership(
+                  passCode: membershipSyncId,
+                  getClub: (clubId) => getClubWithFallback(clubId, fallbackTeam),
+                );
+              } on HttpException catch (e, st) {
+                if (e.response?.statusCode == 400) {
+                  _logger.warning(
+                    'Cannot find wrestler with passcode $membershipSyncId. Fall back to bout values.',
+                    e,
+                    st,
                   );
+                  final teamClubAffiliations = await getMany<TeamClubAffiliation, Team>(fallbackTeam);
+                  if (teamClubAffiliations.isEmpty) rethrow;
+                  final club = teamClubAffiliations.first.club;
+                  return Membership(
+                    club: club,
+                    organization: organization,
+                    no: membershipSyncId.toString(),
+                    orgSyncId: '${club.no}-$membershipSyncId',
+                    person: _copyPersonWithOrg(
+                      Person(
+                        prename: boutJson['${jsonPrefix}WrestlerGivenname'],
+                        surname: boutJson['${jsonPrefix}WrestlerName'],
+                      ),
+                    ),
+                  );
+                } else {
+                  rethrow;
+                }
+              }
+            }
+            return null;
+          }
 
-          final opponentSyncId = int.tryParse(boutJson['opponentWrestlerId'] ?? '');
-          final opponentMembership =
-              opponentSyncId == null
-                  ? null
-                  : await _getMembership(
-                    passCode: opponentSyncId,
-                    getClub: (clubId) => getClubWithFallback(clubId, teamMatch.guest.team),
-                  );
+          final homeMembership = await extractMembership('home', teamMatch.home.team);
+          final opponentMembership = await extractMembership('opponent', teamMatch.guest.team);
 
           BoutResult? getBoutResult(String? result) {
             try {
