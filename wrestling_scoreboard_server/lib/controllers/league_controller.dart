@@ -70,11 +70,12 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
       filterId: entity.id,
       onUpdatedOrCreated: (previous, teamMatch) async {
         final officials = teamMatchMap.entries.where((tmm) => tmm.key.orgSyncId == teamMatch.orgSyncId).single.value;
-        final updatedOfficials = await forEachFuture(
-          officials.entries,
-          (official) async =>
-              MapEntry(await PersonController().updateOrCreateSingleOfOrg(official.key), official.value),
-        );
+        final updatedOfficials = await forEachFuture(officials.entries, (official) async {
+          return MapEntry(
+            official.key.id != null ? official.key : (await PersonController().updateOrCreateSingleOfOrg(official.key)),
+            official.value,
+          );
+        });
 
         await TeamMatchPersonController().updateOnDiffMany(
           updatedOfficials
