@@ -26,6 +26,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/team_match_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/league_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_person_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -201,11 +202,13 @@ class TeamMatchOverview extends ConsumerWidget {
                                     title: homeLineup.team.name,
                                     subtitle: '${localizations.team} ${localizations.red}',
                                     icon: Icons.group,
+                                    onTap: () => TeamOverview.navigateTo(context, homeLineup.team),
                                   ),
                                   ContentItem(
                                     title: guestLineup.team.name,
                                     subtitle: '${localizations.team} ${localizations.blue}',
                                     icon: Icons.group,
+                                    onTap: () => TeamOverview.navigateTo(context, guestLineup.team),
                                   ),
                                   ContentItem(
                                     title: match.comment ?? '-',
