@@ -687,7 +687,11 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
           BoutAction? parseActionStr(String str) {
             final match = RegExp(r'(\d+|[A-Za-z])([BRbr])(\d*)').firstMatch(str);
-            if (match == null) throw Exception('Could not parse action "$str" in bout $boutJson.');
+            if (match == null) {
+              // https://www.brv-ringen.de/Api/dev/cs/?op=getCompetition&sid=2025&cid=039034h
+              _logger.warning('Action "$str" could not be parsed. The action is ignored. Bout:\n$boutJson');
+              return null;
+            }
             final actionStr = match.group(1)!; // Group 0 is the whole matched string
             int? pointCount;
             BoutActionType actionType;
@@ -720,7 +724,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 actionType = BoutActionType.points;
                 pointCount = int.tryParse(actionStr);
                 if (pointCount == null) {
-                  _logger.warning('Action type "$actionStr" could not be parsed: $boutJson. The action is ignored.');
+                  _logger.warning(
+                    'Action type "$actionStr" could not be parsed. The action is ignored. Bout:\n$boutJson',
+                  );
                   return null;
                 }
             }
