@@ -447,6 +447,28 @@ class CustomSettingsScreen extends ConsumerWidget {
                       ),
                 ),
                 ListTile(
+                  leading: const Icon(Icons.cloud_upload),
+                  title: Text(localizations.restoreDatabase),
+                  onTap: () {
+                    showLoadingDialog(
+                      context: context,
+                      runAsync: () async {
+                        const typeGroup = file_selector.XTypeGroup(label: 'SQL', extensions: <String>['sql']);
+                        final file_selector.XFile? fileSelectorResult = await file_selector.openFile(
+                          acceptedTypeGroups: [typeGroup],
+                        );
+                        if (fileSelectorResult != null) {
+                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          await dataManager.restoreDatabase(
+                            await fileSelectorResult.readAsString(encoding: const Utf8Codec()),
+                          );
+                          _invalidateProviders(ref);
+                        }
+                      },
+                    );
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.settings_backup_restore),
                   title: Text(localizations.resetDatabase),
                   onTap: () async {
@@ -484,28 +506,6 @@ class CustomSettingsScreen extends ConsumerWidget {
                         },
                       );
                     }
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.cloud_upload),
-                  title: Text(localizations.restoreDatabase),
-                  onTap: () {
-                    showLoadingDialog(
-                      context: context,
-                      runAsync: () async {
-                        const typeGroup = file_selector.XTypeGroup(label: 'SQL', extensions: <String>['sql']);
-                        final file_selector.XFile? fileSelectorResult = await file_selector.openFile(
-                          acceptedTypeGroups: [typeGroup],
-                        );
-                        if (fileSelectorResult != null) {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
-                          await dataManager.restoreDatabase(
-                            await fileSelectorResult.readAsString(encoding: const Utf8Codec()),
-                          );
-                          _invalidateProviders(ref);
-                        }
-                      },
-                    );
                   },
                 ),
                 // Automatic Backup is not supported on web, as we cannot save it to the device
