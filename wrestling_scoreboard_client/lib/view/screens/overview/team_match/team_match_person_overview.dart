@@ -7,6 +7,8 @@ import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_person_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/person_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -43,11 +45,17 @@ class TeamMatchPersonOverview extends ConsumerWidget {
               () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchPerson>(teamMatchPerson),
           classLocale: localizations.official,
           children: [
-            ContentItem(title: teamMatchPerson.person.fullName, subtitle: localizations.person, icon: Icons.person),
+            ContentItem(
+              title: teamMatchPerson.person.fullName,
+              subtitle: localizations.person,
+              icon: Icons.person,
+              onTap: () => PersonOverview.navigateTo(context, teamMatchPerson.person),
+            ),
             ContentItem(
               title: teamMatchPerson.teamMatch.localize(context),
               subtitle: localizations.match,
               icon: Icons.event,
+              onTap: () => TeamMatchOverview.navigateTo(context, teamMatchPerson.teamMatch),
             ),
             ContentItem(title: teamMatchPerson.role.localize(context), subtitle: localizations.role, icon: Icons.label),
           ],
