@@ -1,3 +1,24 @@
+## 0.3.6
+
+ - **REFACTOR**: Reorder restore of database in settings. ([7b335c2f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7b335c2f2c0d23e811882286c0f678df1bf2b2fa))
+ - **REFACTOR**: Formulate Scratch bout reset problem ([#187](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/187)). ([cde59c0f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/cde59c0f6b7a8843f68ed69cccc7655271639461))
+ - **REFACTOR**: Update time display when changing property. ([69205743](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/69205743d1d8663334f84cfd66ea8e07cd3be043))
+ - **FIX**: Respecting time zone of ByGermanyWrestlingApi. ([c8b0a87d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8b0a87df1d6e4afd33a715b97a09027c6e94632))
+ - **FIX**: Close subscriptions on dispose. ([587c001c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/587c001c9c3a83373f91e7a054691a4ef007a056))
+ - **FIX**: Avoid creating duplicate memberships / persons on TeamLineupEdit ([#196](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/196)). ([81c03aa2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/81c03aa235051df70749ee241573231fe46612a4))
+ - **FIX**: Catch error on team lineup save. ([5d1c44e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d1c44e99f4f15f8fd4f63649bda3bfeee5d2cac))
+ - **FIX**: Invalidate providers after resetting the database. ([8301fdc8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8301fdc898f2b953b04688ad4115378e100b751d))
+ - **FIX**: Only propose persons with distinct birth dates to be merged. ([dc7bc9ab](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dc7bc9ab2d66b07309fb4204e2f2a3b3ea692054))
+ - **FIX**: Update organization before checking credentials. ([27e66320](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/27e6632096751b5b1b2ba143760437eeb7bb7638))
+ - **FIX**: Recreate index.html (flutter/flutter[#154596](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/154596)). ([9a74e29d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9a74e29d755f36c1f63e4f4ec5e547afce947a47))
+ - **FIX**: Avoid reloading screen when changing between break and bout stopwatch. ([89694428](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/896944284cf32e6f6c12616f059475c76661faa4))
+ - **FIX**: Avoid reloading whole screen on scratch bout update. ([1b338cc3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1b338cc38fea9bea3b8b8f2d69883188ebdc78cf))
+ - **FIX**: Always recreate default entities on reloading scratch provider. ([01ea3d27](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/01ea3d278e496c4acada8927a282b87ba0af7650))
+ - **FIX**: Stop stopwatch at precisely the limit (closes [#201](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/201)). ([6a29f87c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6a29f87c0b7c47cca6df0767c4a6a780365e6e63))
+ - **FEAT**: Links in Team Match Overviews. ([24285849](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/24285849e87222ca36f23bf0a4f03b3b59e5edf2))
+ - **FEAT**: Improve loading feedback on async tasks. ([5d36a3f1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d36a3f17d6a2b5eab2599bfe85e9e8b4c227f86))
+ - **FEAT**: Splash screen on web (closes [#215](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/215)). ([026637fd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/026637fda4010e7ee85485ab2648512a5991b094))
+
 ## 0.3.5
 
  - **FIX**: Ensure bout is updated after reentering the bout display. ([a8e8e788](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a8e8e7885266fb6fe0f05149f85b59bfc9cf9fa3))

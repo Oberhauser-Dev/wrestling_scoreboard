@@ -1,3 +1,24 @@
+## 0.3.6
+
+ - **REFACTOR**: Move wrestling API to server package. ([9e6e7a7c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9e6e7a7c70276fd3c970027a5ddeca893594ac47))
+ - **REFACTOR**: Remove obfuscate parameter for import. ([22a6b099](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/22a6b099f308ee8940754b765ad114a7c746f7de))
+ - **FIX**: Use existing person for referee if available. ([918d0a4a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/918d0a4a62806a63db318e08fd53b7b2549a51e9))
+ - **FIX**: Use sanitized names on API import. ([9fff1549](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9fff154919f175f53b753595ae89402a37786471))
+ - **FIX**: Add fallback for wrestler on API import. ([5326eea9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5326eea95868a448555cb433d9660c23fc07295f))
+ - **FIX**: Overwrite existing membership with same club and person on Import. ([641ad068](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/641ad068032d17a39ec4e13bb0552f95c1b60db2))
+ - **FIX**: Ignore unknown action string on API import. ([be91d00b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/be91d00b775457a270ffdf35dbed7e5b9e7804f7))
+ - **FIX**: Respecting time zone of ByGermanyWrestlingApi. ([c8b0a87d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8b0a87df1d6e4afd33a715b97a09027c6e94632))
+ - **FIX**: Keep only unchanged data objects to avoid conflicts with unique constraint. ([4a3623a7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4a3623a7b4ac747b4dabea52c578a3aee23add30))
+ - **FIX**: Properly delete bouts on import. ([d1e1c78f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d1e1c78fe8765e8aadfbbb5d4e91100aff76d087))
+ - **FIX**: Use first club of team as fallback when clubId was not found on import. ([afc5f168](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/afc5f168ec01cd61ed185635adb9d89ded138070))
+ - **FIX**: Consider parent entities on API import. ([dc4d47a8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dc4d47a8ba65354d1bee07dab6f04a1a4bfd5a78))
+ - **FIX**: Throw when import already in progress. ([d0a0bf1f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0a0bf1f9bbb88330bd408a44051a80a8e2f16d9))
+ - **FIX**: Enforce org_sync_id + organization_id to be unique. ([52cb3978](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/52cb39781bc6de1c0a514ec533f40261563d4339))
+ - **FIX**: Broadcast on diff after being updated. ([8d8ffc5a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8d8ffc5a7569c37030c4239d168ac6dcbe4a7df8))
+ - **FIX**: Broadcast entities on import (closes [#137](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/137)). ([c6593290](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c659329083337cbf22d85e73be0f37155e9e9b5f))
+ - **FEAT**: Convert WrestlingEvent date to dateTime. ([a67891a9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a67891a9e93dcea4570a52605b084464894c23aa))
+ - **FEAT**: Stop SQL file execution on error. ([7e7f1318](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7e7f1318502a80ef3e45b7270a4f9bee463c9aa0))
+
 ## 0.3.5
 
  - Update a dependency to the latest release

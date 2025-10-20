@@ -1,3 +1,11 @@
+## 0.3.5+1
+
+ - **REFACTOR**: Move wrestling API to server package. ([9e6e7a7c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9e6e7a7c70276fd3c970027a5ddeca893594ac47))
+ - **FIX**: Use existing person for referee if available. ([918d0a4a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/918d0a4a62806a63db318e08fd53b7b2549a51e9))
+ - **FIX**: Also consider league weight classes on import. ([3d9f7f8e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3d9f7f8ed1f7f345870551efb0fd133724635f4a))
+ - **FIX**: Use first club of team as fallback when clubId was not found on import. ([afc5f168](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/afc5f168ec01cd61ed185635adb9d89ded138070))
+ - **FIX**: Stop stopwatch at precisely the limit (closes [#201](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/201)). ([6a29f87c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6a29f87c0b7c47cca6df0767c4a6a780365e6e63))
+
 ## 0.3.5
 
  - **FIX**: Avoid updating stop watch after being disposed. ([83647e15](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83647e151be5e1a749407fab5fa6a299d0c45982))

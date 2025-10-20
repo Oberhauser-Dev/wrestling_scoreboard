@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-20
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.6`](#wrestling_scoreboard_client---v036)
+ - [`wrestling_scoreboard_common` - `v0.3.5+1`](#wrestling_scoreboard_common---v0351)
+ - [`wrestling_scoreboard_server` - `v0.3.6`](#wrestling_scoreboard_server---v036)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.6`
+
+ - **REFACTOR**: Reorder restore of database in settings. ([7b335c2f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7b335c2f2c0d23e811882286c0f678df1bf2b2fa))
+ - **REFACTOR**: Formulate Scratch bout reset problem ([#187](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/187)). ([cde59c0f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/cde59c0f6b7a8843f68ed69cccc7655271639461))
+ - **REFACTOR**: Update time display when changing property. ([69205743](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/69205743d1d8663334f84cfd66ea8e07cd3be043))
+ - **FIX**: Respecting time zone of ByGermanyWrestlingApi. ([c8b0a87d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8b0a87df1d6e4afd33a715b97a09027c6e94632))
+ - **FIX**: Close subscriptions on dispose. ([587c001c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/587c001c9c3a83373f91e7a054691a4ef007a056))
+ - **FIX**: Avoid creating duplicate memberships / persons on TeamLineupEdit ([#196](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/196)). ([81c03aa2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/81c03aa235051df70749ee241573231fe46612a4))
+ - **FIX**: Catch error on team lineup save. ([5d1c44e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d1c44e99f4f15f8fd4f63649bda3bfeee5d2cac))
+ - **FIX**: Invalidate providers after resetting the database. ([8301fdc8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8301fdc898f2b953b04688ad4115378e100b751d))
+ - **FIX**: Only propose persons with distinct birth dates to be merged. ([dc7bc9ab](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dc7bc9ab2d66b07309fb4204e2f2a3b3ea692054))
+ - **FIX**: Update organization before checking credentials. ([27e66320](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/27e6632096751b5b1b2ba143760437eeb7bb7638))
+ - **FIX**: Recreate index.html (flutter/flutter[#154596](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/154596)). ([9a74e29d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9a74e29d755f36c1f63e4f4ec5e547afce947a47))
+ - **FIX**: Avoid reloading screen when changing between break and bout stopwatch. ([89694428](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/896944284cf32e6f6c12616f059475c76661faa4))
+ - **FIX**: Avoid reloading whole screen on scratch bout update. ([1b338cc3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/1b338cc38fea9bea3b8b8f2d69883188ebdc78cf))
+ - **FIX**: Always recreate default entities on reloading scratch provider. ([01ea3d27](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/01ea3d278e496c4acada8927a282b87ba0af7650))
+ - **FIX**: Stop stopwatch at precisely the limit (closes [#201](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/201)). ([6a29f87c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6a29f87c0b7c47cca6df0767c4a6a780365e6e63))
+ - **FEAT**: Links in Team Match Overviews. ([24285849](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/24285849e87222ca36f23bf0a4f03b3b59e5edf2))
+ - **FEAT**: Improve loading feedback on async tasks. ([5d36a3f1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d36a3f17d6a2b5eab2599bfe85e9e8b4c227f86))
+ - **FEAT**: Splash screen on web (closes [#215](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/215)). ([026637fd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/026637fda4010e7ee85485ab2648512a5991b094))
+
+#### `wrestling_scoreboard_common` - `v0.3.5+1`
+
+ - **REFACTOR**: Move wrestling API to server package. ([9e6e7a7c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9e6e7a7c70276fd3c970027a5ddeca893594ac47))
+ - **FIX**: Use existing person for referee if available. ([918d0a4a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/918d0a4a62806a63db318e08fd53b7b2549a51e9))
+ - **FIX**: Also consider league weight classes on import. ([3d9f7f8e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3d9f7f8ed1f7f345870551efb0fd133724635f4a))
+ - **FIX**: Use first club of team as fallback when clubId was not found on import. ([afc5f168](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/afc5f168ec01cd61ed185635adb9d89ded138070))
+ - **FIX**: Stop stopwatch at precisely the limit (closes [#201](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/201)). ([6a29f87c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6a29f87c0b7c47cca6df0767c4a6a780365e6e63))
+
+#### `wrestling_scoreboard_server` - `v0.3.6`
+
+ - **REFACTOR**: Move wrestling API to server package. ([9e6e7a7c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9e6e7a7c70276fd3c970027a5ddeca893594ac47))
+ - **REFACTOR**: Remove obfuscate parameter for import. ([22a6b099](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/22a6b099f308ee8940754b765ad114a7c746f7de))
+ - **FIX**: Use existing person for referee if available. ([918d0a4a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/918d0a4a62806a63db318e08fd53b7b2549a51e9))
+ - **FIX**: Use sanitized names on API import. ([9fff1549](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9fff154919f175f53b753595ae89402a37786471))
+ - **FIX**: Add fallback for wrestler on API import. ([5326eea9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5326eea95868a448555cb433d9660c23fc07295f))
+ - **FIX**: Overwrite existing membership with same club and person on Import. ([641ad068](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/641ad068032d17a39ec4e13bb0552f95c1b60db2))
+ - **FIX**: Ignore unknown action string on API import. ([be91d00b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/be91d00b775457a270ffdf35dbed7e5b9e7804f7))
+ - **FIX**: Respecting time zone of ByGermanyWrestlingApi. ([c8b0a87d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c8b0a87df1d6e4afd33a715b97a09027c6e94632))
+ - **FIX**: Keep only unchanged data objects to avoid conflicts with unique constraint. ([4a3623a7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4a3623a7b4ac747b4dabea52c578a3aee23add30))
+ - **FIX**: Properly delete bouts on import. ([d1e1c78f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d1e1c78fe8765e8aadfbbb5d4e91100aff76d087))
+ - **FIX**: Use first club of team as fallback when clubId was not found on import. ([afc5f168](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/afc5f168ec01cd61ed185635adb9d89ded138070))
+ - **FIX**: Consider parent entities on API import. ([dc4d47a8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dc4d47a8ba65354d1bee07dab6f04a1a4bfd5a78))
+ - **FIX**: Throw when import already in progress. ([d0a0bf1f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0a0bf1f9bbb88330bd408a44051a80a8e2f16d9))
+ - **FIX**: Enforce org_sync_id + organization_id to be unique. ([52cb3978](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/52cb39781bc6de1c0a514ec533f40261563d4339))
+ - **FIX**: Broadcast on diff after being updated. ([8d8ffc5a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8d8ffc5a7569c37030c4239d168ac6dcbe4a7df8))
+ - **FIX**: Broadcast entities on import (closes [#137](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/137)). ([c6593290](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c659329083337cbf22d85e73be0f37155e9e9b5f))
+ - **FEAT**: Convert WrestlingEvent date to dateTime. ([a67891a9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a67891a9e93dcea4570a52605b084464894c23aa))
+ - **FEAT**: Stop SQL file execution on error. ([7e7f1318](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7e7f1318502a80ef3e45b7270a4f9bee463c9aa0))
+
+
 ## 2025-10-11
 
 ### Changes
