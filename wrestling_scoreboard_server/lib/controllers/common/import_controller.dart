@@ -54,6 +54,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     }
     importInProgress = true;
     try {
+      _logger.info('postImport for type "$T" and entityId "$entityId" STARTED');
       final message = await request.readAsString();
 
       // Only admins can call a subjacent import, to prevent overwriting critical entities.
@@ -93,6 +94,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
       }
 
       await import(entity: entity, apiProvider: apiProvider, includeSubjacent: includeSubjacent);
+      _logger.info('postImport for type "$T" and entityId "$entityId" was SUCCESSFUL');
       return Response.ok('{"status": "success"}');
     } on HttpException catch (err, stackTrace) {
       return Response.badRequest(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
