@@ -23,7 +23,13 @@ Future<void> exportSQL({required String fileBaseName, required String sqlString}
 }
 
 Future<void> exportRDB({required String fileBaseName, required String rdbString}) async {
-  await downloadSelector(content: rdbString, fileExtension: 'rdb', fileBaseName: fileBaseName, mimeType: 'text/rdb');
+  await downloadSelector(
+    content: rdbString,
+    fileExtension: 'rdb',
+    fileBaseName: fileBaseName,
+    mimeType: 'text/rdb',
+    encoding: latin1,
+  );
 }
 
 /// Exports a [table] (list of rows) as CSV to the specified [fileBaseName] (without extension).
@@ -38,12 +44,13 @@ Future<void> downloadSelector<T>({
   required String mimeType,
   required String fileBaseName,
   required String fileExtension,
+  Encoding encoding = utf8,
 }) async {
   final fileName = '$fileBaseName.$fileExtension';
   if (kIsWeb) {
     final Uri uri;
     if (content is String) {
-      uri = Uri.dataFromString(content, mimeType: mimeType, encoding: utf8);
+      uri = Uri.dataFromString(content, mimeType: mimeType, encoding: encoding);
     } else if (content is List<int>) {
       uri = Uri.dataFromBytes(content, mimeType: mimeType);
     } else {
@@ -68,7 +75,7 @@ Future<void> downloadSelector<T>({
     final outputFile = File(outputPath);
 
     if (content is String) {
-      await outputFile.writeAsString(content, encoding: const Utf8Codec());
+      await outputFile.writeAsString(content, encoding: encoding);
     } else if (content is List<int>) {
       await outputFile.writeAsBytes(content);
     } else {
