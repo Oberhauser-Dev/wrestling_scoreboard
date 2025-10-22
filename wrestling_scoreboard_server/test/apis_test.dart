@@ -699,6 +699,7 @@ void main() {
               ),
             ),
           ),
+          comment: 'Test comment',
         );
         final expectedBout = TeamMatchBout(
           weightClass: weightClass,
@@ -777,14 +778,14 @@ void main() {
             BoutAction(
               role: BoutRole.blue,
               actionType: BoutActionType.passivity,
-              duration: Duration(seconds: 360),
+              duration: Duration(seconds: 359),
               pointCount: null,
               bout: bout,
             ),
             BoutAction(
               role: BoutRole.blue,
               actionType: BoutActionType.points,
-              duration: Duration(seconds: 360),
+              duration: Duration(seconds: 359),
               pointCount: 2,
               bout: bout,
             ),

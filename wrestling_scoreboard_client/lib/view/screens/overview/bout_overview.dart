@@ -87,6 +87,7 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
                 );
               },
             ),
+            ContentItem(title: bout.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
           ],
         );
         final relations = buildRelations != null ? buildRelations(bout) : {};

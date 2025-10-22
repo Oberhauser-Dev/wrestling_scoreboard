@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict eHIi8bYDh4RdpXaIu20il5AZ91gx2v6B7GCIKSv6wXb3cNushUOHhJPQaW4S5uW
+\restrict bkmUI5PMKzgUVfM6qO9nhaW480x4AwzBlOkRGKF51wEEJQSPlznHqUiHcGBxtcA
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -281,7 +281,8 @@ CREATE TABLE public.bout (
     bout_result public.bout_result,
     duration_millis integer,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    comment text
 );
 
 
@@ -1779,21 +1780,21 @@ COPY public.athlete_bout_state (id, classification_points, membership_id) FROM s
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
-28	33	34	\N	\N	0	\N	\N
-29	35	36	\N	\N	0	\N	\N
-32	40	41	\N	\N	0	\N	\N
-34	44	45	\N	\N	0	\N	\N
-35	46	47	\N	\N	0	\N	\N
-37	50	51	\N	\N	0	\N	\N
-38	52	53	\N	\N	0	\N	\N
-40	56	57	\N	\N	0	\N	\N
-43	62	\N	\N	\N	0	\N	\N
-45	65	66	\N	\N	0	\N	\N
-47	69	70	\N	\N	0	\N	\N
-49	73	74	\N	\N	0	\N	\N
-50	75	76	\N	\N	0	\N	\N
-27	31	32	\N	\N	0	\N	\N
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment) FROM stdin;
+28	33	34	\N	\N	0	\N	\N	\N
+29	35	36	\N	\N	0	\N	\N	\N
+32	40	41	\N	\N	0	\N	\N	\N
+34	44	45	\N	\N	0	\N	\N	\N
+35	46	47	\N	\N	0	\N	\N	\N
+37	50	51	\N	\N	0	\N	\N	\N
+38	52	53	\N	\N	0	\N	\N	\N
+40	56	57	\N	\N	0	\N	\N	\N
+45	65	66	\N	\N	0	\N	\N	\N
+47	69	70	\N	\N	0	\N	\N	\N
+49	73	74	\N	\N	0	\N	\N	\N
+50	75	76	\N	\N	0	\N	\N	\N
+27	31	32	\N	\N	0	\N	\N	\N
+43	62	\N	\N	\N	0	\N	\N	Test Bout Comment
 \.
 
 
@@ -2036,7 +2037,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.6-pre.2	0.3.4
+0.3.7-pre.1	0.3.4
 \.
 
 
@@ -3468,5 +3469,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict eHIi8bYDh4RdpXaIu20il5AZ91gx2v6B7GCIKSv6wXb3cNushUOHhJPQaW4S5uW
+\unrestrict bkmUI5PMKzgUVfM6qO9nhaW480x4AwzBlOkRGKF51wEEJQSPlznHqUiHcGBxtcA
 

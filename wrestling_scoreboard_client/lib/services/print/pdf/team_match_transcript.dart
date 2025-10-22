@@ -476,8 +476,7 @@ class TeamMatchTranscript extends PdfSheet {
                 fontSize: cellFontSize,
               ),
               ...buildParticipantState(bout.bout.b, BoutRole.blue, bout.weightClass, guestParticipations),
-              // TODO: bout comment
-              buildTextCell('', height: cellHeight, fontSize: cellFontSize),
+              buildTextCell(bout.bout.comment ?? '', height: cellHeight, fontSize: 6),
             ],
           );
         }),

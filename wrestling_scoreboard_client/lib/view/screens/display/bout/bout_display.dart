@@ -507,7 +507,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 Container(
                   padding: bottomPadding,
                   child: ManyConsumer<BoutAction, Bout>(
-                    filterObject: widget.bout,
+                    filterObject: bout,
                     builder: (context, actions) {
                       return ActionsWidget(
                         actions,

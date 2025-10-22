@@ -16,6 +16,7 @@ _Bout _$BoutFromJson(Map<String, dynamic> json) => _Bout(
   winnerRole: $enumDecodeNullable(_$BoutRoleEnumMap, json['winnerRole']),
   result: $enumDecodeNullable(_$BoutResultEnumMap, json['result']),
   duration: json['duration'] == null ? Duration.zero : Duration(microseconds: (json['duration'] as num).toInt()),
+  comment: json['comment'] as String?,
 );
 
 Map<String, dynamic> _$BoutToJson(_Bout instance) => <String, dynamic>{
@@ -27,6 +28,7 @@ Map<String, dynamic> _$BoutToJson(_Bout instance) => <String, dynamic>{
   'winnerRole': _$BoutRoleEnumMap[instance.winnerRole],
   'result': _$BoutResultEnumMap[instance.result],
   'duration': instance.duration.inMicroseconds,
+  'comment': instance.comment,
 };
 
 const _$BoutRoleEnumMap = {BoutRole.red: 'red', BoutRole.blue: 'blue'};

@@ -88,7 +88,23 @@ final competitionS2023C005029cJson = r'''
               "order": "2",
               "round": "1",
               "type": "points",
-              "value": "2R26,2B37,PB98,AB124,1R156,PR252,AR292,1B326,1R337,AB360,2B360"
+              "value": "2R26,2B37,PB98,AB124,1R156,PR252,AR292,1B326,1R337,AB359,2B359"
+            },
+            "comment": {
+                "saisonId": "2023",
+                "competitionId": "005029c",
+                "order": "2",
+                "round": "1",
+                "type": "comment",
+                "value": "Test comment"
+            },
+            "duration": {
+                "saisonId": "2023",
+                "competitionId": "005029c",
+                "order": "2",
+                "round": "1",
+                "type": "duration",
+                "value": "360"
             }
           }
         }
