@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 8oOHPHHlzCTMYk3oQ1oOLEkljCXJGEle0ZSBZJ3EBBWXCWMMEqDbFn0KaxUsc3v
+\restrict O7Y6RyIcDnbugGanE1pIollItEsoiYJOTCajkrLo76iPrUAhBOJOLY660gtrMdj
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -281,7 +281,8 @@ CREATE TABLE public.bout (
     bout_result public.bout_result,
     duration_millis integer,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    comment text
 );
 
 
@@ -1748,8 +1749,8 @@ COPY public.athlete_bout_state (id, classification_points, membership_id) FROM s
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id) FROM stdin;
-52	79	80	blue	vpo	360000	005029c_61_kg_free	2
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment) FROM stdin;
+52	79	80	blue	vpo	360000	005029c_61_kg_free	2	Test comment
 \.
 
 
@@ -1768,8 +1769,8 @@ COPY public.bout_action (id, duration_millis, point_count, action_type, bout_rol
 11	292000	\N	passivity	red	52
 12	326000	1	points	blue	52
 13	337000	1	points	red	52
-14	360000	\N	passivity	blue	52
-15	360000	2	points	blue	52
+14	359000	\N	passivity	blue	52
+15	359000	2	points	blue	52
 \.
 
 
@@ -2243,7 +2244,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.6-pre.2	0.3.4
+0.3.7-pre.1	0.3.4
 \.
 
 
@@ -3835,5 +3836,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 8oOHPHHlzCTMYk3oQ1oOLEkljCXJGEle0ZSBZJ3EBBWXCWMMEqDbFn0KaxUsc3v
+\unrestrict O7Y6RyIcDnbugGanE1pIollItEsoiYJOTCajkrLo76iPrUAhBOJOLY660gtrMdj
 

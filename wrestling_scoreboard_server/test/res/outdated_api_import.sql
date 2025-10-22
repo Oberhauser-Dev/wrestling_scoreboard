@@ -1381,8 +1381,8 @@ COPY public.bout_action (id, duration_millis, point_count, action_type, bout_rol
 11	292000	\N	passivity	red	52
 12	326000	1	points	blue	52
 13	337000	1	points	red	52
-14	360000	\N	passivity	blue	52
-15	360000	2	points	blue	52
+14	359000	\N	passivity	blue	52
+15	359000	2	points	blue	52
 16	360000	1	points	red	52
 \.
 

@@ -30,6 +30,6 @@ class BoutController extends ShelfController<Bout> with OrganizationalController
 
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
-    return {'winner_role': null, 'bout_result': null};
+    return {'winner_role': null, 'bout_result': null, 'comment': psql.Type.text};
   }
 }

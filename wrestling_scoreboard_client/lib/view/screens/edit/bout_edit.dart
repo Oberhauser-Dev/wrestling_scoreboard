@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/components/dropdow
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -28,6 +29,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
   Membership? _redMembership;
   Membership? _blueMembership;
   Duration? _boutDuration;
+  String? _comment;
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
     _boutResult = widget.bout?.result;
     _redMembership = widget.bout?.r?.membership;
     _blueMembership = widget.bout?.b?.membership;
+    _comment = widget.bout?.comment;
   }
 
   @override
@@ -116,6 +119,13 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
           },
         ),
       ),
+      CustomTextInput(
+        iconData: Icons.comment,
+        label: localizations.comment,
+        initialValue: widget.bout?.comment,
+        isMandatory: false,
+        onSaved: (value) => _comment = value,
+      ),
     ];
 
     return Form(
@@ -162,6 +172,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         r: await updateAthleteBoutState(_redMembership, widget.bout?.r),
         b: await updateAthleteBoutState(_blueMembership, widget.bout?.b),
         duration: _boutDuration ?? Duration.zero,
+        comment: _comment,
       );
 
       bout = bout.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout));

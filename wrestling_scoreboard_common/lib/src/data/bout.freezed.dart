@@ -17,7 +17,7 @@ mixin _$Bout {
 
  int? get id; String? get orgSyncId; Organization? get organization; AthleteBoutState? get r;// red
  AthleteBoutState? get b;// blue
- BoutRole? get winnerRole; BoutResult? get result; Duration get duration;
+ BoutRole? get winnerRole; BoutResult? get result; Duration get duration; String? get comment;
 /// Create a copy of Bout
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +30,16 @@ $BoutCopyWith<Bout> get copyWith => _$BoutCopyWithImpl<Bout>(this as Bout, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Bout&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.r, r) || other.r == r)&&(identical(other.b, b) || other.b == b)&&(identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole)&&(identical(other.result, result) || other.result == result)&&(identical(other.duration, duration) || other.duration == duration));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Bout&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.r, r) || other.r == r)&&(identical(other.b, b) || other.b == b)&&(identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole)&&(identical(other.result, result) || other.result == result)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.comment, comment) || other.comment == comment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,r,b,winnerRole,result,duration);
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,r,b,winnerRole,result,duration,comment);
 
 @override
 String toString() {
-  return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration)';
+  return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration, comment: $comment)';
 }
 
 
@@ -50,7 +50,7 @@ abstract mixin class $BoutCopyWith<$Res>  {
   factory $BoutCopyWith(Bout value, $Res Function(Bout) _then) = _$BoutCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, AthleteBoutState? r, AthleteBoutState? b, BoutRole? winnerRole, BoutResult? result, Duration duration
+ int? id, String? orgSyncId, Organization? organization, AthleteBoutState? r, AthleteBoutState? b, BoutRole? winnerRole, BoutResult? result, Duration duration, String? comment
 });
 
 
@@ -67,7 +67,7 @@ class _$BoutCopyWithImpl<$Res>
 
 /// Create a copy of Bout
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? r = freezed,Object? b = freezed,Object? winnerRole = freezed,Object? result = freezed,Object? duration = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? r = freezed,Object? b = freezed,Object? winnerRole = freezed,Object? result = freezed,Object? duration = null,Object? comment = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,8 @@ as AthleteBoutState?,b: freezed == b ? _self.b : b // ignore: cast_nullable_to_n
 as AthleteBoutState?,winnerRole: freezed == winnerRole ? _self.winnerRole : winnerRole // ignore: cast_nullable_to_non_nullable
 as BoutRole?,result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
 as BoutResult?,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
-as Duration,
+as Duration,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of Bout
@@ -198,10 +199,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  AthleteBoutState? r,  AthleteBoutState? b,  BoutRole? winnerRole,  BoutResult? result,  Duration duration)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  AthleteBoutState? r,  AthleteBoutState? b,  BoutRole? winnerRole,  BoutResult? result,  Duration duration,  String? comment)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Bout() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_that.winnerRole,_that.result,_that.duration);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_that.winnerRole,_that.result,_that.duration,_that.comment);case _:
   return orElse();
 
 }
@@ -219,10 +220,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  AthleteBoutState? r,  AthleteBoutState? b,  BoutRole? winnerRole,  BoutResult? result,  Duration duration)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  AthleteBoutState? r,  AthleteBoutState? b,  BoutRole? winnerRole,  BoutResult? result,  Duration duration,  String? comment)  $default,) {final _that = this;
 switch (_that) {
 case _Bout():
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_that.winnerRole,_that.result,_that.duration);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_that.winnerRole,_that.result,_that.duration,_that.comment);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -239,10 +240,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  AthleteBoutState? r,  AthleteBoutState? b,  BoutRole? winnerRole,  BoutResult? result,  Duration duration)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  AthleteBoutState? r,  AthleteBoutState? b,  BoutRole? winnerRole,  BoutResult? result,  Duration duration,  String? comment)?  $default,) {final _that = this;
 switch (_that) {
 case _Bout() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_that.winnerRole,_that.result,_that.duration);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_that.winnerRole,_that.result,_that.duration,_that.comment);case _:
   return null;
 
 }
@@ -254,7 +255,7 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.r,_that.b,_tha
 @JsonSerializable()
 
 class _Bout extends Bout {
-  const _Bout({this.id, this.orgSyncId, this.organization, this.r, this.b, this.winnerRole, this.result, this.duration = Duration.zero}): super._();
+  const _Bout({this.id, this.orgSyncId, this.organization, this.r, this.b, this.winnerRole, this.result, this.duration = Duration.zero, this.comment}): super._();
   factory _Bout.fromJson(Map<String, dynamic> json) => _$BoutFromJson(json);
 
 @override final  int? id;
@@ -267,6 +268,7 @@ class _Bout extends Bout {
 @override final  BoutRole? winnerRole;
 @override final  BoutResult? result;
 @override@JsonKey() final  Duration duration;
+@override final  String? comment;
 
 /// Create a copy of Bout
 /// with the given fields replaced by the non-null parameter values.
@@ -281,16 +283,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Bout&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.r, r) || other.r == r)&&(identical(other.b, b) || other.b == b)&&(identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole)&&(identical(other.result, result) || other.result == result)&&(identical(other.duration, duration) || other.duration == duration));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Bout&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.r, r) || other.r == r)&&(identical(other.b, b) || other.b == b)&&(identical(other.winnerRole, winnerRole) || other.winnerRole == winnerRole)&&(identical(other.result, result) || other.result == result)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.comment, comment) || other.comment == comment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,r,b,winnerRole,result,duration);
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,r,b,winnerRole,result,duration,comment);
 
 @override
 String toString() {
-  return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration)';
+  return 'Bout(id: $id, orgSyncId: $orgSyncId, organization: $organization, r: $r, b: $b, winnerRole: $winnerRole, result: $result, duration: $duration, comment: $comment)';
 }
 
 
@@ -301,7 +303,7 @@ abstract mixin class _$BoutCopyWith<$Res> implements $BoutCopyWith<$Res> {
   factory _$BoutCopyWith(_Bout value, $Res Function(_Bout) _then) = __$BoutCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, AthleteBoutState? r, AthleteBoutState? b, BoutRole? winnerRole, BoutResult? result, Duration duration
+ int? id, String? orgSyncId, Organization? organization, AthleteBoutState? r, AthleteBoutState? b, BoutRole? winnerRole, BoutResult? result, Duration duration, String? comment
 });
 
 
@@ -318,7 +320,7 @@ class __$BoutCopyWithImpl<$Res>
 
 /// Create a copy of Bout
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? r = freezed,Object? b = freezed,Object? winnerRole = freezed,Object? result = freezed,Object? duration = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? r = freezed,Object? b = freezed,Object? winnerRole = freezed,Object? result = freezed,Object? duration = null,Object? comment = freezed,}) {
   return _then(_Bout(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -328,7 +330,8 @@ as AthleteBoutState?,b: freezed == b ? _self.b : b // ignore: cast_nullable_to_n
 as AthleteBoutState?,winnerRole: freezed == winnerRole ? _self.winnerRole : winnerRole // ignore: cast_nullable_to_non_nullable
 as BoutRole?,result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
 as BoutResult?,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
-as Duration,
+as Duration,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

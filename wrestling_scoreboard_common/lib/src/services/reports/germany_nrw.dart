@@ -210,8 +210,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       if (points.isNotEmpty) {
         points = '(points $points)';
       }
-      // TODO: One comment is allowed per bout, according to the specs.
-      var comment = ''; // bout.comment ?? ''
+      String comment = bout.comment ?? '';
       if (comment.isNotEmpty) {
         comment = '(comment ${_handleComment(comment)})';
       }

@@ -7,7 +7,9 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -71,6 +73,32 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                             },
                           ),
                         ),
+              ),
+              Expanded(
+                child: DelayedTooltip(
+                  message: localizations.comment,
+                  child: IconButton(
+                    onPressed: () async {
+                      String text = '';
+                      final result = await showOkCancelDialog(
+                        context: context,
+                        child: CustomTextInput(
+                          iconData: Icons.comment,
+                          isMultiline: true,
+                          label: localizations.comment,
+                          initialValue: widget.boutState.bout.comment,
+                          isMandatory: false,
+                          onChanged: (value) => text = value,
+                        ),
+                      );
+                      if (result) {
+                        widget.boutState.bout = widget.boutState.bout.copyWith(comment: text);
+                        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(widget.boutState.bout);
+                      }
+                    },
+                    icon: const Icon(Icons.comment),
+                  ),
+                ),
               ),
               Expanded(
                 child: DelayedTooltip(

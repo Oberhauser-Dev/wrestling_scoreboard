@@ -19,6 +19,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     BoutRole? winnerRole,
     BoutResult? result,
     @Default(Duration.zero) Duration duration,
+    String? comment,
   }) = _Bout;
 
   factory Bout.fromJson(Map<String, Object?> json) => _$BoutFromJson(json);
@@ -34,6 +35,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       'winner_role': winnerRole?.name,
       'bout_result': result?.name,
       'duration_millis': duration.inMilliseconds,
+      'comment': comment,
     };
   }
 
@@ -53,6 +55,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       winnerRole: winner == null ? null : BoutRole.values.byName(winner),
       result: boutResult == null ? null : BoutResult.values.byName(boutResult),
       duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
+      comment: e['comment'] as String?,
     );
   }
 

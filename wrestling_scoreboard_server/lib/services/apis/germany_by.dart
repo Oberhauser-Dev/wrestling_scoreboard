@@ -709,9 +709,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             winnerRole = BoutRole.blue;
           }
 
-          final String boutDurationJson = boutJson['annotation']?['1']?['duration']?['value'] ?? '';
+          final annotations = boutJson['annotation']?['1'];
+
+          final String boutDurationJson = annotations?['duration']?['value'] ?? '';
           final boutDurationSeconds = int.tryParse(boutDurationJson);
           final boutDuration = boutDurationSeconds == null ? Duration.zero : Duration(seconds: boutDurationSeconds);
+          final boutComment = annotations?['comment']?['value'];
 
           var bout = Bout(
             orgSyncId: '${teamMatch.orgSyncId}_${weightClass.name}_${weightClass.style.name}'.replaceAll(' ', '_'),
@@ -730,6 +733,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                       classificationPoints: classificationPointsOpponent,
                       membership: opponentMembership,
                     ),
+            comment: boutComment,
           );
 
           BoutAction? parseActionStr(String str) {

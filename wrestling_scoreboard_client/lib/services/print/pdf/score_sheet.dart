@@ -78,9 +78,10 @@ class ScoreSheet extends PdfSheet {
                   Expanded(
                     child: buildFormCell(
                       title: localizations.winner,
-                      content: bout.winnerRole?.localize(buildContext) ?? '',
+                      content: bout.winnerRole?.localize(buildContext).toUpperCase(),
                     ),
                   ),
+                  Expanded(child: buildFormCell(title: localizations.comment, content: bout.comment)),
                   buildFormCell(
                     title: localizations.duration,
                     content:
