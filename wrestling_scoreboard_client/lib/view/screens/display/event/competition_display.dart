@@ -46,45 +46,6 @@ class CompetitionDisplay extends StatelessWidget {
           icon: const Icon(Icons.info),
           onTap: () => CompetitionOverview.navigateTo(context, competition),
         );
-        // final pdfAction = ResponsiveScaffoldActionItem(
-        //   tooltip: localizations.print,
-        //   icon: const Icon(Icons.print),
-        //   onPressed: () async {
-        //     final competitionBouts = await ref.readAsync(manyDataStreamProvider<CompetitionBout, Competition>(
-        //       ManyProviderData<CompetitionBout, Competition>(filterObject: competition),
-        //     ).future);
-        //
-        //     final competitionBoutActions = Map.fromEntries(await Future.wait(competitionBouts.map((competitionBout) async {
-        //       final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
-        //         ManyProviderData<BoutAction, Bout>(filterObject: competitionBout.bout),
-        //       ).future);
-        //       // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: competitionBout.bout);
-        //       return MapEntry(competitionBout, boutActions);
-        //     })));
-        //     final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
-        //
-        //     final homeParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
-        //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.home),
-        //     ).future);
-        //
-        //     final guestParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
-        //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.guest),
-        //     ).future);
-        //
-        //     if (context.mounted) {
-        //       final bytes = await CompetitionTranscript(
-        //         competitionBoutActions: competitionBoutActions,
-        //         buildContext: context,
-        //         competition: competition,
-        //         boutConfig: competition.boutConfig ?? Competition.defaultBoutConfig,
-        //         isTimeCountDown: isTimeCountDown,
-        //         homeParticipations: homeParticipations,
-        //         guestParticipations: guestParticipations,
-        //       ).buildPdf();
-        //       Printing.sharePdf(bytes: bytes, filename: '${competition.fileBaseName}.pdf');
-        //     }
-        //   },
-        // );
 
         Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
           return Container(
@@ -107,10 +68,7 @@ class CompetitionDisplay extends StatelessWidget {
 
         return WindowStateScaffold(
           hideAppBarOnFullscreen: true,
-          actions: [
-            infoAction,
-            // pdfAction,
-          ],
+          actions: [infoAction],
           body: ManyConsumer<CompetitionBout, Competition>(
             filterObject: competition,
             builder: (context, competitionBouts) {

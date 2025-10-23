@@ -347,11 +347,21 @@ class TeamMatchOverview extends ConsumerWidget {
     );
   }
 
-  Future<List<TeamMatchBout>> _getBouts(WidgetRef ref, {required TeamMatch match}) => ref.readAsync(
-    manyDataStreamProvider<TeamMatchBout, TeamMatch>(
-      ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
-    ).future,
-  );
+  Future<List<TeamMatchBout>> _getBouts(WidgetRef ref, {required TeamMatch match}) async {
+    final teamMatchBouts = await ref.readAsync(
+      manyDataStreamProvider<TeamMatchBout, TeamMatch>(
+        ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
+      ).future,
+    );
+
+    return await Future.wait(
+      teamMatchBouts.map((tmb) async {
+        return tmb.copyWith(
+          bout: await ref.readAsync(singleDataStreamProvider<Bout>(SingleProviderData<Bout>(id: tmb.bout.id!)).future),
+        );
+      }),
+    );
+  }
 
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
