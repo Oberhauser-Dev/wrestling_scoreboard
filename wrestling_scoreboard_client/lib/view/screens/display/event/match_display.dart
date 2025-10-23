@@ -48,10 +48,20 @@ class MatchDisplay extends ConsumerWidget {
           label: localizations.print,
           icon: const Icon(Icons.print),
           onTap: () async {
-            final teamMatchBouts = await ref.readAsync(
+            List<TeamMatchBout> teamMatchBouts = await ref.readAsync(
               manyDataStreamProvider<TeamMatchBout, TeamMatch>(
                 ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
               ).future,
+            );
+
+            teamMatchBouts = await Future.wait(
+              teamMatchBouts.map((tmb) async {
+                return tmb.copyWith(
+                  bout: await ref.readAsync(
+                    singleDataStreamProvider<Bout>(SingleProviderData<Bout>(id: tmb.bout.id!)).future,
+                  ),
+                );
+              }),
             );
 
             final teamMatchBoutActions = Map.fromEntries(

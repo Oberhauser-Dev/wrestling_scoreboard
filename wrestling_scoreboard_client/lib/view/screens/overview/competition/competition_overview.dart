@@ -306,11 +306,21 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
     );
   }
 
-  Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) => ref.readAsync(
-    manyDataStreamProvider<CompetitionBout, Competition>(
-      ManyProviderData<CompetitionBout, Competition>(filterObject: competition),
-    ).future,
-  );
+  Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) async {
+    final cBouts = await ref.readAsync(
+      manyDataStreamProvider<CompetitionBout, Competition>(
+        ManyProviderData<CompetitionBout, Competition>(filterObject: competition),
+      ).future,
+    );
+
+    return await Future.wait(
+      cBouts.map((cb) async {
+        return cb.copyWith(
+          bout: await ref.readAsync(singleDataStreamProvider<Bout>(SingleProviderData<Bout>(id: cb.bout.id!)).future),
+        );
+      }),
+    );
+  }
 
   Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
