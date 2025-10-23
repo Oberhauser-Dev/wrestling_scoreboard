@@ -799,10 +799,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get searchResults => 'Suchresultate';
 
   @override
-  String get red => 'Red';
+  String get red => 'Rot';
 
   @override
-  String get blue => 'Blue';
+  String get blue => 'Blau';
 
   @override
   String get winner => 'Gewinner';
