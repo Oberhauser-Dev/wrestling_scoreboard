@@ -158,6 +158,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bellSound => 'Bell sound';
 
   @override
+  String get smartBoutActions => 'Automatic Bout Actions';
+
+  @override
   String get timeCountDown => 'Count down the time';
 
   @override
@@ -902,6 +905,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maximum => 'Maximum';
+
+  @override
+  String get warningCautionNoPoints => 'A caution must be followed by one or two points.';
 
   @override
   String get official => 'Official';

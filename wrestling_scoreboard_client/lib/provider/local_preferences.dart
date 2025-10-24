@@ -18,6 +18,7 @@ class Preferences {
 
   static const keyBellSound = 'bell-sound';
   static const keyTimeCountDown = 'time-count-down';
+  static const keySmartBoutActions = 'smart-bout-actions';
 
   static const keyFontFamily = 'font-family';
   static const keyFavorites = 'favorites';

@@ -1,409 +1,156 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-enum BoutScreenActions {
-  startStop,
-  reset,
-  addOneSec,
-  rmOneSec,
-  undo,
-  nextBout,
-  previousBout,
-  horn,
-  quit,
-  redOne,
-  redTwo,
-  redThree,
-  redFour,
-  redFive,
-  redVerbal,
-  redPassivity,
-  redCaution,
-  redDismissal,
-  redActivityTime,
-  redInjuryTime,
-  redBleedingInjuryTime,
-  redUndo,
-  blueOne,
-  blueTwo,
-  blueThree,
-  blueFour,
-  blueFive,
-  blueVerbal,
-  bluePassivity,
-  blueCaution,
-  blueDismissal,
-  blueActivityTime,
-  blueInjuryTime,
-  blueBleedingInjuryTime,
-  blueUndo,
-}
+enum BoutScreenActionType { startStop, reset, addOneSec, rmOneSec, undo, nextBout, previousBout, horn, quit }
+
+enum RoleScreenActionType { roleAction, activityTime, injuryTime, bleedingInjuryTime, undo }
 
 class BoutScreenActionIntent extends Intent {
   const BoutScreenActionIntent({required this.type});
 
-  const BoutScreenActionIntent.startStop() : type = BoutScreenActions.startStop;
+  const BoutScreenActionIntent.startStop() : type = BoutScreenActionType.startStop;
 
-  const BoutScreenActionIntent.reset() : type = BoutScreenActions.reset;
+  const BoutScreenActionIntent.reset() : type = BoutScreenActionType.reset;
 
-  const BoutScreenActionIntent.addOneSec() : type = BoutScreenActions.addOneSec;
+  const BoutScreenActionIntent.addOneSec() : type = BoutScreenActionType.addOneSec;
 
-  const BoutScreenActionIntent.rmOneSec() : type = BoutScreenActions.rmOneSec;
+  const BoutScreenActionIntent.rmOneSec() : type = BoutScreenActionType.rmOneSec;
 
-  const BoutScreenActionIntent.undo() : type = BoutScreenActions.undo;
+  const BoutScreenActionIntent.undo() : type = BoutScreenActionType.undo;
 
-  const BoutScreenActionIntent.nextBout() : type = BoutScreenActions.nextBout;
+  const BoutScreenActionIntent.nextBout() : type = BoutScreenActionType.nextBout;
 
-  const BoutScreenActionIntent.previousBout() : type = BoutScreenActions.previousBout;
+  const BoutScreenActionIntent.previousBout() : type = BoutScreenActionType.previousBout;
 
-  const BoutScreenActionIntent.horn() : type = BoutScreenActions.horn;
+  const BoutScreenActionIntent.horn() : type = BoutScreenActionType.horn;
 
-  const BoutScreenActionIntent.quit() : type = BoutScreenActions.quit;
+  const BoutScreenActionIntent.quit() : type = BoutScreenActionType.quit;
 
-  const BoutScreenActionIntent.redOne() : type = BoutScreenActions.redOne;
-
-  const BoutScreenActionIntent.redTwo() : type = BoutScreenActions.redTwo;
-
-  const BoutScreenActionIntent.redThree() : type = BoutScreenActions.redThree;
-
-  const BoutScreenActionIntent.redFour() : type = BoutScreenActions.redFour;
-
-  const BoutScreenActionIntent.redFive() : type = BoutScreenActions.redFive;
-
-  const BoutScreenActionIntent.redVerbal() : type = BoutScreenActions.redVerbal;
-
-  const BoutScreenActionIntent.redPassivity() : type = BoutScreenActions.redPassivity;
-
-  const BoutScreenActionIntent.redCaution() : type = BoutScreenActions.redCaution;
-
-  const BoutScreenActionIntent.redDismissal() : type = BoutScreenActions.redDismissal;
-
-  const BoutScreenActionIntent.redActivityTime() : type = BoutScreenActions.redActivityTime;
-
-  const BoutScreenActionIntent.redInjuryTime() : type = BoutScreenActions.redInjuryTime;
-
-  const BoutScreenActionIntent.redBleedingInjuryTime() : type = BoutScreenActions.redBleedingInjuryTime;
-
-  const BoutScreenActionIntent.redUndo() : type = BoutScreenActions.redUndo;
-
-  const BoutScreenActionIntent.blueOne() : type = BoutScreenActions.blueOne;
-
-  const BoutScreenActionIntent.blueTwo() : type = BoutScreenActions.blueTwo;
-
-  const BoutScreenActionIntent.blueThree() : type = BoutScreenActions.blueThree;
-
-  const BoutScreenActionIntent.blueFour() : type = BoutScreenActions.blueFour;
-
-  const BoutScreenActionIntent.blueFive() : type = BoutScreenActions.blueFive;
-
-  const BoutScreenActionIntent.blueVerbal() : type = BoutScreenActions.blueVerbal;
-
-  const BoutScreenActionIntent.bluePassivity() : type = BoutScreenActions.bluePassivity;
-
-  const BoutScreenActionIntent.blueCaution() : type = BoutScreenActions.blueCaution;
-
-  const BoutScreenActionIntent.blueDismissal() : type = BoutScreenActions.blueDismissal;
-
-  const BoutScreenActionIntent.blueActivityTime() : type = BoutScreenActions.blueActivityTime;
-
-  const BoutScreenActionIntent.blueInjuryTime() : type = BoutScreenActions.blueInjuryTime;
-
-  const BoutScreenActionIntent.blueBleedingInjuryTime() : type = BoutScreenActions.blueBleedingInjuryTime;
-
-  const BoutScreenActionIntent.blueUndo() : type = BoutScreenActions.blueUndo;
-  final BoutScreenActions type;
-
-  Future<void> handle(
-    List<Bout> bouts,
-    Future<List<BoutAction>> Function() getActions,
-    int boutIndex,
-    Function(BoutScreenActions action) doAction, {
-    required ObservableStopwatch currentStopwatch,
-    required ObservableStopwatch boutStopwatch,
-    BuildContext? context,
-    required void Function(BuildContext context, int boutIndex) navigateToBoutByIndex,
-    required Future<void> Function(BoutAction action) createOrUpdateAction,
-    required Future<void> Function(BoutAction action) deleteAction,
-  }) async {
-    final bout = bouts[boutIndex];
-    switch (type) {
-      case BoutScreenActions.startStop:
-        currentStopwatch.startStop();
-        break;
-      case BoutScreenActions.addOneSec:
-        currentStopwatch.add(const Duration(seconds: 1));
-        break;
-      case BoutScreenActions.rmOneSec:
-        if (currentStopwatch.elapsed > const Duration(seconds: 1)) {
-          currentStopwatch.add(-const Duration(seconds: 1));
-        } else {
-          currentStopwatch.add(-currentStopwatch.elapsed);
-        } // Do not reset, as it will may stop the timer
-        break;
-      case BoutScreenActions.reset:
-        currentStopwatch.reset();
-        break;
-      case BoutScreenActions.nextBout:
-        if (context != null) {
-          final int index = boutIndex + 1;
-          if (index < bouts.length) {
-            navigateToBoutByIndex(context, index);
-          }
-        }
-        break;
-      case BoutScreenActions.previousBout:
-        if (context != null) {
-          final int index = boutIndex - 1;
-          if (index >= 0) {
-            navigateToBoutByIndex(context, index);
-          }
-        }
-        break;
-      case BoutScreenActions.quit:
-        if (context != null) context.pop();
-        break;
-      case BoutScreenActions.redOne:
-        // NOTE: Do not used bout.duration as time, as it is not up to date.
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 1,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redTwo:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 2,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redThree:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 3,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redFour:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 4,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redFive:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 5,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redVerbal:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.verbal,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redPassivity:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.passivity,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redCaution:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.caution,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redDismissal:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.red,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.dismissal,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.redActivityTime:
-        doAction(BoutScreenActions.redActivityTime);
-        break;
-      case BoutScreenActions.redInjuryTime:
-        doAction(BoutScreenActions.redInjuryTime);
-        break;
-      case BoutScreenActions.redBleedingInjuryTime:
-        doAction(BoutScreenActions.redBleedingInjuryTime);
-        break;
-      case BoutScreenActions.redUndo:
-        if (bout.r != null) {
-          final actions = await getActions();
-          final rActions = actions.where((el) => el.role == BoutRole.red);
-          if (rActions.isNotEmpty) {
-            final action = rActions.last;
-            deleteAction(action);
-          }
-        }
-        break;
-      case BoutScreenActions.blueOne:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 1,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueTwo:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 2,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueThree:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 3,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueFour:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 4,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueFive:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.points,
-          pointCount: 5,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueVerbal:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.verbal,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.bluePassivity:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.passivity,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueCaution:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.caution,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueDismissal:
-        final action = BoutAction(
-          bout: bout,
-          role: BoutRole.blue,
-          duration: boutStopwatch.elapsed,
-          actionType: BoutActionType.dismissal,
-        );
-        await createOrUpdateAction(action);
-        break;
-      case BoutScreenActions.blueUndo:
-        if (bout.b != null) {
-          final actions = await getActions();
-          final bActions = actions.where((el) => el.role == BoutRole.blue);
-          if (bActions.isNotEmpty) {
-            final action = bActions.last;
-            deleteAction(action);
-          }
-        }
-        break;
-      case BoutScreenActions.blueActivityTime:
-        doAction(BoutScreenActions.blueActivityTime);
-        break;
-      case BoutScreenActions.blueInjuryTime:
-        doAction(BoutScreenActions.blueInjuryTime);
-        break;
-      case BoutScreenActions.blueBleedingInjuryTime:
-        doAction(BoutScreenActions.blueBleedingInjuryTime);
-        break;
-      case BoutScreenActions.undo:
-        final actions = await getActions();
-        if (actions.isNotEmpty) {
-          final action = actions.last;
-          deleteAction(action);
-        }
-        break;
-      case BoutScreenActions.horn:
-        doAction(BoutScreenActions.horn);
-        break;
-    }
-  }
+  final BoutScreenActionType type;
 }
 
-const redOneIntent = BoutScreenActionIntent.redOne();
-const redTwoIntent = BoutScreenActionIntent.redTwo();
-const redThreeIntent = BoutScreenActionIntent.redThree();
-const redFourIntent = BoutScreenActionIntent.redFour();
-const redFiveIntent = BoutScreenActionIntent.redFive();
+class RoleScreenActionIntent extends Intent {
+  final BoutRole role;
+  final RoleScreenActionType type;
 
-const blueOneIntent = BoutScreenActionIntent.blueOne();
-const blueTwoIntent = BoutScreenActionIntent.blueTwo();
-const blueThreeIntent = BoutScreenActionIntent.blueThree();
-const blueFourIntent = BoutScreenActionIntent.blueFour();
-const blueFiveIntent = BoutScreenActionIntent.blueFive();
+  const RoleScreenActionIntent({required this.role, required this.type});
+
+  const RoleScreenActionIntent.redActivityTime() : role = BoutRole.red, type = RoleScreenActionType.activityTime;
+
+  const RoleScreenActionIntent.redInjuryTime() : role = BoutRole.red, type = RoleScreenActionType.injuryTime;
+
+  const RoleScreenActionIntent.redBleedingInjuryTime()
+    : role = BoutRole.red,
+      type = RoleScreenActionType.bleedingInjuryTime;
+
+  const RoleScreenActionIntent.redUndo() : role = BoutRole.red, type = RoleScreenActionType.undo;
+
+  const RoleScreenActionIntent.blueActivityTime() : role = BoutRole.blue, type = RoleScreenActionType.activityTime;
+
+  const RoleScreenActionIntent.blueInjuryTime() : role = BoutRole.blue, type = RoleScreenActionType.injuryTime;
+
+  const RoleScreenActionIntent.blueBleedingInjuryTime()
+    : role = BoutRole.blue,
+      type = RoleScreenActionType.bleedingInjuryTime;
+
+  const RoleScreenActionIntent.blueUndo() : role = BoutRole.blue, type = RoleScreenActionType.undo;
+}
+
+class RoleBoutActionIntent extends RoleScreenActionIntent {
+  final BoutActionType boutActionType;
+
+  const RoleBoutActionIntent({required this.boutActionType, required super.role})
+    : super(type: RoleScreenActionType.roleAction);
+
+  factory RoleBoutActionIntent.verbal({required BoutRole role}) =>
+      RoleBoutActionIntent(boutActionType: BoutActionType.verbal, role: role);
+
+  factory RoleBoutActionIntent.redVerbal() => RoleBoutActionIntent.verbal(role: BoutRole.red);
+
+  factory RoleBoutActionIntent.blueVerbal() => RoleBoutActionIntent.verbal(role: BoutRole.blue);
+
+  factory RoleBoutActionIntent.passivity({required BoutRole role}) =>
+      RoleBoutActionIntent(boutActionType: BoutActionType.passivity, role: role);
+
+  factory RoleBoutActionIntent.redPassivity() => RoleBoutActionIntent.passivity(role: BoutRole.red);
+
+  factory RoleBoutActionIntent.bluePassivity() => RoleBoutActionIntent.passivity(role: BoutRole.blue);
+
+  factory RoleBoutActionIntent.caution({required BoutRole role}) =>
+      RoleBoutActionIntent(boutActionType: BoutActionType.caution, role: role);
+
+  factory RoleBoutActionIntent.redCaution() => RoleBoutActionIntent.caution(role: BoutRole.red);
+
+  factory RoleBoutActionIntent.blueCaution() => RoleBoutActionIntent.caution(role: BoutRole.blue);
+
+  factory RoleBoutActionIntent.dismissal({required BoutRole role}) =>
+      RoleBoutActionIntent(boutActionType: BoutActionType.dismissal, role: role);
+
+  factory RoleBoutActionIntent.redDismissal() => RoleBoutActionIntent.dismissal(role: BoutRole.red);
+
+  factory RoleBoutActionIntent.blueDismissal() => RoleBoutActionIntent.dismissal(role: BoutRole.blue);
+}
+
+class RolePointBoutActionIntent extends RoleBoutActionIntent {
+  final int points;
+
+  const RolePointBoutActionIntent({required this.points, required super.role})
+    : super(boutActionType: BoutActionType.points);
+
+  const RolePointBoutActionIntent.redOne()
+    : points = 1,
+      super(boutActionType: BoutActionType.points, role: BoutRole.red);
+
+  const RolePointBoutActionIntent.redTwo()
+    : points = 2,
+      super(boutActionType: BoutActionType.points, role: BoutRole.red);
+
+  const RolePointBoutActionIntent.redThree()
+    : points = 3,
+      super(boutActionType: BoutActionType.points, role: BoutRole.red);
+
+  const RolePointBoutActionIntent.redFour()
+    : points = 4,
+      super(boutActionType: BoutActionType.points, role: BoutRole.red);
+
+  const RolePointBoutActionIntent.redFive()
+    : points = 5,
+      super(boutActionType: BoutActionType.points, role: BoutRole.red);
+
+  const RolePointBoutActionIntent.blueOne()
+    : points = 1,
+      super(boutActionType: BoutActionType.points, role: BoutRole.blue);
+
+  const RolePointBoutActionIntent.blueTwo()
+    : points = 2,
+      super(boutActionType: BoutActionType.points, role: BoutRole.blue);
+
+  const RolePointBoutActionIntent.blueThree()
+    : points = 3,
+      super(boutActionType: BoutActionType.points, role: BoutRole.blue);
+
+  const RolePointBoutActionIntent.blueFour()
+    : points = 4,
+      super(boutActionType: BoutActionType.points, role: BoutRole.blue);
+
+  const RolePointBoutActionIntent.blueFive()
+    : points = 5,
+      super(boutActionType: BoutActionType.points, role: BoutRole.blue);
+}
+
+const redOneIntent = RolePointBoutActionIntent.redOne();
+const redTwoIntent = RolePointBoutActionIntent.redTwo();
+const redThreeIntent = RolePointBoutActionIntent.redThree();
+const redFourIntent = RolePointBoutActionIntent.redFour();
+const redFiveIntent = RolePointBoutActionIntent.redFive();
+
+const blueOneIntent = RolePointBoutActionIntent.blueOne();
+const blueTwoIntent = RolePointBoutActionIntent.blueTwo();
+const blueThreeIntent = RolePointBoutActionIntent.blueThree();
+const blueFourIntent = RolePointBoutActionIntent.blueFour();
+const blueFiveIntent = RolePointBoutActionIntent.blueFive();
 
 final shortcuts = <LogicalKeySet, Intent>{
   LogicalKeySet(LogicalKeyboardKey.space): const BoutScreenActionIntent.startStop(),
@@ -427,29 +174,9 @@ final shortcuts = <LogicalKeySet, Intent>{
 
 class BoutActionHandler extends ConsumerWidget {
   final Widget child;
-  final ObservableStopwatch boutStopwatch;
-  final ObservableStopwatch Function() getCurrentStopwatch;
-  final List<Bout> bouts;
-  final Future<List<BoutAction>> Function() getActions;
-  final int boutIndex;
-  final Function(BoutScreenActions action) doAction;
-  final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
-  final Future<void> Function(BoutAction action) createOrUpdateAction;
-  final Future<void> Function(BoutAction action) deleteAction;
+  final void Function(Intent intent) handleIntent;
 
-  const BoutActionHandler({
-    required this.child,
-    required this.boutStopwatch,
-    required this.getCurrentStopwatch,
-    required this.bouts,
-    required this.getActions,
-    required this.boutIndex,
-    required this.doAction,
-    super.key,
-    required this.navigateToBoutByIndex,
-    required this.createOrUpdateAction,
-    required this.deleteAction,
-  });
+  const BoutActionHandler({required this.child, required this.handleIntent, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -457,9 +184,8 @@ class BoutActionHandler extends ConsumerWidget {
       shortcuts: shortcuts,
       child: Actions(
         actions: <Type, Action<Intent>>{
-          BoutScreenActionIntent: CallbackAction<BoutScreenActionIntent>(
-            onInvoke: (BoutScreenActionIntent intent) => handleIntent(intent, context: context),
-          ),
+          RoleScreenActionIntent: CallbackAction<RolePointBoutActionIntent>(onInvoke: handleIntent),
+          BoutScreenActionIntent: CallbackAction<BoutScreenActionIntent>(onInvoke: handleIntent),
         },
         child: KeyboardListener(
           focusNode: FocusNode(),
@@ -467,51 +193,32 @@ class BoutActionHandler extends ConsumerWidget {
           onKeyEvent: (KeyEvent event) {
             if (event is KeyDownEvent) {
               if (event.physicalKey == PhysicalKeyboardKey.keyF) {
-                handleIntent(redOneIntent, context: context);
+                handleIntent(redOneIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyD) {
-                handleIntent(redTwoIntent, context: context);
+                handleIntent(redTwoIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyS) {
-                handleIntent(redFourIntent, context: context);
+                handleIntent(redFourIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyA) {
-                handleIntent(redFiveIntent, context: context);
+                handleIntent(redFiveIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyJ ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit1)) {
-                handleIntent(blueOneIntent, context: context);
+                handleIntent(blueOneIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyK ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit2)) {
-                handleIntent(blueTwoIntent, context: context);
+                handleIntent(blueTwoIntent);
               } else if (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3) {
-                handleIntent(blueThreeIntent, context: context);
+                handleIntent(blueThreeIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.keyL ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit4)) {
-                handleIntent(blueFourIntent, context: context);
+                handleIntent(blueFourIntent);
               } else if (event.physicalKey == PhysicalKeyboardKey.semicolon ||
                   (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit5)) {
-                handleIntent(blueFiveIntent, context: context);
+                handleIntent(blueFiveIntent);
               }
             }
           },
         ),
       ),
     );
-  }
-
-  Future<void> handleIntent(BoutScreenActionIntent intent, {required BuildContext context}) async {
-    if (context.mounted) {
-      await catchAsync(context, () async {
-        await intent.handle(
-          bouts,
-          getActions,
-          boutIndex,
-          doAction,
-          context: context,
-          currentStopwatch: getCurrentStopwatch(),
-          boutStopwatch: boutStopwatch,
-          navigateToBoutByIndex: navigateToBoutByIndex,
-          createOrUpdateAction: createOrUpdateAction,
-          deleteAction: deleteAction,
-        );
-      });
-    }
   }
 }

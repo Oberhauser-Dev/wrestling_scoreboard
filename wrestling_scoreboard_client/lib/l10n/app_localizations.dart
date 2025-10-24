@@ -368,6 +368,12 @@ abstract class AppLocalizations {
   /// **'Bell sound'**
   String get bellSound;
 
+  /// No description provided for @smartBoutActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic Bout Actions'**
+  String get smartBoutActions;
+
   /// No description provided for @timeCountDown.
   ///
   /// In en, this message translates to:
@@ -1831,6 +1837,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Maximum'**
   String get maximum;
+
+  /// No description provided for @warningCautionNoPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'A caution must be followed by one or two points.'**
+  String get warningCautionNoPoints;
 
   /// No description provided for @official.
   ///

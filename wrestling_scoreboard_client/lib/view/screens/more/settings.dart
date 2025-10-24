@@ -207,59 +207,75 @@ class CustomSettingsScreen extends ConsumerWidget {
             future: ref.watch(bellSoundProvider),
             builder: (context, bellSoundPath) {
               return LoadingBuilder<bool>(
-                future: ref.watch(timeCountDownProvider),
-                builder: (context, isTimeCountDown) {
-                  return SettingsSection(
-                    title: localizations.scoreboard,
-                    action: TextButton(
-                      onPressed: () async {
-                        bellSoundPath = Env.bellSoundPath.fromString();
-                        await ref.read(bellSoundProvider.notifier).setState(bellSoundPath);
+                future: ref.watch(smartBoutActionsProvider),
+                builder: (context, useSmartBoutActions) {
+                  return LoadingBuilder<bool>(
+                    future: ref.watch(timeCountDownProvider),
+                    builder: (context, isTimeCountDown) {
+                      return SettingsSection(
+                        title: localizations.scoreboard,
+                        action: TextButton(
+                          onPressed: () async {
+                            bellSoundPath = Env.bellSoundPath.fromString();
+                            await ref.read(bellSoundProvider.notifier).setState(bellSoundPath);
 
-                        isTimeCountDown = Env.timeCountDown.fromBool();
-                        await ref.read(timeCountDownProvider.notifier).setState(isTimeCountDown);
-                      },
-                      child: Text(localizations.reset),
-                    ),
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.audiotrack),
-                        title: Text(localizations.bellSound),
-                        subtitle: Text(getBellNameOfPath(bellSoundPath)),
-                        onTap: () async {
-                          final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
-                          // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
-                          final List<MapEntry<String, String>> bellSoundValues =
-                              bellSoundPaths
-                                  .asMap()
-                                  .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
-                                  .entries
-                                  .toList();
-                          if (context.mounted) {
-                            await showRadioDialog<String>(
-                              context: context,
-                              values: bellSoundValues,
-                              initialValue: bellSoundPath,
-                              onChanged: (value) async {
-                                final ap = AudioPlayer();
-                                await ap.play(AssetSource(value));
-                              },
-                              onSuccess: (value) => ref.read(bellSoundProvider.notifier).setState(value),
-                            );
-                          }
-                        },
-                      ),
-                      SwitchListTile(
-                        title: Text(localizations.timeCountDown),
-                        secondary: const Icon(Icons.timer),
-                        value: isTimeCountDown,
-                        onChanged: (val) async {
-                          await ref.read(timeCountDownProvider.notifier).setState(val);
-                        },
-                      ),
-                      // TODO option to overwrite boutConfigs
-                      // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
-                    ],
+                            useSmartBoutActions = Env.smartBoutActions.fromBool();
+                            await ref.read(smartBoutActionsProvider.notifier).setState(useSmartBoutActions);
+
+                            isTimeCountDown = Env.timeCountDown.fromBool();
+                            await ref.read(timeCountDownProvider.notifier).setState(isTimeCountDown);
+                          },
+                          child: Text(localizations.reset),
+                        ),
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.audiotrack),
+                            title: Text(localizations.bellSound),
+                            subtitle: Text(getBellNameOfPath(bellSoundPath)),
+                            onTap: () async {
+                              final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
+                              // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
+                              final List<MapEntry<String, String>> bellSoundValues =
+                                  bellSoundPaths
+                                      .asMap()
+                                      .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
+                                      .entries
+                                      .toList();
+                              if (context.mounted) {
+                                await showRadioDialog<String>(
+                                  context: context,
+                                  values: bellSoundValues,
+                                  initialValue: bellSoundPath,
+                                  onChanged: (value) async {
+                                    final ap = AudioPlayer();
+                                    await ap.play(AssetSource(value));
+                                  },
+                                  onSuccess: (value) => ref.read(bellSoundProvider.notifier).setState(value),
+                                );
+                              }
+                            },
+                          ),
+                          SwitchListTile(
+                            title: Text(localizations.smartBoutActions),
+                            secondary: const Icon(Icons.smart_toy),
+                            value: useSmartBoutActions,
+                            onChanged: (val) async {
+                              await ref.read(smartBoutActionsProvider.notifier).setState(val);
+                            },
+                          ),
+                          SwitchListTile(
+                            title: Text(localizations.timeCountDown),
+                            secondary: const Icon(Icons.timer),
+                            value: isTimeCountDown,
+                            onChanged: (val) async {
+                              await ref.read(timeCountDownProvider.notifier).setState(val);
+                            },
+                          ),
+                          // TODO option to overwrite boutConfigs
+                          // ContentItem(title: localizations.durations, icon: Icons.timer, onTap: null),
+                        ],
+                      );
+                    },
                   );
                 },
               );

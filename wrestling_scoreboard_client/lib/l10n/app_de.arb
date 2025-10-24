@@ -57,6 +57,7 @@
   "saveEvery": "Speichere alle",
   "deleteAfter": "Lösche nach",
   "bellSound": "Glocken-Sound",
+  "smartBoutActions": "Automatische Kampf-Aktionen",
   "timeCountDown": "Zähle die Zeit herunter",
   "incompatibleVersionsPhrase": "Dieser Client mit der Version **{clientVersion}** ist nicht kompatibel mit der Serverversion **{serverVersion}**. {compatibilityText}\nBitte laden Sie einen kompatiblen Client von [GitHub - Oberhauser-Dev/wrestling_scoreboard](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases) herunter oder ändern Sie die Server-URLs in den Einstellungen.",
   "@incompatibleVersionsPhrase": {
@@ -337,6 +338,7 @@
   "periodCount": "Anzahl der Kampfabschnitte",
   "minimum": "Minimum",
   "maximum": "Maximum",
+  "warningCautionNoPoints": "Auf eine Verwarnung müssen ein oder zwei Punkte folgen.",
 
   "official": "Offizielle(r)",
   "officials": "Offizielle",
