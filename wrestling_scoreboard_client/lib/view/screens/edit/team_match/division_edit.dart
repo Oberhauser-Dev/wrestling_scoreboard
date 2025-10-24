@@ -127,8 +127,7 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableOrganizations ??=
-                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+            _availableOrganizations ??= await (await ref.read(dataManagerProvider)).readMany<Organization, Null>();
             return _availableOrganizations!.toList();
           },
         ),
@@ -145,7 +144,7 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
               }),
           itemAsString: (u) => u.fullname,
           asyncItems: (String filter) async {
-            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
+            _availableDivisions ??= await (await ref.read(dataManagerProvider)).readMany<Division, Null>();
             return _availableDivisions!.toList();
           },
         ),
@@ -170,10 +169,10 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
       if (boutConfig == null) {
         boutConfig = TeamMatch.defaultBoutConfig;
         boutConfig = boutConfig.copyWithId(
-          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(boutConfig),
+          await (await ref.read(dataManagerProvider)).createOrUpdateSingle(boutConfig),
         );
       }
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         Division(
           id: widget.division?.id,
           name: _name!,

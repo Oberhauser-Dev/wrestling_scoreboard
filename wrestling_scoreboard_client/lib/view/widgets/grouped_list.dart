@@ -254,9 +254,7 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
               _throttleTimer = Timer(throttleDuration, () async {
                 try {
                   // TODO: Support server side filter type
-                  final results = await (await ref.read(
-                    dataManagerNotifierProvider,
-                  )).search(searchTerm: searchTerm, type: T);
+                  final results = await (await ref.read(dataManagerProvider)).search(searchTerm: searchTerm, type: T);
                   final Set<T> parsedResults = results[getTableNameFromType(T)]?.map((item) => item as T).toSet() ?? {};
                   setState(() {
                     // TODO: Remove intersection, if support server side filter type

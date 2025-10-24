@@ -42,9 +42,8 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
             initialCompetition: competitionAgeCategory.competition,
           ),
           onDelete:
-              () async => (await ref.read(
-                dataManagerNotifierProvider,
-              )).deleteSingle<CompetitionAgeCategory>(competitionAgeCategory),
+              () async =>
+                  (await ref.read(dataManagerProvider)).deleteSingle<CompetitionAgeCategory>(competitionAgeCategory),
           classLocale: localizations.ageCategory,
           children: [
             ContentItem(

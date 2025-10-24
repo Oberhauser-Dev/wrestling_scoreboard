@@ -45,7 +45,7 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerNotifierProvider)).deleteSingle<Bout>(bout);
+            (await ref.read(dataManagerProvider)).deleteSingle<Bout>(bout);
           },
           classLocale: classLocale,
           children: [
@@ -75,7 +75,7 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
               ),
             ),
             LoadingBuilder<bool>(
-              future: ref.watch(timeCountDownNotifierProvider),
+              future: ref.watch(timeCountDownProvider),
               builder: (context, isTimeCountDown) {
                 return ContentItem(
                   title:

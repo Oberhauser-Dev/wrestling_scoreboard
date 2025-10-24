@@ -165,7 +165,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<League, Organization>(filterObject: widget.initialOrganization);
             return _availableLeagues!.toList();
           },
@@ -211,31 +211,23 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
       var home = widget.teamMatch?.home;
       if (home == null) {
-        final homeId = await (await ref.read(
-          dataManagerNotifierProvider,
-        )).createOrUpdateSingle(TeamLineup(team: _homeTeam!));
+        final homeId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(team: _homeTeam!));
         home = TeamLineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
       } else if (home.team != _homeTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(
-          dataManagerNotifierProvider,
-        )).createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
       }
 
       var guest = widget.teamMatch?.guest;
       if (guest == null) {
-        final guestId = await (await ref.read(
-          dataManagerNotifierProvider,
-        )).createOrUpdateSingle(TeamLineup(team: _guestTeam!));
+        final guestId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(team: _guestTeam!));
         guest = TeamLineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
       } else if (guest.team != _guestTeam) {
         // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(
-          dataManagerNotifierProvider,
-        )).createOrUpdateSingle(TeamLineup(id: guest.id, team: _guestTeam!));
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(id: guest.id, team: _guestTeam!));
       }
 
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         TeamMatch(
           id: widget.teamMatch?.id,
           organization:

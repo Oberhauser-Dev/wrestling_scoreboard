@@ -90,7 +90,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator, {Future<void> Function()? onSubmitGenerate}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final dataManager = await ref.read(dataManagerNotifierProvider);
+      final dataManager = await ref.read(dataManagerProvider);
       await dataManager.createOrUpdateSingle(
         TeamLineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach),
       );

@@ -38,8 +38,7 @@ class BoutResultRuleOverview extends ConsumerWidget {
         final description = InfoWidget(
           obj: boutResultRule,
           editPage: BoutResultRuleEdit(boutResultRule: boutResultRule),
-          onDelete:
-              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutResultRule>(boutResultRule),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<BoutResultRule>(boutResultRule),
           classLocale: localizations.boutResultRule,
           children: [
             ContentItem(

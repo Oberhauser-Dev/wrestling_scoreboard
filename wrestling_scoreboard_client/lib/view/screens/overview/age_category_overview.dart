@@ -34,7 +34,7 @@ class AgeCategoryOverview extends ConsumerWidget {
         final description = InfoWidget(
           obj: ageCategory,
           editPage: AgeCategoryEdit(ageCategory: ageCategory),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<AgeCategory>(ageCategory),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<AgeCategory>(ageCategory),
           classLocale: localizations.ageCategory,
           children: [
             ContentItem(title: ageCategory.name, subtitle: localizations.name, icon: Icons.description),

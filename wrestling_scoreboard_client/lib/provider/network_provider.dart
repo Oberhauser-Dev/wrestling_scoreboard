@@ -14,13 +14,13 @@ part 'network_provider.g.dart';
 class DataManagerNotifier extends _$DataManagerNotifier {
   @override
   Raw<Future<DataManager>> build() async {
-    final apiUrl = await ref.watch(apiUrlNotifierProvider);
-    final jwtToken = await ref.watch(jwtNotifierProvider);
+    final apiUrl = await ref.watch(apiUrlProvider);
+    final jwtToken = await ref.watch(jwtProvider);
     return RestDataManager(
       apiUrl: apiUrl,
       authService: jwtToken == null ? null : BearerAuthService(token: jwtToken),
       onResetAuth: () async {
-        if (ref.mounted) await ref.read(jwtNotifierProvider.notifier).setState(null);
+        if (ref.mounted) await ref.read(jwtProvider.notifier).setState(null);
       },
     );
   }
@@ -31,8 +31,8 @@ class DataManagerNotifier extends _$DataManagerNotifier {
 class WebSocketManagerNotifier extends _$WebSocketManagerNotifier {
   @override
   Raw<Future<WebSocketManager>> build() async {
-    final wsUrl = await ref.watch(webSocketUrlNotifierProvider);
-    final dataManager = await ref.watch(dataManagerNotifierProvider);
+    final wsUrl = await ref.watch(webSocketUrlProvider);
+    final dataManager = await ref.watch(dataManagerProvider);
 
     final webSocketManager = WebSocketManager(dataManager, url: wsUrl);
     dataManager.webSocketManager = webSocketManager;
@@ -46,7 +46,7 @@ class WebSocketManagerNotifier extends _$WebSocketManagerNotifier {
   dependencies: [WebSocketManagerNotifier, LocalWebsocketManagerNotifier, MockWebsocketManagerNotifier],
 )
 Stream<WebSocketConnectionState> webSocketStateStream(Ref ref) async* {
-  final webSocketManager = await ref.watch(webSocketManagerNotifierProvider);
+  final webSocketManager = await ref.watch(webSocketManagerProvider);
   final webSocketConnectionStream = webSocketManager.onWebSocketConnection.stream.distinct().where(
     (event) => event == WebSocketConnectionState.disconnected || event == WebSocketConnectionState.connected,
   );

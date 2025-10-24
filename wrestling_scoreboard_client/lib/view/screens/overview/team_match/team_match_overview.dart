@@ -77,7 +77,7 @@ class TeamMatchOverview extends ConsumerWidget {
                     }),
                   ),
                 );
-                final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+                final isTimeCountDown = await ref.read(timeCountDownProvider);
 
                 final homeParticipations = await ref.readAsync(
                   manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
@@ -179,8 +179,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                 obj: match,
                                 editPage: TeamMatchEdit(teamMatch: match, initialOrganization: organization),
                                 onDelete:
-                                    () async =>
-                                        (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatch>(match),
+                                    () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatch>(match),
                                 classLocale: localizations.match,
                                 children: [
                                   ContentItem(
@@ -238,7 +237,7 @@ class TeamMatchOverview extends ConsumerWidget {
                               ),
                               if (match.league != null)
                                 LoadingBuilder<User?>(
-                                  future: ref.watch(userNotifierProvider),
+                                  future: ref.watch(userProvider),
                                   builder: (context, user) {
                                     final items = [
                                       ContentItem(
@@ -286,7 +285,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                               );
                                               if (hasConfirmed && context.mounted) {
                                                 await catchAsync(context, () async {
-                                                  final dataManager = await ref.read(dataManagerNotifierProvider);
+                                                  final dataManager = await ref.read(dataManagerProvider);
                                                   await dataManager.generateBouts<TeamMatch>(match, false);
                                                   if (context.mounted) {
                                                     await showOkDialog(
@@ -318,7 +317,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                       initialOrganization: match.organization!,
                                       onCreated: (person) async {
                                         // TODO: ability to change role inside another implementation of PersonEdit.
-                                        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+                                        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
                                           TeamMatchPerson(teamMatch: match, person: person, role: PersonRole.steward),
                                         );
                                       },
@@ -385,7 +384,7 @@ class TeamMatchOverview extends ConsumerWidget {
     NavigatorState navigator, {
     required League league,
   }) async {
-    final dataManager = await ref.read(dataManagerNotifierProvider);
+    final dataManager = await ref.read(dataManagerProvider);
     final participations = await dataManager.readMany<TeamLineupParticipation, TeamLineup>(filterObject: lineup);
     final leagueWeightClasses =
         (await dataManager.readMany<LeagueWeightClass, League>(

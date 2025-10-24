@@ -30,7 +30,7 @@ class MoreScreen extends ConsumerWidget {
       body: ResponsiveScrollView(
         child: Card(
           child: LoadingBuilder<User?>(
-            future: ref.watch(userNotifierProvider),
+            future: ref.watch(userProvider),
             builder: (context, user) {
               return Column(
                 children:
@@ -85,7 +85,7 @@ class MoreScreen extends ConsumerWidget {
                 exception ?? '',
                 stackTrace: stackTrace,
                 onRetry: () async {
-                  await ref.read(userNotifierProvider.notifier).signOut();
+                  await ref.read(userProvider.notifier).signOut();
                 },
               );
             },

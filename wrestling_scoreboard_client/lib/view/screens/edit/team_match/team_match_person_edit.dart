@@ -63,7 +63,7 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<Person, Organization>(filterObject: widget.initialOrganization);
             return _availablePersons!.toList();
           },
@@ -83,7 +83,7 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
           itemAsString: (u) => u.localize(context),
           asyncItems: (String filter) async {
             _availableTeamMatchs ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<TeamMatch, Organization>(filterObject: widget.initialOrganization);
             return _availableTeamMatchs!.toList();
           },
@@ -118,7 +118,7 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         TeamMatchPerson(id: widget.teamMatchPerson?.id, person: _person!, teamMatch: _teamMatch!, role: _personRole!),
       );
       navigator.pop();

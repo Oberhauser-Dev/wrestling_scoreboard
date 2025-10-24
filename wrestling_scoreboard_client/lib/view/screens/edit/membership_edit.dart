@@ -61,7 +61,7 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<Person, Organization>(filterObject: widget.initialOrganization);
             return _availablePersons!.toList();
           },
@@ -81,7 +81,7 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableClubs ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<Club, Organization>(filterObject: widget.initialOrganization);
             return _availableClubs!.toList();
           },
@@ -103,7 +103,7 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await (await ref.read(
-        dataManagerNotifierProvider,
+        dataManagerProvider,
       )).createOrUpdateSingle(Membership(id: widget.membership?.id, person: _person!, club: _club!));
       navigator.pop();
     }
@@ -160,7 +160,7 @@ class MembershipPersonEditState extends AbstractPersonEditState<MembershipPerson
                 }),
             itemAsString: (u) => u.name,
             asyncItems: (String filter) async {
-              _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
+              _availableClubs ??= await (await ref.read(dataManagerProvider)).readMany<Club, Null>();
               return _availableClubs!.toList();
             },
           ),
@@ -172,8 +172,6 @@ class MembershipPersonEditState extends AbstractPersonEditState<MembershipPerson
   @override
   Future<void> handleNested(person) async {
     var membership = Membership(id: widget.membership?.id, person: person, club: _club!, no: _no);
-    membership = membership.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(membership),
-    );
+    membership = membership.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(membership));
   }
 }

@@ -65,12 +65,10 @@ class ScratchBoutEditState extends BoutEditState<ScratchBoutEdit> {
   @override
   Future<void> handleNested(Bout dataObject) async {
     var scratchBout = widget.scratchBout.copyWith(weightClass: _weightClass);
-    scratchBout = scratchBout.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(scratchBout),
-    );
+    scratchBout = scratchBout.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(scratchBout));
   }
 
   Future<List<WeightClass>> get availableWeightClasses async {
-    return await (await ref.read(dataManagerNotifierProvider)).readMany<WeightClass, Null>();
+    return await (await ref.read(dataManagerProvider)).readMany<WeightClass, Null>();
   }
 }

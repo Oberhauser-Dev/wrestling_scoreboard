@@ -80,7 +80,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           itemAsString: (u) => u.club.name,
           asyncItems: (String filter) async {
             _availableLineups ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<CompetitionLineup, Competition>(filterObject: widget.initialCompetition);
             return _availableLineups!.toList();
           },
@@ -114,7 +114,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           itemAsString: (w) => w.name,
           asyncItems: (String filter) async {
             _availableWeightCategories ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
             return _availableWeightCategories!.toList();
           },
@@ -178,7 +178,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
         poolDrawNumber: widget.competitionParticipation?.poolDrawNumber,
         poolGroup: widget.competitionParticipation?.poolDrawNumber,
       );
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(cParticipation);
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(cParticipation);
       navigator.pop();
     }
   }

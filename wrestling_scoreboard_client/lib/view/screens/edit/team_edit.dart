@@ -71,7 +71,7 @@ class TeamEditState extends ConsumerState<TeamEdit> {
         name: _name!,
         description: _description,
       );
-      team = team.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(team));
+      team = team.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(team));
       if (widget.onCreated != null) {
         await widget.onCreated!(team);
       }

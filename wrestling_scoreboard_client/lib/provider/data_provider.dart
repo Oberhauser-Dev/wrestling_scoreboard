@@ -30,7 +30,7 @@ class SingleProviderData<T extends DataObject> {
 Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> pData) async* {
   ref.cache();
 
-  final dataManager = await ref.watch(dataManagerNotifierProvider);
+  final dataManager = await ref.watch(dataManagerProvider);
   if (pData.initialData != null) {
     yield pData.initialData!;
   }
@@ -79,7 +79,7 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
 ) async* {
   ref.cache();
 
-  final dataManager = await ref.watch(dataManagerNotifierProvider);
+  final dataManager = await ref.watch(dataManagerProvider);
   if (pData.initialData != null) {
     yield pData.initialData!;
   }

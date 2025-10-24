@@ -71,7 +71,7 @@ class DivisionWeightClassEditState extends WeightClassEditState<DivisionWeightCl
       seasonPartition: _seasonPartition,
     );
     divisionWeightClass = divisionWeightClass.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(divisionWeightClass),
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(divisionWeightClass),
     );
   }
 }

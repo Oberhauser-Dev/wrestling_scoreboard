@@ -47,7 +47,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
         //                 ManyProviderData<BoutResultRule, BoutConfig>(
         //                     filterObject: competitionBout.competition.boutConfig))
         //             .future);
-        //     final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+        //     final isTimeCountDown = await ref.read(timeCountDownProvider);
         //     if (context.mounted) {
         //       final bytes = await ScoreSheet(
         //         bout: bout,
@@ -72,8 +72,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
             competitionBout: competitionBout,
             initialCompetition: competitionBout.competition,
           ),
-          onDelete:
-              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionBout>(competitionBout),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionBout>(competitionBout),
           tiles: [
             ContentItem(title: competitionBout.mat?.toString() ?? '-', subtitle: localizations.mat, icon: Icons.adjust),
             ContentItem(

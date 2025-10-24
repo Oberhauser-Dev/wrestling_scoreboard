@@ -74,7 +74,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           },
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
+            _availableClubs ??= await (await ref.read(dataManagerProvider)).readMany<Club, Null>();
             return _availableClubs!.toList();
           },
         ),
@@ -126,7 +126,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
         leader: _leader,
         coach: _coach,
       );
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(cLineup);
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(cLineup);
       navigator.pop();
     }
   }

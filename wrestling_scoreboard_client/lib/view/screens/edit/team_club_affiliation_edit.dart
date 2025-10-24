@@ -51,7 +51,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
               }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
+            _availableTeams ??= await (await ref.read(dataManagerProvider)).readMany<Team, Null>();
             return _availableTeams!.toList();
           },
         ),
@@ -69,7 +69,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
               }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableClubs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Club, Null>();
+            _availableClubs ??= await (await ref.read(dataManagerProvider)).readMany<Club, Null>();
             return _availableClubs!.toList();
           },
         ),
@@ -91,7 +91,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await (await ref.read(
-        dataManagerNotifierProvider,
+        dataManagerProvider,
       )).createOrUpdateSingle(TeamClubAffiliation(id: widget.affiliation?.id, team: _team!, club: _club!));
       navigator.pop();
     }

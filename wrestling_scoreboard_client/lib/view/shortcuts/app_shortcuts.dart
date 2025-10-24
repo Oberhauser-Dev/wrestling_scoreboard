@@ -19,10 +19,10 @@ class AppActionIntent extends Intent {
   Future<void> handle(BuildContext? context, WidgetRef ref) async {
     switch (type) {
       case AppAction.closeFullScreen:
-        await ref.read(windowStateNotifierProvider.notifier).requestWindowState(isFullscreen: false);
+        await ref.read(windowStateProvider.notifier).requestWindowState(isFullscreen: false);
         break;
       case AppAction.toggleFullScreen:
-        await ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen();
+        await ref.read(windowStateProvider.notifier).requestToggleFullScreen();
         break;
     }
   }

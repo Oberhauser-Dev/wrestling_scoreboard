@@ -66,7 +66,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             }
                             final navigator = Navigator.of(context);
                             await ref
-                                .read(userNotifierProvider.notifier)
+                                .read(userProvider.notifier)
                                 .signUp(
                                   User(
                                     email: _email,

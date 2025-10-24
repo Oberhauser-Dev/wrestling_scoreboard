@@ -18,7 +18,7 @@ class OrganizationEdit extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LoadingBuilder(
-      future: ref.read(orgAuthNotifierProvider.notifier).getByOrganization(organization?.id),
+      future: ref.read(orgAuthProvider.notifier).getByOrganization(organization?.id),
       builder: (context, authService) {
         return _OrganizationEdit(
           organization: organization,
@@ -98,8 +98,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
           allowEmpty: true,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableOrganizations ??=
-                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+            _availableOrganizations ??= await (await ref.read(dataManagerProvider)).readMany<Organization, Null>();
             return _availableOrganizations!.toList();
           },
         ),
@@ -168,7 +167,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
     }
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final dataManager = await ref.read(dataManagerNotifierProvider);
+      final dataManager = await ref.read(dataManagerProvider);
       // Need to update the organization before validating the credentials, as the API provider has to be set
       await dataManager.createOrUpdateSingle(
         Organization(
@@ -196,10 +195,10 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
             setState(() => _areCredentialsValid = false);
             return;
           }
-          await ref.read(orgAuthNotifierProvider.notifier).addOrgAuthService(widget.organization!.id!, authService);
+          await ref.read(orgAuthProvider.notifier).addOrgAuthService(widget.organization!.id!, authService);
         } else if (widget.initialAuthService != null) {
           // Delete credentials if they already existed
-          await ref.read(orgAuthNotifierProvider.notifier).removeOrgAuthService(widget.organization!.id!);
+          await ref.read(orgAuthProvider.notifier).removeOrgAuthService(widget.organization!.id!);
         }
       }
       navigator.pop();

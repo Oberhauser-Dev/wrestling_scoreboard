@@ -50,7 +50,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
               }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableTeams ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Team, Null>();
+            _availableTeams ??= await (await ref.read(dataManagerProvider)).readMany<Team, Null>();
             return _availableTeams!.toList();
           },
         ),
@@ -67,7 +67,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
               }),
           itemAsString: (l) => '${l.fullname}, ${l.startDate.year}',
           asyncItems: (String filter) async {
-            _availableLeagues ??= await (await ref.read(dataManagerNotifierProvider)).readMany<League, Null>();
+            _availableLeagues ??= await (await ref.read(dataManagerProvider)).readMany<League, Null>();
             return _availableLeagues!.toList();
           },
         ),
@@ -89,7 +89,7 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       await (await ref.read(
-        dataManagerNotifierProvider,
+        dataManagerProvider,
       )).createOrUpdateSingle(LeagueTeamParticipation(id: widget.participation?.id, team: _team!, league: _league!));
       navigator.pop();
     }

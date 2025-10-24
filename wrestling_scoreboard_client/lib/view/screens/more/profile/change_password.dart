@@ -51,10 +51,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                             if (_password != _passwordAgain) {
                               throw Exception('Passwords must match!');
                             }
-                            final user = await ref.read(userNotifierProvider);
+                            final user = await ref.read(userProvider);
                             if (user != null) {
                               await ref
-                                  .read(userNotifierProvider.notifier)
+                                  .read(userProvider.notifier)
                                   .updateUser(user: user.copyWith(password: _password));
                             }
                             if (context.mounted) Navigator.of(context).pop();

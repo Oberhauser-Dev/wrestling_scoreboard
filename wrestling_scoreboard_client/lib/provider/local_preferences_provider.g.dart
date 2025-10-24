@@ -6,9 +6,12 @@ part of 'local_preferences_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Null value represents the system locale `Platform.localeName`.
+
 @ProviderFor(LocaleNotifier)
-const localeNotifierProvider = LocaleNotifierProvider._();
+const localeProvider = LocaleNotifierProvider._();
 
 /// Null value represents the system locale `Platform.localeName`.
 final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw<Future<Locale?>>> {
@@ -18,7 +21,7 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
         from: null,
         argument: null,
         retry: null,
-        name: r'localeNotifierProvider',
+        name: r'localeProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -38,6 +41,8 @@ final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw
 }
 
 String _$localeNotifierHash() => r'bb11642ed6d1ecce845d2d6f67b79020c8d3ec70';
+
+/// Null value represents the system locale `Platform.localeName`.
 
 abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
@@ -59,7 +64,7 @@ abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
 }
 
 @ProviderFor(ThemeModeNotifier)
-const themeModeNotifierProvider = ThemeModeNotifierProvider._();
+const themeModeProvider = ThemeModeNotifierProvider._();
 
 final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifier, Raw<Future<ThemeMode>>> {
   const ThemeModeNotifierProvider._()
@@ -67,7 +72,7 @@ final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifie
         from: null,
         argument: null,
         retry: null,
-        name: r'themeModeNotifierProvider',
+        name: r'themeModeProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -108,7 +113,7 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
 }
 
 @ProviderFor(FontFamilyNotifier)
-const fontFamilyNotifierProvider = FontFamilyNotifierProvider._();
+const fontFamilyProvider = FontFamilyNotifierProvider._();
 
 final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotifier, Raw<Future<String?>>> {
   const FontFamilyNotifierProvider._()
@@ -116,7 +121,7 @@ final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotif
         from: null,
         argument: null,
         retry: null,
-        name: r'fontFamilyNotifierProvider',
+        name: r'fontFamilyProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -157,7 +162,7 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
 }
 
 @ProviderFor(WebSocketUrlNotifier)
-const webSocketUrlNotifierProvider = WebSocketUrlNotifierProvider._();
+const webSocketUrlProvider = WebSocketUrlNotifierProvider._();
 
 final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlNotifier, Raw<Future<String>>> {
   const WebSocketUrlNotifierProvider._()
@@ -165,7 +170,7 @@ final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlN
         from: null,
         argument: null,
         retry: null,
-        name: r'webSocketUrlNotifierProvider',
+        name: r'webSocketUrlProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -207,8 +212,9 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
 
 /// The url used to host the client for web. This can be unset.
 /// It is used for sharing the web url on native platforms.
+
 @ProviderFor(WebClientUrlNotifier)
-const webClientUrlNotifierProvider = WebClientUrlNotifierProvider._();
+const webClientUrlProvider = WebClientUrlNotifierProvider._();
 
 /// The url used to host the client for web. This can be unset.
 /// It is used for sharing the web url on native platforms.
@@ -220,7 +226,7 @@ final class WebClientUrlNotifierProvider extends $NotifierProvider<WebClientUrlN
         from: null,
         argument: null,
         retry: null,
-        name: r'webClientUrlNotifierProvider',
+        name: r'webClientUrlProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -240,6 +246,9 @@ final class WebClientUrlNotifierProvider extends $NotifierProvider<WebClientUrlN
 }
 
 String _$webClientUrlNotifierHash() => r'defe83fe084e8c4f5faa2eb219ad1393bc5b2f0b';
+
+/// The url used to host the client for web. This can be unset.
+/// It is used for sharing the web url on native platforms.
 
 abstract class _$WebClientUrlNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
@@ -261,7 +270,7 @@ abstract class _$WebClientUrlNotifier extends $Notifier<Raw<Future<String?>>> {
 }
 
 @ProviderFor(NetworkTimeoutNotifier)
-const networkTimeoutNotifierProvider = NetworkTimeoutNotifierProvider._();
+const networkTimeoutProvider = NetworkTimeoutNotifierProvider._();
 
 final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTimeoutNotifier, Raw<Future<Duration>>> {
   const NetworkTimeoutNotifierProvider._()
@@ -269,7 +278,7 @@ final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTime
         from: null,
         argument: null,
         retry: null,
-        name: r'networkTimeoutNotifierProvider',
+        name: r'networkTimeoutProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -310,7 +319,7 @@ abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>>
 }
 
 @ProviderFor(ApiUrlNotifier)
-const apiUrlNotifierProvider = ApiUrlNotifierProvider._();
+const apiUrlProvider = ApiUrlNotifierProvider._();
 
 final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw<Future<String>>> {
   const ApiUrlNotifierProvider._()
@@ -318,7 +327,7 @@ final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw
         from: null,
         argument: null,
         retry: null,
-        name: r'apiUrlNotifierProvider',
+        name: r'apiUrlProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -359,7 +368,7 @@ abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
 }
 
 @ProviderFor(AppDataDirectoryNotifier)
-const appDataDirectoryNotifierProvider = AppDataDirectoryNotifierProvider._();
+const appDataDirectoryProvider = AppDataDirectoryNotifierProvider._();
 
 final class AppDataDirectoryNotifierProvider extends $NotifierProvider<AppDataDirectoryNotifier, Raw<Future<String?>>> {
   const AppDataDirectoryNotifierProvider._()
@@ -367,7 +376,7 @@ final class AppDataDirectoryNotifierProvider extends $NotifierProvider<AppDataDi
         from: null,
         argument: null,
         retry: null,
-        name: r'appDataDirectoryNotifierProvider',
+        name: r'appDataDirectoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -408,7 +417,7 @@ abstract class _$AppDataDirectoryNotifier extends $Notifier<Raw<Future<String?>>
 }
 
 @ProviderFor(BellSoundNotifier)
-const bellSoundNotifierProvider = BellSoundNotifierProvider._();
+const bellSoundProvider = BellSoundNotifierProvider._();
 
 final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifier, Raw<Future<String>>> {
   const BellSoundNotifierProvider._()
@@ -416,7 +425,7 @@ final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifie
         from: null,
         argument: null,
         retry: null,
-        name: r'bellSoundNotifierProvider',
+        name: r'bellSoundProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -457,7 +466,7 @@ abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
 }
 
 @ProviderFor(TimeCountDownNotifier)
-const timeCountDownNotifierProvider = TimeCountDownNotifierProvider._();
+const timeCountDownProvider = TimeCountDownNotifierProvider._();
 
 final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDownNotifier, Raw<Future<bool>>> {
   const TimeCountDownNotifierProvider._()
@@ -465,7 +474,7 @@ final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDow
         from: null,
         argument: null,
         retry: null,
-        name: r'timeCountDownNotifierProvider',
+        name: r'timeCountDownProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -506,7 +515,7 @@ abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
 }
 
 @ProviderFor(FavoritesNotifier)
-const favoritesNotifierProvider = FavoritesNotifierProvider._();
+const favoritesProvider = FavoritesNotifierProvider._();
 
 final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> {
   const FavoritesNotifierProvider._()
@@ -514,7 +523,7 @@ final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifie
         from: null,
         argument: null,
         retry: null,
-        name: r'favoritesNotifierProvider',
+        name: r'favoritesProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -558,7 +567,7 @@ abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<
 }
 
 @ProviderFor(OrgAuthNotifier)
-const orgAuthNotifierProvider = OrgAuthNotifierProvider._();
+const orgAuthProvider = OrgAuthNotifierProvider._();
 
 final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> {
   const OrgAuthNotifierProvider._()
@@ -566,7 +575,7 @@ final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, R
         from: null,
         argument: null,
         retry: null,
-        name: r'orgAuthNotifierProvider',
+        name: r'orgAuthProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -610,7 +619,7 @@ abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthServi
 }
 
 @ProviderFor(ProposeApiImportDurationNotifier)
-const proposeApiImportDurationNotifierProvider = ProposeApiImportDurationNotifierProvider._();
+const proposeApiImportDurationProvider = ProposeApiImportDurationNotifierProvider._();
 
 final class ProposeApiImportDurationNotifierProvider
     extends $NotifierProvider<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> {
@@ -619,7 +628,7 @@ final class ProposeApiImportDurationNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'proposeApiImportDurationNotifierProvider',
+        name: r'proposeApiImportDurationProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -660,7 +669,7 @@ abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<D
 }
 
 @ProviderFor(JwtNotifier)
-const jwtNotifierProvider = JwtNotifierProvider._();
+const jwtProvider = JwtNotifierProvider._();
 
 final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Future<String?>>> {
   const JwtNotifierProvider._()
@@ -668,7 +677,7 @@ final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Futur
         from: null,
         argument: null,
         retry: null,
-        name: r'jwtNotifierProvider',
+        name: r'jwtProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -709,7 +718,7 @@ abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
 }
 
 @ProviderFor(BackupEnabledNotifier)
-const backupEnabledNotifierProvider = BackupEnabledNotifierProvider._();
+const backupEnabledProvider = BackupEnabledNotifierProvider._();
 
 final class BackupEnabledNotifierProvider extends $NotifierProvider<BackupEnabledNotifier, Raw<Future<bool>>> {
   const BackupEnabledNotifierProvider._()
@@ -717,16 +726,16 @@ final class BackupEnabledNotifierProvider extends $NotifierProvider<BackupEnable
         from: null,
         argument: null,
         retry: null,
-        name: r'backupEnabledNotifierProvider',
+        name: r'backupEnabledProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[userNotifierProvider],
+        dependencies: const <ProviderOrFamily>[userProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           BackupEnabledNotifierProvider.$allTransitiveDependencies0,
           BackupEnabledNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = userNotifierProvider;
+  static const $allTransitiveDependencies0 = userProvider;
   static const $allTransitiveDependencies1 = UserNotifierProvider.$allTransitiveDependencies0;
 
   @override
@@ -742,7 +751,7 @@ final class BackupEnabledNotifierProvider extends $NotifierProvider<BackupEnable
   }
 }
 
-String _$backupEnabledNotifierHash() => r'bc2faaf1b770ffe556e934d833b20225fc868f5f';
+String _$backupEnabledNotifierHash() => r'f2cfad13ab1483b8e71b40b6792df400ebfdd21c';
 
 abstract class _$BackupEnabledNotifier extends $Notifier<Raw<Future<bool>>> {
   Raw<Future<bool>> build();
@@ -764,7 +773,7 @@ abstract class _$BackupEnabledNotifier extends $Notifier<Raw<Future<bool>>> {
 }
 
 @ProviderFor(BackupRulesNotifier)
-const backupRulesNotifierProvider = BackupRulesNotifierProvider._();
+const backupRulesProvider = BackupRulesNotifierProvider._();
 
 final class BackupRulesNotifierProvider extends $NotifierProvider<BackupRulesNotifier, Raw<Future<List<BackupRule>>>> {
   const BackupRulesNotifierProvider._()
@@ -772,9 +781,9 @@ final class BackupRulesNotifierProvider extends $NotifierProvider<BackupRulesNot
         from: null,
         argument: null,
         retry: null,
-        name: r'backupRulesNotifierProvider',
+        name: r'backupRulesProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[backupEnabledNotifierProvider],
+        dependencies: const <ProviderOrFamily>[backupEnabledProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           BackupRulesNotifierProvider.$allTransitiveDependencies0,
           BackupRulesNotifierProvider.$allTransitiveDependencies1,
@@ -782,7 +791,7 @@ final class BackupRulesNotifierProvider extends $NotifierProvider<BackupRulesNot
         ],
       );
 
-  static const $allTransitiveDependencies0 = backupEnabledNotifierProvider;
+  static const $allTransitiveDependencies0 = backupEnabledProvider;
   static const $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
 
@@ -799,7 +808,7 @@ final class BackupRulesNotifierProvider extends $NotifierProvider<BackupRulesNot
   }
 }
 
-String _$backupRulesNotifierHash() => r'1cc55e5e6b59bb303efe891114a2732ab9bd20aa';
+String _$backupRulesNotifierHash() => r'cb975cde195d90959a5b8010e608a7faaa099959';
 
 abstract class _$BackupRulesNotifier extends $Notifier<Raw<Future<List<BackupRule>>>> {
   Raw<Future<List<BackupRule>>> build();
@@ -819,6 +828,3 @@ abstract class _$BackupRulesNotifier extends $Notifier<Raw<Future<List<BackupRul
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -35,7 +35,7 @@ class ActionsWidget extends ConsumerWidget {
     final double padding = width / 100;
 
     return LoadingBuilder<bool>(
-      future: ref.watch(timeCountDownNotifierProvider),
+      future: ref.watch(timeCountDownProvider),
       builder: (context, isTimeCountDown) {
         return SingleChildScrollView(
           reverse: true,

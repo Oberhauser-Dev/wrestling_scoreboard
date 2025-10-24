@@ -6,8 +6,11 @@ part of 'audio_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(BellPlayerNotifier)
-const bellPlayerNotifierProvider = BellPlayerNotifierProvider._();
+const bellPlayerProvider = BellPlayerNotifierProvider._();
 
 final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotifier, Raw<Future<AudioPlayer>>> {
   const BellPlayerNotifierProvider._()
@@ -15,7 +18,7 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
         from: null,
         argument: null,
         retry: null,
-        name: r'bellPlayerNotifierProvider',
+        name: r'bellPlayerProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -34,7 +37,7 @@ final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotif
   }
 }
 
-String _$bellPlayerNotifierHash() => r'629ce6a4cd9db09a0250a179cd31607a10216d97';
+String _$bellPlayerNotifierHash() => r'468bb0885278f98b9ebd49ea66b7c261c1249a15';
 
 abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> {
   Raw<Future<AudioPlayer>> build();
@@ -54,6 +57,3 @@ abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> 
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

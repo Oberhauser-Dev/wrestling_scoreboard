@@ -65,8 +65,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableOrganizations ??=
-                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+            _availableOrganizations ??= await (await ref.read(dataManagerProvider)).readMany<Organization, Null>();
             return _availableOrganizations!.toList();
           },
         ),
@@ -94,7 +93,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
         no: _no,
         organization: _organization!,
       );
-      club = club.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(club));
+      club = club.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(club));
       if (widget.onCreated != null) {
         await widget.onCreated!(club);
       }

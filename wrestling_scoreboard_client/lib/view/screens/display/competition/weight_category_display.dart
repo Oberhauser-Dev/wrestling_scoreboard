@@ -62,10 +62,10 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
         //       final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
         //         ManyProviderData<BoutAction, Bout>(filterObject: competitionBout.bout),
         //       ).future);
-        //       // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: competitionBout.bout);
+        //       // final boutActions = await (await ref.read(dataManagerProvider)).readMany<BoutAction, Bout>(filterObject: competitionBout.bout);
         //       return MapEntry(competitionBout, boutActions);
         //     })));
-        //     final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+        //     final isTimeCountDown = await ref.read(timeCountDownProvider);
         //
         //     final homeParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, TeamLineup>(
         //       ManyProviderData<CompetitionParticipation, TeamLineup>(filterObject: competition.home),

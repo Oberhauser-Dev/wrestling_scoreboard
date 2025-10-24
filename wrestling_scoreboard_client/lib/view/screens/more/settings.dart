@@ -68,9 +68,9 @@ class CustomSettingsScreen extends ConsumerWidget {
 
     Future<(Locale?, ThemeMode, String?)> loadGeneralSettings() async {
       final results = await Future.wait([
-        ref.watch(localeNotifierProvider),
-        ref.watch(themeModeNotifierProvider),
-        ref.watch(fontFamilyNotifierProvider),
+        ref.watch(localeProvider),
+        ref.watch(themeModeProvider),
+        ref.watch(fontFamilyProvider),
       ]);
 
       return (results[0] as Locale?, results[1] as ThemeMode, results[2] as String?);
@@ -78,10 +78,10 @@ class CustomSettingsScreen extends ConsumerWidget {
 
     Future<(Duration, String, String, String?)> loadNetworkSettings() async {
       final results = await Future.wait([
-        ref.watch(networkTimeoutNotifierProvider),
-        ref.watch(apiUrlNotifierProvider),
-        ref.watch(webSocketUrlNotifierProvider),
-        ref.watch(webClientUrlNotifierProvider),
+        ref.watch(networkTimeoutProvider),
+        ref.watch(apiUrlProvider),
+        ref.watch(webSocketUrlProvider),
+        ref.watch(webClientUrlProvider),
       ]);
 
       return (results[0] as Duration, results[1] as String, results[2] as String, results[3] as String?);
@@ -101,13 +101,13 @@ class CustomSettingsScreen extends ConsumerWidget {
                 action: TextButton(
                   onPressed: () async {
                     locale = null;
-                    await ref.read(localeNotifierProvider.notifier).setState(locale);
+                    await ref.read(localeProvider.notifier).setState(locale);
 
                     themeMode = ThemeMode.system;
-                    await ref.read(themeModeNotifierProvider.notifier).setState(themeMode);
+                    await ref.read(themeModeProvider.notifier).setState(themeMode);
 
                     const defaultFontFamily = 'Roboto';
-                    await ref.read(fontFamilyNotifierProvider.notifier).setState(defaultFontFamily);
+                    await ref.read(fontFamilyProvider.notifier).setState(defaultFontFamily);
                   },
                   child: Text(localizations.reset),
                 ),
@@ -126,7 +126,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         context: context,
                         initialValue: locale,
                         values: languageSettingValues,
-                        onSuccess: (value) => ref.read(localeNotifierProvider.notifier).setState(value),
+                        onSuccess: (value) => ref.read(localeProvider.notifier).setState(value),
                       );
                     },
                   ),
@@ -143,7 +143,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         context: context,
                         initialValue: themeMode,
                         values: themeModeValues,
-                        onSuccess: (value) => ref.read(themeModeNotifierProvider.notifier).setState(value),
+                        onSuccess: (value) => ref.read(themeModeProvider.notifier).setState(value),
                       );
                     },
                   ),
@@ -195,7 +195,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                             ),
                           );
                         },
-                        onSuccess: (value) => ref.read(fontFamilyNotifierProvider.notifier).setState(value),
+                        onSuccess: (value) => ref.read(fontFamilyProvider.notifier).setState(value),
                       );
                     },
                   ),
@@ -204,20 +204,20 @@ class CustomSettingsScreen extends ConsumerWidget {
             },
           ),
           LoadingBuilder<String>(
-            future: ref.watch(bellSoundNotifierProvider),
+            future: ref.watch(bellSoundProvider),
             builder: (context, bellSoundPath) {
               return LoadingBuilder<bool>(
-                future: ref.watch(timeCountDownNotifierProvider),
+                future: ref.watch(timeCountDownProvider),
                 builder: (context, isTimeCountDown) {
                   return SettingsSection(
                     title: localizations.scoreboard,
                     action: TextButton(
                       onPressed: () async {
                         bellSoundPath = Env.bellSoundPath.fromString();
-                        await ref.read(bellSoundNotifierProvider.notifier).setState(bellSoundPath);
+                        await ref.read(bellSoundProvider.notifier).setState(bellSoundPath);
 
                         isTimeCountDown = Env.timeCountDown.fromBool();
-                        await ref.read(timeCountDownNotifierProvider.notifier).setState(isTimeCountDown);
+                        await ref.read(timeCountDownProvider.notifier).setState(isTimeCountDown);
                       },
                       child: Text(localizations.reset),
                     ),
@@ -244,7 +244,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                 final ap = AudioPlayer();
                                 await ap.play(AssetSource(value));
                               },
-                              onSuccess: (value) => ref.read(bellSoundNotifierProvider.notifier).setState(value),
+                              onSuccess: (value) => ref.read(bellSoundProvider.notifier).setState(value),
                             );
                           }
                         },
@@ -254,7 +254,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         secondary: const Icon(Icons.timer),
                         value: isTimeCountDown,
                         onChanged: (val) async {
-                          await ref.read(timeCountDownNotifierProvider.notifier).setState(val);
+                          await ref.read(timeCountDownProvider.notifier).setState(val);
                         },
                       ),
                       // TODO option to overwrite boutConfigs
@@ -266,21 +266,19 @@ class CustomSettingsScreen extends ConsumerWidget {
             },
           ),
           LoadingBuilder<Duration>(
-            future: ref.watch(proposeApiImportDurationNotifierProvider),
+            future: ref.watch(proposeApiImportDurationProvider),
             builder: (context, proposeApiImportDuration) {
               return LoadingBuilder<String?>(
-                future: ref.watch(appDataDirectoryNotifierProvider),
+                future: ref.watch(appDataDirectoryProvider),
                 builder: (context, appDataDirectory) {
                   return SettingsSection(
                     title: localizations.services,
                     action: TextButton(
                       onPressed: () async {
                         proposeApiImportDuration = const Duration(days: 2);
-                        await ref
-                            .read(proposeApiImportDurationNotifierProvider.notifier)
-                            .setState(proposeApiImportDuration);
+                        await ref.read(proposeApiImportDurationProvider.notifier).setState(proposeApiImportDuration);
 
-                        await ref.read(appDataDirectoryNotifierProvider.notifier).resetState();
+                        await ref.read(appDataDirectoryProvider.notifier).resetState();
                       },
                       child: Text(localizations.reset),
                     ),
@@ -300,7 +298,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                               maxValue: const Duration(days: 365),
                             );
                             if (val != null) {
-                              await ref.read(proposeApiImportDurationNotifierProvider.notifier).setState(val);
+                              await ref.read(proposeApiImportDurationProvider.notifier).setState(val);
                             }
                           },
                         ),
@@ -314,7 +312,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                           onTap: () async {
                             final String? dirPath = await file_selector.getDirectoryPath();
                             if (dirPath != null) {
-                              await ref.read(appDataDirectoryNotifierProvider.notifier).setState(dirPath);
+                              await ref.read(appDataDirectoryProvider.notifier).setState(dirPath);
                             }
                           },
                           trailing:
@@ -340,19 +338,19 @@ class CustomSettingsScreen extends ConsumerWidget {
                 action: TextButton(
                   onPressed: () async {
                     const defaultNetworkTimeout = Duration(seconds: 10);
-                    await ref.read(networkTimeoutNotifierProvider.notifier).setState(defaultNetworkTimeout);
+                    await ref.read(networkTimeoutProvider.notifier).setState(defaultNetworkTimeout);
 
                     apiUrl = Env.apiUrl.fromString();
-                    await ref.read(apiUrlNotifierProvider.notifier).setState(apiUrl);
+                    await ref.read(apiUrlProvider.notifier).setState(apiUrl);
 
                     wsUrl = Env.webSocketUrl.fromString();
-                    await ref.read(webSocketUrlNotifierProvider.notifier).setState(wsUrl);
+                    await ref.read(webSocketUrlProvider.notifier).setState(wsUrl);
 
                     webClientUrl = Env.webClientUrl.fromString();
                     if (webClientUrl != null && webClientUrl!.isEmpty) {
                       webClientUrl = null;
                     }
-                    await ref.read(webClientUrlNotifierProvider.notifier).setState(webClientUrl);
+                    await ref.read(webClientUrlProvider.notifier).setState(webClientUrl);
                   },
                   child: Text(localizations.reset),
                 ),
@@ -369,7 +367,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         },
                       );
                       if (val != null) {
-                        await ref.read(apiUrlNotifierProvider.notifier).setState(val);
+                        await ref.read(apiUrlProvider.notifier).setState(val);
                       }
                     },
                   ),
@@ -385,7 +383,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         },
                       );
                       if (val != null) {
-                        await ref.read(webSocketUrlNotifierProvider.notifier).setState(val);
+                        await ref.read(webSocketUrlProvider.notifier).setState(val);
                       }
                     },
                   ),
@@ -401,7 +399,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                             return TextInputDialog(initialValue: webClientUrl);
                           },
                         );
-                        await ref.read(webClientUrlNotifierProvider.notifier).setState(val);
+                        await ref.read(webClientUrlProvider.notifier).setState(val);
                       },
                     ),
                   ListTile(
@@ -415,7 +413,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         maxValue: const Duration(hours: 1),
                       );
                       if (val != null) {
-                        await ref.read(networkTimeoutNotifierProvider.notifier).setState(val);
+                        await ref.read(networkTimeoutProvider.notifier).setState(val);
                       }
                     },
                   ),
@@ -436,7 +434,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                         context: context,
                         showSuccess: false,
                         runAsync: () async {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          final dataManager = await ref.read(dataManagerProvider);
                           final sqlString = await dataManager.exportDatabase();
                           await exportSQL(
                             fileBaseName:
@@ -458,7 +456,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                           acceptedTypeGroups: [typeGroup],
                         );
                         if (fileSelectorResult != null) {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          final dataManager = await ref.read(dataManagerProvider);
                           await dataManager.restoreDatabase(
                             await fileSelectorResult.readAsString(encoding: const Utf8Codec()),
                           );
@@ -480,7 +478,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                       await showLoadingDialog(
                         context: context,
                         runAsync: () async {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          final dataManager = await ref.read(dataManagerProvider);
                           await dataManager.resetDatabase();
                           _invalidateProviders(ref);
                         },
@@ -500,7 +498,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                       await showLoadingDialog(
                         context: context,
                         runAsync: () async {
-                          final dataManager = await ref.read(dataManagerNotifierProvider);
+                          final dataManager = await ref.read(dataManagerProvider);
                           await dataManager.restoreDefaultDatabase();
                           _invalidateProviders(ref);
                         },
@@ -511,10 +509,10 @@ class CustomSettingsScreen extends ConsumerWidget {
                 // Automatic Backup is not supported on web, as we cannot save it to the device
                 if (!kIsWeb)
                   LoadingBuilder<bool>(
-                    future: ref.watch(backupEnabledNotifierProvider),
+                    future: ref.watch(backupEnabledProvider),
                     builder: (context, isBackupEnabled) {
                       return LoadingBuilder<List<BackupRule>>(
-                        future: ref.watch(backupRulesNotifierProvider),
+                        future: ref.watch(backupRulesProvider),
                         builder: (context, backupRules) {
                           return ExpansionTile(
                             leading: const Icon(Icons.cloud_download),
@@ -522,7 +520,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                             trailing: Switch(
                               value: isBackupEnabled,
                               onChanged: (enableBackup) async {
-                                await ref.read(backupEnabledNotifierProvider.notifier).setState(enableBackup);
+                                await ref.read(backupEnabledProvider.notifier).setState(enableBackup);
                               },
                             ),
                             children: [
@@ -537,7 +535,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                     icon: Icon(Icons.delete),
                                     onPressed: () async {
                                       await ref
-                                          .read(backupRulesNotifierProvider.notifier)
+                                          .read(backupRulesProvider.notifier)
                                           .setState(backupRules.where((element) => element != backupRule).toList());
                                     },
                                   ),
@@ -548,7 +546,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                           (BuildContext context) => BackupRuleEditDialog(initialBackupRule: backupRule),
                                     );
                                     if (newBackupRule != null) {
-                                      await ref.read(backupRulesNotifierProvider.notifier).setState([
+                                      await ref.read(backupRulesProvider.notifier).setState([
                                         ...backupRules.where((element) => element != backupRule),
                                         newBackupRule,
                                       ]);
@@ -565,7 +563,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                                     builder: (BuildContext context) => BackupRuleEditDialog(),
                                   );
                                   if (newBackupRule != null) {
-                                    await ref.read(backupRulesNotifierProvider.notifier).setState([
+                                    await ref.read(backupRulesProvider.notifier).setState([
                                       ...backupRules,
                                       newBackupRule,
                                     ]);

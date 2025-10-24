@@ -37,8 +37,7 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
         final description = InfoWidget(
           obj: data,
           editPage: LeagueTeamParticipationEdit(participation: data),
-          onDelete:
-              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueTeamParticipation>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<LeagueTeamParticipation>(data),
           classLocale: localizations.team,
           children: [
             ContentItem(

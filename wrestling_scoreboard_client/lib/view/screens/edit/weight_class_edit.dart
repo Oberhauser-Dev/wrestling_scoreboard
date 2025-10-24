@@ -111,7 +111,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
         unit: _unit,
       );
       weightClass = weightClass.copyWithId(
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(weightClass),
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(weightClass),
       );
       await handleNested(weightClass);
       navigator.pop();

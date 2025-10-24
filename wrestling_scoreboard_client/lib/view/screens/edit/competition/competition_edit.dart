@@ -128,10 +128,10 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
       if (boutConfig == null) {
         boutConfig = Competition.defaultBoutConfig;
         boutConfig = boutConfig.copyWithId(
-          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(boutConfig),
+          await (await ref.read(dataManagerProvider)).createOrUpdateSingle(boutConfig),
         );
       }
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         Competition(
           id: widget.competition?.id,
           organization: widget.competition?.organization ?? widget.initialOrganization,

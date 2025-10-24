@@ -240,7 +240,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
                     await catchAsync(
                       context,
                       () async => (await ref.read(
-                        dataManagerNotifierProvider,
+                        dataManagerProvider,
                       )).createOrUpdateSingle(competitionBout.copyWith(mat: mat)),
                     );
                   },

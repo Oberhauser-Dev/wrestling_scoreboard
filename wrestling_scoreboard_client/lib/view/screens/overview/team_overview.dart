@@ -40,7 +40,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
         final description = InfoWidget(
           obj: team,
           editPage: TeamEdit(team: team),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Team>(team),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Team>(team),
           classLocale: localizations.team,
           children: [
             ContentItem(title: team.description ?? '-', subtitle: localizations.description, icon: Icons.subject),
@@ -74,7 +74,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                       initialOrganization: team.organization,
                       onCreated: (club) async {
                         await (await ref.read(
-                          dataManagerNotifierProvider,
+                          dataManagerProvider,
                         )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
                       },
                     ),

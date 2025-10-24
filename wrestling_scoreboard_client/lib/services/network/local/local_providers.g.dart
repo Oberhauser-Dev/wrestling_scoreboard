@@ -6,8 +6,11 @@ part of 'local_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(LocalWebsocketManagerNotifier)
-const localWebsocketManagerNotifierProvider = LocalWebsocketManagerNotifierProvider._();
+const localWebsocketManagerProvider = LocalWebsocketManagerNotifierProvider._();
 
 final class LocalWebsocketManagerNotifierProvider
     extends $NotifierProvider<LocalWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
@@ -16,15 +19,15 @@ final class LocalWebsocketManagerNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'localWebsocketManagerNotifierProvider',
+        name: r'localWebsocketManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
+        dependencies: const <ProviderOrFamily>[dataManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           LocalWebsocketManagerNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
+  static const $allTransitiveDependencies0 = dataManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$localWebsocketManagerNotifierHash();
@@ -39,7 +42,7 @@ final class LocalWebsocketManagerNotifierProvider
   }
 }
 
-String _$localWebsocketManagerNotifierHash() => r'507901095468cab49cd07f88c2a83036f8a56cd7';
+String _$localWebsocketManagerNotifierHash() => r'c1cf26f8783f8c4b526bb3b5fe64110862eb36b4';
 
 abstract class _$LocalWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
@@ -61,8 +64,9 @@ abstract class _$LocalWebsocketManagerNotifier extends $Notifier<Raw<Future<WebS
 }
 
 /// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
+
 @ProviderFor(LocalDataManagerNotifier)
-const localDataManagerNotifierProvider = LocalDataManagerNotifierProvider._();
+const localDataManagerProvider = LocalDataManagerNotifierProvider._();
 
 /// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 final class LocalDataManagerNotifierProvider
@@ -73,15 +77,15 @@ final class LocalDataManagerNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'localDataManagerNotifierProvider',
+        name: r'localDataManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[localDataNotifierProvider],
+        dependencies: const <ProviderOrFamily>[localDataProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           LocalDataManagerNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = localDataNotifierProvider;
+  static const $allTransitiveDependencies0 = localDataProvider;
 
   @override
   String debugGetCreateSourceHash() => _$localDataManagerNotifierHash();
@@ -96,7 +100,9 @@ final class LocalDataManagerNotifierProvider
   }
 }
 
-String _$localDataManagerNotifierHash() => r'def6b996a273dc8f705e5b089c7c836e36577ccb';
+String _$localDataManagerNotifierHash() => r'cd7b44d66cf608f2d4b90d9ea468b8999b9f4431';
+
+/// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 
 abstract class _$LocalDataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
@@ -118,7 +124,7 @@ abstract class _$LocalDataManagerNotifier extends $Notifier<Raw<Future<DataManag
 }
 
 @ProviderFor(LocalDataNotifier)
-const localDataNotifierProvider = LocalDataNotifierFamily._();
+const localDataProvider = LocalDataNotifierFamily._();
 
 final class LocalDataNotifierProvider<T extends DataObject>
     extends $NotifierProvider<LocalDataNotifier<T>, Raw<Future<List<Map<String, dynamic>>>>> {
@@ -126,7 +132,7 @@ final class LocalDataNotifierProvider<T extends DataObject>
     : super(
         argument: null,
         retry: null,
-        name: r'localDataNotifierProvider',
+        name: r'localDataProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -137,7 +143,7 @@ final class LocalDataNotifierProvider<T extends DataObject>
 
   @override
   String toString() {
-    return r'localDataNotifierProvider'
+    return r'localDataProvider'
         '<${T}>'
         '()';
   }
@@ -175,7 +181,7 @@ final class LocalDataNotifierFamily extends $Family {
   const LocalDataNotifierFamily._()
     : super(
         retry: null,
-        name: r'localDataNotifierProvider',
+        name: r'localDataProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: false,
@@ -184,7 +190,7 @@ final class LocalDataNotifierFamily extends $Family {
   LocalDataNotifierProvider<T> call<T extends DataObject>() => LocalDataNotifierProvider<T>._(from: this);
 
   @override
-  String toString() => r'localDataNotifierProvider';
+  String toString() => r'localDataProvider';
 
   /// {@macro riverpod.override_with}
   Override overrideWith(LocalDataNotifier<T> Function<T extends DataObject>() create) => $FamilyOverride(
@@ -232,6 +238,3 @@ abstract class _$LocalDataNotifier<T extends DataObject> extends $Notifier<Raw<F
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

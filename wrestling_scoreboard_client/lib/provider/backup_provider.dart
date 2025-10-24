@@ -9,12 +9,12 @@ part 'backup_provider.g.dart';
 class BackupNotifier extends _$BackupNotifier {
   @override
   Raw<Future<(String?, List<BackupRule>)>> build() async {
-    final backupEnabled = await ref.watch(backupEnabledNotifierProvider);
-    final appDataDir = await ref.watch(appDataDirectoryNotifierProvider);
+    final backupEnabled = await ref.watch(backupEnabledProvider);
+    final appDataDir = await ref.watch(appDataDirectoryProvider);
     if (!backupEnabled || appDataDir == null) return (null, <BackupRule>[]);
 
     final backupDir = path.join(appDataDir, 'backups');
-    final backupRules = await ref.watch(backupRulesNotifierProvider);
+    final backupRules = await ref.watch(backupRulesProvider);
     return (backupDir, backupRules);
   }
 }

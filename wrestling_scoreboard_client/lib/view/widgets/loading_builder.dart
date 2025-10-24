@@ -27,7 +27,7 @@ class LoadingBuilder<T> extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<T>(
       future: ref
-          .read(networkTimeoutNotifierProvider)
+          .read(networkTimeoutProvider)
           .then(
             (timeout) => future.timeout(
               timeout,

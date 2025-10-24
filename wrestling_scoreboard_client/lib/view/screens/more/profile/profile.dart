@@ -24,7 +24,7 @@ class ProfileScreen extends ConsumerWidget {
       body: ResponsiveScrollView(
         child: Card(
           child: LoadingBuilder<User?>(
-            future: ref.watch(userNotifierProvider),
+            future: ref.watch(userProvider),
             builder: (context, user) {
               if (user != null) {
                 return Column(
@@ -62,7 +62,7 @@ class ProfileScreen extends ConsumerWidget {
                       padding: const EdgeInsets.all(16),
                       child: ElevatedButton(
                         onPressed: () async {
-                          await ref.read(userNotifierProvider.notifier).signOut();
+                          await ref.read(userProvider.notifier).signOut();
                           if (context.mounted) Navigator.of(context).pop();
                         },
                         child: Text(localizations.auth_signOut),

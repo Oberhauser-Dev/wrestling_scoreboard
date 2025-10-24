@@ -60,11 +60,11 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                             if (result && context.mounted) {
                               // FIXME: Entity is not reset when leaving the scratch provider scope (#187)
                               // Only reset entities which are displayed, but keep e.g. BoutResultRules
-                              await ref.read(localDataNotifierProvider<BoutAction>().notifier).setState([]);
-                              await ref.read(localDataNotifierProvider<AthleteBoutState>().notifier).setState([]);
-                              await ref.read(localDataNotifierProvider<Bout>().notifier).setState([]);
-                              await ref.read(localDataNotifierProvider<ScratchBout>().notifier).setState([]);
-                              ref.invalidate(localDataNotifierProvider);
+                              await ref.read(localDataProvider<BoutAction>().notifier).setState([]);
+                              await ref.read(localDataProvider<AthleteBoutState>().notifier).setState([]);
+                              await ref.read(localDataProvider<Bout>().notifier).setState([]);
+                              await ref.read(localDataProvider<ScratchBout>().notifier).setState([]);
+                              ref.invalidate(localDataProvider);
 
                               // Invalidate stream providers
                               ref.invalidate(singleDataStreamProvider);

@@ -35,7 +35,7 @@ class DivisionWeightClassOverview extends ConsumerWidget with WeightClassOvervie
           ref,
           classLocale: localizations.weightClass,
           editPage: DivisionWeightClassEdit(divisionWeightClass: data, initialDivision: data.division),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<DivisionWeightClass>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<DivisionWeightClass>(data),
           tiles: [
             ContentItem(
               title: data.division.fullname,

@@ -6,8 +6,11 @@ part of 'app_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(WindowStateNotifier)
-const windowStateNotifierProvider = WindowStateNotifierProvider._();
+const windowStateProvider = WindowStateNotifierProvider._();
 
 final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNotifier, Raw<Future<WindowState>>> {
   const WindowStateNotifierProvider._()
@@ -15,7 +18,7 @@ final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNot
         from: null,
         argument: null,
         retry: null,
-        name: r'windowStateNotifierProvider',
+        name: r'windowStateProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -54,6 +57,3 @@ abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>>
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -60,7 +60,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
                       ).future,
                     );
 
-            final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+            final isTimeCountDown = await ref.read(timeCountDownProvider);
 
             final officials = await ref.readAsync(
               manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
@@ -91,8 +91,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           ref,
           classLocale: localizations.bout,
           editPage: TeamMatchBoutEdit(teamMatchBout: teamMatchBout, initialTeamMatch: teamMatchBout.teamMatch),
-          onDelete:
-              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchBout>(teamMatchBout),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatchBout>(teamMatchBout),
           tiles: [
             ContentItem(
               title: teamMatchBout.teamMatch.localize(context),

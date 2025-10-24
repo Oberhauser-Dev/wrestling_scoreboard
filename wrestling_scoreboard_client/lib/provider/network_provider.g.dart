@@ -6,9 +6,12 @@ part of 'network_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
+
 @ProviderFor(DataManagerNotifier)
-const dataManagerNotifierProvider = DataManagerNotifierProvider._();
+const dataManagerProvider = DataManagerNotifierProvider._();
 
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
 final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNotifier, Raw<Future<DataManager>>> {
@@ -18,7 +21,7 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
         from: null,
         argument: null,
         retry: null,
-        name: r'dataManagerNotifierProvider',
+        name: r'dataManagerProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[],
         $allTransitiveDependencies: const <ProviderOrFamily>[],
@@ -37,7 +40,9 @@ final class DataManagerNotifierProvider extends $NotifierProvider<DataManagerNot
   }
 }
 
-String _$dataManagerNotifierHash() => r'c8dea305a880328441dfe1ea59a319cba4065403';
+String _$dataManagerNotifierHash() => r'3bf51b57e7f2433b51072031b0594774a652a768';
+
+/// This provider can be scoped, so it can be overridden in a sub scope of the app.
 
 abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>> {
   Raw<Future<DataManager>> build();
@@ -59,8 +64,9 @@ abstract class _$DataManagerNotifier extends $Notifier<Raw<Future<DataManager>>>
 }
 
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
+
 @ProviderFor(WebSocketManagerNotifier)
-const webSocketManagerNotifierProvider = WebSocketManagerNotifierProvider._();
+const webSocketManagerProvider = WebSocketManagerNotifierProvider._();
 
 /// This provider can be scoped, so it can be overridden in a sub scope of the app.
 final class WebSocketManagerNotifierProvider
@@ -71,15 +77,15 @@ final class WebSocketManagerNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'webSocketManagerNotifierProvider',
+        name: r'webSocketManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
+        dependencies: const <ProviderOrFamily>[dataManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           WebSocketManagerNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
+  static const $allTransitiveDependencies0 = dataManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$webSocketManagerNotifierHash();
@@ -94,7 +100,9 @@ final class WebSocketManagerNotifierProvider
   }
 }
 
-String _$webSocketManagerNotifierHash() => r'b4f127bbe6fc7bfa3804d5af8a33ec0adb83f7f3';
+String _$webSocketManagerNotifierHash() => r'02871868abdcc1275854a6caf58370908b0168db';
+
+/// This provider can be scoped, so it can be overridden in a sub scope of the app.
 
 abstract class _$WebSocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
@@ -134,9 +142,9 @@ final class WebSocketStateStreamProvider
         name: r'webSocketStateStreamProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
-          webSocketManagerNotifierProvider,
-          localWebsocketManagerNotifierProvider,
-          mockWebsocketManagerNotifierProvider,
+          webSocketManagerProvider,
+          localWebsocketManagerProvider,
+          mockWebsocketManagerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           WebSocketStateStreamProvider.$allTransitiveDependencies0,
@@ -146,10 +154,10 @@ final class WebSocketStateStreamProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = webSocketManagerNotifierProvider;
+  static const $allTransitiveDependencies0 = webSocketManagerProvider;
   static const $allTransitiveDependencies1 = WebSocketManagerNotifierProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = localWebsocketManagerNotifierProvider;
-  static const $allTransitiveDependencies3 = mockWebsocketManagerNotifierProvider;
+  static const $allTransitiveDependencies2 = localWebsocketManagerProvider;
+  static const $allTransitiveDependencies3 = mockWebsocketManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$webSocketStateStreamHash();
@@ -165,7 +173,4 @@ final class WebSocketStateStreamProvider
   }
 }
 
-String _$webSocketStateStreamHash() => r'8c07bedb8f4026426f3b424dc5bcda22463de2c2';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+String _$webSocketStateStreamHash() => r'19dffbedc10ec4cf7ee774b404a5ebc11e89c89c';

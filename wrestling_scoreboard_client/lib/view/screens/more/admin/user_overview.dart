@@ -37,7 +37,7 @@ class UserOverview extends ConsumerWidget {
         final description = InfoWidget(
           obj: data,
           editPage: UserEdit(user: data),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<SecuredUser>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<SecuredUser>(data),
           classLocale: localizations.user,
           children: [
             ContentItem(title: data.username, subtitle: localizations.username, icon: Icons.person),

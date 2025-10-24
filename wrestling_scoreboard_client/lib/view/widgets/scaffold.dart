@@ -46,10 +46,10 @@ class WindowStateScaffold extends ConsumerWidget {
     final localizations = context.l10n;
     final alwaysShowAppBar = !hideAppBarOnFullscreen || isMobile;
     return LoadingBuilder<String?>(
-      future: ref.watch(webClientUrlNotifierProvider),
+      future: ref.watch(webClientUrlProvider),
       builder: (BuildContext context, String? webClientUrl) {
         return LoadingBuilder<WindowState>(
-          future: ref.watch(windowStateNotifierProvider),
+          future: ref.watch(windowStateProvider),
           builder: (BuildContext context, WindowState data) {
             final hideAppBar = data == WindowState.fullscreen;
             final appBar = AppBar(
@@ -78,7 +78,7 @@ class WindowStateScaffold extends ConsumerWidget {
                     if (isOnDesktop)
                       ResponsiveScaffoldActionItem(
                         icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
-                        onTap: () => ref.read(windowStateNotifierProvider.notifier).requestToggleFullScreen(),
+                        onTap: () => ref.read(windowStateProvider.notifier).requestToggleFullScreen(),
                         label: localizations.toggleFullscreen,
                       ),
                   ],
@@ -101,16 +101,12 @@ class WindowStateScaffold extends ConsumerWidget {
                               onEnter: (event) async {
                                 if (data == WindowState.fullscreenAppbar) {
                                   // Also call onEnter, to ensure AppBar is not disappearing when exiting and entering it again.
-                                  await ref
-                                      .read(windowStateNotifierProvider.notifier)
-                                      .setFullscreenState(showAppbar: true);
+                                  await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: true);
                                 }
                               },
                               onExit: (event) async {
                                 if (data == WindowState.fullscreenAppbar) {
-                                  await ref
-                                      .read(windowStateNotifierProvider.notifier)
-                                      .setFullscreenState(showAppbar: false);
+                                  await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: false);
                                 }
                               },
                               child: appBar,
@@ -125,7 +121,7 @@ class WindowStateScaffold extends ConsumerWidget {
                     cursor: SystemMouseCursors.allScroll,
                     child: Container(height: 1),
                     onEnter: (event) async {
-                      await ref.read(windowStateNotifierProvider.notifier).setFullscreenState(showAppbar: true);
+                      await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: true);
                     },
                     // On Exit is called via the AppBar, to ensure AppBar is not disappearing, if still pointing to it.
                   ),

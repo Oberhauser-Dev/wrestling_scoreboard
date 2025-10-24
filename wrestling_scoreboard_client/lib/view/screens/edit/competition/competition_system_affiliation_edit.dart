@@ -98,7 +98,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
         maxContestants: _maxContestants,
         poolGroupCount: _poolGroupCount,
       );
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(csa);
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(csa);
       navigator.pop();
     }
   }

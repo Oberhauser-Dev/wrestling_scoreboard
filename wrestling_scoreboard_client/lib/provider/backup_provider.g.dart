@@ -6,8 +6,11 @@ part of 'backup_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(BackupNotifier)
-const backupNotifierProvider = BackupNotifierProvider._();
+const backupProvider = BackupNotifierProvider._();
 
 final class BackupNotifierProvider extends $NotifierProvider<BackupNotifier, Raw<Future<(String?, List<BackupRule>)>>> {
   const BackupNotifierProvider._()
@@ -15,9 +18,9 @@ final class BackupNotifierProvider extends $NotifierProvider<BackupNotifier, Raw
         from: null,
         argument: null,
         retry: null,
-        name: r'backupNotifierProvider',
+        name: r'backupProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[backupEnabledNotifierProvider, backupRulesNotifierProvider],
+        dependencies: const <ProviderOrFamily>[backupEnabledProvider, backupRulesProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           BackupNotifierProvider.$allTransitiveDependencies0,
           BackupNotifierProvider.$allTransitiveDependencies1,
@@ -26,10 +29,10 @@ final class BackupNotifierProvider extends $NotifierProvider<BackupNotifier, Raw
         },
       );
 
-  static const $allTransitiveDependencies0 = backupEnabledNotifierProvider;
+  static const $allTransitiveDependencies0 = backupEnabledProvider;
   static const $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = backupRulesNotifierProvider;
+  static const $allTransitiveDependencies3 = backupRulesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$backupNotifierHash();
@@ -47,7 +50,7 @@ final class BackupNotifierProvider extends $NotifierProvider<BackupNotifier, Raw
   }
 }
 
-String _$backupNotifierHash() => r'dd909def398fd500bfd61a3fd42de9baf589a38c';
+String _$backupNotifierHash() => r'6156ee67da3a49d1d1430f1b676412adeabedb5a';
 
 abstract class _$BackupNotifier extends $Notifier<Raw<Future<(String?, List<BackupRule>)>>> {
   Raw<Future<(String?, List<BackupRule>)>> build();
@@ -67,6 +70,3 @@ abstract class _$BackupNotifier extends $Notifier<Raw<Future<(String?, List<Back
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

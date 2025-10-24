@@ -73,8 +73,7 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
-            _availableOrganizations ??=
-                await (await ref.read(dataManagerNotifierProvider)).readMany<Organization, Null>();
+            _availableOrganizations ??= await (await ref.read(dataManagerProvider)).readMany<Organization, Null>();
             return _availableOrganizations!.toList();
           },
         ),
@@ -103,7 +102,7 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
         maxAge: _maxAge!,
         organization: _organization!,
       );
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(ageCategory);
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(ageCategory);
       navigator.pop();
     }
   }

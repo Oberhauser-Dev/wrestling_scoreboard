@@ -16,7 +16,7 @@ part 'local_providers.g.dart';
 class LocalWebsocketManagerNotifier extends _$LocalWebsocketManagerNotifier implements WebSocketManagerNotifier {
   @override
   Raw<Future<WebSocketManager>> build() async {
-    final dataManager = await ref.watch(dataManagerNotifierProvider);
+    final dataManager = await ref.watch(dataManagerProvider);
     final webSocketManager = LocalWebSocketManager(dataManager);
     dataManager.webSocketManager = webSocketManager;
     return webSocketManager;
@@ -29,8 +29,8 @@ class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements Dat
   @override
   Raw<Future<DataManager>> build() async {
     return LocalDataManager(
-      <T extends DataObject>() => ref.read(localDataNotifierProvider<T>().notifier),
-      <T extends DataObject>() async => await ref.read(localDataNotifierProvider<T>()),
+      <T extends DataObject>() => ref.read(localDataProvider<T>().notifier),
+      <T extends DataObject>() async => await ref.read(localDataProvider<T>()),
     );
   }
 }

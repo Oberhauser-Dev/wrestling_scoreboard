@@ -143,7 +143,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
         gender: _gender,
         nationality: _nationality,
       );
-      person = person.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(person));
+      person = person.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(person));
       await handleNested(person);
       await widget.onCreated?.call(person);
       navigator.pop();

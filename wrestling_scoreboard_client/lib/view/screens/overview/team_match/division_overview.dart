@@ -44,7 +44,7 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
           obj: division,
           editPage: DivisionEdit(division: division),
           onDelete: () async {
-            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<Division>(division);
+            await (await ref.read(dataManagerProvider)).deleteSingle<Division>(division);
             if (context.mounted) await super.onDelete(context, ref, single: division.boutConfig);
           },
           classLocale: localizations.division,

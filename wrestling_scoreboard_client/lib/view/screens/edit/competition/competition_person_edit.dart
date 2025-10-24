@@ -62,7 +62,7 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<Person, Organization>(filterObject: widget.initialOrganization);
             return _availablePersons!.toList();
           },
@@ -82,7 +82,7 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableCompetitions ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<Competition, Organization>(filterObject: widget.initialOrganization);
             return _availableCompetitions!.toList();
           },
@@ -117,7 +117,7 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         CompetitionPerson(
           id: widget.competitionPerson?.id,
           person: _person!,

@@ -173,7 +173,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       bout = bout.copyWith(duration: event);
 
       // Save time to database on each stop
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout);
     });
     mainStopwatch.boutStopwatch.onAdd.stream.listen((event) {
       _r.activityStopwatch?.add(event);
@@ -240,9 +240,8 @@ class BoutState extends ConsumerState<BoutScreen> {
           currentStopwatch: mainStopwatch.stopwatch,
           boutStopwatch: mainStopwatch.boutStopwatch,
           navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
-          createOrUpdateAction:
-              (action) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
-          deleteAction: (action) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle(action),
+          createOrUpdateAction: (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
+          deleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
         ),
       );
     }
@@ -348,7 +347,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         }
         break;
       case BoutScreenActions.horn:
-        ref.read(bellPlayerNotifierProvider).then((player) async {
+        ref.read(bellPlayerProvider).then((player) async {
           await player.stop();
           await player.resume();
         });
@@ -376,7 +375,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       label: localizations.print,
       icon: const Icon(Icons.print),
       onTap: () async {
-        final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+        final isTimeCountDown = await ref.read(timeCountDownProvider);
         final actions = await ref.readAsync(
           manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
         );
@@ -403,9 +402,8 @@ class BoutState extends ConsumerState<BoutScreen> {
         await save();
       },
       child: BoutActionHandler(
-        createOrUpdateAction:
-            (action) async => (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
-        deleteAction: (action) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle(action),
+        createOrUpdateAction: (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
+        deleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
         getCurrentStopwatch: () => mainStopwatch.stopwatch,
         boutStopwatch: mainStopwatch.boutStopwatch,
         getActions:
@@ -522,11 +520,9 @@ class BoutState extends ConsumerState<BoutScreen> {
                       return ActionsWidget(
                         actions,
                         boutConfig: boutConfig,
-                        onDeleteAction:
-                            (action) async => (await ref.read(dataManagerNotifierProvider)).deleteSingle(action),
+                        onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
                         onCreateOrUpdateAction:
-                            (action) async =>
-                                (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(action),
+                            (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
                       );
                     },
                   ),
@@ -551,7 +547,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     mainStopwatch.breakStopwatch.dispose();
 
     // Save time to database when dispose
-    await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout);
+    await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout);
   }
 }
 
