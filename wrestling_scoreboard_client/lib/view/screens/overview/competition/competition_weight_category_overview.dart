@@ -48,7 +48,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
           ),
           onDelete:
               () async => (await ref.read(
-                dataManagerNotifierProvider,
+                dataManagerProvider,
               )).deleteSingle<CompetitionWeightCategory>(competitionWeightCategory),
           classLocale: localizations.weightCategory,
           children: [
@@ -149,7 +149,7 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
     NavigatorState navigator,
     CompetitionWeightCategory weightCategory,
   ) async {
-    final dataManager = await ref.read(dataManagerNotifierProvider);
+    final dataManager = await ref.read(dataManagerProvider);
     // TODO: set isReset to false, when more general approach to generate bouts is available
     await dataManager.generateBouts<CompetitionWeightCategory>(weightCategory, true);
   }

@@ -85,7 +85,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
   @override
   Widget build(BuildContext context) {
     return LoadingBuilder<bool>(
-      future: ref.watch(timeCountDownNotifierProvider),
+      future: ref.watch(timeCountDownProvider),
       builder: (context, isTimeCountDown) {
         Duration adjustedTime() => _currentTime.invertIf(isTimeCountDown, max: widget.maxDuration);
         return GestureDetector(

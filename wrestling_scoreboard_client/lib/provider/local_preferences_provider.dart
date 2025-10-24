@@ -326,7 +326,7 @@ class BackupEnabledNotifier extends _$BackupEnabledNotifier {
   @override
   Raw<Future<bool>> build() async {
     // Enable by default
-    final user = await ref.watch(userNotifierProvider);
+    final user = await ref.watch(userProvider);
     if (user == null || user.privilege < UserPrivilege.admin) return false;
     return await Preferences.getBool(Preferences.keyBackupEnabled) ?? !kIsWeb;
   }
@@ -341,7 +341,7 @@ class BackupEnabledNotifier extends _$BackupEnabledNotifier {
 class BackupRulesNotifier extends _$BackupRulesNotifier {
   @override
   Raw<Future<List<BackupRule>>> build() async {
-    final enabled = await ref.watch(backupEnabledNotifierProvider);
+    final enabled = await ref.watch(backupEnabledProvider);
     final rules =
         ((await Preferences.getStringList(Preferences.keyBackupRules)) ?? [])
             .map((e) => BackupRule.fromJson(jsonDecode(e)))

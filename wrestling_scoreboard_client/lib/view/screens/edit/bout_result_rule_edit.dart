@@ -141,7 +141,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
           allowEmpty: false,
           itemAsString: (u) => u.localize(context),
           asyncItems: (String filter) async {
-            _availableBoutConfigs ??= await (await ref.read(dataManagerNotifierProvider)).readMany<BoutConfig, Null>();
+            _availableBoutConfigs ??= await (await ref.read(dataManagerProvider)).readMany<BoutConfig, Null>();
             return _availableBoutConfigs!.toList();
           },
         ),
@@ -174,7 +174,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
         boutConfig: _boutConfig!,
       );
       boutResultRule = boutResultRule.copyWithId(
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle<BoutResultRule>(boutResultRule),
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle<BoutResultRule>(boutResultRule),
       );
       if (widget.onCreated != null) {
         await widget.onCreated!(boutResultRule);

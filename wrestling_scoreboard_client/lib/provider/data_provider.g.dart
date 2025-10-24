@@ -6,6 +6,9 @@ part of 'data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(singleDataStream)
 const singleDataStreamProvider = SingleDataStreamFamily._();
 
@@ -63,14 +66,14 @@ final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalPr
   }
 }
 
-String _$singleDataStreamHash() => r'09b393e03f60af35fa1c17b206567955a146cb8a';
+String _$singleDataStreamHash() => r'5a4725f2a0c213686d371ec9b2c88faf31883440';
 
 final class SingleDataStreamFamily extends $Family {
   const SingleDataStreamFamily._()
     : super(
         retry: null,
         name: r'singleDataStreamProvider',
-        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerNotifierProvider],
+        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           SingleDataStreamProvider.$allTransitiveDependencies0,
           SingleDataStreamProvider.$allTransitiveDependencies1,
@@ -160,14 +163,14 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   }
 }
 
-String _$manyDataStreamHash() => r'cceb9b5eb42f4f5d3435726169ca2a6b28d1f6e7';
+String _$manyDataStreamHash() => r'30243793a01ab36f4e1a442dd75a4576573418ad';
 
 final class ManyDataStreamFamily extends $Family {
   const ManyDataStreamFamily._()
     : super(
         retry: null,
         name: r'manyDataStreamProvider',
-        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerNotifierProvider],
+        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           ManyDataStreamProvider.$allTransitiveDependencies0,
           ManyDataStreamProvider.$allTransitiveDependencies1,
@@ -199,6 +202,3 @@ final class ManyDataStreamFamily extends $Family {
     },
   );
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

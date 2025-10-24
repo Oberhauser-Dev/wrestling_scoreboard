@@ -64,7 +64,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
             itemAsString: (u) => u.ageCategory.name,
             asyncItems: (String filter) async {
               _availableCompetitionAgeCategories ??= (await (await ref.read(
-                dataManagerNotifierProvider,
+                dataManagerProvider,
               )).readMany<CompetitionAgeCategory, Competition>(filterObject: widget.initialCompetition));
               return _availableCompetitionAgeCategories!.toList();
             },
@@ -109,7 +109,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
       pos: _pos,
     );
     competitionWeightCategory = competitionWeightCategory.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionWeightCategory),
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(competitionWeightCategory),
     );
   }
 }

@@ -94,7 +94,7 @@ class UserEditState extends ConsumerState<UserEdit> {
           password: _password,
         );
         securedUser = user.toSecuredUser().copyWithId(
-          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(user),
+          await (await ref.read(dataManagerProvider)).createOrUpdateSingle(user),
         );
       } else {
         securedUser = widget.user!.copyWith(
@@ -105,7 +105,7 @@ class UserEditState extends ConsumerState<UserEdit> {
           // Disallow changing the password of already existing users (for now). One should delete and recreate an account in such edge cases.
         );
         securedUser = widget.user!.copyWithId(
-          await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(securedUser),
+          await (await ref.read(dataManagerProvider)).createOrUpdateSingle(securedUser),
         );
       }
 

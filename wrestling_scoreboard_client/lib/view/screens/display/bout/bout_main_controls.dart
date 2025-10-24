@@ -93,7 +93,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                       );
                       if (result) {
                         widget.boutState.bout = widget.boutState.bout.copyWith(comment: text);
-                        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(widget.boutState.bout);
+                        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(widget.boutState.bout);
                       }
                     },
                     icon: const Icon(Icons.comment),
@@ -226,7 +226,7 @@ class _MainControlDropDown extends ConsumerWidget {
                   selected: role == bout.winnerRole || (bout.result?.affectsBoth() ?? false) ? bout.result : null,
                   options: boutResultOptions,
                   onChange: (BoutResult? val) async {
-                    final dataManager = await ref.read(dataManagerNotifierProvider);
+                    final dataManager = await ref.read(dataManagerProvider);
                     var updatedBout = bout.copyWith(
                       winnerRole: val != null && !val.affectsBoth() ? role : null,
                       result: val,

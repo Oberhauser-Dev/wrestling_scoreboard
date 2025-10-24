@@ -61,7 +61,7 @@ class CompetitionAgeCategoryEditState extends ConsumerState<CompetitionAgeCatego
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableAgeCategories ??= await (await ref.read(
-              dataManagerNotifierProvider,
+              dataManagerProvider,
             )).readMany<AgeCategory, Organization>(filterObject: widget.initialCompetition.organization);
             return _availableAgeCategories!.toList();
           },
@@ -89,7 +89,7 @@ class CompetitionAgeCategoryEditState extends ConsumerState<CompetitionAgeCatego
         pos: _pos,
       );
       competitionAgeCategory = competitionAgeCategory.copyWithId(
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionAgeCategory),
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(competitionAgeCategory),
       );
       navigator.pop();
     }

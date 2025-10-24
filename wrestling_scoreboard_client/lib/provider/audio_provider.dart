@@ -14,7 +14,7 @@ class BellPlayerNotifier extends _$BellPlayerNotifier {
       await _audioPlayer.dispose();
     });
 
-    final soundPath = await ref.watch(bellSoundNotifierProvider);
+    final soundPath = await ref.watch(bellSoundProvider);
     await _audioPlayer.setSource(AssetSource(soundPath));
     return _audioPlayer;
   }

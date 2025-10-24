@@ -36,14 +36,14 @@ class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>,
         // Cannot use LocaDataManager as it depends on dataManagerProvider internally, which would require a ProviderScope.
         // This provider scope is not feasible here as we request the original result rules from the default provider.
         // Therefore we directly manipulate the local data.
-        await ref.read(localDataNotifierProvider<BoutConfig>().notifier).setState([boutConfig]);
-        ref.invalidate(localDataNotifierProvider<BoutConfig>());
+        await ref.read(localDataProvider<BoutConfig>().notifier).setState([boutConfig]);
+        ref.invalidate(localDataProvider<BoutConfig>());
         // We just assume we can override every bout config & bout result rule without checking the dependency on existing bout configs.
         if (boutResultRules != null && boutResultRules.isNotEmpty) {
           await ref
-              .read(localDataNotifierProvider<BoutResultRule>().notifier)
+              .read(localDataProvider<BoutResultRule>().notifier)
               .setState(boutResultRules.map((e) => e.copyWith(/*id: null,*/ boutConfig: boutConfig!)).toList());
-          ref.invalidate(localDataNotifierProvider<BoutResultRule>());
+          ref.invalidate(localDataProvider<BoutResultRule>());
         }
       }
     }
@@ -115,10 +115,10 @@ class ScratchBoutProviderScope extends StatelessWidget {
       // Never retry any provider
       retry: (retryCount, error) => null,
       overrides: [
-        dataManagerNotifierProvider.overrideWith(() {
+        dataManagerProvider.overrideWith(() {
           return LocalDataManagerNotifier();
         }),
-        webSocketManagerNotifierProvider.overrideWith(() {
+        webSocketManagerProvider.overrideWith(() {
           return LocalWebsocketManagerNotifier();
         }),
       ],

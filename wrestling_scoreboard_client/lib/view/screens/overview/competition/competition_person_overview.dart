@@ -41,8 +41,7 @@ class CompetitionPersonOverview extends ConsumerWidget {
             competitionPerson: competitionPerson,
           ),
           onDelete:
-              () async =>
-                  (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionPerson>(competitionPerson),
+              () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionPerson>(competitionPerson),
           classLocale: localizations.official,
           children: [
             ContentItem(

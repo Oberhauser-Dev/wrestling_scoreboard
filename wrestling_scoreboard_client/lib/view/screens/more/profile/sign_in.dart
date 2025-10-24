@@ -55,9 +55,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         () => catchAsync(context, () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            await ref
-                                .read(userNotifierProvider.notifier)
-                                .signIn(username: _username!, password: _password!);
+                            await ref.read(userProvider.notifier).signIn(username: _username!, password: _password!);
                             if (context.mounted) Navigator.of(context).pop();
                           }
                         }),

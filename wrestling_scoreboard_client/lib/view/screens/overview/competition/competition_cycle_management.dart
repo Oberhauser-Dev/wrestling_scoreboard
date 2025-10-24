@@ -75,7 +75,7 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
                                     skippedCycles.remove(index);
                                   }
                                   await (await ref.read(
-                                    dataManagerNotifierProvider,
+                                    dataManagerProvider,
                                   )).createOrUpdateSingle(e.copyWith(skippedCycles: skippedCycles.toList()));
                                 },
                               ),
@@ -117,7 +117,7 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
                                     skippedCycles.remove(index);
                                   }
                                   await (await ref.read(
-                                    dataManagerNotifierProvider,
+                                    dataManagerProvider,
                                   )).createOrUpdateSingle(e.copyWith(skippedCycles: skippedCycles.toList()));
                                 },
                               ),
@@ -153,7 +153,7 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
     await catchAsync(context, () async {
       final e = orderedData[oldIndex];
       await (await ref.read(
-        dataManagerNotifierProvider,
+        dataManagerProvider,
       )).reorder<T, Competition>(id: e.id!, newIndex: newPos, filterObject: widget.competition);
     });
   }

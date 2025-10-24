@@ -7,8 +7,8 @@ final mockProviderScope = ProviderScope(
   // Never retry any provider
   retry: (retryCount, error) => null,
   overrides: [
-    dataManagerNotifierProvider.overrideWith(() => MockDataManagerNotifier()),
-    webSocketManagerNotifierProvider.overrideWith(() => MockWebsocketManagerNotifier()),
+    dataManagerProvider.overrideWith(() => MockDataManagerNotifier()),
+    webSocketManagerProvider.overrideWith(() => MockWebsocketManagerNotifier()),
   ],
   child: const WrestlingScoreboardApp(),
 );

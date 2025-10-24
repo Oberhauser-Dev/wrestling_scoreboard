@@ -77,7 +77,7 @@ class FavoriteScaffold<T extends DataObject> extends ConsumerWidget {
     final localizations = context.l10n;
     final tableName = getTableNameFromType(T);
     return LoadingBuilder(
-      future: ref.watch(favoritesNotifierProvider),
+      future: ref.watch(favoritesProvider),
       builder: (BuildContext context, favorites) {
         final isFavorite = favorites[tableName]?.contains(dataObject.id) ?? false;
         return OverviewScaffold(
@@ -91,7 +91,7 @@ class FavoriteScaffold<T extends DataObject> extends ConsumerWidget {
               label: localizations.favorite,
               icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_outline),
               onTap: () async {
-                final notifier = ref.read(favoritesNotifierProvider.notifier);
+                final notifier = ref.read(favoritesProvider.notifier);
                 if (isFavorite) {
                   notifier.removeFavorite(tableName, dataObject.id!);
                 } else {

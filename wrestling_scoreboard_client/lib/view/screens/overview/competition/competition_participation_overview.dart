@@ -44,7 +44,7 @@ class CompetitionParticipationOverview extends ConsumerWidget {
           ),
           onDelete:
               () async => (await ref.read(
-                dataManagerNotifierProvider,
+                dataManagerProvider,
               )).deleteSingle<CompetitionParticipation>(competitionParticipation),
           classLocale: localizations.participation,
           children: [

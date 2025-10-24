@@ -72,9 +72,7 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
       ResponsiveScaffoldActionItem(
         label: localizations.importFromApiProvider,
         onTap: () async {
-          final authService = await ref
-              .read(orgAuthNotifierProvider.notifier)
-              .getByOrganization(widget.organization.id!);
+          final authService = await ref.read(orgAuthProvider.notifier).getByOrganization(widget.organization.id!);
           if (authService is! BasicAuthService && context.mounted) {
             await showOkDialog(context: context, child: Text(localizations.warningMissingApiProviderCredentials));
             if (context.mounted) {
@@ -106,7 +104,7 @@ Future<void> checkProposeImport(
   required int id,
   required OrganizationImportType importType,
 }) async {
-  final dataManager = await ref.read(dataManagerNotifierProvider);
+  final dataManager = await ref.read(dataManagerProvider);
   DateTime? lastUpdated;
   switch (importType) {
     case OrganizationImportType.organization:
@@ -122,9 +120,9 @@ Future<void> checkProposeImport(
   }
   lastUpdated = lastUpdated?.toLocal();
 
-  final proposeApiImportDuration = await ref.read(proposeApiImportDurationNotifierProvider);
+  final proposeApiImportDuration = await ref.read(proposeApiImportDurationProvider);
   if (lastUpdated == null || lastUpdated.compareTo(DateTime.now().subtract(proposeApiImportDuration)) < 0) {
-    final authService = await ref.read(orgAuthNotifierProvider.notifier).getByOrganization(organization.id!);
+    final authService = await ref.read(orgAuthProvider.notifier).getByOrganization(organization.id!);
     if (authService is BasicAuthService && context.mounted) {
       final localizations = context.l10n;
       await _showImportDialog(
@@ -179,8 +177,8 @@ Future<void> _processImport(
     context: context,
     label: localizations.importFromApiProvider,
     runAsync: () async {
-      final dataManager = await ref.read(dataManagerNotifierProvider);
-      final authService = await ref.read(orgAuthNotifierProvider.notifier).getByOrganization(orgId);
+      final dataManager = await ref.read(dataManagerProvider);
+      final authService = await ref.read(orgAuthProvider.notifier).getByOrganization(orgId);
       switch (importType) {
         case OrganizationImportType.organization:
           await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);

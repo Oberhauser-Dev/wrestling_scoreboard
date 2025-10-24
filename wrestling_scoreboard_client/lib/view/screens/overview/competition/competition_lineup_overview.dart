@@ -42,8 +42,7 @@ class CompetitionLineupOverview extends ConsumerWidget {
             initialCompetition: competitionLineup.competition,
           ),
           onDelete:
-              () async =>
-                  (await ref.read(dataManagerNotifierProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
+              () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
           classLocale: localizations.lineup,
           children: [
             ContentItem(

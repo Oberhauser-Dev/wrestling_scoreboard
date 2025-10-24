@@ -127,11 +127,11 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
       round: _round,
     );
     competitionBout = competitionBout.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(competitionBout),
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(competitionBout),
     );
   }
 
   Future<List<CompetitionWeightCategory>> get availableWeightCategories async => (await ref.read(
-    dataManagerNotifierProvider,
+    dataManagerProvider,
   )).readMany<CompetitionWeightCategory, Competition>(filterObject: widget.initialCompetition);
 }

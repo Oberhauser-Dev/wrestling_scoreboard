@@ -37,7 +37,7 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
       // Handle initial data via the stream
       onRetry:
           () async => (await ref.read(
-            webSocketManagerNotifierProvider,
+            webSocketManagerProvider,
           )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
       onException: onException,
     );
@@ -90,7 +90,7 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
       initialData: null, // Handle initial data via the stream
       onRetry:
           () async => (await ref.read(
-            webSocketManagerNotifierProvider,
+            webSocketManagerProvider,
           )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
       onException: onException,
     );

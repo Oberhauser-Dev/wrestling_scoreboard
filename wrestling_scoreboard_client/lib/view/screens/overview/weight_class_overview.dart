@@ -39,7 +39,7 @@ mixin WeightClassOverview<T extends DataObject> implements AbstractOverview<Weig
           editPage: editPage,
           onDelete: () async {
             onDelete();
-            (await ref.read(dataManagerNotifierProvider)).deleteSingle<WeightClass>(weightClass);
+            (await ref.read(dataManagerProvider)).deleteSingle<WeightClass>(weightClass);
           },
           classLocale: classLocale,
           children: [

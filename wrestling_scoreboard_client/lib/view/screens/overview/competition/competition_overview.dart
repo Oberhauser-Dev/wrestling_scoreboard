@@ -73,10 +73,10 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
             //       final boutActions = await ref.readAsync(manyDataStreamProvider<BoutAction, Bout>(
             //         ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
             //       ).future);
-            //       // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+            //       // final boutActions = await (await ref.read(dataManagerProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
             //       return MapEntry(teamMatchBout, boutActions);
             //     })));
-            //     final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+            //     final isTimeCountDown = await ref.read(timeCountDownProvider);
             //
             //     final homeParticipations = await ref.readAsync(manyDataStreamProvider<CompetitionParticipation, CompetitionLineup>(
             //       ManyProviderData<CompetitionParticipation, CompetitionLineup>(filterObject: competition.home),
@@ -106,7 +106,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               obj: competition,
               editPage: CompetitionEdit(competition: competition),
               onDelete: () async {
-                await (await ref.read(dataManagerNotifierProvider)).deleteSingle<Competition>(competition);
+                await (await ref.read(dataManagerProvider)).deleteSingle<Competition>(competition);
                 if (context.mounted) await super.onDelete(context, ref, single: competition.boutConfig);
               },
               classLocale: localizations.competition,
@@ -203,7 +203,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                       initialOrganization: competition.organization!,
                       onCreated: (person) async {
                         // TODO: ability to change role inside another implementation of PersonEdit.
-                        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+                        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
                           CompetitionPerson(competition: competition, person: person, role: PersonRole.steward),
                         );
                       },

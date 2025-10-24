@@ -72,12 +72,12 @@ class MatchDisplay extends ConsumerWidget {
                       ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
                     ).future,
                   );
-                  // final boutActions = await (await ref.read(dataManagerNotifierProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
+                  // final boutActions = await (await ref.read(dataManagerProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
                   return MapEntry(teamMatchBout, boutActions);
                 }),
               ),
             );
-            final isTimeCountDown = await ref.read(timeCountDownNotifierProvider);
+            final isTimeCountDown = await ref.read(timeCountDownProvider);
 
             final homeParticipations = await ref.readAsync(
               manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(

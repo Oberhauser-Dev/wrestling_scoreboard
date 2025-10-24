@@ -6,8 +6,11 @@ part of 'network_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(MockDataManagerNotifier)
-const mockDataManagerNotifierProvider = MockDataManagerNotifierProvider._();
+const mockDataManagerProvider = MockDataManagerNotifierProvider._();
 
 final class MockDataManagerNotifierProvider
     extends $NotifierProvider<MockDataManagerNotifier, Raw<Future<DataManager>>> {
@@ -16,7 +19,7 @@ final class MockDataManagerNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'mockDataManagerNotifierProvider',
+        name: r'mockDataManagerProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -57,7 +60,7 @@ abstract class _$MockDataManagerNotifier extends $Notifier<Raw<Future<DataManage
 }
 
 @ProviderFor(MockWebsocketManagerNotifier)
-const mockWebsocketManagerNotifierProvider = MockWebsocketManagerNotifierProvider._();
+const mockWebsocketManagerProvider = MockWebsocketManagerNotifierProvider._();
 
 final class MockWebsocketManagerNotifierProvider
     extends $NotifierProvider<MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
@@ -66,7 +69,7 @@ final class MockWebsocketManagerNotifierProvider
         from: null,
         argument: null,
         retry: null,
-        name: r'mockWebsocketManagerNotifierProvider',
+        name: r'mockWebsocketManagerProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -85,7 +88,7 @@ final class MockWebsocketManagerNotifierProvider
   }
 }
 
-String _$mockWebsocketManagerNotifierHash() => r'709ed2a007d7a6ac50c4c2680f750b6c1e730e95';
+String _$mockWebsocketManagerNotifierHash() => r'0ca4a56e381640ba0bb6c2122498c052e2183807';
 
 abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSocketManager>>> {
   Raw<Future<WebSocketManager>> build();
@@ -105,6 +108,3 @@ abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSo
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

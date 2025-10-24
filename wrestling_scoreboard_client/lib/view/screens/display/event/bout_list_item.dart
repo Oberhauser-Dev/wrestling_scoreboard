@@ -132,7 +132,7 @@ class SmallBoutStateDisplay extends ConsumerWidget {
                             child:
                                 bout.result != null || bout.duration > Duration.zero
                                     ? LoadingBuilder<bool>(
-                                      future: ref.watch(timeCountDownNotifierProvider),
+                                      future: ref.watch(timeCountDownProvider),
                                       builder: (context, isTimeCountDown) {
                                         return ScaledText(
                                           bout.duration

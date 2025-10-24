@@ -47,7 +47,7 @@ class OrganizationOverview extends ConsumerWidget {
         final description = InfoWidget(
           obj: organization,
           editPage: OrganizationEdit(organization: organization),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<Organization>(organization),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Organization>(organization),
           classLocale: localizations.organization,
           children: [
             ContentItem(title: organization.name, subtitle: localizations.name, icon: Icons.description),

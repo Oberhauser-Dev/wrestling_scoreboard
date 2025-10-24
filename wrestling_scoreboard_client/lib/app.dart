@@ -95,13 +95,13 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
   @override
   Widget build(BuildContext context) {
     return LoadingBuilder<Locale?>(
-      future: ref.watch(localeNotifierProvider),
+      future: ref.watch(localeProvider),
       builder: (context, locale) {
         return LoadingBuilder<ThemeMode>(
-          future: ref.watch(themeModeNotifierProvider),
+          future: ref.watch(themeModeProvider),
           builder: (context, themeMode) {
             return LoadingBuilder<String?>(
-              future: ref.watch(fontFamilyNotifierProvider),
+              future: ref.watch(fontFamilyProvider),
               builder: (context, fontFamily) {
                 return MaterialApp.router(
                   debugShowCheckedModeBanner: false,
@@ -162,7 +162,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
     super.initState();
 
     // Prepare log file
-    _appDataDirectorySubscription = ref.listenManual(appDataDirectoryNotifierProvider, (previous, next) async {
+    _appDataDirectorySubscription = ref.listenManual(appDataDirectoryProvider, (previous, next) async {
       final appDataDir = await next;
       if (appDataDir == null) return;
       final now = MockableDateTime.now();
@@ -185,7 +185,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
     }, fireImmediately: true);
 
     // Prepare backups
-    _backupSubscription = ref.listenManual(backupNotifierProvider, (previous, next) async {
+    _backupSubscription = ref.listenManual(backupProvider, (previous, next) async {
       // Clear timers
       for (final timer in _backupTimers) {
         timer.cancel();
@@ -197,7 +197,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
 
       final now = MockableDateTime.now();
       if (!ref.context.mounted) return;
-      final dataManager = await ref.read(dataManagerNotifierProvider);
+      final dataManager = await ref.read(dataManagerProvider);
 
       await Future.wait(
         backupRules.map((backupRule) async {
@@ -290,9 +290,7 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
 
     // Start listening
     void onRetry() async {
-      (await ref.read(
-        webSocketManagerNotifierProvider,
-      )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+      (await ref.read(webSocketManagerProvider)).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
     }
 
     // Listen to the websocket provider as soon as possible to not miss any state changes.
@@ -320,7 +318,7 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
       }, onRetry: onRetry);
     });
 
-    _dataManagerSubscription = ref.listenManual(dataManagerNotifierProvider, (previous, next) async {
+    _dataManagerSubscription = ref.listenManual(dataManagerProvider, (previous, next) async {
       final dataManager = await next;
       final migration = await dataManager.getMigration();
       final minClientVersion = Version.parse(migration.minClientVersion);

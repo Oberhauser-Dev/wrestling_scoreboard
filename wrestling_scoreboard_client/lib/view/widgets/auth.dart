@@ -14,7 +14,7 @@ class Restricted extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LoadingBuilder(
-      future: ref.watch(userNotifierProvider),
+      future: ref.watch(userProvider),
       // Center widget has no size, so use CircularProgressIndicator directly.
       onLoad: (context) => const CircularProgressIndicator(),
       onException:
@@ -38,7 +38,7 @@ class RestrictedBuilder extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LoadingBuilder(
-      future: ref.watch(userNotifierProvider),
+      future: ref.watch(userProvider),
       // Center widget has no size, so use CircularProgressIndicator directly.
       onLoad: (context) => const CircularProgressIndicator(),
       onException:

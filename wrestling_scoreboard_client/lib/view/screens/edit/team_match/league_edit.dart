@@ -58,7 +58,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           itemAsString: (u) => u.fullname,
           allowEmpty: false,
           asyncItems: (String filter) async {
-            _availableDivisions ??= await (await ref.read(dataManagerNotifierProvider)).readMany<Division, Null>();
+            _availableDivisions ??= await (await ref.read(dataManagerProvider)).readMany<Division, Null>();
             return _availableDivisions!.toList();
           },
         ),
@@ -143,7 +143,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
         League(
           id: widget.league?.id,
           organization: widget.league?.organization ?? widget.initialDivision?.organization,

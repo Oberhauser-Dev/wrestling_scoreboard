@@ -36,7 +36,7 @@ class LeagueWeightClassOverview extends ConsumerWidget with WeightClassOverview<
           ref,
           classLocale: localizations.weightClass,
           editPage: LeagueWeightClassEdit(leagueWeightClass: data, initialLeague: data.league),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<LeagueWeightClass>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<LeagueWeightClass>(data),
           tiles: [
             ContentItem(
               title: '${data.league.fullname}, ${data.league.startDate.toDateString(context)}',

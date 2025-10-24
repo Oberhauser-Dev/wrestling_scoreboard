@@ -85,6 +85,6 @@ mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
 
   @override
   Future<void> onDelete(BuildContext context, WidgetRef ref, {required BoutConfig single}) async {
-    await (await ref.read(dataManagerNotifierProvider)).deleteSingle<BoutConfig>(single);
+    await (await ref.read(dataManagerProvider)).deleteSingle<BoutConfig>(single);
   }
 }

@@ -109,7 +109,7 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
       weightClass: _weightClass,
     );
     teamMatchBout = teamMatchBout.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(teamMatchBout),
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(teamMatchBout),
     );
   }
 
@@ -118,13 +118,13 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
     final List<WeightClass> weightClasses = [];
     weightClasses.addAll(
       await (await ref.read(
-        dataManagerNotifierProvider,
+        dataManagerProvider,
       )).readMany<WeightClass, League>(filterObject: widget.initialTeamMatch.league),
     );
     if (weightClasses.isEmpty) {
       weightClasses.addAll(
         await (await ref.read(
-          dataManagerNotifierProvider,
+          dataManagerProvider,
         )).readMany<WeightClass, Division>(filterObject: widget.initialTeamMatch.league?.division),
       );
     }

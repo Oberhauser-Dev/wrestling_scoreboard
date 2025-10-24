@@ -40,7 +40,7 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
           ),
           onDelete:
               () async => (await ref.read(
-                dataManagerNotifierProvider,
+                dataManagerProvider,
               )).deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
           classLocale: localizations.competitionSystem,
           children: [

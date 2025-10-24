@@ -107,7 +107,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         leading: const Icon(Icons.timer),
         subtitle: Text(localizations.duration),
         title: LoadingBuilder<bool>(
-          future: ref.watch(timeCountDownNotifierProvider),
+          future: ref.watch(timeCountDownProvider),
           builder: (context, isTimeCountDown) {
             return DurationFormField(
               initialValue: _boutDuration?.invertIf(isTimeCountDown, max: widget.boutConfig.totalPeriodDuration),
@@ -149,14 +149,12 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
       ) async {
         if (newMembership != oldAthleteBoutState?.membership) {
           if (oldAthleteBoutState != null) {
-            await (await ref.read(dataManagerNotifierProvider)).deleteSingle<AthleteBoutState>(oldAthleteBoutState);
+            await (await ref.read(dataManagerProvider)).deleteSingle<AthleteBoutState>(oldAthleteBoutState);
           }
           if (newMembership != null) {
             final newAthleteBoutState = AthleteBoutState(membership: newMembership);
             return newAthleteBoutState.copyWithId(
-              await (await ref.read(
-                dataManagerNotifierProvider,
-              )).createOrUpdateSingle<AthleteBoutState>(newAthleteBoutState),
+              await (await ref.read(dataManagerProvider)).createOrUpdateSingle<AthleteBoutState>(newAthleteBoutState),
             );
           } else {
             return null;
@@ -175,7 +173,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
         comment: _comment,
       );
 
-      bout = bout.copyWithId(await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(bout));
+      bout = bout.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout));
       await handleNested(bout);
       navigator.pop();
     }

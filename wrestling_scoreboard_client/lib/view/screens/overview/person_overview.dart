@@ -52,7 +52,7 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
           editPage: editPage,
           onDelete: () async {
             if (onDelete != null) onDelete();
-            (await ref.read(dataManagerNotifierProvider)).deleteSingle<Person>(person);
+            (await ref.read(dataManagerProvider)).deleteSingle<Person>(person);
           },
           classLocale: classLocale,
           actions: [
@@ -184,7 +184,7 @@ Future<void> mergePersonDialog(BuildContext context, WidgetRef ref, {required Pe
       builder: (context) => _MergePersonDialog(organization: person.organization!, pivotPerson: person),
     );
     if (personToMergeWith != null && context.mounted) {
-      final dataManager = await ref.read(dataManagerNotifierProvider);
+      final dataManager = await ref.read(dataManagerProvider);
       // Use current person as first item, so it will be kept, as the current route needs to stay consistent
       await dataManager.mergeObjects<Person>([person, personToMergeWith]);
     }
@@ -201,7 +201,7 @@ Future<void> mergePersonsDialog(BuildContext context, WidgetRef ref, {required L
       ),
     );
     if (confirmed && context.mounted) {
-      final dataManager = await ref.read(dataManagerNotifierProvider);
+      final dataManager = await ref.read(dataManagerProvider);
       await dataManager.mergeObjects<Person>(persons);
     }
   });
@@ -220,7 +220,7 @@ Future<void> mergeAllPersonsDialog(
     ),
   );
   if (confirmed) {
-    final dataManager = await ref.read(dataManagerNotifierProvider);
+    final dataManager = await ref.read(dataManagerProvider);
     for (final persons in allPersons) {
       if (context.mounted) {
         await catchAsync(context, () async {
@@ -250,7 +250,7 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
     _availablePersonsFuture =
         (() async {
           final availablePersons = await (await ref.read(
-            dataManagerNotifierProvider,
+            dataManagerProvider,
           )).readMany<Person, Organization>(filterObject: widget.organization);
           availablePersons.remove(widget.pivotPerson);
           setState(() {

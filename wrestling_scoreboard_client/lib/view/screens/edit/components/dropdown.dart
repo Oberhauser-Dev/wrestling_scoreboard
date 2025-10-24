@@ -30,7 +30,7 @@ class MembershipDropdown extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LoadingBuilder<Map<int, AuthService>>(
-      future: ref.watch(orgAuthNotifierProvider),
+      future: ref.watch(orgAuthProvider),
       builder: (context, authServiceMap) {
         return SearchableDropdown<Membership>(
           selectedItem: selectedItem,
@@ -86,9 +86,9 @@ class MembershipDropdown extends ConsumerWidget {
 
     const enableApiProviderSearch = true;
     if (enableApiProviderSearch) {
-      final authService = await ref.read(orgAuthNotifierProvider.notifier).getByOrganization(organization?.id);
+      final authService = await ref.read(orgAuthProvider.notifier).getByOrganization(organization?.id);
       if (authService != null) {
-        final providerResults = await (await ref.read(dataManagerNotifierProvider)).search(
+        final providerResults = await (await ref.read(dataManagerProvider)).search(
           searchTerm: filter,
           type: Membership,
           organizationId: organization?.id,

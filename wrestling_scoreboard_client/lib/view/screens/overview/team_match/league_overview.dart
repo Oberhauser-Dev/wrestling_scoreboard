@@ -43,7 +43,7 @@ class LeagueOverview extends ConsumerWidget {
         final description = InfoWidget(
           obj: data,
           editPage: LeagueEdit(league: data),
-          onDelete: () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<League>(data),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
             ContentItem(

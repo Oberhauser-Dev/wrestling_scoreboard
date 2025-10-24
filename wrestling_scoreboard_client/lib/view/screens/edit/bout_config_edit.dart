@@ -121,9 +121,7 @@ class BoutConfigEditState extends ConsumerState<BoutConfigEdit> {
         bleedingInjuryDuration: _bleedingInjuryDuration,
         periodCount: _periodCount!,
       );
-      boutConfig = boutConfig.copyWithId(
-        await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(boutConfig),
-      );
+      boutConfig = boutConfig.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(boutConfig));
       navigator.pop();
     }
   }

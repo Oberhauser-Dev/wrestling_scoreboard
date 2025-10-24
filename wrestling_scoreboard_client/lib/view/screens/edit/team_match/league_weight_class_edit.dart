@@ -73,7 +73,7 @@ class LeagueWeightClassEditState extends WeightClassEditState<LeagueWeightClassE
       seasonPartition: _seasonPartition,
     );
     leagueWeightClass = leagueWeightClass.copyWithId(
-      await (await ref.read(dataManagerNotifierProvider)).createOrUpdateSingle(leagueWeightClass),
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(leagueWeightClass),
     );
   }
 }

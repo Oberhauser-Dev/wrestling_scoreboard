@@ -6,8 +6,11 @@ part of 'account_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(UserNotifier)
-const userNotifierProvider = UserNotifierProvider._();
+const userProvider = UserNotifierProvider._();
 
 final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
   const UserNotifierProvider._()
@@ -15,13 +18,13 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
         from: null,
         argument: null,
         retry: null,
-        name: r'userNotifierProvider',
+        name: r'userProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[dataManagerNotifierProvider],
+        dependencies: const <ProviderOrFamily>[dataManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[UserNotifierProvider.$allTransitiveDependencies0],
       );
 
-  static const $allTransitiveDependencies0 = dataManagerNotifierProvider;
+  static const $allTransitiveDependencies0 = dataManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$userNotifierHash();
@@ -36,7 +39,7 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
   }
 }
 
-String _$userNotifierHash() => r'c7e7df23f18e9c559245722e3c3281165a4f3120';
+String _$userNotifierHash() => r'20cb097680c55f94eb419148f60c3acef8d98370';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();
@@ -56,6 +59,3 @@ abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

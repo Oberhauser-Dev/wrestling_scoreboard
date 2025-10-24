@@ -18,7 +18,7 @@ class MockDataManagerNotifier extends _$MockDataManagerNotifier implements DataM
 class MockWebsocketManagerNotifier extends _$MockWebsocketManagerNotifier implements WebSocketManagerNotifier {
   @override
   Raw<Future<WebSocketManager>> build() async {
-    final dataManager = await ref.watch(mockDataManagerNotifierProvider);
+    final dataManager = await ref.watch(mockDataManagerProvider);
     final webSocketManager = MockWebSocketManager(dataManager);
     dataManager.webSocketManager = webSocketManager;
     return webSocketManager;

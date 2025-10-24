@@ -57,7 +57,7 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
     return LoadingBuilder<User?>(
-      future: ref.watch(userNotifierProvider),
+      future: ref.watch(userProvider),
       builder: (context, user) {
         return WindowStateScaffold(
           appBarTitle: Text(localizations.start),
@@ -140,7 +140,7 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
       }
     } else {
       gridEntries = LoadingBuilder(
-        future: ref.watch(favoritesNotifierProvider),
+        future: ref.watch(favoritesProvider),
         builder: (context, favorites) {
           if (favorites.isEmpty) {
             return Center(
@@ -168,7 +168,7 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                 PopupMenuItem(
                   child: Text(localizations.remove),
                   onTap: () {
-                    final notifier = ref.read(favoritesNotifierProvider.notifier);
+                    final notifier = ref.read(favoritesProvider.notifier);
                     notifier.removeFavorite(getTableNameFromType(T), id);
                   },
                 ),
@@ -192,7 +192,7 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                 ),
               );
               if (removeItem) {
-                final notifier = ref.read(favoritesNotifierProvider.notifier);
+                final notifier = ref.read(favoritesProvider.notifier);
                 notifier.removeFavorite(getTableNameFromType(T), id);
               }
             },
@@ -231,9 +231,9 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                 _throttleTimer = Timer(throttleDuration, () async {
                   try {
                     final authService = await ref
-                        .read(orgAuthNotifierProvider.notifier)
+                        .read(orgAuthProvider.notifier)
                         .getByOrganization(_searchOrganization?.id);
-                    final results = await (await ref.read(dataManagerNotifierProvider)).search(
+                    final results = await (await ref.read(dataManagerProvider)).search(
                       searchTerm: searchTerm,
                       type: _searchType,
                       organizationId: _searchOrganization?.id,
@@ -437,7 +437,7 @@ class _EntityGrid extends ConsumerWidget {
         ),
         _ =>
           (() {
-            final notifier = ref.read(favoritesNotifierProvider.notifier);
+            final notifier = ref.read(favoritesProvider.notifier);
             ids.forEach((id, value) => notifier.removeFavorite(tableName, id));
             throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.');
           })(),

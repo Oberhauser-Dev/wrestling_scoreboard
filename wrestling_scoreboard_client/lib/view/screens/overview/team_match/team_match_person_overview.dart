@@ -41,8 +41,7 @@ class TeamMatchPersonOverview extends ConsumerWidget {
             initialOrganization: teamMatchPerson.teamMatch.organization!,
             teamMatchPerson: teamMatchPerson,
           ),
-          onDelete:
-              () async => (await ref.read(dataManagerNotifierProvider)).deleteSingle<TeamMatchPerson>(teamMatchPerson),
+          onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatchPerson>(teamMatchPerson),
           classLocale: localizations.official,
           children: [
             ContentItem(
