@@ -39,6 +39,20 @@ You can download the client and the server for your preferred platforms from the
 
 For setting up the database and hosting a server, see the [Server Setup](wrestling_scoreboard_server/README.md#setup).
 
+## Instructions
+
+The program aligns with the [UWW Wrestling Rules](./wrestling_scoreboard_client/docs/wrestling_rules/uww-wrestling-rules-en-2023.pdf).
+Nonetheless, there are specifics to some regions.
+
+### Germany
+
+#### Freestyle
+
+Germany handles the first a verbal admonition `V` (official) before an activity period as passivity `P` (regional).
+Germany handles the passivity `P` (official) which leads to an activity period as `A` (regional).
+This means to effectively write a `P`/`A` (regional) one must record `V`/`P` (official) in the application.
+On the export, it is then converted to the regional convention.
+
 ## Development
 
 All the code is based on Dart and Flutter. For setting up Flutter, see the [getting started guide](https://docs.flutter.dev/get-started).

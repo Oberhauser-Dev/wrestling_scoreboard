@@ -479,7 +479,12 @@ class BoutState extends ConsumerState<BoutScreen> {
                   padding: bottomPadding,
                   children: [
                     displayTechnicalPoints(_r, BoutRole.red),
-                    BoutActionControls(BoutRole.red, boutConfig, bout.r == null ? null : handleAction),
+                    BoutActionControls(
+                      BoutRole.red,
+                      boutConfig,
+                      bout.r == null ? null : handleAction,
+                      wrestlingStyle: weightClass?.style,
+                    ),
                     Expanded(
                       flex: 50,
                       child: Center(
@@ -500,7 +505,12 @@ class BoutState extends ConsumerState<BoutScreen> {
                         ),
                       ),
                     ),
-                    BoutActionControls(BoutRole.blue, boutConfig, bout.b == null ? null : handleAction),
+                    BoutActionControls(
+                      BoutRole.blue,
+                      boutConfig,
+                      bout.b == null ? null : handleAction,
+                      wrestlingStyle: weightClass?.style,
+                    ),
                     displayTechnicalPoints(_b, BoutRole.blue),
                   ],
                 ),
