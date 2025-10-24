@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
@@ -130,7 +131,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         _r.isInjury = false;
         _r.isInjuryDisplayed = false;
       });
-      handleAction(const BoutScreenActionIntent.horn());
+      handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
     _b.injuryStopwatch.limit = boutConfig.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
@@ -138,7 +139,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         _b.isInjury = false;
         _b.isInjuryDisplayed = false;
       });
-      handleAction(const BoutScreenActionIntent.horn());
+      handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
 
     // Bleeding injury
@@ -148,7 +149,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         _r.isBleedingInjury = false;
         _r.isBleedingInjuryDisplayed = false;
       });
-      handleAction(const BoutScreenActionIntent.horn());
+      handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
     _b.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
     _b.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
@@ -156,7 +157,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         _b.isBleedingInjury = false;
         _b.isBleedingInjuryDisplayed = false;
       });
-      handleAction(const BoutScreenActionIntent.horn());
+      handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
 
     mainStopwatch = MainStopwatch(
@@ -196,7 +197,7 @@ class BoutState extends ConsumerState<BoutScreen> {
             _b.activityStopwatch!.dispose();
             _b.activityStopwatch = null;
           }
-          handleAction(const BoutScreenActionIntent.horn());
+          handleOrCatchIntent(const BoutScreenActionIntent.horn());
           if (period < boutConfig.periodCount) {
             mainStopwatch.isBreak.value = true;
             mainStopwatch.breakStopwatch.start();
@@ -212,7 +213,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       if (mainStopwatch.isBreak.value) {
         mainStopwatch.breakStopwatch.reset();
         mainStopwatch.isBreak.value = false;
-        handleAction(const BoutScreenActionIntent.horn());
+        handleOrCatchIntent(const BoutScreenActionIntent.horn());
       }
     });
   }
@@ -224,29 +225,6 @@ class BoutState extends ConsumerState<BoutScreen> {
     super.dispose();
   }
 
-  void handleAction(BoutScreenActionIntent intent) async {
-    final tmpContext = context;
-    if (tmpContext.mounted) {
-      await catchAsync(
-        tmpContext,
-        () => intent.handle(
-          widget.bouts,
-          () async => await ref.readAsync(
-            manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
-          ),
-          widget.boutIndex,
-          doAction,
-          context: tmpContext,
-          currentStopwatch: mainStopwatch.stopwatch,
-          boutStopwatch: mainStopwatch.boutStopwatch,
-          navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
-          createOrUpdateAction: (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
-          deleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
-        ),
-      );
-    }
-  }
-
   Widget displayTechnicalPoints(ParticipantStateModel pStatus, BoutRole role) {
     return Expanded(
       flex: 33,
@@ -254,28 +232,88 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  void doAction(BoutScreenActions action) {
-    switch (action) {
-      case BoutScreenActions.redActivityTime:
-        final ParticipantStateModel psm = _r;
+  void handleOrCatchIntent(Intent intent) async {
+    await catchAsync(context, () => handleIntent(intent));
+  }
+
+  Future<List<BoutAction>> _getActions() async =>
+      await ref.readAsync(manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future);
+
+  Future<void> handleIntent(Intent intent) async {
+    Future<void> deleteAction(BoutAction action) async =>
+        (await ref.read(dataManagerProvider)).deleteSingle<BoutAction>(action);
+
+    Future<void> createOrUpdateAction(BoutAction action) async =>
+        (await ref.read(dataManagerProvider)).createOrUpdateSingle<BoutAction>(action);
+
+    if (intent is BoutScreenActionIntent) {
+      return await _handleBoutScreenActionIntent(intent, deleteAction);
+    } else if (intent is RoleScreenActionIntent) {
+      return await _handleRoleScreenActionIntent(intent, deleteAction, createOrUpdateAction);
+    }
+  }
+
+  Future<void> _handleRoleScreenActionIntent(
+    RoleScreenActionIntent intent,
+    Future<void> Function(BoutAction action) deleteAction,
+    Future<void> Function(BoutAction action) createOrUpdateAction,
+  ) async {
+    final useSmartBoutActions = await ref.readAsync(smartBoutActionsProvider);
+    List<BoutAction>? prevActions;
+    if (useSmartBoutActions) {
+      // Smart actions check before the actual action
+      prevActions = await _getActions();
+      if (!mounted) return;
+      if (prevActions.isNotEmpty) {
+        if (prevActions.last.actionType == BoutActionType.caution) {
+          if (intent is! RolePointBoutActionIntent || intent.points > 2 || intent.role == prevActions.last.role) {
+            // A caution must follow one or two points.
+            final localizations = context.l10n;
+            await showOkDialog(context: context, child: Text(localizations.warningCautionNoPoints));
+            return;
+          }
+        }
+      }
+    }
+    if (!mounted) return;
+    final boutStopwatch = mainStopwatch.boutStopwatch;
+    final type = intent.type;
+    switch (type) {
+      case RoleScreenActionType.roleAction:
+        if (intent is! RoleBoutActionIntent) {
+          throw StateError('Intent type $type does not match the class RoleBoutActionIntent');
+        }
+        // NOTE: Do not used bout.duration as time, as it is not up to date.
+        final action = BoutAction(
+          bout: bout,
+          role: intent.role,
+          duration: boutStopwatch.elapsed,
+          actionType: intent.boutActionType,
+          pointCount: intent is RolePointBoutActionIntent ? intent.points : null,
+        );
+        await createOrUpdateAction(action);
+        break;
+      case RoleScreenActionType.activityTime:
+        final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
         psm.activityStopwatch?.dispose();
         setState(() {
           psm.activityStopwatch =
               psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
         });
         if (psm.activityStopwatch != null && mainStopwatch.boutStopwatch.isRunning) psm.activityStopwatch!.start();
-        psm.activityStopwatch?.onEnd.stream.listen((event) {
-          handleAction(const BoutScreenActionIntent.horn());
+        psm.activityStopwatch?.onEnd.stream.listen((event) async {
           psm.activityStopwatch?.dispose();
           setState(() {
             psm.activityStopwatch = null;
           });
+          await handleIntent(const BoutScreenActionIntent.horn());
+          if (useSmartBoutActions) await handleIntent(RolePointBoutActionIntent(points: 1, role: intent.role.opponent));
         });
         break;
-      case BoutScreenActions.redInjuryTime:
-        final ParticipantStateModel psm = _r;
+      case RoleScreenActionType.injuryTime:
+        final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
         setState(() {
-          if (!_r.injuryStopwatch.hasEnded) {
+          if (!psm.injuryStopwatch.hasEnded) {
             // If time is set manually after timer has ended, the timer and display flags differ.
             // So we use the displayed flag as the reset option.
             psm.isInjury = !psm.isInjuryDisplayed;
@@ -288,10 +326,10 @@ class BoutState extends ConsumerState<BoutScreen> {
           psm.injuryStopwatch.stop();
         }
         break;
-      case BoutScreenActions.redBleedingInjuryTime:
-        final ParticipantStateModel psm = _r;
+      case RoleScreenActionType.bleedingInjuryTime:
+        final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
         setState(() {
-          if (!_r.bleedingInjuryStopwatch.hasEnded) {
+          if (!psm.bleedingInjuryStopwatch.hasEnded) {
             psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
           }
           psm.isBleedingInjuryDisplayed = !psm.isBleedingInjuryDisplayed;
@@ -302,57 +340,105 @@ class BoutState extends ConsumerState<BoutScreen> {
           psm.bleedingInjuryStopwatch.stop();
         }
         break;
-      case BoutScreenActions.blueActivityTime:
-        final ParticipantStateModel psm = _b;
-        psm.activityStopwatch?.dispose();
-        setState(() {
-          psm.activityStopwatch =
-              psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
-        });
-        if (psm.activityStopwatch != null && mainStopwatch.boutStopwatch.isRunning) psm.activityStopwatch!.start();
-        psm.activityStopwatch?.onEnd.stream.listen((event) {
+      case RoleScreenActionType.undo:
+        final AthleteBoutState? abs = intent.role == BoutRole.red ? bout.r : bout.b;
+        if (abs != null) {
+          prevActions ??= await _getActions();
+          final roleActions = prevActions.where((el) => el.role == intent.role);
+          if (roleActions.isNotEmpty) {
+            final action = roleActions.last;
+            deleteAction(action);
+          }
+        }
+        break;
+    }
+
+    if (useSmartBoutActions) {
+      final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
+      if (intent is RoleBoutActionIntent && intent.boutActionType == BoutActionType.passivity) {
+        // Smart actions, after the actual action.
+        final wrestlingStyle = weightClass?.style ?? WrestlingStyle.free;
+
+        if (wrestlingStyle == WrestlingStyle.free) {
+          // In free style, stop the timer and start activity time on passivity (P)
+
+          mainStopwatch.stopwatch.stop();
+          // Dispose previous activity times, so it is not toggled off
           psm.activityStopwatch?.dispose();
-          setState(() {
-            psm.activityStopwatch = null;
-          });
-          handleAction(const BoutScreenActionIntent.horn());
-        });
-        break;
-      case BoutScreenActions.blueInjuryTime:
-        final ParticipantStateModel psm = _b;
-        setState(() {
-          if (!_b.injuryStopwatch.hasEnded) {
-            psm.isInjury = !psm.isInjuryDisplayed;
-          }
-          psm.isInjuryDisplayed = !psm.isInjuryDisplayed;
-        });
-        if (psm.isInjury) {
-          psm.injuryStopwatch.start();
+          psm.activityStopwatch = null;
+          await handleIntent(RoleScreenActionIntent(role: intent.role, type: RoleScreenActionType.activityTime));
         } else {
-          psm.injuryStopwatch.stop();
+          assert(prevActions != null, 'prevActions should already be initialized');
+          Future<bool> hadZeroOrOnePassivity(BoutRole role) async {
+            // At this moment, the new passivity is not yet updated by the websocket (even if freshly getting the list),
+            // so we need to treat them as one less.
+            return prevActions!.where((la) => la.role == role && la.actionType == BoutActionType.passivity).length <= 1;
+          }
+
+          // In greco, stop the timer (P)
+          // Give one point to the opponent at the first and the second (P).
+          mainStopwatch.stopwatch.stop();
+          if (!await hadZeroOrOnePassivity(BoutRole.red)) return;
+          await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 1));
+        }
+      } else if (intent is RolePointBoutActionIntent) {
+        if (psm.activityStopwatch != null) {
+          psm.activityStopwatch?.dispose();
+          psm.activityStopwatch = null;
+        }
+      }
+    }
+  }
+
+  Future<void> _handleBoutScreenActionIntent(
+    BoutScreenActionIntent intent,
+    Future<void> Function(BoutAction action) deleteAction,
+  ) async {
+    final type = intent.type;
+    switch (type) {
+      case BoutScreenActionType.startStop:
+        mainStopwatch.stopwatch.startStop();
+        break;
+      case BoutScreenActionType.addOneSec:
+        mainStopwatch.stopwatch.add(const Duration(seconds: 1));
+        break;
+      case BoutScreenActionType.rmOneSec:
+        if (mainStopwatch.stopwatch.elapsed > const Duration(seconds: 1)) {
+          mainStopwatch.stopwatch.add(-const Duration(seconds: 1));
+        } else {
+          mainStopwatch.stopwatch.add(-mainStopwatch.stopwatch.elapsed);
+        } // Do not reset, as it will may stop the timer
+        break;
+      case BoutScreenActionType.reset:
+        mainStopwatch.stopwatch.reset();
+        break;
+      case BoutScreenActionType.nextBout:
+        final int index = widget.boutIndex + 1;
+        if (index < widget.bouts.length) {
+          saveAndNavigateToBoutByIndex(context, index);
         }
         break;
-      case BoutScreenActions.blueBleedingInjuryTime:
-        final ParticipantStateModel psm = _b;
-        setState(() {
-          if (!_b.bleedingInjuryStopwatch.hasEnded) {
-            psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
-          }
-          psm.isBleedingInjuryDisplayed = !psm.isBleedingInjuryDisplayed;
-        });
-        if (psm.isBleedingInjury) {
-          psm.bleedingInjuryStopwatch.start();
-        } else {
-          psm.bleedingInjuryStopwatch.stop();
+      case BoutScreenActionType.previousBout:
+        final int index = widget.boutIndex - 1;
+        if (index >= 0) {
+          saveAndNavigateToBoutByIndex(context, index);
         }
         break;
-      case BoutScreenActions.horn:
+      case BoutScreenActionType.quit:
+        context.pop();
+        break;
+      case BoutScreenActionType.undo:
+        final prevActions = await _getActions();
+        if (prevActions.isNotEmpty) {
+          final action = prevActions.last;
+          deleteAction(action);
+        }
+        break;
+      case BoutScreenActionType.horn:
         ref.read(bellPlayerProvider).then((player) async {
           await player.stop();
           await player.resume();
         });
-        break;
-      default:
         break;
     }
   }
@@ -402,18 +488,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         await save();
       },
       child: BoutActionHandler(
-        createOrUpdateAction: (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
-        deleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
-        getCurrentStopwatch: () => mainStopwatch.stopwatch,
-        boutStopwatch: mainStopwatch.boutStopwatch,
-        getActions:
-            () async => await ref.readAsync(
-              manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
-            ),
-        bouts: widget.bouts,
-        boutIndex: widget.boutIndex,
-        doAction: doAction,
-        navigateToBoutByIndex: saveAndNavigateToBoutByIndex,
+        handleIntent: handleOrCatchIntent,
         child: WindowStateScaffold(
           hideAppBarOnFullscreen: true,
           actions: [...widget.actions, pdfAction],
@@ -480,7 +555,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                     BoutActionControls(
                       BoutRole.red,
                       boutConfig,
-                      bout.r == null ? null : handleAction,
+                      bout.r == null ? null : handleOrCatchIntent,
                       wrestlingStyle: weightClass?.style,
                     ),
                     Expanded(
@@ -506,7 +581,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                     BoutActionControls(
                       BoutRole.blue,
                       boutConfig,
-                      bout.b == null ? null : handleAction,
+                      bout.b == null ? null : handleOrCatchIntent,
                       wrestlingStyle: weightClass?.style,
                     ),
                     displayTechnicalPoints(_b, BoutRole.blue),
@@ -527,7 +602,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                     },
                   ),
                 ),
-                Container(padding: bottomPadding, child: BoutMainControls(handleAction, this)),
+                Container(padding: bottomPadding, child: BoutMainControls(handleOrCatchIntent, this)),
               ],
             ),
           ),

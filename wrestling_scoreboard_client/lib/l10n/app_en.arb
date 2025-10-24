@@ -60,6 +60,7 @@
   "saveEvery": "Save every",
   "deleteAfter": "Delete after",
   "bellSound": "Bell sound",
+  "smartBoutActions": "Automatic Bout Actions",
   "timeCountDown": "Count down the time",
   "incompatibleVersionsPhrase": "This client with version **{clientVersion}** is not compatible with the server version **{serverVersion}**. {compatibilityText}\nPlease download a compatible client from [GitHub - Oberhauser-Dev/wrestling_scoreboard](https://github.com/Oberhauser-Dev/wrestling_scoreboard/releases) or change the server URLs in the settings.",
   "@incompatibleVersionsPhrase": {
@@ -340,6 +341,7 @@
   "periodCount": "Number of periods",
   "minimum": "Minimum",
   "maximum": "Maximum",
+  "warningCautionNoPoints": "A caution must be followed by one or two points.",
 
   "official": "Official",
   "officials": "Officials",

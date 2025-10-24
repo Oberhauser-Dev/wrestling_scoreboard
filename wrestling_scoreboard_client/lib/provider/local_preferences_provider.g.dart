@@ -514,6 +514,55 @@ abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
   }
 }
 
+@ProviderFor(SmartBoutActionsNotifier)
+const smartBoutActionsProvider = SmartBoutActionsNotifierProvider._();
+
+final class SmartBoutActionsNotifierProvider extends $NotifierProvider<SmartBoutActionsNotifier, Raw<Future<bool>>> {
+  const SmartBoutActionsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'smartBoutActionsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$smartBoutActionsNotifierHash();
+
+  @$internal
+  @override
+  SmartBoutActionsNotifier create() => SmartBoutActionsNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<bool>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<bool>>>(value));
+  }
+}
+
+String _$smartBoutActionsNotifierHash() => r'ec4837e01a554e7c4be0d70748fe3f8351de38f4';
+
+abstract class _$SmartBoutActionsNotifier extends $Notifier<Raw<Future<bool>>> {
+  Raw<Future<bool>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<bool>>, Raw<Future<bool>>>,
+              Raw<Future<bool>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(FavoritesNotifier)
 const favoritesProvider = FavoritesNotifierProvider._();
 

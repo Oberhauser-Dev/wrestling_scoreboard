@@ -9,7 +9,7 @@ class BoutActionControls extends StatelessWidget {
   final BoutRole role;
   final BoutConfig boutConfig;
   final WrestlingStyle? wrestlingStyle;
-  final Function(BoutScreenActionIntent)? callback;
+  final Function(Intent)? callback;
 
   const BoutActionControls(this.role, this.boutConfig, this.callback, {super.key, required this.wrestlingStyle});
 
@@ -18,26 +18,26 @@ class BoutActionControls extends StatelessWidget {
     final localizations = context.l10n;
     final bool isRed = role == BoutRole.red;
     final MaterialColor color = isRed ? Colors.red : Colors.blue;
-    void Function()? prepareCallback(BoutScreenActionIntent intentRed, BoutScreenActionIntent intentBlue) {
+    void Function()? prepareCallback(Intent intentRed, Intent intentBlue) {
       return callback == null ? null : () => callback!(isRed ? intentRed : intentBlue);
     }
 
     final actions = <Widget>[
       _ActionControl(
         '1',
-        prepareCallback(const BoutScreenActionIntent.redOne(), const BoutScreenActionIntent.blueOne()),
+        prepareCallback(const RolePointBoutActionIntent.redOne(), const RolePointBoutActionIntent.blueOne()),
         color,
         tooltipMessage: '1 ${localizations.point} (${isRed ? '1 | F' : 'Numpad1 | J | ⇧ + 1'})',
       ),
       _ActionControl(
         '2',
-        prepareCallback(const BoutScreenActionIntent.redTwo(), const BoutScreenActionIntent.blueTwo()),
+        prepareCallback(const RolePointBoutActionIntent.redTwo(), const RolePointBoutActionIntent.blueTwo()),
         color,
         tooltipMessage: '2 ${localizations.points} (${isRed ? '2 | D' : 'Numpad2 | K | ⇧ + 2'})',
       ),
       _ActionControl(
         '4',
-        prepareCallback(const BoutScreenActionIntent.redFour(), const BoutScreenActionIntent.blueFour()),
+        prepareCallback(const RolePointBoutActionIntent.redFour(), const RolePointBoutActionIntent.blueFour()),
         color,
         tooltipMessage: '4 ${localizations.points} (${isRed ? '4 | S' : 'Numpad4 | L | ⇧ + 4'})',
       ),
@@ -45,31 +45,31 @@ class BoutActionControls extends StatelessWidget {
       // https://github.com/flutter/flutter/issues/25841
       _ActionControl(
         '5',
-        prepareCallback(const BoutScreenActionIntent.redFive(), const BoutScreenActionIntent.blueFive()),
+        prepareCallback(const RolePointBoutActionIntent.redFive(), const RolePointBoutActionIntent.blueFive()),
         color,
         tooltipMessage: '5 ${localizations.points} (${isRed ? '5 | A' : 'Numpad5 | ;/Ö | ⇧ + 5'})',
       ),
       _ActionControl(
         localizations.verbalWarningAbbr,
-        prepareCallback(const BoutScreenActionIntent.redVerbal(), const BoutScreenActionIntent.blueVerbal()),
+        prepareCallback(RoleBoutActionIntent.redVerbal(), RoleBoutActionIntent.blueVerbal()),
         color,
         tooltipMessage: localizations.verbalWarning,
       ),
       _ActionControl(
         localizations.passivityAbbr,
-        prepareCallback(const BoutScreenActionIntent.redPassivity(), const BoutScreenActionIntent.bluePassivity()),
+        prepareCallback(RoleBoutActionIntent.redPassivity(), RoleBoutActionIntent.bluePassivity()),
         color,
         tooltipMessage: localizations.passivity,
       ),
       _ActionControl(
         localizations.cautionAbbr,
-        prepareCallback(const BoutScreenActionIntent.redCaution(), const BoutScreenActionIntent.blueCaution()),
+        prepareCallback(RoleBoutActionIntent.redCaution(), RoleBoutActionIntent.blueCaution()),
         color,
         tooltipMessage: localizations.caution,
       ),
       _ActionControl(
         localizations.dismissalAbbr,
-        prepareCallback(const BoutScreenActionIntent.redDismissal(), const BoutScreenActionIntent.blueDismissal()),
+        prepareCallback(RoleBoutActionIntent.redDismissal(), RoleBoutActionIntent.blueDismissal()),
         color,
         tooltipMessage: localizations.dismissal,
       ),
@@ -77,8 +77,8 @@ class BoutActionControls extends StatelessWidget {
         _ActionControl(
           context.l10n.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           prepareCallback(
-            const BoutScreenActionIntent.redActivityTime(),
-            const BoutScreenActionIntent.blueActivityTime(),
+            const RoleScreenActionIntent.redActivityTime(),
+            const RoleScreenActionIntent.blueActivityTime(),
           ),
           color,
           tooltipMessage: localizations.activityDuration,
@@ -86,7 +86,7 @@ class BoutActionControls extends StatelessWidget {
       if (boutConfig.injuryDuration != null)
         _ActionControl(
           context.l10n.injuryTimeShort, // VZ Injury Time, Verletzungszeit
-          prepareCallback(const BoutScreenActionIntent.redInjuryTime(), const BoutScreenActionIntent.blueInjuryTime()),
+          prepareCallback(const RoleScreenActionIntent.redInjuryTime(), const RoleScreenActionIntent.blueInjuryTime()),
           color,
           tooltipMessage: localizations.injuryDuration,
         ),
@@ -94,15 +94,15 @@ class BoutActionControls extends StatelessWidget {
         _ActionControl(
           context.l10n.bleedingInjuryTimeShort, // BZ Bleeding Injury Time, Verletzungszeit Blut
           prepareCallback(
-            const BoutScreenActionIntent.redBleedingInjuryTime(),
-            const BoutScreenActionIntent.blueBleedingInjuryTime(),
+            const RoleScreenActionIntent.redBleedingInjuryTime(),
+            const RoleScreenActionIntent.blueBleedingInjuryTime(),
           ),
           color,
           tooltipMessage: localizations.bleedingInjuryDuration,
         ),
       _ActionControl(
         '⎌',
-        prepareCallback(const BoutScreenActionIntent.redUndo(), const BoutScreenActionIntent.blueUndo()),
+        prepareCallback(const RoleScreenActionIntent.redUndo(), const RoleScreenActionIntent.blueUndo()),
         color,
         tooltipMessage: '${localizations.deleteLatestAction} (⌫)',
       ),

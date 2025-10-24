@@ -9,6 +9,7 @@ enum Env {
   appEnvironment,
   bellSoundPath,
   timeCountDown,
+  smartBoutActions,
 
   /// Use [PathUrlStrategy] instead of the [HashUrlStrategy]. This must be supported by your server, see
   /// https://docs.flutter.dev/ui/navigation/url-strategies#configuring-your-web-server
@@ -37,6 +38,8 @@ enum Env {
         return const bool.fromEnvironment('USE_PATH_URL_STRATEGY', defaultValue: false);
       case Env.timeCountDown:
         return const bool.fromEnvironment('IS_TIME_COUNT_DOWN', defaultValue: true);
+      case Env.smartBoutActions:
+        return const bool.fromEnvironment('SMART_BOUT_ACTIONS', defaultValue: true);
       default:
         throw '$this is not of type `bool`';
     }

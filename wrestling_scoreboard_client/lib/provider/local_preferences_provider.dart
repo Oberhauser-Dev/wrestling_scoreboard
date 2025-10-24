@@ -190,6 +190,21 @@ class TimeCountDownNotifier extends _$TimeCountDownNotifier {
 }
 
 @Riverpod(keepAlive: true)
+class SmartBoutActionsNotifier extends _$SmartBoutActionsNotifier {
+  @override
+  Raw<Future<bool>> build() async {
+    var smartBoutActions = await Preferences.getBool(Preferences.keySmartBoutActions);
+    smartBoutActions ??= Env.smartBoutActions.fromBool();
+    return smartBoutActions;
+  }
+
+  Future<void> setState(bool? val) async {
+    await Preferences.setBool(Preferences.keySmartBoutActions, val);
+    state = Future.value(val);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class FavoritesNotifier extends _$FavoritesNotifier {
   @override
   Raw<Future<Map<String, Set<int>>>> build() async {

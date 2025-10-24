@@ -159,6 +159,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get bellSound => 'Glocken-Sound';
 
   @override
+  String get smartBoutActions => 'Automatische Kampf-Aktionen';
+
+  @override
   String get timeCountDown => 'Zähle die Zeit herunter';
 
   @override
@@ -905,6 +908,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get maximum => 'Maximum';
+
+  @override
+  String get warningCautionNoPoints => 'Auf eine Verwarnung müssen ein oder zwei Punkte folgen.';
 
   @override
   String get official => 'Offizielle(r)';
