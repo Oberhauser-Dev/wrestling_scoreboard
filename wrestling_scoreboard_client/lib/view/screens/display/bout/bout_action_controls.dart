@@ -8,9 +8,10 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class BoutActionControls extends StatelessWidget {
   final BoutRole role;
   final BoutConfig boutConfig;
+  final WrestlingStyle? wrestlingStyle;
   final Function(BoutScreenActionIntent)? callback;
 
-  const BoutActionControls(this.role, this.boutConfig, this.callback, {super.key});
+  const BoutActionControls(this.role, this.boutConfig, this.callback, {super.key, required this.wrestlingStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class BoutActionControls extends StatelessWidget {
         color,
         tooltipMessage: localizations.dismissal,
       ),
-      if (boutConfig.activityDuration != null)
+      if (boutConfig.activityDuration != null && wrestlingStyle == WrestlingStyle.free)
         _ActionControl(
           context.l10n.activityTimeAbbr, // AZ Activity Time, Aktivitätszeit
           prepareCallback(
