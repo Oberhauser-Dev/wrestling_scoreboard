@@ -223,7 +223,10 @@ class _MainControlDropDown extends ConsumerWidget {
 
                 return CustomDropdown<BoutResult>(
                   isNullable: true,
-                  selected: role == bout.winnerRole || (bout.result?.affectsBoth() ?? false) ? bout.result : null,
+                  selected:
+                      pStatus != null && (role == bout.winnerRole || (bout.result?.affectsBoth() ?? false))
+                          ? bout.result
+                          : null,
                   options: boutResultOptions,
                   onChange: (BoutResult? val) async {
                     final dataManager = await ref.read(dataManagerProvider);
