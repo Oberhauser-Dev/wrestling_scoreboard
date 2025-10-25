@@ -162,6 +162,17 @@ class BoutState extends ConsumerState<BoutScreen> {
     mainStopwatch.boutStopwatch.onStart.stream.listen((event) {
       _r.activityStopwatch?.start();
       _b.activityStopwatch?.start();
+
+      // Stop all injury timers, when bout stop watch is started
+      _r.injuryStopwatch.stop();
+      _r.isInjuryDisplayedNotifier.value = false;
+      _r.bleedingInjuryStopwatch.stop();
+      _r.isBleedingInjuryDisplayedNotifier.value = false;
+
+      _b.injuryStopwatch.stop();
+      _b.isInjuryDisplayedNotifier.value = false;
+      _b.bleedingInjuryStopwatch.stop();
+      _b.isBleedingInjuryDisplayedNotifier.value = false;
     });
     mainStopwatch.boutStopwatch.onStop.stream.listen((event) async {
       _r.activityStopwatch?.stop();
