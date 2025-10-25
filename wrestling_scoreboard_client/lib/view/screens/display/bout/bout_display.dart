@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
+import 'package:wrestling_scoreboard_client/view/models/main_stopwatch.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_action_controls.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_actions.dart';
@@ -125,36 +126,32 @@ class BoutState extends ConsumerState<BoutScreen> {
     // Regular injury
     _r.injuryStopwatch.limit = boutConfig.injuryDuration;
     _r.injuryStopwatch.onEnd.stream.listen((event) {
-      setState(() {
-        _r.isInjury = false;
-        _r.isInjuryDisplayed = false;
-      });
+      _r.isInjury = false;
+      _r.isInjuryDisplayedNotifier.value = false;
+
       handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
     _b.injuryStopwatch.limit = boutConfig.injuryDuration;
     _b.injuryStopwatch.onEnd.stream.listen((event) {
-      setState(() {
-        _b.isInjury = false;
-        _b.isInjuryDisplayed = false;
-      });
+      _b.isInjury = false;
+      _b.isInjuryDisplayedNotifier.value = false;
+
       handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
 
     // Bleeding injury
     _r.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
     _r.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
-      setState(() {
-        _r.isBleedingInjury = false;
-        _r.isBleedingInjuryDisplayed = false;
-      });
+      _r.isBleedingInjury = false;
+      _r.isBleedingInjuryDisplayedNotifier.value = false;
+
       handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
     _b.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
     _b.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
-      setState(() {
-        _b.isBleedingInjury = false;
-        _b.isBleedingInjuryDisplayed = false;
-      });
+      _b.isBleedingInjury = false;
+      _b.isBleedingInjuryDisplayedNotifier.value = false;
+
       handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
 
@@ -189,11 +186,11 @@ class BoutState extends ConsumerState<BoutScreen> {
           mainStopwatch.boutStopwatch.stopAt(event);
           if (_r.activityStopwatch != null) {
             _r.activityStopwatch!.dispose();
-            _r.activityStopwatch = null;
+            _r.activityStopwatchNotifier.value = null;
           }
           if (_b.activityStopwatch != null) {
             _b.activityStopwatch!.dispose();
-            _b.activityStopwatch = null;
+            _b.activityStopwatchNotifier.value = null;
           }
           handleOrCatchIntent(const BoutScreenActionIntent.horn());
           if (period < boutConfig.periodCount) {
@@ -294,30 +291,27 @@ class BoutState extends ConsumerState<BoutScreen> {
       case RoleScreenActionType.activityTime:
         final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
         psm.activityStopwatch?.dispose();
-        setState(() {
-          psm.activityStopwatch =
-              psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
-        });
+        psm.activityStopwatchNotifier.value =
+            psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
         if (psm.activityStopwatch != null && mainStopwatch.boutStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) async {
           psm.activityStopwatch?.dispose();
-          setState(() {
-            psm.activityStopwatch = null;
-          });
+          psm.activityStopwatchNotifier.value = null;
+
           await handleIntent(const BoutScreenActionIntent.horn());
           if (useSmartBoutActions) await handleIntent(RolePointBoutActionIntent(points: 1, role: intent.role.opponent));
         });
         break;
       case RoleScreenActionType.injuryTime:
         final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
-        setState(() {
-          if (!psm.injuryStopwatch.hasEnded) {
-            // If time is set manually after timer has ended, the timer and display flags differ.
-            // So we use the displayed flag as the reset option.
-            psm.isInjury = !psm.isInjuryDisplayed;
-          }
-          psm.isInjuryDisplayed = !psm.isInjuryDisplayed;
-        });
+
+        if (!psm.injuryStopwatch.hasEnded) {
+          // If time is set manually after timer has ended, the timer and display flags differ.
+          // So we use the displayed flag as the reset option.
+          psm.isInjury = !psm.isInjuryDisplayed;
+        }
+        psm.isInjuryDisplayedNotifier.value = !psm.isInjuryDisplayed;
+
         if (psm.isInjury) {
           psm.injuryStopwatch.start();
         } else {
@@ -326,12 +320,12 @@ class BoutState extends ConsumerState<BoutScreen> {
         break;
       case RoleScreenActionType.bleedingInjuryTime:
         final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
-        setState(() {
-          if (!psm.bleedingInjuryStopwatch.hasEnded) {
-            psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
-          }
-          psm.isBleedingInjuryDisplayed = !psm.isBleedingInjuryDisplayed;
-        });
+
+        if (!psm.bleedingInjuryStopwatch.hasEnded) {
+          psm.isBleedingInjury = !psm.isBleedingInjuryDisplayed;
+        }
+        psm.isBleedingInjuryDisplayedNotifier.value = !psm.isBleedingInjuryDisplayed;
+
         if (psm.isBleedingInjury) {
           psm.bleedingInjuryStopwatch.start();
         } else {
@@ -363,7 +357,7 @@ class BoutState extends ConsumerState<BoutScreen> {
           mainStopwatch.stopwatch.stop();
           // Dispose previous activity times, so it is not toggled off
           psm.activityStopwatch?.dispose();
-          psm.activityStopwatch = null;
+          psm.activityStopwatchNotifier.value = null;
           await handleIntent(RoleScreenActionIntent(role: intent.role, type: RoleScreenActionType.activityTime));
         } else {
           assert(prevActions != null, 'prevActions should already be initialized');
@@ -382,7 +376,7 @@ class BoutState extends ConsumerState<BoutScreen> {
       } else if (intent is RolePointBoutActionIntent) {
         if (psm.activityStopwatch != null) {
           psm.activityStopwatch?.dispose();
-          psm.activityStopwatch = null;
+          psm.activityStopwatchNotifier.value = null;
         }
       }
     }
@@ -675,17 +669,6 @@ class _ParticipantDisplay extends StatelessWidget {
         )
         : Container();
   }
-}
-
-class MainStopwatch {
-  // Use value notifier to not need to reload the whole widget.
-  final isBreak = ValueNotifier(false);
-  final ObservableStopwatch boutStopwatch;
-  final ObservableStopwatch breakStopwatch;
-
-  ObservableStopwatch get stopwatch => isBreak.value ? breakStopwatch : boutStopwatch;
-
-  MainStopwatch({required this.boutStopwatch, required this.breakStopwatch});
 }
 
 class _NameDisplay extends StatelessWidget {

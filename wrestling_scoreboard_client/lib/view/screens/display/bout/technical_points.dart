@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
@@ -48,53 +48,75 @@ class TechnicalPoints extends StatelessWidget {
               },
             ),
           ),
-          if (pStatusModel.activityStopwatch != null && boutConfig.activityDuration != null)
-            Expanded(
-              flex: 30,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ScaledText(context.l10n.activityTimeAbbr, fontSize: timerFontSize),
-                  TimeDisplay(
-                    pStatusModel.activityStopwatch!,
-                    white,
-                    fontSize: timerFontSize,
-                    maxDuration: boutConfig.activityDuration!,
+          if (boutConfig.activityDuration != null)
+            ValueListenableBuilder(
+              valueListenable: pStatusModel.activityStopwatchNotifier,
+              builder: (context, activityStopwatch, _) {
+                if (activityStopwatch == null) return SizedBox.shrink();
+                return Expanded(
+                  flex: 30,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ScaledText(context.l10n.activityTimeAbbr, fontSize: timerFontSize),
+                      TimeDisplay(
+                        activityStopwatch,
+                        white,
+                        fontSize: timerFontSize,
+                        maxDuration: boutConfig.activityDuration!,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          if (pStatusModel.isInjuryDisplayed && boutConfig.injuryDuration != null)
-            Expanded(
-              flex: 30,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ScaledText(context.l10n.injuryTimeShort, fontSize: timerFontSize),
-                  TimeDisplay(
-                    pStatusModel.injuryStopwatch,
-                    white,
-                    fontSize: timerFontSize,
-                    maxDuration: boutConfig.injuryDuration!,
+          if (boutConfig.injuryDuration != null)
+            ValueListenableBuilder(
+              valueListenable: pStatusModel.isInjuryDisplayedNotifier,
+              builder: (context, isInjuryDisplayed, _) {
+                return Visibility(
+                  visible: isInjuryDisplayed,
+                  child: Expanded(
+                    flex: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ScaledText(context.l10n.injuryTimeShort, fontSize: timerFontSize),
+                        TimeDisplay(
+                          pStatusModel.injuryStopwatch,
+                          white,
+                          fontSize: timerFontSize,
+                          maxDuration: boutConfig.injuryDuration!,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          if (pStatusModel.isBleedingInjuryDisplayed && boutConfig.bleedingInjuryDuration != null)
-            Expanded(
-              flex: 30,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ScaledText(context.l10n.bleedingInjuryTimeShort, fontSize: timerFontSize),
-                  TimeDisplay(
-                    pStatusModel.bleedingInjuryStopwatch,
-                    white,
-                    fontSize: timerFontSize,
-                    maxDuration: boutConfig.bleedingInjuryDuration!,
+          if (boutConfig.bleedingInjuryDuration != null)
+            ValueListenableBuilder(
+              valueListenable: pStatusModel.isBleedingInjuryDisplayedNotifier,
+              builder: (context, isBleedingInjuryDisplayed, _) {
+                return Visibility(
+                  visible: isBleedingInjuryDisplayed,
+                  child: Expanded(
+                    flex: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ScaledText(context.l10n.bleedingInjuryTimeShort, fontSize: timerFontSize),
+                        TimeDisplay(
+                          pStatusModel.bleedingInjuryStopwatch,
+                          white,
+                          fontSize: timerFontSize,
+                          maxDuration: boutConfig.bleedingInjuryDuration!,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
         ],
       ),
