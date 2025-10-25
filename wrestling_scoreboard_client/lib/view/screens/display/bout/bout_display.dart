@@ -32,9 +32,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-// TODO: check if comment is still valid.
-/// Initialize with default values, but do not synchronize with live data, as during a bout the connection could be interrupted. So the client always sends data, but never should receive any.
-/// If closing and reopening screen, data should be updated though.
+/// Everything is live updated, except the timers are running locally, to reduce traffic and raise accuracy.
 class BoutScreen extends ConsumerStatefulWidget {
   final WrestlingEvent wrestlingEvent;
   final Map<Person, PersonRole> officials;
