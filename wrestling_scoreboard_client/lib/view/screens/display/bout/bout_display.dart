@@ -385,6 +385,7 @@ class BoutState extends ConsumerState<BoutScreen> {
           await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 1));
         }
       } else if (intent is RolePointBoutActionIntent) {
+        // End activity stop watch, if a point is made.
         if (psm.activityStopwatch != null) {
           psm.activityStopwatch?.dispose();
           psm.activityStopwatchNotifier.value = null;

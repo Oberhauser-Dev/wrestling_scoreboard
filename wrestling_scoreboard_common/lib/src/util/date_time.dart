@@ -68,8 +68,8 @@ class ObservableStopwatch extends Stopwatch {
       }
     }
     if (hasEnded) {
+      // onEnd is called within stopAt, otherwise it gets called twice.
       stopAt(limit!);
-      onEnd.add(elapsed);
     }
     _prevDuration = elapsed;
   }
@@ -98,6 +98,7 @@ class ObservableStopwatch extends Stopwatch {
       this.elapsed = elapsed;
       onStop.add(elapsed);
       _onStartStop();
+      if (hasEnded) onEnd.add(elapsed);
     }
   }
 
