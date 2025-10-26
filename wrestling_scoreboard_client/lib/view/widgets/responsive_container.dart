@@ -45,7 +45,7 @@ class ResponsiveScaffoldActionItem {
   final VoidCallback? onTap;
   final ResponsiveScaffoldActionItemStyle style;
 
-  ResponsiveScaffoldActionItem({
+  const ResponsiveScaffoldActionItem({
     required this.icon,
     required this.label,
     required this.onTap,
