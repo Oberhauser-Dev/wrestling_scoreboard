@@ -707,6 +707,7 @@ class _NameDisplay extends StatelessWidget {
                 color: pStatus == null ? Colors.white30 : Colors.white,
                 fontSize: 40,
                 minFontSize: 20,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
