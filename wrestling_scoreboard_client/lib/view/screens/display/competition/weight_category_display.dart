@@ -18,6 +18,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionWeightCategoryDisplay extends ConsumerWidget {
@@ -90,176 +91,179 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
         //   },
         // );
 
-        return WindowStateScaffold(
-          hideAppBarOnFullscreen: true,
-          actions: [
-            infoAction,
-            // pdfAction,
-          ],
-          body: ManyConsumer<CompetitionParticipation, CompetitionWeightCategory>(
-            filterObject: competitionWeightCategory,
-            builder: (context, competitionParticipations) {
-              final competitionInfos = [
-                competitionWeightCategory.competition.name,
-                competitionWeightCategory.competition.date.toDateString(context),
-              ];
+        return DisplayTheme(
+          child: WindowStateScaffold(
+            hideAppBarOnFullscreen: true,
+            actions: [
+              infoAction,
+              // pdfAction,
+            ],
+            body: ManyConsumer<CompetitionParticipation, CompetitionWeightCategory>(
+              filterObject: competitionWeightCategory,
+              builder: (context, competitionParticipations) {
+                final competitionInfos = [
+                  competitionWeightCategory.competition.name,
+                  competitionWeightCategory.competition.date.toDateString(context),
+                ];
 
-              return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
-                filterObject: competitionWeightCategory,
-                builder: (context, competitionBouts) {
-                  return LoadingBuilder(
-                    future: Future.wait(
-                      competitionBouts.map((cb) async => MapEntry(cb, await _getActions(ref, cb.bout))),
-                    ),
-                    builder: (context, competitionBoutsWithActions) {
-                      final competitionBoutsByRound = SplayTreeMap<int?, Map<CompetitionBout, Iterable<BoutAction>>>.of(
-                        competitionBoutsWithActions
-                            .groupSetsBy((element) => element.key.round)
-                            .map((key, entries) => MapEntry(key, Map.fromEntries(entries))),
-                      );
-                      final participantWidgets = <Widget>[];
-                      competitionWeightCategory.rankingBuilder(
-                        weightCategoryParticipants: competitionParticipations,
-                        weightCategoryBoutsWithActions: Map.fromEntries(competitionBoutsWithActions),
-                        poolGroupBuilder: (poolGroup) {
-                          if (competitionWeightCategory.poolGroupCount > 1) {
-                            participantWidgets.add(
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-                                child: Card(
-                                  child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}')),
+                return ManyConsumer<CompetitionBout, CompetitionWeightCategory>(
+                  filterObject: competitionWeightCategory,
+                  builder: (context, competitionBouts) {
+                    return LoadingBuilder(
+                      future: Future.wait(
+                        competitionBouts.map((cb) async => MapEntry(cb, await _getActions(ref, cb.bout))),
+                      ),
+                      builder: (context, competitionBoutsWithActions) {
+                        final competitionBoutsByRound =
+                            SplayTreeMap<int?, Map<CompetitionBout, Iterable<BoutAction>>>.of(
+                              competitionBoutsWithActions
+                                  .groupSetsBy((element) => element.key.round)
+                                  .map((key, entries) => MapEntry(key, Map.fromEntries(entries))),
+                            );
+                        final participantWidgets = <Widget>[];
+                        competitionWeightCategory.rankingBuilder(
+                          weightCategoryParticipants: competitionParticipations,
+                          weightCategoryBoutsWithActions: Map.fromEntries(competitionBoutsWithActions),
+                          poolGroupBuilder: (poolGroup) {
+                            if (competitionWeightCategory.poolGroupCount > 1) {
+                              participantWidgets.add(
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                                  child: Card(
+                                    child: Center(child: ScaledText('${localizations.pool} ${poolGroup.toLetter()}')),
+                                  ),
                                 ),
+                              );
+                            }
+                          },
+                          poolGroupParticipantBuilder: (participation, ranking, poolRanking, rankingMetric) {
+                            participantWidgets.add(
+                              Column(
+                                children: [
+                                  IntrinsicHeight(
+                                    child: CompetitionParticipationItem(
+                                      participation: participation,
+                                      // Need to pass all participations as it can pair with another pool in the finals.
+                                      participations: competitionParticipations,
+                                      competitionBoutsByRound: competitionBoutsByRound,
+                                      rankingMetric: rankingMetric,
+                                      ranking: ranking,
+                                      poolRanking: poolRanking,
+                                    ),
+                                  ),
+                                  const Divider(height: 1),
+                                ],
                               ),
                             );
-                          }
-                        },
-                        poolGroupParticipantBuilder: (participation, ranking, poolRanking, rankingMetric) {
-                          participantWidgets.add(
-                            Column(
+                          },
+                        );
+                        return Column(
+                          children: [
+                            Row(
                               children: [
-                                IntrinsicHeight(
-                                  child: CompetitionParticipationItem(
-                                    participation: participation,
-                                    // Need to pass all participations as it can pair with another pool in the finals.
-                                    participations: competitionParticipations,
-                                    competitionBoutsByRound: competitionBoutsByRound,
-                                    rankingMetric: rankingMetric,
-                                    ranking: ranking,
-                                    poolRanking: poolRanking,
+                                Expanded(
+                                  child: Center(
+                                    child: ScaledText(
+                                      competitionWeightCategory.name,
+                                      softWrap: false,
+                                      fontSize: 16,
+                                      minFontSize: 12,
+                                    ),
                                   ),
                                 ),
-                                const Divider(height: 1),
+                                Column(
+                                  children:
+                                      competitionInfos
+                                          .map(
+                                            (e) => Center(
+                                              child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8),
+                                            ),
+                                          )
+                                          .toList(),
+                                ),
                               ],
                             ),
-                          );
-                        },
-                      );
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: ScaledText(
-                                    competitionWeightCategory.name,
-                                    softWrap: false,
-                                    fontSize: 16,
-                                    minFontSize: 12,
+                            Divider(),
+                            IntrinsicHeight(
+                              // Need to see the vertical divider
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.numberRelativeWidth,
+                                    child: ScaledText(localizations.numberAbbreviation),
                                   ),
-                                ),
-                              ),
-                              Column(
-                                children:
-                                    competitionInfos
-                                        .map(
-                                          (e) => Center(
-                                            child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8),
+                                  VerticalDivider(),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.nameRelativeWidth,
+                                    child: ScaledText(localizations.name),
+                                  ),
+                                  VerticalDivider(),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.clubRelativeWidth,
+                                    child: ScaledText(localizations.club),
+                                  ),
+                                  VerticalDivider(width: 1),
+                                  ...competitionBoutsByRound.keys.where((round) => round != null && round >= 0).map((
+                                    round,
+                                  ) {
+                                    final competitionBout = competitionBoutsByRound[round]!.keys.first;
+                                    return Row(
+                                      children: [
+                                        ScaledContainer(
+                                          width: CompetitionParticipationItem.roundRelativeWidth,
+                                          child: ScaledText(
+                                            '${competitionBout.roundType.localize(context)} (R${competitionBout.displayRound})',
+                                            fontSize: 10,
                                           ),
-                                        )
-                                        .toList(),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                          IntrinsicHeight(
-                            // Need to see the vertical divider
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.numberRelativeWidth,
-                                  child: ScaledText(localizations.numberAbbreviation),
-                                ),
-                                VerticalDivider(),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.nameRelativeWidth,
-                                  child: ScaledText(localizations.name),
-                                ),
-                                VerticalDivider(),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.clubRelativeWidth,
-                                  child: ScaledText(localizations.club),
-                                ),
-                                VerticalDivider(width: 1),
-                                ...competitionBoutsByRound.keys.where((round) => round != null && round >= 0).map((
-                                  round,
-                                ) {
-                                  final competitionBout = competitionBoutsByRound[round]!.keys.first;
-                                  return Row(
-                                    children: [
-                                      ScaledContainer(
-                                        width: CompetitionParticipationItem.roundRelativeWidth,
-                                        child: ScaledText(
-                                          '${competitionBout.roundType.localize(context)} (R${competitionBout.displayRound})',
-                                          fontSize: 10,
                                         ),
-                                      ),
-                                      VerticalDivider(width: 1),
-                                    ],
-                                  );
-                                }),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.wins, fontSize: 8),
-                                ),
-                                VerticalDivider(width: 1),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.classificationPointsAbbr),
-                                ),
-                                VerticalDivider(width: 1),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.technicalPointsAbbr),
-                                ),
-                                VerticalDivider(width: 1),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText('${localizations.rank} (${localizations.pool})', fontSize: 8),
-                                ),
-                                VerticalDivider(width: 1),
-                                ScaledContainer(
-                                  width: CompetitionParticipationItem.pointsRelativeWidth,
-                                  child: ScaledText(localizations.rank, fontSize: 8),
-                                ),
-                                VerticalDivider(width: 1),
-                              ],
+                                        VerticalDivider(width: 1),
+                                      ],
+                                    );
+                                  }),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.pointsRelativeWidth,
+                                    child: ScaledText(localizations.wins, fontSize: 8),
+                                  ),
+                                  VerticalDivider(width: 1),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.pointsRelativeWidth,
+                                    child: ScaledText(localizations.classificationPointsAbbr),
+                                  ),
+                                  VerticalDivider(width: 1),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.pointsRelativeWidth,
+                                    child: ScaledText(localizations.technicalPointsAbbr),
+                                  ),
+                                  VerticalDivider(width: 1),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.pointsRelativeWidth,
+                                    child: ScaledText('${localizations.rank} (${localizations.pool})', fontSize: 8),
+                                  ),
+                                  VerticalDivider(width: 1),
+                                  ScaledContainer(
+                                    width: CompetitionParticipationItem.pointsRelativeWidth,
+                                    child: ScaledText(localizations.rank, fontSize: 8),
+                                  ),
+                                  VerticalDivider(width: 1),
+                                ],
+                              ),
                             ),
-                          ),
-                          Divider(),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: participantWidgets.length,
-                              itemBuilder: (context, index) => participantWidgets[index],
+                            Divider(),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: participantWidgets.length,
+                                itemBuilder: (context, index) => participantWidgets[index],
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
-            },
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         );
       },

@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class MatchDisplay extends ConsumerWidget {
@@ -113,89 +114,93 @@ class MatchDisplay extends ConsumerWidget {
             }
           },
         );
-        return WindowStateScaffold(
-          hideAppBarOnFullscreen: true,
-          actions: [infoAction, pdfAction],
-          body: ManyConsumer<TeamMatchPerson, TeamMatch>(
-            filterObject: match,
-            builder: (context, officials) {
-              return ManyConsumer<TeamMatchBout, TeamMatch>(
-                filterObject: match,
-                builder: (context, teamMatchBouts) {
-                  final matchInfos = [match.league?.fullname, '${localizations.matchNumber}: ${match.id ?? ''}'];
-                  final headerItems = <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: Center(
-                        child: ScaledText(matchInfos.join('\n'), softWrap: false, fontSize: 12, minFontSize: 10),
+        return DisplayTheme(
+          child: WindowStateScaffold(
+            hideAppBarOnFullscreen: true,
+            actions: [infoAction, pdfAction],
+            body: ManyConsumer<TeamMatchPerson, TeamMatch>(
+              filterObject: match,
+              builder: (context, officials) {
+                return ManyConsumer<TeamMatchBout, TeamMatch>(
+                  filterObject: match,
+                  builder: (context, teamMatchBouts) {
+                    final matchInfos = [match.league?.fullname, '${localizations.matchNumber}: ${match.id ?? ''}'];
+                    final headerItems = <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(padding),
+                        child: Center(
+                          child: ScaledText(matchInfos.join('\n'), softWrap: false, fontSize: 12, minFontSize: 10),
+                        ),
                       ),
-                    ),
-                    ...CommonElements.getTeamHeader(
-                      match.home.team,
-                      match.guest.team,
-                      teamMatchBouts.map((e) => e.bout).toList(),
-                      context,
-                    ),
-                  ];
-                  final column = Column(
-                    children: [
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                      ...CommonElements.getTeamHeader(
+                        match.home.team,
+                        match.guest.team,
+                        teamMatchBouts.map((e) => e.bout).toList(),
+                        context,
+                      ),
+                    ];
+                    final column = Column(
+                      children: [
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children:
+                                headerItems
+                                    .asMap()
+                                    .entries
+                                    .map(
+                                      (entry) => Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value),
+                                    )
+                                    .toList(),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: teamMatchBouts.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBouts[index]),
+                                    child: IntrinsicHeight(
+                                      child: BoutListItem(
+                                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                                        bout: teamMatchBouts[index].bout,
+                                        weightClass: teamMatchBouts[index].weightClass,
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(height: 1),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        Row(
                           children:
-                              headerItems
-                                  .asMap()
-                                  .entries
+                              officials
+                                  .where(
+                                    (official) =>
+                                        official.role == PersonRole.referee ||
+                                        official.role == PersonRole.matChairman ||
+                                        official.role == PersonRole.judge,
+                                  )
                                   .map(
-                                    (entry) => Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value),
+                                    (tmp) => Expanded(
+                                      child: Center(
+                                        child: Text('${tmp.role.localize(context)}: ${tmp.person.fullName}'),
+                                      ),
+                                    ),
                                   )
                                   .toList(),
                         ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: teamMatchBouts.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBouts[index]),
-                                  child: IntrinsicHeight(
-                                    child: BoutListItem(
-                                      boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                                      bout: teamMatchBouts[index].bout,
-                                      weightClass: teamMatchBouts[index].weightClass,
-                                    ),
-                                  ),
-                                ),
-                                const Divider(height: 1),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      Row(
-                        children:
-                            officials
-                                .where(
-                                  (official) =>
-                                      official.role == PersonRole.referee ||
-                                      official.role == PersonRole.matChairman ||
-                                      official.role == PersonRole.judge,
-                                )
-                                .map(
-                                  (tmp) => Expanded(
-                                    child: Center(child: Text('${tmp.role.localize(context)}: ${tmp.person.fullName}')),
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                    ],
-                  );
-                  return column;
-                },
-              );
-            },
+                      ],
+                    );
+                    return column;
+                  },
+                );
+              },
+            ),
           ),
         );
       },
