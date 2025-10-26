@@ -302,6 +302,8 @@
   "boutConfig": "Bout configuration",
   "boutResultRule": "Bout Result Rule",
   "boutResultRules": "Bout Result Rules",
+  "sortedChronologically": "Sorted chronologically",
+  "sortedByWeightClass": "Sorted by weight class",
   "launchScratchBout": "Launch Scratch Bout",
   "searchResults": "Search results",
 

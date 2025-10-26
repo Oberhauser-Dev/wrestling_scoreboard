@@ -19,7 +19,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
-class MatchDisplay extends ConsumerWidget {
+class MatchDisplay extends ConsumerStatefulWidget {
   static const route = 'display';
 
   static void navigateTo(BuildContext context, TeamMatch match) {
@@ -32,14 +32,26 @@ class MatchDisplay extends ConsumerWidget {
   const MatchDisplay({required this.id, this.teamMatch, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MatchDisplay> createState() => _MatchDisplayState();
+}
+
+class _MatchDisplayState extends ConsumerState<MatchDisplay> {
+  bool sortChronologically = true;
+
+  @override
+  Widget build(BuildContext context) {
     final localizations = context.l10n;
     final double width = MediaQuery.of(context).size.width;
     final double padding = width / 140;
     return SingleConsumer<TeamMatch>(
-      id: id,
-      initialData: teamMatch,
+      id: widget.id,
+      initialData: widget.teamMatch,
       builder: (context, match) {
+        final chronologicalSortAction = ResponsiveScaffoldActionItem(
+          label: sortChronologically ? localizations.sortedChronologically : localizations.sortedByWeightClass,
+          icon: Icon(sortChronologically ? Icons.timeline : Icons.format_list_numbered),
+          onTap: () => setState(() => sortChronologically = !sortChronologically),
+        );
         final infoAction = ResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
@@ -117,13 +129,17 @@ class MatchDisplay extends ConsumerWidget {
         return DisplayTheme(
           child: WindowStateScaffold(
             hideAppBarOnFullscreen: true,
-            actions: [infoAction, pdfAction],
+            actions: [infoAction, pdfAction, chronologicalSortAction],
             body: ManyConsumer<TeamMatchPerson, TeamMatch>(
               filterObject: match,
               builder: (context, officials) {
                 return ManyConsumer<TeamMatchBout, TeamMatch>(
                   filterObject: match,
                   builder: (context, teamMatchBouts) {
+                    if (sortChronologically) {
+                      teamMatchBouts = TeamMatchBout.sortChronologically(teamMatchBouts);
+                    }
+
                     final matchInfos = [match.league?.fullname, '${localizations.matchNumber}: ${match.id ?? ''}'];
                     final headerItems = <Widget>[
                       Padding(

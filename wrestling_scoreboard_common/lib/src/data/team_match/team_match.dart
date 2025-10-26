@@ -119,6 +119,43 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     return bouts;
   }
 
+  static List<WeightClass> sortWeightClassesChronologically(List<WeightClass> weightClasses) {
+    // Reorder weightClasses according to bout order:
+    // Calculate the number of match sections.
+    WeightClass? lastWeightClass;
+    final List<int> sectionLengths = [];
+    for (final weightClass in weightClasses) {
+      // A weight class is smaller than the one before, a new section starts
+      if (lastWeightClass == null || weightClass.weight < lastWeightClass.weight) {
+        // A new section starts
+        sectionLengths.add(1);
+      } else {
+        // Add more weight classes to current section
+        sectionLengths.last++;
+      }
+      lastWeightClass = weightClass;
+    }
+    final List<WeightClass> sortedWeightClasses = List.of(weightClasses);
+
+    // For each section, calculate the new position of the weight classes:
+    // 0    1     2    3    4    5    6	        7    8    9    10   11   12   13
+    // 57F, 61G, 66F,  75G, 86F, 98G, 130F,     57G, 61F, 66G, 75F, 86G, 98F, 130G
+    // 0    2     4    6    5    3    1         7    9    11   13   12   10   8
+    //
+    // 0    1     2    3    4    5    6         7    8     9    10   11   12   13
+    // 57F, 130F, 61G, 98G, 66F, 86F, 75G,      57G, 130G, 61F, 98F, 66G, 86G, 75F
+    int sectionPos = 0;
+    for (final sectionLength in sectionLengths) {
+      for (int originalPos = 0; originalPos < sectionLength; originalPos++) {
+        final weightClass = weightClasses[sectionPos + originalPos];
+        final newPos = originalPos < (sectionLength / 2) ? originalPos * 2 : (sectionLength - originalPos - 1) * 2 + 1;
+        sortedWeightClasses[sectionPos + newPos] = weightClass;
+      }
+      sectionPos += sectionLength;
+    }
+    return sortedWeightClasses;
+  }
+
   @override
   @override
   String get tableName => cTableName;

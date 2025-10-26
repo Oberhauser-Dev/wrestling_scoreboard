@@ -793,6 +793,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultRules => 'Bout Result Rules';
 
   @override
+  String get sortedChronologically => 'Sorted chronologically';
+
+  @override
+  String get sortedByWeightClass => 'Sorted by weight class';
+
+  @override
   String get launchScratchBout => 'Launch Scratch Bout';
 
   @override
