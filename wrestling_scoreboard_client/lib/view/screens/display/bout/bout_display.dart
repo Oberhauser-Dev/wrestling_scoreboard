@@ -91,33 +91,23 @@ class BoutState extends ConsumerState<BoutScreen> {
   late Bout bout;
   int period = 1;
 
-  late final ProviderSubscription<Future<Bout>> _boutSubscription;
   late final StreamSubscription<Duration> _onEndBreakStopwatchSubscription;
   late final MainStopwatch mainStopwatch;
+
+  Widget? _child;
 
   @override
   initState() {
     super.initState();
+
     boutConfig = widget.boutConfig;
     boutRules = widget.boutRules;
-    bout = widget.bout;
-    // Set the initial current period based on the duration (to avoid wrong trigger of wrong stopwatch):
-    period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
-    // Update bout state with events from other clients:
-    _boutSubscription = ref.listenManual(
-      singleDataStreamProvider<Bout>(SingleProviderData(id: bout.id!, initialData: bout)).future,
-      (previous, next) async {
-        bout = await next;
-        // Set the current period based on the duration:
-        period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
-        if (!mainStopwatch.boutStopwatch.isDisposed) {
-          mainStopwatch.boutStopwatch.elapsed = bout.duration;
-        }
-      },
-      // Ensure the bout is updated immediately (e.g. after leaving and entering the display)
-      // This happens, as the bout object is not refreshed in the underlaying screens to avoid reload animations.
-      fireImmediately: true,
+    mainStopwatch = MainStopwatch(
+      boutStopwatch: ObservableStopwatch(limit: boutConfig.totalPeriodDuration),
+      breakStopwatch: ObservableStopwatch(limit: boutConfig.breakDuration),
     );
+
+    _initializeBout();
 
     weightClass = widget.weightClass;
     _r = ParticipantStateModel();
@@ -155,10 +145,6 @@ class BoutState extends ConsumerState<BoutScreen> {
       handleOrCatchIntent(const BoutScreenActionIntent.horn());
     });
 
-    mainStopwatch = MainStopwatch(
-      boutStopwatch: ObservableStopwatch(limit: boutConfig.totalPeriodDuration),
-      breakStopwatch: ObservableStopwatch(limit: boutConfig.breakDuration),
-    );
     mainStopwatch.boutStopwatch.onStart.stream.listen((event) {
       _r.activityStopwatch?.start();
       _b.activityStopwatch?.start();
@@ -225,8 +211,26 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant BoutScreen oldWidget) {
+    if (oldWidget.bout != widget.bout) {
+      _initializeBout();
+      // Trigger rerendering child not needed, as the values are updated in its own widgets.
+      // _child = null;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _initializeBout() {
+    bout = widget.bout;
+    // Set the current period based on the duration:
+    period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
+    if (!mainStopwatch.boutStopwatch.isDisposed) {
+      mainStopwatch.boutStopwatch.elapsed = bout.duration;
+    }
+  }
+
+  @override
   void dispose() {
-    _boutSubscription.close();
     _onEndBreakStopwatchSubscription.cancel();
     super.dispose();
   }
@@ -456,6 +460,13 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _child ??= _buildChild(context);
+    return _child!;
+  }
+
+  /// Increase performance by only rerendering child, if the properties in didUpdateWidget change.
+  /// https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html#performance-considerations
+  Widget _buildChild(BuildContext context) {
     final localizations = context.l10n;
     final double width = MediaQuery.of(context).size.width;
     final double padding = width / 100;
@@ -648,7 +659,6 @@ class _ParticipantDisplay extends StatelessWidget {
       child: IntrinsicHeight(
         child: SingleConsumer<Bout>(
           id: bout.id,
-          initialData: bout,
           builder: (context, bout) {
             final athleteBoutState = role == BoutRole.red ? bout.r : bout.b;
             return NullableSingleConsumer<AthleteBoutState>(
