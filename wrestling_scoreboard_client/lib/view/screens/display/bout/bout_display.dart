@@ -493,121 +493,123 @@ class BoutState extends ConsumerState<BoutScreen> {
       },
       child: BoutActionHandler(
         handleIntent: handleOrCatchIntent,
-        child: WindowStateScaffold(
-          hideAppBarOnFullscreen: true,
-          actions: [...widget.actions, pdfAction],
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                row(
-                  padding: bottomPadding,
-                  children:
-                      widget.headerItems
-                          .asMap()
-                          .entries
-                          .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                          .toList(),
-                ),
-                row(
-                  padding: bottomPadding,
-                  children: [
-                    Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.red, padding, widget.getWeightR)),
-                    Expanded(
-                      flex: 20,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if (widget.mat != null)
-                            Center(
-                              child: ScaledText('${localizations.mat} ${widget.mat}', fontSize: 22, minFontSize: 10),
-                            ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: ScaledText(
-                                    '${localizations.bout} ${widget.boutIndex + 1}',
-                                    fontSize: 14,
-                                    minFontSize: 10,
+        child: DisplayTheme(
+          child: WindowStateScaffold(
+            hideAppBarOnFullscreen: true,
+            actions: [...widget.actions, pdfAction],
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  row(
+                    padding: bottomPadding,
+                    children:
+                        widget.headerItems
+                            .asMap()
+                            .entries
+                            .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                            .toList(),
+                  ),
+                  row(
+                    padding: bottomPadding,
+                    children: [
+                      Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.red, padding, widget.getWeightR)),
+                      Expanded(
+                        flex: 20,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            if (widget.mat != null)
+                              Center(
+                                child: ScaledText('${localizations.mat} ${widget.mat}', fontSize: 22, minFontSize: 10),
+                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Center(
+                                    child: ScaledText(
+                                      '${localizations.bout} ${widget.boutIndex + 1}',
+                                      fontSize: 14,
+                                      minFontSize: 10,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          if (widget.roundDescription != null)
-                            Center(child: ScaledText(widget.roundDescription!, fontSize: 22, minFontSize: 10)),
-                          if (widget.ageCategory != null)
-                            Center(child: ScaledText(widget.ageCategory!.name, fontSize: 22, minFontSize: 10)),
-                          if (weightClass != null)
-                            Center(
-                              child: ScaledText(
-                                '${weightClass!.name} | ${weightClass!.style.abbreviation(context)}',
-                                fontSize: 26,
-                                minFontSize: 10,
-                              ),
+                              ],
                             ),
-                        ],
+                            if (widget.roundDescription != null)
+                              Center(child: ScaledText(widget.roundDescription!, fontSize: 22, minFontSize: 10)),
+                            if (widget.ageCategory != null)
+                              Center(child: ScaledText(widget.ageCategory!.name, fontSize: 22, minFontSize: 10)),
+                            if (weightClass != null)
+                              Center(
+                                child: ScaledText(
+                                  '${weightClass!.name} | ${weightClass!.style.abbreviation(context)}',
+                                  fontSize: 26,
+                                  minFontSize: 10,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.blue, padding, widget.getWeightB)),
-                  ],
-                ),
-                row(
-                  padding: bottomPadding,
-                  children: [
-                    displayTechnicalPoints(_r, BoutRole.red),
-                    BoutActionControls(
-                      BoutRole.red,
-                      boutConfig,
-                      bout.r == null ? null : handleOrCatchIntent,
-                      wrestlingStyle: weightClass?.style,
-                    ),
-                    Expanded(
-                      flex: 50,
-                      child: Center(
-                        child: DelayedTooltip(
-                          message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
-                          child: ValueListenableBuilder(
-                            valueListenable: mainStopwatch.isBreak,
-                            builder: (context, isBreak, _) {
-                              return TimeDisplay(
-                                showDeciSecond: true,
-                                mainStopwatch.stopwatch,
-                                isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
-                                fontSize: 128,
-                                maxDuration: isBreak ? boutConfig.breakDuration : boutConfig.totalPeriodDuration,
-                              );
-                            },
+                      Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.blue, padding, widget.getWeightB)),
+                    ],
+                  ),
+                  row(
+                    padding: bottomPadding,
+                    children: [
+                      displayTechnicalPoints(_r, BoutRole.red),
+                      BoutActionControls(
+                        BoutRole.red,
+                        boutConfig,
+                        bout.r == null ? null : handleOrCatchIntent,
+                        wrestlingStyle: weightClass?.style,
+                      ),
+                      Expanded(
+                        flex: 50,
+                        child: Center(
+                          child: DelayedTooltip(
+                            message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
+                            child: ValueListenableBuilder(
+                              valueListenable: mainStopwatch.isBreak,
+                              builder: (context, isBreak, _) {
+                                return TimeDisplay(
+                                  showDeciSecond: true,
+                                  mainStopwatch.stopwatch,
+                                  isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 128,
+                                  maxDuration: isBreak ? boutConfig.breakDuration : boutConfig.totalPeriodDuration,
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    BoutActionControls(
-                      BoutRole.blue,
-                      boutConfig,
-                      bout.b == null ? null : handleOrCatchIntent,
-                      wrestlingStyle: weightClass?.style,
-                    ),
-                    displayTechnicalPoints(_b, BoutRole.blue),
-                  ],
-                ),
-                Container(
-                  padding: bottomPadding,
-                  child: ManyConsumer<BoutAction, Bout>(
-                    filterObject: bout,
-                    builder: (context, actions) {
-                      return ActionsWidget(
-                        actions,
-                        boutConfig: boutConfig,
-                        onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
-                        onCreateOrUpdateAction:
-                            (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
-                      );
-                    },
+                      BoutActionControls(
+                        BoutRole.blue,
+                        boutConfig,
+                        bout.b == null ? null : handleOrCatchIntent,
+                        wrestlingStyle: weightClass?.style,
+                      ),
+                      displayTechnicalPoints(_b, BoutRole.blue),
+                    ],
                   ),
-                ),
-                Container(padding: bottomPadding, child: BoutMainControls(handleOrCatchIntent, this)),
-              ],
+                  Container(
+                    padding: bottomPadding,
+                    child: ManyConsumer<BoutAction, Bout>(
+                      filterObject: bout,
+                      builder: (context, actions) {
+                        return ActionsWidget(
+                          actions,
+                          boutConfig: boutConfig,
+                          onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
+                          onCreateOrUpdateAction:
+                              (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
+                        );
+                      },
+                    ),
+                  ),
+                  Container(padding: bottomPadding, child: BoutMainControls(handleOrCatchIntent, this)),
+                ],
+              ),
             ),
           ),
         ),

@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionDisplay extends StatelessWidget {
@@ -66,133 +67,140 @@ class CompetitionDisplay extends StatelessWidget {
           );
         }
 
-        return WindowStateScaffold(
-          hideAppBarOnFullscreen: true,
-          actions: [infoAction],
-          body: ManyConsumer<CompetitionBout, Competition>(
-            filterObject: competition,
-            builder: (context, competitionBouts) {
-              final competitionInfos = [
-                '${localizations.competitionNumber}: ${competition.id ?? ''}',
-                '${localizations.date}: ${competition.date.toDateString(context)}',
-              ];
-              int initialScrollIndex = competitionBouts.indexWhere((element) => element.mat == null);
-              if (initialScrollIndex < 0) {
-                // Scroll to last element if non is found
-                initialScrollIndex = math.max(0, competitionBouts.length - 1);
-              }
-              final column = Column(
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        children:
-                            competitionInfos
-                                .map((e) => Center(child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8)))
-                                .toList(),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: ScaledText(competition.name, softWrap: false, fontSize: 16, minFontSize: 12),
+        return DisplayTheme(
+          child: WindowStateScaffold(
+            hideAppBarOnFullscreen: true,
+            actions: [infoAction],
+            body: ManyConsumer<CompetitionBout, Competition>(
+              filterObject: competition,
+              builder: (context, competitionBouts) {
+                final competitionInfos = [
+                  '${localizations.competitionNumber}: ${competition.id ?? ''}',
+                  '${localizations.date}: ${competition.date.toDateString(context)}',
+                ];
+                int initialScrollIndex = competitionBouts.indexWhere((element) => element.mat == null);
+                if (initialScrollIndex < 0) {
+                  // Scroll to last element if non is found
+                  initialScrollIndex = math.max(0, competitionBouts.length - 1);
+                }
+                final column = Column(
+                  children: [
+                    Row(
+                      children: [
+                        Column(
+                          children:
+                              competitionInfos
+                                  .map(
+                                    (e) => Center(child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8)),
+                                  )
+                                  .toList(),
                         ),
-                      ),
-                      Center(child: ScaledText('Estimated end: TODO', softWrap: false, fontSize: 10, minFontSize: 8)),
-                    ],
-                  ),
-                  Divider(),
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      spacing: 12,
-                      children:
-                          Iterable.generate(competition.matCount, (index) {
-                            // Either get the last bout of this mat, which has no bout result, or get the first bout which has a result.
-                            final matCompetitionBouts = competitionBouts.where((element) => element.mat == index);
-                            CompetitionBout? matCompetitionBout =
-                                matCompetitionBouts.where((element) => element.bout.result == null).firstOrNull;
-                            matCompetitionBout ??=
-                                matCompetitionBouts.where((element) => element.bout.result != null).lastOrNull;
-                            Widget matDisplay;
-                            if (matCompetitionBout != null) {
-                              matDisplay = InkWell(
-                                onTap: () => CompetitionBoutDisplay.navigateTo(context, matCompetitionBout!),
-                                child: SingleConsumer<Bout>(
-                                  id: matCompetitionBout.bout.id,
-                                  initialData: matCompetitionBout.bout,
-                                  builder: (context, bout) {
-                                    Widget column = Column(
-                                      children: [
-                                        Center(
-                                          child: ScaledText(
-                                            matCompetitionBout!.weightCategory?.name ?? '---',
-                                            fontSize: 12,
-                                            minFontSize: 10,
-                                          ),
-                                        ),
-                                        displayParticipant(bout.r, BoutRole.red),
-                                        SizedBox(
-                                          height: width / 30,
-                                          child: SmallBoutStateDisplay(bout: bout, boutConfig: competition.boutConfig),
-                                        ),
-                                        displayParticipant(bout.b, BoutRole.blue),
-                                      ],
-                                    );
-
-                                    if (bout.result != null) {
-                                      column = Stack(
-                                        fit: StackFit.expand,
+                        Expanded(
+                          child: Center(
+                            child: ScaledText(competition.name, softWrap: false, fontSize: 16, minFontSize: 12),
+                          ),
+                        ),
+                        Center(child: ScaledText('Estimated end: TODO', softWrap: false, fontSize: 10, minFontSize: 8)),
+                      ],
+                    ),
+                    Divider(),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: 12,
+                        children:
+                            Iterable.generate(competition.matCount, (index) {
+                              // Either get the last bout of this mat, which has no bout result, or get the first bout which has a result.
+                              final matCompetitionBouts = competitionBouts.where((element) => element.mat == index);
+                              CompetitionBout? matCompetitionBout =
+                                  matCompetitionBouts.where((element) => element.bout.result == null).firstOrNull;
+                              matCompetitionBout ??=
+                                  matCompetitionBouts.where((element) => element.bout.result != null).lastOrNull;
+                              Widget matDisplay;
+                              if (matCompetitionBout != null) {
+                                matDisplay = InkWell(
+                                  onTap: () => CompetitionBoutDisplay.navigateTo(context, matCompetitionBout!),
+                                  child: SingleConsumer<Bout>(
+                                    id: matCompetitionBout.bout.id,
+                                    initialData: matCompetitionBout.bout,
+                                    builder: (context, bout) {
+                                      Widget column = Column(
                                         children: [
-                                          column,
-                                          Container(
-                                            color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
+                                          Center(
+                                            child: ScaledText(
+                                              matCompetitionBout!.weightCategory?.name ?? '---',
+                                              fontSize: 12,
+                                              minFontSize: 10,
+                                            ),
                                           ),
+                                          displayParticipant(bout.r, BoutRole.red),
+                                          SizedBox(
+                                            height: width / 30,
+                                            child: SmallBoutStateDisplay(
+                                              bout: bout,
+                                              boutConfig: competition.boutConfig,
+                                            ),
+                                          ),
+                                          displayParticipant(bout.b, BoutRole.blue),
                                         ],
                                       );
-                                    }
-                                    return column;
-                                  },
+
+                                      if (bout.result != null) {
+                                        column = Stack(
+                                          fit: StackFit.expand,
+                                          children: [
+                                            column,
+                                            Container(
+                                              color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                      return column;
+                                    },
+                                  ),
+                                );
+                              } else {
+                                matDisplay = Center(child: ScaledText('No bout'));
+                              }
+                              return Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
+                                    Expanded(child: matDisplay),
+                                  ],
                                 ),
                               );
-                            } else {
-                              matDisplay = Center(child: ScaledText('No bout'));
-                            }
-                            return Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
-                                  Expanded(child: matDisplay),
-                                ],
-                              ),
-                            );
-                          }).toList(),
+                            }).toList(),
+                      ),
                     ),
-                  ),
-                  Divider(height: 1),
-                  Expanded(
-                    child: ScrollablePositionedList.builder(
-                      // TODO: initialScrollIndex is not updated in ScrollablePositionedList, this also cannot properly be set via the itemScrollController
-                      // ScrollablePositionedList currently is not maintained
-                      key: ValueKey(competitionBouts),
-                      initialScrollIndex: initialScrollIndex,
-                      itemCount: competitionBouts.length,
-                      itemBuilder: (context, index) {
-                        if (index == -1) return Center(child: Text(localizations.noItems));
-                        final competitionBout = competitionBouts[index];
-                        return Column(
-                          children: [
-                            _CompetitionBoutListItem(competition: competition, competitionBout: competitionBout),
-                            const Divider(height: 1),
-                          ],
-                        );
-                      },
+                    Divider(height: 1),
+                    Expanded(
+                      child: ScrollablePositionedList.builder(
+                        // TODO: initialScrollIndex is not updated in ScrollablePositionedList, this also cannot properly be set via the itemScrollController
+                        // ScrollablePositionedList currently is not maintained
+                        key: ValueKey(competitionBouts),
+                        initialScrollIndex: initialScrollIndex,
+                        itemCount: competitionBouts.length,
+                        itemBuilder: (context, index) {
+                          if (index == -1) return Center(child: Text(localizations.noItems));
+                          final competitionBout = competitionBouts[index];
+                          return Column(
+                            children: [
+                              _CompetitionBoutListItem(competition: competition, competitionBout: competitionBout),
+                              const Divider(height: 1),
+                            ],
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              );
-              return column;
-            },
+                  ],
+                );
+                return column;
+              },
+            ),
           ),
         );
       },
