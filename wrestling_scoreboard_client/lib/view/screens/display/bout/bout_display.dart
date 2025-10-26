@@ -451,11 +451,8 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
   }
 
-  Widget row({required List<Widget> children, EdgeInsets? padding}) {
-    return Container(
-      padding: padding,
-      child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)),
-    );
+  Widget row({required List<Widget> children}) {
+    return IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children));
   }
 
   @override
@@ -470,7 +467,6 @@ class BoutState extends ConsumerState<BoutScreen> {
     final localizations = context.l10n;
     final double width = MediaQuery.of(context).size.width;
     final double padding = width / 100;
-    final bottomPadding = EdgeInsets.only(bottom: padding);
 
     final pdfAction = ResponsiveScaffoldActionItem(
       label: localizations.print,
@@ -510,9 +506,9 @@ class BoutState extends ConsumerState<BoutScreen> {
             actions: [...widget.actions, pdfAction],
             body: SingleChildScrollView(
               child: Column(
+                spacing: padding,
                 children: [
                   row(
-                    padding: bottomPadding,
                     children:
                         widget.headerItems
                             .asMap()
@@ -521,7 +517,6 @@ class BoutState extends ConsumerState<BoutScreen> {
                             .toList(),
                   ),
                   row(
-                    padding: bottomPadding,
                     children: [
                       Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.red, padding, widget.getWeightR)),
                       Expanded(
@@ -565,7 +560,6 @@ class BoutState extends ConsumerState<BoutScreen> {
                     ],
                   ),
                   row(
-                    padding: bottomPadding,
                     children: [
                       displayTechnicalPoints(_r, BoutRole.red),
                       BoutActionControls(
@@ -603,22 +597,19 @@ class BoutState extends ConsumerState<BoutScreen> {
                       displayTechnicalPoints(_b, BoutRole.blue),
                     ],
                   ),
-                  Container(
-                    padding: bottomPadding,
-                    child: ManyConsumer<BoutAction, Bout>(
-                      filterObject: bout,
-                      builder: (context, actions) {
-                        return ActionsWidget(
-                          actions,
-                          boutConfig: boutConfig,
-                          onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
-                          onCreateOrUpdateAction:
-                              (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
-                        );
-                      },
-                    ),
+                  ManyConsumer<BoutAction, Bout>(
+                    filterObject: bout,
+                    builder: (context, actions) {
+                      return ActionsWidget(
+                        actions,
+                        boutConfig: boutConfig,
+                        onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
+                        onCreateOrUpdateAction:
+                            (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
+                      );
+                    },
                   ),
-                  Container(padding: bottomPadding, child: BoutMainControls(handleOrCatchIntent, this)),
+                  BoutMainControls(handleOrCatchIntent, this),
                 ],
               ),
             ),
