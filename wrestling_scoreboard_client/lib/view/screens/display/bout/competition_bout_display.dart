@@ -57,50 +57,55 @@ class CompetitionBoutDisplay extends ConsumerWidget {
                 return ManyConsumer<BoutResultRule, BoutConfig>(
                   filterObject: competitionBout.competition.boutConfig,
                   builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
-                    return BoutScreen(
-                      wrestlingEvent: competition,
-                      // TODO: Need to be able to define official per bout
-                      officials: {},
-                      boutConfig: competition.boutConfig,
-                      boutRules: boutResultRules,
-                      bouts: matCompetitionBouts.map((e) => e.bout).toList(),
-                      boutIndex: matCompetitionBoutIndex,
-                      bout: competitionBout.bout,
-                      mat: competitionBout.displayMat,
-                      actions: [
-                        ResponsiveScaffoldActionItem(
-                          label: localizations.info,
-                          icon: const Icon(Icons.info),
-                          onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),
-                        ),
-                      ],
-                      navigateToBoutByIndex: (context, index) {
-                        context.pop();
-                        CompetitionBoutDisplay.navigateTo(context, matCompetitionBouts[index]);
-                      },
-                      // TODO
-                      headerItems: [],
-                      weightClass: competitionBout.weightCategory?.weightClass,
-                      ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
-                      roundDescription: competitionBout.roundDescription(context),
-                      getWeightR: (bout) async {
-                        final homeParticipation =
-                            CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
-                              participations: participations,
-                              membership: bout.r?.membership,
-                              weightCategory: competitionBout.weightCategory,
-                            );
-                        return homeParticipation?.weight;
-                      },
-                      getWeightB: (bout) async {
-                        final guestParticipation =
-                            CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
-                              participations: participations,
-                              membership: bout.r?.membership,
-                              weightCategory: competitionBout.weightCategory,
-                            );
+                    return SingleConsumer<Bout>(
+                      id: competitionBout.bout.id,
+                      builder: (context, bout) {
+                        return BoutScreen(
+                          wrestlingEvent: competition,
+                          // TODO: Need to be able to define official per bout
+                          officials: {},
+                          boutConfig: competition.boutConfig,
+                          boutRules: boutResultRules,
+                          bouts: matCompetitionBouts.map((e) => e.bout).toList(),
+                          boutIndex: matCompetitionBoutIndex,
+                          bout: bout,
+                          mat: competitionBout.displayMat,
+                          actions: [
+                            ResponsiveScaffoldActionItem(
+                              label: localizations.info,
+                              icon: const Icon(Icons.info),
+                              onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),
+                            ),
+                          ],
+                          navigateToBoutByIndex: (context, index) {
+                            context.pop();
+                            CompetitionBoutDisplay.navigateTo(context, matCompetitionBouts[index]);
+                          },
+                          // TODO
+                          headerItems: [],
+                          weightClass: competitionBout.weightCategory?.weightClass,
+                          ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
+                          roundDescription: competitionBout.roundDescription(context),
+                          getWeightR: (bout) async {
+                            final homeParticipation =
+                                CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
+                                  participations: participations,
+                                  membership: bout.r?.membership,
+                                  weightCategory: competitionBout.weightCategory,
+                                );
+                            return homeParticipation?.weight;
+                          },
+                          getWeightB: (bout) async {
+                            final guestParticipation =
+                                CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
+                                  participations: participations,
+                                  membership: bout.r?.membership,
+                                  weightCategory: competitionBout.weightCategory,
+                                );
 
-                        return guestParticipation?.weight;
+                            return guestParticipation?.weight;
+                          },
+                        );
                       },
                     );
                   },

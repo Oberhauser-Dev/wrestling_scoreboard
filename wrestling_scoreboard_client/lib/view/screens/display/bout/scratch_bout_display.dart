@@ -41,43 +41,48 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
               builder: (context, boutResultRules) {
                 return Consumer(
                   builder: (context, ref, child) {
-                    return BoutScreen(
-                      wrestlingEvent: ScratchEvent(),
-                      officials: {},
-                      boutConfig: boutConfig,
-                      boutRules: boutResultRules,
-                      bouts: [scratchBout.bout],
-                      boutIndex: 0,
-                      bout: scratchBout.bout,
-                      actions: [
-                        ResponsiveScaffoldActionItem(
-                          icon: const Icon(Icons.restore_page),
-                          onTap: () async {
-                            final result = await showOkCancelDialog(
-                              context: context,
-                              child: Text('${localizations.reset}?'),
-                            );
-                            if (result && context.mounted) {
-                              // FIXME: Entity is not reset when leaving the scratch provider scope (#187)
-                              // Only reset entities which are displayed, but keep e.g. BoutResultRules
-                              await ref.read(localDataProvider<BoutAction>().notifier).setState([]);
-                              await ref.read(localDataProvider<AthleteBoutState>().notifier).setState([]);
-                              await ref.read(localDataProvider<Bout>().notifier).setState([]);
-                              await ref.read(localDataProvider<ScratchBout>().notifier).setState([]);
-                              ref.invalidate(localDataProvider);
+                    return SingleConsumer<Bout>(
+                      id: scratchBout.bout.id,
+                      builder: (context, bout) {
+                        return BoutScreen(
+                          wrestlingEvent: ScratchEvent(),
+                          officials: {},
+                          boutConfig: boutConfig,
+                          boutRules: boutResultRules,
+                          bouts: [bout],
+                          boutIndex: 0,
+                          bout: bout,
+                          actions: [
+                            ResponsiveScaffoldActionItem(
+                              icon: const Icon(Icons.restore_page),
+                              onTap: () async {
+                                final result = await showOkCancelDialog(
+                                  context: context,
+                                  child: Text('${localizations.reset}?'),
+                                );
+                                if (result && context.mounted) {
+                                  // FIXME: Entity is not reset when leaving the scratch provider scope (#187)
+                                  // Only reset entities which are displayed, but keep e.g. BoutResultRules
+                                  await ref.read(localDataProvider<BoutAction>().notifier).setState([]);
+                                  await ref.read(localDataProvider<AthleteBoutState>().notifier).setState([]);
+                                  await ref.read(localDataProvider<Bout>().notifier).setState([]);
+                                  await ref.read(localDataProvider<ScratchBout>().notifier).setState([]);
+                                  ref.invalidate(localDataProvider);
 
-                              // Invalidate stream providers
-                              ref.invalidate(singleDataStreamProvider);
-                              ref.invalidate(manyDataStreamProvider);
-                            }
+                                  // Invalidate stream providers
+                                  ref.invalidate(singleDataStreamProvider);
+                                  ref.invalidate(manyDataStreamProvider);
+                                }
+                              },
+                              label: localizations.reset,
+                            ),
+                          ],
+                          navigateToBoutByIndex: (context, index) {
+                            context.pop();
                           },
-                          label: localizations.reset,
-                        ),
-                      ],
-                      navigateToBoutByIndex: (context, index) {
-                        context.pop();
+                          weightClass: scratchBout.weightClass,
+                        );
                       },
-                      weightClass: scratchBout.weightClass,
                     );
                   },
                 );
