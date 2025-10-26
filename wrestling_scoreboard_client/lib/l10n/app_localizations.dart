@@ -1610,6 +1610,18 @@ abstract class AppLocalizations {
   /// **'Bout Result Rules'**
   String get boutResultRules;
 
+  /// No description provided for @sortedChronologically.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorted chronologically'**
+  String get sortedChronologically;
+
+  /// No description provided for @sortedByWeightClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorted by weight class'**
+  String get sortedByWeightClass;
+
   /// No description provided for @launchScratchBout.
   ///
   /// In en, this message translates to:

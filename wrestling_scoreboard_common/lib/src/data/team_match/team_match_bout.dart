@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common.dart';
@@ -36,6 +37,25 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
       weightClass: weightClassId == null ? null : await getSingle<WeightClass>(weightClassId),
       pos: e['pos'] as int,
     );
+  }
+
+  static List<TeamMatchBout> sortChronologically(List<TeamMatchBout> teamMatchBouts) {
+    final groups = teamMatchBouts.groupListsBy((tmb) => tmb.weightClass != null);
+
+    final tmbWithWeightClass = groups[true];
+    var result = [...?groups[false]];
+    if (tmbWithWeightClass != null) {
+      // Sort team match bouts based on order of weight class
+      final weightClasses = tmbWithWeightClass.map((tmb) => tmb.weightClass!).toList();
+      final Map<WeightClass, TeamMatchBout> mapping = {
+        for (int i = 0; i < weightClasses.length; i++) weightClasses[i]: tmbWithWeightClass[i],
+      };
+
+      final sortedWeightClasses = TeamMatch.sortWeightClassesChronologically(weightClasses);
+
+      result = [for (final weightClass in sortedWeightClasses) mapping[weightClass]!, ...result];
+    }
+    return result;
   }
 
   bool equalDuringBout(TeamMatchBout o) => bout.equalDuringBout(o.bout) && weightClass == o.weightClass;

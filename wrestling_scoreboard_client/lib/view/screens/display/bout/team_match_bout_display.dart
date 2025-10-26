@@ -44,6 +44,7 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
                 if (teamMatchBouts.isEmpty) {
                   return Center(child: Text(localizations.noItems, style: Theme.of(context).textTheme.bodySmall));
                 }
+                teamMatchBouts = TeamMatchBout.sortChronologically(teamMatchBouts);
                 final teamMatchBout = teamMatchBouts.singleWhere((element) => element.id == teamMatchBoutId);
                 final teamMatchBoutIndex = teamMatchBouts.indexOf(teamMatchBout);
                 // Use bout to get the actual state, but use teamMatchBout for navigation.

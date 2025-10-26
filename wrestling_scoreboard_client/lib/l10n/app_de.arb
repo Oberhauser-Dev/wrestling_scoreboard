@@ -299,6 +299,8 @@
   "boutConfig": "Kampf-Konfiguration",
   "boutResultRule": "Kampfergebnisregel",
   "boutResultRules": "Kampfergebnisregeln",
+  "sortedChronologically": "Chonologisch sortiert",
+  "sortedByWeightClass": "Sortiert nach Gewichtsklasse",
   "launchScratchBout": "Starte Notiz-Kampf",
   "searchResults": "Suchresultate",
 

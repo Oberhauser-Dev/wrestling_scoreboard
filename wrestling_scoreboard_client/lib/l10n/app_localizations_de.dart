@@ -796,6 +796,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get boutResultRules => 'Kampfergebnisregeln';
 
   @override
+  String get sortedChronologically => 'Chonologisch sortiert';
+
+  @override
+  String get sortedByWeightClass => 'Sortiert nach Gewichtsklasse';
+
+  @override
   String get launchScratchBout => 'Starte Notiz-Kampf';
 
   @override
