@@ -47,19 +47,20 @@ class ApiRoute {
 
     // Generate GET endpoints simple object relations
     directDataObjectRelations.forEach((dataObjectType, relationMap) {
-      relationMap.forEach((propertyType, propertyConfig) {
-        final (tableRef, orderBy) = propertyConfig;
-        router.restrictedGetOne(
-          '/${getTableNameFromType(propertyType)}/<id|[0-9]+>/${getTableNameFromType(dataObjectType)}s',
-          (Request request, User? user, String id) =>
-              ShelfController.getControllerFromDataType(dataObjectType)!.handleGetRequestMany(
-                isRaw: request.isRaw,
-                conditions: ['$tableRef = @id'],
-                substitutionValues: {'id': id},
-                orderBy: orderBy,
-                obfuscate: user?.obfuscate ?? true,
-              ),
-        );
+      relationMap.forEach((propertyType, propertyConfigs) {
+        for (final config in propertyConfigs) {
+          router.restrictedGetOne(
+            '/${getTableNameFromType(propertyType)}/<id|[0-9]+>/${getTableNameFromType(dataObjectType)}s',
+            (Request request, User? user, String id) =>
+                ShelfController.getControllerFromDataType(dataObjectType)!.handleGetRequestMany(
+                  isRaw: request.isRaw,
+                  conditions: ['${config.property} = @id'],
+                  substitutionValues: {'id': id},
+                  orderBy: config.orderBy,
+                  obfuscate: user?.obfuscate ?? true,
+                ),
+          );
+        }
       });
     });
 
