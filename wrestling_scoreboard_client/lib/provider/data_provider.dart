@@ -4,6 +4,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
@@ -27,31 +28,65 @@ class SingleProviderData<T extends DataObject> {
 }
 
 @Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
-Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> pData) async* {
-  ref.cache();
+class SingleDataStream<T extends DataObject> extends _$SingleDataStream<T> {
+  @override
+  Stream<T> build(SingleProviderData<T> pData) async* {
+    ref.cache();
+    List<KeepAliveLink>? aliveDependencies;
+    void keepDependenciesAlive(T single) {
+      final oldAliveDependencies = aliveDependencies;
+      aliveDependencies =
+          mapDirectDataObjectRelations<T, KeepAliveLink?>(
+            single,
+            <F extends DataObject>(F? filterObject) => _aliveLink(ref, filterObject),
+          ).nonNulls.toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
+      // Close old keep-alives, after the new ones have been initialized.
+      oldAliveDependencies?.forEach((element) => element.close());
+    }
 
-  final dataManager = await ref.watch(dataManagerProvider);
-  if (pData.initialData != null) {
-    yield pData.initialData!;
+    final dataManager = await ref.watch(dataManagerProvider);
+    if (pData.initialData != null) {
+      keepDependenciesAlive(pData.initialData!);
+      yield pData.initialData!;
+    }
+
+    final dataStream = dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
+
+    // Reload, whenever the stream is connected
+    final connectionStateStreamController = StreamController<T>();
+    final sub = ref.listen(webSocketStateStreamProvider.future, (previous, next) async {
+      final wsConnectionState = await next;
+      if (wsConnectionState == WebSocketConnectionState.connected) {
+        connectionStateStreamController.add(await dataManager.readSingle<T>(pData.id));
+      } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
+        connectionStateStreamController.addError(
+          Exception('Server disconnected\nSingleDataStreamProvider: $T (id: ${pData.id})'),
+        );
+      }
+    });
+
+    ref.onDispose(() {
+      aliveDependencies?.forEach((element) => element.close());
+      sub.close();
+    });
+
+    await for (final single in StreamGroup.merge([dataStream, connectionStateStreamController.stream])) {
+      keepDependenciesAlive(single);
+      yield single;
+    }
   }
 
-  final dataStream = dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
+  KeepAliveLink keepAlive() => ref.keepAlive();
 
-  // Reload, whenever the stream is connected
-  final connectionStateStreamController = StreamController<T>();
-  final sub = ref.listen(webSocketStateStreamProvider.future, (previous, next) async {
-    final wsConnectionState = await next;
-    if (wsConnectionState == WebSocketConnectionState.connected) {
-      connectionStateStreamController.add(await dataManager.readSingle<T>(pData.id));
-    } else if (wsConnectionState == WebSocketConnectionState.disconnected) {
-      connectionStateStreamController.addError(
-        Exception('Server disconnected\nSingleDataStreamProvider: $T (id: ${pData.id})'),
-      );
-    }
-  });
-  ref.onDispose(() => sub.close());
-
-  yield* StreamGroup.merge([dataStream, connectionStateStreamController.stream]);
+  static KeepAliveLink? _aliveLink<F extends DataObject>(Ref ref, F? filterObject) {
+    if (filterObject == null) return null;
+    if (!ref.mounted) return null;
+    return ref
+        .read(
+          singleDataStreamProvider<F>(SingleProviderData<F>(initialData: filterObject, id: filterObject.id!)).notifier,
+        )
+        .keepAlive();
+  }
 }
 
 /// Class to wrap equal many data for providers.
@@ -71,7 +106,7 @@ class ManyProviderData<T extends DataObject, S extends DataObject?> {
   int get hashCode => Object.hash(filterObject?.id, T, S);
 }
 
-@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
+@Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier, SingleDataStream])
 Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   Ref ref,
   ManyProviderData<T, S> pData,
@@ -80,9 +115,7 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
 
   final dataManager = await ref.watch(dataManagerProvider);
 
-  final dataStream = dataManager
-      .streamMany<T, S>(filterObject: pData.filterObject)
-      .map((event) => event.data);
+  final dataStream = dataManager.streamMany<T, S>(filterObject: pData.filterObject).map((event) => event.data);
 
   // Reload, whenever the stream is connected
   final connectionStateStreamController = StreamController<List<T>>();
@@ -96,7 +129,24 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
       );
     }
   });
-  ref.onDispose(() => sub.close());
 
-  yield* StreamGroup.merge([dataStream, connectionStateStreamController.stream]);
+  List<KeepAliveLink>? aliveItems;
+  ref.onDispose(() {
+    aliveItems?.forEach((element) => element.close());
+    sub.close();
+  });
+
+  final mergedStream = StreamGroup.merge([dataStream, connectionStateStreamController.stream]);
+  await for (final many in mergedStream) {
+    final oldAliveItems = aliveItems;
+    aliveItems =
+        many.map((single) {
+          return ref
+              .read(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: single, id: single.id!)).notifier)
+              .keepAlive();
+        }).toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
+    // Close old keep-alives, after the new ones have been initialized.
+    oldAliveItems?.forEach((element) => element.close());
+    yield many;
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
 import 'package:wrestling_scoreboard_server/controllers/athlete_bout_state_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_action_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
@@ -16,6 +17,8 @@ void main() {
   MockableDateTime.isMocked = true;
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
   MockableRandom.isMocked = true;
+
+  final mockedData = MockedData();
 
   test('TeamMatch', () async {
     final db = PostgresDb();
@@ -51,7 +54,7 @@ void main() {
       BoutConfig,
     ];
     for (final dataType in teamMatchDataTypes.reversed) {
-      final Iterable<DataObject> objs = getMockedDataObjects(dataType);
+      final Iterable<DataObject> objs = mockedData.getByType(dataType);
       for (var obj in objs) {
         final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
         final tableUrl = '$apiUrl/${obj.tableName}';

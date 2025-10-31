@@ -1,4 +1,4 @@
-import 'package:wrestling_scoreboard_common/common.dart';
+import '../common.dart';
 
 class OrderableProperty {
   final String property;

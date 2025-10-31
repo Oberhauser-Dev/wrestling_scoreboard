@@ -108,7 +108,7 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> reorder<T extends Orderable, S extends DataObject?>({
+  Future<void> reorder<T extends PosOrderable, S extends DataObject?>({
     required int id,
     required int newIndex,
     S? filterObject,

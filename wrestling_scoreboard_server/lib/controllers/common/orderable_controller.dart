@@ -7,10 +7,9 @@ import 'package:wrestling_scoreboard_server/controllers/common/entity_controller
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
-import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
-mixin OrderableController<T extends Orderable> on ShelfController<T> {
+mixin OrderableController<T extends PosOrderable> on ShelfController<T> {
   Future<Response> postRequestReorder(Request request, User? user, String idAsStr) async {
     final id = int.tryParse(idAsStr);
     if (id == null) {

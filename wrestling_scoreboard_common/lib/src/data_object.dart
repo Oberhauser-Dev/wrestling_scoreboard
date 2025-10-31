@@ -20,7 +20,7 @@ abstract class Organizational extends DataObject {
   Organization? get organization;
 }
 
-abstract class Orderable extends DataObject {
+abstract class PosOrderable implements DataObject {
   int get pos;
 }
 

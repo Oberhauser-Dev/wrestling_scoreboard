@@ -133,7 +133,7 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
     );
   }
 
-  Future<void> _onReorder<T extends Orderable>(int oldIndex, int newIndex, List<T> orderedData) async {
+  Future<void> _onReorder<T extends PosOrderable>(int oldIndex, int newIndex, List<T> orderedData) async {
     late int newPos;
     final oldPos = orderedData[oldIndex].pos;
     if (newIndex > oldIndex) {

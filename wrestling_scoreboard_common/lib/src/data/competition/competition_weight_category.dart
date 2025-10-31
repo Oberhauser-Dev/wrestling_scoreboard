@@ -7,7 +7,7 @@ part 'competition_weight_category.freezed.dart';
 part 'competition_weight_category.g.dart';
 
 @freezed
-abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implements DataObject, Orderable {
+abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implements DataObject, PosOrderable {
   const CompetitionWeightCategory._();
 
   const factory CompetitionWeightCategory({

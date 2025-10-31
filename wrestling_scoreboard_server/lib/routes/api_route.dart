@@ -20,7 +20,6 @@ import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/middleware/content_type.dart';
 import 'package:wrestling_scoreboard_server/middleware/error.dart';
 import 'package:wrestling_scoreboard_server/request.dart';
-import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/routes/router.dart';
 
 class ApiRoute {

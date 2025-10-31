@@ -7,7 +7,7 @@ part 'team_match_bout.freezed.dart';
 part 'team_match_bout.g.dart';
 
 @freezed
-abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organizational, Orderable {
+abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organizational, PosOrderable {
   const TeamMatchBout._();
 
   const factory TeamMatchBout({

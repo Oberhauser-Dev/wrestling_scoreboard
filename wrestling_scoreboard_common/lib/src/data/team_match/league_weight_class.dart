@@ -6,7 +6,7 @@ part 'league_weight_class.freezed.dart';
 part 'league_weight_class.g.dart';
 
 @freezed
-abstract class LeagueWeightClass with _$LeagueWeightClass implements DataObject, Organizational, Orderable {
+abstract class LeagueWeightClass with _$LeagueWeightClass implements DataObject, Organizational, PosOrderable {
   const LeagueWeightClass._();
 
   /// The [seasonPartition] is started counting at 0.

@@ -55,56 +55,66 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
                   filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
                   builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
                     final bouts = teamMatchBouts.map((e) => e.bout).toList();
-                    return SingleConsumer<Bout>(
-                      id: teamMatchBout.bout.id,
-                      builder: (context, bout) {
-                        return BoutScreen(
-                          wrestlingEvent: match,
-                          officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
-                          boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                          boutRules: boutResultRules,
-                          bouts: bouts,
-                          boutIndex: teamMatchBoutIndex,
-                          bout: bout,
-                          actions: [
-                            ResponsiveScaffoldActionItem(
-                              label: localizations.info,
-                              icon: const Icon(Icons.info),
-                              onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
-                            ),
-                          ],
-                          navigateToBoutByIndex: (context, index) {
-                            context.pushReplacement(TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]));
-                          },
-                          headerItems: CommonElements.getTeamHeader(match.home.team, match.guest.team, bouts, context),
-                          weightClass: teamMatchBout.weightClass,
-                          getWeightR: (bout) async {
-                            final homeParticipations = await ref.readAsync(
-                              manyDataStreamProvider(
-                                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-                              ).future,
-                            );
-                            final homeParticipation =
-                                TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                  participations: homeParticipations,
-                                  membership: bout.r?.membership,
-                                  weightClass: teamMatchBout.weightClass,
+                    return SingleConsumer<TeamMatchBout>(
+                      id: teamMatchBout.id,
+                      builder: (context, teamMatchBout) {
+                        return SingleConsumer<Bout>(
+                          id: teamMatchBout.bout.id,
+                          builder: (context, bout) {
+                            return BoutScreen(
+                              wrestlingEvent: match,
+                              officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
+                              boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                              boutRules: boutResultRules,
+                              bouts: bouts,
+                              boutIndex: teamMatchBoutIndex,
+                              bout: bout,
+                              actions: [
+                                ResponsiveScaffoldActionItem(
+                                  label: localizations.info,
+                                  icon: const Icon(Icons.info),
+                                  onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
+                                ),
+                              ],
+                              navigateToBoutByIndex: (context, index) {
+                                context.pushReplacement(TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]));
+                              },
+                              headerItems: CommonElements.getTeamHeader(
+                                match.home.team,
+                                match.guest.team,
+                                bouts,
+                                context,
+                              ),
+                              weightClass: teamMatchBout.weightClass,
+                              getWeightR: (bout) async {
+                                final homeParticipations = await ref.readAsync(
+                                  manyDataStreamProvider(
+                                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
+                                  ).future,
                                 );
-                            return homeParticipation?.weight;
-                          },
-                          getWeightB: (bout) async {
-                            final guestParticipations = await ref.readAsync(
-                              manyDataStreamProvider(
-                                ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-                              ).future,
-                            );
-                            final guestParticipation =
-                                TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                  participations: guestParticipations,
-                                  membership: bout.b?.membership,
-                                  weightClass: teamMatchBout.weightClass,
+                                final homeParticipation =
+                                    TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                      participations: homeParticipations,
+                                      membership: bout.r?.membership,
+                                      weightClass: teamMatchBout.weightClass,
+                                    );
+                                return homeParticipation?.weight;
+                              },
+                              getWeightB: (bout) async {
+                                final guestParticipations = await ref.readAsync(
+                                  manyDataStreamProvider(
+                                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
+                                  ).future,
                                 );
-                            return guestParticipation?.weight;
+                                final guestParticipation =
+                                    TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                      participations: guestParticipations,
+                                      membership: bout.b?.membership,
+                                      weightClass: teamMatchBout.weightClass,
+                                    );
+                                return guestParticipation?.weight;
+                              },
+                            );
                           },
                         );
                       },

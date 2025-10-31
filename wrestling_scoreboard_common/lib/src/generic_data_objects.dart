@@ -455,3 +455,82 @@ extension DataObjectParser on DataObject {
     };
   }
 }
+
+List<R> mapDirectDataObjectRelations<T extends DataObject, R>(
+  T single,
+  R Function<F extends DataObject>(F? filterObject) callback,
+) {
+  switch (single) {
+    case final BoutResultRule single:
+      return [callback(single.boutConfig)];
+    case final Organization single:
+      return [callback(single.parent)];
+    case final AgeCategory single:
+      return [callback(single.organization)];
+    case final Club single:
+      return [callback(single.organization)];
+    case final Competition single:
+      return [callback(single.organization), callback(single.boutConfig)];
+    case final CompetitionAgeCategory single:
+      return [callback(single.competition), callback(single.ageCategory)];
+    case final CompetitionSystemAffiliation single:
+      return [callback(single.competition)];
+    case final Division single:
+      return [callback(single.organization), callback(single.boutConfig), callback(single.parent)];
+    case final League single:
+      return [callback(single.organization), callback(single.division)];
+    case final Person single:
+      return [callback(single.organization)];
+    case final CompetitionPerson single:
+      return [callback(single.competition), callback(single.person)];
+    case final Membership single:
+      return [callback(single.organization), callback(single.club), callback(single.person)];
+    case final AthleteBoutState single:
+      return [callback(single.membership)];
+    case final Bout single:
+      return [callback(single.organization), callback(single.r), callback(single.b)];
+    case final BoutAction single:
+      return [callback(single.bout)];
+    case final CompetitionLineup single:
+      return [callback(single.competition), callback(single.club), callback(single.leader), callback(single.coach)];
+    case final SecuredUser single:
+      return [callback(single.person)];
+    case final Team single:
+      return [callback(single.organization)];
+    case final LeagueTeamParticipation single:
+      return [callback(single.league), callback(single.team)];
+    case final TeamClubAffiliation single:
+      return [callback(single.team), callback(single.club)];
+    case final TeamLineup single:
+      return [callback(single.team), callback(single.leader), callback(single.coach)];
+    case final TeamMatch single:
+      return [callback(single.organization), callback(single.home), callback(single.guest), callback(single.league)];
+    case final TeamMatchPerson single:
+      return [callback(single.teamMatch), callback(single.person)];
+    case final User single:
+      return [callback(single.person)];
+
+    case final CompetitionWeightCategory single:
+      return [callback(single.weightClass), callback(single.competitionAgeCategory), callback(single.competition)];
+    case final CompetitionBout single:
+      return [callback(single.competition), callback(single.bout), callback(single.weightCategory)];
+    case final CompetitionParticipation single:
+      return [callback(single.membership), callback(single.lineup), callback(single.weightCategory)];
+    case final DivisionWeightClass single:
+      return [callback(single.organization), callback(single.division), callback(single.weightClass)];
+    case final LeagueWeightClass single:
+      return [callback(single.organization), callback(single.league), callback(single.weightClass)];
+    case final ScratchBout single:
+      return [callback(single.bout), callback(single.weightClass), callback(single.boutConfig)];
+    case final TeamLineupParticipation single:
+      return [callback(single.membership), callback(single.lineup), callback(single.weightClass)];
+    case final TeamMatchBout single:
+      return [
+        callback(single.organization),
+        callback(single.teamMatch),
+        callback(single.bout),
+        callback(single.weightClass),
+      ];
+  }
+  return [];
+}
