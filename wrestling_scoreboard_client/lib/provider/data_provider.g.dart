@@ -9,11 +9,10 @@ part of 'data_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(singleDataStream)
+@ProviderFor(SingleDataStream)
 const singleDataStreamProvider = SingleDataStreamFamily._();
 
-final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalProvider<AsyncValue<T>, T, Stream<T>>
-    with $FutureModifier<T>, $StreamProvider<T> {
+final class SingleDataStreamProvider<T extends DataObject> extends $StreamNotifierProvider<SingleDataStream<T>, T> {
   const SingleDataStreamProvider._({
     required SingleDataStreamFamily super.from,
     required SingleProviderData<T> super.argument,
@@ -43,13 +42,7 @@ final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalPr
 
   @$internal
   @override
-  $StreamProviderElement<T> $createElement($ProviderPointer pointer) => $StreamProviderElement(pointer);
-
-  @override
-  Stream<T> create(Ref ref) {
-    final argument = this.argument as SingleProviderData<T>;
-    return singleDataStream<T>(ref, argument);
-  }
+  SingleDataStream<T> create() => SingleDataStream<T>();
 
   $R _captureGenerics<$R>($R Function<T extends DataObject>() cb) {
     return cb<T>();
@@ -66,7 +59,7 @@ final class SingleDataStreamProvider<T extends DataObject> extends $FunctionalPr
   }
 }
 
-String _$singleDataStreamHash() => r'5a4725f2a0c213686d371ec9b2c88faf31883440';
+String _$singleDataStreamHash() => r'faef416cd66018e718cd07e16ac3373ad4aace81';
 
 final class SingleDataStreamFamily extends $Family {
   const SingleDataStreamFamily._()
@@ -91,18 +84,45 @@ final class SingleDataStreamFamily extends $Family {
   String toString() => r'singleDataStreamProvider';
 
   /// {@macro riverpod.override_with}
-  Override overrideWith(Stream<T> Function<T extends DataObject>(Ref ref, SingleProviderData<T> args) create) =>
+  Override overrideWith(SingleDataStream<T> Function<T extends DataObject>() create) => $FamilyOverride(
+    from: this,
+    createElement: (pointer) {
+      final provider = pointer.origin as SingleDataStreamProvider;
+      return provider._captureGenerics(<T extends DataObject>() {
+        provider as SingleDataStreamProvider<T>;
+        return provider.$view(create: create<T>).$createElement(pointer);
+      });
+    },
+  );
+
+  /// {@macro riverpod.override_with_build}
+  Override overrideWithBuild(Stream<T> Function<T extends DataObject>(Ref ref, SingleDataStream<T> notifier) build) =>
       $FamilyOverride(
         from: this,
         createElement: (pointer) {
           final provider = pointer.origin as SingleDataStreamProvider;
           return provider._captureGenerics(<T extends DataObject>() {
             provider as SingleDataStreamProvider<T>;
-            final argument = provider.argument as SingleProviderData<T>;
-            return provider.$view(create: (ref) => create(ref, argument)).$createElement(pointer);
+            return provider.$view(runNotifierBuildOverride: build<T>).$createElement(pointer);
           });
         },
       );
+}
+
+abstract class _$SingleDataStream<T extends DataObject> extends $StreamNotifier<T> {
+  late final _$args = ref.$arg as SingleProviderData<T>;
+  SingleProviderData<T> get pData => _$args;
+
+  Stream<T> build(SingleProviderData<T> pData);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<T>, T>;
+    final element =
+        ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<T>, T>, AsyncValue<T>, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
 @ProviderFor(manyDataStream)
@@ -127,6 +147,7 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   static const $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
+  static const $allTransitiveDependencies5 = singleDataStreamProvider;
 
   @override
   String debugGetCreateSourceHash() => _$manyDataStreamHash();
@@ -163,20 +184,25 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   }
 }
 
-String _$manyDataStreamHash() => r'30243793a01ab36f4e1a442dd75a4576573418ad';
+String _$manyDataStreamHash() => r'a6873e58b264c9ff265b2b2b2fff8719987973b7';
 
 final class ManyDataStreamFamily extends $Family {
   const ManyDataStreamFamily._()
     : super(
         retry: null,
         name: r'manyDataStreamProvider',
-        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerProvider],
+        dependencies: const <ProviderOrFamily>[
+          webSocketStateStreamProvider,
+          dataManagerProvider,
+          singleDataStreamProvider,
+        ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           ManyDataStreamProvider.$allTransitiveDependencies0,
           ManyDataStreamProvider.$allTransitiveDependencies1,
           ManyDataStreamProvider.$allTransitiveDependencies2,
           ManyDataStreamProvider.$allTransitiveDependencies3,
           ManyDataStreamProvider.$allTransitiveDependencies4,
+          ManyDataStreamProvider.$allTransitiveDependencies5,
         },
         isAutoDispose: true,
       );

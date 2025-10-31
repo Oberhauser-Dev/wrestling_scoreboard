@@ -721,4 +721,41 @@ class MockedData {
   List<CompetitionParticipation> getCompetitionParticipations() => _competitionParticipations;
 
   List<WeightClass> getWeightClasses() => _weightClasses;
+
+  List<DataObject> getByType(Type type) {
+    return switch (type) {
+      const (AgeCategory) => getAgeCategories(),
+      const (Bout) => getBouts(),
+      const (BoutAction) => getBoutActions(),
+      const (BoutConfig) => getBoutConfigs(),
+      const (BoutResultRule) => getBoutResultRules(),
+      const (Club) => getClubs(),
+      const (Competition) => getCompetitions(),
+      const (CompetitionPerson) => getCompetitionPersons(),
+      const (CompetitionBout) => getCompetitionBouts(),
+      const (CompetitionLineup) => getCompetitionLineups(),
+      const (CompetitionSystemAffiliation) => getCompetitionSystemAffiliations(),
+      const (CompetitionAgeCategory) => getCompetitionAgeCategories(),
+      const (CompetitionWeightCategory) => getCompetitionWeightCategories(),
+      const (CompetitionParticipation) => getCompetitionParticipations(),
+      const (Organization) => getOrganizations(),
+      const (Division) => getDivisions(),
+      const (DivisionWeightClass) => getDivisionWeightClasses(),
+      const (League) => getLeagues(),
+      const (LeagueTeamParticipation) => getLeagueTeamParticipations(),
+      const (LeagueWeightClass) => getLeagueWeightClasses(),
+      const (TeamLineup) => getTeamLineups(),
+      const (Membership) => getMemberships(),
+      const (TeamLineupParticipation) => getTeamLineupParticipations(),
+      const (AthleteBoutState) => getAthleteBoutStates(),
+      const (Person) => getPersons(),
+      const (Team) => getTeams(),
+      const (TeamClubAffiliation) => getTeamClubAffiliations(),
+      const (TeamMatch) => getTeamMatches(),
+      const (TeamMatchBout) => getTeamMatchBouts(),
+      const (TeamMatchPerson) => getTeamMatchPersons(),
+      const (WeightClass) => getWeightClasses(),
+      _ => throw UnimplementedError(),
+    };
+  }
 }

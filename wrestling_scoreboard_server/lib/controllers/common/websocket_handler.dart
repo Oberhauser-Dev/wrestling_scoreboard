@@ -14,7 +14,6 @@ import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
-import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/auth.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 

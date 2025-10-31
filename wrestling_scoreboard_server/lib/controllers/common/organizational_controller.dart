@@ -5,7 +5,6 @@ import 'package:wrestling_scoreboard_server/controllers/common/entity_controller
 import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
-import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 mixin OrganizationalController<T extends Organizational> on ShelfController<T> {

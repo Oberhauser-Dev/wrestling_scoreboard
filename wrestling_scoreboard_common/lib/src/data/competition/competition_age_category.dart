@@ -6,7 +6,7 @@ part 'competition_age_category.freezed.dart';
 part 'competition_age_category.g.dart';
 
 @freezed
-abstract class CompetitionAgeCategory with _$CompetitionAgeCategory implements DataObject, Orderable {
+abstract class CompetitionAgeCategory with _$CompetitionAgeCategory implements DataObject, PosOrderable {
   const CompetitionAgeCategory._();
 
   const factory CompetitionAgeCategory({

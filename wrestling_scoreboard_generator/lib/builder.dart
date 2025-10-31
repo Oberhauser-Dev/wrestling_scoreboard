@@ -24,6 +24,16 @@ extension on ClassElement2 {
       return getter.returnType.element3?.name3 == cElement.name3;
     });
   }
+
+  Iterable<GetterElement> getDataObjectGetters() {
+    if (mixins.isEmpty) {
+      return [];
+    }
+    return mixins.first.getters.where((getter) {
+      final e = getter.returnType.element3;
+      return (e is ClassElement2) && e.isDataObject;
+    });
+  }
 }
 
 class GenericDataObjectBuilder implements Builder {
@@ -114,6 +124,20 @@ extension DataObjectParser on DataObject {
       _ => throw UnimplementedError('Raw conversation for "\$T" not found.'),
     };
   }
+}
+
+Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
+  T single,
+  R Function<F extends DataObject>(F? filterObject) callback,
+) {
+  switch (single) {
+    ${sorted.map((c) {
+      final properties = c.getDataObjectGetters();
+      if (properties.isEmpty) return '';
+      return 'case final ${c.name3} single:\nreturn [${properties.map((property) => 'callback(single.${property.name3})').join(',')}];';
+    }).join('\n')}
+  }
+  return [];
 }
 ''';
     await buildStep.writeAsString(_allFileOutput(buildStep), output);

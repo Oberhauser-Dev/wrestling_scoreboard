@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
@@ -17,6 +18,8 @@ void main() {
   MockableDateTime.isMocked = true;
   MockableDateTime.mockedDateTime = DateTime.utc(2024, 01, 02);
   MockableRandom.isMocked = true;
+
+  final mockedData = MockedData();
 
   group('Database', () {
     late PostgresDb db;
@@ -178,7 +181,7 @@ void main() {
           if (dataType == SecuredUser) continue;
           if (dataType == ScratchBout) continue;
 
-          final objs = getMockedDataObjects(dataType);
+          final objs = mockedData.getByType(dataType);
           if (objs.isEmpty) throw 'No mocked datatypes provided for $dataType';
           for (var obj in objs) {
             final body = jsonEncode(singleToJson(obj, dataType, CRUD.create));
@@ -206,7 +209,7 @@ void main() {
           // e.g. Bout is deleted by TeamMatchBout, or CompetitionBout.
           if (dataType == Bout) continue;
 
-          final objs = getMockedDataObjects(dataType);
+          final objs = mockedData.getByType(dataType);
           if (objs.isEmpty) throw 'No mocked datatypes provided for $dataType';
           // Need to delete in reversed order, as entities can be their own parent.
           for (var obj in objs.reversed) {

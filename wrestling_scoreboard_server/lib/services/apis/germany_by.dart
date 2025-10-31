@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/routes/data_object_relations.dart';
 import 'package:wrestling_scoreboard_server/services/api.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-005029c.json.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/competition_s-2023_c-029013c.json.dart';
