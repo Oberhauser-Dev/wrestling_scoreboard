@@ -45,7 +45,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   GetMany getMany;
 
   Future<List<T>> getManyByFilter<T extends DataObject, S extends DataObject>(S filterObject) async {
-    final conditions = ['${directDataObjectRelations[T]![S]!.$1} = @fid'];
+    final conditions = ['${directDataObjectRelations[T]![S]!.first.property} = @fid'];
     final substitutionValues = {'fid': filterObject.id};
     return await getMany<T>(conditions: conditions, substitutionValues: substitutionValues);
   }

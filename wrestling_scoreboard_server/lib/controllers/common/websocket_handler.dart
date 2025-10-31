@@ -193,14 +193,15 @@ void _broadcastUpdateManyRawInListOfFilter(
 /// Update filtered lists (often the list they are contained in).
 /// Currently do not update list of all entities (as it should only be used in special cases)
 void broadcastDependants<T extends DataObject>(T single) async {
-  directDataObjectRelations[T]?.forEach((propertyType, propertyConfig) {
-    final (propertyTableRef, orderBy) = propertyConfig;
-    _broadcastUpdateManyInListOfFilter(
-      single,
-      filterType: propertyType,
-      propertyTableRef: propertyTableRef,
-      orderBy: orderBy,
-    );
+  directDataObjectRelations[T]?.forEach((propertyType, propertyConfigs) {
+    for (final config in propertyConfigs) {
+      _broadcastUpdateManyInListOfFilter(
+        single,
+        filterType: propertyType,
+        propertyTableRef: config.property,
+        orderBy: config.orderBy,
+      );
+    }
   });
 
   if (single is Bout) {
@@ -296,9 +297,10 @@ void broadcastDependants<T extends DataObject>(T single) async {
 }
 
 void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) async {
-  directDataObjectRelations[T]?.forEach((propertyType, propertyConfig) {
-    final (propertyTableRef, orderBy) = propertyConfig;
-    _broadcastUpdateManyRawInListOfFilter(T, single, propertyType, propertyTableRef, orderBy);
+  directDataObjectRelations[T]?.forEach((propertyType, propertyConfigs) {
+    for (final config in propertyConfigs) {
+      _broadcastUpdateManyRawInListOfFilter(T, single, propertyType, config.property, config.orderBy);
+    }
   });
 
   if (T == Organization) {

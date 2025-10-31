@@ -201,7 +201,7 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<List<T>> updateOnDiffMany(List<T> dataObjects, {Type? filterType, int? filterId}) async {
-    final conditions = ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'];
+    final conditions = ['${directDataObjectRelations[T]![filterType]!.first.property} = @fid'];
     final substitutionValues = {'fid': filterId};
     final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
 

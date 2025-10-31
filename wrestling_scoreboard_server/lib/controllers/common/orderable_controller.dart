@@ -30,7 +30,7 @@ mixin OrderableController<T extends Orderable> on ShelfController<T> {
 
     final indexedFilter = Iterable<int>.generate(filterTypes.length);
     final conditions =
-        indexedFilter.map((i) => '${directDataObjectRelations[T]![filterTypes[i]]!.$1} = @fid$i').toList();
+        indexedFilter.map((i) => '${directDataObjectRelations[T]![filterTypes[i]]!.first.property} = @fid$i').toList();
     await _reorder(
       conditions: conditions,
       id: id,
@@ -42,7 +42,7 @@ mixin OrderableController<T extends Orderable> on ShelfController<T> {
     for (final i in indexedFilter) {
       broadcastUpdateMany<T>(
         (obfuscate) async => await getMany(
-          conditions: ['${directDataObjectRelations[T]![filterTypes[i]]!.$1} = @fid'],
+          conditions: ['${directDataObjectRelations[T]![filterTypes[i]]!.first.property} = @fid'],
           substitutionValues: {'fid': filterIds[i]},
           obfuscate: obfuscate,
         ),
@@ -69,8 +69,8 @@ WITH renumbered AS (
     ROW_NUMBER() OVER (ORDER BY ${orderByStmt == null ? '' : '$orderByStmt, '}ot.pos, t.pos) - 1 AS new_pos
   FROM $tableName AS t
   JOIN $orderTable AS ot
-    ON t.${directDataObjectRelations[T]![orderType]!.$1} = ot.id
-  WHERE t.${directDataObjectRelations[T]![filterType]!.$1} = @fid
+    ON t.${directDataObjectRelations[T]![orderType]!.first.property} = ot.id
+  WHERE t.${directDataObjectRelations[T]![filterType]!.first.property} = @fid
 )
 UPDATE $tableName AS tgt
 SET pos = rn.new_pos
@@ -81,7 +81,7 @@ WHERE tgt.id = rn.id;
 
     broadcastUpdateMany<T>(
       (obfuscate) async => await getMany(
-        conditions: ['${directDataObjectRelations[T]![filterType]!.$1} = @fid'],
+        conditions: ['${directDataObjectRelations[T]![filterType]!.first.property} = @fid'],
         substitutionValues: {'fid': filterId},
         obfuscate: obfuscate,
       ),
@@ -157,7 +157,7 @@ WHERE id = @id;
       conjunction: conjunction,
       substitutionValues: substitutionValues,
       joins: joins,
-      orderBy: orderBy.isEmpty ? ['pos'] : orderBy,
+      orderBy: orderBy.contains('pos') ? orderBy : [...orderBy, 'pos'],
       obfuscate: obfuscate,
     );
   }
