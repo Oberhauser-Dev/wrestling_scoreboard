@@ -57,9 +57,8 @@ Stream<T> singleDataStream<T extends DataObject>(Ref ref, SingleProviderData<T> 
 /// Class to wrap equal many data for providers.
 class ManyProviderData<T extends DataObject, S extends DataObject?> {
   final S? filterObject;
-  final List<T>? initialData;
 
-  ManyProviderData({this.filterObject, this.initialData});
+  ManyProviderData({this.filterObject});
 
   @override
   bool operator ==(Object other) {
@@ -80,12 +79,9 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   ref.cache();
 
   final dataManager = await ref.watch(dataManagerProvider);
-  if (pData.initialData != null) {
-    yield pData.initialData!;
-  }
 
   final dataStream = dataManager
-      .streamMany<T, S>(filterObject: pData.filterObject, init: pData.initialData == null)
+      .streamMany<T, S>(filterObject: pData.filterObject)
       .map((event) => event.data);
 
   // Reload, whenever the stream is connected
