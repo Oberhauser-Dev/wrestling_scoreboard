@@ -16,10 +16,11 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CompetitionBoutDisplay extends ConsumerWidget {
   static const route = 'display';
 
+  static String fullRoute(CompetitionBout bout) =>
+      '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/$route';
+
   static void navigateTo(BuildContext context, CompetitionBout bout) {
-    context.push(
-      '/${CompetitionOverview.route}/${bout.competition.id}/${CompetitionBoutOverview.route}/${bout.id}/$route',
-    );
+    context.push(fullRoute(bout));
   }
 
   final int competitionId;
@@ -78,8 +79,7 @@ class CompetitionBoutDisplay extends ConsumerWidget {
                             ),
                           ],
                           navigateToBoutByIndex: (context, index) {
-                            context.pop();
-                            CompetitionBoutDisplay.navigateTo(context, matCompetitionBouts[index]);
+                            context.pushReplacement(CompetitionBoutDisplay.fullRoute(matCompetitionBouts[index]));
                           },
                           // TODO
                           headerItems: [],
