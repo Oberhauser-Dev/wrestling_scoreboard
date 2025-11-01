@@ -18,8 +18,11 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class TeamMatchBoutDisplay extends ConsumerWidget {
   static const route = 'display';
 
+  static String fullRoute(TeamMatchBout bout) =>
+      '/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}/$route';
+
   static void navigateTo(BuildContext context, TeamMatchBout bout) {
-    context.push('/${TeamMatchOverview.route}/${bout.teamMatch.id}/${TeamMatchBoutOverview.route}/${bout.id}/$route');
+    context.push(fullRoute(bout));
   }
 
   final int matchId;
@@ -71,8 +74,7 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
                             ),
                           ],
                           navigateToBoutByIndex: (context, index) {
-                            context.pop();
-                            TeamMatchBoutDisplay.navigateTo(context, teamMatchBouts[index]);
+                            context.pushReplacement(TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]));
                           },
                           headerItems: CommonElements.getTeamHeader(match.home.team, match.guest.team, bouts, context),
                           weightClass: teamMatchBout.weightClass,
