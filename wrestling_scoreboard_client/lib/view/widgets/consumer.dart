@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
@@ -24,11 +24,11 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (id == null) {
+    if (id == null && initialData?.id == null) {
       return builder(context, initialData);
     }
     final stream = ref.watch(
-      singleDataStreamProvider<T>(SingleProviderData<T>(initialData: initialData, id: id!)).future,
+      singleDataStreamProvider<T>(SingleProviderData<T>(initialData: initialData, id: id ?? initialData!.id!)).future,
     );
     return LoadingBuilder<T>(
       builder: builder,
@@ -72,22 +72,20 @@ class SingleConsumer<T extends DataObject> extends StatelessWidget {
 }
 
 class ManyConsumer<T extends DataObject, S extends DataObject?> extends ConsumerWidget {
-  final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, List<T> data) builder;
   final Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException;
 
-  const ManyConsumer({required this.builder, this.onException, this.initialData, this.filterObject, super.key});
+  const ManyConsumer({required this.builder, this.onException, this.filterObject, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stream = ref.watch(
-      manyDataStreamProvider<T, S>(ManyProviderData<T, S>(initialData: initialData, filterObject: filterObject)).future,
-    );
+    final stream = ref.watch(manyDataStreamProvider<T, S>(ManyProviderData<T, S>(filterObject: filterObject)).future);
     return LoadingBuilder<List<T>>(
       builder: builder,
       future: stream,
-      initialData: null, // Handle initial data via the stream
+      initialData: null,
+      // Handle initial data via the stream
       onRetry:
           () async => (await ref.read(
             webSocketManagerProvider,

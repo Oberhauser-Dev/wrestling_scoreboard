@@ -59,7 +59,6 @@ class ContentItem extends StatelessWidget {
 class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extends ConsumerWidget {
   final Widget? trailing;
   final String? hintText;
-  final List<T>? initialData;
   final S? filterObject;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final Widget? Function(BuildContext context, List<T> data)? prependBuilder;
@@ -74,7 +73,6 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     this.hintText,
     this.prependBuilder,
     this.onException,
-    this.initialData,
     this.filterObject,
     this.mapData,
     this.shrinkWrap = false,
@@ -87,7 +85,6 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     required Widget Function(BuildContext context) addPageBuilder,
     required Widget Function(BuildContext context, T item) itemBuilder,
     String? hintText,
-    List<T>? initialData,
     S? filterObject,
     Widget? Function(BuildContext context, List<T> data)? prependBuilder,
     Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException,
@@ -101,7 +98,6 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
       filterObject: filterObject,
       mapData: mapData,
       prependBuilder: prependBuilder,
-      initialData: initialData,
       hintText: hintText,
       trailing: RestrictedAddButton(
         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: addPageBuilder)),
@@ -117,7 +113,6 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
     required Widget Function(BuildContext context) createPageBuilder,
     required Widget Function(BuildContext context, T item) itemBuilder,
     String? hintText,
-    List<T>? initialData,
     S? filterObject,
     Widget? Function(BuildContext context, List<T> data)? prependBuilder,
     Widget Function(BuildContext context, Object? exception, {StackTrace? stackTrace})? onException,
@@ -132,7 +127,6 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
       filterObject: filterObject,
       mapData: mapData,
       prependBuilder: prependBuilder,
-      initialData: initialData,
       hintText: hintText,
       trailing: MenuAnchor(
         menuChildren: [
@@ -177,7 +171,6 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
           initialItemIndex: getInitialIndex == null ? 0 : getInitialIndex!.call(data),
         );
       },
-      initialData: initialData,
       filterObject: filterObject,
       onException: onException,
     );
