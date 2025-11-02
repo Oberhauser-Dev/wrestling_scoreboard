@@ -563,6 +563,56 @@ abstract class _$SmartBoutActionsNotifier extends $Notifier<Raw<Future<bool>>> {
   }
 }
 
+@ProviderFor(TeamMatchChronologicalSortNotifier)
+const teamMatchChronologicalSortProvider = TeamMatchChronologicalSortNotifierProvider._();
+
+final class TeamMatchChronologicalSortNotifierProvider
+    extends $NotifierProvider<TeamMatchChronologicalSortNotifier, Raw<Future<bool>>> {
+  const TeamMatchChronologicalSortNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'teamMatchChronologicalSortProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$teamMatchChronologicalSortNotifierHash();
+
+  @$internal
+  @override
+  TeamMatchChronologicalSortNotifier create() => TeamMatchChronologicalSortNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<bool>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<bool>>>(value));
+  }
+}
+
+String _$teamMatchChronologicalSortNotifierHash() => r'baefe43c1be14b4fd1281e3660122e8b69588720';
+
+abstract class _$TeamMatchChronologicalSortNotifier extends $Notifier<Raw<Future<bool>>> {
+  Raw<Future<bool>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<bool>>, Raw<Future<bool>>>,
+              Raw<Future<bool>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(FavoritesNotifier)
 const favoritesProvider = FavoritesNotifierProvider._();
 

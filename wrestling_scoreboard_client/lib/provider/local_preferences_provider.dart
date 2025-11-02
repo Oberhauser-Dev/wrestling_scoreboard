@@ -205,6 +205,21 @@ class SmartBoutActionsNotifier extends _$SmartBoutActionsNotifier {
 }
 
 @Riverpod(keepAlive: true)
+class TeamMatchChronologicalSortNotifier extends _$TeamMatchChronologicalSortNotifier {
+  @override
+  Raw<Future<bool>> build() async {
+    var teamMatchChronologicalSort = await Preferences.getBool(Preferences.keyTeamMatchChronologicalSort);
+    teamMatchChronologicalSort ??= false;
+    return teamMatchChronologicalSort;
+  }
+
+  Future<void> setState(bool? val) async {
+    await Preferences.setBool(Preferences.keyTeamMatchChronologicalSort, val);
+    state = Future.value(val);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class FavoritesNotifier extends _$FavoritesNotifier {
   @override
   Raw<Future<Map<String, Set<int>>>> build() async {

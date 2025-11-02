@@ -59,7 +59,7 @@ final class SingleDataStreamProvider<T extends DataObject> extends $StreamNotifi
   }
 }
 
-String _$singleDataStreamHash() => r'faef416cd66018e718cd07e16ac3373ad4aace81';
+String _$singleDataStreamHash() => r'2604e012bdff0be14b2fe534087af1475eaea679';
 
 final class SingleDataStreamFamily extends $Family {
   const SingleDataStreamFamily._()
@@ -184,7 +184,7 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
   }
 }
 
-String _$manyDataStreamHash() => r'a6873e58b264c9ff265b2b2b2fff8719987973b7';
+String _$manyDataStreamHash() => r'eb77623eee9831645262d5e3310886fc868474b3';
 
 final class ManyDataStreamFamily extends $Family {
   const ManyDataStreamFamily._()
