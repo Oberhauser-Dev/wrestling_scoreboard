@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict q0reC2gQodaVORWTvswLPID2YYLncWoR1AisSFGcICkTzuG6O1m9KJfgkNpT4xd
+\restrict 17b6HUoYY2Z68C00RDPpOQI7MsWq0LeA4Cy6obbJQfZ7ztFE2cT82xcOUGcUGh6
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -477,7 +477,8 @@ CREATE TABLE public.wrestling_event (
     comment text,
     no character varying(16),
     organization_id integer,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    end_date timestamp with time zone
 );
 
 
@@ -1787,7 +1788,7 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 -- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking) FROM stdin;
+COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, name, bout_config_id, mat_count, max_ranking) FROM stdin;
 \.
 
 
@@ -1900,7 +1901,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7-pre.1	0.3.4
+0.3.7-pre.2	0.3.4
 \.
 
 
@@ -1965,7 +1966,7 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition) FROM stdin;
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition) FROM stdin;
 \.
 
 
@@ -1997,7 +1998,7 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 -- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id) FROM stdin;
+COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date) FROM stdin;
 \.
 
 
@@ -3221,5 +3222,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict q0reC2gQodaVORWTvswLPID2YYLncWoR1AisSFGcICkTzuG6O1m9KJfgkNpT4xd
+\unrestrict 17b6HUoYY2Z68C00RDPpOQI7MsWq0LeA4Cy6obbJQfZ7ztFE2cT82xcOUGcUGh6
 

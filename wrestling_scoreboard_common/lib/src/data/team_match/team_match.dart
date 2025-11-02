@@ -23,6 +23,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     String? no,
     String? location,
     required DateTime date,
+    DateTime? endDate,
     int? visitorsCount,
     String? comment,
   }) = _TeamMatch;
@@ -47,6 +48,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       no: e['no'] as String?,
       location: e['location'] as String?,
       date: e['date'] as DateTime,
+      endDate: e['end_date'] as DateTime?,
       visitorsCount: e['visitors_count'] as int?,
       comment: e['comment'] as String?,
       home: home,

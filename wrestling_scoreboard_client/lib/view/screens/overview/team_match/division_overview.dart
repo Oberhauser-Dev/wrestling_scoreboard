@@ -52,12 +52,12 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
             ContentItem(title: division.name, subtitle: localizations.name, icon: Icons.description),
             ContentItem(
               title: division.startDate.toDateString(context),
-              subtitle: localizations.startDate, // Start date
+              subtitle: localizations.startDate,
               icon: Icons.event,
             ),
             ContentItem(
               title: division.endDate.toDateString(context),
-              subtitle: localizations.endDate, // End date
+              subtitle: localizations.endDate,
               icon: Icons.event,
             ),
             ContentItem(

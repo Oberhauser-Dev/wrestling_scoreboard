@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict bkmUI5PMKzgUVfM6qO9nhaW480x4AwzBlOkRGKF51wEEJQSPlznHqUiHcGBxtcA
+\restrict JkD9sxEhyCrqTVOATKKZ1WTnC9z3th5Pcn7DtjrZbZWcpSJZnqVpZDkkVyxphGm
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -477,7 +477,8 @@ CREATE TABLE public.wrestling_event (
     comment text,
     no character varying(16),
     organization_id integer,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    end_date timestamp with time zone
 );
 
 
@@ -1849,8 +1850,8 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 -- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking) FROM stdin;
-1	2021-07-17 00:00:00+00	Quahog	15	\N	\N	1	\N	The Griffin-Simpson Competition	1	0	10
+COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, name, bout_config_id, mat_count, max_ranking) FROM stdin;
+1	2021-07-17 00:00:00+00	Quahog	15	\N	\N	1	\N	\N	The Griffin-Simpson Competition	1	0	10
 \.
 
 
@@ -2037,7 +2038,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7-pre.1	0.3.4
+0.3.7-pre.2	0.3.4
 \.
 
 
@@ -2163,8 +2164,8 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition) FROM stdin;
-1	2021-07-10 00:00:00+00	Springfield	\N	\N		1	\N	1	2	1	1
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition) FROM stdin;
+1	2021-07-10 00:00:00+00	Springfield	\N	\N		1	\N	\N	1	2	1	1
 \.
 
 
@@ -2245,7 +2246,7 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 -- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id) FROM stdin;
+COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date) FROM stdin;
 \.
 
 
@@ -3469,5 +3470,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict bkmUI5PMKzgUVfM6qO9nhaW480x4AwzBlOkRGKF51wEEJQSPlznHqUiHcGBxtcA
+\unrestrict JkD9sxEhyCrqTVOATKKZ1WTnC9z3th5Pcn7DtjrZbZWcpSJZnqVpZDkkVyxphGm
 

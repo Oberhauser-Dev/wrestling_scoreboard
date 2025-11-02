@@ -31,6 +31,7 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {
       'date': psql.Type.timestampTz,
+      'end_date': psql.Type.timestampTz,
       'mat_count': psql.Type.smallInteger,
       'max_ranking': psql.Type.smallInteger,
       'mat': psql.Type.smallInteger,

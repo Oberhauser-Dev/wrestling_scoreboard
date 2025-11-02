@@ -18,6 +18,7 @@ _TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => _TeamMatch(
   no: json['no'] as String?,
   location: json['location'] as String?,
   date: DateTime.parse(json['date'] as String),
+  endDate: json['endDate'] == null ? null : DateTime.parse(json['endDate'] as String),
   visitorsCount: (json['visitorsCount'] as num?)?.toInt(),
   comment: json['comment'] as String?,
 );
@@ -33,6 +34,7 @@ Map<String, dynamic> _$TeamMatchToJson(_TeamMatch instance) => <String, dynamic>
   'no': instance.no,
   'location': instance.location,
   'date': instance.date.toIso8601String(),
+  'endDate': instance.endDate?.toIso8601String(),
   'visitorsCount': instance.visitorsCount,
   'comment': instance.comment,
 };

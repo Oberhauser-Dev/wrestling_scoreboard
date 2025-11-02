@@ -456,7 +456,7 @@ extension DataObjectParser on DataObject {
   }
 }
 
-List<R> mapDirectDataObjectRelations<T extends DataObject, R>(
+Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
   T single,
   R Function<F extends DataObject>(F? filterObject) callback,
 ) {
