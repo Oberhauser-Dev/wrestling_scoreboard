@@ -71,7 +71,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         onSaved: (value) => _name = value,
       ),
       ListTile(
-        leading: const Icon(Icons.date_range),
+        leading: const Icon(Icons.event),
         title: TextFormField(
           key: ValueKey(_startDate),
           readOnly: true,
@@ -96,7 +96,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.date_range),
+        leading: const Icon(Icons.event),
         title: TextFormField(
           key: ValueKey(_endDate),
           readOnly: true,

@@ -63,7 +63,7 @@ void main() {
 
       // At this point the database should already be migrated
       final defaultDump = await File(definitionDatabasePath).readAsString();
-      final databaseExport = await db.export();
+      final databaseExport = await _canonicalExport(db);
       expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(defaultDump));
     });
 
@@ -90,7 +90,7 @@ void main() {
 
       // At this point the database should already be migrated
       final expectedDump = await File(prepopulatedDatabasePath).readAsString();
-      final databaseExport = await db.export();
+      final databaseExport = await _canonicalExport(db);
       expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(expectedDump));
     });
 
@@ -229,7 +229,7 @@ void main() {
 
         // After deletion, no entities should exist any more.
         final expectedDump = await File(definitionDatabasePath).readAsString();
-        final databaseExport = await db.export();
+        final databaseExport = await _canonicalExport(db);
         expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(expectedDump));
 
         await instance.close();
@@ -247,4 +247,13 @@ void main() {
       expect(controller.tableName, getTableNameFromType(dataType));
     }
   });
+}
+
+/// Import and export again to match database schema.
+/// Inherited classes differ in the position of an added column, after migration,
+/// in contrast to the default import.
+Future<String> _canonicalExport(PostgresDb db) async {
+  final databaseExport = await db.export();
+  await db.restoreFromString(databaseExport);
+  return db.export();
 }

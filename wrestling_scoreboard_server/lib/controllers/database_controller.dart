@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
@@ -30,11 +29,7 @@ class DatabaseController {
   Future<Response> restore(Request request, User? user) async {
     try {
       final message = await request.readAsString();
-      final File file = File(
-        '${Directory.systemTemp.path}/${message.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0')}.sql',
-      );
-      await file.writeAsString(message);
-      await PostgresDb().restore(file.path);
+      await PostgresDb().restoreFromString(message);
       await PostgresDb().migrate();
       return Response.ok('{"status": "success"}');
     } catch (err, stackTrace) {

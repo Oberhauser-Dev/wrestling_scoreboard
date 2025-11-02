@@ -45,7 +45,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   Team? _guestTeam;
   League? _league;
   int? _seasonPartition;
-  late DateTime _date;
+  late DateTime _startDate;
+  DateTime? _endDate;
   int? _visitorsCount;
   String? _comment;
 
@@ -54,7 +55,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     super.initState();
     _homeTeam = widget.teamMatch?.home.team ?? widget.initialHomeTeam;
     _guestTeam = widget.teamMatch?.guest.team ?? widget.initialGuestTeam;
-    _date = widget.teamMatch?.date ?? DateTime.now();
+    _startDate = widget.teamMatch?.date ?? DateTime.now();
+    _endDate = widget.teamMatch?.endDate;
     _comment = widget.teamMatch?.comment;
     _league = widget.teamMatch?.league ?? widget.initialLeague;
     // Set initial season partition to 0, if match has a league.
@@ -82,24 +84,51 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         onSaved: (value) => _location = value,
       ),
       ListTile(
-        leading: const Icon(Icons.date_range),
+        leading: const Icon(Icons.event),
         title: TextFormField(
-          key: ValueKey(_date),
+          key: ValueKey(_startDate),
           readOnly: true,
-          decoration: CustomInputDecoration(isMandatory: true, label: localizations.date, localizations: localizations),
+          decoration: CustomInputDecoration(
+            isMandatory: true,
+            label: localizations.startDate,
+            localizations: localizations,
+          ),
           onTap:
               () => showDatePicker(
                 initialDatePickerMode: DatePickerMode.day,
                 context: context,
-                initialDate: _date,
+                initialDate: _startDate,
                 firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
                 lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
               ).then((value) {
                 if (value != null) {
-                  setState(() => _date = value);
+                  setState(() => _startDate = value);
                 }
               }),
-          initialValue: _date.toDateTimeString(context),
+          initialValue: _startDate.toDateTimeString(context),
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.event),
+        title: TextFormField(
+          key: ValueKey(_endDate),
+          readOnly: true,
+          decoration: CustomInputDecoration(
+            isMandatory: false,
+            label: localizations.endDate,
+            localizations: localizations,
+          ),
+          onTap:
+              () => showDatePicker(
+                initialDatePickerMode: DatePickerMode.day,
+                context: context,
+                initialDate: _endDate,
+                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+              ).then((value) {
+                setState(() => _endDate = value);
+              }),
+          initialValue: _endDate?.toDateTimeString(context),
         ),
       ),
       ListTile(
@@ -237,7 +266,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           no: _no,
           home: home,
           guest: guest,
-          date: _date,
+          date: _startDate,
+          endDate: _endDate,
           league: _league,
           seasonPartition: _seasonPartition,
           comment: _comment,

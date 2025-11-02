@@ -23,7 +23,8 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
 
   String? _location;
   String? _no;
-  late DateTime _date;
+  late DateTime _startDate;
+  DateTime? _endDate;
   String? _comment;
   String? _name;
   int? _visitorsCount;
@@ -32,7 +33,8 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
   @override
   void initState() {
     super.initState();
-    _date = widget.competition?.date ?? DateTime.now();
+    _startDate = widget.competition?.date ?? DateTime.now();
+    _endDate = widget.competition?.endDate;
     _comment = widget.competition?.comment;
   }
 
@@ -64,24 +66,51 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
         initialValue: widget.competition?.location,
       ),
       ListTile(
-        leading: const Icon(Icons.date_range),
+        leading: const Icon(Icons.event),
         title: TextFormField(
-          key: ValueKey(_date),
+          key: ValueKey(_startDate),
           readOnly: true,
-          decoration: CustomInputDecoration(isMandatory: true, label: localizations.date, localizations: localizations),
+          decoration: CustomInputDecoration(
+            isMandatory: true,
+            label: localizations.startDate,
+            localizations: localizations,
+          ),
           onTap:
               () => showDatePicker(
                 initialDatePickerMode: DatePickerMode.day,
                 context: context,
-                initialDate: _date,
+                initialDate: _startDate,
                 firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
                 lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
               ).then((value) {
                 if (value != null) {
-                  setState(() => _date = value);
+                  setState(() => _startDate = value);
                 }
               }),
-          initialValue: _date.toDateTimeString(context),
+          initialValue: _startDate.toDateTimeString(context),
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.event),
+        title: TextFormField(
+          key: ValueKey(_endDate),
+          readOnly: true,
+          decoration: CustomInputDecoration(
+            isMandatory: false,
+            label: localizations.endDate,
+            localizations: localizations,
+          ),
+          onTap:
+              () => showDatePicker(
+                initialDatePickerMode: DatePickerMode.day,
+                context: context,
+                initialDate: _endDate,
+                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+              ).then((value) {
+                setState(() => _endDate = value);
+              }),
+          initialValue: _endDate?.toDateTimeString(context),
         ),
       ),
       NumericalInput(
@@ -138,7 +167,8 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
           orgSyncId: widget.competition?.orgSyncId,
           location: _location!,
           no: _no,
-          date: _date,
+          date: _startDate,
+          endDate: _endDate,
           comment: _comment,
           name: _name!,
           boutConfig: boutConfig,

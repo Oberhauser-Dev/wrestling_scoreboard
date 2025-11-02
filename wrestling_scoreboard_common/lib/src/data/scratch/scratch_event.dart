@@ -16,6 +16,9 @@ class ScratchEvent extends WrestlingEvent {
   DateTime get date => MockableDateTime.now();
 
   @override
+  DateTime? get endDate => null;
+
+  @override
   @override
   String? get location => null;
 

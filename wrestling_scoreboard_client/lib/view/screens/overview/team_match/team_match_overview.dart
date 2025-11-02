@@ -194,8 +194,13 @@ class TeamMatchOverview extends ConsumerWidget {
                                   ),
                                   ContentItem(
                                     title: match.date.toDateTimeString(context),
-                                    subtitle: localizations.date,
-                                    icon: Icons.date_range,
+                                    subtitle: localizations.startDate,
+                                    icon: Icons.event,
+                                  ),
+                                  ContentItem(
+                                    title: match.endDate?.toDateString(context) ?? '-',
+                                    subtitle: localizations.endDate,
+                                    icon: Icons.event,
                                   ),
                                   ContentItem(
                                     title: homeLineup.team.name,
@@ -208,6 +213,11 @@ class TeamMatchOverview extends ConsumerWidget {
                                     subtitle: '${localizations.team} ${localizations.blue}',
                                     icon: Icons.group,
                                     onTap: () => TeamOverview.navigateTo(context, guestLineup.team),
+                                  ),
+                                  ContentItem(
+                                    title: match.visitorsCount?.toString() ?? '-',
+                                    subtitle: localizations.visitors,
+                                    icon: Icons.confirmation_number,
                                   ),
                                   ContentItem(
                                     title: match.comment ?? '-',

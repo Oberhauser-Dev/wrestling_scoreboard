@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Competition {
 
- int? get id; String? get orgSyncId; Organization? get organization; String get name; BoutConfig get boutConfig; String? get location; DateTime get date; String? get no; int? get visitorsCount; String? get comment; int get matCount;/// The ranks which must be determined
+ int? get id; String? get orgSyncId; Organization? get organization; String get name; BoutConfig get boutConfig; String? get location; DateTime get date; DateTime? get endDate; String? get no; int? get visitorsCount; String? get comment; int get matCount;/// The ranks which must be determined
  dynamic get maxRanking;
 /// Create a copy of Competition
 /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +29,16 @@ $CompetitionCopyWith<Competition> get copyWith => _$CompetitionCopyWithImpl<Comp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Competition&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.name, name) || other.name == name)&&(identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.no, no) || other.no == no)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.matCount, matCount) || other.matCount == matCount)&&const DeepCollectionEquality().equals(other.maxRanking, maxRanking));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Competition&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.name, name) || other.name == name)&&(identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.no, no) || other.no == no)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.matCount, matCount) || other.matCount == matCount)&&const DeepCollectionEquality().equals(other.maxRanking, maxRanking));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,name,boutConfig,location,date,no,visitorsCount,comment,matCount,const DeepCollectionEquality().hash(maxRanking));
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,name,boutConfig,location,date,endDate,no,visitorsCount,comment,matCount,const DeepCollectionEquality().hash(maxRanking));
 
 @override
 String toString() {
-  return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxRanking: $maxRanking)';
+  return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, endDate: $endDate, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxRanking: $maxRanking)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $CompetitionCopyWith<$Res>  {
   factory $CompetitionCopyWith(Competition value, $Res Function(Competition) _then) = _$CompetitionCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, String name, BoutConfig boutConfig, String? location, DateTime date, String? no, int? visitorsCount, String? comment, int matCount, dynamic maxRanking
+ int? id, String? orgSyncId, Organization? organization, String name, BoutConfig boutConfig, String? location, DateTime date, DateTime? endDate, String? no, int? visitorsCount, String? comment, int matCount, dynamic maxRanking
 });
 
 
@@ -66,7 +66,7 @@ class _$CompetitionCopyWithImpl<$Res>
 
 /// Create a copy of Competition
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? name = null,Object? boutConfig = null,Object? location = freezed,Object? date = null,Object? no = freezed,Object? visitorsCount = freezed,Object? comment = freezed,Object? matCount = null,Object? maxRanking = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? name = null,Object? boutConfig = null,Object? location = freezed,Object? date = null,Object? endDate = freezed,Object? no = freezed,Object? visitorsCount = freezed,Object? comment = freezed,Object? matCount = null,Object? maxRanking = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,8 @@ as Organization?,name: null == name ? _self.name : name // ignore: cast_nullable
 as String,boutConfig: null == boutConfig ? _self.boutConfig : boutConfig // ignore: cast_nullable_to_non_nullable
 as BoutConfig,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String?,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,no: freezed == no ? _self.no : no // ignore: cast_nullable_to_non_nullable
+as DateTime,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,no: freezed == no ? _self.no : no // ignore: cast_nullable_to_non_nullable
 as String?,visitorsCount: freezed == visitorsCount ? _self.visitorsCount : visitorsCount // ignore: cast_nullable_to_non_nullable
 as int?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,matCount: null == matCount ? _self.matCount : matCount // ignore: cast_nullable_to_non_nullable
@@ -186,10 +187,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String name,  BoutConfig boutConfig,  String? location,  DateTime date,  String? no,  int? visitorsCount,  String? comment,  int matCount,  dynamic maxRanking)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String name,  BoutConfig boutConfig,  String? location,  DateTime date,  DateTime? endDate,  String? no,  int? visitorsCount,  String? comment,  int matCount,  dynamic maxRanking)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Competition() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.boutConfig,_that.location,_that.date,_that.no,_that.visitorsCount,_that.comment,_that.matCount,_that.maxRanking);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.boutConfig,_that.location,_that.date,_that.endDate,_that.no,_that.visitorsCount,_that.comment,_that.matCount,_that.maxRanking);case _:
   return orElse();
 
 }
@@ -207,10 +208,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.bou
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String name,  BoutConfig boutConfig,  String? location,  DateTime date,  String? no,  int? visitorsCount,  String? comment,  int matCount,  dynamic maxRanking)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String name,  BoutConfig boutConfig,  String? location,  DateTime date,  DateTime? endDate,  String? no,  int? visitorsCount,  String? comment,  int matCount,  dynamic maxRanking)  $default,) {final _that = this;
 switch (_that) {
 case _Competition():
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.boutConfig,_that.location,_that.date,_that.no,_that.visitorsCount,_that.comment,_that.matCount,_that.maxRanking);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.boutConfig,_that.location,_that.date,_that.endDate,_that.no,_that.visitorsCount,_that.comment,_that.matCount,_that.maxRanking);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -227,10 +228,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.bou
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  String name,  BoutConfig boutConfig,  String? location,  DateTime date,  String? no,  int? visitorsCount,  String? comment,  int matCount,  dynamic maxRanking)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  String name,  BoutConfig boutConfig,  String? location,  DateTime date,  DateTime? endDate,  String? no,  int? visitorsCount,  String? comment,  int matCount,  dynamic maxRanking)?  $default,) {final _that = this;
 switch (_that) {
 case _Competition() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.boutConfig,_that.location,_that.date,_that.no,_that.visitorsCount,_that.comment,_that.matCount,_that.maxRanking);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.boutConfig,_that.location,_that.date,_that.endDate,_that.no,_that.visitorsCount,_that.comment,_that.matCount,_that.maxRanking);case _:
   return null;
 
 }
@@ -242,7 +243,7 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.name,_that.bou
 @JsonSerializable()
 
 class _Competition extends Competition {
-  const _Competition({this.id, this.orgSyncId, this.organization, required this.name, required this.boutConfig, this.location, required this.date, this.no, this.visitorsCount, this.comment, required this.matCount, this.maxRanking = 10}): super._();
+  const _Competition({this.id, this.orgSyncId, this.organization, required this.name, required this.boutConfig, this.location, required this.date, this.endDate, this.no, this.visitorsCount, this.comment, required this.matCount, this.maxRanking = 10}): super._();
   factory _Competition.fromJson(Map<String, dynamic> json) => _$CompetitionFromJson(json);
 
 @override final  int? id;
@@ -252,6 +253,7 @@ class _Competition extends Competition {
 @override final  BoutConfig boutConfig;
 @override final  String? location;
 @override final  DateTime date;
+@override final  DateTime? endDate;
 @override final  String? no;
 @override final  int? visitorsCount;
 @override final  String? comment;
@@ -272,16 +274,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Competition&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.name, name) || other.name == name)&&(identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.no, no) || other.no == no)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.matCount, matCount) || other.matCount == matCount)&&const DeepCollectionEquality().equals(other.maxRanking, maxRanking));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Competition&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.name, name) || other.name == name)&&(identical(other.boutConfig, boutConfig) || other.boutConfig == boutConfig)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.no, no) || other.no == no)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.matCount, matCount) || other.matCount == matCount)&&const DeepCollectionEquality().equals(other.maxRanking, maxRanking));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,name,boutConfig,location,date,no,visitorsCount,comment,matCount,const DeepCollectionEquality().hash(maxRanking));
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,name,boutConfig,location,date,endDate,no,visitorsCount,comment,matCount,const DeepCollectionEquality().hash(maxRanking));
 
 @override
 String toString() {
-  return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxRanking: $maxRanking)';
+  return 'Competition(id: $id, orgSyncId: $orgSyncId, organization: $organization, name: $name, boutConfig: $boutConfig, location: $location, date: $date, endDate: $endDate, no: $no, visitorsCount: $visitorsCount, comment: $comment, matCount: $matCount, maxRanking: $maxRanking)';
 }
 
 
@@ -292,7 +294,7 @@ abstract mixin class _$CompetitionCopyWith<$Res> implements $CompetitionCopyWith
   factory _$CompetitionCopyWith(_Competition value, $Res Function(_Competition) _then) = __$CompetitionCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, String name, BoutConfig boutConfig, String? location, DateTime date, String? no, int? visitorsCount, String? comment, int matCount, dynamic maxRanking
+ int? id, String? orgSyncId, Organization? organization, String name, BoutConfig boutConfig, String? location, DateTime date, DateTime? endDate, String? no, int? visitorsCount, String? comment, int matCount, dynamic maxRanking
 });
 
 
@@ -309,7 +311,7 @@ class __$CompetitionCopyWithImpl<$Res>
 
 /// Create a copy of Competition
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? name = null,Object? boutConfig = null,Object? location = freezed,Object? date = null,Object? no = freezed,Object? visitorsCount = freezed,Object? comment = freezed,Object? matCount = null,Object? maxRanking = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? name = null,Object? boutConfig = null,Object? location = freezed,Object? date = null,Object? endDate = freezed,Object? no = freezed,Object? visitorsCount = freezed,Object? comment = freezed,Object? matCount = null,Object? maxRanking = freezed,}) {
   return _then(_Competition(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -318,7 +320,8 @@ as Organization?,name: null == name ? _self.name : name // ignore: cast_nullable
 as String,boutConfig: null == boutConfig ? _self.boutConfig : boutConfig // ignore: cast_nullable_to_non_nullable
 as BoutConfig,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String?,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,no: freezed == no ? _self.no : no // ignore: cast_nullable_to_non_nullable
+as DateTime,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,no: freezed == no ? _self.no : no // ignore: cast_nullable_to_non_nullable
 as String?,visitorsCount: freezed == visitorsCount ? _self.visitorsCount : visitorsCount // ignore: cast_nullable_to_non_nullable
 as int?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,matCount: null == matCount ? _self.matCount : matCount // ignore: cast_nullable_to_non_nullable

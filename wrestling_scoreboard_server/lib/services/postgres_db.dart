@@ -141,6 +141,14 @@ extension DatabaseExt on PostgresDb {
     await executeSqlFile(dumpPath);
   }
 
+  Future<void> restoreFromString(String sqlString) async {
+    final File file = File(
+      '${Directory.systemTemp.path}/${sqlString.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0')}.sql',
+    );
+    await file.writeAsString(sqlString);
+    await restore(file.path);
+  }
+
   Future<void> executeSqlFile(String sqlFilePath) async {
     await close();
 

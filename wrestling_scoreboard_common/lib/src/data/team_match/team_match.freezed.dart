@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeamMatch {
 
- int? get id; String? get orgSyncId; Organization? get organization; TeamLineup get home; TeamLineup get guest; League? get league; int? get seasonPartition; String? get no; String? get location; DateTime get date; int? get visitorsCount; String? get comment;
+ int? get id; String? get orgSyncId; Organization? get organization; TeamLineup get home; TeamLineup get guest; League? get league; int? get seasonPartition; String? get no; String? get location; DateTime get date; DateTime? get endDate; int? get visitorsCount; String? get comment;
 /// Create a copy of TeamMatch
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TeamMatchCopyWith<TeamMatch> get copyWith => _$TeamMatchCopyWithImpl<TeamMatch>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamMatch&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.home, home) || other.home == home)&&(identical(other.guest, guest) || other.guest == guest)&&(identical(other.league, league) || other.league == league)&&(identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition)&&(identical(other.no, no) || other.no == no)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamMatch&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.home, home) || other.home == home)&&(identical(other.guest, guest) || other.guest == guest)&&(identical(other.league, league) || other.league == league)&&(identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition)&&(identical(other.no, no) || other.no == no)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,home,guest,league,seasonPartition,no,location,date,visitorsCount,comment);
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,home,guest,league,seasonPartition,no,location,date,endDate,visitorsCount,comment);
 
 @override
 String toString() {
-  return 'TeamMatch(id: $id, orgSyncId: $orgSyncId, organization: $organization, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, no: $no, location: $location, date: $date, visitorsCount: $visitorsCount, comment: $comment)';
+  return 'TeamMatch(id: $id, orgSyncId: $orgSyncId, organization: $organization, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, no: $no, location: $location, date: $date, endDate: $endDate, visitorsCount: $visitorsCount, comment: $comment)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TeamMatchCopyWith<$Res>  {
   factory $TeamMatchCopyWith(TeamMatch value, $Res Function(TeamMatch) _then) = _$TeamMatchCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, TeamLineup home, TeamLineup guest, League? league, int? seasonPartition, String? no, String? location, DateTime date, int? visitorsCount, String? comment
+ int? id, String? orgSyncId, Organization? organization, TeamLineup home, TeamLineup guest, League? league, int? seasonPartition, String? no, String? location, DateTime date, DateTime? endDate, int? visitorsCount, String? comment
 });
 
 
@@ -65,7 +65,7 @@ class _$TeamMatchCopyWithImpl<$Res>
 
 /// Create a copy of TeamMatch
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? home = null,Object? guest = null,Object? league = freezed,Object? seasonPartition = freezed,Object? no = freezed,Object? location = freezed,Object? date = null,Object? visitorsCount = freezed,Object? comment = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? home = null,Object? guest = null,Object? league = freezed,Object? seasonPartition = freezed,Object? no = freezed,Object? location = freezed,Object? date = null,Object? endDate = freezed,Object? visitorsCount = freezed,Object? comment = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,8 @@ as League?,seasonPartition: freezed == seasonPartition ? _self.seasonPartition :
 as int?,no: freezed == no ? _self.no : no // ignore: cast_nullable_to_non_nullable
 as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String?,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,visitorsCount: freezed == visitorsCount ? _self.visitorsCount : visitorsCount // ignore: cast_nullable_to_non_nullable
+as DateTime,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,visitorsCount: freezed == visitorsCount ? _self.visitorsCount : visitorsCount // ignore: cast_nullable_to_non_nullable
 as int?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -206,10 +207,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  TeamLineup home,  TeamLineup guest,  League? league,  int? seasonPartition,  String? no,  String? location,  DateTime date,  int? visitorsCount,  String? comment)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  TeamLineup home,  TeamLineup guest,  League? league,  int? seasonPartition,  String? no,  String? location,  DateTime date,  DateTime? endDate,  int? visitorsCount,  String? comment)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeamMatch() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.guest,_that.league,_that.seasonPartition,_that.no,_that.location,_that.date,_that.visitorsCount,_that.comment);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.guest,_that.league,_that.seasonPartition,_that.no,_that.location,_that.date,_that.endDate,_that.visitorsCount,_that.comment);case _:
   return orElse();
 
 }
@@ -227,10 +228,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.gue
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  TeamLineup home,  TeamLineup guest,  League? league,  int? seasonPartition,  String? no,  String? location,  DateTime date,  int? visitorsCount,  String? comment)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  TeamLineup home,  TeamLineup guest,  League? league,  int? seasonPartition,  String? no,  String? location,  DateTime date,  DateTime? endDate,  int? visitorsCount,  String? comment)  $default,) {final _that = this;
 switch (_that) {
 case _TeamMatch():
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.guest,_that.league,_that.seasonPartition,_that.no,_that.location,_that.date,_that.visitorsCount,_that.comment);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.guest,_that.league,_that.seasonPartition,_that.no,_that.location,_that.date,_that.endDate,_that.visitorsCount,_that.comment);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -247,10 +248,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.gue
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  TeamLineup home,  TeamLineup guest,  League? league,  int? seasonPartition,  String? no,  String? location,  DateTime date,  int? visitorsCount,  String? comment)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  TeamLineup home,  TeamLineup guest,  League? league,  int? seasonPartition,  String? no,  String? location,  DateTime date,  DateTime? endDate,  int? visitorsCount,  String? comment)?  $default,) {final _that = this;
 switch (_that) {
 case _TeamMatch() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.guest,_that.league,_that.seasonPartition,_that.no,_that.location,_that.date,_that.visitorsCount,_that.comment);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.guest,_that.league,_that.seasonPartition,_that.no,_that.location,_that.date,_that.endDate,_that.visitorsCount,_that.comment);case _:
   return null;
 
 }
@@ -262,7 +263,7 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.home,_that.gue
 @JsonSerializable()
 
 class _TeamMatch extends TeamMatch {
-  const _TeamMatch({this.id, this.orgSyncId, this.organization, required this.home, required this.guest, this.league, this.seasonPartition, this.no, this.location, required this.date, this.visitorsCount, this.comment}): super._();
+  const _TeamMatch({this.id, this.orgSyncId, this.organization, required this.home, required this.guest, this.league, this.seasonPartition, this.no, this.location, required this.date, this.endDate, this.visitorsCount, this.comment}): super._();
   factory _TeamMatch.fromJson(Map<String, dynamic> json) => _$TeamMatchFromJson(json);
 
 @override final  int? id;
@@ -275,6 +276,7 @@ class _TeamMatch extends TeamMatch {
 @override final  String? no;
 @override final  String? location;
 @override final  DateTime date;
+@override final  DateTime? endDate;
 @override final  int? visitorsCount;
 @override final  String? comment;
 
@@ -291,16 +293,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamMatch&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.home, home) || other.home == home)&&(identical(other.guest, guest) || other.guest == guest)&&(identical(other.league, league) || other.league == league)&&(identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition)&&(identical(other.no, no) || other.no == no)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamMatch&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.home, home) || other.home == home)&&(identical(other.guest, guest) || other.guest == guest)&&(identical(other.league, league) || other.league == league)&&(identical(other.seasonPartition, seasonPartition) || other.seasonPartition == seasonPartition)&&(identical(other.no, no) || other.no == no)&&(identical(other.location, location) || other.location == location)&&(identical(other.date, date) || other.date == date)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.visitorsCount, visitorsCount) || other.visitorsCount == visitorsCount)&&(identical(other.comment, comment) || other.comment == comment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,home,guest,league,seasonPartition,no,location,date,visitorsCount,comment);
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,home,guest,league,seasonPartition,no,location,date,endDate,visitorsCount,comment);
 
 @override
 String toString() {
-  return 'TeamMatch(id: $id, orgSyncId: $orgSyncId, organization: $organization, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, no: $no, location: $location, date: $date, visitorsCount: $visitorsCount, comment: $comment)';
+  return 'TeamMatch(id: $id, orgSyncId: $orgSyncId, organization: $organization, home: $home, guest: $guest, league: $league, seasonPartition: $seasonPartition, no: $no, location: $location, date: $date, endDate: $endDate, visitorsCount: $visitorsCount, comment: $comment)';
 }
 
 
@@ -311,7 +313,7 @@ abstract mixin class _$TeamMatchCopyWith<$Res> implements $TeamMatchCopyWith<$Re
   factory _$TeamMatchCopyWith(_TeamMatch value, $Res Function(_TeamMatch) _then) = __$TeamMatchCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, TeamLineup home, TeamLineup guest, League? league, int? seasonPartition, String? no, String? location, DateTime date, int? visitorsCount, String? comment
+ int? id, String? orgSyncId, Organization? organization, TeamLineup home, TeamLineup guest, League? league, int? seasonPartition, String? no, String? location, DateTime date, DateTime? endDate, int? visitorsCount, String? comment
 });
 
 
@@ -328,7 +330,7 @@ class __$TeamMatchCopyWithImpl<$Res>
 
 /// Create a copy of TeamMatch
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? home = null,Object? guest = null,Object? league = freezed,Object? seasonPartition = freezed,Object? no = freezed,Object? location = freezed,Object? date = null,Object? visitorsCount = freezed,Object? comment = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? home = null,Object? guest = null,Object? league = freezed,Object? seasonPartition = freezed,Object? no = freezed,Object? location = freezed,Object? date = null,Object? endDate = freezed,Object? visitorsCount = freezed,Object? comment = freezed,}) {
   return _then(_TeamMatch(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -340,7 +342,8 @@ as League?,seasonPartition: freezed == seasonPartition ? _self.seasonPartition :
 as int?,no: freezed == no ? _self.no : no // ignore: cast_nullable_to_non_nullable
 as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String?,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,visitorsCount: freezed == visitorsCount ? _self.visitorsCount : visitorsCount // ignore: cast_nullable_to_non_nullable
+as DateTime,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,visitorsCount: freezed == visitorsCount ? _self.visitorsCount : visitorsCount // ignore: cast_nullable_to_non_nullable
 as int?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

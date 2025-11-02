@@ -5,6 +5,8 @@ abstract class WrestlingEvent implements DataObject, Organizational {
 
   DateTime get date;
 
+  DateTime? get endDate;
+
   /// competitionId (CID), eventId, matchId or Kampf-Id
   String? get no;
 
@@ -33,6 +35,7 @@ abstract class WrestlingEvent implements DataObject, Organizational {
       'no': no,
       'location': location,
       'date': date,
+      'end_date': endDate,
       'visitors_count': visitorsCount,
       'comment': comment,
     };
