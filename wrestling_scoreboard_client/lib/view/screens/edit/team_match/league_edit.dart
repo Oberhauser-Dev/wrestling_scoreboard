@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -70,55 +69,33 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
         isMandatory: true,
         onSaved: (value) => _name = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.event),
-        title: TextFormField(
-          key: ValueKey(_startDate),
-          readOnly: true,
-          decoration: CustomInputDecoration(
-            isMandatory: true,
-            label: localizations.startDate,
-            localizations: localizations,
-          ),
-          onTap:
-              () => showDatePicker(
-                initialDatePickerMode: DatePickerMode.year,
-                context: context,
-                initialDate: _startDate,
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-              ).then((value) {
-                if (value != null) {
-                  setState(() => _startDate = value);
-                }
-              }),
-          initialValue: _startDate.toDateString(context),
-        ),
+      DateInput(
+        iconData: Icons.event,
+        label: localizations.startDate,
+        initialValue: _startDate,
+        initialDatePickerMode: DatePickerMode.year,
+        isMandatory: true,
+        minValue: DateTime.now().subtract(const Duration(days: 365 * 5)),
+        maxValue: DateTime.now().add(const Duration(days: 365 * 3)),
+        onSaved: (newValue) {
+          if (newValue != null) {
+            _startDate = newValue;
+          }
+        },
       ),
-      ListTile(
-        leading: const Icon(Icons.event),
-        title: TextFormField(
-          key: ValueKey(_endDate),
-          readOnly: true,
-          decoration: CustomInputDecoration(
-            isMandatory: true,
-            label: localizations.endDate,
-            localizations: localizations,
-          ),
-          onTap:
-              () => showDatePicker(
-                initialDatePickerMode: DatePickerMode.year,
-                context: context,
-                initialDate: _endDate,
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-              ).then((value) {
-                if (value != null) {
-                  setState(() => _endDate = value);
-                }
-              }),
-          initialValue: _endDate.toDateString(context),
-        ),
+      DateInput(
+        iconData: Icons.event,
+        label: localizations.endDate,
+        initialValue: _endDate,
+        initialDatePickerMode: DatePickerMode.year,
+        isMandatory: true,
+        minValue: DateTime.now().subtract(const Duration(days: 365 * 5)),
+        maxValue: DateTime.now().add(const Duration(days: 365 * 3)),
+        onSaved: (newValue) {
+          if (newValue != null) {
+            _endDate = newValue;
+          }
+        },
       ),
       NumericalInput(
         iconData: Icons.calendar_month,

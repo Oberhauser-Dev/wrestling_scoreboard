@@ -198,7 +198,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                     icon: Icons.event,
                                   ),
                                   ContentItem(
-                                    title: match.endDate?.toDateString(context) ?? '-',
+                                    title: match.endDate?.toDateTimeString(context) ?? '-',
                                     subtitle: localizations.endDate,
                                     icon: Icons.event,
                                   ),

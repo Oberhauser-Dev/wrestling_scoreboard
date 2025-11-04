@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -83,53 +82,27 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         isMandatory: false,
         onSaved: (value) => _location = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.event),
-        title: TextFormField(
-          key: ValueKey(_startDate),
-          readOnly: true,
-          decoration: CustomInputDecoration(
-            isMandatory: true,
-            label: localizations.startDate,
-            localizations: localizations,
-          ),
-          onTap:
-              () => showDatePicker(
-                initialDatePickerMode: DatePickerMode.day,
-                context: context,
-                initialDate: _startDate,
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-              ).then((value) {
-                if (value != null) {
-                  setState(() => _startDate = value);
-                }
-              }),
-          initialValue: _startDate.toDateTimeString(context),
-        ),
+      DateTimeInput(
+        iconData: Icons.event,
+        label: localizations.startDate,
+        initialValue: _startDate,
+        isMandatory: true,
+        minValue: DateTime.now().subtract(const Duration(days: 365 * 5)),
+        maxValue: DateTime.now().add(const Duration(days: 365 * 3)),
+        onSaved: (newValue) {
+          if (newValue != null) {
+            _startDate = newValue;
+          }
+        },
       ),
-      ListTile(
-        leading: const Icon(Icons.event),
-        title: TextFormField(
-          key: ValueKey(_endDate),
-          readOnly: true,
-          decoration: CustomInputDecoration(
-            isMandatory: false,
-            label: localizations.endDate,
-            localizations: localizations,
-          ),
-          onTap:
-              () => showDatePicker(
-                initialDatePickerMode: DatePickerMode.day,
-                context: context,
-                initialDate: _endDate,
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-              ).then((value) {
-                setState(() => _endDate = value);
-              }),
-          initialValue: _endDate?.toDateTimeString(context),
-        ),
+      DateTimeInput(
+        iconData: Icons.event,
+        label: localizations.endDate,
+        initialValue: _endDate,
+        isMandatory: false,
+        minValue: DateTime.now().subtract(const Duration(days: 365 * 5)),
+        maxValue: DateTime.now().add(const Duration(days: 365 * 3)),
+        onSaved: (newValue) => _endDate = newValue,
       ),
       ListTile(
         title: SearchableDropdown<Team>(

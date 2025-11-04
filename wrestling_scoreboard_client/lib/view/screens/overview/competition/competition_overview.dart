@@ -124,7 +124,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   icon: Icons.event,
                 ),
                 ContentItem(
-                  title: competition.endDate?.toDateString(context) ?? '-',
+                  title: competition.endDate?.toDateTimeString(context) ?? '-',
                   subtitle: localizations.endDate,
                   icon: Icons.event,
                 ),
