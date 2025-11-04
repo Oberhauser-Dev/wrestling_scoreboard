@@ -2,7 +2,6 @@ import 'package:country/country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/gender.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
@@ -62,30 +61,17 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
         isMandatory: true,
         onSaved: (value) => _surname = value,
       ),
-      ListTile(
-        leading: const Icon(Icons.date_range),
-        title: TextFormField(
-          key: ValueKey(_dateOfBirth),
-          readOnly: true,
-          decoration: CustomInputDecoration(
-            isMandatory: false,
-            label: localizations.date,
-            localizations: localizations,
-          ),
-          onTap:
-              () => showDatePicker(
-                initialDatePickerMode: DatePickerMode.year,
-                context: context,
-                initialDate: _dateOfBirth ?? DateTime.now().subtract(const Duration(days: 365 * 20)),
-                firstDate: DateTime.now().subtract(const Duration(days: 365 * 100)),
-                lastDate: DateTime.now(),
-              ).then((value) {
-                if (value != null) {
-                  setState(() => _dateOfBirth = value);
-                }
-              }),
-          initialValue: _dateOfBirth?.toDateString(context),
-        ),
+      DateInput(
+        iconData: Icons.event,
+        label: localizations.date,
+        initialValue: _dateOfBirth,
+        initialDatePickerMode: DatePickerMode.year,
+        isMandatory: false,
+        minValue: DateTime.now().subtract(const Duration(days: 365 * 100)),
+        maxValue: DateTime.now(),
+        onSaved: (newValue) {
+          _dateOfBirth = newValue;
+        },
       ),
       ListTile(
         leading: const Icon(Icons.transgender),

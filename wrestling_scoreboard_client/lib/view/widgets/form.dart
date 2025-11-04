@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/date_time_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -207,6 +208,106 @@ class PasswordInput extends StatelessWidget {
           errorText: errorText,
         ),
         autofillHints: [isNewPassword ? AutofillHints.newPassword : AutofillHints.password],
+      ),
+    );
+  }
+}
+
+class DateInput extends StatelessWidget {
+  final FormFieldSetter<DateTime?>? onSaved;
+  final ValueChanged<DateTime?>? onChanged;
+  final IconData? iconData;
+  final String label;
+  final DateTime? initialValue;
+  final DatePickerMode? initialDatePickerMode;
+  final bool isMandatory;
+  final String? errorText;
+  final DateTime? minValue;
+  final DateTime? maxValue;
+
+  const DateInput({
+    this.onSaved,
+    this.onChanged,
+    required this.label,
+    this.iconData,
+    this.initialValue,
+    this.isMandatory = false,
+    super.key,
+    this.errorText,
+    this.minValue,
+    this.maxValue,
+    this.initialDatePickerMode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return ListTile(
+      leading: iconData != null ? Icon(iconData) : const SizedBox(),
+      title: DateFormField(
+        readOnly: onSaved == null && onChanged == null,
+        onSaved: onSaved,
+        onChange: onChanged,
+        initialValue: initialValue,
+        minValue: minValue,
+        maxValue: maxValue,
+        initialDatePickerMode: initialDatePickerMode,
+        decoration: CustomInputDecoration(
+          isMandatory: isMandatory,
+          label: label,
+          localizations: localizations,
+          errorText: errorText,
+        ),
+      ),
+    );
+  }
+}
+
+class DateTimeInput extends StatelessWidget {
+  final FormFieldSetter<DateTime?>? onSaved;
+  final ValueChanged<DateTime?>? onChanged;
+  final IconData? iconData;
+  final String label;
+  final DateTime? initialValue;
+  final DatePickerMode? initialDatePickerMode;
+  final bool isMandatory;
+  final String? errorText;
+  final DateTime? minValue;
+  final DateTime? maxValue;
+
+  const DateTimeInput({
+    this.onSaved,
+    this.onChanged,
+    required this.label,
+    this.iconData,
+    this.initialValue,
+    this.isMandatory = false,
+    super.key,
+    this.errorText,
+    this.minValue,
+    this.maxValue,
+    this.initialDatePickerMode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    return ListTile(
+      leading: iconData != null ? Icon(iconData) : const SizedBox(),
+      title: DateTimeFormField(
+        readOnly: onSaved == null && onChanged == null,
+        onSaved: onSaved,
+        onChange: onChanged,
+        initialValue: initialValue?.toLocal(),
+        minValue: minValue,
+        maxValue: maxValue,
+        initialDatePickerMode: initialDatePickerMode,
+        decoration: CustomInputDecoration(
+          isMandatory: isMandatory,
+          label: label,
+          localizations: localizations,
+          errorText: errorText,
+        ),
       ),
     );
   }
