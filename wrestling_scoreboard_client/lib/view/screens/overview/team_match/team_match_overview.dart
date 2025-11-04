@@ -28,6 +28,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/lea
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/buttons.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -285,10 +286,10 @@ class TeamMatchOverview extends ConsumerWidget {
                                       header: HeadingItem(
                                         trailing: Restricted(
                                           privilege: UserPrivilege.write,
-                                          child: ElevatedButton.icon(
+                                          child: AsyncElevatedButton(
                                             icon: const Icon(Icons.autorenew),
                                             label: Text(localizations.generate),
-                                            onPressed: () async {
+                                            onTap: () async {
                                               final hasConfirmed = await showOkCancelDialog(
                                                 context: context,
                                                 child: Text(localizations.warningBoutGenerate),

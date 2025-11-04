@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/buttons.dart';
 
 class ResponsiveContainer extends StatelessWidget {
   final Widget child;
@@ -42,7 +45,7 @@ class ResponsiveColumn extends StatelessWidget {
 class ResponsiveScaffoldActionItem {
   final Widget icon;
   final String label;
-  final VoidCallback? onTap;
+  final FutureOr<void> Function()? onTap;
   final ResponsiveScaffoldActionItemStyle style;
 
   const ResponsiveScaffoldActionItem({
@@ -71,10 +74,10 @@ class ResponsiveScaffoldActions extends StatelessWidget {
             if (a.style == ResponsiveScaffoldActionItemStyle.elevatedIconAndText) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ElevatedButton.icon(icon: a.icon, onPressed: a.onTap, label: Text(a.label)),
+                child: AsyncElevatedButton(icon: a.icon, onTap: a.onTap, label: Text(a.label)),
               );
             }
-            return IconButton(onPressed: a.onTap, icon: a.icon, tooltip: a.label);
+            return AsyncIconButton(onTap: a.onTap, icon: a.icon, tooltip: a.label);
           }),
         Visibility(
           visible: !showActionsInAppBar,
