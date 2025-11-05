@@ -12,7 +12,7 @@ class MembershipDropdown extends ConsumerWidget {
   final void Function(Membership? membership)? onChange;
   final void Function(Membership? membership)? onSave;
   final Membership? selectedItem;
-  final String label;
+  final String? label;
   final Organization? organization;
   final bool allowEmpty;
 
@@ -20,7 +20,7 @@ class MembershipDropdown extends ConsumerWidget {
     super.key,
     required this.getOrSetMemberships,
     this.selectedItem,
-    required this.label,
+    this.label,
     this.organization,
     this.onChange,
     required this.onSave,
