@@ -36,6 +36,7 @@ class ClassificationPointsDisplay extends ConsumerWidget {
               TeamMatch.getClassificationPoints(participationStates).toString(),
               fontSize: 36,
               minFontSize: 16,
+              fontWeight: FontWeight.bold,
               softWrap: false,
             );
           },

@@ -33,4 +33,8 @@ extension AtheleteBoutStateLocalization on AthleteBoutState {
   String fullName(BuildContext context) {
     return membership.person.fullName;
   }
+
+  String get surname => membership.person.surname;
+
+  String get prename => membership.person.prename;
 }

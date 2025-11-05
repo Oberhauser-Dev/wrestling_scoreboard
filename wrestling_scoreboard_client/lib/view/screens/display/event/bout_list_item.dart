@@ -39,11 +39,26 @@ class BoutListItem extends ConsumerWidget {
     return ThemedContainer(
       color: role.color(),
       child: Center(
-        child: ScaledText(
-          pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.fullName,
-          color: pStatus == null ? Colors.white.disabled() : Colors.white,
-          fontSize: 17,
-          minFontSize: 14,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ScaledText(
+              pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
+              color: pStatus == null ? Colors.white.disabled() : Colors.white,
+              fontSize: 17,
+              minFontSize: 14,
+              textAlign: TextAlign.center,
+            ),
+            if (pStatus != null)
+              ScaledText(
+                ' ${pStatus.membership.person.surname}',
+                color: Colors.white,
+                fontSize: 17,
+                minFontSize: 14,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.bold,
+              ),
+          ],
         ),
       ),
     );
@@ -64,14 +79,22 @@ class BoutListItem extends ConsumerWidget {
                       flex: 2,
                       child: Column(
                         children: [
-                          if (ageCategory != null) Center(child: ScaledText(ageCategory!.name, minFontSize: 8)),
+                          if (ageCategory != null)
+                            Center(child: ScaledText(ageCategory!.name, minFontSize: 8, fontWeight: FontWeight.bold)),
                           if (weightClass != null)
                             Expanded(
                               child: Center(
-                                child: ScaledText(
-                                  '${weightClass!.weight} $weightUnit',
-                                  softWrap: false,
-                                  minFontSize: 10,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ScaledText(
+                                      '${weightClass!.weight} ',
+                                      softWrap: false,
+                                      minFontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    ScaledText(weightUnit, softWrap: false, minFontSize: 10),
+                                  ],
                                 ),
                               ),
                             ),
@@ -80,7 +103,13 @@ class BoutListItem extends ConsumerWidget {
                     ),
                     if (weightClass != null)
                       Expanded(
-                        child: Center(child: ScaledText(weightClass!.style.abbreviation(context), minFontSize: 12)),
+                        child: Center(
+                          child: ScaledText(
+                            weightClass!.style.abbreviation(context),
+                            minFontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                   ],
                 ),
@@ -166,6 +195,7 @@ class SmallBoutStateDisplay extends ConsumerWidget {
     required List<BoutAction> actions,
   }) {
     final color = (role == bout.winnerRole) ? role.color().shade800 : null;
+    final fontWeight = (role == bout.winnerRole) ? FontWeight.bold : FontWeight.normal;
     return NullableSingleConsumer<AthleteBoutState>(
       id: pState?.id,
       initialData: pState,
@@ -180,7 +210,11 @@ class SmallBoutStateDisplay extends ConsumerWidget {
                 child: Center(
                   child:
                       bout.result != null
-                          ? ScaledText(pState?.classificationPoints?.toString() ?? '0', fontSize: 15)
+                          ? ScaledText(
+                            pState?.classificationPoints?.toString() ?? '0',
+                            fontSize: 15,
+                            fontWeight: fontWeight,
+                          )
                           : null,
                 ),
               ),

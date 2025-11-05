@@ -547,10 +547,23 @@ class BoutState extends ConsumerState<BoutScreen> {
                               Center(child: ScaledText(widget.ageCategory!.name, fontSize: 22, minFontSize: 10)),
                             if (weightClass != null)
                               Center(
-                                child: ScaledText(
-                                  '${weightClass!.name} | ${weightClass!.style.abbreviation(context)}',
-                                  fontSize: 26,
-                                  minFontSize: 10,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ScaledText(
+                                      weightClass!.weight.toString(),
+                                      fontSize: 26,
+                                      minFontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    ScaledText(' ${weightClass!.unit.toAbbr()} | ', fontSize: 26, minFontSize: 10),
+                                    ScaledText(
+                                      weightClass!.style.abbreviation(context),
+                                      fontSize: 26,
+                                      minFontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
                                 ),
                               ),
                           ],
@@ -657,11 +670,13 @@ class _ParticipantDisplay extends StatelessWidget {
               initialData: athleteBoutState,
               builder: (context, pStatus) {
                 List<Widget> items = [
-                  LoadingBuilder(
-                    future: getWeight?.call(bout) ?? Future.value(null),
-                    builder: (context, weight) {
-                      return _NameDisplay(pStatus: pStatus, padding: padding, weight: weight);
-                    },
+                  Expanded(
+                    child: LoadingBuilder(
+                      future: getWeight?.call(bout) ?? Future.value(null),
+                      builder: (context, weight) {
+                        return _NameDisplay(pStatus: pStatus, padding: padding, weight: weight);
+                      },
+                    ),
                   ),
                   displayClassificationPoints(pStatus, color, padding),
                 ];
@@ -703,24 +718,37 @@ class _NameDisplay extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(padding),
             child: Center(
-              child: ScaledText(
-                pStatus?.fullName(context) ?? localizations.participantVacant,
-                color: pStatus == null ? Colors.white30 : Colors.white,
-                fontSize: 40,
-                minFontSize: 20,
-                textAlign: TextAlign.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ScaledText(
+                    pStatus?.prename ?? localizations.participantVacant,
+                    color: pStatus == null ? Colors.white30 : Colors.white,
+                    fontSize: 30,
+                    minFontSize: 20,
+                    textAlign: TextAlign.center,
+                  ),
+                  if (pStatus != null)
+                    ScaledText(
+                      pStatus!.surname,
+                      color: Colors.white,
+                      fontSize: 40,
+                      minFontSize: 20,
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.bold,
+                    ),
+                ],
               ),
             ),
           ),
-          SizedBox(
-            child: Center(
-              child: ScaledText(
-                (weight != null ? '${weight!.toStringAsFixed(1)} $weightUnit' : localizations.participantUnknownWeight),
-                color: weight == null ? Colors.white30 : Colors.white,
-                fontSize: 22,
+          if (weight != null)
+            SizedBox(
+              child: Center(
+                child: ScaledText('${weight!.toStringAsFixed(1)} $weightUnit', color: Colors.white70, fontSize: 22),
               ),
             ),
-          ),
         ],
       ),
     );
