@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -518,7 +519,17 @@ class BoutState extends ConsumerState<BoutScreen> {
                   ),
                   row(
                     children: [
-                      Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.red, padding, widget.getWeightR)),
+                      Expanded(
+                        flex: 50,
+                        child: _ParticipantDisplay(
+                          bout,
+                          BoutRole.red,
+                          padding,
+                          widget.getWeightR,
+                          widget.weightClass?.style,
+                          widget.boutRules,
+                        ),
+                      ),
                       Expanded(
                         flex: 20,
                         child: Column(
@@ -569,7 +580,17 @@ class BoutState extends ConsumerState<BoutScreen> {
                           ],
                         ),
                       ),
-                      Expanded(flex: 50, child: _ParticipantDisplay(bout, BoutRole.blue, padding, widget.getWeightB)),
+                      Expanded(
+                        flex: 50,
+                        child: _ParticipantDisplay(
+                          bout,
+                          BoutRole.blue,
+                          padding,
+                          widget.getWeightB,
+                          widget.weightClass?.style,
+                          widget.boutRules,
+                        ),
+                      ),
                     ],
                   ),
                   row(
@@ -649,11 +670,13 @@ class BoutState extends ConsumerState<BoutScreen> {
 
 class _ParticipantDisplay extends StatelessWidget {
   final Bout bout;
+  final WrestlingStyle? wrestlingStyle;
   final BoutRole role;
   final double padding;
   final Future<double?> Function(Bout bout)? getWeight;
+  final List<BoutResultRule> rules;
 
-  const _ParticipantDisplay(this.bout, this.role, this.padding, this.getWeight);
+  const _ParticipantDisplay(this.bout, this.role, this.padding, this.getWeight, this.wrestlingStyle, this.rules);
 
   @override
   Widget build(BuildContext context) {
@@ -678,7 +701,52 @@ class _ParticipantDisplay extends StatelessWidget {
                       },
                     ),
                   ),
-                  displayClassificationPoints(pStatus, color, padding),
+                  ManyConsumer<BoutAction, Bout>(
+                    filterObject: bout,
+                    builder: (context, actions) {
+                      int? getPredictedPoints() {
+                        // TODO: may can optimize by not calculating for each athlete separately.
+                        // Also:
+                        // - Take cautions (VCA) into consideration
+                        // - Use VFO, if not show up on the mat or is excluded before (too heavy, disqualified, etc.)
+                        final technicalPointsRed = AthleteBoutState.getTechnicalPoints(actions, BoutRole.red);
+                        final technicalPointsBlue = AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue);
+                        BoutRole? predictedWinnerRole;
+                        if (technicalPointsBlue == technicalPointsRed) {
+                          predictedWinnerRole =
+                              actions.lastWhereOrNull((e) => e.actionType == BoutActionType.points)?.role;
+                        } else {
+                          predictedWinnerRole = technicalPointsRed > technicalPointsBlue ? BoutRole.red : BoutRole.blue;
+                        }
+                        if (predictedWinnerRole == null) return null;
+                        var predictedResultRule = BoutConfig.resultRule(
+                          result: BoutResult.vsu,
+                          style: wrestlingStyle ?? WrestlingStyle.free,
+                          technicalPointsWinner:
+                              predictedWinnerRole == BoutRole.red ? technicalPointsRed : technicalPointsBlue,
+                          technicalPointsLoser:
+                              predictedWinnerRole == BoutRole.red ? technicalPointsBlue : technicalPointsRed,
+                          rules: rules,
+                        );
+                        predictedResultRule ??= BoutConfig.resultRule(
+                          result: BoutResult.vpo,
+                          style: wrestlingStyle ?? WrestlingStyle.free,
+                          technicalPointsWinner:
+                              predictedWinnerRole == BoutRole.red ? technicalPointsRed : technicalPointsBlue,
+                          technicalPointsLoser:
+                              predictedWinnerRole == BoutRole.red ? technicalPointsBlue : technicalPointsRed,
+                          rules: rules,
+                        );
+                        if (predictedResultRule == null) return null;
+
+                        return predictedWinnerRole == role
+                            ? predictedResultRule.winnerClassificationPoints
+                            : predictedResultRule.loserClassificationPoints;
+                      }
+
+                      return displayClassificationPoints(pStatus, color, padding, getPredictedPoints);
+                    },
+                  ),
                 ];
                 if (role == BoutRole.blue) items = List.from(items.reversed);
                 return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
@@ -690,14 +758,26 @@ class _ParticipantDisplay extends StatelessWidget {
     );
   }
 
-  Widget displayClassificationPoints(AthleteBoutState? pStatus, MaterialColor color, double padding) {
-    return pStatus?.classificationPoints != null
-        ? ThemedContainer(
-          color: color.shade800,
-          padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
-          child: Center(child: ScaledText(pStatus!.classificationPoints.toString(), fontSize: 54, minFontSize: 30)),
-        )
-        : Container();
+  Widget displayClassificationPoints(
+    AthleteBoutState? pStatus,
+    MaterialColor color,
+    double padding,
+    int? Function() predictedPoints,
+  ) {
+    final classificationPoints = pStatus?.classificationPoints ?? predictedPoints();
+    if (classificationPoints == null) return Container();
+    return ThemedContainer(
+      color: color.shade800,
+      padding: EdgeInsets.symmetric(vertical: padding * 3, horizontal: padding * 2),
+      child: Center(
+        child: ScaledText(
+          classificationPoints.toString(),
+          fontSize: 54,
+          minFontSize: 30,
+          color: pStatus?.classificationPoints == null ? Colors.white38 : null,
+        ),
+      ),
+    );
   }
 }
 
