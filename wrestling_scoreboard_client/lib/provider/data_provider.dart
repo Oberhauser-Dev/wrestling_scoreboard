@@ -34,6 +34,7 @@ class SingleDataStream<T extends DataObject> extends _$SingleDataStream<T> {
     ref.cache();
     List<KeepAliveLink>? aliveDependencies;
     void keepDependenciesAlive(T single) {
+      if (!ref.mounted) return;
       final oldAliveDependencies = aliveDependencies;
       aliveDependencies =
           mapDirectDataObjectRelations<T, KeepAliveLink?>(
@@ -138,15 +139,18 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
 
   final mergedStream = StreamGroup.merge([dataStream, connectionStateStreamController.stream]);
   await for (final many in mergedStream) {
-    final oldAliveItems = aliveItems;
-    aliveItems =
-        many.map((single) {
-          return ref
-              .read(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: single, id: single.id!)).notifier)
-              .keepAlive();
-        }).toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
-    // Close old keep-alives, after the new ones have been initialized.
-    oldAliveItems?.forEach((element) => element.close());
-    yield many;
+    if (ref.mounted) {
+      final oldAliveItems = aliveItems;
+      aliveItems =
+          many.map((single) {
+            return ref
+                .read(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: single, id: single.id!)).notifier)
+                .keepAlive();
+          }).toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
+
+      // Close old keep-alives, after the new ones have been initialized.
+      oldAliveItems?.forEach((element) => element.close());
+      yield many;
+    }
   }
 }
