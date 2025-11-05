@@ -191,16 +191,13 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
           .asMap()
           .entries
           .map((boutActionEntry) {
-            final boutActionIndex = boutActionEntry.key;
             final action = boutActionEntry.value;
             String actionValue = action.actionValue;
             if (teamMatchBout.weightClass?.style == WrestlingStyle.free) {
               // In germany: 'P' is handled as 'A' activity period, whereas a verbal admonition 'V' before a passivity ('P' / 'A' in Germany) is written as first 'P'.
               if (action.actionType == BoutActionType.passivity) {
                 actionValue = 'A';
-              } else if (action.actionType == BoutActionType.caution &&
-                  entry.value.length > (boutActionIndex + 1) &&
-                  entry.value[boutActionIndex + 1].actionType == BoutActionType.passivity) {
+              } else if (action.actionType == BoutActionType.verbal) {
                 actionValue = 'P';
               }
             }
