@@ -6,16 +6,15 @@ part 'audio_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class BellPlayerNotifier extends _$BellPlayerNotifier {
-  static final AudioPlayer _audioPlayer = AudioPlayer();
-
   @override
   Raw<Future<AudioPlayer>> build() async {
+    final audioPlayer = AudioPlayer()..setReleaseMode(ReleaseMode.stop);
     ref.onDispose(() async {
-      await _audioPlayer.dispose();
+      await audioPlayer.dispose();
     });
 
     final soundPath = await ref.watch(bellSoundProvider);
-    await _audioPlayer.setSource(AssetSource(soundPath));
-    return _audioPlayer;
+    await audioPlayer.setSource(AssetSource(soundPath));
+    return audioPlayer;
   }
 }
