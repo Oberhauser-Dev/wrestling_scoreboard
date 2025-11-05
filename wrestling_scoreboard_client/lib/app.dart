@@ -192,6 +192,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
       }
       _backupTimers.clear();
 
+      if (!ref.context.mounted) return;
       final (backupDir, backupRules) = await next;
       if (backupDir == null) return;
 
