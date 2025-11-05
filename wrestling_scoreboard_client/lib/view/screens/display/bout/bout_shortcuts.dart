@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 enum BoutScreenActionType { startStop, reset, addOneSec, rmOneSec, undo, nextBout, previousBout, horn, quit }
@@ -107,10 +106,6 @@ class RolePointBoutActionIntent extends RoleBoutActionIntent {
     : points = 2,
       super(boutActionType: BoutActionType.points, role: BoutRole.red);
 
-  const RolePointBoutActionIntent.redThree()
-    : points = 3,
-      super(boutActionType: BoutActionType.points, role: BoutRole.red);
-
   const RolePointBoutActionIntent.redFour()
     : points = 4,
       super(boutActionType: BoutActionType.points, role: BoutRole.red);
@@ -127,10 +122,6 @@ class RolePointBoutActionIntent extends RoleBoutActionIntent {
     : points = 2,
       super(boutActionType: BoutActionType.points, role: BoutRole.blue);
 
-  const RolePointBoutActionIntent.blueThree()
-    : points = 3,
-      super(boutActionType: BoutActionType.points, role: BoutRole.blue);
-
   const RolePointBoutActionIntent.blueFour()
     : points = 4,
       super(boutActionType: BoutActionType.points, role: BoutRole.blue);
@@ -142,13 +133,11 @@ class RolePointBoutActionIntent extends RoleBoutActionIntent {
 
 const redOneIntent = RolePointBoutActionIntent.redOne();
 const redTwoIntent = RolePointBoutActionIntent.redTwo();
-const redThreeIntent = RolePointBoutActionIntent.redThree();
 const redFourIntent = RolePointBoutActionIntent.redFour();
 const redFiveIntent = RolePointBoutActionIntent.redFive();
 
 const blueOneIntent = RolePointBoutActionIntent.blueOne();
 const blueTwoIntent = RolePointBoutActionIntent.blueTwo();
-const blueThreeIntent = RolePointBoutActionIntent.blueThree();
 const blueFourIntent = RolePointBoutActionIntent.blueFour();
 const blueFiveIntent = RolePointBoutActionIntent.blueFive();
 
@@ -160,60 +149,79 @@ final shortcuts = <LogicalKeySet, Intent>{
   LogicalKeySet(LogicalKeyboardKey.arrowRight): const BoutScreenActionIntent.nextBout(),
   LogicalKeySet(LogicalKeyboardKey.arrowLeft): const BoutScreenActionIntent.previousBout(),
   LogicalKeySet(LogicalKeyboardKey.keyQ, LogicalKeyboardKey.control): const BoutScreenActionIntent.quit(),
-  LogicalKeySet(LogicalKeyboardKey.digit1): redOneIntent,
-  LogicalKeySet(LogicalKeyboardKey.digit2): redTwoIntent,
-  LogicalKeySet(LogicalKeyboardKey.digit3): redThreeIntent,
-  LogicalKeySet(LogicalKeyboardKey.digit4): redFourIntent,
-  LogicalKeySet(LogicalKeyboardKey.digit5): redFiveIntent,
   LogicalKeySet(LogicalKeyboardKey.numpad1): blueOneIntent,
   LogicalKeySet(LogicalKeyboardKey.numpad2): blueTwoIntent,
-  LogicalKeySet(LogicalKeyboardKey.numpad3): blueThreeIntent,
   LogicalKeySet(LogicalKeyboardKey.numpad4): blueFourIntent,
   LogicalKeySet(LogicalKeyboardKey.numpad5): blueFiveIntent,
 };
 
-class BoutActionHandler extends ConsumerWidget {
+class BoutActionHandler extends StatefulWidget {
   final Widget child;
   final void Function(Intent intent) handleIntent;
 
   const BoutActionHandler({required this.child, required this.handleIntent, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<BoutActionHandler> createState() => _BoutActionHandlerState();
+}
+
+class _BoutActionHandlerState extends State<BoutActionHandler> {
+  final _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Shortcuts(
       shortcuts: shortcuts,
       child: Actions(
         actions: <Type, Action<Intent>>{
-          RoleScreenActionIntent: CallbackAction<RolePointBoutActionIntent>(onInvoke: handleIntent),
-          BoutScreenActionIntent: CallbackAction<BoutScreenActionIntent>(onInvoke: handleIntent),
+          RolePointBoutActionIntent: CallbackAction<RolePointBoutActionIntent>(onInvoke: widget.handleIntent),
+          RoleBoutActionIntent: CallbackAction<RoleBoutActionIntent>(onInvoke: widget.handleIntent),
+          RoleScreenActionIntent: CallbackAction<RoleScreenActionIntent>(onInvoke: widget.handleIntent),
+          BoutScreenActionIntent: CallbackAction<BoutScreenActionIntent>(onInvoke: widget.handleIntent),
         },
         child: KeyboardListener(
-          focusNode: FocusNode(),
-          child: Focus(autofocus: true, child: child),
+          focusNode: _focusNode,
+          autofocus: true,
+          child: widget.child,
           onKeyEvent: (KeyEvent event) {
             if (event is KeyDownEvent) {
-              if (event.physicalKey == PhysicalKeyboardKey.keyF) {
-                handleIntent(redOneIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyD) {
-                handleIntent(redTwoIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyS) {
-                handleIntent(redFourIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyA) {
-                handleIntent(redFiveIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyJ ||
-                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit1)) {
-                handleIntent(blueOneIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyK ||
-                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit2)) {
-                handleIntent(blueTwoIntent);
-              } else if (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit3) {
-                handleIntent(blueThreeIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.keyL ||
-                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit4)) {
-                handleIntent(blueFourIntent);
-              } else if (event.physicalKey == PhysicalKeyboardKey.semicolon ||
-                  (HardwareKeyboard.instance.isShiftPressed && event.physicalKey == PhysicalKeyboardKey.digit5)) {
-                handleIntent(blueFiveIntent);
+              if (!HardwareKeyboard.instance.isShiftPressed) {
+                if (event.physicalKey == PhysicalKeyboardKey.keyF || event.physicalKey == PhysicalKeyboardKey.digit1) {
+                  widget.handleIntent(redOneIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.keyD ||
+                    event.physicalKey == PhysicalKeyboardKey.digit2) {
+                  widget.handleIntent(redTwoIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.keyS ||
+                    event.physicalKey == PhysicalKeyboardKey.digit4) {
+                  widget.handleIntent(redFourIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.keyA ||
+                    event.physicalKey == PhysicalKeyboardKey.digit5) {
+                  widget.handleIntent(redFiveIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.keyJ) {
+                  widget.handleIntent(blueOneIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.keyK) {
+                  widget.handleIntent(blueTwoIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.keyL) {
+                  widget.handleIntent(blueFourIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.semicolon) {
+                  widget.handleIntent(blueFiveIntent);
+                }
+              } else {
+                if (event.physicalKey == PhysicalKeyboardKey.digit1) {
+                  widget.handleIntent(blueOneIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.digit2) {
+                  widget.handleIntent(blueTwoIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.digit4) {
+                  widget.handleIntent(blueFourIntent);
+                } else if (event.physicalKey == PhysicalKeyboardKey.digit5) {
+                  widget.handleIntent(blueFiveIntent);
+                }
               }
             }
           },
