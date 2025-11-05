@@ -91,9 +91,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final dataManager = await ref.read(dataManagerProvider);
-      await dataManager.createOrUpdateSingle(
-        TeamLineup(id: widget.lineup.id, team: widget.lineup.team, leader: _leader, coach: _coach),
-      );
+      await dataManager.createOrUpdateSingle(widget.lineup.copyWith(leader: _leader, coach: _coach));
       await Future.forEach(_deleteParticipations, (TeamLineupParticipation element) async {
         await dataManager.deleteSingle<TeamLineupParticipation>(element);
       });
@@ -219,10 +217,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
               getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
               selectedItem: _leader,
-              onSave:
-                  (Membership? value) => setState(() {
-                    _leader = value;
-                  }),
+              onSave: (Membership? value) => _leader = value,
             ),
           ),
           ListTile(
@@ -232,10 +227,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
               getOrSetMemberships: _getMemberships,
               organization: widget.lineup.team.organization,
               selectedItem: _coach,
-              onSave:
-                  (Membership? value) => setState(() {
-                    _coach = value;
-                  }),
+              onSave: (Membership? value) => _coach = value,
             ),
           ),
           ..._participations.entries.map((mapEntry) {
