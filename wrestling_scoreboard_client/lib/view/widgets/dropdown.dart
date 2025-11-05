@@ -5,7 +5,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 
 class SearchableDropdown<T> extends StatelessWidget {
   final T? selectedItem;
-  final String label;
+  final String? label;
   final void Function(T? value)? onChanged;
   final void Function(T? value)? onSaved;
   final Future<List<T>> Function(String filter) asyncItems;
@@ -19,7 +19,7 @@ class SearchableDropdown<T> extends StatelessWidget {
 
   const SearchableDropdown({
     required this.selectedItem,
-    required this.label,
+    this.label,
     this.onChanged,
     this.onSaved,
     required this.asyncItems,

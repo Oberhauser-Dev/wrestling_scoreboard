@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
+import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -357,13 +357,25 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
       // TODO replace with image of person
       leading: Icon(Icons.person_2),
       title: Row(
+        spacing: 16,
         children: [
+          Text.rich(
+            TextSpan(
+              text: '${widget.weightClass.weight} ',
+              children: [
+                TextSpan(
+                  text: widget.weightClass.style.abbreviation(context),
+                  style: TextStyle(color: widget.weightClass.style.color),
+                ),
+              ],
+            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
           Expanded(
             flex: 80,
             child: Container(
-              padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: MembershipDropdown(
-                label: '${localizations.weightClass} ${widget.weightClass.abbreviation(context)}',
                 getOrSetMemberships: widget.getOrSetMemberships,
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;
@@ -377,7 +389,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
           Expanded(
             flex: 20,
             child: Container(
-              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(
                 initialValue: widget.participation?.weight?.toString() ?? '',
                 keyboardType: TextInputType.number,

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -11,5 +11,9 @@ extension WrestlingStyleLocalization on WrestlingStyle {
   String abbreviation(BuildContext context) {
     if (this == WrestlingStyle.free) return context.l10n.freeStyleAbbr;
     return context.l10n.grecoRomanAbbr;
+  }
+
+  Color get color {
+    return this == WrestlingStyle.free ? Colors.green : Colors.deepOrange;
   }
 }
