@@ -109,6 +109,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
                 color: _stopwatch.isRunning ? widget.color : widget.color.disabled(),
                 minFontSize: 12,
                 softWrap: false,
+                fontWeight: FontWeight.w600,
               ),
               if (widget.showDeciSecond)
                 Padding(

@@ -43,7 +43,7 @@ class TechnicalPoints extends StatelessWidget {
                 return FittedText(
                   (AthleteBoutState.getTechnicalPoints(actions, role)).toString(),
                   softWrap: false,
-                  style: const TextStyle(height: 1.2),
+                  style: const TextStyle(height: 1.2, fontWeight: FontWeight.bold),
                 );
               },
             ),
