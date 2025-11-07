@@ -49,121 +49,142 @@ class MockDataManager extends DataManager {
     switch (T) {
       case const (AgeCategory):
         if (filterObject is Organization) {
-          return all.where((e) => (e as AgeCategory).organization == filterObject).toList();
+          return all.where((e) => (e as AgeCategory).organization?.id == filterObject.id).toList();
         }
       case const (Bout):
         if (filterObject is Competition) {
           return (await getListOfType<CompetitionBout>())
-              .where((e) => e.competition == filterObject)
+              .where((e) => e.competition.id == filterObject.id)
               .map((e) => e.bout)
               .cast<T>()
               .toList();
         }
         if (filterObject is TeamMatch) {
           return (await getListOfType<TeamMatchBout>())
-              .where((e) => e.teamMatch == filterObject)
+              .where((e) => e.teamMatch.id == filterObject.id)
               .map((e) => e.bout)
               .cast<T>()
               .toList();
         }
       case const (BoutAction):
-        if (filterObject is Bout) return all.where((e) => (e as BoutAction).bout == filterObject).toList();
+        if (filterObject is Bout) return all.where((e) => (e as BoutAction).bout.id == filterObject.id).toList();
       case const (BoutResultRule):
         if (filterObject is BoutConfig) {
-          return all.where((e) => (e as BoutResultRule).boutConfig == filterObject).toList();
+          final a = all.where((e) => (e as BoutResultRule).boutConfig.id == filterObject.id).toList();
+          return a;
         }
       case const (Club):
-        if (filterObject is Organization) return all.where((e) => (e as Club).organization == filterObject).toList();
+        if (filterObject is Organization) {
+          return all.where((e) => (e as Club).organization.id == filterObject.id).toList();
+        }
       case const (Competition):
         if (filterObject is Organization) {
-          return all.where((e) => (e as Competition).organization == filterObject).toList();
+          return all.where((e) => (e as Competition).organization?.id == filterObject.id).toList();
         }
       case const (CompetitionSystemAffiliation):
         if (filterObject is Competition) {
-          return all.where((e) => (e as CompetitionSystemAffiliation).competition == filterObject).toList();
+          return all.where((e) => (e as CompetitionSystemAffiliation).competition.id == filterObject.id).toList();
         }
       case const (CompetitionBout):
         if (filterObject is Competition) {
-          return all.where((e) => (e as CompetitionBout).competition == filterObject).toList();
+          return all.where((e) => (e as CompetitionBout).competition.id == filterObject.id).toList();
         }
         if (filterObject is CompetitionWeightCategory) {
-          return all.where((e) => (e as CompetitionBout).weightCategory == filterObject).toList();
+          return all.where((e) => (e as CompetitionBout).weightCategory?.id == filterObject.id).toList();
         }
       case const (CompetitionLineup):
         if (filterObject is Competition) {
-          return all.where((e) => (e as CompetitionLineup).competition == filterObject).toList();
+          return all.where((e) => (e as CompetitionLineup).competition.id == filterObject.id).toList();
         }
       case const (CompetitionParticipation):
         if (filterObject is CompetitionWeightCategory) {
-          return all.where((e) => (e as CompetitionParticipation).weightCategory == filterObject).toList();
+          return all.where((e) => (e as CompetitionParticipation).weightCategory?.id == filterObject.id).toList();
         }
         if (filterObject is CompetitionLineup) {
-          return all.where((e) => (e as CompetitionParticipation).lineup == filterObject).toList();
+          return all.where((e) => (e as CompetitionParticipation).lineup.id == filterObject.id).toList();
         }
       case const (CompetitionWeightCategory):
         if (filterObject is Competition) {
-          return all.where((e) => (e as CompetitionWeightCategory).competition == filterObject).toList();
+          return all.where((e) => (e as CompetitionWeightCategory).competition.id == filterObject.id).toList();
         }
       case const (CompetitionAgeCategory):
         if (filterObject is Competition) {
-          return all.where((e) => (e as CompetitionAgeCategory).competition == filterObject).toList();
+          return all.where((e) => (e as CompetitionAgeCategory).competition.id == filterObject.id).toList();
         }
       case const (Division):
         if (filterObject is Organization) {
-          return all.where((e) => (e as Division).organization == filterObject).toList();
+          return all.where((e) => (e as Division).organization.id == filterObject.id).toList();
         }
-        if (filterObject is Division) return all.where((e) => (e as Division).parent == filterObject).toList();
+        if (filterObject is Division) return all.where((e) => (e as Division).parent?.id == filterObject.id).toList();
       case const (DivisionWeightClass):
         if (filterObject is Division) {
-          return all.where((e) => (e as DivisionWeightClass).division == filterObject).toList();
+          return all.where((e) => (e as DivisionWeightClass).division.id == filterObject.id).toList();
         }
       case const (League):
-        if (filterObject is Division) return all.where((e) => (e as League).division == filterObject).toList();
+        if (filterObject is Division) return all.where((e) => (e as League).division.id == filterObject.id).toList();
       case const (LeagueTeamParticipation):
         if (filterObject is League) {
-          return all.where((e) => (e as LeagueTeamParticipation).league == filterObject).toList();
+          return all.where((e) => (e as LeagueTeamParticipation).league.id == filterObject.id).toList();
         }
-        if (filterObject is Team) return all.where((e) => (e as LeagueTeamParticipation).team == filterObject).toList();
+        if (filterObject is Team) {
+          return all.where((e) => (e as LeagueTeamParticipation).team.id == filterObject.id).toList();
+        }
       case const (LeagueWeightClass):
-        if (filterObject is League) return all.where((e) => (e as LeagueWeightClass).league == filterObject).toList();
+        if (filterObject is League) {
+          return all.where((e) => (e as LeagueWeightClass).league.id == filterObject.id).toList();
+        }
       case const (Membership):
-        if (filterObject is Club) return all.where((e) => (e as Membership).club == filterObject).toList();
+        if (filterObject is Club) return all.where((e) => (e as Membership).club.id == filterObject.id).toList();
       case const (Organization):
-        if (filterObject is Organization) return all.where((e) => (e as Organization).parent == filterObject).toList();
+        if (filterObject is Organization) {
+          return all.where((e) => (e as Organization).parent?.id == filterObject.id).toList();
+        }
       case const (Person):
-        if (filterObject is Organization) return all.where((e) => (e as Person).organization == filterObject).toList();
+        if (filterObject is Organization) {
+          return all.where((e) => (e as Person).organization?.id == filterObject.id).toList();
+        }
+      case const (ScratchBout):
+        if (filterObject is Bout) {
+          return all.where((e) => (e as ScratchBout).bout.id == filterObject.id).toList();
+        }
       case const (Team):
         if (filterObject is Club) {
           return (await getListOfType<TeamClubAffiliation>())
-              .where((e) => e.club == filterObject)
+              .where((e) => e.club.id == filterObject.id)
               .map((e) => e.team)
               .cast<T>()
               .toList();
         }
         if (filterObject is League) {
           return (await getListOfType<LeagueTeamParticipation>())
-              .where((e) => e.league == filterObject)
+              .where((e) => e.league.id == filterObject.id)
               .map((e) => e.team)
               .cast<T>()
               .toList();
         }
       case const (TeamMatch):
-        if (filterObject is League) return all.where((e) => (e as TeamMatch).league == filterObject).toList();
+        if (filterObject is League) return all.where((e) => (e as TeamMatch).league?.id == filterObject.id).toList();
         if (filterObject is Team) {
           return all
-              .where((e) => (e as TeamMatch).home.team == filterObject || (e as TeamMatch).guest.team == filterObject)
+              .where(
+                (e) =>
+                    (e as TeamMatch).home.team.id == filterObject.id ||
+                    (e as TeamMatch).guest.team.id == filterObject.id,
+              )
               .toList();
         }
       case const (TeamMatchBout):
-        if (filterObject is TeamMatch) return all.where((e) => (e as TeamMatchBout).teamMatch == filterObject).toList();
+        if (filterObject is TeamMatch) {
+          return all.where((e) => (e as TeamMatchBout).teamMatch.id == filterObject.id).toList();
+        }
       case const (TeamLineupParticipation):
         if (filterObject is TeamLineup) {
-          return all.where((e) => (e as TeamLineupParticipation).lineup == filterObject).toList();
+          return all.where((e) => (e as TeamLineupParticipation).lineup.id == filterObject.id).toList();
         }
       case const (WeightClass):
         if (filterObject is Division) {
           return (await getListOfType<DivisionWeightClass>())
-              .where((e) => e.division == filterObject)
+              .where((e) => e.division.id == filterObject.id)
               .map((e) => e.weightClass)
               .cast<T>()
               .toList();

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math' as math;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
@@ -37,44 +36,6 @@ class LocalDataManagerNotifier extends _$LocalDataManagerNotifier implements Dat
 
 @Riverpod(keepAlive: true)
 class LocalDataNotifier<T extends DataObject> extends _$LocalDataNotifier<T> {
-  /// Need to recreate default entities on every initialization, as the original object can get changed during usage.
-  List<T> _createDefaultEntities(List<Map<String, dynamic>> result) {
-    final organization = Organization(id: 0, name: 'Organization');
-    final person0 = Person(id: 0, prename: 'Red', surname: '');
-    final person1 = Person(id: 1, prename: 'Blue', surname: '');
-    final club0 = Club(id: 0, organization: organization, name: 'Home');
-    final club1 = Club(id: 1, organization: organization, name: 'Guest');
-    final membership0 = Membership(id: 0, club: club0, person: person0);
-    final membership1 = Membership(id: 1, club: club1, person: person1);
-    final athleteBoutState0 = AthleteBoutState(id: 0, membership: membership0);
-    final athleteBoutState1 = AthleteBoutState(id: 1, membership: membership1);
-    final bout = Bout(id: 0, r: athleteBoutState0, b: athleteBoutState1);
-    final weightClassFree = WeightClass(id: 0, weight: 0, style: WrestlingStyle.free);
-    final weightClassGreco = WeightClass(id: 1, weight: 0, style: WrestlingStyle.greco);
-
-    final boutConfig = Competition.defaultBoutConfig.copyWithId(0);
-    final boutResultRules =
-        Competition.defaultBoutResultRules.indexed.map((e) => e.$2.copyWith(id: e.$1, boutConfig: boutConfig)).toList();
-
-    final scratchBout = ScratchBout(id: 0, bout: bout, boutConfig: boutConfig, weightClass: weightClassFree);
-
-    // Provide a set of default entities to create a scratch bout
-    return switch (T) {
-      const (Bout) => [bout as T],
-      const (Organization) => [organization as T],
-      const (AthleteBoutState) => [athleteBoutState0 as T, athleteBoutState1 as T],
-      const (Membership) => [membership0 as T, membership1 as T],
-      const (Club) => [club0 as T, club1 as T],
-      const (Person) => [person0 as T, person1 as T],
-      const (BoutConfig) => [boutConfig as T],
-      // Only add Bout Result Rule, if empty, otherwise it would add random rules which the user does not expect
-      const (BoutResultRule) => result.isEmpty ? boutResultRules.cast<T>() : [],
-      const (WeightClass) => [weightClassFree as T, weightClassGreco as T],
-      const (ScratchBout) => [scratchBout as T],
-      _ => [],
-    };
-  }
-
   @override
   Raw<Future<List<Map<String, dynamic>>>> build() async {
     final jsonList = await Preferences.getStringList(getTableNameFromType(T) + Preferences.keyDataSuffix);
@@ -82,17 +43,6 @@ class LocalDataNotifier<T extends DataObject> extends _$LocalDataNotifier<T> {
     if (jsonList != null) {
       result.addAll(jsonList.map((json) => jsonDecode(json)));
     }
-
-    final defaultEntities = _createDefaultEntities(result);
-    final diff = defaultEntities.map((e) => e.id).toSet().difference(result.map((e) => e['id']).toSet());
-    if (diff.isNotEmpty) {
-      // Always add default entities which were not saved yet.
-      result.addAll(diff.map((id) => defaultEntities.singleWhere((e) => e.id == id).toRaw()));
-    }
-    LocalDataManager.idCounter[T] = result.fold(
-      LocalDataManager.idCounter[T] ?? 0,
-      (value, element) => math.max(value, element['id'] ?? 0),
-    );
     return result;
   }
 
