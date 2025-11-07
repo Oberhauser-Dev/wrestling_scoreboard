@@ -43,6 +43,7 @@ class ObservableStopwatch extends Stopwatch {
   @override
   void start() {
     if (!isRunning) {
+      if (hasEnded) return;
       _timer = Timer.periodic(tick, (Timer timer) {
         _handleTick();
       });
