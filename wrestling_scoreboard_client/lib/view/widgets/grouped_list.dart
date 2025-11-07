@@ -257,6 +257,7 @@ class _SearchableGroupedListState<T extends DataObject> extends ConsumerState<Se
                   if (context.mounted) {
                     await showExceptionDialog(context: context, exception: e, stackTrace: st);
                   }
+                  rethrow;
                 }
               });
             }

@@ -18,15 +18,17 @@ class ExceptionCard extends StatelessWidget {
     return ResponsiveContainer(
       alignment: Alignment.center,
       child: PaddedCard(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ExceptionInfo(exception, stackTrace: stackTrace),
-            if (onRetry != null) const SizedBox(height: 16),
-            if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(context.l10n.retry)),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: 16,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ExceptionInfo(exception, stackTrace: stackTrace),
+              if (onRetry != null) OutlinedButton(onPressed: onRetry, child: Text(context.l10n.retry)),
+            ],
+          ),
         ),
       ),
     );
