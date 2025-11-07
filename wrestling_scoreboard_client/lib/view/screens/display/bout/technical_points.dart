@@ -4,11 +4,58 @@ import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
+import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_action_controls.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
+
+class ResponsiveTechnicalPoints extends StatelessWidget {
+  final BoutRole role;
+  final ParticipantStateModel pStatusModel;
+  final Bout bout;
+  final BoutConfig boutConfig;
+  final WrestlingStyle? wrestlingStyle;
+  final Function(Intent)? actionCallback;
+
+  const ResponsiveTechnicalPoints({
+    required this.role,
+    required this.pStatusModel,
+    required this.bout,
+    required this.boutConfig,
+    required this.wrestlingStyle,
+    required this.actionCallback,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isHorizontal = !context.isMediumScreenOrLarger;
+    final technicalPoints = TechnicalPoints(pStatusModel: pStatusModel, role: role, bout: bout, boutConfig: boutConfig);
+    final boutActionControls = BoutActionControls(
+      role,
+      boutConfig,
+      (role == BoutRole.red && bout.r == null) || (role == BoutRole.blue && bout.b == null) ? null : actionCallback,
+      wrestlingStyle: wrestlingStyle,
+      isHorizontal: isHorizontal,
+    );
+    return Expanded(
+      flex: 33,
+      child:
+          isHorizontal
+              ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [technicalPoints, boutActionControls])
+              : Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children:
+                    role == BoutRole.red
+                        ? [Expanded(child: technicalPoints), boutActionControls]
+                        : [boutActionControls, Expanded(child: technicalPoints)],
+              ),
+    );
+  }
+}
 
 class TechnicalPoints extends StatelessWidget {
   final BoutRole role;
@@ -16,6 +63,7 @@ class TechnicalPoints extends StatelessWidget {
   final Bout bout;
   final BoutConfig boutConfig;
   final timerFontSize = 32.0;
+  final _timerMinFontSize = 12.0;
 
   const TechnicalPoints({
     required this.role,
@@ -28,7 +76,7 @@ class TechnicalPoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final cellHeight = width / 6;
+    final cellHeight = context.isMediumScreenOrLarger ? (width / 6) : (width / 3);
     return ThemedContainer(
       color: role.color(),
       height: cellHeight,
@@ -43,7 +91,8 @@ class TechnicalPoints extends StatelessWidget {
                 return FittedText(
                   (AthleteBoutState.getTechnicalPoints(actions, role)).toString(),
                   softWrap: false,
-                  style: const TextStyle(height: 1.2, fontWeight: FontWeight.bold),
+                  // The smaller the height value, the bigger the text.
+                  style: const TextStyle(height: 1.1, fontWeight: FontWeight.bold),
                 );
               },
             ),
@@ -58,11 +107,16 @@ class TechnicalPoints extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ScaledText(context.l10n.activityTimeAbbr, fontSize: timerFontSize),
+                      ScaledText(
+                        context.l10n.activityTimeAbbr,
+                        minFontSize: _timerMinFontSize,
+                        fontSize: timerFontSize,
+                      ),
                       TimeDisplay(
                         activityStopwatch,
                         white,
                         fontSize: timerFontSize,
+                        minFontSize: _timerMinFontSize,
                         maxDuration: boutConfig.activityDuration!,
                       ),
                     ],
@@ -81,11 +135,16 @@ class TechnicalPoints extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ScaledText(context.l10n.injuryTimeShort, fontSize: timerFontSize),
+                        ScaledText(
+                          context.l10n.injuryTimeShort,
+                          minFontSize: _timerMinFontSize,
+                          fontSize: timerFontSize,
+                        ),
                         TimeDisplay(
                           pStatusModel.injuryStopwatch,
                           white,
                           fontSize: timerFontSize,
+                          minFontSize: _timerMinFontSize,
                           maxDuration: boutConfig.injuryDuration!,
                         ),
                       ],
@@ -105,11 +164,16 @@ class TechnicalPoints extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ScaledText(context.l10n.bleedingInjuryTimeShort, fontSize: timerFontSize),
+                        ScaledText(
+                          context.l10n.bleedingInjuryTimeShort,
+                          minFontSize: _timerMinFontSize,
+                          fontSize: timerFontSize,
+                        ),
                         TimeDisplay(
                           pStatusModel.bleedingInjuryStopwatch,
                           white,
                           fontSize: timerFontSize,
+                          minFontSize: _timerMinFontSize,
                           maxDuration: boutConfig.bleedingInjuryDuration!,
                         ),
                       ],

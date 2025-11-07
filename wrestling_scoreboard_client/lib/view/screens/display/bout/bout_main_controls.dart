@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
@@ -37,7 +38,96 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
         });
       }
     });
-    return Row(
+    final isBigScreen = context.isMediumScreenOrLarger;
+    final buttonControls = Row(
+      children: [
+        Expanded(
+          child:
+              widget.boutState.widget.bouts.first.id == widget.boutState.bout.id
+                  ? IconButton(
+                    color: Theme.of(context).disabledColor,
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      widget.callback(const BoutScreenActionIntent.quit());
+                    },
+                  )
+                  : DelayedTooltip(
+                    message: '${localizations.previous} (←)',
+                    child: IconButton(
+                      color: Theme.of(context).disabledColor,
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        widget.callback(const BoutScreenActionIntent.previousBout());
+                      },
+                    ),
+                  ),
+        ),
+        Expanded(
+          child: DelayedTooltip(
+            message: localizations.comment,
+            child: IconButton(
+              onPressed: () async {
+                String text = '';
+                final result = await showOkCancelDialog(
+                  context: context,
+                  child: CustomTextInput(
+                    iconData: Icons.comment,
+                    isMultiline: true,
+                    label: localizations.comment,
+                    initialValue: widget.boutState.bout.comment,
+                    isMandatory: false,
+                    onChanged: (value) => text = value,
+                  ),
+                );
+                if (result) {
+                  widget.boutState.bout = widget.boutState.bout.copyWith(comment: text);
+                  await (await ref.read(dataManagerProvider)).createOrUpdateSingle(widget.boutState.bout);
+                }
+              },
+              icon: const Icon(Icons.comment),
+            ),
+          ),
+        ),
+        Expanded(
+          child: DelayedTooltip(
+            message: '${_isRunning ? localizations.pause : localizations.start} (Space)',
+            child: IconButton(
+              onPressed: () => widget.callback(const BoutScreenActionIntent.startStop()),
+              icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
+            ),
+          ),
+        ),
+        Expanded(
+          child: IconButton(
+            onPressed: () => widget.callback(const BoutScreenActionIntent.horn()),
+            icon: const Icon(Icons.campaign),
+          ),
+        ),
+        Expanded(
+          child:
+              widget.boutState.widget.bouts.last.id == widget.boutState.bout.id
+                  ? IconButton(
+                    color: Theme.of(context).disabledColor,
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      widget.callback(const BoutScreenActionIntent.quit());
+                    },
+                  )
+                  : DelayedTooltip(
+                    message: '${localizations.next} (→)',
+                    child: IconButton(
+                      color: Theme.of(context).disabledColor,
+                      icon: const Icon(Icons.arrow_forward),
+                      onPressed: () {
+                        widget.callback(const BoutScreenActionIntent.nextBout());
+                      },
+                    ),
+                  ),
+        ),
+      ],
+    );
+    final mainRow = Row(
+      spacing: 8,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
@@ -49,96 +139,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
             boutRules: widget.boutState.boutRules,
           ),
         ),
-        Expanded(
-          flex: 50,
-          child: Row(
-            children: [
-              Expanded(
-                child:
-                    widget.boutState.widget.bouts.first.id == widget.boutState.bout.id
-                        ? IconButton(
-                          color: Theme.of(context).disabledColor,
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            widget.callback(const BoutScreenActionIntent.quit());
-                          },
-                        )
-                        : DelayedTooltip(
-                          message: '${localizations.previous} (←)',
-                          child: IconButton(
-                            color: Theme.of(context).disabledColor,
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              widget.callback(const BoutScreenActionIntent.previousBout());
-                            },
-                          ),
-                        ),
-              ),
-              Expanded(
-                child: DelayedTooltip(
-                  message: localizations.comment,
-                  child: IconButton(
-                    onPressed: () async {
-                      String text = '';
-                      final result = await showOkCancelDialog(
-                        context: context,
-                        child: CustomTextInput(
-                          iconData: Icons.comment,
-                          isMultiline: true,
-                          label: localizations.comment,
-                          initialValue: widget.boutState.bout.comment,
-                          isMandatory: false,
-                          onChanged: (value) => text = value,
-                        ),
-                      );
-                      if (result) {
-                        widget.boutState.bout = widget.boutState.bout.copyWith(comment: text);
-                        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(widget.boutState.bout);
-                      }
-                    },
-                    icon: const Icon(Icons.comment),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: DelayedTooltip(
-                  message: '${_isRunning ? localizations.pause : localizations.start} (Space)',
-                  child: IconButton(
-                    onPressed: () => widget.callback(const BoutScreenActionIntent.startStop()),
-                    icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: IconButton(
-                  onPressed: () => widget.callback(const BoutScreenActionIntent.horn()),
-                  icon: const Icon(Icons.campaign),
-                ),
-              ),
-              Expanded(
-                child:
-                    widget.boutState.widget.bouts.last.id == widget.boutState.bout.id
-                        ? IconButton(
-                          color: Theme.of(context).disabledColor,
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            widget.callback(const BoutScreenActionIntent.quit());
-                          },
-                        )
-                        : DelayedTooltip(
-                          message: '${localizations.next} (→)',
-                          child: IconButton(
-                            color: Theme.of(context).disabledColor,
-                            icon: const Icon(Icons.arrow_forward),
-                            onPressed: () {
-                              widget.callback(const BoutScreenActionIntent.nextBout());
-                            },
-                          ),
-                        ),
-              ),
-            ],
-          ),
-        ),
+        if (isBigScreen) Expanded(flex: 50, child: buttonControls),
         Expanded(
           flex: 35,
           child: _MainControlDropDown(
@@ -150,6 +151,8 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
         ),
       ],
     );
+    if (isBigScreen) return mainRow;
+    return Column(spacing: 8, children: [buttonControls, mainRow]);
   }
 }
 
