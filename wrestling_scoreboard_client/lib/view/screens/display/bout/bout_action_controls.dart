@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -10,8 +11,16 @@ class BoutActionControls extends StatelessWidget {
   final BoutConfig boutConfig;
   final WrestlingStyle? wrestlingStyle;
   final Function(Intent)? callback;
+  final bool isHorizontal;
 
-  const BoutActionControls(this.role, this.boutConfig, this.callback, {super.key, required this.wrestlingStyle});
+  const BoutActionControls(
+    this.role,
+    this.boutConfig,
+    this.callback, {
+    super.key,
+    required this.wrestlingStyle,
+    required this.isHorizontal,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +116,21 @@ class BoutActionControls extends StatelessWidget {
         tooltipMessage: '${localizations.deleteLatestAction} (⌫)',
       ),
     ];
-    return IntrinsicWidth(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: actions));
+    if (isHorizontal) {
+      return Wrap(
+        runSpacing: 0,
+        spacing: 0,
+        alignment: role == BoutRole.red ? WrapAlignment.start : WrapAlignment.end,
+        children: actions,
+      );
+    }
+    return IntrinsicWidth(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: actions.map((e) => Expanded(child: e)).toList(),
+      ),
+    );
   }
 }
 
@@ -121,22 +144,22 @@ class _ActionControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: DelayedTooltip(
-        message: tooltipMessage,
-        child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            minimumSize: Size.zero,
-            visualDensity: VisualDensity.compact,
-            foregroundColor: Colors.white,
-            backgroundColor: color,
-            side: BorderSide(color: color.shade900, width: 1),
-            padding: EdgeInsets.zero,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-          ),
-          onPressed: callback,
-          child: ScaledText(text, fontSize: 10, minFontSize: 8, softWrap: false),
+    return DelayedTooltip(
+      message: tooltipMessage,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          elevation: 0,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          minimumSize: Size.square(isOnMobile ? 44 : 28),
+          visualDensity: VisualDensity.compact,
+          foregroundColor: Colors.white,
+          backgroundColor: color,
+          side: BorderSide(color: color.shade900, width: 0.5),
+          padding: EdgeInsets.zero,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
         ),
+        onPressed: callback,
+        child: ScaledText(text, fontSize: isOnMobile ? 14 : 12, minFontSize: isOnMobile ? 14 : 12, softWrap: false),
       ),
     );
   }

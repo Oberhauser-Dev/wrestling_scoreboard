@@ -17,13 +17,13 @@ import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/models/main_stopwatch.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
-import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_action_controls.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_main_controls.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/technical_points.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -96,6 +96,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   late final MainStopwatch mainStopwatch;
 
   Widget? _child;
+  bool _isBigScreen = true;
 
   void _doForParticipantStateModels(void Function(ParticipantStateModel psm) callback) {
     callback(_r);
@@ -353,13 +354,6 @@ class BoutState extends ConsumerState<BoutScreen> {
     super.dispose();
   }
 
-  Widget displayTechnicalPoints(ParticipantStateModel pStatus, BoutRole role) {
-    return Expanded(
-      flex: 33,
-      child: TechnicalPoints(pStatusModel: pStatus, role: role, bout: bout, boutConfig: boutConfig),
-    );
-  }
-
   void handleOrCatchIntent(Intent intent) async {
     await catchAsync(context, () => handleIntent(intent));
   }
@@ -575,13 +569,17 @@ class BoutState extends ConsumerState<BoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _child ??= _buildChild(context);
+    final isBigScreen = context.isMediumScreenOrLarger;
+    if (_child == null || _isBigScreen != isBigScreen) {
+      _isBigScreen = isBigScreen;
+      _child = _buildChild(context, isBigScreen);
+    }
     return _child!;
   }
 
   /// Increase performance by only rerendering child, if the properties in didUpdateWidget change.
   /// https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html#performance-considerations
-  Widget _buildChild(BuildContext context) {
+  Widget _buildChild(BuildContext context, bool isBigScreen) {
     final localizations = context.l10n;
     final double width = MediaQuery.of(context).size.width;
     final double padding = width / 100;
@@ -610,6 +608,42 @@ class BoutState extends ConsumerState<BoutScreen> {
           Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
         }
       },
+    );
+    final boutInfo = Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (widget.mat != null)
+          Center(child: ScaledText('${localizations.mat} ${widget.mat}', fontSize: 22, minFontSize: 10)),
+        Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: ScaledText('${localizations.bout} ${widget.boutIndex + 1}', fontSize: 14, minFontSize: 10),
+              ),
+            ),
+          ],
+        ),
+        if (widget.roundDescription != null)
+          Center(child: ScaledText(widget.roundDescription!, fontSize: 22, minFontSize: 10)),
+        if (widget.ageCategory != null)
+          Center(child: ScaledText(widget.ageCategory!.name, fontSize: 22, minFontSize: 10)),
+        if (weightClass != null)
+          Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ScaledText(weightClass!.weight.toString(), fontSize: 26, minFontSize: 10, fontWeight: FontWeight.bold),
+                ScaledText(' ${weightClass!.unit.toAbbr()} | ', fontSize: 26, minFontSize: 10),
+                ScaledText(
+                  weightClass!.style.abbreviation(context),
+                  fontSize: 26,
+                  minFontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ],
+            ),
+          ),
+      ],
     );
     return PopScope(
       canPop: true,
@@ -647,56 +681,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                           widget.boutRules,
                         ),
                       ),
-                      Expanded(
-                        flex: 20,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            if (widget.mat != null)
-                              Center(
-                                child: ScaledText('${localizations.mat} ${widget.mat}', fontSize: 22, minFontSize: 10),
-                              ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Center(
-                                    child: ScaledText(
-                                      '${localizations.bout} ${widget.boutIndex + 1}',
-                                      fontSize: 14,
-                                      minFontSize: 10,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            if (widget.roundDescription != null)
-                              Center(child: ScaledText(widget.roundDescription!, fontSize: 22, minFontSize: 10)),
-                            if (widget.ageCategory != null)
-                              Center(child: ScaledText(widget.ageCategory!.name, fontSize: 22, minFontSize: 10)),
-                            if (weightClass != null)
-                              Center(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ScaledText(
-                                      weightClass!.weight.toString(),
-                                      fontSize: 26,
-                                      minFontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    ScaledText(' ${weightClass!.unit.toAbbr()} | ', fontSize: 26, minFontSize: 10),
-                                    ScaledText(
-                                      weightClass!.style.abbreviation(context),
-                                      fontSize: 26,
-                                      minFontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+                      if (isBigScreen) Expanded(flex: 20, child: boutInfo),
                       Expanded(
                         flex: 50,
                         child: _ParticipantDisplay(
@@ -712,12 +697,13 @@ class BoutState extends ConsumerState<BoutScreen> {
                   ),
                   row(
                     children: [
-                      displayTechnicalPoints(_r, BoutRole.red),
-                      BoutActionControls(
-                        BoutRole.red,
-                        boutConfig,
-                        bout.r == null ? null : handleOrCatchIntent,
+                      ResponsiveTechnicalPoints(
+                        pStatusModel: _r,
+                        role: BoutRole.red,
                         wrestlingStyle: weightClass?.style,
+                        bout: bout,
+                        boutConfig: boutConfig,
+                        actionCallback: handleOrCatchIntent,
                       ),
                       Expanded(
                         flex: 50,
@@ -739,13 +725,14 @@ class BoutState extends ConsumerState<BoutScreen> {
                           ),
                         ),
                       ),
-                      BoutActionControls(
-                        BoutRole.blue,
-                        boutConfig,
-                        bout.b == null ? null : handleOrCatchIntent,
+                      ResponsiveTechnicalPoints(
+                        pStatusModel: _b,
+                        role: BoutRole.blue,
                         wrestlingStyle: weightClass?.style,
+                        bout: bout,
+                        boutConfig: boutConfig,
+                        actionCallback: handleOrCatchIntent,
                       ),
-                      displayTechnicalPoints(_b, BoutRole.blue),
                     ],
                   ),
                   ManyConsumer<BoutAction, Bout>(

@@ -15,6 +15,7 @@ class TimeDisplay extends ConsumerStatefulWidget {
   final Color color;
   final ObservableStopwatch stopwatch;
   final double? fontSize;
+  final double? minFontSize;
   final Duration maxDuration;
   final bool showDeciSecond;
 
@@ -22,6 +23,7 @@ class TimeDisplay extends ConsumerStatefulWidget {
     this.stopwatch,
     this.color, {
     this.fontSize,
+    this.minFontSize,
     super.key,
     required this.maxDuration,
     this.showDeciSecond = false,
@@ -107,7 +109,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
                 adjustedTime().formatMinutesAndSeconds(),
                 fontSize: widget.fontSize ?? 14,
                 color: _stopwatch.isRunning ? widget.color : widget.color.disabled(),
-                minFontSize: 12,
+                minFontSize: widget.minFontSize ?? 12,
                 softWrap: false,
                 fontWeight: FontWeight.w600,
               ),
