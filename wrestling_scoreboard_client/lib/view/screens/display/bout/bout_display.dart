@@ -26,7 +26,6 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_displ
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
@@ -40,8 +39,8 @@ class BoutScreen extends ConsumerStatefulWidget {
   final Map<Person, PersonRole> officials;
   final List<Bout> bouts;
   final Bout bout;
-  final Future<double?> Function(Bout bout)? getWeightR;
-  final Future<double?> Function(Bout bout)? getWeightB;
+  final double? weightR;
+  final double? weightB;
   final WeightClass? weightClass;
   final AgeCategory? ageCategory;
   final String? roundDescription;
@@ -70,9 +69,8 @@ class BoutScreen extends ConsumerStatefulWidget {
     this.weightClass,
     this.roundDescription,
     this.ageCategory,
-    // Use getter so we don't need to update the whole screen
-    this.getWeightR,
-    this.getWeightB,
+    this.weightR,
+    this.weightB,
     this.mat,
   });
 
@@ -644,7 +642,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                           bout,
                           BoutRole.red,
                           padding,
-                          widget.getWeightR,
+                          widget.weightR,
                           widget.weightClass?.style,
                           widget.boutRules,
                         ),
@@ -705,7 +703,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                           bout,
                           BoutRole.blue,
                           padding,
-                          widget.getWeightB,
+                          widget.weightB,
                           widget.weightClass?.style,
                           widget.boutRules,
                         ),
@@ -792,10 +790,10 @@ class _ParticipantDisplay extends StatelessWidget {
   final WrestlingStyle? wrestlingStyle;
   final BoutRole role;
   final double padding;
-  final Future<double?> Function(Bout bout)? getWeight;
+  final double? weight;
   final List<BoutResultRule> rules;
 
-  const _ParticipantDisplay(this.bout, this.role, this.padding, this.getWeight, this.wrestlingStyle, this.rules);
+  const _ParticipantDisplay(this.bout, this.role, this.padding, this.weight, this.wrestlingStyle, this.rules);
 
   @override
   Widget build(BuildContext context) {
@@ -805,6 +803,7 @@ class _ParticipantDisplay extends StatelessWidget {
       child: IntrinsicHeight(
         child: SingleConsumer<Bout>(
           id: bout.id,
+          initialData: bout,
           builder: (context, bout) {
             final athleteBoutState = role == BoutRole.red ? bout.r : bout.b;
             return NullableSingleConsumer<AthleteBoutState>(
@@ -812,14 +811,7 @@ class _ParticipantDisplay extends StatelessWidget {
               initialData: athleteBoutState,
               builder: (context, pStatus) {
                 List<Widget> items = [
-                  Expanded(
-                    child: LoadingBuilder(
-                      future: getWeight?.call(bout) ?? Future.value(null),
-                      builder: (context, weight) {
-                        return _NameDisplay(pStatus: pStatus, padding: padding, weight: weight);
-                      },
-                    ),
-                  ),
+                  Expanded(child: _NameDisplay(pStatus: pStatus, padding: padding, weight: weight)),
                   ManyConsumer<BoutAction, Bout>(
                     filterObject: bout,
                     builder: (context, actions) {
@@ -942,11 +934,7 @@ class _NameDisplay extends StatelessWidget {
           ),
         ),
         if (weight != null)
-          SizedBox(
-            child: Center(
-              child: ScaledText('${weight!.toStringAsFixed(1)} $weightUnit', color: Colors.white70, fontSize: 22),
-            ),
-          ),
+          Center(child: ScaledText('${weight!.toStringAsFixed(1)} $weightUnit', color: Colors.white70, fontSize: 22)),
       ],
     );
   }
