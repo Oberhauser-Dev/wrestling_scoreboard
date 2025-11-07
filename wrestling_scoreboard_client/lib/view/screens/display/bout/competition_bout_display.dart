@@ -61,6 +61,19 @@ class CompetitionBoutDisplay extends ConsumerWidget {
                     return SingleConsumer<Bout>(
                       id: competitionBout.bout.id,
                       builder: (context, bout) {
+                        final homeParticipation =
+                            CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
+                              participations: participations,
+                              membership: bout.r?.membership,
+                              weightCategory: competitionBout.weightCategory,
+                            );
+                        final guestParticipation =
+                            CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
+                              participations: participations,
+                              membership: bout.b?.membership,
+                              weightCategory: competitionBout.weightCategory,
+                            );
+
                         return BoutScreen(
                           wrestlingEvent: competition,
                           // TODO: Need to be able to define official per bout
@@ -86,25 +99,8 @@ class CompetitionBoutDisplay extends ConsumerWidget {
                           weightClass: competitionBout.weightCategory?.weightClass,
                           ageCategory: competitionBout.weightCategory?.competitionAgeCategory.ageCategory,
                           roundDescription: competitionBout.roundDescription(context),
-                          getWeightR: (bout) async {
-                            final homeParticipation =
-                                CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
-                                  participations: participations,
-                                  membership: bout.r?.membership,
-                                  weightCategory: competitionBout.weightCategory,
-                                );
-                            return homeParticipation?.weight;
-                          },
-                          getWeightB: (bout) async {
-                            final guestParticipation =
-                                CompetitionParticipation.fromParticipationsAndMembershipAndWeightCategory(
-                                  participations: participations,
-                                  membership: bout.r?.membership,
-                                  weightCategory: competitionBout.weightCategory,
-                                );
-
-                            return guestParticipation?.weight;
-                          },
+                          weightR: homeParticipation?.weight,
+                          weightB: guestParticipation?.weight,
                         );
                       },
                     );

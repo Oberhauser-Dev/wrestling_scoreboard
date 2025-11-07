@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
@@ -41,78 +39,79 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
         return ManyConsumer<TeamMatchPerson, TeamMatch>(
           filterObject: match,
           builder: (context, officials) {
-            return ManyConsumer<TeamMatchBout, TeamMatch>(
-              filterObject: match,
-              builder: (context, teamMatchBouts) {
-                if (teamMatchBouts.isEmpty) {
-                  return Center(child: Text(localizations.noItems, style: Theme.of(context).textTheme.bodySmall));
-                }
-                teamMatchBouts = TeamMatchBout.sortChronologically(teamMatchBouts);
-                final teamMatchBout = teamMatchBouts.singleWhere((element) => element.id == teamMatchBoutId);
-                final teamMatchBoutIndex = teamMatchBouts.indexOf(teamMatchBout);
-                // Use bout to get the actual state, but use teamMatchBout for navigation.
-                return ManyConsumer<BoutResultRule, BoutConfig>(
-                  filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
-                  builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
-                    final bouts = teamMatchBouts.map((e) => e.bout).toList();
-                    return SingleConsumer<TeamMatchBout>(
-                      id: teamMatchBout.id,
-                      builder: (context, teamMatchBout) {
-                        return SingleConsumer<Bout>(
-                          id: teamMatchBout.bout.id,
-                          builder: (context, bout) {
-                            return BoutScreen(
-                              wrestlingEvent: match,
-                              officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
-                              boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                              boutRules: boutResultRules,
-                              bouts: bouts,
-                              boutIndex: teamMatchBoutIndex,
-                              bout: bout,
-                              actions: [
-                                ResponsiveScaffoldActionItem(
-                                  label: localizations.info,
-                                  icon: const Icon(Icons.info),
-                                  onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
-                                ),
-                              ],
-                              navigateToBoutByIndex: (context, index) {
-                                context.pushReplacement(TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]));
-                              },
-                              headerItems: CommonElements.getTeamHeader(
-                                match.home.team,
-                                match.guest.team,
-                                bouts,
-                                context,
-                              ),
-                              weightClass: teamMatchBout.weightClass,
-                              getWeightR: (bout) async {
-                                final homeParticipations = await ref.readAsync(
-                                  manyDataStreamProvider(
-                                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-                                  ).future,
-                                );
-                                final homeParticipation =
-                                    TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                      participations: homeParticipations,
-                                      membership: bout.r?.membership,
+            return ManyConsumer<TeamLineupParticipation, TeamLineup>(
+              filterObject: match.home,
+              builder: (context, homeParticipations) {
+                return ManyConsumer<TeamLineupParticipation, TeamLineup>(
+                  filterObject: match.guest,
+                  builder: (context, guestParticipations) {
+                    return ManyConsumer<TeamMatchBout, TeamMatch>(
+                      filterObject: match,
+                      builder: (context, teamMatchBouts) {
+                        if (teamMatchBouts.isEmpty) {
+                          return Center(
+                            child: Text(localizations.noItems, style: Theme.of(context).textTheme.bodySmall),
+                          );
+                        }
+                        teamMatchBouts = TeamMatchBout.sortChronologically(teamMatchBouts);
+                        final teamMatchBout = teamMatchBouts.singleWhere((element) => element.id == teamMatchBoutId);
+                        final teamMatchBoutIndex = teamMatchBouts.indexOf(teamMatchBout);
+                        // Use bout to get the actual state, but use teamMatchBout for navigation.
+                        return ManyConsumer<BoutResultRule, BoutConfig>(
+                          filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
+                          builder: (BuildContext context, List<BoutResultRule> boutResultRules) {
+                            final bouts = teamMatchBouts.map((e) => e.bout).toList();
+                            return SingleConsumer<TeamMatchBout>(
+                              id: teamMatchBout.id,
+                              builder: (context, teamMatchBout) {
+                                return SingleConsumer<Bout>(
+                                  id: teamMatchBout.bout.id,
+                                  builder: (context, bout) {
+                                    final homeParticipation =
+                                        TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                          participations: homeParticipations,
+                                          membership: bout.r?.membership,
+                                          weightClass: teamMatchBout.weightClass,
+                                        );
+                                    final guestParticipation =
+                                        TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
+                                          participations: guestParticipations,
+                                          membership: bout.b?.membership,
+                                          weightClass: teamMatchBout.weightClass,
+                                        );
+
+                                    return BoutScreen(
+                                      wrestlingEvent: match,
+                                      officials: Map.fromEntries(
+                                        officials.map((tmp) => MapEntry(tmp.person, tmp.role)),
+                                      ),
+                                      boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                                      boutRules: boutResultRules,
+                                      bouts: bouts,
+                                      boutIndex: teamMatchBoutIndex,
+                                      bout: bout,
+                                      actions: [
+                                        ResponsiveScaffoldActionItem(
+                                          label: localizations.info,
+                                          icon: const Icon(Icons.info),
+                                          onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
+                                        ),
+                                      ],
+                                      navigateToBoutByIndex: (context, index) {
+                                        context.pushReplacement(TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]));
+                                      },
+                                      headerItems: CommonElements.getTeamHeader(
+                                        match.home.team,
+                                        match.guest.team,
+                                        bouts,
+                                        context,
+                                      ),
                                       weightClass: teamMatchBout.weightClass,
+                                      weightR: homeParticipation?.weight,
+                                      weightB: guestParticipation?.weight,
                                     );
-                                return homeParticipation?.weight;
-                              },
-                              getWeightB: (bout) async {
-                                final guestParticipations = await ref.readAsync(
-                                  manyDataStreamProvider(
-                                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-                                  ).future,
+                                  },
                                 );
-                                final guestParticipation =
-                                    TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                      participations: guestParticipations,
-                                      membership: bout.b?.membership,
-                                      weightClass: teamMatchBout.weightClass,
-                                    );
-                                return guestParticipation?.weight;
                               },
                             );
                           },
