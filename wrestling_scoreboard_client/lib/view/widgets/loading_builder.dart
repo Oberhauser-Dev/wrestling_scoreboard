@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logging/logging.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
+
+final _logger = Logger('LoadingBuilder');
 
 class LoadingBuilder<T> extends ConsumerWidget {
   final Future<T> future;
@@ -38,6 +41,11 @@ class LoadingBuilder<T> extends ConsumerWidget {
           ),
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
+          _logger.warning(
+            'LoadingBuilder could not fetch $T with initialData $initialData',
+            snapshot.error,
+            snapshot.stackTrace,
+          );
           return onException?.call(context, snapshot.error!, stackTrace: snapshot.stackTrace) ??
               ExceptionCard(snapshot.error!, stackTrace: snapshot.stackTrace, onRetry: onRetry);
         }
@@ -74,6 +82,11 @@ class LoadingStreamBuilder<T> extends StatelessWidget {
       initialData: initialData,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
+          _logger.warning(
+            'LoadingStreamBuilder could not fetch $T with initialData $initialData',
+            snapshot.error,
+            snapshot.stackTrace,
+          );
           return ExceptionCard(snapshot.error!, onRetry: onRetry, stackTrace: snapshot.stackTrace);
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
