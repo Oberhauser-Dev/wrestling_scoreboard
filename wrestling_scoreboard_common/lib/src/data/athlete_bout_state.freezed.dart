@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AthleteBoutState {
 
- int? get id; Membership get membership; int? get classificationPoints;
+ int? get id; Membership get membership; int? get classificationPoints;/// Activity time is only running, when bout time is running.
+ Duration? get activityTime; Duration? get injuryTime; bool get isInjuryTimeRunning; Duration? get bleedingInjuryTime; bool get isBleedingInjuryTimeRunning;
 /// Create a copy of AthleteBoutState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $AthleteBoutStateCopyWith<AthleteBoutState> get copyWith => _$AthleteBoutStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AthleteBoutState&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.classificationPoints, classificationPoints) || other.classificationPoints == classificationPoints));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AthleteBoutState&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.classificationPoints, classificationPoints) || other.classificationPoints == classificationPoints)&&(identical(other.activityTime, activityTime) || other.activityTime == activityTime)&&(identical(other.injuryTime, injuryTime) || other.injuryTime == injuryTime)&&(identical(other.isInjuryTimeRunning, isInjuryTimeRunning) || other.isInjuryTimeRunning == isInjuryTimeRunning)&&(identical(other.bleedingInjuryTime, bleedingInjuryTime) || other.bleedingInjuryTime == bleedingInjuryTime)&&(identical(other.isBleedingInjuryTimeRunning, isBleedingInjuryTimeRunning) || other.isBleedingInjuryTimeRunning == isBleedingInjuryTimeRunning));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,membership,classificationPoints);
+int get hashCode => Object.hash(runtimeType,id,membership,classificationPoints,activityTime,injuryTime,isInjuryTimeRunning,bleedingInjuryTime,isBleedingInjuryTimeRunning);
 
 @override
 String toString() {
-  return 'AthleteBoutState(id: $id, membership: $membership, classificationPoints: $classificationPoints)';
+  return 'AthleteBoutState(id: $id, membership: $membership, classificationPoints: $classificationPoints, activityTime: $activityTime, injuryTime: $injuryTime, isInjuryTimeRunning: $isInjuryTimeRunning, bleedingInjuryTime: $bleedingInjuryTime, isBleedingInjuryTimeRunning: $isBleedingInjuryTimeRunning)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $AthleteBoutStateCopyWith<$Res>  {
   factory $AthleteBoutStateCopyWith(AthleteBoutState value, $Res Function(AthleteBoutState) _then) = _$AthleteBoutStateCopyWithImpl;
 @useResult
 $Res call({
- int? id, Membership membership, int? classificationPoints
+ int? id, Membership membership, int? classificationPoints, Duration? activityTime, Duration? injuryTime, bool isInjuryTimeRunning, Duration? bleedingInjuryTime, bool isBleedingInjuryTimeRunning
 });
 
 
@@ -65,12 +66,17 @@ class _$AthleteBoutStateCopyWithImpl<$Res>
 
 /// Create a copy of AthleteBoutState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? membership = null,Object? classificationPoints = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? membership = null,Object? classificationPoints = freezed,Object? activityTime = freezed,Object? injuryTime = freezed,Object? isInjuryTimeRunning = null,Object? bleedingInjuryTime = freezed,Object? isBleedingInjuryTimeRunning = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,membership: null == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
 as Membership,classificationPoints: freezed == classificationPoints ? _self.classificationPoints : classificationPoints // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,activityTime: freezed == activityTime ? _self.activityTime : activityTime // ignore: cast_nullable_to_non_nullable
+as Duration?,injuryTime: freezed == injuryTime ? _self.injuryTime : injuryTime // ignore: cast_nullable_to_non_nullable
+as Duration?,isInjuryTimeRunning: null == isInjuryTimeRunning ? _self.isInjuryTimeRunning : isInjuryTimeRunning // ignore: cast_nullable_to_non_nullable
+as bool,bleedingInjuryTime: freezed == bleedingInjuryTime ? _self.bleedingInjuryTime : bleedingInjuryTime // ignore: cast_nullable_to_non_nullable
+as Duration?,isBleedingInjuryTimeRunning: null == isBleedingInjuryTimeRunning ? _self.isBleedingInjuryTimeRunning : isBleedingInjuryTimeRunning // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of AthleteBoutState
@@ -164,10 +170,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Membership membership,  int? classificationPoints)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Membership membership,  int? classificationPoints,  Duration? activityTime,  Duration? injuryTime,  bool isInjuryTimeRunning,  Duration? bleedingInjuryTime,  bool isBleedingInjuryTimeRunning)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AthleteBoutState() when $default != null:
-return $default(_that.id,_that.membership,_that.classificationPoints);case _:
+return $default(_that.id,_that.membership,_that.classificationPoints,_that.activityTime,_that.injuryTime,_that.isInjuryTimeRunning,_that.bleedingInjuryTime,_that.isBleedingInjuryTimeRunning);case _:
   return orElse();
 
 }
@@ -185,10 +191,10 @@ return $default(_that.id,_that.membership,_that.classificationPoints);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Membership membership,  int? classificationPoints)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Membership membership,  int? classificationPoints,  Duration? activityTime,  Duration? injuryTime,  bool isInjuryTimeRunning,  Duration? bleedingInjuryTime,  bool isBleedingInjuryTimeRunning)  $default,) {final _that = this;
 switch (_that) {
 case _AthleteBoutState():
-return $default(_that.id,_that.membership,_that.classificationPoints);case _:
+return $default(_that.id,_that.membership,_that.classificationPoints,_that.activityTime,_that.injuryTime,_that.isInjuryTimeRunning,_that.bleedingInjuryTime,_that.isBleedingInjuryTimeRunning);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +211,10 @@ return $default(_that.id,_that.membership,_that.classificationPoints);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Membership membership,  int? classificationPoints)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Membership membership,  int? classificationPoints,  Duration? activityTime,  Duration? injuryTime,  bool isInjuryTimeRunning,  Duration? bleedingInjuryTime,  bool isBleedingInjuryTimeRunning)?  $default,) {final _that = this;
 switch (_that) {
 case _AthleteBoutState() when $default != null:
-return $default(_that.id,_that.membership,_that.classificationPoints);case _:
+return $default(_that.id,_that.membership,_that.classificationPoints,_that.activityTime,_that.injuryTime,_that.isInjuryTimeRunning,_that.bleedingInjuryTime,_that.isBleedingInjuryTimeRunning);case _:
   return null;
 
 }
@@ -220,12 +226,18 @@ return $default(_that.id,_that.membership,_that.classificationPoints);case _:
 @JsonSerializable()
 
 class _AthleteBoutState extends AthleteBoutState {
-  const _AthleteBoutState({this.id, required this.membership, this.classificationPoints}): super._();
+  const _AthleteBoutState({this.id, required this.membership, this.classificationPoints, this.activityTime, this.injuryTime, this.isInjuryTimeRunning = false, this.bleedingInjuryTime, this.isBleedingInjuryTimeRunning = false}): super._();
   factory _AthleteBoutState.fromJson(Map<String, dynamic> json) => _$AthleteBoutStateFromJson(json);
 
 @override final  int? id;
 @override final  Membership membership;
 @override final  int? classificationPoints;
+/// Activity time is only running, when bout time is running.
+@override final  Duration? activityTime;
+@override final  Duration? injuryTime;
+@override@JsonKey() final  bool isInjuryTimeRunning;
+@override final  Duration? bleedingInjuryTime;
+@override@JsonKey() final  bool isBleedingInjuryTimeRunning;
 
 /// Create a copy of AthleteBoutState
 /// with the given fields replaced by the non-null parameter values.
@@ -240,16 +252,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AthleteBoutState&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.classificationPoints, classificationPoints) || other.classificationPoints == classificationPoints));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AthleteBoutState&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.classificationPoints, classificationPoints) || other.classificationPoints == classificationPoints)&&(identical(other.activityTime, activityTime) || other.activityTime == activityTime)&&(identical(other.injuryTime, injuryTime) || other.injuryTime == injuryTime)&&(identical(other.isInjuryTimeRunning, isInjuryTimeRunning) || other.isInjuryTimeRunning == isInjuryTimeRunning)&&(identical(other.bleedingInjuryTime, bleedingInjuryTime) || other.bleedingInjuryTime == bleedingInjuryTime)&&(identical(other.isBleedingInjuryTimeRunning, isBleedingInjuryTimeRunning) || other.isBleedingInjuryTimeRunning == isBleedingInjuryTimeRunning));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,membership,classificationPoints);
+int get hashCode => Object.hash(runtimeType,id,membership,classificationPoints,activityTime,injuryTime,isInjuryTimeRunning,bleedingInjuryTime,isBleedingInjuryTimeRunning);
 
 @override
 String toString() {
-  return 'AthleteBoutState(id: $id, membership: $membership, classificationPoints: $classificationPoints)';
+  return 'AthleteBoutState(id: $id, membership: $membership, classificationPoints: $classificationPoints, activityTime: $activityTime, injuryTime: $injuryTime, isInjuryTimeRunning: $isInjuryTimeRunning, bleedingInjuryTime: $bleedingInjuryTime, isBleedingInjuryTimeRunning: $isBleedingInjuryTimeRunning)';
 }
 
 
@@ -260,7 +272,7 @@ abstract mixin class _$AthleteBoutStateCopyWith<$Res> implements $AthleteBoutSta
   factory _$AthleteBoutStateCopyWith(_AthleteBoutState value, $Res Function(_AthleteBoutState) _then) = __$AthleteBoutStateCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, Membership membership, int? classificationPoints
+ int? id, Membership membership, int? classificationPoints, Duration? activityTime, Duration? injuryTime, bool isInjuryTimeRunning, Duration? bleedingInjuryTime, bool isBleedingInjuryTimeRunning
 });
 
 
@@ -277,12 +289,17 @@ class __$AthleteBoutStateCopyWithImpl<$Res>
 
 /// Create a copy of AthleteBoutState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? membership = null,Object? classificationPoints = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? membership = null,Object? classificationPoints = freezed,Object? activityTime = freezed,Object? injuryTime = freezed,Object? isInjuryTimeRunning = null,Object? bleedingInjuryTime = freezed,Object? isBleedingInjuryTimeRunning = null,}) {
   return _then(_AthleteBoutState(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,membership: null == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
 as Membership,classificationPoints: freezed == classificationPoints ? _self.classificationPoints : classificationPoints // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,activityTime: freezed == activityTime ? _self.activityTime : activityTime // ignore: cast_nullable_to_non_nullable
+as Duration?,injuryTime: freezed == injuryTime ? _self.injuryTime : injuryTime // ignore: cast_nullable_to_non_nullable
+as Duration?,isInjuryTimeRunning: null == isInjuryTimeRunning ? _self.isInjuryTimeRunning : isInjuryTimeRunning // ignore: cast_nullable_to_non_nullable
+as bool,bleedingInjuryTime: freezed == bleedingInjuryTime ? _self.bleedingInjuryTime : bleedingInjuryTime // ignore: cast_nullable_to_non_nullable
+as Duration?,isBleedingInjuryTimeRunning: null == isBleedingInjuryTimeRunning ? _self.isBleedingInjuryTimeRunning : isBleedingInjuryTimeRunning // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

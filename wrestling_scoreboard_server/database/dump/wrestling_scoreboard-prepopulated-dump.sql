@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict JkD9sxEhyCrqTVOATKKZ1WTnC9z3th5Pcn7DtjrZbZWcpSJZnqVpZDkkVyxphGm
+\restrict D4bP2ts9YgmsfAUrmmNi8kRyM2o8sCm5ge4eQW4TmnaTWWbuamYHfzuyxw6gZJt
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -263,7 +263,12 @@ ALTER SEQUENCE public.age_category_id_seq OWNED BY public.age_category.id;
 CREATE TABLE public.athlete_bout_state (
     id integer NOT NULL,
     classification_points smallint,
-    membership_id integer NOT NULL
+    membership_id integer NOT NULL,
+    activity_time_millis integer,
+    injury_time_millis integer,
+    is_injury_time_running boolean DEFAULT false NOT NULL,
+    bleeding_injury_time_millis integer,
+    is_bleeding_injury_time_running boolean DEFAULT false NOT NULL
 );
 
 
@@ -282,7 +287,8 @@ CREATE TABLE public.bout (
     duration_millis integer,
     org_sync_id character varying(127),
     organization_id integer,
-    comment text
+    comment text,
+    is_running boolean DEFAULT false NOT NULL
 );
 
 
@@ -1745,35 +1751,35 @@ COPY public.age_category (id, org_sync_id, organization_id, name, min_age, max_a
 -- Data for Name: athlete_bout_state; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.athlete_bout_state (id, classification_points, membership_id) FROM stdin;
-26	\N	9
-31	\N	21
-32	\N	13
-33	\N	4
-34	\N	8
-35	\N	1
-36	\N	10
-40	\N	19
-41	\N	12
-44	\N	2
-45	\N	15
-46	\N	22
-47	\N	5
-50	\N	20
-51	\N	9
-52	\N	1
-53	\N	13
-56	\N	4
-57	\N	8
-62	\N	18
-65	\N	19
-66	\N	12
-69	\N	2
-70	\N	7
-73	\N	3
-74	\N	5
-75	\N	17
-76	\N	9
+COPY public.athlete_bout_state (id, classification_points, membership_id, activity_time_millis, injury_time_millis, is_injury_time_running, bleeding_injury_time_millis, is_bleeding_injury_time_running) FROM stdin;
+26	\N	9	\N	\N	f	\N	f
+31	\N	21	\N	\N	f	\N	f
+32	\N	13	\N	\N	f	\N	f
+33	\N	4	\N	\N	f	\N	f
+34	\N	8	\N	\N	f	\N	f
+35	\N	1	\N	\N	f	\N	f
+36	\N	10	\N	\N	f	\N	f
+40	\N	19	\N	\N	f	\N	f
+41	\N	12	\N	\N	f	\N	f
+44	\N	2	\N	\N	f	\N	f
+45	\N	15	\N	\N	f	\N	f
+46	\N	22	\N	\N	f	\N	f
+47	\N	5	\N	\N	f	\N	f
+50	\N	20	\N	\N	f	\N	f
+51	\N	9	\N	\N	f	\N	f
+52	\N	1	\N	\N	f	\N	f
+53	\N	13	\N	\N	f	\N	f
+56	\N	4	\N	\N	f	\N	f
+57	\N	8	\N	\N	f	\N	f
+62	\N	18	\N	\N	f	\N	f
+65	\N	19	\N	\N	f	\N	f
+66	\N	12	\N	\N	f	\N	f
+69	\N	2	\N	\N	f	\N	f
+70	\N	7	\N	\N	f	\N	f
+73	\N	3	\N	\N	f	\N	f
+74	\N	5	\N	\N	f	\N	f
+75	\N	17	\N	\N	f	\N	f
+76	\N	9	\N	\N	f	\N	f
 \.
 
 
@@ -1781,21 +1787,21 @@ COPY public.athlete_bout_state (id, classification_points, membership_id) FROM s
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment) FROM stdin;
-28	33	34	\N	\N	0	\N	\N	\N
-29	35	36	\N	\N	0	\N	\N	\N
-32	40	41	\N	\N	0	\N	\N	\N
-34	44	45	\N	\N	0	\N	\N	\N
-35	46	47	\N	\N	0	\N	\N	\N
-37	50	51	\N	\N	0	\N	\N	\N
-38	52	53	\N	\N	0	\N	\N	\N
-40	56	57	\N	\N	0	\N	\N	\N
-45	65	66	\N	\N	0	\N	\N	\N
-47	69	70	\N	\N	0	\N	\N	\N
-49	73	74	\N	\N	0	\N	\N	\N
-50	75	76	\N	\N	0	\N	\N	\N
-27	31	32	\N	\N	0	\N	\N	\N
-43	62	\N	\N	\N	0	\N	\N	Test Bout Comment
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment, is_running) FROM stdin;
+28	33	34	\N	\N	0	\N	\N	\N	f
+29	35	36	\N	\N	0	\N	\N	\N	f
+32	40	41	\N	\N	0	\N	\N	\N	f
+34	44	45	\N	\N	0	\N	\N	\N	f
+35	46	47	\N	\N	0	\N	\N	\N	f
+37	50	51	\N	\N	0	\N	\N	\N	f
+38	52	53	\N	\N	0	\N	\N	\N	f
+40	56	57	\N	\N	0	\N	\N	\N	f
+45	65	66	\N	\N	0	\N	\N	\N	f
+47	69	70	\N	\N	0	\N	\N	\N	f
+49	73	74	\N	\N	0	\N	\N	\N	f
+50	75	76	\N	\N	0	\N	\N	\N	f
+27	31	32	\N	\N	0	\N	\N	\N	f
+43	62	\N	\N	\N	0	\N	\N	Test Bout Comment	f
 \.
 
 
@@ -2038,7 +2044,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7-pre.2	0.3.4
+0.3.7-pre.3	0.3.4
 \.
 
 
@@ -3470,5 +3476,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict JkD9sxEhyCrqTVOATKKZ1WTnC9z3th5Pcn7DtjrZbZWcpSJZnqVpZDkkVyxphGm
+\unrestrict D4bP2ts9YgmsfAUrmmNi8kRyM2o8sCm5ge4eQW4TmnaTWWbuamYHfzuyxw6gZJt
 

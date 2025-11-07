@@ -8,7 +8,7 @@ class MockableDateTime {
 }
 
 class ObservableStopwatch extends Stopwatch {
-  final StreamController onStart = StreamController.broadcast();
+  final StreamController<void> onStart = StreamController.broadcast();
   final StreamController<bool> onStartStop = StreamController.broadcast();
   final StreamController<Duration> onStop = StreamController.broadcast();
   final StreamController<Duration> onEnd = StreamController.broadcast();
