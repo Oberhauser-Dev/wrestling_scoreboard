@@ -93,9 +93,68 @@ class BoutState extends ConsumerState<BoutScreen> {
   int period = 1;
 
   late final StreamSubscription<Duration> _onEndBreakStopwatchSubscription;
+  ProviderSubscription<Future<AthleteBoutState>>? _rChangeSub;
+  ProviderSubscription<Future<AthleteBoutState>>? _bChangeSub;
   late final MainStopwatch mainStopwatch;
 
   Widget? _child;
+
+  void _doForParticipantStateModels(void Function(ParticipantStateModel psm) callback) {
+    callback(_r);
+    callback(_b);
+  }
+
+  void _updateParticipantStateModel(ParticipantStateModel psm, AthleteBoutState abs) {
+    if (abs.activityTime != null) {
+      psm.activityStopwatchNotifier.value ??= ObservableStopwatch(limit: boutConfig.activityDuration);
+      psm.activityStopwatch?.elapsed = abs.activityTime!;
+      if (bout.isRunning) {
+        psm.activityStopwatch?.start();
+      } else {
+        psm.activityStopwatch?.stop();
+      }
+    } else {
+      psm.activityStopwatch?.dispose();
+      psm.activityStopwatchNotifier.value = null;
+    }
+
+    if (abs.isInjuryTimeRunning != psm.injuryStopwatch.isRunning ||
+        (!abs.isInjuryTimeRunning && !psm.injuryStopwatch.isRunning)) {
+      psm.injuryStopwatch.elapsed = abs.injuryTime ?? Duration.zero;
+      psm.isInjuryDisplayedNotifier.value = abs.isInjuryTimeRunning;
+      if (abs.isInjuryTimeRunning) {
+        psm.injuryStopwatch.start();
+      } else {
+        psm.injuryStopwatch.stop();
+      }
+    }
+
+    if (abs.isBleedingInjuryTimeRunning != psm.bleedingInjuryStopwatch.isRunning ||
+        (!abs.isBleedingInjuryTimeRunning && !psm.bleedingInjuryStopwatch.isRunning)) {
+      psm.bleedingInjuryStopwatch.elapsed = abs.bleedingInjuryTime ?? Duration.zero;
+      psm.isBleedingInjuryDisplayedNotifier.value = abs.isBleedingInjuryTimeRunning;
+      if (abs.isBleedingInjuryTimeRunning) {
+        psm.bleedingInjuryStopwatch.start();
+      } else {
+        psm.bleedingInjuryStopwatch.stop();
+      }
+    }
+  }
+
+  void _updateAthleteBoutState(ParticipantStateModel psm, AthleteBoutState Function(AthleteBoutState abs) apply) async {
+    final abs = psm == _r ? bout.r : bout.b;
+    if (abs != null) {
+      final newAbs = apply(abs);
+      if (abs != newAbs) {
+        if (psm == _r) {
+          bout = bout.copyWith(r: newAbs);
+        } else {
+          bout = bout.copyWith(b: newAbs);
+        }
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(newAbs);
+      }
+    }
+  }
 
   @override
   initState() {
@@ -114,64 +173,67 @@ class BoutState extends ConsumerState<BoutScreen> {
     _r = ParticipantStateModel();
     _b = ParticipantStateModel();
 
-    // Regular injury
-    _r.injuryStopwatch.limit = boutConfig.injuryDuration;
-    _r.injuryStopwatch.onEnd.stream.listen((event) {
-      _r.isInjury = false;
-      _r.isInjuryDisplayedNotifier.value = false;
+    _doForParticipantStateModels((psm) {
+      // Regular injury
+      psm.injuryStopwatch.limit = boutConfig.injuryDuration;
+      psm.injuryStopwatch.onEnd.stream.listen((event) {
+        psm.isInjury = false;
+        psm.isInjuryDisplayedNotifier.value = false;
 
-      handleOrCatchIntent(const BoutScreenActionIntent.horn());
-    });
-    _b.injuryStopwatch.limit = boutConfig.injuryDuration;
-    _b.injuryStopwatch.onEnd.stream.listen((event) {
-      _b.isInjury = false;
-      _b.isInjuryDisplayedNotifier.value = false;
+        handleOrCatchIntent(const BoutScreenActionIntent.horn());
+      });
 
-      handleOrCatchIntent(const BoutScreenActionIntent.horn());
-    });
+      // Bleeding injury
+      psm.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
+      psm.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
+        psm.isBleedingInjury = false;
+        psm.isBleedingInjuryDisplayedNotifier.value = false;
 
-    // Bleeding injury
-    _r.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
-    _r.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
-      _r.isBleedingInjury = false;
-      _r.isBleedingInjuryDisplayedNotifier.value = false;
-
-      handleOrCatchIntent(const BoutScreenActionIntent.horn());
-    });
-    _b.bleedingInjuryStopwatch.limit = boutConfig.bleedingInjuryDuration;
-    _b.bleedingInjuryStopwatch.onEnd.stream.listen((event) {
-      _b.isBleedingInjury = false;
-      _b.isBleedingInjuryDisplayedNotifier.value = false;
-
-      handleOrCatchIntent(const BoutScreenActionIntent.horn());
+        handleOrCatchIntent(const BoutScreenActionIntent.horn());
+      });
     });
 
-    mainStopwatch.boutStopwatch.onStart.stream.listen((event) {
-      _r.activityStopwatch?.start();
-      _b.activityStopwatch?.start();
+    mainStopwatch.boutStopwatch.onStart.stream.listen((event) async {
+      _doForParticipantStateModels((psm) async {
+        psm.activityStopwatch?.start();
 
-      // Stop all injury timers, when bout stop watch is started
-      _r.injuryStopwatch.stop();
-      _r.isInjuryDisplayedNotifier.value = false;
-      _r.bleedingInjuryStopwatch.stop();
-      _r.isBleedingInjuryDisplayedNotifier.value = false;
+        // Stop all injury timers, when bout stop watch is started
+        psm.injuryStopwatch.stop();
+        psm.isInjuryDisplayedNotifier.value = false;
+        psm.bleedingInjuryStopwatch.stop();
+        psm.isBleedingInjuryDisplayedNotifier.value = false;
 
-      _b.injuryStopwatch.stop();
-      _b.isInjuryDisplayedNotifier.value = false;
-      _b.bleedingInjuryStopwatch.stop();
-      _b.isBleedingInjuryDisplayedNotifier.value = false;
+        _updateAthleteBoutState(
+          psm,
+          (abs) => abs.copyWith(
+            activityTime: psm.activityStopwatch?.elapsed,
+            injuryTime: psm.injuryStopwatch.elapsed,
+            isInjuryTimeRunning: false,
+            bleedingInjuryTime: psm.bleedingInjuryStopwatch.elapsed,
+            isBleedingInjuryTimeRunning: false,
+          ),
+        );
+      });
+
+      bout = bout.copyWith(isRunning: true);
+      // Trigger running on each start
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout);
     });
     mainStopwatch.boutStopwatch.onStop.stream.listen((event) async {
-      _r.activityStopwatch?.stop();
-      _b.activityStopwatch?.stop();
-      bout = bout.copyWith(duration: event);
+      _doForParticipantStateModels((psm) async {
+        psm.activityStopwatch?.stop();
+
+        _updateAthleteBoutState(psm, (abs) => abs.copyWith(activityTime: psm.activityStopwatch?.elapsed));
+      });
+      bout = bout.copyWith(duration: event, isRunning: false);
 
       // Save time to database on each stop
       await (await ref.read(dataManagerProvider)).createOrUpdateSingle(bout);
     });
     mainStopwatch.boutStopwatch.onAdd.stream.listen((event) {
-      _r.activityStopwatch?.add(event);
-      _b.activityStopwatch?.add(event);
+      _doForParticipantStateModels((psm) {
+        psm.activityStopwatch?.add(event);
+      });
     });
     mainStopwatch.boutStopwatch.onChangeSecond.stream.listen((event) {
       if (!mainStopwatch.isBreak.value) {
@@ -182,14 +244,12 @@ class BoutState extends ConsumerState<BoutScreen> {
           // Set to exact period end, as internal duration of stopwatch usually is a few milliseconds ahead of the second listener.
           // Otherwise the timer is displaying a different time (2:59.9) than expected (3:00.0) after a break.
           mainStopwatch.boutStopwatch.stopAt(event);
-          if (_r.activityStopwatch != null) {
-            _r.activityStopwatch!.dispose();
-            _r.activityStopwatchNotifier.value = null;
-          }
-          if (_b.activityStopwatch != null) {
-            _b.activityStopwatch!.dispose();
-            _b.activityStopwatchNotifier.value = null;
-          }
+          _doForParticipantStateModels((psm) {
+            if (psm.activityStopwatch != null) {
+              psm.activityStopwatch!.dispose();
+              psm.activityStopwatchNotifier.value = null;
+            }
+          });
           handleOrCatchIntent(const BoutScreenActionIntent.horn());
           if (period < boutConfig.periodCount) {
             mainStopwatch.isBreak.value = true;
@@ -209,6 +269,52 @@ class BoutState extends ConsumerState<BoutScreen> {
         handleOrCatchIntent(const BoutScreenActionIntent.horn());
       }
     });
+
+    _doForParticipantStateModels((psm) {
+      psm.injuryStopwatch.onStartStop.stream.listen((isRunning) {
+        _updateAthleteBoutState(
+          psm,
+          (abs) => abs.copyWith(injuryTime: psm.injuryStopwatch.elapsed, isInjuryTimeRunning: isRunning),
+        );
+      });
+      psm.bleedingInjuryStopwatch.onStartStop.stream.listen((isRunning) {
+        _updateAthleteBoutState(
+          psm,
+          (abs) => abs.copyWith(
+            bleedingInjuryTime: psm.bleedingInjuryStopwatch.elapsed,
+            isBleedingInjuryTimeRunning: isRunning,
+          ),
+        );
+      });
+    });
+
+    if (bout.r != null) {
+      _rChangeSub = ref.listenManual(
+        singleDataStreamProvider<AthleteBoutState>(
+          SingleProviderData<AthleteBoutState>(initialData: bout.r, id: bout.r!.id!),
+        ).future,
+        (previous, next) async {
+          final abs = await next;
+          bout = bout.copyWith(r: abs);
+          _updateParticipantStateModel(_r, abs);
+        },
+        fireImmediately: true,
+      );
+    }
+
+    if (bout.b != null) {
+      _bChangeSub = ref.listenManual(
+        singleDataStreamProvider<AthleteBoutState>(
+          SingleProviderData<AthleteBoutState>(initialData: bout.b, id: bout.b!.id!),
+        ).future,
+        (previous, next) async {
+          final abs = await next;
+          bout = bout.copyWith(b: abs);
+          _updateParticipantStateModel(_b, abs);
+        },
+        fireImmediately: true,
+      );
+    }
   }
 
   @override
@@ -226,13 +332,26 @@ class BoutState extends ConsumerState<BoutScreen> {
     // Set the current period based on the duration:
     period = (bout.duration.inSeconds ~/ boutConfig.periodDuration.inSeconds) + 1;
     if (!mainStopwatch.boutStopwatch.isDisposed) {
-      mainStopwatch.boutStopwatch.elapsed = bout.duration;
+      // We assume, when the isRunning state differs, the client is controlled remotely.
+      if (mainStopwatch.boutStopwatch.isRunning != bout.isRunning ||
+          (!mainStopwatch.boutStopwatch.isRunning && !bout.isRunning)) {
+        // Only update duration on remote clients as on otherwise the timer is lagging behind due to network latency.
+        // But also, if non of them are running (otherwise the first initialization is not executed).
+        mainStopwatch.boutStopwatch.elapsed = bout.duration;
+      }
+      if (bout.isRunning) {
+        mainStopwatch.boutStopwatch.start();
+      } else {
+        mainStopwatch.boutStopwatch.stop();
+      }
     }
   }
 
   @override
   void dispose() {
     _onEndBreakStopwatchSubscription.cancel();
+    _rChangeSub?.close();
+    _bChangeSub?.close();
     super.dispose();
   }
 
@@ -749,7 +868,7 @@ class _ParticipantDisplay extends StatelessWidget {
                   ),
                 ];
                 if (role == BoutRole.blue) items = List.from(items.reversed);
-                return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
+                return Row(children: items);
               },
             );
           },
@@ -791,46 +910,44 @@ class _NameDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            padding: EdgeInsets.all(padding),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          padding: EdgeInsets.all(padding),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ScaledText(
+                  pStatus?.prename ?? localizations.participantVacant,
+                  color: pStatus == null ? Colors.white30 : Colors.white,
+                  fontSize: 30,
+                  minFontSize: 20,
+                  textAlign: TextAlign.center,
+                ),
+                if (pStatus != null)
                   ScaledText(
-                    pStatus?.prename ?? localizations.participantVacant,
-                    color: pStatus == null ? Colors.white30 : Colors.white,
-                    fontSize: 30,
+                    pStatus!.surname,
+                    color: Colors.white,
+                    fontSize: 40,
                     minFontSize: 20,
                     textAlign: TextAlign.center,
+                    fontWeight: FontWeight.bold,
                   ),
-                  if (pStatus != null)
-                    ScaledText(
-                      pStatus!.surname,
-                      color: Colors.white,
-                      fontSize: 40,
-                      minFontSize: 20,
-                      textAlign: TextAlign.center,
-                      fontWeight: FontWeight.bold,
-                    ),
-                ],
-              ),
+              ],
             ),
           ),
-          if (weight != null)
-            SizedBox(
-              child: Center(
-                child: ScaledText('${weight!.toStringAsFixed(1)} $weightUnit', color: Colors.white70, fontSize: 22),
-              ),
+        ),
+        if (weight != null)
+          SizedBox(
+            child: Center(
+              child: ScaledText('${weight!.toStringAsFixed(1)} $weightUnit', color: Colors.white70, fontSize: 22),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

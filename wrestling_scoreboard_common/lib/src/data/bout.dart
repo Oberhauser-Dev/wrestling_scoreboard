@@ -19,6 +19,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
     BoutRole? winnerRole,
     BoutResult? result,
     @Default(Duration.zero) Duration duration,
+    @Default(false) bool isRunning,
     String? comment,
   }) = _Bout;
 
@@ -35,6 +36,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       'winner_role': winnerRole?.name,
       'bout_result': result?.name,
       'duration_millis': duration.inMilliseconds,
+      'is_running': isRunning,
       'comment': comment,
     };
   }
@@ -54,7 +56,8 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
       b: blueId == null ? null : await getSingle<AthleteBoutState>(blueId),
       winnerRole: winner == null ? null : BoutRole.values.byName(winner),
       result: boutResult == null ? null : BoutResult.values.byName(boutResult),
-      duration: durationMillis == null ? Duration() : Duration(milliseconds: durationMillis),
+      duration: durationMillis == null ? Duration.zero : Duration(milliseconds: durationMillis),
+      isRunning: e['is_running'] as bool,
       comment: e['comment'] as String?,
     );
   }

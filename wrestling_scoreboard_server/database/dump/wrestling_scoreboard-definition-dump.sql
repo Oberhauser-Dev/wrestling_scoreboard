@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 17b6HUoYY2Z68C00RDPpOQI7MsWq0LeA4Cy6obbJQfZ7ztFE2cT82xcOUGcUGh6
+\restrict 6zcRAcEoCXqOKrlSAtIemOMChTTEaHIkKlQNo35Y2z9ngt2tH2wa5aBci72sm2z
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -263,7 +263,12 @@ ALTER SEQUENCE public.age_category_id_seq OWNED BY public.age_category.id;
 CREATE TABLE public.athlete_bout_state (
     id integer NOT NULL,
     classification_points smallint,
-    membership_id integer NOT NULL
+    membership_id integer NOT NULL,
+    activity_time_millis integer,
+    injury_time_millis integer,
+    is_injury_time_running boolean DEFAULT false NOT NULL,
+    bleeding_injury_time_millis integer,
+    is_bleeding_injury_time_running boolean DEFAULT false NOT NULL
 );
 
 
@@ -282,7 +287,8 @@ CREATE TABLE public.bout (
     duration_millis integer,
     org_sync_id character varying(127),
     organization_id integer,
-    comment text
+    comment text,
+    is_running boolean DEFAULT false NOT NULL
 );
 
 
@@ -1740,7 +1746,7 @@ COPY public.age_category (id, org_sync_id, organization_id, name, min_age, max_a
 -- Data for Name: athlete_bout_state; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.athlete_bout_state (id, classification_points, membership_id) FROM stdin;
+COPY public.athlete_bout_state (id, classification_points, membership_id, activity_time_millis, injury_time_millis, is_injury_time_running, bleeding_injury_time_millis, is_bleeding_injury_time_running) FROM stdin;
 \.
 
 
@@ -1748,7 +1754,7 @@ COPY public.athlete_bout_state (id, classification_points, membership_id) FROM s
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment) FROM stdin;
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment, is_running) FROM stdin;
 \.
 
 
@@ -1901,7 +1907,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7-pre.2	0.3.4
+0.3.7-pre.3	0.3.4
 \.
 
 
@@ -3222,5 +3228,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 17b6HUoYY2Z68C00RDPpOQI7MsWq0LeA4Cy6obbJQfZ7ztFE2cT82xcOUGcUGh6
+\unrestrict 6zcRAcEoCXqOKrlSAtIemOMChTTEaHIkKlQNo35Y2z9ngt2tH2wa5aBci72sm2z
 
