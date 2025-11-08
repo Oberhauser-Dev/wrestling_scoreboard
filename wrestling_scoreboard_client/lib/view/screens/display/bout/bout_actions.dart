@@ -18,15 +18,13 @@ class ActionsWidget extends ConsumerWidget {
   final Future<void> Function(BoutAction action) onDeleteAction;
   final Future<void> Function(BoutAction action) onCreateOrUpdateAction;
 
-  ActionsWidget(
+  const ActionsWidget(
     this.actions, {
     required this.boutConfig,
     super.key,
     required this.onDeleteAction,
     required this.onCreateOrUpdateAction,
-  }) {
-    actions.sort((a, b) => a.duration.compareTo(b.duration));
-  }
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,114 +1,113 @@
 import '../common.dart';
 
-class OrderableProperty {
-  final String property;
-  final List<String> orderBy;
+const Map<Type, List<String>> dataObjectOrder = {
+  TeamMatch: ['date'],
+  League: ['end_date', 'name'],
+  Division: ['end_date', 'name'],
+  Club: ['name'],
+  DivisionWeightClass: ['season_partition'],
+  LeagueWeightClass: ['season_partition'],
+  Competition: ['date', 'name'],
+  BoutAction: ['duration_millis'],
+  Person: ['prename', 'surname'],
+};
 
-  const OrderableProperty(this.property, [this.orderBy = const []]);
-}
-
-const Map<Type, Map<Type, List<OrderableProperty>>> directDataObjectRelations = {
+const Map<Type, Map<Type, List<String>>> directDataObjectRelations = {
   Bout: {
-    AthleteBoutState: [OrderableProperty('red_id'), OrderableProperty('blue_id')],
+    AthleteBoutState: ['red_id', 'blue_id'],
   },
   BoutResultRule: {
-    BoutConfig: [OrderableProperty('bout_config_id')],
+    BoutConfig: ['bout_config_id'],
   },
   Membership: {
-    Club: [OrderableProperty('club_id')],
-    Person: [OrderableProperty('person_id')],
+    Club: ['club_id'],
+    Person: ['person_id'],
   },
   BoutAction: {
-    Bout: [OrderableProperty('bout_id')],
+    Bout: ['bout_id'],
   },
   Organization: {
-    Organization: [OrderableProperty('parent_id')],
+    Organization: ['parent_id'],
   },
   Division: {
-    Organization: [OrderableProperty('organization_id')],
-    Division: [OrderableProperty('parent_id')],
+    Organization: ['organization_id'],
+    Division: ['parent_id'],
   },
   Club: {
-    Organization: [OrderableProperty('organization_id')],
+    Organization: ['organization_id'],
   },
   Person: {
-    Organization: [OrderableProperty('organization_id')],
+    Organization: ['organization_id'],
   },
   AgeCategory: {
-    Organization: [OrderableProperty('organization_id')],
+    Organization: ['organization_id'],
   },
   Competition: {
-    Organization: [OrderableProperty('organization_id')],
+    Organization: ['organization_id'],
   },
   League: {
-    Division: [OrderableProperty('division_id')],
-    Organization: [OrderableProperty('organization_id')],
+    Division: ['division_id'],
+    Organization: ['organization_id'],
   },
   Team: {
-    Organization: [OrderableProperty('organization_id')],
+    Organization: ['organization_id'],
   },
   LeagueTeamParticipation: {
-    League: [OrderableProperty('league_id')],
-    Team: [OrderableProperty('team_id')],
+    League: ['league_id'],
+    Team: ['team_id'],
   },
   TeamMatch: {
-    League: [
-      OrderableProperty('league_id', ['date']),
-    ],
+    League: ['league_id'],
   },
   TeamClubAffiliation: {
-    Club: [OrderableProperty('club_id')],
-    Team: [OrderableProperty('team_id')],
+    Club: ['club_id'],
+    Team: ['team_id'],
   },
   TeamLineupParticipation: {
-    TeamLineup: [OrderableProperty('lineup_id')],
-    Membership: [OrderableProperty('membership_id')],
+    TeamLineup: ['lineup_id'],
+    Membership: ['membership_id'],
   },
   CompetitionParticipation: {
-    CompetitionLineup: [OrderableProperty('competition_lineup_id')],
-    Membership: [OrderableProperty('membership_id')],
-    CompetitionWeightCategory: [OrderableProperty('weight_category_id')],
+    CompetitionLineup: ['competition_lineup_id'],
+    Membership: ['membership_id'],
+    CompetitionWeightCategory: ['weight_category_id'],
   },
   TeamMatchBout: {
-    TeamMatch: [OrderableProperty('team_match_id')],
+    TeamMatch: ['team_match_id'],
   },
   TeamMatchPerson: {
-    TeamMatch: [OrderableProperty('team_match_id')],
-    Person: [OrderableProperty('person_id')],
+    TeamMatch: ['team_match_id'],
+    Person: ['person_id'],
   },
   CompetitionBout: {
-    Competition: [OrderableProperty('competition_id')],
-    CompetitionWeightCategory: [OrderableProperty('weight_category_id')],
+    Competition: ['competition_id'],
+    CompetitionWeightCategory: ['weight_category_id'],
   },
   CompetitionLineup: {
-    Competition: [OrderableProperty('competition_id')],
-    Club: [OrderableProperty('club_id')],
-    Membership: [OrderableProperty('leader_id'), OrderableProperty('coach_id')],
+    Competition: ['competition_id'],
+    Club: ['club_id'],
+    Membership: ['leader_id', 'coach_id'],
   },
   CompetitionPerson: {
-    Competition: [OrderableProperty('competition_id')],
-    Person: [OrderableProperty('person_id')],
+    Competition: ['competition_id'],
+    Person: ['person_id'],
   },
   CompetitionWeightCategory: {
-    Competition: [OrderableProperty('competition_id')],
-    CompetitionAgeCategory: [OrderableProperty('competition_age_category_id')],
-    WeightClass: [OrderableProperty('weight_class_id')],
+    Competition: ['competition_id'],
+    CompetitionAgeCategory: ['competition_age_category_id'],
+    WeightClass: ['weight_class_id'],
   },
   CompetitionAgeCategory: {
-    Competition: [OrderableProperty('competition_id')],
-    AgeCategory: [OrderableProperty('age_category_id')],
+    Competition: ['competition_id'],
+    AgeCategory: ['age_category_id'],
   },
   CompetitionSystemAffiliation: {
-    Competition: [OrderableProperty('competition_id')],
+    Competition: ['competition_id'],
   },
   DivisionWeightClass: {
-    Division: [
-      OrderableProperty('division_id', ['season_partition']),
-    ],
+    Division: ['division_id'],
   },
   LeagueWeightClass: {
-    League: [
-      OrderableProperty('league_id', ['season_partition']),
-    ],
+    League: ['league_id'],
   },
 };

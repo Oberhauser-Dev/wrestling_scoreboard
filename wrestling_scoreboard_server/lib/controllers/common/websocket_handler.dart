@@ -192,14 +192,9 @@ void _broadcastUpdateManyRawInListOfFilter(
 /// Update filtered lists (often the list they are contained in).
 /// Currently do not update list of all entities (as it should only be used in special cases)
 void broadcastDependants<T extends DataObject>(T single) async {
-  directDataObjectRelations[T]?.forEach((propertyType, propertyConfigs) {
-    for (final config in propertyConfigs) {
-      _broadcastUpdateManyInListOfFilter(
-        single,
-        filterType: propertyType,
-        propertyTableRef: config.property,
-        orderBy: config.orderBy,
-      );
+  directDataObjectRelations[T]?.forEach((propertyType, properties) {
+    for (final property in properties) {
+      _broadcastUpdateManyInListOfFilter(single, filterType: propertyType, propertyTableRef: property);
     }
   });
 
@@ -296,9 +291,9 @@ void broadcastDependants<T extends DataObject>(T single) async {
 }
 
 void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) async {
-  directDataObjectRelations[T]?.forEach((propertyType, propertyConfigs) {
-    for (final config in propertyConfigs) {
-      _broadcastUpdateManyRawInListOfFilter(T, single, propertyType, config.property, config.orderBy);
+  directDataObjectRelations[T]?.forEach((propertyType, properties) {
+    for (final property in properties) {
+      _broadcastUpdateManyRawInListOfFilter(T, single, propertyType, property, const []);
     }
   });
 
