@@ -687,6 +687,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 'DQ' => BoutResult.dsq,
                 'DS' => BoutResult.dsq, // Disqualifikation aufgrund von Passivität
                 '1M.' => BoutResult.dsq, // Doppelstart
+                '3A.' => BoutResult.dsq, // Dritter Ausländer
                 'o.W.' => BoutResult.bothVfo, // ohne Wertung
                 'DQ2' => BoutResult.bothDsq,
                 '' => null,
@@ -694,8 +695,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 _ => throw UnimplementedError('The bout result type "$result" is not known in bout $boutJson.'),
               };
             } catch (e, st) {
-              _logger.severe('Could not parse bout result $result', e, st);
-              rethrow;
+              _logger.warning('Could not parse bout result $result', e, st);
+              return null;
             }
           }
 
