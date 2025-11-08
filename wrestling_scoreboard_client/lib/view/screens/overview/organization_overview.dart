@@ -103,13 +103,6 @@ class OrganizationOverview extends ConsumerWidget {
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => DivisionEdit(initialOrganization: organization),
-                    mapData:
-                        (divisions) =>
-                            divisions..sort((a, b) {
-                              final comparison = a.endDate.compareTo(b.endDate);
-                              if (comparison != 0) return comparison;
-                              return a.name.compareTo(b.name);
-                            }),
                     getInitialIndex: (data) => data.indexWhere((division) => division.endDate.compareTo(today) >= 0),
                     itemBuilder:
                         (context, item) => ContentItem(
@@ -122,7 +115,6 @@ class OrganizationOverview extends ConsumerWidget {
                   FilterableManyConsumer<Club, Organization>.add(
                     context: context,
                     filterObject: organization,
-                    mapData: (List<Club> clubs) => clubs..sort((a, b) => a.name.compareTo(b.name)),
                     addPageBuilder: (context) => ClubEdit(initialOrganization: organization),
                     itemBuilder:
                         (context, item) => ContentItem(
@@ -135,13 +127,6 @@ class OrganizationOverview extends ConsumerWidget {
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => CompetitionEdit(initialOrganization: organization),
-                    mapData:
-                        (competitions) =>
-                            competitions..sort((a, b) {
-                              final comparison = a.date.compareTo(b.date);
-                              if (comparison != 0) return comparison;
-                              return a.name.compareTo(b.name);
-                            }),
                     getInitialIndex: (data) => data.indexWhere((competition) => competition.date.compareTo(today) >= 0),
                     itemBuilder:
                         (context, item) => ContentItem(
@@ -166,7 +151,6 @@ class OrganizationOverview extends ConsumerWidget {
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => PersonEdit(initialOrganization: organization),
-                    mapData: (persons) => persons..sort((a, b) => a.fullName.compareTo(b.fullName)),
                     prependBuilder: (context, persons) {
                       final duplicatePersons =
                           persons

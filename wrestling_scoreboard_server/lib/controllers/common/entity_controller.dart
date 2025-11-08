@@ -200,7 +200,7 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<List<T>> updateOnDiffMany(List<T> dataObjects, {Type? filterType, int? filterId}) async {
-    final conditions = ['${directDataObjectRelations[T]![filterType]!.first.property} = @fid'];
+    final conditions = ['${directDataObjectRelations[T]![filterType]!.first} = @fid'];
     final substitutionValues = {'fid': filterId};
     final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
 
@@ -283,7 +283,6 @@ abstract class EntityController<T extends DataObject> {
     String searchStr, {
     int? organizationId,
     required bool obfuscate,
-    required Type searchType,
   }) async {
     final Iterable<String> searchTokens = searchStr.split(RegExp(r'\s|,|;')).where((str) => str.isNotEmpty);
 
@@ -326,7 +325,7 @@ abstract class EntityController<T extends DataObject> {
         });
       }
 
-      addSearchableAttrTypeMapping(searchType);
+      addSearchableAttrTypeMapping(T);
 
       if (searchConditions.isNotEmpty) {
         // TODO: remove hacky OR composition by allowing nested query conditions.
@@ -420,7 +419,8 @@ abstract class EntityController<T extends DataObject> {
       return [];
     }
     // Always order at least by id to get more consistent results
-    orderBy = [...orderBy, 'id'];
+    // E.g. 'name', 'pos', 'id'
+    orderBy = [...?dataObjectOrder[T], ...orderBy, 'id'];
     final query =
         'SELECT $tableName.* FROM $tableName '
         '${joins.entries.map((join) {

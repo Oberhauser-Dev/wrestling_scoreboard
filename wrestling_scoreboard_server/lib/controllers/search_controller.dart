@@ -67,7 +67,6 @@ class SearchController {
             raw,
             likeParam,
             organizationId: searchOrganizationId,
-            searchType: searchType,
             obfuscate: obfuscate,
           );
           if (!searchAllTypes && useProvider && searchOrganizationId != null) {
