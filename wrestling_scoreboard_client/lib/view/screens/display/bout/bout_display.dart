@@ -141,6 +141,7 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   void _updateAthleteBoutState(ParticipantStateModel psm, AthleteBoutState Function(AthleteBoutState abs) apply) async {
+    if (!ref.context.mounted) return;
     final abs = psm == _r ? bout.r : bout.b;
     if (abs != null) {
       final newAbs = apply(abs);
@@ -150,7 +151,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         } else {
           bout = bout.copyWith(b: newAbs);
         }
-        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(newAbs);
+        await (await ref.readAsync(dataManagerProvider)).createOrUpdateSingle(newAbs);
       }
     }
   }
