@@ -31,9 +31,11 @@ class _AsyncElevatedButtonState extends State<AsyncElevatedButton> {
                     try {
                       await widget.onTap!();
                     } finally {
-                      setState(() {
-                        isDisabled = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          isDisabled = false;
+                        });
+                      }
                     }
                   }
                   : widget.onTap),
@@ -72,9 +74,11 @@ class _AsyncIconButtonState extends State<AsyncIconButton> {
                     try {
                       await widget.onTap!();
                     } finally {
-                      setState(() {
-                        isDisabled = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          isDisabled = false;
+                        });
+                      }
                     }
                   }
                   : widget.onTap),
