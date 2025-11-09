@@ -19,6 +19,7 @@ import 'package:wrestling_scoreboard_client/utils/asset.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
@@ -332,11 +333,12 @@ class CustomSettingsScreen extends ConsumerWidget {
                             }
                           },
                           trailing:
-                              appDataDirectory == null
+                              // Mobiles do not easily support opening "file" urls in File Manager
+                              appDataDirectory == null || isMobile
                                   ? null
                                   : IconButton(
                                     icon: Icon(Icons.folder_open),
-                                    onPressed: () => launchUrl(Uri.parse('file:$appDataDirectory')),
+                                    onPressed: () => shareFileUri(Uri.parse('file:$appDataDirectory')),
                                   ),
                         ),
                     ],
