@@ -339,7 +339,7 @@ class ProposeApiImportDurationNotifier extends _$ProposeApiImportDurationNotifie
     final proposeApiImportDurationSecs = await Preferences.getInt(Preferences.keyProposeApiImportDuration);
     return proposeApiImportDurationSecs != null
         ? Duration(seconds: proposeApiImportDurationSecs)
-        : const Duration(days: 2);
+        : const Duration(days: 6);
   }
 
   Future<void> setState(Duration? val) async {

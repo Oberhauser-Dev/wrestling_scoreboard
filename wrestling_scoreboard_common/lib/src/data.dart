@@ -1,3 +1,4 @@
+export 'data/api_metadata.dart';
 export 'data/athlete_bout_state.dart';
 export 'data/bout.dart';
 export 'data/bout_action.dart';
