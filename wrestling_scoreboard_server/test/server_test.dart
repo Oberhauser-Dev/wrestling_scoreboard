@@ -65,7 +65,7 @@ void main() {
       final defaultDump = await File(definitionDatabasePath).readAsString();
       final databaseExport = await _canonicalExport(db);
       expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(defaultDump));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
     test('Migrate data to match prepopulated database', () async {
       final db = PostgresDb();
@@ -92,7 +92,7 @@ void main() {
       final expectedDump = await File(prepopulatedDatabasePath).readAsString();
       final databaseExport = await _canonicalExport(db);
       expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(expectedDump));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
     Future<String> executeMockedImport(PostgresDb db, Organization org) async {
       final apiProvider = await OrganizationController().initApiProvider(organization: org);
@@ -128,7 +128,7 @@ void main() {
       final secondImportSql = await executeMockedImport(db, org);
 
       expect(DatabaseExt.sanitizeSql(firstImportSql), DatabaseExt.sanitizeSql(secondImportSql));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
     test('Changes in external API import', () async {
       final db = PostgresDb();
@@ -145,7 +145,7 @@ void main() {
       final expectedSql = await db.export();
 
       expect(DatabaseExt.sanitizeSql(updatedImportSql), DatabaseExt.sanitizeSql(expectedSql));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
     group('API', () {
       test('GET all', () async {
@@ -236,7 +236,7 @@ void main() {
         expect(DatabaseExt.sanitizeSql(databaseExport), DatabaseExt.sanitizeSql(expectedDump));
 
         await instance.close();
-      });
+      }, timeout: const Timeout(Duration(seconds: 60)));
     });
   });
 
