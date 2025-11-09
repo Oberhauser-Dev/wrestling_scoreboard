@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +156,17 @@ class AppDataDirectoryNotifier extends _$AppDataDirectoryNotifier {
 
   Future<String?> _defaultDirectory() async {
     if (kIsWeb) return null;
-    return (await getApplicationSupportDirectory()).path;
+    // Purpose of directories differentiates across platforms: https://github.com/flutter/flutter/issues/118712
+    // Do not use defaultTargetPlatform, as tests require a path actually present on the tested platform.
+    Future<Directory?> Function()? getDirectory;
+    if (Platform.isIOS || Platform.isMacOS) {
+      getDirectory = getApplicationDocumentsDirectory;
+    } else if (Platform.isWindows || Platform.isLinux) {
+      getDirectory = getApplicationSupportDirectory;
+    } else if (Platform.isAndroid) {
+      getDirectory = getExternalStorageDirectory;
+    }
+    return (await getDirectory?.call())?.path;
   }
 }
 
