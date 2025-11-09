@@ -1,3 +1,17 @@
+## 0.3.7
+
+ - **FIX**: Avoid failure on unknown bout result on import. ([08c58823](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/08c588233c1e8bfdcd175a08b08c16ceaddd1fca))
+ - **FIX**: Keep single providers of many lists alive ([#222](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/222)). ([3f042ca0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3f042ca0f5d416dbdaf66add320744083d0296b2))
+ - **FIX**: Sort chronologically or by weight class ([#222](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/222)). ([780280e8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/780280e826679779b13c37476637ad5a0cf006e8))
+ - **FEAT**: Check Progress of import (closes [#230](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/230)). ([c9e5f1b7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c9e5f1b7b3628fd4309e90ea1934c5f66d08e521))
+ - **FEAT**: Save import metadata in database. ([525b50bd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/525b50bd83d00b601201767f5b35be608b8d446f))
+ - **FEAT**: Order by properties on server (closes [#195](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/195)). ([dd289936](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dd2899364fe4c19f767f10d5913e5681a248610c))
+ - **FEAT**: Live activity and injury times (closes [#41](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/41)). ([a270c328](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a270c3286a6a4dd7d50b3b2be1ef64af5038f47d))
+ - **FEAT**: Support visitors count and end date ([#222](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/222)). ([e6db6fd2](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e6db6fd25fcb6735383198e226905717279fb482))
+ - **FEAT**: Support filtering multiple properties of the same type. ([8a19c712](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8a19c712266b8965bf85b7a19cbd52ccf17d408e))
+ - **FEAT**: Support comments in bout ([#1](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/1)). ([a81fc79b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a81fc79bc8a2400109687e71e61293cc3db4ad4b))
+ - **FEAT**: Log start and end of import. ([49fe7d0a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/49fe7d0a90f4de018a8825c0c3085b34716c3e52))
+
 ## 0.3.6
 
  - **REFACTOR**: Move wrestling API to server package. ([9e6e7a7c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9e6e7a7c70276fd3c970027a5ddeca893594ac47))
