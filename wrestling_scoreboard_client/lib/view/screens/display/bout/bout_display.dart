@@ -425,8 +425,6 @@ class BoutState extends ConsumerState<BoutScreen> {
         psm.activityStopwatch?.onEnd.stream.listen((event) async {
           psm.activityStopwatch?.dispose();
           psm.activityStopwatchNotifier.value = null;
-
-          await handleIntent(const BoutScreenActionIntent.horn());
           if (useSmartBoutActions) await handleIntent(RolePointBoutActionIntent(points: 1, role: intent.role.opponent));
         });
         break;
