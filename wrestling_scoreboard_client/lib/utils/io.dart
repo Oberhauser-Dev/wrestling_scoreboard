@@ -1,3 +1,7 @@
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
+
 extension FileNameDateTimeParser on DateTime {
   String toFileNameDateFormat() => toIso8601String().substring(0, 10);
 
@@ -13,5 +17,13 @@ extension FileNameDateTimeParser on DateTime {
       dateStr = dateStr.substring(0, 10) + dateStr.substring(10).replaceAll('-', ':');
     }
     return DateTime.tryParse(dateStr);
+  }
+}
+
+Future<void> shareFileUri(Uri uri) async {
+  if (isDesktop) {
+    await launchUrl(uri);
+  } else {
+    await SharePlus.instance.share(ShareParams(uri: uri));
   }
 }

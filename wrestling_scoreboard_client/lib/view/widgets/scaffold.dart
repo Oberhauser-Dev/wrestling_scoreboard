@@ -2,12 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/platform/interface.dart';
 import 'package:wrestling_scoreboard_client/provider/app_state_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -67,11 +66,7 @@ class WindowStateScaffold extends ConsumerWidget {
                         icon: const Icon(Icons.share),
                         onTap: () async {
                           final shareUrl = Uri.parse(webClientUrl + GoRouterState.of(context).matchedLocation);
-                          if (isDesktop) {
-                            await launchUrl(shareUrl);
-                          } else {
-                            await SharePlus.instance.share(ShareParams(uri: shareUrl));
-                          }
+                          await shareFileUri(shareUrl);
                         },
                         label: localizations.share,
                       ),
