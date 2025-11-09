@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -477,49 +478,22 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService}) {
+  Future<void> organizationImport(
+    int id, {
+    bool includeSubjacent = false,
+    AuthService? authService,
+    required OrganizationImportType importType,
+  }) {
     // TODO: implement organizationImport
     throw UnimplementedError();
   }
 
   @override
-  Future<void> organizationLeagueImport(int id, {bool includeSubjacent = false, AuthService? authService}) {
-    // TODO: implement organizationLeagueImport
-    throw UnimplementedError();
-  }
+  Future<DateTime?> organizationLastImportUtcDateTime(int id, OrganizationImportType importType) =>
+      throw UnimplementedError();
 
   @override
-  Future<void> organizationTeamMatchImport(int id, {bool includeSubjacent = false, AuthService? authService}) {
-    // TODO: implement organizationLeagueImport
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> organizationCompetitionImport(int id, {bool includeSubjacent = false, AuthService? authService}) {
-    // TODO: implement organizationCompetitionImport
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> organizationTeamImport(int id, {bool includeSubjacent = false, AuthService? authService}) {
-    // TODO: implement organizationTeamImport
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<DateTime?> organizationLastImportUtcDateTime(int id) => throw UnimplementedError();
-
-  @override
-  Future<DateTime?> organizationLeagueLastImportUtcDateTime(int id) => throw UnimplementedError();
-
-  @override
-  Future<DateTime?> organizationTeamMatchLastImportUtcDateTime(int id) => throw UnimplementedError();
-
-  @override
-  Future<DateTime?> organizationCompetitionLastImportUtcDateTime(int id) => throw UnimplementedError();
-
-  @override
-  Future<DateTime?> organizationTeamLastImportUtcDateTime(int id) => throw UnimplementedError();
+  Future<double?> organizationImportProgress(int id, OrganizationImportType importType) => throw UnimplementedError();
 
   @override
   Future<Map<String, List<DataObject>>> search({

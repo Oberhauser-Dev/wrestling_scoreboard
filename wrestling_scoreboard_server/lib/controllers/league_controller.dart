@@ -57,11 +57,13 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
   }
 
   @override
-  Future<void> import({
+  Stream<double> import({
     required WrestlingApi apiProvider,
     required League entity,
     bool includeSubjacent = false,
-  }) async {
+  }) async* {
+    final totalSteps = 2 + (includeSubjacent ? 1 : 0);
+    int step = 0;
     final teamMatchMap = await apiProvider.importTeamMatches(league: entity);
 
     final teamMatchs = await TeamMatchController().updateOrCreateManyOfOrg(
@@ -104,6 +106,7 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
         await TeamLineupController().deleteSingle(previous.guest.id!);
       },
     );
+    yield (++step) / totalSteps;
 
     await forEachFuture(teamMatchs, (teamMatch) async {
       // Do not add teams to a league multiple times.
@@ -128,16 +131,24 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
         );
       }
     });
+    yield (++step) / totalSteps;
 
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
+      int subStep = 0;
       for (final teamMatch in teamMatchs) {
-        await TeamMatchController().import(
+        final teamMatchProgress = TeamMatchController().import(
           entity: teamMatch,
           apiProvider: apiProvider,
           includeSubjacent: includeSubjacent,
         );
+
+        await for (final progress in teamMatchProgress) {
+          yield (step + ((subStep + progress) / teamMatchs.length)) / totalSteps;
+        }
+        yield (step + (++subStep / teamMatchs.length)) / totalSteps;
       }
+      yield (++step) / totalSteps;
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
@@ -105,19 +107,7 @@ Future<void> checkProposeImport(
   required OrganizationImportType importType,
 }) async {
   final dataManager = await ref.read(dataManagerProvider);
-  DateTime? lastUpdated;
-  switch (importType) {
-    case OrganizationImportType.organization:
-      lastUpdated = await dataManager.organizationLastImportUtcDateTime(id);
-    case OrganizationImportType.team:
-      lastUpdated = await dataManager.organizationTeamLastImportUtcDateTime(id);
-    case OrganizationImportType.league:
-      lastUpdated = await dataManager.organizationLeagueLastImportUtcDateTime(id);
-    case OrganizationImportType.competition:
-      lastUpdated = await dataManager.organizationCompetitionLastImportUtcDateTime(id);
-    case OrganizationImportType.teamMatch:
-      lastUpdated = await dataManager.organizationTeamMatchLastImportUtcDateTime(id);
-  }
+  DateTime? lastUpdated = await dataManager.organizationLastImportUtcDateTime(id, importType);
   lastUpdated = lastUpdated?.toLocal();
 
   final proposeApiImportDuration = await ref.read(proposeApiImportDurationProvider);
@@ -148,6 +138,17 @@ Future<void> _showImportDialog(
   required int id,
   required OrganizationImportType importType,
 }) async {
+  final dataManager = await ref.read(dataManagerProvider);
+  final progress = await dataManager.organizationImportProgress(id, importType);
+  if (!context.mounted) return;
+  if (progress != null) {
+    final percentPattern = NumberFormat.percentPattern();
+    await showOkDialog(
+      context: context,
+      child: Text('Import currently in progress: ${percentPattern.format(progress)}'),
+    );
+    return;
+  }
   final result = await showDialog<bool>(
     context: context,
     builder: (context) => _IncludeSubjacentDialog(child: Text(text)),
@@ -179,26 +180,12 @@ Future<void> _processImport(
     runAsync: () async {
       final dataManager = await ref.read(dataManagerProvider);
       final authService = await ref.read(orgAuthProvider.notifier).getByOrganization(orgId);
-      switch (importType) {
-        case OrganizationImportType.organization:
-          await dataManager.organizationImport(id, includeSubjacent: includeSubjacent, authService: authService);
-        case OrganizationImportType.team:
-          await dataManager.organizationTeamImport(id, includeSubjacent: includeSubjacent, authService: authService);
-        case OrganizationImportType.league:
-          await dataManager.organizationLeagueImport(id, includeSubjacent: includeSubjacent, authService: authService);
-        case OrganizationImportType.competition:
-          await dataManager.organizationCompetitionImport(
-            id,
-            includeSubjacent: includeSubjacent,
-            authService: authService,
-          );
-        case OrganizationImportType.teamMatch:
-          await dataManager.organizationTeamMatchImport(
-            id,
-            includeSubjacent: includeSubjacent,
-            authService: authService,
-          );
-      }
+      await dataManager.organizationImport(
+        id,
+        includeSubjacent: includeSubjacent,
+        authService: authService,
+        importType: importType,
+      );
     },
   );
 }
@@ -240,8 +227,6 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
     );
   }
 }
-
-enum OrganizationImportType { organization, team, league, competition, teamMatch }
 
 class OrganizationReportActionItem extends ResponsiveScaffoldActionItem {
   OrganizationReportActionItem({

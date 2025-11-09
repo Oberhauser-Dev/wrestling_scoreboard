@@ -14,15 +14,20 @@ class CompetitionController extends ShelfController<Competition> with ImportCont
   CompetitionController._internal() : super();
 
   @override
-  Future<void> import({
+  Stream<double> import({
     required WrestlingApi apiProvider,
     required Competition entity,
     bool obfuscate = true,
     bool includeSubjacent = false,
-  }) async {
+  }) async* {
+    final totalSteps = 1 + (includeSubjacent ? 1 : 0);
+    int step = 0;
+    yield (++step) / totalSteps;
+
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       // Nothing to do
+      yield (++step) / totalSteps;
     }
     throw UnimplementedError('This operation is not supported yet!');
   }

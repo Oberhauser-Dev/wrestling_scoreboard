@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/url.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
@@ -206,26 +207,21 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
-      _import(id, 'organization', includeSubjacent: includeSubjacent, authService: authService);
+  Future<void> organizationImport(
+    int id, {
+    bool includeSubjacent = false,
+    AuthService? authService,
+    required OrganizationImportType importType,
+  }) => _import(
+    id,
+    getTableNameFromType(importType.dataType),
+    includeSubjacent: includeSubjacent,
+    authService: authService,
+  );
 
   @override
-  Future<void> organizationLeagueImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
-      _import(id, 'league', includeSubjacent: includeSubjacent, authService: authService);
-
-  @override
-  Future<void> organizationTeamMatchImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
-      _import(id, 'team_match', includeSubjacent: includeSubjacent, authService: authService);
-
-  @override
-  Future<void> organizationCompetitionImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
-      _import(id, 'competition', includeSubjacent: includeSubjacent, authService: authService);
-
-  @override
-  Future<void> organizationTeamImport(int id, {bool includeSubjacent = false, AuthService? authService}) =>
-      _import(id, 'team', includeSubjacent: includeSubjacent, authService: authService);
-
-  Future<DateTime?> _lastImportUtcDateTime(int id, String table) async {
+  Future<DateTime?> organizationLastImportUtcDateTime(int id, OrganizationImportType importType) async {
+    final table = getTableNameFromType(importType.dataType);
     final uri = Uri.parse('$_apiUrl/$table/$id/api/last_import');
     final response = await http.get(uri, headers: _headers);
 
@@ -234,19 +230,14 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<DateTime?> organizationLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'organization');
+  Future<double?> organizationImportProgress(int id, OrganizationImportType importType) async {
+    final table = getTableNameFromType(importType.dataType);
+    final uri = Uri.parse('$_apiUrl/$table/$id/api/import_progress');
+    final response = await http.get(uri, headers: _headers);
 
-  @override
-  Future<DateTime?> organizationLeagueLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'league');
-
-  @override
-  Future<DateTime?> organizationTeamMatchLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'team_match');
-
-  @override
-  Future<DateTime?> organizationCompetitionLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'competition');
-
-  @override
-  Future<DateTime?> organizationTeamLastImportUtcDateTime(int id) => _lastImportUtcDateTime(id, 'team');
+    await _handleResponse(response, errorMessage: 'Failed to get progress for $table $id');
+    return double.tryParse(response.body);
+  }
 
   @override
   Future<Map<String, List<DataObject>>> search({

@@ -170,11 +170,14 @@ class TeamMatchController extends ShelfController<TeamMatch>
   }
 
   @override
-  Future<void> import({
+  Stream<double> import({
     required WrestlingApi apiProvider,
     required TeamMatch entity,
     bool includeSubjacent = false,
-  }) async {
+  }) async* {
+    final totalSteps = 1 + (includeSubjacent ? 1 : 0);
+    int step = 0;
+
     final tmbMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
     List<TeamMatchBout> teamMatchBouts = tmbMap.keys.toList();
 
@@ -229,9 +232,12 @@ class TeamMatchController extends ShelfController<TeamMatch>
       Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))),
     );
 
+    yield (++step) / totalSteps;
+
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
       // Nothing to do
+      yield (++step) / totalSteps;
     }
   }
 
