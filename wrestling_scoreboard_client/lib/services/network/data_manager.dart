@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -83,25 +84,16 @@ abstract class DataManager implements AuthManager {
 
   Future<bool> organizationCheckCredentials(int id, {required AuthService authService});
 
-  Future<void> organizationImport(int id, {bool includeSubjacent = false, AuthService? authService});
+  Future<void> organizationImport(
+    int id, {
+    bool includeSubjacent = false,
+    AuthService? authService,
+    required OrganizationImportType importType,
+  });
 
-  Future<void> organizationTeamImport(int id, {bool includeSubjacent = false, AuthService? authService});
+  Future<DateTime?> organizationLastImportUtcDateTime(int id, OrganizationImportType importType);
 
-  Future<void> organizationLeagueImport(int id, {bool includeSubjacent = false, AuthService? authService});
-
-  Future<void> organizationCompetitionImport(int id, {bool includeSubjacent = false, AuthService? authService});
-
-  Future<void> organizationTeamMatchImport(int id, {bool includeSubjacent = false, AuthService? authService});
-
-  Future<DateTime?> organizationLastImportUtcDateTime(int id);
-
-  Future<DateTime?> organizationTeamLastImportUtcDateTime(int id);
-
-  Future<DateTime?> organizationLeagueLastImportUtcDateTime(int id);
-
-  Future<DateTime?> organizationCompetitionLastImportUtcDateTime(int id);
-
-  Future<DateTime?> organizationTeamMatchLastImportUtcDateTime(int id);
+  Future<double?> organizationImportProgress(int id, OrganizationImportType importType);
 
   Future<Map<String, List<DataObject>>> search({
     required String searchTerm,

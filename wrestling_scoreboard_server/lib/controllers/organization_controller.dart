@@ -64,11 +64,14 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
   }
 
   @override
-  Future<void> import({
+  Stream<double> import({
     required WrestlingApi apiProvider,
     required Organization entity,
     bool includeSubjacent = false,
-  }) async {
+  }) async* {
+    final totalSteps = 3 + (includeSubjacent ? 1 : 0);
+    int step = 0;
+
     final teamClubAffiliations = await apiProvider.importTeamClubAffiliations();
 
     await Future.forEach(teamClubAffiliations, (teamClubAffiliation) async {
@@ -87,6 +90,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         await TeamClubAffiliationController().createSingle(TeamClubAffiliation(team: team, club: club));
       }
     });
+    yield (++step) / totalSteps;
 
     final divisionBoutResultRuleMap = await apiProvider.importDivisions();
     final divisions = await DivisionController().updateOrCreateManyOfOrg(
@@ -115,6 +119,7 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
         await BoutConfigController().deleteSingle(previous.boutConfig.id!);
       },
     );
+    yield (++step) / totalSteps;
 
     final leagues = (await forEachFuture(divisions, (division) async {
       var leagues = await apiProvider.importLeagues(division: division);
@@ -165,11 +170,24 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
       return leagues;
     })).expand((league) => league);
 
+    yield (++step) / totalSteps;
+
     updateLastImportUtcDateTime(entity.id!);
     if (includeSubjacent) {
+      int subStep = 0;
       for (final league in leagues) {
-        await LeagueController().import(entity: league, includeSubjacent: includeSubjacent, apiProvider: apiProvider);
+        final leagueProgress = LeagueController().import(
+          entity: league,
+          includeSubjacent: includeSubjacent,
+          apiProvider: apiProvider,
+        );
+        await for (final progress in leagueProgress) {
+          yield (step + ((subStep + progress) / leagues.length)) / totalSteps;
+        }
+        yield (step + (++subStep / leagues.length)) / totalSteps;
       }
+
+      yield (++step) / totalSteps;
     }
   }
 

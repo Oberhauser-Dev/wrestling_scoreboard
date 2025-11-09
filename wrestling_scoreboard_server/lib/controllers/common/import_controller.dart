@@ -12,7 +12,7 @@ import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 final _logger = Logger('ImportController');
 
 mixin ImportController<T extends DataObject> implements ShelfController<T> {
-  int? importProgress;
+  double? importProgress;
 
   Future<Response> requestLastImportUtcDateTime(Request request, User? user, String entityId) async {
     final res = await PostgresDb().connection.execute(
@@ -21,6 +21,10 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     final row = res.zeroOrOne;
     final apiMetaData = row == null ? null : await ApiMetadata.fromRaw(row.toColumnMap());
     return Response.ok(apiMetaData?.lastImport?.toIso8601String());
+  }
+
+  Future<Response> requestImportProgress(Request request, User? user, String entityId) async {
+    return Response.ok(importProgress.toString());
   }
 
   Future<void> updateLastImportUtcDateTime(int id) async {
@@ -71,6 +75,7 @@ DO UPDATE SET last_import = EXCLUDED.last_import;
       );
     }
     importProgress = 0;
+
     try {
       _logger.info('postImport for type "$T" and entityId "$entityId" STARTED');
       final message = await request.readAsString();
@@ -91,27 +96,44 @@ DO UPDATE SET last_import = EXCLUDED.last_import;
         throw Exception('No API provider selected for the organization $organization.');
       }
 
+      final totalSteps = 2;
+      int step = 0;
+
       // Import parent entities first, as they are required by subjacent entities (e.g. TeamMatch requires Clubs)
       if (entity is! Organization) {
-        await OrganizationController().import(apiProvider: apiProvider, entity: organization, includeSubjacent: false);
+        final organizationProgress = OrganizationController().import(
+          apiProvider: apiProvider,
+          entity: organization,
+          includeSubjacent: false,
+        );
+        await for (final progress in organizationProgress) {
+          importProgress = (step + (progress / 2)) / totalSteps;
+        }
         if (entity is Competition) {
           // No further parent to update
         } else if (entity is! League) {
           if (entity is TeamMatch) {
             if (entity.league != null) {
-              await LeagueController().import(
+              final leagueProgress = LeagueController().import(
                 apiProvider: apiProvider,
                 entity: entity.league!,
                 includeSubjacent: false,
               );
+              await for (final progress in leagueProgress) {
+                importProgress = (step + ((1 + progress) / 2)) / totalSteps;
+              }
             }
           } else {
             throw HttpException('Cannot process parent API import for $T');
           }
         }
       }
+      importProgress = (++step) / totalSteps;
 
-      await import(entity: entity, apiProvider: apiProvider, includeSubjacent: includeSubjacent);
+      final progressStream = import(entity: entity, apiProvider: apiProvider, includeSubjacent: includeSubjacent);
+      await for (final progress in progressStream) {
+        importProgress = (step + progress) / totalSteps;
+      }
       _logger.info('postImport for type "$T" and entityId "$entityId" was SUCCESSFUL');
       return Response.ok('{"status": "success"}');
     } on HttpException catch (err, stackTrace) {
@@ -124,5 +146,5 @@ DO UPDATE SET last_import = EXCLUDED.last_import;
     }
   }
 
-  Future<void> import({required WrestlingApi apiProvider, required T entity, bool includeSubjacent = false});
+  Stream<double> import({required WrestlingApi apiProvider, required T entity, bool includeSubjacent = false});
 }

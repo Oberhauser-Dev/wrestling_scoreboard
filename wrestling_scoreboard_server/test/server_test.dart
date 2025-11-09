@@ -101,13 +101,16 @@ void main() {
       }
       apiProvider.isMock = true;
 
-      await OrganizationController().import(entity: org, apiProvider: apiProvider);
+      final organizationProgress = OrganizationController().import(entity: org, apiProvider: apiProvider);
+      await for (final _ in organizationProgress) {}
 
       final league = await LeagueController().getSingleOfOrg('2023_Bayernliga_Süd', orgId: org.id!, obfuscate: false);
-      await LeagueController().import(entity: league, apiProvider: apiProvider);
+      final leagueProgress = LeagueController().import(entity: league, apiProvider: apiProvider);
+      await for (final _ in leagueProgress) {}
 
       final teamMatch = await TeamMatchController().getSingleOfOrg('005029c', orgId: org.id!, obfuscate: false);
-      await TeamMatchController().import(entity: teamMatch, apiProvider: apiProvider);
+      final teamMatchProgress = TeamMatchController().import(entity: teamMatch, apiProvider: apiProvider);
+      await for (final _ in teamMatchProgress) {}
 
       return await db.export();
     }

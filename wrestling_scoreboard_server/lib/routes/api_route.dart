@@ -105,6 +105,10 @@ class ApiRoute {
       '/${Organization.cTableName}/<id|[0-9]+>/api/last_import',
       organizationController.requestLastImportUtcDateTime,
     );
+    router.restrictedGetOne(
+      '/${Organization.cTableName}/<id|[0-9]+>/api/import_progress',
+      organizationController.requestImportProgress,
+    );
     // Need to use post, as credentials are appended in body
     router.restrictedPostOne(
       '/${Organization.cTableName}/<id|[0-9]+>/api/check_credentials',
@@ -122,6 +126,10 @@ class ApiRoute {
     router.restrictedGetOne(
       '/${League.cTableName}/<id|[0-9]+>/api/last_import',
       leagueController.requestLastImportUtcDateTime,
+    );
+    router.restrictedGetOne(
+      '/${League.cTableName}/<id|[0-9]+>/api/import_progress',
+      leagueController.requestImportProgress,
     );
     router.restrictedGetOne(
       '/${League.cTableName}/<id|[0-9]+>/${WeightClass.cTableName}s',
@@ -148,6 +156,10 @@ class ApiRoute {
       teamController.requestLastImportUtcDateTime,
     );
     router.restrictedGetOne(
+      '/${Team.cTableName}/<id|[0-9]+>/api/import_progress',
+      teamController.requestImportProgress,
+    );
+    router.restrictedGetOne(
       '/${Team.cTableName}/<id|[0-9]+>/${TeamMatch.cTableName}s',
       teamController.requestTeamMatches,
     );
@@ -158,6 +170,10 @@ class ApiRoute {
     router.restrictedGetOne(
       '/${TeamMatch.cTableName}/<id|[0-9]+>/api/last_import',
       matchController.requestLastImportUtcDateTime,
+    );
+    router.restrictedGetOne(
+      '/${TeamMatch.cTableName}/<id|[0-9]+>/api/import_progress',
+      matchController.requestImportProgress,
     );
     router.restrictedPostOne(
       '/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
@@ -170,6 +186,10 @@ class ApiRoute {
     router.restrictedGetOne(
       '/${Competition.cTableName}/<id|[0-9]+>/api/last_import',
       competitionController.requestLastImportUtcDateTime,
+    );
+    router.restrictedGetOne(
+      '/${Competition.cTableName}/<id|[0-9]+>/api/import_progress',
+      competitionController.requestImportProgress,
     );
 
     final competitionWeightCategoryController = CompetitionWeightCategoryController();
