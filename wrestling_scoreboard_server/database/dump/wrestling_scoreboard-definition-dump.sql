@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 6zcRAcEoCXqOKrlSAtIemOMChTTEaHIkKlQNo35Y2z9ngt2tH2wa5aBci72sm2z
+\restrict cFXqefQ2HR7p9Fn0TjjfvQ6sU0bUQMZtRWgWqvkCxxtZv6wkv67cjOm9snUufYF
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -255,6 +255,19 @@ ALTER SEQUENCE public.age_category_id_seq OWNER TO wrestling;
 
 ALTER SEQUENCE public.age_category_id_seq OWNED BY public.age_category.id;
 
+
+--
+-- Name: api_metadata; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.api_metadata (
+    entity_id integer NOT NULL,
+    entity_type character varying NOT NULL,
+    last_import timestamp with time zone
+);
+
+
+ALTER TABLE public.api_metadata OWNER TO wrestling;
 
 --
 -- Name: athlete_bout_state; Type: TABLE; Schema: public; Owner: wrestling
@@ -1743,6 +1756,14 @@ COPY public.age_category (id, org_sync_id, organization_id, name, min_age, max_a
 
 
 --
+-- Data for Name: api_metadata; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.api_metadata (entity_id, entity_type, last_import) FROM stdin;
+\.
+
+
+--
 -- Data for Name: athlete_bout_state; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
@@ -1907,7 +1928,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7-pre.3	0.3.4
+0.3.7-pre.4	0.3.4
 \.
 
 
@@ -2253,6 +2274,14 @@ ALTER TABLE ONLY public.age_category
 
 ALTER TABLE ONLY public.age_category
     ADD CONSTRAINT age_category_pk PRIMARY KEY (id);
+
+
+--
+-- Name: api_metadata api_metadata_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.api_metadata
+    ADD CONSTRAINT api_metadata_pk PRIMARY KEY (entity_id, entity_type);
 
 
 --
@@ -3228,5 +3257,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 6zcRAcEoCXqOKrlSAtIemOMChTTEaHIkKlQNo35Y2z9ngt2tH2wa5aBci72sm2z
+\unrestrict cFXqefQ2HR7p9Fn0TjjfvQ6sU0bUQMZtRWgWqvkCxxtZv6wkv67cjOm9snUufYF
 

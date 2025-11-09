@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
@@ -6,19 +7,36 @@ import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
 import 'package:wrestling_scoreboard_server/services/api.dart';
+import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 
 final _logger = Logger('ImportController');
 
 mixin ImportController<T extends DataObject> implements ShelfController<T> {
-  Map<int, DateTime> lastImportUtcDateTime = {};
-  bool importInProgress = false;
+  int? importProgress;
 
   Future<Response> requestLastImportUtcDateTime(Request request, User? user, String entityId) async {
-    return Response.ok(lastImportUtcDateTime[int.parse(entityId)]?.toIso8601String());
+    final res = await PostgresDb().connection.execute(
+      "SELECT * FROM ${ApiMetadata.cTableName} WHERE entity_id = $entityId AND entity_type = '$tableName' LIMIT 1;",
+    );
+    final row = res.zeroOrOne;
+    final apiMetaData = row == null ? null : await ApiMetadata.fromRaw(row.toColumnMap());
+    return Response.ok(apiMetaData?.lastImport?.toIso8601String());
   }
 
-  void updateLastImportUtcDateTime(int id) {
-    lastImportUtcDateTime[id] = DateTime.now().toUtc();
+  Future<void> updateLastImportUtcDateTime(int id) async {
+    final sqlQuery = '''
+INSERT INTO ${ApiMetadata.cTableName} (entity_id, entity_type, last_import)
+VALUES (@entityId, @entityType, @lastImport)
+ON CONFLICT (entity_id, entity_type)
+DO UPDATE SET last_import = EXCLUDED.last_import;
+    ''';
+    final substitutionValues = {
+      'entityId': id,
+      'entityType': tableName,
+      'lastImport': psql.TypedValue(psql.Type.timestampTz, DateTime.now().toUtc()),
+    };
+    final stmt = await PostgresDb().connection.prepare(psql.Sql.named(sqlQuery));
+    await stmt.bind(substitutionValues).toList();
   }
 
   Organization? getOrganization(T entity);
@@ -47,12 +65,12 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
     }
     final entityId = int.parse(entityIdStr);
     final queryParams = request.requestedUri.queryParameters;
-    if (importInProgress) {
+    if (importProgress != null) {
       return Response.badRequest(
         body: 'There already is another import for $T in progress. Please wait until finished!',
       );
     }
-    importInProgress = true;
+    importProgress = 0;
     try {
       _logger.info('postImport for type "$T" and entityId "$entityId" STARTED');
       final message = await request.readAsString();
@@ -102,7 +120,7 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
       _logger.severe('postImport for type "$T" and entityId "$entityId" FAILED', err, stackTrace);
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": "$stackTrace"}');
     } finally {
-      importInProgress = false;
+      importProgress = null;
     }
   }
 

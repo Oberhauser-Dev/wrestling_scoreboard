@@ -74,8 +74,8 @@ extension DatabaseExt on PostgresDb {
 
   Future<Migration> getMigration() async {
     final res = await connection.execute('SELECT * FROM ${Migration.cTableName} LIMIT 1;');
-    final row = res.zeroOrOne;
-    return await Migration.fromRaw(row!.toColumnMap());
+    final row = res.single;
+    return await Migration.fromRaw(row.toColumnMap());
   }
 
   Future<void> migrate({bool skipPreparation = false, Future<void> Function(Version version)? onMigrate}) async {
@@ -221,8 +221,9 @@ extension DatabaseExt on PostgresDb {
     sqlString = sqlString.replaceAll('\r\n', '\n');
     // Compatibility to PostgreSQL Fix:
     // https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
-    sqlString = sqlString.replaceAll(RegExp(r'\n\\restrict(.*)\n'), '');
-    sqlString = sqlString.replaceAll(RegExp(r'\n\\unrestrict(.*)\n'), '');
+    sqlString = sqlString.replaceAll(RegExp(r'\nCOPY public.api_metadata.*?\\\.\n', dotAll: true), '');
+    sqlString = sqlString.replaceAll(RegExp(r'\n\\restrict.*\n'), '');
+    sqlString = sqlString.replaceAll(RegExp(r'\n\\unrestrict.*\n'), '');
     return sqlString
         .split('\n')
         .where((line) {
