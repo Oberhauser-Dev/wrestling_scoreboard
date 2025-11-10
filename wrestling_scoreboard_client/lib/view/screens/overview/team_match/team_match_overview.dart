@@ -287,10 +287,11 @@ class TeamMatchOverview extends ConsumerWidget {
                                         privilege: UserPrivilege.write,
                                         child: AsyncElevatedButton(
                                           icon: const Icon(Icons.autorenew),
-                                          label: Text(localizations.generate),
+                                          label: Text(localizations.pairBouts),
                                           onTap: () async {
                                             final hasConfirmed = await showOkCancelDialog(
                                               context: context,
+                                              title: Text(localizations.pairBouts),
                                               child: Text(localizations.warningBoutGenerate),
                                             );
                                             if (hasConfirmed && context.mounted) {
@@ -395,17 +396,24 @@ class TeamMatchOverview extends ConsumerWidget {
     NavigatorState navigator, {
     required League league,
   }) async {
-    final dataManager = await ref.read(dataManagerProvider);
-    final participations = await dataManager.readMany<TeamLineupParticipation, TeamLineup>(filterObject: lineup);
+    final participations = await ref.readAsync(
+      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
+      ).future,
+    );
     final leagueWeightClasses =
-        (await dataManager.readMany<LeagueWeightClass, League>(
-          filterObject: league,
+        (await ref.readAsync(
+          manyDataStreamProvider<LeagueWeightClass, League>(
+            ManyProviderData<LeagueWeightClass, League>(filterObject: league),
+          ).future,
         )).where((element) => element.seasonPartition == match.seasonPartition).toList();
     var weightClasses = leagueWeightClasses.map((e) => e.weightClass).toList();
     if (weightClasses.isEmpty) {
       final divisionWeightClasses =
-          (await dataManager.readMany<DivisionWeightClass, Division>(
-            filterObject: league.division,
+          (await ref.readAsync(
+            manyDataStreamProvider<DivisionWeightClass, Division>(
+              ManyProviderData<DivisionWeightClass, Division>(filterObject: league.division),
+            ).future,
           )).where((element) => element.seasonPartition == match.seasonPartition).toList();
       weightClasses = divisionWeightClasses.map((e) => e.weightClass).toList();
     }
@@ -431,8 +439,10 @@ class TeamMatchOverview extends ConsumerWidget {
           importType: OrganizationImportType.teamMatch,
         );
         proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
-        proposedParticipations = await dataManager.readMany<TeamLineupParticipation, TeamLineup>(
-          filterObject: proposedLineup,
+        proposedParticipations = await ref.readAsync(
+          manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+            ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: proposedLineup),
+          ).future,
         );
       }
     }
@@ -440,15 +450,13 @@ class TeamMatchOverview extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) {
           return TeamLineupEdit(
+            teamMatch: match,
             weightClasses: weightClasses,
             participations: participations,
             lineup: lineup,
             initialCoach: proposedLineup?.coach,
             initialLeader: proposedLineup?.leader,
             initialParticipations: proposedParticipations,
-            onSubmitGenerate: () async {
-              await dataManager.generateBouts<TeamMatch>(match, false);
-            },
           );
         },
       ),

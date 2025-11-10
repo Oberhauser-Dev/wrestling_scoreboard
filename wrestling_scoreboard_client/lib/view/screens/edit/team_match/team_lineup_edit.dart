@@ -22,6 +22,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamLineupEdit extends ConsumerStatefulWidget {
+  final TeamMatch teamMatch;
   final TeamLineup lineup;
   final List<WeightClass> weightClasses;
   final List<TeamLineupParticipation> participations;
@@ -29,14 +30,12 @@ class TeamLineupEdit extends ConsumerStatefulWidget {
   final Membership? initialCoach;
   final List<TeamLineupParticipation>? initialParticipations;
 
-  final Future<void> Function()? onSubmitGenerate;
-
   const TeamLineupEdit({
     super.key,
+    required this.teamMatch,
     required this.lineup,
     required this.weightClasses,
     required this.participations,
-    this.onSubmitGenerate,
     this.initialLeader,
     this.initialCoach,
     this.initialParticipations,
@@ -87,7 +86,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     }
   }
 
-  Future<void> handleSubmit(NavigatorState navigator, {Future<void> Function()? onSubmitGenerate}) async {
+  Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final dataManager = await ref.read(dataManagerProvider);
@@ -126,7 +125,27 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         }
         await dataManager.createOrUpdateSingle<TeamLineupParticipation>(participation);
       }
-      if (onSubmitGenerate != null) await onSubmitGenerate();
+
+      // Ask to generate bouts, if opponent also has saved their participants
+      final opponentLineup = widget.teamMatch.home == widget.lineup ? widget.teamMatch.guest : widget.teamMatch.home;
+      final opponentParticipations = await ref.readAsync(
+        manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+          ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: opponentLineup),
+        ).future,
+      );
+      if (opponentParticipations.isNotEmpty && mounted) {
+        final localizations = context.l10n;
+        final hasConfirmed = await showOkCancelDialog(
+          context: context,
+          title: Text(localizations.pairBouts),
+          child: Text(localizations.warningBoutGenerate),
+          okText: localizations.saveAndPairBouts,
+          cancelText: localizations.save,
+        );
+        if (hasConfirmed) {
+          await dataManager.generateBouts<TeamMatch>(widget.teamMatch, false);
+        }
+      }
       navigator.pop();
     }
   }
@@ -140,20 +159,6 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         icon: const Icon(Icons.save),
         label: localizations.save,
         onTap: () => catchAsync(context, () => handleSubmit(navigator)),
-      ),
-      ResponsiveScaffoldActionItem(
-        style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
-        icon: const Icon(Icons.autorenew),
-        label: localizations.saveAndGenerate,
-        onTap: () async {
-          final hasConfirmed = await showOkCancelDialog(
-            context: context,
-            child: Text(localizations.warningBoutGenerate),
-          );
-          if (hasConfirmed && context.mounted) {
-            await catchAsync(context, () => handleSubmit(navigator, onSubmitGenerate: widget.onSubmitGenerate));
-          }
-        },
       ),
     ];
   }

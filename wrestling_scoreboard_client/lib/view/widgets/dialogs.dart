@@ -7,8 +7,9 @@ import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.da
 
 class SizedDialog extends StatelessWidget {
   /// Do not wrap this into a column with shrinkwrap, so that ListViews act dynamically.
-  const SizedDialog({super.key, required this.actions, required this.child, this.isScrollable = true});
+  const SizedDialog({super.key, required this.actions, this.title, required this.child, this.isScrollable = true});
 
+  final Widget? title;
   final List<Widget> actions;
   final Widget child;
   final bool isScrollable;
@@ -16,6 +17,7 @@ class SizedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: title,
       content: SizedBox(width: 300, child: isScrollable ? SingleChildScrollView(child: child) : child),
       actions: actions,
     );
@@ -57,7 +59,9 @@ Future<void> showOkDialog({required BuildContext context, required Widget child}
 }
 
 class OkCancelDialog<T extends Object?> extends StatelessWidget {
+  final Widget? title;
   final Widget child;
+  final String? cancelText;
   final String? okText;
   final T Function() getResult;
   final T? cancelResult;
@@ -65,8 +69,10 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
 
   const OkCancelDialog({
     required this.child,
+    this.title,
     required this.getResult,
     this.cancelResult,
+    this.cancelText,
     this.okText,
     super.key,
     this.isScrollable = true,
@@ -78,18 +84,35 @@ class OkCancelDialog<T extends Object?> extends StatelessWidget {
     return SizedDialog(
       isScrollable: isScrollable,
       actions: <Widget>[
-        TextButton(onPressed: () => Navigator.pop(context, cancelResult), child: Text(localizations.cancel)),
+        TextButton(
+          onPressed: () => Navigator.pop(context, cancelResult),
+          child: Text(cancelText ?? localizations.cancel),
+        ),
         TextButton(onPressed: () => Navigator.pop(context, getResult()), child: Text(okText ?? localizations.ok)),
       ],
+      title: title,
       child: child,
     );
   }
 }
 
-Future<bool> showOkCancelDialog({required BuildContext context, required Widget child, String? okText}) async {
+Future<bool> showOkCancelDialog({
+  required BuildContext context,
+  Widget? title,
+  required Widget child,
+  final String? cancelText,
+  String? okText,
+}) async {
   return (await showDialog<bool>(
         context: context,
-        builder: (context) => OkCancelDialog<bool>(getResult: () => true, okText: okText, child: child),
+        builder:
+            (context) => OkCancelDialog<bool>(
+              getResult: () => true,
+              title: title,
+              cancelText: cancelText,
+              okText: okText,
+              child: child,
+            ),
       )) ??
       false;
 }
