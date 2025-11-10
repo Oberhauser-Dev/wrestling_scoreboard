@@ -99,10 +99,11 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             ),
             ResponsiveScaffoldActionItem(
               icon: const Icon(Icons.autorenew),
-              label: localizations.generate,
+              label: localizations.pairBouts,
               onTap: () async {
                 final hasConfirmed = await showOkCancelDialog(
                   context: context,
+                  title: Text(localizations.pairBouts),
                   child: Text(localizations.warningBoutGenerate),
                 );
                 if (hasConfirmed && context.mounted) {

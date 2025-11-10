@@ -299,10 +299,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get save => 'Speichern';
 
   @override
-  String get saveAndGenerate => 'Speichern & Generieren';
+  String get saveAndPairBouts => 'Speichern & Kämpfe paaren';
 
   @override
-  String get generate => 'Generieren';
+  String get pairBouts => 'Kämpfe paaren';
 
   @override
   String get add => 'Hinzufügen';
@@ -397,7 +397,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get warningBoutGenerate =>
-      'Diese Aktion überschreibt alle existierenden Kämpfe dieser Begegnung. Um einzelne Kämpfe zu bearbeiten, nutze die Seite zur Kampf-Bearbeitung. Bist du sicher, dass du fortfahren möchtest?';
+      'Diese Aktion überschreibt Kämpfe der geänderten Gewichtsklassen. Um einzelne Kämpfe zu bearbeiten, nutze die Seite zur Kampf-Bearbeitung. Bist du sicher, dass du fortfahren möchtest?';
 
   @override
   String get warningPrefilledLineup => 'Die Aufstellung wurde mit Werten einer vorherigen Begegnung vorausgefüllt!';

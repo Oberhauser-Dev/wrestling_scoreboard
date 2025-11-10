@@ -297,10 +297,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
-  String get saveAndGenerate => 'Save & Generate';
+  String get saveAndPairBouts => 'Save & Pair bouts';
 
   @override
-  String get generate => 'Generate';
+  String get pairBouts => 'Pair bouts';
 
   @override
   String get add => 'Add';
@@ -394,7 +394,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get warningBoutGenerate =>
-      'This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?';
+      'This action will overwrite bouts in the modified weight classes. To edit individual bouts, use the bout editing page. Are you sure you want to continue?';
 
   @override
   String get warningPrefilledLineup => 'The lineup was prefilled with values from a previous match!';

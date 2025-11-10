@@ -626,17 +626,17 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get save;
 
-  /// No description provided for @saveAndGenerate.
+  /// No description provided for @saveAndPairBouts.
   ///
   /// In en, this message translates to:
-  /// **'Save & Generate'**
-  String get saveAndGenerate;
+  /// **'Save & Pair bouts'**
+  String get saveAndPairBouts;
 
-  /// No description provided for @generate.
+  /// No description provided for @pairBouts.
   ///
   /// In en, this message translates to:
-  /// **'Generate'**
-  String get generate;
+  /// **'Pair bouts'**
+  String get pairBouts;
 
   /// No description provided for @add.
   ///
@@ -821,7 +821,7 @@ abstract class AppLocalizations {
   /// No description provided for @warningBoutGenerate.
   ///
   /// In en, this message translates to:
-  /// **'This action overrides all existing bouts of this match. To edit single bouts, use the bout editing page. Are you sure, you want to continue?'**
+  /// **'This action will overwrite bouts in the modified weight classes. To edit individual bouts, use the bout editing page. Are you sure you want to continue?'**
   String get warningBoutGenerate;
 
   /// No description provided for @warningPrefilledLineup.
