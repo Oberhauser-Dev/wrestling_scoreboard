@@ -448,8 +448,8 @@ class MockDataManager extends DataManager {
   @override
   Future<Migration> getMigration() async {
     return Migration(
-      semver: Version(0, 3, 3).canonicalizedVersion,
-      minClientVersion: Version(0, 3, 4).canonicalizedVersion,
+      semver: Version(0, 3, 7).canonicalizedVersion,
+      minClientVersion: Version(0, 3, 7).canonicalizedVersion,
     );
   }
 
