@@ -245,8 +245,8 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                   } catch (e, st) {
                     if (context.mounted) {
                       await showExceptionDialog(context: context, exception: e, stackTrace: st);
-                      rethrow;
                     }
+                    rethrow;
                   }
                 });
               }

@@ -267,7 +267,7 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
     if (isDevelopment) {
       return Banner(message: 'DEV', location: BannerLocation.bottomEnd, child: result);
     }
-    return TickerMode(enabled: false, child: result);
+    return result;
   }
 }
 
