@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-11-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.8`](#wrestling_scoreboard_client---v038)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.8`
+
+ - **FIX**: Reenable ticker mode. ([c0566fb3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c0566fb39432357a337435888d0d0dbf2d29f6c7))
+ - **FEAT**: Propose to pair bouts if opponent participations available ([#231](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/231)). ([dfa4774d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dfa4774d52fddc22ee01beaaa3bd67ff6a290e97))
+
+
 ## 2025-11-09
 
 ### Changes

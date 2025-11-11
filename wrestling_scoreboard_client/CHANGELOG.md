@@ -1,3 +1,8 @@
+## 0.3.8
+
+ - **FIX**: Reenable ticker mode. ([c0566fb3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c0566fb39432357a337435888d0d0dbf2d29f6c7))
+ - **FEAT**: Propose to pair bouts if opponent participations available ([#231](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/231)). ([dfa4774d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/dfa4774d52fddc22ee01beaaa3bd67ff6a290e97))
+
 ## 0.3.7
 
  - **REFACTOR**: Change logic how bouts are updated ([#222](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/222)). ([e474d919](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e474d919c83c3a5904e21a16c928487ef5de4cf9))
