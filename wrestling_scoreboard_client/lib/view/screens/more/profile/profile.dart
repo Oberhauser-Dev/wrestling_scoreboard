@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/change_password.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -22,7 +24,7 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(localizations.profile)),
       body: ResponsiveScrollView(
-        child: Card(
+        child: PaddedCard(
           child: LoadingBuilder<User?>(
             future: ref.watch(userProvider),
             builder: (context, user) {
@@ -50,23 +52,40 @@ class ProfileScreen extends ConsumerWidget {
                       title: Text(user.privilege.name),
                       subtitle: Text(localizations.privilege),
                     ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: InkWell(
-                        onTap: () => context.push('/${MoreScreen.route}/${ChangePasswordScreen.route}'),
-                        child: Text(localizations.auth_change_password),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await ref.read(userProvider.notifier).signOut();
-                          if (context.mounted) Navigator.of(context).pop();
-                        },
-                        child: Text(localizations.auth_signOut),
-                      ),
+                    Column(
+                      spacing: 16,
+                      children: [
+                        InkWell(
+                          onTap: () => context.push('/${MoreScreen.route}/${ChangePasswordScreen.route}'),
+                          child: Text(localizations.auth_change_password),
+                        ),
+                        ElevatedButton(
+                          onPressed:
+                              () => catchAsync(context, () async {
+                                await ref.read(userProvider.notifier).signOut();
+                                if (context.mounted) Navigator.of(context).pop();
+                              }),
+                          child: Text(localizations.auth_signOut),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.errorContainer,
+                          ),
+                          onPressed:
+                              () => catchAsync(context, () async {
+                                final result = await showOkCancelDialog(
+                                  title: Text(localizations.auth_delete),
+                                  context: context,
+                                  child: Text(localizations.auth_delete_confirmation),
+                                );
+                                if (result && context.mounted) {
+                                  await ref.read(userProvider.notifier).deleteUser();
+                                  if (context.mounted) Navigator.of(context).pop();
+                                }
+                              }),
+                          child: Text(localizations.auth_delete),
+                        ),
+                      ],
                     ),
                   ],
                 );

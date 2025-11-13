@@ -33,4 +33,10 @@ class UserNotifier extends _$UserNotifier {
     final dataManager = await ref.read(dataManagerProvider);
     await dataManager.updateUser(user);
   }
+
+  Future<void> deleteUser() async {
+    final dataManager = await ref.read(dataManagerProvider);
+    await dataManager.deleteUser();
+    await signOut();
+  }
 }

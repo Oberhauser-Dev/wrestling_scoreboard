@@ -58,6 +58,21 @@ class AuthController {
     return Response.ok('{"status": "success"}');
   }
 
+  Future<Response> deleteSingle(Request request, User? user) async {
+    if (user == null) {
+      return Response.badRequest(body: 'The user to be deleted does not exist');
+    }
+    if (user.privilege >= UserPrivilege.admin) {
+      return Response.badRequest(
+        body: '''As admin you cannot delete your own account.
+This prevents accidentally excluding access to the system.
+Ask another admin to remove you.''',
+      );
+    }
+    await SecuredUserController().deleteSingle(user.id!);
+    return Response.ok('{"status": "success"}');
+  }
+
   Future<Response> requestUser(Request request, User? user) async {
     return Response.ok(jsonEncode(user));
   }

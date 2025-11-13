@@ -116,6 +116,8 @@
   "auth_password_save_phrase": "Save password",
   "auth_change_password": "Change password",
   "auth_agreeTermsAndConditions_phrase": "I read and agree to Terms & Conditions",
+  "auth_delete": "Delete account",
+  "auth_delete_confirmation": "Are you sure you want to delete your account?",
 
   "imprint": "Imprint",
   "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",

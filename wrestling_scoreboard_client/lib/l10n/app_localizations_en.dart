@@ -243,6 +243,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get auth_agreeTermsAndConditions_phrase => 'I read and agree to Terms & Conditions';
 
   @override
+  String get auth_delete => 'Delete account';
+
+  @override
+  String get auth_delete_confirmation => 'Are you sure you want to delete your account?';
+
+  @override
   String get imprint => 'Imprint';
 
   @override

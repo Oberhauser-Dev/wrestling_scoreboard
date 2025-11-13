@@ -193,4 +193,6 @@ abstract class AuthManager {
   Future<User?> getUser();
 
   Future<void> updateUser(User user);
+
+  Future<void> deleteUser();
 }
