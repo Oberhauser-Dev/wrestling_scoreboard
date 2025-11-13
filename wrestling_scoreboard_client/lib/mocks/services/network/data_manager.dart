@@ -531,6 +531,12 @@ class MockDataManager extends DataManager {
   }
 
   @override
+  Future<void> deleteUser() {
+    // TODO: implement deleteUser
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> mergeObjects<T extends DataObject>(List<T> objects) {
     // TODO: implement mergeObjects
     throw UnimplementedError();

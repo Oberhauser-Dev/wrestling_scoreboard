@@ -345,6 +345,14 @@ class RestDataManager extends DataManager {
 
     await _handleResponse(response, errorMessage: 'Failed to change password');
   }
+
+  @override
+  Future<void> deleteUser() async {
+    final uri = Uri.parse('$_apiUrl/auth/user');
+    final response = await http.delete(uri, headers: _headers);
+
+    await _handleResponse(response, errorMessage: 'Failed to delete user ${authService?.header}');
+  }
 }
 
 class RestException implements Exception {

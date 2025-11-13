@@ -524,6 +524,18 @@ abstract class AppLocalizations {
   /// **'I read and agree to Terms & Conditions'**
   String get auth_agreeTermsAndConditions_phrase;
 
+  /// No description provided for @auth_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get auth_delete;
+
+  /// No description provided for @auth_delete_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your account?'**
+  String get auth_delete_confirmation;
+
   /// No description provided for @imprint.
   ///
   /// In en, this message translates to:

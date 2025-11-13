@@ -245,6 +245,12 @@ class AppLocalizationsDe extends AppLocalizations {
       'Ich habe die Allgemeinen Geschäftsbedingungen gelesen und stimme ihnen zu';
 
   @override
+  String get auth_delete => 'Account löschen';
+
+  @override
+  String get auth_delete_confirmation => 'Bist du sicher, dass du dein Konto löschen möchtest?';
+
+  @override
   String get imprint => 'Impressum';
 
   @override

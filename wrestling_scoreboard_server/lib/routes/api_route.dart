@@ -76,6 +76,7 @@ class ApiRoute {
     router.post('/auth/sign_in', authController.signIn);
     router.post('/auth/sign_up', authController.signUp);
     router.restrictedPost('/auth/user', authController.updateSingle);
+    router.restrictedDelete('/auth/user', authController.deleteSingle);
 
     final userController = SecuredUserController();
     router.restrictedPost('/user', userController.postSingleUser, UserPrivilege.admin); // Create
