@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
+import 'package:wrestling_scoreboard_server/services/mail.dart';
 
 class AuthController {
   late final String jwtSecret;
@@ -18,16 +19,37 @@ class AuthController {
     this.jwtSecret = jwtSecret;
   }
 
+  Future<Response> requestVerificationCode(Request request) async {
+    if (!supportEmail) {
+      return Response.badRequest(body: 'Requesting a verification code is not supported on this server.');
+    }
+    final message = await request.readAsString();
+    final verificationCodeRequest = VerificationCodeRequest.fromJson(jsonDecode(message));
+
+    // Do sending without awaiting to not give an attacker the possibility to find out if the email is correct.
+    (() async {
+      SecuredUser? securedUser = await SecuredUserController().getSingleByUsername(verificationCodeRequest.username!);
+      // Return silently, if email is incorrect the user should not get a feedback.
+      if (securedUser == null) return;
+      securedUser = await SecuredUserController().generateVerificationCode(securedUser);
+      await SecuredUserController().updateSingle(securedUser);
+      await SecuredUserController().sendVerificationEmail(securedUser);
+    })();
+    return Response.ok('{"status": "success"}');
+  }
+
   Future<Response> signUp(Request request) async {
     final message = await request.readAsString();
     var user = parseAndCheckUser(message);
     user = user.copyWith(
+      // Do not allow verify the email upfront.
+      isEmailVerified: false,
       // Do not allow setting or raising privileges for oneself.
       privilege: UserPrivilege.none,
-      // Do always set the current date time as createdAt property
+      // Do always set the current date time as createdAt property.
       createdAt: MockableDateTime.now(),
     );
-    await SecuredUserController().createSingleUser(user);
+    await SecuredUserController().createSingle(user.toSecuredUser());
     return Response.ok('{"status": "success"}');
   }
 
@@ -42,18 +64,8 @@ class AuthController {
     }
 
     final updatedSecuredUser = updatedUser.toSecuredUser();
+    final securedUser = await SecuredUserController().updateSingleReturn(updatedSecuredUser);
 
-    SecuredUser securedUser = await SecuredUserController().getSingle(user.id!, obfuscate: false);
-    securedUser = securedUser.copyWith(
-      username: updatedSecuredUser.username,
-      email: updatedSecuredUser.email,
-      person: updatedSecuredUser.person,
-      passwordHash: updatedSecuredUser.passwordHash ?? securedUser.passwordHash,
-      salt: updatedSecuredUser.salt ?? securedUser.salt,
-      // privilege: Do not allow raising privileges for oneself.
-      // createdAt: Do not allow to set the createdAt property.
-    );
-    await SecuredUserController().updateSingle(securedUser);
     unicastUpdateSingle<SecuredUser>((obfuscate) async => securedUser, user: user);
     return Response.ok('{"status": "success"}');
   }
@@ -82,19 +94,51 @@ Ask another admin to remove you.''',
     if (authorizationHeader == null) return Response.badRequest(body: 'No authorization header provided.');
     final authService = BasicAuthService.fromHeader(authorizationHeader);
 
-    final user = await SecuredUserController().getSingleByUsername(authService.username);
-    if (user == null) return Response.badRequest(body: 'No user found with username "${authService.username}".');
+    // Use the same response for username or password, so an attacker cannot differentiate which email is registered.
+    final badUserOrPasswordResponse = Response.badRequest(body: 'Username or password incorrect.');
+    final securedUser = await SecuredUserController().getSingleByUsername(authService.username);
+    if (securedUser == null) return badUserOrPasswordResponse;
 
-    if (!user.checkPassword(authService.password)) {
-      return Response.badRequest(body: 'Password incorrect for username "${authService.username}".');
+    if (!securedUser.checkPassword(authService.password)) {
+      return badUserOrPasswordResponse;
     }
-    final String token = _signToken(user);
+    final String token = _signToken(securedUser);
     return Response.ok(token);
+  }
+
+  Future<Response> signInVerification(Request request) async {
+    final message = await request.readAsString();
+    final userVerification = UserVerification.fromJson(jsonDecode(message));
+    if (!supportEmail || userVerification.method != VerificationMethod.email) {
+      return Response.badRequest(
+        body: 'Verification method "${userVerification.method}" is not supported at the moment.',
+      );
+    }
+    final securedUser = await SecuredUserController().getSingleByUsername(userVerification.username);
+    if (securedUser != null &&
+        // Also allow already verified emails to authenticate
+        securedUser.emailVerificationCode != null &&
+        securedUser.emailVerificationCode!.isNotEmpty &&
+        securedUser.emailVerificationCode == userVerification.verificationCode &&
+        securedUser.emailVerificationCodeExpirationDate != null &&
+        securedUser.emailVerificationCodeExpirationDate!.isAfter(MockableDateTime.now())) {
+      await SecuredUserController().updateSingle(
+        securedUser.copyWith(
+          isEmailVerified: true,
+          emailVerificationCode: null,
+          emailVerificationCodeExpirationDate: null,
+        ),
+      );
+      final String token = _signToken(securedUser);
+      return Response.ok(token);
+    }
+    // Do not state whether the user or the verification code is valid, to not give attackers a chance to detect valid usernames.
+    return Response.badRequest(body: 'User or verification code not valid.');
   }
 
   String _signToken(SecuredUser user) {
     final int jwtExpiresInDays = env.jwtExpiresInDays ?? 90;
-    final jwtIssuer = env.jwtIssuer ?? 'Wrestling Scoreboard (oberhauser.dev)';
+    final jwtIssuer = env.issuer ?? 'Wrestling Scoreboard (oberhauser.dev)';
 
     final jwt = JWT(
       // Payload

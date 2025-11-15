@@ -251,6 +251,28 @@ class AppLocalizationsDe extends AppLocalizations {
   String get auth_delete_confirmation => 'Bist du sicher, dass du dein Konto löschen möchtest?';
 
   @override
+  String get auth_warning_email_not_verified => 'Die Email-Adresse ist nicht verifiziert.';
+
+  @override
+  String get auth_verfication => 'Nutzer verifizieren';
+
+  @override
+  String get auth_verificationCode => 'Verifizierungs-Code';
+
+  @override
+  String get auth_verification_confirmation => 'Nutzer wurde erfolgreich verifiziert.';
+
+  @override
+  String get auth_forgotPassword => 'Passwort vergessen?';
+
+  @override
+  String get auth_resetPassword => 'Passwort zurücksetzen';
+
+  @override
+  String get auth_verificationCodeSend_confirmation =>
+      'Falls das Konto existiert, solltest du eine E-Mail mit einem Verifizierungs-Code erhalten.';
+
+  @override
   String get imprint => 'Impressum';
 
   @override

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$User {
 
- int? get id; String? get email; String get username; String? get password; Person? get person; DateTime get createdAt; UserPrivilege get privilege;
+ int? get id; String? get email; bool get isEmailVerified; String get username; String? get password; Person? get person; DateTime get createdAt; UserPrivilege get privilege;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.password, password) || other.password == password)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.username, username) || other.username == username)&&(identical(other.password, password) || other.password == password)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,username,password,person,createdAt,privilege);
+int get hashCode => Object.hash(runtimeType,id,email,isEmailVerified,username,password,person,createdAt,privilege);
 
 @override
 String toString() {
-  return 'User(id: $id, email: $email, username: $username, password: $password, person: $person, createdAt: $createdAt, privilege: $privilege)';
+  return 'User(id: $id, email: $email, isEmailVerified: $isEmailVerified, username: $username, password: $password, person: $person, createdAt: $createdAt, privilege: $privilege)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserCopyWith<$Res>  {
   factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? email, String username, String? password, Person? person, DateTime createdAt, UserPrivilege privilege
+ int? id, String? email, bool isEmailVerified, String username, String? password, Person? person, DateTime createdAt, UserPrivilege privilege
 });
 
 
@@ -65,11 +65,12 @@ class _$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? username = null,Object? password = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? isEmailVerified = null,Object? username = null,Object? password = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String?,isEmailVerified: null == isEmailVerified ? _self.isEmailVerified : isEmailVerified // ignore: cast_nullable_to_non_nullable
+as bool,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,password: freezed == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String?,person: freezed == person ? _self.person : person // ignore: cast_nullable_to_non_nullable
 as Person?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -171,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? email,  String username,  String? password,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? email,  bool isEmailVerified,  String username,  String? password,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.email,_that.username,_that.password,_that.person,_that.createdAt,_that.privilege);case _:
+return $default(_that.id,_that.email,_that.isEmailVerified,_that.username,_that.password,_that.person,_that.createdAt,_that.privilege);case _:
   return orElse();
 
 }
@@ -192,10 +193,10 @@ return $default(_that.id,_that.email,_that.username,_that.password,_that.person,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? email,  String username,  String? password,  Person? person,  DateTime createdAt,  UserPrivilege privilege)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? email,  bool isEmailVerified,  String username,  String? password,  Person? person,  DateTime createdAt,  UserPrivilege privilege)  $default,) {final _that = this;
 switch (_that) {
 case _User():
-return $default(_that.id,_that.email,_that.username,_that.password,_that.person,_that.createdAt,_that.privilege);case _:
+return $default(_that.id,_that.email,_that.isEmailVerified,_that.username,_that.password,_that.person,_that.createdAt,_that.privilege);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +213,10 @@ return $default(_that.id,_that.email,_that.username,_that.password,_that.person,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? email,  String username,  String? password,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? email,  bool isEmailVerified,  String username,  String? password,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.email,_that.username,_that.password,_that.person,_that.createdAt,_that.privilege);case _:
+return $default(_that.id,_that.email,_that.isEmailVerified,_that.username,_that.password,_that.person,_that.createdAt,_that.privilege);case _:
   return null;
 
 }
@@ -227,11 +228,12 @@ return $default(_that.id,_that.email,_that.username,_that.password,_that.person,
 @JsonSerializable()
 
 class _User extends User {
-  const _User({this.id, this.email, required this.username, this.password, this.person, required this.createdAt, this.privilege = UserPrivilege.none}): super._();
+  const _User({this.id, this.email, this.isEmailVerified = false, required this.username, this.password, this.person, required this.createdAt, this.privilege = UserPrivilege.none}): super._();
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  int? id;
 @override final  String? email;
+@override@JsonKey() final  bool isEmailVerified;
 @override final  String username;
 @override final  String? password;
 @override final  Person? person;
@@ -251,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.password, password) || other.password == password)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.username, username) || other.username == username)&&(identical(other.password, password) || other.password == password)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,username,password,person,createdAt,privilege);
+int get hashCode => Object.hash(runtimeType,id,email,isEmailVerified,username,password,person,createdAt,privilege);
 
 @override
 String toString() {
-  return 'User(id: $id, email: $email, username: $username, password: $password, person: $person, createdAt: $createdAt, privilege: $privilege)';
+  return 'User(id: $id, email: $email, isEmailVerified: $isEmailVerified, username: $username, password: $password, person: $person, createdAt: $createdAt, privilege: $privilege)';
 }
 
 
@@ -271,7 +273,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? email, String username, String? password, Person? person, DateTime createdAt, UserPrivilege privilege
+ int? id, String? email, bool isEmailVerified, String username, String? password, Person? person, DateTime createdAt, UserPrivilege privilege
 });
 
 
@@ -288,11 +290,12 @@ class __$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? username = null,Object? password = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? isEmailVerified = null,Object? username = null,Object? password = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
   return _then(_User(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String?,isEmailVerified: null == isEmailVerified ? _self.isEmailVerified : isEmailVerified // ignore: cast_nullable_to_non_nullable
+as bool,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,password: freezed == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String?,person: freezed == person ? _self.person : person // ignore: cast_nullable_to_non_nullable
 as Person?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -320,7 +323,7 @@ $PersonCopyWith<$Res>? get person {
 /// @nodoc
 mixin _$SecuredUser {
 
- int? get id; String? get email; String get username; List<int>? get passwordHash; String? get salt; Person? get person; DateTime get createdAt; UserPrivilege get privilege;
+ int? get id; String? get email; bool get isEmailVerified; String? get emailVerificationCode; DateTime? get emailVerificationCodeExpirationDate; String get username; List<int>? get passwordHash; String? get salt; Person? get person; DateTime get createdAt; UserPrivilege get privilege;
 /// Create a copy of SecuredUser
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -333,16 +336,16 @@ $SecuredUserCopyWith<SecuredUser> get copyWith => _$SecuredUserCopyWithImpl<Secu
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SecuredUser&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other.passwordHash, passwordHash)&&(identical(other.salt, salt) || other.salt == salt)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SecuredUser&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.emailVerificationCode, emailVerificationCode) || other.emailVerificationCode == emailVerificationCode)&&(identical(other.emailVerificationCodeExpirationDate, emailVerificationCodeExpirationDate) || other.emailVerificationCodeExpirationDate == emailVerificationCodeExpirationDate)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other.passwordHash, passwordHash)&&(identical(other.salt, salt) || other.salt == salt)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,username,const DeepCollectionEquality().hash(passwordHash),salt,person,createdAt,privilege);
+int get hashCode => Object.hash(runtimeType,id,email,isEmailVerified,emailVerificationCode,emailVerificationCodeExpirationDate,username,const DeepCollectionEquality().hash(passwordHash),salt,person,createdAt,privilege);
 
 @override
 String toString() {
-  return 'SecuredUser(id: $id, email: $email, username: $username, passwordHash: $passwordHash, salt: $salt, person: $person, createdAt: $createdAt, privilege: $privilege)';
+  return 'SecuredUser(id: $id, email: $email, isEmailVerified: $isEmailVerified, emailVerificationCode: $emailVerificationCode, emailVerificationCodeExpirationDate: $emailVerificationCodeExpirationDate, username: $username, passwordHash: $passwordHash, salt: $salt, person: $person, createdAt: $createdAt, privilege: $privilege)';
 }
 
 
@@ -353,7 +356,7 @@ abstract mixin class $SecuredUserCopyWith<$Res>  {
   factory $SecuredUserCopyWith(SecuredUser value, $Res Function(SecuredUser) _then) = _$SecuredUserCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? email, String username, List<int>? passwordHash, String? salt, Person? person, DateTime createdAt, UserPrivilege privilege
+ int? id, String? email, bool isEmailVerified, String? emailVerificationCode, DateTime? emailVerificationCodeExpirationDate, String username, List<int>? passwordHash, String? salt, Person? person, DateTime createdAt, UserPrivilege privilege
 });
 
 
@@ -370,11 +373,14 @@ class _$SecuredUserCopyWithImpl<$Res>
 
 /// Create a copy of SecuredUser
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? username = null,Object? passwordHash = freezed,Object? salt = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? isEmailVerified = null,Object? emailVerificationCode = freezed,Object? emailVerificationCodeExpirationDate = freezed,Object? username = null,Object? passwordHash = freezed,Object? salt = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String?,isEmailVerified: null == isEmailVerified ? _self.isEmailVerified : isEmailVerified // ignore: cast_nullable_to_non_nullable
+as bool,emailVerificationCode: freezed == emailVerificationCode ? _self.emailVerificationCode : emailVerificationCode // ignore: cast_nullable_to_non_nullable
+as String?,emailVerificationCodeExpirationDate: freezed == emailVerificationCodeExpirationDate ? _self.emailVerificationCodeExpirationDate : emailVerificationCodeExpirationDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,passwordHash: freezed == passwordHash ? _self.passwordHash : passwordHash // ignore: cast_nullable_to_non_nullable
 as List<int>?,salt: freezed == salt ? _self.salt : salt // ignore: cast_nullable_to_non_nullable
 as String?,person: freezed == person ? _self.person : person // ignore: cast_nullable_to_non_nullable
@@ -477,10 +483,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? email,  String username,  List<int>? passwordHash,  String? salt,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? email,  bool isEmailVerified,  String? emailVerificationCode,  DateTime? emailVerificationCodeExpirationDate,  String username,  List<int>? passwordHash,  String? salt,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SecuredUser() when $default != null:
-return $default(_that.id,_that.email,_that.username,_that.passwordHash,_that.salt,_that.person,_that.createdAt,_that.privilege);case _:
+return $default(_that.id,_that.email,_that.isEmailVerified,_that.emailVerificationCode,_that.emailVerificationCodeExpirationDate,_that.username,_that.passwordHash,_that.salt,_that.person,_that.createdAt,_that.privilege);case _:
   return orElse();
 
 }
@@ -498,10 +504,10 @@ return $default(_that.id,_that.email,_that.username,_that.passwordHash,_that.sal
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? email,  String username,  List<int>? passwordHash,  String? salt,  Person? person,  DateTime createdAt,  UserPrivilege privilege)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? email,  bool isEmailVerified,  String? emailVerificationCode,  DateTime? emailVerificationCodeExpirationDate,  String username,  List<int>? passwordHash,  String? salt,  Person? person,  DateTime createdAt,  UserPrivilege privilege)  $default,) {final _that = this;
 switch (_that) {
 case _SecuredUser():
-return $default(_that.id,_that.email,_that.username,_that.passwordHash,_that.salt,_that.person,_that.createdAt,_that.privilege);case _:
+return $default(_that.id,_that.email,_that.isEmailVerified,_that.emailVerificationCode,_that.emailVerificationCodeExpirationDate,_that.username,_that.passwordHash,_that.salt,_that.person,_that.createdAt,_that.privilege);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -518,10 +524,10 @@ return $default(_that.id,_that.email,_that.username,_that.passwordHash,_that.sal
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? email,  String username,  List<int>? passwordHash,  String? salt,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? email,  bool isEmailVerified,  String? emailVerificationCode,  DateTime? emailVerificationCodeExpirationDate,  String username,  List<int>? passwordHash,  String? salt,  Person? person,  DateTime createdAt,  UserPrivilege privilege)?  $default,) {final _that = this;
 switch (_that) {
 case _SecuredUser() when $default != null:
-return $default(_that.id,_that.email,_that.username,_that.passwordHash,_that.salt,_that.person,_that.createdAt,_that.privilege);case _:
+return $default(_that.id,_that.email,_that.isEmailVerified,_that.emailVerificationCode,_that.emailVerificationCodeExpirationDate,_that.username,_that.passwordHash,_that.salt,_that.person,_that.createdAt,_that.privilege);case _:
   return null;
 
 }
@@ -533,11 +539,14 @@ return $default(_that.id,_that.email,_that.username,_that.passwordHash,_that.sal
 @JsonSerializable()
 
 class _SecuredUser extends SecuredUser {
-  const _SecuredUser({this.id, this.email, required this.username, final  List<int>? passwordHash, this.salt, this.person, required this.createdAt, this.privilege = UserPrivilege.none}): assert((passwordHash != null && salt != null) || (passwordHash == null && salt == null)),_passwordHash = passwordHash,super._();
+  const _SecuredUser({this.id, this.email, this.isEmailVerified = false, this.emailVerificationCode, this.emailVerificationCodeExpirationDate, required this.username, final  List<int>? passwordHash, this.salt, this.person, required this.createdAt, this.privilege = UserPrivilege.none}): assert((passwordHash != null && salt != null) || (passwordHash == null && salt == null)),_passwordHash = passwordHash,super._();
   factory _SecuredUser.fromJson(Map<String, dynamic> json) => _$SecuredUserFromJson(json);
 
 @override final  int? id;
 @override final  String? email;
+@override@JsonKey() final  bool isEmailVerified;
+@override final  String? emailVerificationCode;
+@override final  DateTime? emailVerificationCodeExpirationDate;
 @override final  String username;
  final  List<int>? _passwordHash;
 @override List<int>? get passwordHash {
@@ -566,16 +575,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SecuredUser&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other._passwordHash, _passwordHash)&&(identical(other.salt, salt) || other.salt == salt)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SecuredUser&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.emailVerificationCode, emailVerificationCode) || other.emailVerificationCode == emailVerificationCode)&&(identical(other.emailVerificationCodeExpirationDate, emailVerificationCodeExpirationDate) || other.emailVerificationCodeExpirationDate == emailVerificationCodeExpirationDate)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other._passwordHash, _passwordHash)&&(identical(other.salt, salt) || other.salt == salt)&&(identical(other.person, person) || other.person == person)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.privilege, privilege) || other.privilege == privilege));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,username,const DeepCollectionEquality().hash(_passwordHash),salt,person,createdAt,privilege);
+int get hashCode => Object.hash(runtimeType,id,email,isEmailVerified,emailVerificationCode,emailVerificationCodeExpirationDate,username,const DeepCollectionEquality().hash(_passwordHash),salt,person,createdAt,privilege);
 
 @override
 String toString() {
-  return 'SecuredUser(id: $id, email: $email, username: $username, passwordHash: $passwordHash, salt: $salt, person: $person, createdAt: $createdAt, privilege: $privilege)';
+  return 'SecuredUser(id: $id, email: $email, isEmailVerified: $isEmailVerified, emailVerificationCode: $emailVerificationCode, emailVerificationCodeExpirationDate: $emailVerificationCodeExpirationDate, username: $username, passwordHash: $passwordHash, salt: $salt, person: $person, createdAt: $createdAt, privilege: $privilege)';
 }
 
 
@@ -586,7 +595,7 @@ abstract mixin class _$SecuredUserCopyWith<$Res> implements $SecuredUserCopyWith
   factory _$SecuredUserCopyWith(_SecuredUser value, $Res Function(_SecuredUser) _then) = __$SecuredUserCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? email, String username, List<int>? passwordHash, String? salt, Person? person, DateTime createdAt, UserPrivilege privilege
+ int? id, String? email, bool isEmailVerified, String? emailVerificationCode, DateTime? emailVerificationCodeExpirationDate, String username, List<int>? passwordHash, String? salt, Person? person, DateTime createdAt, UserPrivilege privilege
 });
 
 
@@ -603,11 +612,14 @@ class __$SecuredUserCopyWithImpl<$Res>
 
 /// Create a copy of SecuredUser
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? username = null,Object? passwordHash = freezed,Object? salt = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? isEmailVerified = null,Object? emailVerificationCode = freezed,Object? emailVerificationCodeExpirationDate = freezed,Object? username = null,Object? passwordHash = freezed,Object? salt = freezed,Object? person = freezed,Object? createdAt = null,Object? privilege = null,}) {
   return _then(_SecuredUser(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String?,isEmailVerified: null == isEmailVerified ? _self.isEmailVerified : isEmailVerified // ignore: cast_nullable_to_non_nullable
+as bool,emailVerificationCode: freezed == emailVerificationCode ? _self.emailVerificationCode : emailVerificationCode // ignore: cast_nullable_to_non_nullable
+as String?,emailVerificationCodeExpirationDate: freezed == emailVerificationCodeExpirationDate ? _self.emailVerificationCodeExpirationDate : emailVerificationCodeExpirationDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,passwordHash: freezed == passwordHash ? _self._passwordHash : passwordHash // ignore: cast_nullable_to_non_nullable
 as List<int>?,salt: freezed == salt ? _self.salt : salt // ignore: cast_nullable_to_non_nullable
 as String?,person: freezed == person ? _self.person : person // ignore: cast_nullable_to_non_nullable

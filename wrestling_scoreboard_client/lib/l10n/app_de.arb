@@ -115,6 +115,13 @@
   "auth_agreeTermsAndConditions_phrase": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und stimme ihnen zu",
   "auth_delete": "Account löschen",
   "auth_delete_confirmation": "Bist du sicher, dass du dein Konto löschen möchtest?",
+  "auth_warning_email_not_verified": "Die Email-Adresse ist nicht verifiziert.",
+  "auth_verfication": "Nutzer verifizieren",
+  "auth_verificationCode": "Verifizierungs-Code",
+  "auth_verification_confirmation": "Nutzer wurde erfolgreich verifiziert.",
+  "auth_forgotPassword": "Passwort vergessen?",
+  "auth_resetPassword": "Passwort zurücksetzen",
+  "auth_verificationCodeSend_confirmation": "Falls das Konto existiert, solltest du eine E-Mail mit einem Verifizierungs-Code erhalten.",
 
   "imprint": "Impressum",
   "imprint_phrase": "**Angaben gem. § 5 TMG:**\n\nOberhauser Dev\n\nAugust Oberhauser\n\nGroßhausener Str. 16\n\n86551 Aichach\n\n**Kontaktaufnahme:**\n\nE-Mail: info@oberhauser.dev\n\n**Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz:**\n\nDE XXX XXX XXX",

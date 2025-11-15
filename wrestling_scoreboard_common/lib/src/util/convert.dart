@@ -23,16 +23,19 @@ Uint8List int32To5BitChunksBigEndian(int value) {
   return Uint8List.sublistView(chunks, firstNonZero);
 }
 
-const rfc4648Base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-final rfc4648Base64Runes = rfc4648Base64.runes.toList();
+/// https://datatracker.ietf.org/doc/html/rfc4648#section-6
+const rfc4648Base32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+final rfc4648Base32Runes = rfc4648Base32.runes.toList();
 
-String encodeBase32(int value) => int32To5BitChunksBigEndian(value).map((e) => rfc4648Base64[e]).join();
+/// RFC4648 Base32 encoder
+String encodeBase32(int value) => int32To5BitChunksBigEndian(value).map((e) => rfc4648Base32[e]).join();
 
+/// RFC4648 Base32 decoder
 int decodeBase32(String value) {
   int res = 0;
   final indexedRunes = value.toUpperCase().runes.indexed;
   for (final (index, rune) in indexedRunes) {
-    final runeIndex = rfc4648Base64Runes.indexOf(rune);
+    final runeIndex = rfc4648Base32Runes.indexOf(rune);
     if (runeIndex == -1) {
       throw FormatException('Cannot parse character ${String.fromCharCode(rune)}');
     }

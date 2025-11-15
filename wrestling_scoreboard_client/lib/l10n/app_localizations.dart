@@ -536,6 +536,48 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete your account?'**
   String get auth_delete_confirmation;
 
+  /// No description provided for @auth_warning_email_not_verified.
+  ///
+  /// In en, this message translates to:
+  /// **'The email address is not verified.'**
+  String get auth_warning_email_not_verified;
+
+  /// No description provided for @auth_verfication.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify user'**
+  String get auth_verfication;
+
+  /// No description provided for @auth_verificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Code'**
+  String get auth_verificationCode;
+
+  /// No description provided for @auth_verification_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'User was verified successfully.'**
+  String get auth_verification_confirmation;
+
+  /// No description provided for @auth_forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get auth_forgotPassword;
+
+  /// No description provided for @auth_resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get auth_resetPassword;
+
+  /// No description provided for @auth_verificationCodeSend_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'If the accounts exists, you should receive an email containing a verification code.'**
+  String get auth_verificationCodeSend_confirmation;
+
   /// No description provided for @imprint.
   ///
   /// In en, this message translates to:

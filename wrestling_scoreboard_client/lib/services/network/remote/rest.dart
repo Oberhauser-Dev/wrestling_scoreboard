@@ -137,12 +137,12 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<Migration> getMigration() async {
-    final uri = Uri.parse('$_apiUrl/database/${Migration.cTableName}');
+  Future<RemoteConfig> getRemoteConfig() async {
+    final uri = Uri.parse('$_apiUrl/${RemoteConfig.cTableName}');
     final response = await http.get(uri, headers: _headers);
 
     await _handleResponse(response, errorMessage: 'Failed to get the migration versions');
-    return Migration.fromJson(jsonDecode(response.body));
+    return RemoteConfig.fromJson(jsonDecode(response.body));
   }
 
   @override
@@ -329,6 +329,15 @@ class RestDataManager extends DataManager {
   }
 
   @override
+  Future<String> signInWithVerification(UserVerification verification) async {
+    final uri = Uri.parse('$_apiUrl/auth/${UserVerification.cTableName}');
+    final response = await http.post(uri, body: jsonEncode(verification), headers: _headers);
+
+    await _handleResponse(response, errorMessage: 'Failed to verify user for $verification');
+    return response.body;
+  }
+
+  @override
   Future<User?> getUser() async {
     if (authService == null) return null;
     final uri = Uri.parse('$_apiUrl/auth/user');
@@ -352,6 +361,18 @@ class RestDataManager extends DataManager {
     final response = await http.delete(uri, headers: _headers);
 
     await _handleResponse(response, errorMessage: 'Failed to delete user ${authService?.header}');
+  }
+
+  @override
+  Future<void> requestVerificationCode({required String username}) async {
+    final uri = Uri.parse('$_apiUrl/auth/${VerificationCodeRequest.cTableName}');
+    final response = await http.post(
+      uri,
+      body: jsonEncode(VerificationCodeRequest(username: username)),
+      headers: _headers,
+    );
+
+    await _handleResponse(response, errorMessage: 'Failed to request verification code for username $username');
   }
 }
 

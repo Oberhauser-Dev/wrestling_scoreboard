@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict ErX3m6tgp7Be6BwUmNnF8k8yMFGb9oHXA2pByJQ9thWA2Z5ndYxu6O4uvC0NjLb
+\restrict JyEhLoTecUgr7jj5Dgep2uGX4pHGPw4JTSfgW8X46RR7KAxD8t34PBdepMkdZVe
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -1240,7 +1240,10 @@ CREATE TABLE public.secured_user (
     person_id integer,
     salt character varying(127) NOT NULL,
     created_at date NOT NULL,
-    privilege public.user_privilege DEFAULT 'none'::public.user_privilege NOT NULL
+    privilege public.user_privilege DEFAULT 'none'::public.user_privilege NOT NULL,
+    is_email_verified boolean DEFAULT false NOT NULL,
+    email_verification_code character varying,
+    email_verification_code_expiration_date timestamp with time zone
 );
 
 
@@ -2065,7 +2068,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7	0.3.7
+0.3.8-pre.1	0.3.7
 \.
 
 
@@ -2113,8 +2116,8 @@ COPY public.person (id, prename, surname, birth_date, gender, nationality, org_s
 -- Data for Name: secured_user; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.secured_user (id, username, password_hash, email, person_id, salt, created_at, privilege) FROM stdin;
-1	admin	\\xb2950268d52c1d17f1b35edd35c071be3d320b488c81425c6b144340963e524a		\N	924VOg==	2024-08-25	admin
+COPY public.secured_user (id, username, password_hash, email, person_id, salt, created_at, privilege, is_email_verified, email_verification_code, email_verification_code_expiration_date) FROM stdin;
+1	admin	\\xb2950268d52c1d17f1b35edd35c071be3d320b488c81425c6b144340963e524a		\N	924VOg==	2024-08-25	admin	f	\N	\N
 \.
 
 
@@ -3505,5 +3508,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ErX3m6tgp7Be6BwUmNnF8k8yMFGb9oHXA2pByJQ9thWA2Z5ndYxu6O4uvC0NjLb
+\unrestrict JyEhLoTecUgr7jj5Dgep2uGX4pHGPw4JTSfgW8X46RR7KAxD8t34PBdepMkdZVe
 

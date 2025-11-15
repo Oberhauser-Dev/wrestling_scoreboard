@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/user_verification.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -76,6 +79,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                     // TODO: may add ability to connect person to account
                                   ),
                                 );
+                            if ((await ref.readAsync(remoteConfigProvider.future)).hasEmailVerification &&
+                                context.mounted) {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => UserVerificationScreen(username: _username!)),
+                              );
+                            }
                             navigator.pop();
                           }
                         }),
@@ -85,7 +95,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: InkWell(
-                    onTap: () => context.push('/${MoreScreen.route}/${SignInScreen.route}'),
+                    onTap: () => context.pushReplacement('/${MoreScreen.route}/${SignInScreen.route}'),
                     child: Text(localizations.auth_signInPrompt_phrase),
                   ),
                 ),

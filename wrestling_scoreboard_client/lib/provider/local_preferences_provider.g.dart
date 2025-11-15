@@ -395,7 +395,7 @@ final class AppDataDirectoryNotifierProvider extends $NotifierProvider<AppDataDi
   }
 }
 
-String _$appDataDirectoryNotifierHash() => r'be9f3355d01a2af2dba966bde812810739613582';
+String _$appDataDirectoryNotifierHash() => r'022f78583c7bfd8314c2c42aec93793474f2ec0d';
 
 abstract class _$AppDataDirectoryNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
@@ -746,7 +746,7 @@ final class ProposeApiImportDurationNotifierProvider
   }
 }
 
-String _$proposeApiImportDurationNotifierHash() => r'9777ac55dd525899c1c2c1e7579921669381eb8f';
+String _$proposeApiImportDurationNotifierHash() => r'68681fc51c1e126a27d8d63cc4acc696d22894bb';
 
 abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<Duration>>> {
   Raw<Future<Duration>> build();

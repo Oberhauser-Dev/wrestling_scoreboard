@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/change_password.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/user_verification.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
@@ -37,11 +40,50 @@ class ProfileScreen extends ConsumerWidget {
                       title: Text(user.username),
                       subtitle: Text(localizations.username),
                     ),
-                    // ListTile(
-                    //   leading: const Icon(Icons.email),
-                    //   title: Text(user.email ?? '-'),
-                    //   subtitle: Text(localizations.email),
-                    // ),
+                    if (!user.isEmailVerified && user.email != null && user.email!.isNotEmpty)
+                      LoadingBuilder(
+                        future: ref.watch(remoteConfigProvider.future),
+                        builder: (context, remoteConfig) {
+                          if (!remoteConfig.hasEmailVerification) return SizedBox.shrink();
+                          return IconCard(
+                            icon: const Icon(Icons.warning),
+                            child: Row(
+                              children: [
+                                Text(localizations.auth_warning_email_not_verified),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      await (await ref.read(
+                                        dataManagerProvider,
+                                      )).requestVerificationCode(username: user.username);
+                                      if (!context.mounted) return;
+                                      await showOkDialog(
+                                        context: context,
+                                        child: Text(localizations.auth_verificationCodeSend_confirmation),
+                                      );
+                                      if (context.mounted) {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => UserVerificationScreen(username: user.username),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: Text(localizations.auth_verfication),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ListTile(
+                      leading: const Icon(Icons.email),
+                      title: Text(user.email ?? '-'),
+                      subtitle: Text(localizations.email),
+                    ),
                     ListTile(
                       leading: const Icon(Icons.calendar_today),
                       title: Text(user.createdAt.toDateTimeString(context)),

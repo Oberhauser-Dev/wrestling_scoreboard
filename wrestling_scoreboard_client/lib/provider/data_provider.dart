@@ -154,3 +154,10 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
     }
   }
 }
+
+@Riverpod(dependencies: [DataManagerNotifier])
+Future<RemoteConfig> remoteConfigNotifier(Ref ref) async {
+  ref.cache();
+  final dataManager = await ref.watch(dataManagerProvider);
+  return await dataManager.getRemoteConfig();
+}
