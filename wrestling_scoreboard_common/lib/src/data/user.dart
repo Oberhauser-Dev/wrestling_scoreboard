@@ -13,6 +13,8 @@ part 'user.g.dart';
 abstract class AbstractUser implements DataObject {
   String? get email;
 
+  bool get isEmailVerified;
+
   String get username;
 
   Person? get person;
@@ -29,6 +31,7 @@ abstract class User with _$User implements AbstractUser {
   const factory User({
     int? id,
     String? email,
+    @Default(false) bool isEmailVerified,
     required String username,
     String? password,
     Person? person,
@@ -54,6 +57,7 @@ abstract class User with _$User implements AbstractUser {
       person: personId == null ? null : await getSingle<Person>(personId),
       createdAt: e['created_at'] as DateTime,
       privilege: UserPrivilege.values.byName(privilege),
+      isEmailVerified: e['is_email_verified'] as bool,
     );
   }
 
@@ -67,6 +71,7 @@ abstract class User with _$User implements AbstractUser {
       if (password != null) 'password': password,
       'created_at': createdAt,
       'privilege': privilege.name,
+      'is_email_verified': isEmailVerified,
     };
   }
 
@@ -82,6 +87,7 @@ abstract class User with _$User implements AbstractUser {
       salt: salt,
       username: username,
       email: email,
+      isEmailVerified: isEmailVerified,
       person: person,
       createdAt: createdAt,
       privilege: privilege,
@@ -114,6 +120,9 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   const factory SecuredUser({
     int? id,
     String? email,
+    @Default(false) bool isEmailVerified,
+    String? emailVerificationCode,
+    DateTime? emailVerificationCodeExpirationDate,
     required String username,
     List<int>? passwordHash,
     String? salt,
@@ -136,6 +145,9 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
       person: personId == null ? null : await getSingle<Person>(personId),
       createdAt: e['created_at'] as DateTime,
       privilege: UserPrivilege.values.byName(privilege),
+      isEmailVerified: e['is_email_verified'] as bool,
+      emailVerificationCode: e['email_verification_code'] as String?,
+      emailVerificationCodeExpirationDate: e['email_verification_code_expiration_date'] as DateTime?,
     );
   }
 
@@ -155,6 +167,9 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
       if (salt != null) 'salt': salt,
       'created_at': createdAt,
       'privilege': privilege.name,
+      'is_email_verified': isEmailVerified,
+      'email_verification_code': emailVerificationCode,
+      'email_verification_code_expiration_date': emailVerificationCodeExpirationDate,
     };
   }
 
@@ -169,7 +184,15 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   }
 
   User toUser() {
-    return User(id: id, username: username, email: email, person: person, createdAt: createdAt, privilege: privilege);
+    return User(
+      id: id,
+      username: username,
+      email: email,
+      person: person,
+      createdAt: createdAt,
+      privilege: privilege,
+      isEmailVerified: isEmailVerified,
+    );
   }
 
   static List<int> hashPassword({required String password, required String salt}) {

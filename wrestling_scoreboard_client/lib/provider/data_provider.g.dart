@@ -228,3 +228,37 @@ final class ManyDataStreamFamily extends $Family {
     },
   );
 }
+
+@ProviderFor(remoteConfigNotifier)
+const remoteConfigProvider = RemoteConfigNotifierProvider._();
+
+final class RemoteConfigNotifierProvider
+    extends $FunctionalProvider<AsyncValue<RemoteConfig>, RemoteConfig, FutureOr<RemoteConfig>>
+    with $FutureModifier<RemoteConfig>, $FutureProvider<RemoteConfig> {
+  const RemoteConfigNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'remoteConfigProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[dataManagerProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[RemoteConfigNotifierProvider.$allTransitiveDependencies0],
+      );
+
+  static const $allTransitiveDependencies0 = dataManagerProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$remoteConfigNotifierHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<RemoteConfig> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<RemoteConfig> create(Ref ref) {
+    return remoteConfigNotifier(ref);
+  }
+}
+
+String _$remoteConfigNotifierHash() => r'bd7fd6ce6fe9a033aa701829a0648e03c28d573a';

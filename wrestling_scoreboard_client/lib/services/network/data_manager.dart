@@ -6,7 +6,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 
 /// Data exchange layer with CRUD operations
 abstract class DataManager implements AuthManager {
-  /// The auth service, if avilable.
+  /// The auth service, if available.
   final AuthService? authService;
 
   DataManager({this.authService});
@@ -72,7 +72,7 @@ abstract class DataManager implements AuthManager {
   /// If [isReset] is true, then delete all previous Bouts and TeamMatchBouts, else reuse the states.
   Future<void> generateBouts<S extends DataObject>(S dataObject, [bool isReset = false]);
 
-  Future<Migration> getMigration();
+  Future<RemoteConfig> getRemoteConfig();
 
   Future<String> exportDatabase();
 
@@ -188,6 +188,8 @@ abstract class DataManager implements AuthManager {
 abstract class AuthManager {
   Future<String> signIn(BasicAuthService authService);
 
+  Future<String> signInWithVerification(UserVerification verification);
+
   Future<void> signUp(User user);
 
   Future<User?> getUser();
@@ -195,4 +197,6 @@ abstract class AuthManager {
   Future<void> updateUser(User user);
 
   Future<void> deleteUser();
+
+  Future<void> requestVerificationCode({required String username});
 }

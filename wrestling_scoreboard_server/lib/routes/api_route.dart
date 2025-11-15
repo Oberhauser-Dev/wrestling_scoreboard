@@ -69,22 +69,25 @@ class ApiRoute {
     router.restrictedPost('/database/reset', databaseController.reset, UserPrivilege.admin);
     router.restrictedPost('/database/restore', databaseController.restore, UserPrivilege.admin);
     router.restrictedPost('/database/restore_default', databaseController.restorePrepopulated, UserPrivilege.admin);
+    // TODO: Remove, when clients are not likely to access this endpoint any more.
+    // ignore: deprecated_member_use_from_same_package
     router.get('/database/${Migration.cTableName}', databaseController.getMigration);
+    router.get('/${RemoteConfig.cTableName}', databaseController.getRemoteConfig);
 
     final authController = AuthController();
     router.restrictedGet('/auth/user', authController.requestUser);
     router.post('/auth/sign_in', authController.signIn);
+    router.post('/auth/${UserVerification.cTableName}', authController.signInVerification);
     router.post('/auth/sign_up', authController.signUp);
     router.restrictedPost('/auth/user', authController.updateSingle);
     router.restrictedDelete('/auth/user', authController.deleteSingle);
+    router.post('/auth/${VerificationCodeRequest.cTableName}', authController.requestVerificationCode);
 
     final userController = SecuredUserController();
-    router.restrictedPost('/user', userController.postSingleUser, UserPrivilege.admin); // Create
-    router.restrictedPost(
-      '/${SecuredUser.cTableName}',
-      userController.postRequestSingle,
-      UserPrivilege.admin,
-    ); // Update
+    // Admin: User Creation endpoint
+    router.restrictedPost('/user', userController.postRequestSingleUser, UserPrivilege.admin);
+    // Admin: User Update endpoint
+    router.restrictedPost('/${SecuredUser.cTableName}', userController.postRequestSingle, UserPrivilege.admin);
     router.restrictedGet('/${SecuredUser.cTableName}s', userController.getRequestMany, UserPrivilege.admin);
     router.restrictedGetOne(
       '/${SecuredUser.cTableName}s/<id|[0-9]+>',

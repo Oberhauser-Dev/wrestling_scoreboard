@@ -249,6 +249,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get auth_delete_confirmation => 'Are you sure you want to delete your account?';
 
   @override
+  String get auth_warning_email_not_verified => 'The email address is not verified.';
+
+  @override
+  String get auth_verfication => 'Verify user';
+
+  @override
+  String get auth_verificationCode => 'Verification Code';
+
+  @override
+  String get auth_verification_confirmation => 'User was verified successfully.';
+
+  @override
+  String get auth_forgotPassword => 'Forgot password?';
+
+  @override
+  String get auth_resetPassword => 'Reset password';
+
+  @override
+  String get auth_verificationCodeSend_confirmation =>
+      'If the accounts exists, you should receive an email containing a verification code.';
+
+  @override
   String get imprint => 'Imprint';
 
   @override

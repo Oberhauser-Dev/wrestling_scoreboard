@@ -321,7 +321,8 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
 
     _dataManagerSubscription = ref.listenManual(dataManagerProvider, (previous, next) async {
       final dataManager = await next;
-      final migration = await dataManager.getMigration();
+      final remoteConfig = await dataManager.getRemoteConfig();
+      final migration = remoteConfig.migration;
       final minClientVersion = Version.parse(migration.minClientVersion);
       final packageVersion = Version.parse(packageInfo.version);
       final serverVersion = Version.parse(migration.semver);

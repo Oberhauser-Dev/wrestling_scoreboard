@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class UserEdit extends ConsumerStatefulWidget {
@@ -49,7 +51,16 @@ class UserEditState extends ConsumerState<UserEdit> {
         initialValue: _username,
         validator: (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
       ),
-      EmailInput(initialValue: _email, onSaved: (String? value) => _email = value, isMandatory: false),
+      LoadingBuilder(
+        future: ref.watch(remoteConfigProvider.future),
+        builder: (context, remoteConfig) {
+          return EmailInput(
+            initialValue: _email,
+            onSaved: (String? value) => _email = value,
+            isMandatory: remoteConfig.hasEmailVerification,
+          );
+        },
+      ),
       if (widget.user?.id == null)
         PasswordInput(isMandatory: true, onSaved: (String? value) => _password = value, isNewPassword: true),
       ListTile(

@@ -446,10 +446,12 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<Migration> getMigration() async {
-    return Migration(
-      semver: Version(0, 3, 7).canonicalizedVersion,
-      minClientVersion: Version(0, 3, 7).canonicalizedVersion,
+  Future<RemoteConfig> getRemoteConfig() async {
+    return RemoteConfig(
+      migration: Migration(
+        semver: Version(0, 3, 7).canonicalizedVersion,
+        minClientVersion: Version(0, 3, 7).canonicalizedVersion,
+      ),
     );
   }
 
@@ -533,6 +535,18 @@ class MockDataManager extends DataManager {
   @override
   Future<void> deleteUser() {
     // TODO: implement deleteUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> requestVerificationCode({required String username}) {
+    // TODO: implement requestVerificationCode
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> signInWithVerification(UserVerification verification) {
+    // TODO: implement signInWithVerification
     throw UnimplementedError();
   }
 

@@ -3,15 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/admin/user_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/admin/admin_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -46,6 +49,17 @@ class UserOverview extends ConsumerWidget {
               subtitle: localizations.joinedOn,
               icon: Icons.calendar_today,
             ),
+            if (!data.isEmailVerified && data.email != null && data.email!.isNotEmpty)
+              LoadingBuilder(
+                future: ref.watch(remoteConfigProvider.future),
+                builder: (context, remoteConfig) {
+                  if (!remoteConfig.hasEmailVerification) return SizedBox.shrink();
+                  return IconCard(
+                    icon: const Icon(Icons.warning),
+                    child: Text(localizations.auth_warning_email_not_verified),
+                  );
+                },
+              ),
             ContentItem(title: data.email ?? '-', subtitle: localizations.email, icon: Icons.email),
             ContentItem(title: data.privilege.name, subtitle: localizations.privilege, icon: Icons.key),
           ],

@@ -4,6 +4,7 @@ class MockableDateTime {
   static bool isMocked = false;
   static DateTime mockedDateTime = DateTime(2021, 6, 15);
 
+  // DateTime is immutable, so can always return the same object.
   static DateTime now() => MockableDateTime.isMocked ? mockedDateTime : DateTime.now();
 }
 

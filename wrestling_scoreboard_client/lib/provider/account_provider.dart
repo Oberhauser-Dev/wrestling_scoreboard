@@ -16,12 +16,20 @@ class UserNotifier extends _$UserNotifier {
   Future<void> signUp(User user) async {
     final dataManager = await ref.read(dataManagerProvider);
     await dataManager.signUp(user);
-    await signIn(username: user.username, password: user.password!);
+    await signInPassword(username: user.username, password: user.password!);
   }
 
-  Future<void> signIn({required String username, required String password}) async {
+  Future<void> signInPassword({required String username, required String password}) async {
     final dataManager = await ref.read(dataManagerProvider);
     final token = await dataManager.signIn(BasicAuthService(username: username, password: password));
+    await ref.read(jwtProvider.notifier).setState(token);
+  }
+
+  Future<void> signInVerificationCode({required String username, required String verificationCode}) async {
+    final dataManager = await ref.read(dataManagerProvider);
+    final token = await dataManager.signInWithVerification(
+      UserVerification(username: username, verificationCode: verificationCode, method: VerificationMethod.email),
+    );
     await ref.read(jwtProvider.notifier).setState(token);
   }
 
