@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/person_role.dart';
-import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
-import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
-import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/team_match_bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/bout_list_item.dart';
@@ -60,71 +56,7 @@ class MatchDisplay extends ConsumerWidget {
             final pdfAction = ResponsiveScaffoldActionItem(
               label: localizations.print,
               icon: const Icon(Icons.print),
-              onTap: () async {
-                List<TeamMatchBout> teamMatchBouts = await ref.readAsync(
-                  manyDataStreamProvider<TeamMatchBout, TeamMatch>(
-                    ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
-                  ).future,
-                );
-
-                teamMatchBouts = await Future.wait(
-                  teamMatchBouts.map((tmb) async {
-                    return tmb.copyWith(
-                      bout: await ref.readAsync(
-                        singleDataStreamProvider<Bout>(SingleProviderData<Bout>(id: tmb.bout.id!)).future,
-                      ),
-                    );
-                  }),
-                );
-
-                final teamMatchBoutActions = Map.fromEntries(
-                  await Future.wait(
-                    teamMatchBouts.map((teamMatchBout) async {
-                      final boutActions = await ref.readAsync(
-                        manyDataStreamProvider<BoutAction, Bout>(
-                          ManyProviderData<BoutAction, Bout>(filterObject: teamMatchBout.bout),
-                        ).future,
-                      );
-                      // final boutActions = await (await ref.read(dataManagerProvider)).readMany<BoutAction, Bout>(filterObject: teamMatchBout.bout);
-                      return MapEntry(teamMatchBout, boutActions);
-                    }),
-                  ),
-                );
-                final isTimeCountDown = await ref.read(timeCountDownProvider);
-
-                final homeParticipations = await ref.readAsync(
-                  manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-                  ).future,
-                );
-
-                final guestParticipations = await ref.readAsync(
-                  manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-                  ).future,
-                );
-
-                final officials = await ref.readAsync(
-                  manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
-                    ManyProviderData<TeamMatchPerson, TeamMatch>(filterObject: match),
-                  ).future,
-                );
-
-                if (context.mounted) {
-                  final bytes =
-                      await TeamMatchTranscript(
-                        teamMatchBoutActions: teamMatchBoutActions,
-                        buildContext: context,
-                        teamMatch: match,
-                        officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
-                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                        isTimeCountDown: isTimeCountDown,
-                        homeParticipations: homeParticipations,
-                        guestParticipations: guestParticipations,
-                      ).buildPdf();
-                  Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
-                }
-              },
+              onTap: () => TeamMatchOverview.shareTeamMatchTranscript(context, ref, match),
             );
             return DisplayTheme(
               child: WindowStateScaffold(

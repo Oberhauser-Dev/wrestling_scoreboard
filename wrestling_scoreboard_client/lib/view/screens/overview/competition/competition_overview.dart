@@ -341,6 +341,6 @@ extension CompetitionFileExt on Competition {
   String get fileBaseName {
     final fileNameBuilder = [date.toFileNameDateFormat(), no, name];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-    return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+    return fileNameBuilder.join('_').sanitizedFileName;
   }
 }

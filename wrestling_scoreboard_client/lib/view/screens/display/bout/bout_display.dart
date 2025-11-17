@@ -604,7 +604,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 isTimeCountDown: isTimeCountDown,
                 weightClass: weightClass,
               ).buildPdf();
-          Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
+          await Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
         }
       },
     );

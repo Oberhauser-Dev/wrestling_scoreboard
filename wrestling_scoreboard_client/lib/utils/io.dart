@@ -20,6 +20,13 @@ extension FileNameDateTimeParser on DateTime {
   }
 }
 
+/// Regex to replace invalid filename characters and whitespace
+final _invalidFileNameRegex = RegExp(r'[\\/:*?"<>|\s]');
+
+extension FileNameExtension on String {
+  String get sanitizedFileName => replaceAll(_invalidFileNameRegex, '-').trim();
+}
+
 Future<void> shareFileUri(Uri uri) async {
   if (isDesktop) {
     await launchUrl(uri);
