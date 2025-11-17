@@ -66,48 +66,7 @@ class TeamMatchOverview extends ConsumerWidget {
             final pdfAction = ResponsiveScaffoldActionItem(
               label: localizations.print,
               icon: const Icon(Icons.print),
-              onTap: () async {
-                final teamMatchBouts = await _getBouts(ref, match: match);
-
-                final teamMatchBoutActions = Map.fromEntries(
-                  await Future.wait(
-                    teamMatchBouts.map((teamMatchBout) async {
-                      final boutActions = await _getActions(ref, bout: teamMatchBout.bout);
-                      return MapEntry(teamMatchBout, boutActions);
-                    }),
-                  ),
-                );
-                final isTimeCountDown = await ref.read(timeCountDownProvider);
-
-                final homeParticipations = await ref.readAsync(
-                  manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-                  ).future,
-                );
-
-                final guestParticipations = await ref.readAsync(
-                  manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-                    ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-                  ).future,
-                );
-
-                final officials = await _getOfficials(ref, match: match);
-
-                if (context.mounted) {
-                  final bytes =
-                      await TeamMatchTranscript(
-                        teamMatchBoutActions: teamMatchBoutActions,
-                        buildContext: context,
-                        teamMatch: match,
-                        officials: officials,
-                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                        isTimeCountDown: isTimeCountDown,
-                        guestParticipations: guestParticipations,
-                        homeParticipations: homeParticipations,
-                      ).buildPdf();
-                  Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
-                }
-              },
+              onTap: () => shareTeamMatchTranscript(context, ref, match),
             );
 
             return ConditionalOrganizationImportActionBuilder(
@@ -256,14 +215,8 @@ class TeamMatchOverview extends ConsumerWidget {
                                       onTap:
                                           (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
                                               ? null
-                                              : () async => handleSelectedLineup(
-                                                context,
-                                                ref,
-                                                homeLineup,
-                                                match,
-                                                navigator,
-                                                league: match.league!,
-                                              ),
+                                              : () async =>
+                                                  handleSelectedLineup(context, ref, homeLineup, match, navigator),
                                     ),
                                     ContentItem(
                                       title: guestLineup.team.name,
@@ -271,14 +224,8 @@ class TeamMatchOverview extends ConsumerWidget {
                                       onTap:
                                           (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
                                               ? null
-                                              : () async => handleSelectedLineup(
-                                                context,
-                                                ref,
-                                                guestLineup,
-                                                match,
-                                                navigator,
-                                                league: match.league!,
-                                              ),
+                                              : () async =>
+                                                  handleSelectedLineup(context, ref, guestLineup, match, navigator),
                                     ),
                                   ];
                                   return GroupedList(
@@ -358,7 +305,7 @@ class TeamMatchOverview extends ConsumerWidget {
     );
   }
 
-  Future<List<TeamMatchBout>> _getBouts(WidgetRef ref, {required TeamMatch match}) async {
+  static Future<List<TeamMatchBout>> _getBouts(WidgetRef ref, {required TeamMatch match}) async {
     final teamMatchBouts = await ref.readAsync(
       manyDataStreamProvider<TeamMatchBout, TeamMatch>(
         ManyProviderData<TeamMatchBout, TeamMatch>(filterObject: match),
@@ -374,11 +321,11 @@ class TeamMatchOverview extends ConsumerWidget {
     );
   }
 
-  Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
+  static Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
 
-  Future<Map<Person, PersonRole>> _getOfficials(WidgetRef ref, {required TeamMatch match}) async {
+  static Future<Map<Person, PersonRole>> _getOfficials(WidgetRef ref, {required TeamMatch match}) async {
     final officials = await ref.readAsync(
       manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
         ManyProviderData<TeamMatchPerson, TeamMatch>(filterObject: match),
@@ -388,23 +335,11 @@ class TeamMatchOverview extends ConsumerWidget {
     return Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role)));
   }
 
-  void handleSelectedLineup(
-    BuildContext context,
-    WidgetRef ref,
-    TeamLineup lineup,
-    TeamMatch match,
-    NavigatorState navigator, {
-    required League league,
-  }) async {
-    final participations = await ref.readAsync(
-      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
-      ).future,
-    );
+  static Future<List<WeightClass>> _getWeightClasses(WidgetRef ref, TeamMatch match) async {
     final leagueWeightClasses =
         (await ref.readAsync(
           manyDataStreamProvider<LeagueWeightClass, League>(
-            ManyProviderData<LeagueWeightClass, League>(filterObject: league),
+            ManyProviderData<LeagueWeightClass, League>(filterObject: match.league),
           ).future,
         )).where((element) => element.seasonPartition == match.seasonPartition).toList();
     var weightClasses = leagueWeightClasses.map((e) => e.weightClass).toList();
@@ -412,17 +347,98 @@ class TeamMatchOverview extends ConsumerWidget {
       final divisionWeightClasses =
           (await ref.readAsync(
             manyDataStreamProvider<DivisionWeightClass, Division>(
-              ManyProviderData<DivisionWeightClass, Division>(filterObject: league.division),
+              ManyProviderData<DivisionWeightClass, Division>(filterObject: match.league!.division),
             ).future,
           )).where((element) => element.seasonPartition == match.seasonPartition).toList();
       weightClasses = divisionWeightClasses.map((e) => e.weightClass).toList();
     }
+    return weightClasses;
+  }
+
+  static Future<void> shareTeamMatchTranscript(BuildContext context, WidgetRef ref, TeamMatch match) async {
+    final teamMatchBouts = await _getBouts(ref, match: match);
+
+    final Map<TeamMatchBout, List<BoutAction>> teamMatchBoutActions;
+    if (teamMatchBouts.isEmpty) {
+      // Fill with placeholder bouts
+      final weightClasses = await _getWeightClasses(ref, match);
+      teamMatchBoutActions = Map.fromEntries(
+        weightClasses.indexed.map(
+          (indexedEntry) => MapEntry(
+            TeamMatchBout(
+              pos: indexedEntry.$1,
+              teamMatch: match,
+              bout: Bout(),
+              weightClass: indexedEntry.$2,
+              organization: match.organization,
+            ),
+            const [],
+          ),
+        ),
+      );
+    } else {
+      teamMatchBoutActions = Map.fromEntries(
+        await Future.wait(
+          teamMatchBouts.map((teamMatchBout) async {
+            final boutActions = await _getActions(ref, bout: teamMatchBout.bout);
+            return MapEntry(teamMatchBout, boutActions);
+          }),
+        ),
+      );
+    }
+    final isTimeCountDown = await ref.read(timeCountDownProvider);
+
+    final homeParticipations = await ref.readAsync(
+      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
+      ).future,
+    );
+
+    final guestParticipations = await ref.readAsync(
+      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
+      ).future,
+    );
+
+    final officials = await _getOfficials(ref, match: match);
+
+    if (context.mounted) {
+      final bytes =
+          await TeamMatchTranscript(
+            teamMatchBoutActions: teamMatchBoutActions,
+            buildContext: context,
+            teamMatch: match,
+            officials: officials,
+            boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+            isTimeCountDown: isTimeCountDown,
+            guestParticipations: guestParticipations,
+            homeParticipations: homeParticipations,
+          ).buildPdf();
+      await Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
+    }
+  }
+
+  void handleSelectedLineup(
+    BuildContext context,
+    WidgetRef ref,
+    TeamLineup lineup,
+    TeamMatch match,
+    NavigatorState navigator,
+  ) async {
+    final participations = await ref.readAsync(
+      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
+      ).future,
+    );
+    final weightClasses = await _getWeightClasses(ref, match);
     TeamLineup? proposedLineup;
     List<TeamLineupParticipation>? proposedParticipations;
     if (participations.isEmpty) {
       // Load lineup from previous fight as proposal
       var matches = await ref.readAsync(
-        manyDataStreamProvider<TeamMatch, League>(ManyProviderData<TeamMatch, League>(filterObject: league)).future,
+        manyDataStreamProvider<TeamMatch, League>(
+          ManyProviderData<TeamMatch, League>(filterObject: match.league),
+        ).future,
       );
       matches =
           matches.where((match) => match.date.isBefore(DateTime.now().subtract(const Duration(hours: 24)))).toList();
@@ -468,6 +484,6 @@ extension TeamMatchFileExt on TeamMatch {
   String get fileBaseName {
     final fileNameBuilder = [date.toFileNameDateFormat(), league?.fullname, no, home.team.name, '–', guest.team.name];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-    return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+    return fileNameBuilder.join('_').sanitizedFileName;
   }
 }

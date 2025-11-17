@@ -126,6 +126,6 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
 //       b?.membership.person.surname,
 //     ];
 //     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-//     return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+//     return fileNameBuilder.join('_').sanitizedFileName;
 //   }
 // }

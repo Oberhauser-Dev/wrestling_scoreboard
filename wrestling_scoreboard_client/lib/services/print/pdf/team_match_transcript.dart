@@ -275,17 +275,18 @@ class TeamMatchTranscript extends PdfSheet {
     }
 
     List<Widget> buildParticipantState(
-      AthleteBoutState? state,
+      Bout bout,
       BoutRole role,
       WeightClass? weightClass,
       Iterable<TeamLineupParticipation> participations,
     ) {
       final borderColor = role.pdfColor;
+      final membership = (role == BoutRole.red ? bout.r : bout.b)?.membership;
       return [
         buildTextCell(
           TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
                 participations: participations,
-                membership: state?.membership,
+                membership: membership,
                 weightClass: weightClass,
               )?.weight?.toString() ??
               '',
@@ -294,14 +295,14 @@ class TeamMatchTranscript extends PdfSheet {
           fontSize: cellFontSize,
         ),
         buildTextCell(
-          state?.membership.person.fullName ?? '-',
+          membership?.person.fullName ?? (bout.result == null ? '' : localizations.participantVacant),
           height: cellHeight,
           borderColor: borderColor,
           fontSize: cellFontSize,
         ),
-        buildTextCell(state?.membership.no ?? '', height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
+        buildTextCell(membership?.no ?? '', height: cellHeight, borderColor: borderColor, fontSize: cellFontSize),
         buildTextCell(
-          state?.membership.person.toStatus() ?? '',
+          membership?.person.toStatus() ?? '',
           height: cellHeight,
           borderColor: borderColor,
           fontSize: cellFontSize,
@@ -434,9 +435,9 @@ class TeamMatchTranscript extends PdfSheet {
                 height: cellHeight,
                 fontSize: cellFontSize,
               ),
-              ...buildParticipantState(bout.bout.r, BoutRole.red, bout.weightClass, homeParticipations),
+              ...buildParticipantState(bout.bout, BoutRole.red, bout.weightClass, homeParticipations),
               buildTextCell(
-                AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
+                bout.bout.result == null ? '' : AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
                 height: cellHeight,
                 borderColor: BoutRole.red.pdfColor,
                 fontSize: cellFontSize,
@@ -456,9 +457,12 @@ class TeamMatchTranscript extends PdfSheet {
                 fontSize: cellFontSize,
               ),
               buildTextCell(
-                bout.bout.duration
-                    .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                    .formatMinutesAndSeconds(),
+                // Do not show a '0:00' time, when bout not finished.
+                (bout.bout.duration == Duration.zero && bout.bout.result == null)
+                    ? ''
+                    : bout.bout.duration
+                        .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                        .formatMinutesAndSeconds(),
                 height: cellHeight,
                 alignment: Alignment.center,
                 fontSize: cellFontSize,
@@ -470,12 +474,12 @@ class TeamMatchTranscript extends PdfSheet {
                 fontSize: cellFontSize,
               ),
               buildTextCell(
-                AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
+                bout.bout.result == null ? '' : AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
                 height: cellHeight,
                 borderColor: BoutRole.blue.pdfColor,
                 fontSize: cellFontSize,
               ),
-              ...buildParticipantState(bout.bout.b, BoutRole.blue, bout.weightClass, guestParticipations),
+              ...buildParticipantState(bout.bout, BoutRole.blue, bout.weightClass, guestParticipations),
               buildTextCell(bout.bout.comment ?? '', height: cellHeight, fontSize: 6),
             ],
           );

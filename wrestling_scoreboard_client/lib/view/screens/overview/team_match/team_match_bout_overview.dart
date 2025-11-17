@@ -81,7 +81,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
                     isTimeCountDown: isTimeCountDown,
                     weightClass: teamMatchBout.weightClass,
                   ).buildPdf();
-              Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
+              await Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }
           },
         );
@@ -129,6 +129,6 @@ extension BoutFileExt on Bout {
       b?.membership.person.surname,
     ];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
-    return fileNameBuilder.map((e) => e!.replaceAll(' ', '-')).join('_');
+    return fileNameBuilder.join('_').sanitizedFileName;
   }
 }
