@@ -1910,6 +1910,12 @@ abstract class AppLocalizations {
   /// **'A caution must be followed by one or two points.'**
   String get warningCautionNoPoints;
 
+  /// No description provided for @warningFreestyleVerbalPrecedePassivity.
+  ///
+  /// In en, this message translates to:
+  /// **'A passivity (P) with activity period should only occur after a verbal admonition (V). Do you want to continue anyways?'**
+  String get warningFreestyleVerbalPrecedePassivity;
+
   /// No description provided for @official.
   ///
   /// In en, this message translates to:

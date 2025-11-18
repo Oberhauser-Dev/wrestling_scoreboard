@@ -947,6 +947,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get warningCautionNoPoints => 'Auf eine Verwarnung müssen ein oder zwei Punkte folgen.';
 
   @override
+  String get warningFreestyleVerbalPrecedePassivity =>
+      'Eine Passivität (P) mit Aktivitätszeit sollte nur nach einer Verbalen Ermahnung (V) erfolgen. Willst du trotzdem fortfahren?';
+
+  @override
   String get official => 'Offizielle(r)';
 
   @override

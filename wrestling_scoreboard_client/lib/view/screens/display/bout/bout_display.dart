@@ -397,6 +397,20 @@ class BoutState extends ConsumerState<BoutScreen> {
           }
         }
       }
+      if (intent is RoleBoutActionIntent &&
+          intent.boutActionType == BoutActionType.passivity &&
+          weightClass?.style == WrestlingStyle.free) {
+        final hadVerbal = prevActions.any((la) => la.actionType == BoutActionType.verbal && intent.role == la.role);
+        if (!hadVerbal) {
+          // A passivity must precede a verbal admonition.
+          final localizations = context.l10n;
+          final result = await showOkCancelDialog(
+            context: context,
+            child: Text(localizations.warningFreestyleVerbalPrecedePassivity),
+          );
+          if (!result) return;
+        }
+      }
     }
     if (!mounted) return;
     final boutStopwatch = mainStopwatch.boutStopwatch;
@@ -471,7 +485,7 @@ class BoutState extends ConsumerState<BoutScreen> {
         break;
     }
 
-    if (useSmartBoutActions) {
+    if (useSmartBoutActions && mounted) {
       final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
       if (intent is RoleBoutActionIntent && intent.boutActionType == BoutActionType.passivity) {
         // Smart actions, after the actual action.
@@ -479,7 +493,6 @@ class BoutState extends ConsumerState<BoutScreen> {
 
         if (wrestlingStyle == WrestlingStyle.free) {
           // In free style, stop the timer and start activity time on passivity (P)
-
           mainStopwatch.stopwatch.stop();
           // Dispose previous activity times, so it is not toggled off
           psm.activityStopwatch?.dispose();

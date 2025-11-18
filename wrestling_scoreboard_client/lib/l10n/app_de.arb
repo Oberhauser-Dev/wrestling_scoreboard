@@ -350,6 +350,7 @@
   "minimum": "Minimum",
   "maximum": "Maximum",
   "warningCautionNoPoints": "Auf eine Verwarnung müssen ein oder zwei Punkte folgen.",
+  "warningFreestyleVerbalPrecedePassivity": "Eine Passivität (P) mit Aktivitätszeit sollte nur nach einer Verbalen Ermahnung (V) erfolgen. Willst du trotzdem fortfahren?",
 
   "official": "Offizielle(r)",
   "officials": "Offizielle",

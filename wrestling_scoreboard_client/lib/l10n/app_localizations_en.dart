@@ -944,6 +944,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get warningCautionNoPoints => 'A caution must be followed by one or two points.';
 
   @override
+  String get warningFreestyleVerbalPrecedePassivity =>
+      'A passivity (P) with activity period should only occur after a verbal admonition (V). Do you want to continue anyways?';
+
+  @override
   String get official => 'Official';
 
   @override
