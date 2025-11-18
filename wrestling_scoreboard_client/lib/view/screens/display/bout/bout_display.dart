@@ -487,16 +487,16 @@ class BoutState extends ConsumerState<BoutScreen> {
           await handleIntent(RoleScreenActionIntent(role: intent.role, type: RoleScreenActionType.activityTime));
         } else {
           assert(prevActions != null, 'prevActions should already be initialized');
-          Future<bool> hadZeroOrOnePassivity(BoutRole role) async {
+          Future<bool> includesZeroOrOnePassivity() async {
             // At this moment, the new passivity is not yet updated by the websocket (even if freshly getting the list),
             // so we need to treat them as one less.
-            return prevActions!.where((la) => la.role == role && la.actionType == BoutActionType.passivity).length <= 1;
+            return prevActions!.where((la) => la.actionType == BoutActionType.passivity).length <= 1;
           }
 
           // In greco, stop the timer (P)
-          // Give one point to the opponent at the first and the second (P).
+          // Give one point to the opponent at the first and the second (P) (no matter which wrestler).
           mainStopwatch.stopwatch.stop();
-          if (!await hadZeroOrOnePassivity(BoutRole.red)) return;
+          if (!await includesZeroOrOnePassivity()) return;
           await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 1));
         }
       } else if (intent is RolePointBoutActionIntent) {
