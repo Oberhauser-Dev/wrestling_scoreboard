@@ -148,7 +148,7 @@ Future<void> showLoadingDialog({
   bool showSuccess = true,
 }) async {
   final localizations = context.l10n;
-  showDialog(
+  final futureLoading = showDialog(
     useRootNavigator: false, // Pop from outside of this dialog.
     context: context,
     barrierDismissible: false,
@@ -167,17 +167,19 @@ Future<void> showLoadingDialog({
   );
   try {
     await runAsync();
-    if (context.mounted) {
-      // Pop loading dialog
-      Navigator.of(context).pop();
-      if (showSuccess) await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
-    }
+    if (!context.mounted) return;
+    // Pop loading dialog
+    Navigator.of(context).pop();
+    await futureLoading;
+    if (!context.mounted) return;
+    if (showSuccess) await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
   } catch (exception, stackTrace) {
-    if (context.mounted) {
-      // Pop loading dialog
-      Navigator.of(context).pop();
-      await showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
-    }
+    if (!context.mounted) return;
+    // Pop loading dialog
+    Navigator.of(context).pop();
+    await futureLoading;
+    if (!context.mounted) return;
+    await showExceptionDialog(context: context, exception: exception, stackTrace: stackTrace, onRetry: onRetry);
     rethrow;
   }
 }
