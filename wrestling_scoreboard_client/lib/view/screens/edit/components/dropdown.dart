@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
@@ -79,6 +80,7 @@ class MembershipDropdown extends ConsumerWidget {
 
     // If filter string is a number, search for membership no or at API provider, if present.
     filter = number.toString();
+
     final filteredMemberships =
         memberships
             .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
@@ -105,6 +107,16 @@ class MembershipDropdown extends ConsumerWidget {
       }
     }
 
-    return filteredMemberships;
+    return filteredMemberships.sorted((a, b) {
+      if (a.no == null && b.no == null) return a.person.fullName.compareTo(b.person.fullName);
+      if (a.no == null) return 1;
+      if (b.no == null) return -1;
+      final aNo = int.tryParse(a.no!);
+      final bNo = int.tryParse(b.no!);
+      if (aNo != null && bNo != null) {
+        return aNo.compareTo(bNo);
+      }
+      return a.no!.compareTo(b.no!);
+    });
   }
 }
